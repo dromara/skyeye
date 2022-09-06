@@ -24,7 +24,7 @@ layui.config({
 		 	pagination: false,
 			method: "GET",
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 		hdb.registerHelper("compare1", function(v1, options){
 					if(isNull(v1)){
 						return path + "assets/img/uploadPic.png";
@@ -145,7 +145,7 @@ layui.config({
 			     	params: {},
 			     	pagination: false,
 			     	template: $("#checkTimeStrTemplate").html(),
-			     	ajaxSendLoadBefore: function(hdb){
+			     	ajaxSendLoadBefore: function(hdb) {
 			     	},
 			     	ajaxSendAfter:function(data) {
 			     		for(var i in json.bean.checkTimeStr){

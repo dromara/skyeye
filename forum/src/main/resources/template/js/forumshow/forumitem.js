@@ -147,7 +147,7 @@ layui.config({
 		 	pagination: false,
 		 	pagesize: 10,
 		 	template: commentTemplate,
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function(j){
 		 		AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumcontent011", params: {forumId: rowId}, type: 'json', callback: function (json) {

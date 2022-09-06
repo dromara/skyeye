@@ -154,11 +154,11 @@ layui.config({
     });
     
     function loadTable() {
-    	table.reloadData("messageTable", {where:{tagName:$("#tagName").val()}});
+    	table.reloadData("messageTable", {where:{tagName: $("#tagName").val()}});
     }
     
     function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where:{tagName:$("#tagName").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{tagName: $("#tagName").val()}});
     }
     
     exports('forumtaglist', {});

@@ -19,7 +19,7 @@ layui.config({
 		 	params: {contactId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/crmCustomerContact/crmCustomerContactEditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter: function (json) {
 		 		// 客户信息赋值

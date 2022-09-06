@@ -31,7 +31,7 @@ layui.config({
             params: {rowId: parent.rowId},
             pagination: false,
             template: $("#usetableTemplate").html(),
-            ajaxSendLoadBefore: function(hdb){
+            ajaxSendLoadBefore: function(hdb) {
             },
             ajaxSendAfter: function (json) {
             	$.each(json.bean.procedureList, function(j, item){

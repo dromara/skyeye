@@ -205,7 +205,7 @@ layui.config({
 
     //右键事件
     function CustomRightClick(id) {
-    	//取消右键  rightmenu属性开始是隐藏的 ，当右击的时候显示，左击的时候隐藏
+    	// 取消右键  rightmenu属性开始是隐藏的 ，当右击的时候显示，左击的时候隐藏
     	$('#LAY_app_tabsheader li').on('contextmenu', function() {
     		return false;
     	})

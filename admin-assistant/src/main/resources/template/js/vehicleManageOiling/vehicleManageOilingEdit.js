@@ -18,7 +18,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/vehicleManageOiling/vehicleManageOilingEditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		// 加油日期

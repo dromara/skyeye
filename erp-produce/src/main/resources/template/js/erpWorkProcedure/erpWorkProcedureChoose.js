@@ -142,7 +142,7 @@ layui.config({
 
 	function getTableParams() {
 		return {
-			name:$("#name").val(), 
+			name: $("#name").val(), 
     		number: $("#number").val()
 		};
 	}

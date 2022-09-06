@@ -15,7 +15,7 @@ layui.config({
 	    form.on('submit(formAddBean)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
 	        	var params = {
-        			colorClass:$("#colorClass").val()
+        			colorClass: $("#colorClass").val()
 	        	};
 	        	AjaxPostUtil.request({url: reqBasePath + "sysevewinthemecolor002", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
@@ -29,7 +29,7 @@ layui.config({
 	    	$("#modelEffect").attr("class", $(this).val());
 	    });
 	    
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

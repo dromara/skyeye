@@ -17,7 +17,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/rmgroup/rmgroupeditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		showGrid({
@@ -26,7 +26,7 @@ layui.config({
 				 	params: {},
 				 	pagination: false,
 				 	template: getFileContent('tpl/template/select-option.tpl'),
-				 	ajaxSendLoadBefore: function(hdb){
+				 	ajaxSendLoadBefore: function(hdb) {
 				 	},
 				 	ajaxSendAfter:function(json1){
 				 		$("#rmTypeId").val(json.bean.rmTypeId);

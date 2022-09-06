@@ -20,11 +20,11 @@ layui.config({
 	 	pagination: true,
 	 	pagesize: 18,
 	 	template: getFileContent('tpl/sysEveIcon/icon-item.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
+	 	ajaxSendLoadBefore: function(hdb) {
 	 		
 	 	},
 	 	options: {'click .del':function(index, row){
-				layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+				layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 					layer.close(index);
 		            AjaxPostUtil.request({url: reqBasePath + "icon003", params: {rowId: row.id}, type: 'json', callback: function (json) {
 						winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});

@@ -115,7 +115,7 @@ layui.config({
 			params: {companyId: $("#companyList").val()},
 			pagination: false,
 			template: selTemplate,
-			ajaxSendLoadBefore: function(hdb){},
+			ajaxSendLoadBefore: function(hdb) {},
 			ajaxSendAfter:function (json) {
 				form.render('select');
 			}
@@ -181,7 +181,7 @@ layui.config({
 			departmentId: $("#departmentList").val(),
 			jobId: $("#jobList").val(),
 			userName: $("#userName").val(),
-			jobNumber:$("#jobNumber").val(),
+			jobNumber: $("#jobNumber").val(),
 			userSex: $("#userSex").val()
 		};
     }

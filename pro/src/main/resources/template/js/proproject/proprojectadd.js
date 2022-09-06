@@ -42,7 +42,7 @@ layui.config({
 			params: {},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
-			ajaxSendLoadBefore: function(hdb){
+			ajaxSendLoadBefore: function(hdb) {
 			},
 			ajaxSendAfter:function (json) {
 				customerList = json.rows;
@@ -78,7 +78,7 @@ layui.config({
 			params: {id: id},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
-			ajaxSendLoadBefore: function(hdb){
+			ajaxSendLoadBefore: function(hdb) {
 			},
 			ajaxSendAfter:function (json) {
 				form.render('select');

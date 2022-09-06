@@ -22,7 +22,7 @@ layui.config({
             pagination: false,
 			method: "GET",
             template: $("#usetableTemplate").html(),
-            ajaxSendLoadBefore: function(hdb){
+            ajaxSendLoadBefore: function(hdb) {
             },
             ajaxSendAfter: function (json) {
             	$.each(json.bean.procedureList, function(j, item){

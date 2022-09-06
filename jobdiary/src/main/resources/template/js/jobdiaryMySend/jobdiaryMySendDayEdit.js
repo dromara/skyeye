@@ -78,7 +78,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/jobdiaryMySend/jobdiaryMySendDayEditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 		hdb.registerHelper("compare1", function(v1, options){
 					return v1.replace(reg, "\n");
 				});

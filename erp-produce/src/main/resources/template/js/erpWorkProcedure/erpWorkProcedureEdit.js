@@ -22,7 +22,7 @@ layui.config({
             params: {rowId: parent.rowId},
             pagination: false,
             template: getFileContent('tpl/erpWorkProcedure/erpWorkProcedureEditTemplate.tpl'),
-            ajaxSendLoadBefore: function(hdb){
+            ajaxSendLoadBefore: function(hdb) {
             },
             ajaxSendAfter:function (json) {
             	
@@ -42,7 +42,7 @@ layui.config({
                     params: {},
                     pagination: false,
                     template: selOption,
-                    ajaxSendLoadBefore: function(hdb){
+                    ajaxSendLoadBefore: function(hdb) {
                     },
                     ajaxSendAfter: function(data) {
                         $("#procedureType").val(json.bean.procedureType);

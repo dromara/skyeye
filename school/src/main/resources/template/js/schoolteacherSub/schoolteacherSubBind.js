@@ -22,7 +22,7 @@ layui.config({
 				params: {schoolId: json.bean.schoolId},
 				pagination: false,
 				template: getFileContent('tpl/template/checkbox-property.tpl'),
-				ajaxSendLoadBefore: function(hdb){},
+				ajaxSendLoadBefore: function(hdb) {},
 				ajaxSendAfter:function(data) {
 					var skill = json.bean.skill;
 					for(var i = 0; i < skill.length; i++){

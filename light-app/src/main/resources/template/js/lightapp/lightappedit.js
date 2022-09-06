@@ -18,7 +18,7 @@ layui.config({
 			 	params: {},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
-			 	ajaxSendLoadBefore: function(hdb){},
+			 	ajaxSendLoadBefore: function(hdb) {},
 			 	ajaxSendAfter:function (json) {
 			 		$("#typeId").val(id);
 			 		form.render('select');
@@ -41,7 +41,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/lightapp/lightappeditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	
 		 	},
 		 	ajaxSendAfter:function (json) {
@@ -79,7 +79,7 @@ layui.config({
 		 	}
 	    });
  	    
- 	    //取消
+ 	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

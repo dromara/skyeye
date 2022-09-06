@@ -22,7 +22,7 @@ layui.config({
 		pagination: false,
 		method: 'GET',
 		template: getFileContent('tpl/dsformcontent/dsformcontenteditTemplate.tpl'),
-		ajaxSendLoadBefore: function(hdb){
+		ajaxSendLoadBefore: function(hdb) {
 			//是否为系统菜单
 			hdb.registerHelper("compare2", function(v1, options){
 				if(v1 == '1'){
@@ -117,7 +117,7 @@ layui.config({
 						params: {},
 						pagination: false,
 						template: getFileContent('tpl/template/select-option.tpl'),
-						ajaxSendLoadBefore: function(hdb){},
+						ajaxSendLoadBefore: function(hdb) {},
 						ajaxSendAfter:function (json) {
 							$("#dataShowTpl").val(id);
 							form.render('select');

@@ -25,7 +25,7 @@ layui.config({
             pagination: false,
             template: radioTemplate,
             method: "GET",
-            ajaxSendLoadBefore: function(hdb){
+            ajaxSendLoadBefore: function(hdb) {
             },
             ajaxSendAfter:function (json) {
                 dataFromTypeList = [].concat(json.rows);
@@ -195,7 +195,7 @@ layui.config({
                     pagination: false,
                     template: selOption,
                     method: "GET",
-                    ajaxSendLoadBefore: function(hdb){
+                    ajaxSendLoadBefore: function(hdb) {
                     },
                     ajaxSendAfter:function (json) {
                     }

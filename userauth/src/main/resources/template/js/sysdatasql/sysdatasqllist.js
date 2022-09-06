@@ -17,7 +17,7 @@ layui.config({
 	    method: 'post',
 	    url: reqBasePath + 'sysdatasqlbackups001',
 	    where:{},
-	    even:true,
+	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,

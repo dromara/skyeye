@@ -126,7 +126,7 @@ layui.config({
 	
 	// 删除
 	function delet(data) {
-		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.knowlgBasePath + "knowledgecontent005", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -177,8 +177,8 @@ layui.config({
 
     function getTableParams() {
     	return {
-			title:$("#title").val(),
-			state:$("#state").val(),
+			title: $("#title").val(),
+			state: $("#state").val(),
 			typeId: isNull($("#typeId").val()) ? "" : $("#typeId").attr("typeId")
 		};
 	}

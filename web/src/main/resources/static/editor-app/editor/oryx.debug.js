@@ -4765,7 +4765,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			var i = 0, indic = []; // Cache indices if the _positionText is called again, before update is called 
 			var is =(this.indices || $R(0,tspans.length-1).toArray());
 			var length = is.length;
-			is.each((function(index){
+			is.each((function (index) {
 				if ("undefined" == typeof index){
 					return;
 				}

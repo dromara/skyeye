@@ -46,7 +46,7 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
         	del(data, obj);
-        } else if (layEvent === 'cancleRemind') { //取消提醒
+        } else if (layEvent === 'cancleRemind') { // 取消提醒
         	cancleRemind(data);
         } else if (layEvent === 'addRemind') { //添加提醒
         	addRemind(data);
@@ -57,7 +57,7 @@ layui.config({
 	
 	// 删除
 	function del(data, obj) {
-		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule011", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});

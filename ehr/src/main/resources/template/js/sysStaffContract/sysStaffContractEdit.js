@@ -22,7 +22,7 @@ layui.config({
 		 	pagination: false,
 		 	method: "GET",
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendLoadBefore: function(hdb){},
+		 	ajaxSendLoadBefore: function(hdb) {},
 		 	ajaxSendAfter:function (json) {
 		 		// 开始时间
 			    var insStart = laydate.render({ 

@@ -49,7 +49,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: showBaseTemplate,
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 		//多单位
 		 		hdb.registerHelper("compare2", function(v1, options){
 					if(v1 == '2' || v1 == 2){
@@ -82,7 +82,7 @@ layui.config({
 					}
 				});
 				
-				hdb.registerHelper("addOne", function(index){
+				hdb.registerHelper("addOne", function (index) {
 					return index + 1;
 				});
 		 	},
@@ -116,7 +116,7 @@ layui.config({
 					 	params: {},
 					 	pagination: false,
 					 	template: selTemplate,
-					 	ajaxSendLoadBefore: function(hdb){},
+					 	ajaxSendLoadBefore: function(hdb) {},
 					 	ajaxSendAfter:function (json) {
 					 		unitGroupList = json.rows;
 
@@ -420,7 +420,7 @@ layui.config({
  	    //删除
  	    $("body").on("click", "#extendMationBox .close-btn", function() {
  	    	var _this = this;
-			layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+			layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 				layer.close(index);
 	            $(_this).parent().remove();
 			});

@@ -30,7 +30,7 @@
             if(node && node.oldname && node.oldname.length>0){
                 node[nameKey] = node.oldname; //如果存在原始名称则恢复原始名称
             }
-            //node.highlight = false; //取消高亮
+            //node.highlight = false; // 取消高亮
             zTreeObj.updateNode(node); //更新节点让之前对节点所做的修改生效
             if (_keywords.length == 0) { 
                 //如果关键字为空,返回true,表示每个节点都显示

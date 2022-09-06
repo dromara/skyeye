@@ -28,7 +28,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendLoadBefore: function(hdb){},
+		 	ajaxSendLoadBefore: function(hdb) {},
 		 	ajaxSendAfter: function (json) {
 		 		// 实际开工时间
 		 		laydate.render({elem: '#comStarTime', type: 'datetime', trigger: 'click'});

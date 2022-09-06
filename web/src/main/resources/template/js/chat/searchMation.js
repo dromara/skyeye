@@ -17,7 +17,7 @@ layui.config({
 		 	pagination: true,
 		 	pagesize: 66,
 		 	template: getFileContent('tpl/chat/searchMation.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 		hdb.registerHelper('compareimg', function(v1, options) {
 		 			if(isNull(v1)){
 		        		return '../../assets/images/os_windows.png';
@@ -61,7 +61,7 @@ layui.config({
 	    	if(isNull($("#groupNameOrNum").val())) {
 	    		winui.window.msg('请输入搜索内容', {icon: 2, time: 2000});
 	    	} else {
-	    		refreshGrid("search-group-list", {params:{groupNameOrNum:$("#groupNameOrNum").val()}});
+	    		refreshGrid("search-group-list", {params:{groupNameOrNum: $("#groupNameOrNum").val()}});
 	    	}
 	    });
 	    

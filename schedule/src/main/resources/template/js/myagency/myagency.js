@@ -51,7 +51,7 @@ layui.config({
 		table.on('tool(messageTable)', function (obj) {
 	        var data = obj.data;
 	        var layEvent = obj.event;
-	        if (layEvent === 'cancleAgency') { //取消代办
+	        if (layEvent === 'cancleAgency') { // 取消代办
 	        	cancleAgency(data);
 	        }
 	    });
@@ -62,7 +62,7 @@ layui.config({
     	loadTable();
     });
     
-	//取消代办
+	// 取消代办
 	function cancleAgency(data, obj){
 		var msg = obj ? '确认取消【' + obj.data.title + '】的提醒吗？' : '确认取消提醒吗？';
 		layer.confirm(msg, { icon: 3, title: '取消代办' }, function (index) {
@@ -75,7 +75,7 @@ layui.config({
 	}
 	
     function loadTable() {
-    	table.reloadData("messageTable", {where:{myagencyType:$("#myagencyType").val(), myagencyName:$("#myagencyName").val()}});
+    	table.reloadData("messageTable", {where:{myagencyType: $("#myagencyType").val(), myagencyName: $("#myagencyName").val()}});
     }
     
     exports('myagency', {});

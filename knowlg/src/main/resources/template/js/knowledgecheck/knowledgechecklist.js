@@ -162,7 +162,7 @@ layui.config({
 			endTime = "";
 		}
 		return {
-			title:$("#title").val(),
+			title: $("#title").val(),
 			typeId: isNull($("#typeId").val()) ? "" : $("#typeId").attr("typeId"),
 			createUser: $("#createUser").val(),
 			startTime: startTime,
@@ -321,8 +321,8 @@ layui.config({
 			theLastTime = "";
 		}
     	return {
-    		title:$("#checkedtitle").val(),
-			state:$("#state").val(),
+    		title: $("#checkedtitle").val(),
+			state: $("#state").val(),
 			typeId: isNull($("#typeId2").val()) ? "" : $("#typeId2").attr("typeId"),
 			createUser: $("#createName").val(),
 			startTime: firstTime,

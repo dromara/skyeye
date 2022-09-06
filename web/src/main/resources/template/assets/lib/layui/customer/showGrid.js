@@ -29,9 +29,9 @@ var dataGrid = function(ele, opt) {
         // 总页数
         totalpage: null,
         // 点击分页之前的回调函数
-        pageClickBefore: function(index){},
+        pageClickBefore: function (index) {},
         // 点击分页之后的回调函数
-        pageClickAfter: function(index){},
+        pageClickAfter: function (index) {},
         // ajax请求之前的回调函数
         ajaxSendBefore:function (json) {},
         // ajax请求之后的加载数据之前的回调函数

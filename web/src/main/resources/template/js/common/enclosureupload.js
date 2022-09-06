@@ -91,7 +91,7 @@ layui.config({
 	    
 	    /********* tree 处理   end *************/
 	    
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

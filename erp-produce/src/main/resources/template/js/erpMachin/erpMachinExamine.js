@@ -18,7 +18,7 @@ layui.config({
 			params: {rowId: parent.rowId},
 			pagination: false,
 			template: $("#useTemplate").html(),
-			ajaxSendLoadBefore: function(hdb){
+			ajaxSendLoadBefore: function(hdb) {
 				hdb.registerHelper('compare1', function(v1, v2, options) {
 		 			return (parseFloat(v1) * parseFloat(v2)).toFixed(2);
 		 		});

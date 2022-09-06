@@ -18,7 +18,7 @@ layui.config({
 		 	pagination: false,
 		 	method: "GET",
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendLoadBefore: function(hdb){},
+		 	ajaxSendLoadBefore: function(hdb) {},
 		 	ajaxSendAfter:function (json) {
 		 		$("input:radio[name=userSex][value=" + json.bean.sex + "]").attr("checked", true);
 			    $("#emergencyContact").val(json.bean.emergencyContact);

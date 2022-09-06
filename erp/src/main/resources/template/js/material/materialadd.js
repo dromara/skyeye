@@ -70,7 +70,7 @@ layui.config({
 			 	params: {},
 			 	pagination: false,
 			 	template: selTemplate,
-			 	ajaxSendLoadBefore: function(hdb){},
+			 	ajaxSendLoadBefore: function(hdb) {},
 			 	ajaxSendAfter:function (json) {
 			 		form.render('select');
 			 		unitGroupList = json.rows;
@@ -325,7 +325,7 @@ layui.config({
  	    //删除
  	    $("body").on("click", "#extendMationBox .close-btn", function() {
  	    	var _this = this;
-			layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+			layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 				layer.close(index);
 	            $(_this).parent().remove();
 			});

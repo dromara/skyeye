@@ -21,7 +21,7 @@ layui.config({
 	 	pagination: true,
 	 	pagesize: 18,
 	 	template: getFileContent('tpl/sysevewinbgpic/bgpic-item.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
+	 	ajaxSendLoadBefore: function(hdb) {
 	 		hdb.registerHelper("compare1", function(v1, options){
 				return fileBasePath + v1;
 			});

@@ -118,8 +118,8 @@ layui.config({
 
     function getTableParams() {
     	return {
-			title:$("#title").val(),
-			label:$("#label").val(),
+			title: $("#title").val(),
+			label: $("#label").val(),
 			typeId: isNull($("#typeId").val()) ? "" : $("#typeId").attr("typeId")
 		};
 	}

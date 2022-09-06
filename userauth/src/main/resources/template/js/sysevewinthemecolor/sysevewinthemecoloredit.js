@@ -16,7 +16,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sysevewinthemecolor/sysevewinthemecoloreditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
@@ -24,7 +24,7 @@ layui.config({
 		 		form.on('submit(formEditBean)', function (data) {
 			        if (winui.verifyForm(data.elem)) {
 			        	var params = {
-		        			colorClass:$("#colorClass").val(),
+		        			colorClass: $("#colorClass").val(),
 		        			rowId:parent.rowId
 			        	};
 			        	AjaxPostUtil.request({url: reqBasePath + "sysevewinthemecolor005", params: params, type: 'json', callback: function (json) {
@@ -41,7 +41,7 @@ layui.config({
 	    	$("#modelEffect").attr("class", $(this).val());
 	    });
 		
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

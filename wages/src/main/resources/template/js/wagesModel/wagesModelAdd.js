@@ -35,7 +35,7 @@ layui.config({
 		pagination: false,
 		template: selTemplate,
 		method: 'GET',
-		ajaxSendLoadBefore: function(hdb){},
+		ajaxSendLoadBefore: function(hdb) {},
 		ajaxSendAfter:function (json) {
 			form.render('select');
 		}

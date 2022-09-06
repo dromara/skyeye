@@ -28,7 +28,7 @@ layui.config({
             pagination: false,
             method: "GET",
             template: $("#showBaseTemplate").html(),
-            ajaxSendLoadBefore: function(hdb){
+            ajaxSendLoadBefore: function(hdb) {
             },
             ajaxSendAfter:function(j){
                 // 加载数据源类型
@@ -39,7 +39,7 @@ layui.config({
                     pagination: false,
                     template: selOption,
                     method: "GET",
-                    ajaxSendLoadBefore: function(hdb){
+                    ajaxSendLoadBefore: function(hdb) {
                     },
                     ajaxSendAfter: function(data) {
                         $("#dataType").val(j.bean.dataType);
@@ -56,7 +56,7 @@ layui.config({
                     pagination: false,
                     template: selOption,
                     method: "GET",
-                    ajaxSendLoadBefore: function(hdb){
+                    ajaxSendLoadBefore: function(hdb) {
                     },
                     ajaxSendAfter: function(data) {
                         $("#poolClass").val(j.bean.poolClass);

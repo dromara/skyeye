@@ -27,7 +27,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sealseservice/sealseserviceeditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter: function (json) {
 				erpOrderUtil.chooseProductMation.productId = json.bean.productId;

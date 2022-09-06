@@ -41,7 +41,7 @@ layui.define(['jquery', 'table'], function(exports) {
 					if(checked) {
 						checkRowData = table.checkStatus(param.gridId).data;
 					}
-					//取消选中
+					// 取消选中
 					else {
 						if(type == 'all') {
 							cacelCheckedRowData = currentPageData;

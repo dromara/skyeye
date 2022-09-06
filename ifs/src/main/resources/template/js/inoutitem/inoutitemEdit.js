@@ -17,7 +17,7 @@ layui.config({
             pagination: false,
             method: "GET",
             template: $("#beanTemplate").html(),
-            ajaxSendLoadBefore: function(hdb){},
+            ajaxSendLoadBefore: function(hdb) {},
             ajaxSendAfter:function (json) {
             	$("#inoutitemType").val(json.bean.inoutitemType);
             	

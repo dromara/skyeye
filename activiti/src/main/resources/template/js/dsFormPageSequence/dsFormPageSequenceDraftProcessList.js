@@ -23,7 +23,7 @@ layui.config({
 	    method: 'post',
 	    url: flowableBasePath + 'pagesequence001',
 	    where: getTableParams(),
-	    even:true,
+	    even: true,
 	    page: true,
 		limits: getLimits(),
 		limit: getLimit(),
@@ -107,7 +107,7 @@ layui.config({
 	
 	// 删除
 	function deleteRow(data) {
-		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "pagesequence002", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});

@@ -19,7 +19,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/documentarymanage/documentaryeditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter: function (json) {
 		 		textool.init({eleId: 'detail', maxlength: 200});
@@ -39,7 +39,7 @@ layui.config({
 					 	params: {},
 					 	pagination: false,
 					 	template: getFileContent('tpl/template/select-option.tpl'),
-					 	ajaxSendLoadBefore: function(hdb){
+					 	ajaxSendLoadBefore: function(hdb) {
 					 	},
 					 	ajaxSendAfter:function(j){
 					 		$("#opportunityId").val(json.bean.opportunityId);

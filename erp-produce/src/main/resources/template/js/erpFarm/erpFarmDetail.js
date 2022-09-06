@@ -17,7 +17,7 @@ layui.config({
             params: {rowId: parent.rowId},
             pagination: false,
             template: $("#beanTemplate").html(),
-            ajaxSendLoadBefore: function(hdb){
+            ajaxSendLoadBefore: function(hdb) {
             },
             ajaxSendAfter: function (json) {
             	matchingLanguage();

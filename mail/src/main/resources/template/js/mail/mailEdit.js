@@ -18,7 +18,7 @@ layui.config({
 		 	pagination: false,
 			method: "GET",
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		// 类型
@@ -39,7 +39,7 @@ layui.config({
 		 			params: {},
 		 			pagination: false,
 		 			template: getFileContent('tpl/template/select-option.tpl'),
-		 			ajaxSendLoadBefore: function(hdb){},
+		 			ajaxSendLoadBefore: function(hdb) {},
 		 			ajaxSendAfter:function(j){
 		 				$("#typeId").val(json.bean.typeId);
 		 				form.render('select');

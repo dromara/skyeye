@@ -20,8 +20,8 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: reqBasePath + 'sysevewinthemecolor001',
-	    where:{colorClass:$("#colorClass").val()},
-	    even:true,
+	    where:{colorClass: $("#colorClass").val()},
+	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
@@ -59,7 +59,7 @@ layui.config({
 	
 	//删除
 	function del(data, obj) {
-		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "sysevewinthemecolor003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -101,11 +101,11 @@ layui.config({
     });
     
     function loadTable() {
-    	table.reloadData("messageTable", {where:{colorClass:$("#colorClass").val()}});
+    	table.reloadData("messageTable", {where:{colorClass: $("#colorClass").val()}});
     }
     
     function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where:{colorClass:$("#colorClass").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{colorClass: $("#colorClass").val()}});
     }
     
     exports('sysevewinthemecolorlist', {});

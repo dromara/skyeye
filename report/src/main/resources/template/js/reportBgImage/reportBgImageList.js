@@ -85,7 +85,7 @@ layui.config({
 
 	// 删除
 	function delet(data) {
-		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
 			AjaxPostUtil.request({url: reportBasePath + "reportbgimage003", params: {id: data.id}, type: 'json', method: "DELETE", callback: function(json) {
 				winui.window.msg("删除成功", {icon: 1, time: 2000});

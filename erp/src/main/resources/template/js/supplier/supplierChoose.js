@@ -101,7 +101,7 @@ layui.config({
     
 	function getTableParams() {
 		return {
-			supplierName:$("#supplierName").val(),
+			supplierName: $("#supplierName").val(),
             telephone: $("#telephone").val(),
             email: $("#email").val(),
             fax: $("#fax").val()

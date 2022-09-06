@@ -379,7 +379,7 @@ layui.config({
 	
 	// 文件夹或者文件删除
 	$("body").on("click", ".deleteFolderAndChild", function (e) {
-		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
 			var checkItems = $("#file-content .menu-folder .item-select .item-check").find("input:checkbox[name='checkFile']:checked");
 			var deleteArray = new Array();
@@ -733,7 +733,7 @@ layui.config({
 	
 	// 树操作--文件夹或者文件删除
 	$("body").on("click", ".treedeleteFolderAndChild", function (e) {
-		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
 			var deleteArray = new Array();
 			deleteArray.push({
@@ -978,7 +978,7 @@ layui.config({
 							$(this).children(".item-select").children(".item-check").find("input:checkbox[name='checkFile']").prop("checked", true);
 						 } else {
 						 	//未选中
-						 	//取消选中样式
+						 	// 取消选中样式
 							$(this).removeClass("active");
 							//设置当前未选中
 							$(this).children(".item-select").children(".item-check").find("input:checkbox[name='checkFile']").prop("checked", false);

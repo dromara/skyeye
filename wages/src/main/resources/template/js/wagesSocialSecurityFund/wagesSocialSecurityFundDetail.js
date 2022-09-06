@@ -17,7 +17,7 @@ layui.config({
 		pagination: false,
 		method: "GET",
 		template: $("#beanTemplate").html(),
-		ajaxSendLoadBefore: function(hdb){},
+		ajaxSendLoadBefore: function(hdb) {},
 		ajaxSendAfter:function (json) {
 			$('#company').html(getNameByList(json.bean.company).toString());
 			$('#department').html(getNameByList(json.bean.departMent).toString());

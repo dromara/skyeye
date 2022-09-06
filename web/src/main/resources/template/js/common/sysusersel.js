@@ -114,7 +114,7 @@ layui.config({
 	//默认加载所有人员模块
 	loadAllPeopleList();
 
-	//取消
+	// 取消
 	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);
 	});

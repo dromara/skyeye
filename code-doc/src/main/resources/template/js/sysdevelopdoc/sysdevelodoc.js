@@ -17,8 +17,8 @@ layui.config({
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/sysdevelopdoc/firsttypeTemplate.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
-	 		hdb.registerHelper("compare1", function(index){
+	 	ajaxSendLoadBefore: function(hdb) {
+	 		hdb.registerHelper("compare1", function (index) {
 	 			if(index === 0){
 	 				return 'active';
 	 			} else {
@@ -39,8 +39,8 @@ layui.config({
 		 	params: {parentId: $("#sysFirstType").find("li[class='active']").find("a").attr("rowid")},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sysdevelopdoc/secondtypeTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
-		 		hdb.registerHelper("compare1", function(index){
+		 	ajaxSendLoadBefore: function(hdb) {
+		 		hdb.registerHelper("compare1", function (index) {
 		 			if(index === 0){
 		 				return 'active';
 		 			} else {
@@ -62,8 +62,8 @@ layui.config({
 		 	params: {parentId: $("#sysSecondType").find("li[class='active']").find("a").attr("rowid")},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sysdevelopdoc/doclist.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
-		 		hdb.registerHelper("compare1", function(index){
+		 	ajaxSendLoadBefore: function(hdb) {
+		 		hdb.registerHelper("compare1", function (index) {
 		 			if(index === 0){
 		 				return 'active';
 		 			} else {

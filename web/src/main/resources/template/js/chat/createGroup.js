@@ -28,7 +28,7 @@ layui.config({
 				var removeInputHtml = $(oldHtml).find('input').prop("outerHTML");
 				oldHtml = oldHtml.replace(removeDivHtml, '').replace(removeInputHtml, '');
 				$("#chooseFriend").append(oldHtml);
-			} else {//取消选中
+			} else {// 取消选中
 				var id = $(this).parent().attr("id");
 				$("#chooseFriend").find('li[id="' + id + '"]').remove();
 			}
@@ -84,7 +84,7 @@ layui.config({
 	    	e.stopPropagation();
 	    });
 	    
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

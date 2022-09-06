@@ -19,7 +19,7 @@ layui.config({
 		params: {},
 		pagination: false,
 		template: getFileContent('tpl/template/select-option-must.tpl'),
-		ajaxSendLoadBefore: function(hdb){
+		ajaxSendLoadBefore: function(hdb) {
 		},
 		ajaxSendAfter:function (json) {
 			form.render('select');

@@ -20,7 +20,7 @@ layui.config({
 		params: {rowId: parent.rowId},
 		pagination: false,
 		template: getFileContent('tpl/proproject/proprojecteditTemplate.tpl'),
-		ajaxSendLoadBefore: function(hdb){},
+		ajaxSendLoadBefore: function(hdb) {},
 		ajaxSendAfter: function (json) {
 			if(json.bean.state == 1){
 				$(".typeTwo").removeClass("layui-hide");
@@ -57,7 +57,7 @@ layui.config({
 					params: {},
 					pagination: false,
 					template: getFileContent('tpl/template/select-option.tpl'),
-					ajaxSendLoadBefore: function(hdb){
+					ajaxSendLoadBefore: function(hdb) {
 					},
 					ajaxSendAfter:function(j){
 						customerList = j.rows;
@@ -97,7 +97,7 @@ layui.config({
 					params: {id: id},
 					pagination: false,
 					template: getFileContent('tpl/template/select-option.tpl'),
-					ajaxSendLoadBefore: function(hdb){
+					ajaxSendLoadBefore: function(hdb) {
 					},
 					ajaxSendAfter:function(j){
 						if(type == 1){

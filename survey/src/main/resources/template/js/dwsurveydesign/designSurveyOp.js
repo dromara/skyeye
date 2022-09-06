@@ -17,7 +17,7 @@ layui.config({
 		 	params: {rowId: parent.parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/dwsurveydesign/designSurveyOpTemplates.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 		hdb.registerHelper('compare1', function(v1, v2, options) {
 		 			if(v1 == v2){
 		 				return "checked";
@@ -162,7 +162,7 @@ layui.config({
 	        return now.getFullYear()+"-" + (now.getMonth()+1) + "-" + now.getDate();
 	    }
 	    
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

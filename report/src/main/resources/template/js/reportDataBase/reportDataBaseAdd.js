@@ -28,7 +28,7 @@ layui.config({
             pagination: false,
             template: selOption,
             method: "GET",
-            ajaxSendLoadBefore: function(hdb){
+            ajaxSendLoadBefore: function(hdb) {
             },
             ajaxSendAfter: function(data) {
                 dataBaseFrom = [].concat(data.rows);
@@ -44,7 +44,7 @@ layui.config({
             pagination: false,
             template: selOption,
             method: "GET",
-            ajaxSendLoadBefore: function(hdb){
+            ajaxSendLoadBefore: function(hdb) {
             },
             ajaxSendAfter: function(data) {
                 poolList = [].concat(data.rows);

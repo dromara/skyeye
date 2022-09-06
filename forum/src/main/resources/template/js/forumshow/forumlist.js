@@ -71,7 +71,7 @@ layui.config({
 		 	pagination: false,
 		 	pagesize: 10,
 		 	template: searchForumListTemplate,
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		var row = json.rows;
@@ -174,7 +174,7 @@ layui.config({
 		 	params: {},
 		 	pagination: false,
 		 	template: hotTagListTemplate,
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		$("#hotTagList").find("a[rowid='']").remove();

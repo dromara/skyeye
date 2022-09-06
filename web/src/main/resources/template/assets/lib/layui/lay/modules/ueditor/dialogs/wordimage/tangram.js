@@ -938,7 +938,7 @@ baidu.flash.fileUploader = baidu.flash.fileUploader || function(options){
      * @public
      * @param {Number|-1} index
      */
-    me.cancel = function(index){
+    me.cancel = function (index) {
         if(typeof index === 'undefined') index = -1;
         _flash.call('cancel', [index]);
     };

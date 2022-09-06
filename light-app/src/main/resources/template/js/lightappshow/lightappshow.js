@@ -16,7 +16,7 @@ layui.config({
     	 	params: {typeId: typeId},
     	 	pagination: false,
     	 	template: getFileContent('tpl/lightappshow/lightappshowlistTemplate.tpl'),
-    	 	ajaxSendLoadBefore: function(hdb){
+    	 	ajaxSendLoadBefore: function(hdb) {
     	 	},
     	 	ajaxSendAfter:function (json) {
     	 	}	
@@ -30,7 +30,7 @@ layui.config({
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/lightappshow/lightappshowaTemplate.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
+	 	ajaxSendLoadBefore: function(hdb) {
 	 	},
 	 	ajaxSendAfter:function (json) {
 	 		//初始化所有上线列表数据

@@ -32,7 +32,7 @@ layui.config({
 	    method: 'post',
 	    url: flowableBasePath + 'activitimode013',
 	    where:{startTime: startTime, endTime: endTime, processInstanceId: $("#processInstanceId").val()},
-	    even:true,
+	    even: true,
 	    page: true,
 		limits: getLimits(),
 		limit: getLimit(),

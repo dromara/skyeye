@@ -117,11 +117,11 @@ layui.config({
     });
     
     function loadTable() {
-    	table.reloadData("messageTable", {where:{proName:$("#proName").val()}});
+    	table.reloadData("messageTable", {where:{proName: $("#proName").val()}});
     }
     
     function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where:{proName:$("#proName").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{proName: $("#proName").val()}});
     }
     
     exports('mysmprolist', {});

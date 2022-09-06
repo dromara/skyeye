@@ -15,7 +15,7 @@ layui.config({
 	    method: 'post',
 	    url: reqBasePath + 'login006',
 	    where:{userName: $("#userName").val(), realPath: $("#realPath").val()},
-	    even:true,
+	    even: true,
 	    page: true,
 	    limits: getLimits(),
 		limit: getLimit(),

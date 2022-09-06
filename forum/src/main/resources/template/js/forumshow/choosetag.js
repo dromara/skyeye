@@ -55,7 +55,7 @@ layui.config({
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/checkbox-property.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
+	 	ajaxSendLoadBefore: function(hdb) {
 	 	},
 	 	ajaxSendAfter:function(j){
 	 		if(parent.tagReturnList.length > 0){

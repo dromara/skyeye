@@ -89,7 +89,7 @@ layui.config({
 
     // 删除
     function delet(data) {
-        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: reportBasePath + "reportwordmodel003", params: {id: data.id}, type: 'json', method: "DELETE", callback: function(json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -100,7 +100,7 @@ layui.config({
 
     // 发布
     function publish(data) {
-        layer.confirm('确定发布该模型吗？', {icon: 3, title: '发布操作'}, function(index){
+        layer.confirm('确定发布该模型吗？', {icon: 3, title: '发布操作'}, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: reportBasePath + "reportwordmodel008", params: {id: data.id}, type: 'json', method: "PUT", callback: function(json) {
                 winui.window.msg('操作成功', {icon: 1, time: 2000});
@@ -111,7 +111,7 @@ layui.config({
 
     // 取消发布
     function unPublish(data) {
-        layer.confirm('确定取消发布该模型吗？', {icon: 3, title: '取消发布操作'}, function(index){
+        layer.confirm('确定取消发布该模型吗？', {icon: 3, title: '取消发布操作'}, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: reportBasePath + "reportwordmodel009", params: {id: data.id}, type: 'json', method: "PUT", callback: function(json) {
                 winui.window.msg('操作成功', {icon: 1, time: 2000});

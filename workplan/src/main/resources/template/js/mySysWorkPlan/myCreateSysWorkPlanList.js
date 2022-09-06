@@ -79,7 +79,7 @@ layui.config({
 			del(data, obj);
 		} else if (layEvent === 'timingSend') { //定时发送
 			timingSend(data);
-		} else if (layEvent === 'cancleTiming') { //取消定时发送
+		} else if (layEvent === 'cancleTiming') { // 取消定时发送
 			cancleTiming(data);
 		} else if (layEvent === 'details'){ // 详情
 			details(data);
@@ -152,7 +152,7 @@ layui.config({
 
 	// 删除
 	function del(data, obj) {
-		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
 			AjaxPostUtil.request({url: sysMainMation.workplanBasePath + "sysworkplan006", params: {planId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});

@@ -94,7 +94,7 @@ layui.config({
 			 	params: {companyId: $("#companyId").val()},
 			 	pagination: false,
 			 	template: selTemplate,
-			 	ajaxSendLoadBefore: function(hdb){},
+			 	ajaxSendLoadBefore: function(hdb) {},
 			 	ajaxSendAfter:function (json) {
 			 		form.render('select');
 			 	}
@@ -176,7 +176,7 @@ layui.config({
 	        return false;
 	    });
 	    
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

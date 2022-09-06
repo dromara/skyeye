@@ -816,7 +816,7 @@ layui.config({
 		 	params: {},
 		 	pagination: false,
 		 	template: getFileContent('tpl/index/noReadNotice.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	options: {},
 		 	ajaxSendAfter:function (json) {

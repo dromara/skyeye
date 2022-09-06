@@ -22,7 +22,7 @@ layui.config({
             pagination: false,
             method: "GET",
             template: $("#showBaseTemplate").html(),
-            ajaxSendLoadBefore: function(hdb){
+            ajaxSendLoadBefore: function(hdb) {
             },
             ajaxSendAfter:function(j){
                 skyeyeReportUtil.getReportEditorType('', selOption, function (data) {

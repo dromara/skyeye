@@ -91,11 +91,11 @@ layui.config({
     });
     
     function loadTable() {
-    	table.reloadData("messageTable", {where:{typeName:$("#typeName").val(),state:$("#state").val()}});
+    	table.reloadData("messageTable", {where:{typeName: $("#typeName").val(),state: $("#state").val()}});
     }
     
     function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where:{typeName:$("#typeName").val(),state:$("#state").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{typeName: $("#typeName").val(),state: $("#state").val()}});
     }
 
 	//新增

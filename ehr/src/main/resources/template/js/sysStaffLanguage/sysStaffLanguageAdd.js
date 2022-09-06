@@ -32,7 +32,7 @@ layui.config({
 				 	params: {typeId: data.value},
 				 	pagination: false,
 				 	template: selTemplate,
-				 	ajaxSendLoadBefore: function(hdb){},
+				 	ajaxSendLoadBefore: function(hdb) {},
 				 	ajaxSendAfter:function (json) {
 				 		form.render('select');
 				 	}

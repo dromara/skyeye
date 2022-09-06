@@ -25,7 +25,7 @@ layui.config({
 			 	params: {},
 			 	pagination: false,
 			 	template: getFileContent('tpl/systheme/systheme.tpl'),
-			 	ajaxSendLoadBefore: function(hdb){
+			 	ajaxSendLoadBefore: function(hdb) {
 			 		hdb.registerHelper("compare1", function(v1, options){
 						return fileBasePath + v1;
 					});
@@ -101,7 +101,7 @@ layui.config({
 	    	 	params: {},
 	    	 	pagination: false,
 	    	 	template: getFileContent('tpl/systheme/custom-bgpic-item.tpl'),
-	    	 	ajaxSendLoadBefore: function(hdb){
+	    	 	ajaxSendLoadBefore: function(hdb) {
 	    	 		hdb.registerHelper("compare1", function(v1, options){
 	    				return fileBasePath + v1;
 	    			});
@@ -135,7 +135,7 @@ layui.config({
 	    	 	params: {},
 	    	 	pagination: false,
 	    	 	template: getFileContent('tpl/systheme/custom-lockbgpic-item.tpl'),
-	    	 	ajaxSendLoadBefore: function(hdb){
+	    	 	ajaxSendLoadBefore: function(hdb) {
 	    	 		hdb.registerHelper("compare1", function(v1, options){
 	    				return fileBasePath + v1;
 	    			});

@@ -16,7 +16,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/rmpropertyvalue/rmpropertyvalueeditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
@@ -29,7 +29,7 @@ layui.config({
 		 		 	params: {},
 		 		 	pagination: false,
 		 		 	template: getFileContent('tpl/template/select-option.tpl'),
-		 		 	ajaxSendLoadBefore: function(hdb){
+		 		 	ajaxSendLoadBefore: function(hdb) {
 		 		 	},
 		 		 	ajaxSendAfter:function(data) {
 		 		 		$("#propertyId").val(json.bean.propertyId);
@@ -41,9 +41,9 @@ layui.config({
 			    	
 			        if (winui.verifyForm(data.elem)) {
 			        	var params = {
-		        			title:$("#title").val(),
-		        			propertyValue:$("#propertyValue").val(),
-		        			propertyId:$("#propertyId").val(),
+		        			title: $("#title").val(),
+		        			propertyValue: $("#propertyValue").val(),
+		        			propertyId: $("#propertyId").val(),
 		        			rowId:parent.rowId,
 			        	};
 			        	
@@ -58,7 +58,7 @@ layui.config({
 		 	}
 	    });
 		
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

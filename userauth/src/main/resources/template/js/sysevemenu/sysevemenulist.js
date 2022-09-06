@@ -25,7 +25,7 @@ layui.config({
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
+	 	ajaxSendLoadBefore: function(hdb) {
 	 	},
 	 	ajaxSendAfter:function (json) {
 	 		form.render('select');
@@ -45,7 +45,7 @@ layui.config({
 		    method: 'post',
 		    url: reqBasePath + 'sys006',
 		    where: getTableParams(),
-		    even:true,
+		    even: true,
 		    page: true,
 		    limits: getLimits(),
 	    	limit: getLimit(),
@@ -137,7 +137,7 @@ layui.config({
     
     // 删除
 	function del(data, obj) {
-		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "sys011", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});

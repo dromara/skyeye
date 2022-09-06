@@ -22,7 +22,7 @@ layui.config({
         pagination: false,
         template: getFileContent('tpl/template/select-option.tpl'),
         method: "GET",
-        ajaxSendLoadBefore: function(hdb){
+        ajaxSendLoadBefore: function(hdb) {
         },
         ajaxSendAfter:function (json) {
             initTable();
@@ -83,7 +83,7 @@ layui.config({
 
     // 删除
     function delet(data) {
-        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: reportBasePath + "reportdatafrom003", params: {id: data.id}, type: 'json', method: "DELETE", callback: function(json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});

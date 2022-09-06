@@ -21,7 +21,7 @@ layui.config({
 		 	params: {rowId: serviceId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sealseservice/sealseservicedetailsTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter: function (json) {
 				// 获取当前登录员工信息

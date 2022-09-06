@@ -34,7 +34,7 @@ layui.config({
 		pagination: false,
 		method: "GET",
 		template: $("#beanTemplate").html(),
-		ajaxSendLoadBefore: function(hdb){},
+		ajaxSendLoadBefore: function(hdb) {},
 		ajaxSendAfter:function (json) {
 			laydate.render({elem: '#executeMonth', type: 'month', range: '~'});
 
@@ -45,7 +45,7 @@ layui.config({
 				pagination: false,
 				template: selTemplate,
 				method: 'GET',
-				ajaxSendLoadBefore: function(hdb){},
+				ajaxSendLoadBefore: function(hdb) {},
 				ajaxSendAfter:function(data) {
 					$("#typeId").val(json.bean.typeId);
 					form.render('select');

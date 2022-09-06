@@ -250,7 +250,7 @@ layui.config({
 		return {
 			firstTime: startTime,
 			lastTime: endTime,
-			title:$("#title").val(),
+			title: $("#title").val(),
 			state: $("#state").val(),
 			realLinesType: $("#realLinesType").val(),
 			whetherEmail: $("#whetherEmail").val()

@@ -94,7 +94,7 @@ layui.config({
 			 	params: {folderId: folderId, shareId: shareId},
 			 	pagination: false,
 			 	template: getFileContent('tpl/shareFile/shareFileItem.tpl'),
-			 	ajaxSendLoadBefore: function(hdb){},
+			 	ajaxSendLoadBefore: function(hdb) {},
 			 	options: {},
 			 	ajaxSendAfter:function (json) {
 					matchingLanguage();

@@ -19,7 +19,7 @@ layui.config({
 	 	pagination: true,
 	 	pagesize: 18,
 	 	template: $("#beanTemplate").html(),
-	 	ajaxSendLoadBefore: function(hdb){
+	 	ajaxSendLoadBefore: function(hdb) {
 	 		hdb.registerHelper("compare1", function(v1, options){
 	 			var fileExt = sysFileUtil.getFileExt(v1);
 	 			if($.inArray(fileExt[0], imageType) >= 0){
@@ -41,7 +41,7 @@ layui.config({
 			});
 	 	},
 	 	options: {'click .del':function(index, row){
-				layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+				layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 					layer.close(index);
 		            AjaxPostUtil.request({url: flowableBasePath + "ifsVoucher003", params: {rowId: row.id}, type: 'json', method: "DELETE", callback: function (json) {
 						winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});

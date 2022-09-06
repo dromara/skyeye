@@ -23,7 +23,7 @@ layui.config({
 		    elem: '#messageTable',
 		    method: 'post',
 		    url: sysMainMation.noticeBasePath + 'notice013',
-		    where: {typeId: typeId, firstTime: startTime, lastTime: endTime, title:$("#titleName").val()},
+		    where: {typeId: typeId, firstTime: startTime, lastTime: endTime, title: $("#titleName").val()},
 		    even: true,
 		    page: true,
 		    limits: [8, 16, 24, 32, 40, 48, 56],
@@ -71,7 +71,7 @@ layui.config({
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/sysnoticefront/sysnoticefrontTemplate.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
+	 	ajaxSendLoadBefore: function(hdb) {
 	 	},
 	 	ajaxSendAfter:function (json) {
 	 		//初始化所有上线列表数据
@@ -103,7 +103,7 @@ layui.config({
     		startTime = $("#upTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#upTime").val().split('~')[1].trim() + ' 23:59:59';
     	}
-    	table.reloadData("messageTable", {where:{typeId: typeId, firstTime: startTime, lastTime: endTime, title:$("#titleName").val()}});
+    	table.reloadData("messageTable", {where:{typeId: typeId, firstTime: startTime, lastTime: endTime, title: $("#titleName").val()}});
     }
     exports('sysnoticefrontlist', {});
 });

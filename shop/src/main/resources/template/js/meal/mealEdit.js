@@ -22,7 +22,7 @@ layui.config({
             pagination: false,
             method: "GET",
             template: $("#beanTemplate").html(),
-            ajaxSendLoadBefore: function(hdb){},
+            ajaxSendLoadBefore: function(hdb) {},
             ajaxSendAfter:function(data) {
 
                 $("input:radio[name=type][value=" + data.bean.type + "]").attr("checked", true);

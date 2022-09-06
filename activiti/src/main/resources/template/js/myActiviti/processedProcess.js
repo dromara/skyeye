@@ -21,7 +21,7 @@ layui.config({
 	    method: 'post',
 	    url: flowableBasePath + 'activitimode014',
 	    where:{},
-	    even:true,
+	    even: true,
 	    page: true,
 		limits: getLimits(),
 		limit: getLimit(),

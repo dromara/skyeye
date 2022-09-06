@@ -32,7 +32,7 @@ layui.config({
 	 	params: {rowId: customerId},
 	 	pagination: false,
 	 	template: getFileContent('tpl/customermanage/customerdetailsTemplate.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
+	 	ajaxSendLoadBefore: function(hdb) {
 	 	},
 	 	ajaxSendAfter: function (json) {
 	 		// 附件回显

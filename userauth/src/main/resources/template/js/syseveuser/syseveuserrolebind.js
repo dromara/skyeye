@@ -15,7 +15,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/syseveuser/rolelist.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){},
+		 	ajaxSendLoadBefore: function(hdb) {},
 		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
 		 		form.render();

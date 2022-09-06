@@ -18,7 +18,7 @@ layui.config({
 		method: 'post',
 		url: sysMainMation.mailBasePath + 'maillist001',
 		where: getTableParams(),
-		even:true,
+		even: true,
 		page: true,
 		limits: getLimits(),
 		limit: getLimit(),
@@ -77,7 +77,7 @@ layui.config({
 	
 	// 删除
 	function del(data) {
-		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.mailBasePath + "maillist009", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});

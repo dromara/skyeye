@@ -27,7 +27,7 @@ layui.config({
 		 	pagination: true,
 		 	pagesize: 16,
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 		hdb.registerHelper("compare1", function(v1, options){
 					return fileBasePath + v1;
 				});

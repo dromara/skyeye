@@ -17,7 +17,7 @@ layui.config({
 		 	pagination: false,
 			method: "GET",
 		 	template: $("#showBaseTemplate").html(),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 				$("input:radio[name=monthlyClearing][value=" + json.bean.monthlyClearing + "]").attr("checked", true);

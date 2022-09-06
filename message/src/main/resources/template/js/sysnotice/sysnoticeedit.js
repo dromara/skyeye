@@ -23,7 +23,7 @@ layui.config({
 			 	params: {},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
-			 	ajaxSendLoadBefore: function(hdb){},
+			 	ajaxSendLoadBefore: function(hdb) {},
 			 	ajaxSendAfter:function (json) {
 			 		$("#noticeTypeId").val(id);
 			 		form.render('select');
@@ -38,7 +38,7 @@ layui.config({
 			 	params: {parentId: $("#noticeTypeId").val()},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
-			 	ajaxSendLoadBefore: function(hdb){},
+			 	ajaxSendLoadBefore: function(hdb) {},
 			 	ajaxSendAfter:function (json) {
 			 		$("#secondTypeId").val(id);
 			 		form.render('select');

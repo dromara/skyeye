@@ -17,7 +17,7 @@ layui.config({
 	 	pagination: true,
 	 	pagesize: 18,
 	 	template: $("#beanTemplate").html(),
-	 	ajaxSendLoadBefore: function(hdb){
+	 	ajaxSendLoadBefore: function(hdb) {
 	 		hdb.registerHelper("compare1", function(v1, options){
 	 			var fileExt = sysFileUtil.getFileExt(v1);
 	 			if($.inArray(fileExt[0], imageType) >= 0){

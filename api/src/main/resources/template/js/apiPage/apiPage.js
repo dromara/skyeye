@@ -57,7 +57,7 @@ layui.config({
 			pagination: false,
 			template: $("#apiMicroservicesTemplate").html(),
 			method: "GET",
-			ajaxSendLoadBefore: function(hdb){},
+			ajaxSendLoadBefore: function(hdb) {},
 			ajaxSendAfter:function(j){
 				form.render('select');
 				// 加载系统信息

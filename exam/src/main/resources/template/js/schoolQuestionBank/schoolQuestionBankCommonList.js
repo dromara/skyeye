@@ -39,7 +39,7 @@ layui.config({
     	 	params: {schoolId: $("#schoolId").val()},
     	 	pagination: false,
     	 	template: $("#gradeTemplate").html(),
-    	 	ajaxSendLoadBefore: function(hdb){
+    	 	ajaxSendLoadBefore: function(hdb) {
     	 	},
     	 	ajaxSendAfter:function (json) {
     	 		form.render('select');
@@ -55,7 +55,7 @@ layui.config({
 		 	params: {gradeId: gradeId},
 		 	pagination: false,
 		 	template: $("#subjectTemplate").html(),
-		 	ajaxSendLoadBefore: function(hdb){},
+		 	ajaxSendLoadBefore: function(hdb) {},
 		 	ajaxSendAfter:function (json) {
 		 		form.render('select');
 		 	}
@@ -70,7 +70,7 @@ layui.config({
 		    method: 'post',
 		    url: schoolBasePath + 'schoolquestionbank019',
 		    where: getTablePatams(),
-		    even:true,
+		    even: true,
 		    page: true,
 		    limits: getLimits(),
 	    	limit: getLimit(),

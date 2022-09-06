@@ -20,7 +20,7 @@ layui.config({
 		params: {rowId: parent.rowId},
 		pagination: false,
 		template: $("#beanTemplate").html(),
-		ajaxSendLoadBefore: function(hdb){
+		ajaxSendLoadBefore: function(hdb) {
 		},
 		ajaxSendAfter:function (json) {
 
@@ -155,7 +155,7 @@ layui.config({
 			params: {notId: id},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
-			ajaxSendLoadBefore: function(hdb){
+			ajaxSendLoadBefore: function(hdb) {
 			},
 			ajaxSendAfter:function (json) {
 				$("#OverAllCompany").val(pId);
@@ -353,7 +353,7 @@ layui.config({
 		}
 	}
 
-	//取消
+	// 取消
 	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);
 	});

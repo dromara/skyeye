@@ -14684,7 +14684,7 @@ UE.plugins['paste'] = function () {
 
             //过滤word粘贴过来的冗余属性
             html = UE.filterWord(html);
-            //取消了忽略空白的第二个参数，粘贴过来的有些是有空白的，会被套上相关的标签
+            // 取消了忽略空白的第二个参数，粘贴过来的有些是有空白的，会被套上相关的标签
             var root = UE.htmlparser(html);
             //如果给了过滤规则就先进行过滤
             if (me.options.filterRules) {
@@ -23903,7 +23903,7 @@ UE.plugin.register('autoupload', function (){
                         }
 
                     });
-                    //取消拖放图片时出现的文字光标位置提示
+                    // 取消拖放图片时出现的文字光标位置提示
                     domUtils.on(me.body, 'dragover', function (e) {
                         if(e.dataTransfer.types[0] == 'Files') {
                             e.preventDefault();

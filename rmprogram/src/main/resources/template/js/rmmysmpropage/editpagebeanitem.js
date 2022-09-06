@@ -16,7 +16,7 @@ layui.config({
 		 	params: {rowId: parent.pageId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/rmmysmpropage/projectpageeditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
@@ -39,7 +39,7 @@ layui.config({
 		 	}
  		});
 	    
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

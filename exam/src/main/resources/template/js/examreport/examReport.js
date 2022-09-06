@@ -21,7 +21,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/examreport/examReport.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 		
 		 		hdb.registerHelper("showIndex", function(v1, options) {
 		 			quIndex++;

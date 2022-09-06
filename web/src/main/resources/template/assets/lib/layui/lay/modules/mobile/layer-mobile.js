@@ -164,7 +164,7 @@ layui.define(function(exports){
       return o.index;
     },
     
-    close: function(index){
+    close: function (index) {
       var ibox = S('#'+classs[0]+index)[0];
       if(!ibox) return;
       ibox.innerHTML = '';

@@ -28,7 +28,7 @@ layui.config({
 			params: {},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option-must.tpl'),
-			ajaxSendLoadBefore: function(hdb){
+			ajaxSendLoadBefore: function(hdb) {
 			},
 			ajaxSendAfter:function(j){
 				$("#conferenceRoom").val(json.bean.conferenceRoom);

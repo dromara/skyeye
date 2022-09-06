@@ -40,7 +40,7 @@ layui.config({
 			 	params: {schoolId: $("#schoolId").val()},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
-			 	ajaxSendLoadBefore: function(hdb){},
+			 	ajaxSendLoadBefore: function(hdb) {},
 			 	ajaxSendAfter:function (json) {
 			 		form.render('select');
 			 	}
@@ -69,7 +69,7 @@ layui.config({
 			 	params: {schoolId: $("#schoolId").val()},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
-			 	ajaxSendLoadBefore: function(hdb){},
+			 	ajaxSendLoadBefore: function(hdb) {},
 			 	ajaxSendAfter:function (json) {
 			 		form.render('select');
 			 	}
@@ -84,7 +84,7 @@ layui.config({
 			 	params: {gradeId: $("#gradeId").val()},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
-			 	ajaxSendLoadBefore: function(hdb){},
+			 	ajaxSendLoadBefore: function(hdb) {},
 			 	ajaxSendAfter:function (json) {
 			 		form.render('select');
 			 	}
@@ -99,7 +99,7 @@ layui.config({
 			 	params: {gradeId: $("#gradeId").val()},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/checkbox-property.tpl'),
-			 	ajaxSendLoadBefore: function(hdb){},
+			 	ajaxSendLoadBefore: function(hdb) {},
 			 	ajaxSendAfter:function(data) {
 			 		$("#sessionYear").html(data.bean.year + '届学生');
 			 		form.render('checkbox');
@@ -142,7 +142,7 @@ layui.config({
 	        return false;
 	    });
 	    
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

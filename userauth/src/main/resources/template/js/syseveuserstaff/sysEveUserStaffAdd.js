@@ -125,7 +125,7 @@ layui.config({
 	     	params: {},
 	     	pagination: false,
 	     	template: $("#checkTimeStrTemplate").html(),
-	     	ajaxSendLoadBefore: function(hdb){
+	     	ajaxSendLoadBefore: function(hdb) {
 	     	},
 	     	ajaxSendAfter:function (json) {
 	     		form.render('checkbox');

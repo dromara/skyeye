@@ -177,7 +177,7 @@ layui.config({
 			pagination: false,
 			method: "GET",
 			template: getFileContent('tpl/index/todaySchedule.tpl'),
-			ajaxSendLoadBefore: function(hdb){
+			ajaxSendLoadBefore: function(hdb) {
 				hdb.registerHelper('compare1', function(v1, options) {
 					if(v1 != '3'){
 						return options.inverse(this);

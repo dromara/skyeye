@@ -18,7 +18,7 @@ layui.config({
 	    method: 'post',
 	    url: flowableBasePath + 'activitimode002',
 	    where: getTableParams(),
-	    even:true,
+	    even: true,
 	    page: true,
 		limits: getLimits(),
 		limit: getLimit(),
@@ -60,7 +60,7 @@ layui.config({
         	fb(data);
         } else if (layEvent === 'versionLevel') { //版本升级
         	versionLevel(data);
-        } else if (layEvent === 'qxfb') { //取消发布
+        } else if (layEvent === 'qxfb') { // 取消发布
         	qxfb(data);
         } else if (layEvent === 'ecportXML') { //导出xml
         	ecportXML(data);

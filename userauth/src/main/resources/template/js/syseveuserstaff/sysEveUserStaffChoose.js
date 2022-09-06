@@ -160,7 +160,7 @@ layui.config({
 		 	params: {companyId: $("#companyList").val()},
 		 	pagination: false,
 		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
+		 	ajaxSendLoadBefore: function(hdb) {},
 		 	ajaxSendAfter:function (json) {
 		 		form.render('select');
 		 	}

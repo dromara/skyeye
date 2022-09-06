@@ -18,7 +18,7 @@ layui.config({
 		 	pagination: true,
 		 	pagesize: 20,
 		 	template: getFileContent('tpl/chat/invitationItem.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 		hdb.registerHelper('compareimg', function(v1, options) {
 		 			if(isNull(v1)){
 		        		return '../../assets/images/os_windows.png';

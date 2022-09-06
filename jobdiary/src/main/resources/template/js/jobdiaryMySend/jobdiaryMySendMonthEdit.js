@@ -78,7 +78,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/jobdiaryMySend/jobdiaryMySendMonthEditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 		hdb.registerHelper("compare1", function(v1, options){
 					return v1.replace(reg, "\n");
 				});
@@ -225,7 +225,7 @@ layui.config({
 		 	}
 		});
 
-	    //取消
+	    // 取消
 	    $("body").on("click", "#monthCancle", function() {
 	    	parent.layer.close(index);
 	    });

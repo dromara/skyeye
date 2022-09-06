@@ -22,7 +22,7 @@ layui.config({
 		 	pagination: false,
 		 	method: "GET",
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendLoadBefore: function(hdb){},
+		 	ajaxSendLoadBefore: function(hdb) {},
 		 	ajaxSendAfter:function (json) {
 		 		laydate.render({elem: '#getTime', trigger: 'click'});
 
@@ -35,7 +35,7 @@ layui.config({
 					params: {typeId: $("#languageId").val()},
 					pagination: false,
 					template: selTemplate,
-					ajaxSendLoadBefore: function(hdb){},
+					ajaxSendLoadBefore: function(hdb) {},
 					ajaxSendAfter:function(data) {
 						$("#levelId").val(json.bean.levelId);
 						form.render('select');
@@ -54,7 +54,7 @@ layui.config({
 						 	params: {typeId: data.value},
 						 	pagination: false,
 						 	template: selTemplate,
-						 	ajaxSendLoadBefore: function(hdb){},
+						 	ajaxSendLoadBefore: function(hdb) {},
 						 	ajaxSendAfter:function (json) {
 						 		form.render('select');
 						 	}

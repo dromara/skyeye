@@ -660,9 +660,9 @@ UE.I18N['en'] = {
         copySuccess:"URL has been copied!",
 
         'flashI18n':{
-            lang:encodeURI( '{"UploadingState":"totalNum: ${a},uploadComplete: ${b}", "BeforeUpload":"waitingNum: ${a}", "ExceedSize":"Size exceed${a}", "ErrorInPreview":"Preview failed", "DefaultDescription":"Description", "LoadingImage":"Loading..."}' ),
-            uploadingTF:encodeURI( '{"font":"Arial", "size":12, "color":"0x000", "bold":"true", "italic":"false", "underline":"false"}' ),
-            imageTF:encodeURI( '{"font":"Arial", "size":11, "color":"red", "bold":"false", "italic":"false", "underline":"false"}' ),
+            lang: encodeURI( '{"UploadingState":"totalNum: ${a},uploadComplete: ${b}", "BeforeUpload":"waitingNum: ${a}", "ExceedSize":"Size exceed${a}", "ErrorInPreview":"Preview failed", "DefaultDescription":"Description", "LoadingImage":"Loading..."}' ),
+            uploadingTF: encodeURI( '{"font":"Arial", "size":12, "color":"0x000", "bold":"true", "italic":"false", "underline":"false"}' ),
+            imageTF: encodeURI( '{"font":"Arial", "size":11, "color":"red", "bold":"false", "italic":"false", "underline":"false"}' ),
             textEncoding:"utf-8",
             addImageSkinURL:"addImage.png",
             allDeleteBtnUpSkinURL:"allDeleteBtnUpSkin.png",

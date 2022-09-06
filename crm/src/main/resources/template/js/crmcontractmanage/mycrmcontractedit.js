@@ -25,7 +25,7 @@ layui.config({
 		params: {rowId: parent.rowId},
 		pagination: false,
 		template: getFileContent('tpl/crmcontractmanage/mycrmcontracteditTemplate.tpl'),
-		ajaxSendLoadBefore: function(hdb){
+		ajaxSendLoadBefore: function(hdb) {
 		},
 		ajaxSendAfter: function (json) {
 			if(json.bean.editRow == "1"){

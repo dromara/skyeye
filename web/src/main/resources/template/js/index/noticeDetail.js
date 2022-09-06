@@ -16,7 +16,7 @@ layui.config({
 		 	params: {rowId: parent.parentRowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/index/noticeDetailTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();

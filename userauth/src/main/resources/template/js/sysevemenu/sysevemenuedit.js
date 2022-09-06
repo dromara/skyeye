@@ -20,7 +20,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 		//是否为系统菜单
 		 		hdb.registerHelper("compare2", function(v1, options){
 					if(v1 == '1'){

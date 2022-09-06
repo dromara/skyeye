@@ -174,7 +174,7 @@ layui.config({
     	return {
     		startTime: startTime,
     		endTime: endTime,
-    		state:$("#useState").val()
+    		state: $("#useState").val()
     	};
     }
 	

@@ -20,7 +20,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/schoolgrademation/schoolgrademationeditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		if(json.bean.parentName == '0' || isNull(json.bean.parentName)){
@@ -52,7 +52,7 @@ layui.config({
 		 	}
 	    });
 		
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

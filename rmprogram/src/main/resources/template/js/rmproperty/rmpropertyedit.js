@@ -17,7 +17,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/rmproperty/rmpropertyeditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		
@@ -97,7 +97,7 @@ layui.config({
 		    		 	params: {},
 		    		 	pagination: false,
 		    		 	template: getFileContent('tpl/template/select-option.tpl'),
-		    		 	ajaxSendLoadBefore: function(hdb){
+		    		 	ajaxSendLoadBefore: function(hdb) {
 		    		 	},
 		    		 	ajaxSendAfter:function(json1){
 		    		 		$("#displayTemplateId").val(json.bean.displayTemplateId);
@@ -119,7 +119,7 @@ layui.config({
 			    		 	params: {},
 			    		 	pagination: false,
 			    		 	template: getFileContent('tpl/template/select-option.tpl'),
-			    		 	ajaxSendLoadBefore: function(hdb){
+			    		 	ajaxSendLoadBefore: function(hdb) {
 			    		 	},
 			    		 	ajaxSendAfter:function (json) {
 			    		 		form.render('select');
@@ -143,7 +143,7 @@ layui.config({
 		    	 	pagination: false,
 					method: 'GET',
 		    	 	template: getFileContent('tpl/template/select-option.tpl'),
-		    	 	ajaxSendLoadBefore: function(hdb){
+		    	 	ajaxSendLoadBefore: function(hdb) {
 		    	 	},
 		    	 	ajaxSendAfter:function(data) {
 		    	 		$("#dsFormContentId").val(json.bean.dsFormContentId);
@@ -169,15 +169,15 @@ layui.config({
 		 		form.on('submit(formEditBean)', function (data) {
 			        if (winui.verifyForm(data.elem)) {
 			        	var params = {
-		        			title:$("#title").val(),
-		        			propertyTag:$("#propertyTag").val(),
-		        			propertyUnit:encodeURI($("#propertyUnit").val()),
-		        			dsFormContentId:$("#dsFormContentId").val(),
+		        			title: $("#title").val(),
+		        			propertyTag: $("#propertyTag").val(),
+		        			propertyUnit: encodeURI($("#propertyUnit").val()),
+		        			dsFormContentId: $("#dsFormContentId").val(),
 		        			propertyOut:data.field.propertyOut,
 		        			selChildData:data.field.selChildData,
-		        			htmlContent:encodeURI(htmlContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
-		        			jsContent:encodeURI(jsContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
-		        			jsRelyOn:encodeURI(jsRelyOnContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+		        			htmlContent: encodeURI(htmlContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+		        			jsContent: encodeURI(jsContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+		        			jsRelyOn: encodeURI(jsRelyOnContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
 		        			rowId:parent.rowId
 			        	};
 			        	if(data.field.selChildData == '1'){
@@ -202,7 +202,7 @@ layui.config({
 		 	}
 	    });
 		
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

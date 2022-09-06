@@ -44,12 +44,12 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'cancleShare') { //取消分享
+        if (layEvent === 'cancleShare') { // 取消分享
         	cancleShare(data, obj);
         }
     });
 	
-	//取消分享
+	// 取消分享
 	function cancleShare(data, obj){
 		layer.confirm("取消分享链接将失效，确定不分享了吗？", { icon: 3, title: '系统提示', btn: ['取消分享','我再想想'] }, function (index) {
 			layer.close(index);

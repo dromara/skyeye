@@ -23,7 +23,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/companyjob/companyjobeditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		
@@ -94,7 +94,7 @@ layui.config({
 						params: {companyId: $("#companyId").val()},
 						pagination: false,
 						template: selTemplate,
-						ajaxSendLoadBefore: function(hdb){},
+						ajaxSendLoadBefore: function(hdb) {},
 						ajaxSendAfter:function(j){
 							$("#departmentId").val(json.bean.departmentId);
 							form.render('select');
@@ -234,14 +234,14 @@ layui.config({
 				params: {companyId: $("#companyId").val()},
 				pagination: false,
 				template: selTemplate,
-				ajaxSendLoadBefore: function(hdb){},
+				ajaxSendLoadBefore: function(hdb) {},
 				ajaxSendAfter:function (json) {
 					form.render('select');
 				}
 			});
 		}
 		
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

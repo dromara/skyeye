@@ -2274,7 +2274,7 @@ layui.define(['jquery','layer','element','form'], function(exports) {
 				$p_div = $p_ul.prev("div"); //当前选中节点的顶级li节点的父级ul的前一个div
 			var $toolBarDiv = _this.obj.prev('div#dtree_toolbar_'+_this.obj[0].id);
 			$toolBarDiv.find(".layui-nav-child").removeClass('layui-anim-fadein layui-show');
-			layer.confirm('确定要删除该'+_this.toolbarStyle.title+'？', {icon: 3, title:'删除'+_this.toolbarStyle.title}, function(index){
+			layer.confirm('确定要删除该'+_this.toolbarStyle.title+'？', {icon: 3, title:'删除'+_this.toolbarStyle.title}, function (index) {
 				var node = _this.getNodeParam($div);
 				_this.temp = [$p_li, $p_div];
 				_this.toolbarFun.delTreeNode(_this.getRequestParam(node));

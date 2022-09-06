@@ -27,7 +27,7 @@ layui.config({
 	 	params: {rowId: parent.rowId},
 	 	pagination: false,
 	 	template: getFileContent('tpl/crmOpportunity/crmopportunityeditTemplate.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
+	 	ajaxSendLoadBefore: function(hdb) {
 	 	},
 	 	ajaxSendAfter: function (json) {
 	 		

@@ -99,11 +99,11 @@ layui.config({
     });
     
     function loadTable() {
-    	table.reloadData("messageTable", {where:{sensitiveWord:$("#sensitiveWord").val()}});
+    	table.reloadData("messageTable", {where:{sensitiveWord: $("#sensitiveWord").val()}});
     }
     
     function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where:{sensitiveWord:$("#sensitiveWord").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{sensitiveWord: $("#sensitiveWord").val()}});
     }
     
     exports('forumtaglist', {});

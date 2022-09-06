@@ -18,7 +18,7 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: sysMainMation.rmprogramBasePath + 'rmxcx001',
-	    where: {rmTypeName:$("#rmTypeName").val()},
+	    where: {rmTypeName: $("#rmTypeName").val()},
 	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
@@ -118,11 +118,11 @@ layui.config({
     });
     
     function loadTable() {
-    	table.reloadData("messageTable", {where:{rmTypeName:$("#rmTypeName").val()}});
+    	table.reloadData("messageTable", {where:{rmTypeName: $("#rmTypeName").val()}});
     }
     
     function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where:{rmTypeName:$("#rmTypeName").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{rmTypeName: $("#rmTypeName").val()}});
     }
     
     exports('rmtypelist', {});

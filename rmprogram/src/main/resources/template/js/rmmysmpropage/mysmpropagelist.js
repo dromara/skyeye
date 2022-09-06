@@ -28,7 +28,7 @@ layui.config({
 	 	params: {rowId: parent.rowId},
 	 	pagination: false,
 	 	template: getFileContent('tpl/rmmysmpropage/pageTemplate.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
+	 	ajaxSendLoadBefore: function(hdb) {
 	 	},
 	 	options: {
 	 		'click .page-click-item':function(index, row){//选择编辑模板中的页面
@@ -135,7 +135,7 @@ layui.config({
 	 		 	params: {},
 	 		 	pagination: false,
 	 		 	template: getFileContent('tpl/rmmysmpropage/groupTemplate.tpl'),
-	 		 	ajaxSendLoadBefore: function(hdb){
+	 		 	ajaxSendLoadBefore: function(hdb) {
 	 		 	},
 	 		 	ajaxSendAfter:function (json) {
 	 		 		
@@ -183,7 +183,7 @@ layui.config({
     	 	params: {rowId: id},
     	 	pagination: false,
     	 	template: getFileContent('tpl/rmmysmpropage/groupMemberTemplate.tpl'),
-    	 	ajaxSendLoadBefore: function(hdb){
+    	 	ajaxSendLoadBefore: function(hdb) {
     	 		hdb.registerHelper("compare1", function(v1, options){
 					return fileBasePath + "images/upload/smpropic/" + v1;
 				});

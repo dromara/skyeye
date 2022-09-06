@@ -19,7 +19,7 @@ layui.config({
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
+	 	ajaxSendLoadBefore: function(hdb) {
 	 	},
 	 	ajaxSendAfter:function (json) {
 	 		form.render();
@@ -40,7 +40,7 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: sysMainMation.rmprogramBasePath + 'rmxcx008',
-	    where: {rmGroupName:$("#rmGroupName").val(), rmTypeId:$("#rmTypeId").val()},
+	    where: {rmGroupName: $("#rmGroupName").val(), rmTypeId: $("#rmTypeId").val()},
 	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
@@ -137,11 +137,11 @@ layui.config({
     });
     
     function loadTable() {
-    	table.reloadData("messageTable", {where:{rmGroupName:$("#rmGroupName").val(), rmTypeId:$("#rmTypeId").val()}});
+    	table.reloadData("messageTable", {where:{rmGroupName: $("#rmGroupName").val(), rmTypeId: $("#rmTypeId").val()}});
     }
     
     function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where:{rmGroupName:$("#rmGroupName").val(), rmTypeId:$("#rmTypeId").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{rmGroupName: $("#rmGroupName").val(), rmTypeId: $("#rmTypeId").val()}});
     }
     
     exports('rmgrouplist', {});

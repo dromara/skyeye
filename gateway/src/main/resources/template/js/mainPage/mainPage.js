@@ -63,7 +63,7 @@ layui.config({
 			params: {},
 			pagination: false,
 			template: $("#actModelTemplate").html(),
-			ajaxSendLoadBefore: function(hdb){
+			ajaxSendLoadBefore: function(hdb) {
 				// 展示图标
 				hdb.registerHelper("compare1", function(v1, v2, v3, v4, options){
 					var str = "";

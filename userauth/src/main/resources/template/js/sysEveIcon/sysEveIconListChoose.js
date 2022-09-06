@@ -16,7 +16,7 @@ layui.config({
 	 	pagination: true,
 	 	pagesize: 18,
 	 	template: $("#useTemplate").html(),
-	 	ajaxSendLoadBefore: function(hdb){
+	 	ajaxSendLoadBefore: function(hdb) {
 	 	},
 	 	options: {'click .choose':function(i, row){
 	 			parent.systemCommonUtil.sysIconChooseClass = row.iconClass;

@@ -36,7 +36,7 @@ layui.config({
 		 	pagination: false,
 		 	pagesize: 10,
 		 	template: taglistTemplate,
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 	}
@@ -61,7 +61,7 @@ layui.config({
 		 	pagination: true,
 		 	pagesize: 12,
 		 	template: addListTemplate,
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		var row = json.rows;

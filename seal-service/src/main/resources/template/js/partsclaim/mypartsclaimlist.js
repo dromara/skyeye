@@ -122,7 +122,7 @@ layui.config({
 	
 	//删除
 	function deleteRow(data) {
-		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
             
             AjaxPostUtil.request({url: flowableBasePath + "sealseservice025", params: {rowId: data.id}, type: 'json', callback: function (json) {

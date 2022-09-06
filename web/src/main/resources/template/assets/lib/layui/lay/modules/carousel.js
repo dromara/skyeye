@@ -206,7 +206,7 @@ layui.define('jquery', function(exports){
     var tplInd = that.elemInd = $(['<div class="'+ ELEM_IND +'"><ul>'
       ,function(){
         var li = [];
-        layui.each(that.elemItem, function(index){
+        layui.each(that.elemItem, function (index) {
           li.push('<li'+ (options.index === index ? ' class="layui-this"' : '') +'></li>');
         });
         return li.join('');

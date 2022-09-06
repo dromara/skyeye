@@ -16,7 +16,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/dsformdisplaytemplate/dsformdisplaytemplateeditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		
@@ -44,8 +44,8 @@ layui.config({
 		 		form.on('submit(formEditBean)', function (data) {
 			        if (winui.verifyForm(data.elem)) {
 			        	var params = {
-		        			templateName:$("#templateName").val(),
-		        			templateContent:encodeURI(templateContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+		        			templateName: $("#templateName").val(),
+		        			templateContent: encodeURI(templateContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
 		        			rowId:parent.rowId
 			        	};
 			        	AjaxPostUtil.request({url: flowableBasePath + "dsformdisplaytemplate005", params: params, type: 'json', callback: function (json) {
@@ -59,11 +59,10 @@ layui.config({
 		 	}
 	    });
 		
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	    
 	});
-	    
 });

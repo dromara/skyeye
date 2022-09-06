@@ -47,7 +47,7 @@ layui.config({
 	    	 	params: {schoolId: $("#schoolId").val()},
 	    	 	pagination: false,
 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
-	    	 	ajaxSendLoadBefore: function(hdb){
+	    	 	ajaxSendLoadBefore: function(hdb) {
 	    	 	},
 	    	 	ajaxSendAfter:function (json) {
 	    	 		form.render('select');
@@ -63,7 +63,7 @@ layui.config({
 	    	 	params: {schoolId: $("#schoolId").val()},
 	    	 	pagination: false,
 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
-	    	 	ajaxSendLoadBefore: function(hdb){
+	    	 	ajaxSendLoadBefore: function(hdb) {
 	    	 	},
 	    	 	ajaxSendAfter:function (json) {
 	    	 		form.render('select');
@@ -109,7 +109,7 @@ layui.config({
  				}});
  	    });
 	    
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

@@ -24,7 +24,7 @@ layui.config({
 	 	params: {rowId: rowId},
 	 	pagination: false,
 	 	template: getFileContent('tpl/forumshow/myforumeditTemplate.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
+	 	ajaxSendLoadBefore: function(hdb) {
 	 		//是否匿名
 	 		hdb.registerHelper("compare4", function(v1, options){
 				if(v1 == '2'){

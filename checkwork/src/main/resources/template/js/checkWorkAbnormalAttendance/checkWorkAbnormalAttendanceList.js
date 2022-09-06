@@ -31,7 +31,7 @@ layui.config({
     	searchPlaceholder: '审批人搜索',	//搜索输入框的提示文字 默认关键词搜索
     	table: {	//定义表格参数，与LAYUI的TABLE模块一致，只是无需再定义表格elem
     		url: flowableBasePath + 'checkwork008',
-    		where: {userName:$("#userName").val()},
+    		where: {userName: $("#userName").val()},
     		method: 'post',
     		page: true,
     	    limits: [8, 16, 24, 32, 40, 48, 56],

@@ -84,7 +84,7 @@ layui.config({
 		 	params: {},
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){},
+		 	ajaxSendLoadBefore: function(hdb) {},
 		 	ajaxSendAfter:function (json) {
 		 		form.render('select');
 		 	}
@@ -187,7 +187,7 @@ layui.config({
     });
     
     function loadTable() {
-		tableTree.reload("messageTable", {where:{name:$("#name").val(),parentId:$("#firstType").val()}});
+		tableTree.reload("messageTable", {where:{name: $("#name").val(),parentId: $("#firstType").val()}});
     }
     
     exports('sysnoticetypelist', {});

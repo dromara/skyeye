@@ -578,7 +578,7 @@ layui.define(function(exports){
         var dom   = $(structure).get(0),
             clone = dom.parentNode || this.length > 1
 
-      return this.each(function(index){
+      return this.each(function (index) {
         $(this).wrapAll(
           func ? structure.call(this, index) :
             clone ? dom.cloneNode(true) : dom
@@ -597,7 +597,7 @@ layui.define(function(exports){
     },
     wrapInner: function(structure){
       var func = isFunction(structure)
-      return this.each(function(index){
+      return this.each(function (index) {
         var self = $(this), contents = self.contents(),
             dom  = func ? structure.call(this, index) : structure
         contents.length ? contents.wrapAll(dom) : self.append(dom)
@@ -688,7 +688,7 @@ layui.define(function(exports){
       }
     },
     offset: function(coordinates){
-      if (coordinates) return this.each(function(index){
+      if (coordinates) return this.each(function (index) {
         var $this = $(this),
             coords = funcArg(this, coordinates, index, $this.offset()),
             parentOffset = $this.offsetParent().offset(),

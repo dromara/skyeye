@@ -17,7 +17,7 @@ layui.config({
             pagination: false,
             method: "GET",
             template: $("#beanTemplate").html(),
-            ajaxSendLoadBefore: function(hdb){},
+            ajaxSendLoadBefore: function(hdb) {},
             ajaxSendAfter:function(data) {
                 memberId = data.bean.memberId;
             	textool.init({eleId: 'remark', maxlength: 400});

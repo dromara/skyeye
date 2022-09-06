@@ -118,10 +118,10 @@ layui.config({
 
     function getTableParams() {
     	return {
-    		userName:$("#userName").val(),
-			userSex:$("#userSex").val(),
-			userIdCard:$("#userIdCard").val(),
-			schoolId:$("#schoolId").val()
+    		userName: $("#userName").val(),
+			userSex: $("#userSex").val(),
+			userIdCard: $("#userIdCard").val(),
+			schoolId: $("#schoolId").val()
     	};
 	}
     

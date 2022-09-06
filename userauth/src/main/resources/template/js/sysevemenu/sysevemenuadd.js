@@ -163,7 +163,7 @@ layui.config({
  	    //初始化加载隐藏创世菜单
  	    $("#parentIdBox").addClass("layui-hide");
 	    
- 	    //取消
+ 	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

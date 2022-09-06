@@ -19,7 +19,7 @@ layui.config({
         pagination: false,
         template: getFileContent('tpl/template/select-option.tpl'),
         method: "GET",
-        ajaxSendLoadBefore: function(hdb){
+        ajaxSendLoadBefore: function(hdb) {
         },
         ajaxSendAfter:function (json) {
             initTable();

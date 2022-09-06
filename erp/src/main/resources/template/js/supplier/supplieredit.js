@@ -15,7 +15,7 @@ layui.config({
             params: {rowId: parent.rowId},
             pagination: false,
             template: getFileContent('tpl/supplier/suppliereditTemplate.tpl'),
-            ajaxSendLoadBefore: function(hdb){},
+            ajaxSendLoadBefore: function(hdb) {},
             ajaxSendAfter:function (json) {
             	
             	textool.init({eleId: 'description', maxlength: 200});

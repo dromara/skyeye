@@ -680,7 +680,7 @@
 			}
 		});
 
-		//取消
+		// 取消
 		function cancel() {
 			var close = config.cancel && config.cancel(that.index, layero);
 			close === false || layer.close(that.index);

@@ -20,7 +20,7 @@ layui.config({
 		 	pagination: true,
 		 	pagesize: 50,
 		 	template: getFileContent('tpl/chat/chatLog.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 		hdb.registerHelper('compare1', function(v1, v2, options) {
 		 			if(v1 === v2){
 		 				return options.inverse(this);

@@ -34,8 +34,8 @@ layui.config({
 	    form.on('submit(formAddBean)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
 	        	var params = {
-        			templateName:$("#templateName").val(),
-        			templateContent:encodeURI(templateContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26"))
+        			templateName: $("#templateName").val(),
+        			templateContent: encodeURI(templateContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26"))
 	        	};
 	        	AjaxPostUtil.request({url: flowableBasePath + "dsformdisplaytemplate002", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
@@ -45,7 +45,7 @@ layui.config({
 	        return false;
 	    });
 	    
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

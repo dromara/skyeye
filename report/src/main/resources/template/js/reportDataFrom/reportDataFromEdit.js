@@ -24,7 +24,7 @@ layui.config({
             pagination: false,
             method: "GET",
             template: $("#showBaseTemplate").html(),
-            ajaxSendLoadBefore: function(hdb){
+            ajaxSendLoadBefore: function(hdb) {
             },
             ajaxSendAfter:function(j){
                 $("#dataBox").html(getFileContent(j.bean.staticTplPath));
@@ -202,7 +202,7 @@ layui.config({
                     pagination: false,
                     template: selOption,
                     method: "GET",
-                    ajaxSendLoadBefore: function(hdb){
+                    ajaxSendLoadBefore: function(hdb) {
                     },
                     ajaxSendAfter:function (json) {
                         $("#sqlDataBase").val(bean.sqlDataBaseId);

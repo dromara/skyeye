@@ -17,7 +17,7 @@ layui.config({
 		 	pagination: false,
 			method: "GET",
 		 	template: $("#showTemplate").html(),
-		 	ajaxSendLoadBefore: function(hdb){
+		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter: function (json) {
 
