@@ -32,7 +32,7 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: flowableBasePath + 'dsformdisplaytemplate001',
-	    where:{templateName: $("#templateName").val()},
+	    where: getTableParams(),
 	    even:true,
 	    page: true,
 		limits: getLimits(),
@@ -41,7 +41,7 @@ layui.config({
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'templateName', title: '模板标题', width: 180 },
 	        { field: 'id', title: '模板内容', align: 'center', width: 80, templet: function (d) {
-	        	if (!isNull(d.templateContent)){
+	        	if (!isNull(d.templateContent)) {
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="templateContent"></i>';
 	        	} else {
 	        		return '无';
@@ -52,6 +52,9 @@ layui.config({
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入模板标题", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -74,17 +77,8 @@ layui.config({
 	        });
         }
     });
-	
-	
-	form.render();
-	form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-        	refreshTable();
-        }
-        return false;
-	});
-	
-	//删除
+
+	// 删除
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
@@ -95,12 +89,12 @@ layui.config({
 		});
 	}
 	
-	//编辑分类
+	// 编辑
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/dsformdisplaytemplate/dsformdisplaytemplateedit.html", 
-			title: "编辑动态表单数据展示模板",
+			title: "编辑",
 			pageId: "dsformdisplaytemplateedit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
@@ -108,32 +102,32 @@ layui.config({
 				loadTable();
 			}});
 	}
-	
-	//刷新数据
-    $("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
-    //新增
-    $("body").on("click", "#addBean", function() {
-    	_openNewWindows({
-			url: "../../tpl/dsformdisplaytemplate/dsformdisplaytemplateadd.html", 
-			title: "新增动态表单数据展示模板",
+
+	// 新增
+	$("body").on("click", "#addBean", function() {
+		_openNewWindows({
+			url: "../../tpl/dsformdisplaytemplate/dsformdisplaytemplateadd.html",
+			title: "新增",
 			pageId: "dsformdisplaytemplateadd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
+	});
+
+	form.render();
+    $("body").on("click", "#reloadTable", function() {
+    	loadTable();
     });
     
     function loadTable() {
-    	table.reloadData("messageTable", {where:{templateName: $("#templateName").val()}});
+    	table.reloadData("messageTable", {where: getTableParams()});
     }
     
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where:{templateName: $("#templateName").val()}});
-    }
+	function getTableParams(){
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
     
     exports('dsformdisplaytemplatelist', {});
 });
