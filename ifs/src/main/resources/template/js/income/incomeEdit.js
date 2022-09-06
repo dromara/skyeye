@@ -42,7 +42,7 @@ layui.config({
                     id: json.bean.organId,
                     supplierName: json.bean.supplierName
                 }
-            }else if(json.bean.organType == 2){
+            } else if (json.bean.organType == 2){
                 // 客户信息
                 sysCustomerUtil.customerMation = {
                     id: json.bean.organId,

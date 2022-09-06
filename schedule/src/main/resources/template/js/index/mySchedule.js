@@ -250,7 +250,7 @@ layui.config({
 			}
 			var li = $(".schedule-list ul").find("li");
 			var liIndex;
-			$.each(li, function(i, item){
+			$.each(li, function(i, item) {
 				var _thisTime = $(item).find('h3[class="layui-timeline-title"]').html().split('~')[0];
 				if(!compare_hms(bean.scheduleStartTime, day + " " + _thisTime + ':00') && isNull(liIndex)){
 					liIndex = i - 1;

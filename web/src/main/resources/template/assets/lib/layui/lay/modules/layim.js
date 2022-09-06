@@ -104,7 +104,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 	     				'<li class="layui-icon" title="历史会话" layim-event="tab" lay-type="history">&#xe611;</li>', 
 	     			"</ul>", 
 	     			'<ul class="layui-unselect layim-tab-content {{# if(d.base.isfriend){ }}layui-show{{# } }} layim-list-friend">', 
-	     				'{{# layui.each(d.friend, function(index, item){ var spread = d.local["spread"+index]; }}', 
+	     				'{{# layui.each(d.friend, function(index, item) { var spread = d.local["spread"+index]; }}',
 	     				"<li>", 
 	     					'<h5 layim-event="spread" lay-type="{{ spread }}">' +
 								'<i class="layui-icon">{{# if(spread === "true"){ }}&#xe61a;{{# } else {  }}&#xe602;{{# } }}</i>' +
@@ -153,7 +153,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
      							'<div class="layui-layim-search"><input><label class="layui-icon" layim-event="closeSearch">&#x1007;</label></div>', 
      							"</div>"].join(""),
 		m = ['<ul class="layui-layim-skin">', 
-		     	"{{# layui.each(d.skin, function(index, item){ }}", 
+		     	"{{# layui.each(d.skin, function(index, item) { }}",
 		     		'<li><img layim-event="setSkin" src="{{ item }}"></li>', 
 		     	"{{# }); }}", 
 		     	'<li layim-event="setSkin"><cite>简约</cite></li>', 
@@ -177,7 +177,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 						"{{# if(d.base && d.base.uploadFile){ }}", 
 							'<span class="layui-icon layim-tool-image" title="发送文件" layim-event="image" data-type="file">&#xe61d;<input type="file" name="file"></span>', 
 						"{{# }; }}", 
-						"{{# layui.each(d.base.tool, function(index, item){ }}", 
+						"{{# layui.each(d.base.tool, function(index, item) { }}",
 							'<span class="layui-icon layim-tool-{{item.alias}}" title="{{item.title}}" layim-event="extend" lay-filter="{{ item.alias }}">{{item.icon}}</span>', 
 						"{{# }); }}", 
 						"{{# if(d.base && d.base.chatLog){ }}", 
@@ -238,7 +238,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 		     			"<p>选择分组</p>", 
 		     		'{{# } if(d.data.type === "friend"){ }}', 
 			     		'<select class="layui-select" id="LAY_layimGroup">', 
-			     			"{{# layui.each(d.data.group, function(index, item){ }}", 
+			     			"{{# layui.each(d.data.group, function(index, item) { }}",
 			     				'<option value="{{ item.id }}">{{ item.groupname }}</option>', 
 		     				"{{# }); }}", 
 	     				"</select>", 
@@ -1240,7 +1240,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 				AjaxPostUtil.request({url: reqBasePath + "companytalkgroup010", params: {groupId: reId}, type: 'json', callback: function (json) {
 					//删除对应的对象群聊
 					var groupIndex = -1;
-					e.each(j.group, function(i, item){
+					e.each(j.group, function(i, item) {
 						if(item.id == reId){
 							groupIndex = i;
 							return false;
@@ -1301,7 +1301,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 				AjaxPostUtil.request({url: reqBasePath + "companytalkgroup009", params: {groupId: reId}, type: 'json', callback: function (json) {
 					//删除对应的对象群聊
 					var groupIndex = -1;
-					e.each(j.group, function(i, item){
+					e.each(j.group, function(i, item) {
 						if(item.id == reId){
 							groupIndex = i;
 							return false;

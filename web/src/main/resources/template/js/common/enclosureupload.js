@@ -121,7 +121,7 @@ layui.config({
 //参数为json
 function addToArray(data) {
 	var inArray = false;
-	$.each(enclosureList, function(i, item){
+	$.each(enclosureList, function(i, item) {
 		if(item.id === data.id){
 			inArray = true;
 			return false;
@@ -139,8 +139,8 @@ function addToArray(data) {
 //移除集合中的元素
 function removeToArray(id){
 	var inArray = -1;
-	$.each(enclosureList, function(i, item){
-		if(id === item.id){
+	$.each(enclosureList, function(i, item) {
+		if(id === item.id) {
 			inArray = i;
 			return false;
 		}

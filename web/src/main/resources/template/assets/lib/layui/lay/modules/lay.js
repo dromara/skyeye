@@ -202,7 +202,7 @@
   lay.isTopElem = function(elem){
     var topElems = [document, lay('body')[0]]
     ,matched = false;
-    lay.each(topElems, function(index, item){
+    lay.each(topElems, function(index, item) {
       if(item === elem){
         return matched = true
       }
@@ -214,7 +214,7 @@
   LAY.addStr = function(str, new_str){
     str = str.replace(/\s+/, ' ');
     new_str = new_str.replace(/\s+/, ' ').split(' ');
-    lay.each(new_str, function(ii, item){
+    lay.each(new_str, function(ii, item) {
       if(!new RegExp('\\b'+ item + '\\b').test(str)){
         str = str + ' ' + item;
       }
@@ -226,7 +226,7 @@
   LAY.removeStr = function(str, new_str){
     str = str.replace(/\s+/, ' ');
     new_str = new_str.replace(/\s+/, ' ').split(' ');
-    lay.each(new_str, function(ii, item){
+    lay.each(new_str, function(ii, item) {
       var exp = new RegExp('\\b'+ item + '\\b')
       if(exp.test(str)){
         str = str.replace(exp, '');
@@ -241,7 +241,7 @@
     var index = 0, arr = []
     ,isObject = typeof selector === 'object';
     
-    this.each(function(i, item){
+    this.each(function(i, item) {
       var nativeDOM = isObject ? item.contains(selector) : item.querySelectorAll(selector || null);
       for(; index < nativeDOM.length; index++){
         arr.push(nativeDOM[index]);
@@ -253,7 +253,7 @@
       that.selector =  (that.selector ? that.selector + ' ' : '') + selector
     }
     
-    lay.each(arr, function(i, item){
+    lay.each(arr, function(i, item) {
       that.push(item);
     });
     
@@ -267,7 +267,7 @@
   
   //添加css类
   LAY.prototype.addClass = function(className, type){
-    return this.each(function(index, item){
+    return this.each(function(index, item) {
       item.className = LAY[type ? 'removeStr' : 'addStr'](item.className, className)
     });
   };
@@ -280,7 +280,7 @@
   //是否包含 css 类
   LAY.prototype.hasClass = function(className){
     var has = false;
-    this.each(function(index, item){
+    this.each(function(index, item) {
       if(new RegExp('\\b'+ className +'\\b').test(item.className)){
         has = true;
       }
@@ -296,7 +296,7 @@
     };
     return (typeof key === 'string' && value === undefined) ? function(){
       if(that.length > 0) return that[0].style[key];
-    }() : that.each(function(index, item){
+    }() : that.each(function(index, item) {
       typeof key === 'object' ? lay.each(key, function(thisKey, thisValue){
         item.style[thisKey] = parseValue(thisValue);
       }) : item.style[key] = parseValue(value);
@@ -308,7 +308,7 @@
     var that = this;
     return value === undefined ? function(){
       if(that.length > 0) return that[0].offsetWidth; //此处还需做兼容
-    }() : that.each(function(index, item){
+    }() : that.each(function(index, item) {
       that.css('width', value);
     });   
   };
@@ -318,7 +318,7 @@
     var that = this;
     return value === undefined ? function(){
       if(that.length > 0) return that[0].offsetHeight; //此处还需做兼容
-    }() : that.each(function(index, item){
+    }() : that.each(function(index, item) {
       that.css('height', value);
     });   
   };
@@ -328,14 +328,14 @@
     var that = this;
     return value === undefined ? function(){
       if(that.length > 0) return that[0].getAttribute(key);
-    }() : that.each(function(index, item){
+    }() : that.each(function(index, item) {
       item.setAttribute(key, value);
     });   
   };
   
   //移除属性
   LAY.prototype.removeAttr = function(key){
-    return this.each(function(index, item){
+    return this.each(function(index, item) {
       item.removeAttribute(key);
     });
   };
@@ -345,7 +345,7 @@
     var that = this;
     return html === undefined ? function(){
       if(that.length > 0) return that[0].innerHTML;
-    }() : this.each(function(index, item){
+    }() : this.each(function(index, item) {
       item.innerHTML = html;
     });
   };
@@ -355,14 +355,14 @@
     var that = this;
     return value === undefined ? function(){
       if(that.length > 0) return that[0].value;
-    }() : this.each(function(index, item){
+    }() : this.each(function(index, item) {
         item.value = value;
     });
   };
   
   //追加内容
   LAY.prototype.append = function(elem){
-    return this.each(function(index, item){
+    return this.each(function(index, item) {
       typeof elem === 'object' 
         ? item.appendChild(elem)
       :  item.innerHTML = item.innerHTML + elem;
@@ -371,14 +371,14 @@
   
   //移除内容
   LAY.prototype.remove = function(elem){
-    return this.each(function(index, item){
+    return this.each(function(index, item) {
       elem ? item.removeChild(elem) : item.parentNode.removeChild(item);
     });
   };
   
   //事件绑定
   LAY.prototype.on = function(eventName, fn){
-    return this.each(function(index, item){
+    return this.each(function(index, item) {
       item.attachEvent ? item.attachEvent('on' + eventName, function (e) {
         e.target = e.srcElement;
         fn.call(item, e);
@@ -388,7 +388,7 @@
   
   //解除事件
   LAY.prototype.off = function(eventName, fn){
-    return this.each(function(index, item){
+    return this.each(function(index, item) {
       item.detachEvent 
         ? item.detachEvent('on'+ eventName, fn)  
       : item.removeEventListener(eventName, fn, false);

@@ -39,7 +39,7 @@ layui.config({
 		var val = data.value;
 		if(val == '1'){//总公司
 			$("#parentIdBox").addClass("layui-hide");
-		}else if(val == '2'){//子公司
+		} else if (val == '2'){//子公司
 			$("#parentIdBox").removeClass("layui-hide");
 		} else {
 			winui.window.msg('状态值错误', {icon: 2, time: 2000});

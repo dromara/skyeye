@@ -68,7 +68,7 @@ layui.config({
 		        { field: 'enabled', title: '状态', rowspan: '2', align: 'center', width: 60, templet: function (d) {
 		        	if(d.enabled == '0'){
 		        		return "<span class='state-down'>禁用</span>";
-		        	}else if(d.enabled == '1'){
+		        	} else if (d.enabled == '1'){
 		        		return "<span class='state-up'>启用</span>";
 		        	}
 		        }},

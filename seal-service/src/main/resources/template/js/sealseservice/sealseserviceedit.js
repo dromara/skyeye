@@ -73,7 +73,7 @@ layui.config({
 			    
 			    var userNames = [];
 		 		cooperationUser = [].concat(json.bean.cooperationUserId);
-		 		$.each(json.bean.cooperationUserId, function(i, item){
+		 		$.each(json.bean.cooperationUserId, function(i, item) {
 		 			userNames.push(item.name);
 		 		});
 			    //工单协助人

@@ -58,11 +58,11 @@ layui.config({
 			var type = workDayation.type;
 			if(type == 1){
 				resetSingleBreak();
-			}else if(type == 2){
+			} else if (type == 2){
 				resetWeekend();
-			}else if(type == 3){
+			} else if (type == 3){
 				resetSingleAndDoubleBreak();
-			}else if(type == 4){
+			} else if (type == 4){
 				resetCustomizeDay(workDayation.days);
 			}
 		}
@@ -136,7 +136,7 @@ layui.config({
 			var s = "";
 			if(json.bean.type == 1){
 				s = getTipStrByTimeId(json);
-			}else if(json.bean.type == 2){
+			} else if (json.bean.type == 2){
 				s = getTipStrByOverTime(json);
 			}
 
@@ -164,15 +164,15 @@ layui.config({
 				// 显示早卡按钮
 				$("#clockInBtn").show();
 				$("#clockOutBtn").hide();
-			}else if(json.bean.isCheck == '2'){
+			} else if (json.bean.isCheck == '2'){
 				// 显示晚卡按钮
 				$("#clockInBtn").hide();
 				$("#clockOutBtn").show();
-			}else if(json.bean.isCheck == '3'){
+			} else if (json.bean.isCheck == '3'){
 				// 不显示按钮
 				$("#clockInBtn").hide();
 				$("#clockOutBtn").hide();
-			}else if(json.bean.isCheck == '4'){
+			} else if (json.bean.isCheck == '4'){
 				// 不显示按钮
 				$("#clockInBtn").hide();
 				$("#clockOutBtn").hide();
@@ -192,13 +192,13 @@ layui.config({
 		if(json.bean.isCheck == "1"){
 			// 显示早卡按钮
 			s = '您还未进行上班打卡</br></br>' + s;
-		}else if(json.bean.isCheck == '2'){
+		} else if (json.bean.isCheck == '2'){
 			// 显示晚卡按钮
 			s = '您还未进行下班打卡</br></br>' + s;
-		}else if(json.bean.isCheck == '3'){
+		} else if (json.bean.isCheck == '3'){
 			// 不显示按钮
 			s = '已下班(无法打卡)，您今日矿工一天哦</br></br>' + s;
-		}else if(json.bean.isCheck == '4'){
+		} else if (json.bean.isCheck == '4'){
 			// 不显示按钮
 			s = '您已完成今日的打卡任务</br></br>' + s;
 		}
@@ -217,13 +217,13 @@ layui.config({
 		if(json.bean.isCheck == "1"){
 			// 显示早卡按钮
 			s = '您还未进行上班打卡</br></br>' + s;
-		}else if(json.bean.isCheck == '2'){
+		} else if (json.bean.isCheck == '2'){
 			// 显示晚卡按钮
 			s = '您还未进行下班打卡</br></br>' + s;
-		}else if(json.bean.isCheck == '3'){
+		} else if (json.bean.isCheck == '3'){
 			// 不显示按钮
 			s = '已下班(无法打卡)，您今日矿工一天哦</br></br>' + s;
-		}else if(json.bean.isCheck == '4'){
+		} else if (json.bean.isCheck == '4'){
 			// 不显示按钮
 			s = '您已完成今日的打卡任务</br></br>' + s;
 		}

@@ -46,7 +46,7 @@ layui.config({
 		if(checkType == '2'){
 			//初始化值
 			var ids = [];
-			$.each(parent.farmMationList, function(i, item){
+			$.each(parent.farmMationList, function(i, item) {
 				ids.push(item.farmId);
 			});
 			tableCheckBoxUtil.setIds({
@@ -81,7 +81,7 @@ layui.config({
 	            { field: 'state', title: '状态', align: 'left', width: 80, templet: function (d) {
 	                if(d.state == '1'){
 	                    return "<span class='state-up'>正常</span>";
-	                }else if(d.state == '2'){
+	                } else if (d.state == '2'){
 	                    return "<span class='state-down'>维修整改</span>";
 	                } else {
 	                    return "参数错误";

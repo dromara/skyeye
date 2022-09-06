@@ -56,7 +56,7 @@ layui.config({
 		    	matchingLanguage();
 		    	//客户名称，派工数量，完工数量，完工率
 		    	var cusName = [], orderAllNum = [], orderComplateNum = [], percentage = [];
-		    	$.each(res.rows, function(i, item){
+		    	$.each(res.rows, function(i, item) {
 		    		cusName.push(item.customName);
 		    		orderAllNum.push(item.allNum);
 		    		orderComplateNum.push(item.complateNum);
@@ -107,13 +107,13 @@ layui.config({
 			var yue = myDate.getMonth() + 1;//获取当前月
 			var date = myDate.getDate();//获取当前日
 			$("#timeRange").val(year + "-" + yue + "-" + date + " ~ " + year + "-" + yue + "-" + date);
-		}else if(nowCheckType === 'week'){//周报
+		} else if (nowCheckType === 'week'){//周报
 			$("#timeRange").val(getWeekStartDate() + " ~ " + getWeekEndDate());
-		}else if(nowCheckType === 'month'){//月报
+		} else if (nowCheckType === 'month'){//月报
 			$("#timeRange").val(getMonthStartDate() + " ~ " + getMonthEndDate());
-		}else if(nowCheckType === 'quarter'){//季报
+		} else if (nowCheckType === 'quarter'){//季报
 			$("#timeRange").val(getQuarterStartDate() + " ~ " + getQuarterEndDate());
-		}else if(nowCheckType === 'year'){//年报
+		} else if (nowCheckType === 'year'){//年报
 			var myDate = new Date();
 			var year = now.getYear(); //当前年
 			year += (year < 2000) ? 1900 : 0;

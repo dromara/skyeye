@@ -19,13 +19,13 @@ layui.config({
 		 	ajaxSendAfter:function (json) {
 				if(json.bean.state == 0){
 		 			$("#statusName").html("<span class='state-down'>未审核</span>");
-		 		}else if(json.bean.state == 1){
+		 		} else if (json.bean.state == 1){
 		 			$("#statusName").html("<span class='state-up'>审核中</span>");
-		 		}else if(json.bean.state == 2){
+		 		} else if (json.bean.state == 2){
 		 			$("#statusName").html("<span class='state-new'>已组装</span>");
-		 		}else if(json.bean.state == 3){
+		 		} else if (json.bean.state == 3){
 		 			$("#statusName").html("<span class='state-down'>拒绝通过</span>");
-		 		}else if(json.bean.state == 4){
+		 		} else if (json.bean.state == 4){
 		 			$("#statusName").html("<span class='state-new'>已组装</span>");
 		 		}
 		 		matchingLanguage();

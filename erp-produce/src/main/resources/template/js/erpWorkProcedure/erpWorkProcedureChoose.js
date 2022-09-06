@@ -37,7 +37,7 @@ layui.config({
 		if(checkType == '2'){
 			//初始化值
 			var ids = [];
-			$.each(parent.procedureMationList, function(i, item){
+			$.each(parent.procedureMationList, function(i, item) {
 				ids.push(item.procedureId);
 			});
 			tableCheckBoxUtil.setIds({

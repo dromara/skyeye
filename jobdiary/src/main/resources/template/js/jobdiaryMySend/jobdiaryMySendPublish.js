@@ -116,7 +116,7 @@ layui.config({
 	    form.on('switch(todycompletedImagetext)', function (data) {
  			//是否图文模式
  			$(data.elem).val(data.elem.checked);
- 			if(data.elem.value === 'true' || data.elem.value === true){
+ 			if (data.elem.value === 'true' || data.elem.value === true){
  				$("#completedtext").parent().hide();
 	    		$("#completedcontent").parent().show();
 	    		layedit.setContent(completedContent, $("#completedtext").val(), false);
@@ -129,7 +129,7 @@ layui.config({
 	    form.on('switch(todyincompleteImagetext)', function (data) {
  			//是否图文模式
  			$(data.elem).val(data.elem.checked);
- 			if(data.elem.value === 'true' || data.elem.value === true){
+ 			if (data.elem.value === 'true' || data.elem.value === true){
  				$("#incompletetext").parent().hide();
 	    		$("#incompletecontent").parent().show();
 	    		layedit.setContent(incompleteContent,$("#incompletetext").val(),false);
@@ -142,7 +142,7 @@ layui.config({
 	    form.on('switch(todycoordinaImagetext)', function (data) {
  			//是否图文模式
  			$(data.elem).val(data.elem.checked);
- 			if(data.elem.value === 'true' || data.elem.value === true){
+ 			if (data.elem.value === 'true' || data.elem.value === true){
  				$("#coordinatext").parent().hide();
 	    		$("#coordinacontent").parent().show();
 	    		layedit.setContent(coordinaContent,$("#coordinatext").val(),false);
@@ -166,7 +166,7 @@ layui.config({
 					winui.window.msg('请选择收件人', {icon: 2, time: 2000});
 					return false;
 				}
-        		if(data.field.todycompleted === 'true'){
+        		if (data.field.todycompleted === 'true'){
         			if(isNull(layedit.getContent(completedContent))){
         				winui.window.msg('请填写今日已完成工作', {icon: 2, time: 2000});
         				return false;
@@ -181,12 +181,12 @@ layui.config({
         				params.completedJob = encodeURIComponent($("#completedtext").val());
         			}
         		}
-        		if(data.field.todyincomplete === 'true'){
+        		if (data.field.todyincomplete === 'true'){
         			params.incompleteJob = encodeURIComponent(layedit.getContent(incompleteContent));
         		} else {
         			params.incompleteJob = encodeURIComponent($("#incompletetext").val());
         		}
-        		if(data.field.todycoordina === 'true'){
+        		if (data.field.todycoordina === 'true'){
         			params.coordinaJob = encodeURIComponent(layedit.getContent(coordinaContent));
         		} else {
         			params.coordinaJob = encodeURIComponent($("#coordinatext").val());
@@ -208,7 +208,7 @@ layui.config({
 	    form.on('switch(weekCompletedImagetext)', function (data) {
  			//是否图文模式
  			$(data.elem).val(data.elem.checked);
- 			if(data.elem.value === 'true' || data.elem.value === true){
+ 			if (data.elem.value === 'true' || data.elem.value === true){
  				$("#weekCompletedText").parent().hide();
 	    		$("#weekCompletedContent").parent().show();
 	    		layedit.setContent(weekCompletedContent, $("#weekCompletedText").val(), false);
@@ -221,7 +221,7 @@ layui.config({
 	    form.on('switch(weekWorkSummaryImagetext)', function (data) {
  			//是否图文模式
  			$(data.elem).val(data.elem.checked);
- 			if(data.elem.value === 'true' || data.elem.value === true){
+ 			if (data.elem.value === 'true' || data.elem.value === true){
  				$("#weekWorkSummaryText").parent().hide();
 	    		$("#weekWorkSummaryContent").parent().show();
 	    		layedit.setContent(weekWorkSummaryContent, $("#weekWorkSummaryText").val(), false);
@@ -234,7 +234,7 @@ layui.config({
 	    form.on('switch(weekNextWorkPlanImagetext)', function (data) {
  			//是否图文模式
  			$(data.elem).val(data.elem.checked);
- 			if(data.elem.value === 'true' || data.elem.value === true){
+ 			if (data.elem.value === 'true' || data.elem.value === true){
  				$("#weekNextWorkPlanText").parent().hide();
 	    		$("#weekNextWorkPlanContent").parent().show();
 	    		layedit.setContent(weekNextWorkPlanContent, $("#weekNextWorkPlanText").val(), false);
@@ -247,7 +247,7 @@ layui.config({
 	    form.on('switch(weekCoordinaJobImagetext)', function (data) {
  			//是否图文模式
  			$(data.elem).val(data.elem.checked);
- 			if(data.elem.value === 'true' || data.elem.value === true){
+ 			if (data.elem.value === 'true' || data.elem.value === true){
  				$("#weekCoordinaJobText").parent().hide();
 	    		$("#weekCoordinaJobContent").parent().show();
 	    		layedit.setContent(weekCoordinaJobContent, $("#weekCoordinaJobText").val(), false);
@@ -270,7 +270,7 @@ layui.config({
 					winui.window.msg('请选择收件人', {icon: 2, time: 2000});
 					return false;
 				}
-        		if(data.field.weekCompleted === 'true'){
+        		if (data.field.weekCompleted === 'true'){
         			if(isNull(layedit.getContent(weekCompletedContent))){
         				winui.window.msg('请填写本周已完成工作', {icon: 2, time: 2000});
         				return false;
@@ -285,17 +285,17 @@ layui.config({
         				params.completedJob = encodeURIComponent($("#weekCompletedText").val());
         			}
         		}
-        		if(data.field.weekCoordinaJob === 'true'){
+        		if (data.field.weekCoordinaJob === 'true'){
         			params.coordinaJob = encodeURIComponent(layedit.getContent(weekCoordinaJobContent));
         		} else {
         			params.coordinaJob = encodeURIComponent($("#weekCoordinaJobText").val());
         		}
-        		if(data.field.weekNextWorkPlan === 'true'){
+        		if (data.field.weekNextWorkPlan === 'true'){
         			params.nextWorkPlan = encodeURIComponent(layedit.getContent(weekNextWorkPlanContent));
         		} else {
         			params.nextWorkPlan = encodeURIComponent($("#weekNextWorkPlanText").val());
         		}
-        		if(data.field.weekWorkSummary === 'true'){
+        		if (data.field.weekWorkSummary === 'true'){
         			params.thisWorkSummary = encodeURIComponent(layedit.getContent(weekWorkSummaryContent));
         		} else {
         			params.thisWorkSummary = encodeURIComponent($("#weekWorkSummaryText").val());
@@ -317,7 +317,7 @@ layui.config({
 	    form.on('switch(monthCompletedImagetext)', function (data) {
  			//是否图文模式
  			$(data.elem).val(data.elem.checked);
- 			if(data.elem.value === 'true' || data.elem.value === true){
+ 			if (data.elem.value === 'true' || data.elem.value === true){
  				$("#monthCompletedText").parent().hide();
 	    		$("#monthCompletedContent").parent().show();
 	    		layedit.setContent(monthCompletedContent, $("#monthCompletedText").val(), false);
@@ -330,7 +330,7 @@ layui.config({
 	    form.on('switch(monthWorkSummaryImagetext)', function (data) {
  			//是否图文模式
  			$(data.elem).val(data.elem.checked);
- 			if(data.elem.value === 'true' || data.elem.value === true){
+ 			if (data.elem.value === 'true' || data.elem.value === true){
  				$("#monthWorkSummaryText").parent().hide();
 	    		$("#monthWorkSummaryContent").parent().show();
 	    		layedit.setContent(monthWorkSummaryContent, $("#monthWorkSummaryText").val(), false);
@@ -343,7 +343,7 @@ layui.config({
 	    form.on('switch(monthNextWorkPlanImagetext)', function (data) {
  			//是否图文模式
  			$(data.elem).val(data.elem.checked);
- 			if(data.elem.value === 'true' || data.elem.value === true){
+ 			if (data.elem.value === 'true' || data.elem.value === true){
  				$("#monthNextWorkPlanText").parent().hide();
 	    		$("#monthNextWorkPlanContent").parent().show();
 	    		layedit.setContent(monthNextWorkPlanContent, $("#monthNextWorkPlanText").val(), false);
@@ -356,7 +356,7 @@ layui.config({
 	    form.on('switch(monthCoordinaJobImagetext)', function (data) {
  			//是否图文模式
  			$(data.elem).val(data.elem.checked);
- 			if(data.elem.value === 'true' || data.elem.value === true){
+ 			if (data.elem.value === 'true' || data.elem.value === true){
  				$("#monthCoordinaJobText").parent().hide();
 	    		$("#monthCoordinaJobContent").parent().show();
 	    		layedit.setContent(monthCoordinaJobContent, $("#monthCoordinaJobText").val(), false);
@@ -378,7 +378,7 @@ layui.config({
                     winui.window.msg('请选择收件人', {icon: 2, time: 2000});
                     return false;
                 }
-        		if(data.field.monthCompleted === 'true'){
+        		if (data.field.monthCompleted === 'true'){
         			if(isNull(layedit.getContent(monthCompletedContent))){
         				winui.window.msg('请填写本月已完成工作', {icon: 2, time: 2000});
         				return false;
@@ -393,17 +393,17 @@ layui.config({
         				params.completedJob = encodeURIComponent($("#monthCompletedText").val());
         			}
         		}
-        		if(data.field.monthCoordinaJob === 'true'){
+        		if (data.field.monthCoordinaJob === 'true'){
         			params.coordinaJob = encodeURIComponent(layedit.getContent(monthCoordinaJobContent));
         		} else {
         			params.coordinaJob = encodeURIComponent($("#monthCoordinaJobText").val());
         		}
-        		if(data.field.monthNextWorkPlan === 'true'){
+        		if (data.field.monthNextWorkPlan === 'true'){
         			params.nextWorkPlan = encodeURIComponent(layedit.getContent(monthNextWorkPlanContent));
         		} else {
         			params.nextWorkPlan = encodeURIComponent($("#monthNextWorkPlanText").val());
         		}
-        		if(data.field.monthWorkSummary === 'true'){
+        		if (data.field.monthWorkSummary === 'true'){
         			params.thisWorkSummary = encodeURIComponent(layedit.getContent(monthWorkSummaryContent));
         		} else {
         			params.thisWorkSummary = encodeURIComponent($("#monthWorkSummaryText").val());

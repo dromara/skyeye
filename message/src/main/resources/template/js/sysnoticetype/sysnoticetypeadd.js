@@ -16,7 +16,7 @@ layui.config({
  			var val = data.value;
 	    	if(val == '1'){//该类型为一级类型
 	    		$("#parentIdBox").addClass("layui-hide");
-	    	}else if(val == '2'){	//该类型为二级类型
+	    	} else if (val == '2'){	//该类型为二级类型
 	    		$("#parentIdBox").removeClass("layui-hide");
 	    		initNoticeTypeId();
 	    	} else {
@@ -58,7 +58,7 @@ layui.config({
 	 	        	} else {
 	 	        		params.parentId = parentId;
 	 	        	}
- 	        	}else if($("input[name='level']:checked").val() === '1'){
+ 	        	} else if ($("input[name='level']:checked").val() === '1'){
  	        		params.parentId = '0';
  	        	}
  	        	AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "noticetype002", params: params, type: 'json', callback: function (json) {

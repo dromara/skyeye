@@ -27,7 +27,7 @@ layui.config({
 		 		if(json.bean.category == 1){//个人通讯录
 		 			$("#typeIdBox").removeClass('layui-hide');
 		 			$("#readonlyBox").addClass('layui-hide');
-		 		}else if(json.bean.category == 2){//公共通讯录
+		 		} else if (json.bean.category == 2){//公共通讯录
 		 			$("#typeIdBox").addClass('layui-hide');
 		 			$("#readonlyBox").removeClass('layui-hide');
 		 			$("input:radio[name=readonly][value=" + json.bean.readonly + "]").attr("checked", true);
@@ -55,7 +55,7 @@ layui.config({
 		 			if(val == '1'){//个人通讯录
 		 				$("#readonlyBox").addClass("layui-hide");
 		 				$("#typeIdBox").removeClass("layui-hide");
-		 			}else if(val == '2'){//公共通讯录
+		 			} else if (val == '2'){//公共通讯录
 		 				$("#readonlyBox").removeClass("layui-hide");
 		 				$("#typeIdBox").addClass("layui-hide");
 		 			} else {
@@ -92,13 +92,13 @@ layui.config({
 	 						typeId: "",
 	 						rowId: parent.rowId
 		 				};
-		 				if(data.field.category == '1'){
+		 				if (data.field.category == '1'){
 		 					params.typeId = $("#typeId").val();
 		 					if(isNull(params.typeId)){
 		 						winui.window.msg("请选择类别", {icon: 2, time: 2000});
 		 						return false;
 		 					}
-		 				}else if(data.field.category == '2'){
+		 				} else if (data.field.category == '2'){
 		 					params.readonly = data.field.readonly;
 		 				} else {
 		 					winui.window.msg("状态值错误。", {icon: 2, time: 2000});

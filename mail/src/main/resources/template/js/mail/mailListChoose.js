@@ -61,7 +61,7 @@ layui.config({
 			gridId: 'messageTable'
 		});
 		var result = [];
-		$.each(selectedData, function(i, item){
+		$.each(selectedData, function(i, item) {
 			result.push(getInPoingArr(tableList, "id", item, ""));
 		});
 

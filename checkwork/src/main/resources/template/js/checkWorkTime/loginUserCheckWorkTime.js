@@ -12,15 +12,15 @@ layui.config({
     // 获取当前登陆人的考勤班次
     checkWorkUtil.getCurrentUserCheckWorkTimeList(function (json) {
         $("#showBox").html(getDataUseHandlebars($("#showTemplate").html(), json));
-        $.each(json.rows, function (i, item){
+        $.each(json.rows, function (i, item) {
             var type = item.type;
             if(type == 1){
                 resetSingleBreak(item.timeId);
-            }else if(type == 2){
+            } else if (type == 2){
                 resetWeekend(item.timeId);
-            }else if(type == 3){
+            } else if (type == 3){
                 resetSingleAndDoubleBreak(item.timeId);
-            }else if(type == 4){
+            } else if (type == 4){
                 resetCustomizeDay(item.days, item.timeId);
             }
         });

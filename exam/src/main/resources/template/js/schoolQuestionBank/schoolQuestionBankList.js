@@ -147,25 +147,25 @@ layui.config({
 		rowId = data.id;
 		var url = "";
 		var title = "编辑";
-		if(data.quType == '1'){
+		if (data.quType == '1'){
 			url = "../../tpl/schoolQuestionBank/radioAdd.html";
-		}else if(data.quType == '2'){
+		} else if (data.quType == '2'){
 			url = "../../tpl/schoolQuestionBank/checkBoxAdd.html";
-		}else if(data.quType == '3'){
+		} else if (data.quType == '3'){
 			url = "../../tpl/schoolQuestionBank/fillblankAdd.html";
-		}else if(data.quType == '4'){
+		} else if (data.quType == '4'){
 			url = "../../tpl/schoolQuestionBank/multiFillblankAdd.html";
-		}else if(data.quType == '8'){
+		} else if (data.quType == '8'){
 			url = "../../tpl/schoolQuestionBank/scoreAdd.html";
-		}else if(data.quType == '9'){
+		} else if (data.quType == '9'){
 			url = "../../tpl/schoolQuestionBank/orderbyAdd.html";
-		}else if(data.quType == '11'){
+		} else if (data.quType == '11'){
 			url = "../../tpl/schoolQuestionBank/chenRadioAdd.html";
-		}else if(data.quType == '12'){
+		} else if (data.quType == '12'){
 			url = "../../tpl/schoolQuestionBank/chenFbkAdd.html";
-		}else if(data.quType == '13'){
+		} else if (data.quType == '13'){
 			url = "../../tpl/schoolQuestionBank/chenCheckBoxAdd.html";
-		}else if(data.quType == '18'){
+		} else if (data.quType == '18'){
 			url = "../../tpl/schoolQuestionBank/chenScoreAdd.html";
 		}
 		title += data.cName;

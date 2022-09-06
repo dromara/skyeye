@@ -36,7 +36,7 @@ layui.config({
 		 		
 		 		var userNames = [];
 		 		userList = [].concat(json.bean.sealAdmin);
-		 		$.each(json.bean.sealAdmin, function(i, item){
+		 		$.each(json.bean.sealAdmin, function(i, item) {
 		 			userNames.push(item.name);
 		 		});
 		 		// 管理人员选择
@@ -51,7 +51,7 @@ layui.config({
 				
 				var borrowuserNames = [];
 		 		borrowuserList = [].concat(json.bean.borrowId);
-		 		$.each(json.bean.borrowId, function(i, item){
+		 		$.each(json.bean.borrowId, function(i, item) {
 		 			borrowuserNames.push(item.name);
 		 		});
 				// 借用人选择

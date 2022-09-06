@@ -116,17 +116,17 @@
                     }
                 }
             },
-            inArray : function(arr,item){
+            inArray : function(arr,item) {
                 var index = -1;
                 this.each(arr,function(v,i){
-                    if(v === item){
+                    if(v === item) {
                         index = i;
                         return false;
                     }
                 });
                 return index;
             },
-            pushItem : function(arr,item){
+            pushItem : function(arr,item) {
                 if(this.inArray(arr,item)==-1){
                     arr.push(item)
                 }
@@ -316,7 +316,7 @@
             } else {
                 if(/^#/.test(selector)){
                     contents = [document.getElementById(selector.replace(/^#/,''))]
-                }else if(/^\./.test(selector)){
+                } else if (/^\./.test(selector)){
                     var contents = [];
                     utils.each(document.getElementsByTagName('*'),function(node){
                         if(node.className && new RegExp('\\b' + selector.replace(/^\./,'') + '\\b','i').test(node.className)){

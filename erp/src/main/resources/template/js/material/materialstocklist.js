@@ -42,7 +42,7 @@ layui.config({
 	        		} else {
 	        			return "-" + d.operNumber;
 	        		}
-	        	}else if(d.subType == 13){//组装单
+	        	} else if (d.subType == 13){//组装单
 	        		if(d.mType == 1){//普通子件
 	        			return d.operNumber;
 	        		} else {

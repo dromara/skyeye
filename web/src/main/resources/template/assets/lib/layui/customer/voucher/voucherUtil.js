@@ -69,7 +69,7 @@ var voucherUtil = {
             _this.find(".col_subject").find(".cell_val").attr("dataId", data[i].subjectId); // 会计科目
             _this.find(".col_subject").find(".cell_val").html(data[i].subjectName);
 
-            if(data[i].directionType == 1){
+            if (data[i].directionType == 1){
                 _this.find(".col_debite").find(".cell_val").html(data[i].eachAmount); // 借方金额
             } else {
                 _this.find(".col_credit").find(".cell_val").html(data[i].eachAmount); // 贷方金额
@@ -94,7 +94,7 @@ var voucherUtil = {
 
             _this.find(".col_subject").find(".cell_val").html(data[i].subjectName); // 会计科目
 
-            if(data[i].directionType == 1){
+            if (data[i].directionType == 1){
                 _this.find(".col_debite").find(".cell_val").html(data[i].eachAmount); // 借方金额
             } else {
                 _this.find(".col_credit").find(".cell_val").html(data[i].eachAmount); // 贷方金额
@@ -210,7 +210,7 @@ var voucherUtil = {
             return null;
         }
         var result = [];
-        $.each(tBody, function (i, item){
+        $.each(tBody, function (i, item) {
             var _this = $(item);
             var subjectId = _this.find(".col_subject").find(".cell_val").attr("dataId");
             var debiteMoney = _this.find(".col_debite").find(".cell_val").html(); // 借方金额

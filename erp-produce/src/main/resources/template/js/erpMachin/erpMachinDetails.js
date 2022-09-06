@@ -36,7 +36,7 @@ layui.config({
 			 		});
 			 		
 			 		var loadOperatorBtn = false;
-					$.each(json.bean.procedure, function(i, item){
+					$.each(json.bean.procedure, function(i, item) {
 						item.unitPrice = parseFloat(item.unitPrice).toFixed(2);
 	            		if(item.state == 1){
 	            			item.stateName = "<span class='state-down'>待验收</span>";
@@ -54,12 +54,12 @@ layui.config({
 		            				item.operator = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal layui-btn-disabled">工序验收</button>';
 		            			}
 	            			}
-	            		}else if(item.state == 2){
+	            		} else if (item.state == 2){
 	            			item.stateName = "<span class='state-up'>已验收</span>"
 	            		}
 	            	});
 	            	
-	            	$.each(json.bean.materiel, function(i, item){
+	            	$.each(json.bean.materiel, function(i, item) {
 						item.unitPrice = parseFloat(item.unitPrice).toFixed(2);
 	            	});
 

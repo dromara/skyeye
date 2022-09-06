@@ -26,27 +26,27 @@ layui.define(["jquery"], function(exports) {
 	            		    var jsonData = JSON.parse(received_msg);
 	            		    if(jsonData.messageType == '1'){//上线提醒
 	            		    	layim.setFriendStatus(jsonData.userId, 'online');
-	            		    }else if(jsonData.messageType == '2'){//下线提醒
+	            		    } else if (jsonData.messageType == '2'){//下线提醒
 	            		    	layim.setFriendStatus(jsonData.userId, 'offline');
-	            		    }else if(jsonData.messageType == '3'){//在线名单
-	            		    	$.each(jsonData.onlineUsers, function(i, item){
+	            		    } else if (jsonData.messageType == '3'){//在线名单
+	            		    	$.each(jsonData.onlineUsers, function(i, item) {
 	            		    		layim.setFriendStatus(item, 'online');
 	            		    	});
-	            		    }else if(jsonData.messageType == '4'){//普通消息
+	            		    } else if (jsonData.messageType == '4'){//普通消息
 	    						layimGetMessage(jsonData.username, jsonData.avatar, jsonData.fromId, 'friend', jsonData.textMessage);
-	            		    }else if(jsonData.messageType == '5'){//系统消息
+	            		    } else if (jsonData.messageType == '5'){//系统消息
 	            		    	sendSystemMsg(jsonData);
-	            		    }else if(jsonData.messageType == '6'){//全体消息
+	            		    } else if (jsonData.messageType == '6'){//全体消息
 	            		    	
-	            		    }else if(jsonData.messageType == '7'){//群组邀请消息
+	            		    } else if (jsonData.messageType == '7'){//群组邀请消息
 	            		    	var messageTotal = layim.getMessageTotal();
 	            		    	messageTotal++;
 	            		    	layim.msgbox(messageTotal);
-	            		    }else if(jsonData.messageType == '8'){//隐身消息
+	            		    } else if (jsonData.messageType == '8'){//隐身消息
 	            		    	layim.setFriendStatus(jsonData.userId, 'offline');
-	            		    }else if(jsonData.messageType == '9'){//隐身上线消息
+	            		    } else if (jsonData.messageType == '9'){//隐身上线消息
 	            		    	layim.setFriendStatus(jsonData.userId, 'online');
-	            		    }else if(jsonData.messageType == '10'){//搜索账号入群审核同意后通知用户加载群信息
+	            		    } else if (jsonData.messageType == '10'){//搜索账号入群审核同意后通知用户加载群信息
 	    						var groupId = jsonData.id;
 	    						var groupname = jsonData.groupname;
 	    						var avatar = jsonData.avatar;
@@ -56,13 +56,13 @@ layui.define(["jquery"], function(exports) {
 			 	   					groupname: groupname, //群组名称
 			 	   					id: groupId //群组id
 			 	   				});
-	            		    }else if(jsonData.messageType == '11'){//群聊
+	            		    } else if (jsonData.messageType == '11'){//群聊
 	    						layimGetMessage(jsonData.username, jsonData.avatar, jsonData.id, 'group', jsonData.textMessage);
-	            		    }else if(jsonData.messageType == '12'){//退出群聊--群主接收消息
+	            		    } else if (jsonData.messageType == '12'){//退出群聊--群主接收消息
 	            		    	var groupId = jsonData.groupId;
 	            		    	var userName = jsonData.userName;
 	            		    	layimGetMessage('系统消息', '../../assets/images/eye.png', groupId, 'group', userName + '退出了群聊。');
-	            		    }else if(jsonData.messageType == '13'){//解散群聊--群员接收消息
+	            		    } else if (jsonData.messageType == '13'){//解散群聊--群员接收消息
 	            		    	var groupId = jsonData.id;
 	            		    	var userName = jsonData.userName;
 	            		    	layimGetMessage('系统消息', '../../assets/images/eye.png', groupId, 'group', userName + '解散了群聊。');
@@ -70,7 +70,7 @@ layui.define(["jquery"], function(exports) {
 	            		            id: groupId,
 	            		            type: 'group'
 	            		    	});
-	            		    }else if(jsonData.messageType == '1301'){//群聊被解散后，成员再次发送消息，返回的内容
+	            		    } else if (jsonData.messageType == '1301'){//群聊被解散后，成员再次发送消息，返回的内容
 	            		    	layimGetMessage('系统消息', '../../assets/images/eye.png', jsonData.groupId, 'group', '该群聊已被解散，消息发送失败。');
 	            		    }
 	            	    }
@@ -132,9 +132,9 @@ layui.define(["jquery"], function(exports) {
 			// 所属大类  1.我的输出  2.我的发送  3.我的获取
 			if(json.bigType == 1){
 				sendOneType(json);
-			}else if(json.bigType == 2){
+			} else if (json.bigType == 2){
 				sendTwoType(json);
-			}else if(json.bigType == 3){
+			} else if (json.bigType == 3){
 				sendThreeType(json);
 			}
 		}
@@ -157,11 +157,11 @@ layui.define(["jquery"], function(exports) {
 			var str = "";
 			if(json.jobType == 2){
 				str = '收件箱邮件获取 ' + getResultMsg(json);
-			}else if(json.jobType == 3){
+			} else if (json.jobType == 3){
 				str = '已发送邮件获取 ' + getResultMsg(json);
-			}else if(json.jobType == 4){
+			} else if (json.jobType == 4){
 				str = '已删除邮件获取 ' + getResultMsg(json);
-			}else if(json.jobType == 5){
+			} else if (json.jobType == 5){
 				str = '草稿箱邮件获取 ' + getResultMsg(json);
 			}
 			sendByState(json, str);
@@ -170,18 +170,18 @@ layui.define(["jquery"], function(exports) {
 		function getResultMsg(json){
 			if(json.state == 3){
 				return '执行失败';
-			}else if(json.state == 4){
+			} else if (json.state == 4){
 				return '执行成功';
-			}else if(json.state == 5){
+			} else if (json.state == 5){
 				return '执行部分成功';
 			}
 		}
 		function sendByState(json, str){
 			if(json.state == 3){
 				sendErrorMsg(str);
-			}else if(json.state == 4){
+			} else if (json.state == 4){
 				sendSuccessMsg(str);
-			}else if(json.state == 5){
+			} else if (json.state == 5){
 				sendWarningMsg(str);
 			}
 		}

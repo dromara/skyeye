@@ -68,7 +68,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 								win = win.top;
 							}
 							win.location.href = "../../tpl/index/login.html";//XMLHttpRequest.getResponseHeader("CONTEXTPATH");
-						}else if(sessionstatus == "NOAUTHPOINT"){
+						} else if (sessionstatus == "NOAUTHPOINT"){
 							fsCommon.errorMsg('您不具备该权限。');
 						}
 					}
@@ -219,7 +219,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 					if("1" == _this.attr("isSelect") || "1" == _this.attr("isMutiDml")) {
 						//获取选中的数据
 						var data = getDatagrid(_tableId).getCheckData(tid);
-						if(data.length == 0) {
+						if (data.length == 0) {
 							fsCommon.warnMsg("请选择需要操作的数据！");
 							return;
 						}
@@ -250,7 +250,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 						}
 						//请求数据
 						fsCommon.invoke(url, param, function(data) {
-							if(data[statusName] == successNo) {
+							if (data[statusName] == successNo) {
 								fsCommon.setRefreshTable("1");
 								if(_this.attr("isRefresh") !== "0" && !isNull(getDatagrid(_tableId))) {
 									//刷新
@@ -306,11 +306,11 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 					if("1" == _this.attr("isSelect")) {
 						//获取选中的数据
 						var data = getDatagrid(_tableId).getCheckData();
-						if(data.length == 0) {
+						if (data.length == 0) {
 							fsCommon.warnMsg("请选择需要操作的数据！");
 							return;
 						}
-						if(data.length > 1) {
+						if (data.length > 1) {
 							fsCommon.warnMsg("请选择一行数据！");
 							return;
 						}
@@ -470,7 +470,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 
 						//请求数据
 						fsCommon.invoke(url, param, function(data) {
-							if(data[statusName] == successNo) {
+							if (data[statusName] == successNo) {
 								fsCommon.setRefreshTable("1");
 								fsCommon.successMsg('操作成功!');
 

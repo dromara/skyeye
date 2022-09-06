@@ -73,7 +73,7 @@ layui.config({
 	function initTable(){
 		//初始化值
 		var ids = [];
-		$.each(productMationList, function(i, item){
+		$.each(productMationList, function(i, item) {
 			ids.push(item.productId);
 		});
 		tableCheckBoxUtil.setIds({
@@ -108,7 +108,7 @@ layui.config({
 		        { field: 'typeName', title: '商品来源', align: 'left', width: 100 },
 		        { field: 'procedureMationList', title: '工序', align: 'left', width: 100, templet: function (d) {
 		        	var str = ""
-		        	$.each(d.procedureMationList, function(i, item){
+		        	$.each(d.procedureMationList, function(i, item) {
 		        		str += '<span class="layui-badge layui-bg-gray">' + item.number + '</span>' + item.procedureName + '<br>';
 		        	});
 		        	return str;
@@ -171,7 +171,7 @@ layui.config({
 			$("#secondTab").show();
 			$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: productMationList}));
 			//设置商品来源选中
-			$.each(productMationList, function(i, item){
+			$.each(productMationList, function(i, item) {
 				$("#type" + item.productId).val(item.typeId);
 			});
 			form.render();
@@ -186,7 +186,7 @@ layui.config({
 			return false;
 		}
 		var proList = new Array();
-		$.each(rows, function(i, item){
+		$.each(rows, function(i, item) {
 			var _object = $(item);
 			var productId = _object.attr("rowid");
 			proList.push({
@@ -222,7 +222,7 @@ layui.config({
 	 */
 	function getProcedureMationList(productId){
 		var proIndex = -1;
-		$.each(productMationList, function(i, item){
+		$.each(productMationList, function(i, item) {
 			if(productId == item.productId){
 				proIndex = i;
 				return false;
@@ -243,7 +243,7 @@ layui.config({
 		var proIndex = -1;
 		//规格索引
 		var normsIndex = -1;
-		$.each(productMationList, function(i, item){
+		$.each(productMationList, function(i, item) {
 			if(productId == item.productId){
 				proIndex = i;
 				$.each(item.unitList, function(j, bean){

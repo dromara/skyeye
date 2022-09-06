@@ -172,7 +172,7 @@ layui.config({
         var check_box = table.checkStatus('messageTable').data;
         for (var i = 0;  i < check_box.length; i++){
             var list = [];
-            $.each(chooseUserList, function(j, item){
+            $.each(chooseUserList, function(j, item) {
                 if(item.id != check_box[i].id){
                     list.push(item);
                 }

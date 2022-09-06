@@ -52,7 +52,7 @@ layui.config({
 
                 var userNames = [];
                 procedureUser = [].concat(json.bean.operators);
-                $.each(procedureUser, function(i, item){
+                $.each(procedureUser, function(i, item) {
                     userNames.push(item.name);
                 });
                 // 工序操作员

@@ -17,7 +17,7 @@ layui.config({
 
 			if(json.bean.vehicleState == '1'){
 				json.bean.vehicleStateName = "<span class='state-up'>" + json.bean.vehicleStateName + "</span>";
-			}else if(json.bean.vehicleState == '2'){
+			} else if (json.bean.vehicleState == '2'){
 				json.bean.vehicleStateName = "<span class='state-down'>" + json.bean.vehicleStateName + "</span>";
 			}
 

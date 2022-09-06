@@ -107,7 +107,7 @@ layui.config({
 				if(replyType == "1"){
 					$("span[rowid=" + belongCommentId + "]").parents('div[class^="comment-text"]').eq(0).find(".second-comment-item").removeClass("layui-hide");
 					$("span[rowid=" + belongCommentId + "]").parents('div[class^="first-comment-item"]').eq(0).find(".second-comment-item").append(getDataUseHandlebars(replyTemplate, params));
-				}else if(replyType == "2"){
+				} else if (replyType == "2"){
 					$("span[rowid=" + belongCommentId + "]").parents('div[class^="se-comment-text"]').eq(0).after(getDataUseHandlebars(replyTemplate, params));
 				}
  	   		}});

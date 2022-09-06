@@ -89,7 +89,7 @@ layui.config({
 					menuStr = "";
 					if(row.menuIconType === 1){//icon
 						row.icon = '<i class="fa ' + row.icon + ' fa-fw"></i>';
-					}else if(row.menuIconType === 2){//图片
+					} else if (row.menuIconType === 2){//图片
 						row.icon = '<img src="' + fileBasePath + row.menuIconPic + '" />';
 					}
 					if(languageType == 'cn'){
@@ -110,7 +110,7 @@ layui.config({
 							$.each(row.childs, function(j, child){
 								if(child.menuIconType === 1){//icon
 									child.icon = '<i class="fa ' + child.icon + ' fa-fw"></i>';
-								}else if(child.menuIconType === 2){//图片
+								} else if (child.menuIconType === 2){//图片
 									child.icon = '<img src="' + fileBasePath + child.menuIconPic + '" />';
 								}
 								if(languageType == 'cn'){
@@ -159,7 +159,7 @@ layui.config({
     function initDeskTopMenuBox(){
     	var items = $(".desktop-menu-box").find('li');
     	var maxWidth = 50;
-    	$.each(items, function(i, item){
+    	$.each(items, function(i, item) {
     		maxWidth += $(item).width();
     	});
     	$(".desktop-menu-box").find('ul').css({'width': maxWidth + 'px'});

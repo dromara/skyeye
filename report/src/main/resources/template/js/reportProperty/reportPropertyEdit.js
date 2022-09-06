@@ -33,7 +33,7 @@ layui.config({
                 if(j.bean.optional == 1){
                     var options = JSON.parse(j.bean.options);
                     // 加载属性值
-                    $.each(options, function(i, item){
+                    $.each(options, function(i, item) {
                         addRow();
                         $("#title" + (rowNum - 1)).val(item.title);
                         $("#value" + (rowNum - 1)).val(item.value);

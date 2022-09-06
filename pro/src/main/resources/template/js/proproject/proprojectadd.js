@@ -53,8 +53,8 @@ layui.config({
 		form.on('select(customerId)', function(data) {
 			if (!isNull(data.value) && data.value != '请选择') {
 				contractId(data.value);
-				$.each(customerList, function(i, item){
-					if(data.value == item.id){
+				$.each(customerList, function(i, item) {
+					if (data.value == item.id) {
 						$("#contactName").val(item.contacts);
 						$("#telphone").val(item.workPhone);
 						$("#mobile").val(item.mobilePhone);

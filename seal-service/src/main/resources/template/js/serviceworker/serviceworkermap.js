@@ -20,7 +20,7 @@ layui.config({
 
 		map.clearMap(); // 清除地图覆盖物
 
-		$.each(json.rows, function(i, item){
+		$.each(json.rows, function(i, item) {
 			new AMap.Marker({
 				map: map,
 				content: getIconContent(item.id, item.userName, item.userPhoto),
@@ -44,8 +44,8 @@ layui.config({
 	
 	$("body").on("click", ".custom-content-marker", function (e) {
 		var rowId = $(this).attr('rowid');
-		$.each(userList, function(i, item){
-			if(rowId === item.id){
+		$.each(userList, function(i, item) {
+			if(rowId === item.id) {
 				document.getElementById('tips').innerHTML = '员工姓名：' + item.userName + '<br>'
 															+ '工单数：' + item.orderNumber + '<br>'
 															+ '状态：' + item.stateName + '<br>'

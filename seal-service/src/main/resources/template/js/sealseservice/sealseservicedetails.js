@@ -31,7 +31,7 @@ layui.config({
 		 		//工单协助人
 		 		if (!isNull(json.bean.cooperationUserId) && json.bean.cooperationUserId.length > 0){
 			    	var str = "";
-	    			$.each(json.bean.cooperationUserId, function(i, item){
+	    			$.each(json.bean.cooperationUserId, function(i, item) {
 	    				str += item.name + ',';
 	    			});
 	    			$("#cooperationUserId").html(str);
@@ -40,7 +40,7 @@ layui.config({
 		 		//相关照片回显
 		 		if (!isNull(json.bean.sheetPicture) && json.bean.sheetPicture.length > 0){
 			    	var str = "";
-	    			$.each(json.bean.sheetPicture.split(','), function(i, item){
+	    			$.each(json.bean.sheetPicture.split(','), function(i, item) {
 	    				if (!isNull(item)){
 		    				str += '<img src="' + item + '" class="photo-img pictureItem">';
 	    				}
@@ -51,7 +51,7 @@ layui.config({
  	        	//完工拍照回显
 		 		if (!isNull(json.bean.comPic) && json.bean.comPic.length > 0){
 			    	var str = "";
-	    			$.each(json.bean.comPic.split(','), function(i, item){
+	    			$.each(json.bean.comPic.split(','), function(i, item) {
 	    				if (!isNull(item)){
 	    					str += '<img src="' + item + '" class="photo-img pictureItem">';
 	    				}

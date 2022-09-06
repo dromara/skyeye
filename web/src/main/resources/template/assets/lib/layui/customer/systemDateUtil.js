@@ -320,7 +320,7 @@ function compare_hms(a, b){
     var n = d.getHours() * 60 * 60 + d.getMinutes() * 60 + d.getSeconds();
     if(i > n){
         return true;
-    }else if(i < n){
+    } else if (i < n){
         return false;
     } else {
         return true;

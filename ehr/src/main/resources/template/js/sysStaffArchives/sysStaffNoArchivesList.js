@@ -39,13 +39,13 @@ layui.config({
                 { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
                     if(d.state == '1'){
                         return "在职";
-                    }else if(d.state == '2'){
+                    } else if (d.state == '2'){
                         return "离职";
-                    }else if(d.state == '3'){
+                    } else if (d.state == '3'){
                         return "见习";
-                    }else if(d.state == '4'){
+                    } else if (d.state == '4'){
                         return "试用";
-                    }else if(d.state == '5'){
+                    } else if (d.state == '5'){
                         return "退休";
                     }
                 }},

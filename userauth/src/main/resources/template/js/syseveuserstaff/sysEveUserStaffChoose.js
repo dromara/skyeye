@@ -26,7 +26,7 @@ layui.config({
 		var checkStaffMation = [].concat(parent.systemCommonUtil.checkStaffMation);
 		// 初始化值
 		var ids = [];
-		$.each(checkStaffMation, function(i, item){
+		$.each(checkStaffMation, function(i, item) {
 			ids.push(item.id);
 		});
 		tableCheckBoxUtil.setIds({
@@ -64,7 +64,7 @@ layui.config({
 	        { field: 'staffType', title: '类型', rowspan: '3', align: 'left', width: 90, templet: function (d) {
 	        	if(d.staffType == 1){
 	        		return '普通员工';
-	        	}else if(d.staffType == 2){
+	        	} else if (d.staffType == 2){
 	        		return '教职工';
 	        	} else {
 	        		return '参数错误';
@@ -82,9 +82,9 @@ layui.config({
 	        { field: 'userSex', title: '性别', width: 60, rowspan: '3', align: 'center', templet: function (d) {
 	        	if(d.userSex == '0'){
 	        		return "保密";
-	        	}else if(d.userSex == '1'){
+	        	} else if (d.userSex == '1'){
 	        		return "男";
-	        	}else if(d.userSex == '2'){
+	        	} else if (d.userSex == '2'){
 	        		return "女";
 	        	} else {
 	        		return "参数错误";

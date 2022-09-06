@@ -30,7 +30,7 @@ layui.config({
 		        		str += '<i class="fa fa-fw ' + json.bean.menuIcon + '" style="color: ' + json.bean.menuIconColor + '"></i>';
 		        	}
 		        	str += '</div>';
-	        	}else if(json.bean.menuIconType == '2'){
+	        	} else if (json.bean.menuIconType == '2'){
 	        		str = '<img src="' + fileBasePath + json.bean.menuIconPic + '" class="photo-img" id="menuIconPic">';
 	        	}
 	        	$("#icon").html(str);

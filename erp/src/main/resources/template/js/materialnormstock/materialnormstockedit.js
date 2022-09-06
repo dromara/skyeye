@@ -14,7 +14,7 @@ layui.config({
 	    var normsStock = [].concat(parent.normsStock);
 	    //要编辑的仓库id
 	    var depotId = parent.chooseDepotId;
-	    $.each(normsStock, function(i, item){
+	    $.each(normsStock, function(i, item) {
     		if(item.depotId === depotId){
     			$("#initialTock").val(item.initialTock);
     			$("#depotName").html(item.depotName);
@@ -26,7 +26,7 @@ layui.config({
  		form.render();
  	    form.on('submit(formEditBean)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
- 	        	$.each(normsStock, function(i, item){
+ 	        	$.each(normsStock, function(i, item) {
  	        		if(item.depotId === depotId){
  	        			item.initialTock = $("#initialTock").val();
  	        			return false;

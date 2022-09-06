@@ -80,7 +80,7 @@ layui.config({
 		var type = $(this).attr("type");
 		if(type == "edit"){
 			edit(rowId);
-		}else if(type == "delete"){
+		} else if (type == "delete"){
 			del(rowId);
 		}
 	});

@@ -186,7 +186,7 @@ layui.config({
 	    //渲染数据到页面
 		function initDataToShow(_object){
 			//渲染列表项
-			$.each(_object.bean.partsList, function(i, item){
+			$.each(_object.bean.partsList, function(i, item) {
 				addRow();
 				// 将规格所属的商品信息加入到对象中存储
 				allChooseProduct["tr" + (rowNum - 1)] = item;

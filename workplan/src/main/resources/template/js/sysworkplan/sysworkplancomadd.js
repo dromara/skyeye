@@ -125,7 +125,7 @@ layui.config({
  		form.on('switch(whetherTimeFilter)', function (data) {
  			//同步开关值
  			$(data.elem).val(data.elem.checked);
- 			if(data.elem.checked){
+ 			if (data.elem.checked){
  				$("#notifyTimeBox").removeClass("layui-hide");
  			} else {
  				$("#notifyTimeBox").addClass("layui-hide");

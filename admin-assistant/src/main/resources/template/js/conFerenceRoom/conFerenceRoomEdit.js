@@ -37,7 +37,7 @@ layui.config({
 		        
 		 		var userNames = [];
 		 		userList = [].concat(json.bean.roomAdmin);
-		 		$.each(json.bean.roomAdmin, function(i, item){
+		 		$.each(json.bean.roomAdmin, function(i, item) {
 		 			userNames.push(item.name);
 		 		});
 		 		

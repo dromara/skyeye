@@ -409,7 +409,7 @@ layui.define('layer', function(exports) {
 			var othis = $(this),
 				data = othis.attr('lay-data');
 
-			if(data) {
+			if (data) {
 				try {
 					data = new Function('return ' + data)();
 					that.config = $.extend({}, options, data);

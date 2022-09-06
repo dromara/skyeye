@@ -43,7 +43,7 @@ layui.config({
 
 		 		var userNames = [];
 		 		userList = [].concat(json.bean.vehicleAdmin);
-		 		$.each(json.bean.vehicleAdmin, function(i, item){
+		 		$.each(json.bean.vehicleAdmin, function(i, item) {
 		 			userNames.push(item.name);
 		 		});
 		 		// 管理人员选择

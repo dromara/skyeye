@@ -29,7 +29,7 @@ layui.config({
             },
             ajaxSendAfter:function (json) {
                 dataFromTypeList = [].concat(json.rows);
-                $.each(dataFromTypeList, function (i, item){
+                $.each(dataFromTypeList, function (i, item) {
                     if(item.checked){
                         initDataFromBoxContent(item.id);
                         form.render('radio');
@@ -70,16 +70,16 @@ layui.config({
 
         function getDataByType(){
             var dataFromType = $("input[name='dataFromType']:checked").val();
-            if(dataFromType == 1){
+            if (dataFromType == 1){
                 // XML数据源
                 return getXMLData();
-            } else if(dataFromType == 2){
+            } else if (dataFromType == 2){
                 // JSON数据源
                 return getJSONData();
-            } else if(dataFromType == 3){
+            } else if (dataFromType == 3){
                 // Rest接口数据源
                 return getRESTData();
-            } else if(dataFromType == 4){
+            } else if (dataFromType == 4){
                 // SQL数据源
                 return getSQLData();
             }
@@ -168,25 +168,25 @@ layui.config({
         function initEvent(dataFromType){
             // 获取公共的配置信息
             var commonOptions = getCommonCodeMirrorOptions();
-            if(dataFromType == 1){
+            if (dataFromType == 1){
                 // XML数据源
                 xmlContent = CodeMirror.fromTextArea(document.getElementById("xmlData"), $.extend(true, commonOptions, {
                     mode: "xml",
                     theme: "default"
                 }));
-            } else if(dataFromType == 2){
+            } else if (dataFromType == 2){
                 // JSON数据源
                 jsonContent = CodeMirror.fromTextArea(document.getElementById("jsonData"), $.extend(true, commonOptions, {
                     mode: "xml",
                     theme: "default"
                 }));
-            } else if(dataFromType == 3){
+            } else if (dataFromType == 3){
                 // Rest接口数据源
                 restRequestBodyContent = CodeMirror.fromTextArea(document.getElementById("requestBody"), $.extend(true, commonOptions, {
                     mode: "xml",
                     theme: "default"
                 }));
-            } else if(dataFromType == 4){
+            } else if (dataFromType == 4){
                 // SQL数据源
                 showGrid({
                     id: "sqlDataBase",
@@ -239,16 +239,16 @@ layui.config({
             if(params == null){
                 return false;
             }
-            if(dataFromType == 1){
+            if (dataFromType == 1){
                 // XML数据源
                 url = "reportcommon002";
-            } else if(dataFromType == 2){
+            } else if (dataFromType == 2){
                 // JSON数据源
                 url = "reportcommon003";
-            } else if(dataFromType == 3){
+            } else if (dataFromType == 3){
                 // Rest接口数据源
                 url = "reportcommon005";
-            } else if(dataFromType == 4){
+            } else if (dataFromType == 4){
                 // SQL数据源
                 url = "reportcommon004";
             }
@@ -266,17 +266,17 @@ layui.config({
          */
         function getResolutionInputParams(dataFromType, e){
             var params = {};
-            if(dataFromType == 1){
+            if (dataFromType == 1){
                 // XML数据源
                 params = {
                     xmlText: xmlContent.getValue()
                 };
-            } else if(dataFromType == 2){
+            } else if (dataFromType == 2){
                 // JSON数据源
                 params = {
                     jsonText: jsonContent.getValue()
                 };
-            } else if(dataFromType == 3){
+            } else if (dataFromType == 3){
                 // Rest接口数据源
                 if(isNull($("#restUrl").val())) {
                     winui.window.msg('请填写url', {icon: 2, time: 2000});
@@ -288,7 +288,7 @@ layui.config({
                     requestHeader: getRestRequestHeaderDataToResolution(),
                     requestBody: restRequestBodyContent.getValue()
                 };
-            } else if(dataFromType == 4){
+            } else if (dataFromType == 4){
                 // SQL数据源
                 if(isNull($("#sqlDataBase").val())) {
                     winui.window.msg('请选择数据库', {icon: 2, time: 2000});
@@ -318,16 +318,16 @@ layui.config({
         }
 
         function getDataByDataFromType(dataFromType, json){
-            if(dataFromType == 1){
+            if (dataFromType == 1){
                 // XML数据源
                 return json.bean.nodeArray;
-            } else if(dataFromType == 2){
+            } else if (dataFromType == 2){
                 // JSON数据源
                 return json.bean.nodeArray;
-            } else if(dataFromType == 3){
+            } else if (dataFromType == 3){
                 // Rest接口数据源
                 return json.bean.nodeArray;
-            } else if(dataFromType == 4){
+            } else if (dataFromType == 4){
                 // SQL数据源
                 return json.rows;
             }
@@ -341,16 +341,16 @@ layui.config({
          */
         function loadFieldResolution(dataFromType, data){
             $("#analysisTable").html("");
-            $.each(data, function (i, item){
+            $.each(data, function (i, item) {
                 addAnalysisRow();
                 $("#key" + (rowNum - 1)).val(item);
-                if(dataFromType == 1){
+                if (dataFromType == 1){
                     // XML数据源
-                } else if(dataFromType == 2){
+                } else if (dataFromType == 2){
                     // JSON数据源
-                } else if(dataFromType == 3){
+                } else if (dataFromType == 3){
                     // Rest接口数据源
-                } else if(dataFromType == 4){
+                } else if (dataFromType == 4){
                     // SQL数据源
                     $("#key" + (rowNum - 1)).val(item.name);
                     $("#dataType" + (rowNum - 1)).val(item.dataType);

@@ -88,7 +88,7 @@ layui.config({
 		if(checkType == '2'){
 			//初始化值
 			var ids = [];
-			$.each(parent.schoolKnowledgeMationList, function(i, item){
+			$.each(parent.schoolKnowledgeMationList, function(i, item) {
 				ids.push(item.id);
 			});
 			tableCheckBoxUtil.setIds({

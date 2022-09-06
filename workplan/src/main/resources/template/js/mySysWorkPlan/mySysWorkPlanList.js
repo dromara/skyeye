@@ -34,9 +34,9 @@ layui.config({
 			{ field: 'planType', title: '计划类型', align: 'center', width: 100, templet: function (d) {
 				if(d.planType == 1){
 					return '个人计划';
-				}else if(d.planType == 2){
+				} else if (d.planType == 2){
 					return '部门计划';
-				}else if(d.planType == 3){
+				} else if (d.planType == 3){
 					return '公司计划';
 				}
 				return '';
@@ -44,15 +44,15 @@ layui.config({
 			{ field: 'planCycle', title: '计划周期', align: 'center', width: 100, templet: function (d) {
 				if(d.planCycle == 1){
 					return '日计划';
-				}else if(d.planCycle == 2){
+				} else if (d.planCycle == 2){
 					return '周计划';
-				}else if(d.planCycle == 3){
+				} else if (d.planCycle == 3){
 					return '月计划';
-				}else if(d.planCycle == 4){
+				} else if (d.planCycle == 4){
 					return '季度计划';
-				}else if(d.planCycle == 5){
+				} else if (d.planCycle == 5){
 					return '半年计划';
-				}else if(d.planCycle == 6){
+				} else if (d.planCycle == 6){
 					return '年计划';
 				}
 				return '';
@@ -60,11 +60,11 @@ layui.config({
 			{ field: 'state', title: '状态', width: 80, templet: function (d) {
 				if(d.state == '1'){
 					return "<span class='state-new'>待执行</span>";
-				}else if(d.state == '2'){
+				} else if (d.state == '2'){
 					return "<span class='state-up'>执行完成</span>";
-				}else if(d.state == '3'){
+				} else if (d.state == '3'){
 					return "<span class='state-down'>延期</span>";
-				}else if(d.state == '4'){
+				} else if (d.state == '4'){
 					return "<span class='state-error'>转任务</span>";
 				}
 				return '';

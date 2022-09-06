@@ -42,7 +42,7 @@ layui.config({
 		charts1 = echarts.init(document.getElementById("charts1"));
 		var name = new Array();
 		var num = new Array();
-		$.each(rows, function(i, item){
+		$.each(rows, function(i, item) {
 			name.push(item.name);
 			num.push(item.number);
 		});
@@ -50,10 +50,10 @@ layui.config({
 		
 		// 加载表格
 		var allNum = 0;
-		$.each(rows, function(i, item){
+		$.each(rows, function(i, item) {
 			allNum += parseInt(item.number);
 		});
-		$.each(rows, function(i, item){
+		$.each(rows, function(i, item) {
 			if(allNum == 0){
 				item["proportion"] = "0.00%";
 			} else {

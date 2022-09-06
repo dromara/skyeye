@@ -34,9 +34,9 @@ layui.config({
 	        { field: 'state', title: '状态', width: 120, templet: function (d) {
 	        	if(d.state == '3'){
 	        		return "<span class='state-down'>审核不通过</span>";
-	        	}else if(d.state == '2'){
+	        	} else if (d.state == '2'){
 	        		return "<span class='state-up'>审核通过</span>";
-	        	}else if(d.state == '1'){
+	        	} else if (d.state == '1'){
 	        		return "<span class='state-new'>审核中</span>";
 	        	}
 	        }},

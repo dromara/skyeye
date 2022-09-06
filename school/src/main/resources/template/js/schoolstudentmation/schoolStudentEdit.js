@@ -161,7 +161,7 @@ layui.config({
 				
 				//学前教育变化事件
 				form.on('radio(preschoolEducation)', function(data) {
-					if(data.value == 1){
+					if (data.value == 1){
 						$("#preschoolSchoolBox").show();
 					} else {
 						$("#preschoolSchoolBox").hide();
@@ -303,7 +303,7 @@ layui.config({
 	    //渲染家庭成员数据到页面
 		function initDataToShow(stuParents){
 			//渲染列表项
-			$.each(stuParents, function(i, item){
+			$.each(stuParents, function(i, item) {
 				addRow();
 				$("#name" + (rowNum - 1)).val(item.name);//姓名回显
 				$("#idcard" + (rowNum - 1)).val(item.idcard);//身份证号回显

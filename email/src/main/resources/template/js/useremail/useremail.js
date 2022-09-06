@@ -24,7 +24,7 @@ layui.config({
 		} else {
 			$("#emailOperator").show();//显示邮箱模块
 			$("#firstAddEmail").hide();//隐藏首次输入邮箱模块
-			$.each(json.rows, function(i, item){
+			$.each(json.rows, function(i, item) {
 				addEmail(item.id, item.emailAddress);
 				if(item.emailCheck == 1 || item.emailCheck === '1'){
 					resetCheckEmail(item.id, item.emailAddress);
@@ -73,17 +73,17 @@ layui.config({
 			if(!inboxEmailAselLoad){//初始化加载数据
 				inboxEmailAselFun();
 			}
-		}else if(labelId === 'draftsEmailAsel'){//草稿箱
+		} else if (labelId === 'draftsEmailAsel'){//草稿箱
 			$("#draftsEmail").show();
 			if(!draftsEmailAselLoad){//初始化加载数据
 				draftsEmailAselFun();
 			}
-		}else if(labelId === 'sendedEmailAsel'){//已发送邮件
+		} else if (labelId === 'sendedEmailAsel'){//已发送邮件
 			$("#sendedEmail").show();
 			if(!sendedEmailAselLoad){//初始化加载数据
 				sendedEmailAselFun();
 			}
-		}else if(labelId === 'deleteedEmailAsel'){//已删除邮件
+		} else if (labelId === 'deleteedEmailAsel'){//已删除邮件
 			$("#deleteedEmail").show();
 			if(!deleteedEmailAselLoad){//初始化加载数据
 				deleteedEmailAselFun();
@@ -215,11 +215,11 @@ layui.config({
 		var _selId = $("#emailSetting").find("a[class='selected']").attr("id");
 		if(_selId === 'inboxEmailAsel'){//收件箱
 			$("#emailContentIframe").attr("src", "../../tpl/useremail/emailshow.html");
-		}else if(_selId === 'draftsEmailAsel'){//草稿箱
+		} else if (_selId === 'draftsEmailAsel'){//草稿箱
 			$("#emailContentIframe").attr("src", "../../tpl/useremail/sendemail.html?id=" + rowId);
-		}else if(_selId === 'sendedEmailAsel'){//已发送邮件
+		} else if (_selId === 'sendedEmailAsel'){//已发送邮件
 			$("#emailContentIframe").attr("src", "../../tpl/useremail/emailshow.html");
-		}else if(_selId === 'deleteedEmailAsel'){//已删除邮件
+		} else if (_selId === 'deleteedEmailAsel'){//已删除邮件
 			$("#emailContentIframe").attr("src", "../../tpl/useremail/emailshow.html");
 		} else {
 			winui.window.msg('参数错误', {icon: 2, time: 2000});
@@ -233,15 +233,15 @@ layui.config({
 			AjaxPostUtil.request({url: sysMainMation.emailBasePath + "useremail003", params: {emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function (json) {
 				winui.window.msg("获取邮件中", {icon: 1, time: 2000});
 			}});
-		}else if(_selId === 'draftsEmailAsel'){//草稿箱
+		} else if (_selId === 'draftsEmailAsel'){//草稿箱
 			AjaxPostUtil.request({url: sysMainMation.emailBasePath + "useremail010", params: {emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function (json) {
 				winui.window.msg("获取邮件中", {icon: 1, time: 2000});
 			}});
-		}else if(_selId === 'sendedEmailAsel'){//已发送邮件
+		} else if (_selId === 'sendedEmailAsel'){//已发送邮件
 			AjaxPostUtil.request({url: sysMainMation.emailBasePath + "useremail006", params: {emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function (json) {
 				winui.window.msg("获取邮件中", {icon: 1, time: 2000});
 			}});
-		}else if(_selId === 'deleteedEmailAsel'){//已删除邮件
+		} else if (_selId === 'deleteedEmailAsel'){//已删除邮件
 			AjaxPostUtil.request({url: sysMainMation.emailBasePath + "useremail008", params: {emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function (json) {
 				winui.window.msg("获取邮件中", {icon: 1, time: 2000});
 			}});
@@ -271,13 +271,13 @@ layui.config({
 		if(_selId === 'inboxEmailAsel'){//收件箱
 			$("#inboxEmail").html("");
 			inboxEmailAselFun();
-		}else if(_selId === 'draftsEmailAsel'){//草稿箱
+		} else if (_selId === 'draftsEmailAsel'){//草稿箱
 			$("#draftsEmail").html("");
 			draftsEmailAselFun();
-		}else if(_selId === 'sendedEmailAsel'){//已发送邮件
+		} else if (_selId === 'sendedEmailAsel'){//已发送邮件
 			$("#sendedEmail").html("");
 			sendedEmailAselFun();
-		}else if(_selId === 'deleteedEmailAsel'){//已删除邮件
+		} else if (_selId === 'deleteedEmailAsel'){//已删除邮件
 			$("#deleteedEmail").html("");
 			deleteedEmailAselFun();
 		} else {

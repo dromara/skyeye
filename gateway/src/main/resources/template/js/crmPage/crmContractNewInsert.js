@@ -39,7 +39,7 @@ layui.config({
 		var name = new Array();
 		var num = new Array();
 		var price = new Array();
-		$.each(rows, function(i, item){
+		$.each(rows, function(i, item) {
 			name.push(item.yearMonth);
 			num.push(item.insertContractNum);
 			price.push(isNull(item.insertContractPrice) ? 0 : item.insertContractPrice);

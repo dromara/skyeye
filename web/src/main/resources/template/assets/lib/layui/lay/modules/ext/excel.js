@@ -10152,7 +10152,7 @@ function make_xlsx_lib(XLSX){
   if(typeof cptable !== 'undefined') {
     set_cp = function(cp) { current_codepage = cp; };
     debom = function(data) {
-      if(data.charCodeAt(0) === 0xFF && data.charCodeAt(1) === 0xFE) { return cptable.utils.decode(1200, char_codes(data.slice(2))); }
+      if (data.charCodeAt(0) === 0xFF && data.charCodeAt(1) === 0xFE) { return cptable.utils.decode(1200, char_codes(data.slice(2))); }
       return data;
     };
     _getchar = function _gc2(x) {
@@ -10257,7 +10257,7 @@ function make_xlsx_lib(XLSX){
 
   function ab2a(data) {
     if(typeof ArrayBuffer == 'undefined') throw new Error("Unsupported");
-    if(data instanceof ArrayBuffer) return ab2a(new Uint8Array(data));
+    if (data instanceof ArrayBuffer) return ab2a(new Uint8Array(data));
     var o = new Array(data.length);
     for(var i = 0; i < data.length; ++i) o[i] = data[i];
     return o;
@@ -11792,7 +11792,7 @@ function make_xlsx_lib(XLSX){
       for(i = 0; i < data.length; ++i) {
         var dad = dirname(data[i][0]);
         s = false;
-        for(j = 0; j < data.length; ++j) if(data[j][0] === dad) s = true;
+        for(j = 0; j < data.length; ++j) if (data[j][0] === dad) s = true;
         if(!s) data.push([dad, ({
           name: filename(dad).replace("/",""),
           type: 1,
@@ -12286,7 +12286,7 @@ function make_xlsx_lib(XLSX){
     /* return [ data, bytesRead ] */
     function inflate(data, usz) {
       /* shortcircuit for empty buffer [0x03, 0x00] */
-      if(data[0] == 3 && !(data[1] & 0x3)) { return [new_raw_buf(usz), 2]; }
+      if (data[0] == 3 && !(data[1] & 0x3)) { return [new_raw_buf(usz), 2]; }
 
       /* bit offset */
       var boff = 0;
@@ -12856,18 +12856,18 @@ function make_xlsx_lib(XLSX){
   }
   function getdatastr(data) {
     if(!data) return null;
-    if(data.data) return debom(data.data);
-    if(data.asNodeBuffer && has_buf) return debom(data.asNodeBuffer().toString('binary'));
-    if(data.asBinary) return debom(data.asBinary());
-    if(data._data && data._data.getContent) return debom(cc2str(Array.prototype.slice.call(data._data.getContent(),0)));
+    if (data.data) return debom(data.data);
+    if (data.asNodeBuffer && has_buf) return debom(data.asNodeBuffer().toString('binary'));
+    if (data.asBinary) return debom(data.asBinary());
+    if (data._data && data._data.getContent) return debom(cc2str(Array.prototype.slice.call(data._data.getContent(),0)));
     return null;
   }
 
   function getdatabin(data) {
     if(!data) return null;
-    if(data.data) return char_codes(data.data);
-    if(data.asNodeBuffer && has_buf) return data.asNodeBuffer();
-    if(data._data && data._data.getContent) {
+    if (data.data) return char_codes(data.data);
+    if (data.asNodeBuffer && has_buf) return data.asNodeBuffer();
+    if (data._data && data._data.getContent) {
       var o = data._data.getContent();
       if(typeof o == "string") return char_codes(o);
       return Array.prototype.slice.call(o);
@@ -13678,7 +13678,7 @@ function make_xlsx_lib(XLSX){
         if(range.s.c > __C) range.s.c = __C;
         if(range.e.r < __R) range.e.r = __R;
         if(range.e.c < __C) range.e.c = __C;
-        if(data[R][C] && typeof data[R][C] === 'object' && !Array.isArray(data[R][C]) && !(data[R][C] instanceof Date)) cell = data[R][C];
+        if (data[R][C] && typeof data[R][C] === 'object' && !Array.isArray(data[R][C]) && !(data[R][C] instanceof Date)) cell = data[R][C];
         else {
           if(Array.isArray(cell.v)) { cell.f = data[R][C][1]; cell.v = cell.v[0]; }
           if(cell.v === null) { if(cell.f) cell.t = 'n'; else if(!o.sheetStubs) continue; else cell.t = 'z'; }
@@ -13719,7 +13719,7 @@ function make_xlsx_lib(XLSX){
   function write_XLWideString(data, o) {
     var _null = false; if(o == null) { _null = true; o = new_buf(4+2*data.length); }
     o.write_shift(4, data.length);
-    if(data.length > 0) o.write_shift(0, data, 'dbcs');
+    if (data.length > 0) o.write_shift(0, data, 'dbcs');
     return _null ? o.slice(0, o.l) : o;
   }
 
@@ -13802,7 +13802,7 @@ function make_xlsx_lib(XLSX){
   function write_XLNullableWideString(data, o) {
     var _null = false; if(o == null) { _null = true; o = new_buf(127); }
     o.write_shift(4, data.length > 0 ? data.length : 0xFFFFFFFF);
-    if(data.length > 0) o.write_shift(0, data, 'dbcs');
+    if (data.length > 0) o.write_shift(0, data, 'dbcs');
     return _null ? o.slice(0, o.l) : o;
   }
 
@@ -16197,7 +16197,7 @@ function make_xlsx_lib(XLSX){
     var b5 = (opts && (opts.biff == 5));
     if(!o) o = new_buf(b5 ? 16 : 20);
     o.write_shift(2, 0);
-    if(data.style) {
+    if (data.style) {
       o.write_shift(2, (data.numFmtId||0));
       o.write_shift(2, 0xFFF4);
     } else {
@@ -16923,7 +16923,7 @@ function make_xlsx_lib(XLSX){
       for(i = 0; i <= range.e.c - range.s.c; ++i) {
         var col = [];
         for(j=0; j < data.length; ++j) {
-          if(data[j][i] != null) col.push(data[j][i]);
+          if (data[j][i] != null) col.push(data[j][i]);
         }
         if(col.length == 0 || headers[i] == null) { coltypes[i] = '?'; continue; }
         var guess = '', _guess = '';
@@ -17212,8 +17212,8 @@ function make_xlsx_lib(XLSX){
             else if (data !== 'EOD') throw new Error("Unrecognized DIF special command " + data);
             break;
           case 0:
-            if(data === 'TRUE') arr[R][C] = true;
-            else if(data === 'FALSE') arr[R][C] = false;
+            if (data === 'TRUE') arr[R][C] = true;
+            else if (data === 'FALSE') arr[R][C] = false;
             else if(!isNaN(fuzzynum(value))) arr[R][C] = fuzzynum(value);
             else if(!isNaN(fuzzydate(value).getDate())) arr[R][C] = parseDate(value);
             else arr[R][C] = value;
@@ -17398,9 +17398,9 @@ function make_xlsx_lib(XLSX){
   var PRN = (function() {
     function set_text_arr(data, arr, R, C, o) {
       if(o.raw) arr[R][C] = data;
-      else if(data === 'TRUE') arr[R][C] = true;
-      else if(data === 'FALSE') arr[R][C] = false;
-      else if(data === ""){/* empty */}
+      else if (data === 'TRUE') arr[R][C] = true;
+      else if (data === 'FALSE') arr[R][C] = false;
+      else if (data === ""){/* empty */}
       else if(!isNaN(fuzzynum(data))) arr[R][C] = fuzzynum(data);
       else if(!isNaN(fuzzydate(data).getDate())) arr[R][C] = parseDate(data);
       else arr[R][C] = data;
@@ -20073,7 +20073,7 @@ function make_xlsx_lib(XLSX){
   /* 18.7 Comments */
   function parse_comments_xml(data, opts) {
     /* 18.7.6 CT_Comments */
-    if(data.match(/<(?:\w+:)?comments *\/>/)) return [];
+    if (data.match(/<(?:\w+:)?comments *\/>/)) return [];
     var authors = [];
     var commentList = [];
     var authtag = data.match(/<(?:\w+:)?authors>([\s\S]*)<\/(?:\w+:)?authors>/);
@@ -22977,7 +22977,7 @@ function make_xlsx_lib(XLSX){
   function parse_ws_xml_sheetpr(sheetPr, s, wb, idx) {
     var data = parsexmltag(sheetPr);
     if(!wb.Sheets[idx]) wb.Sheets[idx] = {};
-    if(data.codeName) wb.Sheets[idx].CodeName = data.codeName;
+    if (data.codeName) wb.Sheets[idx].CodeName = data.codeName;
   }
 
   /* 18.3.1.85 sheetProtection CT_SheetProtection */
@@ -24903,9 +24903,9 @@ function make_xlsx_lib(XLSX){
   function write_BrtWbProp(data, o) {
     if(!o) o = new_buf(72);
     var flags = 0;
-    if(data) {
+    if (data) {
       /* TODO: mirror parse_BrtWbProp fields */
-      if(data.filterPrivacy) flags |= 0x08;
+      if (data.filterPrivacy) flags |= 0x08;
     }
     o.write_shift(4, flags);
     o.write_shift(4, 0);

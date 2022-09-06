@@ -208,7 +208,7 @@ layui.config({
 						//移除界面上的信息
 						$(item).parent().parent().remove();
 					});
-					$.each(machinMation.norms, function(i, item){
+					$.each(machinMation.norms, function(i, item) {
 						addRow();
 						//将规格所属的商品信息加入到对象中存储
 						allChooseProduct["tr" + (rowNum - 1)] = item;

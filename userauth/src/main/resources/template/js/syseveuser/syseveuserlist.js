@@ -33,9 +33,9 @@ layui.config({
 	        { field: 'sexName', title: '性别', width: 60, templet: function (d) {
 	        	if(d.sexName == '0') {
 	        		return "保密";
-	        	}else if(d.sexName == '1'){
+	        	} else if (d.sexName == '1'){
 	        		return "男";
-	        	}else if(d.sexName == '2'){
+	        	} else if (d.sexName == '2'){
 	        		return "女";
 	        	} else {
 	        		return "参数错误";

@@ -33,9 +33,9 @@ layui.config({
 			{ field: 'planType', title: '计划类型', align: 'center', width: 100, templet: function (d) {
 				if(d.planType == 1){
 					return '个人计划';
-				}else if(d.planType == 2){
+				} else if (d.planType == 2){
 					return '部门计划';
-				}else if(d.planType == 3){
+				} else if (d.planType == 3){
 					return '公司计划';
 				}
 				return '';
@@ -43,15 +43,15 @@ layui.config({
 			{ field: 'planCycle', title: '计划周期', align: 'center', width: 100, templet: function (d) {
 				if(d.planCycle == 1){
 					return '日计划';
-				}else if(d.planCycle == 2){
+				} else if (d.planCycle == 2){
 					return '周计划';
-				}else if(d.planCycle == 3){
+				} else if (d.planCycle == 3){
 					return '月计划';
-				}else if(d.planCycle == 4){
+				} else if (d.planCycle == 4){
 					return '季度计划';
-				}else if(d.planCycle == 5){
+				} else if (d.planCycle == 5){
 					return '半年计划';
-				}else if(d.planCycle == 6){
+				} else if (d.planCycle == 6){
 					return '年计划';
 				}
 				return '';

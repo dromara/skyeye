@@ -30,7 +30,7 @@ layui.config({
 		ajaxSendAfter: function (json) {
 			if(json.bean.editRow == "1"){
 				$(".typeTwo").addClass("layui-hide");
-			}else if(json.bean.editRow == "2"){
+			} else if (json.bean.editRow == "2"){
 				$(".typeOne").addClass("layui-hide");
 			}
 			processInstanceId = json.bean.processInstanceId;
@@ -49,7 +49,7 @@ layui.config({
 
 			var userNames = [];
 			userList = [].concat(json.bean.relationUserId);
-			$.each(json.bean.relationUserId, function(i, item){
+			$.each(json.bean.relationUserId, function(i, item) {
 				userNames.push(item.name);
 			});
 			//关联人员选择

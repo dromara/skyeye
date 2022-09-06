@@ -27,7 +27,7 @@ layui.config({
 
             var userNames = [];
             interviewer = [].concat(json.bean.interviewer);
-            $.each(interviewer, function(i, item){
+            $.each(interviewer, function(i, item) {
                 userNames.push(item.name);
             });
             $('#interviewer').tagEditor({

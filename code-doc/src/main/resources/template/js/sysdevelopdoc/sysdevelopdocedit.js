@@ -42,7 +42,7 @@ layui.config({
 				var val = data.value;
 				if(val == '1'){//一级目录
 					$("#parentIdBox").addClass("layui-hide");
-				}else if(val == '2'){//二级目录
+				} else if (val == '2'){//二级目录
 					$("#parentIdBox").removeClass("layui-hide");
 				} else {
 					winui.window.msg('状态值错误', {icon: 2, time: 2000});

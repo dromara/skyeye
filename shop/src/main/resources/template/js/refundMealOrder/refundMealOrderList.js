@@ -52,9 +52,9 @@ layui.config({
             { field: 'state', title: '审核状态', width: 80, align: "center", templet: function (d) {
                 if(d.state == 1){
                     return "待审核";
-                }else if(d.state == 2){
+                } else if (d.state == 2){
                     return "退款驳回";
-                }else if(d.state == 3){
+                } else if (d.state == 3){
                     return "已退款";
                 }else {
                     return "取消退款";

@@ -23,7 +23,7 @@ layui.config({
     			var str = "暂无附件";
                 if(json.bean.enclosureInfo.length != 0 && !isNull(json.bean.enclosureInfo)){
                 	str = "";
-                    $.each([].concat(json.bean.enclosureInfo), function(i, item){
+                    $.each([].concat(json.bean.enclosureInfo), function(i, item) {
                         str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
                     });
                 }

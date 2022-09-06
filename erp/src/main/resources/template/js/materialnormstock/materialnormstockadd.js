@@ -26,7 +26,7 @@ layui.config({
  	        if (winui.verifyForm(data.elem)) {
  	        	//新增的仓库库存是否在集合中
  	        	var inList = false;
- 	        	$.each(normsStock, function(i, item){
+ 	        	$.each(normsStock, function(i, item) {
  	        		if(item.depotId === $("#storeHouseId").val()){
  	        			inList = true;
  	        			return false;

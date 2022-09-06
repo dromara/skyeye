@@ -20,7 +20,7 @@ PathParser.prototype.setHandler=function(handler){this._handler=handler;};
 PathLexer.VERSION=1.0;
 function PathLexer(pathData){if(pathData==null)pathData="";this.setPathData(pathData);}
 PathLexer.prototype.setPathData=function(pathData){if(typeof(pathData)!="string")throw new Error("PathLexer.setPathData: The first parameter must be a string");this._pathData=pathData;};
-PathLexer.prototype.getNextToken=function(){var result=null;var d=this._pathData;while(result==null){if(d==null||d==""){result=new PathToken(PathToken.EOD,"");}else if(d.match(/^([ \t\r\n,]+)/)){d=d.substr(RegExp.$1.length);}else if(d.match(/^([AaCcHhLlMmQqSsTtVvZz])/)){result=new PathToken(PathToken.COMMAND,RegExp.$1);d=d.substr(RegExp.$1.length);}else if(d.match(/^(([-+]?[0-9]+(\.[0-9]*)?|[-+]?\.[0-9]+)([eE][-+]?[0-9]+)?)/)){result=new PathToken(PathToken.NUMBER,parseFloat(RegExp.$1));d=d.substr(RegExp.$1.length);} else {throw new Error("PathLexer.getNextToken: unrecognized path data "+d);}}this._pathData=d;return result;};
+PathLexer.prototype.getNextToken=function(){var result=null;var d=this._pathData;while(result==null){if(d==null||d==""){result=new PathToken(PathToken.EOD,"");} else if (d.match(/^([ \t\r\n,]+)/)){d=d.substr(RegExp.$1.length);} else if (d.match(/^([AaCcHhLlMmQqSsTtVvZz])/)){result=new PathToken(PathToken.COMMAND,RegExp.$1);d=d.substr(RegExp.$1.length);} else if (d.match(/^(([-+]?[0-9]+(\.[0-9]*)?|[-+]?\.[0-9]+)([eE][-+]?[0-9]+)?)/)){result=new PathToken(PathToken.NUMBER,parseFloat(RegExp.$1));d=d.substr(RegExp.$1.length);} else {throw new Error("PathLexer.getNextToken: unrecognized path data "+d);}}this._pathData=d;return result;};
 PathToken.UNDEFINED=0;
 PathToken.COMMAND=1;
 PathToken.NUMBER=2;

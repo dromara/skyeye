@@ -25,7 +25,7 @@ layui.config({
             ajaxSendLoadBefore: function(hdb) {
             },
             ajaxSendAfter: function (json) {
-            	$.each(json.bean.procedureList, function(j, item){
+            	$.each(json.bean.procedureList, function(j, item) {
             		item.id = rowNum;
 					procedureList.push(item);
 					rowNum++;

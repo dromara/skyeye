@@ -38,7 +38,7 @@ layui.config({
 		 		textool.init({eleId: 'addDesc', maxlength: 200});
 		 		
 		 		userList = [].concat(json.bean.chargeUser);
-		 		$.each(json.bean.chargeUser, function(i, item){
+		 		$.each(json.bean.chargeUser, function(i, item) {
 		 			$("#relationUserId").val(item.name);
 		 		});
 		 		
@@ -105,7 +105,7 @@ layui.config({
 			systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
 				userList = [].concat(userReturnList);
 				//添加选择
-				$.each(userList, function(i, item){
+				$.each(userList, function(i, item) {
 					$("#relationUserId").val(item.name);
 				});
 			});

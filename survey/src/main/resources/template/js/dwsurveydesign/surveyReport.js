@@ -106,7 +106,7 @@ layui.config({
 		
 		function resetQuNum(){
 			var quCoNums = $(".quCoNum");
-			$.each(quCoNums, function(i, item){
+			$.each(quCoNums, function(i, item) {
 				$(this).html((i + 1) + "、");
 			});
 		}

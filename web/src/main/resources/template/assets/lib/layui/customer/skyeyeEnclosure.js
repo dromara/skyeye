@@ -91,7 +91,7 @@ var skyeyeEnclosure = {
     loadEnclosureHTML: function (boxId, btnId, type){
         var enclosureList = skyeyeEnclosure.getJSONEnclosureListByBoxId(boxId);
         var str = "";
-        $.each(enclosureList, function(i, item){
+        $.each(enclosureList, function(i, item) {
             if(type == 1){
                 str += '<br><a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a>';
             } else {

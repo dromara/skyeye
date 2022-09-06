@@ -121,7 +121,7 @@ layui.config({
 			    form.on('switch(weekCompletedImagetext)', function (data) {
 		 			//是否图文模式
 		 			$(data.elem).val(data.elem.checked);
-		 			if(data.elem.value === 'true' || data.elem.value === true){
+		 			if (data.elem.value === 'true' || data.elem.value === true){
 		 				$("#weekCompletedText").parent().hide();
 			    		$("#weekCompletedContent").parent().show();
 			    		layedit.setContent(weekCompletedContent, $("#weekCompletedText").val().replace(/\n|\r\n/g, "<br>"), false);
@@ -134,7 +134,7 @@ layui.config({
 			    form.on('switch(weekWorkSummaryImagetext)', function (data) {
 		 			//是否图文模式
 		 			$(data.elem).val(data.elem.checked);
-		 			if(data.elem.value === 'true' || data.elem.value === true){
+		 			if (data.elem.value === 'true' || data.elem.value === true){
 		 				$("#weekWorkSummaryText").parent().hide();
 			    		$("#weekWorkSummaryContent").parent().show();
 			    		layedit.setContent(weekWorkSummaryContent, $("#weekWorkSummaryText").val().replace(/\n|\r\n/g, "<br>"), false);
@@ -147,7 +147,7 @@ layui.config({
 			    form.on('switch(weekNextWorkPlanImagetext)', function (data) {
 		 			//是否图文模式
 		 			$(data.elem).val(data.elem.checked);
-		 			if(data.elem.value === 'true' || data.elem.value === true){
+		 			if (data.elem.value === 'true' || data.elem.value === true){
 		 				$("#weekNextWorkPlanText").parent().hide();
 			    		$("#weekNextWorkPlanContent").parent().show();
 			    		layedit.setContent(weekNextWorkPlanContent, $("#weekNextWorkPlanText").val().replace(/\n|\r\n/g, "<br>"), false);
@@ -160,7 +160,7 @@ layui.config({
 			    form.on('switch(weekCoordinaJobImagetext)', function (data) {
 		 			//是否图文模式
 		 			$(data.elem).val(data.elem.checked);
-		 			if(data.elem.value === 'true' || data.elem.value === true){
+		 			if (data.elem.value === 'true' || data.elem.value === true){
 		 				$("#weekCoordinaJobText").parent().hide();
 			    		$("#weekCoordinaJobContent").parent().show();
 			    		layedit.setContent(weekCoordinaJobContent, $("#weekCoordinaJobText").val().replace(/\n|\r\n/g, "<br>"), false);
@@ -184,7 +184,7 @@ layui.config({
 							winui.window.msg('请选择收件人', {icon: 2, time: 2000});
 							return false;
 						}
-		        		if(data.field.weekCompleted === 'true'){
+		        		if (data.field.weekCompleted === 'true'){
 		        			if(isNull(layedit.getContent(weekCompletedContent))){
 		        				winui.window.msg('请填写本周已完成工作', {icon: 2, time: 2000});
 		        				return false;
@@ -199,17 +199,17 @@ layui.config({
 		        				params.completedJob = encodeURIComponent($("#weekCompletedText").val().replace(/\n|\r\n/g, "<br>"));
 		        			}
 		        		}
-		        		if(data.field.weekCoordinaJob === 'true'){
+		        		if (data.field.weekCoordinaJob === 'true'){
 		        			params.coordinaJob = encodeURIComponent(layedit.getContent(weekCoordinaJobContent));
 		        		} else {
 		        			params.coordinaJob = encodeURIComponent($("#weekCoordinaJobText").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
-		        		if(data.field.weekNextWorkPlan === 'true'){
+		        		if (data.field.weekNextWorkPlan === 'true'){
 		        			params.nextWorkPlan = encodeURIComponent(layedit.getContent(weekNextWorkPlanContent));
 		        		} else {
 		        			params.nextWorkPlan = encodeURIComponent($("#weekNextWorkPlanText").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
-		        		if(data.field.weekWorkSummary === 'true'){
+		        		if (data.field.weekWorkSummary === 'true'){
 		        			params.thisWorkSummary = encodeURIComponent(layedit.getContent(weekWorkSummaryContent));
 		        		} else {
 		        			params.thisWorkSummary = encodeURIComponent($("#weekWorkSummaryText").val().replace(/\n|\r\n/g, "<br>"));

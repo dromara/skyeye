@@ -21,7 +21,7 @@ layui.config({
 		 	ajaxSendAfter:function (json) {
 		 		if(json.bean.examineState == "未审核"){
 		 			$(".examine").addClass("layui-hide");
-		 		}else if(json.bean.examineState == "审核通过"){
+		 		} else if (json.bean.examineState == "审核通过"){
 		 			$(".nopass").addClass("layui-hide");
 		 		}
 		 		if(json.bean.reportType != "其他"){

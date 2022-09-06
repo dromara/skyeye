@@ -25,7 +25,7 @@ function loadPage(url, container) {
                             if(!datas||datas.length==0)
                                 return;
                             $("section.content-header ol.breadcrumb").html("");
-                            if(datas.length==1){
+                            if (datas.length==1){
                                 $("section.content-header ol.breadcrumb").append('<li class="active"> <i class="' + datas[0].icon + '"></i>&nbsp;&nbsp;' + datas[0].name + '</li>');
                             }else {
                                 for (var i = 0; i < datas.length; i++) {

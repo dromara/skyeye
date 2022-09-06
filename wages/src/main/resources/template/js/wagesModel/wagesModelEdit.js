@@ -89,7 +89,7 @@ layui.config({
 			});
 
 			// 加载列表项
-			$.each(json.bean.modelField, function(i, item){
+			$.each(json.bean.modelField, function(i, item) {
 				addRow();
 				$("#fieldId" + (rowNum - 1)).val(item.nameCn + '(' + item.fieldKey + ')');
 				$("#fieldId" + (rowNum - 1)).attr("rowKey", item.fieldKey);
@@ -136,19 +136,19 @@ layui.config({
 					};
 					// 公积金适用对象
 					var object = [];
-					$.each(companyList, function(i, item){
+					$.each(companyList, function(i, item) {
 						object.push({
 							objectId: item.id,
 							objectType: 3
 						});
 					});
-					$.each(departmentList, function(i, item){
+					$.each(departmentList, function(i, item) {
 						object.push({
 							objectId: item.id,
 							objectType: 2
 						});
 					});
-					$.each(checkStaffList, function(i, item){
+					$.each(checkStaffList, function(i, item) {
 						object.push({
 							objectId: item.id,
 							objectType: 1
@@ -170,7 +170,7 @@ layui.config({
 		if(isNull(array)){
 			return name;
 		}
-		$.each(array, function(i, item){
+		$.each(array, function(i, item) {
 			name.push(item.name)
 		});
 		return name;

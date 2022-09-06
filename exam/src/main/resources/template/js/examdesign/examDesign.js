@@ -33,7 +33,7 @@ layui.config({
 	    initPageJson();
 	    function initPageJson(callback) {
 		    AjaxPostUtil.request({url:schoolBasePath + "exam003", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
-				$.each(json.rows, function(i, item){
+				$.each(json.rows, function(i, item) {
 					item.saveTag = 1;
 				});
 				loadPageJson = json;
@@ -52,7 +52,7 @@ layui.config({
 			 	pagination: false,
 			 	template: getFileContent('tpl/examdesign/examDesignBean.tpl'),
 			 	ajaxSendLoadBefore: function(hdb, json){
-			 		$.each(json.rows, function(i, item){
+			 		$.each(json.rows, function(i, item) {
 			 			if(isNull(item.id)){
 			 				item.id = getRandomValueToString();
 			 				item.noQuId = 1;
@@ -257,7 +257,7 @@ layui.config({
 			    			}
 			    		});
 		    		});
-    			}else if(quType === "CHENRADIO"){
+    			} else if (quType === "CHENRADIO"){
     				var answer = qBodyItem.find(".quCoItem table.quCoChenTable tr input.chenRadioInput");
 		    		var isDefaultAnswer = isJsonFormat(bean.isDefaultAnswer) ? JSON.parse(bean.isDefaultAnswer) : [];
 		    		var columuLength = qBodyItem.find(".quCoItem table.quCoChenTable tr td.quChenColumnTd").length;
@@ -277,7 +277,7 @@ layui.config({
 			    			}
 			    		});
 		    		});
-    			}else if(quType === "CHENSCORE"){
+    			} else if (quType === "CHENSCORE"){
     				var answer = qBodyItem.find(".quCoItem table.quCoChenTable tr select.quChenScoreSelect");
 		    		var isDefaultAnswer = isJsonFormat(bean.isDefaultAnswer) ? JSON.parse(bean.isDefaultAnswer) : [];
 		    		var columuLength = qBodyItem.find(".quCoItem table.quCoChenTable tr td.quChenColumnTd").length;
@@ -297,7 +297,7 @@ layui.config({
 			    			}
 			    		});
 		    		});
-    			}else if(quType === "CHENFBK"){
+    			} else if (quType === "CHENFBK"){
     				var answer = qBodyItem.find(".quCoItem table.quCoChenTable tr input.questionChenColumnValue");
 		    		var isDefaultAnswer = isJsonFormat(bean.isDefaultAnswer) ? JSON.parse(bean.isDefaultAnswer) : [];
 		    		var columuLength = qBodyItem.find(".quCoItem table.quCoChenTable tr td.quChenColumnTd").length;
@@ -420,7 +420,7 @@ layui.config({
 			var oldKnowIds = $(_this).attr("knowledgeIds");
 			schoolKnowledgeMationList = new Array();
 			if (!isNull(oldKnowIds)){
-				$.each(oldKnowIds.split(','), function(i, item){
+				$.each(oldKnowIds.split(','), function(i, item) {
 					schoolKnowledgeMationList.push({
 						id: item
 					});
@@ -433,7 +433,7 @@ layui.config({
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {
 					var strIds = new Array();
-					$.each(schoolKnowledgeMationList, function(i, item){
+					$.each(schoolKnowledgeMationList, function(i, item) {
 						strIds.push(item.id);
 					});
 					$(_this).attr("knowledgeIds", strIds.toString());
@@ -461,7 +461,7 @@ layui.config({
 				callBack: function (refreshCode) {
 					initPageJson(function(){
 						quIndex = 0, quLeftIndex = 0;
-						$.each(questionMationList, function(i, item){
+						$.each(questionMationList, function(i, item) {
 							// 加载试题数据
 							item.saveTag = 0;
 							item.orderById = (loadPageJson.rows.length + 1);
@@ -590,7 +590,7 @@ layui.config({
 	    		};
 	    		$.extend(data, getCommonParams(quItemBody));
 	    		var quItemOptions = null;
-	    		if(data.hv == 3) {
+	    		if (data.hv == 3) {
 	    			//还有是table的情况需要处理
 	    			quItemOptions = quItemBody.find(".quCoItem table.tableQuColItem tr td");
 	    		} else {
@@ -678,7 +678,7 @@ layui.config({
 	    		};
 	    		$.extend(data, getCommonParams(quItemBody));
 	    		var quItemOptions = null;
-	    		if(data.hv == 3) {
+	    		if (data.hv == 3) {
 	    			//还有是table的情况需要处理
 	    			quItemOptions = quItemBody.find(".quCoItem table.tableQuColItem tr td");
 	    		} else {
@@ -1164,7 +1164,7 @@ layui.config({
 	    		});
 	    		
 	    		// 答案
-	    		if(data.quType === "CHENCHECKBOX"){
+	    		if (data.quType === "CHENCHECKBOX"){
 		    		var answer = quItemBody.find(".quCoItem table.quCoChenTable tr input.chenCheckBoxInput");
 		    		var isDefaultAnswer = new Array();
 		    		var columuLength = quColumnOptions.length;
@@ -1185,7 +1185,7 @@ layui.config({
 		    			isDefaultAnswer.push(s);
 		    		});
 		    		data.isDefaultAnswer = JSON.stringify(isDefaultAnswer);
-    			}else if(data.quType === "CHENRADIO"){
+    			} else if (data.quType === "CHENRADIO"){
     				var answer = quItemBody.find(".quCoItem table.quCoChenTable tr input.chenRadioInput");
 		    		var isDefaultAnswer = new Array();
 		    		var columuLength = quColumnOptions.length;
@@ -1206,7 +1206,7 @@ layui.config({
 		    			isDefaultAnswer.push(s);
 		    		});
 		    		data.isDefaultAnswer = JSON.stringify(isDefaultAnswer);
-    			}else if(data.quType === "CHENSCORE"){
+    			} else if (data.quType === "CHENSCORE"){
     				var answer = quItemBody.find(".quCoItem table.quCoChenTable tr select.quChenScoreSelect");
 		    		var isDefaultAnswer = new Array();
 		    		var columuLength = quColumnOptions.length;
@@ -1227,7 +1227,7 @@ layui.config({
 		    			isDefaultAnswer.push(s);
 		    		});
 		    		data.isDefaultAnswer = JSON.stringify(isDefaultAnswer);
-    			}else if(data.quType === "CHENFBK"){
+    			} else if (data.quType === "CHENFBK"){
     				var answer = quItemBody.find(".quCoItem table.quCoChenTable tr input.questionChenColumnValue");
 		    		var isDefaultAnswer = new Array();
 		    		var columuLength = quColumnOptions.length;

@@ -31,9 +31,9 @@ layui.config({
 		        { field: 'sex', title: '性别', width: 80, templet: function (d) {
                     if(d.sex == '0'){
                         return "保密";
-                    }else if(d.sex == '1'){
+                    } else if (d.sex == '1'){
                         return "男";
-                    }else if(d.sex == '2'){
+                    } else if (d.sex == '2'){
                         return "女";
                     }
                 }},
@@ -47,13 +47,13 @@ layui.config({
                 { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
                     if(d.state == '1'){
                         return "在职";
-                    }else if(d.state == '2'){
+                    } else if (d.state == '2'){
                         return "离职";
-                    }else if(d.state == '3'){
+                    } else if (d.state == '3'){
                         return "见习";
-                    }else if(d.state == '4'){
+                    } else if (d.state == '4'){
                         return "试用";
-                    }else if(d.state == '5'){
+                    } else if (d.state == '5'){
                         return "退休";
                     }
                 }},

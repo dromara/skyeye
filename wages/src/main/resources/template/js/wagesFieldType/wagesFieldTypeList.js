@@ -32,21 +32,21 @@ layui.config({
             { field: 'state', title: '状态', align: 'center', width: 60, templet: function (d) {
                 if(d.state == '2'){
                     return "<span class='state-down'>禁用</span>";
-                }else if(d.state == '1'){
+                } else if (d.state == '1'){
                     return "<span class='state-up'>启用</span>";
                 }
             }},
             { field: 'monthlyClearing', title: '月度清零', align: 'center', width: 80, templet: function (d) {
                 if(d.monthlyClearing == '1'){
                     return "是";
-                }else if(d.monthlyClearing == '2'){
+                } else if (d.monthlyClearing == '2'){
                     return "否";
                 }
             }},
             { field: 'wagesType', title: '字段类型', align: 'center', width: 80, templet: function (d) {
                 if(d.wagesType == '1'){
                     return "<span class='state-up'>薪资增加</span>";
-                }else if(d.wagesType == '2'){
+                } else if (d.wagesType == '2'){
                     return "<span class='state-down'>薪资减少</span>";
                 }
             }},

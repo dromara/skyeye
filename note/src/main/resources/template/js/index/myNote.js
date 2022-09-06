@@ -649,7 +649,7 @@ layui.config({
 	
 	//显示笔记内容
 	function showNoteContent(data) {
-		if(data.length > 0){
+		if (data.length > 0){
 			if (!isNull(noteId)){
 				$(".note-operator").removeClass("layui-hide");//显示保存按钮
 				var noteItem =$("#folderChildList").find(".folder-item[id='" + noteId + "']");

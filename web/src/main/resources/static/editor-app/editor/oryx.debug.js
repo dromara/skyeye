@@ -475,7 +475,7 @@ var ERDF = {
 		
 		if(!literal){
 			return "";
-		}else if(literal.constructor == String) {
+		} else if (literal.constructor == String) {
 			return literal;
 		} else if(literal.constructor == Boolean) {
 			return literal? 'true':'false';
@@ -6290,7 +6290,7 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
         
         if (jsonProp.type === ORYX.CONFIG.TYPE_CHOICE) {
             if (jsonProp.items && jsonProp.items instanceof Array) {
-                jsonProp.items.each((function(jsonItem){
+                jsonProp.items.each((function(jsonitem) {
                 	// why is the item's value used as the key???
                     this._items[jsonItem.value.toLowerCase()] = new ORYX.Core.StencilSet.PropertyItem(jsonItem, namespace, this);
                 }).bind(this));
@@ -6303,7 +6303,7 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
         else 
             if (jsonProp.type === ORYX.CONFIG.TYPE_COMPLEX || jsonProp.type == ORYX.CONFIG.TYPE_MULTIPLECOMPLEX) {
                 if (jsonProp.complexItems && jsonProp.complexItems instanceof Array) {
-                    jsonProp.complexItems.each((function(jsonComplexItem){
+                    jsonProp.complexItems.each((function(jsonComplexitem) {
                         this._complexItems[jsonComplexItem.id.toLowerCase()] = new ORYX.Core.StencilSet.ComplexPropertyItem(jsonComplexItem, namespace, this);
                     }).bind(this));
                 }
@@ -15515,7 +15515,7 @@ ORYX.Core.Edge = {
 			this.attachedNodePositionData[node.getId()].node = node;
 			this.attachedNodePositionData[node.getId()].segment = new Object();
 			this.findEdgeSegmentForNode(node);
-		}else if(node.isChanged) {
+		} else if (node.isChanged) {
 			this.findEdgeSegmentForNode(node);
 		}
 		
@@ -18620,13 +18620,13 @@ ORYX.Plugins.RenameShapes = Clazz.extend({
 		this.destroy();
 		
 		// Get all properties which where at least one ref to view is set
-		var props = shape.getStencil().properties().findAll(function(item){ 
+		var props = shape.getStencil().properties().findAll(function(item) {
 			return (item.refToView() 
 					&&  item.refToView().length > 0
 					&&	item.directlyEditable()); 
 		});
 		// from these, get all properties where write access are and the type is String or Expression
-		props = props.findAll(function(item){ return !item.readonly() &&  (item.type() == ORYX.CONFIG.TYPE_STRING || item.type() == ORYX.CONFIG.TYPE_EXPRESSION || item.type() == ORYX.CONFIG.TYPE_DATASOURCE); });
+		props = props.findAll(function(item) { return !item.readonly() &&  (item.type() == ORYX.CONFIG.TYPE_STRING || item.type() == ORYX.CONFIG.TYPE_EXPRESSION || item.type() == ORYX.CONFIG.TYPE_DATASOURCE); });
 		
 		// Get all ref ids
 		var allRefToViews	= props.collect(function(prop){ return prop.refToView(); }).flatten().compact();
@@ -18686,7 +18686,7 @@ ORYX.Plugins.RenameShapes = Clazz.extend({
 			}
 		}
 		// Get the particular property for the label
-		var prop 			= props.find(function(item){ return item.refToView().any(function(toView){ return nearestLabel.id == shape.id + toView; });});
+		var prop 			= props.find(function(item) { return item.refToView().any(function(toView){ return nearestLabel.id == shape.id + toView; });});
 		
 		// Get the center position from the nearest label
 		var width		= Math.min(Math.max(100, shape.bounds.width()), 200);

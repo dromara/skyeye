@@ -61,7 +61,7 @@ layui.config({
 					// 初始化上传
 					$("#menuIconPic").upload(systemCommonUtil.uploadCommon003Config('menuIconPic', 17, '', 1));
 					$(".menuIconTypeIsTwo").addClass("layui-hide");
-				}else if(json.bean.menuIconType == '2'){//图片
+				} else if (json.bean.menuIconType == '2'){//图片
 					// 初始化上传
 					$("#menuIconPic").upload(systemCommonUtil.uploadCommon003Config('menuIconPic', 17, json.bean.menuIconPic, 1));
 					$(".menuIconTypeIsOne").addClass("layui-hide");
@@ -80,7 +80,7 @@ layui.config({
 					if(val == '1'){//icon
 						$(".menuIconTypeIsTwo").addClass("layui-hide");
 						$(".menuIconTypeIsOne").removeClass("layui-hide");
-					}else if(val == '2'){//图片
+					} else if (val == '2'){//图片
 						$(".menuIconTypeIsTwo").removeClass("layui-hide");
 						$(".menuIconTypeIsOne").addClass("layui-hide");
 					} else {
@@ -110,7 +110,7 @@ layui.config({
 			    	if(val == '1'){//指定页面
 			    		$(".TypeIsTwo").addClass("layui-hide");
 			    		$(".TypeIsOne").removeClass("layui-hide");
-			    	}else if(val == '2'){//动态表单
+			    	} else if (val == '2'){//动态表单
 			    		$(".TypeIsTwo").removeClass("layui-hide");
 			    		$(".TypeIsOne").addClass("layui-hide");
 			    	} else {
@@ -153,7 +153,7 @@ layui.config({
 		 	        			return false;
 		        			}
 		        			params.dsFormId = "";
-		 	        	}else if(params.pageTypes == 2){
+		 	        	} else if (params.pageTypes == 2){
 		 	        		params.pageUrl = "";
 		 	        		params.editPageUrl = "";
 		 	        		params.revokeMapping = "";
@@ -163,13 +163,13 @@ layui.config({
 		 	        			return false;
 		        			}
 		 	        	}
-						if(data.field.menuIconType == '1'){
+						if (data.field.menuIconType == '1'){
 							if(isNull($("#menuIcon").val())) {
 								winui.window.msg("请选择图标", {icon: 2, time: 2000});
 								return false;
 							}
 							params.menuIconPic = '';
-						}else if(data.field.menuIconType == '2'){
+						} else if (data.field.menuIconType == '2'){
 							params.menuIconPic = $("#menuIconPic").find("input[type='hidden'][name='upload']").attr("oldurl");
 							if(isNull(params.menuIconPic)){
 								winui.window.msg('请上传logo', {icon: 2, time: 2000});

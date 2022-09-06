@@ -28,7 +28,7 @@ layui.config({
 		 			item.unitName = json.bean.unitName;
 		 			$("#showForm").append(getDataUseHandlebars(simpleTemplate, item));
 		 			var str = "";
-			    	$.each(json.bean.norms[0].normStock, function(i, item){
+			    	$.each(json.bean.norms[0].normStock, function(i, item) {
 			    		str += '<span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.initialTock + '</span></span><br>';
 					});
 					$("#initialTock").html(str);

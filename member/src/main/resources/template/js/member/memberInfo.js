@@ -37,10 +37,10 @@ layui.config({
 
         function loadCarMation(){
             AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: {memberId: parent.rowId}, type: 'json', method: "POST", callback: function (json) {
-                $.each(json.rows, function (i, item){
+                $.each(json.rows, function (i, item) {
                     if(item.insure == '1'){
                         item.insure = "已购买";
-                    }else if(item.insure == '2'){
+                    } else if (item.insure == '2'){
                         item.insure = "未购买";
                     }
                     item.stateName = shopUtil.getMemberCarEnableStateName(item.enabled);
@@ -62,7 +62,7 @@ layui.config({
                 page: 1
             };
             AjaxPostUtil.request({url: shopBasePath + "mealOrder001", params: params, type: 'json', method: "POST", callback: function (json) {
-                $.each(json.rows, function (i, item){
+                $.each(json.rows, function (i, item) {
                     item.state = shopUtil.getMealOrderStateName(item);
                 });
                 $("#showForm").append(getDataUseHandlebars($("#memberMealOrderTemplate").html(), json));
@@ -76,7 +76,7 @@ layui.config({
                 page: 1
             };
             AjaxPostUtil.request({url: shopBasePath + "keepFitOrder001", params: params, type: 'json', method: "POST", callback: function (json) {
-                $.each(json.rows, function (i, item){
+                $.each(json.rows, function (i, item) {
                     item.state = shopUtil.getKeepFitOrderStateName(item);
                 });
                 $("#showForm").append(getDataUseHandlebars($("#memberKeepFitOrderTemplate").html(), json));

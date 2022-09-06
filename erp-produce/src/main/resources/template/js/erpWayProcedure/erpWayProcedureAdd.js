@@ -101,7 +101,7 @@ layui.config({
 			var check_box = table.checkStatus('messageTable').data;
 			for (var i = 0;  i < check_box.length; i++){
 				var list = [];
-				$.each(procedureList, function(j, item){
+				$.each(procedureList, function(j, item) {
 					if(item.id != check_box[i].id){
 						list.push(item);
 					}
@@ -126,7 +126,7 @@ layui.config({
 	    
 	    function loadUseTableMation(trId, procedureMation){
 	    	var inIndex = -1;
-	    	$.each(procedureList, function(j, item){
+	    	$.each(procedureList, function(j, item) {
 				if(item.id == trId){
 					inIndex = j;
 					return;
@@ -162,7 +162,7 @@ layui.config({
 	    
 	    function loadFarmUseTableMation(trId, farmMation){
 	    	var inIndex = -1;
-	    	$.each(procedureList, function(j, item){
+	    	$.each(procedureList, function(j, item) {
 				if(item.id == trId){
 					inIndex = j;
 					return;
@@ -179,7 +179,7 @@ layui.config({
 	    
 	    function getProcedureMation(trId){
 	    	var inIndex = -1;
-	    	$.each(procedureList, function(j, item){
+	    	$.each(procedureList, function(j, item) {
 				if(item.id == trId){
 					inIndex = j;
 					return;

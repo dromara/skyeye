@@ -127,7 +127,7 @@ layui.config({
 				});
 				
 				form.on('select(selectParent)', function(data) {
-					if(data.value != parentId){
+					if (data.value != parentId){
 						if(isNull(data.value) || data.value == '请选择'){
 							layui.$(data.elem).parent('dd').nextAll().remove();
 							if(layui.$(data.elem).parent('dd').prev().children('select[class=menuParent]').length > 0){

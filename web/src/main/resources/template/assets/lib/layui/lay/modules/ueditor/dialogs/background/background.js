@@ -60,7 +60,7 @@
         domUtils.on($G('coloredRadio'), 'click', updateHandler);
         domUtils.on($G('url'), 'keyup', function() {
             if($G('url').value && $G('alignment').style.display == "none") {
-                utils.each($G('repeatType').children, function(item){
+                utils.each($G('repeatType').children, function(item) {
                     item.selected = ('repeat' == item.getAttribute('value') ? 'selected':false);
                 });
             }
@@ -141,7 +141,7 @@
             $G('url').value = url;
         }
         if(align) {
-            utils.each($G('repeatType').children, function(item){
+            utils.each($G('repeatType').children, function(item) {
                 item.selected = (align == item.getAttribute('value') ? 'selected':false);
             });
         }

@@ -24,7 +24,7 @@ layui.config({
 		 	ajaxSendAfter:function (json) {
 
 				// 加载列表项
-				$.each(json.bean.modelField, function(i, item){
+				$.each(json.bean.modelField, function(i, item) {
 					addRow();
 					$("#fieldId" + (rowNum - 1)).val(item.nameCn + '(' + item.key + ')');
 					$("#fieldId" + (rowNum - 1)).attr("rowKey", item.fieldKey);

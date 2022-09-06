@@ -29,7 +29,7 @@ layui.config({
 			$('#userStaff').html(getNameByList(json.bean.userStaff).toString());
 
 			// 加载列表项
-			$.each(json.bean.modelField, function(i, item){
+			$.each(json.bean.modelField, function(i, item) {
 				addRow();
 				$("#fieldId" + (rowNum - 1)).html(item.nameCn + '(' + item.fieldKey + ')');
 				$("#fieldType" + (rowNum - 1)).html(getFileType(item.fieldType));
@@ -64,17 +64,17 @@ layui.config({
 		var str = "";
 		if(fieldType == 1){
 			str = "字段";
-		}else if(fieldType == 2){
+		} else if (fieldType == 2){
 			str = "增加";
-		}else if(fieldType == 3){
+		} else if (fieldType == 3){
 			str = "减少";
-		}else if(fieldType == 4){
+		} else if (fieldType == 4){
 			str = "仅实发增加";
-		}else if(fieldType == 5){
+		} else if (fieldType == 5){
 			str = "仅实发减少";
-		}else if(fieldType == 6){
+		} else if (fieldType == 6){
 			str = "仅应发增加";
-		}else if(fieldType == 7){
+		} else if (fieldType == 7){
 			str = "仅应发减少";
 		}
 		return str;
@@ -85,7 +85,7 @@ layui.config({
 		if(isNull(array)){
 			return name;
 		}
-		$.each(array, function(i, item){
+		$.each(array, function(i, item) {
 			name.push(item.name)
 		});
 		return name;

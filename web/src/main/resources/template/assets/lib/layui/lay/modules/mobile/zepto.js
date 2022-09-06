@@ -86,7 +86,7 @@ layui.define(function(exports){
     )
   }
 
-  function compact(array) { return filter.call(array, function(item){ return item != null }) }
+  function compact(array) { return filter.call(array, function(item) { return item != null }) }
   function flatten(array) { return array.length > 0 ? $.fn.concat.apply([], array) : array }
   camelize = function(str){ return str.replace(/-+(.)?/g, function(match, chr){ return chr ? chr.toUpperCase() : '' }) }
   function dasherize(str) {

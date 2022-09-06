@@ -85,7 +85,7 @@ layui.config({
 		if(checkType == '2'){
 			//初始化值
 			var ids = [];
-			$.each(parent.erpOrderUtil.chooseProductMation, function(i, item){
+			$.each(parent.erpOrderUtil.chooseProductMation, function(i, item) {
 				ids.push(item.productId);
 			});
 			tableCheckBoxUtil.setIds({

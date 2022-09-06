@@ -20,7 +20,7 @@ layui.config({
 	    	if(val == '2'){
 	    		$("#nextTime").addClass('layui-hide');
 	    		$("#nextAnnualReview").val("");
-	    	}else if(val == '1'){
+	    	} else if (val == '1'){
 	    		$("#nextTime").removeClass('layui-hide');
 	    	} else {
 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
@@ -31,7 +31,7 @@ layui.config({
  			var val = data.value;
 	    	if(val == '2'){
 	    		$("#termTime").removeClass('layui-hide');
-	    	}else if(val == '1'){
+	    	} else if (val == '1'){
 	    		$("#termTime").addClass('layui-hide');
 	    		$("#termOfValidityTime").val("");
 	    	} else {
@@ -76,7 +76,7 @@ layui.config({
 		 		
 		 		var userNames = [];
 		 		userList = [].concat(json.bean.licenceAdmin);
-		 		$.each(json.bean.licenceAdmin, function(i, item){
+		 		$.each(json.bean.licenceAdmin, function(i, item) {
 		 			userNames.push(item.name);
 		 		});
 		 		// 管理人员选择
@@ -91,7 +91,7 @@ layui.config({
 			    
 				var borrowNames = [];
 		 		borrowList = [].concat(json.bean.borrowId);
-		 		$.each(json.bean.borrowId, function(i, item){
+		 		$.each(json.bean.borrowId, function(i, item) {
 		 			borrowNames.push(item.name);
 		 		});
 		 		// 借用人员选择

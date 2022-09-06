@@ -25,7 +25,7 @@ layui.config({
 		 		// 业务需求和目标的附件回显
 			    if(json.bean.businessEnclosureInfoList.length != 0 && json.bean.businessEnclosureInfoList != ""){
 			    	var str = "";
-	    			$.each([].concat(json.bean.businessEnclosureInfoList), function(i, item){
+	    			$.each([].concat(json.bean.businessEnclosureInfoList), function(i, item) {
 	    				str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
 	    			});
 	    			$("#businessEnclosureInfoListBox").html(str);
@@ -34,7 +34,7 @@ layui.config({
  	        	// 项目组织和分工的附件回显
 			    if(json.bean.projectEnclosureInfoList.length != 0 && json.bean.projectEnclosureInfoList != ""){
 			    	var str = "";
-	    			$.each([].concat(json.bean.projectEnclosureInfoList), function(i, item){
+	    			$.each([].concat(json.bean.projectEnclosureInfoList), function(i, item) {
 	    				str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
 	    			});
 	    			$("#projectEnclosureInfoListBox").html(str);
@@ -43,7 +43,7 @@ layui.config({
  	        	// 实施计划和方案的附件回显
 			    if(json.bean.planEnclosureInfoList.length != 0 && json.bean.planEnclosureInfoList != ""){
 			    	var str = "";
-	    			$.each([].concat(json.bean.planEnclosureInfoList), function(i, item){
+	    			$.each([].concat(json.bean.planEnclosureInfoList), function(i, item) {
 	    				str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
 	    			});
 	    			$("#planEnclosureInfoListBox").html(str);

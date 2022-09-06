@@ -57,7 +57,7 @@ layui.config({
 		var type = $(this).attr("type");
 		if(type == "edit"){
 			edit();
-		}else if(type == "delete"){
+		} else if (type == "delete"){
 			del();
 		}
 	});

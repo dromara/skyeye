@@ -119,7 +119,7 @@ layui.config({
 	    		 		form.render('select');
 	    		 	}
 	    		});
-	    	}else if(val == '2'){
+	    	} else if (val == '2'){
 	    		// 否
 	    		$("#dataShowModel").hide();
 	    	} else {
@@ -150,7 +150,7 @@ layui.config({
         			jsRelyOn: encodeURI(jsRelyOnContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26"))
 	        	};
 	        	
-	        	if(data.field.selChildData == '1'){
+	        	if (data.field.selChildData == '1'){
 	        		if(isNull($("#displayTemplateId").val())) {
 	        			winui.window.msg('请选择子查询数据展示模板', {icon: 2, time: 2000});
 	        			return false;

@@ -257,7 +257,7 @@ BaseEvent.prototype = {
 	removeEventListener: function (eventName,callback){
 	    if (!callback){
 	        this._cbs[eventName] = null;
-	    }else if(this._cbs[eventName]){
+	    } else if (this._cbs[eventName]){
 	        var i = 0, len = this._cbs[eventName].length;
 	        while(i<len){
 	            if(this._cbs[eventName][i] === callback){
@@ -1486,9 +1486,9 @@ function dataFunctionManager(){
             if(layerData.ty===0){
                 layerData.layers = findCompLayers(layerData.refId, comps);
                 completeLayers(layerData.layers,comps, fontManager);
-            }else if(layerData.ty === 4){
+            } else if (layerData.ty === 4){
                 completeShapes(layerData.shapes);
-            }else if(layerData.ty == 5){
+            } else if (layerData.ty == 5){
                 completeText(layerData, fontManager);
             }
         }
@@ -1528,7 +1528,7 @@ function dataFunctionManager(){
                     }
                 }
                 hasPaths = true;
-            }else if(arr[i].ty == 'gr'){
+            } else if (arr[i].ty == 'gr'){
                 completeShapes(arr[i].it);
             }
         }
@@ -1648,7 +1648,7 @@ function dataFunctionManager(){
             for(i=0;i<len;i+=1){
                 if(shapes[i].ty === 'gr'){
                     iterateShapes(shapes[i].it);
-                }else if(shapes[i].ty === 'fl' || shapes[i].ty === 'st'){
+                } else if (shapes[i].ty === 'fl' || shapes[i].ty === 'st'){
                     if(shapes[i].c.k && shapes[i].c.k[0].i){
                         jLen = shapes[i].c.k.length;
                         for(j=0;j<jLen;j+=1){
@@ -1725,7 +1725,7 @@ function dataFunctionManager(){
                         }
                     }
                     hasPaths = true;
-                }else if(arr[i].ty == 'gr'){
+                } else if (arr[i].ty == 'gr'){
                     completeShapes(arr[i].it);
                 }
             }
@@ -1792,7 +1792,7 @@ function dataFunctionManager(){
     }
 
     function completeText(data, fontManager){
-        if(data.t.a.length === 0 && !('m' in data.t.p)){
+        if (data.t.a.length === 0 && !('m' in data.t.p)){
             data.singleShape = true;
         }
     }
@@ -1947,7 +1947,7 @@ var FontManager = (function(){
             if(!fontArr[i].fPath) {
                 fontArr[i].loaded = true;
                 _pendingFonts -= 1;
-            }else if(fontArr[i].fOrigin === 'p' || fontArr[i].origin === 3){
+            } else if (fontArr[i].fOrigin === 'p' || fontArr[i].origin === 3){
                 loadedSelector = document.querySelectorAll('style[f-forigin="p"][f-family="'+ fontArr[i].fFamily +'"], style[f-origin="3"][f-family="'+ fontArr[i].fFamily +'"]');
 
                 if (loadedSelector.length > 0) {
@@ -2542,7 +2542,7 @@ var PropertyFactory = (function(){
         var p;
         if(!data.k.length){
             p = new ValueProperty(elem,data, mult, container);
-        }else if(typeof(data.k[0]) === 'number'){
+        } else if (typeof(data.k[0]) === 'number'){
             p = new MultiDimensionalProperty(elem,data, mult, container);
         } else {
             switch(type){
@@ -2729,20 +2729,20 @@ var TransformPropertyFactory = (function() {
         this.pre = new Matrix();
         this.appliedTransformations = 0;
         this.initDynamicPropertyContainer(container || elem);
-        if(data.p && data.p.s){
+        if (data.p && data.p.s){
             this.px = PropertyFactory.getProp(elem,data.p.x,0,0,this);
             this.py = PropertyFactory.getProp(elem,data.p.y,0,0,this);
-            if(data.p.z){
+            if (data.p.z){
                 this.pz = PropertyFactory.getProp(elem,data.p.z,0,0,this);
             }
         } else {
             this.p = PropertyFactory.getProp(elem,data.p || {k:[0,0,0]},1,0,this);
         }
-        if(data.rx) {
+        if (data.rx) {
             this.rx = PropertyFactory.getProp(elem, data.rx, 0, degToRads, this);
             this.ry = PropertyFactory.getProp(elem, data.ry, 0, degToRads, this);
             this.rz = PropertyFactory.getProp(elem, data.rz, 0, degToRads, this);
-            if(data.or.k[0].ti) {
+            if (data.or.k[0].ti) {
                 var i, len = data.or.k.length;
                 for(i=0;i<len;i+=1) {
                     data.or.k[i].to = data.or.k[i].ti = null;
@@ -2754,14 +2754,14 @@ var TransformPropertyFactory = (function() {
         } else {
             this.r = PropertyFactory.getProp(elem, data.r || {k: 0}, 0, degToRads, this);
         }
-        if(data.sk){
+        if (data.sk){
             this.sk = PropertyFactory.getProp(elem, data.sk, 0, degToRads, this);
             this.sa = PropertyFactory.getProp(elem, data.sa, 0, degToRads, this);
         }
         this.a = PropertyFactory.getProp(elem,data.a || {k:[0,0,0]},1,0,this);
         this.s = PropertyFactory.getProp(elem,data.s || {k:[100,100,100]},1,0.01,this);
         // Opacity is not part of the transform properties, that's why it won't use this.dynamicProperties. That way transforms won't get updated if opacity changes.
-        if(data.o){
+        if (data.o){
             this.o = PropertyFactory.getProp(elem,data.o,0,0.01,elem);
         } else {
             this.o = {_mdf:false,v:1};
@@ -2888,7 +2888,7 @@ var ShapePropertyFactory = (function(){
             keyPropS = kf[0].s[0];
             isHold = true;
             iterationIndex = 0;
-        }else if(frameNum >= kf[kf.length - 1].t-this.offsetTime){
+        } else if (frameNum >= kf[kf.length - 1].t-this.offsetTime){
             keyPropS = kf[kf.length - 1].s ? kf[kf.length - 1].s[0] : kf[kf.length - 2].e[0];
             /*if(kf[kf.length - 1].s){
                 keyPropS = kf[kf.length - 1].s[0];
@@ -2916,7 +2916,7 @@ var ShapePropertyFactory = (function(){
             if(!isHold){
                 if(frameNum >= nextKeyData.t-this.offsetTime){
                     perc = 1;
-                }else if(frameNum < keyData.t-this.offsetTime){
+                } else if (frameNum < keyData.t-this.offsetTime){
                     perc = 0;
                 } else {
                     var fnc;
@@ -3165,7 +3165,7 @@ var ShapePropertyFactory = (function(){
             this.frameId = -1;
             this.d = data.d;
             this.initDynamicPropertyContainer(elem);
-            if(data.sy === 1){
+            if (data.sy === 1){
                 this.ir = PropertyFactory.getProp(elem,data.ir,0,0,this);
                 this.is = PropertyFactory.getProp(elem,data.is,0,0.01,this);
                 this.convertToPath = this.convertStarToPath;
@@ -3358,11 +3358,11 @@ var ShapePropertyFactory = (function(){
             } else {
                 prop = new ShapeProperty(elem, data, type);
             }
-        }else if(type === 5){
+        } else if (type === 5){
             prop = new RectShapeProperty(elem, data);
-        }else if(type === 6){
+        } else if (type === 6){
             prop = new EllShapeProperty(elem, data);
-        }else if(type === 7){
+        } else if (type === 7){
             prop = new StarShapeProperty(elem, data);
         }
         if(prop.k){
@@ -5115,7 +5115,7 @@ TextAnimatorProperty.prototype.getMeasures = function(documentData, lettersChang
             }
             if(renderType === 'html'){
                 letterM = matrixHelper.toCSS();
-            }else if(renderType === 'svg'){
+            } else if (renderType === 'svg'){
                 letterM = matrixHelper.to2dCSS();
             } else {
                 letterP = [matrixHelper.props[0],matrixHelper.props[1],matrixHelper.props[2],matrixHelper.props[3],matrixHelper.props[4],matrixHelper.props[5],matrixHelper.props[6],matrixHelper.props[7],matrixHelper.props[8],matrixHelper.props[9],matrixHelper.props[10],matrixHelper.props[11],matrixHelper.props[12],matrixHelper.props[13],matrixHelper.props[14],matrixHelper.props[15]];
@@ -5286,7 +5286,7 @@ TextProperty.prototype.defaultBoxWidth = [0,0];
 
 TextProperty.prototype.copyData = function(obj, data) {
     for(var s in data) {
-        if(data.hasOwnProperty(s)) {
+        if (data.hasOwnProperty(s)) {
             obj[s] = data[s];
         }
     }
@@ -5464,7 +5464,7 @@ TextProperty.prototype.completeTextData = function(documentData) {
                 newLineFlag = false;
                 if(finalText[i] === ' '){
                     lastSpaceIndex = i;
-                }else if(charCode === 13 || charCode === 3){
+                } else if (charCode === 13 || charCode === 3){
                     lineWidth = 0;
                     newLineFlag = true;
                     currentHeight += documentData.finalLineHeight || documentData.finalSize*1.2;
@@ -5555,7 +5555,7 @@ TextProperty.prototype.completeTextData = function(documentData) {
                 index += 1;
                 currentSize = 0;
             }
-        }else if(anchorGrouping == 3){
+        } else if (anchorGrouping == 3){
             currentSize += cLength;
             if(val === '' || i === len - 1){
                 if(val === ''){
@@ -5993,7 +5993,7 @@ BaseRenderer.prototype.checkLayers = function(num){
     for (i = len - 1; i >= 0; i--) {
         if (!this.elements[i]) {
             data = this.layers[i];
-            if(data.ip - data.st <= (num - this.layers[i].st) && data.op - data.st > (num - this.layers[i].st))
+            if (data.ip - data.st <= (num - this.layers[i].st) && data.op - data.st > (num - this.layers[i].st))
             {
                 this.buildItem(i);
             }
@@ -6605,7 +6605,7 @@ CanvasRenderer.prototype.updateContainerSize = function () {
             this.transformCanvas.ty = 0;
         }
 
-    }else if(this.renderConfig.preserveAspectRatio == 'none'){
+    } else if (this.renderConfig.preserveAspectRatio == 'none'){
         this.transformCanvas.sx = elementWidth/(this.transformCanvas.w/this.renderConfig.dpr);
         this.transformCanvas.sy = elementHeight/(this.transformCanvas.h/this.renderConfig.dpr);
         this.transformCanvas.tx = 0;
@@ -7354,11 +7354,11 @@ function CVShapeData(element, data, styles, transformsManager) {
     this.styledShapes = [];
     this.tr = [0,0,0,0,0,0];
     var ty = 4;
-    if(data.ty == 'rc'){
+    if (data.ty == 'rc'){
         ty = 5;
-    }else if(data.ty == 'el'){
+    } else if (data.ty == 'el'){
         ty = 6;
-    }else if(data.ty == 'sr'){
+    } else if (data.ty == 'sr'){
         ty = 7;
     }
     this.sh = ShapePropertyFactory.getShapeProp(element,data,ty,element);
@@ -8065,11 +8065,11 @@ SVGShapeElement.prototype.createStyleElement = function(data, level){
     var styleOb = new SVGStyleData(data, level);
 
     var pathElement = styleOb.pElem;
-    if(data.ty === 'st') {
+    if (data.ty === 'st') {
         elementData = new SVGStrokeStyleData(this, data, styleOb);
-    } else if(data.ty === 'fl') {
+    } else if (data.ty === 'fl') {
         elementData = new SVGFillStyleData(this, data, styleOb);
-    } else if(data.ty === 'gf' || data.ty === 'gs') {
+    } else if (data.ty === 'gf' || data.ty === 'gs') {
         var gradientConstructor = data.ty === 'gf' ? SVGGradientFillStyleData : SVGGradientStrokeStyleData;
         elementData = new gradientConstructor(this, data, styleOb);
         this.globalData.defs.appendChild(elementData.gf);
@@ -8080,26 +8080,26 @@ SVGShapeElement.prototype.createStyleElement = function(data, level){
         }
     }
 
-    if(data.ty === 'st' || data.ty === 'gs') {
+    if (data.ty === 'st' || data.ty === 'gs') {
         pathElement.setAttribute('stroke-linecap', this.lcEnum[data.lc] || 'round');
         pathElement.setAttribute('stroke-linejoin',this.ljEnum[data.lj] || 'round');
         pathElement.setAttribute('fill-opacity','0');
-        if(data.lj === 1) {
+        if (data.lj === 1) {
             pathElement.setAttribute('stroke-miterlimit',data.ml);
         }
     }
 
-    if(data.r === 2) {
+    if (data.r === 2) {
         pathElement.setAttribute('fill-rule', 'evenodd');
     }
 
-    if(data.ln){
+    if (data.ln){
         pathElement.setAttribute('id',data.ln);
     }
-    if(data.cl){
+    if (data.cl){
         pathElement.setAttribute('class',data.cl);
     }
-    if(data.bm){
+    if (data.bm){
         pathElement.style['mix-blend-mode'] = getBlendMode(data.bm);
     }
     this.stylesList.push(styleOb);
@@ -8109,13 +8109,13 @@ SVGShapeElement.prototype.createStyleElement = function(data, level){
 
 SVGShapeElement.prototype.createGroupElement = function(data) {
     var elementData = new ShapeGroupData();
-    if(data.ln){
+    if (data.ln){
         elementData.gr.setAttribute('id',data.ln);
     }
-    if(data.cl){
+    if (data.cl){
         elementData.gr.setAttribute('class',data.cl);
     }
-    if(data.bm){
+    if (data.bm){
         elementData.gr.style['mix-blend-mode'] = getBlendMode(data.bm);
     }
     return elementData;
@@ -8130,11 +8130,11 @@ SVGShapeElement.prototype.createTransformElement = function(data, container) {
 
 SVGShapeElement.prototype.createShapeElement = function(data, ownTransformers, level) {
     var ty = 4;
-    if(data.ty === 'rc'){
+    if (data.ty === 'rc'){
         ty = 5;
-    }else if(data.ty === 'el'){
+    } else if (data.ty === 'el'){
         ty = 6;
-    }else if(data.ty === 'sr'){
+    } else if (data.ty === 'sr'){
         ty = 7;
     }
     var shapeProperty = ShapePropertyFactory.getShapeProp(this,data,ty,this);
@@ -8207,7 +8207,7 @@ SVGShapeElement.prototype.searchShapes = function(arr,itemsData,prevViewData,con
                 container.appendChild(itemsData[i].style.pElem);
             }
             ownStyles.push(itemsData[i].style);
-        }else if(arr[i].ty == 'gr'){
+        } else if (arr[i].ty == 'gr'){
             if(!processedPos){
                 itemsData[i] = this.createGroupElement(arr[i]);
             } else {
@@ -8220,19 +8220,19 @@ SVGShapeElement.prototype.searchShapes = function(arr,itemsData,prevViewData,con
             if(arr[i]._render){
                 container.appendChild(itemsData[i].gr);
             }
-        }else if(arr[i].ty == 'tr'){
+        } else if (arr[i].ty == 'tr'){
             if(!processedPos){
                 itemsData[i] = this.createTransformElement(arr[i], container);
             }
             currentTransform = itemsData[i].transform;
             ownTransformers.push(currentTransform);
-        }else if(arr[i].ty == 'sh' || arr[i].ty == 'rc' || arr[i].ty == 'el' || arr[i].ty == 'sr'){
+        } else if (arr[i].ty == 'sh' || arr[i].ty == 'rc' || arr[i].ty == 'el' || arr[i].ty == 'sr'){
             if(!processedPos){
                 itemsData[i] = this.createShapeElement(arr[i], ownTransformers, level);
             }
             this.setElementStyles(itemsData[i]);
 
-        }else if(arr[i].ty == 'tm' || arr[i].ty == 'rd' || arr[i].ty == 'ms' || arr[i].ty == 'pb'){
+        } else if (arr[i].ty == 'tm' || arr[i].ty == 'rd' || arr[i].ty == 'ms' || arr[i].ty == 'pb'){
             if(!processedPos){
                 modifier = ShapeModifiers.getModifier(arr[i].ty);
                 modifier.init(this,arr[i]);
@@ -8243,7 +8243,7 @@ SVGShapeElement.prototype.searchShapes = function(arr,itemsData,prevViewData,con
                 modifier.closed = false;
             }
             ownModifiers.push(modifier);
-        }else if(arr[i].ty == 'rp'){
+        } else if (arr[i].ty == 'rp'){
             if(!processedPos){
                 modifier = ShapeModifiers.getModifier(arr[i].ty);
                 itemsData[i] = modifier;
@@ -8574,7 +8574,7 @@ CVShapeElement.prototype.createStyleElement = function(data, transforms) {
         closed: data.hd === true
     };
     var elementData = {};
-    if(data.ty == 'fl' || data.ty == 'st'){
+    if (data.ty == 'fl' || data.ty == 'st'){
         elementData.c = PropertyFactory.getProp(this,data.c,1,255,this);
         if(!elementData.c.k){
             styleElem.co = 'rgb('+bm_floor(elementData.c.v[0])+','+bm_floor(elementData.c.v[1])+','+bm_floor(elementData.c.v[2])+')';
@@ -8587,17 +8587,17 @@ CVShapeElement.prototype.createStyleElement = function(data, transforms) {
         elementData.g = new GradientProperty(this,data.g,this);
     }
     elementData.o = PropertyFactory.getProp(this,data.o,0,0.01,this);
-    if(data.ty == 'st' || data.ty == 'gs') {
+    if (data.ty == 'st' || data.ty == 'gs') {
         styleElem.lc = this.lcEnum[data.lc] || 'round';
         styleElem.lj = this.ljEnum[data.lj] || 'round';
-        if(data.lj == 1) {
+        if (data.lj == 1) {
             styleElem.ml = data.ml;
         }
         elementData.w = PropertyFactory.getProp(this,data.w,0,null,this);
         if(!elementData.w.k){
             styleElem.wi = elementData.w.v;
         }
-        if(data.d){
+        if (data.d){
             var d = new DashProperty(this,data.d,'canvas', this);
             elementData.d = d;
             if(!elementData.d.k){
@@ -8702,7 +8702,7 @@ CVShapeElement.prototype.searchShapes = function(arr,itemsData, prevViewData, sh
             }
 
             ownStyles.push(itemsData[i].style);
-        }else if(arr[i].ty == 'gr'){
+        } else if (arr[i].ty == 'gr'){
             if(!processedPos){
                 itemsData[i] = this.createGroupElement(arr[i]);
             } else {
@@ -8712,19 +8712,19 @@ CVShapeElement.prototype.searchShapes = function(arr,itemsData, prevViewData, sh
                 }
             }
             this.searchShapes(arr[i].it,itemsData[i].it,itemsData[i].prevViewData, shouldRender, ownTransforms);
-        }else if(arr[i].ty == 'tr'){
+        } else if (arr[i].ty == 'tr'){
             if(!processedPos){
                 currentTransform = this.createTransformElement(arr[i]);
                 itemsData[i] = currentTransform;
             }
             ownTransforms.push(itemsData[i]);
             this.addTransformToStyleList(itemsData[i]);
-        }else if(arr[i].ty == 'sh' || arr[i].ty == 'rc' || arr[i].ty == 'el' || arr[i].ty == 'sr'){
+        } else if (arr[i].ty == 'sh' || arr[i].ty == 'rc' || arr[i].ty == 'el' || arr[i].ty == 'sr'){
             if(!processedPos){
                 itemsData[i] = this.createShapeElement(arr[i]);
             }
 
-        }else if(arr[i].ty == 'tm' || arr[i].ty == 'rd' || arr[i].ty == 'pb'){
+        } else if (arr[i].ty == 'tm' || arr[i].ty == 'rd' || arr[i].ty == 'pb'){
             if(!processedPos){
                 modifier = ShapeModifiers.getModifier(arr[i].ty);
                 modifier.init(this,arr[i]);
@@ -8821,7 +8821,7 @@ CVShapeElement.prototype.drawLayer = function() {
             for(k=0;k<kLen;k+=1){
                 if(nodes[k].t == 'm'){
                     ctx.moveTo(nodes[k].p[0],nodes[k].p[1]);
-                }else if(nodes[k].t == 'c'){
+                } else if (nodes[k].t == 'c'){
                     ctx.bezierCurveTo(nodes[k].pts[0],nodes[k].pts[1],nodes[k].pts[2],nodes[k].pts[3],nodes[k].pts[4],nodes[k].pts[5]);
                 } else {
                     ctx.closePath();
@@ -8849,17 +8849,17 @@ CVShapeElement.prototype.renderShape = function(parentTransform,items,data,isMai
         if(items[i].ty == 'tr'){
             groupTransform = data[i].transform;
             this.renderShapeTransform(parentTransform, groupTransform);
-        }else if(items[i].ty == 'sh' || items[i].ty == 'el' || items[i].ty == 'rc' || items[i].ty == 'sr'){
+        } else if (items[i].ty == 'sh' || items[i].ty == 'el' || items[i].ty == 'rc' || items[i].ty == 'sr'){
             this.renderPath(items[i],data[i]);
-        }else if(items[i].ty == 'fl'){
+        } else if (items[i].ty == 'fl'){
             this.renderFill(items[i],data[i],groupTransform);
-        }else if(items[i].ty == 'st'){
+        } else if (items[i].ty == 'st'){
             this.renderStroke(items[i],data[i],groupTransform);
-        }else if(items[i].ty == 'gf' || items[i].ty == 'gs'){
+        } else if (items[i].ty == 'gf' || items[i].ty == 'gs'){
             this.renderGradientFill(items[i],data[i],groupTransform);
-        }else if(items[i].ty == 'gr'){
+        } else if (items[i].ty == 'gr'){
             this.renderShape(groupTransform,items[i].it,data[i].it);
-        }else if(items[i].ty == 'tm'){
+        } else if (items[i].ty == 'tm'){
             //
         }
     }
@@ -9146,7 +9146,7 @@ CVTextElement.prototype.renderInnerContent = function(){
                     lastFill = renderedLetter.fc;
                     ctx.fillStyle = renderedLetter.fc;
                 }
-            }else if(lastFill !== this.values.fill){
+            } else if (lastFill !== this.values.fill){
                 lastFill = this.values.fill;
                 ctx.fillStyle = this.values.fill;
             }
@@ -9171,7 +9171,7 @@ CVTextElement.prototype.renderInnerContent = function(){
                     lastStrokeW = renderedLetter.sw;
                     ctx.lineWidth = renderedLetter.sw;
                 }
-            }else if(lastStrokeW !== this.values.sWidth){
+            } else if (lastStrokeW !== this.values.sWidth){
                 lastStrokeW = this.values.sWidth;
                 ctx.lineWidth = this.values.sWidth;
             }
@@ -9180,7 +9180,7 @@ CVTextElement.prototype.renderInnerContent = function(){
                     lastStroke = renderedLetter.sc;
                     ctx.strokeStyle = renderedLetter.sc;
                 }
-            }else if(lastStroke !== this.values.stroke){
+            } else if (lastStroke !== this.values.stroke){
                 lastStroke = this.values.stroke;
                 ctx.strokeStyle = this.values.stroke;
             }
@@ -9555,9 +9555,9 @@ AnimationItem.prototype.setData = function (wrapper, animationData) {
 
     var loop = wrapperAttributes.getNamedItem('data-anim-loop') ? wrapperAttributes.getNamedItem('data-anim-loop').value :  wrapperAttributes.getNamedItem('data-bm-loop') ? wrapperAttributes.getNamedItem('data-bm-loop').value :  wrapperAttributes.getNamedItem('bm-loop') ? wrapperAttributes.getNamedItem('bm-loop').value : '';
     if(loop === ''){
-    }else if(loop === 'false'){
+    } else if (loop === 'false'){
         params.loop = false;
-    }else if(loop === 'true'){
+    } else if (loop === 'true'){
         params.loop = true;
     } else {
         params.loop = parseInt(loop);
@@ -9575,7 +9575,7 @@ AnimationItem.prototype.setData = function (wrapper, animationData) {
 };
 
 AnimationItem.prototype.includeLayers = function(data) {
-    if(data.op > this.animationData.op){
+    if (data.op > this.animationData.op){
         this.animationData.op = data.op;
         this.totalFrames = Math.floor(data.op - this.animationData.ip);
     }
@@ -9593,11 +9593,11 @@ AnimationItem.prototype.includeLayers = function(data) {
             i += 1;
         }
     }
-    if(data.chars || data.fonts){
+    if (data.chars || data.fonts){
         this.renderer.globalData.fontManager.addChars(data.chars);
         this.renderer.globalData.fontManager.addFonts(data.fonts, this.renderer.globalData.defs);
     }
-    if(data.assets){
+    if (data.assets){
         len = data.assets.length;
         for(i = 0; i < len; i += 1){
             this.animationData.assets.push(data.assets[i]);
@@ -10428,7 +10428,7 @@ var ExpressionManager = (function(){
         }
         if(t <= tMin) {
             return value1;
-        }else if(t >= tMax){
+        } else if (t >= tMax){
             return value2;
         }
         var perc = tMax === tMin ? 0 : (t-tMin)/(tMax-tMin);
@@ -10507,7 +10507,7 @@ var ExpressionManager = (function(){
         var loopIn, loop_in, loopOut, loop_out, smooth;
         var toWorld,fromWorld,fromComp,toComp,fromCompToSurface, position, rotation, anchorPoint, scale, thisLayer, thisComp,mask,valueAtTime,velocityAtTime;
         var __expression_functions = [];
-        if(data.xf) {
+        if (data.xf) {
             var i, len = data.xf.length;
             for(i = 0; i < len; i += 1) {
                 __expression_functions[i] = eval('(function(){ return ' + data.xf[i] + '}())');
@@ -10640,7 +10640,7 @@ var ExpressionManager = (function(){
                             index = i + 1;
                             keyTime = data.k[i].t;
                             break;
-                        }else if(time>data.k[i].t && time<data.k[i+1].t){
+                        } else if (time>data.k[i].t && time<data.k[i+1].t){
                             if(time-data.k[i].t > data.k[i+1].t - time){
                                 index = i + 2;
                                 keyTime = data.k[i+1].t;
@@ -10809,7 +10809,7 @@ var ExpressionManager = (function(){
 var expressionHelpers = (function(){
 
     function searchExpressions(elem,data,prop){
-        if(data.x){
+        if (data.x){
             prop.k = true;
             prop.x = true;
             prop.initiateExpression = ExpressionManager.initiateExpression;
@@ -11424,17 +11424,17 @@ var ShapeExpressionInterface = (function(){
         for(i=0;i<len;i+=1){
             if(shapes[i].ty == 'gr'){
                 arr.push(groupInterfaceFactory(shapes[i],view[i],propertyGroup));
-            }else if(shapes[i].ty == 'fl'){
+            } else if (shapes[i].ty == 'fl'){
                 arr.push(fillInterfaceFactory(shapes[i],view[i],propertyGroup));
-            }else if(shapes[i].ty == 'st'){
+            } else if (shapes[i].ty == 'st'){
                 arr.push(strokeInterfaceFactory(shapes[i],view[i],propertyGroup));
-            }else if(shapes[i].ty == 'tm'){
+            } else if (shapes[i].ty == 'tm'){
                 arr.push(trimInterfaceFactory(shapes[i],view[i],propertyGroup));
-            }else if(shapes[i].ty == 'tr'){
+            } else if (shapes[i].ty == 'tr'){
                 //arr.push(transformInterfaceFactory(shapes[i],view[i],propertyGroup));
-            }else if(shapes[i].ty == 'el'){
+            } else if (shapes[i].ty == 'el'){
                 arr.push(ellipseInterfaceFactory(shapes[i],view[i],propertyGroup));
-            }else if(shapes[i].ty == 'sr'){
+            } else if (shapes[i].ty == 'sr'){
                 arr.push(starInterfaceFactory(shapes[i],view[i],propertyGroup));
             } else if(shapes[i].ty == 'sh'){
                 arr.push(ShapePathInterface(shapes[i],view[i],propertyGroup));
@@ -12297,14 +12297,14 @@ var EffectsExpressionInterface = (function (){
         var effectElements = [];
         var i, len = data.ef.length;
         for(i=0;i<len;i+=1){
-            if(data.ef[i].ty === 5){
+            if (data.ef[i].ty === 5){
                 effectElements.push(createGroupInterface(data.ef[i],elements.effectElements[i],elements.effectElements[i].propertyGroup, elem));
             } else {
                 effectElements.push(createValueInterface(elements.effectElements[i],data.ef[i].ty, elem, _propertyGroup));
             }
         }
 
-        if(data.mn === 'ADBE Color Control'){
+        if (data.mn === 'ADBE Color Control'){
             Object.defineProperty(groupInterface, 'color', {
                 get: function(){
                     return effectElements[0]();
@@ -12523,7 +12523,7 @@ var ExpressionPropertyInterface = (function() {
 
 	var propertyGetTextProp = TextSelectorProp.getTextSelectorProp;
 	TextSelectorProp.getTextSelectorProp = function(elem, data,arr){
-	    if(data.t === 1){
+	    if (data.t === 1){
 	        return new TextExpressionSelectorProp(elem, data,arr);
 	    } else {
 	        return propertyGetTextProp(elem,data,arr);

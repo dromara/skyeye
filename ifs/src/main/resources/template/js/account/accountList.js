@@ -36,7 +36,7 @@ layui.config({
             { field: 'isDefault', title: '默认', align: 'center', width: 60, templet: function (d) {
                     if(d.isDefault == '1'){
                         return "<span class='state-up'>是</span>";
-                    }else if(d.isDefault == '0'){
+                    } else if (d.isDefault == '0'){
                         return "<span class='state-down'>否</span>";
                     } else {
                         return "<span class='state-error'>参数错误</span>";

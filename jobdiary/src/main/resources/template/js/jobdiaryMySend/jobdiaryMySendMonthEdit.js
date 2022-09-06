@@ -121,7 +121,7 @@ layui.config({
 			    form.on('switch(monthCompletedImagetext)', function (data) {
 		 			//是否图文模式
 		 			$(data.elem).val(data.elem.checked);
-		 			if(data.elem.value === 'true' || data.elem.value === true){
+		 			if (data.elem.value === 'true' || data.elem.value === true){
 		 				$("#monthCompletedText").parent().hide();
 			    		$("#monthCompletedContent").parent().show();
 			    		layedit.setContent(monthCompletedContent, $("#monthCompletedText").val().replace(/\n|\r\n/g, "<br>"), false);
@@ -134,7 +134,7 @@ layui.config({
 			    form.on('switch(monthWorkSummaryImagetext)', function (data) {
 		 			//是否图文模式
 		 			$(data.elem).val(data.elem.checked);
-		 			if(data.elem.value === 'true' || data.elem.value === true){
+		 			if (data.elem.value === 'true' || data.elem.value === true){
 		 				$("#monthWorkSummaryText").parent().hide();
 			    		$("#monthWorkSummaryContent").parent().show();
 			    		layedit.setContent(monthWorkSummaryContent, $("#monthWorkSummaryText").val().replace(/\n|\r\n/g, "<br>"), false);
@@ -147,7 +147,7 @@ layui.config({
 			    form.on('switch(monthNextWorkPlanImagetext)', function (data) {
 		 			//是否图文模式
 		 			$(data.elem).val(data.elem.checked);
-		 			if(data.elem.value === 'true' || data.elem.value === true){
+		 			if (data.elem.value === 'true' || data.elem.value === true){
 		 				$("#monthNextWorkPlanText").parent().hide();
 			    		$("#monthNextWorkPlanContent").parent().show();
 			    		layedit.setContent(monthNextWorkPlanContent, $("#monthNextWorkPlanText").val().replace(/\n|\r\n/g, "<br>"), false);
@@ -160,7 +160,7 @@ layui.config({
 			    form.on('switch(monthCoordinaJobImagetext)', function (data) {
 		 			//是否图文模式
 		 			$(data.elem).val(data.elem.checked);
-		 			if(data.elem.value === 'true' || data.elem.value === true){
+		 			if (data.elem.value === 'true' || data.elem.value === true){
 		 				$("#monthCoordinaJobText").parent().hide();
 			    		$("#monthCoordinaJobContent").parent().show();
 			    		layedit.setContent(monthCoordinaJobContent, $("#monthCoordinaJobText").val().replace(/\n|\r\n/g, "<br>"), false);
@@ -184,7 +184,7 @@ layui.config({
 							winui.window.msg('请选择收件人', {icon: 2, time: 2000});
 							return false;
 						}
-		        		if(data.field.monthCompleted === 'true'){
+		        		if (data.field.monthCompleted === 'true'){
 		        			if(isNull(layedit.getContent(monthCompletedContent))){
 		        				winui.window.msg('请填写本月已完成工作', {icon: 2, time: 2000});
 		        				return false;
@@ -199,17 +199,17 @@ layui.config({
 		        				params.completedJob = encodeURIComponent($("#monthCompletedText").val().replace(/\n|\r\n/g, "<br>"));
 		        			}
 		        		}
-		        		if(data.field.monthCoordinaJob === 'true'){
+		        		if (data.field.monthCoordinaJob === 'true'){
 		        			params.coordinaJob = encodeURIComponent(layedit.getContent(monthCoordinaJobContent));
 		        		} else {
 		        			params.coordinaJob = encodeURIComponent($("#monthCoordinaJobText").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
-		        		if(data.field.monthNextWorkPlan === 'true'){
+		        		if (data.field.monthNextWorkPlan === 'true'){
 		        			params.nextWorkPlan = encodeURIComponent(layedit.getContent(monthNextWorkPlanContent));
 		        		} else {
 		        			params.nextWorkPlan = encodeURIComponent($("#monthNextWorkPlanText").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
-		        		if(data.field.monthWorkSummary === 'true'){
+		        		if (data.field.monthWorkSummary === 'true'){
 		        			params.thisWorkSummary = encodeURIComponent(layedit.getContent(monthWorkSummaryContent));
 		        		} else {
 		        			params.thisWorkSummary = encodeURIComponent($("#monthWorkSummaryText").val().replace(/\n|\r\n/g, "<br>"));

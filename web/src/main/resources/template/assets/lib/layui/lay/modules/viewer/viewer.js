@@ -390,7 +390,7 @@ layui.define(["jquery"], function(exports) {
 			 */
 
 			function forEach(data, callback) {
-				if(data && isFunction(callback)) {
+				if (data && isFunction(callback)) {
 					if(Array.isArray(data) || isNumber(data.length)
 						/* array-like */
 					) {

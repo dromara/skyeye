@@ -34,9 +34,9 @@ layui.config({
 				{ field: 'userSex', title: '性别', width: 60, templet: function (d) {
 		        	if(d.userSex == '0'){
 		        		return "保密";
-		        	}else if(d.userSex == '1'){
+		        	} else if (d.userSex == '1'){
 		        		return "男";
-		        	}else if(d.userSex == '2'){
+		        	} else if (d.userSex == '2'){
 		        		return "女";
 		        	} else {
 		        		return "参数错误";
@@ -78,7 +78,7 @@ layui.config({
 	        { field: 'state', title: '阅读状态', align: 'center', width: 110, templet: function (d) {
 	        	if(d.state == '1'){
 	        		return "<span class='state-down'>未读</span>";
-	        	}else if(d.state == '2'){
+	        	} else if (d.state == '2'){
 	        		return "<span class='state-up'>已读</span>";
 	        	} else {
 	        		return "参数错误";
@@ -109,7 +109,7 @@ layui.config({
 	// 阅读收到的日志
 	function read(data) {
 		rowId = data.id;
-		if(data.diaryType == 1){
+		if (data.diaryType == 1){
 			// 日报
 			_openNewWindows({
 				url: "../../tpl/jobdiaryMyReceive/jobdiaryMyReceiveDayDetails.html", 
@@ -117,10 +117,10 @@ layui.config({
 				pageId: "jobdiaryMyReceiveDayDetails",
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {
-					if(data.state == '1')
+					if (data.state == '1')
 						loadTable();
 				}});
-		}else if(data.diaryType == 2){
+		} else if (data.diaryType == 2){
 			// 周报
 			_openNewWindows({
 				url: "../../tpl/jobdiaryMyReceive/jobdiaryMyReceiveWeekDetails.html", 
@@ -128,10 +128,10 @@ layui.config({
 				pageId: "jobdiaryMyReceiveWeekDetails",
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {
-					if(data.state == '1')
+					if (data.state == '1')
 						loadTable();
 				}});
-		}else if(data.diaryType == 3){
+		} else if (data.diaryType == 3){
 			// 月报
 			_openNewWindows({
 				url: "../../tpl/jobdiaryMyReceive/jobdiaryMyReceiveMonthDetails.html", 
@@ -139,7 +139,7 @@ layui.config({
 				pageId: "jobdiaryMyReceiveMonthDetails",
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {
-					if(data.state == '1')
+					if (data.state == '1')
 						loadTable();
 				}});
 		}

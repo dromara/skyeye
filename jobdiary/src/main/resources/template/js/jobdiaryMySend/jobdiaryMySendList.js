@@ -47,7 +47,7 @@ layui.config({
 		        { field: 'state', title: '发件状态', align: 'center', width: 130, templet: function (d) {
 		        	if(d.state == 1){
 		        		return "已发送";
-		        	}else if(d.state == 2){
+		        	} else if (d.state == 2){
 		        		return "未发送";
 		        	} else {
 		        		return "参数错误";
@@ -113,7 +113,7 @@ layui.config({
 	// 我发出的日志详情
 	function reading(data) {
 		rowId = data.id;
-		if(data.diaryType == 1){
+		if (data.diaryType == 1){
 			// 日报
 			_openNewWindows({
 				url: "../../tpl/jobdiaryMySend/jobdiaryMySendDayDetails.html", 
@@ -122,7 +122,7 @@ layui.config({
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {
 				}});
-		}else if(data.diaryType == 2){
+		} else if (data.diaryType == 2){
 			// 周报
 			_openNewWindows({
 				url: "../../tpl/jobdiaryMySend/jobdiaryMySendWeekDetails.html", 
@@ -131,7 +131,7 @@ layui.config({
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {
 				}});
-		}else if(data.diaryType == 3){
+		} else if (data.diaryType == 3){
 			// 周报
 			_openNewWindows({
 				url: "../../tpl/jobdiaryMySend/jobdiaryMySendMonthDetails.html", 
@@ -146,7 +146,7 @@ layui.config({
 	// 发送撤回的日志
 	function send(data) {
 		rowId = data.id;
-		if(data.diaryType == 1){
+		if (data.diaryType == 1){
 			// 日报
 			_openNewWindows({
 				url: "../../tpl/jobdiaryMySend/jobdiaryMySendDayEdit.html", 
@@ -157,7 +157,7 @@ layui.config({
 					winui.window.msg("发送成功", {icon: 1, time: 2000});
 					loadMySendTable();
 				}});
-		}else if(data.diaryType == 2){
+		} else if (data.diaryType == 2){
 			// 周报
 			_openNewWindows({
 				url: "../../tpl/jobdiaryMySend/jobdiaryMySendWeekEdit.html", 
@@ -168,7 +168,7 @@ layui.config({
 					winui.window.msg("发送成功", {icon: 1, time: 2000});
 					loadMySendTable();
 				}});
-		}else if(data.diaryType == 3){
+		} else if (data.diaryType == 3){
 			// 月报
 			_openNewWindows({
 				url: "../../tpl/jobdiaryMySend/jobdiaryMySendMonthEdit.html", 

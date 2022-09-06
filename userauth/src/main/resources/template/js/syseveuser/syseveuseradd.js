@@ -16,12 +16,12 @@ layui.config({
 	    	tableSelect = layui.tableSelect;
 	    
  		form.verify({
- 			password : function(value, item){
+ 			password : function(value, item) {
 	            if(value.length < 6){
 	                return "密码长度不能小于6位";
 	            }
 	        },
-	        confirmPwd : function(value, item){
+	        confirmPwd : function(value, item) {
 	            if($("#password").val() != value){
 	                return "两次输入密码不一致，请重新输入！";
 	            }
@@ -49,9 +49,9 @@ layui.config({
  					{ field: 'userSex', title: '性别', width: 60, templet: function (d) {
  			        	if(d.userSex == '0'){
  			        		return "保密";
- 			        	}else if(d.userSex == '1'){
+ 			        	} else if (d.userSex == '1'){
  			        		return "男";
- 			        	}else if(d.userSex == '2'){
+ 			        	} else if (d.userSex == '2'){
  			        		return "女";
  			        	} else {
  			        		return "参数错误";

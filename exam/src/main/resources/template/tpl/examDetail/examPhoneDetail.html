@@ -926,10 +926,10 @@
 								if(v1 == 2){
 									//多选题
 									return '<input type="hidden" name="qu_' + v1 + '_' + v2 + '" value="tag_qu_' + v1 + '_' + v2 + '_" />';
-								}else if(v1 == 9 || v1 == 11 || v1 == 13 || v1 == 12 || v1 == 18 || v1 == 8){
+								} else if (v1 == 9 || v1 == 11 || v1 == 13 || v1 == 12 || v1 == 18 || v1 == 8){
 									//排序题，矩阵单选题，矩阵多选题，矩阵填空题，矩阵评分题，评分题
 									return '<input type="hidden" name="qu_' + v1 + '_' + v2 + '" value="item_qu_' + v1 + '_' + v2 + '_" />';
-								}else if(v1 == 4){
+								} else if (v1 == 4){
 									//多项填空题
 									return '<input type="hidden" name="qu_' + v1 + '_' + v2 + '" value="text_qu_' + v1 + '_' + v2 + '_" />';
 								}
@@ -1007,7 +1007,7 @@
 					function loadUploadPic(qBodyItem, bean){
 						var str = "";
 						if (!isNull(bean.url)){
-							$.each(bean.url.split(','), function(i, item){
+							$.each(bean.url.split(','), function(i, item) {
 								if (!isNull(item)){
 									str += '<img src="' + item + '" class="photo-img pictureItem">';
 								}
@@ -1024,10 +1024,10 @@
 	 	   				if(fileType == 1){
 	 	   					// 视频
 	 	   					str = '<div><img src="../../assets/images/icon-vedio.png" class="questionShowVedio" fileUrl="' + fileUrl + '"/></div>';
-	 	   				}else if(fileType == 2){
+	 	   				} else if (fileType == 2){
 	 	   					// 音频
 	 	   					str = '<div><img src="../../assets/images/icon-audio.png" class="questionShowAudio" fileUrl="' + fileUrl + '" quTitle="' + bean.quTitle + '"/></div>';
-	 	   				}else if(fileType == 3){
+	 	   				} else if (fileType == 3){
 	 	   					// 图片
 	 	   					str = '<img src="' + fileUrl + '" class="questionShowImg" />';
 	 	   				}

@@ -31,7 +31,7 @@ layui.config({
         			jsonContent: ""
 	        	};
 	        	
-	        	if(data.field.isShare){
+	        	if (data.field.isShare){
 	        		params.isShare = '2';
 	        	} else {
 	        		params.isShare = '1';

@@ -43,7 +43,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
         			icon = '<i class="fa ' + item.icon + ' fa-fw"></i>';
         		}
         		winIcon = (item.icon == '' || item.icon == undefined) ? '' : 'win-icon="' + item.icon + '"';
-        	}else if(item.menuIconType === '2' || item.menuIconType == 2){//图片
+        	} else if (item.menuIconType === '2' || item.menuIconType == 2){//图片
         		icon = '<img src="' + fileBasePath + item.menuIconPic + '" />';
         		winIcon = (item.menuIconPic == '' || item.menuIconPic == undefined) ? '' : 'win-icon="' + item.menuIconPic + '"';
         	}
@@ -85,7 +85,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
                         } else {
                         	cicon = '<i class="fa ' + cItem.icon + ' fa-fw"></i>';
                         }
-                	}else if(cItem.menuIconType === '2' || cItem.menuIconType == 2){//图片
+                	} else if (cItem.menuIconType === '2' || cItem.menuIconType == 2){//图片
                 		cicon = '<img src="' + fileBasePath + cItem.menuIconPic + '" />';
                 		cWinIcon = (cItem.menuIconPic == '' || cItem.menuIconPic == undefined) ? '' : 'win-icon="' + cItem.menuIconPic + '"'
                 	}
@@ -220,7 +220,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
     function getActiveArticle(){
     	var article = $("#winui-desktop").find('article');
     	var articIndex = -1;
-    	$.each(article, function(i, item){
+    	$.each(article, function(i, item) {
     		if($(item).hasClass('active')){
     			articIndex = i;
     			return false;

@@ -50,7 +50,7 @@ layui.config({
  	        		winui.window.msg('群内至少拥有两名成员。', {icon: 2, time: 2000});
  	        		return false;
  	        	}
- 	        	$.each($("#chooseFriend").find('li'), function(i, item){
+ 	        	$.each($("#chooseFriend").find('li'), function(i, item) {
  	        		params.userIds = params.userIds + $(item).attr("id").replace('layim-friend', '') + ",";
  	        	});
  	        	

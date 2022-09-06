@@ -27,7 +27,7 @@ layui.config({
 			hdb.registerHelper("compare2", function(v1, options){
 				if(v1 == '1'){
 					return 'checked';
-				}else if(v1 == '2'){
+				} else if (v1 == '2'){
 					return '';
 				} else {
 					return '';
@@ -36,7 +36,7 @@ layui.config({
 			hdb.registerHelper("compare3", function(v1, options){
 				if(v1 == '1'){
 					return 'true';
-				}else if(v1 == '2'){
+				} else if (v1 == '2'){
 					return 'false';
 				} else {
 					return 'false';
@@ -128,11 +128,11 @@ layui.config({
 			//数据展示模板监听事件
 			form.on('select(dataShowTpl)', function(data) {
 				dataShowTplValue = $('#dataShowTpl').val();
-				if(dataShowTplValue.length == 0){
+				if (dataShowTplValue.length == 0){
 					$("#templateContent").html("");
 				} else {
-					$.each(jsonStr, function(i, item){
-						if(dataShowTplValue == item.id){
+					$.each(jsonStr, function(i, item) {
+						if (dataShowTplValue == item.id) {
 							var str = '<textarea class="layui-textarea" readonly>' + item.templateContent + '</textarea>';
 							$("#templateContent").html(str);
 							tplContentVal = strMatchAllByTwo(item.templateContent, '{{','}}');//取出数据模板中用{{}}包裹的词

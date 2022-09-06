@@ -52,7 +52,7 @@ layui.config({
 		myChart1 = echarts.init(document.getElementById("layer04_chart1"));
 		var nameStr = new Array();
 		var numStr = new Array();
-		$.each(rows, function(i, item){
+		$.each(rows, function(i, item) {
 			nameStr.push(item.yearMonth);
 			numStr.push(item.purchaseMoney);
 		});
@@ -84,7 +84,7 @@ layui.config({
 		myChart2 = echarts.init(document.getElementById("layer04_chart2"));
 		var nameStr = new Array();
 		var numStr = new Array();
-		$.each(rows, function(i, item){
+		$.each(rows, function(i, item) {
 			nameStr.push(item.yearMonth);
 			numStr.push(item.salesMoney);
 		});
@@ -116,7 +116,7 @@ layui.config({
 		myChart3 = echarts.init(document.getElementById("layer04_chart3"));
 		var nameStr = new Array();
 		var numStr = new Array();
-		$.each(rows, function(i, item){
+		$.each(rows, function(i, item) {
 			nameStr.push(item.yearMonth);
 			numStr.push(item.profitMoney);
 		});

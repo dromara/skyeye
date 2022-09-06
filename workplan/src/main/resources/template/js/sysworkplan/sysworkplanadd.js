@@ -113,7 +113,7 @@ layui.config({
 			var val = data.value;
 			if(val == '1'){//自己
 				$("#carryPeopleBox").addClass("layui-hide");
-			}else if(val == '2'){//他人
+			} else if (val == '2'){//他人
 				$("#carryPeopleBox").removeClass("layui-hide");
 			} else {
 				winui.window.msg('状态值错误', {icon: 2, time: 2000});
@@ -136,7 +136,7 @@ layui.config({
  		form.on('switch(whetherTimeFilter)', function (data) {
  			//同步开关值
  			$(data.elem).val(data.elem.checked);
- 			if(data.elem.checked){
+ 			if (data.elem.checked){
  				$("#notifyTimeBox").removeClass("layui-hide");
  			} else {
  				$("#notifyTimeBox").addClass("layui-hide");

@@ -108,7 +108,7 @@ layui.config({
 			        if (winui.verifyForm(data.elem)) {
 			        	if(isNull(htmlContent.getValue())){
 		        			winui.window.msg("请填写HTML内容", {icon: 2, time: 2000});
-		        		}else if(isNull(wxmlContent.getValue())){
+		        		} else if (isNull(wxmlContent.getValue())){
 		        			winui.window.msg("请填写WXML内容", {icon: 2, time: 2000});
 		        		} else {
 			 	   			var params = {

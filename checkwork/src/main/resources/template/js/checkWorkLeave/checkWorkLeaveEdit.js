@@ -49,7 +49,7 @@ layui.config({
             $("#messageTips").html("截至当前剩余年假：" + staffYearHoliday + "小时，剩余补休为：" + holidayNumber + "小时");
             // 获取当前登陆人的考勤班次
             checkWorkUtil.getCurrentUserCheckWorkTimeList(function (json) {
-                $.each(json.rows, function (i, item){
+                $.each(json.rows, function (i, item) {
                     checkWorkTime.push({
                         id: item.timeId,
                         name: item.title,
@@ -69,7 +69,7 @@ layui.config({
     // 初始化请假类型
     function initTypeHtml(mation) {
         AjaxPostUtil.request({url: reqBasePath + "sysfdsettings001", params: {}, type: 'json', method: 'GET', callback: function(json) {
-            $.each(JSON.parse(json.bean.holidaysTypeJson), function (i, item){
+            $.each(JSON.parse(json.bean.holidaysTypeJson), function (i, item) {
                 leaveType.push({
                     id: item.holidayNo,
                     name: item.holidayName,

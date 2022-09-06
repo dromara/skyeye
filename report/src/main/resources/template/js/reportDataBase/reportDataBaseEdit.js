@@ -67,7 +67,7 @@ layui.config({
 
                 var options = JSON.parse(j.bean.options);
                 // 加载配置选项
-                $.each(options, function(i, item){
+                $.each(options, function(i, item) {
                     addRow();
                     $("#configKey" + (rowNum - 1)).val(item.configKey);
                     $("#configValue" + (rowNum - 1)).val(item.configValue);

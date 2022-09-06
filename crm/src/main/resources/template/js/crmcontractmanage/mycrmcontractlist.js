@@ -56,19 +56,19 @@ layui.config({
 	        { field: 'stateName', title: '状态', width: 90, templet: function (d) {
 	        	if(d.state == '0'){
 	        		return "<span>" + d.stateName + "</span>";
-	        	}else if(d.state == '1'){
+	        	} else if (d.state == '1'){
 	        		return "<span class='state-new'>" + d.stateName + "</span>";
-	        	}else if(d.state == '2'){
+	        	} else if (d.state == '2'){
 	        		return "<span class='state-up'>" + d.stateName + "</span>";
-	        	}else if(d.state == '11'){
+	        	} else if (d.state == '11'){
 	        		return "<span class='state-up'>" + d.stateName + "</span>";
-	        	}else if(d.state == '12'){
+	        	} else if (d.state == '12'){
 	        		return "<span class='state-down'>" + d.stateName + "</span>";
-	        	}else if(d.state == '3'){
+	        	} else if (d.state == '3'){
 	        		return "<span class='state-error'>" + d.stateName + "</span>";
-	        	}else if(d.state == '4'){
+	        	} else if (d.state == '4'){
 	        		return "<span class='state-error'>" + d.stateName + "</span>";
-	        	}else if(d.state == '5'){
+	        	} else if (d.state == '5'){
 	        		return "<span class='state-error'>" + d.stateName + "</span>";
 	        	}
 	        }},

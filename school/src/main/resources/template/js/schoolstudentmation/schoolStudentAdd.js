@@ -128,7 +128,7 @@ layui.config({
 		
 		//学前教育变化事件
 		form.on('radio(preschoolEducation)', function(data) {
-			if(data.value == 1){
+			if (data.value == 1){
 				$("#preschoolSchoolBox").show();
 			} else {
 				$("#preschoolSchoolBox").hide();

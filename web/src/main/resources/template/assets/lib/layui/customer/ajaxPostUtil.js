@@ -80,7 +80,7 @@ var AjaxPostUtil = {
                     win = win.top;
                 }
                 win.location.href = "../../tpl/index/login.html";//XMLHttpRequest.getResponseHeader("CONTEXTPATH");
-            }else if(sessionstatus == "NOAUTHPOINT"){
+            } else if (sessionstatus == "NOAUTHPOINT"){
                 returnValue = eval('(' + '{"returnMessage":"您不具备该权限。","returnCode":-9999,"total":0,"rows":"","bean":""}' + ')');
             }
             switch(this.options.type) {
@@ -102,7 +102,7 @@ var AjaxPostUtil = {
                     break;
             }
             ajaxObj.checkAndCallback(returnValue);
-        }else if(xmlhttp.readyState == 4 && (xmlhttp.status == 404)) {
+        } else if (xmlhttp.readyState == 4 && (xmlhttp.status == 404)) {
             // 移除请求遮罩层
             layui.$("body").find(".mask-req-str").remove();
             returnValue = eval('(' + '{"returnMessage":"接口请求：404","returnCode":-9999,"total":0,"rows":"","bean":""}' + ')');

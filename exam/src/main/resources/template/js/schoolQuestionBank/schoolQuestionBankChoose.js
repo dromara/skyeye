@@ -80,7 +80,7 @@ layui.config({
 	function initTable(){
 		// 初始化值
 		var ids = [];
-		$.each(questionMationList, function(i, item){
+		$.each(questionMationList, function(i, item) {
 			ids.push(item.quInBankId);
 		});
 		tableCheckBoxUtil.setIds({

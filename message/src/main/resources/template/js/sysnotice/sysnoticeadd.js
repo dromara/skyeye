@@ -58,7 +58,7 @@ layui.config({
  			var val = data.value;
 	    	if(val == '1'){//群发所有人
 	    		$("#sendTo").hide();
-	    	}else if(val == '2'){//选择性群发
+	    	} else if (val == '2'){//选择性群发
 	    		$("#sendTo").show();
 	    	} else {
 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
@@ -70,7 +70,7 @@ layui.config({
  			var val = data.value;
 	    	if(val == '1'){//不设置定时通知
 	    		$("#sendTime").hide();
-	    	}else if(val == '2'){//设置定时通知
+	    	} else if (val == '2'){//设置定时通知
 	    		$("#sendTime").show();
 	    	} else {
 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});

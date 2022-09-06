@@ -45,7 +45,7 @@ layui.config({
 				var val = data.value;
 				if(val == '1'){//总公司
 					$("#parentIdBox").addClass("layui-hide");
-				}else if(val == '2'){//子公司
+				} else if (val == '2'){//子公司
 					$("#parentIdBox").removeClass("layui-hide");
 				} else {
 					winui.window.msg('状态值错误', {icon: 2, time: 2000});
@@ -54,7 +54,7 @@ layui.config({
 
 			// 设置个人所得税比例
 			if (!isNull(json.bean.taxRateJson)){
-				$.each(json.bean.taxRateJson, function(i, item){
+				$.each(json.bean.taxRateJson, function(i, item) {
 					addRow();
 					$("#minMoney" + (rowNum - 1)).val(item.minMoney);
 					$("#maxMoney" + (rowNum - 1)).val(item.maxMoney);

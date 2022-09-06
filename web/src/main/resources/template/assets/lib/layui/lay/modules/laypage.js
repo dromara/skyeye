@@ -152,7 +152,7 @@ layui.define(function(exports){
       //每页条数
       ,limit: function(){
         var options = ['<span class="layui-laypage-limits"><select lay-ignore>'];
-        layui.each(config.limits, function(index, item){
+        layui.each(config.limits, function(index, item) {
           options.push(
             '<option value="'+ item +'"'
             +(item === config.limit ? 'selected' : '') 
@@ -178,7 +178,7 @@ layui.define(function(exports){
     ) : 'default') +'" id="layui-laypage-'+ config.index +'">'
       ,function(){
         var plate = [];
-        layui.each(config.layout, function(index, item){
+        layui.each(config.layout, function(index, item) {
           if(views[item]){
             plate.push(views[item])
           }

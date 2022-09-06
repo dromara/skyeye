@@ -32,7 +32,7 @@ layui.config({
 	    	if(val == '1'){//个人通讯录
 	    		$("#readonlyBox").addClass("layui-hide");
 	    		$("#typeIdBox").removeClass("layui-hide");
-	    	}else if(val == '2'){//公共通讯录
+	    	} else if (val == '2'){//公共通讯录
 	    		$("#readonlyBox").removeClass("layui-hide");
 	    		$("#typeIdBox").addClass("layui-hide");
 	    	} else {
@@ -68,13 +68,13 @@ layui.config({
         			readonly: "",
         			typeId: ""
  	        	};
- 	        	if(data.field.category == '1'){
+ 	        	if (data.field.category == '1'){
  	        		params.typeId = $("#typeId").val();
  	        		if(isNull(params.typeId)){
  	        			winui.window.msg("请选择类别", {icon: 2, time: 2000});
  	 	        		return false;
  	        		}
- 	        	}else if(data.field.category == '2'){
+ 	        	} else if (data.field.category == '2'){
  	        		params.readonly = data.field.readonly;
  	        	} else {
  	        		winui.window.msg("状态值错误。", {icon: 2, time: 2000});

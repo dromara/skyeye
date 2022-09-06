@@ -158,7 +158,7 @@ layui.config({
 	// 根据模块名称获取模块下标
 	function getModelIndex(box, str){
 		var inIndex = -1;
-		$.each(box, function(i, item){
+		$.each(box, function(i, item) {
 			if(item.name == str){
 				inIndex = i;
 				return false;
@@ -170,7 +170,7 @@ layui.config({
 	function loadBox(json){
 		var box = [];
 		// 为每个工程模块都加入'未分类接口'
-		$.each(model, function(i, item){
+		$.each(model, function(i, item) {
 			box.push({
 				boxId: getRandomValueToString(),
 				modelId: model[i].id,
@@ -178,7 +178,7 @@ layui.config({
 			});
 		});
 		// 获取已分类接口
-		$.each(json.rows, function(i, item){
+		$.each(json.rows, function(i, item) {
 			if (!isNull(item.groupName) && getBoxIndex(box, item.groupName, item.modelName) == -1){
 				box.push({
 					boxId: getRandomValueToString(),
@@ -200,7 +200,7 @@ layui.config({
 	function getBoxIndex(box, groupName, modelName){
 		var inIndex = -1;
 		var modelId = model[getModelIndex(model, modelName)].id;
-		$.each(box, function(i, item){
+		$.each(box, function(i, item) {
 			if(item.boxName == groupName && modelId == item.modelId){
 				inIndex = i;
 				return false;

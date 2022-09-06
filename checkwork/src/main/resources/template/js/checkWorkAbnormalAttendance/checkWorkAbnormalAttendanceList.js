@@ -43,9 +43,9 @@ layui.config({
 				{ field: 'userSex', title: '性别', width: 60, templet: function (d) {
 		        	if(d.userSex == '0'){
 		        		return "保密";
-		        	}else if(d.userSex == '1'){
+		        	} else if (d.userSex == '1'){
 		        		return "男";
-		        	}else if(d.userSex == '2'){
+		        	} else if (d.userSex == '2'){
 		        		return "女";
 		        	} else {
 		        		return "参数错误";
@@ -87,9 +87,9 @@ layui.config({
 		        { field: 'state', title: '申诉状态', width: 100, align: 'center', templet: function (d) {
 		        	if(d.state == '0'){
 		        		return "<span class='state-new'>申诉中</span>";
-		        	}else if(d.state == '1'){
+		        	} else if (d.state == '1'){
 		        		return "<span class='state-up'>申诉通过</span>";
-		        	}else if(d.state == '2'){
+		        	} else if (d.state == '2'){
 		        		return "<span class='state-down'>申诉不通过</span>";
 		        	} else {
 		        		return "参数错误";

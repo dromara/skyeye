@@ -27,22 +27,22 @@ layui.config({
 				$("#content").val(json.bean.content);
 
 				// 初始化收件人对象
-				$.each(json.bean.toPeopleList, function(i, item){
+				$.each(json.bean.toPeopleList, function(i, item) {
 					toPeopleList.push(item.email);
 				});
 
 				// 初始化抄送人对象
-				$.each(json.bean.toCcList, function(i, item){
+				$.each(json.bean.toCcList, function(i, item) {
 					toCcList.push(item.email);
 				});
 
 				// 初始化暗送人对象
-				$.each(json.bean.toBccList, function(i, item){
+				$.each(json.bean.toBccList, function(i, item) {
 					toBccList.push(item.email);
 				});
 
 
-				$.each(json.bean.emailEnclosureList, function(i, item){
+				$.each(json.bean.emailEnclosureList, function(i, item) {
 					if (!isNull(item.sysEnclosureId)){
 						enclosureList.push({
 							id: item.sysEnclosureId,
@@ -68,22 +68,22 @@ layui.config({
 				$("#content").val(emailContentHeadStr + json.bean.content);
 
 				// 初始化收件人对象
-				$.each(json.bean.toPeopleList, function(i, item){
+				$.each(json.bean.toPeopleList, function(i, item) {
 					toPeopleList.push(item.email);
 				});
 
 				// 初始化抄送人对象
-				$.each(json.bean.toCcList, function(i, item){
+				$.each(json.bean.toCcList, function(i, item) {
 					toCcList.push(item.email);
 				});
 
 				// 初始化暗送人对象
-				$.each(json.bean.toBccList, function(i, item){
+				$.each(json.bean.toBccList, function(i, item) {
 					toBccList.push(item.email);
 				});
 
 
-				$.each(json.bean.emailEnclosureList, function(i, item){
+				$.each(json.bean.emailEnclosureList, function(i, item) {
 					if (!isNull(item.sysEnclosureId)){
 						enclosureList.push({
 							id: item.sysEnclosureId,
@@ -254,9 +254,9 @@ layui.config({
 				$.each(userReturnList, function(i, item) {
 					if(clickId == 'toPeopleSelPeople'){
 						$('#toPeople').tagEditor('addTag', item.email);
-					}else if(clickId == 'toCcSelPeople'){
+					} else if (clickId == 'toCcSelPeople'){
 						$('#toCc').tagEditor('addTag', item.email);
-					}else if(clickId == 'toBccSelPeople'){
+					} else if (clickId == 'toBccSelPeople'){
 						$('#toBcc').tagEditor('addTag', item.email);
 					}
 				});
@@ -266,12 +266,12 @@ layui.config({
 		$("body").on("click", "#toPeopleSelMail, #toCcSelMail, #toBccSelMail", function (e) {
 			var clickId = $(this).attr("id");
 			mailUtil.openMailChoosePage(function (mailChooseList){
-				$.each(mailChooseList, function(i, item){
+				$.each(mailChooseList, function(i, item) {
 					if(clickId == 'toPeopleSelMail'){
 						$('#toPeople').tagEditor('addTag', item.email);
-					}else if(clickId == 'toCcSelMail'){
+					} else if (clickId == 'toCcSelMail'){
 						$('#toCc').tagEditor('addTag', item.email);
-					}else if(clickId == 'toBccSelMail'){
+					} else if (clickId == 'toBccSelMail'){
 						$('#toBcc').tagEditor('addTag', item.email);
 					}
 				});

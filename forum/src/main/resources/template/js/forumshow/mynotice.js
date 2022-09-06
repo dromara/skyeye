@@ -41,14 +41,14 @@ layui.config({
                                  if(content == "2"){
                                      content = "审核通过"
                                      $(this).addClass("state-new");
-                                 }else if(content == "3"){
+                                 } else if (content == "3"){
                                      content = "审核不通过"
                                      $(this).addClass("state-down");
                                  }
                                  $(this).append(content);
                              }
                          });
-                     }else if(row[i].noticeTitle == "违规"){
+                     } else if (row[i].noticeTitle == "违规"){
                          var id = row[i].id;
                          $(".my-forum-main-span").each(function(){
                              var thisId  = $(this).parents('div[class^="my-forum-main"]').eq(0).attr("rowId");

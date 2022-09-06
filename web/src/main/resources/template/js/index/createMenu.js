@@ -49,7 +49,7 @@ layui.config({
 	    	if(val == '1'){//icon
 	    		$(".menuIconTypeIsTwo").addClass("layui-hide");
 	    		$(".menuIconTypeIsOne").removeClass("layui-hide");
-	    	}else if(val == '2'){//图片
+	    	} else if (val == '2'){//图片
 	    		$(".menuIconTypeIsTwo").removeClass("layui-hide");
 	    		$(".menuIconTypeIsOne").addClass("layui-hide");
 	    	} else {
@@ -70,13 +70,13 @@ layui.config({
         			deskTopId: deskTopId,
  	        	};
 	        	
-	        	if(data.field.menuIconType == '1'){
+	        	if (data.field.menuIconType == '1'){
  	        		if(isNull($("#menuIcon").val())) {
  	        			winui.window.msg("请选择菜单图标", {icon: 2, time: 2000});
  	 	        		return false;
  	        		}
  	        		params.menuIconPic = '';
- 	        	}else if(data.field.menuIconType == '2'){
+ 	        	} else if (data.field.menuIconType == '2'){
  	        		params.menuIconPic = $("#menuIconPic").find("input[type='hidden'][name='upload']").attr("oldurl");
  	 	        	if(isNull(params.menuIconPic)){
  	 	        		winui.window.msg('请上传菜单logo', {icon: 2, time: 2000});

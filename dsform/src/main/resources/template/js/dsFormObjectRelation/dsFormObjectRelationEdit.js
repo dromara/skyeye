@@ -22,7 +22,7 @@ layui.config({
         ajaxSendLoadBefore: function (hdb) {
         },
         ajaxSendAfter: function (json) {
-            $.each(json.bean.dsFormPageMations, function (i, item){
+            $.each(json.bean.dsFormPageMations, function (i, item) {
                 addRow();
                 $("#dsFormChooseList" + (rowNum - 1)).val(item.pageNum);
                 $("#dsFormChooseList" + (rowNum - 1)).attr("dataId", item.id);

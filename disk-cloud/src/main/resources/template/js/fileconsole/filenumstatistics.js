@@ -67,7 +67,7 @@ layui.config({
 		var fileStorageBean = $("#fileStorageBean").html();
 		var str = "";
 		var colorSize = ["#027825", "#006DD6", "#238681"];
-		$.each(jsonData.fileStorageNum, function(i, item){
+		$.each(jsonData.fileStorageNum, function(i, item) {
 			item.id = "test" + i;
 			jsonStr = {
 				bean: item
@@ -140,7 +140,7 @@ layui.config({
 	function renderLayer04Left() {
 		var myChart = echarts.init(document.getElementById("layer04_left_chart"));
 		var nameStr = "", numStr = "";
-		$.each(jsonData.newFileNum, function(i, item){
+		$.each(jsonData.newFileNum, function(i, item) {
 			nameStr += item.monthName + ',';
 			numStr += item.fileNum + ',';
 		});
@@ -265,7 +265,7 @@ layui.config({
 	function renderLayer04Right() {
 		var myChart = echarts.init(document.getElementById("layer04_right_chart"));
 		var dataStr = new Array(), nameList = new Array(), clickDate = new Array();
-		$.each(jsonData.fileTypeNumSevenDay, function(i, item){
+		$.each(jsonData.fileTypeNumSevenDay, function(i, item) {
 			clickDate.push(item.clickDate);
 			
 			//加载数据
@@ -306,7 +306,7 @@ layui.config({
 		var sevenDay = get7days(getYMDFormatDate());
 		$.each(dataStr, function(k, entity){
 			var s = "";
-			$.each(sevenDay, function(i, item){
+			$.each(sevenDay, function(i, item) {
 				var dayInStr = -1;
 				$.each(entity.customData, function(j, bean){
 					if(item == bean.date){

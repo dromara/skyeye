@@ -65,13 +65,13 @@ layui.config({
 		        { field: 'status', title: '状态', align: 'left', width: 100, templet: function (d) {
 		        	if(d.status == '1'){
 		        		return "等待处理";
-		        	}else if(d.status == '2'){
+		        	} else if (d.status == '2'){
 		        		return "处理中";
-		        	}else if(d.status == '3'){
+		        	} else if (d.status == '3'){
 		        		return "<span class='state-down'>执行失败</span>";
-		        	}else if(d.status == '4'){
+		        	} else if (d.status == '4'){
 		        		return "<span class='state-up'>执行成功</span>";
-		        	}else if(d.status == '5'){
+		        	} else if (d.status == '5'){
 		        		return "<span class='state-new'>部分完成</span>";
 		        	} else {
 		        		return "参数错误";
@@ -152,13 +152,13 @@ layui.config({
 		        { field: 'status', title: '状态', align: 'left', width: 100, templet: function (d) {
 		        	if(d.status == '1'){
 		        		return "等待处理";
-		        	}else if(d.status == '2'){
+		        	} else if (d.status == '2'){
 		        		return "处理中";
-		        	}else if(d.status == '3'){
+		        	} else if (d.status == '3'){
 		        		return "<span class='state-down'>执行失败</span>";
-		        	}else if(d.status == '4'){
+		        	} else if (d.status == '4'){
 		        		return "<span class='state-up'>执行成功</span>";
-		        	}else if(d.status == '5'){
+		        	} else if (d.status == '5'){
 		        		return "<span class='state-new'>部分完成</span>";
 		        	} else {
 		        		return "参数错误";
@@ -208,13 +208,13 @@ layui.config({
 		        { field: 'status', title: '状态', align: 'left', width: 100, templet: function (d) {
 		        	if(d.status == '1'){
 		        		return "等待处理";
-		        	}else if(d.status == '2'){
+		        	} else if (d.status == '2'){
 		        		return "处理中";
-		        	}else if(d.status == '3'){
+		        	} else if (d.status == '3'){
 		        		return "<span class='state-down'>执行失败</span>";
-		        	}else if(d.status == '4'){
+		        	} else if (d.status == '4'){
 		        		return "<span class='state-up'>执行成功</span>";
-		        	}else if(d.status == '5'){
+		        	} else if (d.status == '5'){
 		        		return "<span class='state-new'>部分完成</span>";
 		        	} else {
 		        		return "参数错误";

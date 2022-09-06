@@ -23,7 +23,7 @@ layui.config({
 			$(".discontent").html(json.bean.content);
 			var jsonStr;
 			var str = "";
-			$.each(json.bean.replyString, function(i, item){
+			$.each(json.bean.replyString, function(i, item) {
 				jsonStr = {
 					bean: item
 				};

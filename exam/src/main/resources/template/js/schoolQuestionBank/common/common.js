@@ -62,7 +62,7 @@ layui.define(["jquery", 'form'], function(exports) {
 				if (!isNull(curEditObj)){
 					deleteDwOption();
 				}
-			}else if(dwEditHtml != curEditObjOldHtml){
+			} else if (dwEditHtml != curEditObjOldHtml){
 				// 更新值
 				$(curEditObj).html(dwEditHtml);
 			}
@@ -77,15 +77,15 @@ layui.define(["jquery", 'form'], function(exports) {
 				if(quType == "RADIO"){
 					// 添加单选选项
 					deleteRadioOption();
-				}else if(quType == "CHECKBOX"){
+				} else if (quType == "CHECKBOX"){
 					deleteCheckboxOption();
-				}else if(quType == "SCORE"){
+				} else if (quType == "SCORE"){
 					deleteScoreOption();
-				}else if(quType == "ORDERQU"){
+				} else if (quType == "ORDERQU"){
 					deleteOrderquOption();
-				}else if(quType == "MULTIFILLBLANK"){
+				} else if (quType == "MULTIFILLBLANK"){
 					deleteMultiFillblankOption();
-				}else if(quType == "CHENRADIO" || quType == "CHENCHECKBOX" 
+				} else if (quType == "CHENRADIO" || quType == "CHENCHECKBOX" 
 						|| quType == "CHENFBK" || quType == "CHENSCORE"){
 					deleteChenOption();
 				}
@@ -102,7 +102,7 @@ layui.define(["jquery", 'form'], function(exports) {
 			if(thClass.indexOf("quCoTitleEdit") > 0){
 				//题目标题
 				$("#dwCommonEditRoot").addClass("quEdit");
-			}else if(thClass.indexOf("quCoOptionEdit") > 0){
+			} else if (thClass.indexOf("quCoOptionEdit") > 0){
 				//题目选项
 				$("#dwCommonEditRoot").addClass("quOptionEdit");
 			}
@@ -142,23 +142,23 @@ layui.define(["jquery", 'form'], function(exports) {
 			var quType = quItemBody.find("input[name='quType']").val();
 			var areaVal = $("#dwQuMoreTextarea").val();
 			var areaValSplits = areaVal.split("\n");
-			$.each(areaValSplits, function(i,item){
+			$.each(areaValSplits, function(i,item) {
 				item = $.trim(item);
 				if(item != ""){
 					if(quType == "RADIO"){
 						// 添加单选选项
 						addRadioItem(quItemBody, item);
-					}else if(quType == "CHECKBOX"){
+					} else if (quType == "CHECKBOX"){
 						// 添加多选选项
 						addCheckboxItem(quItemBody, item);	
-					}else if(quType == "SCORE"){
+					} else if (quType == "SCORE"){
 						// 评分题
 						addScoreItem(quItemBody, item);
-					}else if(quType == "ORDERQU"){
+					} else if (quType == "ORDERQU"){
 						addOrderquItem(quItemBody, item);
-					}else if(quType == "MULTIFILLBLANK"){
+					} else if (quType == "MULTIFILLBLANK"){
 						addMultiFillblankItem(quItemBody, item);
-					}else if(quType == "CHENRADIO" || quType == "CHENCHECKBOX" || quType == "CHENFBK" || quType == "CHENSCORE"){
+					} else if (quType == "CHENRADIO" || quType == "CHENCHECKBOX" || quType == "CHENFBK" || quType == "CHENSCORE"){
 						addChenItem(dwDialogObj, quItemBody, item);
 					}
 				}
@@ -674,7 +674,7 @@ layui.define(["jquery", 'form'], function(exports) {
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {
 					var str = "";
-					$.each(schoolKnowledgeMationList, function(i, item){
+					$.each(schoolKnowledgeMationList, function(i, item) {
 						str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.title + '</span>';
 					});
 					$("#schoolKnowledgeChoose").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="schoolKnowledgeChoose">知识点选择</button>' + str);

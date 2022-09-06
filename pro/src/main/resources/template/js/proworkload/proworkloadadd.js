@@ -37,7 +37,7 @@ layui.config({
 	form.on('select(proIdProperty)', function(data) {
 		var thisRowValue = data.value;
 		if (!isNull(thisRowValue) && thisRowValue != '请选择') {
-			$.each(proList, function(i, item){
+			$.each(proList, function(i, item) {
 				if(item.id == thisRowValue){
 					$("#projectNumber").html(item.projectNumber);
 					if(isNull(item.customerName)){
@@ -74,9 +74,9 @@ layui.config({
 		var thisRowValue = data.value;
 		if(thisRowValue == 1){//上一周
 			setDate(addDate(new Date(), -7));
-		}else if(thisRowValue == 2){//本周
+		} else if (thisRowValue == 2){//本周
 			setDate(new Date());
-		}else if(thisRowValue == 3){//下一周
+		} else if (thisRowValue == 3){//下一周
 			setDate(addDate(new Date(), 7));
 		}
 	});

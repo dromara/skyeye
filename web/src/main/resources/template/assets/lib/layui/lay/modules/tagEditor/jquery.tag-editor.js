@@ -300,7 +300,7 @@ layui.define(["jquery"], function(exports) {
 
             // create initial tags
             var tags = o.initialTags.length ? o.initialTags : el.val().split(o.dregex);
-            $.each(tags, function(i, item){
+            $.each(tags, function(i, item) {
             	var tag = $.trim(item.replace(/ +/, ' '));
             	if (tag) {
             		tag_list.push(tag);

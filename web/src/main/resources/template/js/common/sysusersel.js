@@ -138,31 +138,31 @@ layui.config({
 				expantNodeParentNode(allPeopleTree, node);
 				allPeopleTree.selectNode(node);//选中指定节点
 			}
-		}else if(_tabId === 'accordingCompany'){//按公司
+		} else if (_tabId === 'accordingCompany'){//按公司
 			var node = accordingCompanyTree.getNodeByParam("id", id);
 			if (!isNull(node)){
 				expantNodeParentNode(accordingCompanyTree, node);
 				accordingCompanyTree.selectNode(node);//选中指定节点
 			}
-		}else if(_tabId === 'accordingDepartment'){//按部门
+		} else if (_tabId === 'accordingDepartment'){//按部门
 			var node = accordingDepartmentTree.getNodeByParam("id", id);
 			if (!isNull(node)){
 				expantNodeParentNode(accordingDepartmentTree, node);
 				accordingDepartmentTree.selectNode(node);//选中指定节点
 			}
-		}else if(_tabId === 'accordingJob'){//按岗位
+		} else if (_tabId === 'accordingJob'){//按岗位
 			var node = accordingJobTree.getNodeByParam("id", id);
 			if (!isNull(node)){
 				expantNodeParentNode(accordingJobTree, node);
 				accordingJobTree.selectNode(node);//选中指定节点
 			}
-		}else if(_tabId === 'accordingSimpleDepartment'){//同部门人员
+		} else if (_tabId === 'accordingSimpleDepartment'){//同部门人员
 			var node = accordingSimpleDepartmentTree.getNodeByParam("id", id);
 			if (!isNull(node)){
 				expantNodeParentNode(accordingSimpleDepartmentTree, node);
 				accordingSimpleDepartmentTree.selectNode(node);//选中指定节点
 			}
-		}else if(_tabId === 'accordingGroup'){//按联系组
+		} else if (_tabId === 'accordingGroup'){//按联系组
 			var node = accordingGroupTree.getNodeByParam("id", id);
 			if (!isNull(node)){
 				expantNodeParentNode(accordingGroupTree, node);
@@ -189,19 +189,19 @@ layui.config({
 		if(_tabId === 'allPeople'){//所有人员
 			if(!allPeopleFirstLoad)
 				loadAllPeopleList();
-		}else if(_tabId === 'accordingCompany'){//按公司
+		} else if (_tabId === 'accordingCompany'){//按公司
 			if(!accordingCompanyFirstLoad)
 				loadPeopleListByAccordingCompany();
-		}else if(_tabId === 'accordingDepartment'){//按部门
+		} else if (_tabId === 'accordingDepartment'){//按部门
 			if(!accordingDepartmentFirstLoad)
 				loadPeopleListByAccordingDepartment();
-		}else if(_tabId === 'accordingJob'){//按岗位
+		} else if (_tabId === 'accordingJob'){//按岗位
 			if(!accordingJobFirstLoad)
 				loadPeopleListByAccordingJob();
-		}else if(_tabId === 'accordingSimpleDepartment'){//同部门人员
+		} else if (_tabId === 'accordingSimpleDepartment'){//同部门人员
 			if(!accordingSimpleDepartmentFirstLoad)
 				loadPeopleListByAccordingSimpleDepartment();
-		}else if(_tabId === 'accordingGroup'){//按联系组
+		} else if (_tabId === 'accordingGroup'){//按联系组
 			if(!accordingGroupFirstLoad)
 				loadPeopleListByAccordingGroup();
 		}
@@ -415,15 +415,15 @@ layui.config({
 	function zTreeOnCheck(event, treeId, treeNode){
 		if(treeId === 'allPeopleTree'){//所有人员
 			getSelNodeByTree(allPeopleTree);
-		}else if(treeId === 'accordingCompanyTree'){//按公司
+		} else if (treeId === 'accordingCompanyTree'){//按公司
 			getSelNodeByTree(accordingCompanyTree);
-		}else if(treeId === 'accordingDepartmentTree'){//按部门
+		} else if (treeId === 'accordingDepartmentTree'){//按部门
 			getSelNodeByTree(accordingDepartmentTree);
-		}else if(treeId === 'accordingJobTree'){//按岗位
+		} else if (treeId === 'accordingJobTree'){//按岗位
 			getSelNodeByTree(accordingJobTree);
-		}else if(treeId === 'accordingSimpleDepartmentTree'){//同部门人员
+		} else if (treeId === 'accordingSimpleDepartmentTree'){//同部门人员
 			getSelNodeByTree(accordingSimpleDepartmentTree);
-		}else if(treeId === 'accordingGroupTree'){//按联系组
+		} else if (treeId === 'accordingGroupTree'){//按联系组
 			getSelNodeByTree(accordingGroupTree);
 		}
 	}

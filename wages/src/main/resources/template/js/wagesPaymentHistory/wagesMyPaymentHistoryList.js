@@ -40,14 +40,14 @@ layui.config({
             { field: 'type', title: '核算方式', align: 'center', width: 80, templet: function (d) {
                 if(d.type == '1'){
                     return "人工核算";
-                }else if(d.type == '2'){
+                } else if (d.type == '2'){
                     return "系统核算";
                 }
             }},
             { field: 'state', title: '状态', align: 'center', width: 80, templet: function (d) {
                 if(d.state == '1'){
                     return "<span class='state-down'>待发放</span>";
-                }else if(d.state == '2'){
+                } else if (d.state == '2'){
                     return "<span class='state-up'>已发放</span>";
                 }
             }},

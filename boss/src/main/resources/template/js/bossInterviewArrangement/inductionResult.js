@@ -52,7 +52,7 @@ layui.config({
                 if(thisRowValue == 6){ // 同意入职
                     $("#reasonBox").hide();
                     $(".agreePass").show();
-                }else if(thisRowValue == 7){ // 拒绝入职
+                } else if (thisRowValue == 7){ // 拒绝入职
                     $("#reasonBox").show();
                     $(".agreePass").hide();
                 }

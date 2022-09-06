@@ -30,7 +30,7 @@ layui.config({
     AjaxPostUtil.request({url:flowableBasePath + "activitimode025", params: {processInstanceId: processInstanceId}, type: 'json', callback: function(j){
 		var jsonStr = "";//实体json对象
 		var str = "";
-		$.each(j.rows, function(i, item){
+		$.each(j.rows, function(i, item) {
 			//如果展示文本不为空，则展示展示文本
 			if (!isNull(item.text))
 				item.value = item.text;
@@ -39,11 +39,11 @@ layui.config({
 			};
 			if(item.showType == 1){//文本展示
 				str = getDataUseHandlebars(textTemplate, jsonStr);
-			}else if(item.showType == 2){//附件展示
+			} else if (item.showType == 2){//附件展示
 				str = getDataUseHandlebars(enclosureTemplate, jsonStr);
-			}else if(item.showType == 3){//富文本展示
+			} else if (item.showType == 3){//富文本展示
 				str = getDataUseHandlebars(eichTextTemplate, jsonStr);
-			}else if(item.showType == 4){//图片展示
+			} else if (item.showType == 4){//图片展示
 				var photoValue = [];
 				if (!isNull(jsonStr.bean.value)){
 					photoValue = item.value.split(",");
@@ -54,7 +54,7 @@ layui.config({
 				});
 				jsonStr.bean.photo = rows;
 				str = getDataUseHandlebars(picTemplate, jsonStr);
-			}else if(item.showType == 5){//表格展示
+			} else if (item.showType == 5){//表格展示
 				str = getDataUseHandlebars(tableTemplate, jsonStr);
 				var tableId = "messageTable" + item.orderBy;//表格id
 				var tableBoxId = "showTable" + item.orderBy;//表格外部div盒子id
@@ -71,7 +71,7 @@ layui.config({
 					cols: getValJson(item.headerTitle, '[', ']')
 				});
 				str = "";
-			}else if(item.showType == 6){//凭证展示
+			} else if (item.showType == 6){//凭证展示
 				str = getDataUseHandlebars(voucherTemplate, jsonStr);
 				$("#showForm").append(str);
 				var boxId = "showVoucher" + item.orderBy;

@@ -61,7 +61,7 @@ layui.config({
     // 初始化请假类型
     function initTypeHtml() {
         AjaxPostUtil.request({url: reqBasePath + "sysfdsettings001", params: {}, type: 'json', method: 'GET', callback: function(json) {
-            $.each(JSON.parse(json.bean.holidaysTypeJson), function (i, item){
+            $.each(JSON.parse(json.bean.holidaysTypeJson), function (i, item) {
                 leaveType.push({
                     id: item.holidayNo,
                     name: item.holidayName,

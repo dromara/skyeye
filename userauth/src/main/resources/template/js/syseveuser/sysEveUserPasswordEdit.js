@@ -11,12 +11,12 @@ layui.config({
 	    var $ = layui.$;
 
 		form.verify({
-			password : function(value, item){
+			password : function(value, item) {
 				if(value.length < 6){
 					return "密码长度不能小于6位";
 				}
 			},
-			confirmPwd : function(value, item){
+			confirmPwd : function(value, item) {
 				if($("#password").val() != value){
 					return "两次输入密码不一致，请重新输入！";
 				}

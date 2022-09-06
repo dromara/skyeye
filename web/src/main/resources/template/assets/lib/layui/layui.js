@@ -667,7 +667,7 @@ function getCookie(name) {
 				).replace(/^\?+/, '').split('&'); //去除 ?，按 & 分割参数
 
 				//遍历分割后的参数
-				that.each(search, function(index, item){
+				that.each(search, function(index, item) {
 					var _index = item.indexOf('=')
 						,key = function(){ //提取 key
 						if(_index < 0){
@@ -890,7 +890,7 @@ function getCookie(name) {
 			,filter = (events || '').match(/\((.*)\)$/)||[] //提取事件过滤器字符结构，如：select(xxx)
 			,eventName = (modName + '.'+ events).replace(filter[0], '') //获取事件名称，如：form.select
 			,filterName = filter[1] || '' //获取过滤器名称,，如：xxx
-			,callback = function(_, item){
+			,callback = function(_, item) {
 			var res = item && item.call(that, params);
 			res === false && result === null && (result = false);
 		};

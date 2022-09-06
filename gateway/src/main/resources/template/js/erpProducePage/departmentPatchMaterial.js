@@ -40,7 +40,7 @@ layui.config({
 		var num = new Array();
 		var materialName = "";
 		var materialNameList = new Array();
-		$.each(rows, function(i, item){
+		$.each(rows, function(i, item) {
 			if(i == 0){
 				materialName = item.materialName;
 				$.each(item.yearPatchMaterialNum, function(j, bean){
@@ -51,7 +51,7 @@ layui.config({
 		});
 		materialNameList.push(materialName);
 		var option = getOption('当前部门补料分析', '统计在指定年份当前部门补料的数量分析', name, materialName, num, 'line');
-		$.each(rows, function(i, item){
+		$.each(rows, function(i, item) {
 			if(i != 0){
 				materialName = item.materialName;
 				materialNameList.push(materialName);

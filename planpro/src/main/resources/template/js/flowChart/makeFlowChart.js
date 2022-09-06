@@ -153,7 +153,7 @@ layui.config({
 			layer.close(index);
 			AjaxPostUtil.request({url: sysMainMation.businessFlowBasePath + "planprojectflow003", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-				if(data.id === designId){
+				if (data.id === designId){
 					$("#flowName").html("流程图");
 					$("#zzc").addClass("zzc");
 					net.changeData();
@@ -367,11 +367,11 @@ layui.config({
 	$("body").on("click", "#reLayout", function (e) {//自动布局
 		var a = net.save();
 		net.changeData();
-		$.each(a.source.edges, function(index, item){
+		$.each(a.source.edges, function(index, item) {
 			delete item.x;
 			delete item.y;
 		});
-		$.each(a.source.nodes, function(index, item){
+		$.each(a.source.nodes, function(index, item) {
 			delete item.x;
 			delete item.y;
 		});

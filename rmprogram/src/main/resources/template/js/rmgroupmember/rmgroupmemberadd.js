@@ -125,9 +125,9 @@ layui.config({
 			        if (winui.verifyForm(data.elem)) {
 			        	if(!isPic){
 			        		winui.window.msg("请先生成预览图", {icon: 2, time: 2000});
-			        	}else if(isNull(htmlContent.getValue())){
+			        	} else if (isNull(htmlContent.getValue())){
 		        			winui.window.msg("请填写HTML内容", {icon: 2, time: 2000});
-		        		}else if(isNull(wxmlContent.getValue())){
+		        		} else if (isNull(wxmlContent.getValue())){
 		        			winui.window.msg("请填写WXML内容", {icon: 2, time: 2000});
 		        		} else {
 		        			var oCanvas = document.getElementById("thecanvas");

@@ -332,7 +332,7 @@ layui.define(['layer', 'form', 'code'], function(exports) {
 							dataType: "json",
 							mimeType: "multipart/form-data",
 							success: function(data) {
-								if(data.code == 0 || data.code == 2) {
+								if (data.code == 0 || data.code == 2) {
 									src = data.data.src;
 									set.uploadImage.done(data);
 								}

@@ -12,42 +12,42 @@ layui.config({
 		var str = '';
 		
 		//图片
-		$.each(imageType, function(i, item){
+		$.each(imageType, function(i, item) {
 			str += '<a href="javascript:;" class="layui-btn layui-btn-primary">' + item + '</a>';
 		});
 		$("#showPicType").html(str);
 		
 		//office
 		str = '';
-		$.each(officeType, function(i, item){
+		$.each(officeType, function(i, item) {
 			str += '<a href="javascript:;" class="layui-btn layui-btn-primary">' + item + '</a>';
 		});
 		$("#showOfficeType").html(str);
 		
 		//视频
 		str = '';
-		$.each(vedioType, function(i, item){
+		$.each(vedioType, function(i, item) {
 			str += '<a href="javascript:;" class="layui-btn layui-btn-primary">' + item + '</a>';
 		});
 		$("#showVedioType").html(str);
 		
 		//压缩包
 		str = '';
-		$.each(packageType, function(i, item){
+		$.each(packageType, function(i, item) {
 			str += '<a href="javascript:;" class="layui-btn layui-btn-primary">' + item + '</a>';
 		});
 		$("#showPackageType").html(str);
 		
 		//电子书
 		str = '';
-		$.each(epubType, function(i, item){
+		$.each(epubType, function(i, item) {
 			str += '<a href="javascript:;" class="layui-btn layui-btn-primary">' + item + '</a>';
 		});
 		$("#epubType").html(str);
 		
 		//其他文件
 		str = '';
-		$.each(aceType, function(i, item){
+		$.each(aceType, function(i, item) {
 			str += '<a href="javascript:;" class="layui-btn layui-btn-primary">' + item + '</a>';
 		});
 		$("#showAceType").html(str);

@@ -56,9 +56,9 @@
 		<script type="text/html" id="tableBar">
 			{{# if((d.planType == 1) && auth('1610200405671')){ }}
 				<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-			{{# }else if((d.planType == 2) && auth('1610200395446')){ }}
+			{{# } else if ((d.planType == 2) && auth('1610200395446')){ }}
 				<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-			{{# }else if((d.planType == 3) && auth('1610200425989')){ }}
+			{{# } else if ((d.planType == 3) && auth('1610200425989')){ }}
 				<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 			{{# } }}
 			{{# if(auth('1610200417215')){ }}
@@ -67,10 +67,10 @@
 			{{# if(d.whetherTimeState == '1'){ }}
 				{{# if(d.whetherTime > getFormatDate() && auth('1610200383130')){ }}
 					<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="cancleTiming">取消定时发送</a>
-				{{# }else if(d.whetherTime <= getFormatDate() && auth('1610200373284')){ }}
+				{{# } else if (d.whetherTime <= getFormatDate() && auth('1610200373284')){ }}
 					<a class="layui-btn layui-btn-xs" lay-event="timingSend">重置定时发送</a>
 				{{# } }}
-			{{# }else if(auth('1610200373284')){ }}
+			{{# } else if (auth('1610200373284')){ }}
 				<a class="layui-btn layui-btn-xs" lay-event="timingSend">定时发送</a>
 			{{# } }}
 		</script>

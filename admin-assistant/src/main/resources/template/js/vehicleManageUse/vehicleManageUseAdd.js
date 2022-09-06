@@ -33,7 +33,7 @@ layui.config({
 		var val = data.value;
 		if(val == '1'){//自驾
 			$("#ishasDriver").addClass("layui-hide");
-		}else if(val == '2'){//安排司机
+		} else if (val == '2'){//安排司机
 			$("#ishasDriver").removeClass("layui-hide");
 			if(!loadDriver){
 				initDriver();

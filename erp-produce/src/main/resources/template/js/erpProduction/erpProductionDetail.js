@@ -15,15 +15,15 @@ layui.config({
         
         AjaxPostUtil.request({url: flowableBasePath + "erpproduction006", params: {orderId: parent.rowId}, type: 'json', callback: function (json) {
 			json.bean.stateName = getStateName(json.bean);
-			$.each(json.bean.procedureMationList, function(i, item){
+			$.each(json.bean.procedureMationList, function(i, item) {
 				if(item.state == 1){
 					item.stateName = "<span class='state-down'>待下达</span>";
-				}else if(item.state == 2){
+				} else if (item.state == 2){
 					item.stateName = "<span class='state-up'>已下达</span>"
 				}
 			});
 
-			$.each(json.bean.childList, function(i, item){
+			$.each(json.bean.childList, function(i, item) {
 				item.needsNum = parseInt(item.needNum) * parseInt(json.bean.number);
 			});
 			$("#showForm").html(getDataUseHandlebars($("#mainHtml").html(), json));
@@ -36,13 +36,13 @@ layui.config({
         function getStateName(d){
         	if(d.state == 1){
         		return "<span class='state-new'>" + d.stateName + "</span>";
-        	}else if(d.state == 2){
+        	} else if (d.state == 2){
         		return "<span>" + d.stateName + "</span>";
-        	}else if(d.state == 3){
+        	} else if (d.state == 3){
         		return "<span class='state-up'>" + d.stateName + "</span>";
-        	}else if(d.state == 4){
+        	} else if (d.state == 4){
         		return "<span class='state-down'>" + d.stateName + "</span>";
-        	}else if(d.state == 5){
+        	} else if (d.state == 5){
         		return "<span class='state-up'>" + d.stateName + "</span>";
         	} else {
         		return "参数错误";

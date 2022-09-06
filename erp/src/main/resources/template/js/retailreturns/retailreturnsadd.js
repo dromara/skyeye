@@ -120,10 +120,10 @@ layui.config({
 			if("rkNum" === showTdByEdit){//数量
 				// 输出金额
 				$("#amountOfMoney" + thisRowKey).val((rkNum * unitPrice).toFixed(2));
-			}else if("unitPrice" === showTdByEdit){//单价
+			} else if ("unitPrice" === showTdByEdit){//单价
 				// 输出金额
 				$("#amountOfMoney" + thisRowKey).val((rkNum * unitPrice).toFixed(2));
-			}else if("amountOfMoney" === showTdByEdit){//金额
+			} else if ("amountOfMoney" === showTdByEdit){//金额
 				// 输出单价
 				$("#unitPrice" + thisRowKey).val((amountOfMoney / rkNum).toFixed(2));
 			}

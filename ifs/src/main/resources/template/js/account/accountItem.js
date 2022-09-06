@@ -39,9 +39,9 @@ layui.config({
             { field: 'type', title: '类型', align: 'center',width: 80, templet: function (d) {
                 if(d.type == 1){
                     return "<span class='state-down'>出库</span>";
-                }else if(d.type == 2){
+                } else if (d.type == 2){
                     return "<span class='state-up'>入库</span>";
-                }else if(d.type == 3){
+                } else if (d.type == 3){
                     return "<span class='state-up'>其他</span>";
                 } else {
                     return "<span class='state-error'>参数错误</span>";
@@ -51,7 +51,7 @@ layui.config({
             { field: 'payType', title: '付款类型', align: 'center',width: 80, templet: function (d) {
                 if(d.payType == 1){
                     return "<span class='state-up'>现金</span>";
-                }else if(d.payType == 2){
+                } else if (d.payType == 2){
                     return "<span class='state-down'>记账</span>";
                 } else {
                     return "<span class='state-error'>其他</span>";

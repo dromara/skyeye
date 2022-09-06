@@ -768,10 +768,10 @@
 									if(v1 == 2){
 										//多选题
 										return '<input type="hidden" name="qu_' + v1 + '_' + v2 + '" value="tag_qu_' + v1 + '_' + v2 + '_" />';
-									}else if(v1 == 9 || v1 == 11 || v1 == 13 || v1 == 12 || v1 == 18 || v1 == 8){
+									} else if (v1 == 9 || v1 == 11 || v1 == 13 || v1 == 12 || v1 == 18 || v1 == 8){
 										//排序题，矩阵单选题，矩阵多选题，矩阵填空题，矩阵评分题，评分题
 										return '<input type="hidden" name="qu_' + v1 + '_' + v2 + '" value="item_qu_' + v1 + '_' + v2 + '_" />';
-									}else if(v1 == 4){
+									} else if (v1 == 4){
 										//多项填空题
 										return '<input type="hidden" name="qu_' + v1 + '_' + v2 + '" value="text_qu_' + v1 + '_' + v2 + '_" />';
 									}

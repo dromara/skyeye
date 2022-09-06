@@ -27,7 +27,7 @@ layui.config({
 
                 var options = j.bean.options;
                 // 加载属性值
-                $.each(options, function(i, item){
+                $.each(options, function(i, item) {
                     addRow();
                     $("#propertyId" + (rowNum - 1)).html(item.code);
                     if(item.editor == 1){

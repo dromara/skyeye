@@ -33,7 +33,7 @@ layui.config({
 			$("#setting").find("a[rowid='nochecklist']").addClass('selected');
 			$("#noCheckForm").removeClass("layui-hide");
 			showNoCheckList();
-		}else if(auth('1568077598792')){
+		} else if (auth('1568077598792')){
 			$("#setting").find("a[rowid='checkedlist']").addClass('selected');
 			$("#checkedForm").removeClass("layui-hide");
 			showCheckedList();
@@ -93,9 +93,9 @@ layui.config({
 		        { field: 'examineState', title: '状态', width: 100, align: 'center', templet: function (d) {
 		        	if(d.examineState == '1'){
 		        		return "<span class='state-new'>未审核</span>";
-		        	}else if(d.examineState == '2'){
+		        	} else if (d.examineState == '2'){
 		        		return "<span class='state-up'>已通过</span>";
-		        	}else if(d.examineState == '3'){
+		        	} else if (d.examineState == '3'){
 		        		return "<span class='state-down'>未通过</span>";
 		        	} else {
 		        		return "参数错误";
@@ -231,9 +231,9 @@ layui.config({
 		        { field: 'examineState', title: '状态', width: 100, align: 'center', templet: function (d) {
 		        	if(d.examineState == '1'){
 		        		return "<span class='state-new'>未审核</span>";
-		        	}else if(d.examineState == '2'){
+		        	} else if (d.examineState == '2'){
 		        		return "<span class='state-up'>已通过</span>";
-		        	}else if(d.examineState == '3'){
+		        	} else if (d.examineState == '3'){
 		        		return "<span class='state-down'>未通过</span>";
 		        	} else {
 		        		return "参数错误";

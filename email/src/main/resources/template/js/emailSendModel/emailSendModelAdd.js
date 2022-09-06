@@ -60,12 +60,12 @@ layui.config({
 			systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
 			systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList){
 				// 添加新的tag
-				$.each(userReturnList, function(i, item){
+				$.each(userReturnList, function(i, item) {
 					if(clickId == 'toPeopleSelPeople'){
 						$('#toPeople').tagEditor('addTag', item.email);
-					}else if(clickId == 'toCcSelPeople'){
+					} else if (clickId == 'toCcSelPeople'){
 						$('#toCc').tagEditor('addTag', item.email);
-					}else if(clickId == 'toBccSelPeople'){
+					} else if (clickId == 'toBccSelPeople'){
 						$('#toBcc').tagEditor('addTag', item.email);
 					}
 				});
@@ -75,12 +75,12 @@ layui.config({
 		$("body").on("click", "#toPeopleSelMail, #toCcSelMail, #toBccSelMail", function (e) {
 			var clickId = $(this).attr("id");
 			mailUtil.openMailChoosePage(function (mailChooseList){
-				$.each(mailChooseList, function(i, item){
+				$.each(mailChooseList, function(i, item) {
 					if(clickId == 'toPeopleSelMail'){
 						$('#toPeople').tagEditor('addTag', item.email);
-					}else if(clickId == 'toCcSelMail'){
+					} else if (clickId == 'toCcSelMail'){
 						$('#toCc').tagEditor('addTag', item.email);
-					}else if(clickId == 'toBccSelMail'){
+					} else if (clickId == 'toBccSelMail'){
 						$('#toBcc').tagEditor('addTag', item.email);
 					}
 				});

@@ -29,7 +29,7 @@
 
 		// 用作缓存一些数据
 		var dataCache = $("#dataCache" + tableId);
-		if(dataCache.length == 0) {
+		if (dataCache.length == 0) {
 			dataCache = $("<div></div>");
 			dataCache.attr("id", "dataCache" + tableId);
 			$(document.body).append(dataCache);
@@ -236,7 +236,7 @@
 		var dataArr = this.table.columns().dataSrc();
 		var colIndex = null;
 		for(var i = 0; i < dataArr.length; i++) {
-			if(dataArr[i] == name) {
+			if (dataArr[i] == name) {
 				colIndex = i;
 				break;
 			} else {
@@ -620,7 +620,7 @@
 			tableName: tableName,
 			template: template
 		}, function(data) {
-			if(data.success) {
+			if (data.success) {
 				window.location.href = basePath + '/query/downExport?tempfile=' + data.data + "&tableName=" + encodeURIComponent(tableName);
 			} else {
 				modals.error(data.message);
@@ -635,7 +635,7 @@
 			reqObjs: JSON.stringify(queryConditions),
 			tableName: tableName
 		}, function(data) {
-			if(data.success) {
+			if (data.success) {
 				window.location.href = basePath + '/query/downExport?tempfile=' + data.data + "&tableName=" + encodeURIComponent(tableName);
 			}
 		})

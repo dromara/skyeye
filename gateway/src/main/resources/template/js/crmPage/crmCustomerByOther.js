@@ -32,7 +32,7 @@ layui.config({
 		
 		var num = new Array();
 		var name = new Array();
-		$.each(bean.numType, function(i, item){
+		$.each(bean.numType, function(i, item) {
 			num.push(item.number);
 			name.push(item.name);
 		});
@@ -40,7 +40,7 @@ layui.config({
 		
 		num = new Array();
 		name = new Array();
-		$.each(bean.numFrom, function(i, item){
+		$.each(bean.numFrom, function(i, item) {
 			num.push(item.number);
 			name.push(item.name);
 		});
@@ -48,7 +48,7 @@ layui.config({
 		
 		num = new Array();
 		name = new Array();
-		$.each(bean.numIndustry, function(i, item){
+		$.each(bean.numIndustry, function(i, item) {
 			num.push(item.number);
 			name.push(item.name);
 		});
@@ -56,7 +56,7 @@ layui.config({
 		
 		num = new Array();
 		name = new Array();
-		$.each(bean.numGroup, function(i, item){
+		$.each(bean.numGroup, function(i, item) {
 			num.push(item.number);
 			name.push(item.name);
 		});

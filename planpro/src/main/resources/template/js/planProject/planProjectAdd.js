@@ -28,7 +28,7 @@ layui.config({
         			projectName: $("#projectName").val(),
         			projectDesc: encodeURIComponent(ue.getContent())
 	        	};
-	        	if(data.field.isShare){
+	        	if (data.field.isShare){
 	        		params.isShare = '2';
 	        	} else {
 	        		params.isShare = '1';

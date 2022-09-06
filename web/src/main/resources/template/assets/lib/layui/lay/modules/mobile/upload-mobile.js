@@ -46,7 +46,7 @@ layui.define(['layer-mobile', 'zepto'] , function(exports){
     //插入iframe    
     $('#'+elemIframe)[0] || body.append(iframe);
     
-    return elem.each(function(index, item){
+    return elem.each(function(index, item) {
       item = $(item);
       var form = '<form target="'+ elemIframe +'" method="'+ (options.method||'post') +'" key="set-mine" enctype="multipart/form-data" action="'+ (options.url||'') +'"></form>';
       

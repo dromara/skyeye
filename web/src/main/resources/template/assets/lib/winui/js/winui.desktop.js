@@ -41,7 +41,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         			icon = '<i class="fa ' + item.icon + ' fa-fw" win-i-id="' + item.id + '"></i>';
         		}
         		isFaIcon = "winui-icon-font";
-        	}else if(item.menuIconType === '2'){//图片
+        	} else if (item.menuIconType === '2'){//图片
         		menuIcon = isNull(item.menuIconPic) ? '' : 'win-icon="' + item.menuIconPic + '"';
         		icon = '<img src="' + fileBasePath + item.menuIconPic + '" class="desktop-img"/>';
         		isFaIcon = "winui-icon-img";
@@ -111,7 +111,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         						}
         					}
         					childsisFaIcon = "winui-icon-font";
-        				}else if(bean.menuIconType === '2'){//图片
+        				} else if (bean.menuIconType === '2'){//图片
         					childsmenuIcon = isNull(bean.menuIconPic) ? '' : 'win-icon="' + bean.menuIconPic + '"';
         					childsiconsmall = '<i class="fa icon-drawer-icon" win-i-id="' + bean.id + '"><img src="' + fileBasePath + bean.menuIconPic + '" class="desktop-img"/></i>';
         					childsicon = '<img src="' + fileBasePath + bean.menuIconPic + '" class="desktop-img"/>';
@@ -149,7 +149,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         						}
         					}
         					childsisFaIcon = "winui-icon-font";
-        				}else if(bean.menuIconType === '2'){//图片
+        				} else if (bean.menuIconType === '2'){//图片
         					childsmenuIcon = isNull(bean.menuIconPic) ? '' : 'win-icon="' + bean.menuIconPic + '"';
         					childsicon = '<img src="' + fileBasePath + bean.menuIconPic + '" class="desktop-img"/>';
         					childsisFaIcon = "winui-icon-img";
@@ -333,7 +333,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         //定位桌面应用
         locaApp: function () {
         	var article = $("#winui-desktop").find('article');
-        	$.each(article, function(i, item){
+        	$.each(article, function(i, item) {
         		$(item).find(".winui-desktop-item")
         		//计算一竖排能容纳几个应用
         		var appHeight = 103;

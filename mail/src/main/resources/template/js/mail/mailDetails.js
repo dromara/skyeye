@@ -23,7 +23,7 @@ layui.config({
 		 			// 个人通讯录
 		 			$("#typeIdBox").removeClass('layui-hide');
 		 			$("#readonlyBox").addClass('layui-hide');
-		 		}else if(json.bean.category == 2){
+		 		} else if (json.bean.category == 2){
 		 			// 公共通讯录
 		 			$("#typeIdBox").addClass('layui-hide');
 		 			$("#readonlyBox").removeClass('layui-hide');

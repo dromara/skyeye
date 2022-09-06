@@ -553,7 +553,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					if (e.ctrlKey && eCode === 90) {
 						// 撤销
 
-					}else if(eCode === 46){
+					} else if (eCode === 46){
 						// delete键
 						f.deleteChooseItem();
 					}
@@ -576,7 +576,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					// 内容点击
 					$("body").on('click', skyeyeReportContent, function (e) {
 						var pass = true;
-						$.each(notTriggerRemove, function (i, item){
+						$.each(notTriggerRemove, function (i, item) {
 							if($(e.target).parents("." + item).length > 0 || $(e.target).attr('class').indexOf(item) != -1){
 								pass = false;
 							}
@@ -621,7 +621,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 
 				getEchartsListToSave: function (){
 					var eachartsList = new Array();
-					$.each(skyeyeReportContent.find(".kuang"), function(i, item){
+					$.each(skyeyeReportContent.find(".kuang"), function(i, item) {
 						if($(item).find(".echarts-box").length > 0){
 							var boxId = $(item).data("boxId");
 							var echartsMation = inPageEcharts[boxId];
@@ -638,7 +638,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 
 				getWordMationListToSave: function (){
 					var wordMationList = new Array();
-					$.each(skyeyeReportContent.find(".kuang"), function(i, item){
+					$.each(skyeyeReportContent.find(".kuang"), function(i, item) {
 						if($(item).find(".word-box").length > 0) {
 							var boxId = $(item).data("boxId");
 							var wordMation = inPageWordMation[boxId];
@@ -1021,7 +1021,7 @@ function getValueByControlType(controlType, value, parentBox){
 	if(controlType == 'inputMoreColor'){
 		// 多行颜色选择器
 		var array = new Array();
-		layui.$.each(parentBox.find(".customer-attr"), function (i, item){
+		layui.$.each(parentBox.find(".customer-attr"), function (i, item) {
 			array.push(layui.$(item).val());
 		});
 		value = array;

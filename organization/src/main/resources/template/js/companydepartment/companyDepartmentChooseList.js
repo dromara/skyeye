@@ -22,7 +22,7 @@ layui.config({
 	function initTable(){
 		// 初始化值
 		var ids = [];
-		$.each(departmentList, function(i, item){
+		$.each(departmentList, function(i, item) {
 			ids.push(item.id);
 		});
 		tableCheckBoxUtil.setIds({

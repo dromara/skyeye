@@ -86,7 +86,7 @@ layui.config({
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {
                     var str = "";
-                    $.each(procedureMationList, function(i, item){
+                    $.each(procedureMationList, function(i, item) {
                         str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.unitPrice + '</td><td>' + item.departmentName + '</td></tr>';
                     });
                     $("#procedureBody").html(str);

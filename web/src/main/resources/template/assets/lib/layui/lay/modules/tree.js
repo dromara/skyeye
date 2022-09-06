@@ -36,7 +36,7 @@ layui.define('jquery', function(exports){
     var that = this, options = that.options
     var nodes = children || options.nodes;
     
-    layui.each(nodes, function(index, item){
+    layui.each(nodes, function(index, item) {
       var hasChild = item.children && item.children.length > 0;
       var ul = $('<ul class="'+ (item.spread ? "layui-show" : "") +'"></ul>');
       var li = $(['<li '+ (item.spread ? 'data-spread="'+ item.spread +'"' : '') +'>'
@@ -93,7 +93,7 @@ layui.define('jquery', function(exports){
   };
   
   //点击节点回调
-  Tree.prototype.click = function(elem, item){
+  Tree.prototype.click = function(elem, item) {
     var that = this, options = that.options;
     elem.children('a').on('click', function (e) {
       layui.stope(e);
@@ -102,7 +102,7 @@ layui.define('jquery', function(exports){
   };
   
   //伸展节点
-  Tree.prototype.spread = function(elem, item){
+  Tree.prototype.spread = function(elem, item) {
     var that = this, options = that.options;
     var arrow = elem.children('.layui-tree-spread')
     var ul = elem.children('ul'), a = elem.children('a');
@@ -168,7 +168,7 @@ layui.define('jquery', function(exports){
     
   //拖拽节点
   Tree.prototype.move = {};
-  Tree.prototype.drag = function(elem, item){
+  Tree.prototype.drag = function(elem, item) {
     var that = this, options = that.options;
     var a = elem.children('a'), mouseenter = function(){
       var othis = $(this), move = that.move;

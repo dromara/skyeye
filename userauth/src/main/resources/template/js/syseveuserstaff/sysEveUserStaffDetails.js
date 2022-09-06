@@ -55,9 +55,9 @@ layui.config({
 			        { field: 'sex', title: '性别', width: 80, templet: function (d) {
 	                    if(d.sex == '0'){
 	                        return "保密";
-	                    }else if(d.sex == '1'){
+	                    } else if (d.sex == '1'){
 	                        return "男";
-	                    }else if(d.sex == '2'){
+	                    } else if (d.sex == '2'){
 	                        return "女";
 	                    }
 	                }},
@@ -71,13 +71,13 @@ layui.config({
 	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
 	                    if(d.state == '1'){
 	                        return "在职";
-	                    }else if(d.state == '2'){
+	                    } else if (d.state == '2'){
 	                        return "离职";
-	                    }else if(d.state == '3'){
+	                    } else if (d.state == '3'){
 	                        return "见习";
-	                    }else if(d.state == '4'){
+	                    } else if (d.state == '4'){
 	                        return "试用";
-	                    }else if(d.state == '5'){
+	                    } else if (d.state == '5'){
 	                        return "退休";
 	                    }
 	                }},
@@ -111,13 +111,13 @@ layui.config({
 	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
 	                    if(d.state == '1'){
 	                        return "在职";
-	                    }else if(d.state == '2'){
+	                    } else if (d.state == '2'){
 	                        return "离职";
-	                    }else if(d.state == '3'){
+	                    } else if (d.state == '3'){
 	                        return "见习";
-	                    }else if(d.state == '4'){
+	                    } else if (d.state == '4'){
 	                        return "试用";
-	                    }else if(d.state == '5'){
+	                    } else if (d.state == '5'){
 	                        return "退休";
 	                    }
 	                }},
@@ -154,13 +154,13 @@ layui.config({
 	            	{ field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
 	                    if(d.state == '1'){
 	                        return "在职";
-	                    }else if(d.state == '2'){
+	                    } else if (d.state == '2'){
 	                        return "离职";
-	                    }else if(d.state == '3'){
+	                    } else if (d.state == '3'){
 	                        return "见习";
-	                    }else if(d.state == '4'){
+	                    } else if (d.state == '4'){
 	                        return "试用";
-	                    }else if(d.state == '5'){
+	                    } else if (d.state == '5'){
 	                        return "退休";
 	                    }
 	                }},
@@ -192,13 +192,13 @@ layui.config({
 	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
 	                    if(d.state == '1'){
 	                        return "在职";
-	                    }else if(d.state == '2'){
+	                    } else if (d.state == '2'){
 	                        return "离职";
-	                    }else if(d.state == '3'){
+	                    } else if (d.state == '3'){
 	                        return "见习";
-	                    }else if(d.state == '4'){
+	                    } else if (d.state == '4'){
 	                        return "试用";
-	                    }else if(d.state == '5'){
+	                    } else if (d.state == '5'){
 	                        return "退休";
 	                    }
 	                }},
@@ -231,20 +231,20 @@ layui.config({
 	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
 	                    if(d.state == '1'){
 	                        return "在职";
-	                    }else if(d.state == '2'){
+	                    } else if (d.state == '2'){
 	                        return "离职";
-	                    }else if(d.state == '3'){
+	                    } else if (d.state == '3'){
 	                        return "见习";
-	                    }else if(d.state == '4'){
+	                    } else if (d.state == '4'){
 	                        return "试用";
-	                    }else if(d.state == '5'){
+	                    } else if (d.state == '5'){
 	                        return "退休";
 	                    }
 	                }},
 	                { field: 'validityType', title: '有效期类型', align: 'left', width: 100, templet: function (d) {
 	                    if(d.validityType == '1'){
 	                        return "永久有效";
-	                    }else if(d.validityType == '2'){
+	                    } else if (d.validityType == '2'){
 	                        return "时间段有效";
 	                    }
 	                }},
@@ -282,13 +282,13 @@ layui.config({
 	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
 	                    if(d.state == '1'){
 	                        return "在职";
-	                    }else if(d.state == '2'){
+	                    } else if (d.state == '2'){
 	                        return "离职";
-	                    }else if(d.state == '3'){
+	                    } else if (d.state == '3'){
 	                        return "见习";
-	                    }else if(d.state == '4'){
+	                    } else if (d.state == '4'){
 	                        return "试用";
-	                    }else if(d.state == '5'){
+	                    } else if (d.state == '5'){
 	                        return "退休";
 	                    }
 	                }},
@@ -321,9 +321,9 @@ layui.config({
 	                { field: 'contractState', title: '状态', align: 'left', width: 80, templet: function (d) {
 	                    if(d.contractState == '1'){
 	                        return "待签约";
-	                    }else if(d.contractState == '2'){
+	                    } else if (d.contractState == '2'){
 	                        return "执行中";
-	                    }else if(d.contractState == '3'){
+	                    } else if (d.contractState == '3'){
 	                        return "过期";
 	                    }
 	                }},
@@ -332,13 +332,13 @@ layui.config({
 	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
 	                    if(d.state == '1'){
 	                        return "在职";
-	                    }else if(d.state == '2'){
+	                    } else if (d.state == '2'){
 	                        return "离职";
-	                    }else if(d.state == '3'){
+	                    } else if (d.state == '3'){
 	                        return "见习";
-	                    }else if(d.state == '4'){
+	                    } else if (d.state == '4'){
 	                        return "试用";
-	                    }else if(d.state == '5'){
+	                    } else if (d.state == '5'){
 	                        return "退休";
 	                    }
 	                }},

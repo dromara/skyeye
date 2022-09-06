@@ -1146,7 +1146,7 @@
 
 			pushData();
 
-			if(data.length === 0) return;
+			if (data.length === 0) return;
 
 			loop || parent.on('click', options.img, function() {
 				var othis = $(this),
@@ -1165,7 +1165,7 @@
 			//不直接弹出
 			if(!loop) return;
 
-		} else if(data.length === 0) {
+		} else if (data.length === 0) {
 			return layer.msg('&#x6CA1;&#x6709;&#x56FE;&#x7247;');
 		}
 
@@ -1207,7 +1207,7 @@
 
 		//切换
 		dict.tabimg = function(key) {
-			if(data.length <= 1) return;
+			if (data.length <= 1) return;
 			photos.start = dict.imgIndex - 1;
 			layer.close(dict.index);
 			return layer.photos(options, true, key);

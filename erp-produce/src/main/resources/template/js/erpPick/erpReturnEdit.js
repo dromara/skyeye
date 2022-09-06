@@ -42,7 +42,7 @@ layui.config({
 				$("#operTime").val(data.operTime);
 				$("#remark").val(data.remark);
 
-				$.each(data.items, function(i, item){
+				$.each(data.items, function(i, item) {
 					addRow();
 					//将规格所属的商品信息加入到对象中存储
 					allChooseProduct["tr" + (rowNum - 1)] = item;

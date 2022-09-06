@@ -150,7 +150,7 @@ layui.config({
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {
 					var str = "";
-					$.each(procedureMationList, function(i, item){
+					$.each(procedureMationList, function(i, item) {
 						str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.unitPrice + '</td><td>' + item.departmentName + '</td></tr>';
 					});
 					$("#procedureBody").html(str);
@@ -284,7 +284,7 @@ layui.config({
 					$("#procedureChoose").hide();
 					procedureMationList = [].concat(productionMation.procedureList);
 					var str = "";
-					$.each(procedureMationList, function(i, item){
+					$.each(procedureMationList, function(i, item) {
 						str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.unitPrice + '</td><td>' + item.departmentName + '</td></tr>';
 					});
 					$("#procedureBody").html(str);
@@ -301,7 +301,7 @@ layui.config({
 						//移除界面上的信息
 						$(item).parent().parent().remove();
 					});
-					$.each(productionMation.norms, function(i, item){
+					$.each(productionMation.norms, function(i, item) {
 						addRow();
 						//将规格所属的商品信息加入到对象中存储
 						allChooseProduct["tr" + (rowNum - 1)] = item.product;

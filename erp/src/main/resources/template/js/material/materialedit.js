@@ -134,7 +134,7 @@ layui.config({
 					 			//加载规格下的初始库存信息
 					 			normsStockItem = [].concat(j.bean.norms[0].normStock);
 					 			var str = "";
-						    	$.each(j.bean.norms[0].normStock, function(i, item){
+						    	$.each(j.bean.norms[0].normStock, function(i, item) {
 						    		str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.initialTock + '</span></span>';
         						});
 								$("#initialTock").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="initialTock">新增库存</button>' + str);
@@ -142,7 +142,7 @@ layui.config({
 					 			$(".single-term").hide();
 					 			$("#unitGroupId").val(j.bean.unitGroupId);
 						 		//加载默认值
-						 		$.each(unitGroupList, function(i, item){
+						 		$.each(unitGroupList, function(i, item) {
 						    		if(item.id == j.bean.unitGroupId){
 						    			var str = getDataUseHandlebars(selTemplate, {rows: item.unitList});
 						    			$("#firstInUnit").html(str);
@@ -153,7 +153,7 @@ layui.config({
 						    			return false;
 						    		}
 						    	});
-						    	$.each(j.bean.norms, function(i, item){
+						    	$.each(j.bean.norms, function(i, item) {
 						    		normsStockList.push({
 						    			trRow: unitIndex.toString(),
 						    			list: [].concat(item.normStock)
@@ -262,7 +262,7 @@ layui.config({
 		 	        	};
 
 		 	        	var extendData = new Array();
-		 	        	$.each($("#extendMationBox .extendMation"), function(i, item){
+		 	        	$.each($("#extendMationBox .extendMation"), function(i, item) {
 		 	        		extendData.push({
 		 	        			labelName: $(item).children(".layui-form-label").children("font").html(),
 		 	        			content: $(item).children(".layui-input-block").children("input").val(),
@@ -294,7 +294,7 @@ layui.config({
 				callBack: function (refreshCode) {
 					var str = "";
 					normsStockItem = [].concat(normsStock);
-					$.each(normsStockItem, function(i, item){
+					$.each(normsStockItem, function(i, item) {
 						str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.initialTock + '</span></span>';
 					});
 					$("#initialTock").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="initialTock">新增库存</button>' + str);
@@ -307,7 +307,7 @@ layui.config({
 	    	var trRow = _this.attr("id").replace("initialTock", "");
 	    	//判断当前行是否有库存集合信息在列表中
 	    	var thisRowHasList = -1;
-	    	$.each(normsStockList, function(i, item){
+	    	$.each(normsStockList, function(i, item) {
 	    		if(item.trRow === trRow){
 	    			thisRowHasList = i;
 	    			return false;
@@ -333,7 +333,7 @@ layui.config({
 							list: [].concat(normsStock)
 						});
 					}
-					$.each(normsStock, function(i, item){
+					$.each(normsStock, function(i, item) {
 						str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.initialTock + '</span></span>';
 					});
 					_this.parent().html(_this.prop("outerHTML") + str);
@@ -347,7 +347,7 @@ layui.config({
 	    		$("#firstOutUnit").html("");
 	    		form.render('select');
 	    	} else {
-		    	$.each(unitGroupList, function(i, item){
+		    	$.each(unitGroupList, function(i, item) {
 		    		if(item.id == data.value){
 		    			var str = getDataUseHandlebars(selTemplate, {rows: item.unitList});
 		    			$("#firstInUnit").html(str);
@@ -378,7 +378,7 @@ layui.config({
  		form.on('switch(unit)', function (data) {
  			//同步开关值
  			$(data.elem).val(data.elem.checked);
- 			if(data.elem.checked){//多单位
+ 			if (data.elem.checked){//多单位
 				$(".many-term").show();
 				$(".single-term").hide();
  			} else {//单单位
@@ -435,7 +435,7 @@ layui.config({
  	    $(document).click(function (e) {
  	    	var _con = $('.label-edit');// 设置目标区域
  	    	if(!_con.is(e.target) && _con.has(e.target).length === 0){
- 	    		$.each($('.label-edit'), function(i, item){
+ 	    		$.each($('.label-edit'), function(i, item) {
  	    			//判断是否是隐藏状态
  	    			if(!$(item).is(':hidden')){
  	    				//显示状态
@@ -456,7 +456,7 @@ layui.config({
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {
 					var str = "";
-					$.each(procedureMationList, function(i, item){
+					$.each(procedureMationList, function(i, item) {
 						str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.procedureName + '<span class="layui-badge layui-bg-gray">' + item.number + '</span></span>';
 					});
 					$("#procedureChoose").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="procedureChoose">工序选择</button>' + str);

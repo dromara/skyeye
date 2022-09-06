@@ -24,7 +24,7 @@ layui.config({
 		 	template: getFileContent('tpl/materialunit/materialuniteditTemplate.tpl'),
 		 	ajaxSendAfter:function (json) {
 		 		
-		 		$.each(json.bean.unitList, function(i, item){
+		 		$.each(json.bean.unitList, function(i, item) {
 		 			if(item.baseUnit.toString() === "1"){//基础数据
 		 				$("#unitName").val(item.unitNameValue);
 		 			} else {
@@ -96,7 +96,7 @@ layui.config({
  	    }
  	    
  	    //添加副单位数据回显
- 	    function addDataRow(item){
+ 	    function addDataRow(item) {
  	    	var j = {
  	    		trId: "tr" + unitIndex.toString(), //行的id
  	    		id: "row" + unitIndex.toString(), //checkbox的id

@@ -22,35 +22,35 @@ layui.config({
 	    
 	    if(parent.stateChangeData.state == '11'){//审核通过
 			$(".layui-form-item").removeClass("layui-hide");
-		}else if(parent.stateChangeData.state == '2'){//初期沟通
+		} else if (parent.stateChangeData.state == '2'){//初期沟通
 			$(".typeQuotedPrice").removeClass("layui-hide");
 			$(".typeTender").removeClass("layui-hide");
 			$(".typeNegotiate").removeClass("layui-hide");
 			$(".typeTurnover").removeClass("layui-hide");
 			$(".typeLosingTable").removeClass("layui-hide");
 			$(".typeLayAside").removeClass("layui-hide");
-		}else if(parent.stateChangeData.state == '3'){//方案与报价
+		} else if (parent.stateChangeData.state == '3'){//方案与报价
 			$(".typeConmunicate").removeClass("layui-hide");
 			$(".typeTender").removeClass("layui-hide");
 			$(".typeNegotiate").removeClass("layui-hide");
 			$(".typeTurnover").removeClass("layui-hide");
 			$(".typeLosingTable").removeClass("layui-hide");
 			$(".typeLayAside").removeClass("layui-hide");
-		}else if(parent.stateChangeData.state == '4'){//竞争与投标
+		} else if (parent.stateChangeData.state == '4'){//竞争与投标
 			$(".typeConmunicate").removeClass("layui-hide");
 			$(".typeQuotedPrice").removeClass("layui-hide");
 			$(".typeNegotiate").removeClass("layui-hide");
 			$(".typeTurnover").removeClass("layui-hide");
 			$(".typeLosingTable").removeClass("layui-hide");
 			$(".typeLayAside").removeClass("layui-hide");
-		}else if(parent.stateChangeData.state == '5'){//商务谈判
+		} else if (parent.stateChangeData.state == '5'){//商务谈判
 			$(".typeConmunicate").removeClass("layui-hide");
 			$(".typeTender").removeClass("layui-hide");
 			$(".typeQuotedPrice").removeClass("layui-hide");
 			$(".typeTurnover").removeClass("layui-hide");
 			$(".typeLosingTable").removeClass("layui-hide");
 			$(".typeLayAside").removeClass("layui-hide");
-		}else if(parent.stateChangeData.state == '8'){//商务谈判
+		} else if (parent.stateChangeData.state == '8'){//商务谈判
 			$(".typeConmunicate").removeClass("layui-hide");
 			$(".typeLosingTable").removeClass("layui-hide");
 		}

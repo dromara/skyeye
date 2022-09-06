@@ -64,7 +64,7 @@ var dsFormUtil = {
         var btnHtml = getDataUseHandlebars(dsFormUtil.dsFormBtnTemplate, {btnId: btnId});
         var str = "";
         var dsFormChooseList = JSON.parse($("#" + id).attr(dsFormUtil.dsFormDataKey));
-        $.each(dsFormChooseList, function(i, item){
+        $.each(dsFormChooseList, function(i, item) {
             str += '<br><a rowid="' + item.id + '" class="dsFormItem" href="javascript:;" style="color:blue;">' + item.pageName + '</a>';
         });
         str = btnHtml + str;
@@ -192,7 +192,7 @@ var dsFormUtil = {
      */
     savePageData: function (showBoxId, objectId){
         var result = {};
-        $.each($("#" + showBoxId + " .ds-form-page"), function (i, item){
+        $.each($("#" + showBoxId + " .ds-form-page"), function (i, item) {
             var _item = $(item);
             result[_item.attr("id")] = dsFormUtil.getPageData(_item);
         });
@@ -204,7 +204,7 @@ var dsFormUtil = {
         }, async: false});
     },
 
-    getPageData: function (_item){
+    getPageData: function (_item) {
         var list = new Array();
         for(var i = 0; i < _item.find(".layui-form-item").length; i++){
             var _this = _item.find(".layui-form-item").eq(i);
@@ -302,9 +302,9 @@ var dsFormUtil = {
                 bean: item
             };
             if(item.showType == 1){//文本展示
-            }else if(item.showType == 2){//附件展示
-            }else if(item.showType == 3){//富文本展示
-            }else if(item.showType == 4){//图片展示
+            } else if (item.showType == 2){//附件展示
+            } else if (item.showType == 3){//富文本展示
+            } else if (item.showType == 4){//图片展示
                 var photoValue = [];
                 if (!isNull(jsonStr.bean.text)){
                     photoValue = item.text.split(",");

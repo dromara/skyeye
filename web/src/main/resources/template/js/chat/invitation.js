@@ -29,7 +29,7 @@ layui.config({
 		 		hdb.registerHelper('compare1', function(v1, options) {
 		 			if(v1 == '1'){
 		 				return "邀请您加入群聊";
-		 			}else if(v1 == '2'){
+		 			} else if (v1 == '2'){
 		 				return "申请加入群聊";
 		 			} else {
 		 				return "参数错误";
@@ -39,9 +39,9 @@ layui.config({
 		 			if(v1 == '0'){
 		 				return '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal aggreIn" rowid="' + v2 + '">同意</button>' +
 		 						'<button type="button" class="layui-btn layui-btn-xs layui-btn-danger refuseIn" rowid="' + v2 + '">拒绝</button>';
-		 			}else if(v1 == '1'){
+		 			} else if (v1 == '1'){
 		 				return "<font>已同意</font>";
-		 			}else if(v1 == '2'){
+		 			} else if (v1 == '2'){
 		 				return "<font>已拒绝</font>";
 		 			} else {
 		 				return "参数错误";
@@ -64,7 +64,7 @@ layui.config({
 								groupname: json.bean.groupName, //群组名称
 								id: json.bean.id, //群组id
 							});
-						}else if(json.bean.inGroupType == '2'){//搜索账号进群
+						} else if (json.bean.inGroupType == '2'){//搜索账号进群
 							var sendMessage = {
 								to: json.bean.userId,//发送人id
 								type: 10,

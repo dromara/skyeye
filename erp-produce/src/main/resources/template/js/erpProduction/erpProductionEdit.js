@@ -72,14 +72,14 @@ layui.config({
 			//初始化工序
 			procedureMationList = [].concat(json.bean.procedureMationList);
 			var str = "";
-			$.each(procedureMationList, function(i, item){
+			$.each(procedureMationList, function(i, item) {
 				str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.departmentName + '</td></tr>';
 			});
 			$("#procedureBody").html(str);
 			//子件清单
 			childProList = [].concat(json.bean.childList);
 			$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: childProList}));
-			$.each(childProList, function(i, item){
+			$.each(childProList, function(i, item) {
 				$("#proposal" + item.productId).val(item.number);
 				//需求数量=生产数量*单位所需数量
 				$("#needNum" + item.productId).html(parseInt(json.bean.number) * parseInt(item.needNum));
@@ -144,7 +144,7 @@ layui.config({
 	    	if(isNaN(number)){
 	    		number = 0;
 	    	}
-	    	$.each(childProList, function(i, item){
+	    	$.each(childProList, function(i, item) {
 	    		//单位所需数量*生产数量-库存抵扣数量
 	    		var proposal = number * parseInt(item.needNum) - parseInt(item.deportAllTock);
 				$("#proposal" + item.productId).val(proposal < 0 ? 0 : proposal);
@@ -180,7 +180,7 @@ layui.config({
  	        	params.procedureJsonStr = JSON.stringify(procedureMationList);
  	        	//子件清单
  	        	var childList = [];
- 	        	$.each(childProList, function(i, item){
+ 	        	$.each(childProList, function(i, item) {
  	        		childList.push({
  	        			materialId: item.productId,
  	        			normsId: item.normsId,
@@ -230,7 +230,7 @@ layui.config({
 
 		function loadProcedureMation(){
 			var str = "";
-			$.each(procedureMationList, function(i, item){
+			$.each(procedureMationList, function(i, item) {
 				str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.departmentName + '</td></tr>';
 			});
 			$("#procedureBody").html(str);

@@ -17,7 +17,7 @@ var shopUtil = {
     getEnableStateName: function (enabled){
         if(enabled == 1){
             return "<span class='state-up'>启用</span>";
-        }else if(enabled == 2){
+        } else if (enabled == 2){
             return "<span class='state-down'>禁用</span>";
         } else {
             return "<span class='state-error'>参数错误</span>";
@@ -33,9 +33,9 @@ var shopUtil = {
     getMemberCarEnableStateName: function (enabled){
         if(enabled == 1){
             return "<span class='state-up'>启用</span>";
-        }else if(enabled == 2){
+        } else if (enabled == 2){
             return "<span class='state-down'>禁用</span>";
-        }else if(enabled == 3){
+        } else if (enabled == 3){
             return "<span class='state-down'>已过户</span>";
         } else {
             return "<span class='state-error'>参数错误</span>";
@@ -65,7 +65,7 @@ var shopUtil = {
      * @returns {string}
      */
     getMealOrderStateName: function (data) {
-        if(data.cancleState == 1) {
+        if (data.cancleState == 1) {
             if (data.state == 1) {
                 return "<span class='state-down'>待支付</span>";
             } else if (data.state == 2) {
@@ -95,12 +95,12 @@ var shopUtil = {
      * @returns {string}
      */
     getKeepFitOrderStateName: function (data) {
-        if(data.cancleState == 1){
-            if(data.state == 1){
+        if (data.cancleState == 1){
+            if (data.state == 1){
                 return "<span class='state-down'>保养中</span>";
-            }else if(data.state == 2){
+            } else if (data.state == 2){
                 return "<span class='state-up'>待核销</span>";
-            }else if(data.state == 3){
+            } else if (data.state == 3){
                 return "<span class='state-up'>已核销</span>";
             }
         } else {

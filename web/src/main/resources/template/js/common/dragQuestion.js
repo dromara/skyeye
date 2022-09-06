@@ -85,7 +85,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 							+ getFileContent('tpl/common/dragQuestion/dragmodel/commonlyusedmodel/dateQuModel.tpl');
 			// 各种模板
 			_varioustemplates = getFileContent('tpl/common/dragQuestion/dwcommon/dwCommonEditRoot.tpl');
-		}else if(type == 2){
+		} else if (type == 2){
 			/**
 			 * 学校试卷模块
 			 */
@@ -251,7 +251,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 			if(type == 1){
 				// 问卷
 				method = layui.survey["SAVEQUS"];
-			}else if(type == 2){
+			} else if (type == 2){
 				// 试卷
 				method = layui.exam["SAVEQUS"];
 			}
@@ -371,17 +371,17 @@ layui.define(["jquery", "form", "element"], function(exports) {
 					prevLi = nextLi.prev();
 					var prevLiHtml = prevLi.html();
 					nextLiAfterHtml = "<li class='quCoItemUlLi'>" + prevLiHtml + "</li>";
-				}else if(quType === "SCORE"){
+				} else if (quType === "SCORE"){
 					nextLi = $(curEditObj).parents("tr.quScoreOptionTr");
 					prevLi = nextLi.prev();
 					var prevLiHtml = prevLi.html();
 					nextLiAfterHtml = "<tr class='quScoreOptionTr'>" + prevLiHtml + "</tr>";
-				}else if(quType === "MULTIFILLBLANK"){
+				} else if (quType === "MULTIFILLBLANK"){
 					nextLi = $(curEditObj).parents("tr.mFillblankTableTr");
 					prevLi = nextLi.prev();
 					var prevLiHtml = prevLi.html();
 					nextLiAfterHtml = "<tr class='mFillblankTableTr'>" + prevLiHtml + "</tr>";
-				}else if(quType === "CHENRADIO" || quType === "CHENCHECKBOX" || quType === "CHENSCORE" || quType === "CHENFBK"){
+				} else if (quType === "CHENRADIO" || quType === "CHENCHECKBOX" || quType === "CHENSCORE" || quType === "CHENFBK"){
 					nextLi = $(curEditObj).parents("tr.quChenRowTr");
 					if(nextLi[0]){
 						prevLi = nextLi.prev();
@@ -445,17 +445,17 @@ layui.define(["jquery", "form", "element"], function(exports) {
 					nextLi = prevLi.next();
 					var nextLiHtml = nextLi.html();
 					prevLiBeforeHtml = "<li class='quCoItemUlLi'>" + nextLiHtml + "</li>";
-				}else if(quType === "SCORE"){
+				} else if (quType === "SCORE"){
 					prevLi = $(curEditObj).parents("tr.quScoreOptionTr");
 					nextLi = prevLi.next();
 					var nextLiHtml = nextLi.html();
 					prevLiBeforeHtml = "<tr class='quScoreOptionTr'>" + nextLiHtml + "</tr>";
-				}else if(quType === "MULTIFILLBLANK"){
+				} else if (quType === "MULTIFILLBLANK"){
 					prevLi = $(curEditObj).parents("tr.mFillblankTableTr");
 					nextLi = prevLi.next();
 					var nextLiHtml = nextLi.html();
 					prevLiBeforeHtml = "<tr class='mFillblankTableTr'>" + nextLiHtml + "</tr>";
-				}else if(quType === "CHENRADIO" || quType === "CHENCHECKBOX" || quType === "CHENSCORE" || quType === "CHENFBK"){
+				} else if (quType === "CHENRADIO" || quType === "CHENCHECKBOX" || quType === "CHENSCORE" || quType === "CHENFBK"){
 					prevLi = $(curEditObj).parents("tr.quChenRowTr");
 					if(prevLi[0]){
 						nextLi = prevLi.next();
@@ -497,7 +497,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 		
 		$("body").on("change", ".hat_province", function() {
 			var thVal = $(this).val();
-			$.each(addrs, function(i, item){
+			$.each(addrs, function(i, item) {
 				var province = item.province;
 				if(province === thVal){
 					var citys = item.citys;
@@ -514,7 +514,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 		$("body").on("change", ".hat_city", function() {
 			var thProvince = $(this).prev().val();
 			var thCity = $(this).val();
-			$.each(addrs, function(i, item){
+			$.each(addrs, function(i, item) {
 				var province = item.province;
 				if(province === thProvince){
 					var citys = item.citys;
@@ -569,22 +569,22 @@ layui.define(["jquery", "form", "element"], function(exports) {
 			var quType = quItemBody.find("input[name='quType']").val();
 			var areaVal = $("#dwQuMoreTextarea").val();
 			var areaValSplits = areaVal.split("\n");
-			$.each(areaValSplits, function(i,item){
+			$.each(areaValSplits, function(i,item) {
 				item = $.trim(item);
 				if(item != ""){
 					if(quType == "RADIO"){
 						// 添加单选选项
 						addRadioItem(quItemBody, item);
-					}else if(quType == "CHECKBOX"){
+					} else if (quType == "CHECKBOX"){
 						// 添加多选选项
 						addCheckboxItem(quItemBody, item);	
-					}else if(quType == "SCORE"){
+					} else if (quType == "SCORE"){
 						addScoreItem(quItemBody, item);
-					}else if(quType == "ORDERBY"){
+					} else if (quType == "ORDERBY"){
 						addOrderquItem(quItemBody, item);
-					}else if(quType == "MULTIFILLBLANK"){
+					} else if (quType == "MULTIFILLBLANK"){
 						addMultiFillblankItem(quItemBody, item);
-					}else if(quType == "CHENRADIO" || quType == "CHENCHECKBOX" || quType == "CHENFBK" || quType == "CHENSCORE"){
+					} else if (quType == "CHENRADIO" || quType == "CHENCHECKBOX" || quType == "CHENFBK" || quType == "CHENSCORE"){
 						addChenItem(dwDialogObj, quItemBody, item);
 					}
 				}
@@ -840,7 +840,7 @@ function getJSUrlParam() {
     var js = document.getElementsByTagName("script");
     // 得到当前引用a.js一行的script，并把src用'?'分隔成数组
     var indexJs = 0;
-    $.each(js, function(i, item){
+    $.each(js, function(i, item) {
     	if(item.src.indexOf("dragQuestion.js") >= 0){
     		indexJs = i;
     		return false;
@@ -1083,7 +1083,7 @@ function resetQuLeftItem(){
 			if(type == 1){
 				// 问卷
 				sa += '<h2 class=""><a href="#' + id + '" class="ellipsis" toid="' + id + '">' + (indexNum++) + '、' + title + '</a></h2>';
-			}else if(type == 2){
+			} else if (type == 2){
 				// 学校试卷
 				var fraction = $(this).find("input[name='fraction']").val();
 				sa += '<h2 class=""><a href="#' + id + '" class="ellipsis" toid="' + id + '">' + (indexNum++) + '、' + title + '</a>' +
@@ -1219,13 +1219,13 @@ function editAble(editAbleObj){
 	if(thClass.indexOf("quCoTitleEdit") > 0){
 		//题目标题
 		$("#dwCommonEditRoot").addClass("quEdit");
-	}else if(thClass.indexOf("quCoOptionEdit") > 0){
+	} else if (thClass.indexOf("quCoOptionEdit") > 0){
 		//题目选项
 		$("#dwCommonEditRoot").addClass("quOptionEdit");
-	}else if(thClass.indexOf("dwSvyNoteEdit") >= 0){
+	} else if (thClass.indexOf("dwSvyNoteEdit") >= 0){
 		//问卷欢迎语
 		$("#dwCommonEditRoot").addClass("svyNoteEdit");
-	}else if(thClass.indexOf("dwSvyName") >= 0){
+	} else if (thClass.indexOf("dwSvyName") >= 0){
 		$("#dwCommonEditRoot").addClass("svyName");
 	}
 	$("#dwCommonEditRoot").show();
@@ -1259,7 +1259,7 @@ function editAble(editAbleObj){
  * 加载地域
  */
 function loadAddr(){
-	$.each(addrs, function(i, item){
+	$.each(addrs, function(i, item) {
 		var province = item.province;
 		$(".hat_province").append("<option value='" + province + "'>" + province + "</option>");
 	});
@@ -1302,7 +1302,7 @@ function showDialog(thDialogObj){
 	$("#dwCommonDialog .dwQuDialogCon").hide();
 	if(thObjClass.indexOf("addMoreOption") >= 0){
 		$("#dwCommonDialog .dwQuAddMore").show();
-	}else if(thObjClass.indexOf("dwQuSet") >= 0){
+	} else if (thObjClass.indexOf("dwQuSet") >= 0){
 		$("#dwCommonDialog .dwQuSetCon").show();
 		var quType = quItemBody.find("input[name='quType']").val();
 		var isRequired = quItemBody.find("input[name='isRequired']").val();
@@ -1344,15 +1344,15 @@ function showDialog(thDialogObj){
 		if(quType === "RADIO" || quType === "CHECKBOX"){
 			$("#dwCommonDialog .optionAutoOrder").show();
 			$("#dwCommonDialog .optionRangeHv").show();
-		}else if(quType === "ORDERBY"){
+		} else if (quType === "ORDERBY"){
 			$("#dwCommonDialog .optionAutoOrder").show();
-		}else if(quType === "SCORE"){
+		} else if (quType === "SCORE"){
 			$("#dwCommonDialog .optionAutoOrder").show();
 			$("#dwCommonDialog .scoreMinMax").show();
 			if(paramInt02[0]){
 				$("#dwCommonDialog .scoreMinMax .maxScore").val(paramInt02.val());
 			}
-		}else if(quType === "MULTIFILLBLANK"){
+		} else if (quType === "MULTIFILLBLANK"){
 			$("#dwCommonDialog .optionAutoOrder").show();
 			$("#dwCommonDialog .minMaxLi").show();
 			$("#dwCommonDialog .minMaxLi .minSpan .lgleftLabel").text("最少回答");
@@ -1372,9 +1372,9 @@ function showDialog(thDialogObj){
 				$("#dwCommonDialog select[name='setContactsField']").val(contactsField);
 			}
 		}
-	}else if(thObjClass.indexOf("dwQuLogic") >= 0){
+	} else if (thObjClass.indexOf("dwQuLogic") >= 0){
 		$("#dwCommonDialog .dwQuDialogLoad").show();
-	}else if(thObjClass.indexOf("dwFbMenuBtn") >= 0){
+	} else if (thObjClass.indexOf("dwFbMenuBtn") >= 0){
 		$("#dwCommonDialog .dwQuFillDataTypeOption").show();
 		var checkType_val = quItemBody.find("input[name='checkType']").val();
 		if(checkType_val == ""){
@@ -1382,7 +1382,7 @@ function showDialog(thDialogObj){
 		}
 		var checkType = $("#dwCommonDialog select[name='quFill_checkType']");
 		checkType.val(checkType_val);
-	}else if(thObjClass.indexOf("quCoOptionEdit") >= 0){
+	} else if (thObjClass.indexOf("quCoOptionEdit") >= 0){
 		$("#dwCommonDialog .dwQuRadioCheckboxOption").show();
 		// 设置回显值 isNote checkType
 		var quOption_isNote = $("#dwCommonDialog input[name='quOption_isNote']");
@@ -2059,7 +2059,7 @@ function setCurEditContent(dwEditHtml){
 	var thClass = $(curEditObj).attr("class");
 	if(dwEditHtml == "" && thClass.indexOf("dwSvyNoteEdit") < 0){
 		deleteDwOption();
-	}else if(dwEditHtml != curEditObjOldHtml){
+	} else if (dwEditHtml != curEditObjOldHtml){
 		//更新值
 		$(curEditObj).html(dwEditHtml);
 		//修改保存状态
@@ -2127,7 +2127,7 @@ function deleteDwOption(){
 		if(type == 1){
 			// 问卷
 			layui.survey[quType]();
-		}else if(type == 2){
+		} else if (type == 2){
 			// 试卷
 			layui.exam[quType]();
 		}

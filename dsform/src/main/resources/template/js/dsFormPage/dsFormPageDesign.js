@@ -29,14 +29,14 @@ layui.config({
  	}});
  	
  	// 加载新增加的控件信息
-    function loadNewControl(item){
+    function loadNewControl(item) {
     	if(item.associatedDataTypes == 1){//json串
 			var obj = item.aData;
 			if(typeof item.aData == 'string'){
 				obj = JSON.parse(item.aData);
 			}
 			item.context = getDataUseHandlebars(item.templateContent, obj);
-		}else if(item.associatedDataTypes == 2){//接口
+		} else if (item.associatedDataTypes == 2){//接口
 			AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params: {interfa: item.aData}, type: 'json', callback: function(j){
 				var obj = JSON.parse(j.bean.aData);
 				item.context = getDataUseHandlebars(item.templateContent, obj);
@@ -53,7 +53,7 @@ layui.config({
     }
 
 	function loadPageMation(json){
-		$.each(json.rows, function(i, item){
+		$.each(json.rows, function(i, item) {
 			if(parseInt(item.state) == 1){
 				// 加载非删除状态的数据
 				loadNewControl(item);
@@ -66,7 +66,7 @@ layui.config({
 	}
 
  	function loadFormItemDrop(){
- 		$.each($("#showForm").find(".layui-form-item"), function(i, item){
+ 		$.each($("#showForm").find(".layui-form-item"), function(i, item) {
  			var _this = $(item);
  			if(!_this.hasClass('form-group')){
  				_this.addClass('form-group');
@@ -141,7 +141,7 @@ layui.config({
 		var defaultData; //选择事件的默认数据
 		var tplContentVal; //数据展示模板的内容的值
 		var templateContent; //数据展示模板的内容
-		$.each(formPageControl, function(i, item){
+		$.each(formPageControl, function(i, item) {
 			if(item.id == id){
 				linkedData = item.linkedData;
 				templateContent = item.templateContent;
@@ -179,7 +179,7 @@ layui.config({
 				winui.window.msg('json串内容有误，请重新填写!', {icon: 2, time: 2000});
         		return false;
 			}
-    	}else if(linkedData == 2){
+    	} else if (linkedData == 2){
     		params.associatedDataTypes = "";
     		params.aData = "";
     	}
@@ -215,7 +215,7 @@ layui.config({
     	$(this).addClass("ui-sortable-placeholder-choose");
     	var rowid = $(this).attr("rowid");
     	var arr = [];
-    	$.each(jsonArray, function(i, item){
+    	$.each(jsonArray, function(i, item) {
 			if(item.id === rowid){
 				$("#btnBoxDesignForm").html(getDataUseHandlebars($("#controlItemEdit").html(), {bean: item}));
 				$("#deleteBtn").attr("rowid", rowid);
@@ -272,7 +272,7 @@ layui.config({
     $("body").on("click", "#deleteBtn", function (e) {
 		var rowid = $(this).attr("rowid");
 		$("#showForm div[rowid='" + rowid + "']").remove();
-		$.each(jsonArray, function(i, item){
+		$.each(jsonArray, function(i, item) {
 			if(item.id === rowid){
 				jsonArray[i].state = 0;
 			}
@@ -282,7 +282,7 @@ layui.config({
     
     function saveNodeData(data, rowid, arr){
     	var inDataIndex = -1;
-    	$.each(jsonArray, function(i, item){ 
+    	$.each(jsonArray, function(i, item) {
 			if(item.id === rowid){
 				inDataIndex = i;
 			}
@@ -375,7 +375,7 @@ layui.config({
     }
     
     function sortNodeData(){
-    	$.each(jsonArray, function(i, item){ 
+    	$.each(jsonArray, function(i, item) {
     		if(parseInt(item.state) == 1){
 	    		var inIndex = $("#showForm div[rowid='" + item.id + "']").index();
 	    		jsonArray[i].orderBy = inIndex / 2 + 1;
@@ -393,7 +393,7 @@ layui.config({
     	if(val == '1'){//Json串
     		$(".TypeIsTwo").addClass("layui-hide");
     		$(".TypeIsOne").removeClass("layui-hide");
-    	}else if(val == '2'){//接口
+    	} else if (val == '2'){//接口
     		$(".TypeIsTwo").removeClass("layui-hide");
     		$(".TypeIsOne").addClass("layui-hide");
     	} else {
@@ -402,7 +402,7 @@ layui.config({
     }
     
     // 初始化限制条件
-	function initRequire(item){
+	function initRequire(item) {
 		AjaxPostUtil.request({url: flowableBasePath + "dsformlimitrequirement006", params: {}, type: 'json', callback: function (json) {
 			var jsonStr = getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json);//模板和数据结合
 			$("#require").html(jsonStr);

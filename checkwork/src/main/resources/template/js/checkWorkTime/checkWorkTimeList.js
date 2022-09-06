@@ -37,18 +37,18 @@ layui.config({
 	        { field: 'type', title: '类型', width: 80, align: 'center', templet: function (d) {
 	        	if(d.type == '1'){
 	        		return "单休";
-	        	}else if(d.type == '2'){
+	        	} else if (d.type == '2'){
 	        		return "双休";
-	        	}else if(d.type == '3'){
+	        	} else if (d.type == '3'){
 	        		return "单双休";
-	        	}else if(d.type == '4'){
+	        	} else if (d.type == '4'){
 	        		return "自定义";
 	        	}
 	        }},
 	        { field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
 	        	if(d.state == '1'){
 	        		return "<span class='state-up'>启用</span>";
-	        	}else if(d.state == '2'){
+	        	} else if (d.state == '2'){
 	        		return "<span class='state-down'>禁用</span>";
 	        	}
 	        }},

@@ -39,7 +39,7 @@ layui.config({
 		var nameStr = new Array();
 		var insertCustomerNum = new Array();
 		var insertContactsNum = new Array();
-		$.each(rows, function(i, item){
+		$.each(rows, function(i, item) {
 			nameStr.push(item.yearMonth);
 			insertCustomerNum.push(item.insertCustomerNum);
 			insertContactsNum.push(item.insertContactsNum);

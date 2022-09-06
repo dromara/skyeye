@@ -68,7 +68,7 @@
 					{{# if(auth('1574644973457')){ }}
             			<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
 					{{# } }}
-				{{# }else if(d.state == '2'){ }} 
+				{{# } else if (d.state == '2'){ }}
 					{{# if(d.creater == '1'){ }}
 						{{# if(auth('1574644930825')){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="taskSplit">拆分</a>
@@ -80,7 +80,7 @@
 					{{# if(auth('1574645120584')){ }}
             			<a class="layui-btn layui-btn-xs" lay-event="executionOver">执行完成</a>
 					{{# } }}
-				{{# }else if(d.state == '11'){ }}
+				{{# } else if (d.state == '11'){ }}
 					{{# if(auth('1574644930825')){ }}
 						<a class="layui-btn layui-btn-xs" lay-event="taskSplit">拆分</a>
 					{{# } }}
@@ -90,7 +90,7 @@
 					{{# if(auth('1574645025398')){ }}
 						<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="cancellation">作废</a>
 					{{# } }}
-				{{# }else if(d.state == '3'){ }}
+				{{# } else if (d.state == '3'){ }}
 					{{# if(d.creater == '1' && auth('1574645131746')){ }}
             			<a class="layui-btn layui-btn-xs" lay-event="executionClose">关闭</a>
 					{{# } }}

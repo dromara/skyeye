@@ -45,7 +45,7 @@ layui.config({
  			if(val == '2'){//审核通过
  				$("#reasonHide").addClass("layui-hide");
  				$("#examineNopassReason").val("");
- 			}else if(val == '3'){//审核不通过
+ 			} else if (val == '3'){//审核不通过
  				$("#reasonHide").removeClass("layui-hide");
  			} else {
  				winui.window.msg('状态值错误', {icon: 2, time: 2000});

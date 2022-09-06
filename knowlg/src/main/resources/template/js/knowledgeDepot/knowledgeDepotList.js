@@ -31,7 +31,7 @@ layui.config({
 			{ field: 'lavel', title: '标签', align: 'left', width: 250, templet: function (d) {
 				var lavel = isNull(d.label) ? [] : d.label.split(',');
 				var str = "";
-				$.each(lavel, function(i, item){
+				$.each(lavel, function(i, item) {
 					str += '<span class="layui-badge layui-bg-blue">' + item + '</span>';
 				});
 				return str;

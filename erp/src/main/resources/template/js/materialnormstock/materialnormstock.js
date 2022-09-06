@@ -61,7 +61,7 @@ layui.config({
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
 			var removeIndex = -1;
-			$.each(normsStock, function(i, item){
+			$.each(normsStock, function(i, item) {
 	    		if(item.depotId === data.depotId){
 	    			removeIndex = i;
 	    			return false;

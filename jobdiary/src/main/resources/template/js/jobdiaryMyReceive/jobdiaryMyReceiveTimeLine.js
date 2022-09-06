@@ -48,7 +48,7 @@ layui.config({
 						} else {
 							bean.showClass = 'date02';
 						}
-						$.each(bean.dayChild, function(i, item){
+						$.each(bean.dayChild, function(i, item) {
 							var content = "已完成工作：" + item.completedJob + "<br>";
 							if (!isNull(item.incompleteJob)){//未完成工作
 								content += "未完成工作：" + item.incompleteJob + "<br>";
@@ -56,14 +56,14 @@ layui.config({
 							if (!isNull(item.workSummary)){//工作总结
 								if(item.jobType === '2'){//周报
 									content += "本周工作总结：" + item.workSummary + "<br>";
-								}else if(item.jobType === '3'){//月报
+								} else if (item.jobType === '3'){//月报
 									content += "本月工作总结：" + item.workSummary + "<br>";
 								}
 							}
 							if (!isNull(item.nextPlan)){//工作计划
 								if(item.jobType === '2'){//周报
 									content += "下周工作计划：" + item.nextPlan + "<br>";
-								}else if(item.jobType === '3'){//月报
+								} else if (item.jobType === '3'){//月报
 									content += "下月工作计划：" + item.nextPlan + "<br>";
 								}
 							}

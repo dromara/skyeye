@@ -32,7 +32,7 @@ layui.config({
 			form.on('submit(formAddBean)', function (data) {
 				if (winui.verifyForm(data.elem)) {
 					var array = new Array();
-					$.each(chooseTeacherList, function(i, item){
+					$.each(chooseTeacherList, function(i, item) {
 						array.push({
 							userId: item.userId,
 							surveyId: parent.rowId

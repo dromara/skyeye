@@ -78,9 +78,9 @@
 						{{# if(d.createId == d.userId){ }}
 							{{# if((checkPlan === '1' || checkPlan == 1) && auth('1567561620738')){ }}
 								<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-							{{# }else if((checkPlan === '2' || checkPlan == 2) && auth('1567561630828')){ }}
+							{{# } else if ((checkPlan === '2' || checkPlan == 2) && auth('1567561630828')){ }}
 								<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-							{{# }else if((checkPlan === '3' || checkPlan == 3) && auth('1567561641410')){ }}
+							{{# } else if ((checkPlan === '3' || checkPlan == 3) && auth('1567561641410')){ }}
 								<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 							{{# } }}
 						{{# } }}
@@ -90,10 +90,10 @@
 						{{# if(d.whetherTimeState == '1' && d.createId == d.userId){ }}
 							{{# if(d.whetherTime > getFormatDate() && d.createId == d.userId && auth('1567561598407')){ }}
 								<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="cancleTiming">取消定时发送</a>
-							{{# }else if(d.whetherTime <= getFormatDate() && d.createId == d.userId && auth('1567561653003')){ }}
+							{{# } else if (d.whetherTime <= getFormatDate() && d.createId == d.userId && auth('1567561653003')){ }}
 								<a class="layui-btn layui-btn-xs" lay-event="timingSend">重置定时发送</a>
 							{{# } }}
-						{{# }else if(d.createId == d.userId && auth('1567561653003')){ }}
+						{{# } else if (d.createId == d.userId && auth('1567561653003')){ }}
 							<a class="layui-btn layui-btn-xs" lay-event="timingSend">定时发送</a>
 						{{# } }}
 			        </script>

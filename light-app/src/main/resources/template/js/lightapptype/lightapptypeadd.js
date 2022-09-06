@@ -19,7 +19,7 @@ layui.config({
 	    	if(val == '1'){//icon
 	    		$(".menuIconTypeIsTwo").addClass("layui-hide");
 	    		$(".menuIconTypeIsOne").removeClass("layui-hide");
-	    	}else if(val == '2'){//图片
+	    	} else if (val == '2'){//图片
 	    		$(".menuIconTypeIsTwo").removeClass("layui-hide");
 	    		$(".menuIconTypeIsOne").addClass("layui-hide");
 	    	} else {
@@ -44,9 +44,9 @@ layui.config({
         			typeName: $("#typeName").val(),
         			iconType: data.field.iconType
  	        	};
- 	        	if(data.field.iconType == '1'){
+ 	        	if (data.field.iconType == '1'){
  	        		params.iconPath = $("#iconPath").val();
- 	        	}else if(data.field.iconType == '2'){
+ 	        	} else if (data.field.iconType == '2'){
  	        		params.iconPath = $("#iconpicPath").find("input[type='hidden'][name='upload']").attr("oldurl");
  	        	} else {
  	        		winui.window.msg("状态值错误。", {icon: 2, time: 2000});

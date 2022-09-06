@@ -36,7 +36,7 @@ layui.config({
 
                 var options = j.bean.options;
                 // 加载属性值
-                $.each(options, function(i, item){
+                $.each(options, function(i, item) {
                     addRow();
                     $("#propertyId" + (rowNum - 1)).val(item.code);
                     $("input:radio[name='whetherEditor" + (rowNum - 1) + "'][value=" + item.editor + "]").attr("checked", true);

@@ -69,7 +69,7 @@ layui.config({
 		        { field: 'isShare', title: '共享', align: 'center', width: 80, templet: function (d) {
 		        	if(d.isShare == 0){
 		        		return '否';
-		        	}else if(d.isShare == 1){
+		        	} else if (d.isShare == 1){
 		        		return '是';
 		        	} else {
 		        		return '参数错误';

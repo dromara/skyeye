@@ -22,7 +22,7 @@ layui.config({
 		 		hdb.registerHelper("compare2", function(v1, options){
 					if(v1 == '2'){//公开分享
 						return 'checked';
-					}else if(v1 == '1'){//不分享
+					} else if (v1 == '1'){//不分享
 						return '';
 					} else {
 						return '';
@@ -31,7 +31,7 @@ layui.config({
 		 		hdb.registerHelper("compare3", function(v1, options){
 					if(v1 == '2'){//公开分享
 						return 'true';
-					}else if(v1 == '1'){//不分享
+					} else if (v1 == '1'){//不分享
 						return 'false';
 					} else {
 						return 'false';
@@ -57,7 +57,7 @@ layui.config({
 		        			title: $("#title").val(),
 			        	};
 			        	
-			        	if(data.field.isShare){
+			        	if (data.field.isShare){
 			        		params.isShare = '2';
 			        	} else {
 			        		params.isShare = '1';

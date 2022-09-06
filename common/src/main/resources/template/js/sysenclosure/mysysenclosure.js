@@ -120,7 +120,7 @@ layui.config({
 		fileType = data.fileType;
 		fileId = data.id;
 		var _title = "";
-		if(data.fileType === 'folder'){
+		if (data.fileType === 'folder'){
 			_title = "编辑文件夹";
 		} else {
 			_title = "编辑文件";

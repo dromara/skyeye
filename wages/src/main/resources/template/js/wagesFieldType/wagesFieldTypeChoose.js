@@ -35,7 +35,7 @@ layui.config({
 				{ field: 'monthlyClearing', title: '月度清零', align: 'center', width: 80, templet: function (d) {
 					if(d.monthlyClearing == '1'){
 						return "是";
-					}else if(d.monthlyClearing == '2'){
+					} else if (d.monthlyClearing == '2'){
 						return "否";
 					} else {
 						return "-";
@@ -44,7 +44,7 @@ layui.config({
 				{ field: 'wagesType', title: '字段类型', align: 'center', width: 80, templet: function (d) {
 					if(d.wagesType == '1'){
 						return "<span class='state-up'>薪资增加</span>";
-					}else if(d.wagesType == '2'){
+					} else if (d.wagesType == '2'){
 						return "<span class='state-down'>薪资减少</span>";
 					} else {
 						return "-";
@@ -78,7 +78,7 @@ layui.config({
 			if(fieldType == 1){
 				$(".customType").show();
 				refreshTable();
-			}else if(fieldType == 2){
+			} else if (fieldType == 2){
 				$(".customType").hide();
 				table.reloadData("messageTable", {
 					url: sysMainMation.wagesBasePath + 'wages009',

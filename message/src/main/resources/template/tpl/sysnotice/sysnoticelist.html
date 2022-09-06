@@ -74,9 +74,9 @@
 						<a class="layui-btn layui-btn-xs" lay-event="timeup">定时上线</a>
 					{{# } }}
 				{{# } }}
-			{{# }else if(d.state == 2 && auth('1561973877111')){ }}
+			{{# } else if (d.state == 2 && auth('1561973877111')){ }}
 				<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="down">下线</a>
-			{{# }else if(d.state == 1){ }}
+			{{# } else if (d.state == 1){ }}
 				{{# if(auth('1561973892019')){ }}
             		<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 				{{# } }}

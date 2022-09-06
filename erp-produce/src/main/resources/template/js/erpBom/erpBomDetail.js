@@ -14,7 +14,7 @@ layui.config({
 			$("#showForm").html(getDataUseHandlebars($("#mainHtml").html(), json));
 			$.fn.zTree.init($("#treeDemo"), setting, json.bean.bomMaterialList);
 			loadTr();
-			$.each(json.bean.bomMaterialList, function(i, item){
+			$.each(json.bean.bomMaterialList, function(i, item) {
 				$("#allPrice" + item.productId).html(parseInt(item.needNum) * parseFloat(item.unitPrice));
 			});
 			matchingLanguage();

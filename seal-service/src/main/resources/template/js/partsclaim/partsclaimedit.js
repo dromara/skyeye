@@ -74,7 +74,7 @@ layui.config({
 			$("#remark").val(orderObject.bean.remark);//备注
 			$("#allPrice").html(orderObject.bean.allPrice.toFixed(2));//总金额
 			//渲染列表项
-			$.each(orderObject.bean.materials, function(i, item){
+			$.each(orderObject.bean.materials, function(i, item) {
 				addRow();
 				if(i == 0){
 					$("#depotId").val(item.depotId);

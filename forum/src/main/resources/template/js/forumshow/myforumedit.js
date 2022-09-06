@@ -29,7 +29,7 @@ layui.config({
 	 		hdb.registerHelper("compare4", function(v1, options){
 				if(v1 == '2'){
 					return 'checked';
-				}else if(v1 == '1'){
+				} else if (v1 == '1'){
 					return '';
 				} else {
 					return '';
@@ -38,7 +38,7 @@ layui.config({
 	 		hdb.registerHelper("compare5", function(v1, options){
 				if(v1 == '2'){
 					return 'true';
-				}else if(v1 == '1'){
+				} else if (v1 == '1'){
 					return 'false';
 				} else {
 					return 'false';
@@ -56,7 +56,7 @@ layui.config({
 	 		//贴子标签
 	 		var tagNames = [];
             tagList = [].concat(json.bean.tagName);
-            $.each(json.bean.tagName, function(i, item){
+            $.each(json.bean.tagName, function(i, item) {
                 tagNames.push(item.name);
             });
 			$('#tagId').tagEditor({

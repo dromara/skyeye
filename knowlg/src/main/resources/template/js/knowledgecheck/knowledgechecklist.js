@@ -36,7 +36,7 @@ layui.config({
 			$("#setting").find("a[rowid='nochecklist']").addClass('selected');
 			$("#noCheckForm").removeClass("layui-hide");
 			showNoCheckList();
-		}else if(auth('1568973377977')){//已审核
+		} else if (auth('1568973377977')){//已审核
 			$("#setting").find("a[rowid='checkedlist']").addClass('selected');
 			$("#checkedForm").removeClass("layui-hide");
 			showCheckedList();
@@ -219,7 +219,7 @@ layui.config({
 		        { field: 'state', title: '状态', width: 80, templet: function (d) {
 		        	if(d.state == '2'){
 		        		return "<span class='state-up'>已通过</span>";
-		        	}else if(d.state == '3'){
+		        	} else if (d.state == '3'){
 		        		return "<span class='state-down'>未通过</span>";
 		        	} else {
 		        		return "参数错误";

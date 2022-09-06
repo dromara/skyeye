@@ -24,7 +24,7 @@ layui.config({
 
 				var lavel = isNull(json.bean.label) ? [] : json.bean.label.split(',');
 				var str = "";
-				$.each(lavel, function(i, item){
+				$.each(lavel, function(i, item) {
 					str += '<span class="layui-badge layui-bg-blue">' + item + '</span>';
 				});
 				$('#label').html(str);

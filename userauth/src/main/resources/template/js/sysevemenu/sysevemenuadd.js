@@ -45,7 +45,7 @@ layui.config({
  			var val = data.value;
 	    	if(val == '1'){//创世菜单
 	    		$("#parentIdBox").addClass("layui-hide");
-	    	}else if(val == '2'){
+	    	} else if (val == '2'){
 	    		parentId = "0";
 	    		$("#lockParentSel").html("");
 	    		$("#parentIdBox").removeClass("layui-hide");
@@ -68,7 +68,7 @@ layui.config({
  		});
  		
  		form.on('select(selectParent)', function(data) {
-			if(data.value != parentId){
+			if (data.value != parentId){
 				if(isNull(data.value) || data.value == '请选择'){
 					layui.$(data.elem).parent('dd').nextAll().remove();
 					if(layui.$(data.elem).parent('dd').prev().children('select[class=menuParent]').length > 0){
@@ -101,9 +101,9 @@ layui.config({
 					return false;
 				}
  	        	
- 	        	if(data.field.menuLevel == '1'){//创世菜单
+ 	        	if (data.field.menuLevel == '1'){//创世菜单
  	        		params.parentId = '0';
- 	 	    	}else if(data.field.menuLevel == '2'){//子菜单
+ 	 	    	} else if (data.field.menuLevel == '2'){//子菜单
  	 	    		var $menu = layui.$('.menuParent');
  	 	    		var str = "";
 					for (var i = 0; i < $menu.length; i++) {

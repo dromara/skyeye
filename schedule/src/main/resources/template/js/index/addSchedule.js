@@ -126,7 +126,7 @@ layui.config({
  		
  		//日程类型
  		form.on('select(scheduleType)', function (data) {
- 			if(data.value == '5'){
+ 			if (data.value == '5'){
  				$("#scheduleTypeName").parent().parent().show();//自定义类型名称显示
  			} else {
  				$("#scheduleTypeName").parent().parent().hide();//自定义类型名称隐藏
@@ -146,7 +146,7 @@ layui.config({
         			typeName: $("#scheduleType option:selected").text(),
 					imported: data.field.scheduleImport,
  	        	};
-	        	if(data.field.allDay || data.field.allDay == 'true'){//全天
+	        	if (data.field.allDay || data.field.allDay == 'true'){//全天
 	        		if(isNull($("#scheduleStartTime").val())) {
 	        			layer.msg("请选择开始时间", {icon: 5, shift: 6});
 	        			return false;

@@ -67,16 +67,16 @@ layui.config({
 		if(subType == 10 || subType == 11){
 			// 采购订单，销售订单
 			icon = getErpOrderHeaderState(state);
-		}else if(subType == 1 || subType == 5 || subType == 15){
+		} else if (subType == 1 || subType == 5 || subType == 15){
 			// 采购入库，销售出库，验收入库单
 			icon = getErpHeaderState(state);
-		}else if(subType == 17){//加工单子单据（工序验收单）
+		} else if (subType == 17){//加工单子单据（工序验收单）
 			icon = getErpMachinChildState(state);
-		}else if(subType == 16){//加工单
+		} else if (subType == 16){//加工单
 			icon = getErpMachinHeaderState(state);
-		}else if(subType == 18){//生产计划单
+		} else if (subType == 18){//生产计划单
 			icon = getErpProductionHeaderState(state);
-		}else if(subType == 19 || subType == 20 || subType == 21){
+		} else if (subType == 19 || subType == 20 || subType == 21){
 			// 领料单/补料单/退料单
 			icon = getErpPickHeaderState(state);
 		}
@@ -101,9 +101,9 @@ layui.config({
 	function getStateName(icon){
 		if(icon == 'fa-spinner fa-spin'){
 			return '执行中';
-		}else if(icon == 'fa-times-circle'){
+		} else if (icon == 'fa-times-circle'){
 			return '执行异常';
-		}else if(icon == 'fa-check-circle'){
+		} else if (icon == 'fa-check-circle'){
 			return '完成';
 		}
 	}
@@ -116,9 +116,9 @@ layui.config({
 	function getStateCustom(icon){
 		if(icon == 'fa-spinner fa-spin'){
 			return icon + ' running';
-		}else if(icon == 'fa-times-circle'){
+		} else if (icon == 'fa-times-circle'){
 			return icon + ' error';
-		}else if(icon == 'fa-check-circle'){
+		} else if (icon == 'fa-check-circle'){
 			return icon + ' success';
 		}
 	}
@@ -134,9 +134,9 @@ layui.config({
 		// 0未审核、1.审核中、2.审核通过、3.审核拒绝、4.已转入库|出库，已完成
 		if(state == 0 || state == 1 || state == 2){
 			icon = "fa-spinner fa-spin";
-		}else if(state == 3){
+		} else if (state == 3){
 			icon = "fa-times-circle";
-		}else if(state == 4){
+		} else if (state == 4){
 			icon = "fa-check-circle";
 		}
 		return icon;
@@ -153,9 +153,9 @@ layui.config({
 		// 0未审核、1.审核中、2.审核通过、3.审核拒绝、4.已转入库|出库，已完成
 		if(state == 0 || state == 1 ){
 			icon = "fa-spinner fa-spin";
-		}else if(state == 3){
+		} else if (state == 3){
 			icon = "fa-times-circle";
-		}else if(state == 2 || state == 4){
+		} else if (state == 2 || state == 4){
 			icon = "fa-check-circle";
 		}
 		return icon;
@@ -171,9 +171,9 @@ layui.config({
 		// 状态  1.新建  2.审核中  3.审核通过  4.审核拒绝  5.已完成
 		if(state == 1 || state == 2 || state == 3){
 			icon = "fa-spinner fa-spin";
-		}else if(state == 4){
+		} else if (state == 4){
 			icon = "fa-times-circle";
-		}else if(state == 5){
+		} else if (state == 5){
 			icon = "fa-check-circle";
 		}
 		return icon;
@@ -189,7 +189,7 @@ layui.config({
 		// 状态  1.待验收  2.验收完成
 		if(state == 1){
 			icon = "fa-spinner fa-spin";
-		}else if(state == 2){
+		} else if (state == 2){
 			icon = "fa-check-circle";
 		}
 		return icon;
@@ -205,9 +205,9 @@ layui.config({
 		// 状态  0.删除  1.新建  2.审核中  3.审核通过  4.审核不通过  5.加工完成
 		if(state == 1 || state == 2 || state == 3){
 			icon = "fa-spinner fa-spin";
-		}else if(state == 4){
+		} else if (state == 4){
 			icon = "fa-times-circle";
-		}else if(state == 5){
+		} else if (state == 5){
 			icon = "fa-check-circle";
 		}
 		return icon;
@@ -223,9 +223,9 @@ layui.config({
 		// 状态  0未审核  1.审核中  2.审核通过-进行领料和退料  3.审核拒绝
 		if(state == 0 || state == 1){
 			icon = "fa-spinner fa-spin";
-		}else if(state == 3){
+		} else if (state == 3){
 			icon = "fa-times-circle";
-		}else if(state == 2){
+		} else if (state == 2){
 			icon = "fa-check-circle";
 		}
 		return icon;

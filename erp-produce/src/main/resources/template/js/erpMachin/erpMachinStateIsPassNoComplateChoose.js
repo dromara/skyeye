@@ -37,13 +37,13 @@ layui.config({
 	            { field: 'state', rowspan: '2', title: '状态', align: 'left', width: 80, templet: function (d) {
 			        if(d.state == '1'){
 		        		return "<span class='state-down'>未审核</span>";
-		        	}else if(d.state == '2'){
+		        	} else if (d.state == '2'){
 		        		return "<span class='state-up'>审核中</span>";
-		        	}else if(d.state == '3'){
+		        	} else if (d.state == '3'){
 		        		return "<span class='state-new'>审核通过</span>";
-		        	}else if(d.state == '4'){
+		        	} else if (d.state == '4'){
 		        		return "<span class='state-down'>拒绝通过</span>";
-		        	}else if(d.state == '5'){
+		        	} else if (d.state == '5'){
 		        		return "<span class='state-new'>已完成</span>";
 		        	} else {
 		        		return "参数错误";

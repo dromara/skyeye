@@ -122,9 +122,9 @@ var browser = UE.browser = function(){
         var v2 = agent.match(/(?:trident.*rv:([\w.]+))/);
         if(v1 && v2 && v1[1] && v2[1]){
             version = Math.max(v1[1]*1,v2[1]*1);
-        }else if(v1 && v1[1]){
+        } else if (v1 && v1[1]){
             version = v1[1]*1;
-        }else if(v2 && v2[1]){
+        } else if (v2 && v2[1]){
             version = v2[1]*1;
         } else {
             version = 0;
@@ -9587,7 +9587,7 @@ var filterNode = UE.filterNode = function () {
                 if(val = rules[node.tagName]){
                    if(val === '-'){
                        node.parentNode.removeChild(node)
-                   }else if(utils.isFunction(val)){
+                   } else if (utils.isFunction(val)){
                        var parentNode = node.parentNode,
                            index = node.getIndex();
                        val(node);
@@ -9749,7 +9749,7 @@ UE.plugin = function(){
                         })
                     }
 
-                }else if(plugin.afterDisabled){
+                } else if (plugin.afterDisabled){
                     plugin.afterDisabled.call(editor)
                 }
 
@@ -10299,7 +10299,7 @@ UE.commands['inserthtml'] = {
             if(domUtils.isFillChar(child)){
                 range.setStartBefore(child).collapse(true);
                 domUtils.remove(child);
-            }else if(domUtils.isFillChar(child,true)){
+            } else if (domUtils.isFillChar(child,true)){
                 child.nodeValue = child.nodeValue.replace(fillCharReg,'');
                 range.startOffset--;
                 range.collapsed && range.collapse(true)
@@ -12319,7 +12319,7 @@ UE.plugins['blockquote'] = function(){
                     for(var i=0,bi;bi=blockquotes[i++];){
                         if(!bi.childNodes.length){
                             domUtils.remove(bi);
-                        }else if(domUtils.getPosition(bi,startBlock)&domUtils.POSITION_FOLLOWING && domUtils.getPosition(bi,endBlock)&domUtils.POSITION_PRECEDING){
+                        } else if (domUtils.getPosition(bi,startBlock)&domUtils.POSITION_FOLLOWING && domUtils.getPosition(bi,endBlock)&domUtils.POSITION_PRECEDING){
                             domUtils.remove(bi,true);
                         }
                     }
@@ -12990,7 +12990,7 @@ UE.plugins['horizontal'] = function(){
 //                var next = hr.nextSibling;
 //                if(next){
 //                    rng.setStart(next,0)
-//                }else if(hr.previousSibling){
+//                } else if (hr.previousSibling){
 //                    rng.setStartAtLast(hr.previousSibling)
 //                } else {
 //                    var p = this.document.createElement('p');
@@ -13262,12 +13262,12 @@ UE.plugins['insertcode'] = function() {
                             if(node.type =='element'){
                                 if(node.tagName == 'br'){
                                     code += '\n'
-                                }else if(!dtd.$empty[node.tagName]){
+                                } else if (!dtd.$empty[node.tagName]){
                                     utils.each(node.children,function(cn){
                                         if(cn.type =='element'){
                                             if(cn.tagName == 'br'){
                                                 code += '\n'
-                                            }else if(!dtd.$empty[node.tagName]){
+                                            } else if (!dtd.$empty[node.tagName]){
                                                 code += cn.innerText();
                                             }
                                         } else {
@@ -13290,12 +13290,12 @@ UE.plugins['insertcode'] = function() {
                                 if(node.type =='element'){
                                     if(node.tagName == 'br'){
                                         code += '<br>'
-                                    }else if(!dtd.$empty[node.tagName]){
+                                    } else if (!dtd.$empty[node.tagName]){
                                         utils.each(node.children,function(cn){
                                             if(cn.type =='element'){
                                                 if(cn.tagName == 'br'){
                                                     code += '<br>'
-                                                }else if(!dtd.$empty[node.tagName]){
+                                                } else if (!dtd.$empty[node.tagName]){
                                                     code += cn.innerText();
                                                 }
                                             } else {
@@ -13616,12 +13616,12 @@ UE.plugins['insertcode'] = function() {
                     if(node.type =='element'){
                         if(node.tagName == 'br'){
                             htmlstr += '\n'
-                        }else if(!dtd.$empty[node.tagName]){
+                        } else if (!dtd.$empty[node.tagName]){
                             utils.each(node.children,function(cn){
                                 if(cn.type =='element'){
                                     if(cn.tagName == 'br'){
                                         htmlstr += '\n'
-                                    }else if(!dtd.$empty[node.tagName]){
+                                    } else if (!dtd.$empty[node.tagName]){
                                         htmlstr += cn.innerText();
                                     }
                                 } else {
@@ -13648,13 +13648,13 @@ UE.plugins['insertcode'] = function() {
                     if(node.type =='element'){
                         if(node.tagName == 'br'){
                             frag.appendChild(me.document.createElement('br'))
-                        }else if(!dtd.$empty[node.tagName]){
+                        } else if (!dtd.$empty[node.tagName]){
                             utils.each(node.children,function(cn){
                                 if(cn.type =='element'){
                                     if(cn.tagName == 'br'){
 
                                         frag.appendChild(me.document.createElement('br'))
-                                    }else if(!dtd.$empty[node.tagName]){
+                                    } else if (!dtd.$empty[node.tagName]){
                                         frag.appendChild(me.document.createTextNode(utils.html(cn.innerText().replace(/&nbsp;/g,' '))));
 
                                     }
@@ -15075,7 +15075,7 @@ UE.plugins['list'] = function () {
                                 domUtils.remove(pn);
                                 rng.setStartAtLast(node).collapse(true);
                                 rng.select(true);
-                            }else if(node = pn.nextSibling){
+                            } else if (node = pn.nextSibling){
                                 domUtils.remove(pn);
                                 rng.setStartAtFirst(node).collapse(true);
                                 rng.select(true);
@@ -15346,7 +15346,7 @@ UE.plugins['list'] = function () {
                                 case 'cn2':
                                     if(index > 10 && (index % 10 == 0 || index > 10 && index < 20)){
                                         paddingLeft = 2
-                                    }else if(index > 20){
+                                    } else if (index > 20){
                                         paddingLeft = 3
                                     }
                                     break;
@@ -17361,7 +17361,7 @@ UE.plugin.register('autolink',function(){
                             }
                         }
                     }
-                }else if(keyCode == 32 ){
+                } else if (keyCode == 32 ){
                     if(start.nodeType == 3 && /^\s$/.test(start.nodeValue)){
                         start = start.previousSibling;
                         if(start && start.nodeName == 'A' && !start.getAttribute('_href')){
@@ -17491,7 +17491,7 @@ UE.plugins['autoheight'] = function () {
         window.onscroll = function(){
             if(lastScrollY === null){
                 lastScrollY = this.scrollY
-            }else if(this.scrollY == 0 && lastScrollY != 0){
+            } else if (this.scrollY == 0 && lastScrollY != 0){
                 me.window.scrollTo(0,0);
                 lastScrollY = null;
             }
@@ -22924,7 +22924,7 @@ UE.plugin.register('searchreplace',function(){
                         'index': currentNodeLength - (currentIndex - index)
                     }
                 }
-            }else if(!dtd.$empty[currentNode.tagName]){
+            } else if (!dtd.$empty[currentNode.tagName]){
                 currentNodeLength = currentNode[browser.ie ? 'innerText' : 'textContent'].replace(/(^[\t\r\n]+)|([\t\r\n]+$)/,'').length
                 currentIndex += currentNodeLength;
                 if(currentIndex >= index){
@@ -23011,7 +23011,7 @@ UE.plugin.register('searchreplace',function(){
                         if(first && first.nodeType == 1){
                             rng.setStart(first,0);
                             rng.shrinkBoundary(true);
-                        }else if(first.nodeType == 3){
+                        } else if (first.nodeType == 3){
                             rng.setStartBefore(first)
                         }
                         rng.collapse(true).select(true);
@@ -24636,7 +24636,7 @@ UE.plugin.register('simpleupload', function (){
                             body = (iframe.contentDocument || iframe.contentWindow.document).body,
                             result = body.innerText || body.textContent || '';
                         link = me.options.imageUrlPrefix + data.url;
-                        if(data.state == 'SUCCESS' && data.url) {
+                        if (data.state == 'SUCCESS' && data.url) {
                             loader = me.document.getElementById(loadingId);
                             loader.setAttribute('src', link);
                             loader.setAttribute('_src', link);

@@ -34,7 +34,7 @@ layui.config({
 
 		 		var userNames = [];
 		 		userList = [].concat(json.bean.assetAdmin);
-		 		$.each(json.bean.assetAdmin, function(i, item){
+		 		$.each(json.bean.assetAdmin, function(i, item) {
 		 			userNames.push(item.name);
 		 		});
 		 		// 管理人员选择

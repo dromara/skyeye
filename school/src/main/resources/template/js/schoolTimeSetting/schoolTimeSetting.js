@@ -28,7 +28,7 @@ layui.config({
 			ajaxSendLoadBefore: function(hdb, json) {
 			},
 			ajaxSendAfter: function(json) {
-				$.each(json.bean.timeList, function(i, item){
+				$.each(json.bean.timeList, function(i, item) {
 					if (!isNull(item.startTime) && !isNull(item.endTime)){
 						$("#" + item.gradeId + '_' + item.semesterId).val(item.startTime + ' ~ ' + item.endTime);
 					}

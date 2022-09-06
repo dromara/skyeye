@@ -60,7 +60,7 @@ layui.config({
 		if(checkType == '2'){
 			//初始化值
 			var ids = [];
-			$.each(parent.chooseTeacherList, function(i, item){
+			$.each(parent.chooseTeacherList, function(i, item) {
 				ids.push(item.staffId);
 			});
 			tableCheckBoxUtil.setIds({

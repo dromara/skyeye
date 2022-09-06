@@ -24,12 +24,12 @@ layui.config({
 	
 	$("#echartsPie").hide();
 	form.on('radio(type)', function (data) {        
-       if(data.value == "image"){
+       if (data.value == "image"){
     	   isTable = false;
     	   $("#tableList").hide();
     	   $("#echartsPie").show();
     	   getPieData();
-       }else if(data.value == "table"){
+       } else if (data.value == "table"){
     	   isTable = true;
     	   $("#echartsPie").hide();
     	   $("#tableList").show();
@@ -71,7 +71,7 @@ layui.config({
 	 	pagination: false,
 	 	template: selTemplate,
 	 	ajaxSendLoadBefore: function(hdb, json){
-	 		$.each(json.rows, function(i, item){
+	 		$.each(json.rows, function(i, item) {
 	 			item.name = item.title + ' [' + item.startTime + ' ~ ' + item.endTime + ']';
 	 		});
 	 	},
@@ -174,15 +174,15 @@ layui.config({
 		var title = "";
 		if(detailType === "1"){
 			title = userName + " " + startTime + "至" + endTime + "的全勤详情";
-		}else if(detailType === "2"){
+		} else if (detailType === "2"){
 			title = userName + " " + startTime + "至" + endTime + "的缺勤详情";
-		}else if(detailType === "3"){
+		} else if (detailType === "3"){
 			title = userName + " " + startTime + "至" + endTime + "的工时不足详情";
-		}else if(detailType === "4"){
+		} else if (detailType === "4"){
 			title = userName + " " + startTime + "至" + endTime + "的迟到详情";
-		}else if(detailType === "5"){
+		} else if (detailType === "5"){
 			title = userName + " " + startTime + "至" + endTime + "的早退详情";
-		}else if(detailType === "6"){
+		} else if (detailType === "6"){
 			title = userName + " " + startTime + "至" + endTime + "的漏签详情";
 		}
 		reportparams = {
@@ -431,15 +431,15 @@ layui.config({
     		var echartstype = "";
     		if(name == "全勤"){
     			echartstype = 1;
-    		}else if(name == "缺勤"){
+    		} else if (name == "缺勤"){
     			echartstype = 2;
-    		}else if(name == "工时不足"){
+    		} else if (name == "工时不足"){
     			echartstype = 3;
-    		}else if(name == "迟到"){
+    		} else if (name == "迟到"){
     			echartstype = 4;
-    		}else if(name == "早退"){
+    		} else if (name == "早退"){
     			echartstype = 5;
-    		}else if(name == "漏签"){
+    		} else if (name == "漏签"){
     			echartstype = 6;
     		} else {
     			return false;

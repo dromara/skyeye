@@ -24,11 +24,11 @@ layui.config({
 		 		type = json.bean.type;
 		 		if(type == 1){
 		    		resetSingleBreak();
-		    	}else if(type == 2){
+		    	} else if (type == 2){
 		    		resetWeekend();
-		    	}else if(type == 3){
+		    	} else if (type == 3){
 		    		resetSingleAndDoubleBreak();
-		    	}else if(type == 4){
+		    	} else if (type == 4){
 		    		resetCustomizeDay(json.bean.days);
 		    	}
 		 		$("input:radio[name=type][value=" + type + "]").attr("checked", true);
@@ -119,11 +119,11 @@ layui.config({
 		 			type = data.value;
 			    	if(type == 1){
 			    		resetSingleBreak();
-			    	}else if(type == 2){
+			    	} else if (type == 2){
 			    		resetWeekend();
-			    	}else if(type == 3){
+			    	} else if (type == 3){
 			    		resetSingleAndDoubleBreak();
-			    	}else if(type == 4){
+			    	} else if (type == 4){
 			    		resetCustomize();
 			    	}
 		        });
@@ -205,11 +205,11 @@ layui.config({
  	    function getWeekDay(){
  	    	if(type == 1){
  	    		return getSingleBreak();
- 	    	}else if(type == 2){
+ 	    	} else if (type == 2){
  	    		return getWeekend();
- 	    	}else if(type == 3){
+ 	    	} else if (type == 3){
  	    		return getSingleAndDoubleBreak();
- 	    	}else if(type == 4){
+ 	    	} else if (type == 4){
  	    		return getCustomize();
  	    	}
  	    	return null;
@@ -258,14 +258,14 @@ layui.config({
  	    // 获取自定义的每周的上班日
  	    function getCustomize(){
  	    	var result = new Array();
- 	    	$.each($(".weekDay"), function(i, item){
+ 	    	$.each($(".weekDay"), function(i, item) {
  	    		var clas = getArrIndexOfPointStr(checkWorkTimeColor, $(item).attr("class"));
     			if('layui-bg-blue' == clas){
     				result.push({
 	 	    			day: $(item).attr("value"),
 	 	    			type: 1
 	 	    		});
-    			}else if('layui-bg-orange' == clas){
+    			} else if ('layui-bg-orange' == clas){
     				result.push({
 	 	    			day: $(item).attr("value"),
 	 	    			type: 2

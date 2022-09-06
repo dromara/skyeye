@@ -557,7 +557,7 @@ baidu.swf.getMovie = function (name) {
 	var movie = document[name], ret;
     return baidu.browser.ie == 9 ?
     	movie && movie.length ? 
-    		(ret = baidu.array.remove(baidu.lang.toArray(movie),function(item){
+    		(ret = baidu.array.remove(baidu.lang.toArray(movie),function(item) {
     			return item.tagName.toLowerCase() != "embed";
     		})).length == 1 ? ret[0] : ret
     		: movie
@@ -603,7 +603,7 @@ baidu.flash._Base = (function(){
         var result = null;
         
         callQueue = callQueue.reverse();
-        baidu.each(callQueue, function(item){
+        baidu.each(callQueue, function(item) {
             result = target.call(item.fnName, item.params);
             item.callBack(result);
         });
@@ -625,7 +625,7 @@ baidu.flash._Base = (function(){
             };
 
             return name;
-        }else if(baidu.lang.isString){
+        } else if (baidu.lang.isString){
             return fun;
         }
     };
@@ -964,7 +964,7 @@ baidu.flash.fileUploader = baidu.flash.fileUploader || function(options){
         index.sort(function(a,b){
             return b-a;
         });
-        baidu.each(index, function(item){
+        baidu.each(index, function(item) {
             _flash.call('deleteFileBy', item, callBackAll);
         });
     };

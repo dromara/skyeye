@@ -276,7 +276,7 @@ layui.config({
 			initFolderName(folderId);
 			// 加载目录下的文件
 			loadThisFolderChild();
-		}else if($.inArray(fileType, vedioType) >= 0){//视频
+		} else if ($.inArray(fileType, vedioType) >= 0){//视频
 			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
 				fileUrl = json.bean.fileAddress;
 				fileThumbnail = json.bean.fileThumbnail;
@@ -287,14 +287,14 @@ layui.config({
 					area: ['80vw', '80vh'],
 					callBack: function (refreshCode) {}});
     		}});
-		}else if($.inArray(fileType, officeType) >= 0){//office文件
+		} else if ($.inArray(fileType, officeType) >= 0){//office文件
 			var thisId = $(this).attr("rowid");
 			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: thisId}, type: 'json', callback: function (json) {
 				fileUrl = json.bean.fileAddress;
 				selFileType = json.bean.fileType;
 				window.open(sysMainMation.homePagePath + "/tpl/fileconsole/officeshow.html?fileUrl=" + fileUrl + "&selFileType=" + selFileType + "&title=" + json.bean.fileName + "&thisId=" + thisId);
     		}});
-		}else if($.inArray(fileType, aceType) >= 0){//ace文件
+		} else if ($.inArray(fileType, aceType) >= 0){//ace文件
 			var thisId = $(this).attr("rowid");
 			_openNewWindows({
 				url: sysMainMation.diskCloudBasePath + "fileconsole024?rowId=" + thisId,
@@ -302,7 +302,7 @@ layui.config({
 				pageId: "aceShow",
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {}});
-		}else if($.inArray(fileType, epubType) >= 0){//电子书
+		} else if ($.inArray(fileType, epubType) >= 0){//电子书
 			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
 				fileUrl = json.bean.fileAddress;
 				fileThumbnail = json.bean.fileThumbnail;
@@ -313,7 +313,7 @@ layui.config({
 					area: ['90vw', '90vh'],
 					callBack: function (refreshCode) {}});
     		}});
-		}else if($.inArray(fileType, packageType) >= 0){//压缩包
+		} else if ($.inArray(fileType, packageType) >= 0){//压缩包
 			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
 				fileUrl = json.bean.fileAddress;
 				fileThumbnail = json.bean.fileThumbnail;
@@ -383,7 +383,7 @@ layui.config({
 			layer.close(index);
 			var checkItems = $("#file-content .menu-folder .item-select .item-check").find("input:checkbox[name='checkFile']:checked");
 			var deleteArray = new Array();
-			$.each(checkItems, function(i, item){
+			$.each(checkItems, function(i, item) {
 				var checkFile = $(item).parent().parent().parent();
 				deleteArray.push({
 					rowId: checkFile.attr("rowid"),
@@ -486,7 +486,7 @@ layui.config({
 			return;
 		}
 		choosePackageIds.splice(0, choosePackageIds.length);
-		$.each(list, function(i, item){
+		$.each(list, function(i, item) {
 			var thisRowId = $(this).parent().parent().parent().attr("rowid");
 			var thisRowType = $(this).parent().parent().parent().attr("filetype");
 			var params = {
@@ -537,7 +537,7 @@ layui.config({
 		}
 		//判断下载项中是否包含文件夹
 		var hasFolder = false;
-		$.each(list, function(i, item){
+		$.each(list, function(i, item) {
 			if($(item).parent().parent().parent().attr("filetype") === 'folder'){
 				hasFolder = true;
 				return false;
@@ -546,7 +546,7 @@ layui.config({
 		//多个文件下载或者单个文件夹下载
 		if(hasFolder || list.length > 1){
 			choosePackageIds.splice(0, choosePackageIds.length);
-			$.each(list, function(i, item){
+			$.each(list, function(i, item) {
 				var thisRowId = $(this).parent().parent().parent().attr("rowid");
 				var thisRowType = $(this).parent().parent().parent().attr("filetype");
 				var params = {
@@ -879,24 +879,24 @@ layui.config({
 			$(".fileconsole-mask").hide();
 			var jsonStr = "";//实体json对象
 			var str = "";
-			$.each(j.rows, function(i, item){
+			$.each(j.rows, function(i, item) {
 				item["fileBasePath"] = fileBasePath;
 				jsonStr = {
 					bean: item
 				};
 				if(item.fileType === 'folder'){//文件夹
 					str += getDataUseHandlebars(folderTemplate, jsonStr);
-				}else if($.inArray(item.fileType, imageType) >= 0){//图片
+				} else if ($.inArray(item.fileType, imageType) >= 0){//图片
 					str += getDataUseHandlebars(imagesTemplate, jsonStr);
-				}else if($.inArray(item.fileType, officeType) >= 0){//office
+				} else if ($.inArray(item.fileType, officeType) >= 0){//office
 					str += getDataUseHandlebars(officeTemplate, jsonStr);
-				}else if($.inArray(item.fileType, vedioType) >= 0){//视频
+				} else if ($.inArray(item.fileType, vedioType) >= 0){//视频
 					str += getDataUseHandlebars(vedioTemplate, jsonStr);
-				}else if($.inArray(item.fileType, packageType) >= 0){//压缩包
+				} else if ($.inArray(item.fileType, packageType) >= 0){//压缩包
 					str += getDataUseHandlebars(packageTemplate, jsonStr);
-				}else if($.inArray(item.fileType, aceType) >= 0){//ace文件
+				} else if ($.inArray(item.fileType, aceType) >= 0){//ace文件
 					str += getDataUseHandlebars(aceTemplate, jsonStr);
-				}else if($.inArray(item.fileType, epubType) >= 0){//电子书
+				} else if ($.inArray(item.fileType, epubType) >= 0){//电子书
 					str += getDataUseHandlebars(epubTemplate, jsonStr);
 				} else {//其他文件
 					str += getDataUseHandlebars(otherTemplate, jsonStr);
@@ -1175,7 +1175,7 @@ layui.config({
   		var checkLength = $("#file-content .menu-folder .item-select .item-check").find("input:checkbox[name='checkFile']:checked").length;
   		if(checkLength > 1){
   			var moveList = $("#file-content .menu-folder .item-select .item-check").find("input:checkbox[name='checkFile']:checked");
-  			$.each(moveList, function(i, item){
+  			$.each(moveList, function(i, item) {
   				var _obj = $(item).parent().parent().parent();
   				var pastedJson = {
 					rowId: _obj.attr("rowid"),
@@ -1198,7 +1198,7 @@ layui.config({
   		if(pastedSaveIds.length > 0 && !isNull(boxId)){
   			//判断可移动项是否包含目标文件夹
   			var inTarget = false;
-  			$.each(pastedSaveIds, function(i, item){
+  			$.each(pastedSaveIds, function(i, item) {
   				if(item.rowId == boxId){
   					inTarget = true;
   					return false;
@@ -1247,7 +1247,7 @@ layui.config({
 	function reNameSpecially(){
 		//获取已经显示的编辑器
 		var showFileNameEdit = $("#file-content div[class='filename-edit']:visible");
-		$.each(showFileNameEdit, function(i, item){
+		$.each(showFileNameEdit, function(i, item) {
 			$(item).parent().css({"z-index": 0});
 			editFolderById($(item));
 		});
@@ -1331,7 +1331,7 @@ layui.config({
 		if(checkLength > 1){//有多个被选中的
 			//隐藏指定项
 			chooseMoreDiskHideParams();
-		}else if(checkLength == 1){//只有一个被选中的
+		} else if (checkLength == 1){//只有一个被选中的
 			var chooseItem = $("#file-content .menu-folder .item-select .item-check").find("input:checkbox[name='checkFile']:checked").parent().parent().parent();
 			operaterId = chooseItem.attr("rowid");
 			//权限控制
@@ -1554,7 +1554,7 @@ layui.config({
 							}
 							loadThisFolderChild();
 						}});
-					}else if(pastedJson.type === '2' || pastedJson.type == 2){
+					} else if (pastedJson.type === '2' || pastedJson.type == 2){
 						AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole035", params: params, type: 'json', callback: function (json) {
 							var selNode = ztree.getNodeByParam("id", pastedJson.id, null);
 							if (!isNull(selNode)){
@@ -1617,7 +1617,7 @@ layui.config({
     $("body").on("click", ".closeBtn", function (e) {
 		if(state === 'pedding' || state === 'ready'){
 	    	// 移除所有缩略图并将上传文件移出上传序列
-	        $.each(uploader.getFiles(), function(i, item){
+	        $.each(uploader.getFiles(), function(i, item) {
 	        	// 将图片从上传序列移除
 	        	uploader.removeFile(item);
 	        	// 将图片从缩略图容器移除
@@ -1985,7 +1985,7 @@ layui.config({
 	            if (stats.successNum) {
 	                alert( '上传成功' );
 	                // 移除所有缩略图并将上传文件移出上传序列
-	                $.each(uploader.getFiles(), function(i, item){
+	                $.each(uploader.getFiles(), function(i, item) {
 	                	// 将图片从上传序列移除
 	                	uploader.removeFile(item);
 	                	// 将图片从缩略图容器移除

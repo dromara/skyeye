@@ -92,7 +92,7 @@ layui.config({
         var myChart = echarts.init(document.getElementById(id));
         var nameStr = new Array();
         var numStr = new Array();
-        $.each(rows, function(i, item){
+        $.each(rows, function(i, item) {
             nameStr.push(item.name);
             numStr.push(item.value);
         });

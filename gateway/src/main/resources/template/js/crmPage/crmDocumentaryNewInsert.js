@@ -38,7 +38,7 @@ layui.config({
 		charts1 = echarts.init(document.getElementById("charts1"));
 		var name = new Array();
 		var num = new Array();
-		$.each(rows, function(i, item){
+		$.each(rows, function(i, item) {
 			name.push(item.yearMonth);
 			num.push(item.insertDocumentaryNum);
 		});

@@ -21,11 +21,11 @@ layui.config({
 		 		var type = json.bean.type;
 		 		if(type == 1){
 		    		resetSingleBreak();
-		    	}else if(type == 2){
+		    	} else if (type == 2){
 		    		resetWeekend();
-		    	}else if(type == 3){
+		    	} else if (type == 3){
 		    		resetSingleAndDoubleBreak();
-		    	}else if(type == 4){
+		    	} else if (type == 4){
 		    		resetCustomizeDay(json.bean.days);
 		    	}
 

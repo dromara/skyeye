@@ -47,7 +47,7 @@ layui.config({
 	    	if(val == '1'){//正常年级
 	    		$("#parentIdBox").addClass("layui-hide");
 	    		$("#yearNBox").removeClass("layui-hide");
-	    	}else if(val == '2'){//补习班
+	    	} else if (val == '2'){//补习班
 	    		$("#parentIdBox").removeClass("layui-hide");
 	    		$("#yearNBox").addClass("layui-hide");
 	    		$("#yearN").val("0");

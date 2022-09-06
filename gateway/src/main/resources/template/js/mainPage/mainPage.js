@@ -28,7 +28,7 @@ layui.config({
 	
 	function initNoticeList(){
 		AjaxPostUtil.request({url: reqBasePath + "mainpage002", params: {}, type: 'json', callback: function (json) {
-			$.each(json.rows, function(i, item){
+			$.each(json.rows, function(i, item) {
 				if(i == 0){
 					item.className = "layui-this";
 					item.contentClassName = "layui-show";

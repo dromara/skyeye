@@ -36,7 +36,7 @@ layui.config({
 		if(isNull(array)){
 			return name;
 		}
-		$.each(array, function(i, item){
+		$.each(array, function(i, item) {
 			name.push(item.name)
 		});
 		return name;

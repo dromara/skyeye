@@ -110,7 +110,7 @@ layui.config({
 		}
 		
 		// 加载工序信息
-		$.each(chooseMation.procedureMationList, function(i, item){
+		$.each(chooseMation.procedureMationList, function(i, item) {
 			var inListIndex = -1;
 			$.each(procedureList, function(j, bean){
 				if(bean.departmentId == item.departmentId){
@@ -124,7 +124,7 @@ layui.config({
 	    		if(item.state == 1){
 	    			item.checkBoxHtml = '<input type="radio" name="procedureListName" value="' + item.departmentId + '">';
 	    			item.stateName = "<span class='state-down'>待下达</span>";
-	    		}else if(item.state == 2){
+	    		} else if (item.state == 2){
 	    			item.checkBoxHtml = '<input type="radio" name="procedureListName" value="' + item.departmentId + '" disabled="disabled">';
 	    			item.stateName = "<span class='state-up'>已下达</span>"
 	    		}
@@ -163,7 +163,7 @@ layui.config({
 		}
 		//获取选择的工序
 		var chooseIndex = -1;
-		$.each(procedureList, function(i, item){
+		$.each(procedureList, function(i, item) {
 			if(item.departmentId == chooseProcedure){
 				chooseIndex = i;
 				return false;

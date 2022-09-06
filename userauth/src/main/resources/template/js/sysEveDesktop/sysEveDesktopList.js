@@ -40,7 +40,7 @@ layui.config({
 	        { field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
 	        	if(d.state == '2'){
 	        		return "<span class='state-down'>禁用</span>";
-	        	}else if(d.state == '1'){
+	        	} else if (d.state == '1'){
 	        		return "<span class='state-up'>启用</span>";
 	        	}
 	        }},

@@ -23,7 +23,7 @@ layui.config({
 					$("#userName").html(json.bean.userName);
 					$("#userPhoto").attr("src", json.bean.userPhoto);
 					$("#userPhoto").attr("alt", json.bean.userName);
-				}else if(json.bean.shareType == 1){//公开分享--跳转列表页面
+				} else if (json.bean.shareType == 1){//公开分享--跳转列表页面
 					location.href = "../../tpl/shareFile/shareFileList.html?id=" + rowId;
 				}
 			}

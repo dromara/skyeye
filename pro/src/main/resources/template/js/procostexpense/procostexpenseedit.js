@@ -45,7 +45,7 @@ layui.config({
 		sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["pmCostExpenseType"]["key"], function (data) {
 			costTypeList = getDataUseHandlebars(selOption, data);
 		});
-		$.each(json.bean.purposes, function(i, item){
+		$.each(json.bean.purposes, function(i, item) {
 			showRow(item);
 		});
 

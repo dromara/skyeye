@@ -44,7 +44,7 @@ layui.config({
 							location.href = "../../tpl/shareFile/shareFilepwd.html?id=" + rowId;
 						}});
 					}
-				}else if(json.bean.shareType == 1){//公开分享--加载列表
+				} else if (json.bean.shareType == 1){//公开分享--加载列表
 					loadUserMation();
 				}
 			}
@@ -74,7 +74,7 @@ layui.config({
 				var str = "";
 				if(json.bean.fileType == 1){//文件夹
 					str = '<img src="../../assets/images/share-folder.png"/>';
-				}else if(json.bean.fileType == 2){//文件
+				} else if (json.bean.fileType == 2){//文件
 					str = '<img src="../../assets/images/share-file.png"/>';
 				}
 				$("#fileTitle").html(str + json.bean.shareName);
@@ -150,7 +150,7 @@ layui.config({
 			var checkList = $("#fileListContent :checkbox:checked");
 			if(checkList.length > 0){
 				chooseSaveIds.splice(0, chooseSaveIds.length);
-				$.each(checkList, function(i, item){
+				$.each(checkList, function(i, item) {
 					var fId = $(item).parent().parent().attr("rowid");
 					var fType = $(item).parent().parent().attr("filetype");
 					var params = {
@@ -247,7 +247,7 @@ layui.config({
 		$("body").on("click", ".folderNamePath", function() {
 			folderId = $(this).attr("rowid");
 			var pathArrayIndex = 0;
-			$.each(pathArray, function(i, item){
+			$.each(pathArray, function(i, item) {
 				if(item.id === folderId){
 					pathArrayIndex = i;
 					return;
@@ -280,7 +280,7 @@ layui.config({
 			if(pathArray.length > 0){
 				var str = '<a href="javascript:;" id="upFolderPath">返回上一级</a><span lay-separator="">|</span>'
 		            + '<a href="javascript:;" id="allFileList">全部文件</a><span lay-separator="">></span>';
-				$.each(pathArray, function(i, item){
+				$.each(pathArray, function(i, item) {
 					if(i == pathArray.length - 1){
 						str += '<a><cite>' + item.fileName + '</cite></a>';
 					} else {

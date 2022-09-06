@@ -2440,7 +2440,7 @@ layui.define(["jquery"], function(exports) {
 						try {
 							data = dataTransfer.getData('text/html');
 						} catch(err) {}
-						if(data) {
+						if (data) {
 							return;
 						}
 						me._getTansferFiles(dataTransfer, function(results) {
@@ -2726,7 +2726,7 @@ layui.define(["jquery"], function(exports) {
 							headLength = offset,
 							ret = {},
 							markerBytes, markerLength, parsers, i;
-						if(dataview.getUint16(0) === 0xffd8) {
+						if (dataview.getUint16(0) === 0xffd8) {
 							while(offset < maxOffset) {
 								markerBytes = dataview.getUint16(offset);
 								if(markerBytes >= 0xffe0 && markerBytes <= 0xffef || markerBytes === 0xfffe) {
@@ -2760,7 +2760,7 @@ layui.define(["jquery"], function(exports) {
 						var data = this._parse(buffer, true),
 							buf1, buf2, bodyoffset;
 						bodyoffset = 2;
-						if(data.imageHead) {
+						if (data.imageHead) {
 							bodyoffset = 2 + data.imageHead.byteLength;
 						}
 						if(buffer.slice) {
@@ -2850,7 +2850,7 @@ layui.define(["jquery"], function(exports) {
 					}
 					tagSize = tagType.size * length;
 					dataOffset = tagSize > 4 ? tiffOffset + dataView.getUint32(offset + 8, littleEndian) : (offset + 8);
-					if(dataOffset + tagSize > dataView.byteLength) {
+					if (dataOffset + tagSize > dataView.byteLength) {
 						Base.log('Invalid Exif data: Invalid data offset.');
 						return;
 					}
@@ -2898,14 +2898,14 @@ layui.define(["jquery"], function(exports) {
 				EXIF.parseExifData = function(dataView, offset, length, data) {
 					var tiffOffset = offset + 10,
 						littleEndian, dirOffset;
-					if(dataView.getUint32(offset + 4) !== 0x45786966) {
+					if (dataView.getUint32(offset + 4) !== 0x45786966) {
 						return;
 					}
 					if(tiffOffset + 8 > dataView.byteLength) {
 						Base.log('Invalid Exif data: Invalid segment size.');
 						return;
 					}
-					if(dataView.getUint16(offset + 8) !== 0x0000) {
+					if (dataView.getUint16(offset + 8) !== 0x0000) {
 						Base.log('Invalid Exif data: Missing byte alignment offset.');
 						return;
 					}
@@ -2920,7 +2920,7 @@ layui.define(["jquery"], function(exports) {
 							Base.log('Invalid Exif data: Invalid byte alignment marker.');
 							return;
 					}
-					if(dataView.getUint16(tiffOffset + 2, littleEndian) !== 0x002A) {
+					if (dataView.getUint16(tiffOffset + 2, littleEndian) !== 0x002A) {
 						Base.log('Invalid Exif data: Missing TIFF marker.');
 						return;
 					}

@@ -27,9 +27,9 @@ layui.config({
 	        { field: 'state', title: '当前状态', width: 120, align: 'center', templet: function (d) {
 	        	if(d.state == '3'){
 	        		return "<span class='state-down'>下线</span>";
-	        	}else if(d.state == '2'){
+	        	} else if (d.state == '2'){
 	        		return "<span class='state-up'>上线</span>";
-	        	}else if(d.state == '1'){
+	        	} else if (d.state == '1'){
 	        		return "<span class='state-new'>新建</span>";
 	        	}
 	        }},

@@ -35,7 +35,7 @@ layui.config({
                     $("#canChoose").show();
                     var options = JSON.parse(j.bean.options);
                     // 加载属性值
-                    $.each(options, function(i, item){
+                    $.each(options, function(i, item) {
                         addRow();
                         $("#title" + (rowNum - 1)).html(item.title);
                         $("#value" + (rowNum - 1)).html(item.value);

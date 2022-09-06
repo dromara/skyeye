@@ -28,7 +28,7 @@ layui.config({
 
                 var userNames = [];
                 personLiable = [].concat(json.bean.personLiable);
-                $.each(personLiable, function(i, item){
+                $.each(personLiable, function(i, item) {
                     userNames.push(item.name);
                 });
                 $('#personLiable').tagEditor({

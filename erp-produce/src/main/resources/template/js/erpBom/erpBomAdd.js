@@ -33,7 +33,7 @@ layui.config({
             	}
             	var childObject = new Array();
             	var wheatherError = false;
-            	$.each(ztreeNode, function(i, item){
+            	$.each(ztreeNode, function(i, item) {
             		item.needNum = $("#needNum" + item.productId).val();
             		item.type = $("#type" + item.productId).val();
             		item.wastagePrice = $("#wastage" + item.productId).val();
@@ -74,7 +74,7 @@ layui.config({
         
         function getSealPrice(unitList, normId){
         	var unitIndex = -1;
-        	$.each(unitList, function(i, item){
+        	$.each(unitList, function(i, item) {
         		if(item.id == normId){
         			unitIndex = i;
         			return false;
@@ -146,7 +146,7 @@ layui.config({
 				rows.eq(0).before(li_head)
 			}
 			//刷新节点数据重置金额
-			$.each(ztreeNode, function(i, item){
+			$.each(ztreeNode, function(i, item) {
 				$("#allPrice" + item.productId).html(parseInt(item.needNum) * parseFloat(item.unitPrice));
 			});
 		}
@@ -164,7 +164,7 @@ layui.config({
 		//拖拽操作结束后的回调函数
 		function onDrop(event, treeId, treeNodes, targetNode, moveType) {
 			var nodesIndex = -1;//拖拽节点所在索引
-			$.each(ztreeNode, function(i, item){
+			$.each(ztreeNode, function(i, item) {
 				//拖拽节点
 				if(item.productId == treeNodes[0].productId){
 					nodesIndex = i;
@@ -204,7 +204,7 @@ layui.config({
 		
 		//删除节点操作
 		function deleteNode(treeNode){
-			$.each(ztreeNode, function(i, item){
+			$.each(ztreeNode, function(i, item) {
 				if(item.productId == treeNode.productId){
 					treeNodeIndex = i;
 					return false;
@@ -214,7 +214,7 @@ layui.config({
 				ztreeNode.splice(treeNodeIndex, 1);
 			}
 			if (!isNull(treeNode.children) && treeNode.children.length > 0){
-				$.each(treeNode.children, function(i, item){
+				$.each(treeNode.children, function(i, item) {
 					deleteNode(item);
 				});
 			}
@@ -269,7 +269,7 @@ layui.config({
  				pageId: "materialChooseToProduce",
  				area: ['90vw', '90vh'],
  				callBack: function (refreshCode) {
-					$.each(productMationList, function(i, item){
+					$.each(productMationList, function(i, item) {
 						if(!inZtreeNode(item.productId)){
 							ztreeNode.push(item);
 						}
@@ -283,7 +283,7 @@ layui.config({
 	    $("body").on("click", ".procedureSel", function() {
 	    	var proId = $(this).attr("id").replace("procedureSel", "");
 	    	var selIndex = -1;
-	    	$.each(ztreeNode, function(i, item){
+	    	$.each(ztreeNode, function(i, item) {
 				if(item.productId == proId){
 					selIndex = i;
 					return false;
@@ -300,7 +300,7 @@ layui.config({
 						ztreeNode[selIndex].procedureMationList = [].concat(procedureMationList);
 						var str = "";
 						var title = "";
-						$.each(procedureMationList, function(i, item){
+						$.each(procedureMationList, function(i, item) {
 							str += '' +
 									'<span class="layui-badge layui-bg-gray">' + item.number + '</span>' + item.procedureName + '，';
 							title += item.number + '、' + item.procedureName + '\n';
@@ -328,7 +328,7 @@ layui.config({
 		 */
 		function inZtreeNode(productId){
 			var inNodeIndex = -1;
-			$.each(ztreeNode, function(i, item){
+			$.each(ztreeNode, function(i, item) {
  	        	if(item.productId == productId){
  	        		inNodeIndex = i;
  	        		return false;
@@ -354,7 +354,7 @@ layui.config({
 		});
 		function calculatedTotalPrice(proId, needNum){
 			var inNodeIndex = -1;
-			$.each(ztreeNode, function(i, item){
+			$.each(ztreeNode, function(i, item) {
  	        	if(item.productId == proId){
  	        		inNodeIndex = i;
  	        		return false;

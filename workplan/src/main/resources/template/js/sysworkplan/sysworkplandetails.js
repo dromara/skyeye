@@ -25,13 +25,13 @@ layui.config({
 			}
 			// 计划执行人
 			var carryPeopleName = [];
-			$.each(json.bean.executors, function(i, item){
+			$.each(json.bean.executors, function(i, item) {
 				carryPeopleName.push(item.userName);
 			});
 			$("#carryPeople").html(carryPeopleName.toString());
 
 			var str = "";
-			$.each([].concat(json.bean.enclosures), function(i, item){
+			$.each([].concat(json.bean.enclosures), function(i, item) {
 				str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
 			});
 			$("#enclosureUploadBtn").html(str);
@@ -48,11 +48,11 @@ layui.config({
 	    function getWorkPlanStateNameExecutor(d){
 			if(d.state == '1'){
 				return "<span class='state-new'>待执行</span>";
-			}else if(d.state == '2'){
+			} else if (d.state == '2'){
 				return "<span class='state-up'>执行完成</span>";
-			}else if(d.state == '3'){
+			} else if (d.state == '3'){
 				return "<span class='state-down'>延期</span>";
-			}else if(d.state == '4'){
+			} else if (d.state == '4'){
 				return "<span class='state-error'>转任务</span>";
 			}
 		}

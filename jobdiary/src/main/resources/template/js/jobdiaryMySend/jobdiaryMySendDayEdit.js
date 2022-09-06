@@ -120,7 +120,7 @@ layui.config({
 			    form.on('switch(todycompletedImagetext)', function (data) {
 		 			//是否图文模式
 		 			$(data.elem).val(data.elem.checked);
-		 			if(data.elem.value === 'true' || data.elem.value === true){
+		 			if (data.elem.value === 'true' || data.elem.value === true){
 		 				$("#completedtext").parent().hide();
 			    		$("#completedcontent").parent().show();
 			    		layedit.setContent(completedContent, $("#completedtext").val().replace(/\n|\r\n/g, "<br>"), false);
@@ -133,7 +133,7 @@ layui.config({
 			    form.on('switch(todyincompleteImagetext)', function (data) {
 		 			//是否图文模式
 		 			$(data.elem).val(data.elem.checked);
-		 			if(data.elem.value === 'true' || data.elem.value === true){
+		 			if (data.elem.value === 'true' || data.elem.value === true){
 		 				$("#incompletetext").parent().hide();
 			    		$("#incompletecontent").parent().show();
 			    		layedit.setContent(incompleteContent,$("#incompletetext").val().replace(/\n|\r\n/g, "<br>"),false);
@@ -146,7 +146,7 @@ layui.config({
 			    form.on('switch(todycoordinaImagetext)', function (data) {
 		 			//是否图文模式
 		 			$(data.elem).val(data.elem.checked);
-		 			if(data.elem.value === 'true' || data.elem.value === true){
+		 			if (data.elem.value === 'true' || data.elem.value === true){
 		 				$("#coordinatext").parent().hide();
 			    		$("#coordinacontent").parent().show();
 			    		layedit.setContent(coordinaContent,$("#coordinatext").val().replace(/\n|\r\n/g, "<br>"),false);
@@ -170,7 +170,7 @@ layui.config({
                             winui.window.msg('请选择收件人', {icon: 2, time: 2000});
                             return false;
                         }
-		        		if(data.field.todycompleted === 'true'){
+		        		if (data.field.todycompleted === 'true'){
 		        			if(isNull(layedit.getContent(completedContent))){
 		        				winui.window.msg('请填写今日已完成工作', {icon: 2, time: 2000});
 		        				return false;
@@ -185,12 +185,12 @@ layui.config({
 		        				params.completedJob = encodeURIComponent($("#completedtext").val().replace(/\n|\r\n/g, "<br>"));
 		        			}
 		        		}
-		        		if(data.field.todyincomplete === 'true'){
+		        		if (data.field.todyincomplete === 'true'){
 		        			params.incompleteJob = encodeURIComponent(layedit.getContent(incompleteContent));
 		        		} else {
 		        			params.incompleteJob = encodeURIComponent($("#incompletetext").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
-		        		if(data.field.todycoordina === 'true'){
+		        		if (data.field.todycoordina === 'true'){
 		        			params.coordinaJob = encodeURIComponent(layedit.getContent(coordinaContent));
 		        		} else {
 		        			params.coordinaJob = encodeURIComponent($("#coordinatext").val().replace(/\n|\r\n/g, "<br>"));

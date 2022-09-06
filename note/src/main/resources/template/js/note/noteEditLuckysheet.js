@@ -44,7 +44,7 @@ layui.config({
 	// 获取编辑器内容
 	window.getContent = function(){
 		var allSheetData = luckysheet.getluckysheetfile();
-		$.each(allSheetData, function(i, item){
+		$.each(allSheetData, function(i, item) {
 			item["celldata"] = getCellData(item.data);
 		});
 		return JSON.stringify(allSheetData);

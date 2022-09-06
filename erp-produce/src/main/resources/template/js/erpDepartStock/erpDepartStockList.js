@@ -43,7 +43,7 @@ layui.config({
 		        { field: 'typeName', title: '商品来源', align: 'left', width: 100 },
 		        { field: 'norms', title: '库存', align: 'center', width: 100, templet: function (d) {
 		        	var str = "";
-		        	$.each(d.norms, function(i, item){
+		        	$.each(d.norms, function(i, item) {
 		        		str += '<span class="layui-badge layui-bg-blue">' + item.allTock + '</span>' + item.unitName + '<br>';
 		        	});
 		        	return str;
@@ -51,7 +51,7 @@ layui.config({
 		        { field: 'enabled', title: '状态', align: 'center', width: 60, templet: function (d) {
 		        	if(d.enabled == '0'){
 		        		return "<span class='state-down'>禁用</span>";
-		        	}else if(d.enabled == '1'){
+		        	} else if (d.enabled == '1'){
 		        		return "<span class='state-up'>启用</span>";
 		        	}
 		        }},

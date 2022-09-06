@@ -63,7 +63,7 @@ layui.config({
 	    ]],
 	    done: function(res, curr, count){
 			matchingLanguage();
-			$.each(res.rows, function (i, item){
+			$.each(res.rows, function (i, item) {
 				if(isNull(getInPoingArr(tableList, "id", item.id, null))){
 					tableList.push(item);
 				}
@@ -108,7 +108,7 @@ layui.config({
 			return false;
 		}
 		var result = [];
-		$.each(selectedData, function(i, item){
+		$.each(selectedData, function(i, item) {
 			result.push(getInPoingArr(tableList, "id", item, ""));
 		});
 

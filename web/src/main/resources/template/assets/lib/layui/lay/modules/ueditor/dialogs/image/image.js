@@ -268,7 +268,7 @@
         },
         getInsertList: function () {
             var data = this.getData();
-            if(data['url']) {
+            if (data['url']) {
                 return [{
                     src: data['url'],
                     _src: data['url'],

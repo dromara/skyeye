@@ -41,11 +41,11 @@ layui.config({
             { field: 'status', title: '状态', align: 'left', width: 80, templet: function (d) {
 		        if(d.status == '0'){
 	        		return "<span class='state-down'>未审核</span>";
-	        	}else if(d.status == '1'){
+	        	} else if (d.status == '1'){
 	        		return "<span class='state-up'>审核中</span>";
-	        	}else if(d.status == '2'){
+	        	} else if (d.status == '2'){
 	        		return "<span class='state-new'>审核通过</span>";
-	        	}else if(d.status == '3'){
+	        	} else if (d.status == '3'){
 	        		return "<span class='state-down'>拒绝通过</span>";
 	        	} else {
 	        		return "参数错误";

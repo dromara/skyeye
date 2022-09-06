@@ -32,7 +32,7 @@ layui.config({
             { field: 'inoutitemType', title: '类型', align: 'center', width: 100, templet: function (d) {
                 if(d.inoutitemType == '1'){
                     return "<span class='state-up'>收入</span>";
-                }else if(d.inoutitemType == '2'){
+                } else if (d.inoutitemType == '2'){
                     return "<span class='state-down'>支出</span>";
                 } else {
                     return "<span class='state-error'>参数错误</span>";

@@ -43,7 +43,7 @@ layui.config({
 		//获取该节点的id和名称
 		var editableNodeId = j.bean.taskKey;
 		var editableNodeName = j.bean.taskKeyName;
-		$.each(j.rows, function(i, item){
+		$.each(j.rows, function(i, item) {
 			jsonStr = {
 				bean: item
 			};
@@ -57,7 +57,7 @@ layui.config({
 						var obj = formItem.aData;
 						tplContent = getDataUseHandlebars(formItem.templateContent, obj);
 						formItem.context = tplContent;
-					}else if(formItem.associatedDataTypes == 2){//接口
+					} else if (formItem.associatedDataTypes == 2){//接口
 						AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params: {interfa: formItem.aData}, type: 'json', callback: function(j){
 							var obj = JSON.parse(j.bean.aData);
 							tplContent = getDataUseHandlebars(formItem.templateContent, obj);
@@ -87,10 +87,10 @@ layui.config({
 						thisId.find("div .layui-slider-bar").css("width", item.text + "%");
 						thisId.find("div .layui-slider-wrap").css("left", item.text + "%");
 						thisId.find("div .layui-slider-wrap").data("value", item.text);
-					}else if(vid === 'color'){//类型为颜色选择器
+					} else if (vid === 'color'){//类型为颜色选择器
 						_this.find("input").val(item.text);
 						_this.find('div[id="' + formItem.id + '"]').find("span .layui-colorpicker-trigger-span").attr("style", "background:" + item.text);
-					}else if(vid === 'switchedradio'){//类型为开关式单选框
+					} else if (vid === 'switchedradio'){//类型为开关式单选框
 						_this.find("input").val(item.text);
 						if(item.text === 'true' || item.text == true){
 							_this.find("input").prop("checked", true);
@@ -98,17 +98,17 @@ layui.config({
 						_this.find("input").attr('id', formItem.id);
 						_this.find("input").attr('name', formItem.id);
 						_this.find("input").attr('lay-filter', formItem.id);
-					}else if(vid === 'radio'){//类型为单选框
+					} else if (vid === 'radio'){//类型为单选框
 						_this.find("input:radio").attr("name", formItem.id);
 						_this.find("input:radio[value=" + item.text + "]").attr("checked", true);
-					}else if(vid === 'richtextarea'){//类型为富文本框
+					} else if (vid === 'richtextarea'){//类型为富文本框
 						_this.find('iframe[textarea="' + formItem.id + '"]').contents().find("body").html(item.text);
-					}else if(vid === 'checkbox'){//类型为多选框
+					} else if (vid === 'checkbox'){//类型为多选框
 						var checkArray = item.text.split(",");
 						var checkBoxAll = _this.find("input:checkbox");
 						checkBoxAll.attr("name", formItem.id);
 						for(var k = 0; k < checkArray.length; k++){
-						   $.each(checkBoxAll, function(j, formItem){
+						   $.each(checkBoxAll, function(j, formitem) {
 							   if(checkArray[k] == $(this).val()){
 								   $(this).prop("checked", true);
 							   }
@@ -118,11 +118,11 @@ layui.config({
 				} else {
 					if(item.showType == 1){//文本展示
 						str = getDataUseHandlebars(textTemplate, jsonStr);
-					}else if(item.showType == 2){//附件展示
+					} else if (item.showType == 2){//附件展示
 						str = getDataUseHandlebars(enclosureTemplate, jsonStr);
-					}else if(item.showType == 3){//富文本展示
+					} else if (item.showType == 3){//富文本展示
 						str = getDataUseHandlebars(eichTextTemplate, jsonStr);
-					}else if(item.showType == 4){//图片展示
+					} else if (item.showType == 4){//图片展示
 						var photoValue = [];
 						if (!isNull(jsonStr.bean.text)){
 							photoValue = item.value.split(",");
@@ -133,7 +133,7 @@ layui.config({
 						});
 						jsonStr.bean.photo = rows;
 						str = getDataUseHandlebars(picTemplate, jsonStr);
-					}else if(item.showType == 5){//表格展示
+					} else if (item.showType == 5){//表格展示
 						str = getDataUseHandlebars(tableTemplate, jsonStr);
 						var tableId = "messageTable" + item.orderBy;//表格id
 						var tableBoxId = "showTable" + item.orderBy;//表格外部div盒子id
@@ -147,7 +147,7 @@ layui.config({
 							cols: [getHeaderTitle(item.headerTitle)]
 						});
 						str = "";
-					}else if(item.showType == 6){//凭证展示
+					} else if (item.showType == 6){//凭证展示
 						str = getDataUseHandlebars(voucherTemplate, jsonStr);
 						$("#showForm").append(str);
 						var boxId = "showVoucher" + item.orderBy;
@@ -159,11 +159,11 @@ layui.config({
 			} else {
 				if(item.showType == 1){//文本展示
 					str = getDataUseHandlebars(textTemplate, jsonStr);
-				}else if(item.showType == 2){//附件展示
+				} else if (item.showType == 2){//附件展示
 					str = getDataUseHandlebars(enclosureTemplate, jsonStr);
-				}else if(item.showType == 3){//富文本展示
+				} else if (item.showType == 3){//富文本展示
 					str = getDataUseHandlebars(eichTextTemplate, jsonStr);
-				}else if(item.showType == 4){//图片展示
+				} else if (item.showType == 4){//图片展示
 					var photoValue = [];
 					if (!isNull(jsonStr.bean.text)){
 						photoValue = item.value.split(",");
@@ -174,7 +174,7 @@ layui.config({
 					});
 					jsonStr.bean.photo = rows;
 					str = getDataUseHandlebars(picTemplate, jsonStr);
-				}else if(item.showType == 5){//表格展示
+				} else if (item.showType == 5){//表格展示
 					str = getDataUseHandlebars(tableTemplate, jsonStr);
 					var tableId = "messageTable" + item.orderBy;//表格id
 					var tableBoxId = "showTable" + item.orderBy;//表格外部div盒子id
@@ -188,7 +188,7 @@ layui.config({
 						cols: [getHeaderTitle(item.headerTitle)]
 					});
 					str = "";
-				}else if(item.showType == 6){//凭证展示
+				} else if (item.showType == 6){//凭证展示
 					str = getDataUseHandlebars(voucherTemplate, jsonStr);
 					$("#showForm").append(str);
 					var boxId = "showVoucher" + item.orderBy;
@@ -279,25 +279,25 @@ layui.config({
 	        		if(vid === 'input'){//类型为输入框
 	        			text = _this.find("input").val();
 	        			value = _this.find("input").val();
-	        		}else if(vid === 'textarea'){//类型为文本框
+	        		} else if (vid === 'textarea'){//类型为文本框
 	        			text = _this.find("textarea").val();
 	        			value = _this.find("textarea").val();
-	        		}else if(vid === 'select'){//类型为下拉框
+	        		} else if (vid === 'select'){//类型为下拉框
 	        			text = _this.find("select").find("option:selected").text();
 	        			value = _this.find("select").val();
-	        		}else if(vid === 'checkbox'){//类型为多选框
+	        		} else if (vid === 'checkbox'){//类型为多选框
 	        			var texts = [], values = [];
 	        			var arr = _this.find("input:checkbox:checked");
-	        			$.each(arr, function(i, item){
+	        			$.each(arr, function(i, item) {
 	        				texts[i] = $(this).attr("title");
 	        				values[i] = $(this).attr("value");
 	        			});
 	        			text = texts.join(",");
 	        			value = values.join(",");
-	        		}else if(vid === 'radio'){//类型为单选框
+	        		} else if (vid === 'radio'){//类型为单选框
 	        			text = _this.find("input:radio:checked").attr("title");
 	        			value = _this.find("input:radio:checked").val();
-	        		}else if(vid === 'upload'){//类型为图片上传
+	        		} else if (vid === 'upload'){//类型为图片上传
 	        			var uploadId = _this.find(".upload").attr("id");
 	        			text = $("#" + uploadId).find("input[type='hidden'][name='upload']").attr("oldurl");
 	        			value = $("#" + uploadId).find("input[type='hidden'][name='upload']").attr("oldurl");
@@ -305,18 +305,18 @@ layui.config({
 	        				text = "";
 	        			if(isNull(value))
 	        				value = "";
-	        		}else if(vid === 'color'){//类型为颜色选择器
+	        		} else if (vid === 'color'){//类型为颜色选择器
 	        			text = _this.find("input").val();
 	        			value = _this.find("input").val();
-	        		}else if(vid === 'range'){//类型为滑块
+	        		} else if (vid === 'range'){//类型为滑块
 	        			text = _this.find(".layui-slider-tips").html();
 	        			value = _this.find(".layui-slider-tips").html();
-	        		}else if(vid === 'richtextarea'){//类型为富文本框
+	        		} else if (vid === 'richtextarea'){//类型为富文本框
 	        			var textareaId = _this.find("textarea").attr("id");
 	        			var content = encodeURIComponent(_this.find('iframe[textarea="' + textareaId + '"]').contents().find("body").html());
 	        			text = content;
 	        			value = content;
-	        		}else if(vid === 'switchedradio'){//类型为开关式单选框
+	        		} else if (vid === 'switchedradio'){//类型为开关式单选框
 	        			value = _this.find("input").val();
 	        			var layText = _this.find("input").attr('lay-text');
 	        			if(value == "true"){

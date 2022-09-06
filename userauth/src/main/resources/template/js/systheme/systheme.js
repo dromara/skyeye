@@ -223,7 +223,7 @@ layui.config({
 	    	winuiTaskbarTask = parent$(".winui-taskbar-task");
 	    	AjaxPostUtil.request({url: reqBasePath + "sys030", params: {loadBottomMenuIcon: data.value}, type: 'json', callback: function (json) {
 				parent.loadBottomMenuIcon = data.value;
-				if(data.value === '1'){//只显示图标
+				if (data.value === '1'){//只显示图标
 					winuiTaskbarTask.each(function () {
 						$(this).find("li").addClass("task-item-icon-box");
 						$(this).find(".title-icon-big").show();
@@ -246,7 +246,7 @@ layui.config({
 	    	var winBgPicVagueValue = "5";
  			//同步开关值
  			$(data.elem).val(data.elem.checked);
- 			if(data.elem.checked){
+ 			if (data.elem.checked){
  				winBgPicVague = '0';
  			} else {
  				winBgPicVague = '1';

@@ -54,21 +54,21 @@ layui.config({
 			    //初始化项目经理
 			    toProjectManager = [].concat(json.bean.projectManagerList);
 			    var toProjectManagerName = "";
-   				$.each(json.bean.projectManagerList, function(i, item){
+   				$.each(json.bean.projectManagerList, function(i, item) {
    					toProjectManagerName += item.name + ',';
    				});
    				
    				//初始化项目赞助人
 			    toProjectSponsor = [].concat(json.bean.projectSponsorList);
    				var toProjectSponsorName = "";
-			    $.each(json.bean.projectSponsorList, function(i, item){
+			    $.each(json.bean.projectSponsorList, function(i, item) {
    					toProjectSponsorName += item.name + ',';
    				});
    				
    				//初始化项目组成员
    				toProjectMembers = [].concat(json.bean.projectMembersList);
    				var toProjectMembersName = "";
-			    $.each(json.bean.projectMembersList, function(i, item){
+			    $.each(json.bean.projectMembersList, function(i, item) {
    					toProjectMembersName += item.name + ',';
    				});
    				

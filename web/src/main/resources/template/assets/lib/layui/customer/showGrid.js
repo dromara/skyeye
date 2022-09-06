@@ -443,7 +443,7 @@ dataGrid.prototype = {
 
 var showGrid = function (options) {
     var showGrid = new dataGrid(this, options);
-    layui.$.each(dataGrid_setting, function(index, item){
+    layui.$.each(dataGrid_setting, function(index, item) {
         if (!isNull(item)){
             if(item.settings.id == showGrid.settings.id){
                 dataGrid_setting.splice(index, 1);
@@ -458,7 +458,7 @@ var showGrid = function (options) {
 var refreshGrid = function (id, option){
     var _option = layui.$.extend({}, getObject(id), option);
     var showGrid = new dataGrid(this, _option);
-    layui.$.each(dataGrid_setting, function(index, item){
+    layui.$.each(dataGrid_setting, function(index, item) {
         if(item.settings.id == showGrid.settings.id){
             dataGrid_setting[index].settings.pageindex = 1;
             showGrid.settings = dataGrid_setting[index].settings;
@@ -481,7 +481,7 @@ var _createObject = function(id, settings){
 
 var getObject = function(id){
     for(var i in dataGrid_setting){
-        if(dataGrid_setting[i].id == id){
+        if (dataGrid_setting[i].id == id){
             return dataGrid_setting[i].settings;
         }
     }

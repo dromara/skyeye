@@ -161,7 +161,7 @@ layui.define(['jquery','layer','element','form'], function(exports) {
 								win = win.top;
 							}
 							win.location.href = "../../tpl/index/login.html";//XMLHttpRequest.getResponseHeader("CONTEXTPATH");
-						}else if(sessionstatus == "NOAUTHPOINT"){
+						} else if (sessionstatus == "NOAUTHPOINT"){
 							layer.msg('您不具备该权限。',{icon:5, shift:6});
 						}
 					}
@@ -700,7 +700,7 @@ layui.define(['jquery','layer','element','form'], function(exports) {
 				var data = listData[i];		
 				if(typeof data !== "object") continue;
 				if(pid == "null" || pid == null){
-					if(data[_this.response.parentId] == null) {
+					if (data[_this.response.parentId] == null) {
 						rootListData.push(data);
 					}
 				} else {
@@ -1406,7 +1406,7 @@ layui.define(['jquery','layer','element','form'], function(exports) {
 		    		_this.temp = []; 
 		    		return ;
 				}
-			}else if(typeof returnID === "string" || typeof this.icon === 'number'){
+			} else if (typeof returnID === "string" || typeof this.icon === 'number'){
 				$thisDiv.attr("data-id", returnID);
 				// 将li节点展示
 				$ul.find("li[data-id='"+returnID+"']").show();

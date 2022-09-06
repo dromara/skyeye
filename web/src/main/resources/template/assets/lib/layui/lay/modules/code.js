@@ -15,7 +15,7 @@ layui.define('jquery', function(exports){
       elems.push(this);
     });
     
-    layui.each(elems.reverse(), function(index, item){
+    layui.each(elems.reverse(), function(index, item) {
       var othis = $(item), html = othis.html();
       
       //转义HTML标签

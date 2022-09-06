@@ -46,9 +46,9 @@
 				{{# if(auth('1561106794451')){ }}
             		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delet"><language showName="com.skyeye.deleteBtn"></language></a>
 				{{# } }}
-			{{# }else if(d.state == 2 && auth('1561106844126')){ }}
+			{{# } else if (d.state == 2 && auth('1561106844126')){ }}
 				<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="down">下线</a>
-			{{# }else if(d.state == 1){ }}
+			{{# } else if (d.state == 1){ }}
 				{{# if(auth('1561106862355')){ }}
             		<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 				{{# } }}

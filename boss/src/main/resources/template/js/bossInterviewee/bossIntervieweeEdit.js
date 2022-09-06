@@ -29,7 +29,7 @@ layui.config({
 
             var userNames = [];
             chargePerson = [].concat(json.bean.chargePerson);
-            $.each(chargePerson, function(i, item){
+            $.each(chargePerson, function(i, item) {
                 userNames.push(item.name);
             });
             $('#chargePersonId').tagEditor({

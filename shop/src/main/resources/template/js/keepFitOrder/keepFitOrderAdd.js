@@ -74,7 +74,7 @@ layui.config({
             var chooseStoreAreaId = getInPoingArr(storeList, "id", storeId, "areaId");
 
             var tempList = [].concat(carHasMealList);
-            $.each(tempList, function (i, item){
+            $.each(tempList, function (i, item) {
                 if(item.areaId != chooseStoreAreaId){
                     item.choose = "disabled";
                 } else {
@@ -192,7 +192,7 @@ layui.config({
                 };
                 // 获取会员拥有的车辆信息(已启用)
                 AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: params, type: 'json', method: "POST", callback: function (json) {
-                    $.each(json.rows, function (i, item){
+                    $.each(json.rows, function (i, item) {
                         item.name = item.modelType + "(" + item.plate + ")";
                     });
                     $("#memberCar").html(getDataUseHandlebars(selOption, json));

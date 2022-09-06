@@ -116,7 +116,7 @@ layui.config({
         systemCommonUtil.checkStaffMation = []; // 选择时返回的对象
         systemCommonUtil.openSysAllUserStaffChoosePage(function (checkStaffMation){
             var list = new Array();
-            $.each(checkStaffMation, function (i, item){
+            $.each(checkStaffMation, function (i, item) {
                 list.push(item.id);
             });
             var params = {

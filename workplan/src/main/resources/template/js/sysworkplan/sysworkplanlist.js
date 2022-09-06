@@ -82,7 +82,7 @@ layui.config({
 	//计划类型按钮点击
 	$("body").on("click", ".plan-type-btn", function (e) {
 		var dataType = $(this).data("type");
-		if(dataType != nowCheckType){
+		if (dataType != nowCheckType){
 			$(".plan-type-btn").removeClass("plan-select");
 			$(this).addClass("plan-select");
 			nowCheckType = dataType;
@@ -90,7 +90,7 @@ layui.config({
 				$("#checkDateTypeYearBox").hide();
 				$("#checkDateTypeMonthBox").show();
 				getDaysInMonth(checkDateTypeMonth$y, checkDateTypeMonth$m);
-			}else if(nowCheckType === 'week' || nowCheckType === 'month' || nowCheckType === 'quarter'
+			} else if (nowCheckType === 'week' || nowCheckType === 'month' || nowCheckType === 'quarter'
 					|| nowCheckType === 'halfyear' || nowCheckType === 'year'){//周计划-月计划-季度计划-半年计划-年计划
 				$("#checkDateTypeMonthBox").hide();
 				$("#checkDateTypeYearBox").show();
@@ -186,7 +186,7 @@ layui.config({
 	//编辑
 	function edit(data) {
 		rowId = data.id;
-		if(data.planType === '1' || data.planType == 1){//个人计划
+		if (data.planType === '1' || data.planType == 1){//个人计划
 			_openNewWindows({
 				url: "../../tpl/sysworkplan/sysworkplanedit.html", 
 				title: "编辑个人计划",
@@ -196,7 +196,7 @@ layui.config({
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					loadTable();
 				}});
-		}else if(data.planType === '2' || data.planType == 2){//部门计划
+		} else if (data.planType === '2' || data.planType == 2){//部门计划
 			_openNewWindows({
 				url: "../../tpl/sysworkplan/sysworkplandepedit.html", 
 				title: "编辑部门计划",
@@ -206,7 +206,7 @@ layui.config({
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					loadTable();
 				}});
-		}else if(data.planType === '3' || data.planType == 3){//公司计划
+		} else if (data.planType === '3' || data.planType == 3){//公司计划
 			_openNewWindows({
 				url: "../../tpl/sysworkplan/sysworkplancomedit.html", 
 				title: "编辑公司计划",
@@ -249,37 +249,37 @@ layui.config({
 		var str = ''
 		if(nowCheckType === 'week'){//周计划
 			var arr = createWeeks(year);
-			$.each(arr, function(i, item){
+			$.each(arr, function(i, item) {
 				let start = item.startTime,
 					end = item.endTime;
 				var nowWeek = formatDig(i + 1);
 				str += '<li value="' + (i + 1) + '">第'+ nowWeek + '周  <span>' + formatDate(start) + '日~' + formatDate(end) + '日</span></li>';
 			});
-		}else if(nowCheckType === 'month'){//月计划
+		} else if (nowCheckType === 'month'){//月计划
 			var arr = createMonths(year);
-			$.each(arr, function(i, item){
+			$.each(arr, function(i, item) {
 				let start = item.startTime,
 					end = item.endTime;
 				var nowMonth = formatDig(i + 1);
 				str += '<li value="' + (i + 1) + '">第'+ nowMonth + '月  <span>' + start + '~' + end + '</span></li>';
 			});
-		}else if(nowCheckType === 'quarter'){//季度计划
+		} else if (nowCheckType === 'quarter'){//季度计划
 			var arr = createQuarter(year);
-			$.each(arr, function(i, item){
+			$.each(arr, function(i, item) {
 				let start = item.startTime,
 					end = item.endTime;
 				var nowQuarter = formatDig(i + 1);
 				str += '<li value="' + (i + 1) + '">第'+ nowQuarter + '季度  <span>' + start + '~' + end + '</span></li>';
 			});
-		}else if(nowCheckType === 'halfyear'){//半年计划
+		} else if (nowCheckType === 'halfyear'){//半年计划
 			var arr = createHalfYear(year);
-			$.each(arr, function(i, item){
+			$.each(arr, function(i, item) {
 				let start = item.startTime,
 					end = item.endTime;
 				var nowHalfYear = formatDig(i + 1);
 				str += '<li value="' + (i + 1) + '">'+ (i == 0 ? '上半年' : '下半年') + '  <span>' + start + '~' + end + '</span></li>';
 			});
-		}else if(nowCheckType === 'year'){//年计划
+		} else if (nowCheckType === 'year'){//年计划
 			str += '<li class="active" value="' + year + '">' + year + '</li>';
 		}
 		resetDate(str);
@@ -337,7 +337,7 @@ layui.config({
 				var _this = $(".plan-choose").find("li[value='" + i + "']");
 				_this.addClass('active');
 				scoolrTo(_this);
-			}else if(nowCheckType === 'month'){//月计划
+			} else if (nowCheckType === 'month'){//月计划
 				var today = new Date();
 				//获取当前月
 				var sMonth = today.getMonth() + 1;
@@ -345,7 +345,7 @@ layui.config({
 				var _this = $(".plan-choose").find("li[value='" + sMonth + "']");
 				_this.addClass('active');
 				scoolrTo(_this);
-			}else if(nowCheckType === 'quarter'){//季度计划
+			} else if (nowCheckType === 'quarter'){//季度计划
 				var today = new Date();
 				//获取当前月
 				var sMonth = today.getMonth() + 1;
@@ -354,7 +354,7 @@ layui.config({
 				var _this = $(".plan-choose").find("li[value='" + i + "']");
 				_this.addClass('active');
 				scoolrTo(_this);
-			}else if(nowCheckType === 'halfyear'){//半年计划
+			} else if (nowCheckType === 'halfyear'){//半年计划
 				var today = new Date();
 				//获取当前月
 				var sMonth = today.getMonth() + 1;
@@ -363,7 +363,7 @@ layui.config({
 				var _this = $(".plan-choose").find("li[value='" + i + "']");
 				_this.addClass('active');
 				scoolrTo(_this);
-			}else if(nowCheckType === 'year'){//年计划
+			} else if (nowCheckType === 'year'){//年计划
 				//无需处理
 			}
 		} else {
@@ -374,7 +374,7 @@ layui.config({
 	}
 	
 	//滚动到指定对象
-	function scoolrTo(item){
+	function scoolrTo(item) {
 		var mainContainer = $('.plan-choose');
 		mainContainer.animate({
 			scrollTop: item.offset().top - mainContainer.offset().top + mainContainer.scrollTop()
@@ -437,7 +437,7 @@ layui.config({
 			ddate = 30;
 			if(i == 1 || i == 3 || i == 5 || i == 7 || i == 8 || i == 10 || i == 12){
 				ddate = 31;
-			}else if(i == 2){ //二月
+			} else if (i == 2){ //二月
 				ddate = isrun ? 29 : 28; //闰年29号,平年28号
 			}
 			arr.push({
@@ -571,15 +571,15 @@ layui.config({
 			var _this = $(".plan-choose").find("li[class='active']").attr("value");
 			timeSoltStr = checkDateTypeMonth$y + '-' + checkDateTypeMonth$m + '-' + formatDig(_this);
 			timeSoltStr = timeSoltStr + '~' + timeSoltStr;
-		}else if(nowCheckType === 'week'){
+		} else if (nowCheckType === 'week'){
 			var _this = $(".plan-choose").find("li[class='active']").attr("value");
 			var arr = createWeeks(checkDateTypeYear$y);
 			var timeItem = arr[_this - 1];
 			timeSoltStr = checkDateTypeYear$y + '-' + formatDateDay(timeItem.startTime) + '~' + checkDateTypeYear$y + '-' + formatDateDay(timeItem.endTime);
-		}else if(nowCheckType === 'month'){
+		} else if (nowCheckType === 'month'){
 			var _this = $(".plan-choose").find("li[class='active']").attr("value");
 			timeSoltStr = checkDateTypeYear$y + '-' + formatDig(_this) + '-01~' + checkDateTypeYear$y + '-' + formatDig(_this) + '-' + getDaysByMonth(checkDateTypeYear$y, _this);
-		}else if(nowCheckType === 'quarter'){
+		} else if (nowCheckType === 'quarter'){
 			var _this = $(".plan-choose").find("li[class='active']").attr("value");
 			var sMonth = _this * 3;
 			var ddate = 30;
@@ -587,7 +587,7 @@ layui.config({
 				ddate = 31;
 			}
 			timeSoltStr = checkDateTypeYear$y + '-' + formatDig(sMonth - 2) + '-01~' +checkDateTypeYear$y + '-' + formatDig(sMonth) + '-' + ddate;
-		}else if(nowCheckType === 'halfyear'){
+		} else if (nowCheckType === 'halfyear'){
 			var _this = $(".plan-choose").find("li[class='active']").attr("value");
 			var sMonth = _this * 6;
 			var ddate = 30;
@@ -595,7 +595,7 @@ layui.config({
 				ddate = 31;
 			}
 			timeSoltStr = checkDateTypeYear$y + '-' + formatDig(sMonth - 5) + '-01~' +checkDateTypeYear$y + '-' + formatDig(sMonth) + '-' + ddate;
-		}else if(nowCheckType === 'year'){
+		} else if (nowCheckType === 'year'){
 			timeSoltStr = checkDateTypeYear$y + '-01-01~' +checkDateTypeYear$y + '-12-31';
 		} else {
 			timeSoltStr = "";

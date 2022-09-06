@@ -92,7 +92,7 @@ layui.config({
 		var checkStatus = table.checkStatus('messageTable');
 		var data = checkStatus.data;
 		var idsStr = '';
-		$.each(data, function(i, item){
+		$.each(data, function(i, item) {
 			if(item.state == '未读'){
 				idsStr += item.id + ",";
 			}
@@ -112,7 +112,7 @@ layui.config({
 		var checkStatus = table.checkStatus('messageTable');
 		var data = checkStatus.data;
 		var idsStr = '';
-		$.each(data, function(i, item){
+		$.each(data, function(i, item) {
 			idsStr += item.id + ",";
 		});
 		if (!isNull(idsStr)){

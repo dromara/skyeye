@@ -36,7 +36,7 @@ layui.config({
             { field: 'insure', title: '是否购买保险', align: 'center', width: 140, templet: function (d) {
                 if(d.insure == '1'){
                     return "已购买";
-                }else if(d.insure == '2'){
+                } else if (d.insure == '2'){
                     return "未购买";
                 } else {
                     return "<span class='state-error'>参数错误</span>";

@@ -62,19 +62,19 @@ layui.config({
 			};
 			// 公积金适用对象
 			var object = [];
-			$.each(companyList, function(i, item){
+			$.each(companyList, function(i, item) {
 				object.push({
 					objectId: item.id,
 					objectType: 3
 				});
 			});
-			$.each(departmentList, function(i, item){
+			$.each(departmentList, function(i, item) {
 				object.push({
 					objectId: item.id,
 					objectType: 2
 				});
 			});
-			$.each(checkStaffList, function(i, item){
+			$.each(checkStaffList, function(i, item) {
 				object.push({
 					objectId: item.id,
 					objectType: 1

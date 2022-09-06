@@ -566,7 +566,7 @@ function getNowCheckTypeName(nowCheckType){
 function matchingLanguage(){
 	var list = layui.$("language");
 	if(list.length > 0){
-		$.each(list, function(i, item){
+		$.each(list, function(i, item) {
 			if(isNull($(item).html())){
 				$(item).html(systemLanguage[$(item).attr("showName")][languageType]);
 			}
@@ -574,7 +574,7 @@ function matchingLanguage(){
 	}
 	list = layui.$("[matchLanguage]");
 	if(list.length > 0){
-		$.each(list, function(i, item){
+		$.each(list, function(i, item) {
 			try{
 				var jsonStr = $(item).attr("matchLanguage");
 				if (!isNull(jsonStr)){
@@ -671,13 +671,13 @@ function uploadImg(file, Editor) {
 function getStaffStateName(d){
 	if(d.state == '1'){
 		return "<span class='state-up'>在职</span>";
-	}else if(d.state == '2'){
+	} else if (d.state == '2'){
 		return "<span class='state-down'>离职</span>";
-	}else if(d.state == '3'){
+	} else if (d.state == '3'){
 		return "见习";
-	}else if(d.state == '4'){
+	} else if (d.state == '4'){
 		return "试用";
-	}else if(d.state == '5'){
+	} else if (d.state == '5'){
 		return "退休";
 	}
 }
@@ -773,7 +773,7 @@ function resetSingleBreak(id){
 	} else {
 		_box = $("#" + id + " .weekDay");
 	}
-	$.each(_box, function(i, item){
+	$.each(_box, function(i, item) {
 		var clas = getArrIndexOfPointStr(checkWorkTimeColor, $(item).attr("class"));
 		$(item).removeClass(clas);
 		if(i < 6){
@@ -792,7 +792,7 @@ function resetWeekend(id){
 	} else {
 		_box = $("#" + id + " .weekDay");
 	}
-	$.each(_box, function(i, item){
+	$.each(_box, function(i, item) {
 		var clas = getArrIndexOfPointStr(checkWorkTimeColor, $(item).attr("class"));
 		$(item).removeClass(clas);
 		if(i < 5){
@@ -811,12 +811,12 @@ function resetSingleAndDoubleBreak(id){
 	} else {
 		_box = $("#" + id + " .weekDay");
 	}
-	$.each(_box, function(i, item){
+	$.each(_box, function(i, item) {
 		var clas = getArrIndexOfPointStr(checkWorkTimeColor, $(item).attr("class"));
 		$(item).removeClass(clas);
 		if(i < 5){
 			$(item).addClass('layui-bg-blue');
-		}else if(i == 5){
+		} else if (i == 5){
 			$(item).addClass('layui-bg-orange');
 		} else {
 			$(item).addClass('layui-bg-gray');
@@ -827,7 +827,7 @@ function resetSingleAndDoubleBreak(id){
 // 类型为4初始化自定休
 function resetCustomizeDay(days, id){
 	resetCustomize(id);
-	$.each(days, function(i, item){
+	$.each(days, function(i, item) {
 		var _this = $("span[value='" + item.day + "']");
 		if (!isNull(id)){
 			_this = $("#" + id).find("span[value='" + item.day + "']");
@@ -836,7 +836,7 @@ function resetCustomizeDay(days, id){
 		_this.removeClass(clas);
 		if(item.type == 1){
 			_this.addClass('layui-bg-blue');
-		}else if(item.type == 2){
+		} else if (item.type == 2){
 			_this.addClass('layui-bg-orange');
 		}
 	});
@@ -850,7 +850,7 @@ function resetCustomize(id){
 	} else {
 		_box = $("#" + id + " .weekDay");
 	}
-	$.each(_box, function(i, item){
+	$.each(_box, function(i, item) {
 		var clas = getArrIndexOfPointStr(checkWorkTimeColor, $(item).attr("class"));
 		$(item).removeClass(clas);
 		$(item).addClass('layui-bg-gray');
@@ -868,15 +868,15 @@ function resetCustomize(id){
 function getStateNameByState(state, stateName){
 	if(state == '0'){
 		stateName = "<span>" + stateName + "</span>";
-	}else if(state == '1'){
+	} else if (state == '1'){
 		stateName = "<span class='state-new'>" + stateName + "</span>";
-	}else if(state == '2'){
+	} else if (state == '2'){
 		stateName = "<span class='state-up'>" + stateName + "</span>";
-	}else if(state == '3'){
+	} else if (state == '3'){
 		stateName = "<span class='state-down'>" + stateName + "</span>";
-	}else if(state == '4'){
+	} else if (state == '4'){
 		stateName = "<span class='state-down'>" + stateName + "</span>";
-	}else if(state == '5'){
+	} else if (state == '5'){
 		stateName = "<span class='state-error'>" + stateName + "</span>";
 	}
 	return stateName;
@@ -1122,8 +1122,8 @@ function judgeStrInStrs(strs, str){
 	if (!isNull(strs) && !isNull(str)){
 		var ss = strs.split(',');
 		var strIndex = -1;
-		layui.$.each(ss, function(i, item){
-			if(str === item){
+		layui.$.each(ss, function(i, item) {
+			if(str === item) {
 				strIndex = i;
 				return false;
 			}

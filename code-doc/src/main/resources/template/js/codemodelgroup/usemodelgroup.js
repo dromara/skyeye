@@ -34,7 +34,7 @@ layui.config({
         	var subData = [].concat(list);
         	if(subData.length == 0){
         		winui.window.msg('请先生成转换结果', {icon: 2, time: 2000});
-        	}else if($('#modelList').find('li').length > subData.length){
+        	} else if ($('#modelList').find('li').length > subData.length){
         		winui.window.msg('您有模板未生成代码文件，请检查。', {icon: 2, time: 2000});
         	} else {
         		for(var i = 0; i < subData.length; i++){
@@ -123,7 +123,7 @@ layui.config({
 	 	},
 	 	ajaxSendAfter:function (json) {
 			list = [].concat(json.rows);
-			$.each(list, function (i, item){
+			$.each(list, function (i, item) {
 				item.modelId = item.id;
 				item.groupId = parent.rowId;
 			});
