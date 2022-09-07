@@ -15,9 +15,9 @@
 
 ### 联系作者
 
-| 作者微信(备注：姓名-联系方式，其余概不通过。) | 企业版设计思路知识星球 | 扫码进微信群畅聊(禁止发广告，进群修改备注：岗位-城市-备注，不改者五分钟内自动请出。)|
-| ---- | ---- |---- |
-| ![](web/src/main/resources/template/tpl/common/微信.jpg)| ![](web/src/main/resources/template/tpl/common/%E7%9F%A5%E8%AF%86%E6%98%9F%E7%90%83.png) | ![](web/src/main/resources/template/tpl/common/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220626095834.jpg) |
+| 作者微信(备注：姓名-联系方式，其余概不通过。) | 企业版设计思路知识星球 |
+| ---- | ---- |
+| ![](web/src/main/resources/template/tpl/common/微信.jpg)| ![](web/src/main/resources/template/tpl/common/%E7%9F%A5%E8%AF%86%E6%98%9F%E7%90%83.png) |
 
 #### 功能介绍
 
