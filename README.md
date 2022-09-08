@@ -8,16 +8,15 @@
 - 最新资讯：[2022-09-05 智能制造云办公 v3.7.29 发布，动态表单](https://www.oschina.net/news/209220/win10-skyeye-3-7-29-released)
 - [软件更新资讯](https://gitee.com/doc_wei01/skyeye/blob/company_server/HISTORY_UPDATE.md)
 - 开源版请下载`master`分支
-- [项目功能结构](https://docs.qq.com/flowchart/DYUFQQnlCUm9Ua2FI)
 - [企业版信息以及价格表](https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1)
-- `企业版所有功能`以及`设计思路`获取方式：扫码进入知识星球
 - 作者本人承诺，知识星球人数达到1000人，即开放所有功能模块源代码(仅供星球内部成员使用)
+- 个人软件，无发票
 
 ### 联系作者
 
-| 作者微信(备注：姓名-联系方式，其余概不通过。) | 企业版设计思路知识星球 |
-| ---- | ---- |
-| ![](web/src/main/resources/template/tpl/common/微信.jpg)| ![](web/src/main/resources/template/tpl/common/%E7%9F%A5%E8%AF%86%E6%98%9F%E7%90%83.png) |
+| 作者微信(备注：姓名-联系方式，其余概不通过。) | 企业版设计思路知识星球 | 软件咨询 |
+| ---- | ---- | ---- |
+| ![](web/src/main/resources/template/tpl/common/微信.jpg)| ![](web/src/main/resources/template/tpl/common/%E7%9F%A5%E8%AF%86%E6%98%9F%E7%90%83.png) |![输入图片说明](web/src/main/resources/template/tpl/common/image.png)|
 
 #### 功能介绍
 
