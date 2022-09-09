@@ -10,7 +10,7 @@ layui.config({
         var index = parent.layer.getFrameIndex(window.name);
         var $ = layui.$;
         
-        AjaxPostUtil.request({url: flowableBasePath + "erpbom003", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
+        AjaxPostUtil.request({url: flowableBasePath + "erpbom003", params: {id: parent.rowId}, type: 'json', method: 'GET', callback: function (json) {
 			$("#showForm").html(getDataUseHandlebars($("#mainHtml").html(), json));
 			$.fn.zTree.init($("#treeDemo"), setting, json.bean.bomMaterialList);
 			loadTr();
