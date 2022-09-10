@@ -39,20 +39,23 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'templateName', title: '模板标题', width: 180 },
-	        { field: 'id', title: '模板内容', align: 'center', width: 80, templet: function (d) {
+	        { field: 'templateName', title: '标题', width: 180 },
+	        { field: 'id', title: '脚本', align: 'center', width: 80, templet: function (d) {
 	        	if (!isNull(d.templateContent)) {
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="templateContent"></i>';
 	        	} else {
 	        		return '无';
 	        	}
 	        }},
-	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
+	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar'}
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
-			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入模板标题", function () {
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入标题", function () {
 				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 	    }
@@ -65,12 +68,12 @@ layui.config({
         	del(data, obj);
         } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        } else if (layEvent === 'templateContent') { //模板内容
+        } else if (layEvent === 'templateContent') { // 模板内容
         	editor.setValue(data.templateContent);
         	layer.open({
 	            id: '模板内容',
 	            type: 1,
-	            title: '模板内容',
+	            title: '脚本内容',
 	            shade: 0.3,
 	            area: ['90vw', '90vh'],
 	            content: $("#modelContentDiv").html(),
@@ -82,7 +85,7 @@ layui.config({
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "dsformdisplaytemplate003", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "dsformdisplaytemplate003", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -93,9 +96,9 @@ layui.config({
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/dsformdisplaytemplate/dsformdisplaytemplateedit.html", 
-			title: "编辑",
-			pageId: "dsformdisplaytemplateedit",
+			url: "../../tpl/dsFormDisplayTemplate/dsFormDisplayTemplateEdit.html",
+			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
+			pageId: "dsFormDisplayTemplateEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -106,9 +109,9 @@ layui.config({
 	// 新增
 	$("body").on("click", "#addBean", function() {
 		_openNewWindows({
-			url: "../../tpl/dsformdisplaytemplate/dsformdisplaytemplateadd.html",
-			title: "新增",
-			pageId: "dsformdisplaytemplateadd",
+			url: "../../tpl/dsFormDisplayTemplate/dsFormDisplayTemplateAdd.html",
+			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+			pageId: "dsFormDisplayTemplateAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -129,5 +132,5 @@ layui.config({
 		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
     
-    exports('dsformdisplaytemplatelist', {});
+    exports('dsFormDisplayTemplateList', {});
 });

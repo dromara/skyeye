@@ -3,18 +3,20 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'element'], function (exports) {
 	winui.renderColor();
 	layui.use(['form', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx', 'solr', 'sql', 'vue'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
+			element = layui.element,
 	    	form = layui.form;
 
 		// 根据类型获取部分功能的使用说明
 		systemCommonUtil.queryExplainMationByType(3, function (json) {
-			$("#exexplaintodsformdisplaytemplateTitle").html(json.bean.title);
-			$("#exexplaintodsformdisplaytemplateContent").html(json.bean.content);
+			$(".layui-colla-title").html(json.bean.title);
+			$(".layui-colla-content").html(json.bean.content);
 		});
+		element.init();
 
 	    var templateContent = CodeMirror.fromTextArea(document.getElementById("templateContent"), {
             mode : "xml",  // 模式
@@ -35,9 +37,9 @@ layui.config({
 	        if (winui.verifyForm(data.elem)) {
 	        	var params = {
         			templateName: $("#templateName").val(),
-        			templateContent: encodeURI(templateContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26"))
+        			templateContent: encodeURIComponent(templateContent.getValue())
 	        	};
-	        	AjaxPostUtil.request({url: flowableBasePath + "dsformdisplaytemplate002", params: params, type: 'json', callback: function (json) {
+	        	AjaxPostUtil.request({url: flowableBasePath + "writeDsFormDisplayTemplate", params: params, type: 'json', method: 'POST', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});

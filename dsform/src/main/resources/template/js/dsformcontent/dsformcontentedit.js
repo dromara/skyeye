@@ -112,18 +112,19 @@ layui.config({
 			function initDataShowTpl(id){
 				initDatatpl = true;
 				showGrid({
-						id: "dataShowTpl",
-						url: flowableBasePath + "dsformdisplaytemplate006",
-						params: {},
-						pagination: false,
-						template: getFileContent('tpl/template/select-option.tpl'),
-						ajaxSendLoadBefore: function(hdb) {},
-						ajaxSendAfter:function (json) {
-							$("#dataShowTpl").val(id);
-							form.render('select');
-							jsonStr = json.rows;
-						}
-					});
+					id: "dataShowTpl",
+					url: flowableBasePath + "dsformdisplaytemplate006",
+					params: {},
+					pagination: false,
+					method: 'GET',
+					template: getFileContent('tpl/template/select-option.tpl'),
+					ajaxSendLoadBefore: function(hdb) {},
+					ajaxSendAfter:function (json) {
+						$("#dataShowTpl").val(id);
+						form.render('select');
+						jsonStr = json.rows;
+					}
+				});
 			}
 			//数据展示模板监听事件
 			form.on('select(dataShowTpl)', function(data) {

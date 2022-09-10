@@ -50,6 +50,7 @@ layui.config({
 			url: flowableBasePath + "dsformdisplaytemplate006",
 			params: {},
 			pagination: false,
+			method: 'GET',
 			template: getFileContent('tpl/template/select-option.tpl'),
 			ajaxSendLoadBefore: function(hdb) {},
 			ajaxSendAfter:function (json) {

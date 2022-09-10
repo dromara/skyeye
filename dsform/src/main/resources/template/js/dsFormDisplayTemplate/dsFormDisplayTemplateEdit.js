@@ -3,19 +3,21 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'element'], function (exports) {
 	winui.renderColor();
 	layui.use(['form', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx', 'solr', 'sql', 'vue'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
+			element = layui.element,
 	    	form = layui.form;
 	    
 		showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "dsformdisplaytemplate004",
-		 	params: {rowId: parent.rowId},
+		 	params: {id: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/dsformdisplaytemplate/dsformdisplaytemplateeditTemplate.tpl'),
+			method: 'GET',
+		 	template: getFileContent('tpl/dsFormDisplayTemplate/dsFormDisplayTemplateEditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
@@ -35,20 +37,22 @@ layui.config({
 		 		
 		        matchingLanguage();
 		 		form.render();
+
 				// 根据类型获取部分功能的使用说明
 				systemCommonUtil.queryExplainMationByType(3, function (json) {
-					$("#exexplaintodsformdisplaytemplateTitle").html(json.bean.title);
-					$("#exexplaintodsformdisplaytemplateContent").html(json.bean.content);
+					$(".layui-colla-title").html(json.bean.title);
+					$(".layui-colla-content").html(json.bean.content);
 				});
+				element.init();
 
 		 		form.on('submit(formEditBean)', function (data) {
 			        if (winui.verifyForm(data.elem)) {
 			        	var params = {
 		        			templateName: $("#templateName").val(),
-		        			templateContent: encodeURI(templateContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
-		        			rowId:parent.rowId
+		        			templateContent: encodeURIComponent(templateContent.getValue()),
+		        			id: parent.rowId
 			        	};
-			        	AjaxPostUtil.request({url: flowableBasePath + "dsformdisplaytemplate005", params: params, type: 'json', callback: function (json) {
+			        	AjaxPostUtil.request({url: flowableBasePath + "writeDsFormDisplayTemplate", params: params, type: 'json', method: 'POST', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 			 	   		}});
