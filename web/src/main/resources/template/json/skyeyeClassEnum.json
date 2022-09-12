@@ -1,0 +1,3 @@
+{
+    "commonEnable": {"name": "启用/禁用", "className": "skyeye-pro#com.skyeye.common.enumeration.EnableEnum"}
+}

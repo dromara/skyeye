@@ -14,10 +14,16 @@
             {{model}}
         </div>
     </div>
-    <div class="layui-form-item layui-col-xs12">
+    <div class="layui-form-item layui-col-xs6">
         <label class="layui-form-label">所属类型：</label>
         <div class="layui-input-block ver-center">
             {{categoryName}}
+        </div>
+    </div>
+    <div class="layui-form-item layui-col-xs6">
+        <label class="layui-form-label">状态：</label>
+        <div class="layui-input-block ver-center">
+            {{enabled}}
         </div>
     </div>
     <div class="layui-form-item layui-col-xs6">
@@ -49,10 +55,10 @@
         </div>
     </div>
     <div class="layui-form-item layui-col-xs12">
-		<span class="hr-title">价格信息</span><hr>
+		<span class="hr-title">规格信息</span><hr>
 	</div>
 	<div class="layui-form-item layui-col-xs12">
-        <label class="layui-form-label">单位类型：</label>
+        <label class="layui-form-label">规格类型：</label>
         <div class="layui-input-block ver-center">
             {{unitType}}
         </div>

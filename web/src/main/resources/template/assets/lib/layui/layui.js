@@ -84,6 +84,7 @@ var lacolMap = {
 	"sysDsFormWithCodeType": "../../json/sysDsFormWithCodeType.json",
 	"sysActivitiModel": "../../json/activitiNameKey.json",
 	"sysDictData": "../../json/sysDictData.json",
+	"skyeyeClassEnum": "../../json/skyeyeClassEnum.json",
 };
 
 // 用户中英文类型
@@ -99,6 +100,8 @@ var sysDsFormWithCodeType = getAndWriteLocal('sysDsFormWithCodeType');
 var sysActivitiModel = getAndWriteLocal('sysActivitiModel');
 // 数据字典关联json文件
 var sysDictData = getAndWriteLocal('sysDictData');
+// 枚举类关联json文件
+var skyeyeClassEnum = getAndWriteLocal('skyeyeClassEnum');
 
 function getAndWriteLocal(key) {
 	if (isNull(localStorage.getItem(key))) {

@@ -45,6 +45,12 @@ layui.config({
 			sysDictData = data;
 			localStorage.setItem("sysDictData", JSON.stringify(data));
 		});
+
+		// 枚举类关联json文件
+		jsGetJsonFile("../../json/skyeyeClassEnum.json", function(data) {
+			skyeyeClassEnum = data;
+			localStorage.setItem("skyeyeClassEnum", JSON.stringify(data));
+		});
 		
 		// 是否登陆中，默认否
 		var isLogin = false;

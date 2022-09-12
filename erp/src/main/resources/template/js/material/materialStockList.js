@@ -85,6 +85,6 @@ layui.config({
 			}});
 	}
 	
-    exports('materialstocklist', {});
+    exports('materialStockList', {});
     
 });

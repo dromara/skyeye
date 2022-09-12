@@ -102,18 +102,24 @@ layui.config({
 			});
 		}
 
+		// 状态
+		systemCommonUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", '', form);
+
 		skyeyeEnclosure.init('enclosureUpload');
 		matchingLanguage();
  		form.render();
  	    form.on('submit(formAddBean)', function (data) {
- 	    	//提交前进行制空操作，防止多余的校验
- 	    	if($("#unit").val() === 'true'){//多单位
- 	        	$(".single-term").find("input").val("");
-        	} else {//单单位
-        		$(".many-term").find("select").val("");
-        		form.render('select');
-        		$("#useTable").html("");
-        	}
+			var unit = $("input[name='unit']:checked").val();
+ 	    	// 提交前进行制空操作，防止多余的校验
+			if (unit == 2) {
+				// 多规格
+				$(".single-term").find("input").val("");
+			} else {
+				// 单规格
+				$(".many-term").find("select").val("");
+				form.render('select');
+				$("#useTable").html("");
+			}
  	    	
  	        if (winui.verifyForm(data.elem)) {
  	        	var checkNodes = materialCategoryType.getCheckedNodes(true);
@@ -122,24 +128,25 @@ layui.config({
  	        		return false;
  	        	}
 				var tableData = new Array();
- 	        	if($("#unit").val() === 'true'){//多单位
- 	        		if(!subVerifyForm("unitGroupId"))return false;//单位非空校验
- 	        		if(!subVerifyForm("firstInUnit"))return false;//首选入库单位校验
- 	        		if(!subVerifyForm("firstOutUnit"))return false;//首选出库单位非空校验
- 	        		//价格表校验
- 	        		var rowTr = $("#useTable tr");
-					if(rowTr.length == 0) {
+				if (unit == 2) {
+					// 多规格
+					if (!subVerifyForm("unitGroupId")) return false;//单位非空校验
+					if (!subVerifyForm("firstInUnit")) return false;//首选入库单位校验
+					if (!subVerifyForm("firstOutUnit")) return false;//首选出库单位非空校验
+					//价格表校验
+					var rowTr = $("#useTable tr");
+					if (rowTr.length == 0) {
 						winui.window.msg('请填写价格表~', {icon: 2, time: 2000});
 						return false;
 					}
-					$.each(rowTr, function(i, item) {
+					$.each(rowTr, function (i, item) {
 						var rowNum = $(item).attr("trcusid").replace("tr", "");
 						var unitId = $(item).attr("unitid");//数据库存储的id
-						if(!subVerifyForm("safetyTock" + rowNum))return false;//安全存量非空校验
-	 	        		if(!subVerifyForm("retailPrice" + rowNum))return false;//零售价非空校验
-	 	        		if(!subVerifyForm("lowPrice" + rowNum))return false;//最低售价非空校验
-	 	        		if(!subVerifyForm("estimatePurchasePrice" + rowNum))return false;//预计采购价非空校验
-	 	        		if(!subVerifyForm("salePrice" + rowNum))return false;//销售价非空校验
+						if (!subVerifyForm("safetyTock" + rowNum)) return false;//安全存量非空校验
+						if (!subVerifyForm("retailPrice" + rowNum)) return false;//零售价非空校验
+						if (!subVerifyForm("lowPrice" + rowNum)) return false;//最低售价非空校验
+						if (!subVerifyForm("estimatePurchasePrice" + rowNum)) return false;//预计采购价非空校验
+						if (!subVerifyForm("salePrice" + rowNum)) return false;//销售价非空校验
 						var row = {
 							unitId: unitId,
 							safetyTock: $("#safetyTock" + rowNum).val(),
@@ -149,25 +156,26 @@ layui.config({
 							salePrice: $("#salePrice" + rowNum).val(),
 							normsStock: []
 						};
-						$.each(normsStockList, function(j, bean){
-				    		if(bean.trRow === rowNum){
-				    			row.normsStock = [].concat(bean.list);
-				    			return false;
-				    		}
-				    	});
+						$.each(normsStockList, function (j, bean) {
+							if (bean.trRow === rowNum) {
+								row.normsStock = [].concat(bean.list);
+								return false;
+							}
+						});
 						tableData.push(row);
 					});
-					if(tableData.length < rowTr.length){
+					if (tableData.length < rowTr.length) {
 						return false;
 					}
- 	        	} else {//单单位
- 	        		if(!subVerifyForm("safetyTock"))return false;//安全存量非空校验
- 	        		if(!subVerifyForm("unitName"))return false;//单位非空校验
- 	        		if(!subVerifyForm("retailPrice"))return false;//零售价非空校验
- 	        		if(!subVerifyForm("lowPrice"))return false;//最低售价非空校验
- 	        		if(!subVerifyForm("estimatePurchasePrice"))return false;//预计采购价非空校验
- 	        		if(!subVerifyForm("salePrice"))return false;//销售价非空校验
- 	        		var row = {
+				} else {
+					// 单规格
+					if (!subVerifyForm("safetyTock")) return false;//安全存量非空校验
+					if (!subVerifyForm("unitName")) return false;//单位非空校验
+					if (!subVerifyForm("retailPrice")) return false;//零售价非空校验
+					if (!subVerifyForm("lowPrice")) return false;//最低售价非空校验
+					if (!subVerifyForm("estimatePurchasePrice")) return false;//预计采购价非空校验
+					if (!subVerifyForm("salePrice")) return false;//销售价非空校验
+					var row = {
 						safetyTock: $("#safetyTock").val(),
 						retailPrice: $("#retailPrice").val(),
 						lowPrice: $("#lowPrice").val(),
@@ -176,19 +184,20 @@ layui.config({
 						normsStock: normsStockItem
 					};
 					tableData.push(row);
- 	        	}
+				}
 				var params = {
         			materialName: $("#materialName").val(),
  	        		model: $("#model").val(),
 					unitName: $("#unitName").val(),
  	        		categoryId: checkNodes[0].id,
  	        		remark: $("#remark").val(),
- 	        		unit: $("#unit").val() === 'true' ? 2 : 1,
+ 	        		unit: unit,
  	        		unitGroupId: $("#unitGroupId").val(),
  	        		firstInUnit: $("#firstInUnit").val(),
  	        		firstOutUnit: $("#firstOutUnit").val(),
 	 	        	materialNorms: JSON.stringify(tableData),
 	 	        	type: $("#fromType").val() === 'true' ? 1 : 2,
+					enabled: $("#enabled input:radio[name='radioProperty']:checked").val(),
 					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
  	        	};
 
@@ -279,17 +288,16 @@ layui.config({
  	    	}
  	    }
  	    
- 	    //多单位开关
- 		form.on('switch(unit)', function (data) {
- 			//同步开关值
- 			$(data.elem).val(data.elem.checked);
- 			if (data.elem.checked){//多单位
+ 	    // 规格变化类型
+ 		form.on('radio(unit)', function (data) {
+			var val = data.value;
+			if (val == 1) {
+				$(".many-term").hide();
+				$(".single-term").show();
+			} else {
 				$(".many-term").show();
 				$(".single-term").hide();
- 			} else {//单单位
- 				$(".many-term").hide();
-				$(".single-term").show();
- 			}
+			}
  		});
  		
  		//商品来源开关

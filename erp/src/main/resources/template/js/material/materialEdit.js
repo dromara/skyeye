@@ -50,22 +50,6 @@ layui.config({
 		 	pagination: false,
 		 	template: showBaseTemplate,
 		 	ajaxSendLoadBefore: function(hdb) {
-		 		//多单位
-		 		hdb.registerHelper("compare2", function(v1, options){
-					if(v1 == '2' || v1 == 2){
-						return 'checked';
-					} else {
-						return '';
-					}
-				});
-		 		hdb.registerHelper("compare3", function(v1, options){
-					if(v1 == '2' || v1 == 2){
-						return 'true';
-					} else {
-						return 'false';
-					}
-				});
-				
 				//商品来源
 		 		hdb.registerHelper("fromType", function(v1, options){
 					if(v1 == '1' || v1 == 1){
@@ -86,7 +70,7 @@ layui.config({
 					return index + 1;
 				});
 		 	},
-		 	ajaxSendAfter:function(j){
+		 	ajaxSendAfter:function(j) {
 		 		
 		 		textool.init({eleId: 'remark', maxlength: 200});
 		 		
@@ -123,44 +107,48 @@ layui.config({
 							// 附件回显
 							skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
-					 		if(j.bean.unit == '1'){//非多单位
-					 			$(".many-term").hide();
-					 			$("#safetyTock").val(j.bean.norms[0].safetyTock);
-					 			$("#unitName").val(j.bean.unitName);
-					 			$("#retailPrice").val(j.bean.norms[0].retailPrice);
-					 			$("#lowPrice").val(j.bean.norms[0].lowPrice);
-					 			$("#estimatePurchasePrice").val(j.bean.norms[0].estimatePurchasePrice);
-					 			$("#salePrice").val(j.bean.norms[0].salePrice);
-					 			//加载规格下的初始库存信息
-					 			normsStockItem = [].concat(j.bean.norms[0].normStock);
-					 			var str = "";
-						    	$.each(j.bean.norms[0].normStock, function(i, item) {
-						    		str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.initialTock + '</span></span>';
-        						});
+							$("input:radio[name=unit][value=" + j.bean.unit + "]").attr("checked", true);
+
+							if (j.bean.unit == 1) {
+								// 单规格
+								$(".many-term").hide();
+								$("#safetyTock").val(j.bean.norms[0].safetyTock);
+								$("#unitName").val(j.bean.unitName);
+								$("#retailPrice").val(j.bean.norms[0].retailPrice);
+								$("#lowPrice").val(j.bean.norms[0].lowPrice);
+								$("#estimatePurchasePrice").val(j.bean.norms[0].estimatePurchasePrice);
+								$("#salePrice").val(j.bean.norms[0].salePrice);
+								//加载规格下的初始库存信息
+								normsStockItem = [].concat(j.bean.norms[0].normStock);
+								var str = "";
+								$.each(j.bean.norms[0].normStock, function (i, item) {
+									str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.initialTock + '</span></span>';
+								});
 								$("#initialTock").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="initialTock">新增库存</button>' + str);
-					 		} else {//多单位
-					 			$(".single-term").hide();
-					 			$("#unitGroupId").val(j.bean.unitGroupId);
-						 		//加载默认值
-						 		$.each(unitGroupList, function(i, item) {
-						    		if(item.id == j.bean.unitGroupId){
-						    			var str = getDataUseHandlebars(selTemplate, {rows: item.unitList});
-						    			$("#firstInUnit").html(str);
-					    				$("#firstOutUnit").html(str);
-					    				$("#firstInUnit").val(j.bean.firstInUnit);
-					    				$("#firstOutUnit").val(j.bean.firstOutUnit);
-					    				form.render('select');
-						    			return false;
-						    		}
-						    	});
-						    	$.each(j.bean.norms, function(i, item) {
-						    		normsStockList.push({
-						    			trRow: unitIndex.toString(),
-						    			list: [].concat(item.normStock)
-						    		});
-						    		unitIndex++;
-						    	});
-					 		}
+							} else {
+								// 多规格
+								$(".single-term").hide();
+								$("#unitGroupId").val(j.bean.unitGroupId);
+								//加载默认值
+								$.each(unitGroupList, function (i, item) {
+									if (item.id == j.bean.unitGroupId) {
+										var str = getDataUseHandlebars(selTemplate, {rows: item.unitList});
+										$("#firstInUnit").html(str);
+										$("#firstOutUnit").html(str);
+										$("#firstInUnit").val(j.bean.firstInUnit);
+										$("#firstOutUnit").val(j.bean.firstOutUnit);
+										form.render('select');
+										return false;
+									}
+								});
+								$.each(j.bean.norms, function (i, item) {
+									normsStockList.push({
+										trRow: unitIndex.toString(),
+										list: [].concat(item.normStock)
+									});
+									unitIndex++;
+								});
+							}
 					 		matchingLanguage();
 					    	form.render();
 					 	}
@@ -170,18 +158,24 @@ layui.config({
 					searchZtree(materialCategoryType, $("#name").val());
 				});
 				
-				//初始化工序
+				// 初始化工序
 				procedureMationList = [].concat(j.bean.procedureMationList);
+
+				// 状态
+				systemCommonUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", j.bean.enabled, form);
 		 		
 		 	    form.on('submit(formEditBean)', function (data) {
-		 	    	//提交前进行制空操作，防止多余的校验
-		 	    	if($("#unit").val() === 'true'){//多单位
-		 	        	$(".single-term").find("input").val("");
-		        	} else {//单单位
-		        		$(".many-term").find("select").val("");
-		        		form.render('select');
-		        		$("#useTable").html("");
-		        	}
+					var unit = $("input[name='unit']:checked").val();
+					// 提交前进行制空操作，防止多余的校验
+					if (unit == 2) {
+						// 多规格
+						$(".single-term").find("input").val("");
+					} else {
+						// 单规格
+						$(".many-term").find("select").val("");
+						form.render('select');
+						$("#useTable").html("");
+					}
 		 	    	
 		 	        if (winui.verifyForm(data.elem)) {
 		 	        	var checkNodes = materialCategoryType.getCheckedNodes(true);
@@ -190,24 +184,25 @@ layui.config({
 		 	        		return false;
 		 	        	}
 						var tableData = new Array();
-		 	        	if($("#unit").val() === 'true'){//多单位
-		 	        		if(!subVerifyForm("unitGroupId"))return false;//单位非空校验
-		 	        		if(!subVerifyForm("firstInUnit"))return false;//首选入库单位校验
-		 	        		if(!subVerifyForm("firstOutUnit"))return false;//首选出库单位非空校验
-		 	        		//价格表校验
-		 	        		var rowTr = $("#useTable tr");
-							if(rowTr.length == 0) {
+						if (unit == 2) {
+							// 多规格
+							if (!subVerifyForm("unitGroupId")) return false;//单位非空校验
+							if (!subVerifyForm("firstInUnit")) return false;//首选入库单位校验
+							if (!subVerifyForm("firstOutUnit")) return false;//首选出库单位非空校验
+							//价格表校验
+							var rowTr = $("#useTable tr");
+							if (rowTr.length == 0) {
 								winui.window.msg('请填写价格表~', {icon: 2, time: 2000});
 								return false;
 							}
-							$.each(rowTr, function(i, item) {
+							$.each(rowTr, function (i, item) {
 								var rowNum = $(item).attr("trcusid").replace("tr", "");
 								var unitId = $(item).attr("unitid");//数据库存储的id
-								if(!subVerifyForm("safetyTock" + rowNum))return false;//安全存量非空校验
-			 	        		if(!subVerifyForm("retailPrice" + rowNum))return false;//零售价非空校验
-			 	        		if(!subVerifyForm("lowPrice" + rowNum))return false;//最低售价非空校验
-			 	        		if(!subVerifyForm("estimatePurchasePrice" + rowNum))return false;//预计采购价非空校验
-			 	        		if(!subVerifyForm("salePrice" + rowNum))return false;//销售价非空校验
+								if (!subVerifyForm("safetyTock" + rowNum)) return false;//安全存量非空校验
+								if (!subVerifyForm("retailPrice" + rowNum)) return false;//零售价非空校验
+								if (!subVerifyForm("lowPrice" + rowNum)) return false;//最低售价非空校验
+								if (!subVerifyForm("estimatePurchasePrice" + rowNum)) return false;//预计采购价非空校验
+								if (!subVerifyForm("salePrice" + rowNum)) return false;//销售价非空校验
 								var row = {
 									unitId: unitId,
 									safetyTock: $("#safetyTock" + rowNum).val(),
@@ -217,25 +212,26 @@ layui.config({
 									salePrice: $("#salePrice" + rowNum).val(),
 									normsStock: []
 								};
-								$.each(normsStockList, function(j, bean){
-						    		if(bean.trRow === rowNum){
-						    			row.normsStock = [].concat(bean.list);
-						    			return false;
-						    		}
-						    	});
+								$.each(normsStockList, function (j, bean) {
+									if (bean.trRow === rowNum) {
+										row.normsStock = [].concat(bean.list);
+										return false;
+									}
+								});
 								tableData.push(row);
 							});
-							if(tableData.length < rowTr.length){
+							if (tableData.length < rowTr.length) {
 								return false;
 							}
-		 	        	} else {//单单位
-		 	        		if(!subVerifyForm("safetyTock"))return false;//安全存量非空校验
-		 	        		if(!subVerifyForm("unitName"))return false;//单位非空校验
-		 	        		if(!subVerifyForm("retailPrice"))return false;//零售价非空校验
-		 	        		if(!subVerifyForm("lowPrice"))return false;//最低售价非空校验
-		 	        		if(!subVerifyForm("estimatePurchasePrice"))return false;//预计采购价非空校验
-		 	        		if(!subVerifyForm("salePrice"))return false;//销售价非空校验
-		 	        		var row = {
+						} else {
+							// 单规格
+							if (!subVerifyForm("safetyTock")) return false;//安全存量非空校验
+							if (!subVerifyForm("unitName")) return false;//单位非空校验
+							if (!subVerifyForm("retailPrice")) return false;//零售价非空校验
+							if (!subVerifyForm("lowPrice")) return false;//最低售价非空校验
+							if (!subVerifyForm("estimatePurchasePrice")) return false;//预计采购价非空校验
+							if (!subVerifyForm("salePrice")) return false;//销售价非空校验
+							var row = {
 								safetyTock: $("#safetyTock").val(),
 								retailPrice: $("#retailPrice").val(),
 								lowPrice: $("#lowPrice").val(),
@@ -244,20 +240,21 @@ layui.config({
 								normsStock: normsStockItem
 							};
 							tableData.push(row);
-		 	        	}
+						}
 						var params = {
 		        			materialName: $("#materialName").val(),
 		 	        		model: $("#model").val(),
 							unitName: $("#unitName").val(),
 		 	        		categoryId: checkNodes[0].id,
 		 	        		remark: $("#remark").val(),
-		 	        		unit: $("#unit").val() === 'true' ? 2 : 1,
+		 	        		unit: unit,
 		 	        		unitGroupId: $("#unitGroupId").val(),
 		 	        		firstInUnit: $("#firstInUnit").val(),
 		 	        		firstOutUnit: $("#firstOutUnit").val(),
 			 	        	materialNorms: JSON.stringify(tableData),
 			 	        	type: $("#fromType").val() === 'true' ? 1 : 2,
 			 	        	id: parent.rowId,
+							enabled: $("#enabled input:radio[name='radioProperty']:checked").val(),
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 		 	        	};
 
@@ -373,19 +370,18 @@ layui.config({
  	    		return true;
  	    	}
  	    }
- 	    
- 	    //多单位开关
- 		form.on('switch(unit)', function (data) {
- 			//同步开关值
- 			$(data.elem).val(data.elem.checked);
- 			if (data.elem.checked){//多单位
+
+		// 规格变化类型
+		form.on('radio(unit)', function (data) {
+			var val = data.value;
+			if (val == 1) {
+				$(".many-term").hide();
+				$(".single-term").show();
+			} else {
 				$(".many-term").show();
 				$(".single-term").hide();
- 			} else {//单单位
- 				$(".many-term").hide();
-				$(".single-term").show();
- 			}
- 		});
+			}
+		});
  		
  		//商品来源开关
  		form.on('switch(fromType)', function (data) {

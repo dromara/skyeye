@@ -21,7 +21,7 @@ layui.config({
 		 	url: flowableBasePath + "material007",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/material/materialdetailsTemplate.tpl'),
+		 	template: getFileContent('tpl/material/materialDetailsTemplate.tpl'),
 		 	ajaxSendAfter:function (json) {
 		 		if(json.bean.unit == '1'){//非多单位
 		 			var item = json.bean.norms[0];
@@ -53,9 +53,9 @@ layui.config({
 		$("body").on("click", ".notice-title-click", function (e) {
 			mUnitId = $(this).attr("rowid");
 			_openNewWindows({
-				url: "../../tpl/material/materialstocklist.html", 
+				url: "../../tpl/material/materialStockList.html",
 				title: "库存明细",
-				pageId: "materialstocklist",
+				pageId: "materialStockList",
 				area: ['100vw', '100vh'],
 				callBack: function (refreshCode) {
 				}});

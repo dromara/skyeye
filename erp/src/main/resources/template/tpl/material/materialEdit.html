@@ -45,7 +45,7 @@
 	            <input type="text" id="model" name="model" win-verify="required" placeholder="请输入型号" class="layui-input" maxlength="50" value="{{model}}"/>
 	        </div>
 	    </div>
-	    <div class="layui-form-item layui-col-xs12">
+	    <div class="layui-form-item layui-col-xs6">
 	        <label class="layui-form-label">所属类型<i class="red">*</i></label>
 	        <div class="layui-input-block">
 	            <div class="layui-inline" style="width: 100%">
@@ -59,6 +59,11 @@
 		        </div>
 	        </div>
 	    </div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">状态<i class="red">*</i></label>
+			<div class="layui-input-block" id="enabled">
+			</div>
+		</div>
 	    <div class="layui-form-item layui-col-xs6">
 	        <label class="layui-form-label">商品来源<i class="red">*</i></label>
 	        <div class="layui-input-block winui-switch">
@@ -89,13 +94,13 @@
         	</div>
     	</div>
 		<div class="layui-form-item layui-col-xs12">
-			<span class="hr-title">价格信息</span>
-			<hr>
+			<span class="hr-title">规格信息</span><hr>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">多单位<i class="red">*</i></label>
-			<div class="layui-input-block winui-switch">
-				<input id="unit" name="unit" lay-filter="unit" type="checkbox" lay-skin="switch" lay-text="是|否" {{#compare2 unit}}{{/compare2}} value="{{#compare3 unit}}{{/compare3}}"/>
+			<label class="layui-form-label">规格类型<i class="red">*</i></label>
+			<div class="layui-input-block winui-radio">
+				<input type="radio" name="unit" value="1" title="单规格" lay-filter="unit" />
+				<input type="radio" name="unit" value="2" title="多规格" lay-filter="unit" />
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs6 single-term">
@@ -258,7 +263,7 @@
     <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.exhide.min.js"></script>
     <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/fuzzysearch.js"></script>
    	<script type="text/javascript">
-		layui.config({base: '../../js/material/'}).use('materialedit');
+		layui.config({base: '../../js/material/'}).use('materialEdit');
 	</script>
 </body>
 </html>
