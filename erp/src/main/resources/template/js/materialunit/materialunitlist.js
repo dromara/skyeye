@@ -19,11 +19,11 @@ layui.config({
         elem: '#messageTable',
         method: 'post',
         url: flowableBasePath + 'materialunit001',
-        where: {groupName: $("#groupName").val()},
+        where: getTableParams(),
         even: true,
         page: true,
-        limits: [8, 16, 24, 32, 40, 48, 56],
-        limit: 8,
+		limits: getLimits(),
+		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'groupName', title: '组名', align: 'left', width: 120 },
@@ -32,6 +32,9 @@ layui.config({
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入组名", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -45,33 +48,22 @@ layui.config({
         }
     });
 	
-	form.render();
-
-	form.on('submit(formSearch)', function (data) {
-        
-        if (winui.verifyForm(data.elem)) {
-        	refreshloadTable();
-        }
-        return false;
-    });
-	
-	//添加
+	// 添加
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/materialunit/materialunitadd.html", 
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "materialunitadd",
-			area: ['70vw', '70vh'],
+			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
-	//删除
+	// 删除
 	function delet(data) {
-		var msg = '确认删除选中数据吗？';
-		layer.confirm(msg, { icon: 3, title: '删除计量单位' }, function (index) {
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "materialunit003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -80,33 +72,34 @@ layui.config({
 		});
 	}
 	
-	//编辑
+	// 编辑
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/materialunit/materialunitedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "materialunitedit",
-			area: ['70vw', '70vh'],
+			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
 		});
 	}
-	
-	//刷新数据
+
+	form.render();
+	// 刷新数据
     $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     
     function loadTable() {
-    	table.reloadData("messageTable", {where:{groupName: $("#groupName").val()}});
+    	table.reloadData("messageTable", {where: getTableParams()});
     }
-    
-    function refreshloadTable() {
-    	table.reloadData("messageTable", {page: {curr: 1}, where:{groupName: $("#groupName").val()}});
-    }
+
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
     
     exports('materialunitlist', {});
 });
