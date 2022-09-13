@@ -7,61 +7,31 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-    <div style="margin:0 auto; height: 100%;">
-        <div class="txtcenter" style="margin:0 auto; padding-top: 10px;">
-            <form class="layui-form layui-form-pane" action="" autocomplete="off">
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">状态</label>
-                        <div class="layui-input-inline">
-                            <select id="state">
-                                <option value="">全部</option>
-                                <option value="1">草稿</option>
-                                <option value="2">已提交(待安排面试人员)</option>
-                                <option value="3">已提交(待面试)</option>
-                                <option value="4">面试通过</option>
-                                <option value="5">面试不通过</option>
-                                <option value="6">已完成入职</option>
-                                <option value="7">已完成拒绝入职</option>
-                                <option value="8">作废</option>
-                                <option value="9">入职其他部门</option>
-                            </select>
-                        </div>
-                        <label class="layui-form-label">录入时间</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="createTime" name="createTime" placeholder="请选择录入时间" class="layui-input" />
-                        </div>
-                        <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
-                        <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="winui-toolbar">
-            <div class="winui-tool" style="text-align: left;">
-                <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-                <button id="addBean" class="winui-toolbtn" auth="1649929352279"><i class="fa fa-plus" aria-hidden="true"></i>面试安排</button>
-            </div>
-        </div>
-        <div style="margin:auto 10px;">
-            <table id="messageTable" lay-filter="messageTable"></table>
-            <script type="text/html" id="messageTableBar">
-                {{# if(d.state == '1' && auth('1649929371715')){ }}
-                    <a class="layui-btn layui-btn-xs" lay-event="sub">提交</a>
-                {{# } }}
-                {{# if((d.state == '1' || d.state == '2' || d.state == '3') && auth('1649929381788')){ }}
-                    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="cancellation">作废</a>
-                {{# } }}
-                {{# if(d.state == '1' && auth('1649929364723')){ }}
-                    <a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-                {{# } }}
-                {{# if(d.state == '4' && auth('1650189947768')){ }}
-                    <a class="layui-btn layui-btn-xs" lay-event="inductionResult">入职</a>
-                {{# } }}
-                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="details">详情</a>
-            </script>
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1649929352279"><i class="fa fa-plus" aria-hidden="true"></i>面试安排</button>
         </div>
     </div>
+    <div style="margin:auto 10px;">
+        <table id="messageTable" lay-filter="messageTable"></table>
+        <script type="text/html" id="messageTableBar">
+            {{# if(d.state == '1' && auth('1649929371715')){ }}
+                <a class="layui-btn layui-btn-xs" lay-event="sub">提交</a>
+            {{# } }}
+            {{# if((d.state == '1' || d.state == '2' || d.state == '3') && auth('1649929381788')){ }}
+                <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="cancellation">作废</a>
+            {{# } }}
+            {{# if(d.state == '1' && auth('1649929364723')){ }}
+                <a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+            {{# } }}
+            {{# if(d.state == '4' && auth('1650189947768')){ }}
+                <a class="layui-btn layui-btn-xs" lay-event="inductionResult">入职</a>
+            {{# } }}
+            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="details">详情</a>
+        </script>
+    </div>
+
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">

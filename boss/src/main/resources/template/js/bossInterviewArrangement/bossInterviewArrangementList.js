@@ -43,6 +43,9 @@ layui.config({
         ]],
         done: function(json) {
             matchingLanguage();
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入面试者", function () {
+                table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+            });
         }
     });
 
@@ -144,13 +147,6 @@ layui.config({
     }
 
     form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-        }
-        return false;
-    });
-
     // 刷新
     $("body").on("click", "#reloadTable", function() {
         loadTable();
@@ -161,16 +157,7 @@ layui.config({
     }
 
     function getTableParams() {
-        var startTime = "", endTime = "";
-        if (!isNull($("#createTime").val())) {
-            startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
-            endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
-        }
-        return {
-            state: $("#state").val(),
-            startTime: startTime,
-            endTime: endTime
-        };
+        return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('bossInterviewArrangementList', {});
