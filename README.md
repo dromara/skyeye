@@ -10,6 +10,7 @@
 - 开源版请下载`master`分支
 - [企业版信息以及价格表](https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1)
 - 作者本人承诺，知识星球人数达到1000人，即开放所有功能模块源代码(仅供星球内部成员使用)
+- 免费体验账号，联系作者填写信息后申请
 - 个人软件，无发票
 
 ### 联系作者
