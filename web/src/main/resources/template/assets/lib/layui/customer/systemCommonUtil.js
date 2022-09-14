@@ -627,7 +627,10 @@ var systemCommonUtil = {
         var params = {
             className: encodeURIComponent(skyeyeClassEnum[code]["className"])
         };
-        AjaxPostUtil.request({url: reqBasePath + "getEnumDataByClassName", params: params, type: 'json', method: "GET", callback: function(json) {
+        if (!isNull(skyeyeClassEnum[code]["filterKey"])) {
+            params["filterKey"] = skyeyeClassEnum[code]["filterKey"];
+        }
+        AjaxPostUtil.request({url: reqBasePath + "getEnumDataByClassName", params: params, type: 'json', method: "POST", callback: function(json) {
             if (showType == 'select') {
                 $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
                 if (!isNull(defaultId)) {

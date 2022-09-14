@@ -1,3 +1,8 @@
 {
-    "commonEnable": {"name": "启用/禁用", "className": "skyeye-pro#com.skyeye.common.enumeration.EnableEnum"}
+    "commonEnable": {"name": "启用/禁用", "className": "skyeye-pro#com.skyeye.common.enumeration.EnableEnum"},
+
+    "bossInterviewArrangementState": {"name": "面试安排状态枚举类", "className": "skyeye-flowable#com.skyeye.service.enumclass.BossInterviewArrangementState"},
+    "bossInterviewArrangementState1": {"name": "面试安排状态枚举类-获取我录入的人员需求关联的面试者信息列表", "className": "skyeye-flowable#com.skyeye.service.enumclass.BossInterviewArrangementState", "filterKey": "2,3,4,5,6,7"},
+    "bossInterviewArrangementState2": {"name": "面试安排状态枚举类-获取面试官为当前登录用户的面试者信息列表", "className": "skyeye-flowable#com.skyeye.service.enumclass.BossInterviewArrangementState", "filterKey": "3,4,5"}
+
 }
