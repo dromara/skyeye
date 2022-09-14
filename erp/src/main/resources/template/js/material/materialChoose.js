@@ -121,7 +121,7 @@ layui.config({
 		        { field: 'typeName', title: '商品来源', align: 'left', width: 100 },
 		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 }
 		    ]],
-		    done: function(res, curr, count){
+		    done: function(json, curr, count) {
 		    	matchingLanguage();
 		    	if(checkType == '1'){
 			    	$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
@@ -129,7 +129,7 @@ layui.config({
 						dubClick.find("input[type='radio']").prop("checked", true);
 						form.render();
 						var chooseIndex = JSON.stringify(dubClick.data('index'));
-						var obj = res.rows[chooseIndex];
+						var obj = json.rows[chooseIndex];
 						parent.erpOrderUtil.chooseProductMation = obj;
 						
 						parent.refreshCode = '0';
@@ -148,6 +148,11 @@ layui.config({
 						fieldName: 'productId'
 					});
 		    	}
+
+				initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入商品名称，型号", function () {
+					table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+				});
+
 		    }
 		});
 		
@@ -162,7 +167,7 @@ layui.config({
 		form.render();
 	}
 	
-	//详情
+	// 详情
 	function details(data) {
 		rowId = data.productId;
 		_openNewWindows({
@@ -174,7 +179,7 @@ layui.config({
 			}});
 	}
 	
-	//保存按钮-多选才有
+	// 保存按钮-多选才有
 	$("body").on("click", "#saveCheckBox", function() {
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
@@ -185,13 +190,8 @@ layui.config({
 			parent.refreshCode = '0';
    		}});
 	});
-	
-	
-	$("body").on("click", "#formSearch", function() {
-		refreshTable();
-	});
-	
-	 $("body").on("click", "#reloadTable", function() {
+
+	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     
@@ -204,12 +204,7 @@ layui.config({
     }
 
 	function getTableParams() {
-		return {
-			materialName: $("#materialName").val(), 
-    		model: $("#model").val(), 
-    		categoryId: categoryId, 
-    		typeNum: $("#typeNum").val()
-		};
+		return $.extend(true, {categoryId: categoryId}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
     exports('materialChoose', {});

@@ -117,10 +117,14 @@ layui.config({
 		    ]],
 		    done: function(res, curr, count){
 		    	matchingLanguage();
-	    		//设置选中
+	    		// 设置选中
 	    		tableCheckBoxUtil.checkedDefault({
 					gridId: 'messageTable',
 					fieldName: 'productId'
+				});
+
+				initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入商品名称，型号", function () {
+					table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 				});
 		    }
 		});
@@ -269,14 +273,6 @@ layui.config({
 	
 	
     form.render();
-    form.on('submit(formSearch)', function (data) {
-        
-        if (winui.verifyForm(data.elem)) {
-            refreshTable();
-        }
-        return false;
-    });
-	
 	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
@@ -290,12 +286,7 @@ layui.config({
     }
 
 	function getTableParams() {
-		return {
-			materialName: $("#materialName").val(), 
-    		model: $("#model").val(), 
-    		categoryId: categoryId, 
-    		typeNum: $("#typeNum").val()
-		};
+		return $.extend(true, {categoryId: categoryId}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
     exports('materialChooseToProduce', {});
