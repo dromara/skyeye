@@ -6,17 +6,14 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
     winui.renderColor();
     var $ = layui.$,
         form = layui.form,
-        laydate = layui.laydate,
         table = layui.table;
 
     // 新增
     authBtn('1649929352279');
-
-    laydate.render({elem: '#createTime', range: '~'});
 
     table.render({
         id: 'messageTable',
@@ -147,7 +144,6 @@ layui.config({
     }
 
     form.render();
-    // 刷新
     $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
