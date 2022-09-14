@@ -115,7 +115,7 @@ layui.config({
 			    }},
 		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 }
 		    ]],
-		    done: function(res, curr, count){
+		    done: function(json, curr, count){
 		    	matchingLanguage();
 	    		// 设置选中
 	    		tableCheckBoxUtil.checkedDefault({
