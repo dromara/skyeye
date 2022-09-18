@@ -1,0 +1,110 @@
+.rule-pattern-wrapper {
+	width: 100%;
+	height: 300px;
+	border: solid 1px #d8d5d5;
+}
+
+.rule-pattern-wrapper-left {
+	float: left;
+	width: 15%;
+	height: 100%;
+	border-right: solid 1px #d8d5d5;
+}
+
+.rule-pattern-wrapper-right-config,
+.rule-pattern-wrapper-right-show {
+	height: 50%;
+	width: calc(85% - 1px);
+	float: left;
+}
+
+.pattern-rules-title {
+	background-color: #f1f1f1;
+	padding: 5px;
+	line-height: 25px;
+	height: 25px;
+	font-size: 13px;
+}
+
+.pattern-rules-title .tip {
+	margin-left: 10px;
+	font-size: 10px;
+	color: #953535;
+}
+
+.pattern-rules-body {
+	height: calc(100% - 35px);
+}
+
+.ruleList {
+	padding: 0 15px;
+}
+
+.ruleList .config-item {
+	cursor: pointer !important;
+	padding: 10px 15px !important;
+	text-align: center !important;
+	border-radius: 3px !important;
+	border: solid 1px #eee !important;
+	margin: 20px 10px !important;
+	max-width: inherit;
+	top: 0px !important;
+	display: block !important;
+	height: auto !important;
+	line-height: inherit;
+}
+
+.ruleList .rule-pattern-text {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.ruleConfig {
+	text-align: center;
+	white-space: nowrap;
+	position: relative;
+}
+
+.config-item {
+	vertical-align: middle;
+	cursor: move;
+	position: relative;
+	max-width: 140px;
+	padding: 10px 17px;
+	height: 30px;
+	max-height: 30px;
+	line-height: 30px;
+	display: inline-block;
+	top: 30px;
+}
+
+.config-item:hover .btn-base {
+	display: block;
+}
+
+.config-item .btn-base {
+	position: absolute;
+	right: 0px;
+	top: -25px;
+	display: none;
+}
+
+.config-item select,
+.config-item input {
+	width: 130px;
+}
+
+.ruleConfig .active {
+	border: 1px solid black;
+}
+
+.ruleShow {
+	text-align: center;
+	font-size: 25px;
+	margin-top: 25px;
+}
+
+.ruleShow p {
+	margin-top: 5px;
+}

@@ -327,6 +327,7 @@ function getCookie(name) {
 			spop: 'spop/spop', //气泡提示
 			orgChart: "orgChart/js/jquery.orgchart", //组织结构图
 			jsonEditor: 'jsonEditor/jquery.json-editor.min', //json格式的数据编辑器
+			ruleCode: 'ruleCode/ruleCode', // 编码规则
 		};
 
 	// 记录基础数据
