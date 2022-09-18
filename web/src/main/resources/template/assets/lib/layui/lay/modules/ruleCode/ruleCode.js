@@ -478,13 +478,17 @@ layui.define(["jquery", "dragula", 'winui', 'form', 'element'], function(exports
 					};
 				} else {
 					var content = variableMap[value].content;
-					if (variableMap[value].type == 'map' && !isNull(variableMap[value].content)) {
-						var contentMap = {};
-						content = content.split(/\n/);
-						$.each(content, function (i, item) {
-							contentMap[item.split("|")[0]] = item.split("|")[1];
-						});
-						content = contentMap;
+					if (variableMap[value].type == 'map') {
+						if (!isNull(variableMap[value].content)) {
+							var contentMap = {};
+							content = content.split(/\n/);
+							$.each(content, function (i, item) {
+								contentMap[item.split("|")[0]] = item.split("|")[1];
+							});
+							content = contentMap;
+						} else {
+							content = {};
+						}
 					}
 					params = {
 						type: variableMap[value].type,
