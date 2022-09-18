@@ -17,7 +17,7 @@ layui.define(["jquery", "dragula", 'winui', 'form', 'element'], function(exports
     }, {
         text: "日期",
         code: "code_manage_date",
-        html: '<select class="layui-input code_manage_date"><option value="yyyy" data-lang="code_manage_y">年</option><option value="yyyyMM" data-lang="code_manage_y_m">年月</option><option value="yyyyMMdd" data-lang="code_manage_y_m_d">年月日</option><option value="yyyyMMddhh" data-lang="code_manage_y_m_d_h">年月日时</option></select>',
+        html: '<select class="layui-input code_manage_date" lay-filter="code_manage_date"><option value="yyyy" data-lang="code_manage_y">年</option><option value="yyyyMM" data-lang="code_manage_y_m">年月</option><option value="yyyyMMdd" data-lang="code_manage_y_m_d">年月日</option><option value="yyyyMMddhh" data-lang="code_manage_y_m_d_h">年月日时</option></select>',
         helper: '<p data-lang="code_manage_y" class="ellipsis">年</p><p> yyyy</p><p data-lang="code_manage_y_m" class="ellipsis">年月</p><p> yyyyMM</p><p data-lang="code_manage_y_m_d" class="ellipsis">年月日</p><p> yyyyMMdd</p><p data-lang="code_manage_y_m_d_h" class="ellipsis">年月日时</p><p> yyyyMMddhh</p>',
         bgColor: "#FFBB96",
         eg: function(value) {
@@ -128,6 +128,7 @@ layui.define(["jquery", "dragula", 'winui', 'form', 'element'], function(exports
 				$(el).find(".check-item-operation").hide();
 				// 加载预览
 				_this.loadShow(options.id);
+				form.render('select');
 			}
 		});
 	};
@@ -138,7 +139,9 @@ layui.define(["jquery", "dragula", 'winui', 'form', 'element'], function(exports
 		
 		// 删除配置中的规则对象
 		$("body").on("click", ".removeThis", function() {
-			$(this).parent().parent().remove();
+			$(this).parent().parent().parent().remove();
+			// 加载预览
+			_this.loadShow(options.id);
 		});
 		
 		// 规则
@@ -171,7 +174,7 @@ layui.define(["jquery", "dragula", 'winui', 'form', 'element'], function(exports
 		});
 		
 		// 变化监听
-		$("body").on("change", ".code_manage_date", function(e) {
+		form.on('select(code_manage_date)', function(data) {
 			_this.loadShow(options.id);
 		});
 		$("body").on("input", ".code_manage_pure_text, .code_manage_variable, .code_manage_pipeline_code", function(e) {
@@ -193,7 +196,7 @@ layui.define(["jquery", "dragula", 'winui', 'form', 'element'], function(exports
 				layer.msg("没有可以转换的变量", {time: 3000, tips: 3});
 				return;
 			}
-			
+
 			var variableSelectStr = [];
 			var variableSelectHtml = '<select class="layui-input" lay-filter="variableSelect" id="variableSelect">';
 			var firstValue = '';
@@ -354,6 +357,8 @@ layui.define(["jquery", "dragula", 'winui', 'form', 'element'], function(exports
 						'</div>' + 
 					'</div>';
 		_config.html(_html);
+		// 加载预览
+		this.loadShow(options.id);
 	};
 	
 	// 回显数据
@@ -508,6 +513,7 @@ layui.define(["jquery", "dragula", 'winui', 'form', 'element'], function(exports
 			var value = $(codeRuleList.eq(i)).find(".layui-input").val();
 			if (isNull(value)) {
 				layer.msg("存在为空的规则", {time: 3000, tips: 3});
+				$("body").find(".mask-req-str").remove();
 				return false;
 			}
 		}
