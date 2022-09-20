@@ -45,7 +45,7 @@ layui.config({
 	        cols: [[
 	            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	            { field: 'materialName', title: '产品名称', align: 'left', width: 250},
-			    { field: 'model', title: '型号', align: 'left', width: 100},
+			    { field: 'materialModel', title: '型号', align: 'left', width: 100},
 	            { field: 'unitName', title: '单位', align: 'left', width: 80},
 	            { field: 'currentTock', title: '进货数量', align: 'left', width: 100},
 	            { field: 'currentTockMoney', title: '进货金额', align: 'left', width: 120},
@@ -58,10 +58,8 @@ layui.config({
 	    });
 	    form.render();
 	}
-	
-    
+
     form.on('submit(formSearch)', function (data) {
-        
         if (winui.verifyForm(data.elem)) {
             loadTable();
         }
