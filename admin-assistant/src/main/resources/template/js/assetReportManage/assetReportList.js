@@ -30,7 +30,10 @@ layui.config({
 			}},
 			{ field: 'unitPrice', title: '采购单价', width: 100 },
 			{ field: 'fromName', title: '资产来源', width: 120 },
-			{ field: 'stateName', title: '状态', width: 100 },
+			{ field: 'barCodeMation', title: '条形码', align: 'center', width: 100, templet: function (d) {
+				return '<img src="' + systemCommonUtil.getFilePath(d.barCodeMation.imagePath) + '" class="photo-img" lay-event="barCode" style="width: 100px">';
+			}},
+			{ field: 'stateName', title: '状态', align: 'center', width: 100 },
 			{ field: 'assetAdmin', title: '管理员', width: 80 },
 			{ field: 'useUserName', title: '申领人', width: 120 },
 			{ field: 'storageArea', title: '存放区域', width: 140 },
@@ -53,6 +56,8 @@ layui.config({
 		var layEvent = obj.event;
 		if (layEvent === 'details') { // 详情
 			details(data);
+		} else if (layEvent === 'barCode') { // 条形码预览
+			systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(data.barCodeMation.imagePath));
 		}
     });
 
@@ -69,7 +74,6 @@ layui.config({
 	}
 
 	form.render();
-	// 刷新数据
     $("body").on("click", "#reloadTable", function() {
     	loadassetTable();
     });
