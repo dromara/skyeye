@@ -89,11 +89,40 @@ var initTableSearchUtil = {
      * @param keywordPlaceholder 关键字搜索的提示语
      */
     initTableKeyWordSearch: function (tableId, keywordPlaceholder) {
-        var str = '<div class="keyword-box">' +
+        var str;
+        if (typeof keywordPlaceholder === 'object') {
+            str = '<div class="keyword-box">' +
+                '<input type="text" id="' + tableId + 'KeyWord" placeholder="' + keywordPlaceholder.value + '" class="layui-input search-input-keyword" />' +
+                '<i class="fa fas fa-search input-icon search-btn-keyword" id="' + tableId + 'SearchTable" title="' + systemLanguage["com.skyeye.search2"][languageType] + '"></i>' +
+                '</div>';
+        } else {
+            str = '<div class="keyword-box">' +
                 '<input type="text" id="' + tableId + 'KeyWord" placeholder="' + keywordPlaceholder + '" class="layui-input search-input-keyword" />' +
                 '<i class="fa fas fa-search input-icon search-btn-keyword" id="' + tableId + 'SearchTable" title="' + systemLanguage["com.skyeye.search2"][languageType] + '"></i>' +
-            '</div>';
+                '</div>';
+        }
         $(".winui-tool").append(str);
+        // 当对输入框有要求时
+        if (typeof keywordPlaceholder === 'object') {
+            // 是否有默认值
+            if (!isNull(keywordPlaceholder.defaultValue)) {
+                $("#" + tableId + "KeyWord").val(keywordPlaceholder.defaultValue);
+            }
+            if (keywordPlaceholder.type == 'month') {
+                var jsCon;
+                // 是否必填
+                if (keywordPlaceholder.required == 'required') {
+                    jsCon = '<script>layui.define(["laydate"], function(exports) {' +
+                        'var laydate = layui.laydate;laydate.render({elem: "#' + tableId + 'KeyWord", type: "' + keywordPlaceholder.type + '", trigger: "click", btns: ["confirm"]});' +
+                        '})</script>';
+                } else {
+                    jsCon = '<script>layui.define(["laydate"], function(exports) {' +
+                        'var laydate = layui.laydate;laydate.render({elem: "#' + tableId + 'KeyWord", type: "' + keywordPlaceholder.type + '", trigger: "click"});' +
+                        '})</script>';
+                }
+                $(".winui-tool").append(jsCon);
+            }
+        }
     },
 
     /**

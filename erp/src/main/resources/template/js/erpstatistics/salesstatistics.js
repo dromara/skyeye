@@ -1,35 +1,16 @@
 
-var rowId = "";
-
-//单据的时间
-var operTime = "";
 
 layui.config({
     base: basePath,
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
     winui.renderColor();
     var $ = layui.$,
         form = layui.form,
-        laydate = layui.laydate,
         table = layui.table;
         
-    //初始化统计时间
-	operTime = getOneYMFormatDate();
-	
-	//获取本月日期
-	function getOneYMFormatDate(){
-		 var date = new Date;
-		 var year = date.getFullYear(); 
-		 var month = date.getMonth() + 1;
-		 month = (month < 10 ? "0" + month : month); 
-		 return year.toString() + "-" + month.toString();
-	}
-	
-    laydate.render({elem: '#operTime', type: 'month', value: operTime});
-	
 	initTable();
 	function initTable(){
 	    table.render({
@@ -37,62 +18,49 @@ layui.config({
 	        elem: '#messageTable',
 	        method: 'post',
 	        url: flowableBasePath + 'statistics004',
-	        where: {materialName: $("#materialName").val(), operTime: operTime},
+	        where: getTableParams(),
 	        even: true,
 	        page: true,
-	        limits: [8, 16, 24, 32, 40, 48, 56],
-	        limit: 8,
+			limits: getLimits(),
+			limit: getLimit(),
 	        cols: [[
 	            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	            { field: 'materialName', title: '产品名称', align: 'left', width: 250},
-			    { field: 'materialModel', title: '型号', align: 'left', width: 100},
-	            { field: 'unitName', title: '单位', align: 'left', width: 80},
-	            { field: 'currentTock', title: '销售数量', align: 'left', width: 100},
-	            { field: 'currentTockMoney', title: '销售金额', align: 'left', width: 120},
-	            { field: 'returnCurrentTock', title: '退货数量', align: 'left', width: 100},
+	            { field: 'materialName', title: '产品名称', align: 'left', width: 250 },
+			    { field: 'materialModel', title: '型号', align: 'left', width: 150 },
+	            { field: 'unitName', title: '单位', align: 'left', width: 80 },
+	            { field: 'currentTock', title: '销售数量', align: 'left', width: 100 },
+	            { field: 'currentTockMoney', title: '销售金额', align: 'left', width: 120 },
+	            { field: 'returnCurrentTock', title: '退货数量', align: 'left', width: 100 },
 	            { field: 'returnCurrentTockMoney', title: '退货金额', align: 'left', width: 120 }
 	        ]],
 		    done: function(json) {
 		    	matchingLanguage();
+				initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form,
+					{value: "请选择日期", type: 'month', defaultValue: getOneYMFormatDate(), required: 'required'},
+					function () {
+					table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+				});
 		    }
 	    });
-	    form.render();
 	}
-	
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            loadTable();
-        }
-        return false;
-    });
 
-    $("body").on("click", "#reloadTable", function() {
-        loadTable();
-    });
+	form.render();
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
+	});
 
-    $("body").on("click", "#formSearch", function () {
-        refreshTable();
-    })
-    
-    //刷新
+	// 刷新
     function loadTable() {
-    	if(isNull($("#operTime").val())) {//一定要记得，当createTime为空时
-    		winui.window.msg("请选择日期.", {icon: 2, time: 2000});
-    	}else {
-    		operTime = $("#operTime").val();
-	        table.reloadData("messageTable", {where:{materialName: $("#materialName").val(), operTime: operTime}});
-    	}
+		table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    //搜索
-    function refreshTable(){
-    	if(isNull($("#operTime").val())) {//一定要记得，当createTime为空时
-    		winui.window.msg("请选择日期.", {icon: 2, time: 2000});
-    	}else {
-    		operTime = $("#operTime").val();
-	        table.reloadData("messageTable", {page: {curr: 1}, where:{materialName: $("#materialName").val(), operTime: operTime}})
-    	}
-    }
+	function getTableParams() {
+		var params = {};
+		if ($("#messageTableKeyWord").length == 0) {
+			params["keyword"] = getOneYMFormatDate();
+		}
+		return $.extend(true, params, initTableSearchUtil.getSearchValue("messageTable"));
+	}
 
     exports('incomingstatistics', {});
 });
