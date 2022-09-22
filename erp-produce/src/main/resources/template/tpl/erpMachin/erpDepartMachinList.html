@@ -7,30 +7,11 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-	<div class="winui-tip alert-info" id="showInfo">
-		该数据仅展示已经由上级审批通过的部门加工单信息。
-	</div>
-	<div class="txtcenter" style="margin:0 auto;padding-top:10px;">
-	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
-	        <div class="layui-form-item">
-	            <div class="layui-inline">
-	                <label class="layui-form-label">单据编号</label>
-	                <div class="layui-input-inline">
-	                    <input type="text" id="defaultNumber" name="defaultNumber" placeholder="请输入单据编号" class="layui-input" />
-	                </div>
-	                <label class="layui-form-label">商品名称</label>
-	                <div class="layui-input-inline">
-	                    <input type="text" id="materialName" name="materialName" placeholder="请输入名称" class="layui-input" />
-	                </div>
-	                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
-	                <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
-	            </div>
-	        </div>
-	    </form>
-	</div>
+	<div class="winui-tip alert-info" id="showInfo">该数据仅展示已经由上级审批通过的部门加工单信息。</div>
+
 	<div class="winui-toolbar">
 	    <div class="winui-tool">
-	        <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+	        <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
 	    </div>
 	</div>
 	<div style="margin:auto 10px;">

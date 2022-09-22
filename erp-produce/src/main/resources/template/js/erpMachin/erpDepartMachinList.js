@@ -21,14 +21,14 @@ layui.config({
         where: getTablePatams(),
         even: true,
         page: true,
-        limits: [8, 16, 24, 32, 40, 48, 56],
         overflow: {
             type: 'tips',
             hoverTime: 300, // 悬停时间，单位ms, 悬停 hoverTime 后才会显示，默认为 0
             minWidth: 150, // 最小宽度
             maxWidth: 500 // 最大宽度
         },
-        limit: 8,
+        limits: getLimits(),
+        limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
             { field: 'orderNum', rowspan: '2', title: '单据编号', align: 'center', width: 180, templet: function (d) {
@@ -75,28 +75,21 @@ layui.config({
         done: function(json) {
         	matchingLanguage();
 	    	soulTable.render(this);
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单据编号", function () {
+                table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+            });
         }
     });
 
     table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'details') { //详情
+        if (layEvent === 'details') { // 详情
         	details(data);
         }
     });
 
-    
-    form.render();
-    form.on('submit(formSearch)', function (data) {
-        
-        if (winui.verifyForm(data.elem)) {
-            loadTable();
-        }
-        return false;
-    });
-    
-    //详情
+    // 详情
 	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
@@ -107,26 +100,19 @@ layui.config({
 			callBack: function (refreshCode) {
 			}});
 	}
-	
+
+    form.render();
     $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
 
-    //刷新
+    // 刷新
     function loadTable() {
         table.reloadData("messageTable", {where: getTablePatams()});
     }
 
-    //搜索
-    function refreshTable(){
-        table.reloadData("messageTable", {page: {curr: 1}, where: getTablePatams()})
-    }
-    
     function getTablePatams(){
-    	return {
-    		defaultNumber: $("#defaultNumber").val(), 
-    		materialName: $("#materialName").val()
-    	};
+    	return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('erpDepartMachinList', {});
