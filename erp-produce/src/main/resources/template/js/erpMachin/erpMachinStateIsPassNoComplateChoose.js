@@ -65,8 +65,8 @@ layui.config({
 				var chooseIndex = JSON.stringify(dubClick.data('index'));
 				var obj = json.rows[chooseIndex];
 
-				//根据加工单id获取该单据下的所有单据中商品以及剩余领料数量
-				AjaxPostUtil.request({url: flowableBasePath + "erpmachin011", params: {rowId: obj.id}, type: 'json', callback: function(json) {
+				// 根据加工单id获取该单据下的所有单据中商品以及剩余领料数量
+				AjaxPostUtil.request({url: flowableBasePath + "erpmachin011", params: {id: obj.id}, type: 'json', method: 'GET', callback: function(json) {
 					obj.norms = [].concat(json.rows);
 					parent.machinMation = obj;
 

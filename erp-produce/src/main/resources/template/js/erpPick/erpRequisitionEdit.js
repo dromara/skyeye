@@ -39,7 +39,7 @@ layui.config({
 		});
 
  		function loadData(){
-			AjaxPostUtil.request({url:flowableBasePath + "erppick005", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url:flowableBasePath + "erppick005", params: {id: parent.rowId}, type: 'json', method: 'GET', callback: function (json) {
 				var data = json.bean;
 				if (!isNull(data.machinId)){
 					$("#machinOrder").val(data.machinNum);
@@ -60,7 +60,7 @@ layui.config({
 					$("#unitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.unitList}));
 					$("#unitId" + (rowNum - 1)).val(item.normsId);
 					//商品回显
-					$("#materialId" + (rowNum - 1)).val(item.productName + "(" + item.productModel + ")");
+					$("#materialId" + (rowNum - 1)).val(item.materialName + "(" + item.materialModel + ")");
 					$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
 					$.each(data.machinToMation, function(j, bean){
 						if(bean.normsId == item.normsId){
@@ -263,7 +263,7 @@ layui.config({
 						$("#unitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.unitList}));
 						$("#unitId" + (rowNum - 1)).val(item.normsId);
 						//商品回显
-						$("#materialId" + (rowNum - 1)).val(item.productName + "(" + item.productModel + ")");
+						$("#materialId" + (rowNum - 1)).val(item.materialName + "(" + item.materialModel + ")");
 						$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
 						//所需领料总数量
 						$("#productionNum" + (rowNum - 1)).html(item.needNumber);

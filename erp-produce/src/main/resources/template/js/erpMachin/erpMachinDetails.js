@@ -20,58 +20,56 @@ layui.config({
 	    var $ = layui.$,
 		    form = layui.form;
 	    
-		initData();
-		function initData(){
-	 		showGrid({
-				id: "showForm",
-				url: flowableBasePath + "erpmachin006",
-				params: {rowId: parent.rowId},
-				pagination: false,
-				template: $("#useTemplate").html(),
-				ajaxSendLoadBefore: function(hdb, json){
-					needNum = json.bean.needNum;
-					
-					hdb.registerHelper('compare1', function(v1, v2, options) {
-			 			return (parseFloat(v1) * parseFloat(v2)).toFixed(2);
-			 		});
-			 		
-			 		var loadOperatorBtn = false;
-					$.each(json.bean.procedure, function(i, item) {
-						item.unitPrice = parseFloat(item.unitPrice).toFixed(2);
-	            		if(item.state == 1){
-	            			item.stateName = "<span class='state-down'>待验收</span>";
-	            			if(!loadOperatorBtn){
-	            				loadOperatorBtn = true;
-	            				if(i == (json.bean.procedure.length - 1)){
-		            				item.operator = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal acceptance" rowId="' + item.id + '" subType="2">生成验收单</button>';
-		            			} else {
-		            				item.operator = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal acceptance" rowId="' + item.id + '" subType="1">工序验收</button>';
-		            			}
-	            			} else {
-	            				if(i == (json.bean.procedure.length - 1)){
-		            				item.operator = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal layui-btn-disabled">生成验收单</button>';
-		            			} else {
-		            				item.operator = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal layui-btn-disabled">工序验收</button>';
-		            			}
-	            			}
-	            		} else if (item.state == 2){
-	            			item.stateName = "<span class='state-up'>已验收</span>"
-	            		}
-	            	});
-	            	
-	            	$.each(json.bean.materiel, function(i, item) {
-						item.unitPrice = parseFloat(item.unitPrice).toFixed(2);
-	            	});
+		showGrid({
+			id: "showForm",
+			url: flowableBasePath + "erpmachin006",
+			params: {id: parent.rowId},
+			pagination: false,
+			method: 'GET',
+			template: $("#useTemplate").html(),
+			ajaxSendLoadBefore: function(hdb, json){
+				needNum = json.bean.needNum;
 
-					$("#contentIframe").attr("src", "../../tpl/erpcommon/erpOrderFlowLine.html?rowId=" + json.bean.id + "&type=3");
-				},
-				ajaxSendAfter: function (json) {
-					matchingLanguage();
-					form.render();
-				}
-			});
-		}
-		
+				hdb.registerHelper('compare1', function(v1, v2, options) {
+					return (parseFloat(v1) * parseFloat(v2)).toFixed(2);
+				});
+
+				var loadOperatorBtn = false;
+				$.each(json.bean.procedure, function(i, item) {
+					item.unitPrice = parseFloat(item.unitPrice).toFixed(2);
+					if(item.state == 1){
+						item.stateName = "<span class='state-down'>待验收</span>";
+						if(!loadOperatorBtn){
+							loadOperatorBtn = true;
+							if(i == (json.bean.procedure.length - 1)){
+								item.operator = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal acceptance" rowId="' + item.id + '" subType="2">生成验收单</button>';
+							} else {
+								item.operator = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal acceptance" rowId="' + item.id + '" subType="1">工序验收</button>';
+							}
+						} else {
+							if(i == (json.bean.procedure.length - 1)){
+								item.operator = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal layui-btn-disabled">生成验收单</button>';
+							} else {
+								item.operator = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal layui-btn-disabled">工序验收</button>';
+							}
+						}
+					} else if (item.state == 2){
+						item.stateName = "<span class='state-up'>已验收</span>"
+					}
+				});
+
+				$.each(json.bean.material, function(i, item) {
+					item.unitPrice = parseFloat(item.unitPrice).toFixed(2);
+				});
+
+				$("#contentIframe").attr("src", "../../tpl/erpcommon/erpOrderFlowLine.html?rowId=" + json.bean.id + "&type=3");
+			},
+			ajaxSendAfter: function (json) {
+				matchingLanguage();
+				form.render();
+			}
+		});
+
 		// 打印
 		$("body").on("click", "#jprint", function (e) {
 			$("#showForm").jqprint({

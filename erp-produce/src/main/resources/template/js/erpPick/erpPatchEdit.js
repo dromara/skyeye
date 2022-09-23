@@ -251,7 +251,7 @@ layui.config({
 						$("#unitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.unitList}));
 						$("#unitId" + (rowNum - 1)).val(item.normsId);
 						//商品回显
-						$("#materialId" + (rowNum - 1)).val(item.productName + "(" + item.productModel + ")");
+						$("#materialId" + (rowNum - 1)).val(item.materialName + "(" + item.materialModel + ")");
 						$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
 						//建议数量
 						$("#rkNum" + (rowNum - 1)).val(0);

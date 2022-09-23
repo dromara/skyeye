@@ -15,8 +15,9 @@ layui.config({
  		showGrid({
 			id: "showForm",
 			url: flowableBasePath + "erpmachin006",
-			params: {rowId: parent.rowId},
+			params: {id: parent.rowId},
 			pagination: false,
+			method: 'GET',
 			template: $("#useTemplate").html(),
 			ajaxSendLoadBefore: function(hdb) {
 				hdb.registerHelper('compare1', function(v1, v2, options) {
