@@ -1003,7 +1003,7 @@ layui.config({
     }
     
     //打开二级窗口
-    function showBigWin(menuitem) {
+    function showBigWin(menuItem) {
     	var menu = $(menuItem);
     	var title = "";
     	if(isNull(menu[0].outerText)){

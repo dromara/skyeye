@@ -46,7 +46,7 @@ layui.config({
                 return activitiUtil.showStateName(d.state, d.submitType);
 		    }},
             { field: 'totalPrice', title: '合计金额', rowspan: '2', align: 'left', width: 120},
-            { field: 'operPersonName', title: '操作人', rowspan: '2', align: 'left', width: 100},
+            { field: 'operPersonName', title: '操作人', rowspan: '2', align: 'left', width: 120},
             { field: 'operTime', title: '单据日期', rowspan: '2', align: 'center', width: 140 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', rowspan: '2', align: 'center', width: 200, toolbar: '#tableBar'}
         ],[
