@@ -39,7 +39,7 @@ layui.config({
 		});
 
  		function loadData(){
-			AjaxPostUtil.request({url:flowableBasePath + "erppick005", params: {id: parent.rowId}, type: 'json', method: 'GET', callback: function (json) {
+			AjaxPostUtil.request({url:flowableBasePath + "erppick007", params: {id: parent.rowId}, type: 'json', method: 'GET', callback: function (json) {
 				var data = json.bean;
 				if (!isNull(data.machinId)){
 					$("#machinOrder").val(data.machinNum);
