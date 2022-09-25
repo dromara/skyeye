@@ -6,16 +6,12 @@
  */
 function loadTockByDepotAndMUnit(rowNum, depotId) {
     // 获取当前选中的规格
-    var chooseUnitId = $("#mUnitId" + rowNum).val();
+    var normsId = $("#mUnitId" + rowNum).val();
     // 当规格不为空时
-    if (!isNull(chooseUnitId)) {
+    if (!isNull(normsId)) {
         // 获取库存
-        getStockAjaxByDepotAndNormsId(chooseUnitId, depotId, function (json) {
-            var currentTock = 0;
-            if (!isNull(json.bean)) {
-                currentTock = json.bean.currentTock;
-            }
-            $("#currentTock" + rowNum).html(currentTock);
+        getStockAjaxByDepotAndNormsId(normsId, depotId, function (json) {
+            $("#currentTock" + rowNum).html(json.bean[normsId]);
         });
     } else {
         // 否则重置库存为空
@@ -30,14 +26,14 @@ function loadTockByDepotAndMUnit(rowNum, depotId) {
  */
 function loadMaterialDepotStockByDepotId(depotId) {
     var normsIds = new Array();
-    var normsIdsNum = new Array();
+    var normsIdIndex = new Array();
     $.each(initTableChooseUtil.getDataRowIndex('productList'), function (i, item) {
         // 获取行坐标
         var thisRowKey = item;
-        var unitId = $("#mUnitId" + thisRowKey).val();
-        if (!isNull(unitId)) {
-            normsIds.push(unitId);
-            normsIdsNum.push(thisRowKey);
+        var normsId = $("#mUnitId" + thisRowKey).val();
+        if (!isNull(normsId)) {
+            normsIds.push(normsId);
+            normsIdIndex[thisRowKey] = normsId;
         }
     });
     if (normsIds.length == 0) {
@@ -45,13 +41,10 @@ function loadMaterialDepotStockByDepotId(depotId) {
     }
     // 获取库存
     getStockAjaxByDepotAndNormsId(normsIds.join(','), depotId, function (json) {
-        if (normsIds.length == 1) {
-            $("#currentTock" + normsIdsNum[0]).html(json.bean.currentTock);
-        } else {
-            $.each(normsIdsNum, function (i, item) {
-                $("#currentTock" + normsIdsNum[i]).html(json.rows[i].currentTock);
-            });
-        }
+        var stockMation = json.bean;
+        $.each(normsIdIndex, function (rowIndex, normsId) {
+            $("#currentTock" + normsIdIndex[rowIndex]).html(stockMation[normsId]);
+        });
     });
 }
 

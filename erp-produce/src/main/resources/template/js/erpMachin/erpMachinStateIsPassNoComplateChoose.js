@@ -46,7 +46,7 @@ layui.config({
 				}
 			}},
 			{ colspan: '3', title: '加工信息', align: 'center'},
-			{ field: 'createName', rowspan: '2', title: '录入人', align: 'left', width: 100},
+			{ field: 'createName', rowspan: '2', title: '录入人', align: 'left', width: 120},
 			{ field: 'createTime', rowspan: '2', title: '录入日期', align: 'center', width: 150 }
 		],[
 			{ field: 'materialName', title: '名称', align: 'left', width: 120},
