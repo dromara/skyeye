@@ -15,7 +15,7 @@
 	        <div class="layui-form-item layui-col-xs6">
 	            <label class="layui-form-label">商品名称<i class="red">*</i></label>
 	            <div class="layui-input-block">
-	                <input type="text" id="productName" name="productName" win-verify="required" placeholder="请选择商品" class="layui-input" readonly="readonly"/>
+	                <input type="text" id="materialName" name="materialName" win-verify="required" placeholder="请选择商品" class="layui-input" readonly="readonly"/>
 	                <i class="fa fa-plus-circle input-icon" id="productNameSel"></i>
 	            </div>
 	        </div>
@@ -29,7 +29,7 @@
 	        <div class="layui-form-item layui-col-xs6">
 	            <label class="layui-form-label">商品型号</label>
 	            <div class="layui-input-block">
-	                <input type="text" id="productModel" name="productModel" placeholder="请选择商品" class="layui-input" readonly="readonly"/>
+	                <input type="text" id="materialModel" name="materialModel" placeholder="请选择商品" class="layui-input" readonly="readonly"/>
 	            </div>
 	        </div>
 	        <div class="layui-form-item layui-col-xs6">
@@ -142,8 +142,8 @@
 	<script type="text/html" id="tableBody">
 		{{#each rows}}
 			<tr rowid="{{productId}}">
-               	<td id="name{{productId}}">{{productName}}</td>
-               	<td id="model{{productId}}">{{productModel}}</td>
+               	<td id="name{{productId}}">{{materialName}}</td>
+               	<td id="model{{productId}}">{{materialModel}}</td>
 				<td>{{categoryName}}</td>
                	<td>{{typeName}}</td>
 				<td>
@@ -153,7 +153,7 @@
 				</td>
                	<td style="text-align: center;">{{needNum}}{{unitName}}</td>
 				<td style="text-align: center;" id="needNum{{productId}}">{{needNum}}</td>
-               	<td>{{deportAllTock}}</td>
+               	<td>{{currentTock}}</td>
 				<td>{{beWarehousedNum}}</td>
 				<td>
 					<input type="text" id="proposal{{productId}}" name="proposal{{productId}}" win-verify="required|number" placeholder="请输入采购或生产数量" class="layui-input"/>

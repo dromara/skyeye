@@ -41,23 +41,23 @@ layui.config({
  		textool.init({eleId: 'remark', maxlength: 200});
  		
  		//回显数据
- 		AjaxPostUtil.request({url: flowableBasePath + "erpproduction003", params: {orderId: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
-			//商品信息
+ 		AjaxPostUtil.request({url: flowableBasePath + "erpproduction003", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
+			// 商品信息
 			erpOrderUtil.chooseProductMation = {
 				productId: json.bean.productId,
 				productName: json.bean.materialName,
 				productModel: json.bean.materialModel
 			};
-			$("#productName").val(json.bean.materialName);
-			$("#productModel").val(json.bean.materialModel);
-			//订单信息
+			$("#materialName").val(json.bean.materialName);
+			$("#materialModel").val(json.bean.materialModel);
+			// 订单信息
 			if (!isNull(json.bean.orderId)){
 				salesOrder = {
 					orderHeaderId: json.bean.orderId
 				};
 				$("#salesOrder").val(json.bean.defaultNumber);
 			}
-			//规格
+			// 规格
 			$("#unitList").html(getDataUseHandlebars(selTemplate, {rows: json.bean.unitList}));
 			$("#unitList").val(json.bean.normsId);
 			$("#number").val(json.bean.number);
@@ -65,10 +65,11 @@ layui.config({
 			$("#planComplateDate").val(json.bean.planComplateDate);
 			$("#operTime").val(json.bean.operTime);
 			$("#remark").val(json.bean.remark);
-			//生产方案
+
+			// 生产方案
 			$("#bomList").html(getDataUseHandlebars(selTemplate, {rows: json.bean.bomList}));
 			$("#bomList").val(json.bean.bomId);
-			//工序
+
 			//初始化工序
 			procedureMationList = [].concat(json.bean.procedureMationList);
 			var str = "";
@@ -76,7 +77,7 @@ layui.config({
 				str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.departmentName + '</td></tr>';
 			});
 			$("#procedureBody").html(str);
-			//子件清单
+			// 子件清单
 			childProList = [].concat(json.bean.childList);
 			$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: childProList}));
 			$.each(childProList, function(i, item) {
@@ -119,7 +120,7 @@ layui.config({
 	    
 	    //加载bom方案下的子件列表
 	    function loadBomChildProList(bomId){
-	    	AjaxPostUtil.request({url: flowableBasePath + "erpbom008", params: {bomId: bomId}, type: 'json', callback: function (json) {
+	    	AjaxPostUtil.request({url: flowableBasePath + "erpbom008", params: {id: bomId}, type: 'json', method: 'GET', callback: function (json) {
 				childProList = [].concat(json.rows);
 				$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: childProList}));
 				//加载建议采购数量
@@ -146,7 +147,7 @@ layui.config({
 	    	}
 	    	$.each(childProList, function(i, item) {
 	    		//单位所需数量*生产数量-库存抵扣数量
-	    		var proposal = number * parseInt(item.needNum) - parseInt(item.deportAllTock);
+	    		var proposal = number * parseInt(item.needNum) - parseInt(item.currentTock);
 				$("#proposal" + item.productId).val(proposal < 0 ? 0 : proposal);
 				//需求数量=单位所需数量*生产数量
 				$("#needNum" + item.productId).html(number * parseInt(item.needNum));
@@ -186,7 +187,7 @@ layui.config({
  	        			normsId: item.normsId,
  	        			number: $("#proposal" + item.productId).val(),
  	        			unitNumber: item.needNum,
- 	        			unitPrice: item.unitPrice
+ 	        			unitPrice: item.normsPurchasePrice
  	        		});
  	        	});
  	        	//子件清单信息
@@ -240,8 +241,8 @@ layui.config({
 	    //商品选择
  	    $("body").on("click", "#productNameSel", function (e) {
 			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
-				$("#productName").val(chooseProductMation.productName);
-				$("#productModel").val(chooseProductMation.productModel);
+				$("#materialName").val(chooseProductMation.productName);
+				$("#materialModel").val(chooseProductMation.productModel);
 				$("#unitList").html(getDataUseHandlebars(selTemplate, {rows: chooseProductMation.unitList}));
 				//重置单据信息
 				salesOrder = {};
@@ -265,8 +266,8 @@ layui.config({
 						productModel: salesOrder.materialModel,
 						productId: salesOrder.materialId
 					};
-					$("#productName").val(erpOrderUtil.chooseProductMation.productName);
-					$("#productModel").val(erpOrderUtil.chooseProductMation.productModel);
+					$("#materialName").val(erpOrderUtil.chooseProductMation.productName);
+					$("#materialModel").val(erpOrderUtil.chooseProductMation.productModel);
 					//加载数量
 					$("#number").val(salesOrder.operNum);
 					//单号

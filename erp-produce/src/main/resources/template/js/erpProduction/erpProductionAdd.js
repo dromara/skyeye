@@ -68,7 +68,7 @@ layui.config({
 	    
 	    //加载bom方案下的子件列表
 	    function loadBomChildProList(bomId){
-	    	AjaxPostUtil.request({url: flowableBasePath + "erpbom008", params: {bomId: bomId}, type: 'json', callback: function (json) {
+	    	AjaxPostUtil.request({url: flowableBasePath + "erpbom008", params: {id: bomId}, type: 'json', method: 'GET', callback: function (json) {
 				childProList = [].concat(json.rows);
 				$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: childProList}));
 				//加载建议采购数量
@@ -90,12 +90,12 @@ layui.config({
 	    function loadChildProPosal(){
 	    	//计划生产数量
 	    	var number = parseInt(isNull($("#number").val()) ? '0' : $("#number").val());
-	    	if(isNaN(number)){
+	    	if (isNaN(number)) {
 	    		number = 0;
 	    	}
 	    	$.each(childProList, function(i, item) {
 	    		//单位所需数量*生产数量-库存抵扣数量
-	    		var proposal = number * parseInt(item.needNum) - parseInt(item.deportAllTock);
+	    		var proposal = number * parseInt(item.needNum) - parseInt(item.currentTock);
 				$("#proposal" + item.productId).val(proposal < 0 ? 0 : proposal);
 				//需求数量=单位所需数量*生产数量
 				$("#needNum" + item.productId).html(number * parseInt(item.needNum));
@@ -190,8 +190,8 @@ layui.config({
 	    // 商品选择
  	    $("body").on("click", "#productNameSel", function (e) {
 			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
-				$("#productName").val(chooseProductMation.productName);
-				$("#productModel").val(chooseProductMation.productModel);
+				$("#materialName").val(chooseProductMation.productName);
+				$("#materialModel").val(chooseProductMation.productModel);
 				$("#unitList").html(getDataUseHandlebars(selTemplate, {rows: chooseProductMation.unitList}));
 				//重置单据信息
 				salesOrder = {};
@@ -215,8 +215,8 @@ layui.config({
 						productModel: salesOrder.materialModel,
 						productId: salesOrder.materialId
 					};
-					$("#productName").val(erpOrderUtil.chooseProductMation.productName);
-					$("#productModel").val(erpOrderUtil.chooseProductMation.productModel);
+					$("#materialName").val(erpOrderUtil.chooseProductMation.productName);
+					$("#materialModel").val(erpOrderUtil.chooseProductMation.productModel);
 					//加载数量
 					$("#number").val(salesOrder.operNum);
 					//单号
