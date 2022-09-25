@@ -50,7 +50,7 @@ layui.config({
 		//商品规格加载变化事件
 		form.on('select(selectUnitProperty)', function(data) {
 			var thisRowValue = data.value;
-			var thisRowNum = data.elem.id.replace("unitId", "");//获取当前行
+			var thisRowNum = data.elem.id.replace("mUnitId", "");//获取当前行
 			//当前当前行选中的商品信息
 			if (!isNull(thisRowValue) && thisRowValue != '请选择') {
 				var product = allChooseProduct["tr" + thisRowNum.toString()];
@@ -104,14 +104,14 @@ layui.config({
 					}
 					// 商品对象
 					var product = allChooseProduct["tr" + rowNum.toString()];
-					if(inTableDataArrayByAssetarId(product.productId, $("#unitId" + rowNum).val(), tableData)) {
+					if(inTableDataArrayByAssetarId(product.productId, $("#mUnitId" + rowNum).val(), tableData)) {
 						winui.window.msg('一张单中不允许出现相同单位的商品信息.', {icon: 2, time: 2000});
 						noError = true;
 						return false;
 					}
 					var row = {
 						materialId: product.productId,
-						mUnitId: $("#unitId" + rowNum).val(),
+						mUnitId: $("#mUnitId" + rowNum).val(),
 						rkNum: rkNum.val(),
 						unitPrice: $("#unitPrice" + rowNum).val()
 					};
@@ -209,7 +209,7 @@ layui.config({
 				id: "row" + rowNum.toString(), //checkbox的id
 				trId: "tr" + rowNum.toString(), //行的id
 				materialId: "materialId" + rowNum.toString(), //商品id
-				unitId: "unitId" + rowNum.toString(), //规格id
+				mUnitId: "mUnitId" + rowNum.toString(), //规格id
 				currentTock: "currentTock" + rowNum.toString(), //库存id
 				productionNum: "productionNum" + rowNum.toString(), //所需总数量id
 				machinNum: "machinNum" + rowNum.toString(), //待分配数量id
@@ -251,7 +251,7 @@ layui.config({
 				//表格商品名称赋值
 				$("#materialId" + thisRowNum.toString()).val(allChooseProduct[trId].productName + "(" + allChooseProduct[trId].productModel + ")");
 				//表格单位赋值
-				$("#unitId" + thisRowNum.toString()).html(getDataUseHandlebars(selOption, {rows: allChooseProduct[trId].unitList}));
+				$("#mUnitId" + thisRowNum.toString()).html(getDataUseHandlebars(selOption, {rows: allChooseProduct[trId].unitList}));
 				form.render('select');
 				//计算价格
 				calculatedTotalPrice();
@@ -306,8 +306,8 @@ layui.config({
 						//将规格所属的商品信息加入到对象中存储
 						allChooseProduct["tr" + (rowNum - 1)] = item.product;
 						//单位回显
-						$("#unitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.product.unitList}));
-						$("#unitId" + (rowNum - 1)).val(item.normsId);
+						$("#mUnitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.product.unitList}));
+						$("#mUnitId" + (rowNum - 1)).val(item.normsId);
 						//商品回显
 						$("#materialId" + (rowNum - 1)).val(item.product.productName + "(" + item.product.productModel + ")");
 						$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
