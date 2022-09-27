@@ -35,6 +35,9 @@ layui.config({
 		]],
 		done: function(json) {
 			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入来源", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 		}
 	});
 
@@ -88,14 +91,6 @@ layui.config({
 	}
 
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			refreshTable();
-		}
-		return false;
-	});
-
-	// 刷新数据
     $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
@@ -103,15 +98,9 @@ layui.config({
     function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
-    
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
 
     function getTableParams() {
-    	return {
-    		title: $("#title").val()
-    	};
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
     
     exports('bossIntervieweeFromList', {});
