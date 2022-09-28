@@ -6,64 +6,55 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		table = layui.table,
-	    laydate = layui.laydate;
+		table = layui.table;
 	
 	// 新增车辆事故
 	authBtn('1597468393714');
 	
-	// 查询所有的车牌号用于下拉选择框
-	adminAssistantUtil.queryAllVehicleList(function (data) {
-		$("#accidentPlate").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
-		form.render('select');
+	table.render({
+		id: 'accidentTable',
+		elem: '#accidentTable',
+		method: 'post',
+		url: flowableBasePath + "accident001",
+		where: getTableParams(),
+		even: true,
+		page: true,
+		limits: getLimits(),
+		limit: getLimit(),
+		cols: [[
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+			{ field: 'accidentTitle', title: '主题', align: 'left', width: 300, templet: function (d) {
+				return '<a lay-event="accidentdetails" class="notice-title-click">' + d.accidentTitle + '</a>';
+			}},
+			{ field: 'licensePlate', title: '车牌号', align: 'center', width: 120},
+			{ field: 'driver', title: '驾驶员', align: 'center', width: 80 },
+			{ field: 'accidentTime', title: '事故时间', align: 'center', width: 100},
+			{ field: 'accidentArea', title: '事故地点', width: 300 },
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#accidenttableBar'}
+		]],
+		done: function(json) {
+			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入标题，车牌号", function () {
+				table.reloadData("accidentTable", {page: {curr: 1}, where: getTableParams()});
+			});
+		}
 	});
 
-	showAccidentList();
-	function showAccidentList(){
-		table.render({
-		    id: 'accidentTable',
-		    elem: '#accidentTable',
-		    method: 'post',
-		    url: flowableBasePath + "accident001",
-		    where: getTableParams(),
-		    even: true,
-		    page: true,
-		    limits: getLimits(),
-	    	limit: getLimit(),
-		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        { field: 'accidentTitle', title: '主题', align: 'left', width: 300, templet: function (d) {
-		        	return '<a lay-event="accidentdetails" class="notice-title-click">' + d.accidentTitle + '</a>';
-		        }},
-		        { field: 'licensePlate', title: '车牌号', align: 'center', width: 120},
-		        { field: 'driver', title: '驾驶员', align: 'center', width: 80 },
-		        { field: 'accidentTime', title: '事故时间', align: 'center', width: 100},
-		        { field: 'accidentArea', title: '事故地点', width: 300 },
-		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#accidenttableBar'}
-		    ]],
-		    done: function(json) {
-		    	matchingLanguage();
-		    }
-		});
-	}
-	
 	table.on('tool(accidentTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'accidentdetails') { //详情
+        if (layEvent === 'accidentdetails') { // 详情
         	accidentdetails(data);
-        } else if (layEvent === 'accidentdelet'){ //删除
+        } else if (layEvent === 'accidentdelet') { // 删除
         	accidentdelet(data);
-        } else if (layEvent === 'accidentedit'){	//编辑
+        } else if (layEvent === 'accidentedit') { // 编辑
         	accidentedit(data);
         }
     });
-	
-	form.render();
 	
 	// 事故信息详情
 	function accidentdetails(data) {
@@ -114,12 +105,8 @@ layui.config({
 				loadAccidentTable();
 			}});
 	}
-	
-	// 搜索表单
-	$("body").on("click", "#accidentformSearch", function() {
-    	table.reloadData("accidentTable", {page: {curr: 1}, where: getTableParams()});
-	});
-	
+
+	form.render();
     $("body").on("click", "#reloadAccidentTable", function() {
     	loadAccidentTable();
     });
@@ -129,10 +116,7 @@ layui.config({
     }
     
     function getTableParams() {
-    	return {
-    		accidentTitle: $("#accidentTitle").val(),
-    		accidentPlate: $("#accidentPlate").val()
-    	};
+    	return $.extend(true, {}, initTableSearchUtil.getSearchValue("accidentTable"));
     }
     
     exports('vehicleManageAccidentList', {});
