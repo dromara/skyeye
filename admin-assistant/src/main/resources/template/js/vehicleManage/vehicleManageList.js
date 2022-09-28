@@ -33,7 +33,6 @@ layui.config({
 		        { field: 'vehicleName', title: '名称', width: 170, templet: function (d) {
 		        	return '<a lay-event="vehicledetails" class="notice-title-click">' + d.vehicleName + '</a>';
 		        }},
-		        { field: 'vehicleCompany', title: '所属公司', align: 'left', width: 170 },
 		        { field: 'vehicleImg', title: '图片', align: 'center', width: 60, templet: function (d) {
 		        	if(isNull(d.vehicleImg)){
 		        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
@@ -56,7 +55,7 @@ layui.config({
 		        { field: 'nextInspectionTime', title: '下次年检日期', align: 'center', width: 100 },
 		        { field: 'insuranceDeadline', title: '保险截止日期', align: 'center', width: 100 },
 		        { field: 'prevMaintainTime', title: '上次保养日期', align: 'center', width: 100 },
-		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 220, toolbar: '#vehicletableBar'}
+		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 220, toolbar: '#vehicletableBar' }
 		    ]],
 		    done: function(json) {
 		    	matchingLanguage();

@@ -1,11 +1,5 @@
 {{#bean}}
 	<div class="layui-form-item layui-col-xs12">
-		<label class="layui-form-label">所属公司：</label>
-		<div class="layui-input-block ver-center">
-			{{vehicleCompany}}
-		</div>
-	</div>
-	<div class="layui-form-item layui-col-xs12">
 		<label class="layui-form-label">名称：</label>
 		<div class="layui-input-block ver-center">
 			{{vehicleName}}
