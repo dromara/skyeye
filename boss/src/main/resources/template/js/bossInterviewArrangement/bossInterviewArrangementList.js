@@ -31,7 +31,7 @@ layui.config({
             { field: 'departmentName', title: '面试部门', width: 140},
             { field: 'jobName', title: '面试岗位', width: 150 },
             { field: 'interviewTime', title: '面试时间', width: 140, align: 'center' },
-            { field: 'interviewer', title: '面试官', width: 140 },
+            { field: 'interviewer', title: '面试官', width: 120 },
             { field: 'state', title: '面试状态', width: 160, templet: function (d) {
                 return bossUtil.showStateName(d.state);
             }},

@@ -5,11 +5,10 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		laydate = layui.laydate,
 		table = layui.table;
 	
 	// 新增会议室
@@ -53,7 +52,7 @@ layui.config({
 	        { field: 'roomCapacity', title: '会议室容量', align: 'center', width: 100 },
 	        { field: 'roomPosition', title: '会议室位置', align: 'center', width: 100 },
 	        { field: 'company', title: '所属公司', align: 'center', width: 170 },
-	        { field: 'roomAdmin', title: '管理人员', align: 'center', width: 100 },
+	        { field: 'roomAdmin', title: '管理人员', align: 'center', width: 120 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#tableBar'}
 	    ]],
 	    done: function(json) {
