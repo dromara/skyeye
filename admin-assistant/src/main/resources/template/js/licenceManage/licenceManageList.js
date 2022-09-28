@@ -15,46 +15,42 @@ layui.config({
 	// 新增证照
 	authBtn('1566464868733');
 	
-	showList();
 	// 证照列表
-	function showList(){
-		table.render({
-		    id: 'licencelistTable',
-		    elem: '#licencelistTable',
-		    method: 'post',
-		    url: flowableBasePath + 'licence001',
-		    where: getTableParams(),
-		    even: true,
-		    page: true,
-		    limits: getLimits(),
-	    	limit: getLimit(),
-		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        { field: 'licenceName', title: '证照名称', width: 170, templet: function (d) {
-		        	return '<a lay-event="details" class="notice-title-click">' + d.licenceName + '</a>';
-		        }},
-		        { field: 'companyName', title: '所属公司', align: 'left', width: 150 },
-		        { field: 'issueTime', title: '签发日期', align: 'center', width: 120 },
-		        { field: 'nextAnnualReview', title: '下次年审时间', align: 'center', width: 120 },
-		        { field: 'termOfValidityTime', title: '有效期至', align: 'center', width: 120 },
-		        { field: 'licenceAdmin', title: '管理人', align: 'center', width: 100 },
-		        { field: 'borrowName', title: '借用人', align: 'center', width: 100 },
-		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#licencelisttableBar'}
-		    ]],
-		    done: function(json) {
-		    	matchingLanguage();
-		    }
-		});
-	}
-	
+	table.render({
+		id: 'licencelistTable',
+		elem: '#licencelistTable',
+		method: 'post',
+		url: flowableBasePath + 'licence001',
+		where: getTableParams(),
+		even: true,
+		page: true,
+		limits: getLimits(),
+		limit: getLimit(),
+		cols: [[
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+			{ field: 'licenceName', title: '证照名称', width: 170, templet: function (d) {
+				return '<a lay-event="details" class="notice-title-click">' + d.licenceName + '</a>';
+			}},
+			{ field: 'issueTime', title: '签发日期', align: 'center', width: 120 },
+			{ field: 'nextAnnualReview', title: '下次年审时间', align: 'center', width: 120 },
+			{ field: 'termOfValidityTime', title: '有效期至', align: 'center', width: 120 },
+			{ field: 'licenceAdmin', title: '管理人', align: 'center', width: 100 },
+			{ field: 'borrowName', title: '借用人', align: 'center', width: 100 },
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#licencelisttableBar' }
+		]],
+		done: function(json) {
+			matchingLanguage();
+		}
+	});
+
 	table.on('tool(licencelistTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'details') { //详情
         	details(data);
-        } else if (layEvent === 'delet'){ //删除
+        } else if (layEvent === 'delet') { //删除
         	delet(data);
-        } else if (layEvent === 'edit'){	//编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
         }
     });

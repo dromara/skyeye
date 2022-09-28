@@ -1,11 +1,5 @@
 {{#bean}}
 	<div class="layui-form-item">
-        <label class="layui-form-label">所属公司：</label>
-        <div class="layui-input-block ver-center">
-            {{companyName}}
-        </div>
-    </div>
-	<div class="layui-form-item">
 		<label class="layui-form-label">证照名称：</label>
 		<div class="layui-input-block ver-center">
 			{{licenceName}}
