@@ -34,7 +34,6 @@ layui.config({
 			{ field: 'articlesNum', title: '编号', width: 270},
 			{ field: 'specifications', title: '规格', width: 100},
 			{ field: 'residualNum', title: '库存数量', width: 100 },
-			{ field: 'company', title: '所属公司', width: 170 },
 			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#liebiaoTableBar'}
 		]],
 		done: function(json) {
