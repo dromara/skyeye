@@ -121,19 +121,19 @@
 	<div class="layui-form-item layui-col-xs6">
         <label class="layui-form-label">项目经理：</label>
         <div class="layui-input-block ver-center">
-        	{{projectManager}}
+        	{{projectManagerName}}
         </div>
     </div>
 	<div class="layui-form-item layui-col-xs6">
         <label class="layui-form-label">项目赞助人：</label>
         <div class="layui-input-block ver-center">
-            {{projectSponsor}}
+            {{projectSponsorName}}
         </div>
     </div>
 	<div class="layui-form-item layui-col-xs12">
         <label class="layui-form-label">项目组成员：</label>
         <div class="layui-input-block ver-center">
-            {{projectMembers}}
+            {{projectMembersName}}
         </div>
     </div>
 	<div class="layui-form-item layui-col-xs12">

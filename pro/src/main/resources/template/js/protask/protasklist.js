@@ -28,7 +28,7 @@ layui.config({
 	    url: flowableBasePath + 'protask011',
 	    where: getTableParams(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: 2},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: 2 },
 	        { field: 'taskName', title: '名称', rowspan: 2, width: 200 },
 	        { field: 'processInstanceId', title: '流程ID', rowspan: 2, width: 70 , templet: function (d) {
 	        	return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
@@ -60,11 +60,11 @@ layui.config({
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: 2, width: 115 },
 	        { field: 'startTime', title: '开始时间', rowspan: 2, width: 80 },
 	        { title: '工作量(天)', align: 'center', colspan: 2 },
-	        { title: systemLanguage["com.skyeye.operation"][languageType], align: 'center', width: 300, rowspan: 2, toolbar: '#tableBar'}
+	        { title: systemLanguage["com.skyeye.operation"][languageType], align: 'center', width: 300, rowspan: 2, toolbar: '#tableBar' }
 	    ],
     		[
-    		 	{ field: 'estimatedWorkload', title: '预估', align: 'center', width: 50},
-    		 	{ field: 'actualWorkload', title: '实际', align: 'center', width: 50}
+    		 	{ field: 'estimatedWorkload', title: '预估', align: 'center', width: 50 },
+    		 	{ field: 'actualWorkload', title: '实际', align: 'center', width: 50 }
 			]	    
 	    ],
 	    done: function(json) {
