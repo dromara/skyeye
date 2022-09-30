@@ -18,7 +18,7 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: flowableBasePath + 'sealseserviceworker001',
-	    where: {userName: $("#userName").val()},
+	    where: getTableParams(),
 	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
@@ -56,25 +56,7 @@ layui.config({
         }
     });
 	
-	form.render();
-	
-	$("body").on("click", "#formSearch", function() {
-		refreshTable();
-	});
-	
-	$("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where: {userName: $("#userName").val()}});
-    }
-    
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: {userName: $("#userName").val()}});
-    }
-
-	//新增
+	// 新增
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/serviceworker/serviceworkeradd.html", 
@@ -87,7 +69,7 @@ layui.config({
 			}});
     });
 	
-	//编辑
+	// 编辑
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
@@ -101,7 +83,7 @@ layui.config({
 			}});
 	}
 	
-	//删除
+	// 删除
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
@@ -110,6 +92,28 @@ layui.config({
 				loadTable();
     		}});
 		});
+	}
+
+	form.render();
+
+	$("body").on("click", "#formSearch", function() {
+		refreshTable();
+	});
+
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
+	});
+
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
+
+	function refreshTable(){
+		table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+	}
+
+	function getTableParams() {
+		return {};
 	}
 	
     exports('serviceworkerlist', {});
