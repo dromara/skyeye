@@ -34,8 +34,8 @@ layui.config({
 			{ field: 'issueTime', title: '签发日期', align: 'center', width: 120 },
 			{ field: 'nextAnnualReview', title: '下次年审时间', align: 'center', width: 120 },
 			{ field: 'termOfValidityTime', title: '有效期至', align: 'center', width: 120 },
-			{ field: 'licenceAdmin', title: '管理人', align: 'center', width: 100 },
-			{ field: 'borrowName', title: '借用人', align: 'center', width: 100 },
+			{ field: 'licenceAdmin', title: '管理人', width: 120 },
+			{ field: 'borrowName', title: '借用人', width: 120 },
 			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#licencelisttableBar' }
 		]],
 		done: function(json) {

@@ -21,11 +21,11 @@ layui.config({
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
-	    limits: [8, 16, 24, 32, 40, 48, 56],
-	    limit: 8,
+		limits: getLimits(),
+		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'userName', title: '用户姓名', align: 'left', width: 80 },
+	        { field: 'userName', title: '用户姓名', align: 'left', width: 120 },
 	        { field: 'proName', title: '所在省', align: 'left', width: 80 },
 	        { field: 'cityName', title: '所在市', align: 'left', width: 80 },
 	        { field: 'areaName', title: '所在区', align: 'left', width: 80 },
@@ -39,10 +39,13 @@ layui.config({
 	        }},
 	        { field: 'addDetail', title: '详细地址', align: 'left', width: 400 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
+	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar' }
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入所在省，市，区县", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -51,7 +54,7 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
         	edit(data);
-        } else if (layEvent === 'delete'){ //删除
+        } else if (layEvent === 'delete') { //删除
         	del(data);
         }
     });
@@ -95,11 +98,6 @@ layui.config({
 	}
 
 	form.render();
-
-	$("body").on("click", "#formSearch", function() {
-		refreshTable();
-	});
-
 	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
@@ -108,12 +106,8 @@ layui.config({
 		table.reloadData("messageTable", {where: getTableParams()});
 	}
 
-	function refreshTable(){
-		table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-	}
-
 	function getTableParams() {
-		return {};
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
     exports('serviceworkerlist', {});
