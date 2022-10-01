@@ -21,23 +21,23 @@ layui.config({
         elem: '#messageTable',
         method: 'post',
         url: flowableBasePath + 'erppick003',
-        where: getTablePatams(),
+        where: getTableParams(),
         even: true,
         page: true,
-        limits: [8, 16, 24, 32, 40, 48, 56],
+        limits: getLimits(),
+        limit: getLimit(),
         overflow: {
             type: 'tips',
             hoverTime: 300, // 悬停时间，单位ms, 悬停 hoverTime 后才会显示，默认为 0
             minWidth: 150, // 最小宽度
             maxWidth: 500 // 最大宽度
         },
-        limit: 8,
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'defaultNumber', title: '单据编号', align: 'center', width: 200, templet: function (d) {
 		        return '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
 		    }},
-            { field: 'machinNum', title: '加工单', align: 'center', width: 200},
+            { field: 'machinNum', title: '加工单', align: 'center', width: 200 },
             { field: 'status', title: '状态', align: 'left', width: 80, templet: function (d) {
 		        if(d.status == '0'){
 	        		return "<span class='state-down'>未审核</span>";
@@ -51,15 +51,18 @@ layui.config({
 	        		return "参数错误";
 	        	}
 		    }},
-		    { field: 'totalPrice', title: '物料合计', align: 'left', width: 100},
+		    { field: 'totalPrice', title: '物料合计', align: 'left', width: 100 },
 		    { field: 'operTime', title: '单据日期', align: 'center', width: 150 },
-            { field: 'createName', title: '录入人', align: 'left', width: 100},
-            { field: 'createTime', title: '录入日期', align: 'center', width: 150 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
+            { field: 'createName', title: '录入人', align: 'left', width: 120 },
+            { field: 'createTime', title: '录入日期', align: 'center', width: 140 },
+            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar' }
         ]],
         done: function(json) {
         	matchingLanguage();
 	    	soulTable.render(this);
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单据编号", function () {
+                table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+            });
         }
     });
 
@@ -79,15 +82,7 @@ layui.config({
         }
     });
 
-    form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            loadTable();
-        }
-        return false;
-    });
-    
-    //编辑
+    // 编辑
     function edit(data) {
         rowId = data.id;
         _openNewWindows({
@@ -101,7 +96,7 @@ layui.config({
             }});
     }
 
-    //删除
+    // 删除
     function deletemember(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             AjaxPostUtil.request({url:flowableBasePath + "erppick008", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -111,7 +106,7 @@ layui.config({
         });
     }
     
-    //详情
+    // 详情
 	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
@@ -123,7 +118,7 @@ layui.config({
 			}});
 	}
 	
-	//提交审批
+	// 提交审批
 	function subExamine(data) {
         layer.confirm('确认要提交审核吗？', { icon: 3, title: '提交审核操作' }, function (index) {
             AjaxPostUtil.request({url:flowableBasePath + "erppick015", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -133,7 +128,7 @@ layui.config({
         });
     }
     
-    //审核
+    // 审核
 	function examine(data) {
 		rowId = data.id;
 		type = data.type,
@@ -148,7 +143,7 @@ layui.config({
 			}});
     }
 	
-    //添加
+    // 添加
     $("body").on("click", "#addBean", function() {
         _openNewWindows({
             url: "../../tpl/erpPick/erpPatchAdd.html",
@@ -161,24 +156,17 @@ layui.config({
             }});
     });
 
+    form.render();
     $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
 
-    //刷新
     function loadTable() {
-        table.reloadData("messageTable", {where: getTablePatams()});
+        table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    //搜索
-    function refreshTable(){
-        table.reloadData("messageTable", {page: {curr: 1}, where: getTablePatams()})
-    }
-    
-    function getTablePatams(){
-    	return {
-    		defaultNumber: $("#defaultNumber").val()
-    	};
+    function getTableParams(){
+        return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('erpPatchPickList', {});
