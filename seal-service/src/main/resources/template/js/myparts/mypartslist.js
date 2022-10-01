@@ -31,7 +31,7 @@ layui.config({
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
-			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入剩余数量TODO待完善插件", function () {
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, '', function () {
 				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 	    }

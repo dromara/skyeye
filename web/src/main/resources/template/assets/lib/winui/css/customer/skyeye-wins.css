@@ -938,6 +938,7 @@
 .winui-toolbar {
     padding: 5px;
     background-color: #F5F6F7;
+    min-height: 30px;
 }
 
 .winui-toolbar * {

@@ -89,6 +89,9 @@ var initTableSearchUtil = {
      * @param keywordPlaceholder 关键字搜索的提示语
      */
     initTableKeyWordSearch: function (tableId, keywordPlaceholder) {
+        if (isNull(keywordPlaceholder)) {
+            return false;
+        }
         var str;
         if (typeof keywordPlaceholder === 'object') {
             str = '<div class="keyword-box">' +
