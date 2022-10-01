@@ -190,7 +190,7 @@ function _openNewWindows(mation){
  * 根据页面高度进行分页
  * @return {}
  */
-function getLimits(){
+function getLimits() {
 	var limit = getLimit();
 	var limits = new Array();
 	for(var i = 1; i <= 7; i++){
@@ -203,11 +203,13 @@ function getLimit(){
 	var clientHeight = document.body.clientHeight;
 	var toolbarHeight = $(".winui-toolbar").outerHeight(true);
 	var txtcenterHeight = $(".txtcenter").outerHeight(true);
+	var winuiTip = $(".winui-tip").outerHeight(true);
 	var tabTtileHeight = $(".layui-tab-title").outerHeight(true);
 	// 计算表格tbody的高度
 	var realHeight = clientHeight - 120
 		- (isNull(toolbarHeight) ? 0 : toolbarHeight)
 		- (isNull(txtcenterHeight) ? 0 : txtcenterHeight)
+		- (isNull(winuiTip) ? 0 : winuiTip)
 		- (isNull(tabTtileHeight) ? 0 : tabTtileHeight);
 	// 计算limit
 	return decimerFiveOrZero(Math.floor(realHeight / 35));

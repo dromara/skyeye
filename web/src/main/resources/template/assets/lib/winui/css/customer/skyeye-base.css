@@ -2,9 +2,10 @@ html,
 body {
     height: 100%;
     background-size: cover;
+    overflow-y: auto;
 }
 
-button{
+button {
     cursor: pointer !important;
 }
 
@@ -40,11 +41,11 @@ button{
     margin-top: 50px;
 }
 
-.pic-show-bg{
+.pic-show-bg {
     background-color: rgba(0, 0, 0, 0) !important;
 }
 
-.pic-show-bg .layui-layer-close{
+.pic-show-bg .layui-layer-close {
     top: 0px !important;
     right: 0px !important;
 }
@@ -75,6 +76,7 @@ button{
     top: 0;
     bottom: 30px;
 }
+
 /*按钮*/
 .winui-btn {
     font-size: 12px;
@@ -224,7 +226,7 @@ input:disabled {
     line-height: 100px;
 }
 
-select option{
+select option {
     padding: 5px;
 }
 
