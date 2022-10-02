@@ -161,6 +161,10 @@ layui.config({
         loadTable();
     });
 
+    function loadTable() {
+        table.reloadData("messageTable", {where: getTableParams()});
+    }
+
     function getTableParams(){
         return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
