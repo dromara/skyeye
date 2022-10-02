@@ -8,7 +8,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
@@ -18,11 +17,11 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: flowableBasePath + 'sealseservice024',
-	    where: {orderNum: $("#orderNum").val(), applyNum: $("#applyNum").val(), customerName: $("#customerName").val()},
+	    where: getTableParams(),
 	    even: true,
 	    page: true,
-	    limits: [8, 16, 24, 32, 40, 48, 56],
-	    limit: 8,
+		limits: getLimits(),
+		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'orderNum', title: '工单号', align: 'center', width: 220, templet: function (d) {
@@ -37,6 +36,9 @@ layui.config({
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入工单号，申领单号", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -49,33 +51,8 @@ layui.config({
         	appDetails(data);
         }
     });
-	
-	form.render();
-	
-	//刷新数据
-	$("body").on("click", "#reloadTable", function() {
-		loadTable();
-	});
-	
-	form.render();
-	
-	form.on('submit(formSearch)', function (data) {
-    	
-        if (winui.verifyForm(data.elem)) {
-        	refreshTable();
-        }
-        return false;
-	});
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where: {orderNum: $("#orderNum").val(), applyNum: $("#applyNum").val(), customerName: $("#customerName").val()}});
-    }
-    
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: {orderNum: $("#orderNum").val(), applyNum: $("#applyNum").val(), customerName: $("#customerName").val()}});
-    }
 
-	//工单详情
+	// 工单详情
 	function details(data) {
 		rowId = data.serviceId;
 		_openNewWindows({
@@ -87,7 +64,7 @@ layui.config({
 			}});
 	}
 	
-	//申领单详情
+	// 申领单详情
 	function appDetails(data) {
 		rowId = data.id;
 		_openNewWindows({
@@ -97,6 +74,19 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}});
+	}
+
+	form.render();
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
+	});
+
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
+
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
     exports('allpartsclaimlist', {});

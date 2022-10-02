@@ -4,19 +4,19 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'jqprint'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'jqprint'], function (exports) {
 	winui.renderColor();
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
-	    var beanTemplate = $("#beanTemplate").html();
-	    
+
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "sealseservice028",
-		 	params: {rowId: parent.rowId},
+		 	params: {id: parent.rowId},
+			method: 'GET',
 		 	pagination: false,
-		 	template: beanTemplate,
+		 	template: $("#beanTemplate").html(),
 		 	ajaxSendAfter:function (json) {
 				// 获取当前登录员工信息
 				systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
@@ -29,7 +29,7 @@ layui.config({
 		 	}
 		});
 		
-		//打印
+		// 打印
 		$("body").on("click", "#jprint", function (e) {
 			$("#showForm").jqprint({
 				title: '申领单',

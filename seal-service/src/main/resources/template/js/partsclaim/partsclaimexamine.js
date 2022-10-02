@@ -4,7 +4,7 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui'], function (exports) {
+}).define(['window', 'jquery', 'winui'], function (exports) {
 	winui.renderColor();
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
@@ -13,7 +13,8 @@ layui.config({
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "sealseservice028",
-		 	params: {rowId: parent.rowId},
+		 	params: {id: parent.rowId},
+			method: 'GET',
 		 	pagination: false,
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendAfter:function (json) {
