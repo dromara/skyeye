@@ -90,14 +90,14 @@ layui.config({
 						return false;
 					}
 					//商品对象
-					var product = allChooseProduct["tr" + rowNum.toString()];
-					if(inTableDataArrayByAssetarId(product.productId, $("#unitId" + rowNum).val(), tableData)) {
+					var material = allChooseProduct["tr" + rowNum.toString()];
+					if(inTableDataArrayByAssetarId(material.materialId, $("#unitId" + rowNum).val(), tableData)) {
 						winui.window.msg('一张单中不允许出现相同单位的商品信息.', {icon: 2, time: 2000});
 						noError = true;
 						return false;
 					}
 					var row = {
-						materialId: product.productId,
+						materialId: material.materialId,
 						mUnitId: $("#unitId" + rowNum).val(),
 						rkNum: rkNum.val(),
 						unitPrice: $("#unitPrice" + rowNum).val()
@@ -182,7 +182,7 @@ layui.config({
 				//商品赋值
 				allChooseProduct[trId] = chooseProductMation;
 				//表格商品名称赋值
-				$("#materialId" + thisRowNum.toString()).val(allChooseProduct[trId].productName + "(" + allChooseProduct[trId].productModel + ")");
+				$("#materialId" + thisRowNum.toString()).val(allChooseProduct[trId].materialName + "(" + allChooseProduct[trId].materialModel + ")");
 				//表格单位赋值
 				$("#unitId" + thisRowNum.toString()).html(getDataUseHandlebars(selOption, {rows: allChooseProduct[trId].unitList}));
 				form.render('select');

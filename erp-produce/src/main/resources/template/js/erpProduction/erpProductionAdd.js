@@ -96,9 +96,9 @@ layui.config({
 	    	$.each(childProList, function(i, item) {
 	    		//单位所需数量*生产数量-库存抵扣数量
 	    		var proposal = number * parseInt(item.needNum) - parseInt(item.currentTock);
-				$("#proposal" + item.productId).val(proposal < 0 ? 0 : proposal);
+				$("#proposal" + item.materialId).val(proposal < 0 ? 0 : proposal);
 				//需求数量=单位所需数量*生产数量
-				$("#needNum" + item.productId).html(number * parseInt(item.needNum));
+				$("#needNum" + item.materialId).html(number * parseInt(item.needNum));
 			});
 	    }
 	    
@@ -116,7 +116,7 @@ layui.config({
 	        	}
 			    var params = {
 			    	orderId: isNull(salesOrder.orderHeaderId) ? '' : salesOrder.orderHeaderId,
-			    	materialId: erpOrderUtil.chooseProductMation.productId,
+			    	materialId: erpOrderUtil.chooseProductMation.materialId,
 			    	normsId: $("#unitList").val(),
 			    	number: $("#number").val(),
 			    	planStartDate: $("#planStartDate").val(),
@@ -132,9 +132,9 @@ layui.config({
  	        	var childList = [];
  	        	$.each(childProList, function(i, item) {
  	        		childList.push({
- 	        			materialId: item.productId,
+ 	        			materialId: item.materialId,
  	        			normsId: item.normsId,
- 	        			number: $("#proposal" + item.productId).val(),
+ 	        			number: $("#proposal" + item.materialId).val(),
  	        			unitNumber: item.needNum,
  	        			unitPrice: item.unitPrice
  	        		});
@@ -190,8 +190,8 @@ layui.config({
 	    // 商品选择
  	    $("body").on("click", "#productNameSel", function (e) {
 			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
-				$("#materialName").val(chooseProductMation.productName);
-				$("#materialModel").val(chooseProductMation.productModel);
+				$("#materialName").val(chooseProductMation.materialName);
+				$("#materialModel").val(chooseProductMation.materialModel);
 				$("#unitList").html(getDataUseHandlebars(selTemplate, {rows: chooseProductMation.unitList}));
 				//重置单据信息
 				salesOrder = {};
@@ -211,12 +211,12 @@ layui.config({
  				area: ['90vw', '90vh'],
  				callBack: function (refreshCode) {
 					erpOrderUtil.chooseProductMation = {
-						productName: salesOrder.materialName,
-						productModel: salesOrder.materialModel,
-						productId: salesOrder.materialId
+						materialName: salesOrder.materialName,
+						materialModel: salesOrder.materialModel,
+						materialId: salesOrder.materialId
 					};
-					$("#materialName").val(erpOrderUtil.chooseProductMation.productName);
-					$("#materialModel").val(erpOrderUtil.chooseProductMation.productModel);
+					$("#materialName").val(erpOrderUtil.chooseProductMation.materialName);
+					$("#materialModel").val(erpOrderUtil.chooseProductMation.materialModel);
 					//加载数量
 					$("#number").val(salesOrder.operNum);
 					//单号

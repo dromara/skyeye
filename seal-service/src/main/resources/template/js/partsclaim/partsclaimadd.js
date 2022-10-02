@@ -45,11 +45,11 @@ layui.config({
 		// 备件规格加载变化事件
 		form.on('select(selectUnitProperty)', function(data) {
 			var thisRowValue = data.value;
-			var thisRowNum = data.elem.id.replace("unitId", "");// 获取当前行
+			var thisRowNum = data.elem.id.replace("mUnitId", "");
 			// 当前当前行选中的商品信息
 			if (!isNull(thisRowValue) && thisRowValue != '请选择') {
-				var product = allChooseProduct["tr" + thisRowNum.toString()];
-				$.each(product.unitList, function(j, bean) {
+				var material = allChooseProduct["tr" + thisRowNum.toString()];
+				$.each(material.unitList, function(j, bean) {
 					if(thisRowValue == bean.id){// 获取规格
 						// 获取当前行数量
 						var rkNum = parseInt($("#rkNum" + thisRowNum).val());
@@ -132,16 +132,16 @@ layui.config({
 						return false;
 					}
 					// 商品对象
-					var product = allChooseProduct["tr" + rowNum.toString()];
-					if(inTableDataArrayByAssetarId(product.productId, $("#unitId" + rowNum).val(), tableData)) {
+					var material = allChooseProduct["tr" + rowNum.toString()];
+					if(inTableDataArrayByAssetarId(material.materialId, $("#mUnitId" + rowNum).val(), tableData)) {
 						winui.window.msg('一张单中不允许出现相同单位的配件信息.', {icon: 2, time: 2000});
 						noError = true;
 						return false;
 					}
 					var row = {
 						depotId: $("#depotId").val(),
-						materialId: product.productId,
-						mUnitId: $("#unitId" + rowNum).val(),
+						materialId: material.materialId,
+						mUnitId: $("#mUnitId" + rowNum).val(),
 						rkNum: rkNum.val(),
 						remark: $("#remark" + rowNum).val()
 					};
@@ -168,10 +168,10 @@ layui.config({
 		});
 		
 		// 判断选中的备件是否也在数组中
-		function inTableDataArrayByAssetarId(materialId, unitId, array) {
+		function inTableDataArrayByAssetarId(materialId, mUnitId, array) {
 			var isIn = false;
 			$.each(array, function(i, item) {
-				if(item.mUnitId === unitId && item.materialId === materialId) {
+				if(item.mUnitId === mUnitId && item.materialId === materialId) {
 					isIn = true;
 					return false;
 				}
@@ -209,7 +209,7 @@ layui.config({
 				id: "row" + rowNum.toString(), // checkbox的id
 				trId: "tr" + rowNum.toString(), // 行的id
 				materialId: "materialId" + rowNum.toString(), // 商品id
-				unitId: "unitId" + rowNum.toString(), // 规格id
+				mUnitId: "mUnitId" + rowNum.toString(), // 规格id
 				currentTock: "currentTock" + rowNum.toString(), // 库存id
 				rkNum: "rkNum" + rowNum.toString(), // 数量id
 				unitPrice: "unitPrice"  + rowNum.toString(), // 单价id
@@ -258,9 +258,9 @@ layui.config({
 				//商品赋值
 				allChooseProduct[trId] = chooseProductMation;
 				//表格商品名称赋值
-				$("#materialId" + thisRowNum.toString()).val(allChooseProduct[trId].productName + "(" + allChooseProduct[trId].productModel + ")");
+				$("#materialId" + thisRowNum.toString()).val(allChooseProduct[trId].materialName + "(" + allChooseProduct[trId].materialModel + ")");
 				//表格单位赋值
-				$("#unitId" + thisRowNum.toString()).html(getDataUseHandlebars(selOption, {rows: allChooseProduct[trId].unitList}));
+				$("#mUnitId" + thisRowNum.toString()).html(getDataUseHandlebars(selOption, {rows: allChooseProduct[trId].unitList}));
 				form.render('select');
 				//计算价格
 				calculatedTotalPrice();

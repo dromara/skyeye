@@ -141,9 +141,9 @@
 	
 	<script type="text/html" id="tableBody">
 		{{#each rows}}
-			<tr rowid="{{productId}}">
-               	<td id="name{{productId}}">{{materialName}}</td>
-               	<td id="model{{productId}}">{{materialModel}}</td>
+			<tr rowid="{{materialId}}">
+               	<td id="name{{materialId}}">{{materialName}}</td>
+               	<td id="model{{materialId}}">{{materialModel}}</td>
 				<td>{{categoryName}}</td>
                	<td>{{typeName}}</td>
 				<td>
@@ -152,11 +152,11 @@
 					{{/each}}
 				</td>
                	<td style="text-align: center;">{{needNum}}{{unitName}}</td>
-				<td style="text-align: center;" id="needNum{{productId}}">{{needNum}}</td>
+				<td style="text-align: center;" id="needNum{{materialId}}">{{needNum}}</td>
                	<td>{{currentTock}}</td>
 				<td>{{beWarehousedNum}}</td>
 				<td>
-					<input type="text" id="proposal{{productId}}" name="proposal{{productId}}" win-verify="required|number" placeholder="请输入采购或生产数量" class="layui-input"/>
+					<input type="text" id="proposal{{materialId}}" name="proposal{{materialId}}" win-verify="required|number" placeholder="请输入采购或生产数量" class="layui-input"/>
 				</td>
             </tr>
 		{{/each}}

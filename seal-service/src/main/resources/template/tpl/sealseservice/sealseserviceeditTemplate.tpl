@@ -65,14 +65,14 @@
     <div class="layui-form-item layui-col-xs6">
         <label class="layui-form-label">产品名称</label>
         <div class="layui-input-block">
-            <input type="text" id="productName" name="productName" placeholder="请输入产品名称" class="layui-input" maxlength="50" value="{{productName}}" readonly="readonly"/>
+            <input type="text" id="productName" name="productName" placeholder="请输入产品名称" class="layui-input" maxlength="50" value="{{materialName}}" readonly="readonly"/>
             <i class="fa fa-plus-circle input-icon" id="productNameSel"></i>
         </div>
     </div>
     <div class="layui-form-item layui-col-xs6">
         <label class="layui-form-label">规格型号</label>
         <div class="layui-input-block">
-            <input type="text" id="productNorms" name="productNorms" placeholder="请输入规格型号" class="layui-input" maxlength="50" value="{{productNorms}}"/>
+            <input type="text" id="productNorms" name="productNorms" placeholder="请输入规格型号" class="layui-input" maxlength="50" value="{{materialModel}}"/>
         </div>
     </div>
     <div class="layui-form-item layui-col-xs6">

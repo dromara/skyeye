@@ -57,7 +57,7 @@ layui.config({
 					"materialType": {
 						"value": item.mType
 					},
-					"materialId": item.product.productName + "(" + item.product.productModel + ")",
+					"materialId": item.product.materialName + "(" + item.product.materialModel + ")",
 					"mUnitId": {
 						"html": getDataUseHandlebars(selOption, {rows: item.product.unitList}),
 						"value": item.mUnitId
@@ -199,13 +199,13 @@ layui.config({
 						hasSplit = true;
 					}
 					//商品对象
-					var product = allChooseProduct["tr" + thisRowKey];
-					if (inTableDataArrayByAssetarId(product.productId, item.mUnitId, tableData)) {
+					var material = allChooseProduct["tr" + thisRowKey];
+					if (inTableDataArrayByAssetarId(material.materialId, item.mUnitId, tableData)) {
 						winui.window.msg('一张单中不允许出现相同单位的商品信息.', {icon: 2, time: 2000});
 						noError = true;
 						return false;
 					}
-					item["materialId"] = product.productId;
+					item["materialId"] = material.materialId;
 					item["depotId"] = $("#depotId").val();
 					tableData.push(item);
 				});

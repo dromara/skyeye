@@ -43,10 +43,10 @@ layui.config({
 				// 故障关键组件
 				if (!isNull(json.bean.faultKeyPartsId)){
 					faultKeyParts = {
-						productId: json.bean.faultKeyPartsId,
-						productName: json.bean.faultKeyPartsName
+						materialId: json.bean.faultKeyPartsId,
+						materialName: json.bean.faultKeyPartsName
 					};
-					$("#faultKeyPartsId").val(faultKeyParts.productName);
+					$("#faultKeyPartsId").val(faultKeyParts.materialName);
 				}
 				
 				// 加载配件使用明细
@@ -128,14 +128,14 @@ layui.config({
 						return false;
 					}
 					// 商品对象
-					var product = allChooseProduct["tr" + rowNum.toString()];
-					if(inTableDataArrayByAssetarId(product.productId, $("#unitId" + rowNum).val(), tableData)) {
+					var material = allChooseProduct["tr" + rowNum.toString()];
+					if(inTableDataArrayByAssetarId(material.materialId, $("#unitId" + rowNum).val(), tableData)) {
 						winui.window.msg('一张单中不允许出现相同单位的配件信息.', {icon: 2, time: 2000});
 						noError = true;
 						return false;
 					}
 					var row = {
-						materialId: product.productId,
+						materialId: material.materialId,
 						mUnitId: $("#unitId" + rowNum).val(),
 						rkNum: rkNum.val(),
 						remark: $("#remark" + rowNum).val()
@@ -158,7 +158,7 @@ layui.config({
 					coverCost: $("#coverCost").val(),
 					otherCost: $("#otherCost").val(),
 					comStarTime: $("#comStarTime").val(),
-					faultKeyPartsId: isNull(faultKeyParts.productId) ? "" : faultKeyParts.productId,
+					faultKeyPartsId: isNull(faultKeyParts.materialId) ? "" : faultKeyParts.materialId,
 					actualFailure: $("#actualFailure").val(),
 					solution: $("#solution").val(),
 					useStr: JSON.stringify(tableData),
@@ -194,7 +194,7 @@ layui.config({
 				$("#unitId" + (rowNum - 1)).val(item.normsId);
 				
 				// 商品回显
-				$("#materialId" + (rowNum - 1)).val(item.productName + "(" + item.productModel + ")");
+				$("#materialId" + (rowNum - 1)).val(item.materialName + "(" + item.materialModel + ")");
 				$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
 				$("#rkNum" + (rowNum - 1)).val(item.operNumber);//数量回显
 				$("#unitPrice" + (rowNum - 1)).html(item.unitPrice.toFixed(2));//单价回显
@@ -307,7 +307,7 @@ layui.config({
 			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
 				faultKeyParts = chooseProductMation;
 				// 重置故障组件信息
-				$("#faultKeyPartsId").val(faultKeyParts.productName);
+				$("#faultKeyPartsId").val(faultKeyParts.materialName);
 
 				form.render();
 			});
@@ -322,7 +322,7 @@ layui.config({
 				// 商品赋值
 				allChooseProduct[trId] = chooseProductMation;
 				// 表格商品名称赋值
-				$("#materialId" + thisRowNum.toString()).val(allChooseProduct[trId].productName + "(" + allChooseProduct[trId].productModel + ")");
+				$("#materialId" + thisRowNum.toString()).val(allChooseProduct[trId].materialName + "(" + allChooseProduct[trId].materialModel + ")");
 				// 表格单位赋值
 				$("#unitId" + thisRowNum.toString()).html(getDataUseHandlebars(selOption, {rows: allChooseProduct[trId].unitList}));
 				form.render('select');

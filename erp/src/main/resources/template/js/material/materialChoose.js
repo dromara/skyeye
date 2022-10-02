@@ -86,17 +86,17 @@ layui.config({
 			//初始化值
 			var ids = [];
 			$.each(parent.erpOrderUtil.chooseProductMation, function(i, item) {
-				ids.push(item.productId);
+				ids.push(item.materialId);
 			});
 			tableCheckBoxUtil.setIds({
 				gridId: 'messageTable',
-				fieldName: 'productId',
+				fieldName: 'materialId',
 				ids: ids
 			});
 			tableCheckBoxUtil.init({
 				gridId: 'messageTable',
 				filterId: 'messageTable',
-				fieldName: 'productId'
+				fieldName: 'materialId'
 			});
 		}
 			
@@ -113,10 +113,10 @@ layui.config({
 		    cols: [[
 		    	{ type: checkType == '1' ? 'radio' : 'checkbox'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        { field: 'productName', title: '商品名称', align: 'left', width: 150, templet: function (d) {
-			        	return '<a lay-event="details" class="notice-title-click">' + d.productName + '</a>';
+		        { field: 'materialName', title: '商品名称', align: 'left', width: 150, templet: function (d) {
+			        	return '<a lay-event="details" class="notice-title-click">' + d.materialName + '</a>';
 			    }},
-		        { field: 'productModel', title: '型号', align: 'left', width: 150 },
+		        { field: 'materialModel', title: '型号', align: 'left', width: 150 },
 		        { field: 'categoryName', title: '所属类型', align: 'left', width: 100 },
 		        { field: 'typeName', title: '商品来源', align: 'left', width: 100 },
 		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 }
@@ -145,7 +145,7 @@ layui.config({
 		    		// 多选,设置选中
 		    		tableCheckBoxUtil.checkedDefault({
 						gridId: 'messageTable',
-						fieldName: 'productId'
+						fieldName: 'materialId'
 					});
 		    	}
 
@@ -169,7 +169,7 @@ layui.config({
 	
 	// 详情
 	function details(data) {
-		rowId = data.productId;
+		rowId = data.materialId;
 		_openNewWindows({
 			url: "../../tpl/material/materialdetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],

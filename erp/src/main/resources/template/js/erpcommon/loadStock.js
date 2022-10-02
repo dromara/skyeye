@@ -136,7 +136,7 @@ function initChooseProductBtnEnent (form, callback, calcPriceCallback) {
             // 获取表格行号
             var thisRowKey = trId.replace("tr", "");
             // 表格商品名称赋值
-            $("#materialId" + thisRowKey.toString()).val(chooseProductMation.productName + "(" + chooseProductMation.productModel + ")");
+            $("#materialId" + thisRowKey.toString()).val(chooseProductMation.materialName + "(" + chooseProductMation.materialModel + ")");
             // 表格单位赋值
             $("#mUnitId" + thisRowKey.toString()).html(getDataUseHandlebars(selOptionHtml, {rows: chooseProductMation.unitList}));
             form.render('select');

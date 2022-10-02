@@ -57,7 +57,7 @@ layui.config({
             	
                 var params = {
                     bomTitle: $("#bomTitle").val(),
-                    materialId: isNull(erpOrderUtil.chooseProductMation.productId) ? '' : erpOrderUtil.chooseProductMation.productId,//商品id
+                    materialId: isNull(erpOrderUtil.chooseProductMation.materialId) ? '' : erpOrderUtil.chooseProductMation.materialId,//商品id
                     normsId: $("#unitList").val(),
                     remark: $("#remark").val(),
                     sealPrice: getSealPrice(erpOrderUtil.chooseProductMation.unitList, $("#unitList").val()),
@@ -316,8 +316,8 @@ layui.config({
 	    // 商品选择
  	    $("body").on("click", "#productNameSel", function (e) {
 			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
-				$("#productName").val(chooseProductMation.productName);
-				$("#productModel").val(chooseProductMation.productModel);
+				$("#productName").val(chooseProductMation.materialName);
+				$("#productModel").val(chooseProductMation.materialModel);
 				$("#unitList").html(getDataUseHandlebars(selTemplate, {rows: chooseProductMation.unitList}));
 				form.render("select");
 			});

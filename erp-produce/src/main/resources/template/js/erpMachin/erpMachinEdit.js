@@ -59,13 +59,13 @@ layui.config({
 				}
 				//加工产品信息
 				machinPro = {
-					productId: data.materialId,
-					productName: data.materialName,
-					productModel: data.materialModel,
+					materialId: data.materialId,
+					materialName: data.materialName,
+					materialModel: data.materialModel,
 					unitList: data.unitList
 				};
-				$("#productName").val(machinPro.productName);
-				$("#productModel").val(machinPro.productModel);
+				$("#productName").val(machinPro.materialName);
+				$("#productModel").val(machinPro.materialModel);
 				$("#unitList").html(getDataUseHandlebars(selOption, {rows: machinPro.unitList}));
 				$("#unitList").val(data.normsId);
 				$("#number").val(data.needNum);
@@ -170,14 +170,14 @@ layui.config({
 						return false;
 					}
 					//商品对象
-					var product = allChooseProduct["tr" + rowNum.toString()];
-					if(inTableDataArrayByAssetarId(product.productId, $("#mUnitId" + rowNum).val(), tableData)) {
+					var material = allChooseProduct["tr" + rowNum.toString()];
+					if(inTableDataArrayByAssetarId(material.materialId, $("#mUnitId" + rowNum).val(), tableData)) {
 						winui.window.msg('一张单中不允许出现相同单位的商品信息.', {icon: 2, time: 2000});
 						noError = true;
 						return false;
 					}
 					var row = {
-						materialId: product.productId,
+						materialId: material.materialId,
 						mUnitId: $("#mUnitId" + rowNum).val(),
 						rkNum: rkNum.val(),
 						unitPrice: $("#unitPrice" + rowNum).val()
@@ -190,7 +190,7 @@ layui.config({
 				
 				var params = {
 			    	orderId: isNull(productionMation.id) ? '' : productionMation.id,
-			    	materialId: machinPro.productId,
+			    	materialId: machinPro.materialId,
 			    	normsId: $("#unitList").val(),
 			    	departmentId: $("#departmentId").val(),
 			    	number: $("#number").val(),
@@ -234,8 +234,8 @@ layui.config({
 				procedureMationList = [];
 				$("#procedureBody").html("");
 				//重置成品信息
-				$("#productName").val(machinPro.productName);
-				$("#productModel").val(machinPro.productModel);
+				$("#productName").val(machinPro.materialName);
+				$("#productModel").val(machinPro.materialModel);
 				$("#unitList").html(getDataUseHandlebars(selOption, {rows: machinPro.unitList}));
 				$("#number").val(1);
 				//重置单据信息
@@ -317,7 +317,7 @@ layui.config({
 				//商品赋值
 				allChooseProduct[trId] = chooseProductMation;
 				//表格商品名称赋值
-				$("#materialId" + thisRowNum.toString()).val(allChooseProduct[trId].productName + "(" + allChooseProduct[trId].productModel + ")");
+				$("#materialId" + thisRowNum.toString()).val(allChooseProduct[trId].materialName + "(" + allChooseProduct[trId].materialModel + ")");
 				//表格单位赋值
 				$("#mUnitId" + thisRowNum.toString()).html(getDataUseHandlebars(selOption, {rows: allChooseProduct[trId].unitList}));
 				form.render('select');
@@ -337,13 +337,13 @@ layui.config({
 					$("#productionOrder").val(productionMation.defaultNumber);
 					//加工产品信息
 					machinPro = {
-						productId: productionMation.materialId,
-						productName: productionMation.materialName,
-						productModel: productionMation.materialModel,
+						materialId: productionMation.materialId,
+						materialName: productionMation.materialName,
+						materialModel: productionMation.materialModel,
 						unitList: productionMation.unitList
 					};
-					$("#productName").val(machinPro.productName);
-					$("#productModel").val(machinPro.productModel);
+					$("#productName").val(machinPro.materialName);
+					$("#productModel").val(machinPro.materialModel);
 					$("#unitList").html(getDataUseHandlebars(selOption, {rows: machinPro.unitList}));
 					$("#unitList").val(productionMation.normsId);
 					$("#number").val(productionMation.number);
@@ -377,7 +377,7 @@ layui.config({
 						$("#mUnitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.product.unitList}));
 						$("#mUnitId" + (rowNum - 1)).val(item.normsId);
 						//商品回显
-						$("#materialId" + (rowNum - 1)).val(item.product.productName + "(" + item.product.productModel + ")");
+						$("#materialId" + (rowNum - 1)).val(item.product.materialName + "(" + item.product.materialModel + ")");
 						$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
 						//所需总数量
 						$("#productionNum" + (rowNum - 1)).html(item.productionNum);
