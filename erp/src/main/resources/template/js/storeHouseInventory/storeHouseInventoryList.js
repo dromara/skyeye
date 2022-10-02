@@ -54,29 +54,28 @@ layui.config({
 	        limit: 8,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
-		        { field: 'name', title: '商品名称', rowspan: '2', align: 'left', width: 150, templet: function (d) {
-			        	return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
+		        { field: 'materialName', title: '商品名称', rowspan: '2', align: 'left', width: 150, templet: function (d) {
+					return '<a lay-event="details" class="notice-title-click">' + d.materialName + '</a>';
 			    }},
-		        { field: 'model', title: '型号', rowspan: '2', align: 'left', width: 150 },
-		        { field: 'categoryName', title: '所属类型', rowspan: '2', align: 'center', width: 100 },
-		        { field: 'typeName', title: '商品来源', rowspan: '2', align: 'left', width: 100 },
-		        { title: '库存', colspan: '3', align: 'center', width: 80},
+		        { field: 'materialModel', title: '型号', rowspan: '2', align: 'left', width: 150 },
+		        { field: 'materialCategoryName', title: '所属类型', rowspan: '2', align: 'center', width: 100 },
+		        { field: 'materialTypeName', title: '商品来源', rowspan: '2', align: 'left', width: 100 },
+		        { title: '库存', colspan: '4', align: 'center', width: 80},
 		        { field: 'id', title: '盘点历史', rowspan: '2', align: 'center', width: 80, templet: function (d) {
 			        	return '<a lay-event="historyDetails" class="notice-title-click">盘点历史</a>';
 			    }},
-		        { field: 'unitName', title: '单位', rowspan: '2', align: 'center', width: 80},
 		        { field: 'enabled', title: '状态', rowspan: '2', align: 'center', width: 60, templet: function (d) {
 		        	if(d.enabled == '0'){
 		        		return "<span class='state-down'>禁用</span>";
 		        	} else if (d.enabled == '1'){
 		        		return "<span class='state-up'>启用</span>";
 		        	}
-		        }},
-		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 }
+		        }}
 		    ],[
-		        { field: 'allTock', title: '总库存', align: 'center', width: 80},
-		    	{ field: 'initialTock', title: '初始库存', align: 'center', width: 80},
-		        { field: 'stockNum', title: '可盘点库存', align: 'center', width: 120, edit: 'text'}
+				{ field: 'unitName', title: '规格', align: 'center', width: 80 },
+		        { field: 'allTock', title: '总库存', align: 'center', width: 80 },
+		    	{ field: 'initialTock', title: '初始库存', align: 'center', width: 80 },
+		        { field: 'stockNum', title: '可盘点库存', align: 'center', width: 120, edit: 'text' }
 	        ]],
 		    done: function(json) {
 		    	matchingLanguage();
@@ -147,7 +146,6 @@ layui.config({
 	}
 	
 	form.render();
-	
 	form.on('submit(formSearch)', function (data) {
         if (winui.verifyForm(data.elem)) {
         	refreshloadTable();
@@ -195,10 +193,8 @@ layui.config({
     
     function getTableParams() {
     	return {
-    		materialName: $("#materialName").val(), 
-    		model: $("#model").val(), 
-    		categoryId: isNull($("#categoryId").val()) ? "" : $("#categoryId").attr("categoryId"), 
-    		typeNum: $("#typeNum").val(), 
+    		categoryId: isNull($("#categoryId").val()) ? "" : $("#categoryId").attr("categoryId"),
+			typeFrom: $("#typeFrom").val(),
     		enabled: $("#enabled").val(),
     		depotId: $("#depotId").val()
     	};
