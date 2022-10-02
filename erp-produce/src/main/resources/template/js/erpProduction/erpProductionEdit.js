@@ -40,7 +40,6 @@ layui.config({
  		
  		textool.init({eleId: 'remark', maxlength: 200});
  		
- 		//回显数据
  		AjaxPostUtil.request({url: flowableBasePath + "erpproduction003", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
 			// 商品信息
 			erpOrderUtil.chooseProductMation = {

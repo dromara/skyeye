@@ -6,10 +6,8 @@ layui.config({
 }).extend({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
-	
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
@@ -20,59 +18,56 @@ layui.config({
 	
 	var chooseMation = {};
 	
-	initTable();
-	function initTable(){
-		table.render({
-		    id: 'messageTable',
-		    elem: '#messageTable',
-		    method: 'post',
-		    url: flowableBasePath + 'erpproduction009',
-		    where: getTableParams(),
-			even: true,
-		    page: false,
-		    cols: [[
-		    	{ type: 'radio'},
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        { field: 'defaultNumber', title: '生产单号', align: 'center', width: 200, templet: function (d) {
-			        return '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
-			    }},
-	            { field: 'salesOrderNum', width: 200, title: '关联销售单', align: 'center'},
-	            { field: 'materialName', width: 150, title: '商品名称'},
-	            { field: 'materialModel', width: 150, title: '商品型号'},
-	            { field: 'number', width: 80, title: '计划数量'},
-		        { field: 'planStartDate', width: 140, align: 'center', title: '计划开始时间'},
-		        { field: 'planComplateDate', width: 140, align: 'center', title: '计划结束时间'}
-		    ]],
-		    done: function(res, curr, count){
-		    	matchingLanguage();
-		    	$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('click',function(){
-					var dubClick = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
-					dubClick.find("input[type='radio']").prop("checked", true);
-					form.render();
-					var chooseIndex = JSON.stringify(dubClick.data('index'));
-					var obj = res.rows[chooseIndex];
-					chooseMation = obj;
-				});
-				
-				$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('click',function(){
-					var click = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
-					click.find("input[type='radio']").prop("checked", true);
-					form.render();
-				})
-		    }
-		});
-		
-		table.on('tool(messageTable)', function (obj) {
-	        var data = obj.data;
-	        var layEvent = obj.event;
-	        if (layEvent === 'details') { //详情
-	        	details(data);
-	        }
-	    });
-		
-		form.render();
-	}
-	
+	table.render({
+		id: 'messageTable',
+		elem: '#messageTable',
+		method: 'post',
+		url: flowableBasePath + 'erpproduction009',
+		where: getTableParams(),
+		even: true,
+		page: false,
+		cols: [[
+			{ type: 'radio'},
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+			{ field: 'defaultNumber', title: '生产单号', align: 'center', width: 200, templet: function (d) {
+				return '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
+			}},
+			{ field: 'salesOrderNum', width: 200, title: '关联销售单', align: 'center'},
+			{ field: 'materialName', width: 150, title: '商品名称'},
+			{ field: 'materialModel', width: 150, title: '商品型号'},
+			{ field: 'number', width: 80, title: '计划数量'},
+			{ field: 'planStartDate', width: 140, align: 'center', title: '计划开始时间'},
+			{ field: 'planComplateDate', width: 140, align: 'center', title: '计划结束时间'}
+		]],
+		done: function(res, curr, count){
+			matchingLanguage();
+			$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('click',function(){
+				var dubClick = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
+				dubClick.find("input[type='radio']").prop("checked", true);
+				form.render();
+				var chooseIndex = JSON.stringify(dubClick.data('index'));
+				var obj = res.rows[chooseIndex];
+				chooseMation = obj;
+			});
+
+			$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('click',function(){
+				var click = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
+				click.find("input[type='radio']").prop("checked", true);
+				form.render();
+			})
+		}
+	});
+
+	table.on('tool(messageTable)', function (obj) {
+		var data = obj.data;
+		var layEvent = obj.event;
+		if (layEvent === 'details') { //详情
+			details(data);
+		}
+	});
+
+	form.render();
+
 	// 详情
 	function details(data) {
 		rowId = data.id;
