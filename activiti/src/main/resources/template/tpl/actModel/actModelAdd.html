@@ -33,15 +33,15 @@
 	        <div class="layui-form-item TypeIsOne">
 	            <label class="layui-form-label">新增页面<i class="red">*</i></label>
 		        <div class="layui-input-block">
-		        	<input type="text" id="pageUrl" name="pageUrl" placeholder="请输入页面URL" class="layui-input"/>
-		        	<div class="layui-form-mid layui-word-aux">格式为：../../tpl/model/modellist.html</div>
+		        	<input type="text" id="addPageUrl" name="addPageUrl" placeholder="请输入页面URL" class="layui-input"/>
+		        	<div class="layui-form-mid layui-word-aux">格式为：../../tpl/model/modelAdd.html</div>
 		        </div>
 	        </div>
 	        <div class="layui-form-item TypeIsOne">
 	            <label class="layui-form-label">编辑页面<i class="red">*</i></label>
 		        <div class="layui-input-block">
 		        	<input type="text" id="editPageUrl" name="editPageUrl" placeholder="请输入页面URL" class="layui-input"/>
-		        	<div class="layui-form-mid layui-word-aux">格式为：../../tpl/model/modellist.html</div>
+		        	<div class="layui-form-mid layui-word-aux">格式为：../../tpl/model/modelEdit.html</div>
 		        </div>
 	        </div>
 	        <div class="layui-form-item TypeIsOne">
@@ -59,50 +59,11 @@
 		            </select>
 	            </div>
 	        </div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">图标类型<i class="red">*</i></label>
-				<div class="layui-input-block winui-radio">
-					<input type="radio" name="menuIconType" value="1" title="Icon" lay-filter="menuIconType" checked/>
-					<input type="radio" name="menuIconType" value="2" title="图片" lay-filter="menuIconType" />
-				</div>
+
+			<div class="layui-form-item" id="iconMation">
+
 			</div>
-			<div class="layui-form-item menuIconTypeIsOne">
-				<label class="layui-form-label">菜单图标<i class="red">*</i></label>
-				<div class="layui-input-block">
-					<input type="text" id="menuIcon" name="menuIcon" placeholder="请输入图标src或者class" class="layui-input" />
-				</div>
-			</div>
-			<div class="layui-form-item menuIconTypeIsOne">
-				<label class="layui-form-label">图标预览</label>
-				<div class="layui-input-block">
-					<div class="layui-col-xs12">
-						<div class="layui-col-xs2">
-							<div class="winui-icon winui-icon-font" style="width: 60px; height: 60px;"><i id="iconShow" class="" style="font-size: 48px; line-height: 65px;"></i></div>
-						</div>
-						<div class="layui-col-xs5">
-							<div class="layui-input-inline" style="width: 120px;">
-								<input type="text" value="" class="layui-input" placeholder="请选择图标颜色" id="menuIconColorInput" />
-							</div>
-							<div id="menuIconColor"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="layui-form-item menuIconTypeIsTwo layui-hide">
-				<label class="layui-form-label">菜单图片<i class="red">*</i></label>
-				<div class="layui-input-block">
-					<div class="upload" id="menuIconPic"></div>
-				</div>
-			</div>
-		    <div class="layui-form-item">
-		    	<label class="layui-form-label">背景颜色<i class="red">*</i></label>
-             	<div class="layui-input-block">
-               		<div class="layui-input-inline" style="width: 130px;">
-			            <input type="text" value="" class="layui-input" placeholder="请选择图标颜色" win-verify="required" id="backgroundColorInput" />
-			        </div>
-                	<div id="backgroundColor"></div>
-	        	</div>
-	        </div>
+
 		    <div class="layui-form-item">
 	            <label class="layui-form-label">回调地址</label>
 		        <div class="layui-input-block">
@@ -136,7 +97,7 @@
 	<script src="../../assets/lib/layui/layui.js"></script>
    	<script src="../../assets/lib/layui/custom.js"></script>
    	<script type="text/javascript">
-		layui.config({base: '../../js/actmodletype/'}).use('actmodletypeadd');
+		layui.config({base: '../../js/actModel/'}).use('actModelAdd');
 	</script>
 </body>
 </html>

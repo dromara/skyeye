@@ -16,7 +16,7 @@ layui.config({
     form = layui.form;
 
     // 获取单据提交类型
-    var submitType = erpOrderUtil.getSubmitTypeByOrderType(systemOrderType["incomeOrder"]["orderType"]);
+    var submitType = erpOrderUtil.getSubmitTypeByKey(systemOrderType["incomeOrder"]["key"]);
 
     var selOption = getFileContent('tpl/template/select-option.tpl');
     var handsPersonList = new Array();//经手人员

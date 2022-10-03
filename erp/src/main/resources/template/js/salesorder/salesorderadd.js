@@ -32,7 +32,7 @@ layui.config({
 	var allChooseProduct = {};
 
 	// 获取单据提交类型
-	var submitType = erpOrderUtil.getSubmitTypeByOrderType(systemOrderType["outchaseOrder"]["orderType"]);
+	var submitType = erpOrderUtil.getSubmitTypeByKey(systemOrderType["outchaseOrder"]["key"]);
 
 	// 单据时间
 	laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
@@ -41,18 +41,16 @@ layui.config({
 
 	// 初始化账户
 	systemCommonUtil.getSysAccountListByType(function (json) {
-		// 加载账户数据
 		$("#accountId").html(getDataUseHandlebars(selOption, json));
 	});
 
 	// 初始化支出项目
 	systemCommonUtil.getSysInoutitemListByType(2, function (json) {
-		// 加载支出项目
 		inoutitemHtml = getDataUseHandlebars(selOption, json);
 	});
 
 	// 加载动态表单
-	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["outchaseOrder"]["code"], null);
+	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["outchaseOrder"]["key"], null);
 
 	// 商品
 	initTableChooseUtil.initTable({

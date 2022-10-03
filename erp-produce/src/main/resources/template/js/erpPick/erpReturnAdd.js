@@ -110,7 +110,7 @@ layui.config({
 			    	materialStr: JSON.stringify(tableData),
 			    	depotId: $("#depotId").val()
 			    };
-	        	AjaxPostUtil.request({url:flowableBasePath + "erppick012", params: params, type: 'json', callback: function (json) {
+	        	AjaxPostUtil.request({url: flowableBasePath + "erppick012", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});

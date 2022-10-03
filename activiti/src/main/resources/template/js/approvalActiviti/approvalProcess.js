@@ -36,7 +36,7 @@ layui.config({
     	tableTemplate = $("#tableTemplate").html(),//表格展示
 		voucherTemplate = $("#voucherTemplate").html();//凭证展示
 
-    AjaxPostUtil.request({url:flowableBasePath + "activitimode016", params: {taskId: taskId, processInstanceId: processInstanceId}, type: 'json', callback: function(j){
+    AjaxPostUtil.request({url: flowableBasePath + "activitimode016", params: {taskId: taskId, processInstanceId: processInstanceId}, type: 'json', callback: function(j){
 		pageTypes = isNull(j.bean.pageTypes) ? '1' : j.bean.pageTypes;
 		var jsonStr = "";//实体json对象
 		var str = "";
@@ -361,7 +361,7 @@ layui.config({
 			done: function(page, next) { //到达临界点（默认滚动触发），触发下一页
 				var lis = [];
 				//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-				AjaxPostUtil.request({url:flowableBasePath + "activitimode017", params: {processInstanceId: parent.processInstanceId}, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: flowableBasePath + "activitimode017", params: {processInstanceId: parent.processInstanceId}, type: 'json', callback: function (json) {
 					var jsonStr = "";//实体json对象
 					$.each(json.rows, function(index, bean) {
 						bean.showClass = 'date02';

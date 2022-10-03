@@ -12,9 +12,10 @@ layui.config({
 
 	showGrid({
 		id: "showForm",
-		url: flowableBasePath + "actmodletype021",
-		params: {rowId:parent.rowId},
+		url: flowableBasePath + "queryActModelDetailsById",
+		params: {id: parent.rowId},
 		pagination: false,
+		method: 'GET',
 		template: $("#beanTemplate").html(),
 		ajaxSendAfter:function (json) {
 			if(json.bean.pageTypes == 1){
@@ -27,14 +28,14 @@ layui.config({
 				$(".TypeIsOne").addClass("layui-hide");
 			}
 
-			if(json.bean.menuIconType == 1){
-				$("#menuIconType").html('Icon');
-				$(".menuIconTypeIsTwo").addClass("layui-hide");
-				$(".menuIconTypeIsOne").removeClass("layui-hide");
+			if(json.bean.iconType == 1){
+				$("#iconType").html('Icon');
+				$(".iconTypeIsTwo").addClass("layui-hide");
+				$(".iconTypeIsOne").removeClass("layui-hide");
 			} else {
-				$("#menuIconType").html('图片');
-				$(".menuIconTypeIsTwo").removeClass("layui-hide");
-				$(".menuIconTypeIsOne").addClass("layui-hide");
+				$("#iconType").html('图片');
+				$(".iconTypeIsTwo").removeClass("layui-hide");
+				$(".iconTypeIsOne").addClass("layui-hide");
 			}
 
 			if(json.bean.commonUsed == 1){

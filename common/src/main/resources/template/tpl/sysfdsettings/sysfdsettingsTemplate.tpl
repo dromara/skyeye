@@ -199,7 +199,7 @@
                 </div>
             </div>
 
-            <div class="layui-tab-item" id="erpOrderExamineMationBox">
+            <div class="layui-tab-item" id="sysOrderBasicDesignMationBox">
 
             </div>
 

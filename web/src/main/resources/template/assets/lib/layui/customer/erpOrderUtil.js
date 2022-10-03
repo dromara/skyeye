@@ -51,13 +51,13 @@ var erpOrderUtil = {
     /**
      * 根据单据类型获取单据提交类型
      *
-     * @param orderType 订单类型
+     * @param key 订单唯一标识符
      * @returns {string} 1需要审核；2不需要审核
      */
-    getSubmitTypeByOrderType: function (orderType) {
+    getSubmitTypeByKey: function (key) {
         // 1需要审核；2不需要审核
         var submitType = "";
-        AjaxPostUtil.request({url: flowableBasePath + "erpcommon004", params: {orderType: orderType}, method: "GET", type: 'json', callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "erpcommon004", params: {key: key}, method: "GET", type: 'json', callback: function(json) {
             submitType = json.bean.needExamine;
         }, async: false});
 

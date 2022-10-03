@@ -105,7 +105,7 @@ var dsFormUtil = {
     /**
      * 加载动态表单到页面
      *
-     * @param showBoxId要追加的boxid后面
+     * @param showBoxId 要追加的boxid后面
      * @param code 动态表单-----业务逻辑表单关联表中的code
      */
     loadPageByCode: function(showBoxId, code, dsFormObjectRelationId){

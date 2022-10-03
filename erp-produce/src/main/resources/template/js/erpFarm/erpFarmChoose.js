@@ -131,7 +131,7 @@ layui.config({
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
 		});
-		AjaxPostUtil.request({url:flowableBasePath + "erpfarm011", params: {ids: selectedData.toString()}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: flowableBasePath + "erpfarm011", params: {ids: selectedData.toString()}, type: 'json', callback: function (json) {
 			parent.procedureMationList = [].concat(json.rows);
 			parent.layer.close(index);
 			parent.refreshCode = '0';

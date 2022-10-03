@@ -47,7 +47,7 @@ layui.config({
 		    			status: $("input[name='flag']:checked").val(),
 		    			rowId: parent.rowId
 		            };
-		            AjaxPostUtil.request({url:flowableBasePath + "erppick016", params: jStr, type: 'json', callback: function (json) {
+		            AjaxPostUtil.request({url: flowableBasePath + "erppick016", params: jStr, type: 'json', callback: function (json) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';
 		 	   		}});

@@ -34,7 +34,7 @@ layui.config({
 	        }},
 	        { field: 'customerName', title: '客户名称', align: 'left', width: 150 },
 	        { field: 'stateName', title: '状态', align: 'left', width: 100 },
-	        { field: 'applyUserName', title: '申领人', align: 'center', width: 140 },
+	        { field: 'applyUserName', title: '申领人', width: 120 },
 	        { field: 'applyTime', title: '申领时间', align: 'center', width: 140 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
 	    ]],

@@ -82,7 +82,7 @@ layui.config({
         } else if (layEvent === 'activitiProcessDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
-            erpOrderUtil.revokeOrderMation(data.processInstanceId, systemOrderType["putIsSalesReturns"]["orderType"], function() {
+            erpOrderUtil.revokeOrderMation(data.processInstanceId, systemOrderType["putIsSalesReturns"]["key"], function() {
                 loadTable();
             });
         }
@@ -90,14 +90,14 @@ layui.config({
 
     // 删除
     function deletemember(data) {
-        erpOrderUtil.deleteOrderMation(data.id, systemOrderType["putIsSalesReturns"]["orderType"], function() {
+        erpOrderUtil.deleteOrderMation(data.id, systemOrderType["putIsSalesReturns"]["key"], function() {
             loadTable();
         });
     }
     
     // 提交数据
 	function subExamine(data) {
-        erpOrderUtil.submitOrderMation(data.id, systemOrderType["putIsSalesReturns"]["orderType"], data.submitType, sysActivitiModel["putIsSalesReturns"]["key"], function() {
+        erpOrderUtil.submitOrderMation(data.id, systemOrderType["putIsSalesReturns"]["key"], data.submitType, sysActivitiModel["putIsSalesReturns"]["key"], function() {
             loadTable();
         });
     }

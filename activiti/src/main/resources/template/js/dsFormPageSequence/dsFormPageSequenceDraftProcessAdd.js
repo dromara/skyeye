@@ -38,7 +38,7 @@ layui.config({
 					pageId: parent.dsFormId,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url:flowableBasePath + "activitimode022", params: jStr, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: flowableBasePath + "activitimode022", params: jStr, type: 'json', callback: function (json) {
 					winui.window.msg("申请提交成功，等待审核...", {icon: 1, time: 2000}, function() {
 						parent.layer.close(index);
 						parent.refreshCode = '0';

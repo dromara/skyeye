@@ -19,12 +19,12 @@
                 <div class="layui-card-body layui-col-md12">
                     {{#each child}}
                         <div class="task-launch-item launchTask" dsFormId="{{dsFormId}}" actid="{{actId}}" pageUrl="{{pageUrl}}" showTitle="{{title}}">
-							<div class="task-left-top" style="background-color: {{backgroundColor}};"></div>
-							<div class="task-launch-item-bk task-launch-item-bk_1" style="border-left: 2px solid {{backgroundColor}};"></div>
-							<div class="task-launch-item-bk task-launch-item-bk_2" style="border-top: 2px solid {{backgroundColor}};"></div>
-							<div class="task-launch-item-bk task-launch-item-bk_3" style="border-right: 2px solid {{backgroundColor}};"></div>
-							<div class="task-launch-item-bk task-launch-item-bk_4" style="border-bottom: 2px solid {{backgroundColor}};"></div>
-                            <div class="icon">{{#compare1 menuIconType menuIconPic menuIcon menuIconColor}}{{/compare1}}</div>
+							<div class="task-left-top" style="background-color: {{iconBg}};"></div>
+							<div class="task-launch-item-bk task-launch-item-bk_1" style="border-left: 2px solid {{iconBg}};"></div>
+							<div class="task-launch-item-bk task-launch-item-bk_2" style="border-top: 2px solid {{iconBg}};"></div>
+							<div class="task-launch-item-bk task-launch-item-bk_3" style="border-right: 2px solid {{iconBg}};"></div>
+							<div class="task-launch-item-bk task-launch-item-bk_4" style="border-bottom: 2px solid {{iconBg}};"></div>
+                            <div class="icon">{{#compare1 iconType iconPic icon iconColor}}{{/compare1}}</div>
                             <div class="hot-div">{{#compare2 commonUsed}}{{/compare2}}</div>
                             <span>{{title}}</span>
 							<a class="remark" title="{{remark}}">{{remark}}</a>

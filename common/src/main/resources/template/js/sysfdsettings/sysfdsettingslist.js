@@ -45,7 +45,7 @@ layui.config({
 				loadAbnormal(json);
 
 				// 加载ERP以及生产订单的审核设置
-				loadErpExamineBasicDesign(json);
+				loadSysOrderBasicDesign(json);
 
 				// 加载事件
 				loadEvent();
@@ -117,15 +117,15 @@ layui.config({
 		 *
 		 * @param json
 		 */
-		function loadErpExamineBasicDesign(json) {
-			if (!isNull(json.bean.erpExamineBasicDesign)) {
-				var erpExamineBasicDesign = JSON.parse(json.bean.erpExamineBasicDesign);
-				$("#erpOrderExamineMationBox").append(getDataUseHandlebars($("#erpOrderExamineMationTemplate").html(), {rows: erpExamineBasicDesign}));
-				$.each(erpExamineBasicDesign, function (i, item) {
+		function loadSysOrderBasicDesign(json) {
+			if (!isNull(json.bean.sysOrderBasicDesign)) {
+				var sysOrderBasicDesign = JSON.parse(json.bean.sysOrderBasicDesign);
+				$("#sysOrderBasicDesignMationBox").append(getDataUseHandlebars($("#sysOrderBasicDesignMationTemplate").html(), {rows: sysOrderBasicDesign}));
+				$.each(sysOrderBasicDesign, function (i, item) {
 					if(item.examineSwitch){
-						$("input:radio[name='" + item.code + "'][value='1']").attr("checked", true);
+						$("input:radio[name='" + item.key + "'][value='1']").attr("checked", true);
 					} else {
-						$("input:radio[name='" + item.code + "'][value='2']").attr("checked", true);
+						$("input:radio[name='" + item.key + "'][value='2']").attr("checked", true);
 					}
 				});
 			}
@@ -222,7 +222,7 @@ layui.config({
 					// 获取异常考勤制度信息
 					params.abnormalMation = getAbnormalMation();
 					// 获取订单审核标识信息
-					params.erpExamineBasicDesign = getErpExamineBasicDesign();
+					params.sysOrderBasicDesign = getSysOrderBasicDesign();
 
 					AjaxPostUtil.request({url: reqBasePath + "sysfdsettings002", params: params, type: 'json', method: "PUT", callback: function (json) {
 						winui.window.msg("更改成功！", {icon: 1, time: 2000});
@@ -258,13 +258,13 @@ layui.config({
 		 *
 		 * @returns {any[]}
 		 */
-		function getErpExamineBasicDesign(){
+		function getSysOrderBasicDesign(){
 			var tableData = new Array();
-			$.each($("#erpOrderExamineMationBox .examineItem"), function (i, item) {
+			$.each($("#sysOrderBasicDesignMationBox .examineItem"), function (i, item) {
 				var row = {
 					title: $(item).attr("title"),
-					code: $(item).attr("code"),
-					examineSwitch: $("input[name='" + $(item).attr("code") + "']:checked").val() == 1 ? true : false
+					key: $(item).attr("key"),
+					examineSwitch: $("input[name='" + $(item).attr("key") + "']:checked").val() == 1 ? true : false
 				};
 				tableData.push(row);
 			});

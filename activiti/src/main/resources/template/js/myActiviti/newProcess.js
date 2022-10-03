@@ -18,8 +18,9 @@ layui.config({
 
     showGrid({
         id: "showForm",
-        url: flowableBasePath + "actmodletype019",
+        url: flowableBasePath + "queryUpActModelList",
         params: {},
+		method: 'GET',
         pagination: false,
         template: beanTemplate,
 		ajaxSendLoadBefore: function(hdb) {

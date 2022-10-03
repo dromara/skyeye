@@ -221,7 +221,7 @@ layui.config({
 				pageId: "erpWayProcedureChoose",
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {
-					AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure008", params: {rowId: wayProcedureMation.id}, type: 'json', method: "GET", callback: function (json) {
+					AjaxPostUtil.request({url: flowableBasePath + "erpwayprocedure008", params: {rowId: wayProcedureMation.id}, type: 'json', method: "GET", callback: function (json) {
 						procedureMationList = [].concat(json.bean.procedureList);
 						loadProcedureMation();
 					}});

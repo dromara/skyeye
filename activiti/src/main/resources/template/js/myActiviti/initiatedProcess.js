@@ -117,7 +117,7 @@ layui.config({
 	function refreshPic(data) {
 		layer.confirm('确认重新生成流程图吗？', { icon: 3, title: '刷新流程图操作' }, function (i) {
 			layer.close(i);
-            AjaxPostUtil.request({url:flowableBasePath + "activitimode027", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "activitimode027", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
  	   		}});
 		});

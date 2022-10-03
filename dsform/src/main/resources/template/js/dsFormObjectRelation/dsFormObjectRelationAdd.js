@@ -34,10 +34,9 @@ layui.config({
             var params = {
                 title: $("#title").val(),
                 titleEn: $("#titleEn").val(),
-                encoded: $("#encoded").val(),
+                codeNum: $("#codeNum").val(),
                 firstTypeId: $("#firstTypeId").val(),
                 secondTypeId: $("#secondTypeId").val(),
-                orderNum: $("#orderNum").val(),
                 remark: $("#remark").val(),
                 dsFormPageIds: formPageId.join(",")
             };

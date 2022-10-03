@@ -31,7 +31,7 @@ layui.config({
 	        	return '<a lay-event="appDetails" class="notice-title-click">' + d.applyNum + '</a>';
 	        }},
 	        { field: 'customerName', title: '客户名称', align: 'left', width: 150 },
-	        { field: 'applyUserName', title: '申领人', align: 'center', width: 140 },
+	        { field: 'applyUserName', title: '申领人', width: 120 },
 	        { field: 'applyTime', title: '申领时间', align: 'center', width: 140 }
 	    ]],
 	    done: function(json) {

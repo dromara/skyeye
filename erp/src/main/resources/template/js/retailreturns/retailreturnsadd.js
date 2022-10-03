@@ -23,7 +23,7 @@ layui.config({
 	var allChooseProduct = {};
 
 	// 获取单据提交类型
-	var submitType = erpOrderUtil.getSubmitTypeByOrderType(systemOrderType["putIsRetailReturns"]["orderType"]);
+	var submitType = erpOrderUtil.getSubmitTypeByKey(systemOrderType["putIsRetailReturns"]["key"]);
 
 	// 单据时间
 	laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
@@ -66,7 +66,7 @@ layui.config({
 	});
 
 	// 加载动态表单
-	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["putIsRetailReturns"]["code"], null);
+	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["putIsRetailReturns"]["key"], null);
 
 	matchingLanguage();
 

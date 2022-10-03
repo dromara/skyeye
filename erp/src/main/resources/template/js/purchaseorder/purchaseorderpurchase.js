@@ -28,13 +28,13 @@ layui.config({
 	var allChooseProduct = {};
 
 	// 获取单据提交类型
-	var submitType = erpOrderUtil.getSubmitTypeByOrderType(systemOrderType["putIsPurchase"]["orderType"]);
+	var submitType = erpOrderUtil.getSubmitTypeByKey(systemOrderType["putIsPurchase"]["key"]);
 
 	// 单据时间
 	laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
 
 	// 加载动态表单
-	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["putIsPurchase"]["code"], null);
+	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["putIsPurchase"]["key"], null);
 
 	// 初始化账户
 	systemCommonUtil.getSysAccountListByType(function (json) {

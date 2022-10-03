@@ -55,17 +55,17 @@
 		</tr>
 	</script>
 
-	<!-- ERP以及生产单据审核设置 -->
-	<script type="text/x-handlebars-template" id="erpOrderExamineMationTemplate">
+	<!-- 系统单据审核设置 -->
+	<script type="text/x-handlebars-template" id="sysOrderBasicDesignMationTemplate">
 		<div class="layui-form-item layui-col-xs12">
 			<span class="hr-title">订单是否需要审核标识</span><hr>
 		</div>
 		{{#each rows}}
-		<div class="layui-form-item layui-col-xs6 examineItem" title="{{title}}" code="{{code}}">
+		<div class="layui-form-item layui-col-xs6 examineItem" title="{{title}}" key="{{key}}">
 			<label class="layui-form-label">{{title}}：</label>
 			<div class="layui-input-block winui-radio">
-				<input type="radio" name="{{code}}" value="1" title="需要" />
-				<input type="radio" name="{{code}}" value="2" title="不需要" />
+				<input type="radio" name="{{key}}" value="1" title="需要" />
+				<input type="radio" name="{{key}}" value="2" title="不需要" />
 			</div>
 		</div>
 		{{/each}}

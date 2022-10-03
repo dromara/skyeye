@@ -32,7 +32,7 @@ layui.config({
 				    			isAgree: $("input[name='flag']:checked").val(),
 				    			rowId: parent.rowId
 				            };
-				            AjaxPostUtil.request({url:flowableBasePath + "sealseservice030", params: jStr, type: 'json', callback: function (json) {
+				            AjaxPostUtil.request({url: flowableBasePath + "sealseservice030", params: jStr, type: 'json', callback: function (json) {
 								parent.layer.close(index);
 								parent.refreshCode = '0';
 				 	   		}});

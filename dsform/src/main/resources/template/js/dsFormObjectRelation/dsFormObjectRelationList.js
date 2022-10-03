@@ -134,7 +134,7 @@ layui.config({
     function getTableParams() {
         return {
             title: $("#title").val(),
-            encoded: $("#encoded").val(),
+            codeNum: $("#codeNum").val(),
             firstTypeId: $("#firstTypeId").val(),
             secondTypeId: $("#secondTypeId").val()
         };

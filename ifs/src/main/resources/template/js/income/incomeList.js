@@ -19,48 +19,46 @@ layui.config({
 
     laydate.render({elem: '#billTime', range: '~'});
 
-    function initloadTable() {
-        table.render({
-            id: 'messageTable',
-            elem: '#messageTable',
-            method: 'post',
-            url: flowableBasePath + 'income001',
-            where: getTableParams(),
-            even: true,
-            page: true,
-            limits: getLimits(),
-            limit: getLimit(),
-            cols: [[
-                { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
-                { field: 'billNo', title: '单据编号', align: 'left', rowspan: '2', width: 200, templet: function (d) {
-                    return '<a lay-event="details" class="notice-title-click">' + d.billNo + '</a>';
-                }},
-                { title: '审批模式', align: 'center', colspan: '2'},
-                { field: 'state', title: '状态', align: 'left', rowspan: '2', width: 80, templet: function (d) {
-                    return activitiUtil.showStateName2(d.state, d.submitType);
-                }},
-                { field: 'typeName', title: '类型', rowspan: '2', align: 'left', width: 80},
-                { field: 'organTypeName', title: '往来单类型', rowspan: '2', align: 'left', width: 100},
-                { field: 'supplierName', title: '往来单位', rowspan: '2', align: 'left', width: 150 },
-                { field: 'totalPrice', title: '合计金额', rowspan: '2', align: 'left', width: 120},
-                { field: 'handsPersonName', title: '经手人', rowspan: '2', align: 'left', width: 120},
-                { field: 'operTime', title: '单据日期', rowspan: '2', align: 'center', width: 140 },
-                { field: 'userName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 120 },
-                { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
-                { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', rowspan: '2', align: 'center', width: 200, toolbar: '#tableBar'}
-            ],[
-                { field: 'submitType', title: '提交模式', align: 'left', width: 120, templet: function (d) {
-                    return erpOrderUtil.getSubmitTypeName(d);
-                }},
-                { field: 'processInstanceId', title: '流程实例id', align: 'left', width: 120, templet: function (d) {
-                    return erpOrderUtil.getProcessInstanceIdBySubmitType(d);
-                }}
-            ]],
-            done: function(json) {
-                matchingLanguage();
-            }
-        });
-    }
+    table.render({
+        id: 'messageTable',
+        elem: '#messageTable',
+        method: 'post',
+        url: flowableBasePath + 'income001',
+        where: getTableParams(),
+        even: true,
+        page: true,
+        limits: getLimits(),
+        limit: getLimit(),
+        cols: [[
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
+            { field: 'billNo', title: '单据编号', align: 'left', rowspan: '2', width: 200, templet: function (d) {
+                return '<a lay-event="details" class="notice-title-click">' + d.billNo + '</a>';
+            }},
+            { title: '审批模式', align: 'center', colspan: '2'},
+            { field: 'state', title: '状态', align: 'left', rowspan: '2', width: 80, templet: function (d) {
+                return activitiUtil.showStateName2(d.state, d.submitType);
+            }},
+            { field: 'typeName', title: '类型', rowspan: '2', align: 'left', width: 80},
+            { field: 'organTypeName', title: '往来单类型', rowspan: '2', align: 'left', width: 100},
+            { field: 'supplierName', title: '往来单位', rowspan: '2', align: 'left', width: 150 },
+            { field: 'totalPrice', title: '合计金额', rowspan: '2', align: 'left', width: 120},
+            { field: 'handsPersonName', title: '经手人', rowspan: '2', align: 'left', width: 120},
+            { field: 'operTime', title: '单据日期', rowspan: '2', align: 'center', width: 140 },
+            { field: 'userName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 120 },
+            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
+            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', rowspan: '2', align: 'center', width: 200, toolbar: '#tableBar'}
+        ],[
+            { field: 'submitType', title: '提交模式', align: 'left', width: 120, templet: function (d) {
+                return erpOrderUtil.getSubmitTypeName(d);
+            }},
+            { field: 'processInstanceId', title: '流程实例id', align: 'left', width: 120, templet: function (d) {
+                return erpOrderUtil.getProcessInstanceIdBySubmitType(d);
+            }}
+        ]],
+        done: function(json) {
+            matchingLanguage();
+        }
+    });
 
     table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
