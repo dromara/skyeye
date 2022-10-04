@@ -78,7 +78,7 @@ layui.config({
 					params.addPageUrl = $("#pageUrl").val();
 					params.editPageUrl = $("#editPageUrl").val();
 					params.revokeMapping = $("#revokeMapping").val();
-					if (isNull(params.pageUrl)) {
+					if (isNull(params.addPageUrl)) {
 						winui.window.msg("请输入新增页面地址", {icon: 2, time: 2000});
 						return false;
 					}

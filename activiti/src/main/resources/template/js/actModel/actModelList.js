@@ -313,12 +313,12 @@ layui.config({
 		}
 	});
 	
-	//新增申请类型实体
+	// 新增申请类型实体
 	$("body").on("click", "#addModle", function (e) {
 		rowId = clickId;
 		_openNewWindows({
 			url: "../../tpl/actModel/actModelAdd.html",
-			title: "新增申请类型实体",
+			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "actModelAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
@@ -338,10 +338,9 @@ layui.config({
 		});
 	}
 	
-	//上线申请类型实体
+	// 上线申请类型实体
 	function up(data) {
-		var msg = '确认上线选中数据吗？';
-		layer.confirm(msg, { icon: 3, title: '上线申请类型实体' }, function (index) {
+		layer.confirm('确认上线选中数据吗？', { icon: 3, title: '上线申请类型实体' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "updateUpActModelById", params: {id: data.id}, type: 'json', method: 'PUT', callback: function (json) {
 				winui.window.msg("上线成功", {icon: 1, time: 2000});
@@ -350,10 +349,9 @@ layui.config({
 		});
 	}
 	
-	//下线申请类型实体
+	// 下线申请类型实体
 	function down(data) {
-		var msg = '确认下线选中数据吗？';
-		layer.confirm(msg, { icon: 3, title: '下线申请类型实体' }, function (index) {
+		layer.confirm('确认下线选中数据吗？', { icon: 3, title: '下线申请类型实体' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "updateDownActModelById", params: {id: data.id}, type: 'json', method: 'PUT', callback: function (json) {
 				winui.window.msg("下线成功", {icon: 1, time: 2000});
@@ -367,7 +365,7 @@ layui.config({
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/actModel/actModelEdit.html",
-			title: "编辑类型实体",
+			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "actModelEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
@@ -382,7 +380,7 @@ layui.config({
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/actModel/actModelDetails.html",
-			title: "详情",
+			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "actModelDetails",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {

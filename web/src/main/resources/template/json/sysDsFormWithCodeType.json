@@ -1,14 +1,14 @@
 {
-  "putIsPurchase": {"title": "采购入库单", "code": "CGRK", "modelName": "ERP模块"},
-  "putIsSalesReturns": {"title": "销售退货单", "code": "XSTH", "modelName": "ERP模块"},
-  "putIsRetailReturns": {"title": "零售退货单", "code": "LSTH", "modelName": "ERP模块"},
-  "putIsOthers": {"title": "其他入库单", "code": "QTRK", "modelName": "ERP模块"},
+  "putIsPurchase": {"title": "采购入库单", "key": "com.skyeye.service.impl.PurchasePutServiceImpl", "modelName": "ERP模块"},
+  "putIsSalesReturns": {"title": "销售退货单", "key": "com.skyeye.service.impl.SalesReturnsServiceImpl", "modelName": "ERP模块"},
+  "putIsRetailReturns": {"title": "零售退货单", "key": "com.skyeye.service.impl.RetailReturnsServiceImpl", "modelName": "ERP模块"},
+  "putIsOthers": {"title": "其他入库单", "key": "com.skyeye.service.impl.OtherWareHousServiceImpl", "modelName": "ERP模块"},
 
-  "outIsSalesOutlet": {"title": "销售出库单", "code": "XSCK", "modelName": "ERP模块"},
-  "outIsPurchaseReturns": {"title": "采购退货单", "code": "CGTH", "modelName": "ERP模块"},
-  "outIsRetail": {"title": "零售出库单", "code": "LSCK", "modelName": "ERP模块"},
-  "outIsOthers": {"title": "其他出库单", "code": "QTCK", "modelName": "ERP模块"},
+  "outIsSalesOutlet": {"title": "销售出库单", "key": "com.skyeye.service.impl.SalesOutLetServiceImpl", "modelName": "ERP模块"},
+  "outIsPurchaseReturns": {"title": "采购退货单", "key": "com.skyeye.service.impl.PurchaseReturnsServiceImpl", "modelName": "ERP模块"},
+  "outIsRetail": {"title": "零售出库单", "key": "com.skyeye.service.impl.RetailOutLetServiceImpl", "modelName": "ERP模块"},
+  "outIsOthers": {"title": "其他出库单", "key": "com.skyeye.service.impl.OtherOutLetsServiceImpl", "modelName": "ERP模块"},
 
-  "purchaseOrder": {"title": "采购订单", "code": "CGDD", "modelName": "ERP模块"},
-  "outchaseOrder": {"title": "销售订单", "code": "XSDD", "modelName": "ERP模块"}
+  "purchaseOrder": {"title": "采购订单", "key": "com.skyeye.service.impl.PurchaseOrderServiceImpl", "modelName": "ERP模块"},
+  "outchaseOrder": {"title": "销售订单", "key": "com.skyeye.service.impl.SalesOrderServiceImpl", "modelName": "ERP模块"}
 }

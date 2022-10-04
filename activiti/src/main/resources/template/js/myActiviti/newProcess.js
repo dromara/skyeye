@@ -59,7 +59,7 @@ layui.config({
 
     $("body").on("click", ".launchTask", function (e) {
         var title = $(this).attr("showTitle");
-        var url = $(this).attr("pageUrl");
+        var url = $(this).attr("addPageUrl");
         dsFormId = $(this).attr("dsFormId");
         actKey = $(this).attr("actid");
         _openNewWindows({
