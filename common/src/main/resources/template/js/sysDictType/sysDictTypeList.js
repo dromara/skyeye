@@ -26,7 +26,7 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'dictName', title: '标题', width: 200 },
+			{ field: 'dictName', title: '名称', width: 200 },
 			{ field: 'dictCode', title: 'Code', width: 300 },
 			{ field: 'dictType', title: '字典类型', align: 'center', width: 100, templet: function (d) {
 				if (d.dictType == 1) {
@@ -47,10 +47,13 @@ layui.config({
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 180, toolbar: '#tableBar'}
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 180, toolbar: '#tableBar' }
 		]],
 		done: function(json) {
 			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称，Code", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 		}
 	});
 
@@ -103,14 +106,6 @@ layui.config({
 	});
 
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-		}
-		return false;
-	});
-
-	// 刷新数据
 	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
@@ -120,10 +115,7 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return {
-			dictName: $("#dictName").val(),
-			dictCode: $("#dictCode").val(),
-		};
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 
 	exports('sysDictTypeList', {});

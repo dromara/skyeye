@@ -11,13 +11,6 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-	var selOption = getFileContent('tpl/template/select-option.tpl');
-
-	// 加载数据字典分类
-	sysDictDataUtil.queryDictTypeListByStatus(0, function (json) {
-		$("#dictTypeId").html(getDataUseHandlebars(selOption, json));
-		form.render('select');
-	});
 
 	authBtn('1656776769966');
 
@@ -33,7 +26,7 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'dictName', title: '标题', width: 200 },
+			{ field: 'dictName', title: '名称', width: 200 },
 			{ field: 'dictTypeName', title: '所属分类', width: 200 },
 			{ field: 'dictSort', title: '排序', width: 60 },
 			{ field: 'isDefault', title: '默认值', align: 'center', width: 80, templet: function (d) {
@@ -55,10 +48,13 @@ layui.config({
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 180, toolbar: '#tableBar'}
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 180, toolbar: '#tableBar' }
 		]],
 		done: function(json) {
 			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 		}
 	});
 
@@ -111,14 +107,6 @@ layui.config({
 	});
 
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-		}
-		return false;
-	});
-
-	// 刷新数据
 	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
@@ -128,10 +116,7 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return {
-			dictName: $("#dictName").val(),
-			dictTypeId: $("#dictTypeId").val(),
-		};
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 
 	exports('sysDictDataList', {});
