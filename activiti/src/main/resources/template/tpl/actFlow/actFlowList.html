@@ -8,35 +8,21 @@
     <link href="../../assets/lib/layui/css/codemirror.css" rel="stylesheet" />
 </head>
 <body>
-	<div class="txtcenter" style="margin:0 auto;padding:10px;">
-	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
-	        <div class="layui-form-item">
-	            <div class="layui-inline">
-					<label class="layui-form-label">模型名称</label>
-					<div class="layui-input-inline">
-						<input type="text" id="modelName" name="modelName" placeholder="请输入模型名称" class="layui-input" />
-					</div>
-	                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
-					<button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
-	            </div>
-	        </div>
-	    </form>
-	</div>
     <div class="winui-toolbar">
         <div class="winui-tool">
-            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-            <button id="addBean" class="winui-toolbtn" auth="1552960740348"><i class="fa fa-plus" aria-hidden="true"></i>绘制流程</button>
+            <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1552960740348"><i class="fa fa-plus" aria-hidden="true"></i>新增流程</button>
         </div>
     </div>
     
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
-			{{# if(auth('1552960943886')){ }}
+			{{# if(auth('1552960740348')){ }}
 				<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 			{{# } }}
-			{{# if(auth('1629206178423')){ }}
-				<a class="layui-btn layui-btn-xs" lay-event="copyModel">拷贝</a>
+			{{# if(auth('1552960943886')){ }}
+				<a class="layui-btn layui-btn-xs" lay-event="modelDesign">流程设计</a>
 			{{# } }}
 			{{# if(isNull(d.deploymentId)){ }}
 				{{# if(auth('1552960701288')){ }}
@@ -59,7 +45,7 @@
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
-        layui.config({base: '../../js/activitimodel/'}).use('activitimodellist');
+        layui.config({base: '../../js/actFlow/'}).use('actFlowList');
     </script>
 </body>
 </html>

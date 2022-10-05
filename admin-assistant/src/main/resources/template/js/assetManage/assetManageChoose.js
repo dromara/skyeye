@@ -55,8 +55,8 @@ layui.config({
 	    limits: getLimits(),
 	    limit: getLimit(),
 	    cols: [[
-	    	{ type: assetCheckType ? 'checkbox' : 'radio', rowspan: '3', fixed: 'left'},
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', fixed: 'left', type: 'numbers' },
+	    	{ type: assetCheckType ? 'checkbox' : 'radio', fixed: 'left'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
 			{ field: 'assetName', title: '资产名称', width: 120, templet: function (d) {
 				return '<a lay-event="assetlistdetails" class="notice-title-click">' + d.assetName + '</a>';
 			}},

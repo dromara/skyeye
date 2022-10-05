@@ -67,7 +67,7 @@ layui.config({
             pageId: "reportModelTypeEdit",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
-                winui.window.msg("操作成功", {icon: 1, time: 2000});
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     }
@@ -80,7 +80,7 @@ layui.config({
             pageId: "reportModelTypeAdd",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
-                winui.window.msg("操作成功", {icon: 1, time: 2000});
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     });

@@ -23,11 +23,11 @@
 var propertiesMultipes = '0';
 var propertiesIds = '0';
 
-var KisBpmAssignmentCtrl = [ '$scope', '$modal', function($scope, $modal) {
+var KisBpmAssignmentCtrl = ['$scope', '$modal', function ($scope, $modal) {
 
     // Config for the modal window
     var opts = {
-        template:  'editor-app/configuration/properties/assignment-popup.html?version=' + Date.now(),
+        template: 'editor-app/configuration/properties/assignment-popup.html?version=' + Date.now(),
         scope: $scope
     };
 
@@ -35,66 +35,63 @@ var KisBpmAssignmentCtrl = [ '$scope', '$modal', function($scope, $modal) {
     $modal(opts);
 }];
 
-var KisBpmAssignmentPopupCtrl = [ '$scope', function($scope) {
-    	
+var KisBpmAssignmentPopupCtrl = ['$scope', function ($scope) {
+
     // Put json representing assignment on scope
     if ($scope.property.value !== undefined && $scope.property.value !== null
         && $scope.property.value.assignment !== undefined
-        && $scope.property.value.assignment !== null) 
-    {
+        && $scope.property.value.assignment !== null) {
         $scope.assignment = $scope.property.value.assignment;
     } else {
         $scope.assignment = {};
     }
 
-    if ($scope.assignment.candidateUsers == undefined || $scope.assignment.candidateUsers.length == 0)
-    {
-    	$scope.assignment.candidateUsers = [{value: '', name: ''}];
+    if ($scope.assignment.candidateUsers == undefined || $scope.assignment.candidateUsers.length == 0) {
+        $scope.assignment.candidateUsers = [{value: '', name: ''}];
     }
-    
+
     // Click handler for + button after enum value
     var userValueIndex = 1;
-    $scope.addCandidateUserValue = function(index) {
+    $scope.addCandidateUserValue = function (index) {
         $scope.assignment.candidateUsers.splice(index + 1, 0, {value: 'value ' + userValueIndex++});
     };
 
     // Click handler for - button after enum value
-    $scope.removeCandidateUserValue = function(index) {
+    $scope.removeCandidateUserValue = function (index) {
         $scope.assignment.candidateUsers.splice(index, 1);
     };
-    
-    if ($scope.assignment.candidateGroups == undefined || $scope.assignment.candidateGroups.length == 0)
-    {
-    	$scope.assignment.candidateGroups = [{value: '', name: ''}];
+
+    if ($scope.assignment.candidateGroups == undefined || $scope.assignment.candidateGroups.length == 0) {
+        $scope.assignment.candidateGroups = [{value: '', name: ''}];
     }
-    
+
     var groupValueIndex = 1;
-    $scope.addCandidateGroupValue = function(index) {
+    $scope.addCandidateGroupValue = function (index) {
         $scope.assignment.candidateGroups.splice(index + 1, 0, {value: 'value ' + groupValueIndex++});
     };
 
     // Click handler for - button after enum value
-    $scope.removeCandidateGroupValue = function(index) {
+    $scope.removeCandidateGroupValue = function (index) {
         $scope.assignment.candidateGroups.splice(index, 1);
     };
 
-    $scope.save = function() {
+    $scope.save = function () {
 
         $scope.property.value = {};
         handleAssignmentInput($scope);
         $scope.property.value.assignment = $scope.assignment;
-        
+
         $scope.updatePropertyInModel($scope.property);
         $scope.close();
     };
 
     // Close button handler
-    $scope.close = function() {
-    	handleAssignmentInput($scope);
-    	$scope.property.mode = 'read';
-    	$scope.$hide();
+    $scope.close = function () {
+        handleAssignmentInput($scope);
+        $scope.property.mode = 'read';
+        $scope.$hide();
     };
-    
+
     //-----------add select User/Group button handler By billJiang--------------
     //代理人(审批人)/候选人
     $scope.selectUser = function (multiple) {
@@ -104,7 +101,7 @@ var KisBpmAssignmentPopupCtrl = [ '$scope', function($scope) {
             title = "选择候选人(多选)";
             //候选人id
             ids = 0;
-            if($scope.assignment.candidateUsers) {
+            if ($scope.assignment.candidateUsers) {
                 var idsArr = [];
                 //alert( $scope.assignment.candidateUsers.length);
                 for (var i = 0; i < $scope.assignment.candidateUsers.length; i++) {
@@ -120,7 +117,7 @@ var KisBpmAssignmentPopupCtrl = [ '$scope', function($scope) {
         propertiesIds = ids;
         modals.openWin({
             winId: 'userSelectWin',
-            url: basePath + '/tpl/activitimodel/chooseagentpeople.html',
+            url: basePath + '/tpl/actFlow/chooseAgentPeople.html',
             width: '800px',
             title: title,
         })
@@ -129,7 +126,7 @@ var KisBpmAssignmentPopupCtrl = [ '$scope', function($scope) {
     //候选组
     $scope.selectGroup = function () {
         var ids = 0;
-        if($scope.assignment.candidateGroups) {
+        if ($scope.assignment.candidateGroups) {
             var idsArr = [];
             for (var i = 0; i < $scope.assignment.candidateGroups.length; i++) {
                 if ($scope.assignment.candidateGroups[i].value)
@@ -142,7 +139,7 @@ var KisBpmAssignmentPopupCtrl = [ '$scope', function($scope) {
         propertiesIds = ids;
         modals.openWin({
             winId: 'groupSelectWin',
-            url: basePath + '/tpl/activitimodel/chooseagentgroup.html?ids=' + ids,
+            url: basePath + '/tpl/actFlow/chooseAgentGroup.html?ids=' + ids,
             width: '1200px',
             title: '选择候选组(多选)'
         })
@@ -197,60 +194,46 @@ var KisBpmAssignmentPopupCtrl = [ '$scope', function($scope) {
         //加上这句话回填后界面立即生效
         $scope.$apply();
     };
-    
-    var handleAssignmentInput = function($scope) {
-    	if ($scope.assignment.candidateUsers)
-    	{
-	    	var emptyUsers = true;
-	    	var toRemoveIndexes = [];
-	        for (var i = 0; i < $scope.assignment.candidateUsers.length; i++)
-	        {
-	        	if ($scope.assignment.candidateUsers[i].value != '')
-	        	{
-	        		emptyUsers = false;
-	        	}
-	        	else
-	        	{
-	        		toRemoveIndexes[toRemoveIndexes.length] = i;
-	        	}
-	        }
-	        
-	        for (var i = 0; i < toRemoveIndexes.length; i++)
-	        {
-	        	$scope.assignment.candidateUsers.splice(toRemoveIndexes[i], 1);
-	        }
-	        
-	        if (emptyUsers)
-	        {
-	        	$scope.assignment.candidateUsers = undefined;
-	        }
-    	}
-        
-    	if ($scope.assignment.candidateGroups)
-    	{
-	        var emptyGroups = true;
-	        var toRemoveIndexes = [];
-	        for (var i = 0; i < $scope.assignment.candidateGroups.length; i++)
-	        {
-	        	if ($scope.assignment.candidateGroups[i].value != '')
-	        	{
-	        		emptyGroups = false;
-	        	}
-	        	else
-	        	{
-	        		toRemoveIndexes[toRemoveIndexes.length] = i;
-	        	}
-	        }
-	        
-	        for (var i = 0; i < toRemoveIndexes.length; i++)
-	        {
-	        	$scope.assignment.candidateGroups.splice(toRemoveIndexes[i], 1);
-	        }
-	        
-	        if (emptyGroups)
-	        {
-	        	$scope.assignment.candidateGroups = undefined;
-	        }
-    	}
+
+    var handleAssignmentInput = function ($scope) {
+        if ($scope.assignment.candidateUsers) {
+            var emptyUsers = true;
+            var toRemoveIndexes = [];
+            for (var i = 0; i < $scope.assignment.candidateUsers.length; i++) {
+                if ($scope.assignment.candidateUsers[i].value != '') {
+                    emptyUsers = false;
+                } else {
+                    toRemoveIndexes[toRemoveIndexes.length] = i;
+                }
+            }
+
+            for (var i = 0; i < toRemoveIndexes.length; i++) {
+                $scope.assignment.candidateUsers.splice(toRemoveIndexes[i], 1);
+            }
+
+            if (emptyUsers) {
+                $scope.assignment.candidateUsers = undefined;
+            }
+        }
+
+        if ($scope.assignment.candidateGroups) {
+            var emptyGroups = true;
+            var toRemoveIndexes = [];
+            for (var i = 0; i < $scope.assignment.candidateGroups.length; i++) {
+                if ($scope.assignment.candidateGroups[i].value != '') {
+                    emptyGroups = false;
+                } else {
+                    toRemoveIndexes[toRemoveIndexes.length] = i;
+                }
+            }
+
+            for (var i = 0; i < toRemoveIndexes.length; i++) {
+                $scope.assignment.candidateGroups.splice(toRemoveIndexes[i], 1);
+            }
+
+            if (emptyGroups) {
+                $scope.assignment.candidateGroups = undefined;
+            }
+        }
     };
 }];

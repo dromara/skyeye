@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+	        
+	    </form>
+	</div>
+
+	<script type="text/x-handlebars-template" id="beanTemplate">
+		{{#bean}}
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">模型名称<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="flowName" name="flowName" win-verify="required" placeholder="请输入模型名称" class="layui-input" value="{{flowName}}"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">模型Key<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="modelKey" name="modelKey" win-verify="required" placeholder="请输入模型Key" class="layui-input" value="{{modelKey}}"/>
+				<div class="layui-form-mid layui-word-aux">在系统中保持唯一。</div>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">绑定业务模型<i class="red">*</i></label>
+			<div class="layui-input-block ver-center" id="businessLinkType">
+
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12 business">
+			<label class="layui-form-label">工作流业务模型<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="serviceClassName" name="serviceClassName" placeholder="请选择工作流业务模型" class="layui-input" readonly
+					   value="{{serviceName}}" className="{{serviceClassName}}"/>
+				<i class="fa fa-user-plus input-icon" id="serviceClassNameSel"></i>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12 business">
+			<label class="layui-form-label">属性字段<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="businessKey" name="businessKey" placeholder="请输入属性字段" class="layui-input" value="{{businessKey}}"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12 business">
+			<label class="layui-form-label">属性值<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="businessData" name="businessData" placeholder="请输入属性值" class="layui-input" value="{{businessData}}"/>
+			</div>
+		</div>
+
+		<div class="layui-form-item layui-col-xs12">
+			<div class="layui-input-block">
+				<button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+				<button class="winui-btn" lay-submit lay-filter="formEditBean"><language showName="com.skyeye.save"></language></button>
+			</div>
+		</div>
+		{{/bean}}
+	</script>
+
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/actFlow/'}).use('actFlowEdit');
+    </script>
+</body>
+</html>

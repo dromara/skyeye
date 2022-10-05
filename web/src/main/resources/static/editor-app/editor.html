@@ -119,11 +119,13 @@
 	                                <span class="title-removed" ng-if="property.hidden"><i>{{ property.title }}&nbsp;({{'PROPERTY.REMOVED' | translate}})&nbsp;:</i></span>
 	                                <span class="value"> 
 	                                    <ng-include
-	                                        src="getPropertyTemplateUrl($index)" ng-if="!property.hasReadWriteMode"></ng-include>
+	                                        src="getPropertyTemplateUrl($index)" ng-if="!property.hasReadWriteMode && !property.readOnly"></ng-include>
 	                                    <ng-include src="getPropertyReadModeTemplateUrl($index)"
-	                                        ng-if="property.hasReadWriteMode && property.mode == 'read'"></ng-include>
+	                                        ng-if="property.hasReadWriteMode && property.mode == 'read' && !property.readOnly"></ng-include>
 	                                    <ng-include src="getPropertyWriteModeTemplateUrl($index)"
-	                                        ng-if="property.hasReadWriteMode && property.mode == 'write'"></ng-include>
+	                                        ng-if="property.hasReadWriteMode && property.mode == 'write' && !property.readOnly"></ng-include>
+										<ng-include src="getPropertyReadModeTemplateUrl($index)"
+											ng-if="property.readOnly"></ng-include>
 	                                </span>
 	                            </div>
 	                        </div>
