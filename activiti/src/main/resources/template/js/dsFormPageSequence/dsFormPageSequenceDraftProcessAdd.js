@@ -27,7 +27,7 @@ layui.config({
  	
 	form.on('submit(formAddBean)', function (data) {
         if (winui.verifyForm(data.elem)) {
-			activitiUtil.startProcess(parent.dsFormId, function (approvalId) {
+			activitiUtil.startProcess(parent.dsFormId, null, function (approvalId) {
 				if(isNull(actKey)){
 					winui.window.msg('流程对象为空，无法启动.', {icon: 2, time: 2000});
 					return false;

@@ -85,7 +85,8 @@ layui.config({
 
     function getTableParams() {
         return {
-            pageUrl: parent.pageUrl
+            actKey: parent.actKey,
+            businessData: parent.businessData
         };
     }
 

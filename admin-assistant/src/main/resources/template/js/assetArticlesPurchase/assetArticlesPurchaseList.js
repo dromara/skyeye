@@ -112,7 +112,7 @@ layui.config({
 	function caigouSubApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
-			activitiUtil.startProcess(sysActivitiModel["assetArticlesPurchase"]["key"], function (approvalId) {
+			activitiUtil.startProcess(sysActivitiModel["assetArticlesPurchase"]["key"], null, function (approvalId) {
 				var params = {
 					rowId: data.id,
 					approvalId: approvalId

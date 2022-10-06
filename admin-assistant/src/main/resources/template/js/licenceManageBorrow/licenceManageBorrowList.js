@@ -103,7 +103,7 @@ layui.config({
 	function subApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
-			activitiUtil.startProcess(sysActivitiModel["licenceManageBorrow"]["key"], function (approvalId) {
+			activitiUtil.startProcess(sysActivitiModel["licenceManageBorrow"]["key"], null, function (approvalId) {
 				var params = {
 					rowId: data.id,
 					approvalId: approvalId

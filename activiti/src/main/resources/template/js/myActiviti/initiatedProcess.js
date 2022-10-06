@@ -88,7 +88,7 @@ layui.config({
 		processInstanceId = data.processInstanceId;
 		rowId = data.dataId;
 		_openNewWindows({
-			url: data.pageUrl, 
+			url: data.editPageUrl,
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "myactivitiedit",
 			area: ['90vw', '90vh'],

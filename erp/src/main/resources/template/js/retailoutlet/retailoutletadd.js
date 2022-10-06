@@ -146,7 +146,7 @@ layui.config({
 	// 走工作流的提交审批
 	form.on('submit(formSubOneBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {
-			activitiUtil.startProcess(sysActivitiModel["outIsRetail"]["key"], function (approvalId) {
+			activitiUtil.startProcess(sysActivitiModel["outIsRetail"]["key"], null, function (approvalId) {
 				saveData("2", approvalId);
 			});
 		}

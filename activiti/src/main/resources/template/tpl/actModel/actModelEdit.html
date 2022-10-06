@@ -22,6 +22,14 @@
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">工作流模型<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="actFlowId" name="actFlowId" win-verify="required" placeholder="请选择工作流模型" class="layui-input" readonly
+					   value="{{actFlowName}}" actFlowId="{{actFlowId}}"/>
+				<i class="fa fa-user-plus input-icon" id="actFlowIdSel"></i>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
 			<label class="layui-form-label">流程类型<i class="red">*</i></label>
 			<div class="layui-input-block winui-radio">
 				<input type="radio" name="pageTypes" value="1" title="指定业务" lay-filter="pageTypes"/>
@@ -57,15 +65,6 @@
 				</select>
 			</div>
 		</div>
-		<div class="layui-form-item TypeIsTwo layui-hide layui-col-xs12">
-			<label class="layui-form-label">工作流模型<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<input type="text" id="actFlowId" name="actFlowId" placeholder="请选择工作流模型" class="layui-input" readonly
-					   value="{{actFlowName}}" actFlowId="{{actFlowId}}"/>
-				<i class="fa fa-user-plus input-icon" id="actFlowIdSel"></i>
-			</div>
-		</div>
-
 		<div class="layui-form-item layui-col-xs12" id="iconMation">
 
 		</div>

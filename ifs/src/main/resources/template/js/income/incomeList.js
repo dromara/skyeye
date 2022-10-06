@@ -168,7 +168,7 @@ layui.config({
                 subToData(params);
             } else {
                 // 工作流提交
-                activitiUtil.startProcess(sysActivitiModel["incomeOrder"]["key"], function (approvalId) {
+                activitiUtil.startProcess(sysActivitiModel["incomeOrder"]["key"], null, function (approvalId) {
                     var params = {
                         rowId: data.id,
                         approvalId: approvalId

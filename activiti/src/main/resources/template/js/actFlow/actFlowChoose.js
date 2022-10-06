@@ -6,6 +6,7 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
+	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
@@ -24,7 +25,14 @@ layui.config({
 			{ type: 'radio', fixed: 'left', rowspan: '2' },
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: '2' },
 			{ colspan: '4', title: '模型信息', align: 'center'},
-			{ colspan: '2', title: '发布信息', align: 'center'}
+			{ colspan: '2', title: '发布信息', align: 'center'},
+			{ field: 'actModelId', title: '流程配置', align: "center", width: 80, rowspan: '2', templet: function (d) {
+				if (isNull(d.actModelId)) {
+					return "<span class='state-new'>未配置</span>";
+				} else {
+					return "<span class='state-up'>已配置</span>";
+				}
+			}},
 	    ], [
 			{ field: 'flowName', title: '模型名称', width: 150 },
 			{ field: 'modelId', title: '模型ID', width: 100 },
@@ -51,8 +59,8 @@ layui.config({
 			});
 
 			for (var i = 0; i < json.rows.length; i++) {
-				// 未发布的或者已绑定业务数据设置为不可选中
-				if(isNull(res.rows[i].model.deploymentId) || res.rows[i].businessLinkType == 2){
+				// 未发布的或者已做配置的工作流模型设置为不可选中
+				if(isNull(json.rows[i].model.deploymentId) || !isNull(json.rows[i].actModelId)){
 					systemCommonUtil.disabledRow(json.rows[i].LAY_TABLE_INDEX, 'radio');
 				}
 			}
@@ -63,7 +71,7 @@ layui.config({
 					dubClick.find("input[type='radio']").prop("checked", true);
 					form.render();
 					var chooseIndex = JSON.stringify(dubClick.data('index'));
-					var obj = res.rows[chooseIndex];
+					var obj = json.rows[chooseIndex];
 					parent.actFlowMation = obj;
 
 					parent.refreshCode = '0';

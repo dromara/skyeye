@@ -1,5 +1,6 @@
 
-var pageUrl = "";
+var actKey = "";
+var businessData = "";
 
 layui.config({
 	base: basePath, 
@@ -12,7 +13,8 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
 
-		pageUrl = parent.activitiUtil.pageUrl;
+		actKey = parent.activitiUtil.actKey;
+		businessData = parent.activitiUtil.businessData;
 
 		$("body").on("click", ".chooseApprovalPersonBtn", function() {
 			_openNewWindows({

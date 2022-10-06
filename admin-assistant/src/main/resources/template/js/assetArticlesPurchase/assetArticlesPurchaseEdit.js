@@ -107,7 +107,7 @@ layui.config({
 	// 提交审批
 	form.on('submit(formSubBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {
-			activitiUtil.startProcess(sysActivitiModel["assetArticlesPurchase"]["key"], function (approvalId) {
+			activitiUtil.startProcess(sysActivitiModel["assetArticlesPurchase"]["key"], null, function (approvalId) {
 				saveData("2", approvalId);
 			});
 		}

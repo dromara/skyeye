@@ -24,7 +24,12 @@ var activitiUtil = {
     /**
      * 该地址为activitiNameKey.json的key，因为刚启动流程，还没有流程id和任务id,所以只能用这种方式
      */
-    pageUrl: "",
+    actKey: "",
+
+    /**
+     * 根据业务数据判断走哪条工作流，该值为对象json字符串
+     */
+    businessData: "",
 
     /**
      * 工作流流程详情查看
@@ -117,11 +122,13 @@ var activitiUtil = {
     /**
      * 启动流程时选择审批人
      *
-     * @param pageUrl 该地址为activitiNameKey.json的key
+     * @param actKey 该地址为activitiNameKey.json的key
+     * @param businessData 业务数据的对象，不支持集合
      * @param callback 回调函数
      */
-    startProcess: function (pageUrl, callback) {
-        activitiUtil.pageUrl = pageUrl;
+    startProcess: function (actKey, businessData, callback) {
+        activitiUtil.actKey = actKey;
+        activitiUtil.businessData = isNull(businessData) ? '' : JSON.stringify(businessData);
         _openNewWindows({
             url: "../../tpl/approvalActiviti/startProcessPersonChooseBtn.html",
             title: "审批人选择",

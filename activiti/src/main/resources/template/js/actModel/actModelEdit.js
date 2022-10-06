@@ -75,7 +75,8 @@ layui.config({
 		 	        		pageTypes: data.field.pageTypes,
 		 	        		tokenUrl: $("#tokenUrl").val(),
 		 	        		remark: $("#remark").val(),
-							commonUsed: data.field.commonUsed
+							commonUsed: data.field.commonUsed,
+							actFlowId: $("#actFlowId").attr("actFlowId")
 		 	        	};
 						if (params.pageTypes == 1) {
 							params.addPageUrl = $("#addPageUrl").val();
@@ -99,13 +100,8 @@ layui.config({
 							params.editPageUrl = "";
 							params.revokeMapping = "";
 							params.dsFormId = $("#dsFormId").val();
-							params.actFlowId = $("#actFlowId").attr("actFlowId");
 							if (isNull(params.dsFormId)) {
 								winui.window.msg("请选择表单页面", {icon: 2, time: 2000});
-								return false;
-							}
-							if (isNull(params.actFlowId)) {
-								winui.window.msg("请选择工作流模型", {icon: 2, time: 2000});
 								return false;
 							}
 						}

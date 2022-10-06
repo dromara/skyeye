@@ -124,7 +124,7 @@ var skyeyeEnclosure = {
      *
      * @param id 盒子id
      */
-    getJSONEnclosureListByBoxId: function (id){
+    getJSONEnclosureListByBoxId: function (id) {
         return [].concat(JSON.parse($("#" + id).attr(skyeyeEnclosure.enclosureListKey)));
     },
 

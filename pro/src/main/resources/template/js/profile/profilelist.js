@@ -63,7 +63,7 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'details'){ //详情
+        if (layEvent === 'details') { //详情
         	details(data);
         } else if (layEvent === 'processDetails') { //流程详情
 			activitiUtil.activitiDetails(data);
@@ -82,8 +82,7 @@ layui.config({
 
 	// 撤销审批申请
 	function revoke(data) {
-		var msg = '确认从工作流中撤销选中数据吗？';
-		layer.confirm(msg, { icon: 3, title: '撤销申请' }, function (index) {
+		layer.confirm('确认从工作流中撤销选中数据吗？', { icon: 3, title: '撤销申请' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "profile007", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
@@ -109,7 +108,7 @@ layui.config({
 	function subApproval(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
-			activitiUtil.startProcess(sysActivitiModel["proFile"]["key"], function (approvalId) {
+			activitiUtil.startProcess(sysActivitiModel["proFile"]["key"], null, function (approvalId) {
 				var params = {
 					rowId: data.id,
 					approvalId: approvalId
@@ -124,8 +123,7 @@ layui.config({
 	
 	// 作废
 	function cancellation(data, obj){
-		var msg = obj ? '确认作废【' + obj.data.title + '】吗？' : '确认作废该任务信息吗？';
-		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
+		layer.confirm('确认作废该数据吗？', { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "profile010", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});

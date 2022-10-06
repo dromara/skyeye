@@ -61,7 +61,7 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'details'){ //详情
+        if (layEvent === 'details') { //详情
         	details(data);
         } else if (layEvent === 'processDetails') { //流程详情
 			activitiUtil.activitiDetails(data);

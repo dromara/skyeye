@@ -61,7 +61,7 @@ layui.config({
         var title = $(this).attr("showTitle");
         var url = $(this).attr("addPageUrl");
         dsFormId = $(this).attr("dsFormId");
-        actKey = $(this).attr("actid");
+        actKey = $(this).attr("serviceClassName");
         _openNewWindows({
             url: url,
             title: title,

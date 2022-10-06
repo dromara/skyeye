@@ -91,7 +91,7 @@ layui.config({
 	function subApproval(data) {
 		layer.confirm('确认提交进行审批吗？', { icon: 3, title: '提交审批' }, function (i) {
 			layer.close(i);
-			activitiUtil.startProcess(data.pageId, function (approvalId) {
+			activitiUtil.startProcess(data.pageId, null, function (approvalId) {
 				var params = {
 					rowId: data.id,
 					pageId: data.pageId,
