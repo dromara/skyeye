@@ -12,21 +12,6 @@ layui.config({
 	    var colorpicker = layui.colorpicker,
 	    	textool = layui.textool;
 	    
-	    // 初始化动态表单
- 		function initDsForm(id){
- 			showGrid({
- 				id: "dsFormId",
- 				url: flowableBasePath + "actmodletype020",
- 				params: {},
- 				pagination: false,
- 				template: getFileContent('tpl/template/select-option-must.tpl'),
- 				ajaxSendAfter: function (json) {
- 					form.render('select');
- 					$("#dsFormId").val(id);
- 				}
- 			})
- 		}
- 		
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "queryActModelMationById",
@@ -34,7 +19,7 @@ layui.config({
 			method: 'GET',
 		 	pagination: false,
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendAfter:function (json) {
+		 	ajaxSendAfter: function (json) {
 				$("input:radio[name=commonUsed][value=" + json.bean.commonUsed + "]").attr("checked", true);
 
 				// 加载图标信息
@@ -43,31 +28,41 @@ layui.config({
 		 		textool.init({eleId: 'remark', maxlength: 200});
 		 		
 		 		// 初始化动态表单
-		 		initDsForm(json.bean.dsFormId);
+				showGrid({
+					id: "dsFormId",
+					url: flowableBasePath + "actmodletype020",
+					params: {},
+					pagination: false,
+					template: getFileContent('tpl/template/select-option-must.tpl'),
+					ajaxSendAfter: function (data) {
+						form.render('select');
+						$("#dsFormId").val(json.bean.dsFormId);
+					}
+				})
 		 		
 		 		// 设置页面类型
 		 		$("input:radio[name=pageTypes][value=" + json.bean.pageTypes + "]").attr("checked", true);
-		 		
-		 		if(json.bean.pageTypes == 1){
-		 			$(".TypeIsTwo").addClass("layui-hide");
-		    		$(".TypeIsOne").removeClass("layui-hide");
-		 		} else {
-		 			$(".TypeIsTwo").removeClass("layui-hide");
-		    		$(".TypeIsOne").addClass("layui-hide");
-		 		}
+
+				if (json.bean.pageTypes == 1) {
+					$(".TypeIsTwo").addClass("layui-hide");
+					$(".TypeIsOne").removeClass("layui-hide");
+				} else {
+					$(".TypeIsTwo").removeClass("layui-hide");
+					$(".TypeIsOne").addClass("layui-hide");
+				}
 		 		
 		 		// 页面类型变化事件
 		 		form.on('radio(pageTypes)', function (data) {
 		 			var val = data.value;
-			    	if(val == '1'){//指定页面
-			    		$(".TypeIsTwo").addClass("layui-hide");
-			    		$(".TypeIsOne").removeClass("layui-hide");
-			    	} else if (val == '2'){//动态表单
-			    		$(".TypeIsTwo").removeClass("layui-hide");
-			    		$(".TypeIsOne").addClass("layui-hide");
-			    	} else {
-			    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
-			    	}
+					if (val == 1) {
+						// 指定页面
+						$(".TypeIsTwo").addClass("layui-hide");
+						$(".TypeIsOne").removeClass("layui-hide");
+					} else if (val == 2) {
+						// 动态表单
+						$(".TypeIsTwo").removeClass("layui-hide");
+						$(".TypeIsOne").addClass("layui-hide");
+					}
 		        });
 		 		
 		        matchingLanguage();
@@ -104,8 +99,13 @@ layui.config({
 							params.editPageUrl = "";
 							params.revokeMapping = "";
 							params.dsFormId = $("#dsFormId").val();
+							params.actFlowId = $("#actFlowId").attr("actFlowId");
 							if (isNull(params.dsFormId)) {
 								winui.window.msg("请选择表单页面", {icon: 2, time: 2000});
+								return false;
+							}
+							if (isNull(params.actFlowId)) {
+								winui.window.msg("请选择工作流模型", {icon: 2, time: 2000});
 								return false;
 							}
 						}
@@ -123,6 +123,19 @@ layui.config({
 		 	        return false;
 		 	    });
 		 	}
+		});
+
+		// 工作流模型选择
+		$("body").on("click", "#actFlowIdSel", function (e) {
+			_openNewWindows({
+				url: "../../tpl/actFlow/actFlowChoose.html",
+				title: "工作流模型选择",
+				pageId: "actFlowChoose",
+				area: ['90vw', '90vh'],
+				callBack: function (refreshCode) {
+					$("#actFlowId").val(actFlowMation.flowName);
+					$("#actFlowId").attr("actFlowId", actFlowMation.id);
+				}});
 		});
 
 	    $("body").on("click", "#cancle", function() {

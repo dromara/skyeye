@@ -19,11 +19,11 @@ layui.config({
 		template: $("#beanTemplate").html(),
 		ajaxSendAfter:function (json) {
 			if(json.bean.pageTypes == 1){
-				$("#pageTypes").html('指定页面');
+				$("#pageTypes").html('指定业务');
 				$(".TypeIsTwo").addClass("layui-hide");
 				$(".TypeIsOne").removeClass("layui-hide");
 			} else {
-				$("#pageTypes").html('表单页面');
+				$("#pageTypes").html('动态表单');
 				$(".TypeIsTwo").removeClass("layui-hide");
 				$(".TypeIsOne").addClass("layui-hide");
 			}

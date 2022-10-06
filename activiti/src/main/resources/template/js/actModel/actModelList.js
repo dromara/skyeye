@@ -264,11 +264,18 @@ layui.config({
 		        { field: 'title', title: '名称', align: 'left', width: 120, templet: function (d) {
 					return '<a lay-event="dedails" class="notice-title-click">' + d.title + '</a>';
 				}},
-		        { field: 'actId', title: '工作流模型', align: 'left', width: 120},
+		        { field: 'actFlowName', title: '工作流模型', align: 'left', width: 120},
+				{ field: 'pageTypes', title: '流程类型', align: 'center', width: 120, templet: function (d) {
+					if (d.pageTypes == 1) {
+						return "指定业务";
+					} else if (d.pageTypes == 2) {
+						return "动态表单";
+					}
+				}},
 		        { field: 'addPageUrl', title: '新增页面', align: 'left', width: 200 },
 		        { field: 'editPageUrl', title: '编辑页面', align: 'left', width: 200 },
 		        { field: 'iconBg', title: '背景', align: 'center', width: 80 },
-		        { field: 'state', title: '状态', align: 'center', width: 100 , templet: function (d) {
+		        { field: 'state', title: '状态', align: 'center', width: 100, templet: function (d) {
 					if (d.state == '1') {
 						return "<span class='state-new'>新建</span>";
 					} else if (d.state == '2') {
@@ -296,7 +303,7 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
 		var data = obj.data;
 		var layEvent = obj.event;
-		if(layEvent === 'del'){  //移除
+		if (layEvent === 'del') {  //移除
 			del(data);
 		} else if (layEvent === 'edit') { //编辑
 			edit(data);

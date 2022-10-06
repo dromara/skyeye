@@ -1,4 +1,6 @@
 
+var actFlowMation = {};
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -16,50 +18,32 @@ layui.config({
 		systemCommonUtil.initIconChooseHtml('iconMation', form, colorpicker, 17);
 
 	    // 初始化动态表单
-	    initDsForm();
+		showGrid({
+			id: "dsFormId",
+			url: flowableBasePath + "actmodletype020",
+			params: {},
+			pagination: false,
+			template: getFileContent('tpl/template/select-option-must.tpl'),
+			ajaxSendAfter: function (json) {
+				form.render('select');
+			}
+		})
 	    
 	    textool.init({eleId: 'remark', maxlength: 200});
 
-        showGrid({
-            id: "actId",
-            url: flowableBasePath + "activitimode009",
-            params: {},
-            pagination: false,
-            template: getFileContent('tpl/template/select-option.tpl'),
-            ajaxSendLoadBefore: function(hdb) {
-            },
-            ajaxSendAfter:function (json) {
-                form.render('select');
-            }
-        });
-        
-        //页面类型变化事件
+        // 页面类型变化事件
  		form.on('radio(pageTypes)', function (data) {
  			var val = data.value;
-	    	if(val == '1'){//指定页面
-	    		$(".TypeIsTwo").addClass("layui-hide");
-	    		$(".TypeIsOne").removeClass("layui-hide");
-	    	} else if (val == '2'){//动态表单
-	    		$(".TypeIsTwo").removeClass("layui-hide");
-	    		$(".TypeIsOne").addClass("layui-hide");
-	    	} else {
-	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
-	    	}
+			if (val == 1) {
+				// 指定页面
+				$(".TypeIsTwo").addClass("layui-hide");
+				$(".TypeIsOne").removeClass("layui-hide");
+			} else if (val == 2) {
+				// 动态表单
+				$(".TypeIsTwo").removeClass("layui-hide");
+				$(".TypeIsOne").addClass("layui-hide");
+			}
         });
- 		
- 		//初始化动态表单
- 		function initDsForm(){
- 			showGrid({
- 				id: "dsFormId",
- 				url: flowableBasePath + "actmodletype020",
- 				params: {},
- 				pagination: false,
- 				template: getFileContent('tpl/template/select-option-must.tpl'),
- 				ajaxSendAfter: function (json) {
- 					form.render('select');
- 				}
- 			})
- 		}
  		
  		matchingLanguage();
  		form.render();
@@ -68,14 +52,13 @@ layui.config({
  	        	var params = {
  	        		typeId: parent.rowId,
  	        		title: $("#typeName").val(),
- 	        		actId: $("#actId").val(),
  	        		pageTypes: data.field.pageTypes,
  	        		tokenUrl: $("#tokenUrl").val(),
  	        		remark: $("#remark").val(),
 					commonUsed: data.field.commonUsed
  	        	};
 				if (params.pageTypes == 1) {
-					params.addPageUrl = $("#pageUrl").val();
+					params.addPageUrl = $("#addPageUrl").val();
 					params.editPageUrl = $("#editPageUrl").val();
 					params.revokeMapping = $("#revokeMapping").val();
 					if (isNull(params.addPageUrl)) {
@@ -96,8 +79,13 @@ layui.config({
 					params.editPageUrl = "";
 					params.revokeMapping = "";
 					params.dsFormId = $("#dsFormId").val();
+					params.actFlowId = $("#actFlowId").attr("actFlowId");
 					if (isNull(params.dsFormId)) {
 						winui.window.msg("请选择表单页面", {icon: 2, time: 2000});
+						return false;
+					}
+					if (isNull(params.actFlowId)) {
+						winui.window.msg("请选择工作流模型", {icon: 2, time: 2000});
 						return false;
 					}
 				}
@@ -114,6 +102,19 @@ layui.config({
  	        }
  	        return false;
  	    });
+
+		// 工作流模型选择
+		$("body").on("click", "#actFlowIdSel", function (e) {
+			_openNewWindows({
+				url: "../../tpl/actFlow/actFlowChoose.html",
+				title: "工作流模型选择",
+				pageId: "actFlowChoose",
+				area: ['90vw', '90vh'],
+				callBack: function (refreshCode) {
+					$("#actFlowId").val(actFlowMation.flowName);
+					$("#actFlowId").attr("actFlowId", actFlowMation.id);
+				}});
+		});
 
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
