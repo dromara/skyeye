@@ -30,7 +30,6 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'title', title: '流程名称', width: 100 },
-	        { field: 'typeTitle', title: '流程类型', width: 100 },
 	        { field: 'createTime', title: '申请时间', align: 'center', width: 140},
 	        { field: 'state', title: '状态', align: 'center', width: 80, templet: function (d) {
 	        	if(d.state == 1){
@@ -94,7 +93,6 @@ layui.config({
 			activitiUtil.startProcess(data.pageId, null, function (approvalId) {
 				var params = {
 					rowId: data.id,
-					pageId: data.pageId,
 					approvalId: approvalId
 				};
 				AjaxPostUtil.request({url: flowableBasePath + "pagesequence005", params: params, type: 'json', callback: function (json) {

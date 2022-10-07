@@ -97,11 +97,11 @@ var erpOrderUtil = {
      * 删除订单信息
      *
      * @param id 订单id
-     * @param orderType 单据类型
+     * @param serviceClassName 单据类型
      */
-    deleteOrderMation: function (id, orderType, callback) {
+    deleteOrderMation: function (id, serviceClassName, callback) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index) {
-            AjaxPostUtil.request({url: flowableBasePath + "erpcommon005", params: {rowId: id, orderType: orderType}, method: "DELETE", type: 'json', callback: function(json) {
+            AjaxPostUtil.request({url: flowableBasePath + "erpcommon005", params: {rowId: id, serviceClassName: serviceClassName}, method: "DELETE", type: 'json', callback: function(json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 if (typeof (callback) == "function") {
                     callback();
@@ -114,26 +114,27 @@ var erpOrderUtil = {
      * 提交订单信息
      *
      * @param id 订单id
-     * @param orderType 单据类型
+     * @param serviceClassName 单据类型
      * @param submitType 单据提交类型  1.走工作流提交  2.直接提交
      * @param actKey 该地址为activitiNameKey.json的key
      */
-    submitOrderMation: function (id, orderType, submitType, actKey, callback) {
+    submitOrderMation: function (id, serviceClassName, submitType, actKey, callback) {
         layer.confirm('确认要提交吗？', { icon: 3, title: '提交操作' }, function (index) {
+            layer.close(index);
             if (submitType == 1) {
                 activitiUtil.startProcess(actKey, null, function (approvalId) {
-                    erpOrderUtil.submitOrderMationToData(id, orderType, approvalId, callback);
+                    erpOrderUtil.submitOrderMationToData(id, serviceClassName, approvalId, callback);
                 });
             } else {
-                erpOrderUtil.submitOrderMationToData(id, orderType, "", callback);
+                erpOrderUtil.submitOrderMationToData(id, serviceClassName, "", callback);
             }
         });
     },
 
-    submitOrderMationToData: function (id, orderType, approvalId, callback) {
+    submitOrderMationToData: function (id, serviceClassName, approvalId, callback) {
         var params = {
             rowId: id,
-            orderType: orderType,
+            serviceClassName: serviceClassName,
             approvalId: approvalId
         };
         AjaxPostUtil.request({url: flowableBasePath + "erpcommon006", params: params, method: "PUT", type: 'json', callback: function(json) {
@@ -148,13 +149,13 @@ var erpOrderUtil = {
      * 撤销订单信息
      *
      * @param processInstanceId 流程实例id
-     * @param orderType 单据类型
+     * @param serviceClassName 单据类型
      */
-    revokeOrderMation: function (processInstanceId, orderType, callback) {
+    revokeOrderMation: function (processInstanceId, serviceClassName, callback) {
         layer.confirm('确认要撤销吗？', { icon: 3, title: '撤销操作' }, function (index) {
             var params = {
                 processInstanceId: processInstanceId,
-                orderType: orderType
+                serviceClassName: serviceClassName
             };
             AjaxPostUtil.request({url: flowableBasePath + "erpcommon003", params: params, type: 'json', method: "PUT", callback: function(json) {
                 winui.window.msg("撤销成功。", {icon: 1, time: 2000});

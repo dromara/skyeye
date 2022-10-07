@@ -1,5 +1,5 @@
 
-var actKey = "";
+var actFlowId = "";
 var dsFormId = "";
 
 /**
@@ -61,7 +61,10 @@ layui.config({
         var title = $(this).attr("showTitle");
         var url = $(this).attr("addPageUrl");
         dsFormId = $(this).attr("dsFormId");
-        actKey = $(this).attr("serviceClassName");
+		if (!isNull(dsFormId)) {
+			// 只有动态表单类型的流程才要工作流模型的id
+			actFlowId = $(this).attr("actFlowId");
+		}
         _openNewWindows({
             url: url,
             title: title,

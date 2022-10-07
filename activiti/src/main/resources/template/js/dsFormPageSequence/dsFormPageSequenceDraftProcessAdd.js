@@ -12,7 +12,7 @@ layui.config({
 	layedit = layui.layedit,
 	form = layui.form;
 	
-	var actKey = parent.actKey;
+	var actFlowId = parent.actFlowId;
 	
 	// 加载动态表单页
 	AjaxPostUtil.request({url: flowableBasePath + "dsformpage004", params: {rowId: parent.dsFormId}, type: 'json', callback: function (json) {
@@ -28,12 +28,12 @@ layui.config({
 	form.on('submit(formAddBean)', function (data) {
         if (winui.verifyForm(data.elem)) {
 			activitiUtil.startProcess(parent.dsFormId, null, function (approvalId) {
-				if(isNull(actKey)){
+				if(isNull(actFlowId)){
 					winui.window.msg('流程对象为空，无法启动.', {icon: 2, time: 2000});
 					return false;
 				}
 				var jStr = {
-					keyName: actKey,
+					keyName: actFlowId,
 					jsonStr: JSON.stringify(dsFormUtil.getPageData($("#showForm"))),
 					pageId: parent.dsFormId,
 					approvalId: approvalId
