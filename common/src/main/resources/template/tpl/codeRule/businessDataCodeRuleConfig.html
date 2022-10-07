@@ -21,12 +21,21 @@
                     <div class="layui-card-header"><b>{{@key}}</b></div>
                     <div class="layui-card-body" style="display: inline-block;">
                         {{#each @this}}
-                            <blockquote class="layui-elem-quote layui-quote-nm layui-col-md2">
-                                {{serviceName}}
-                                <select lay-filter="codeRole" lay-search="" id="{{id}}" win-verify="required">
-                                    {{{selectHtml}}}
-                                </select>
-                            </blockquote>
+                            <div class="layui-col-md12">
+                                <div class="layui-card">
+                                    <div class="layui-card-header"><b>{{@key}}</b></div>
+                                    <div class="layui-card-body" style="display: flow-root;">
+                                        {{#each @this}}
+                                        <blockquote class="layui-elem-quote layui-quote-nm layui-col-md2">
+                                            {{serviceName}}
+                                            <select lay-filter="codeRole" lay-search="" id="{{id}}" win-verify="required">
+                                                {{{selectHtml}}}
+                                            </select>
+                                        </blockquote>
+                                        {{/each}}
+                                    </div>
+                                </div>
+                            </div>
                         {{/each}}
                     </div>
                 </div>

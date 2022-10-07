@@ -24,18 +24,22 @@ layui.config({
 		method: "GET",
 		template: $("#baseTemplate").html(),
 		ajaxSendLoadBefore: function (hdb, json) {
-			$.each(json.bean, function (key, value) {
-				$.each(value, function (i, item) {
-					item.selectHtml = codeRuleSelectHtml;
-				})
-			})
+			$.each(json.bean, function (key, appIdValue) {
+				$.each(appIdValue, function (i, groupNameValue) {
+					$.each(groupNameValue, function (j, bean) {
+						bean.selectHtml = codeRuleSelectHtml;
+					});
+				});
+			});
 		},
 		ajaxSendAfter: function (json) {
-			$.each(json.bean, function (key, value) {
-				$.each(value, function (i, item) {
-					$("#" + item.id).val(item.codeRuleId);
-				})
-			})
+			$.each(json.bean, function (key, appIdValue) {
+				$.each(appIdValue, function (i, groupNameValue) {
+					$.each(groupNameValue, function (j, bean) {
+						$("#" + bean.id).val(bean.codeRuleId);
+					})
+				});
+			});
 
 			form.render();
 			form.on('select(codeRole)', function(data) {
