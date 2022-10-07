@@ -29,7 +29,7 @@ layui.config({
 				var str = "";
 				if(v1 == 1){
 					// icon
-					str = '<i class="fa fa-fw ' + v3 + '" style="font-size: 18px; line-height: 30px; width: 100%; color: ' + v4 + '"></i>';
+					str = '<i class="fa fa-fw ' + v3 + '" style="font-size: 18px; line-height: 30px; color: ' + v4 + '"></i>';
 				} else {
 					str = '<img src="' + reqBasePath + v2 + '" class="photo-img" style="width: 25px; height: 25px">';
 				}

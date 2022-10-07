@@ -126,6 +126,13 @@ var initTableSearchUtil = {
                 $(".winui-tool").append(jsCon);
             }
         }
+        // 监听搜索的回车按钮
+        $("#" + tableId + "KeyWord").keypress(function (event) {
+            if (event.keyCode == 13) {
+                // 回车搜索
+                $("#" + tableId + "SearchTable").click();
+            }
+        });
     },
 
     /**
