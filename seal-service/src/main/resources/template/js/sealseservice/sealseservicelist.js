@@ -18,7 +18,7 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: flowableBasePath + 'sealseservice001',
-	    where: {orderNum: $("#orderNum").val(), state: $("#state").val(), contacts: $("#contacts").val(), receiver: $("#receiver").val()},
+	    where: getTableParams(),
 	    even: true,
 	    page: true,
 		limits: getLimits(),
@@ -69,25 +69,7 @@ layui.config({
         }
     });
 	
-	form.render();
-	
-	$("body").on("click", "#formSearch", function() {
-		refreshTable();
-	});
-	
-	$("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where: {orderNum: $("#orderNum").val(), state: $("#state").val(), contacts: $("#contacts").val(), receiver: $("#receiver").val()}});
-    }
-    
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: {orderNum: $("#orderNum").val(), state: $("#state").val(), contacts: $("#contacts").val(), receiver: $("#receiver").val()}});
-    }
-
-	//编辑
+	// 编辑
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
@@ -141,7 +123,7 @@ layui.config({
 			}});
 	}
 	
-	//签到
+	// 签到
 	function signIn(data) {
 		rowId = data.id;
 		_openNewWindows({
@@ -155,7 +137,7 @@ layui.config({
 			}});
 	}
 	
-	//完工
+	// 完工
 	function finishedPro(data) {
 		rowId = data.id;
 		_openNewWindows({
@@ -169,7 +151,7 @@ layui.config({
 			}});
 	}
 	
-	//评价
+	// 评价
 	function evaluate(data) {
 		rowId = data.id;
 		_openNewWindows({
@@ -183,7 +165,7 @@ layui.config({
 			}});
 	}
 	
-	//审核
+	// 审核
 	function examine(data) {
 		layer.confirm('确认审核该数据吗？', {icon: 3, title: '审核操作'}, function (index) {
 			layer.close(index);
@@ -194,7 +176,7 @@ layui.config({
 		});
 	}
 	
-	//情况反馈
+	// 情况反馈
 	function feedBack(data) {
 		rowId = data.id;
 		_openNewWindows({
@@ -206,7 +188,7 @@ layui.config({
 			}});
 	}
 	
-	//删除
+	// 删除
 	function deleteRow(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
@@ -215,6 +197,31 @@ layui.config({
 				loadTable();
     		}});
 		});
+	}
+
+	form.render();
+	$("body").on("click", "#formSearch", function() {
+		refreshTable();
+	});
+
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
+	});
+
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
+
+	function refreshTable() {
+		table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+	}
+
+	function getTableParams() {
+		return {
+			orderNum: $("#orderNum").val(),
+			state: $("#state").val(),
+			contacts: $("#contacts").val()
+		};
 	}
 	
     exports('sealseservicelist', {});

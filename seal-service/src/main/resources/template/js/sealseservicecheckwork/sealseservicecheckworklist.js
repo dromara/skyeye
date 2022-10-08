@@ -8,7 +8,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
@@ -18,16 +17,15 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: flowableBasePath + 'sealseservicecheckwork001',
-	    where: {userName: $("#userName").val()},
+	    where: getTableParams(),
 	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'createTime', title: '签到时间', align: 'center', width: 140 },
-	        { field: 'userName', title: '签到人', width: 80, align: 'left'},
-	        { field: 'departmentName', title: '签到部门', align: 'left', width: 100},
+			{ field: 'userName', title: '签到人', width: 120, align: 'left'},
+			{ field: 'createTime', title: '签到时间', align: 'center', width: 140 },
 	        { field: 'orderNum', title: '所属工单', align: 'center', width: 220, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.orderNum + '</a>';
 	        }},
@@ -47,9 +45,7 @@ layui.config({
         }
     });
 	
-	form.render();
-	
-	//详情
+	// 详情
 	function details(data) {
 		rowId = data.serviceId;
 		_openNewWindows({
@@ -60,8 +56,8 @@ layui.config({
 			callBack: function (refreshCode) {
 			}});
 	}
-	
-	
+
+	form.render();
 	$("body").on("click", "#formSearch", function() {
 		refreshTable();
 	});
@@ -71,12 +67,16 @@ layui.config({
     });
     
     function loadTable() {
-    	table.reloadData("messageTable", {where: {userName: $("#userName").val()}});
+    	table.reloadData("messageTable", {where: getTableParams()});
     }
     
     function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: {userName: $("#userName").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
+
+	function getTableParams() {
+		return {};
+	}
 
     exports('sealseservicecheckworklist', {});
 });
