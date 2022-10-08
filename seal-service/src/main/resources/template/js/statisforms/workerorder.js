@@ -11,7 +11,6 @@ layui.config({
     echartsTheme: '../echarts/echartsTheme'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate', 'echarts'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
@@ -37,13 +36,12 @@ layui.config({
 	
 	initTable();
 	function initTable(){
-		
 		table.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
 		    url: flowableBasePath + 'sealseservicestatisforms002',
-		    where: {userName: $("#userName").val(), startTime: startTime, endTime: endTime},
+		    where: {startTime: startTime, endTime: endTime},
 		    even: true,
 		    page: true,
 		    limits: [8, 16, 24, 32, 40, 48, 56],
@@ -81,7 +79,6 @@ layui.config({
 	}
 	
 	form.render();
-	
 	$("body").on("click", "#formSearch", function() {
 		refreshTable();
 	});
@@ -94,7 +91,7 @@ layui.config({
     		startTime = $("#timeRange").val().split('~')[0].trim();
     		endTime = $("#timeRange").val().split('~')[1].trim();
     	}
-    	table.reloadData("messageTable", {page: {curr: 1}, where: {userName: $("#userName").val(), startTime: startTime, endTime: endTime}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: {startTime: startTime, endTime: endTime}});
     }
     
     $("body").on("click", ".plan-type-btn", function (e) {
@@ -310,5 +307,5 @@ layui.config({
 		myChart.resize();
     }
 	
-    exports('customorder', {});
+    exports('workerorder', {});
 });
