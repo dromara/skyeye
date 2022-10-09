@@ -25,7 +25,8 @@ layui.config({
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "sealseservice033",
-		 	params: {rowId: parent.rowId},
+		 	params: {id: parent.rowId},
+			method: 'GET',
 		 	pagination: false,
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb) {},
@@ -41,7 +42,7 @@ layui.config({
 				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceFaultType"]["key"], 'select', "faultTypeId", defaultFaultTypeId, form);
 		 		
 				// 故障关键组件
-				if (!isNull(json.bean.faultKeyPartsId)){
+				if (!isNull(json.bean.faultKeyPartsId)) {
 					faultKeyParts = {
 						materialId: json.bean.faultKeyPartsId,
 						materialName: json.bean.faultKeyPartsName
