@@ -13,7 +13,6 @@ layui.config({
 		table = layui.table;
 
 	authBtn('1663473377361');
-
 	table.render({
 		id: 'messageTable',
 		elem: '#messageTable',
@@ -28,7 +27,7 @@ layui.config({
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'name', title: '名称', width: 200 },
 			{ field: 'codeNum', title: '编码', width: 150 },
-			{ field: 'pattern', title: '命名模式', width: 200 },
+			{ field: 'pattern', title: '命名模式', width: 300 },
 			{ field: 'alarm', title: '是否告警', align: 'center', width: 80, templet: function (d) {
 				if (d.alarm == 0) {
 					return "否";
@@ -41,7 +40,7 @@ layui.config({
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 180, toolbar: '#tableBar'}
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 180, toolbar: '#tableBar' }
 		]],
 		done: function(json) {
 			matchingLanguage();
