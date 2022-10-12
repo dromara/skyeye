@@ -12,6 +12,7 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
+	var serviceClassName = sysServiceMation["crmOpportUnity"]["key"];
 
 	authBtn('1572508625517');
 
@@ -125,7 +126,7 @@ layui.config({
 	function subApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
-			activitiUtil.startProcess(sysActivitiModel["crmOpportUnity"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				var params = {
 					rowId: data.id,
 					approvalId: approvalId

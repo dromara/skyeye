@@ -9,6 +9,7 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
+	var serviceClassName = sysServiceMation["myCrmContract"]["key"];
 	
 	authBtn('1573888009852');//列表
 	authBtn('1573888019541');//新增
@@ -148,7 +149,7 @@ layui.config({
 	function subApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
-			activitiUtil.startProcess(sysActivitiModel["myCrmContract"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				var params = {
 					rowId: data.id,
 					approvalId: approvalId
