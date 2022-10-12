@@ -116,7 +116,7 @@ var erpOrderUtil = {
      * @param id 订单id
      * @param serviceClassName 单据类型
      * @param submitType 单据提交类型  1.走工作流提交  2.直接提交
-     * @param actKey 该地址为activitiNameKey.json的key
+     * @param actKey 该地址为 sysServiceMation.json的key
      */
     submitOrderMation: function (id, serviceClassName, submitType, actKey, callback) {
         layer.confirm('确认要提交吗？', { icon: 3, title: '提交操作' }, function (index) {

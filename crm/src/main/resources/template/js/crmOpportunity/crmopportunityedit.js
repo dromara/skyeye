@@ -19,6 +19,7 @@ layui.config({
     	laydate = layui.laydate,
     	form = layui.form,
     	textool = layui.textool;
+	var serviceClassName = sysServiceMation["crmOpportUnity"]["key"];
     var selOption = getFileContent('tpl/template/select-option.tpl');
     
     showGrid({
@@ -155,7 +156,7 @@ layui.config({
 	// 提交审批
 	form.on('submit(formSubBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {
-			activitiUtil.startProcess(sysActivitiModel["crmOpportUnity"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				saveData("2", approvalId);
 			});
 		}

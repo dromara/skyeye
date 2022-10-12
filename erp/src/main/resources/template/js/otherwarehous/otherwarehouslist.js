@@ -12,6 +12,7 @@ layui.config({
         form = layui.form,
         laydate = layui.laydate,
         table = layui.table;
+    var serviceClassName = sysServiceMation["putIsOthers"]["key"];
     authBtn('1570958309701');//添加
     authBtn('1571987485364');//导出
         
@@ -70,7 +71,7 @@ layui.config({
         } else if (layEvent === 'activitiProcessDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
-            erpOrderUtil.revokeOrderMation(data.processInstanceId, systemOrderType["putIsOthers"]["key"], function() {
+            erpOrderUtil.revokeOrderMation(data.processInstanceId, serviceClassName, function() {
                 loadTable();
             });
         }
@@ -78,7 +79,7 @@ layui.config({
 
     // 提交数据
 	function subExamine(data) {
-        erpOrderUtil.submitOrderMation(data.id, systemOrderType["putIsOthers"]["key"], data.submitType, sysActivitiModel["putIsOthers"]["key"], function() {
+        erpOrderUtil.submitOrderMation(data.id, serviceClassName, data.submitType, serviceClassName, function() {
             loadTable();
         });
     }
@@ -99,7 +100,7 @@ layui.config({
 
     // 删除
     function deletemember(data) {
-        erpOrderUtil.deleteOrderMation(data.id, systemOrderType["putIsOthers"]["key"], function() {
+        erpOrderUtil.deleteOrderMation(data.id, serviceClassName, function() {
             loadTable();
         });
     }

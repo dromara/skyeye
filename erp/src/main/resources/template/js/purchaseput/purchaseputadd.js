@@ -16,6 +16,7 @@ layui.config({
 	var $ = layui.$,
 		laydate = layui.laydate,
 		textool = layui.textool;
+	var serviceClassName = sysServiceMation["putIsPurchase"]["key"];
 
 	layedit = layui.layedit,
 	form = layui.form;
@@ -27,7 +28,7 @@ layui.config({
 	var allChooseProduct = {};
 
 	// 获取单据提交类型
-	var submitType = erpOrderUtil.getSubmitTypeByKey(systemOrderType["putIsPurchase"]["key"]);
+	var submitType = erpOrderUtil.getSubmitTypeByKey(serviceClassName);
 
 	// 单据时间
 	laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
@@ -95,7 +96,7 @@ layui.config({
 	});
 
 	// 加载动态表单
-	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["putIsPurchase"]["key"], null);
+	dsFormUtil.loadPageByCode("dsFormShow", serviceClassName, null);
 
 	matchingLanguage();
 
@@ -118,7 +119,7 @@ layui.config({
 	// 走工作流的提交审批
 	form.on('submit(formSubOneBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {
-			activitiUtil.startProcess(sysActivitiModel["putIsPurchase"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				saveData("2", approvalId);
 			});
 		}

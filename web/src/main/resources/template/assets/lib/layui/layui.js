@@ -80,9 +80,7 @@ MiniSite.JsLoader={
 
 var lacolMap = {
 	"systemLanguage": "../../json/language.json",
-	"systemOrderType": "../../json/sysOrderType.json",
-	"sysDsFormWithCodeType": "../../json/sysDsFormWithCodeType.json",
-	"sysActivitiModel": "../../json/activitiNameKey.json",
+	"sysServiceMation": "../../json/sysServiceMation.json",
 	"sysDictData": "../../json/sysDictData.json",
 	"skyeyeClassEnum": "../../json/skyeyeClassEnum.json",
 };
@@ -92,12 +90,9 @@ var languageType = isNull(getCookie("languageType")) ? "zh" : getCookie("languag
 
 // 系统中英文
 var systemLanguage = getAndWriteLocal('systemLanguage');
-// 系统单据类型
-var systemOrderType = getAndWriteLocal('systemOrderType');
-// 动态表单关联json文件
-var sysDsFormWithCodeType = getAndWriteLocal('sysDsFormWithCodeType');
-// 工作流流程模型关联json文件
-var sysActivitiModel = getAndWriteLocal('sysActivitiModel');
+
+// 系统模型关联json文件加载
+var sysServiceMation = getAndWriteLocal('sysServiceMation');
 // 数据字典关联json文件
 var sysDictData = getAndWriteLocal('sysDictData');
 // 枚举类关联json文件

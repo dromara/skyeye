@@ -20,9 +20,9 @@ layui.config({
 	var $ = layui.$,
 		laydate = layui.laydate,
 		textool = layui.textool;
-
 	layedit = layui.layedit,
 	form = layui.form;
+	var serviceClassName = sysServiceMation["outchaseOrder"]["key"];
 
 	var inoutitemHtml = "";//支出项目
 	var salesManList = new Array();//销售人员
@@ -32,7 +32,7 @@ layui.config({
 	var allChooseProduct = {};
 
 	// 获取单据提交类型
-	var submitType = erpOrderUtil.getSubmitTypeByKey(systemOrderType["outchaseOrder"]["key"]);
+	var submitType = erpOrderUtil.getSubmitTypeByKey(serviceClassName);
 
 	// 单据时间
 	laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
@@ -50,7 +50,7 @@ layui.config({
 	});
 
 	// 加载动态表单
-	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["outchaseOrder"]["key"], null);
+	dsFormUtil.loadPageByCode("dsFormShow", serviceClassName, null);
 
 	// 商品
 	initTableChooseUtil.initTable({
@@ -113,7 +113,7 @@ layui.config({
 	// 走工作流的提交审批
 	form.on('submit(formSubOneBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {
-			activitiUtil.startProcess(sysActivitiModel["outchaseOrder"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				saveData("2", approvalId);
 			});
 		}

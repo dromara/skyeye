@@ -12,9 +12,10 @@ layui.config({
         form = layui.form,
         laydate = layui.laydate,
         table = layui.table;
+    var serviceClassName = sysServiceMation["outchaseOrder"]["key"];
     authBtn('1571813326930');//新增
     authBtn('1571991191343');//导出
-        
+
     laydate.render({elem: '#operTime', range: '~'});
     
     table.render({
@@ -33,14 +34,14 @@ layui.config({
 		        return '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
 		    }},
             { field: 'supplierName', title: '客户', rowspan: '2', align: 'left', width: 150 },
-            { title: '审批模式', align: 'center', colspan: '2'},
+            { title: '审批模式', align: 'center', colspan: '2' },
             { field: 'state', title: '状态', align: 'left', rowspan: '2', width: 80, templet: function (d) {
                 return activitiUtil.showStateName(d.state, d.submitType);
 		    }},
-            { field: 'totalPrice', title: '合计金额', align: 'left', rowspan: '2', width: 120},
-            { field: 'operPersonName', title: '操作人', align: 'left', rowspan: '2', width: 100},
+            { field: 'totalPrice', title: '合计金额', align: 'left', rowspan: '2', width: 120 },
+            { field: 'operPersonName', title: '操作人', align: 'left', rowspan: '2', width: 100 },
             { field: 'operTime', title: '单据日期', align: 'center', rowspan: '2', width: 140 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', rowspan: '2', width: 200, toolbar: '#tableBar'}
+            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', rowspan: '2', width: 200, toolbar: '#tableBar' }
         ],[
             { field: 'submitType', title: '提交模式', align: 'left', width: 120, templet: function (d) {
                 return erpOrderUtil.getSubmitTypeName(d);
@@ -72,7 +73,7 @@ layui.config({
         } else if (layEvent === 'activitiProcessDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
-            erpOrderUtil.revokeOrderMation(data.processInstanceId, systemOrderType["outchaseOrder"]["key"], function() {
+            erpOrderUtil.revokeOrderMation(data.processInstanceId, serviceClassName, function() {
                 loadTable();
             });
         }
@@ -94,7 +95,7 @@ layui.config({
 
     // 删除
     function deletemember(data) {
-        erpOrderUtil.deleteOrderMation(data.id, systemOrderType["outchaseOrder"]["key"], function() {
+        erpOrderUtil.deleteOrderMation(data.id, serviceClassName, function() {
             loadTable();
         });
     }
@@ -113,7 +114,7 @@ layui.config({
 	
 	// 提交数据
 	function subExamine(data) {
-        erpOrderUtil.submitOrderMation(data.id, systemOrderType["outchaseOrder"]["key"], data.submitType, sysActivitiModel["outchaseOrder"]["key"], function() {
+        erpOrderUtil.submitOrderMation(data.id, serviceClassName, data.submitType, serviceClassName, function() {
             loadTable();
         });
     }

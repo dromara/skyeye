@@ -22,7 +22,7 @@ var activitiUtil = {
     chooseApprovalPersonMation: {},
 
     /**
-     * 该地址为activitiNameKey.json的key，因为刚启动流程，还没有流程id和任务id,所以只能用这种方式
+     * 该地址为 sysServiceMation.json的key，因为刚启动流程，还没有流程id和任务id,所以只能用这种方式
      */
     actKey: "",
 
@@ -122,7 +122,7 @@ var activitiUtil = {
     /**
      * 启动流程时选择审批人
      *
-     * @param actKey 该地址为activitiNameKey.json的key
+     * @param actKey 该地址为 sysServiceMation.json的key
      * @param businessData 业务数据的对象，不支持集合
      * @param callback 回调函数
      */

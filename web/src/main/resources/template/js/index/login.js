@@ -22,22 +22,10 @@ layui.config({
             localStorage.setItem("systemLanguage", JSON.stringify(data));
         });
 
-		// 系统单据类型文件加载
-		jsGetJsonFile("../../json/sysOrderType.json", function(data) {
-			systemOrderType = data;
-			localStorage.setItem("systemOrderType", JSON.stringify(data));
-		});
-
-		// 动态表单关联json文件加载
-		jsGetJsonFile("../../json/sysDsFormWithCodeType.json", function(data) {
-			sysDsFormWithCodeType = data;
-			localStorage.setItem("sysDsFormWithCodeType", JSON.stringify(data));
-		});
-
-		// 工作流流程模型关联json文件加载
-		jsGetJsonFile("../../json/activitiNameKey.json", function(data) {
-			sysActivitiModel = data;
-			localStorage.setItem("sysActivitiModel", JSON.stringify(data));
+		// 系统模型关联json文件加载
+		jsGetJsonFile("../../json/sysServiceMation.json", function(data) {
+			sysServiceMation = data;
+			localStorage.setItem("sysServiceMation", JSON.stringify(data));
 		});
 
 		// 数据字典关联json文件加载

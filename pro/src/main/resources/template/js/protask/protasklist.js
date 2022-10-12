@@ -15,6 +15,7 @@ layui.config({
 		form = layui.form,
 		laydate = layui.laydate,
 		tableTree = layui.tableTreeDj;
+	var serviceClassName = sysServiceMation["proTask"]["key"];
 
 	authBtn('1574644930825');
 	
@@ -188,7 +189,7 @@ layui.config({
 	function subApproval(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
-			activitiUtil.startProcess(sysActivitiModel["proTask"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				var params = {
 					rowId: data.id,
 					approvalId: approvalId

@@ -14,16 +14,16 @@ layui.config({
 	var $ = layui.$,
 		laydate = layui.laydate,
 		textool = layui.textool;
-
 	layedit = layui.layedit,
 	form = layui.form;
+	var serviceClassName = sysServiceMation["putIsRetailReturns"]["key"];
 
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 	// 已经选择的商品集合key：表格的行trId，value：商品信息
 	var allChooseProduct = {};
 
 	// 获取单据提交类型
-	var submitType = erpOrderUtil.getSubmitTypeByKey(systemOrderType["putIsRetailReturns"]["key"]);
+	var submitType = erpOrderUtil.getSubmitTypeByKey(serviceClassName);
 
 	// 单据时间
 	laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
@@ -66,7 +66,7 @@ layui.config({
 	});
 
 	// 加载动态表单
-	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["putIsRetailReturns"]["key"], null);
+	dsFormUtil.loadPageByCode("dsFormShow", serviceClassName, null);
 
 	matchingLanguage();
 
@@ -146,7 +146,7 @@ layui.config({
 	// 走工作流的提交审批
 	form.on('submit(formSubOneBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {
-			activitiUtil.startProcess(sysActivitiModel["putIsRetailReturns"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				saveData("2", approvalId);
 			});
 		}
