@@ -14,6 +14,7 @@ layui.config({
 		form = layui.form,
 		laydate = layui.laydate,
 		table = layui.table;
+	var serviceClassName = sysServiceMation["assetManageReturn"]["key"];
 	
 	// 新增资产归还申请
 	authBtn('1597243733271');
@@ -140,7 +141,7 @@ layui.config({
 	function returnSubApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
-			activitiUtil.startProcess(sysActivitiModel["assetManageReturn"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				var params = {
 					rowId: data.id,
 					approvalId: approvalId

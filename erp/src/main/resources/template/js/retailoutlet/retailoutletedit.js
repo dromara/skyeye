@@ -13,9 +13,9 @@ layui.config({
 	var $ = layui.$,
 		laydate = layui.laydate,
 		textool = layui.textool;
-
 	layedit = layui.layedit,
 	form = layui.form;
+	var serviceClassName = sysServiceMation["outIsRetail"]["key"];
 
 	var showTdByEdit = 'rkNum';//根据那一列的值进行变化,默认根据数量
 	var beanTemplate = $("#beanTemplate").html();
@@ -213,7 +213,7 @@ layui.config({
 	// 走工作流的提交审批
 	form.on('submit(formSubOneBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {
-			activitiUtil.startProcess(sysActivitiModel["outIsRetail"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				saveData("2", approvalId);
 			});
 		}

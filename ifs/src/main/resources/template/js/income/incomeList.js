@@ -14,6 +14,7 @@ layui.config({
         fsTree = layui.fsTree,
         fsCommon = layui.fsCommon,
         table = layui.table;
+    var serviceClassName = sysServiceMation["incomeOrder"]["key"];
     authBtn('1571638020191');//新增
     authBtn('1572313776196');//导出
 
@@ -168,7 +169,7 @@ layui.config({
                 subToData(params);
             } else {
                 // 工作流提交
-                activitiUtil.startProcess(sysActivitiModel["incomeOrder"]["key"], null, function (approvalId) {
+                activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
                     var params = {
                         rowId: data.id,
                         approvalId: approvalId

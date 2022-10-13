@@ -11,6 +11,7 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		laydate = layui.laydate;
+	var serviceClassName = sysServiceMation["vehicleManageUse"]["key"];
 
 	// 是否加载司机
 	var loadDriver = false;
@@ -108,7 +109,7 @@ layui.config({
 	// 提交审批
 	form.on('submit(formSubBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {
-			activitiUtil.startProcess(sysActivitiModel["vehicleManageUse"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				saveData("2", approvalId);
 			});
 		}

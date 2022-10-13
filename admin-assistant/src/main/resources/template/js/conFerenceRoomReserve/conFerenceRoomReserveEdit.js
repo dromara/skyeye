@@ -11,6 +11,7 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		laydate = layui.laydate;
+	var serviceClassName = sysServiceMation["conFerenceRoomReserve"]["key"];
 	var reserveTemplate = $("#reserveTemplate").html();
 
 	AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve004", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
@@ -55,7 +56,7 @@ layui.config({
 	// 提交审批
 	form.on('submit(formSubBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {
-			activitiUtil.startProcess(sysActivitiModel["conFerenceRoomReserve"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				saveData("2", approvalId);
 			});
 		}

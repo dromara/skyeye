@@ -10,6 +10,7 @@ layui.config({
 	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
 		form = layui.form;
+	var serviceClassName = sysServiceMation["assetManageReturn"]["key"];
 
 	var allChooseAssetReport = {};
 
@@ -82,7 +83,7 @@ layui.config({
 	// 提交审批
 	form.on('submit(formSubBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {
-			activitiUtil.startProcess(sysActivitiModel["assetManageReturn"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				saveData("2", approvalId);
 			});
 		}

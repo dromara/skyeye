@@ -11,6 +11,7 @@ layui.config({
         textool = layui.textool,
         form = layui.form,
         dtree = layui.dtree;
+    var serviceClassName = sysServiceMation["bossInterviewJobTransfer"]["key"];
     var selOption = getFileContent('tpl/template/select-option.tpl');
 
     // 调岗类型
@@ -35,7 +36,7 @@ layui.config({
     // 提交审批
     form.on('submit(formSubBean)', function(data) {
         if(winui.verifyForm(data.elem)) {
-            activitiUtil.startProcess(sysActivitiModel["bossInterviewJobTransfer"]["key"], function (approvalId) {
+            activitiUtil.startProcess(serviceClassName, function (approvalId) {
                 saveData("2", approvalId);
             });
         }

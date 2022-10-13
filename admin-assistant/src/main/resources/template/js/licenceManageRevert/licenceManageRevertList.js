@@ -12,6 +12,7 @@ layui.config({
 		form = layui.form,
 		laydate = layui.laydate,
 		table = layui.table;
+	var serviceClassName = sysServiceMation["licenceManageRevert"]["key"];
 	
 	// 归还新增
 	authBtn('1596972093939');
@@ -103,7 +104,7 @@ layui.config({
 	function revertSubApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
-			activitiUtil.startProcess(sysActivitiModel["licenceManageRevert"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				var params = {
 					rowId: data.id,
 					approvalId: approvalId

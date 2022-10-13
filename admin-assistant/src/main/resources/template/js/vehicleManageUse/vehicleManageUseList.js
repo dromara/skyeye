@@ -11,6 +11,7 @@ layui.config({
 		form = layui.form,
 		table = layui.table,
 	    laydate = layui.laydate;
+	var serviceClassName = sysServiceMation["vehicleManageUse"]["key"];
 	
 	// 新增用车申请
 	authBtn('1597481948288');
@@ -83,7 +84,7 @@ layui.config({
 	function subApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
-			activitiUtil.startProcess(sysActivitiModel["vehicleManageUse"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				var params = {
 					rowId: data.id,
 					approvalId: approvalId

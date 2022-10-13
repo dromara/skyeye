@@ -20,9 +20,9 @@ layui.config({
 	var $ = layui.$,
 		laydate = layui.laydate,
 		textool = layui.textool;
-
 	layedit = layui.layedit,
 	form = layui.form;
+	var serviceClassName = sysServiceMation["outchaseOrder"]["key"];
 
 	var inoutitemHtml = "";//支出项目
 	var salesManList = new Array();//销售人员
@@ -205,7 +205,7 @@ layui.config({
 	// 走工作流的提交审批
 	form.on('submit(formSubOneBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {
-			activitiUtil.startProcess(sysActivitiModel["outchaseOrder"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				saveData("2", approvalId);
 			});
 		}

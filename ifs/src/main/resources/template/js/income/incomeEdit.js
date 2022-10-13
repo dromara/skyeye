@@ -14,6 +14,7 @@ layui.config({
         laydate = layui.laydate;
     layedit = layui.layedit,
     form = layui.form;
+    var serviceClassName = sysServiceMation["incomeOrder"]["key"];
 
     // 获取单据提交类型
     var submitType = "";
@@ -112,7 +113,7 @@ layui.config({
     // 走工作流的提交审批
     form.on('submit(formSubOneBean)', function(data) {
         if(winui.verifyForm(data.elem)) {
-            activitiUtil.startProcess(sysActivitiModel["incomeOrder"]["key"], null, function (approvalId) {
+            activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
                 saveData("2", approvalId);
             });
         }
