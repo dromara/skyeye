@@ -29,17 +29,18 @@
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">绑定业务模型<i class="red">*</i></label>
-			<div class="layui-input-block ver-center" id="businessLinkType">
-
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs12 business">
-			<label class="layui-form-label">工作流业务模型<i class="red">*</i></label>
+			<label class="layui-form-label">工作流业务模型</label>
 			<div class="layui-input-block">
 				<input type="text" id="serviceClassName" name="serviceClassName" placeholder="请选择工作流业务模型" class="layui-input" readonly
 					   value="{{serviceName}}" className="{{serviceClassName}}"/>
 				<i class="fa fa-user-plus input-icon" id="serviceClassNameSel"></i>
+				<div class="layui-form-mid layui-word-aux" style="width: 100%;">动态表单类型的工作流可不选择业务模型</div>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">关联业务数据<i class="red">*</i></label>
+			<div class="layui-input-block ver-center" id="businessLinkType">
+
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12 business">

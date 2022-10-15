@@ -31,16 +31,12 @@ layui.config({
 			var params = {
 				flowName: $("#flowName").val(),
 				modelKey: $("#modelKey").val(),
-				businessLinkType: data.field.businessLinkType
+				businessLinkType: data.field.businessLinkType,
+				serviceClassName: $("#serviceClassName").attr("className")
 			};
 			if (params.businessLinkType == 2) {
-				params.serviceClassName = $("#serviceClassName").attr("className");
 				params.businessKey = $("#businessKey").val();
 				params.businessData = $("#businessData").val();
-				if (isNull(params.serviceClassName)) {
-					winui.window.msg("请选择工作流业务模型", {icon: 2, time: 2000});
-					return false;
-				}
 				if (isNull(params.businessKey)) {
 					winui.window.msg("请输入属性字段", {icon: 2, time: 2000});
 					return false;

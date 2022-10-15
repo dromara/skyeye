@@ -20,9 +20,9 @@ layui.config({
 	var $ = layui.$,
 		laydate = layui.laydate,
 		textool = layui.textool;
-
 	layedit = layui.layedit,
 	form = layui.form;
+	var serviceClassName = sysServiceMation["putIsSalesReturns"]["key"];
 
 	var inoutitemHtml = "";//支出项目
 	var salesManList = new Array();//销售人员
@@ -39,21 +39,17 @@ layui.config({
 
 	// 初始化账户
 	systemCommonUtil.getSysAccountListByType(function (json) {
-		// 加载账户数据
 		$("#accountId").html(getDataUseHandlebars(selOption, json));
 	});
 
 	// 初始化支出项目
 	systemCommonUtil.getSysInoutitemListByType(2, function (json) {
-		// 加载支出项目
 		inoutitemHtml = getDataUseHandlebars(selOption, json);
 	});
 
 	// 初始化仓库
 	erpOrderUtil.getDepotList(function (json){
-		// 加载仓库数据
 		$("#depotId").html(getDataUseHandlebars(selOption, json));
-		// 初始化回显数据
 		initDataShow();
 	});
 
@@ -215,7 +211,7 @@ layui.config({
 	// 走工作流的提交审批
 	form.on('submit(formSubOneBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {
-			activitiUtil.startProcess(sysActivitiModel["putIsSalesReturns"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				saveData("2", approvalId);
 			});
 		}

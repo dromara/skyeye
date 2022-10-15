@@ -11,6 +11,7 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		laydate = layui.laydate;
+	var serviceClassName = sysServiceMation["proworkLoad"]["key"];
 
 	var rowNum = 1; //表格的序号
 	var proList = new Array();//项目集合
@@ -182,7 +183,7 @@ layui.config({
 	// 提交审批
 	form.on('submit(formSubBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {
-			activitiUtil.startProcess(sysActivitiModel["proworkLoad"]["key"], null, function (approvalId) {
+			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				saveData("2", approvalId);
 			});
 		}

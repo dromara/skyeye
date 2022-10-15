@@ -14,6 +14,7 @@ layui.config({
         form = layui.form,
         laydate = layui.laydate,
         table = layui.table;
+    var serviceClassName = sysServiceMation["checkWorkCancelLeave"]["key"];
 
     // 新增销假申请
     authBtn('1618112042591');
@@ -113,7 +114,7 @@ layui.config({
     function subApproval(data) {
         layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
             layer.close(index);
-            activitiUtil.startProcess(sysActivitiModel["checkWorkCancelLeave"]["key"], null, function (approvalId) {
+            activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
                 var params = {
                     rowId: data.id,
                     approvalId: approvalId

@@ -10,6 +10,7 @@ layui.config({
         laydate = layui.laydate,
         textool = layui.textool,
         form = layui.form;
+    var serviceClassName = sysServiceMation["bossInterviewRegularWorker"]["key"];
 
     showGrid({
         id: "showForm",
@@ -49,7 +50,7 @@ layui.config({
     // 提交审批
     form.on('submit(formSubBean)', function(data) {
         if(winui.verifyForm(data.elem)) {
-            activitiUtil.startProcess(sysActivitiModel["bossInterviewRegularWorker"]["key"], function (approvalId) {
+            activitiUtil.startProcess(serviceClassName, function (approvalId) {
                 saveData("2", approvalId);
             });
         }

@@ -24,7 +24,7 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: '2' },
-			{ colspan: '4', title: '模型信息', align: 'center'},
+			{ colspan: '5', title: '模型信息', align: 'center'},
 			{ colspan: '2', title: '发布信息', align: 'center'},
 			{ field: 'actModelId', title: '流程配置', align: "center", width: 80, rowspan: '2', templet: function (d) {
 				if (isNull(d.actModelId)) {
@@ -43,6 +43,7 @@ layui.config({
 			{ field: 'modelId', title: '模型ID', width: 100 },
 			{ field: 'modelKey', title: '模型key', width: 250 },
 			{ field: 'version', title: '版本', width: 80, templet: function (d) {return d.model.version}},
+			{ field: 'serviceName', title: '工作流业务模型', width: 140 },
 			{ field: 'deploymentId', title: '发布状态', align: "center", width: 80, templet: function (d) {
 				if (isNull(d.model.deploymentId)) {
 					return "<span class='state-new'>未发布</span>";

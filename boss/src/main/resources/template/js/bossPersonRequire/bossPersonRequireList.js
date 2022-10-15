@@ -12,6 +12,7 @@ layui.config({
         form = layui.form,
         laydate = layui.laydate,
         table = layui.table;
+    var serviceClassName = sysServiceMation["bossPersonRequire"]["key"];
 
     // 新增
     authBtn('1649569413156');
@@ -117,7 +118,7 @@ layui.config({
     function subApproval(data) {
         layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
             layer.close(index);
-            activitiUtil.startProcess(sysActivitiModel["assetArticlesPurchase"]["key"], function (approvalId) {
+            activitiUtil.startProcess(serviceClassName, function (approvalId) {
                 var params = {
                     id: data.id,
                     approvalId: approvalId
