@@ -59,7 +59,7 @@ layui.config({
 
 	// 初始化回显数据
 	function initDataShow(){
-		AjaxPostUtil.request({url: flowableBasePath + "purchaseorder008", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "purchaseorder008", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function(json) {
 			if (isNull(json.bean)) {
 				$("#showForm").html("");
 				winui.window.msg('数据不存在~', {icon: 2, time: 2000});
@@ -99,7 +99,7 @@ layui.config({
 						"html": getDataUseHandlebars(selOption, {rows: item.product.unitList}),
 						"value": item.mUnitId
 					},
-					"currentTock": item.currentTock,
+					"allStock": item.allStock,
 					"rkNum": isNull(item.nowNumber) ? 0 : item.nowNumber,
 					"nowNum": isNull(item.nowNumber) ? 0 : item.nowNumber, // 订单剩余数量
 					"unitPrice": item.unitPrice.toFixed(2),
@@ -141,7 +141,7 @@ layui.config({
 			cols: [
 				{id: 'materialId', title: '商品(型号)', formType: 'chooseInput', width: '150', iconClassName: 'chooseProductBtn', verify: 'required'},
 				{id: 'mUnitId', title: '单位', formType: 'select', width: '50', verify: 'required', layFilter: 'selectUnitProperty'},
-				{id: 'currentTock', title: '库存', formType: 'detail', width: '80'},
+				{id: 'allStock', title: '当前库存', formType: 'detail', width: '80'},
 				{id: 'rkNum', title: '数量', formType: 'input', width: '80', className: 'change-input rkNum', verify: 'required|number', value: '1'},
 				{id: 'nowNum', title: '待入库数量', formType: 'detail', width: '80'},
 				{id: 'unitPrice', title: '单价', formType: 'input', width: '80', className: 'change-input unitPrice', verify: 'required|money'},

@@ -20,7 +20,7 @@
 			<td>{{unitNameType}}</td>
 			<td>{{unitName}}</td>
 			<td><input type="text" class="layui-input" id="{{safetyTock}}" win-verify="number"/></td>
-			<td><button type="button" class="layui-btn layui-btn-primary layui-btn-xs initialTockMore" id="{{initialTock}}">库存信息</button></td>
+			<td><button type="button" class="layui-btn layui-btn-primary layui-btn-xs stockMore" id="{{stock}}">库存信息</button></td>
 			<td><input type="text" class="layui-input" id="{{retailPrice}}" win-verify="money"/></td>
 			<td><input type="text" class="layui-input" id="{{lowPrice}}" win-verify="money"/></td>
 			<td><input type="text" class="layui-input" id="{{estimatePurchasePrice}}" win-verify="money"/></td>
@@ -112,7 +112,7 @@
 		<div class="layui-form-item layui-col-xs6 single-term">
 		    <label class="layui-form-label">初始库存<i class="red">*</i></label>
 		    <div class="layui-input-block">
-		        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="initialTock">库存信息</button>
+		        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="stock">库存信息</button>
 		    </div>
 		</div>
 		<div class="layui-form-item layui-col-xs6 single-term">
@@ -193,9 +193,9 @@
 							<td>{{baseUnit}}</td>
 							<td>{{unitName}}</td>
 							<td><input type="text" class="layui-input" id="safetyTock{{addOne @index}}" win-verify="number" value="{{safetyTock}}"/></td>
-							<td><button type="button" class="layui-btn layui-btn-primary layui-btn-xs initialTockMore" id="initialTock{{addOne @index}}">库存信息</button>
+							<td><button type="button" class="layui-btn layui-btn-primary layui-btn-xs stockMore" id="stock{{addOne @index}}">库存信息</button>
 								{{#each normStock}}
-									<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">{{depotName}}<span class="layui-badge layui-bg-gray">{{initialTock}}</span></span>
+									<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">{{depotName}}<span class="layui-badge layui-bg-gray">{{stock}}</span></span>
 								{{/each}}
 							</td>
 							<td><input type="text" class="layui-input" id="retailPrice{{addOne @index}}" win-verify="money" value="{{retailPrice}}"/></td>

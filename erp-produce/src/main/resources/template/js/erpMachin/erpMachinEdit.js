@@ -93,7 +93,7 @@ layui.config({
 					$("#mUnitId" + (rowNum - 1)).val(item.normsId);
 					//商品回显
 					$("#materialId" + (rowNum - 1)).val(item.materialName + "(" + item.materialModel + ")");
-					$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
+					$("#allStock" + (rowNum - 1)).html(item.allStock);//库存回显
 					$.each(data.referToMation, function(j, bean){
 						if(bean.normsId == item.normsId){
 							//所需总数量
@@ -278,7 +278,7 @@ layui.config({
 				trId: "tr" + rowNum.toString(), //行的id
 				materialId: "materialId" + rowNum.toString(), //商品id
 				mUnitId: "mUnitId" + rowNum.toString(), //规格id
-				currentTock: "currentTock" + rowNum.toString(), //库存id
+				allStock: "allStock" + rowNum.toString(), //库存id
 				productionNum: "productionNum" + rowNum.toString(), //所需总数量id
 				machinNum: "machinNum" + rowNum.toString(), //待分配数量id
 				rkNum: "rkNum" + rowNum.toString(), //数量id
@@ -378,7 +378,7 @@ layui.config({
 						$("#mUnitId" + (rowNum - 1)).val(item.normsId);
 						//商品回显
 						$("#materialId" + (rowNum - 1)).val(item.product.materialName + "(" + item.product.materialModel + ")");
-						$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
+						$("#allStock" + (rowNum - 1)).html(item.allStock);//库存回显
 						//所需总数量
 						$("#productionNum" + (rowNum - 1)).html(item.productionNum);
 						//待分配数量

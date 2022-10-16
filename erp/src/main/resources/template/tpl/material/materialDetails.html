@@ -16,7 +16,7 @@
 			<div class="layui-form-item layui-col-xs12">
 		        <label class="layui-form-label">当前存量：</label>
 		        <div class="layui-input-block ver-center">
-		        	<a class="notice-title-click" rowid="{{id}}">{{allTock}}</a>
+		        	<a class="notice-title-click" rowid="{{id}}">{{allStock}}</a>
 		        </div>
 		    </div>
 			<div class="layui-form-item layui-col-xs6">
@@ -106,10 +106,10 @@
 									<td>{{safetyTock}}</td>
 									<td>
 										{{#each normStock}}
-											<span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">{{depotName}}<span class="layui-badge layui-bg-gray">{{initialTock}}</span></span><br>
+											<span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">{{depotName}}<span class="layui-badge layui-bg-gray">{{stock}}</span></span><br>
 										{{/each}}
 									</td>
-									<td><a class="notice-title-click" rowid="{{id}}">{{allTock}}</a></td>
+									<td><a class="notice-title-click" rowid="{{id}}">{{allStock}}</a></td>
 									<td>{{retailPrice}}</td>
 									<td>{{lowPrice}}</td>
 									<td>{{estimatePurchasePrice}}</td>

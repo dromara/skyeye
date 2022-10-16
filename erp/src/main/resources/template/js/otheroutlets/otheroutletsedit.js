@@ -83,7 +83,7 @@ layui.config({
 						"html": getDataUseHandlebars(selOption, {rows: item.product.unitList}),
 						"value": item.mUnitId
 					},
-					"currentTock": item.currentTock,
+					"allStock": item.allStock,
 					"rkNum": item.operNum,
 					"unitPrice": item.unitPrice.toFixed(2),
 					"amountOfMoney": item.allPrice.toFixed(2),
@@ -117,7 +117,7 @@ layui.config({
 			cols: [
 				{id: 'materialId', title: '商品(型号)', formType: 'chooseInput', width: '150', iconClassName: 'chooseProductBtn', verify: 'required'},
 				{id: 'mUnitId', title: '单位', formType: 'select', width: '50', verify: 'required', layFilter: 'selectUnitProperty'},
-				{id: 'currentTock', title: '库存', formType: 'detail', width: '80'},
+				{id: 'allStock', title: '库存', formType: 'detail', width: '80'},
 				{id: 'rkNum', title: '数量', formType: 'input', width: '80', className: 'change-input rkNum', verify: 'required|number', value: '1'},
 				{id: 'unitPrice', title: '单价', formType: 'input', width: '80', className: 'change-input unitPrice', verify: 'required|money'},
 				{id: 'amountOfMoney', title: '金额', formType: 'input', width: '80', className: 'change-input amountOfMoney', verify: 'required|money'},
@@ -201,7 +201,7 @@ layui.config({
 				noError = true;
 				return false;
 			}
-			if (parseInt(item.rkNum) > parseInt($("#currentTock" + thisRowKey).html())) {
+			if (parseInt(item.rkNum) > parseInt($("#allStock" + thisRowKey).html())) {
 				$("#rkNum" + thisRowKey).addClass("layui-form-danger");
 				$("#rkNum" + thisRowKey).focus();
 				winui.window.msg('超过库存数量.', {icon: 2, time: 2000});

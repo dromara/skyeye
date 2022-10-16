@@ -33,10 +33,10 @@ layui.config({
 	    var selTemplate = getFileContent('tpl/template/select-option.tpl');
 	    
 	    //多个单位时的库存集合
-	    //格式{trRow: 1, list: [{depotId: "ea843ebe9b5846f088525cc7a2975057",depotName: "广州第二仓库",initialTock: "123"}]}
+	    //格式{trRow: 1, list: [{depotId: "ea843ebe9b5846f088525cc7a2975057",depotName: "广州第二仓库",stock: "123"}]}
 	    var normsStockList = new Array();
 	    //单个单位时的库存集合
-	    //格式[{depotId: "ea843ebe9b5846f088525cc7a2975057",depotName: "广州第二仓库",initialTock: "123"}]
+	    //格式[{depotId: "ea843ebe9b5846f088525cc7a2975057",depotName: "广州第二仓库",stock: "123"}]
 	    var normsStockItem = new Array();
 	    
 	    //默认隐藏多单位选项内容
@@ -221,7 +221,7 @@ layui.config({
  	    });
  	    
  	    //单个单位新增库存
-	    $("body").on("click", "#initialTock", function() {
+	    $("body").on("click", "#stock", function() {
 	    	normsStock = [].concat(normsStockItem);
 	    	_openNewWindows({
 				url: "../../tpl/materialnormstock/materialnormstock.html", 
@@ -232,16 +232,16 @@ layui.config({
 					var str = "";
 					normsStockItem = [].concat(normsStock);
 					$.each(normsStockItem, function(i, item) {
-						str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.initialTock + '</span></span>';
+						str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.stock + '</span></span>';
 					});
-					$("#initialTock").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="initialTock">新增库存</button>' + str);
+					$("#stock").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="stock">新增库存</button>' + str);
 				}});
 	    });
 	    //多单位
-	    $("body").on("click", ".initialTockMore", function() {
+	    $("body").on("click", ".stockMore", function() {
 	    	var _this = $(this);
 	    	//获取行号
-	    	var trRow = _this.attr("id").replace("initialTock", "");
+	    	var trRow = _this.attr("id").replace("stock", "");
 	    	//判断当前行是否有库存集合信息在列表中
 	    	var thisRowHasList = -1;
 	    	$.each(normsStockList, function(i, item) {
@@ -271,7 +271,7 @@ layui.config({
 						});
 					}
 					$.each(normsStock, function(i, item) {
-						str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.initialTock + '</span></span>';
+						str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.stock + '</span></span>';
 					});
 					_this.parent().html(_this.prop("outerHTML") + str);
 				}});
@@ -314,7 +314,7 @@ layui.config({
  	    		unitNameType: bean.baseUnit == 1 ? "基础单位" : "副单位", //单位类型
  	    		unitName: bean.name, //单位
  	    		safetyTock: "safetyTock" + unitIndex.toString(), //安全存量
- 	    		initialTock: "initialTock" + unitIndex.toString(), //初始化库存
+				stock: "stock" + unitIndex.toString(), //初始化库存
  	    		retailPrice: "retailPrice" + unitIndex.toString(), //零售价
  	    		lowPrice: "lowPrice" + unitIndex.toString(), //最低售价
  	    		estimatePurchasePrice: "estimatePurchasePrice" + unitIndex.toString(), //预计采购价

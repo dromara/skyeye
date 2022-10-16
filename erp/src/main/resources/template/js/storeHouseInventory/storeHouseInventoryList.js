@@ -44,14 +44,14 @@ layui.config({
 	        where: getTableParams(),
 	        even: true,
 	        page: true,
-	        limits: [8, 16, 24, 32, 40, 48, 56],
 	        overflow: {
 	            type: 'tips',
 	            hoverTime: 300, // 悬停时间，单位ms, 悬停 hoverTime 后才会显示，默认为 0
 	            minWidth: 150, // 最小宽度
 	            maxWidth: 500 // 最大宽度
 	        },
-	        limit: 8,
+			limits: getLimits(),
+			limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
 		        { field: 'materialName', title: '商品名称', rowspan: '2', align: 'left', width: 150, templet: function (d) {
@@ -73,7 +73,7 @@ layui.config({
 		        }}
 		    ],[
 				{ field: 'unitName', title: '规格', align: 'center', width: 80 },
-		        { field: 'allTock', title: '总库存', align: 'center', width: 80 },
+		        { field: 'allStock', title: '总库存', align: 'center', width: 80 },
 		    	{ field: 'initialTock', title: '初始库存', align: 'center', width: 80 },
 		        { field: 'stockNum', title: '可盘点库存', align: 'center', width: 120, edit: 'text' }
 	        ]],

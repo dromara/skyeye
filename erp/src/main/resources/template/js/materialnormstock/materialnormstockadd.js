@@ -38,9 +38,9 @@ layui.config({
 	 	        	normsStock.push({
 	 	        		depotId: $("#storeHouseId").val(),
 	 	        		depotName: $("#storeHouseId").find("option:selected").text(),
-	 	        		initialTock: $("#initialTock").val()
+						stock: $("#stock").val()
 	 	        	});
-	 	        	//赋值给列表
+	 	        	// 赋值给列表
 	 	        	parent.normsStock = [].concat(normsStock);
 	    			parent.layer.close(index);
 	    			parent.refreshCode = '0';

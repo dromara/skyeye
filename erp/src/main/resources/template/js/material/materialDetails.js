@@ -19,27 +19,28 @@ layui.config({
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "material007",
-		 	params: {rowId: parent.rowId},
+		 	params: {id: parent.rowId},
 		 	pagination: false,
+			method: 'GET',
 		 	template: getFileContent('tpl/material/materialDetailsTemplate.tpl'),
 		 	ajaxSendAfter:function (json) {
-		 		if(json.bean.unit == '1'){//非多单位
-		 			var item = json.bean.norms[0];
-		 			item.unitName = json.bean.unitName;
-		 			$("#showForm").append(getDataUseHandlebars(simpleTemplate, item));
-		 			var str = "";
-			    	$.each(json.bean.norms[0].normStock, function(i, item) {
-			    		str += '<span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.initialTock + '</span></span><br>';
+				if (json.bean.unit == '1') {//非多单位
+					var item = json.bean.norms[0];
+					item.unitName = json.bean.unitName;
+					$("#showForm").append(getDataUseHandlebars(simpleTemplate, item));
+					var str = "";
+					$.each(json.bean.norms[0].normStock, function (i, item) {
+						str += '<span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.stock + '</span></span><br>';
 					});
 					$("#initialTock").html(str);
-		 		} else {//多单位
-		 			var item = new Array();
-		 			item.unitGroupName = json.bean.unitGroupName;
-		 			item.firstInUnit = json.bean.firstInUnit;
-		 			item.firstOutUnit = json.bean.firstOutUnit;
-		 			item.norms = json.bean.norms;
-		 			$("#showForm").append(getDataUseHandlebars(manyTemplate, item));
-		 		}
+				} else {//多单位
+					var item = new Array();
+					item.unitGroupName = json.bean.unitGroupName;
+					item.firstInUnit = json.bean.firstInUnit;
+					item.firstOutUnit = json.bean.firstOutUnit;
+					item.norms = json.bean.norms;
+					$("#showForm").append(getDataUseHandlebars(manyTemplate, item));
+				}
 
 				// 附件回显
 				skyeyeEnclosure.showDetails({"enclosureUploadBtn": json.bean.enclosureInfo});

@@ -16,7 +16,7 @@ layui.config({
 	    var depotId = parent.chooseDepotId;
 	    $.each(normsStock, function(i, item) {
     		if(item.depotId === depotId){
-    			$("#initialTock").val(item.initialTock);
+    			$("#stock").val(item.stock);
     			$("#depotName").html(item.depotName);
     			return false;
     		}
@@ -28,7 +28,7 @@ layui.config({
  	        if (winui.verifyForm(data.elem)) {
  	        	$.each(normsStock, function(i, item) {
  	        		if(item.depotId === depotId){
- 	        			item.initialTock = $("#initialTock").val();
+ 	        			item.stock = $("#stock").val();
  	        			return false;
  	        		}
  	        	});

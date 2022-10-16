@@ -23,7 +23,6 @@ layui.config({
 		var rowNum = 1; //表格的序号
 
 		var usetableTemplate = $("#usetableTemplate").html();
-		var beanTemplate = $("#beanTemplate").html();
 		var selOption = getFileContent('tpl/template/select-option.tpl');
 		// 已经选择的商品集合key：表格的行trId，value：商品信息
 		var allChooseProduct = {};
@@ -36,7 +35,7 @@ layui.config({
 		 	params: {id: parent.rowId},
 			method: 'GET',
 		 	pagination: false,
-		 	template: beanTemplate,
+		 	template: $("#beanTemplate").html(),
 		 	ajaxSendAfter:function (json) {
 		 		// 单据时间
 		 		laydate.render({elem: '#operTime', type: 'datetime', value: json.bean.applyTime, trigger: 'click'});
@@ -87,7 +86,7 @@ layui.config({
 				$("#mUnitId" + (rowNum - 1)).val(item.normsId);
 				// 商品回显
 				$("#materialId" + (rowNum - 1)).val(item.materialName + "(" + item.materialModel + ")");
-				$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
+				$("#allStock" + (rowNum - 1)).html(item.allStock);//库存回显
 				$("#rkNum" + (rowNum - 1)).val(item.operNum);//数量回显
 				$("#unitPrice" + (rowNum - 1)).html(item.unitPrice.toFixed(2));//单价回显
 				$("#amountOfMoney" + (rowNum - 1)).html(item.allPrice.toFixed(2));//金额回显
@@ -182,7 +181,7 @@ layui.config({
 						noError = true;
 						return false;
 					}
-					if(parseInt(rkNum.val()) > parseInt($("#currentTock" + rowNum).html())){
+					if(parseInt(rkNum.val()) > parseInt($("#allStock" + rowNum).html())){
 						rkNum.addClass("layui-form-danger");
 						rkNum.focus();
 						winui.window.msg('超过库存数量.', {icon: 2, time: 2000});
@@ -269,7 +268,7 @@ layui.config({
 				trId: "tr" + rowNum.toString(), // 行的id
 				materialId: "materialId" + rowNum.toString(), //商品id
 				mUnitId: "mUnitId" + rowNum.toString(), // 规格id
-				currentTock: "currentTock" + rowNum.toString(), // 库存id
+				allStock: "allStock" + rowNum.toString(), // 库存id
 				rkNum: "rkNum" + rowNum.toString(), // 数量id
 				unitPrice: "unitPrice"  + rowNum.toString(), // 单价id
 				amountOfMoney: "amountOfMoney"  + rowNum.toString(), // 金额id

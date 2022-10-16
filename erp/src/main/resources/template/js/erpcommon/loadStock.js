@@ -1,5 +1,5 @@
 /**
- * 根据规格加载库存
+ * 根据规格加载当前库存
  *
  * @param rowNum 表格行坐标
  * @param depotId 仓库id
@@ -11,11 +11,11 @@ function loadTockByDepotAndMUnit(rowNum, depotId) {
     if (!isNull(normsId)) {
         // 获取库存
         getStockAjaxByDepotAndNormsId(normsId, depotId, function (json) {
-            $("#currentTock" + rowNum).html(json.bean[normsId]);
+            $("#allStock" + rowNum).html(json.bean[normsId]);
         });
     } else {
         // 否则重置库存为空
-        $("#currentTock" + rowNum).html("");
+        $("#allStock" + rowNum).html("");
     }
 }
 
@@ -26,7 +26,7 @@ function loadTockByDepotAndMUnit(rowNum, depotId) {
  */
 function loadMaterialDepotStockByDepotId(depotId) {
     var normsIds = new Array();
-    var normsIdIndex = new Array();
+    var normsIdIndex = {};
     $.each(initTableChooseUtil.getDataRowIndex('productList'), function (i, item) {
         // 获取行坐标
         var thisRowKey = item;
@@ -43,7 +43,7 @@ function loadMaterialDepotStockByDepotId(depotId) {
     getStockAjaxByDepotAndNormsId(normsIds.join(','), depotId, function (json) {
         var stockMation = json.bean;
         $.each(normsIdIndex, function (rowIndex, normsId) {
-            $("#currentTock" + normsIdIndex[rowIndex]).html(stockMation[normsId]);
+            $("#allStock" + rowIndex).html(stockMation[normsId]);
         });
     });
 }

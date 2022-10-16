@@ -25,7 +25,7 @@ layui.config({
         data: $.extend(true, [], normsStock),
 	    cols: [[
 		    { field: 'depotName', title: '仓库', align: 'left', width: 200},
-	        { field: 'initialTock', title: '初始数量', align: 'left', width: 80},
+	        { field: 'stock', title: '初始数量', align: 'left', width: 80},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 140, toolbar: '#tableBar'}
 	    ]],
 	    done: function(json) {
@@ -77,7 +77,7 @@ layui.config({
 		});
 	}
 	
-	//编辑
+	// 编辑
 	function edit(data) {
 		chooseDepotId = data.depotId;
 		_openNewWindows({
@@ -94,7 +94,6 @@ layui.config({
 	
 	form.render();
     form.on('submit(formAddBean)', function (data) {
-    	
         if (winui.verifyForm(data.elem)) {
         	parent.normsStock = [].concat(normsStock);
         	parent.layer.close(index);
