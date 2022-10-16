@@ -69,7 +69,7 @@ layui.config({
 		    elem: '#messageTable',
 		    method: 'post',
 		    url: schoolBasePath + 'schoolquestionbank019',
-		    where: getTablePatams(),
+		    where: getTableParams(),
 		    even: true,
 		    page: true,
 		    limits: getLimits(),
@@ -86,10 +86,10 @@ layui.config({
 		        		return '<span style="color: goldenrod">' + d.typeName + '</span>';
 		        	}
 		        }},
-		        { field: 'cName', width: 100, title: '题型'},
-		        { field: 'schoolName', width: 150, title: '学校'},
-	            { field: 'gradeName', width: 80, align: 'center', title: '年级'},
-	            { field: 'subjectName', width: 80, align: 'center', title: '科目'},
+		        { field: 'cName', width: 100, title: '题型' },
+		        { field: 'schoolName', width: 150, title: '学校' },
+	            { field: 'gradeName', width: 80, align: 'center', title: '年级' },
+	            { field: 'subjectName', width: 80, align: 'center', title: '科目' },
 		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 140 }
 		    ]],
 		    done: function(json) {
@@ -148,10 +148,10 @@ layui.config({
 	});
     
     function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: getTablePatams()});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
     
-    function getTablePatams(){
+    function getTableParams(){
     	return {
     		schoolId: $("#schoolId").val(), 
     		gradeId: gradeId, 

@@ -67,7 +67,7 @@ layui.config({
 		    elem: '#myGetTable',
 		    method: 'post',
 		    url: flowableBasePath + 'checkwork007',
-		    where: getTablePatams(),
+		    where: getTableParams(),
 		    even: true,
 		    page: true,
 		    limits: getLimits(),
@@ -76,7 +76,7 @@ layui.config({
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'checkDate', title: '申诉内容', align: 'left', width: 160, templet: function (d) {
 		        	var text = d.checkDate;
-		        	return text += d.situation;
+		        	return text + d.situation;
 		        }},
 		        { field: 'appealName', title: '申诉原因', align: 'center', width: 100 },
 		        { field: 'appealReason', title: '申诉具体原因', align: 'left', width: 170 },
@@ -141,7 +141,7 @@ layui.config({
 	
 	// 搜索员工考勤申诉审批
 	$("body").on("click", "#searchForm2", function() {
-    	table.reloadData("myGetTable", {page: {curr: 1}, where: getTablePatams()});
+    	table.reloadData("myGetTable", {page: {curr: 1}, where: getTableParams()});
 	});
     
     // 刷新员工考勤申诉审批
@@ -150,10 +150,10 @@ layui.config({
     });
     
     function reloadMyGetTable(){
-    	table.reloadData("myGetTable", {where: getTablePatams()});
+    	table.reloadData("myGetTable", {where: getTableParams()});
     }
     
-    function getTablePatams(){
+    function getTableParams(){
     	if(isNull($("#createId").val())) {
     		createid = "";
     	}

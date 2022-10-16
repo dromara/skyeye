@@ -20,7 +20,7 @@ layui.config({
         elem: '#messageTable',
         method: 'post',
         url: flowableBasePath + 'erpfarm001',
-        where: getTablePatams(),
+        where: getTableParams(),
         even: true,
         page: true,
         overflow: {
@@ -78,7 +78,7 @@ layui.config({
     form.render();
     form.on('submit(formSearch)', function (data) {
         if (winui.verifyForm(data.elem)) {
-            table.reloadData("messageTable", {page: {curr: 1}, where: getTablePatams()})
+            table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
         }
         return false;
     });
@@ -158,10 +158,10 @@ layui.config({
 
     //刷新
     function loadTable() {
-        table.reloadData("messageTable", {where: getTablePatams()});
+        table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTablePatams(){
+    function getTableParams(){
         return {
             farmNumber: $("#farmNumber").val(),
             farmName: $("#farmName").val(),

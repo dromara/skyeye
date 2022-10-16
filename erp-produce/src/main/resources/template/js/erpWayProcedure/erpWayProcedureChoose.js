@@ -16,7 +16,7 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: flowableBasePath + 'erpwayprocedure009',
-	    where: getTablePatams(),
+	    where: getTableParams(),
 	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
@@ -62,7 +62,7 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			table.reloadData("messageTable", {page: {curr: 1}, where: getTablePatams()})
+			table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
 		}
 		return false;
 	});
@@ -72,10 +72,10 @@ layui.config({
     });
     
     function loadTable() {
-    	table.reloadData("messageTable", {where: getTablePatams()});
+    	table.reloadData("messageTable", {where: getTableParams()});
     }
 
-	function getTablePatams(){
+	function getTableParams(){
 		return {
 			wayNumber: $("#wayNumber").val(),
 			wayName: $("#wayName").val()

@@ -69,7 +69,7 @@ layui.config({
 		    elem: '#messageTable',
 		    method: 'post',
 		    url: schoolBasePath + 'knowledgepoints009',
-		    where: getTablePatams(),
+		    where: getTableParams(),
 		    even: true,
 		    page: true,
 		    limits: getLimits(),
@@ -140,10 +140,10 @@ layui.config({
 	});
     
     function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: getTablePatams()});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
     
-    function getTablePatams(){
+    function getTableParams(){
     	return {
     		schoolId: $("#schoolId").val(), 
     		gradeId: gradeId, 

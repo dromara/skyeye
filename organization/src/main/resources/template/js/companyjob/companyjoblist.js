@@ -46,7 +46,7 @@ layui.config({
 	    });
 	}
 	
-	function initloadTable() {
+	function initLoadTable() {
 		tableTree.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',

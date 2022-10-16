@@ -270,7 +270,7 @@ var postDownLoadFile = function(options) {
  * 权限验证
  * @param urlNum
  */
-function auth(urlNum){
+function auth(urlNum) {
 	var authList = JSON.parse(localStorage.getItem("authpoints"));
 	if (!isNull(authList)) {
 		for (var i = 0; i < authList.length; i++) {

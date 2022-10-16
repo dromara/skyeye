@@ -20,7 +20,7 @@ layui.config({
         elem: '#messageTable',
         method: 'post',
         url: flowableBasePath + 'erpmachin001',
-        where: getTablePatams(),
+        where: getTableParams(),
         even: true,
         page: true,
         overflow: {
@@ -168,12 +168,11 @@ layui.config({
         loadTable();
     });
 
-    // 刷新
     function loadTable() {
-        table.reloadData("messageTable", {where: getTablePatams()});
+        table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTablePatams(){
+    function getTableParams(){
     	return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 

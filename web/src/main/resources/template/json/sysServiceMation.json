@@ -21,6 +21,14 @@
     "assemblySheetOrder": {"name": "组装订单", "key": "com.skyeye.other.service.impl.AssemblySheetServiceImpl"},
     "allocationFormOrder": {"name": "调拨订单", "key": "com.skyeye.other.service.impl.AllocationServiceImpl"},
 
+    "putAcceptanceWarehousing": {"name": "验收入库单", "key": "com.skyeye.machin.service.impl.ErpAcceptanceReceiptServiceImpl"},
+    "machinHeader": {"name": "加工单", "key": "com.skyeye.machin.service.impl.ErpMachinServiceImpl"},
+    "machinChild": {"name": "工序验收单", "key": "com.skyeye.machin.service.impl.ErpProcessAcceptanceSheetServiceImpl"},
+    "productionHead": {"name": "生产计划单", "key": "com.skyeye.production.service.impl.ErpProductionServiceImpl"},
+    "pickPicking": {"name": "领料单", "key": "com.skyeye.pick.service.impl.RequisitionMaterialServiceImpl"},
+    "pickReplenishment": {"name": "补料单", "key": "com.skyeye.pick.service.impl.PatchMaterialServiceImpl"},
+    "pickReturn": {"name": "退料单", "key": "com.skyeye.pick.service.impl.ReturnMaterialServiceImpl"},
+
     "proworkLoad": {"name": "项目工作量审核", "key": "com.skyeye.service.impl.ProWorkloadServiceImpl"},
     "proTask": {"name": "项目任务审核", "key": "com.skyeye.service.impl.ProTaskServiceImpl"},
     "proProject": {"name": "项目立项审批", "key": "com.skyeye.service.impl.ProProjectServiceImpl"},
@@ -46,14 +54,6 @@
 
     "assetArticlesUse": {"name": "用品领用", "key": "com.skyeye.eve.articles.service.impl.AssetArticlesApplyUseServiceImpl"},
     "assetArticlesPurchase": {"name": "用品采购", "key": "com.skyeye.eve.articles.service.impl.AssetArticlesApplyPurchaseServiceImpl"},
-
-    "putAcceptanceWarehousing": {"name": "验收入库单", "key": "com.skyeye.service.impl.AcceptanceReceiptServiceImpl"},
-    "machinHeader": {"name": "加工单", "key": "com.skyeye.service.impl.ErpMachinServiceImpl"},
-    "machinChild": {"name": "工序验收单", "key": "com.skyeye.service.impl.ErpProcessAcceptanceSheetServiceImpl"},
-    "productionHead": {"name": "生产计划单", "key": "com.skyeye.service.impl.ErpProductionServiceImpl"},
-    "pickPicking": {"name": "领料单", "key": "com.skyeye.pick.service.impl.RequisitionMaterialServiceImpl"},
-    "pickReplenishment": {"name": "补料单", "key": "com.skyeye.pick.service.impl.PatchMaterialServiceImpl"},
-    "pickReturn": {"name": "退料单", "key": "com.skyeye.pick.service.impl.ReturnMaterialServiceImpl"},
 
     "incomeOrder": {"name": "财务明细账", "key": "com.skyeye.service.impl.IncomeServiceImpl"},
 
