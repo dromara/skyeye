@@ -4,25 +4,28 @@
     "sealManageRevert": {"name": "印章归还", "key": "com.skyeye.eve.seal.service.impl.SealApplyRevertServiceImpl"},
     "sealManageBorrow": {"name": "印章借用", "key": "com.skyeye.eve.seal.service.impl.SealApplyBorrowServiceImpl"},
 
-    "putIsSalesReturns": {"name": "销售退货单申请", "key": "com.skyeye.service.impl.SalesReturnsServiceImpl"},
-    "outIsSalesOutlet": {"name": "销售出库单申请", "key": "com.skyeye.service.impl.SalesOutLetServiceImpl"},
-    "outchaseOrder": {"name": "销售订单申请", "key": "com.skyeye.service.impl.SalesOrderServiceImpl"},
+    "putIsSalesReturns": {"name": "销售退货单申请", "key": "com.skyeye.seal.service.impl.SalesReturnsServiceImpl"},
+    "outIsSalesOutlet": {"name": "销售出库单申请", "key": "com.skyeye.seal.service.impl.SalesOutLetServiceImpl"},
+    "outchaseOrder": {"name": "销售订单申请", "key": "com.skyeye.seal.service.impl.SalesOrderServiceImpl"},
 
-    "putIsRetailReturns": {"name": "零售退货单申请", "key": "com.skyeye.service.impl.RetailReturnsServiceImpl"},
-    "outIsRetail": {"name": "零售出库单申请", "key": "com.skyeye.service.impl.RetailOutLetServiceImpl"},
+    "putIsRetailReturns": {"name": "零售退货单申请", "key": "com.skyeye.retail.service.impl.RetailReturnsServiceImpl"},
+    "outIsRetail": {"name": "零售出库单申请", "key": "com.skyeye.retail.service.impl.RetailOutLetServiceImpl"},
 
-    "outIsPurchaseReturns": {"name": "采购退货单申请", "key": "com.skyeye.service.impl.PurchaseReturnsServiceImpl"},
-    "putIsPurchase": {"name": "采购入库单申请", "key": "com.skyeye.service.impl.PurchasePutServiceImpl"},
-    "purchaseOrder": {"name": "采购订单申请", "key": "com.skyeye.service.impl.PurchaseOrderServiceImpl"},
+    "outIsPurchaseReturns": {"name": "采购退货单申请", "key": "com.skyeye.purchase.service.impl.PurchaseReturnsServiceImpl"},
+    "putIsPurchase": {"name": "采购入库单申请", "key": "com.skyeye.purchase.service.impl.PurchasePutServiceImpl"},
+    "purchaseOrder": {"name": "采购订单申请", "key": "com.skyeye.purchase.service.impl.PurchaseOrderServiceImpl"},
+
+    "putIsOthers": {"name": "其他入库单申请", "key": "com.skyeye.other.service.impl.OtherWareHousServiceImpl"},
+    "outIsOthers": {"name": "其他出库单申请", "key": "com.skyeye.other.service.impl.OtherOutLetsServiceImpl"},
+    "splitListOrder": {"name": "拆分订单", "key": "com.skyeye.other.service.impl.SplitListServiceImpl"},
+    "assemblySheetOrder": {"name": "组装订单", "key": "com.skyeye.other.service.impl.AssemblySheetServiceImpl"},
+    "allocationFormOrder": {"name": "调拨订单", "key": "com.skyeye.other.service.impl.AllocationServiceImpl"},
 
     "proworkLoad": {"name": "项目工作量审核", "key": "com.skyeye.service.impl.ProWorkloadServiceImpl"},
     "proTask": {"name": "项目任务审核", "key": "com.skyeye.service.impl.ProTaskServiceImpl"},
     "proProject": {"name": "项目立项审批", "key": "com.skyeye.service.impl.ProProjectServiceImpl"},
     "proFile": {"name": "项目文档审核", "key": "com.skyeye.service.impl.ProFileServiceImpl"},
     "proCostExpense": {"name": "项目费用报销审核", "key": "com.skyeye.service.impl.ProCostExpenseServiceImpl"},
-
-    "putIsOthers": {"name": "其他入库单申请", "key": "com.skyeye.service.impl.OtherWareHousServiceImpl"},
-    "outIsOthers": {"name": "其他出库单申请", "key": "com.skyeye.service.impl.OtherOutLetsServiceImpl"},
 
     "licenceManageRevert": {"name": "证照归还", "key": "com.skyeye.eve.licence.service.impl.LicenceApplyRevertServiceImpl"},
     "licenceManageBorrow": {"name": "证照借用", "key": "com.skyeye.eve.licence.service.impl.LicenceApplyBorrowServiceImpl"},
@@ -44,9 +47,6 @@
     "assetArticlesUse": {"name": "用品领用", "key": "com.skyeye.eve.articles.service.impl.AssetArticlesApplyUseServiceImpl"},
     "assetArticlesPurchase": {"name": "用品采购", "key": "com.skyeye.eve.articles.service.impl.AssetArticlesApplyPurchaseServiceImpl"},
 
-    "splitListOrder": {"name": "拆分订单", "key": "com.skyeye.service.impl.SplitListServiceImpl"},
-    "assemblySheetOrder": {"name": "组装订单", "key": "com.skyeye.service.impl.AssemblySheetServiceImpl"},
-    "allocationFormOrder": {"name": "调拨订单", "key": "com.skyeye.service.impl.AllocationServiceImpl"},
     "putAcceptanceWarehousing": {"name": "验收入库单", "key": "com.skyeye.service.impl.AcceptanceReceiptServiceImpl"},
     "machinHeader": {"name": "加工单", "key": "com.skyeye.service.impl.ErpMachinServiceImpl"},
     "machinChild": {"name": "工序验收单", "key": "com.skyeye.service.impl.ErpProcessAcceptanceSheetServiceImpl"},
