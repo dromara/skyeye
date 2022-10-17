@@ -2,6 +2,8 @@
 ## 历史更新资讯
 
 - 2022年
+  - [2022-10-17 智能制造云办公 v3.8.5 发布，ERP 更新](https://www.oschina.net/news/213885)
+  - [2022-10-08 智能制造云办公 v3.8.4 发布，工作流更新](https://www.oschina.net/news/212813)
   - [2022-10-04 智能制造云办公 v3.8.3 发布，ERP、工作流 更新](https://www.oschina.net/news/212530/skyeye-3-8-3-released)
   - [2022-09-26 智能制造云办公 v3.8.2 发布，ERP 更新](https://www.oschina.net/news/211675/win10-skyeye-3-8-2-released)
   - [2022-09-19 智能制造云办公 v3.8.1 发布，编码管理](https://www.oschina.net/news/210811)
