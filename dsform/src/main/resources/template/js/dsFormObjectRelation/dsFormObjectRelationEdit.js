@@ -22,12 +22,16 @@ layui.config({
         ajaxSendLoadBefore: function (hdb) {
         },
         ajaxSendAfter: function (json) {
-            $.each(json.bean.dsFormPageMations, function (i, item) {
+            if (!isNull(json.bean.dsFormPageMations)) {
+                $.each(json.bean.dsFormPageMations, function (i, item) {
+                    addRow();
+                    $("#dsFormChooseList" + (rowNum - 1)).val(item.pageNum);
+                    $("#dsFormChooseList" + (rowNum - 1)).attr("dataId", item.id);
+                    $("#pageName" + (rowNum - 1)).html(item.pageName);
+                })
+            } else {
                 addRow();
-                $("#dsFormChooseList" + (rowNum - 1)).val(item.pageNum);
-                $("#dsFormChooseList" + (rowNum - 1)).attr("dataId", item.id);
-                $("#pageName" + (rowNum - 1)).html(item.pageName);
-            })
+            }
 
             matchingLanguage();
             form.render();

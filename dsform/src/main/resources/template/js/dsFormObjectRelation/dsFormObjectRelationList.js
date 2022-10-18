@@ -27,8 +27,8 @@ layui.config({
             { field: 'serviceName', title: '服务名称', align: 'left', width: 120, templet: function (d) {
                 return '<a lay-event="details" class="notice-title-click">' + d.serviceName + '</a>';
             }},
-            { field: 'className', title: '服务编码', align: 'left', width: 120 },
-            { field: 'appId', title: '应用ID', align: 'left', width: 120 },
+            { field: 'className', title: '服务编码', align: 'left', width: 400 },
+            { field: 'appId', title: '应用ID', align: 'left', width: 240 },
             { field: 'appName', title: '应用名称', align: 'left', width: 120 },
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
@@ -59,7 +59,7 @@ layui.config({
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/dsFormObjectRelation/dsFormObjectRelationEdit.html",
-            title: systemLanguage["com.skyeye.editPageTitle"][languageType],
+            title: '绑定表单',
             pageId: "dsFormObjectRelationEdit",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
@@ -71,7 +71,6 @@ layui.config({
     // 详情
     function details(data) {
         rowId = data.id;
-        var url = erpOrderUtil.getErpDetailUrl(data);
         _openNewWindows({
             url: "../../tpl/dsFormObjectRelation/dsFormObjectRelationDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
