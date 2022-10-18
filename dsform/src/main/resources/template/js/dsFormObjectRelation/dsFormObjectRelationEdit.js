@@ -29,18 +29,6 @@ layui.config({
                 $("#pageName" + (rowNum - 1)).html(item.pageName);
             })
 
-            dsFormUtil.loadDsFormPageTypeByPId("firstTypeId", "0");
-            $("#firstTypeId").val(json.bean.firstTypeId);
-
-            dsFormUtil.loadDsFormPageTypeByPId("secondTypeId", json.bean.firstTypeId);
-            $("#secondTypeId").val(json.bean.secondTypeId);
-
-            form.on('select(firstTypeId)', function(data) {
-                var thisRowValue = data.value;
-                dsFormUtil.loadDsFormPageTypeByPId("secondTypeId", isNull(thisRowValue) ? "-" : thisRowValue);
-                form.render('select');
-            });
-
             matchingLanguage();
             form.render();
             form.on('submit(formEditBean)', function (data) {
@@ -54,12 +42,6 @@ layui.config({
                     });
 
                     var params = {
-                        title: $("#title").val(),
-                        titleEn: $("#titleEn").val(),
-                        codeNum: $("#codeNum").val(),
-                        firstTypeId: $("#firstTypeId").val(),
-                        secondTypeId: $("#secondTypeId").val(),
-                        remark: $("#remark").val(),
                         dsFormPageIds: formPageId.join(","),
                         id: parent.rowId
                     };

@@ -20,44 +20,27 @@
             <hr>
         </div>
         <div class="layui-form-item layui-col-xs6">
-            <label class="layui-form-label">中文名称<i class="red">*</i></label>
-            <div class="layui-input-block">
-                <input type="text" id="title" name="title" win-verify="required" placeholder="请输入中文名称" class="layui-input" value="{{title}}"/>
-                <div class="layui-form-mid layui-word-aux">该名称不能重复且不区分父子级别。</div>
+            <label class="layui-form-label">服务名称：</label>
+            <div class="layui-input-block ver-center">
+                {{serviceName}}
             </div>
         </div>
         <div class="layui-form-item layui-col-xs6">
-            <label class="layui-form-label">英文名称<i class="red">*</i></label>
-            <div class="layui-input-block">
-                <input type="text" id="titleEn" name="titleEn" win-verify="required" placeholder="请输入英文名称" class="layui-input" value="{{titleEn}}"/>
-                <div class="layui-form-mid layui-word-aux">该名称不能重复且不区分父子级别。</div>
+            <label class="layui-form-label">服务编码：</label>
+            <div class="layui-input-block ver-center">
+                {{className}}
             </div>
         </div>
         <div class="layui-form-item layui-col-xs6">
-            <label class="layui-form-label">一级分类<i class="red">*</i></label>
-            <div class="layui-input-block">
-                <select lay-filter="firstTypeId" lay-search="" win-verify="required" id="firstTypeId">
-                </select>
+            <label class="layui-form-label">应用ID：</label>
+            <div class="layui-input-block ver-center">
+                {{appId}}
             </div>
         </div>
         <div class="layui-form-item layui-col-xs6">
-            <label class="layui-form-label">二级分类<i class="red">*</i></label>
-            <div class="layui-input-block">
-                <select lay-filter="secondTypeId" lay-search="" win-verify="required" id="secondTypeId">
-                </select>
-            </div>
-        </div>
-        <div class="layui-form-item layui-col-xs12">
-            <label class="layui-form-label">唯一编码<i class="red">*</i></label>
-            <div class="layui-input-block">
-                <input type="text" id="codeNum" name="codeNum" win-verify="required" placeholder="请输入唯一编码，例如：CGDD" class="layui-input" value="{{code}}"/>
-                <div class="layui-form-mid layui-word-aux">唯一编码不区分父子级别。</div>
-            </div>
-        </div>
-        <div class="layui-form-item layui-col-xs12">
-            <label class="layui-form-label">备注</label>
-            <div class="layui-input-block">
-                <textarea id="remark" name="remark" placeholder="请输入备注" class="layui-textarea">{{remark}}</textarea>
+            <label class="layui-form-label">应用名称：</label>
+            <div class="layui-input-block ver-center">
+                {{appName}}
             </div>
         </div>
 
