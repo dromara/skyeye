@@ -12,7 +12,7 @@ layui.config({
 
     showGrid({
         id: "showForm",
-        url: flowableBasePath + "dsFormObjectRelation004",
+        url: reqBasePath + "dsFormObjectRelation004",
         params: {id: parent.rowId},
         pagination: false,
         method: 'GET',

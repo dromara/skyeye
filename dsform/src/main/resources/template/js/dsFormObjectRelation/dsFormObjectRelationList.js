@@ -16,7 +16,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: flowableBasePath + 'dsFormObjectRelation001',
+        url: reqBasePath + 'dsFormObjectRelation001',
         where: getTableParams(),
         even: true,
         page: true,

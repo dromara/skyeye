@@ -14,6 +14,7 @@ layui.config({
 
     var firstTypeCode = GetUrlParam("firstTypeCode");
 
+    // todo 待替换
     /********* tree 处理   start *************/
     var orderType = "";
     var ztree = null;

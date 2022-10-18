@@ -82,6 +82,7 @@ layui.config({
     });
 
     /********* tree 处理   start *************/
+    // todo 待替换
     var orderType = "";
     var ztree = null;
     fsTree.render({

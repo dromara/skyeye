@@ -19,7 +19,7 @@ layui.config({
 	
 	authBtn('1567732055673');//保存控件
 	
-	AjaxPostUtil.request({url: flowableBasePath + "dsformpage004", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
+	AjaxPostUtil.request({url: flowableBasePath + "dsformpage004", params: {pageId: parent.rowId}, type: 'json', method: 'GET', callback: function (json) {
 		// 加载表单控件
 		loadLeftBoxItem();
 		// 加载拖拽

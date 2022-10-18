@@ -113,7 +113,7 @@ var dsFormUtil = {
             dsFormObjectRelationCode: isNull(code) ? "" : code,
             dsFormObjectRelationId: isNull(dsFormObjectRelationId) ? "" : dsFormObjectRelationId
         };
-        AjaxPostUtil.request({url: flowableBasePath + "dsFormObjectRelation006", params: params, method: "GET", type: 'json', callback: function(json) {
+        AjaxPostUtil.request({url: reqBasePath + "dsFormObjectRelation006", params: params, method: "GET", type: 'json', callback: function(json) {
             dsFormUtil.loadDsFormItem(showBoxId, json);
         }, async: false});
     },
