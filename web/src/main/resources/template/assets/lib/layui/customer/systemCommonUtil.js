@@ -627,7 +627,8 @@ var systemCommonUtil = {
         var params = {
             className: encodeURIComponent(skyeyeClassEnum[code]["className"])
         };
-        if (!isNull(skyeyeClassEnum[code]["filterKey"])) {
+        if (!isNull(skyeyeClassEnum[code]["filterValue"])) {
+            params["filterValue"] = skyeyeClassEnum[code]["filterValue"];
             params["filterKey"] = skyeyeClassEnum[code]["filterKey"];
         }
         AjaxPostUtil.request({url: reqBasePath + "getEnumDataByClassName", params: params, type: 'json', method: "POST", callback: function(json) {
