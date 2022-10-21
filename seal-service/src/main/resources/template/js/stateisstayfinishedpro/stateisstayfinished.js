@@ -66,8 +66,8 @@ layui.config({
 							if(thisRowValue == bean.id){// 获取规格
 								// 获取当前行数量
 								var rkNum = parseInt($("#rkNum" + thisRowNum).val());
-								$("#unitPrice" + thisRowNum).html(bean.retailPrice.toFixed(2));// 单价
-								$("#amountOfMoney" + thisRowNum).html((rkNum * parseFloat(bean.retailPrice)).toFixed(2));// 金额
+								$("#unitPrice" + thisRowNum).html(bean.normsRetailPrice.toFixed(2));// 单价
+								$("#amountOfMoney" + thisRowNum).html((rkNum * parseFloat(bean.normsRetailPrice)).toFixed(2));// 金额
 								return false;
 							}
 						});

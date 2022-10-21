@@ -56,19 +56,19 @@
 	        <div class="layui-form-item layui-col-xs12">
 	            <label class="layui-form-label">商品名称：</label>
 	            <div class="layui-input-block ver-center">
-	                {{materialName}}
+	                {{normMation.materialName}}
 	            </div>
 	        </div>
 	        <div class="layui-form-item layui-col-xs6">
 	            <label class="layui-form-label">商品型号：</label>
 	            <div class="layui-input-block ver-center">
-	                {{materialModel}}
+	                {{normMation.materialModel}}
 	            </div>
 	        </div>
 	        <div class="layui-form-item layui-col-xs6">
 	            <label class="layui-form-label">计量单位：</label>
 	            <div class="layui-input-block ver-center">
-	                {{unitName}}
+	                {{normMation.unitName}}
 	            </div>
 	        </div>
 			<div class="layui-form-item layui-col-xs6">
@@ -133,6 +133,7 @@
 	
 	<!-- 表格行 -->
 	<script type="text/html" id="tableBody">
+		<div class="diy" style="width: 13%">{{productName}}</div>
 		<div class="diy" style="width: 13%">{{productModel}}</div>
 		<div class="diy" style="width: 6%">{{unitName}}</div>
 		<div class="diy procedureBox" style="width: 15%" id="procedureBox{{productId}}" 

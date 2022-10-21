@@ -186,7 +186,7 @@ layui.config({
  	        			normsId: item.normsId,
  	        			number: $("#proposal" + item.materialId).val(),
  	        			unitNumber: item.needNum,
- 	        			unitPrice: item.normsPurchasePrice
+ 	        			unitPrice: item.normsEstimatePurchasePrice
  	        		});
  	        	});
  	        	//子件清单信息

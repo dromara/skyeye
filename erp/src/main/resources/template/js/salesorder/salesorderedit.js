@@ -192,7 +192,7 @@ layui.config({
 	}
 
 	// 商品规格加载变化事件
-	mUnitChangeEvent(form, allChooseProduct, "salePrice");
+	mUnitChangeEvent(form, allChooseProduct, "normsSalePrice");
 
 	// 保存为草稿
 	form.on('submit(formEditBean)', function(data) {

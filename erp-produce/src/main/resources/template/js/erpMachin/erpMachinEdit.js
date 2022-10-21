@@ -60,9 +60,9 @@ layui.config({
 				//加工产品信息
 				machinPro = {
 					materialId: data.materialId,
-					materialName: data.materialName,
-					materialModel: data.materialModel,
-					unitList: data.unitList
+					materialName: data.normMation.materialName,
+					materialModel: data.normMation.materialModel,
+					unitList: data.normMation.unitList
 				};
 				$("#productName").val(machinPro.materialName);
 				$("#productModel").val(machinPro.materialModel);
@@ -126,8 +126,8 @@ layui.config({
 					if(thisRowValue == bean.id){//获取规格
 						//获取当前行数量
 						var rkNum = parseInt($("#rkNum" + thisRowNum).val());
-						$("#unitPrice" + thisRowNum).val(bean.estimatePurchasePrice.toFixed(2));//单价
-						$("#amountOfMoney" + thisRowNum).val((rkNum * parseFloat(bean.estimatePurchasePrice)).toFixed(2));//金额
+						$("#unitPrice" + thisRowNum).val(bean.normsEstimatePurchasePrice.toFixed(2));//单价
+						$("#amountOfMoney" + thisRowNum).val((rkNum * parseFloat(bean.normsEstimatePurchasePrice)).toFixed(2));//金额
 						return false;
 					}
 				});

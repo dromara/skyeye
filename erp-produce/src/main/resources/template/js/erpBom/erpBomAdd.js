@@ -81,7 +81,7 @@ layui.config({
         		}
         	});
         	if(unitIndex >= 0){
-        		return unitList[unitIndex].salePrice;
+        		return unitList[unitIndex].normsSalePrice;
         	}
         }
         

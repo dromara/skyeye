@@ -28,9 +28,9 @@ layui.config({
             { field: 'title', title: 'bom方案名称', align: 'left',width: 150, templet: function (d) {
                 return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 		    }},
-		    { field: 'materialName', title: '商品名称', align: 'left',width: 150 },
-            { field: 'materialModel', title: '商品型号', align: 'left',width: 150 },
-            { field: 'unitName', title: '计量单位', align: 'center',width: 100 },
+		    { field: 'materialName', title: '商品名称', align: 'left',width: 150, templet: function (d) {return d.normMation.materialName}},
+            { field: 'materialModel', title: '商品型号', align: 'left',width: 150, templet: function (d) {return d.normMation.materialModel}},
+            { field: 'unitName', title: '计量单位', align: 'center',width: 100, templet: function (d) {return d.normMation.unitName}},
             { field: 'makeNum', title: '数量', align: 'center',width: 80 },
             { field: 'consumablesPrice', title: '耗材总费用', align: 'right',width: 100 },
             { field: 'procedurePrice', title: '工序总费用', align: 'right',width: 100 },

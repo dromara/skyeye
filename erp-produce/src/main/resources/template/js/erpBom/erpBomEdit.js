@@ -22,7 +22,7 @@ layui.config({
         	
 	    var selTemplate = getFileContent('tpl/template/select-option-must.tpl');
 	    
-	    AjaxPostUtil.request({url: flowableBasePath + "erpbom005", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
+	    AjaxPostUtil.request({url: flowableBasePath + "erpbom005", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
 			$("#showForm").html(getDataUseHandlebars($("#mainHtml").html(), json));
 			textool.init({eleId: 'remark', maxlength: 200});
 
@@ -103,7 +103,7 @@ layui.config({
         		}
         	});
         	if(unitIndex >= 0){
-        		return unitList[unitIndex].salePrice;
+        		return unitList[unitIndex].normsSalePrice;
         	}
         }
         
@@ -319,8 +319,7 @@ layui.config({
 						var str = "";
 						var title = "";
 						$.each(procedureMationList, function(i, item) {
-							str += '' +
-									'<span class="layui-badge layui-bg-gray">' + item.number + '</span>' + item.procedureName + '，';
+							str += '<span class="layui-badge layui-bg-gray">' + item.number + '</span>' + item.procedureName + '，';
 							title += item.number + '、' + item.procedureName + '\n';
 						});
 						$("#procedureBox" + proId).html('<img class="procedureSel" id="procedureSel' + proId + '" src="../../assets/images/forum-menu.png"/>' + str);
