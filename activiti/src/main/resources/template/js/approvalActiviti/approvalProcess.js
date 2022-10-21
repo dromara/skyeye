@@ -36,7 +36,7 @@ layui.config({
     	tableTemplate = $("#tableTemplate").html(),//表格展示
 		voucherTemplate = $("#voucherTemplate").html();//凭证展示
 
-    AjaxPostUtil.request({url: flowableBasePath + "activitimode016", params: {taskId: taskId, processInstanceId: processInstanceId}, type: 'json', callback: function(j){
+    AjaxPostUtil.request({url: flowableBasePath + "activitimode016", params: {taskId: taskId, processInstanceId: processInstanceId}, type: 'json', method: 'GET', callback: function(j){
 		pageTypes = isNull(j.bean.pageTypes) ? '1' : j.bean.pageTypes;
 		var jsonStr = "";//实体json对象
 		var str = "";
@@ -48,7 +48,7 @@ layui.config({
 				bean: item
 			};
 			jsonArray.push(item);
-			//判断表单项在该流程节点是否可以编辑
+			// 判断表单项在该流程节点是否可以编辑
 			if((!isNull(editableNodeId) && ("," + item.editableNodeId + ",").indexOf("," + editableNodeId + ",") > -1)
 				|| (!isNull(editableNodeName) && ("," + item.editableNodeName + ",").indexOf("," + editableNodeName + ",") > -1)){
 				var formItem = item.formItem;
