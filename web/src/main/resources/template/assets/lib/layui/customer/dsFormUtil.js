@@ -41,7 +41,7 @@ var dsFormUtil = {
      *
      * @param id dom对象的id
      */
-    initDsFormChooseBtn: function(id, initData){
+    initDsFormChooseBtn: function(id, initData) {
         var btnId = id + 'Btn';
         $("#" + id).attr(dsFormUtil.dsFormDataKey, JSON.stringify(initData));
         dsFormUtil.initData(id, btnId);
@@ -60,7 +60,7 @@ var dsFormUtil = {
      * @param id box的id
      * @param btnId 按钮id
      */
-    initData: function(id, btnId){
+    initData: function(id, btnId) {
         var btnHtml = getDataUseHandlebars(dsFormUtil.dsFormBtnTemplate, {btnId: btnId});
         var str = "";
         var dsFormChooseList = JSON.parse($("#" + id).attr(dsFormUtil.dsFormDataKey));
@@ -77,7 +77,7 @@ var dsFormUtil = {
      * @param id box的id
      * @returns {*[]}
      */
-    getJSONDsFormListByBoxId: function (id){
+    getJSONDsFormListByBoxId: function (id) {
         return [].concat(JSON.parse($("#" + id).attr(dsFormUtil.dsFormDataKey)));
     },
 
@@ -87,7 +87,7 @@ var dsFormUtil = {
      * @param domId 要加载的dom对象的id
      * @param parentId 父id
      */
-    loadDsFormPageTypeByPId: function (domId, parentId){
+    loadDsFormPageTypeByPId: function (domId, parentId) {
         showGrid({
             id: domId,
             url: flowableBasePath + "dsformpagetype006",
@@ -108,7 +108,7 @@ var dsFormUtil = {
      * @param showBoxId 要追加的boxid后面
      * @param code 动态表单-----业务逻辑表单关联表中的code
      */
-    loadPageByCode: function(showBoxId, code, dsFormObjectRelationId){
+    loadPageByCode: function(showBoxId, code, dsFormObjectRelationId) {
         var params = {
             dsFormObjectRelationCode: isNull(code) ? "" : code,
             dsFormObjectRelationId: isNull(dsFormObjectRelationId) ? "" : dsFormObjectRelationId
@@ -118,7 +118,7 @@ var dsFormUtil = {
         }, async: false});
     },
 
-    loadDsFormItem: function(showBoxId, json){
+    loadDsFormItem: function(showBoxId, json) {
         $.each(json.rows, function(j, bean){
             var customBoxId = bean.id;
             $("#" + showBoxId).append(getDataUseHandlebars(dsFormUtil.customDsFormBox, bean));
@@ -190,7 +190,7 @@ var dsFormUtil = {
     /**
      * 获取保存的数据
      */
-    savePageData: function (showBoxId, objectId){
+    savePageData: function (showBoxId, objectId) {
         var result = {};
         $.each($("#" + showBoxId + " .ds-form-page"), function (i, item) {
             var _item = $(item);
@@ -286,7 +286,7 @@ var dsFormUtil = {
      * @param showBoxId要追加的boxid后面
      * @param objectId 绑定的objectId
      */
-    loadPageShowDetailsByObjectId: function(showBoxId, objectId){
+    loadPageShowDetailsByObjectId: function(showBoxId, objectId) {
         AjaxPostUtil.request({url: flowableBasePath + "dsformpage015", params: {objectId: objectId}, method: "GET", type: 'json', callback: function(json) {
             $.each(json.rows, function(j, bean) {
                 var customBoxId = bean.id;
@@ -296,7 +296,7 @@ var dsFormUtil = {
         }, async: false});
     },
 
-    initSequenceDataDetails: function (customBoxId, rows){
+    initSequenceDataDetails: function (customBoxId, rows) {
         $.each(rows, function (i, item) {
             var jsonStr = {
                 bean: item
@@ -339,7 +339,7 @@ var dsFormUtil = {
      * @param callback 回调函数
      */
     dsFormObjectRelationChoose: {}, // 已经选择的单据类型
-    openDsFormObjectRelationChooseByFirstTypeCodeChoosePage: function (firstTypeCode, callback){
+    openDsFormObjectRelationChooseByFirstTypeCodeChoosePage: function (firstTypeCode, callback) {
         _openNewWindows({
             url: "../../tpl/dsFormObjectRelation/dsFormObjectRelationChooseByFirstTypeCode.html?firstTypeCode=" + firstTypeCode,
             title: "单据类型",
