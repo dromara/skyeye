@@ -7,76 +7,69 @@ layui.config({
 }).extend({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'eleTree', 'soulTable'], function (exports) {
-	
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
 		soulTable = layui.soulTable,
 		eleTree = layui.eleTree;
-	
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 
+	// 加载仓库数据
 	erpOrderUtil.getDepotList(function (json){
-		// 加载仓库数据
 		$("#depotId").html(getDataUseHandlebars(selOption, json));
-		// 初始化表格
-		initTable();
 	});
 
-	function initTable(){
-		table.render({
-		    id: 'messageTable',
-	        elem: '#messageTable',
-	        method: 'post',
-	        url: flowableBasePath + 'material017',
-	        where: getTableParams(),
-	        even: true,
-	        page: true,
-	        limits: getLimits(),
-	    	limit: getLimit(),
-	        overflow: {
-	            type: 'tips',
-	            hoverTime: 300, // 悬停时间，单位ms, 悬停 hoverTime 后才会显示，默认为 0
-	            minWidth: 150, // 最小宽度
-	            maxWidth: 500 // 最大宽度
-	        },
-		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
-		        { field: 'name', title: '商品名称', rowspan: '2', align: 'left', width: 150, templet: function (d) {
-			        	return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
-			    }},
-		        { field: 'model', title: '型号', rowspan: '2', align: 'left', width: 150 },
-		        { field: 'categoryName', title: '所属类型', rowspan: '2', align: 'center', width: 100 },
-		        { field: 'typeName', title: '商品来源', rowspan: '2', align: 'left', width: 100 },
-		        { field: 'unitName', title: '单位', rowspan: '2', align: 'center', width: 80},
-	        	{ title: '库存', colspan: '3', align: 'center', width: 100},
-		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 }
-		    ],[
-		    	{ field: 'safetyTock', title: '安全存量', align: 'center', width: 80},
-		        { field: 'allTock', title: '当前库存', align: 'center', width: 120}
-	        ]],
-		    done: function(json) {
-		    	matchingLanguage();
-		    	soulTable.render(this);
-		    	if(!loadFirstType){
-		    		initFirstType();
-		    	}
-		    }
-		});
-		
-		table.on('tool(messageTable)', function (obj) {
-	        var data = obj.data;
-	        var layEvent = obj.event;
-	        if (layEvent === 'details') { //详情
-	        	details(data);
-	        }
-	    });
-	    
-	    form.render();
-	}
-    
+	table.render({
+		id: 'messageTable',
+		elem: '#messageTable',
+		method: 'post',
+		url: flowableBasePath + 'material017',
+		where: getTableParams(),
+		even: true,
+		page: true,
+		limits: getLimits(),
+		limit: getLimit(),
+		overflow: {
+			type: 'tips',
+			hoverTime: 300, // 悬停时间，单位ms, 悬停 hoverTime 后才会显示，默认为 0
+			minWidth: 150, // 最小宽度
+			maxWidth: 500 // 最大宽度
+		},
+		cols: [[
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
+			{ field: 'name', title: '商品名称', rowspan: '2', align: 'left', width: 150, templet: function (d) {
+					return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
+			}},
+			{ field: 'model', title: '型号', rowspan: '2', align: 'left', width: 150 },
+			{ field: 'categoryName', title: '所属类型', rowspan: '2', align: 'center', width: 100 },
+			{ field: 'typeName', title: '商品来源', rowspan: '2', align: 'left', width: 100 },
+			{ field: 'unitName', title: '单位', rowspan: '2', align: 'center', width: 80},
+			{ title: '库存', colspan: '3', align: 'center', width: 100},
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 }
+		],[
+			{ field: 'safetyTock', title: '安全存量', align: 'center', width: 80},
+			{ field: 'allTock', title: '当前库存', align: 'center', width: 120}
+		]],
+		done: function(json) {
+			matchingLanguage();
+			soulTable.render(this);
+			if(!loadFirstType){
+				initFirstType();
+			}
+		}
+	});
+
+	table.on('tool(messageTable)', function (obj) {
+		var data = obj.data;
+		var layEvent = obj.event;
+		if (layEvent === 'details') { //详情
+			details(data);
+		}
+	});
+
+	form.render();
+
     var loadFirstType = false;
 	//初始化商品类型
 	function initFirstType(){
@@ -103,10 +96,8 @@ layui.config({
 		    $(".ele5").hide();
 		})
 	}
-	
-	
+
 	form.on('submit(formSearch)', function (data) {
-        
         if (winui.verifyForm(data.elem)) {
         	refreshloadTable();
         }

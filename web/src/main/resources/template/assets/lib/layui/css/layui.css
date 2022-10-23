@@ -2294,6 +2294,7 @@ hr,
 
 /* 警告域 */
 .layui-form-danger:focus,
+.layui-form-danger,
 .layui-form-danger+.layui-form-select .layui-input {
 	border-color: #FF5722 !important;
 }

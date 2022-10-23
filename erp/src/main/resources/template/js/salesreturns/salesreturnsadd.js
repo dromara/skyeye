@@ -110,7 +110,7 @@ layui.config({
 	matchingLanguage();
 
 	// 商品规格加载变化事件
-	mUnitChangeEvent(form, allChooseProduct, "normsSalePrice");
+	mUnitChangeEvent(form, allChooseProduct, "salePrice");
 
 	// 仓库变化事件
 	form.on('select(depotId)', function(data) {

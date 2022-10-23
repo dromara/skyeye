@@ -21,6 +21,15 @@
         "filterValue": "3,4,5"
     },
 
+    "materialFromType": {
+        "name": "商品来源类型枚举类",
+        "className": "skyeye-flowable#com.skyeye.material.enumclass.MaterialFromType"
+    },
+    "materialType": {
+        "name": "商品类型枚举类",
+        "className": "skyeye-flowable#com.skyeye.material.enumclass.MaterialType"
+    },
+
     "skyeyeView": {
         "name": "视图枚举",
         "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"

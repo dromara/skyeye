@@ -16,19 +16,6 @@
 	</div>
 	
 	<script type="text/x-handlebars-template" id="beanTemplate">
-		<tr trcusid="{{trId}}" unitid="{{unitId}}">
-			<td>{{unitNameType}}</td>
-			<td>{{unitName}}</td>
-			<td><input type="text" class="layui-input" id="{{safetyTock}}" win-verify="number"/></td>
-			<td><button type="button" class="layui-btn layui-btn-primary layui-btn-xs stockMore" id="{{stock}}">库存信息</button></td>
-			<td><input type="text" class="layui-input" id="{{retailPrice}}" win-verify="money"/></td>
-			<td><input type="text" class="layui-input" id="{{lowPrice}}" win-verify="money"/></td>
-			<td><input type="text" class="layui-input" id="{{estimatePurchasePrice}}" win-verify="money"/></td>
-			<td><input type="text" class="layui-input" id="{{salePrice}}" win-verify="money"/></td>
-		</tr>
-	</script>
-	
-	<script type="text/x-handlebars-template" id="showBaseTemplate">
 		{{#bean}}
 		<div class="layui-form-item layui-col-xs12">
     		<span class="hr-title">基础信息</span><hr>
@@ -64,12 +51,16 @@
 			<div class="layui-input-block" id="enabled">
 			</div>
 		</div>
-	    <div class="layui-form-item layui-col-xs6">
-	        <label class="layui-form-label">商品来源<i class="red">*</i></label>
-	        <div class="layui-input-block winui-switch">
-	            <input id="fromType" name="fromType" lay-filter="fromType" type="checkbox" lay-skin="switch" lay-text="自产|外购" {{#fromType type}}{{/fromType}} value="{{#fromTypeReturn type}}{{/fromTypeReturn}}"/>
-	        </div>
-	    </div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">商品来源<i class="red">*</i></label>
+			<div class="layui-input-block winui-radio" id="fromType">
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">商品类型<i class="red">*</i></label>
+			<div class="layui-input-block winui-radio" id="materialType">
+			</div>
+		</div>
 		<div class="layui-form-item layui-col-xs6">
 		    <label class="layui-form-label">工序资料</label>
 		    <div class="layui-input-block">
@@ -96,120 +87,10 @@
 		<div class="layui-form-item layui-col-xs12">
 			<span class="hr-title">规格信息</span><hr>
 		</div>
-		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">规格类型<i class="red">*</i></label>
-			<div class="layui-input-block winui-radio">
-				<input type="radio" name="unit" value="1" title="单规格" lay-filter="unit" />
-				<input type="radio" name="unit" value="2" title="多规格" lay-filter="unit" />
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs6 single-term">
-			<label class="layui-form-label">安全存量<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<input type="text" id="safetyTock" name="safetyTock" win-verify="number" placeholder="请输入安全存量" class="layui-input"/>
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs6 single-term">
-		    <label class="layui-form-label">初始库存<i class="red">*</i></label>
-		    <div class="layui-input-block">
-		        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="stock">库存信息</button>
-		    </div>
-		</div>
-		<div class="layui-form-item layui-col-xs6 single-term">
-			<label class="layui-form-label">单位<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<input type="text" id="unitName" name="unitName" win-verify="" placeholder="请输入单位" class="layui-input" maxlength="25"/>
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs6 single-term">
-			<label class="layui-form-label">零售价<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<input type="text" id="retailPrice" name="retailPrice" win-verify="money" placeholder="请输入零售价" class="layui-input"/>
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs6 single-term">
-			<label class="layui-form-label">最低售价<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<input type="text" id="lowPrice" name="lowPrice" win-verify="money" placeholder="请输入最低售价" class="layui-input"/>
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs6 single-term">
-			<label class="layui-form-label">采购价/成本价<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<input type="text" id="estimatePurchasePrice" name="estimatePurchasePrice" win-verify="money" placeholder="请输入采购价/成本价" class="layui-input"/>
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs6 single-term">
-			<label class="layui-form-label">销售价<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<input type="text" id="salePrice" name="salePrice" win-verify="money" placeholder="请输入销售价" class="layui-input"/>
-			</div>
-		</div>
-		
-		<div class="layui-form-item layui-col-xs12 many-term">
-			<label class="layui-form-label">单位<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<select lay-filter="unitGroupId" lay-search="" id="unitGroupId">
+		<div class="layui-form-item layui-col-xs12" id="skuTableBox">
 
-				</select>
-			</div>
 		</div>
-		<div class="layui-form-item layui-col-xs6 many-term">
-			<label class="layui-form-label">首选入库单位<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<select lay-filter="firstInUnit" lay-search="" id="firstInUnit">
 
-				</select>
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs6 many-term">
-			<label class="layui-form-label">首选出库单位<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<select lay-filter="firstOutUnit" lay-search="" id="firstOutUnit">
-
-				</select>
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs12 many-term">
-			<label class="layui-form-label">价格表<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<table class="layui-table">
-					<thead>
-						<tr>
-							<th style="width: 60px;">单位类型</th>
-							<th style="width: 60px;">计量单位</th>
-							<th style="width: 80px;">安全存量<i class="red">*</i></th>
-		                    <th style="width: 150px;">初始库存<i class="red">*</i></th>
-							<th>零售价<i class="red">*</i></th>
-							<th>最低售价<i class="red">*</i></th>
-							<th>采购价/成本价<i class="red">*</i></th>
-							<th>销售价<i class="red">*</i></th>
-						</tr>
-					</thead>
-					<tbody id="useTable" class="insurance-table">
-					{{#each norms}}
-						{{#if unitId}}
-						<tr trcusid="tr{{addOne @index}}" unitid="{{unitId}}">
-							<td>{{baseUnit}}</td>
-							<td>{{unitName}}</td>
-							<td><input type="text" class="layui-input" id="safetyTock{{addOne @index}}" win-verify="number" value="{{safetyTock}}"/></td>
-							<td><button type="button" class="layui-btn layui-btn-primary layui-btn-xs stockMore" id="stock{{addOne @index}}">库存信息</button>
-								{{#each normStock}}
-									<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">{{depotName}}<span class="layui-badge layui-bg-gray">{{stock}}</span></span>
-								{{/each}}
-							</td>
-							<td><input type="text" class="layui-input" id="retailPrice{{addOne @index}}" win-verify="money" value="{{retailPrice}}"/></td>
-							<td><input type="text" class="layui-input" id="lowPrice{{addOne @index}}" win-verify="money" value="{{lowPrice}}"/></td>
-							<td><input type="text" class="layui-input" id="estimatePurchasePrice{{addOne @index}}" win-verify="money" value="{{estimatePurchasePrice}}"/></td>
-							<td><input type="text" class="layui-input" id="salePrice{{addOne @index}}" win-verify="money" value="{{salePrice}}"/></td>
-						</tr>
-						{{else}}
-						{{/if}}
-					{{/each}}
-					</tbody>
-				</table>
-			</div>
-		</div>
 		<div class="layui-form-item layui-col-xs12">
     		<span class="hr-title">扩展信息</span>
 	        <button id="addExtendRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增扩展字段</button><hr>

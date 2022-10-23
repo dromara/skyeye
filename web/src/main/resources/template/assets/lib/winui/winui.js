@@ -462,7 +462,11 @@
                             value = "";
                         }
                     }
-                    othis.removeClass(DANGER);
+                    if (othis.attr('type') == 'hidden') {
+                        othis.siblings('img').removeClass(DANGER);
+                    } else {
+                        othis.removeClass(DANGER);
+                    }
                     layui.each(ver, function (_, thisVer) {
                         var isFn = typeof that.verify[thisVer] === 'function';
                         if (that.verify[thisVer]
@@ -475,7 +479,11 @@
                             if (!device.android && !device.ios) {
                                 item.focus();
                             }
-                            othis.addClass(DANGER);
+                            if (othis.attr('type') == 'hidden') {
+                                othis.siblings('img').addClass(DANGER);
+                            } else {
+                                othis.addClass(DANGER);
+                            }
                             //移除请求遮罩层
                             $("body").find(".mask-req-str").remove();
                             return stop = true;

@@ -624,6 +624,53 @@ var systemCommonUtil = {
      * @param callback 回调函数
      */
     showEnumDataListByClassName: function (code, showType, showBoxId, defaultId, form, callback) {
+        var json = systemCommonUtil.getEnumDataListByClassName(code);
+        if (showType == 'select') {
+            $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
+            if (!isNull(defaultId)) {
+                $("#" + showBoxId).val(defaultId);
+            } else {
+                $.each(json.rows, function (i, item) {
+                    if (item.isDefault) {
+                        $("#" + showBoxId).val(item.id);
+                    }
+                });
+            }
+            form.render('select');
+        } else if (showType == 'checkbox') {
+            $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/checkbox-property.tpl'), json));
+            if (!isNull(defaultId)) {
+                var arr = defaultId.split(",");
+                for(var i = 0; i < arr.length; i++){
+                    $('input:checkbox[rowId="' + arr[i] + '"]').attr("checked", true);
+                }
+            } else {
+                $.each(json.rows, function (i, item) {
+                    if (item.isDefault) {
+                        $('input:checkbox[rowId="' + item.id + '"]').attr("checked", true);
+                    }
+                });
+            }
+            form.render('checkbox');
+        } else if (showType == 'radio') {
+            $("#" + showBoxId).html(getDataUseHandlebars('{{#each rows}}<input type="radio" name="' + showBoxId + 'Name" value="{{id}}" title="{{name}}" />{{/each}}', json));
+            if (!isNull(defaultId)) {
+                $("#" + showBoxId + " input:radio[name=" + showBoxId + "Name][value=" + defaultId + "]").attr("checked", true);
+            } else {
+                $.each(json.rows, function (i, item) {
+                    if (item.isDefault) {
+                        $("#" + showBoxId + " input:radio[name=" + showBoxId + "Name][value=" + item.id + "]").attr("checked", true);
+                    }
+                });
+            }
+            form.render('radio');
+        }
+        if (typeof (callback) == "function") {
+            callback(json);
+        }
+    },
+
+    getEnumDataListByClassName: function (code) {
         var params = {
             className: encodeURIComponent(skyeyeClassEnum[code]["className"])
         };
@@ -631,51 +678,11 @@ var systemCommonUtil = {
             params["filterValue"] = skyeyeClassEnum[code]["filterValue"];
             params["filterKey"] = skyeyeClassEnum[code]["filterKey"];
         }
+        var result = {};
         AjaxPostUtil.request({url: reqBasePath + "getEnumDataByClassName", params: params, type: 'json', method: "POST", callback: function(json) {
-            if (showType == 'select') {
-                $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
-                if (!isNull(defaultId)) {
-                    $("#" + showBoxId).val(defaultId);
-                } else {
-                    $.each(json.rows, function (i, item) {
-                        if (item.isDefault) {
-                            $("#" + showBoxId).val(item.id);
-                        }
-                    });
-                }
-                form.render('select');
-            } else if (showType == 'checkbox') {
-                $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/checkbox-property.tpl'), json));
-                if (!isNull(defaultId)) {
-                    var arr = defaultId.split(",");
-                    for(var i = 0; i < arr.length; i++){
-                        $('input:checkbox[rowId="' + arr[i] + '"]').attr("checked", true);
-                    }
-                } else {
-                    $.each(json.rows, function (i, item) {
-                        if (item.isDefault) {
-                            $('input:checkbox[rowId="' + item.id + '"]').attr("checked", true);
-                        }
-                    });
-                }
-                form.render('checkbox');
-            } else if (showType == 'radio') {
-                $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/radio-property.tpl'), json));
-                if (!isNull(defaultId)) {
-                    $("#" + showBoxId + " input:radio[name=radioProperty][value=" + defaultId + "]").attr("checked", true);
-                } else {
-                    $.each(json.rows, function (i, item) {
-                        if (item.isDefault) {
-                            $("#" + showBoxId + " input:radio[name=radioProperty][value=" + item.id + "]").attr("checked", true);
-                        }
-                    });
-                }
-                form.render('radio');
-            }
-            if (typeof (callback) == "function") {
-                callback(json);
-            }
+            result = json;
         }, async: false});
+        return result;
     },
 
 };

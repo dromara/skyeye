@@ -57,7 +57,7 @@ layui.config({
 		matchingLanguage();
 
 		// 商品规格加载变化事件
-		mUnitChangeEvent(form, allChooseProduct, "normsEstimatePurchasePrice", calculatedTotalPrice);
+		mUnitChangeEvent(form, allChooseProduct, "estimatePurchasePrice", calculatedTotalPrice);
 
 		// 调出仓库变化事件
 		form.on('select(depotId)', function(data) {

@@ -323,6 +323,8 @@ function getCookie(name) {
 			orgChart: "orgChart/js/jquery.orgchart", //组织结构图
 			jsonEditor: 'jsonEditor/jquery.json-editor.min', //json格式的数据编辑器
 			ruleCode: 'ruleCode/ruleCode', // 编码规则
+			sortable: 'skuTable/sortable', // 表格排序
+			skuTable: 'skuTable/skuTable', // 商品规格
 		};
 
 	// 记录基础数据

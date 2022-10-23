@@ -258,7 +258,7 @@ layui.config({
 			}
 		});
 		if(proIndex >= 0 && normsIndex >= 0){
-			return productMationList[proIndex].unitList[normsIndex].normsEstimatePurchasePrice;
+			return productMationList[proIndex].unitList[normsIndex].estimatePurchasePrice;
 		} else {
 			return new Array();
 		}

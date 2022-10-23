@@ -139,7 +139,7 @@ layui.config({
 	}
 
 	// 商品规格加载变化事件
-	mUnitChangeEvent(form, allChooseProduct, "normsRetailPrice", calculatedTotalPrice);
+	mUnitChangeEvent(form, allChooseProduct, "retailPrice", calculatedTotalPrice);
 
 	// 仓库变化事件
 	form.on('select(depotId)', function(data) {
