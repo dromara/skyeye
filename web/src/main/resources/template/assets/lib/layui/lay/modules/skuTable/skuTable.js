@@ -114,6 +114,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     },
                 ]
             },
+            edit: true,
             rowspan: false,
             skuIcon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjczN0RFNzU1MTk1RTExRTlBMEQ5OEEwMEM5NDNFOEE4IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjczN0RFNzU2MTk1RTExRTlBMEQ5OEEwMEM5NDNFOEE4Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NzM3REU3NTMxOTVFMTFFOUEwRDk4QTAwQzk0M0U4QTgiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NzM3REU3NTQxOTVFMTFFOUEwRDk4QTAwQzk0M0U4QTgiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5NHmJUAAAA+0lEQVR42pySPwsBYRzH7zk3KIP34CVIKSOrELLJdpuymyzew90kIwMZvACDsCldWZTFn5WQpPN5rlPXlXJ39en7/J57fn+fR9i2rYT5NNM0B2gC3n/6qHBQDMOwZNYg4LOQ3vcQld40/w6lC13Xbd/eHElC3G1JqL4DFWSNprz7BMpAFJ6YkW+jThaosuxAD/rY6R9lCmeq8IAmtKBA1A1OW9YjtIS9QvPYRZkcXo43EzqjF/mDQ5an7ALShTFk4eQOsgFTWeoNKl4nt68J0oYc1LHLbmtDp1IyLgPe4QCuMkIsyAWSuYbs5HD29DML8OTkHR9F2Ef+EWAAdwmkvBAtw94AAAAASUVORK5CYII=',
 			specData: [],
@@ -127,10 +128,13 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 			this.data.specData = isNull(this.options.specData) ? [] : this.options.specData;
 			this.data.skuData = isNull(this.options.skuData) ? {} : this.options.skuData;
             this.data.otherMationData = isNull(this.options.otherMationData) ? {} : this.options.otherMationData;
-			// 编辑到时候在这里做分支
 			this.css();
-			this.render();
-			this.listen();
+            if (this.options.edit) {
+                this.render();
+                this.listen();
+            } else {
+                this.renderDetails();
+            }
         }
 
         css() {
@@ -194,6 +198,50 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     this.renderMultipleSkuTable();
                 }
             }
+        }
+
+        renderDetails() {
+            var that = this;
+            var _html = `<div id="${this.options.otherElemId}">` +
+                `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label">规格类型：</label>
+                        <div class="layui-input-block ver-center">
+                            ${that.data.otherMationData.unitType}
+                        </div>
+                    </div>` +
+                `</div>` +
+                `<div id="${this.options.otherMationElemId}"></div>` +
+                `<div id="${this.options.specTableElemId}"></div>` +
+                `<div id="${this.options.skuTableElemId}"></div>`;
+            $(`#${that.options.boxId}`).html(_html);
+            form.render();
+            if (that.data.otherMationData.unit == 1) {
+                // 单规格
+                $(`#${this.options.specTableElemId}`).html(that.loadSimpleSkuConfigDetails());
+            } else {
+                // 多规格
+                var str = `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label">计量单位：</label>
+                            <div class="layui-input-block ver-center">
+                                ${that.data.otherMationData.unitGroupName}
+                            </div>
+                        </div>
+                       <div class="layui-form-item layui-col-xs6">
+                        <label class="layui-form-label">首选入库单位：</label>
+                        <div class="layui-input-block ver-center">
+                            ${that.data.otherMationData.firstInUnitName}
+                        </div>
+                       </div>
+                       <div class="layui-form-item layui-col-xs6">
+                        <label class="layui-form-label">首选出库单位：</label>
+                        <div class="layui-input-block ver-center">
+                            ${that.data.otherMationData.firstOutUnitName}
+                        </div>
+                       </div>`;
+                $(`#${this.options.otherMationElemId}`).html(str);
+                that.renderMultipleSkuTableDetails();
+            }
+            that.picShow();
         }
 		
 		// 初始化html界面
@@ -405,7 +453,10 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     });
                 }
             });
+            that.picShow();
+        }
 
+        picShow() {
             /**
              * 图片移入放大/移出恢复
              */
@@ -809,6 +860,196 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     case "input":
                     default:
                         div += '<input type="text" id="' + id + '" name="' + type + '" value="' + value + '" class="layui-input" win-verify="' + item.verify + '" lay-reqtext="' + item.reqtext + '">';
+                        break;
+                }
+                div += '</div></div>';
+            });
+            return div;
+        }
+
+        /**
+         * 渲染sku表
+         */
+        renderMultipleSkuTableDetails() {
+            var tableId = this.options.skuTableElemId + '-id';
+            var that = this, table = `<table class="layui-table" id="${tableId}">`;
+            var prependThead = [], prependTbody = [];
+
+            // 加载计量单位作为其中的一个规格
+            AjaxPostUtil.request({url: flowableBasePath + "materialunit006", params: {}, type: 'json', method: "POST", callback: function(json) {
+                var prependTbodyItem = [];
+                $.each(json.rows, function (i, item) {
+                    if (item.id == that.data.otherMationData.unitGroupId) {
+                        $.each(item.unitList, function (j, bean) {
+                            prependTbodyItem.push({
+                                rowNum: bean.id,
+                                title: bean.name
+                            });
+                        });
+                        return false;
+                    }
+                });
+                prependThead.push('计量单位');
+                prependTbody.push(prependTbodyItem);
+            }, async: false});
+
+            $.each(that.data.specData, function (index, item) {
+                var isShow = item.options.some(function (option, index, array) {
+                    return item.value.includes(option.rowNum);
+                });
+                if (isShow) {
+                    prependThead.push(item.title);
+                    var prependTbodyItem = [];
+                    $.each(item.options, function (key, option) {
+                        if (item.value.includes(option.rowNum)) {
+                            prependTbodyItem.push({rowNum: option.rowNum, title: option.title});
+                        }
+                    });
+                    prependTbody.push(prependTbodyItem);
+                }
+            });
+
+            table += '<colgroup>' + '<col width="70">'.repeat(prependThead.length + 1) + '</colgroup>';
+            table += '<thead>';
+            var theadTr = '<tr>';
+            theadTr += prependThead.map(function (t, i, a) {
+                return '<th class="fairy-spec-name">' + t + '</th>';
+            }).join('');
+            this.options.multipleSkuTableConfig.thead.forEach(function (item) {
+                if (isNull(item.width)) {
+                    theadTr += '<th>' + item.title + (item.icon ? ' <i class="layui-icon ' + item.icon + '"></i>' : '') + '</th>';
+                } else {
+                    theadTr += '<th style="width: ' + item.width + '">' + item.title + '</th>';
+                }
+            });
+            theadTr += '</tr>';
+            table += theadTr;
+            table += '</thead>';
+
+            if (this.options.rowspan) {
+                var skuRowspanArr = [];
+                prependTbody.forEach(function (v, i, a) {
+                    var num = 1, index = i;
+                    while (index < a.length - 1) {
+                        num *= a[index + 1].length;
+                        index++;
+                    }
+                    skuRowspanArr.push(num);
+                });
+            }
+
+            var prependTbodyTrs = [];
+            prependTbody.reduce(function (prev, cur, index, array) {
+                var tmp = [];
+                prev.forEach(function (a) {
+                    cur.forEach(function (b) {
+                        tmp.push({rowNum: a.rowNum + that.options.skuNameDelimiter + b.rowNum, title: a.title + that.options.skuNameDelimiter + b.title});
+                    });
+                });
+                return tmp;
+            }).forEach(function (item, index, array) {
+                var tr = `<tr id="${item.rowNum}" row="${index}">`;
+                tr += item.title.split(that.options.skuNameDelimiter).map(function (t, i, a) {
+                    if (that.options.rowspan) {
+                        if (index % skuRowspanArr[i] === 0 && skuRowspanArr[i] > 1) {
+                            return '<td class="fairy-spec-value" rowspan="' + skuRowspanArr[i] + '">' + t + '</td>';
+                        } else if (skuRowspanArr[i] === 1) {
+                            return '<td class="fairy-spec-value">' + t + '</td>';
+                        } else {
+                            return '';
+                        }
+                    } else {
+                        return '<td>' + t + '</td>';
+                    }
+                }).join('');
+                tr += that.loadMultipleSkuTableConfigDetail(item, index);
+                tr += '</tr>';
+                prependTbodyTrs.push(tr);
+            });
+            table += '<tbody>';
+            if (prependTbodyTrs.length > 0) {
+                table += prependTbodyTrs.join('');
+            }
+            table += '</tbody>';
+            table += '</table>';
+            this.renderFormItem('商品库存', table, this.options.skuTableElemId);
+            form.render();
+        }
+
+        loadMultipleSkuTableConfigDetail(item, index) {
+            var that = this;
+            var tr = '';
+            that.options.multipleSkuTableConfig.tbody.forEach(function (c) {
+                var key = item.rowNum;
+                var type = c.field;
+                var value = (!isNull(key) && !isNull(that.data.skuData[key])) ? that.data.skuData[key][type] : c.value;
+                tr += '<td>';
+                switch (c.type) {
+                    case "image":
+                        value = isNull(value) ? '' : value;
+                        tr += '<img class="fairy-sku-img skyeye-img" src="' + value + '">';
+                        break;
+                    case "select":
+                        c.option.forEach(function (o) {
+                            if (!isNull(value) && o.id == value) {
+                                tr += o.name;
+                            }
+                        });
+                        break;
+                    case "btn":
+                        value = isNull(value) ? [] : JSON.parse(value);
+                        $.each(value, function(i, item) {
+                            tr += '<span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '【' + item.stock + '】</span><br>';
+                        });
+                        break;
+                    case "input":
+                    default:
+                        tr += value;
+                        break;
+                }
+                tr += '</td>';
+            });
+            return tr;
+        }
+
+        loadSimpleSkuConfigDetails() {
+            var that = this;
+            var div = `<div class="layui-form-item layui-col-xs6">
+                        <label class="layui-form-label">计量单位：</label>
+                        <div class="layui-input-block ver-center">
+                            ${that.data.otherMationData.unitName}
+                        </div>
+                    </div>`;
+            that.options.multipleSkuTableConfig.tbody.forEach(function (item, index) {
+                var type = item.field;
+                var value = (!isNull(that.data.skuData["simpleNorms"])) ? that.data.skuData["simpleNorms"][type] : item.value;
+                var id = item.field;
+                var title = that.options.multipleSkuTableConfig.thead[index].title;
+                div += `<div class="layui-form-item layui-col-xs6">` +
+                    `<label class="layui-form-label">${title}：</label>` +
+                    `<div class="layui-input-block ver-center">`;
+
+                switch (item.type) {
+                    case "image":
+                        value = isNull(value) ? '' : value;
+                        div += '<img class="fairy-sku-img skyeye-img" src="' + value + '">';
+                        break;
+                    case "select":
+                        item.option.forEach(function (o) {
+                            if (!isNull(value) && o.id == value) {
+                                div += o.name;
+                            }
+                        });
+                        break;
+                    case "btn":
+                        value = isNull(value) ? [] : JSON.parse(value);
+                        $.each(value, function(i, item) {
+                            div += '<span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '【' + item.stock + '】</span><br>';
+                        });
+                        break;
+                    case "input":
+                    default:
+                        div += value;
                         break;
                 }
                 div += '</div></div>';

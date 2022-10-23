@@ -670,6 +670,12 @@ var systemCommonUtil = {
         }
     },
 
+    getEnumDataNameByClassName: function (code, key, value, getKey) {
+        var json = systemCommonUtil.getEnumDataListByClassName(code);
+        var result = getInPoingArr(json.rows, key, value, getKey);
+        return isNull(result) ? '' : result;
+    },
+
     getEnumDataListByClassName: function (code) {
         var params = {
             className: encodeURIComponent(skyeyeClassEnum[code]["className"])

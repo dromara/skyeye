@@ -6,46 +6,68 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'skuTable'], function (exports) {
 	winui.renderColor();
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
-	    var $ = layui.$;
-	    
-	    var simpleTemplate = $("#simpleTemplate").html();
-	    var manyTemplate = $("#manyTemplate").html();
-	    var extendsTemplate = $("#extendsTemplate").html();
-	    
+	    var $ = layui.$,
+			skuTable = layui.skuTable;
+
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "material007",
 		 	params: {id: parent.rowId},
 		 	pagination: false,
 			method: 'GET',
-		 	template: getFileContent('tpl/material/materialDetailsTemplate.tpl'),
+		 	template: $("#beanTemplate").html(),
+			ajaxSendLoadBefore: function(hdb, json) {
+				json.bean.enabled = systemCommonUtil.getEnumDataNameByClassName('commonEnable', 'id', json.bean.enabled, 'name');
+				json.bean.fromType = systemCommonUtil.getEnumDataNameByClassName('materialFromType', 'id', json.bean.fromType, 'name');
+				json.bean.type = systemCommonUtil.getEnumDataNameByClassName('materialType', 'id', json.bean.type, 'name');
+			},
 		 	ajaxSendAfter:function (json) {
-				if (json.bean.unit == '1') {//非多单位
-					var item = json.bean.norms[0];
-					item.unitName = json.bean.unitName;
-					$("#showForm").append(getDataUseHandlebars(simpleTemplate, item));
-					var str = "";
-					$.each(json.bean.norms[0].normStock, function (i, item) {
-						str += '<span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.stock + '</span></span><br>';
-					});
-					$("#initialTock").html(str);
-				} else {//多单位
-					var item = new Array();
-					item.unitGroupName = json.bean.unitGroupName;
-					item.firstInUnit = json.bean.firstInUnit;
-					item.firstOutUnit = json.bean.firstOutUnit;
-					item.norms = json.bean.norms;
-					$("#showForm").append(getDataUseHandlebars(manyTemplate, item));
-				}
+				var skuData = {};
+				$.each(json.bean.norms, function (index, item) {
+					skuData[item.tableNum] = item;
+				});
+				var enableData = systemCommonUtil.getEnumDataListByClassName("commonEnable");
+				skuTable.render({
+					boxId: 'skuTableBox',
+					specTableElemId: 'fairy-spec-table',
+					skuTableElemId: 'fairy-sku-table',
+					// 是否开启sku表行合并
+					rowspan: true,
+					edit: false,
+					// 多规格SKU表配置
+					multipleSkuTableConfig: {
+						thead: [
+							{title: '图片', icon: ''},
+							{title: '安全库存', icon: 'layui-icon-cols'},
+							{title: '初始库存', width: '150px'},
+							{title: '零售价(元)', icon: 'layui-icon-cols'},
+							{title: '最低售价(元)', icon: 'layui-icon-cols'},
+							{title: '采购价/成本价(元)', icon: 'layui-icon-cols'},
+							{title: '销售价(元)', icon: 'layui-icon-cols'},
+							{title: '状态', icon: ''},
+						],
+						tbody: [
+							{type: 'image', field: 'logo', value: '', verify: 'required', reqtext: ''},
+							{type: 'input', field: 'safetyTock', value: '0', verify: 'required|number'},
+							{type: 'btn', field: 'normsStock'},
+							{type: 'input', field: 'retailPrice', value: '0', verify: 'required|money'},
+							{type: 'input', field: 'lowPrice', value: '0', verify: 'required|money'},
+							{type: 'input', field: 'estimatePurchasePrice', value: '0', verify: 'required|money'},
+							{type: 'input', field: 'salePrice', value: '0', verify: 'required|money'},
+							{type: 'select', field: 'enable', option: enableData.rows},
+						]
+					},
+					specData: JSON.parse(json.bean.normsSpec),
+					skuData: skuData,
+					otherMationData: json.bean
+				});
 
 				// 附件回显
 				skyeyeEnclosure.showDetails({"enclosureUploadBtn": json.bean.enclosureInfo});
-
-		 		$("#showForm").append(getDataUseHandlebars(extendsTemplate, {'extends': json.bean.extends}));
 		 		matchingLanguage();
 		 		form.render();
 		 	}
