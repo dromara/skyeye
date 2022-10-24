@@ -5,7 +5,7 @@
 智能制造云办公软件，后端采用Springboot框架，前端采用基于layui封装的winUI，打造一款不同风格的办公软件。适用于中型企业等机构的管理。包含30多个应用模块、50多种电子流程，CRM客户、PM项目、ERP采购、库存、ADM行政、HR人事、笔记、知识库、多门店、商城、财务、考勤、HCM薪资、云盘等全面管理，打造全业务覆盖、全流程驱动的云办公。实现一体化智能制造行业的管理，实现管理流程“客户关系->
 线上/线下报价->销售报价->销售合同->生产计划->产品设计->采购->加工制造->入库->发货->售后服务”的高效运作，同时实现企业员工的管理以及内部运作的流程操作，完善了员工从“入职->培训->转正->办公->离职”等多项功能。
 
-- 最新资讯：[2022-10-17 智能制造云办公 v3.8.5 发布，ERP 更新](https://www.oschina.net/news/213885)
+- 最新资讯：[2022-10-24 智能制造云办公 v3.8.6 发布，ERP 更新](https://www.oschina.net/news/214690/skyeye-3-8-6-released)
 - [软件更新资讯](https://gitee.com/doc_wei01/skyeye/blob/company_server/HISTORY_UPDATE.md)
 - 开源版请下载`master`分支
 - [企业版信息](https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1)
