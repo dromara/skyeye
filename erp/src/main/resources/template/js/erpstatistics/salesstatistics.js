@@ -25,7 +25,7 @@ layui.config({
 			limit: getLimit(),
 	        cols: [[
 	            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	            { field: 'materialName', title: '产品名称', align: 'left', width: 250 },
+	            { field: 'materialName', title: '商品名称', align: 'left', width: 250 },
 			    { field: 'materialModel', title: '型号', align: 'left', width: 150 },
 	            { field: 'unitName', title: '单位', align: 'left', width: 80 },
 	            { field: 'currentTock', title: '销售数量', align: 'left', width: 100 },

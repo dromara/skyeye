@@ -267,7 +267,7 @@ layui.config({
  				area: ['90vw', '90vh'],
  				callBack: function (refreshCode) {
 					$("#productionOrder").val(productionMation.defaultNumber);
-					// 加工产品信息
+					// 加工商品信息
 					machinPro = {
 						materialId: productionMation.materialId,
 						materialName: productionMation.materialName,

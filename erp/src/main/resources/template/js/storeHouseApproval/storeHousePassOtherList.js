@@ -61,7 +61,7 @@ layui.config({
 			        return str;
 			    }},
 			    { field: 'subTypeName', title: '单据类型', align: 'left', width: 100},
-	            { field: 'materialNames', title: '关联产品', align: 'left', width: 300},
+	            { field: 'materialNames', title: '关联商品', align: 'left', width: 300},
 	            { field: 'status', title: '状态', align: 'left', width: 80, templet: function (d) {
 			        if(d.status == '0'){
 		        		return "<span class='state-down'>未审核</span>";

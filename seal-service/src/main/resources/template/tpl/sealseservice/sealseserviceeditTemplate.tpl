@@ -60,12 +60,12 @@
     </div>
     
     <div class="layui-form-item layui-col-xs12">
-		<span class="hr-title">产品信息</span><hr>
+		<span class="hr-title">商品信息</span><hr>
 	</div>
     <div class="layui-form-item layui-col-xs6">
-        <label class="layui-form-label">产品名称</label>
+        <label class="layui-form-label">商品名称</label>
         <div class="layui-input-block">
-            <input type="text" id="productName" name="productName" placeholder="请输入产品名称" class="layui-input" maxlength="50" value="{{materialName}}" readonly="readonly"/>
+            <input type="text" id="productName" name="productName" placeholder="请输入商品名称" class="layui-input" maxlength="50" value="{{materialName}}" readonly="readonly"/>
             <i class="fa fa-plus-circle input-icon" id="productNameSel"></i>
         </div>
     </div>

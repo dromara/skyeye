@@ -40,7 +40,7 @@ layui.config({
 		        { field: 'serviceTypeName', title: '服务类型', align: 'left', width: 100 },
 		        { field: 'declarationTime', title: '报单时间', align: 'center', width: 140 },
 		        { field: 'customerName', title: '客户名称', align: 'left', width: 120 },
-		        { field: 'productName', title: '产品名称', align: 'left', width: 120 },
+		        { field: 'productName', title: '商品名称', align: 'left', width: 120 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar'}
 		    ]],
 		    done: function(json) {

@@ -129,7 +129,7 @@
   "com.skyeye.inventoryAvailable": {"zh": "可盘点库存", "cn": "Inventory Available"},
   
   "com.skyeye.supplier": {"zh": "供应商", "cn": "Supplier"},
-  "com.skyeye.relatedProducts": {"zh": "关联产品", "cn": "Related Products"},
+  "com.skyeye.relatedProducts": {"zh": "关联商品", "cn": "Related Products"},
   
   "com.skyeye.attachment": {"zh": "附件", "cn": "Attachment"},
   "com.skyeye.attachment2": {"zh": "附件资料", "cn": "Attachments"},

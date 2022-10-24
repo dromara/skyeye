@@ -35,7 +35,7 @@ layui.config({
             { field: 'consumablesPrice', title: '耗材总费用', align: 'right',width: 100 },
             { field: 'procedurePrice', title: '工序总费用', align: 'right',width: 100 },
             { field: 'wastagePrice', title: '耗损总费用', align: 'right',width: 100 },
-            { field: 'sealPrice', title: '产品销售价', align: 'right',width: 100 },
+            { field: 'sealPrice', title: '商品销售价', align: 'right',width: 100 },
             { field: 'remark', title: '备注说明', align: 'left',width: 200 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar' }
         ]],

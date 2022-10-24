@@ -11,7 +11,7 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 		var $ = layui.$;
 		var customerId = "",//客户id
-			productId = "";//产品id
+			productId = "";//商品id
 		
 		AjaxPostUtil.request({url: flowableBasePath + "feedback002", params: {serviceId: parent.serviceId}, type: 'json', callback: function(json) {
 			$("#orderNum").html(json.bean.orderNum);

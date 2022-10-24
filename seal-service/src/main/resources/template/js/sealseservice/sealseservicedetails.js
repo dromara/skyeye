@@ -1,5 +1,5 @@
 
-var rowId = "";//情况反馈id/客户id/产品id
+var rowId = "";//情况反馈id/客户id/商品id
 var serviceId = "";//工单id
 
 layui.config({
@@ -70,7 +70,7 @@ layui.config({
  	        		$("#customerName").html('<a class="customerNameMation notice-title-click" rowid="' + json.bean.customerId + '">' + $("#customerName").html() + '</a>');
  	        	}
  	        	
- 	        	//产品详情
+ 	        	//商品详情
  	        	if (!isNull(json.bean.productId)){
  	        		$("#productName").html('<a class="productNameMation notice-title-click" rowid="' + json.bean.productId + '">' + $("#productName").html() + '</a>');
  	        	}
@@ -103,12 +103,12 @@ layui.config({
 				}});
 	    });
 	    
-	    // 产品详情
+	    // 商品详情
 		$("body").on("click", ".productNameMation", function() {
 	    	rowId = $(this).attr("rowid");
 			_openNewWindows({
 				url: "../../tpl/material/materialdetails.html", 
-				title: "产品详情",
+				title: "商品详情",
 				pageId: "licencedetails",
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {

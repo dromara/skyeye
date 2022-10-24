@@ -125,8 +125,8 @@ layui.config({
 		        			areaId: areaId,//区县，可为空
 		        			townshipId: townshipId,//乡镇，可为空
 		        			addressDetailed: $("#addressDetailed").val(),//详细地址，不可为空
-		        			productId: isNull(erpOrderUtil.chooseProductMation.materialId) ? '' : erpOrderUtil.chooseProductMation.materialId,//产品id，可为空
-		        			productName: $("#productName").val(),//产品名称，可为空
+		        			productId: isNull(erpOrderUtil.chooseProductMation.materialId) ? '' : erpOrderUtil.chooseProductMation.materialId,//商品id，可为空
+		        			productName: $("#productName").val(),//商品名称，可为空
 		        			productNorms: $("#productNorms").val(),//规格型号，可为空
 		        			productSerialNum: $("#productSerialNum").val(),//序列号，可为空
 		        			productWarranty: $("#productWarranty").val(),//质保类型，可为空
@@ -315,7 +315,7 @@ layui.config({
  	   		}});
  	    }
  	    
- 	    //产品选择
+ 	    //商品选择
  	    $("body").on("click", "#productNameSel", function (e) {
 			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
 				$("#productName").val(chooseProductMation.materialName);
