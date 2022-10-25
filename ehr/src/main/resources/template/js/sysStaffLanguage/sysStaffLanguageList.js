@@ -109,7 +109,7 @@ layui.config({
     	return {
 			userName: $("#userName").val(),
 			jobNumber: $("#jobNumber").val(),
-			state: $("#state").val()
+			staffState: $("#state").val()
     	};
 	}
     
