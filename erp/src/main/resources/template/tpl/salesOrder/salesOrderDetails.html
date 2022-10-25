@@ -1,0 +1,305 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="height: 100%">
+		<div class="layui-tab">
+			<ul class="layui-tab-title">
+				<li class="layui-this" id="orderMationLi">订单信息</li>
+				<li>进度报表</li>
+			</ul>
+			<div class="layui-tab-content">
+				<div class="layui-tab-item layui-show">
+					<form class="layui-form" action="" id="showForm">
+
+					</form>
+					<div class="layui-form-item layui-col-xs12">
+						<div class="layui-input-block ver-center">
+							<button class="winui-btn" type="button" id="jprint">打印</button>
+						</div>
+					</div>
+				</div>
+				<div class="layui-tab-item" style="height: 100%;">
+					<iframe style="width: 100%; height: 100%; border: 0px;" id="contentIframe"></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/x-handlebars-template" id="beanTemplate">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs12">
+				<span class="detail-title">
+					{{companyName}} - 销售订单
+				</span><hr>
+    		</div>
+			<div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">基本信息</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">客户：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{supplierName}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">单据日期：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{operTime}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">单据编号：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{defaultNumber}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">状态：</label>
+		        <div class="layui-input-block ver-center" id="statusName">
+					
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">操作人：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{operPersonName}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">录入日期：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{createTime}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">列表项：</label>
+		        <div class="layui-input-block ver-center">
+		            <table class="layui-table">
+		                <thead>
+		                    <tr>
+		                        <th style="width: 150px;">商品(型号)</th>
+		                        <th style="width: 70px;">单位</th>
+		                        <th style="width: 80px;">数量</th>
+		                        <th style="width: 80px;">单价</th>
+		                        <th style="width: 80px;">金额</th>
+								<th style="width: 80px;">税率(%)</th>
+								<th style="width: 80px;">税额</th>
+								<th style="width: 80px;">含税单价</th>
+								<th style="width: 80px;">合计价税</th>
+		                        <th style="min-width: 100px;">备注</th>
+		                    </tr>
+		                </thead>
+		                <tbody id="useTable" class="insurance-table">
+							{{#each items}}
+								<tr>
+									<td>{{materialNames}}</td>
+									<td>{{unitName}}</td>
+									<td>{{operNumber}}</td>
+									<td>{{unitPrice}}</td>
+									<td>{{allPrice}}</td>
+									<td>{{taxRate}}</td>
+									<td>{{taxMoney}}</td>
+									<td>{{taxUnitPrice}}</td>
+									<td>{{taxLastMoney}}</td>
+									<td>{{remark}}</td>
+								</tr>
+							{{/each}}
+		                </tbody>
+					</table>
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">是否需要统筹：</label>
+				<div class="layui-input-block ver-center">
+					{{needOverPlanName}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">结算账户：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{accountName}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">收款类型：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{payType}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">金额合计：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{totalPrice}}元
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">价税合计：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{taxLastMoneyPrice}}元
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">备注：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{remark}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">优惠率%：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{discount}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">优惠金额：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{discountMoney}}元
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">优惠后金额：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{discountLastMoney}}元
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">收款金额：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{changeAmount}}元
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">本次欠款：</label>
+		        <div class="layui-input-block ver-center">
+		            {{arrears}}元
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">销售人员：</label>
+		        <div class="layui-input-block ver-center">
+		            {{salesMan}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">其他费用：</label>
+		        <div class="layui-input-block">
+		            <table class="layui-table">
+		                <thead>
+		                    <tr>
+		                        <th style="width: 120px;">支出项目：</th>
+		                        <th id="otherPriceTotal" style="width: 120px;">费用合计：{{otherMoney}}元</th>
+		                    </tr>
+		                </thead>
+		                <tbody id="otherPriceTable" class="insurance-table">
+							{{#each otherMoneyList}}
+								<tr>
+									<td>{{name}}</td>
+									<td>{{otherPrice}}</td>
+								</tr>
+							{{/each}}
+		                </tbody>
+					</table>
+		        </div>
+		    </div>
+			<div id="dsFormShow">
+
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">完成信息</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">单据完成日期：</label>
+				<div class="layui-input-block ver-center">
+					{{realComplateTime}}
+				</div>
+			</div>
+		{{/bean}}
+	</script>
+
+	<script type="text/x-handlebars-template" id="overPlanTemplate">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">统筹信息</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">统筹状态：</label>
+				<div class="layui-input-block ver-center">
+					{{stateName}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">设计部最迟完成时间：</label>
+				<div class="layui-input-block ver-center">
+					{{lateDesignTime}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">设计部实际最迟完成日期：</label>
+				<div class="layui-input-block ver-center">
+					{{realDesignTime}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">采购最迟到货时间：</label>
+				<div class="layui-input-block ver-center">
+					{{latePurchaseTime}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">采购实际最迟到货时间：</label>
+				<div class="layui-input-block ver-center">
+					{{realPurchaseTime}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">生产最迟完成时间：</label>
+				<div class="layui-input-block ver-center">
+					{{lateProduceTime}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">生产实际最迟完成时间：</label>
+				<div class="layui-input-block ver-center">
+					{{realProduceTime}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">质检最迟完成时间：</label>
+				<div class="layui-input-block ver-center">
+					{{lateQualityTime}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">质检实际最迟完成时间：</label>
+				<div class="layui-input-block ver-center">
+					{{realQualityTime}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">统筹人：</label>
+				<div class="layui-input-block ver-center">
+					{{overPlanName}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">统筹日期：</label>
+				<div class="layui-input-block ver-center">
+					{{overPlanTime}}
+				</div>
+			</div>
+		{{/bean}}
+	</script>
+	    
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/salesOrder/'}).use('salesOrderDetails');
+    </script>
+</body>
+</html>

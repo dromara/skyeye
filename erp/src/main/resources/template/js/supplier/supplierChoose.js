@@ -74,9 +74,9 @@ layui.config({
 	function selectSupplier(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/supplier/supplierinfo.html",
+			url: "../../tpl/supplier/supplierInfo.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "supplierinfo",
+			pageId: "supplierInfo",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}

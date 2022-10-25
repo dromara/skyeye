@@ -84,7 +84,7 @@ layui.config({
 		_openNewWindows({
 			url: url, 
 			title: "单据详情",
-			pageId: "otherwarehousdetails",
+			pageId: "orderMationDetails",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}});
@@ -92,7 +92,6 @@ layui.config({
 	
     
     form.on('submit(formSearch)', function (data) {
-        
         if (winui.verifyForm(data.elem)) {
             loadTable();
         }

@@ -9,27 +9,27 @@ var erpOrderUtil = {
     getErpDetailUrl: function(data) {
         var url = "";
         if (data.subType == 1) {//采购入库---入库
-            url = "../../tpl/purchaseput/purchaseputdetails.html";
+            url = "../../tpl/purchasePut/purchasePutDetails.html";
         } else if (data.subType == 4) {//其他入库---入库
-            url = "../../tpl/otherwarehous/otherwarehousdetails.html";
+            url = "../../tpl/otherWarehous/otherWarehousDetails.html";
         } else if (data.subType == 2) {//销售退货---入库
-            url = "../../tpl/salesreturns/salesReturnsDetails.html";
+            url = "../../tpl/salesReturns/salesReturnsDetails.html";
         } else if (data.subType == 6) {//采购退货---出库
-            url = "../../tpl/purchasereturns/purchasereturnsdetails.html";
+            url = "../../tpl/purchaseReturns/purchaseReturnsDetails.html";
         } else if (data.subType == 9) {//其他出库---出库
-            url = "../../tpl/otheroutlets/otheroutletsdetails.html";
+            url = "../../tpl/otherOutlets/otherOutletsDetails.html";
         } else if (data.subType == 5) {//销售出库---出库
-            url = "../../tpl/salesoutlet/salesoutletdetails.html";
+            url = "../../tpl/salesOutlet/salesOutletDetails.html";
         } else if (data.subType == 8) {//零售出库---出库
-            url = "../../tpl/retailoutlet/retailoutletdetails.html";
+            url = "../../tpl/retailOutlet/retailOutletDetails.html";
         } else if (data.subType == 3) {//零售退货---入库
-            url = "../../tpl/retailreturns/retailReturnsDetails.html";
+            url = "../../tpl/retailReturns/retailReturnsDetails.html";
         } else if (data.subType == 12) {//拆分单---其他,一进一出
-            url = "../../tpl/splitlist/splitlistdetails.html";
+            url = "../../tpl/splitDoc/splitDocDetails.html";
         } else if (data.subType == 13) {//组装单---其他,一进一出
-            url = "../../tpl/assemblysheet/assemblysheetdetails.html";
+            url = "../../tpl/assemblySheet/assemblySheetDetails.html";
         } else if (data.subType == 14) {//调拨单---其他,一进一出
-            url = "../../tpl/allocation/allocationdetails.html";
+            url = "../../tpl/allocation/allocationDetails.html";
         } else if (data.subType == 15) {//验收入库单
             url = "";
         } else if (data.subType == 16) {//加工单

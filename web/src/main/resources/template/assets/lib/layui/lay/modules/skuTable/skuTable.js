@@ -389,9 +389,9 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 
                 normsStock = isNull(_data) ? [] : [].concat(JSON.parse(_data));
                 _openNewWindows({
-                    url: "../../tpl/materialnormstock/materialnormstock.html",
+                    url: "../../tpl/materialNormInitStock/materialNormInitStockList.html",
                     title: "库存信息",
-                    pageId: "materialnormstock",
+                    pageId: "materialNormInitStockList",
                     area: ['70vw', '70vh'],
                     callBack: function (refreshCode) {
                         var str = "";

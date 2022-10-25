@@ -255,7 +255,7 @@ layui.config({
  	    //销售单选择
  	    $("body").on("click", "#salesOrderSel", function (e) {
  	    	_openNewWindows({
- 				url: "../../tpl/salesorder/salesOrderChoose.html", 
+ 				url: "../../tpl/salesOrder/salesOrderChoose.html",
  				title: "选择销售单据",
  				pageId: "salesOrderChoose",
  				area: ['90vw', '90vh'],

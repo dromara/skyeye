@@ -66,9 +66,9 @@ layui.config({
 	function details(data) {
 		rowId = data.orderId;
 		_openNewWindows({
-			url: "../../tpl/salesorder/salesorderdetails.html", 
+			url: "../../tpl/salesOrder/salesOrderDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "salesorderdetails",
+			pageId: "salesOrderDetails",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}});

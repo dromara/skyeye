@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+    <div style="padding:20px; margin:0 auto;">
+        <form class="layui-form" action="" id="showForm">
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">仓库名称<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="houseName" name="houseName" win-verify="required" placeholder="请输入仓库名称" class="layui-input" maxlength="25"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">仓库地址</label>
+                <div class="layui-input-block">
+                    <input type="text" id="address" name="address" placeholder="请输入仓库地址" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">仓储费<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="warehousing" name="warehousing" win-verify="required|money" placeholder="请输入仓储费" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">搬运费<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="truckage" name="truckage" win-verify="required|money" placeholder="请输入搬运费" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">负责人</label>
+                <div class="layui-input-block">
+                    <input type="text" id="principal" name="principal" placeholder="请选择仓库负责人" class="layui-input"/>
+                    <i class="fa fa-user-plus input-icon" id="principalUserIdSelPeople"></i>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">是否默认<i class="red">*</i></label>
+                <div class="layui-input-block winui-radio">
+                    <input type="radio" name="isDefault" value="1" title="是" checked="checked"/>
+                    <input type="radio" name="isDefault" value="2" title="否" />
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <textarea id="remark" name="remark" placeholder="请输入备注信息" maxlength="200" class="layui-textarea" style="height: 100px;"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-col-xs12">
+                <div class="layui-input-block">
+                    <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+                    <button class="winui-btn" lay-submit lay-filter="formAddBean"><language showName="com.skyeye.save"></language></button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/storeHouse/'}).use('storeHouseAdd');
+    </script>
+</body>
+</html>
