@@ -8,7 +8,7 @@
 - 最新资讯：[2022-10-24 智能制造云办公 v3.8.6 发布，ERP 更新](https://www.oschina.net/news/214690/skyeye-3-8-6-released)
 - [软件更新资讯](https://gitee.com/doc_wei01/skyeye/blob/company_server/HISTORY_UPDATE.md)
 - 开源版请下载`master`分支
-- [企业版信息](https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1)
+- 企业版当前版本：202209版，发布时间：2022-09-08
 - 作者本人承诺，知识星球人数达到1000人，即开放所有功能模块源代码(仅供星球内部成员使用)
 - 免费体验账号，联系作者填写信息后申请
 - 个人软件，无发票
