@@ -38,8 +38,8 @@
     "licenceManageRevert": {"name": "证照归还", "key": "com.skyeye.eve.licence.service.impl.LicenceApplyRevertServiceImpl"},
     "licenceManageBorrow": {"name": "证照借用", "key": "com.skyeye.eve.licence.service.impl.LicenceApplyBorrowServiceImpl"},
 
-    "crmOpportUnity": {"name": "商机审核一阶段", "key": "com.skyeye.service.impl.CrmOpportunityServiceImpl"},
-    "myCrmContract": {"name": "合同审批", "key": "com.skyeye.service.impl.CrmContractServiceImpl"},
+    "crmOpportUnity": {"name": "商机审核一阶段", "key": "com.skyeye.opportunity.service.impl.CrmOpportunityServiceImpl"},
+    "myCrmContract": {"name": "合同审批", "key": "com.skyeye.contract.service.impl.CrmContractServiceImpl"},
 
     "conFerenceRoomReserve": {"name": "会议室预定", "key": "com.skyeye.eve.conference.service.impl.ConferenceRoomReserveServiceImpl"},
 
