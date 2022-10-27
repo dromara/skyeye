@@ -4,6 +4,11 @@
         "className": "skyeye-pro#com.skyeye.common.enumeration.EnableEnum"
     },
 
+    "verificationParams": {
+        "name": "字段校验枚举",
+        "className": "skyeye-pro#com.skyeye.common.enumeration.VerificationParamsEnum"
+    },
+
     "bossInterviewArrangementState": {
         "name": "面试安排状态枚举类",
         "className": "skyeye-flowable#com.skyeye.service.enumclass.BossInterviewArrangementState"
