@@ -109,7 +109,7 @@ layui.config({
 		}
     });
 	
-	//删除
+	// 删除
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
@@ -134,7 +134,7 @@ layui.config({
 			}});
 	}
 
-    //新增
+    // 新增
     $("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/dsformcontent/dsformcontentadd.html", 
@@ -148,7 +148,6 @@ layui.config({
     });
 
 	form.render();
-	//刷新数据
 	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
