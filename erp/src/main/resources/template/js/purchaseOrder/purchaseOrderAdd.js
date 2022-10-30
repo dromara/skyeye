@@ -41,7 +41,6 @@ layui.config({
 
 	// 初始化账户
 	systemCommonUtil.getSysAccountListByType(function (json) {
-		// 加载账户数据
 		$("#accountId").html(getDataUseHandlebars(selOption, json));
 	});
 

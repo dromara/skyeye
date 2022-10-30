@@ -534,7 +534,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                        </div>`;
             $(`#${this.options.otherMationElemId}`).html(str);
             var that = this;
-            AjaxPostUtil.request({url: flowableBasePath + "materialunit006", params: {}, type: 'json', method: "POST", callback: function(json) {
+            AjaxPostUtil.request({url: flowableBasePath + "materialunit006", params: {}, type: 'json', method: "GET", callback: function(json) {
                 $(`#unitGroupId`).html(getDataUseHandlebars(that.selTemplate, json));
                 that.unitGroupList = json.rows;
             }, async: false});
@@ -876,7 +876,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             var prependThead = [], prependTbody = [];
 
             // 加载计量单位作为其中的一个规格
-            AjaxPostUtil.request({url: flowableBasePath + "materialunit006", params: {}, type: 'json', method: "POST", callback: function(json) {
+            AjaxPostUtil.request({url: flowableBasePath + "materialunit006", params: {}, type: 'json', method: "GET", callback: function(json) {
                 var prependTbodyItem = [];
                 $.each(json.rows, function (i, item) {
                     if (item.id == that.data.otherMationData.unitGroupId) {
