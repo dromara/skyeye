@@ -14,7 +14,7 @@ layui.config({
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "materialcategory004",
-		 	params: {rowId: parent.rowId},
+		 	params: {id: parent.rowId},
 		 	pagination: false,
 			method: "GET",
 		 	template: $("#beanTemplate").html(),
@@ -27,11 +27,12 @@ layui.config({
 		 	    form.on('submit(formEditBean)', function (data) {
 		 	        if (winui.verifyForm(data.elem)) {
 		 	        	var params = {
-		 	        		rowId: parent.rowId,
+		 	        		id: parent.rowId,
 		 	        		name: $("#typeName").val(),
-		 	        		remark: $("#remark").val()
+		 	        		remark: $("#remark").val(),
+							parentId: json.bean.parentId
 		 	        	};
-		 	        	AjaxPostUtil.request({url: flowableBasePath + "materialcategory005", params: params, type: 'json', method: "PUT", callback: function (json) {
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "writeMaterialCategoryMation", params: params, type: 'json', method: "POST", callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 		 	        	}});

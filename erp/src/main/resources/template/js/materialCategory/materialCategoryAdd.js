@@ -17,7 +17,6 @@ layui.config({
 		
 		textool.init({eleId: 'remark', maxlength: 200});
 		
-		//加载树信息
 	    fsTree.render({
 			id: "materialCategoryType",
 			url: flowableBasePath + "materialcategory008",
@@ -46,7 +45,7 @@ layui.config({
  	        		remark: $("#remark").val(),
  	        		parentId: checkNodes[0].id
  	        	};
- 	        	AjaxPostUtil.request({url: flowableBasePath + "materialcategory002", params: params, type: 'json', method: "POST", callback: function (json) {
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "writeMaterialCategoryMation", params: params, type: 'json', method: "POST", callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
  	        	}});
