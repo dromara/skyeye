@@ -18,11 +18,10 @@ layui.config({
 		 	url: reqBasePath + "companydepartment004",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/companydepartment/companydepartmenteditTemplate.tpl'),
+		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
-
 				$("#overtimeSettlementType").val(json.bean.overtimeSettlementType);
 		 		
 		 		layedit.set({
@@ -83,7 +82,6 @@ layui.config({
 		 		
 			    // 加载公司数据
 				systemCommonUtil.getSysCompanyList(function(data) {
-					// 加载企业数据
 					$("#companyId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
 					$("#companyId").val(json.bean.companyId);
 				});

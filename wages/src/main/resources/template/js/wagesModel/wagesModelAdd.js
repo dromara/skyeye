@@ -115,7 +115,7 @@ layui.config({
 	});
 	$("body").on("click", "#companySel", function() {
 		_openNewWindows({
-			url: "../../tpl/companymation/companyChooseList.html",
+			url: "../../tpl/companyMation/companyChooseList.html",
 			title: "选择企业",
 			pageId: "companyChooseList",
 			area: ['90vw', '90vh'],
@@ -136,7 +136,7 @@ layui.config({
 	});
 	$("body").on("click", "#departmentSel", function() {
 		_openNewWindows({
-			url: "../../tpl/companydepartment/companyDepartmentChooseList.html",
+			url: "../../tpl/companyDepartment/companyDepartmentChooseList.html",
 			title: "选择部门",
 			pageId: "companyDepartmentChooseList",
 			area: ['90vw', '90vh'],

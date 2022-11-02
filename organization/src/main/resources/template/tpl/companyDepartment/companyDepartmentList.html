@@ -11,10 +11,25 @@
 	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
 	        <div class="layui-form-item">
 	            <div class="layui-inline">
-	                <label class="layui-form-label">公司名称</label>
+	                <label class="layui-form-label">所属公司</label>
 	                <div class="layui-input-inline">
-	                    <input id="companyName" name="companyName" class="layui-input" placeholder="请输入公司名称"/>
+	                    <select lay-filter="companyId" lay-search="" id="companyId">
+	                    </select>
 	                </div>
+	                <label class="layui-form-label">部门名称</label>
+	                <div class="layui-input-inline">
+	                    <input id="departmentName" name="departmentName" class="layui-input" placeholder="请输入部门名称"/>
+	                </div>
+					<label class="layui-form-label">结算方式</label>
+					<div class="layui-input-inline">
+						<select lay-filter="overtimeSettlementType" lay-search="" id="overtimeSettlementType">
+							<option value="">请选择</option>
+							<option value="1">单倍薪资结算</option>
+							<option value="2">1.5倍薪资结算</option>
+							<option value="3">双倍薪资结算</option>
+							<option value="6">补休结算</option>
+						</select>
+					</div>
 	                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
 	                <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
 	            </div>
@@ -24,16 +39,16 @@
     <div class="winui-toolbar">
         <div class="winui-tool">
             <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-            <button id="addBean" class="winui-toolbtn" auth="1552959308337"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
+            <button id="addBean" class="winui-toolbtn" auth="1552961771842"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
         </div>
     </div>
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
-			{{# if(auth('1552959229699')){ }}
+			{{# if(auth('1552961805628')){ }}
             	<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 			{{# } }}
-			{{# if(d.childsNum == 0 && d.userNum == 0 && d.departmentNum == 0 && auth('1552959169750')){ }}
+			{{# if(d.jobNum == 0 && d.userNum == 0 && auth('1552961786068')){ }}
           		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
 			{{# } }}
         </script>
@@ -41,7 +56,7 @@
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
-        layui.config({base: '../../js/companymation/'}).use('companymationlist');
+        layui.config({base: '../../js/companyDepartment/'}).use('companyDepartmentList');
     </script>
 </body>
 </html>

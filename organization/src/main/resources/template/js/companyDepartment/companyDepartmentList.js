@@ -93,9 +93,9 @@ layui.config({
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/companydepartment/companydepartmentedit.html", 
+			url: "../../tpl/companyDepartment/companyDepartmentEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-			pageId: "companydepartmentedit",
+			pageId: "companyDepartmentEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -106,9 +106,9 @@ layui.config({
     // 新增
     $("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/companydepartment/companydepartmentadd.html", 
+			url: "../../tpl/companyDepartment/companyDepartmentAdd.html",
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-			pageId: "companydepartmentadd",
+			pageId: "companyDepartmentAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -137,5 +137,5 @@ layui.config({
 		}
 	}
     
-    exports('companydepartmentlist', {});
+    exports('companyDepartmentList', {});
 });

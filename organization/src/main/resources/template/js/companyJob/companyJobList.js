@@ -54,6 +54,7 @@ layui.config({
 		    url: reqBasePath + 'companyjob001',
 		    where: getTableParams(),
 		    cols: [[
+				{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'jobName', title: '职位名称', width: 180 },
 		        { field: 'id', title: '职位简介', width: 80, align: 'center', templet: function (d) {
 		        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="jobDesc"></i>';
@@ -62,7 +63,7 @@ layui.config({
 		        { field: 'companyName', title: '所属公司', width: 150 },
 		        { field: 'departmentName', title: '所属部门', width: 100 },
 		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150 },
-		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
+		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar' }
 		    ]],
 		    done: function(json) {
 		    	matchingLanguage();
@@ -103,7 +104,7 @@ layui.config({
         return false;
 	});
 	
-	//删除
+	// 删除
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
@@ -114,13 +115,13 @@ layui.config({
 		});
 	}
 	
-	//编辑
+	// 编辑
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/companyjob/companyjobedit.html", 
+			url: "../../tpl/companyJob/companyJobEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-			pageId: "companyjobedit",
+			pageId: "companyJobEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -148,9 +149,9 @@ layui.config({
     // 新增
     $("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/companyjob/companyjobadd.html", 
+			url: "../../tpl/companyJob/companyJobAdd.html",
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-			pageId: "companyjobadd",
+			pageId: "companyJobAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -170,5 +171,5 @@ layui.config({
     	};
 	}
     
-    exports('companyjoblist', {});
+    exports('companyJobList', {});
 });

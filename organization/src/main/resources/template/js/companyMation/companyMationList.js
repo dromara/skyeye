@@ -13,7 +13,6 @@ layui.config({
 		tableTree = layui.tableTreeDj;
 	
 	authBtn('1552959308337');
-	// 公司列表
 	tableTree.render({
         id: 'messageTable',
         elem: '#messageTable',
@@ -21,6 +20,7 @@ layui.config({
         url: reqBasePath + 'companymation001',
         where:{companyName: $("#companyName").val()},
         cols: [[
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'companyName', width: 300, title: '公司名称'},
             { field: 'companyDesc', width: 80, title: '公司简介', align: 'center', templet: function (d) {
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="companyDesc"></i>';
@@ -43,8 +43,8 @@ layui.config({
             	}
 	        	return str;
 	        }},
-	        { field:'createTime', width:150, align: 'center', title: systemLanguage["com.skyeye.entryTime"][languageType]},
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
+	        { field:'createTime', width:150, align: 'center', title: systemLanguage["com.skyeye.entryTime"][languageType] },
+            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar' }
         ]],
         isPage:false,
 	    done: function(json) {
@@ -83,7 +83,7 @@ layui.config({
         return false;
 	});
 	
-	//删除
+	// 删除
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
@@ -94,13 +94,13 @@ layui.config({
 		});
 	}
 	
-	//编辑
+	// 编辑
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/companymation/companymationedit.html", 
+			url: "../../tpl/companyMation/companyMationEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-			pageId: "companymationedit",
+			pageId: "companyMationEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -108,17 +108,17 @@ layui.config({
 			}});
 	}
 	
-	//刷新数据
+	// 刷新数据
     $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     
-    //新增
+    // 新增
     $("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/companymation/companymationadd.html", 
+			url: "../../tpl/companyMation/companyMationAdd.html",
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-			pageId: "companymationadd",
+			pageId: "companyMationAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -130,5 +130,5 @@ layui.config({
 		tableTree.reload("messageTable", {where:{companyName: $("#companyName").val()}});
     }
     
-    exports('companymationlist', {});
+    exports('companyMationList', {});
 });

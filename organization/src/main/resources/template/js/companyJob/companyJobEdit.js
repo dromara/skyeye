@@ -22,7 +22,7 @@ layui.config({
 		 	url: reqBasePath + "companyjob004",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/companyjob/companyjobeditTemplate.tpl'),
+		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {
