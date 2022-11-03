@@ -101,13 +101,13 @@ layui.config({
 		}});
 	}
 	
-	// 编辑
+	// 重置密码
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/syseveuser/sysEveUserPasswordEdit.html",
+			url: "../../tpl/sysEveUser/sysEveUserPasswordEdit.html",
 			title: "重置密码",
-			pageId: "syseveuseredit",
+			pageId: "sysEveUserPasswordEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -119,9 +119,9 @@ layui.config({
 	function bindRole(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/syseveuser/syseveuserrolebind.html", 
+			url: "../../tpl/sysEveUser/sysEveUserRoleBind.html",
 			title: "绑定角色",
-			pageId: "syseveuserrolebind",
+			pageId: "sysEveUserRoleBind",
 			area: ['450px', '300px'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -132,9 +132,9 @@ layui.config({
 	// 添加用户
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/syseveuser/syseveuseradd.html", 
+			url: "../../tpl/sysEveUser/sysEveUserAdd.html",
 			title: "新增用户",
-			pageId: "syseveuseradd",
+			pageId: "sysEveUserAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -146,7 +146,7 @@ layui.config({
 	function details(data) {
 		rowId = data.staffId;
 		_openNewWindows({
-			url: "../../tpl/syseveuserstaff/sysEveUserStaffDetails.html",
+			url: "../../tpl/sysEveUserStaff/sysEveUserStaffDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sysEveUserStaffDetails",
 			area: ['90vw', '90vh'],
@@ -166,5 +166,5 @@ layui.config({
     	return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
     
-    exports('syseveuserlist', {});
+    exports('sysEveUserList', {});
 });

@@ -14,7 +14,7 @@ layui.config({
 		 	url: reqBasePath + "sys019",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/syseveuser/rolelist.tpl'),
+		 	template: getFileContent('tpl/sysEveUser/roleList.tpl'),
 		 	ajaxSendLoadBefore: function(hdb) {},
 		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();

@@ -145,7 +145,7 @@ layui.config({
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/syseveuserstaff/sysEveUserStaffEdit.html",
+			url: "../../tpl/sysEveUserStaff/sysEveUserStaffEdit.html",
 			title: "编辑员工",
 			pageId: "sysEveUserStaffEdit",
 			area: ['90vw', '90vh'],
@@ -159,7 +159,7 @@ layui.config({
 	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/syseveuserstaff/sysEveUserStaffDetails.html",
+			url: "../../tpl/sysEveUserStaff/sysEveUserStaffDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sysEveUserStaffDetails",
 			area: ['90vw', '90vh'],
@@ -171,9 +171,9 @@ layui.config({
 	function leave(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/syseveuserstaff/syseveuserstaffleave.html", 
+			url: "../../tpl/sysEveUserStaff/sysEveUserStaffLeave.html",
 			title: "员工离职",
-			pageId: "syseveuserstaffleave",
+			pageId: "sysEveUserStaffLeave",
 			area: ['50vw', '55vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -185,9 +185,9 @@ layui.config({
 	function turnTeacher(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/syseveuserstaff/turnTeacher.html", 
+			url: "../../tpl/sysEveUserStaff/turnTeacher.html",
 			title: "转教职工",
-			pageId: "syseveuserstaffleave",
+			pageId: "turnTeacher",
 			area: ['50vw', '55vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg("操作成功，请通知该员工重新登录帐号。", {icon: 1, time: 2000});
@@ -282,7 +282,7 @@ layui.config({
 	// 新增员工
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/syseveuserstaff/sysEveUserStaffAdd.html?type=1",
+			url: "../../tpl/sysEveUserStaff/sysEveUserStaffAdd.html?type=1",
 			title: "新增员工",
 			pageId: "sysEveUserStaffAdd",
 			area: ['90vw', '90vh'],
@@ -306,5 +306,5 @@ layui.config({
     	return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
     
-    exports('syseveuserstafflist', {});
+    exports('sysEveUserStaffList', {});
 });

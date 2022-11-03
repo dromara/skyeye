@@ -215,9 +215,9 @@ var systemCommonUtil = {
     checkStaffMation: [], // 选择时返回的对象
     openSysAllUserStaffChoosePage: function (callback) {
         _openNewWindows({
-            url: "../../tpl/syseveuserstaff/sysEveUserStaffChoose.html",
+            url: "../../tpl/sysEveUserStaff/sysEveUserStaffChoose.html",
             title: "员工选择",
-            pageId: "sysuserselpage",
+            pageId: "sysEveUserStaffChoose",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 if (typeof (callback) == "function") {
