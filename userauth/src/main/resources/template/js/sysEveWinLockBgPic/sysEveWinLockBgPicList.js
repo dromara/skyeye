@@ -19,7 +19,7 @@ layui.config({
 	 	params: {},
 	 	pagination: true,
 	 	pagesize: 18,
-	 	template: getFileContent('tpl/sysEveWinLockBgPic/bgpic-item.tpl'),
+	 	template: getFileContent('tpl/sysEveWinLockBgPic/bglockpic-item.tpl'),
 	 	ajaxSendLoadBefore: function(hdb) {
 	 		hdb.registerHelper("compare1", function(v1, options){
 				return fileBasePath + v1;
