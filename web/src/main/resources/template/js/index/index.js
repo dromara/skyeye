@@ -126,9 +126,7 @@ layui.config({
 			winui.helper.addTool([{
 				tips: '主题设置',
 				icon: 'fa-paw',
-				click: function (e) {
-					winui.window.openTheme(loadBottomMenuIcon);
-				}
+				click: function (e) {winui.window.openTheme(loadBottomMenuIcon);}
 			}, {
 				tips: '添加便签',
 				icon: 'fa-pencil-square-o',
@@ -172,9 +170,7 @@ layui.config({
 			}, {
 				tips: '消息中心',
 				icon: 'fa-list-ul',
-				click: function(e) {
-					winui.window.openSysNotice(loadBottomMenuIcon);
-				}
+				click: function(e) {winui.window.openSysNotice(loadBottomMenuIcon);}
 			}]);
 
 			// 读取本地便签
@@ -638,10 +634,7 @@ layui.config({
                 vagueBgSrcValue: currentUserMation.winBgPicVagueValue
             },
             desktop: {//桌面菜单栏
-                options: {
-                	url: reqBasePath + 'login004',
-                    method: 'get',
-                },    //可以为{}
+                options: {url: reqBasePath + 'login004', method: 'get',},
                 done: function (desktopApp) {
                     desktopApp.onclick(function (id, elem) {
                     	var item = $(elem);
@@ -656,10 +649,7 @@ layui.config({
                 }
             },
             menu: {//左下角菜单栏右键效果
-                options: {
-                    url: reqBasePath + 'login005',
-                    method: 'get',
-                },
+                options: {url: reqBasePath + 'login005', method: 'get',},
                 done: function (menuItem) {
                     //监听开始菜单点击
                     menuItem.onclick(function (elem) {

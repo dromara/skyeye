@@ -24,7 +24,6 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'name', title: '名称', align: 'left', width: 200 },
 	        { field: 'sort', title: systemLanguage["com.skyeye.serialNumber"][languageType], align: 'center', width: 80 },
 	        { field: 'remark', title: '备注', align: 'left', width: 200 },

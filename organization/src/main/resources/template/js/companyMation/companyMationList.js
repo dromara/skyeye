@@ -20,7 +20,6 @@ layui.config({
         url: reqBasePath + 'companymation001',
         where:{companyName: $("#companyName").val()},
         cols: [[
-			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'companyName', width: 300, title: '公司名称'},
             { field: 'companyDesc', width: 80, title: '公司简介', align: 'center', templet: function (d) {
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="companyDesc"></i>';

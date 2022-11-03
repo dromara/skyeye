@@ -87,7 +87,8 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
 						childsmenuSysWinUrl = isNull(bean.sysWinUrl) ? '' : 'win-sysWinUrl="' + bean.sysWinUrl + '"',
         				childsmenuIcon = '';
         			//如果子菜单的所属桌面和父菜单的一样或者该菜单所属桌面不存在
-                    if(bean.deskTopId === item.deskTopId || $('.winui-desktop').find("article[id='" + bean.deskTopId + "']").length == 0 || bean.deskTopId === 'winfixedpage00000000'){
+                    if(bean.deskTopId === item.deskTopId || $('.winui-desktop').find("article[id='" + bean.deskTopId + "']").length == 0
+						|| bean.deskTopId === 'winfixedpage00000000'){
         				var childsicon;
         				var childsiconsmall;
         				var childsisFaIcon = "";

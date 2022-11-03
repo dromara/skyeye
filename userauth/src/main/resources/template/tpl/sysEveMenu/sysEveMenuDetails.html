@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+	        
+	    </form>
+	</div>
+
+	<script type="text/x-handlebars-template" id="beanTemplate">
+		{{#bean}}
+		<div class="layui-form-item layui-col-xs12">
+			<span class="hr-title">基本信息</span><hr>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">菜单名称：</label>
+			<div class="layui-input-block ver-center">
+				{{menuName}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">英文名称：</label>
+			<div class="layui-input-block ver-center">
+				{{menuNameEn}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">图标：</label>
+			<div class="layui-input-block" id="icon" style="font-size: 60px; display: flex;">
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">菜单地址：</label>
+			<div class="layui-input-block ver-center">
+				{{menuUrl}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">所属桌面：</label>
+			<div class="layui-input-block ver-center">
+				{{desktopName}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">所属服务：</label>
+			<div class="layui-input-block ver-center">
+				{{sysWinName}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">菜单类型：</label>
+			<div class="layui-input-block ver-center" id="menuLevel">
+
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">父菜单：</label>
+			<div class="layui-input-block ver-center">
+				{{menuParentName}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">打开方式：</label>
+			<div class="layui-input-block ver-center">
+				{{menuType}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">系统菜单：</label>
+			<div class="layui-input-block ver-center">
+				{{menuSysTypeName}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">同步共享：</label>
+			<div class="layui-input-block ver-center">
+				{{isShareName}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<span class="hr-title">使用信息</span><hr>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">角色使用量：</label>
+			<div class="layui-input-block ver-center">
+				{{roleNum}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">权限点数量：</label>
+			<div class="layui-input-block ver-center">
+				{{authpointNum}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<span class="hr-title">创建信息</span><hr>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">创建人：</label>
+			<div class="layui-input-block ver-center">
+				{{userName}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">创建时间：</label>
+			<div class="layui-input-block ver-center">
+				{{createTime}}
+			</div>
+		</div>
+		{{/bean}}
+	</script>
+
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/sysEveMenu/'}).use('sysEveMenuDetails');
+    </script>
+</body>
+</html>

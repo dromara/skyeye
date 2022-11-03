@@ -54,7 +54,6 @@ layui.config({
 		    url: reqBasePath + 'companyjob001',
 		    where: getTableParams(),
 		    cols: [[
-				{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'jobName', title: '职位名称', width: 180 },
 		        { field: 'id', title: '职位简介', width: 80, align: 'center', templet: function (d) {
 		        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="jobDesc"></i>';

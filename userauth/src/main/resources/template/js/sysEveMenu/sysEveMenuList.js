@@ -8,38 +8,18 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'fsCommon', 'fsTree'], function (exports) {
+}).define(['window', 'tableTreeDj', 'jquery', 'winui', 'form', 'fsTree'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
 		fsTree = layui.fsTree,
-		fsCommon = layui.fsCommon,
-		table = layui.table;
-	var parentId = "";
+		tableTree = layui.tableTreeDj;
+	var sysWinId = "";
 	
 	authBtn('1552958167410');
 	
-	showGrid({
-	 	id: "menuLevel",
-	 	url: reqBasePath + "sys021",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb) {
-	 	},
-	 	ajaxSendAfter:function (json) {
-	 		form.render('select');
-	 	}
-	});
-	
-	// 桌面信息
-	systemCommonUtil.getSysDesttop(function (json) {
-		$("#desktop").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
-		form.render('select');
-	});
-
 	function initLoadTable() {
-		table.render({
+		tableTree.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
@@ -50,30 +30,18 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        { field: 'menuName', title: '菜单名称', width: 120, templet: function (d) {
-		        	return '<a lay-event="details" class="notice-title-click">' + d.menuName + '</a>';
-		        }},
+		        { field: 'menuName', title: '菜单名称', width: 120 },
 		        { field: 'menuNameEn', title: '英文名称', width: 150 },
 		        { field: 'id', title: '图标', align: 'center', width: 60, templet: function (d) {
 		        	return systemCommonUtil.initIconShow(d);
 		        }},
-		        { field: 'menuLevel', title: '菜单级别', width: 140, templet: function (d) {
-		        	if(d.parentId == '0'){
-		        		return "创世菜单";
-		        	} else {
-		        		return "子菜单-->" + d.menuLevel + "级子菜单";
-		        	}
+				{ field: 'orderNum', title: '排序', align: 'center', width: 80 },
+		        { field: 'menuLevel', title: '菜单类型', align: 'center', width: 100, templet: function (d) {
+		        	return d.menuLevel == 0 ? '父菜单' : '子菜单';
 		        }},
-		        { field: 'desktopName', title: '所属桌面', width: 140},
+		        { field: 'desktopName', title: '所属桌面', width: 120 },
 		        { field: 'isShare', title: '共享', align: 'center', width: 80, templet: function (d) {
-		        	if(d.isShare == 0){
-		        		return '否';
-		        	} else if (d.isShare == 1){
-		        		return '是';
-		        	} else {
-		        		return '参数错误';
-		        	}
+					return d.isShare == 0 ? '否' : '是';
 		        }},
 		        { field: 'menuParentName', title: '父菜单', width: 100 },
 		        { field: 'menuUrl', title: '菜单链接', width: 160 },
@@ -81,14 +49,21 @@ layui.config({
 				{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 				{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
 				{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar'}
+		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 320, toolbar: '#tableBar' }
 		    ]],
 		    done: function(json) {
 		    	matchingLanguage();
+				initTableSearchUtil.initAdvancedSearch($("#messageTable")[0], json.searchFilter, form, "请输入菜单名称", function () {
+					tableTree.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+				});
 		    }
+		}, {
+			keyId: 'id',
+			keyPid: 'parentId',
+			title: 'menuName',
 		});
-		
-		table.on('tool(messageTable)', function (obj) {
+
+		tableTree.getTable().on('tool(messageTable)', function (obj) {
 	        var data = obj.data;
 	        var layEvent = obj.event;
 			if (layEvent === 'del') { // 删除
@@ -122,19 +97,14 @@ layui.config({
 	//异步加载的方法
 	function onClickTree(event, treeId, treeNode) {
 		if(treeNode == undefined) {
-			parentId = "";
+			sysWinId = "";
 		} else {
-			parentId = treeNode.id;
+			sysWinId = treeNode.id;
 		}
 		loadTable();
 	}
 	/********* tree 处理   end *************/
 	
-	// 刷新数据
-    $("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
     // 删除
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
@@ -150,9 +120,9 @@ layui.config({
     function details(data) {
         rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/sysevemenu/sysevemenudetails.html", 
+            url: "../../tpl/sysEveMenu/sysEveMenuDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "sysevemenudetails",
+            pageId: "sysEveMenuDetails",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
             }});
@@ -162,9 +132,9 @@ layui.config({
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/sysevemenu/sysevemenuedit.html", 
+			url: "../../tpl/sysEveMenu/sysEveMenuEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-			pageId: "sysevemenuedit",
+			pageId: "sysEveMenuEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -191,9 +161,9 @@ layui.config({
     // 新增菜单
     $("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/sysevemenu/sysevemenuadd.html", 
+			url: "../../tpl/sysEveMenu/sysEveMenuAdd.html",
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-			pageId: "sysevemenuadd",
+			pageId: "sysEveMenuAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -215,28 +185,16 @@ layui.config({
 	}
 
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-		}
-		return false;
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
 	});
-    
     function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
+		tableTree.reload("messageTable", {where: getTableParams()});
     }
     
     function getTableParams() {
-		return {
-			menuName: $("#menuName").val(),
-			menuUrl: $("#menuUrl").val(),
-			parentId: parentId,
-			menuLevel: $("#menuLevel").val(),
-			desktopId: $("#desktop").val(),
-			isShare: $("#isShare").val(),
-			parentMenuName: $("#parentMenuName").val()
-		};
+		return $.extend(true, {sysWinId: sysWinId}, initTableSearchUtil.getSearchValue("messageTable"));
     }
     
-    exports('sysevemenulist', {});
+    exports('sysEveMenuList', {});
 });
