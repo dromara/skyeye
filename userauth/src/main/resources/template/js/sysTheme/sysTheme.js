@@ -24,7 +24,7 @@ layui.config({
 			 	url: reqBasePath + "sysevewinmation001",
 			 	params: {},
 			 	pagination: false,
-			 	template: getFileContent('tpl/systheme/systheme.tpl'),
+			 	template: getFileContent('tpl/sysTheme/sysTheme.tpl'),
 			 	ajaxSendLoadBefore: function(hdb) {
 			 		hdb.registerHelper("compare1", function(v1, options){
 						return fileBasePath + v1;
@@ -73,7 +73,7 @@ layui.config({
 				    $('.start-size input[value=' + startSize + ']').prop('checked', true);
 				    $('.preview-start').removeClass('xs sm lg');
 				    $('.preview-start').addClass(startSize);
-				    $(".preview-start").html(getFileContent('tpl/systheme/menu-model.tpl'));
+				    $(".preview-start").html(getFileContent('tpl/sysTheme/menu-model.tpl'));
 				    var vagueBgSrc = winui.getSetting('vagueBgSrc');
 				    if(vagueBgSrc == '1'){
 				    	$("#winBgPicVague").val(false);
@@ -100,7 +100,7 @@ layui.config({
 	    	 	url: reqBasePath + "sysevewinbgpic006",
 	    	 	params: {},
 	    	 	pagination: false,
-	    	 	template: getFileContent('tpl/systheme/custom-bgpic-item.tpl'),
+	    	 	template: getFileContent('tpl/sysTheme/custom-bgpic-item.tpl'),
 	    	 	ajaxSendLoadBefore: function(hdb) {
 	    	 		hdb.registerHelper("compare1", function(v1, options){
 	    				return fileBasePath + v1;
@@ -134,7 +134,7 @@ layui.config({
 	    	 	url: reqBasePath + "sysevewinlockbgpic006",
 	    	 	params: {},
 	    	 	pagination: false,
-	    	 	template: getFileContent('tpl/systheme/custom-lockbgpic-item.tpl'),
+	    	 	template: getFileContent('tpl/sysTheme/custom-lockbgpic-item.tpl'),
 	    	 	ajaxSendLoadBefore: function(hdb) {
 	    	 		hdb.registerHelper("compare1", function(v1, options){
 	    				return fileBasePath + v1;

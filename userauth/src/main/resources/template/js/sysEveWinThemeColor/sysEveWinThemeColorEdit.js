@@ -15,7 +15,7 @@ layui.config({
 		 	url: reqBasePath + "sysevewinthemecolor004",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/sysevewinthemecolor/sysevewinthemecoloreditTemplate.tpl'),
+		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {

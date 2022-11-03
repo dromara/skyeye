@@ -72,9 +72,9 @@ layui.config({
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/sysevewinthemecolor/sysevewinthemecoloredit.html", 
+			url: "../../tpl/sysEveWinThemeColor/sysEveWinThemeColorEdit.html",
 			title: "编辑主题",
-			pageId: "sysevewinthemecoloredit",
+			pageId: "sysEveWinThemeColorEdit",
 			area: ['400px', '400px'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -90,9 +90,9 @@ layui.config({
     //新增
     $("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/sysevewinthemecolor/sysevewinthemecoloradd.html", 
+			url: "../../tpl/sysEveWinThemeColor/sysEveWinThemeColorAdd.html",
 			title: "新增主题",
-			pageId: "sysevewinthemecoloradd",
+			pageId: "sysEveWinThemeColorAdd",
 			area: ['400px', '400px'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -108,5 +108,5 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where:{colorClass: $("#colorClass").val()}});
     }
     
-    exports('sysevewinthemecolorlist', {});
+    exports('sysEveWinThemeColorList', {});
 });

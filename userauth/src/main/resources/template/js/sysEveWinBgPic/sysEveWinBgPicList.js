@@ -1,5 +1,4 @@
 
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -11,25 +10,24 @@ layui.config({
 		form = layui.form,
 		upload = layui.upload;
 	
-	authBtn('1552961984449');
+	authBtn('1552959527026');
 	
-	//初始化数据
     showGrid({
 	 	id: "showForm",
-	 	url: reqBasePath + "sysevewinlockbgpic001",
+	 	url: reqBasePath + "sysevewinbgpic001",
 	 	params: {},
 	 	pagination: true,
 	 	pagesize: 18,
-	 	template: getFileContent('tpl/sysevewinbgpic/bgpic-item.tpl'),
+	 	template: getFileContent('tpl/sysEveWinBgPic/bgpic-item.tpl'),
 	 	ajaxSendLoadBefore: function(hdb) {
 	 		hdb.registerHelper("compare1", function(v1, options){
 				return fileBasePath + v1;
 			});
 	 	},
 	 	options: {'click .del':function(index, row){
-				layer.confirm('确认删除选中数据吗？', { icon: 3, title: '删除win系统锁屏桌面图片' }, function (index) {
+				layer.confirm('确认删除选中数据吗？', { icon: 3, title: '删除win系统桌面图片' }, function (index) {
 					layer.close(index);
-		            AjaxPostUtil.request({url: reqBasePath + "sysevewinlockbgpic003", params: {rowId: row.id}, type: 'json', callback: function (json) {
+		            AjaxPostUtil.request({url: reqBasePath + "sysevewinbgpic003", params: {rowId: row.id}, type: 'json', callback: function (json) {
 						winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 						loadTable();
 		    		}});
@@ -39,7 +37,7 @@ layui.config({
 	 		}
 	 	},
 	 	ajaxSendAfter:function (json) {
-	 		authBtn('1552961968162');
+	 		authBtn('1552959489421');
 	 		matchingLanguage();
 	 	}
     });
@@ -52,11 +50,11 @@ layui.config({
 	var uploadInst = upload.render({
 		elem: '#addBean', // 绑定元素
 		url: reqBasePath + 'common003', // 上传接口
-		data: {type: 3},
+		data: {type: 2},
 		done: function(json) {
 			// 上传完毕回调
 			if (json.returnCode == 0) {
-				AjaxPostUtil.request({url: reqBasePath + "sysevewinlockbgpic002", params: {picUrl: json.bean.picUrl}, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: reqBasePath + "sysevewinbgpic002", params: {picUrl: json.bean.picUrl}, type: 'json', callback: function (json) {
 					winui.window.msg("上传成功", {icon: 1, time: 2000});
 					loadTable();
 	    		}});
@@ -74,5 +72,5 @@ layui.config({
     	refreshGrid("showForm", {params:{}});
     }
     
-    exports('sysevewinbgpiclist', {});
+    exports('sysEveWinBgPicList', {});
 });

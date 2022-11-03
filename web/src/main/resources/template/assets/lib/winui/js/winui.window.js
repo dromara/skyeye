@@ -617,7 +617,7 @@ layui.define(['layer', 'winui'], function (exports) {
     // 打开主题设置窗口
     winLayer.openTheme = function (loadBottomMenuIcon) {
         var that = this;
-        $.get(winui.path + '../../../tpl/systheme/systheme.html', {}, function (content) {
+        $.get(winui.path + '../../../tpl/sysTheme/sysTheme.html', {}, function (content) {
         	var title = '<i class="fa title-icon fa-fw fa-cog" style="background-color: #0491fe;color: #ecf3f8;"></i>' + '<font class="win-title-class">主题设置</font>';
         	var iconTitle = '<i class="fa title-icon-big fa-fw fa-cog" style="background-color: #0491fe;color: #ecf3f8;"></i>';
             that.open({
