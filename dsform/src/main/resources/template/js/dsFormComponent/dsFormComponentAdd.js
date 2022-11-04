@@ -154,7 +154,7 @@ layui.config({
 				if (!params["iconChooseResult"]) {
 					return false;
 				}
-				AjaxPostUtil.request({url: flowableBasePath + "writeDsFormContent", params: params, type: 'json', method: 'POST', callback: function(json) {
+				AjaxPostUtil.request({url: flowableBasePath + "writeDsFormComponent", params: params, type: 'json', method: 'POST', callback: function(json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 				}});

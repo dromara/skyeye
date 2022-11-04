@@ -17,11 +17,11 @@ layui.config({
 
 	showGrid({
 		id: "showForm",
-		url: flowableBasePath + "queryDsFormContentMationById",
+		url: flowableBasePath + "queryDsFormComponentMationById",
 		params: {id: parent.rowId},
 		pagination: false,
 		method: 'GET',
-		template: getFileContent('tpl/dsformcontent/dsformcontenteditTemplate.tpl'),
+		template: $("#beanTemplate").html(),
 		ajaxSendLoadBefore: function(hdb) {
 			//是否为系统菜单
 			hdb.registerHelper("compare2", function(v1, options){
@@ -198,7 +198,7 @@ layui.config({
 							return false;
 						}
 
-						AjaxPostUtil.request({url: flowableBasePath + "writeDsFormContent", params: params, type: 'json', method: 'POST', callback: function (json) {
+						AjaxPostUtil.request({url: flowableBasePath + "writeDsFormComponent", params: params, type: 'json', method: 'POST', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 						}});

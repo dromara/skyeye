@@ -89,7 +89,7 @@ layui.config({
       	//展现形式
       	showGrid({
     	 	id: "dsFormContentId",
-    	 	url: flowableBasePath + "queryDsFormContentMationToShow",
+    	 	url: flowableBasePath + "queryDsFormComponentMationToShow",
     	 	params: {},
     	 	pagination: false,
 			method: 'GET',

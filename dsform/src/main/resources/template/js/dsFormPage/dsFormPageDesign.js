@@ -87,7 +87,7 @@ layui.config({
  	function loadLeftBoxItem(){
  		showGrid({
 		 	id: "btnBox",
-		 	url: flowableBasePath + "queryDsFormContentMationToShow",
+		 	url: flowableBasePath + "queryDsFormComponentMationToShow",
 		 	params: {},
 		 	pagination: false,
 			method: 'GET',

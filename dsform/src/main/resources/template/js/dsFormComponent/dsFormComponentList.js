@@ -19,7 +19,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: flowableBasePath + 'queryDsFormContentList',
+	    url: flowableBasePath + 'queryDsFormComponentList',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -113,7 +113,7 @@ layui.config({
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "deleteDsFormContentMationById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "deleteDsFormComponentMationById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -124,9 +124,9 @@ layui.config({
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/dsformcontent/dsformcontentedit.html", 
+			url: "../../tpl/dsFormComponent/dsFormComponentEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-			pageId: "dsformcontentedit",
+			pageId: "dsFormComponentEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -137,9 +137,9 @@ layui.config({
     // 新增
     $("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/dsformcontent/dsformcontentadd.html", 
+			url: "../../tpl/dsFormComponent/dsFormComponentAdd.html",
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-			pageId: "dsformcontentadd",
+			pageId: "dsFormComponentAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -160,5 +160,5 @@ layui.config({
 		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
     
-    exports('dsformcontentlist', {});
+    exports('dsFormComponentList', {});
 });
