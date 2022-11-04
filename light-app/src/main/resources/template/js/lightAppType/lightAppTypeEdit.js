@@ -15,7 +15,7 @@ layui.config({
 		 	url: sysMainMation.lightAppBasePath + "lightapptype003",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/lightapptype/lightapptypeeditTemplate.tpl'),
+		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
 		 	ajaxSendAfter:function (json) {

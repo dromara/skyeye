@@ -15,7 +15,7 @@ layui.config({
     	 	url: sysMainMation.lightAppBasePath + "lightapp008",
     	 	params: {typeId: typeId},
     	 	pagination: false,
-    	 	template: getFileContent('tpl/lightappshow/lightappshowlistTemplate.tpl'),
+    	 	template: getFileContent('tpl/lightAppShow/lightAppShowListTemplate.tpl'),
     	 	ajaxSendLoadBefore: function(hdb) {
     	 	},
     	 	ajaxSendAfter:function (json) {
@@ -29,7 +29,7 @@ layui.config({
 	 	url: sysMainMation.lightAppBasePath + "lightapptype010",
 	 	params: {},
 	 	pagination: false,
-	 	template: getFileContent('tpl/lightappshow/lightappshowaTemplate.tpl'),
+	 	template: getFileContent('tpl/lightAppShow/lightAppShowItemTemplate.tpl'),
 	 	ajaxSendLoadBefore: function(hdb) {
 	 	},
 	 	ajaxSendAfter:function (json) {
@@ -75,5 +75,5 @@ layui.config({
 	
 	form.render();
 	
-    exports('lightappshow', {});
+    exports('lightAppShow', {});
 });

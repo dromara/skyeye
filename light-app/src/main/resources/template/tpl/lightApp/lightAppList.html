@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1560418136905"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
+        </div>
+    </div>
+    <div style="margin:auto 10px;">
+        <table id="messageTable" lay-filter="messageTable"></table>
+        <script type="text/html" id="tableBar">
+			{{# if(d.state == 1||d.state == 3){ }}
+				{{# if(auth('1560418152289')){ }}
+            		<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+				{{# } }}
+			{{# } }}
+            {{# if((d.state == 1||d.state == 3)){ }}
+				{{# if(auth('1560418165540')){ }}
+            		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+				{{# } }}
+			{{# } }}
+			{{# if(d.state == 1||d.state == 3){ }}
+				{{# if(auth('1560418180506')){ }}
+            		<a class="layui-btn layui-btn-xs" lay-event="up">上线</a>
+				{{# } }}
+			{{# } }}
+			{{# if(d.state == 2){ }}
+				{{# if(auth('1560418189357')){ }}
+					<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="down">下线</a>
+				{{# } }}
+			{{# } }}
+        </script>
+    </div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/lightApp/'}).use('lightAppList');
+    </script>
+</body>
+</html>

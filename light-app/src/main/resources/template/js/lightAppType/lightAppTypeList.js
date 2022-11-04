@@ -1,4 +1,6 @@
+
 var rowId = "";
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -16,14 +18,14 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: sysMainMation.lightAppBasePath + 'lightapptype001',
-	    where: {typeName: $("#typeName").val(), state: $("#state").val()},
+	    where: getTableParams(),
 	    even: true,
 	    page: true,
-	    limits: [8, 16, 24, 32, 40, 48, 56],
-	    limit: 8,
+		limits: getLimits(),
+		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'typeName', title: '类型名称', align: 'center', width: 120 },
+	        { field: 'typeName', title: '名称', width: 120 },
 	        { field: 'iconPath', title: 'logo', width: 60, templet: function (d) {
 	        	if(isNull(d.iconPath)){
 	        		return '';
@@ -39,7 +41,7 @@ layui.config({
 		        	return str;
 	        	}
 	        }},
-	        { field: 'useNum', title: '轻应用数量', align: 'center', width: 120},
+	        { field: 'useNum', title: '轻应用数量', align: 'center', width: 120 },
 	        { field: 'state', title: '状态', width: 100, align: 'center', templet: function (d) {
 	        	if(d.state == '1'){
 	        		return "<span class='state-new'>新建</span>";
@@ -51,12 +53,15 @@ layui.config({
 	        		return "参数错误";
 	        	}
 	        }},
-	        { field: 'createId', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120},
-	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 200},
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#tableBar'}
+	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#tableBar' }
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -80,52 +85,34 @@ layui.config({
 		}
     });
 	
-	form.render();
-	
-	$("body").on("click", "#formSearchLightApp", function() {
-		refreshTable();
-	});
-	
-	$("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where:{typeName: $("#typeName").val(),state: $("#state").val()}});
-    }
-    
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where:{typeName: $("#typeName").val(),state: $("#state").val()}});
-    }
-
-	//新增
+	// 新增
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/lightapptype/lightapptypeadd.html", 
-			title: "新增轻应用类型",
-			pageId: "lightapptypeadd",
-			area: ['800px', '60vh'],
+			url: "../../tpl/lightAppType/lightAppTypeAdd.html",
+			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+			pageId: "lightAppTypeAdd",
+			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
-	//编辑
+	// 编辑
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/lightapptype/lightapptypeedit.html", 
-			title: "编辑轻应用类型",
-			pageId: "lightapptypeedit",
-			area: ['800px', '60vh'],
+			url: "../../tpl/lightAppType/lightAppTypeEdit.html",
+			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
+			pageId: "lightAppTypeEdit",
+			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
-	//删除
+	// 删除
 	function del(data, obj) {
 		var msg = obj ? '确认删除【' + obj.data.typeName + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除轻应用类型' }, function (index) {
@@ -137,7 +124,7 @@ layui.config({
 		});
 	}
 	
-	//上线
+	// 上线
 	function up(data, obj){
 		var msg = obj ? '确认将【' + obj.data.typeName + '】上线吗？' : '确认将选中数据上线吗？';
 		layer.confirm(msg, { icon: 3, title: '轻应用类型上线' }, function (index) {
@@ -149,7 +136,7 @@ layui.config({
 		});
 	}
 	
-	//下线
+	// 下线
 	function down(data, obj){
 		var msg = obj ? '确认将【' + obj.data.typeName + '】下线吗？' : '确认将选中数据下线吗？';
 		layer.confirm(msg, { icon: 3, title: '轻应用类型下线' }, function (index) {
@@ -161,7 +148,7 @@ layui.config({
 		});
 	}
 	
-	//上移
+	// 上移
 	function topOne(data) {
 		AjaxPostUtil.request({url: sysMainMation.lightAppBasePath + "lightapptype005", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -169,13 +156,25 @@ layui.config({
 		}});
 	}
 	
-	//下移
+	// 下移
 	function lowerOne(data) {
 		AjaxPostUtil.request({url: sysMainMation.lightAppBasePath + "lightapptype006", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
 	}
+
+	form.render();
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
+	});
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
+
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
 	
-    exports('lightapptypelist', {});
+    exports('lightAppTypeList', {});
 });

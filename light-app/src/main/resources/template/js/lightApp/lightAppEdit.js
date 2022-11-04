@@ -10,7 +10,6 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
 	    
-	   // 初始化应用类型
 		function initAppType(id){
 			showGrid({
 			 	id: "typeId",
@@ -40,9 +39,8 @@ layui.config({
 		 	url: sysMainMation.lightAppBasePath + "lightapp003",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/lightapp/lightappeditTemplate.tpl'),
+		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb) {
-		 	
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		$("#iconShow").attr("class", "fa fa-fw " + $("#appLogo").val());
@@ -52,7 +50,6 @@ layui.config({
 		 		form.render();
 		 		
 		 		initAppType(json.bean.typeId);
-				// 初始化上传
 				$("#appLogo").upload(systemCommonUtil.uploadCommon003Config('appLogo', 12, json.bean.appLogo, 1));
 
 		 	    form.on('submit(formEditMenu)', function (data) {
