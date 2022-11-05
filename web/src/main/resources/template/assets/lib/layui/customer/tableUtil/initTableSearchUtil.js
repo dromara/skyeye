@@ -571,6 +571,17 @@ var initTableSearchUtil = {
             }
         });
 
+        $("body").on("click", ".type-btn", function (e) {
+            $(this).parent().find('.type-btn').removeClass("plan-select");
+            $(this).addClass("plan-select");
+            var tableId = $(this).attr('table-id');
+            // 加载回调函数
+            var mation = initTableSearchUtil.tableMap[tableId];
+            if (typeof (mation.callback) == "function") {
+                mation.callback();
+            }
+        });
+
         // 取消
         $("body").on("click", ".searchCancle", function (e) {
             $(".search-form").hide();
@@ -760,10 +771,16 @@ var initTableSearchUtil = {
                 "attributeValue": confimValue.hideValue
             });
         });
-        return {
+        var retult = {
             "dynamicCondition": JSON.stringify(searchCondition),
             "keyword": $("#" + tableId + "KeyWord").val(),
         };
+        $.each($(".type-group"), function (i, item) {
+            var idKey = $(item).attr('id');
+            var chooseValue = $(item).find('.plan-select').data('type');
+            retult[idKey] = chooseValue;
+        });
+        return retult;
     }
 
 }

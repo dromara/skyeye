@@ -112,9 +112,9 @@ layui.config({
 	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/customermanage/customerdetails.html", 
+			url: "../../tpl/customerManage/customerDetails.html",
 			title: "客户详情",
-			pageId: "customerdetails",
+			pageId: "customerDetails",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}});

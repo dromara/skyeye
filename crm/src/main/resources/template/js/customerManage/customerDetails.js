@@ -28,12 +28,12 @@ layui.config({
     
     showGrid({
 	 	id: "showForm",
-	 	url: flowableBasePath + "customer005",
-	 	params: {rowId: customerId},
+	 	url: flowableBasePath + "queryCustomerMationById",
+	 	params: {id: customerId},
 	 	pagination: false,
-	 	template: getFileContent('tpl/customermanage/customerdetailsTemplate.tpl'),
-	 	ajaxSendLoadBefore: function(hdb) {
-	 	},
+		method: 'GET',
+	 	template: $("#beanTemplate").html(),
+	 	ajaxSendLoadBefore: function(hdb) {},
 	 	ajaxSendAfter: function (json) {
 	 		// 附件回显
 			skyeyeEnclosure.showDetails({"enclosureUpload": json.bean.enclosureInfo});

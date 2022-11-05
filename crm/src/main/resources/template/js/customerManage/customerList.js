@@ -1,5 +1,5 @@
+
 var rowId = "";
-var searchType = "";
 
 layui.config({
 	base: basePath, 
@@ -13,16 +13,9 @@ layui.config({
 		table = layui.table;
 	// 新增
 	authBtn('1570454924611');
-	// 所有客户
-	authBtn('1658637723975');
-	// 我创建的
-	authBtn('1658637741078');
-	// 我负责的
-	authBtn('1658637775025');
+	// 加载列表数据权限
+	loadAuthBtnGroup('messageTable', '1570455037177');
 
-	$("#typeBox").find('button').eq(0).addClass(' plan-select');
-
-	// 表格渲染
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
@@ -45,7 +38,7 @@ layui.config({
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 	        { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
+	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar' }
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
@@ -70,9 +63,9 @@ layui.config({
 	// 新增
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/customermanage/customeradd.html", 
+			url: "../../tpl/customerManage/customerAdd.html",
 			title: "新增客户",
-			pageId: "customeradd",
+			pageId: "customerAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -84,9 +77,9 @@ layui.config({
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/customermanage/customeredit.html", 
+			url: "../../tpl/customerManage/customerEdit.html",
 			title: "编辑客户",
-			pageId: "customeredit",
+			pageId: "customerEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -98,9 +91,9 @@ layui.config({
 	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/customermanage/customerdetails.html", 
+			url: "../../tpl/customerManage/customerDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "customerdetails",
+			pageId: "customerDetails",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}});
@@ -117,15 +110,7 @@ layui.config({
 		});
 	}
 
-	$("body").on("click", ".type-btn", function (e) {
-		$(".type-btn").removeClass("plan-select");
-		$(this).addClass("plan-select");
-		loadTable();
-	});
-
 	form.render();
-
-	// 刷新数据
 	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
@@ -135,10 +120,8 @@ layui.config({
     }
     
     function getTableParams() {
-    	return $.extend(true, {
-			type: $(".plan-select").data("type")
-    	}, initTableSearchUtil.getSearchValue("messageTable"));
+    	return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 	
-    exports('customerlist', {});
+    exports('customerList', {});
 });

@@ -306,9 +306,45 @@ function auth(urlNum) {
 	return false;
 }
 
-function authBtn(urlNum){
-	if(!auth(urlNum)){
+function authBtn(urlNum) {
+	if (!auth(urlNum)) {
 		layui.$('[auth="' + urlNum + '"]').remove();
+	}
+}
+
+/**
+ * 加载列表接口的数据权限菜单，因为要和表格搜索结合到一起，所以监听事件是要去initTableSearchUtil.js中查看
+ *
+ * @param tableId 表格id
+ * @param urlNum 权限点id
+ */
+function loadAuthBtnGroup(tableId, urlNum) {
+	if (isNull(urlNum)) {
+		return;
+	}
+	var authList = JSON.parse(localStorage.getItem("authpoints"));
+	if (!isNull(authList)) {
+		var str = '';
+		for (var i = 0; i < authList.length; i++) {
+			if (authList[i].menuNum === urlNum && authList[i].children.length > 0) {
+				// 数据权限分组不为空
+				var dataGroup = authList[i].children;
+				for (var j = 0; j < dataGroup.length; j++) {
+					str += `<div style="" class="type-group" id="${dataGroup[j].menuUrl}">`;
+					// 数据权限不为空
+					if (dataGroup[j].children.length > 0) {
+						var dataAuthPoint = dataGroup[j].children;
+						for (var k = 0; k < dataAuthPoint.length; k++) {
+							var type = dataAuthPoint[k].menuUrl.split('==')[1].trim();
+							var defaultClassName = k == 0 ? 'plan-select' : '';
+							str += `<button type="button" class="layui-btn layui-btn-primary type-btn ${defaultClassName}" data-type="${type}" table-id="${tableId}"><i class="layui-icon"></i>${dataAuthPoint[k].authMenuName}</button>`;
+						}
+					}
+					str += `</div>`;
+				}
+			}
+		}
+		$(".winui-toolbar").before(str);
 	}
 }
 

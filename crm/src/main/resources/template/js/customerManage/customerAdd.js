@@ -70,7 +70,7 @@ layui.config({
         			params.chargeUser = userList[0].id;
                 }
         		
- 	        	AjaxPostUtil.request({url: flowableBasePath + "customer002", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "writeCustomerMation", params: params, type: 'json', method: 'POST', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});

@@ -7,10 +7,7 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-	<div class="txtcenter" style="margin: 0 auto; padding-top: 10px;">
-		<div class="winui-tip alert-info" id="showInfo">
-			
-		</div>
+	<div class="txtcenter" style="margin:0 auto;padding-top:10px;">
 	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
 	        <div class="layui-form-item">
 	            <div class="layui-inline">
@@ -34,7 +31,7 @@
 						</select>
 					</div>
 					<button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
-	                <button class="layui-btn list-form-search" type="button" id="formSearch"><language showName="com.skyeye.search2"></language></button>
+					<button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
 	            </div>
 	        </div>
 	    </form>
@@ -50,7 +47,7 @@
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
-        layui.config({base: '../../js/customermanage/'}).use('customerInternationalList');
+        layui.config({base: '../../js/customerManage/'}).use('customerChoose');
     </script>
 </body>
 </html>

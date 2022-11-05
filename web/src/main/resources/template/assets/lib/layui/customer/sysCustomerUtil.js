@@ -14,8 +14,8 @@ var sysCustomerUtil = {
      */
     openSysCustomerChoosePage: function (callback) {
         _openNewWindows({
-            url: "../../tpl/customermanage/customerChoose.html",
-            title: "客户选择",
+            url: "../../tpl/customerManage/customerChoose.html",
+            title: "选择客户",
             pageId: "customerChoose",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {

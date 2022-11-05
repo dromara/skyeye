@@ -235,9 +235,9 @@ layui.config({
 	// 客户选择
 	$("body").on("click", "#customMationSel", function (e) {
 		_openNewWindows({
-			url: "../../tpl/customermanage/customerChoose.html",
+			url: "../../tpl/customerManage/customerChoose.html",
 			title: "选择客户",
-			pageId: "customerchooselist",
+			pageId: "customerChoose",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				$("#customName").val(customerMation.customName);

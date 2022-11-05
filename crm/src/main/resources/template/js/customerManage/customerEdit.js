@@ -12,16 +12,15 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
 	    	textool = layui.textool;
-	   	var selectMust = getFileContent('tpl/template/select-option-must.tpl');
-	    
+
 	    showGrid({
 		 	id: "showForm",
-		 	url: flowableBasePath + "customer003",
-		 	params: {rowId: parent.rowId},
+		 	url: flowableBasePath + "queryCustomerMationById",
+		 	params: {id: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/customermanage/customereditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb) {
-		 	},
+			method: 'GET',
+		 	template: $("#beanTemplate").html(),
+		 	ajaxSendLoadBefore: function(hdb) {},
 		 	ajaxSendAfter: function (json) {
 				// 客户分类
 				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerType"]["key"], 'select', "typeId", json.bean.typeId, form);
@@ -50,7 +49,7 @@ layui.config({
 		 	    form.on('submit(formEditBean)', function (data) {
 		 	        if (winui.verifyForm(data.elem)) {
 		 	        	var params = {
-	 	        			rowId: parent.rowId,
+	 	        			id: parent.rowId,
 	 	        			name: $("#name").val(),
 	 	 	        		combine: $("#combine").val(),
 	 	 	        		typeId: $("#typeId").val(),
@@ -86,7 +85,7 @@ layui.config({
 	 	        			params.chargeUser = userList[0].id;
 		                }
 	 	        		
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "customer004", params: params, type: 'json', callback: function (json) {
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "writeCustomerMation", params: params, type: 'json', method: 'POST', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 	 		 	   		}});

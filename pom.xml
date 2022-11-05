@@ -59,6 +59,7 @@
         <module>member</module>
         <module>shop</module>
         <module>report</module>
+        <module>base-server</module>
     </modules>
 
     <properties>
