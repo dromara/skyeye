@@ -9,17 +9,14 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'fsTree', 'textool', 'skuTable'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'textool', 'skuTable'], function (exports) {
 	winui.renderColor();
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
-	    	fsTree = layui.fsTree,
 			textool = layui.textool,
 			skuTable = layui.skuTable;
 	    
-	    // 商品分类类型树对象
-	    var materialCategoryType;
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "material007",
@@ -29,28 +26,8 @@ layui.config({
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb) {
 		 	},
-		 	ajaxSendAfter:function(j) {
+		 	ajaxSendAfter: function(j) {
 		 		textool.init({eleId: 'remark', maxlength: 200});
-		 		
-		 		fsTree.render({
-					id: "materialCategoryType",
-					url: flowableBasePath + "materialcategory008",
-					checkEnable: true,
-					loadEnable: false,
-					chkStyle: "radio",
-					showLine: false,
-					showIcon: true,
-					expandSpeed: 'fast'
-				}, function(id) {
-					materialCategoryType = $.fn.zTree.getZTreeObj(id);
-					fuzzySearch(id, '#name', null, true); //初始化模糊搜索方法
-				});
-				var zTree = materialCategoryType.getCheckedNodes(false);
-				for (var i = 0; i < zTree.length; i++) {
-					if(zTree[i].id == j.bean.categoryId){
-						materialCategoryType.checkNode(zTree[i], true, true);
-					}
-				}
 
 				var skuData = {};
 				$.each(j.bean.norms, function (index, item) {
@@ -91,6 +68,8 @@ layui.config({
 					otherMationData: j.bean
 				});
 
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["erpMaterialCategory"]["key"], 'radioTree', "materialCategoryType", j.bean.categoryId, form);
+
 				skyeyeClassEnumUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", j.bean.enabled, form);
 				skyeyeClassEnumUtil.showEnumDataListByClassName("materialFromType", 'radio', "fromType", j.bean.fromType, form);
 				skyeyeClassEnumUtil.showEnumDataListByClassName("materialType", 'radio', "materialType", j.bean.materialType, form);
@@ -103,16 +82,16 @@ layui.config({
 				form.render();
 		 	    form.on('submit(formEditBean)', function (data) {
 		 	        if (winui.verifyForm(data.elem)) {
-		 	        	var checkNodes = materialCategoryType.getCheckedNodes(true);
-		 	        	if(checkNodes.length == 0){
-		 	        		winui.window.msg('请选择商品所属类型', {icon: 2, time: 2000});
-		 	        		return false;
-		 	        	}
+						var materialCategoryType = $("#materialCategoryType").attr("chooseId");
+						if (isNull(materialCategoryType)) {
+							winui.window.msg('请选择商品所属类型', {icon: 2, time: 2000});
+							return false;
+						}
 						var params = {
 		        			materialName: $("#materialName").val(),
 		 	        		model: $("#model").val(),
 							unitName: isNull($("#unitName").val()) ? "" : $("#unitName").val(),
-		 	        		categoryId: checkNodes[0].id,
+		 	        		categoryId: materialCategoryType,
 		 	        		remark: $("#remark").val(),
 							unit: $("input[name='unit']:checked").val(),
 							unitGroupId: isNull($("#unitGroupId").val()) ? "" : $("#unitGroupId").val(),

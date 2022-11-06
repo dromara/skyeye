@@ -44,6 +44,10 @@
 
     "bbsForumReportType": {"name": "BBS-论坛举报类型", "key": "BBS_FORUM_REPORT_TYPE"},
 
-    "dsFormContentType": {"name": "动态表单-组件分类", "key": "DS_FORM_CONTENT_TYPE"}
+    "dsFormContentType": {"name": "动态表单-组件分类", "key": "DS_FORM_CONTENT_TYPE"},
+
+    "erpMaterialCategory": {"name": "ERP-商品类型", "key": "ERP_MATERIAL_CATEGORY"},
+
+    "teamRole": {"name": "团队-团队角色", "key": "TEAM_ROLE"}
 
 }

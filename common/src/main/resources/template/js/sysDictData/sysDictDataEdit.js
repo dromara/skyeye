@@ -23,16 +23,14 @@ layui.config({
 				json.bean.remark = stringManipulation.textAreaShow(json.bean.remark);
 			},
 		 	ajaxSendAfter: function (json) {
-
+				skyeyeClassEnumUtil.showEnumDataListByClassName("commonIsDefault", 'radio', "isDefault", json.bean.isDefault, form);
+				skyeyeClassEnumUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", json.bean.enabled, form);
 				// 加载数据字典分类
 				sysDictDataUtil.queryDictTypeListByEnabled(1, function (data) {
 					$("#dictTypeId").html(getDataUseHandlebars(selOption, data));
 					$("#dictTypeId").val(json.bean.dictTypeId);
 					form.render('select');
 				});
-
-				$("input:radio[name=isDefault][value=" + json.bean.isDefault + "]").attr("checked", true);
-				$("input:radio[name=status][value=" + json.bean.status + "]").attr("checked", true);
 
 				textool.init({eleId: 'remark', maxlength: 200});
 
@@ -45,8 +43,10 @@ layui.config({
 							dictName: $("#dictName").val(),
 							dictTypeId: $("#dictTypeId").val(),
 							dictSort: $("#dictSort").val(),
-							isDefault: $("input[name='isDefault']:checked").val(),
-							status: $("input[name='status']:checked").val(),
+							isDefault: $("#isDefault input:radio:checked").val(),
+							enabled: $("#enabled input:radio:checked").val(),
+							parentId: json.bean.parentId,
+							level: json.bean.level,
 							remark: $("#remark").val(),
 		 	        	};
 		 	        	AjaxPostUtil.request({url: reqBasePath + "writeDictDataMation", params: params, type: 'json', method: "POST", callback: function (json) {

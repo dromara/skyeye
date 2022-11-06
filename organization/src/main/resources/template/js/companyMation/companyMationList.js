@@ -20,7 +20,7 @@ layui.config({
         url: reqBasePath + 'companymation001',
         where:{companyName: $("#companyName").val()},
         cols: [[
-            { field: 'companyName', width: 300, title: '公司名称'},
+            { field: 'companyName', width: 300, title: '公司名称' },
             { field: 'companyDesc', width: 80, title: '公司简介', align: 'center', templet: function (d) {
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="companyDesc"></i>';
 	        }},
@@ -45,7 +45,7 @@ layui.config({
 	        { field:'createTime', width:150, align: 'center', title: systemLanguage["com.skyeye.entryTime"][languageType] },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar' }
         ]],
-        isPage:false,
+        isPage: false,
 	    done: function(json) {
 	    	matchingLanguage();
 	    }

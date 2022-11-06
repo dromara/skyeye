@@ -9,12 +9,11 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'fsTree', 'textool', 'skuTable'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'textool', 'skuTable'], function (exports) {
 	winui.renderColor();
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
-	    	fsTree = layui.fsTree,
 			textool = layui.textool,
 			skuTable = layui.skuTable;
 	    
@@ -51,23 +50,9 @@ layui.config({
 				]
 			}
 		});
-	    
-		// 初始商品分类类型
-	    var materialCategoryType;
-	    fsTree.render({
-			id: "materialCategoryType",
-			url: flowableBasePath + "materialcategory008",
-			checkEnable: true,
-			loadEnable: false,//异步加载
-			chkStyle: "radio",
-			showLine: false,
-			showIcon: true,
-			expandSpeed: 'fast'
-		}, function(id){
-			materialCategoryType = $.fn.zTree.getZTreeObj(id);
-			fuzzySearch(id, '#name', null, true); //初始化模糊搜索方法
-		});
 
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["erpMaterialCategory"]["key"], 'radioTree', "materialCategoryType", '', form);
+	    
 		skyeyeClassEnumUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", '', form);
 		skyeyeClassEnumUtil.showEnumDataListByClassName("materialFromType", 'radio', "fromType", '', form);
 		skyeyeClassEnumUtil.showEnumDataListByClassName("materialType", 'radio', "materialType", '', form);
@@ -77,16 +62,16 @@ layui.config({
  		form.render();
  	    form.on('submit(formAddBean)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
- 	        	var checkNodes = materialCategoryType.getCheckedNodes(true);
- 	        	if(checkNodes.length == 0){
- 	        		winui.window.msg('请选择商品所属类型', {icon: 2, time: 2000});
- 	        		return false;
- 	        	}
+ 	        	var materialCategoryType = $("#materialCategoryType").attr("chooseId");
+				if (isNull(materialCategoryType)) {
+					winui.window.msg('请选择商品所属类型', {icon: 2, time: 2000});
+					return false;
+				}
 				var params = {
         			materialName: $("#materialName").val(),
  	        		model: $("#model").val(),
 					unitName: isNull($("#unitName").val()) ? "" : $("#unitName").val(),
- 	        		categoryId: checkNodes[0].id,
+ 	        		categoryId: materialCategoryType,
  	        		remark: $("#remark").val(),
  	        		unit: $("input[name='unit']:checked").val(),
  	        		unitGroupId: isNull($("#unitGroupId").val()) ? "" : $("#unitGroupId").val(),
@@ -141,17 +126,17 @@ layui.config({
  	    });
  	    $(document).click(function (e) {
  	    	var _con = $('.label-edit');
- 	    	if(!_con.is(e.target) && _con.has(e.target).length === 0){
- 	    		$.each($('.label-edit'), function(i, item) {
- 	    			//判断是否是隐藏状态
- 	    			if(!$(item).is(':hidden')){
- 	    				//显示状态
- 	    				$(item).parent().children("font").html($(item).val());
- 	    				$(item).parent().children("font").show();
- 	    				$(item).hide();
- 	    			}
- 	    		});
- 	    	}
+			if (!_con.is(e.target) && _con.has(e.target).length === 0) {
+				$.each($('.label-edit'), function (i, item) {
+					//判断是否是隐藏状态
+					if (!$(item).is(':hidden')) {
+						//显示状态
+						$(item).parent().children("font").html($(item).val());
+						$(item).parent().children("font").show();
+						$(item).hide();
+					}
+				});
+			}
  	    });
 
 	    // 工序选择

@@ -1,8 +1,8 @@
 layui.define(['layer', "fsCommon"], function(exports) {
 	var layer = layui.layer, fsCommon = layui.fsCommon, FsTree = function() {
 		this.config = {
-			funcNo : undefined, // 功能号
 			url : undefined, // 请求url地址
+			simpleData: '', // 静态数据json字符串
 			id : "",
 			isRoot : true, // 是否显示根目录，默认显示
 			clickCallback : undefined, // 点击回调函数
@@ -36,7 +36,6 @@ layui.define(['layer', "fsCommon"], function(exports) {
 	 */
 	FsTree.prototype.render = function(options, callback) {
 		var _this = this;
-
 		$.extend(true, _this.config, options);
 		if (isNull(_this.config.id)) {
 			fsCommon.warnMsg("id不能为空!");
@@ -128,12 +127,6 @@ layui.define(['layer', "fsCommon"], function(exports) {
 	// 显示树
 	FsTree.prototype.showTree = function(data) {
 		var _this = this;
-		var funcNo = _this.config.funcNo;
-		var url = _this.config.url; // 请求url
-		if (isNull(funcNo) && isNull(url)) {
-			fsCommon.warnMsg("功能号或请求地址为空!");
-			return;
-		}
 		if (isNull(_this.config.chkboxType)) {
 			_this.config.chkboxType = {
 				"Y" : "ps",
@@ -142,31 +135,31 @@ layui.define(['layer', "fsCommon"], function(exports) {
 		}
 		var checkType = _this.config.checkType;
 		var setting = {
-			view : {
-				addDiyDom : _this.config.addDiyDom,
-				showIcon : _this.config.showIcon,
-				showLine : _this.config.showLine,
-				fontCss : _this.config.fontCss,
-				expandSpeed : _this.config.expandSpeed
+			view: {
+				addDiyDom: _this.config.addDiyDom,
+				showIcon: _this.config.showIcon,
+				showLine: _this.config.showLine,
+				fontCss: _this.config.fontCss,
+				expandSpeed: _this.config.expandSpeed
 				// 不要展开、折叠时的动画
 			},
-			data : {
-				key : {
-					name : _this.config.treeName
+			data: {
+				key: {
+					name: _this.config.treeName
 				},
-				simpleData : {
-					enable : _this.config.enable,
-					idKey : _this.config.treeIdKey,
-					pIdKey : _this.config.treePIdKey,
-					rootPId : 0
+				simpleData: {
+					enable: _this.config.enable,
+					idKey: _this.config.treeIdKey,
+					pIdKey: _this.config.treePIdKey,
+					rootPId: 0
 				}
 			},
-			async : { // 异步加载
-				type : "get",
-				enable : _this.config.loadEnable,
-				url : _this.config.url,
-				autoParam : ["id=parentId"],// 异步加载时需要自动提交父节点属性的参数
-				dataType : "json",
+			async: { // 异步加载
+				type: "get",
+				enable: _this.config.loadEnable,
+				url: _this.config.url,
+				autoParam: ["id=parentId"],// 异步加载时需要自动提交父节点属性的参数
+				dataType: "json",
 				beforeSend: function(XHR){
 					setRequestHeaders(XHR);
 				},
@@ -177,30 +170,30 @@ layui.define(['layer', "fsCommon"], function(exports) {
 					}
 				}
 			},
-			check : {
-				enable : _this.config.checkEnable,
-				chkStyle : _this.config.chkStyle, // 复选框
-				radioType : "all",
-				chkboxType : _this.config.chkboxType
+			check: {
+				enable: _this.config.checkEnable,
+				chkStyle: _this.config.chkStyle, // 复选框
+				radioType: "all",
+				chkboxType: _this.config.chkboxType
 			},
-			edit : {
-				enable : _this.config.dragEnable,
-				drag : {
-					isCopy : false,
-					isMove : true,
-					prev : true,
-					next : true,
-					inner : true,
-					autoOpenTime : 0,
-					minMoveSize : 10
+			edit: {
+				enable: _this.config.dragEnable,
+				drag: {
+					isCopy: false,
+					isMove: true,
+					prev: true,
+					next: true,
+					inner: true,
+					autoOpenTime: 0,
+					minMoveSize: 10
 				},
-				editNameSelectAll : true,
-				showRemoveBtn : false,
-				showRenameBtn : false
+				editNameSelectAll: true,
+				showRemoveBtn: false,
+				showRenameBtn: false
 			},
-			callback : {
-				onClick : _this.config.clickCallback,
-				onAsyncSuccess : function() {
+			callback: {
+				onClick: _this.config.clickCallback,
+				onAsyncSuccess: function() {
 					// 判断是否选中，如果有选择的值，那么默认选中根节点
 					if ("checkbox" == checkType || "radio" == checkType) {
 						var zTree = $.fn.zTree.getZTreeObj(_this.config.id);
@@ -221,14 +214,14 @@ layui.define(['layer', "fsCommon"], function(exports) {
 						_this.config.onAsyncSuccess(_this.config.id);
 					}
 				},
-				onDblClick : _this.config.onDblClick,
-				beforeCheck : _this.config.beforeCheck,
-				onCheck : _this.config.onCheck,
-				beforeRename : _this.config.beforeRename,
-				onRename : _this.config.onRename,
-				beforeDrag : _this.config.beforeDrag,
-				beforeDrop : _this.config.beforeDrop,
-				onDrop : _this.config.onDrop,
+				onDblClick: _this.config.onDblClick,
+				beforeCheck: _this.config.beforeCheck,
+				onCheck: _this.config.onCheck,
+				beforeRename: _this.config.beforeRename,
+				onRename: _this.config.onRename,
+				beforeDrag: _this.config.beforeDrag,
+				beforeDrop: _this.config.beforeDrop,
+				onDrop: _this.config.onDrop,
 				onRightClick:  _this.config.onRightClick
 			}
 		};
@@ -260,14 +253,11 @@ layui.define(['layer', "fsCommon"], function(exports) {
 	// 查询菜单树列表
 	FsTree.prototype.queryTree = function() {
 		var _this = this;
-		var funcNo = _this.config.funcNo;
 		var url = _this.config.url; // 请求url
-		if (isNull(funcNo) && isNull(url)) {
-			fsCommon.warnMsg("功能号或请求地址为空!");
+		var simpleData = !isNull(_this.config.simpleData) ? JSON.parse(_this.config.simpleData) : [];
+		if (isNull(url) && simpleData.length == 0) {
+			fsCommon.warnMsg("静态数据或请求地址为空!");
 			return;
-		}
-		if (isNull(url)) {
-			url = "/" + funcNo;
 		}
 		var domTree = $("#" + _this.config.id);
 
@@ -301,6 +291,7 @@ layui.define(['layer', "fsCommon"], function(exports) {
 				arr[_this.config.treeIdKey] = 0;
 				array.push(arr);
 			}
+			array = $.extend(true, array, simpleData);
 			_this.showTree(array);
 		} else {
 			var method = domTree.attr("method"); // 请求方式

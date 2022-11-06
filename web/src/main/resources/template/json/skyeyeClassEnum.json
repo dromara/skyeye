@@ -5,7 +5,7 @@
     },
     "commonIsDefault": {
         "name": "是否默认",
-        "className": "com.skyeye.common.enumeration.IsDefaultEnum"
+        "className": "skyeye-pro#com.skyeye.common.enumeration.IsDefaultEnum"
     },
 
     "verificationParams": {

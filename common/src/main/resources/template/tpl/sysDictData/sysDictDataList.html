@@ -5,6 +5,17 @@
     <title></title>
     <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .layui-table-body {
+            height: 700px !important;
+        }
+
+        .layui-table-fixed .layui-table-body {
+            height: 690px !important;
+        }
+    </style>
 </head>
 <body>
     <div class="winui-toolbar">
@@ -13,20 +24,39 @@
 			<button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1656776769966"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
         </div>
     </div>
-    <div style="margin:auto 10px;">
-		<table id="messageTable" lay-filter="messageTable"></table>
-		<script type="text/html" id="tableBar">
-			{{# if(auth('1656776769966')){ }}
-				<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-			{{# } }}
-			{{# if(auth('1656776782199')){ }}
-				<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
-			{{# } }}
-		</script>
-	</div>
+
+    <div class="layui-row">
+        <div style="width: 240px; float: left; height: 750px; overflow: auto; padding: 5px;">
+            <input type="text" id="name" name="name" placeholder="请输入要搜索的节点" class="layui-input" />
+            <ul id="treeDemo" class="ztree fsTree" method="get" isRoot="1"
+                treeIdKey="id" inputs="parentId" treePIdKey="pId" clickCallbackInputs="parentId:$id" treeName="name"></ul>
+        </div>
+        <div style="width: calc(100% - 250px); float: left;">
+            <div style="margin:auto 10px;">
+                <table id="messageTable" lay-filter="messageTable"></table>
+            </div>
+        </div>
+    </div>
+    <script type="text/html" id="tableBar">
+        {{# if(auth('1656776769966') && d.dictType == 2){ }}
+            <a class="layui-btn layui-btn-xs" lay-event="add">新增子节点</a>
+            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="move">移动</a>
+        {{# } }}
+        {{# if(auth('1656776769966')){ }}
+            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+        {{# } }}
+        {{# if(auth('1656776782199')){ }}
+            <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
+        {{# } }}
+    </script>
 
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery-min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.exhide.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/fuzzysearch.js"></script>
     <script type="text/javascript">
         layui.config({base: '../../js/sysDictData/'}).use('sysDictDataList');
     </script>
