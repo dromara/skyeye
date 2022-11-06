@@ -25,7 +25,7 @@ layui.config({
 		 	ajaxSendAfter: function (json) {
 
 				// 加载数据字典分类
-				sysDictDataUtil.queryDictTypeListByStatus(0, function (data) {
+				sysDictDataUtil.queryDictTypeListByEnabled(1, function (data) {
 					$("#dictTypeId").html(getDataUseHandlebars(selOption, data));
 					$("#dictTypeId").val(json.bean.dictTypeId);
 					form.render('select');

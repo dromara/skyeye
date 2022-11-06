@@ -27,7 +27,7 @@ layui.config({
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'dictName', title: '名称', width: 200 },
-			{ field: 'dictCode', title: 'Code', width: 300 },
+			{ field: 'dictCode', title: '编码', width: 300 },
 			{ field: 'dictType', title: '字典类型', align: 'center', width: 100, templet: function (d) {
 				if (d.dictType == 1) {
 					return '一级分类';
@@ -35,12 +35,8 @@ layui.config({
 					return '多级分类';
 				}
 			}},
-			{ field: 'status', title: '状态', align: 'center', width: 100, templet: function (d) {
-				if (d.status == 0) {
-					return "<span class='state-new'>启用</span>";
-				} else if (d.status == 1) {
-					return "<span class='state-down'>禁用</span>";
-				}
+			{ field: 'enabled', title: '状态', align: 'center', width: 100, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("commonEnable", 'id', d.enabled, 'name');
 			}},
 			{ field: 'remark', title: '备注', width: 300 },
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },

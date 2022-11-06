@@ -38,6 +38,7 @@
     "licenceManageRevert": {"name": "证照归还", "key": "com.skyeye.eve.licence.service.impl.LicenceApplyRevertServiceImpl"},
     "licenceManageBorrow": {"name": "证照借用", "key": "com.skyeye.eve.licence.service.impl.LicenceApplyBorrowServiceImpl"},
 
+    "crmCustomer": {"name": "客户信息", "key": "com.skyeye.customer.service.impl.CustomerServiceImpl"},
     "crmOpportUnity": {"name": "商机审核一阶段", "key": "com.skyeye.opportunity.service.impl.CrmOpportunityServiceImpl"},
     "myCrmContract": {"name": "合同审批", "key": "com.skyeye.contract.service.impl.CrmContractServiceImpl"},
 
@@ -60,5 +61,7 @@
     "bossPersonRequire": {"name": "人员需求申请", "key": "com.skyeye.service.impl.BossPersonRequireServiceImpl"},
     "bossInterviewRegularWorker": {"name": "转正申请", "key": "com.skyeye.service.impl.BossInterviewRegularWorkerServiceImpl"},
     "bossInterviewQuit": {"name": "离职申请", "key": "com.skyeye.service.impl.BossInterviewQuitServiceImpl"},
-    "bossInterviewJobTransfer": {"name": "岗位调动申请", "key": "com.skyeye.service.impl.BossInterviewJobTransferServiceImpl"}
+    "bossInterviewJobTransfer": {"name": "岗位调动申请", "key": "com.skyeye.service.impl.BossInterviewJobTransferServiceImpl"},
+
+    "contacts": {"name": "联系人", "key": "com.skyeye.contacts.service.impl.ContactsServiceImpl"}
 }

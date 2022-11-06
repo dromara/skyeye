@@ -20,7 +20,7 @@ layui.config({
 	    
 	    textool.init({eleId: 'remark', maxlength: 200});
 
-		var enableData = systemCommonUtil.getEnumDataListByClassName("commonEnable");
+		var enableData = skyeyeClassEnumUtil.getEnumDataListByClassName("commonEnable");
 		var skuTableObj = skuTable.render({
 			boxId: 'skuTableBox',
 			specTableElemId: 'fairy-spec-table',
@@ -68,9 +68,9 @@ layui.config({
 			fuzzySearch(id, '#name', null, true); //初始化模糊搜索方法
 		});
 
-		systemCommonUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", '', form);
-		systemCommonUtil.showEnumDataListByClassName("materialFromType", 'radio', "fromType", '', form);
-		systemCommonUtil.showEnumDataListByClassName("materialType", 'radio', "materialType", '', form);
+		skyeyeClassEnumUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", '', form);
+		skyeyeClassEnumUtil.showEnumDataListByClassName("materialFromType", 'radio', "fromType", '', form);
+		skyeyeClassEnumUtil.showEnumDataListByClassName("materialType", 'radio', "materialType", '', form);
 
 		skyeyeEnclosure.init('enclosureUpload');
 		matchingLanguage();

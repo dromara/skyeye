@@ -23,7 +23,35 @@ layui.config({
 			},
 		 	ajaxSendAfter: function (json) {
 
-				$("input:radio[name=status][value=" + json.bean.status + "]").attr("checked", true);
+				skyeyeClassEnumUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", json.bean.enabled, form);
+
+				form.on('radio(dictType)', function (data) {
+					var val = data.value;
+					if (val == 1) {
+						$("#chooseLevel").parent().parent().remove();
+					} else if (val == 2) {
+						$("#dictTypeBox").after(
+							`<div class="layui-form-item layui-col-xs6">
+								<label class="layui-form-label">可选层级<i class="red">*</i></label>
+								<div class="layui-input-block">
+									<input type="text" id="chooseLevel" name="chooseLevel" win-verify="required|number" placeholder="请输入可选层级" class="layui-input"/>
+									<div class="layui-form-mid layui-word-aux">例如：多级字典为三级，这里设置为2，那么只有二级和二级的所有子层级可以选择</div>
+								</div>
+							</div>`);
+					}
+				});
+
+				if (json.bean.dictType == 2) {
+					$("#dictTypeBox").after(
+						`<div class="layui-form-item layui-col-xs6">
+								<label class="layui-form-label">可选层级<i class="red">*</i></label>
+								<div class="layui-input-block">
+									<input type="text" id="chooseLevel" name="chooseLevel" win-verify="required|number" placeholder="请输入可选层级" class="layui-input" value="${json.bean.chooseLevel}"/>
+									<div class="layui-form-mid layui-word-aux">例如：多级字典为三级，这里设置为2，那么只有二级和二级的所有子层级可以选择</div>
+								</div>
+							</div>`);
+				}
+				$("input:radio[name=dictType][value=" + json.bean.dictType + "]").attr("checked", true);
 
 				textool.init({eleId: 'remark', maxlength: 200});
 
@@ -31,12 +59,14 @@ layui.config({
 				form.render();
 		 	    form.on('submit(formEditBean)', function (data) {
 		 	        if (winui.verifyForm(data.elem)) {
+						var dictType = $("input[name='dictType']:checked").val();
 		 	        	var params = {
 							id: parent.rowId,
 							dictName: $("#dictName").val(),
 							dictCode: $("#dictCode").val(),
-							status: $("input[name='status']:checked").val(),
-							dictType: 1,
+							enabled: $("#enabled input:radio:checked").val(),
+							dictType: dictType,
+							chooseLevel: dictType == 1 ? 1 : $('#chooseLevel').val(),
 							remark: $("#remark").val(),
 		 	        	};
 		 	        	AjaxPostUtil.request({url: reqBasePath + "writeDictTypeMation", params: params, type: 'json', method: "POST", callback: function (json) {

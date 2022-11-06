@@ -21,16 +21,16 @@ layui.config({
 			method: 'GET',
 		 	template: $("#beanTemplate").html(),
 			ajaxSendLoadBefore: function(hdb, json) {
-				json.bean.enabled = systemCommonUtil.getEnumDataNameByClassName('commonEnable', 'id', json.bean.enabled, 'name');
-				json.bean.fromType = systemCommonUtil.getEnumDataNameByClassName('materialFromType', 'id', json.bean.fromType, 'name');
-				json.bean.type = systemCommonUtil.getEnumDataNameByClassName('materialType', 'id', json.bean.type, 'name');
+				json.bean.enabled = skyeyeClassEnumUtil.getEnumDataNameByClassName('commonEnable', 'id', json.bean.enabled, 'name');
+				json.bean.fromType = skyeyeClassEnumUtil.getEnumDataNameByClassName('materialFromType', 'id', json.bean.fromType, 'name');
+				json.bean.type = skyeyeClassEnumUtil.getEnumDataNameByClassName('materialType', 'id', json.bean.type, 'name');
 			},
 		 	ajaxSendAfter:function (json) {
 				var skuData = {};
 				$.each(json.bean.norms, function (index, item) {
 					skuData[item.tableNum] = item;
 				});
-				var enableData = systemCommonUtil.getEnumDataListByClassName("commonEnable");
+				var enableData = skyeyeClassEnumUtil.getEnumDataListByClassName("commonEnable");
 				skuTable.render({
 					boxId: 'skuTableBox',
 					specTableElemId: 'fairy-spec-table',

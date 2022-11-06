@@ -13,7 +13,7 @@ var customerJS = {
 	"calculationUtil": "../../assets/lib/layui/customer/calculationUtil.js", // 加减乘除工具函数
 	"skyeyeEnclosure": "../../assets/lib/layui/customer/skyeyeEnclosure.js", // 附件工具函数
 	"ajaxPostUtil": "../../assets/lib/layui/customer/ajaxPostUtil.js", // ajax工具函数
-	"dsFormUtil": "../../assets/lib/layui/customer/dsFormUtil.js", // 动态表单工具函数
+	"dsFormUtil": "../../assets/lib/layui/customer/skyeye/dsFormUtil.js", // 动态表单工具函数
 	"systemModelUtil": "../../assets/lib/layui/customer/systemModelUtil.js", // 系统编辑器模板工具函数
 	"ueEditorUtil": "../../assets/lib/layui/customer/ueEditorUtil.js", // ueEditor编辑器工具函数
 	"accountSubjectUtil": "../../assets/lib/layui/customer/accountSubjectUtil.js", // 财务会计相关的工具函数
@@ -32,12 +32,13 @@ var customerJS = {
 	"organizationUtil": "../../assets/lib/layui/customer/organizationUtil.js", // 组织机构相关工具类
 	"threeUtil": "../../assets/lib/layui/customer/threeUtil.js", // 3D编辑器相关工具类
 	"reportModelTypeUtil": "../../assets/lib/layui/customer/reportModelTypeUtil.js", // 模型分类工具类
-	"schoolUtil": "../../assets/lib/layui/customer/schoolUtil.js", // 学校模块工具类
+	"schoolUtil": "../../assets/lib/layui/customer/skyeye/schoolUtil.js", // 学校模块工具类
 	"checkWorkUtil": "../../assets/lib/layui/customer/checkWorkUtil.js", // 考勤模块工具类
 	"arrayUtil": "../../assets/lib/layui/customer/arrayUtil.js", // 集合工具类
 	"initTableChooseUtil": "../../assets/lib/layui/customer/tableUtil/initTableChooseUtil.js", // 加载表格选择的表格插件
-	"sysDictDataUtil": "../../assets/lib/layui/customer/sysDictDataUtil.js", // 数据字典插件
+	"sysDictDataUtil": "../../assets/lib/layui/customer/skyeye/sysDictDataUtil.js", // 数据字典插件
 	"initTableSearchUtil": "../../assets/lib/layui/customer/tableUtil/initTableSearchUtil.js", // 表格高级查询插件
+	"skyeyeClassEnumUtil": "../../assets/lib/layui/customer/skyeye/skyeyeClassEnumUtil.js", // 动态枚举插件
 };
 
 //系统基础信息

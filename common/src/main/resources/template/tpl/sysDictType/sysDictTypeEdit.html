@@ -23,17 +23,22 @@
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs6">
-			<label class="layui-form-label">Code<i class="red">*</i></label>
+			<label class="layui-form-label">编码<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="dictCode" name="dictCode" win-verify="required" placeholder="请输入Code" class="layui-input" value="{{dictCode}}"/>
-				<div class="layui-form-mid layui-word-aux">Code不能重复。</div>
+				<input type="text" id="dictCode" name="dictCode" win-verify="required" placeholder="请输入编码" class="layui-input" value="{{dictCode}}"/>
+				<div class="layui-form-mid layui-word-aux">编码不能重复。</div>
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
 			<label class="layui-form-label">状态<i class="red">*</i></label>
+			<div class="layui-input-block winui-radio" id="enabled">
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6" id="dictTypeBox">
+			<label class="layui-form-label">字典类型<i class="red">*</i></label>
 			<div class="layui-input-block winui-radio">
-				<input type="radio" name="status" value="0" title="启用" />
-				<input type="radio" name="status" value="1" title="禁用" />
+				<input type="radio" name="dictType" value="1" title="一级字典" lay-filter="dictType" />
+				<input type="radio" name="dictType" value="2" title="多级字典" lay-filter="dictType" />
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">

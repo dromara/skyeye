@@ -56,7 +56,7 @@ layui.config({
 				$.each(j.bean.norms, function (index, item) {
 					skuData[item.tableNum] = item;
 				});
-				var enableData = systemCommonUtil.getEnumDataListByClassName("commonEnable");
+				var enableData = skyeyeClassEnumUtil.getEnumDataListByClassName("commonEnable");
 				var skuTableObj = skuTable.render({
 					boxId: 'skuTableBox',
 					specTableElemId: 'fairy-spec-table',
@@ -91,9 +91,9 @@ layui.config({
 					otherMationData: j.bean
 				});
 
-				systemCommonUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", j.bean.enabled, form);
-				systemCommonUtil.showEnumDataListByClassName("materialFromType", 'radio', "fromType", j.bean.fromType, form);
-				systemCommonUtil.showEnumDataListByClassName("materialType", 'radio', "materialType", j.bean.materialType, form);
+				skyeyeClassEnumUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", j.bean.enabled, form);
+				skyeyeClassEnumUtil.showEnumDataListByClassName("materialFromType", 'radio', "fromType", j.bean.fromType, form);
+				skyeyeClassEnumUtil.showEnumDataListByClassName("materialType", 'radio', "materialType", j.bean.materialType, form);
 
 				// 初始化工序
 				procedureMationList = [].concat(j.bean.procedureMationList);

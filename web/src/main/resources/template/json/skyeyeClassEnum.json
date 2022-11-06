@@ -3,6 +3,10 @@
         "name": "启用/禁用",
         "className": "skyeye-pro#com.skyeye.common.enumeration.EnableEnum"
     },
+    "commonIsDefault": {
+        "name": "是否默认",
+        "className": "com.skyeye.common.enumeration.IsDefaultEnum"
+    },
 
     "verificationParams": {
         "name": "字段校验枚举",
@@ -39,4 +43,5 @@
         "name": "视图枚举",
         "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"
     }
+
 }

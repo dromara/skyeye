@@ -2,17 +2,19 @@
 
 var sysDictDataUtil = {
 
+    dictDataMap: {},
+
     /**
      * 获取指定状态的数据字典分类
      *
-     * @param status 状态（0正常 1停用）
+     * @param enabled 状态（1 启用  2.停用）
      * @param callback 回执函数
      */
-    queryDictTypeListByStatus: function (status, callback) {
+    queryDictTypeListByEnabled: function (enabled, callback) {
         var params = {
-            status: status
+            enabled: enabled
         };
-        AjaxPostUtil.request({url: reqBasePath + "queryDictTypeListByStatus", params: params, type: 'json', method: "GET", callback: function(json) {
+        AjaxPostUtil.request({url: reqBasePath + "queryDictTypeListByEnabled", params: params, type: 'json', method: "GET", callback: function(json) {
             if (typeof(callback) == "function") {
                 callback(json);
             }
@@ -29,7 +31,7 @@ var sysDictDataUtil = {
         var params = {
             dictTypeCode: dictTypeCode
         };
-        AjaxPostUtil.request({url: reqBasePath + "queryDictDataListByDictTypeCode", params: params, type: 'json', method: "GET", callback: function(json) {
+        sysDictDataUtil.queryDictDataListByDictTypeCode(dictTypeCode, function (json) {
             if (showType == 'select') {
                 $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
                 if (!isNull(defaultId)) {
@@ -49,7 +51,7 @@ var sysDictDataUtil = {
             if (typeof (callback) == "function") {
                 callback(json);
             }
-        }, async: false});
+        });
     },
 
     /**
@@ -59,14 +61,29 @@ var sysDictDataUtil = {
      * @param callback 回执函数
      */
     queryDictDataListByDictTypeCode: function (dictTypeCode, callback) {
-        var params = {
-            dictTypeCode: dictTypeCode
-        };
-        AjaxPostUtil.request({url: reqBasePath + "queryDictDataListByDictTypeCode", params: params, type: 'json', method: "GET", callback: function(json) {
-            if (typeof(callback) == "function") {
-                callback(json);
-            }
-        }, async: false});
+        if (isNull(sysDictDataUtil.dictDataMap[dictTypeCode])) {
+            var params = {
+                dictTypeCode: dictTypeCode
+            };
+            AjaxPostUtil.request({url: reqBasePath + "queryDictDataListByDictTypeCode", params: params, type: 'json', method: "GET", callback: function(json) {
+                sysDictDataUtil.dictDataMap[dictTypeCode] = json;
+            }, async: false});
+        }
+        if (typeof(callback) == "function") {
+            callback(sysDictDataUtil.dictDataMap[dictTypeCode]);
+        }
     },
+
+    getDictDataNameByCodeAndKey: function (dictTypeCode, key) {
+        var displayName = '';
+        sysDictDataUtil.queryDictDataListByDictTypeCode(dictTypeCode, function (json) {
+            $.each(json.rows, function (i, item) {
+                if (item.id == key) {
+                    displayName = item.name;
+                }
+            });
+        });
+        return displayName;
+    }
 
 };

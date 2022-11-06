@@ -15,7 +15,7 @@ layui.config({
 		textool.init({eleId: 'remark', maxlength: 200});
 
 		// 加载数据字典分类
-		sysDictDataUtil.queryDictTypeListByStatus(0, function (json) {
+		sysDictDataUtil.queryDictTypeListByEnabled(1, function (json) {
 			$("#dictTypeId").html(getDataUseHandlebars(selOption, json));
 			form.render('select');
 		});
