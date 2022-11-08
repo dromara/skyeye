@@ -27,7 +27,7 @@ var sysDictDataUtil = {
      * @param dictTypeCode 数据字典所属分类的Code
      * @param callback 回执函数
      */
-    showDictDataListByDictTypeCode: function (dictTypeCode, showType, showBoxId, defaultId, form, callback) {
+    showDictDataListByDictTypeCode: function (dictTypeCode, showType, showBoxId, defaultId, form, callback, chooseCallback) {
         sysDictDataUtil.queryDictDataListByDictTypeCode(dictTypeCode, function (json) {
             if (showType == 'select') {
                 $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
@@ -56,23 +56,8 @@ var sysDictDataUtil = {
                     });
                 }
                 form.render('checkbox');
-            }  else if (showType == 'radioTree') {
-                var _html = `<link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
-                            <link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
-                            <div class="layui-inline" style="width: 100%">
-                                <div class="layui-input-inline">
-                                    <input type="text" id="${showBoxId}Name" name="${showBoxId}Name" placeholder="请输入要搜索的节点" class="layui-input" />
-                                </div>
-                            </div>
-                            <div class="layui-inline" style="max-height: 200px; width: 100%; overflow-y: auto;">
-                            <ul id="${showBoxId}Tree" class="ztree fsTree" method="get" isRoot="0" isLoad="0" treeIdKey="id" inputs="parentId" treePIdKey="pId" 
-                                clickCallbackInputs="parentId:$id" treeName="name" style="overflow-y: auto; height: 100%;"></ul>
-                            </div>
-                            <script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery-min.js"></script>
-                            <script type="text/javascript" src="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.js"></script>
-                            <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.all.min.js"></script>
-                            <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.exhide.min.js"></script>
-                            <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/fuzzysearch.js"></script>`;
+            } else if (showType == 'radioTree') {
+                var _html = sysDictDataUtil.getShowTteeHtml();
                 var _js = `<script>
                             layui.define(["jquery", 'fsTree'], function(exports) {
                                 var jQuery = layui.jquery,
@@ -107,11 +92,66 @@ var sysDictDataUtil = {
                                 })(jQuery);});
                            </script>`;
                 $("#" + showBoxId).append(_html + _js);
+            } else if (showType == 'selectTree') {
+                var _html = sysDictDataUtil.getShowTteeHtml();
+                var _js = `<script>
+                            layui.define(["jquery", 'fsTree'], function(exports) {
+                                var jQuery = layui.jquery,
+                                    fsTree = layui.fsTree;
+                                (function($) {
+                                    fsTree.render({
+                                        id: "${showBoxId}Tree",
+                                        simpleData: '` + JSON.stringify(json.treeRows) + `',
+                                        checkEnable: true,
+                                        loadEnable: false,
+                                        chkStyle: "radio",
+                                        showLine: false,
+                                        showIcon: true,
+                                        expandSpeed: 'fast',
+                                        clickCallback: onClickTree,
+                                        onDblClick: onClickTree
+                                    }, function(id) {
+                                        fuzzySearch(id, '#${showBoxId}Name', null, true);
+                                    });
+                                    function onClickTree(event, treeId, treeNode) {
+                                        var chooseId;
+                                        if (treeNode == undefined || treeNode.id == 0) {
+                                            chooseId = "";
+                                        } else {
+                                            chooseId = treeNode.id;
+                                        }
+                                        if (typeof (chooseCallback) == "function") {
+                                            chooseCallback(chooseId);
+                                        }
+                                    }
+                                })(jQuery);});
+                           </script>`;
+                $("#" + showBoxId).append(_html + _js);
             }
             if (typeof (callback) == "function") {
                 callback(json);
             }
         });
+    },
+
+    getShowTteeHtml: function (showBoxId) {
+        var _html = `<link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+                    <link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
+                    <div class="layui-inline" style="width: 100%">
+                        <div class="layui-input-inline">
+                            <input type="text" id="${showBoxId}Name" name="${showBoxId}Name" placeholder="请输入要搜索的节点" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-inline" style="max-height: 200px; width: 100%; overflow-y: auto;">
+                    <ul id="${showBoxId}Tree" class="ztree fsTree" method="get" isRoot="0" isLoad="0" treeIdKey="id" inputs="parentId" treePIdKey="pId" 
+                        clickCallbackInputs="parentId:$id" treeName="name" style="overflow-y: auto; height: 100%;"></ul>
+                    </div>
+                    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery-min.js"></script>
+                    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.js"></script>
+                    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.all.min.js"></script>
+                    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.exhide.min.js"></script>
+                    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/fuzzysearch.js"></script>`;
+        return _html;
     },
 
     /**
