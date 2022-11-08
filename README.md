@@ -11,6 +11,7 @@
 - 企业版当前版本：202209版，发布时间：2022-09-08
 - 作者本人承诺，知识星球人数达到1000人，即开放所有功能模块源代码(仅供星球内部成员使用)
 - 免费体验账号，联系作者填写信息后申请
+- [项目文档](https://gitee.com/doc_wei01/skyeye/blob/company_server/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3.md)
 - 基础模块 (源代码) 针对星球内部用户开放，具体包含功能可查看：[https://docs.qq.com/sheet/DYWZWUWZQUkFTcmh2?tab=BB08J2](https://docs.qq.com/sheet/DYWZWUWZQUkFTcmh2?tab=BB08J2)
 
 ### 沟通交流
