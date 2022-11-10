@@ -5,14 +5,12 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'tableCheckBoxUtil', 'fsCommon', 'fsTree'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form', 'tableCheckBoxUtil'], function (exports) {
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
-		fsTree = layui.fsTree,
-		fsCommon = layui.fsCommon,
 		tableCheckBoxUtil = layui.tableCheckBoxUtil;
 
 	var checkType = '1';//商品选择类型：1.单选；2.多选
@@ -20,8 +18,7 @@ layui.config({
 	if (!isNull(parent.erpOrderUtil.productCheckType)){
 		checkType = parent.erpOrderUtil.productCheckType;
 	}
-	
-	//设置提示信息
+
 	var s = "商品选择规则：";
 	if(checkType == "1"){
 		s += '1.单选，双击指定行数据即可选中；';
@@ -32,55 +29,15 @@ layui.config({
 	}
 	s += '如没有查到要选择的商品，请检查商品信息是否满足当前规则。';
 	$("#showInfo").html(s);
-	
-	/********* tree 处理   start *************/
-	//初始商品分类类型
-    var materialCategoryType;
-    fsTree.render({
-		id: "materialCategoryType",
-		url: flowableBasePath + "materialcategory008",
-		checkEnable: false,
-		loadEnable: false,//异步加载
-		showLine: false,
-		showIcon: true,
-		expandSpeed: 'fast',
-		clickCallback: zTreeOnClick
-	}, function(id){
-		materialCategoryType = $.fn.zTree.getZTreeObj(id);
-		//加载商品列表
-		initTable();
-	});
-	
-	//节点点击事件
-	function zTreeOnClick(event, treeId, treeNode) {
-		categoryId = treeNode.id == 0 ? '' : treeNode.id;
-		refreshTable();
-	}
-	
-	$("body").on("input", "#name", function() {
-		searchZtree(materialCategoryType, $("#name").val());
-	});
-	//ztree查询
-	var hiddenNodes = [];
-	function searchZtree(ztreeObj, ztreeInput) {
-		//显示上次搜索后隐藏的结点
-		ztreeObj.showNodes(hiddenNodes);
-		function filterFunc(node) {
-			var keyword = ztreeInput;
-			//如果当前结点，或者其父结点可以找到，或者当前结点的子结点可以找到，则该结点不隐藏
-			if(searchParent(keyword, node) || searchChildren(keyword, node.children)) {
-				return false;
-			}
-			return true;
-		};
-		//获取不符合条件的叶子结点
-		hiddenNodes = ztreeObj.getNodesByFilter(filterFunc);
-		//隐藏不符合条件的叶子结点
-		ztreeObj.hideNodes(hiddenNodes);
-	}
-	/********* tree 处理   end *************/
-	//树节点选中的商品类型id
+
 	var categoryId = "";
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["erpMaterialCategory"]["key"], 'selectTree', "materialCategoryType", '', form, function () {
+		initTable();
+	}, function (chooseId) {
+		categoryId = chooseId;
+		refreshTable();
+	});
+	
 	function initTable(){
 		if(checkType == '2'){
 			//初始化值

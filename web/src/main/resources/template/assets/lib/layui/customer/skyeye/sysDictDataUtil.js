@@ -145,7 +145,7 @@ var sysDictDataUtil = {
                             <input type="hidden" id="${showBoxId}Choose" name="${showBoxId}Choose" class="layui-input" />
                         </div>
                     </div>
-                    <div class="layui-inline" style="max-height: 200px; width: 100%; overflow-y: auto;">
+                    <div class="layui-inline" style="width: 100%;">
                     <ul id="${showBoxId}Tree" class="ztree fsTree" method="get" isRoot="${isRoot}" isLoad="0" treeIdKey="id" inputs="parentId" treePIdKey="parentId" 
                         clickCallbackInputs="parentId:$id" treeName="name" style="overflow-y: auto; height: 100%;"></ul>
                     </div>

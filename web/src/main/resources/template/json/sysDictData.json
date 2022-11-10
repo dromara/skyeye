@@ -48,6 +48,9 @@
 
     "erpMaterialCategory": {"name": "ERP-商品类型", "key": "ERP_MATERIAL_CATEGORY"},
 
-    "teamRole": {"name": "团队-团队角色", "key": "TEAM_ROLE"}
+    "teamRole": {"name": "团队-团队角色", "key": "TEAM_ROLE"},
 
+    "knowledgeType": {"name": "知识库-知识类型", "key": "KNOWLEDGE_TYPE"},
+
+    "ifsOrderType": {"name": "IFS-财务单据类型", "key": "IFS_ORDER_TYPE"}
 }

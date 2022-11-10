@@ -25,8 +25,8 @@
         </div>
     </div>
 
-    <div class="layui-row">
-        <div style="width: 240px; float: left; height: 750px; overflow: auto; padding: 5px;">
+    <div class="layui-row" style="height: calc(100% - 50px);">
+        <div style="width: 240px; float: left; height: 100%; overflow: auto; padding: 5px;">
             <input type="text" id="name" name="name" placeholder="请输入要搜索的节点" class="layui-input" />
             <ul id="treeDemo" class="ztree fsTree" method="get" isRoot="1"
                 treeIdKey="id" inputs="parentId" treePIdKey="pId" clickCallbackInputs="parentId:$id" treeName="name"></ul>
