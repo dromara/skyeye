@@ -5,8 +5,6 @@
     <title></title>
     <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
-    <link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
-    <link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
     <link href="../../assets/lib/layui/lay/modules/jqueryStep/css/jquery.step.css" rel="stylesheet" />
     <style>
 		.layui-input{
@@ -30,16 +28,8 @@
 	        </div>
 	    </div>
 	    <div style="margin:auto 10px;">
-	        <div style="width: 200px; float: left;">
-	    		<div class="layui-inline" style="width: 100%">
-	                <div class="layui-input-inline" style="width: 100%">
-	                    <input type="text" id="name" name="name" placeholder="请输入要搜索的节点" class="layui-input" />
-	                </div>
-	            </div>
-	            <div class="layui-inline" style="width: 100%">
-	            	<ul id="materialCategoryType" class="ztree fsTree" method="get" isRoot="1"
-						treeIdKey="id" inputs="parentId" treePIdKey="pId" clickCallbackInputs="parentId:$id" treeName="name" style="overflow-y: auto; height: 100%;"></ul>
-	            </div>
+	        <div style="width: 200px; float: left;" id="materialCategoryType">
+
 	    	</div>
 	    	<div style="width: calc(100% - 200px); float: left;">
 		    	<div style="margin:auto 10px;">
@@ -61,8 +51,8 @@
 	    				<th>型号</th>
 	    				<th>所属类型</th>
 	    				<th>商品来源</th>
-	    				<th>BOM方案选择</th>
-	    				<th>规格选择</th>
+						<th>规格选择</th>
+						<th>BOM方案选择</th>
 	    				<th>工序</th>
 	    			</tr>
 	    		</thead>
@@ -91,17 +81,17 @@
 						<option value="2">外购</option>
 					</select>
 				</td>
-               	<td>
-					<select lay-filter="bomListChoose" lay-search="" id="bom{{productId}}">
-						<option value="">全部</option>
-						{{#each bomList}}
-							<option value="{{id}}">{{name}}</option>
+				<td>
+					<select lay-filter="unitListChoose" lay-search="" id="norms{{productId}}">
+						{{#each unitList}}
+						<option value="{{id}}">{{name}}</option>
 						{{/each}}
 					</select>
 				</td>
                	<td>
-					<select lay-filter="unitListChoose" lay-search="" id="norms{{productId}}">
-						{{#each unitList}}
+					<select lay-filter="bomListChoose" lay-search="" id="bom{{productId}}">
+						<option value="">全部</option>
+						{{#each bomList}}
 							<option value="{{id}}">{{name}}</option>
 						{{/each}}
 					</select>
@@ -117,12 +107,8 @@
     
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
-    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery-min.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery-min.js"></script>
     <script type="text/javascript" src="../../assets/lib/layui/lay/modules/jqueryStep/js/jquery.step.min.js"></script>
-   	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.js"></script>
-    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.all.min.js"></script>
-    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.exhide.min.js"></script>
-    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/fuzzysearch.js"></script>
     <script type="text/javascript">
         layui.config({base: '../../js/material/'}).use('materialChooseToProduce');
     </script>

@@ -107,9 +107,9 @@ layui.config({
 		$("body").on("click", ".productNameMation", function() {
 	    	rowId = $(this).attr("rowid");
 			_openNewWindows({
-				url: "../../tpl/material/materialdetails.html", 
+				url: "../../tpl/material/materialDetails.html",
 				title: "商品详情",
-				pageId: "licencedetails",
+				pageId: "materialDetails",
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {
 				}});
@@ -119,9 +119,9 @@ layui.config({
 		$("body").on("click", ".faultKeyPartsNameMation", function() {
 	    	rowId = $(this).attr("rowid");
 			_openNewWindows({
-				url: "../../tpl/material/materialdetails.html", 
+				url: "../../tpl/material/materialDetails.html",
 				title: "组件详情",
-				pageId: "licencedetails",
+				pageId: "materialDetails",
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {
 				}});

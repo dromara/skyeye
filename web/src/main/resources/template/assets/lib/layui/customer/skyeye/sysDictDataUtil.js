@@ -57,7 +57,7 @@ var sysDictDataUtil = {
                 }
                 form.render('checkbox');
             } else if (showType == 'radioTree') {
-                var _html = sysDictDataUtil.getShowTteeHtml();
+                var _html = sysDictDataUtil.getShowTteeHtml(showBoxId, '0');
                 var _js = `<script>
                             layui.define(["jquery", 'fsTree'], function(exports) {
                                 var jQuery = layui.jquery,
@@ -93,7 +93,7 @@ var sysDictDataUtil = {
                            </script>`;
                 $("#" + showBoxId).append(_html + _js);
             } else if (showType == 'selectTree') {
-                var _html = sysDictDataUtil.getShowTteeHtml();
+                var _html = sysDictDataUtil.getShowTteeHtml(showBoxId, '1');
                 var _js = `<script>
                             layui.define(["jquery", 'fsTree'], function(exports) {
                                 var jQuery = layui.jquery,
@@ -102,9 +102,8 @@ var sysDictDataUtil = {
                                     fsTree.render({
                                         id: "${showBoxId}Tree",
                                         simpleData: '` + JSON.stringify(json.treeRows) + `',
-                                        checkEnable: true,
+                                        checkEnable: false,
                                         loadEnable: false,
-                                        chkStyle: "radio",
                                         showLine: false,
                                         showIcon: true,
                                         expandSpeed: 'fast',
@@ -120,13 +119,16 @@ var sysDictDataUtil = {
                                         } else {
                                             chooseId = treeNode.id;
                                         }
-                                        if (typeof (chooseCallback) == "function") {
-                                            chooseCallback(chooseId);
-                                        }
+                                        $('#${showBoxId}Choose').val(chooseId).change();
                                     }
                                 })(jQuery);});
                            </script>`;
                 $("#" + showBoxId).append(_html + _js);
+                $("#" + showBoxId + "Choose").on("change", function() {
+                    if (typeof (chooseCallback) == "function") {
+                        chooseCallback($(this).val());
+                    }
+                });
             }
             if (typeof (callback) == "function") {
                 callback(json);
@@ -134,16 +136,17 @@ var sysDictDataUtil = {
         });
     },
 
-    getShowTteeHtml: function (showBoxId) {
+    getShowTteeHtml: function (showBoxId, isRoot) {
         var _html = `<link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
                     <link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
                     <div class="layui-inline" style="width: 100%">
                         <div class="layui-input-inline">
                             <input type="text" id="${showBoxId}Name" name="${showBoxId}Name" placeholder="请输入要搜索的节点" class="layui-input" />
+                            <input type="hidden" id="${showBoxId}Choose" name="${showBoxId}Choose" class="layui-input" />
                         </div>
                     </div>
                     <div class="layui-inline" style="max-height: 200px; width: 100%; overflow-y: auto;">
-                    <ul id="${showBoxId}Tree" class="ztree fsTree" method="get" isRoot="0" isLoad="0" treeIdKey="id" inputs="parentId" treePIdKey="pId" 
+                    <ul id="${showBoxId}Tree" class="ztree fsTree" method="get" isRoot="${isRoot}" isLoad="0" treeIdKey="id" inputs="parentId" treePIdKey="parentId" 
                         clickCallbackInputs="parentId:$id" treeName="name" style="overflow-y: auto; height: 100%;"></ul>
                     </div>
                     <script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery-min.js"></script>

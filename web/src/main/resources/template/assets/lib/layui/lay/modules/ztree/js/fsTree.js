@@ -281,17 +281,16 @@ layui.define(['layer', "fsCommon"], function(exports) {
 		_this.config.otherParam = otherParam;
 
 		if (domTree.attr("isLoad") === "0") {
-			var array = new Array();
-			if (domTree.attr("isRoot") !== "0") { // 是否显示根目录
+			var array = [].concat(simpleData);
+			if (domTree.attr("isRoot") !== "0") {
 				var arr = {};
 				arr["open"] = true;
 				arr["isParent"] = true;
 				arr["drag"] = false;
 				arr[_this.config.treeName] = "全部";
-				arr[_this.config.treeIdKey] = 0;
+				arr[_this.config.treeIdKey] = "0";
 				array.push(arr);
 			}
-			array = $.extend(true, array, simpleData);
 			_this.showTree(array);
 		} else {
 			var method = domTree.attr("method"); // 请求方式
@@ -306,13 +305,13 @@ layui.define(['layer', "fsCommon"], function(exports) {
 					if (!$.isArray(array)) {
 						array = new Array();
 					}
-					if (domTree.attr("isRoot") !== "0") { // 是否显示根目录
+					if (domTree.attr("isRoot") !== "0") {
 						var arr = {};
 						arr["open"] = true;
 						arr["isParent"] = true;
 						arr["drag"] = false;
 						arr[_this.config.treeName] = "全部";
-						arr[_this.config.treeIdKey] = 0;
+						arr[_this.config.treeIdKey] = "0";
 						array.push(arr);
 					}
 					_this.showTree(array);

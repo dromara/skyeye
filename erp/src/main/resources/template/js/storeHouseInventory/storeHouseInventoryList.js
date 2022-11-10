@@ -157,9 +157,9 @@ layui.config({
 	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/material/materialdetails.html", 
+			url: "../../tpl/material/materialDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "materialdetails",
+			pageId: "materialDetails",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}});

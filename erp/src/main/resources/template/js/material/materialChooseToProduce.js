@@ -5,86 +5,43 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'tableCheckBoxUtil', 'fsCommon', 'fsTree'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form', 'tableCheckBoxUtil'], function (exports) {
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
-		fsTree = layui.fsTree,
-		fsCommon = layui.fsCommon,
 		tableCheckBoxUtil = layui.tableCheckBoxUtil;
 	
-	//选择的多商品列表
+	// 选择的多商品列表
 	productMationList = parent.productMationList;
 	
-	//设置提示信息
+	// 设置提示信息
 	var s = "商品选择规则：1.多选；如没有查到要选择的商品，请检查商品信息是否满足当前规则。";
 	$("#showInfo").html(s);
-	
-	/********* tree 处理   start *************/
-	//初始商品分类类型
-    var materialCategoryType;
-    fsTree.render({
-		id: "materialCategoryType",
-		url: flowableBasePath + "materialcategory008",
-		checkEnable: false,
-		loadEnable: false,//异步加载
-		showLine: false,
-		showIcon: true,
-		expandSpeed: 'fast',
-		clickCallback: zTreeOnClick
-	}, function(id){
-		materialCategoryType = $.fn.zTree.getZTreeObj(id);
-		//加载商品列表
-		initTable();
-	});
-	
-	//节点点击事件
-	function zTreeOnClick(event, treeId, treeNode) {
-		categoryId = treeNode.id == 0 ? '' : treeNode.id;
-		refreshTable();
-	}
-	
-	$("body").on("input", "#name", function() {
-		searchZtree(materialCategoryType, $("#name").val());
-	});
-	//ztree查询
-	var hiddenNodes = [];
-	function searchZtree(ztreeObj, ztreeInput) {
-		//显示上次搜索后隐藏的结点
-		ztreeObj.showNodes(hiddenNodes);
-		function filterFunc(node) {
-			var keyword = ztreeInput;
-			//如果当前结点，或者其父结点可以找到，或者当前结点的子结点可以找到，则该结点不隐藏
-			if(searchParent(keyword, node) || searchChildren(keyword, node.children)) {
-				return false;
-			}
-			return true;
-		};
-		//获取不符合条件的叶子结点
-		hiddenNodes = ztreeObj.getNodesByFilter(filterFunc);
-		//隐藏不符合条件的叶子结点
-		ztreeObj.hideNodes(hiddenNodes);
-	}
-	/********* tree 处理   end *************/
-	//树节点选中的商品类型id
+
 	var categoryId = "";
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["erpMaterialCategory"]["key"], 'selectTree', "materialCategoryType", '', form, function () {
+		initTable();
+	}, function (chooseId) {
+		categoryId = chooseId;
+		refreshTable();
+	});
+
 	function initTable(){
-		//初始化值
 		var ids = [];
 		$.each(productMationList, function(i, item) {
 			ids.push(item.productId);
 		});
 		tableCheckBoxUtil.setIds({
 			gridId: 'messageTable',
-			fieldName: 'productId',
+			fieldName: 'materialId',
 			ids: ids
 		});
 		tableCheckBoxUtil.init({
 			gridId: 'messageTable',
 			filterId: 'messageTable',
-			fieldName: 'productId'
+			fieldName: 'materialId'
 		});
 
 		table.render({
@@ -100,10 +57,8 @@ layui.config({
 		    cols: [[
 		    	{ type: 'checkbox'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        { field: 'productName', title: '商品名称', align: 'left', width: 150, templet: function (d) {
-			        	return '<a lay-event="details" class="notice-title-click">' + d.productName + '</a>';
-			    }},
-		        { field: 'productModel', title: '型号', align: 'left', width: 150 },
+		        { field: 'materialName', title: '商品名称', align: 'left', width: 150 },
+		        { field: 'materialModel', title: '型号', align: 'left', width: 150 },
 		        { field: 'categoryName', title: '所属类型', align: 'left', width: 100 },
 		        { field: 'typeName', title: '商品来源', align: 'left', width: 100 },
 		        { field: 'procedureMationList', title: '工序', align: 'left', width: 100, templet: function (d) {
@@ -120,7 +75,7 @@ layui.config({
 	    		// 设置选中
 	    		tableCheckBoxUtil.checkedDefault({
 					gridId: 'messageTable',
-					fieldName: 'productId'
+					fieldName: 'materialId'
 				});
 
 				initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入商品名称，型号", function () {
@@ -129,27 +84,7 @@ layui.config({
 		    }
 		});
 		
-		table.on('tool(messageTable)', function (obj) {
-	        var data = obj.data;
-	        var layEvent = obj.event;
-	        if (layEvent === 'details') { //详情
-	        	details(data);
-	        }
-	    });
-		
 		form.render();
-	}
-	
-	//详情
-	function details(data) {
-		rowId = data.productId;
-		_openNewWindows({
-			url: "../../tpl/material/materialdetails.html", 
-			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "materialdetails",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-			}});
 	}
 	
 	var $step = $("#step");
@@ -159,7 +94,7 @@ layui.config({
 		title: ["选择商品", "选择规格"]
 	});
 	
-	//下一步
+	// 下一步
 	$("body").on("click", "#nextTab", function() {
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
@@ -182,7 +117,7 @@ layui.config({
    		}});
 	});
 	
-	//保存
+	// 保存
 	$("body").on("click", "#saveChoose", function() {
 		var rows = $("#tBody tr");
 		if(rows.length == 0){
@@ -264,14 +199,13 @@ layui.config({
 		}
 	}
 	
-	//上一步
+	// 上一步
 	$("body").on("click", "#prevTab", function() {
 		$step.prevStep();
 		$("#firstTab").show();
 		$("#secondTab").hide();
 	});
-	
-	
+
     form.render();
 	$("body").on("click", "#reloadTable", function() {
     	loadTable();
