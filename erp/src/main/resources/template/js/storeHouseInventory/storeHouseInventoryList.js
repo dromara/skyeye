@@ -10,13 +10,12 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'eleTree', 'soulTable'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form', 'soulTable'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
-		soulTable = layui.soulTable,
-		eleTree = layui.eleTree;
+		soulTable = layui.soulTable;
 	
 	var selOption = getFileContent('tpl/template/select-option-must.tpl');
 	
@@ -80,9 +79,6 @@ layui.config({
 		    done: function(json) {
 		    	matchingLanguage();
 		    	soulTable.render(this);
-		    	if(!loadFirstType){
-		    		initFirstType();
-		    	}
 		    }
 		});
 		
@@ -119,32 +115,6 @@ layui.config({
 	    });
 	}
     
-    var loadFirstType = false;
-	//初始化商品类型
-	function initFirstType(){
-		loadFirstType = true;
-		var el5 = eleTree.render({
-            elem: '.ele5',
-            url: flowableBasePath + "materialcategory009",
-            defaultExpandAll: true,
-            expandOnClickNode: false,
-            highlightCurrent: true
-        });
-        $(".ele5").hide();
-		$("#categoryId").on("click",function (e) {
-		    e.stopPropagation();
-		    $(".ele5").toggle();
-		});
-		eleTree.on("nodeClick(data5)",function(d) {
-		    $("#categoryId").val(d.data.currentData.name);
-		    $("#categoryId").attr("categoryId", d.data.currentData.id);
-		    $(".ele5").hide();
-		}) 
-		$(document).on("click",function() {
-		    $(".ele5").hide();
-		})
-	}
-	
 	form.render();
 	form.on('submit(formSearch)', function (data) {
         if (winui.verifyForm(data.elem)) {
@@ -193,7 +163,6 @@ layui.config({
     
     function getTableParams() {
     	return {
-    		categoryId: isNull($("#categoryId").val()) ? "" : $("#categoryId").attr("categoryId"),
 			typeFrom: $("#typeFrom").val(),
     		enabled: $("#enabled").val(),
     		depotId: $("#depotId").val()

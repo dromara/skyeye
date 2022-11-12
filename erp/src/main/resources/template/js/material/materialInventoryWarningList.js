@@ -6,13 +6,12 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'eleTree', 'soulTable'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form', 'soulTable'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
-		soulTable = layui.soulTable,
-		eleTree = layui.eleTree;
+		soulTable = layui.soulTable;
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 
 	// 加载仓库数据
@@ -49,14 +48,11 @@ layui.config({
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 }
 		],[
 			{ field: 'safetyTock', title: '安全存量', align: 'center', width: 80},
-			{ field: 'allTock', title: '当前库存', align: 'center', width: 120}
+			{ field: 'allStock', title: '当前库存', align: 'center', width: 120}
 		]],
 		done: function(json) {
 			matchingLanguage();
 			soulTable.render(this);
-			if(!loadFirstType){
-				initFirstType();
-			}
 		}
 	});
 
@@ -69,34 +65,6 @@ layui.config({
 	});
 
 	form.render();
-
-    var loadFirstType = false;
-	//初始化商品类型
-	function initFirstType(){
-		loadFirstType = true;
-		var el5;
-		el5 = eleTree.render({
-            elem: '.ele5',
-            url: flowableBasePath + "materialcategory009",
-            defaultExpandAll: true,
-            expandOnClickNode: false,
-            highlightCurrent: true
-        });
-        $(".ele5").hide();
-		$("#categoryId").on("click",function (e) {
-		    e.stopPropagation();
-		    $(".ele5").toggle();
-		});
-		eleTree.on("nodeClick(data5)",function(d) {
-		    $("#categoryId").val(d.data.currentData.name);
-		    $("#categoryId").attr("categoryId", d.data.currentData.id);
-		    $(".ele5").hide();
-		}) 
-		$(document).on("click",function() {
-		    $(".ele5").hide();
-		})
-	}
-
 	form.on('submit(formSearch)', function (data) {
         if (winui.verifyForm(data.elem)) {
         	refreshloadTable();
@@ -133,7 +101,6 @@ layui.config({
     	return {
     		materialName: $("#materialName").val(), 
     		model: $("#model").val(), 
-    		categoryId: isNull($("#categoryId").val()) ? "" : $("#categoryId").attr("categoryId"), 
     		typeNum: $("#typeNum").val()
     	};
     }

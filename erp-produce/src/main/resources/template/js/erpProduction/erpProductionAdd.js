@@ -66,8 +66,8 @@ layui.config({
 			loadBomChildProList(thisRowValue);
 	    });
 	    
-	    //加载bom方案下的子件列表
-	    function loadBomChildProList(bomId){
+	    // 加载bom方案下的子件列表
+	    function loadBomChildProList(bomId) {
 	    	AjaxPostUtil.request({url: flowableBasePath + "erpbom008", params: {id: bomId}, type: 'json', method: 'GET', callback: function (json) {
 				childProList = [].concat(json.rows);
 				$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: childProList}));

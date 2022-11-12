@@ -45,12 +45,14 @@ layui.config({
 	        limit: 8,
 	        cols: [[
 	            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	            { field: 'materialName', title: '商品名称', align: 'left', width: 250},
-			    { field: 'model', title: '型号', align: 'left', width: 100},
-			    { field: 'typeName', title: '分类', align: 'left', width: 100},
-	            { field: 'unitName', title: '单位', align: 'left', width: 80},
-	            { field: 'currentTock', title: '入库数量', align: 'left', width: 100},
-	            { field: 'currentTockMoney', title: '入库金额', align: 'left', width: 120}
+	            { field: 'materialName', title: '商品名称', align: 'left', width: 250 },
+			    { field: 'model', title: '型号', align: 'left', width: 100 },
+			    { field: 'typeName', title: '分类', align: 'left', width: 100 },
+	            { field: 'normMation', title: '规格', align: 'left', width: 80, templet: function (d) {
+					return d.normMation.name;
+				}},
+	            { field: 'currentTock', title: '入库数量', align: 'left', width: 100 },
+	            { field: 'currentTockMoney', title: '入库金额', align: 'left', width: 120 }
 	        ]],
 		    done: function(json) {
 		    	matchingLanguage();
