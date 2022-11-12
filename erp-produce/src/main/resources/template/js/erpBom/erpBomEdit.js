@@ -1,6 +1,6 @@
 
-//bom表商品选择必备参数
-var productMationList = [];//选择的商品列表
+// bom表商品选择必备参数
+var materialMationList = [];
 
 //工序选择必备参数
 var procedureCheckType = 2;//工序选择类型：1.单选procedureMation；2.多选procedureMationList
@@ -28,7 +28,7 @@ layui.config({
 
 			// 初始化父件商品信息
 			erpOrderUtil.chooseProductMation = {
-				materialId: json.bean.productId,
+				materialId: json.bean.materialId,
 				materialName: json.bean.productName,
 				materialModel: json.bean.productModel,
 				unitList: json.bean.unitList
@@ -55,12 +55,12 @@ layui.config({
             	var childObject = new Array();
             	var wheatherError = false;
             	$.each(ztreeNode, function(i, item) {
-            		item.needNum = $("#needNum" + item.productId).val();
-            		item.type = $("#type" + item.productId).val();
-            		item.wastagePrice = $("#wastage" + item.productId).val();
-            		item.remark = $("#remark" + item.productId).val();
+            		item.needNum = $("#needNum" + item.materialId).val();
+            		item.type = $("#type" + item.materialId).val();
+            		item.wastagePrice = $("#wastage" + item.materialId).val();
+            		item.remark = $("#remark" + item.materialId).val();
             		childObject.push(item);
-            		if(item.productId == erpOrderUtil.chooseProductMation.productId){
+            		if(item.materialId == erpOrderUtil.chooseProductMation.materialId){
             			winui.window.msg('子件清单中不能包含父件信息。', {icon: 2, time: 2000});
             			wheatherError = true;
             			return false;
@@ -129,7 +129,7 @@ layui.config({
 				},
 				simpleData: {
 					enable: true,
-					idKey: 'productId',
+					idKey: 'materialId',
 					pIdKey: 'pId',
 					rootPId: 0
 				}
@@ -165,7 +165,7 @@ layui.config({
 			}
 			//刷新节点数据重置金额
 			$.each(ztreeNode, function(i, item) {
-				$("#allPrice" + item.productId).html(parseInt(item.needNum) * parseFloat(item.unitPrice));
+				$("#allPrice" + item.materialId).html(parseInt(item.needNum) * parseFloat(item.unitPrice));
 			});
 		}
 		
@@ -184,7 +184,7 @@ layui.config({
 			var nodesIndex = -1;//拖拽节点所在索引
 			$.each(ztreeNode, function(i, item) {
 				//拖拽节点
-				if(item.productId == treeNodes[0].productId){
+				if(item.materialId == treeNodes[0].materialId){
 					nodesIndex = i;
 					return false;
 				}
@@ -195,7 +195,7 @@ layui.config({
 				if('inner' == moveType){
 					//依然为父节点
 					if(nodesIndex >= 0){
-						ztreeNode[nodesIndex].pId = targetNode.productId;
+						ztreeNode[nodesIndex].pId = targetNode.materialId;
 					}
 				}
 			}
@@ -223,7 +223,7 @@ layui.config({
 		//删除节点操作
 		function deleteNode(treeNode){
 			$.each(ztreeNode, function(i, item) {
-				if(item.productId == treeNode.productId){
+				if(item.materialId == treeNode.materialId){
 					treeNodeIndex = i;
 					return false;
 				}
@@ -269,7 +269,7 @@ layui.config({
 			switchObj.before(spaceStr);
 			aObj.append(getDataUseHandlebars($("#tableBody").html(), treeNode));
 			//设置商品来源选中
-			$("#type" + treeNode.productId).val(treeNode.type);
+			$("#type" + treeNode.materialId).val(treeNode.type);
 			form.render("select");
 		}
 		
@@ -280,15 +280,15 @@ layui.config({
         
 		//新增子件
 		$("body").on("click", "#addRow", function (e) {
-			productMationList = [];
+			materialMationList = [];
 			_openNewWindows({
  				url: "../../tpl/material/materialChooseToProduce.html", 
  				title: "选择商品",
  				pageId: "materialChooseToProduce",
  				area: ['90vw', '90vh'],
  				callBack: function (refreshCode) {
-					$.each(productMationList, function(i, item) {
-						if(!inZtreeNode(item.productId)){
+					$.each(materialMationList, function(i, item) {
+						if(!inZtreeNode(item.materialId)){
 							ztreeNode.push(item);
 						}
 					});
@@ -302,7 +302,7 @@ layui.config({
 	    	var proId = $(this).attr("id").replace("procedureSel", "");
 	    	var selIndex = -1;
 	    	$.each(ztreeNode, function(i, item) {
-				if(item.productId == proId){
+				if(item.materialId == proId){
 					selIndex = i;
 					return false;
 				}
@@ -343,10 +343,10 @@ layui.config({
 		/**
 		 * 判断该商品是否在树节点里面
 		 */
-		function inZtreeNode(productId){
+		function inZtreeNode(materialId){
 			var inNodeIndex = -1;
 			$.each(ztreeNode, function(i, item) {
- 	        	if(item.productId == productId){
+ 	        	if(item.materialId == materialId){
  	        		inNodeIndex = i;
  	        		return false;
  	        	}
@@ -372,7 +372,7 @@ layui.config({
 		function calculatedTotalPrice(proId, needNum){
 			var inNodeIndex = -1;
 			$.each(ztreeNode, function(i, item) {
- 	        	if(item.productId == proId){
+ 	        	if(item.materialId == proId){
  	        		inNodeIndex = i;
  	        		return false;
  	        	}
@@ -382,7 +382,7 @@ layui.config({
 	        	$("#allPrice" + proId).html(needNum * parseFloat(ztreeNode[inNodeIndex].unitPrice));
 	        	//修改节点信息
 	        	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-	        	var node = zTree.getNodeByParam("productId", proId);
+	        	var node = zTree.getNodeByParam("materialId", proId);
 	        	node.needNum = needNum;
 	        	zTree.updateNode(node);
         	}

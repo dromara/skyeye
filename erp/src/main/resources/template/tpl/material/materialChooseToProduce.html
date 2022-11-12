@@ -44,10 +44,10 @@
     
     <div id="secondTab" style="display: none;">
     	<form class="layui-form" action="" id="showForm" autocomplete="off">
-	    	<table class="layui-table">
+	    	<table class="layui-table" style="margin: 0px 10px;">
 	    		<thead>
 	    			<tr>
-	    				<th>商品名称</th>
+	    				<th style="width: 100px">商品名称</th>
 	    				<th>型号</th>
 	    				<th>所属类型</th>
 	    				<th>商品来源</th>
@@ -71,25 +71,25 @@
     
     <script type="text/html" id="tableBody">
 		{{#each rows}}
-			<tr rowid="{{productId}}">
-               	<td id="name{{productId}}">{{productName}}</td>
-               	<td id="model{{productId}}">{{productModel}}</td>
+			<tr rowid="{{materialId}}">
+               	<td id="name{{materialId}}">{{materialName}}</td>
+               	<td id="model{{materialId}}">{{materialModel}}</td>
                	<td>{{categoryName}}</td>
                	<td>
-					<select lay-filter="typeId" lay-search="" id="type{{productId}}" disabled>
+					<select lay-filter="typeId" lay-search="" id="type{{materialId}}" disabled>
 						<option value="1">自产</option>
 						<option value="2">外购</option>
 					</select>
 				</td>
 				<td>
-					<select lay-filter="unitListChoose" lay-search="" id="norms{{productId}}">
+					<select lay-filter="unitListChoose" lay-search="" id="norms{{materialId}}">
 						{{#each unitList}}
 						<option value="{{id}}">{{name}}</option>
 						{{/each}}
 					</select>
 				</td>
                	<td>
-					<select lay-filter="bomListChoose" lay-search="" id="bom{{productId}}">
+					<select lay-filter="bomListChoose" lay-search="" id="bom{{materialId}}">
 						<option value="">全部</option>
 						{{#each bomList}}
 							<option value="{{id}}">{{name}}</option>

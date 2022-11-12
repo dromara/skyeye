@@ -14,7 +14,7 @@ layui.config({
 		tableCheckBoxUtil = layui.tableCheckBoxUtil;
 	
 	// 选择的多商品列表
-	productMationList = parent.productMationList;
+	materialMationList = parent.materialMationList;
 	
 	// 设置提示信息
 	var s = "商品选择规则：1.多选；如没有查到要选择的商品，请检查商品信息是否满足当前规则。";
@@ -30,18 +30,14 @@ layui.config({
 
 	function initTable(){
 		var ids = [];
-		$.each(productMationList, function(i, item) {
-			ids.push(item.productId);
-		});
-		tableCheckBoxUtil.setIds({
-			gridId: 'messageTable',
-			fieldName: 'materialId',
-			ids: ids
+		$.each(materialMationList, function(i, item) {
+			ids.push(item.materialId);
 		});
 		tableCheckBoxUtil.init({
 			gridId: 'messageTable',
 			filterId: 'messageTable',
-			fieldName: 'materialId'
+			fieldName: 'materialId',
+			ids: ids
 		});
 
 		table.render({
@@ -67,13 +63,12 @@ layui.config({
 		        		str += '<span class="layui-badge layui-bg-gray">' + item.number + '</span>' + item.procedureName + '<br>';
 		        	});
 		        	return str;
-			    }},
-		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 }
+			    }}
 		    ]],
-		    done: function(json, curr, count){
-		    	matchingLanguage();
-	    		// 设置选中
-	    		tableCheckBoxUtil.checkedDefault({
+			done: function (json, curr, count) {
+				matchingLanguage();
+				// 设置选中
+				tableCheckBoxUtil.checkedDefault({
 					gridId: 'messageTable',
 					fieldName: 'materialId'
 				});
@@ -81,7 +76,7 @@ layui.config({
 				initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入商品名称，型号", function () {
 					table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 				});
-		    }
+			}
 		});
 		
 		form.render();
@@ -96,51 +91,45 @@ layui.config({
 	
 	// 下一步
 	$("body").on("click", "#nextTab", function() {
-		var selectedData = tableCheckBoxUtil.getValue({
+		var selectedData = tableCheckBoxUtil.getValueList({
 			gridId: 'messageTable'
 		});
 		if(selectedData.length == 0){
 			winui.window.msg("请选择商品", {icon: 2, time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "material014", params: {ids: selectedData.toString()}, type: 'json', callback: function (json) {
-			productMationList = json.rows;
-			$step.nextStep();
-			$("#firstTab").hide();
-			$("#secondTab").show();
-			$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: productMationList}));
-			//设置商品来源选中
-			$.each(productMationList, function(i, item) {
-				$("#type" + item.productId).val(item.typeId);
-			});
-			form.render();
-   		}});
+		materialMationList = [].concat(selectedData);
+		$step.nextStep();
+		$("#firstTab").hide();
+		$("#secondTab").show();
+		$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: materialMationList}));
+		// 设置商品来源选中
+		$.each(materialMationList, function(i, item) {
+			$("#type" + item.materialId).val(item.typeId);
+		});
+		form.render();
 	});
 	
 	// 保存
 	$("body").on("click", "#saveChoose", function() {
 		var rows = $("#tBody tr");
-		if(rows.length == 0){
-			winui.window.msg("请选择商品", {icon: 2, time: 2000});
-			return false;
-		}
 		var proList = new Array();
 		$.each(rows, function(i, item) {
 			var _object = $(item);
-			var productId = _object.attr("rowid");
+			var materialId = _object.attr("rowid");
 			proList.push({
-				productId: productId,
-				productName: $("#name" + productId).html(),
-				productModel: $("#model" + productId).html(),
-				bomId: $("#bom" + productId).val(),
-				normsId: $("#norms" + productId).val(),
-				unitName: $("#norms" + productId).find("option:selected").text(),
-				procedureMationList: getProcedureMationList(productId),
+				materialId: materialId,
+				materialName: $("#name" + materialId).html(),
+				materialModel: $("#model" + materialId).html(),
+				bomId: $("#bom" + materialId).val(),
+				normsId: $("#norms" + materialId).val(),
+				unitName: $("#norms" + materialId).find("option:selected").text(),
+				procedureMationList: getProcedureMationList(materialId),
 				pId: '0',
 				needNum: '1',
-				unitPrice: getNormsPrice(productId, $("#norms" + productId).val()),
+				unitPrice: getNormsPrice(materialId, $("#norms" + materialId).val()),
 				wastagePrice: '0.00',
-				type: $("#type" + productId).val(),
+				type: $("#type" + materialId).val(),
 				remark: '',
 				open: 'true',
 				isParent: 1
@@ -150,7 +139,7 @@ layui.config({
 			proList: JSON.stringify(proList)
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "material015", params: params, type: 'json', callback: function(json) {
-			parent.productMationList = [].concat(json.rows);
+			parent.materialMationList = [].concat(json.rows);
 			parent.layer.close(index);
 			parent.refreshCode = '0';
 		}});
@@ -159,16 +148,16 @@ layui.config({
 	/**
 	 * 获取商品工序
 	 */
-	function getProcedureMationList(productId){
+	function getProcedureMationList(materialId) {
 		var proIndex = -1;
-		$.each(productMationList, function(i, item) {
-			if(productId == item.productId){
+		$.each(materialMationList, function (i, item) {
+			if (materialId == item.materialId) {
 				proIndex = i;
 				return false;
 			}
 		});
-		if(proIndex >= 0){
-			return productMationList[proIndex].procedureMationList;
+		if (proIndex >= 0) {
+			return materialMationList[proIndex].procedureMationList;
 		} else {
 			return new Array();
 		}
@@ -177,13 +166,13 @@ layui.config({
 	/**
 	 * 获取指定规格的采购价/成本价
 	 */
-	function getNormsPrice(productId, normsId){
+	function getNormsPrice(materialId, normsId){
 		//项目索引
 		var proIndex = -1;
 		//规格索引
 		var normsIndex = -1;
-		$.each(productMationList, function(i, item) {
-			if(productId == item.productId){
+		$.each(materialMationList, function(i, item) {
+			if(materialId == item.materialId){
 				proIndex = i;
 				$.each(item.unitList, function(j, bean){
 					normsIndex = j;
@@ -193,7 +182,7 @@ layui.config({
 			}
 		});
 		if(proIndex >= 0 && normsIndex >= 0){
-			return productMationList[proIndex].unitList[normsIndex].estimatePurchasePrice;
+			return materialMationList[proIndex].unitList[normsIndex].estimatePurchasePrice;
 		} else {
 			return new Array();
 		}
