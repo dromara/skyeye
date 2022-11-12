@@ -40,7 +40,7 @@ layui.config({
 			{ field: 'norms', title: '库存', align: 'center', width: 100, templet: function (d) {
 				var str = "";
 				$.each(d.norms, function(i, item) {
-					str += '<span class="layui-badge layui-bg-blue">' + item.allTock + '</span>' + item.name + '<br>';
+					str += '<span class="layui-badge layui-bg-blue">' + item.departmentTock + '</span>' + item.name + '<br>';
 				});
 				return str;
 			}},

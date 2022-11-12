@@ -1,7 +1,7 @@
 var rowId = "";
 
 layui.config({
-	base: basePath, 
+	base: basePath,
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
@@ -14,7 +14,7 @@ layui.config({
 		tableCheckBoxUtil = layui.tableCheckBoxUtil;
 
 	var checkType = '1';//商品选择类型：1.单选；2.多选
-	
+
 	if (!isNull(parent.erpOrderUtil.productCheckType)){
 		checkType = parent.erpOrderUtil.productCheckType;
 	}
@@ -37,26 +37,21 @@ layui.config({
 		categoryId = chooseId;
 		refreshTable();
 	});
-	
+
 	function initTable(){
 		if(checkType == '2'){
-			//初始化值
 			var ids = [];
 			$.each(parent.erpOrderUtil.chooseProductMation, function(i, item) {
 				ids.push(item.materialId);
 			});
-			tableCheckBoxUtil.setIds({
-				gridId: 'messageTable',
-				fieldName: 'materialId',
-				ids: ids
-			});
 			tableCheckBoxUtil.init({
 				gridId: 'messageTable',
 				filterId: 'messageTable',
-				fieldName: 'materialId'
+				fieldName: 'materialId',
+				ids: ids
 			});
 		}
-			
+
 		table.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
@@ -70,13 +65,10 @@ layui.config({
 		    cols: [[
 		    	{ type: checkType == '1' ? 'radio' : 'checkbox'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        { field: 'materialName', title: '商品名称', align: 'left', width: 150, templet: function (d) {
-			        	return '<a lay-event="details" class="notice-title-click">' + d.materialName + '</a>';
-			    }},
+		        { field: 'materialName', title: '商品名称', align: 'left', width: 150 },
 		        { field: 'materialModel', title: '型号', align: 'left', width: 150 },
 		        { field: 'categoryName', title: '所属类型', align: 'left', width: 100 },
 		        { field: 'typeName', title: '商品来源', align: 'left', width: 100 },
-		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 }
 		    ]],
 		    done: function(json, curr, count) {
 		    	matchingLanguage();
@@ -88,11 +80,11 @@ layui.config({
 						var chooseIndex = JSON.stringify(dubClick.data('index'));
 						var obj = json.rows[chooseIndex];
 						parent.erpOrderUtil.chooseProductMation = obj;
-						
+
 						parent.refreshCode = '0';
 						parent.layer.close(index);
 					});
-					
+
 					$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('click',function(){
 						var click = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
 						click.find("input[type='radio']").prop("checked", true);
@@ -112,50 +104,32 @@ layui.config({
 
 		    }
 		});
-		
-		table.on('tool(messageTable)', function (obj) {
-	        var data = obj.data;
-	        var layEvent = obj.event;
-	        if (layEvent === 'details') { //详情
-	        	details(data);
-	        }
-	    });
-		
+
 		form.render();
 	}
-	
-	// 详情
-	function details(data) {
-		rowId = data.materialId;
-		_openNewWindows({
-			url: "../../tpl/material/materialDetails.html",
-			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "materialDetails",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-			}});
-	}
-	
+
 	// 保存按钮-多选才有
 	$("body").on("click", "#saveCheckBox", function() {
-		var selectedData = tableCheckBoxUtil.getValue({
+		var selectedData = tableCheckBoxUtil.getValueList({
 			gridId: 'messageTable'
 		});
-		AjaxPostUtil.request({url: flowableBasePath + "material013", params: {ids: selectedData.toString()}, type: 'json', callback: function (json) {
-			parent.erpOrderUtil.chooseProductMation = [].concat(json.rows);
-			parent.layer.close(index);
-			parent.refreshCode = '0';
-   		}});
+		if (selectedData.length == 0) {
+			winui.window.msg("请选择商品", {icon: 2, time: 2000});
+			return false;
+		}
+		parent.erpOrderUtil.chooseProductMation = [].concat(selectedData);
+		parent.layer.close(index);
+		parent.refreshCode = '0';
 	});
 
 	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
-    
+
     function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
-    
+
     function refreshTable(){
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
@@ -163,6 +137,6 @@ layui.config({
 	function getTableParams() {
 		return $.extend(true, {categoryId: categoryId}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
-	
+
     exports('materialChoose', {});
 });

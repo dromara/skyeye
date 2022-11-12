@@ -16,62 +16,21 @@
 	</style>
 </head>
 <body>
-	<div class="txtcenter" style="margin:0 auto;padding-top:10px;">
-	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
-	        <div class="layui-form-item">
-	            <div class="layui-inline">
-	            	<label class="layui-form-label">仓库</label>
-	                <div class="layui-input-inline">
-	                    <select id="depotId" name="depotId" lay-search="">
-		            	
-		            	</select>
-	                </div>
-	                <label class="layui-form-label">商品名称</label>
-	                <div class="layui-input-inline">
-	                    <input type="text" id="materialName" name="materialName" placeholder="请输入商品名称" class="layui-input" />
-	                </div>
-	                <label class="layui-form-label">型号</label>
-	                <div class="layui-input-inline">
-	                    <input type="text" id="model" name="model" placeholder="请输入商品型号" class="layui-input" />
-	                </div>
-	                <label class="layui-form-label">所属类型</label>
-	                <div class="layui-input-inline">
-	                    <input type="text" id="categoryId" name="categoryId" placeholder="请选择商品类型" class="layui-input" readonly="readonly" categoryId=""/>
-	                    <div class="eleTree ele5" lay-filter="data5"></div>
-	                </div>
-	                <label class="layui-form-label">商品来源</label>
-	                <div class="layui-input-inline">
-	                    <select lay-filter="typeNum" lay-search="" id="typeNum">
-	                    	<option value="">全部</option>
-	                    	<option value="1">自产</option>
-	                    	<option value="2">外购</option>
-	                    </select>
-	                </div>
-	                <label class="layui-form-label">状态</label>
-	                <div class="layui-input-inline">
-	                    <select lay-filter="enabled" lay-search="" id="enabled">
-	                    	<option value="">全部</option>
-	                    	<option value="0">禁用</option>
-	                    	<option value="1">启用</option>
-	                    </select>
-	                </div>
-	                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
-	                <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
-	            </div>
-	        </div>
-	    </form>
-	</div>
     <div class="winui-toolbar">
         <div class="winui-tool">
-            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
         </div>
     </div>
-    <div style="margin:auto 10px;">
-        <table id="messageTable" lay-filter="messageTable"></table>
-        <script type="text/html" id="tableBar">
-			
-        </script>
-    </div>
+	<div style="margin: auto 10px; height: calc(100% - 50px);">
+		<div style="width: 200px; float: left; height: 100%; overflow-y: auto;" id="materialCategoryType">
+
+		</div>
+		<div style="width: calc(100% - 200px); float: left;">
+			<div style="margin:auto 10px;">
+				<table id="messageTable" lay-filter="messageTable"></table>
+			</div>
+		</div>
+	</div>
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
