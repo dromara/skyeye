@@ -42,6 +42,11 @@
     "skyeyeView": {
         "name": "视图枚举",
         "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"
+    },
+
+    "teamObjectType": {
+        "name": "团队适用对象枚举",
+        "className": "skyeye-pro#com.skyeye.team.classenum.TeamObjectTypeEnum"
     }
 
 }
