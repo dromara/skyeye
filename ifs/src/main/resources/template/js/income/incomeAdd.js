@@ -18,6 +18,8 @@ layui.config({
 
     // 获取单据提交类型
     var submitType = erpOrderUtil.getSubmitTypeByKey(serviceClassName);
+    // 加载动态表单
+    dsFormUtil.loadPageByCode("dsFormShow", serviceClassName, null);
 
     var selOption = getFileContent('tpl/template/select-option.tpl');
     var handsPersonList = new Array();//经手人员
@@ -29,6 +31,8 @@ layui.config({
     systemCommonUtil.getSysAccountListByType(function (json) {
         $("#accountId").html(getDataUseHandlebars(selOption, json));
     });
+
+    sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["ifsOrderType"]["key"], 'radioTree', "ifsOrderType", '', form);
 
     // 初始化列表项选择
     voucherUtil.init('showVoucherUtilBox');
@@ -63,13 +67,18 @@ layui.config({
 
     function saveData(subType, approvalId) {
         var result = voucherUtil.getData();
-        if(result.length < 2){
+        if (result.length < 2) {
+            return false;
+        }
+        var ifsOrderType = $("#ifsOrderType").attr("chooseId");
+        if (isNull(ifsOrderType)) {
+            winui.window.msg('请选择单据类型', {icon: 2, time: 2000});
             return false;
         }
         var params = {
             organType: $("#correspondentUnitType").val(),
             organId: getOrganId(),
-            type: dsFormUtil.dsFormObjectRelationChoose.id,
+            type: ifsOrderType,
             handsPersonId: handsPersonList[0].id,
             operTime: $("#operTime").val(),
             accountId: $("#accountId").val(),
@@ -151,17 +160,6 @@ layui.config({
         var _this = $(this);
         sysIfsUtil.openIfsSetOfBooksListChoosePage(function (ifsSetOfBooksMation){
             _this.parent().find("input").val(ifsSetOfBooksMation.name);
-        });
-    });
-
-    // 选择单据类型
-    $("body").on("click", "#chooseOrderTypeBtn", function (e) {
-        var _this = $(this);
-        dsFormUtil.openDsFormObjectRelationChooseByFirstTypeCodeChoosePage("IFS", function (dsFormObjectRelationChoose){
-            _this.parent().find("input").val(dsFormObjectRelationChoose.name);
-            $("#dsFormShow").html("");
-            // 加载动态表单
-            dsFormUtil.loadPageByCode("dsFormShow", null, dsFormObjectRelationChoose.id);
         });
     });
 

@@ -48,9 +48,8 @@
         </div>
         <div class="layui-form-item layui-col-xs6">
             <label class="layui-form-label">类型<i class="red">*</i></label>
-            <div class="layui-input-block">
-                <input type="text" id="orderType" name="orderType" win-verify="required" placeholder="请选择类型" class="layui-input" readonly="readonly" value="{{typeName}}"/>
-                <i class="fa fa-plus-circle input-icon" id="chooseOrderTypeBtn"></i>
+            <div class="layui-input-block ver-center" chooseId="{{type}}">
+                {{typeName}}
             </div>
         </div>
         <div class="layui-form-item layui-col-xs12">

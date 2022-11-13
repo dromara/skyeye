@@ -57,12 +57,6 @@ layui.config({
                 name: json.bean.setOfBooksName
             };
 
-            // 类型
-            dsFormUtil.dsFormObjectRelationChoose = {
-                id: json.bean.type,
-                name: json.bean.typeName
-            };
-
             erpOrderUtil.orderEditPageSetBtnBySubmitType(submitType, json.bean.state);
 
             // 加载动态表单
@@ -90,7 +84,6 @@ layui.config({
     function initOtherMation(data) {
         // 初始化账户
         systemCommonUtil.getSysAccountListByType(function (json) {
-            // 加载账户数据
             $("#accountId").html(getDataUseHandlebars(selOption, json));
             $("#accountId").val(data.bean.accountId);
         });
@@ -144,7 +137,7 @@ layui.config({
         var params = {
             organType: $("#correspondentUnitType").val(),
             organId: getOrganId(),
-            type: dsFormUtil.dsFormObjectRelationChoose.id,
+            type: $("#ifsOrderType").attr("chooseId"),
             handsPersonId: handsPersonList[0].id,
             operTime: $("#operTime").val(),
             accountId: $("#accountId").val(),
@@ -218,17 +211,6 @@ layui.config({
         var _this = $(this);
         sysIfsUtil.openIfsSetOfBooksListChoosePage(function (ifsSetOfBooksMation){
             _this.parent().find("input").val(ifsSetOfBooksMation.name);
-        });
-    });
-
-    // 选择单据类型
-    $("body").on("click", "#chooseOrderTypeBtn", function (e) {
-        var _this = $(this);
-        dsFormUtil.openDsFormObjectRelationChooseByFirstTypeCodeChoosePage("IFS", function (dsFormObjectRelationChoose){
-            _this.parent().find("input").val(dsFormObjectRelationChoose.name);
-            $("#dsFormShow").html("");
-            // 加载动态表单
-            dsFormUtil.loadPageByCode("dsFormShow", null, dsFormObjectRelationChoose.id);
         });
     });
 

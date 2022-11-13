@@ -66,5 +66,3 @@
 | ![](images/show/tradition/show008.png) | ![](images/show/win10/show008.png) |
 | ![](images/show/tradition/show009.png) | ![](images/show/win10/show009.png) |
 | ![](images/show/tradition/show010.png) | ![](images/show/win10/show010.png) |
-
-
