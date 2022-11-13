@@ -15,11 +15,11 @@ layui.config({
     authBtn('1571638020191');//新增
     authBtn('1572313776196');//导出
 
-    var type = "";
+    var orderType = "";
     sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["ifsOrderType"]["key"], 'selectTree', "ifsOrderType", '', form, function () {
         initTable();
     }, function (chooseId) {
-        type = chooseId;
+        orderType = chooseId;
         refreshTable();
     });
 
@@ -202,7 +202,7 @@ layui.config({
     }
 
     function getTableParams() {
-        $.extend(true, {type: type}, initTableSearchUtil.getSearchValue("messageTable"));
+        return $.extend(true, {orderType: orderType}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('incomeList', {});
