@@ -1,22 +1,10 @@
 {
-    "commonEnable": {
-        "name": "启用/禁用",
-        "className": "skyeye-pro#com.skyeye.common.enumeration.EnableEnum"
-    },
-    "commonIsDefault": {
-        "name": "是否默认",
-        "className": "skyeye-pro#com.skyeye.common.enumeration.IsDefaultEnum"
-    },
+    "commonEnable": {"name": "启用/禁用", "className": "skyeye-pro#com.skyeye.common.enumeration.EnableEnum"},
+    "commonIsDefault": {"name": "是否默认", "className": "skyeye-pro#com.skyeye.common.enumeration.IsDefaultEnum"},
+    "verificationParams": {"name": "字段校验枚举", "className": "skyeye-pro#com.skyeye.common.enumeration.VerificationParamsEnum"},
+    "isUsed": {"name": "是否使用的枚举", "className": "skyeye-pro#com.skyeye.common.enumeration.IsUsedEnum"},
 
-    "verificationParams": {
-        "name": "字段校验枚举",
-        "className": "skyeye-pro#com.skyeye.common.enumeration.VerificationParamsEnum"
-    },
-
-    "bossInterviewArrangementState": {
-        "name": "面试安排状态枚举类",
-        "className": "skyeye-flowable#com.skyeye.service.enumclass.BossInterviewArrangementState"
-    },
+    "bossInterviewArrangementState": {"name": "面试安排状态枚举类", "className": "skyeye-flowable#com.skyeye.service.enumclass.BossInterviewArrangementState"},
     "bossInterviewArrangementState1": {
         "name": "面试安排状态枚举类-获取我录入的人员需求关联的面试者信息列表",
         "className": "skyeye-flowable#com.skyeye.service.enumclass.BossInterviewArrangementState",
@@ -30,23 +18,12 @@
         "filterValue": "3,4,5"
     },
 
-    "materialFromType": {
-        "name": "商品来源类型枚举类",
-        "className": "skyeye-flowable#com.skyeye.material.enumclass.MaterialFromType"
-    },
-    "materialType": {
-        "name": "商品类型枚举类",
-        "className": "skyeye-flowable#com.skyeye.material.enumclass.MaterialType"
-    },
+    "materialFromType": {"name": "商品来源类型枚举类", "className": "skyeye-flowable#com.skyeye.material.enumclass.MaterialFromType"},
+    "materialType": {"name": "商品类型枚举类", "className": "skyeye-flowable#com.skyeye.material.enumclass.MaterialType"},
 
-    "skyeyeView": {
-        "name": "视图枚举",
-        "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"
-    },
+    "skyeyeView": {"name": "视图枚举", "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"},
 
-    "teamObjectType": {
-        "name": "团队适用对象枚举",
-        "className": "skyeye-pro#com.skyeye.team.classenum.TeamObjectTypeEnum"
-    }
+    "teamObjectType": {"name": "团队适用对象枚举", "className": "skyeye-pro#com.skyeye.team.classenum.TeamObjectTypeEnum"},
+    "contactsAuthEnum": {"name": "联系人", "className": "skyeye-pro#com.skyeye.contacts.classenum.ContactsAuthEnum"}
 
 }
