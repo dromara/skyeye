@@ -833,6 +833,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function (exports) 
             if (typeof options.totalRow === 'object') {
                 res[response.totalRowName] = $.extend({}, options.totalRow);
             }
+            if (typeof options.parseData === 'function') {
+                res = options.parseData(res) || res;
+            }
 
             that.renderData(res, curr, res[response.countName], '', opts.type), sort();
             that.setColsWidth();

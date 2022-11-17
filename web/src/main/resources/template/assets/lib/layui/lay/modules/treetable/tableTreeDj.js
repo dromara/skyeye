@@ -1,4 +1,4 @@
-layui.define(['table', 'jquery'], function(exports) {
+layui.define(['table', 'jquery'], function (exports) {
     const MOD_NAME = 'tableTreeDj';
     const $ = layui.jquery;
     const table = layui.table;
@@ -22,11 +22,11 @@ layui.define(['table', 'jquery'], function(exports) {
                 , showCache: false
                 , sort: 'asc' // 排序方式.['asc', 'desc'].必须小写
                 // 点击展开时候的回调函数
-                ,showByPidCallback: {}
+                , showByPidCallback: {}
 
                 // 点击折叠时候的回调函数
-                ,hideByPidCallback: {}
-                ,defaultShow: false // 全部展开,如果开启缓存,只有缓存里面没有展开状态时候此配置才生效.否则按缓存里面的展开状态来初始化数据
+                , hideByPidCallback: {}
+                , defaultShow: false // 全部展开,如果开启缓存,只有缓存里面没有展开状态时候此配置才生效.否则按缓存里面的展开状态来初始化数据
             };
             // 运行数据模板
             this.runTemplate = {
@@ -52,28 +52,30 @@ layui.define(['table', 'jquery'], function(exports) {
         // 渲染
         render(obj, config) {
             // 此操作是为了在多次调用render方法的时候,可以忽略obj参数
-            if(!!obj) {
+            if (!!obj) {
                 this.objTable = obj;
             } else {
                 obj = this.objTable;
             }
-            if(obj.url == null) {
-                console.error("url不可为空");
-                return;
-            }
+            // if(obj.url == null) {
+            //     console.error("url不可为空");
+            //     return;
+            // }
 
-            if(!!config) {
+            if (!!config) {
                 this.config = $.extend(this.config, config);
             }
 
             // 整理数据初始状态
+            var loadData = false;
             const parseData = obj.parseData || {};
             obj.parseData = (res) => {
-                if(JSON.stringify(parseData) !== "{}") {
+                if (JSON.stringify(parseData) !== "{}") {
                     res = parseData(res)
                 }
                 this._initDo()
                 res.rows = this._parse(res.rows);
+                loadData = true;
                 return res;
             }
 
@@ -81,11 +83,14 @@ layui.define(['table', 'jquery'], function(exports) {
             const done = obj.done || {};
             obj.done = (res, curr, count) => {
                 this._done(obj, res, curr, count);
-                if(JSON.stringify(done) !== "{}") {
+                if (JSON.stringify(done) !== "{}") {
                     done(res, curr, count);
                 }
             }
             table.render(obj);
+            if (!loadData) {
+                this._initDo()
+            }
         }
 
         // 重载
@@ -108,8 +113,8 @@ layui.define(['table', 'jquery'], function(exports) {
             const dataIndex = this.getDataIndex();
             const layId = obj.id;
 
-            for(let id in dataIndex) {
-                if(this.run.hasChild.indexOf(id) !== -1) {
+            for (let id in dataIndex) {
+                if (this.run.hasChild.indexOf(id) !== -1) {
                     this.hideByPid(id, layId);
                 }
             }
@@ -120,31 +125,31 @@ layui.define(['table', 'jquery'], function(exports) {
             const dataIndex = this.getDataIndex();
             const layId = obj.id;
 
-            for(let id in dataIndex) {
-                if(this.run.hasChild.indexOf(id) !== -1) {
+            for (let id in dataIndex) {
+                if (this.run.hasChild.indexOf(id) !== -1) {
                     this.showByPid(id, layId);
                 }
             }
         }
 
         getElemTrByIndex(layId, index) {
-            return $("[lay-id='"+ layId +"'] table tr[data-index='"+ index +"']");
+            return $("[lay-id='" + layId + "'] table tr[data-index='" + index + "']");
         }
 
         getElemTdByIndex(layId) {
             const title = this.getTitle();
-            return $('[lay-id="'+ layId +'"] [data-field="'+ title +'"]')
+            return $('[lay-id="' + layId + '"] [data-field="' + title + '"]')
         }
 
         getElemIconByIndex(layId, index) {
             const title = this.getTitle();
-            return $("[lay-id='"+ layId +"'] table tr[data-index='"+ index +"'] td[data-field="+ title +"] div span");
+            return $("[lay-id='" + layId + "'] table tr[data-index='" + index + "'] td[data-field=" + title + "] div span");
         }
 
         // 根据父元素隐藏子元素
         hideByPid(id, layId) {
             const idArr = this.getParentChild(id);
-            if(!idArr) {
+            if (!idArr) {
                 return false;
             }
 
@@ -174,7 +179,7 @@ layui.define(['table', 'jquery'], function(exports) {
 
         showByPid(id, layId) {
             const idArr = this.getParentChild(id);
-            if(!idArr) {
+            if (!idArr) {
                 return false;
             }
 
@@ -255,10 +260,10 @@ layui.define(['table', 'jquery'], function(exports) {
 
         // 获取层级
         getLevel(id) {
-            if(!!id) {
+            if (!!id) {
                 const level = this.run.level;
-                for(let i=0; i<level.length; i++) {
-                    if(level[i][id] === id) {
+                for (let i = 0; i < level.length; i++) {
+                    if (level[i][id] === id) {
                         return level[i]['level']
                     }
                 }
@@ -268,7 +273,7 @@ layui.define(['table', 'jquery'], function(exports) {
 
         // 获取父子级关系
         getParentChild(id) {
-            if(!!id) {
+            if (!!id) {
                 return this.run.parentChild[id];
             }
             return this.run.parentChild;
@@ -286,7 +291,7 @@ layui.define(['table', 'jquery'], function(exports) {
 
         // 获取展开的id
         getUnfoldStatus(id) {
-            if(!!id) {
+            if (!!id) {
                 return this.run.unfoldStatus[id] || false;
             }
             return this.run.unfoldStatus;
@@ -298,7 +303,7 @@ layui.define(['table', 'jquery'], function(exports) {
             this.run.unfoldStatus[id] = flag;
 
             const cache = this.getShowCache();
-            if(cache) {
+            if (cache) {
                 this.cache(cache, this.run.unfoldStatus);
             }
         }
@@ -306,7 +311,7 @@ layui.define(['table', 'jquery'], function(exports) {
         // 获取是否启用展示缓存,返回值是 缓存的 key
         getShowCache() {
             let cache = this.config.showCache;
-            if(cache === true) {
+            if (cache === true) {
                 return "unfoldStatus";
             }
             return cache;
@@ -319,7 +324,7 @@ layui.define(['table', 'jquery'], function(exports) {
 
         // 缓存操作
         cache(key, val) {
-            if(val) {
+            if (val) {
                 val = JSON.stringify(val);
                 localStorage.setItem(key, val);
             }
@@ -334,7 +339,7 @@ layui.define(['table', 'jquery'], function(exports) {
 
             // 获取缓存
             const cache = this.getShowCache();
-            if(cache) {
+            if (cache) {
                 this.run.unfoldStatus = this.cache(cache) || {};
             }
         }
@@ -345,9 +350,9 @@ layui.define(['table', 'jquery'], function(exports) {
             const keyPid = this.getKeyPid();
 
             // 将ID改为字符串,因为既当key又当value.会把整型改为字符串类型,所以这里统一改成字符串型
-            for(let i=0; i<data.length; i++) {
-                data[i][keyId] = data[i][keyId]+"";
-                data[i][keyPid] = data[i][keyPid]+"";
+            for (let i = 0; i < data.length; i++) {
+                data[i][keyId] = data[i][keyId] + "";
+                data[i][keyPid] = data[i][keyPid] + "";
             }
 
             // 一. 获取id数组
@@ -359,9 +364,9 @@ layui.define(['table', 'jquery'], function(exports) {
             // 二. pid数组
             data.forEach((obj) => {
                 const pid = obj[keyPid];
-                if(this.run.idArr.indexOf(pid) !== -1) {
+                if (this.run.idArr.indexOf(pid) !== -1) {
                     // 判断本条pid对应的数据是否存在
-                    if(this.run.pidArr.indexOf(pid) === -1) {
+                    if (this.run.pidArr.indexOf(pid) === -1) {
                         // 如果没有才添加
                         this.run.pidArr.push(pid);
                     }
@@ -373,7 +378,7 @@ layui.define(['table', 'jquery'], function(exports) {
                 const id = obj[keyId];
                 const pid = obj[keyPid];
 
-                if(this.run.idArr.indexOf(id) !== -1 && this.run.pidArr.indexOf(pid) !== -1) {
+                if (this.run.idArr.indexOf(id) !== -1 && this.run.pidArr.indexOf(pid) !== -1) {
                     // 整理子级与父级对应关系
                     this.run.childParent[id] = pid;
 
@@ -390,7 +395,7 @@ layui.define(['table', 'jquery'], function(exports) {
                 const pid = obj[keyPid];
 
                 // 1. 整理 hasChild
-                if(this.run.idArr.indexOf(pid) !== -1) {
+                if (this.run.idArr.indexOf(pid) !== -1) {
                     // 数据真实存在才添加到 hasChild
                     // 1. 整理 hasChild 是否有子级[id1, id2, id3]
                     if (this.run.hasChild.indexOf(pid) === -1) {
@@ -403,9 +408,9 @@ layui.define(['table', 'jquery'], function(exports) {
                 let hasParent = true;
                 let level = 0;
                 let idCheck = id;
-                while(hasParent) {
+                while (hasParent) {
                     // 判断当前父级是否存在.不存在则退出
-                    if(!this.run.childParent.hasOwnProperty(idCheck)) {
+                    if (!this.run.childParent.hasOwnProperty(idCheck)) {
                         hasParent = false;
                         break;
                     }
@@ -434,7 +439,7 @@ layui.define(['table', 'jquery'], function(exports) {
 
         // 数据整理(总) - 获取数据之后,渲染数据之前.
         _parse(data) {
-            if(!data) data = [];
+            if (!data) data = [];
 
             // 保留原始data
             this._setDataOri(data);
@@ -476,14 +481,14 @@ layui.define(['table', 'jquery'], function(exports) {
 
             // 判断是否有缓存存在
             const hasUnfold = that.getUnfoldStatus()
-            if(JSON.stringify(hasUnfold) !== '{}') {
+            if (JSON.stringify(hasUnfold) !== '{}') {
                 const keyId = this.getKeyId();
                 data.forEach((item) => {
                     const id = item[keyId];
 
                     // 判断当前折叠还是展开
                     const unfoldId = that.getUnfoldStatus(id);
-                    if(unfoldId) {
+                    if (unfoldId) {
                         // 下级展开
                         that.showByPid(id, layId);
                     } else {
@@ -495,7 +500,7 @@ layui.define(['table', 'jquery'], function(exports) {
             }
 
             const defaultShow = that._getDefaultShow()
-            if(defaultShow) {
+            if (defaultShow) {
                 // 如果缓存不存在,则判断是否配置全部展开
                 that.showAll(obj)
             } else {
@@ -518,7 +523,7 @@ layui.define(['table', 'jquery'], function(exports) {
 
             // 判断当前折叠还是展开
             const unfoldId = that.getUnfoldStatus(id);
-            if(unfoldId) {
+            if (unfoldId) {
                 // 下级折叠
                 that.hideByPid(id, layId);
             } else {
@@ -559,10 +564,10 @@ layui.define(['table', 'jquery'], function(exports) {
 
             // 1. 先排序顶级
             const dataTop = [];
-            for(let i=0; i<level.length; i++) {
-                if(level[i]["level"] === 0) {
+            for (let i = 0; i < level.length; i++) {
+                if (level[i]["level"] === 0) {
                     const key = level[i]['id'];
-                    if(sort === 'asc') {
+                    if (sort === 'asc') {
                         dataTop.push(key);
                     } else {
                         dataTop.splice(0, 0, key);
@@ -584,8 +589,8 @@ layui.define(['table', 'jquery'], function(exports) {
                 dataTop.splice(0, 1);
 
                 let child = pc[id];
-                if(child) {
-                    if(sort !== 'asc') {
+                if (child) {
+                    if (sort !== 'asc') {
                         child = child.reverse();
                     }
 
@@ -601,9 +606,9 @@ layui.define(['table', 'jquery'], function(exports) {
         // 获取某id=x所在某个数组的位置
         _getdataOriIndexById(id, data) {
             const keyId = this.getKeyId();
-            for(let i=0; i<data.length; i++) {
+            for (let i = 0; i < data.length; i++) {
                 const line = data[i];
-                if(line[keyId] === id) {
+                if (line[keyId] === id) {
                     return i;
                 }
             }
@@ -623,13 +628,13 @@ layui.define(['table', 'jquery'], function(exports) {
                 const title = this.getTitle();
                 let indentItem = '';
                 let levelValue = 0;
-                for(let i=0; i<level.length; i++) {
-                    if(level[i]['id'] === id) {
+                for (let i = 0; i < level.length; i++) {
+                    if (level[i]['id'] === id) {
                         levelValue = level[i]['level'];
                     }
                 }
 
-                for(let i=0; i<levelValue; i++) {
+                for (let i = 0; i < levelValue; i++) {
                     indentItem = indentItem + indent
                 }
                 item[title] = indentItem + item[title];
@@ -649,8 +654,8 @@ layui.define(['table', 'jquery'], function(exports) {
                 const id = item[keyId];
                 const title = this.getTitle();
                 const iconClose = this.getIconClose();
-                if(hasChild.indexOf(id) !== -1) {
-                    item[title] = '<span class="'+ iconClose +'" style="font-size: 18px; width: 18px; height: 18px; text-align: center;"></span>' + item[title];
+                if (hasChild.indexOf(id) !== -1) {
+                    item[title] = '<span class="' + iconClose + '" style="font-size: 18px; width: 18px; height: 18px; text-align: center;"></span>' + item[title];
                 }
                 tmp.push(item);
             });
@@ -660,7 +665,7 @@ layui.define(['table', 'jquery'], function(exports) {
         // 展开回调函数
         _showByPidCallback(idArr) {
             let callback = this.config.showByPidCallback
-            if(JSON.stringify(callback) !== "{}") {
+            if (JSON.stringify(callback) !== "{}") {
                 callback(idArr);
             }
         }
@@ -668,7 +673,7 @@ layui.define(['table', 'jquery'], function(exports) {
         // 折叠回调函数
         _hideByPidCallback(idArr) {
             let callback = this.config.hideByPidCallback
-            if(JSON.stringify(callback) !== "{}") {
+            if (JSON.stringify(callback) !== "{}") {
                 callback(idArr);
             }
         }

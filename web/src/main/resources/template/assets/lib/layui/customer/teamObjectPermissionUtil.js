@@ -28,12 +28,12 @@ var teamObjectPermissionUtil = {
                                 </table>
                             </div>
                         </div>
-                    {{/json}}`;
+                    {{/json}}`,
 
     // 新增时的展示
     insertPageShow: function (objectType, showBoxId, form) {
         if (isNull(objectType)) {
-             $('#authList').html('');
+             $(`#${showBoxId}`).html('');
          } else {
              jsGetJsonFile("../../json/teamObjectLink.json", function(data) {
                  var authStrList = data[objectType];
@@ -47,7 +47,7 @@ var teamObjectPermissionUtil = {
                      authBtnJson["bean"] = bean;
                      str += getDataUseHandlebars($('#authTableTemplate').html(), {json: authBtnJson});
                  });
-                 $('#authList').html(str);
+                 $(`#${showBoxId}`).html(str);
              });
          }
          form.render();
