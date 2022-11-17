@@ -40,25 +40,7 @@ layui.config({
 
 		 function loadAuthList() {
 			 var objectType = $('#objectType').val();
-			 if (isNull(objectType)) {
-				 $('#authList').html('');
-			 } else {
-				 jsGetJsonFile("../../json/teamObjectLink.json", function(data) {
-					 var authStrList = data[objectType];
-					 var str = ``;
-					 $.each(authStrList, function(i, item) {
-						 var bean = {
-							 key: item,
-							 name: skyeyeClassEnum[item].name
-						 };
-						 var authBtnJson = skyeyeClassEnumUtil.getEnumDataListByClassName(item);
-						 authBtnJson["bean"] = bean;
-						 str += getDataUseHandlebars($('#authTableTemplate').html(), {json: authBtnJson});
-					 });
-					 $('#authList').html(str);
-				 });
-			 }
-			 form.render();
+			 teamObjectPermissionUtil.insertPageShow(objectType, 'authList', form);
 		 }
  	    
 	    $("body").on("click", "#cancle", function() {
