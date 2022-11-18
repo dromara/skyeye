@@ -138,7 +138,7 @@ layui.config({
 
 	//省级行政区划
 	function loadChildProvinceArea(){
-		AjaxPostUtil.request({url: reqBasePath + "commontarea001", params: {}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "queryAreaListByPId", params: {pId: 0}, type: 'json', callback: function (json) {
 			var str = '<dd class="layui-col-xs3"><select id="provinceId" win-verify="required" lay-filter="areaProvince" lay-search=""><option value="">请选择</option>';
 			for(var i = 0; i < json.rows.length; i++){
 				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -151,7 +151,7 @@ layui.config({
 
 	//市级行政区划
 	function loadChildCityArea(){
-		AjaxPostUtil.request({url: reqBasePath + "commontarea002", params: {rowId: $("#provinceId").val()}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "queryAreaListByPId", params: {pId: $("#provinceId").val()}, type: 'json', callback: function (json) {
 			var str = '<dd class="layui-col-xs3"><select id="cityId" lay-filter="areaCity" lay-search=""><option value="">请选择</option>';
 			for(var i = 0; i < json.rows.length; i++){
 				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -164,7 +164,7 @@ layui.config({
 
 	//县级行政区划
 	function loadChildArea(){
-		AjaxPostUtil.request({url: reqBasePath + "commontarea003", params: {rowId: $("#cityId").val()}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "queryAreaListByPId", params: {pId: $("#cityId").val()}, type: 'json', callback: function (json) {
 			var str = '<dd class="layui-col-xs3"><select id="areaId" lay-filter="area" lay-search=""><option value="">请选择</option>';
 			for(var i = 0; i < json.rows.length; i++){
 				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -177,7 +177,7 @@ layui.config({
 
 	//镇级行政区划
 	function loadChildAreaTownShip(){
-		AjaxPostUtil.request({url: reqBasePath + "commontarea004", params: {rowId: $("#areaId").val()}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "queryAreaListByPId", params: {pId: $("#areaId").val()}, type: 'json', callback: function (json) {
 			var str = '<dd class="layui-col-xs3"><select id="townshipId" lay-filter="areaTownShip" lay-search=""><option value="">请选择</option>';
 			for(var i = 0; i < json.rows.length; i++){
 				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';

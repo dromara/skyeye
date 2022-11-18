@@ -103,6 +103,8 @@ layui.each(customerJS, function(key, jsPath){
 
 // 操作添加或者编辑时，判断表格是否需要刷新,为0则刷新，否则则不刷新
 var refreshCode = "";
+// 返回父页面的数据
+var turnData = "";
 
 /**
  * 打开新的窗口
@@ -152,6 +154,7 @@ function _openNewWindows(mation){
 		mation.skin = '';
 	}
 	refreshCode = "";
+	turnData = "";
 	var pageIndex = layer.open({
 		id: mation.pageId,
 		type: 2,
@@ -168,7 +171,7 @@ function _openNewWindows(mation){
 		end: function() {
 			if(typeof(mation.callBack) == "function") {
 				if (refreshCode == '0') {
-					mation.callBack(refreshCode);
+					mation.callBack(refreshCode, turnData);
 				} else if (refreshCode == '-9999') {
 					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 				}

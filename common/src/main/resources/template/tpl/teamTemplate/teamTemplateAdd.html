@@ -42,8 +42,16 @@
 				<span class="hr-title">成员信息</span><hr>
 			</div>
 			<div class="layui-form-item layui-col-xs12">
-				<div style="margin:auto 10px;">
-					<table id="messageTable" lay-filter="messageTable"></table>
+				<label class="layui-form-label">成员信息：</label>
+				<div class="layui-input-block">
+					<div class="winui-toolbar">
+						<div class="winui-tool" style="text-align: left;">
+							<button id="addRole" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>添加角色</button>
+						</div>
+					</div>
+					<div style="margin:auto 10px;">
+						<table id="messageTable" lay-filter="messageTable"></table>
+					</div>
 				</div>
 			</div>
 
@@ -61,6 +69,15 @@
 		    </div>
 	    </form>
 	</div>
+
+	<script type="text/html" id="tableBar">
+		{{# if(d.pId == '0'){ }}
+			<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="addUser">添加成员</a>
+			<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="removeRole">移除</a>
+		{{# } else { }}
+			<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="removeUser">移除</a>
+		{{# } }}
+	</script>
 
 	<script type="text/x-handlebars-template" id="authTableTemplate">
 		{{#json}}

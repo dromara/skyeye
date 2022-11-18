@@ -10,28 +10,22 @@ layui.config({
 		form = layui.form,
         tableTree = layui.tableTreeDj;
 	
-	form.render();
-	form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-        	loadTable();
-        }
-        return false;
-	});
-
     tableTree.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
         url: reqBasePath + 'systarea001',
-        where: {addressName: $("#addressName").val()},
+        where: getTableParams(),
         cols: [[
-            {field:'name', width:300, title: '区域名称'},
-            {field:'id', width:100, title: 'id'},
-            {field:'pId', title: 'pId'},
+            { field: 'name', width: 300, title: '区域名称' },
+            { field: 'id', width: 100, title: 'id' },
+            { field: 'pId', title: 'pId' },
         ]],
-        isPage:false,
 	    done: function(json) {
 	    	matchingLanguage();
+            initTableSearchUtil.initAdvancedSearch($("#messageTable")[0], json.searchFilter, form, "请输入名称", function () {
+                tableTree.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+            });
 	    }
     }, {
         keyId: 'id',
@@ -39,13 +33,17 @@ layui.config({
         title: 'name',
     });
 	
-	// 刷新数据
+    form.render();
     $("body").on("click", "#reloadTable", function() {
-    	loadTable();
+        loadTable();
     });
-	
-	function loadTable() {
-        tableTree.reload("messageTable", {where:{addressName: $("#addressName").val()}});
+
+    function loadTable() {
+        tableTree.reload("messageTable", {where: getTableParams()});
+    }
+
+    function getTableParams() {
+        return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
     
     exports('tarea', {});
