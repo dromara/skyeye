@@ -12,7 +12,7 @@
 	        <div class="layui-form-item layui-col-xs12">
 	            <label class="layui-form-label">公司名称<i class="red">*</i></label>
 	            <div class="layui-input-block">
-                	<input type="text" id="companyName" name="companyName" win-verify="required" placeholder="请输入公司名称" class="layui-input" maxlength="50"/>
+                	<input type="text" id="name" name="name" win-verify="required" placeholder="请输入公司名称" class="layui-input" maxlength="50"/>
                 </div>
 	        </div>
 	        <div class="layui-form-item layui-col-xs12">
@@ -32,55 +32,24 @@
 	        </div>
 	        <div class="layui-form-item layui-col-xs12">
 	            <label class="layui-form-label">公司地址<i class="red">*</i></label>
-	            <div class="layui-input-block" id="lockParentSel">
+	            <div class="layui-input-block" id="address">
 	            </div>
-	        </div>
-	        <div class="layui-form-item layui-col-xs12">
-	            <label class="layui-form-label">详细地址<i class="red">*</i></label>
-	            <div class="layui-input-block">
-                	<input type="text" id="addressDetailed" name="addressDetailed" win-verify="required" placeholder="请输入公司详细地址" class="layui-input" maxlength="50"/>
-                </div>
 	        </div>
 			<div class="layui-form-item layui-col-xs12">
 				<label class="layui-form-label">个人月薪资扣税比例<i class="red">*</i></label>
 				<div class="layui-input-block">
-					<div class="winui-toolbar">
-						<div class="winui-tool" style="text-align: left;">
-							<button id="addRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增行</button>
-							<button id="deleteRow" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>
-							<span style="color: cornflowerblue;">具有重复薪资范围的，系统优先以顺序为主取第一个</span>
-						</div>
+					<div class="winui-tip alert-info" id="showInfo">
+						具有重复薪资范围的，系统优先以顺序为主取第一个
 					</div>
-					<table class="layui-table">
-						<thead>
-						<tr>
-							<th style="width: 30px;"></th>
-							<th style="width: 150px;">薪资范围-最小值<i class="red">*</i></th>
-							<th style="width: 90px;"></th>
-							<th style="width: 150px;">薪资范围-最大值<i class="red">*</i></th>
-							<th style="width: 90px;">一月(%)<i class="red">*</i></th>
-							<th style="width: 90px;">二月(%)<i class="red">*</i></th>
-							<th style="width: 90px;">三月(%)<i class="red">*</i></th>
-							<th style="width: 90px;">四月(%)<i class="red">*</i></th>
-							<th style="width: 90px;">五月(%)<i class="red">*</i></th>
-							<th style="width: 90px;">六月(%)<i class="red">*</i></th>
-							<th style="width: 90px;">七月(%)<i class="red">*</i></th>
-							<th style="width: 90px;">八月(%)<i class="red">*</i></th>
-							<th style="width: 90px;">九月(%)<i class="red">*</i></th>
-							<th style="width: 90px;">十月(%)<i class="red">*</i></th>
-							<th style="width: 90px;">十一月(%)<i class="red">*</i></th>
-							<th style="width: 90px;">十二月(%)<i class="red">*</i></th>
-						</tr>
-						</thead>
-						<tbody id="taxRateTable" class="insurance-table">
-						</tbody>
-					</table>
+					<div id="taxRateList">
+
+					</div>
 				</div>
 			</div>
 	        <div class="layui-form-item layui-col-xs12">
 	            <label class="layui-form-label">公司简介</label>
 	            <div class="layui-input-block">
-					<div id="container" name="content" type="text/plain"></div>
+					<div id="remark" name="remark" type="text/plain"></div>
                 </div>
 	        </div>
 	        <div class="layui-form-item layui-col-xs12">
@@ -91,28 +60,6 @@
 	        </div>
 	    </form>
 	</div>
-
-	<!-- 个人税率模板 -->
-	<script type="text/x-handlebars-template" id="taxRateTemplate">
-		<tr trcusid="{{trId}}">
-			<td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
-			<td><input type="text" class="layui-input" id="{{minMoney}}" win-verify="required|money"/></td>
-			<td>≤ 薪资 <</td>
-			<td><input type="text" class="layui-input" id="{{maxMoney}}" win-verify="required|money"/></td>
-			<td><input type="text" class="layui-input" id="{{janRate}}" win-verify="required|percentage"/></td>
-			<td><input type="text" class="layui-input" id="{{febRate}}" win-verify="required|percentage"/></td>
-			<td><input type="text" class="layui-input" id="{{marRate}}" win-verify="required|percentage"/></td>
-			<td><input type="text" class="layui-input" id="{{aprRate}}" win-verify="required|percentage"/></td>
-			<td><input type="text" class="layui-input" id="{{mayRate}}" win-verify="required|percentage"/></td>
-			<td><input type="text" class="layui-input" id="{{junRate}}" win-verify="required|percentage"/></td>
-			<td><input type="text" class="layui-input" id="{{julRate}}" win-verify="required|percentage"/></td>
-			<td><input type="text" class="layui-input" id="{{augRate}}" win-verify="required|percentage"/></td>
-			<td><input type="text" class="layui-input" id="{{septRate}}" win-verify="required|percentage"/></td>
-			<td><input type="text" class="layui-input" id="{{octRate}}" win-verify="required|percentage"/></td>
-			<td><input type="text" class="layui-input" id="{{novRate}}" win-verify="required|percentage"/></td>
-			<td><input type="text" class="layui-input" id="{{decRate}}" win-verify="required|percentage"/></td>
-		</tr>
-	</script>
 
 	<script src="../../assets/lib/layui/lay/modules/ace/ace.js"></script>
 	<script src="../../assets/lib/layui/layui.js"></script>

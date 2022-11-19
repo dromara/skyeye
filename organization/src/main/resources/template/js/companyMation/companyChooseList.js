@@ -20,20 +20,15 @@ layui.config({
 
 	initTable();
 	function initTable(){
-		// 初始化值
 		var ids = [];
 		$.each(companyList, function(i, item) {
 			ids.push(item.id);
 		});
-		tableCheckBoxUtil.setIds({
-			gridId: 'messageTable',
-			fieldName: 'id',
-			ids: ids
-		});
 		tableCheckBoxUtil.init({
 			gridId: 'messageTable',
 			filterId: 'messageTable',
-			fieldName: 'id'
+			fieldName: 'id',
+			ids: ids
 		});
 
 		table.render({
@@ -49,96 +44,50 @@ layui.config({
 		    cols: [[
 		    	{ type: 'checkbox'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-				{ field: 'companyName', width: 300, title: '公司名称'},
-				{ field: 'companyDesc', width: 80, title: '公司简介', align: 'center', templet: function (d) {
-						return '<i class="fa fa-fw fa-html5 cursor" lay-event="companyDesc"></i>';
-					}},
+				{ field: 'name', width: 300, title: '公司名称'},
 				{ field: 'departmentNum', title: '部门数', width: 100 },
 				{ field: 'userNum', title: '员工数', width: 100 },
-				{ field:'id', width:400, title: '公司地址', templet: function (d) {
-					var str = d.provinceName + " ";
-					if (!isNull(d.cityName)){
-						str += d.cityName + " ";
-					}
-					if (!isNull(d.areaName)){
-						str += d.areaName + " ";
-					}
-					if (!isNull(d.townshipName)){
-						str += d.townshipName + " ";
-					}
-					if (!isNull(d.addressDetailed)){
-						str += d.addressDetailed;
-					}
-					return str;
-				}}
 		    ]],
 		    done: function(res, curr, count){
 		    	matchingLanguage();
-	    		//设置选中
 	    		tableCheckBoxUtil.checkedDefault({
 					gridId: 'messageTable',
 					fieldName: 'id'
 				});
+
+				initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
+					table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+				});
 		    }
 		});
 		
-		table.on('tool(messageTable)', function (obj) {
-	        var data = obj.data;
-	        var layEvent = obj.event;
-			if (layEvent === 'companyDesc') { //公司简介
-				layer.open({
-					id: '公司简介',
-					type: 1,
-					title: '公司简介',
-					shade: 0.3,
-					area: ['90vw', '90vh'],
-					content: data.companyDesc
-				});
-			}
-	    });
 		form.render();
 	}
 
 	// 保存
 	$("body").on("click", "#saveCheckBox", function() {
-		var selectedData = tableCheckBoxUtil.getValue({
+		var selectedData = tableCheckBoxUtil.getValueList({
 			gridId: 'messageTable'
 		});
-		if(selectedData.length == 0){
+		if (selectedData.length == 0) {
 			winui.window.msg("请选择企业", {icon: 2, time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url: reqBasePath + "companymation011", params: {ids: selectedData.toString()}, type: 'json', callback: function (json) {
-			parent.companyList = [].concat(json.rows);
-			parent.layer.close(index);
-			parent.refreshCode = '0';
-   		}});
+		parent.companyList = [].concat(selectedData);
+		parent.layer.close(index);
+		parent.refreshCode = '0';
 	});
 
-    form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            refreshTable();
-        }
-        return false;
-    });
-	
 	$("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
-    }
-    
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
+		loadTable();
+	});
+
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
 
 	function getTableParams() {
-		return {
-			companyName: $("companyName").val()
-		};
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
     exports('companyChooseList', {});

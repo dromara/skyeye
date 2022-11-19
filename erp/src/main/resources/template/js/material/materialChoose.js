@@ -91,7 +91,7 @@ layui.config({
 						form.render();
 					})
 		    	} else {
-		    		// 多选,设置选中
+		    		// 多选
 		    		tableCheckBoxUtil.checkedDefault({
 						gridId: 'messageTable',
 						fieldName: 'materialId'

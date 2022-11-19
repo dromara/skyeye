@@ -18,41 +18,44 @@ layui.config({
         elem: '#messageTable',
         method: 'post',
         url: reqBasePath + 'companymation001',
-        where:{companyName: $("#companyName").val()},
+        where: getTableParams(),
         cols: [[
-            { field: 'companyName', width: 300, title: '公司名称' },
-            { field: 'companyDesc', width: 80, title: '公司简介', align: 'center', templet: function (d) {
-	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="companyDesc"></i>';
+            { field: 'name', width: 300, title: '公司名称' },
+            { field: 'remark', width: 80, title: '公司简介', align: 'center', templet: function (d) {
+	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="remark"></i>';
 	        }},
 	        { field: 'departmentNum', title: '部门数', width: 100 },
 	        { field: 'userNum', title: '员工数', width: 100 },
-            { field:'id', width:400, title: '公司地址', templet: function (d) {
+            { field:'id', width: 400, title: '公司地址', templet: function (d) {
             	var str = d.provinceName + " ";
-            	if (!isNull(d.cityName)){
+            	if (!isNull(d.cityName)) {
             		str += d.cityName + " ";
             	}
-            	if (!isNull(d.areaName)){
+            	if (!isNull(d.areaName)) {
             		str += d.areaName + " ";
             	}
-            	if (!isNull(d.townshipName)){
+            	if (!isNull(d.townshipName)) {
             		str += d.townshipName + " ";
             	}
-            	if (!isNull(d.addressDetailed)){
-            		str += d.addressDetailed;
+            	if (!isNull(d.absoluteAddress)) {
+            		str += d.absoluteAddress;
             	}
 	        	return str;
 	        }},
-	        { field:'createTime', width:150, align: 'center', title: systemLanguage["com.skyeye.entryTime"][languageType] },
+	        { field:'createTime', width: 150, align: 'center', title: systemLanguage["com.skyeye.entryTime"][languageType] },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar' }
         ]],
         isPage: false,
 	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
     }, {
 		keyId: 'id',
 		keyPid: 'pId',
-		title: 'companyName',
+		title: 'name',
 	});
 
 	tableTree.getTable().on('tool(messageTable)', function (obj) {
@@ -62,31 +65,23 @@ layui.config({
         	del(data, obj);
         } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        } else if (layEvent === 'companyDesc') { //公司简介
+        } else if (layEvent === 'remark') { //公司简介
         	layer.open({
 	            id: '公司简介',
 	            type: 1,
 	            title: '公司简介',
 	            shade: 0.3,
 	            area: ['90vw', '90vh'],
-	            content: data.companyDesc
+	            content: data.remark
 	        });
         }
     });
-	
-	form.render();
-	form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-        	loadTable();
-        }
-        return false;
-	});
 	
 	// 删除
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "companymation003", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "deleteCompanyMationById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -107,11 +102,6 @@ layui.config({
 			}});
 	}
 	
-	// 刷新数据
-    $("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
     // 新增
     $("body").on("click", "#addBean", function() {
     	_openNewWindows({
@@ -124,10 +114,19 @@ layui.config({
 				loadTable();
 			}});
     });
-    
-    function loadTable() {
-		tableTree.reload("messageTable", {where:{companyName: $("#companyName").val()}});
-    }
+
+	form.render();
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
+	});
+
+	function loadTable() {
+		tableTree.reload("messageTable", {where: getTableParams()});
+	}
+
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
     
     exports('companyMationList', {});
 });

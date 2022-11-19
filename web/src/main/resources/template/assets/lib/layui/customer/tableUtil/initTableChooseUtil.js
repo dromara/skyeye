@@ -112,7 +112,7 @@ var initTableChooseUtil = {
                 var modelHtml = isNull(item.modelHtml) ? "" : item.modelHtml;
                 tbodyStr += '<td><select id="' + tdId + '" lay-filter="' + item.layFilter + '" lay-search win-verify="' + verify + '">' + modelHtml + '</select></td>';
             } else if (item.formType == 'detail') {
-                tbodyStr += '<td id="' + tdId + '" class="' + className + '"></td>';
+                tbodyStr += '<td id="' + tdId + '" class="' + className + '">' + value + '</td>';
             }
         });
         tbodyStr += '</tr>';
@@ -194,6 +194,7 @@ var initTableChooseUtil = {
                 }
                 row[bean.id] = value;
             });
+            row["sortNo"] = i;
             dataList.push(row);
         });
         var checkResult = true;

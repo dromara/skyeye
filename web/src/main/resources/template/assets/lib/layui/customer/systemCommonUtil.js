@@ -614,3 +614,135 @@ var systemCommonUtil = {
     }
 
 };
+
+// 行政区划工具函数
+var areaUtil = {
+
+    tips: {
+        0: '最少选择到省级别',
+        1: '最少选择到市级别',
+        2: '最少选择到区县级别',
+        3: '最少选择到乡镇级别'
+    },
+
+    selectId: {
+        0: 'provinceId',
+        1: 'cityId',
+        2: 'areaId',
+        3: 'townshipId',
+        'details': 'absoluteAddress'
+    },
+
+    form: null,
+    leastRequireLevel: -1,
+
+    initArea: function (leastRequireLevel, showBoxId, form, defaultParams) {
+        areaUtil.form = form;
+        areaUtil.leastRequireLevel = isNull(leastRequireLevel) ? -1 : leastRequireLevel;
+        areaUtil.loadBox(showBoxId);
+        areaUtil.loadData(defaultParams);
+    },
+
+    loadBox: function (showBoxId) {
+        var tip = areaUtil.tips[areaUtil.leastRequireLevel];
+        var str = `<div class="layui-col-xs3" id="${areaUtil.selectId['0']}Box">
+                    </div>
+                    <div class="layui-col-xs3" id="${areaUtil.selectId['1']}Box">
+                    </div>
+                    <div class="layui-col-xs3" id="${areaUtil.selectId['2']}Box">
+                    </div>
+                    <div class="layui-col-xs3" id="${areaUtil.selectId['3']}Box">
+                    </div>
+                    <div class="layui-col-xs12" id="${areaUtil.selectId['details']}Box">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">${tip}</div>`;
+        $(`#${showBoxId}`).html(str);
+    },
+
+    loadData: function (defaultParams) {
+        // 获取省的数据
+        var data = areaUtil.loadDataFromAjax('0');
+
+        areaUtil.readerSelect(data, 0, defaultParams);
+
+        areaUtil.readerDetails(defaultParams);
+
+        areaUtil.renderListener();
+    },
+
+    loadDataFromAjax: function (pId) {
+        var data = [];
+        AjaxPostUtil.request({url: reqBasePath + "queryAreaListByPId", params: {pId: pId}, type: 'json', callback: function (json) {
+            data = [].concat(json.rows);
+        }, async: false});
+        return data;
+    },
+
+    readerSelect: function (data, level, defaultParams) {
+        var id = areaUtil.selectId[level];
+        if (isNull(id)) {
+            return false;
+        }
+        var str = `<select id="${id}" win-verify="${level <= areaUtil.leastRequireLevel ? 'required' : ''}" level="${level}" lay-filter="${id}" lay-search=""><option value="">请选择</option>`;
+        for(var i = 0; i < data.length; i++){
+            str += `<option value="${data[i].id}">${data[i].name}</option>`;
+        }
+        str += `</select>`;
+        $(`#${id}Box`).html(str);
+
+        // 设置值
+        if (!isNull(defaultParams)) {
+            var value = defaultParams[id];
+            if (!isNull(value)) {
+                $(`#${id}`).val(value);
+                var nextData = areaUtil.loadDataFromAjax(value);
+                areaUtil.readerSelect(nextData, level + 1, defaultParams);
+            }
+        }
+
+        areaUtil.form.render('select');
+    },
+
+    renderListener: function () {
+        $.each(areaUtil.selectId, function (key, value) {
+            if (!isNaN(key)) {
+                areaUtil.form.on(`select(${value})`, function(data) {
+                    layui.$(data.elem).parent('dd').nextAll().remove();
+                    // 获取当前的级别
+                    var level = parseInt($(`#${value}`).attr('level'));
+                    if (!isNull(data.value)) {
+                        var nextData = areaUtil.loadDataFromAjax(data.value);
+                        areaUtil.readerSelect(nextData, level + 1, null);
+                    }
+                    $.each(areaUtil.selectId, function (key1, value1) {
+                        if (key1 > (level + 1) && !isNaN(key1)) {
+                            $(`#${value1}Box`).html('');
+                        }
+                    });
+                });
+            }
+        });
+    },
+
+    readerDetails(defaultParams) {
+        var id = areaUtil.selectId['details'];
+        var str = `<input type="text" id="${id}" name="${id}" placeholder="请输入详细地址" class="layui-input" maxlength="100"/>`;
+        $(`#${id}Box`).html(str);
+        // 设置值
+        if (!isNull(defaultParams)) {
+            var value = defaultParams[id];
+            if (!isNull(value)) {
+                $(`#${id}`).val(value);
+            }
+        }
+    },
+
+    getValue: function () {
+        var result = {};
+        $.each(areaUtil.selectId, function (key, value) {
+            var resultValue = $(`#${value}`).val();
+            result[value] = isNull(resultValue) ? '' : resultValue;
+        });
+        return result;
+    }
+};
