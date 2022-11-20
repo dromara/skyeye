@@ -66,7 +66,6 @@ layui.config({
     
     function getTableParams() {
     	return {
-			companyName: $("#companyName").val(),
 			departmentName: $("#departmentName").val(),
 			monthTime: $("#monthTime").val()
     	};

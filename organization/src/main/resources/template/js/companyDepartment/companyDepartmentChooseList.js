@@ -20,20 +20,15 @@ layui.config({
 
 	initTable();
 	function initTable(){
-		// 初始化值
 		var ids = [];
 		$.each(departmentList, function(i, item) {
 			ids.push(item.id);
 		});
-		tableCheckBoxUtil.setIds({
-			gridId: 'messageTable',
-			fieldName: 'id',
-			ids: ids
-		});
 		tableCheckBoxUtil.init({
 			gridId: 'messageTable',
 			filterId: 'messageTable',
-			fieldName: 'id'
+			fieldName: 'id',
+			ids: ids
 		});
 
 		table.render({
@@ -52,16 +47,17 @@ layui.config({
 				{ field: 'departmentName', title: '部门名称', width: 300 },
 				{ field: 'id', title: '部门简介', width: 80, align: 'center', templet: function (d) {
 					return '<i class="fa fa-fw fa-html5 cursor" lay-event="departmentDesc"></i>';
-				}},
-				{ field: 'jobNum', title: '职位数', width: 120 },
-				{ field: 'userNum', title: '员工数', width: 120 }
+				}}
 		    ]],
 		    done: function(res, curr, count){
 		    	matchingLanguage();
-	    		//设置选中
 	    		tableCheckBoxUtil.checkedDefault({
 					gridId: 'messageTable',
 					fieldName: 'id'
+				});
+
+				initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
+					table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 				});
 		    }
 		});
@@ -85,45 +81,28 @@ layui.config({
 
 	// 保存
 	$("body").on("click", "#saveCheckBox", function() {
-		var selectedData = tableCheckBoxUtil.getValue({
+		var selectedData = tableCheckBoxUtil.getValueList({
 			gridId: 'messageTable'
 		});
-		if(selectedData.length == 0){
+		if (selectedData.length == 0) {
 			winui.window.msg("请选择部门", {icon: 2, time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url: reqBasePath + "companydepartment009", params: {ids: selectedData.toString()}, type: 'json', callback: function (json) {
-			parent.departmentList = [].concat(json.rows);
-			parent.layer.close(index);
-			parent.refreshCode = '0';
-   		}});
+		parent.departmentList = [].concat(selectedData);
+		parent.layer.close(index);
+		parent.refreshCode = '0';
 	});
 
-    form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            refreshTable();
-        }
-        return false;
-    });
-	
 	$("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
-    }
-    
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
+		loadTable();
+	});
+
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
 
 	function getTableParams() {
-		return {
-			companyName: $("companyName").val(),
-			departmentName: $("departmentName").val()
-		};
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
     exports('companyDepartmentChooseList', {});
