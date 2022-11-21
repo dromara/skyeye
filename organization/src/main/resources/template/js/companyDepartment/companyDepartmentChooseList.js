@@ -44,12 +44,12 @@ layui.config({
 		    cols: [[
 		    	{ type: 'checkbox'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-				{ field: 'departmentName', title: '部门名称', width: 300 },
+				{ field: 'name', title: '部门名称', width: 300 },
 				{ field: 'id', title: '部门简介', width: 80, align: 'center', templet: function (d) {
-					return '<i class="fa fa-fw fa-html5 cursor" lay-event="departmentDesc"></i>';
+					return '<i class="fa fa-fw fa-html5 cursor" lay-event="remark"></i>';
 				}}
 		    ]],
-		    done: function(res, curr, count){
+		    done: function(json, curr, count){
 		    	matchingLanguage();
 	    		tableCheckBoxUtil.checkedDefault({
 					gridId: 'messageTable',
@@ -65,14 +65,14 @@ layui.config({
 		table.on('tool(messageTable)', function (obj) {
 	        var data = obj.data;
 	        var layEvent = obj.event;
-			if (layEvent === 'departmentDesc') { //部门简介
+			if (layEvent === 'remark') { //部门简介
 				layer.open({
 					id: '部门简介',
 					type: 1,
 					title: '部门简介',
 					shade: 0.3,
 					area: ['90vw', '90vh'],
-					content: data.departmentDesc
+					content: data.remark
 				});
 			}
 	    });

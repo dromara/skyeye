@@ -48,7 +48,7 @@ layui.config({
 				{ field: 'departmentNum', title: '部门数', width: 100 },
 				{ field: 'userNum', title: '员工数', width: 100 },
 		    ]],
-		    done: function(res, curr, count){
+		    done: function(json, curr, count){
 		    	matchingLanguage();
 	    		tableCheckBoxUtil.checkedDefault({
 					gridId: 'messageTable',
