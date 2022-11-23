@@ -39,7 +39,7 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === '') { //
+        if (layEvent === '') {
         	edit(data);
         }
     });
@@ -66,7 +66,6 @@ layui.config({
     
     function getTableParams() {
     	return {
-			departmentName: $("#departmentName").val(),
 			monthTime: $("#monthTime").val()
     	};
     }
