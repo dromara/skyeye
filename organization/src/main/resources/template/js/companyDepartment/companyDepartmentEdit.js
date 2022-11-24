@@ -41,7 +41,7 @@ layui.config({
 						name: $("#name").val(),
 						remark: encodeURIComponent(ue.getContent()),
 						companyId: isNull($("#companyId").val()) ? '0' : $("#companyId").val(),
-						pId: '0',
+						parentId: '0',
 						overtimeSettlementType: $("#overtimeSettlementType").val(),
 						id: parent.rowId
 					};

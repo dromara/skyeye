@@ -159,6 +159,7 @@ layui.config({
 		 	url: reqBasePath + "companydepartment007",
 		 	params: {companyId: $("#companyList").val()},
 		 	pagination: false,
+			method: 'POST',
 		 	template: selTemplate,
 		 	ajaxSendLoadBefore: function(hdb) {},
 		 	ajaxSendAfter:function (json) {

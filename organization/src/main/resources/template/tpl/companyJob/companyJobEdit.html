@@ -40,13 +40,13 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">职位名称<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="jobName" name="jobName" win-verify="required" placeholder="请输入职位名称" class="layui-input" maxlength="50" value="{{jobName}}"/>
+				<input type="text" id="name" name="name" win-verify="required" placeholder="请输入职位名称" class="layui-input" maxlength="50" value="{{name}}"/>
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">职位简介</label>
 			<div class="layui-input-block">
-				<textarea id="content" name="content" style="display: none;">{{jobDesc}}</textarea>
+				<div id="remark" name="remark" type="text/plain"></div>
 			</div>
 		</div>
 		<div class="layui-form-item">
@@ -58,9 +58,11 @@
 		{{/bean}}
 	</script>
 
-	<script src="../../assets/lib/layui/lay/modules/ace/ace.js"></script>
 	<script src="../../assets/lib/layui/layui.js"></script>
    	<script src="../../assets/lib/layui/custom.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/ueditor/ueditor.config.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/ueditor/ueditor.all.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/ueditor/lang/zh-cn/zh-cn.js"></script>
    	<script type="text/javascript">
         layui.config({base: '../../js/companyJob/'}).use('companyJobEdit');
     </script>
