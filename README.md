@@ -14,6 +14,10 @@
 - [开源版项目文档](https://gitee.com/doc_wei01/skyeye/blob/company_server/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3.md)
 - [企业版项目文档](https://gitee.com/doc_wei01/skyeye/blob/company_server/企业版项目文档.md)
 - 基础模块 (源代码) 针对星球内部用户开放，具体包含功能可查看：[https://docs.qq.com/sheet/DYWZWUWZQUkFTcmh2?tab=BB08J2](https://docs.qq.com/sheet/DYWZWUWZQUkFTcmh2?tab=BB08J2)
+- 免费体验账号(只具备查看权限):
+  - 地址：http://114.116.253.94:8080/
+  - 账号：skyeye
+  - 密码：123456
 
 ### 沟通交流
 
