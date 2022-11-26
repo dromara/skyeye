@@ -67,7 +67,6 @@ layui.define(['table', 'jquery'], function (exports) {
             }
 
             // 整理数据初始状态
-            var loadData = false;
             const parseData = obj.parseData || {};
             obj.parseData = (res) => {
                 if (JSON.stringify(parseData) !== "{}") {
@@ -75,7 +74,6 @@ layui.define(['table', 'jquery'], function (exports) {
                 }
                 this._initDo()
                 res.rows = this._parse(res.rows);
-                loadData = true;
                 return res;
             }
 
@@ -88,9 +86,6 @@ layui.define(['table', 'jquery'], function (exports) {
                 }
             }
             table.render(obj);
-            if (!loadData) {
-                this._initDo()
-            }
         }
 
         // 重载

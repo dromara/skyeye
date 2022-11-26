@@ -44,6 +44,7 @@
 			<div class="layui-form-item layui-col-xs12">
 				<label class="layui-form-label">成员信息：</label>
 				<div class="layui-input-block">
+					<div class="winui-tip alert-info" id="showInfo">一个用户在一个团队中只能属于一个角色。</div>
 					<div class="winui-toolbar">
 						<div class="winui-tool" style="text-align: left;">
 							<button id="addRole" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>添加角色</button>
@@ -80,33 +81,14 @@
 	</script>
 
 	<script type="text/x-handlebars-template" id="authTableTemplate">
-		{{#json}}
+		{{#list}}
 		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">{{bean.name}}<i class="red">*</i></label>
+			<label class="layui-form-label">{{title}}<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<table class="layui-table">
-					<thead>
-						<tr>
-							<th>成员</th>
-							{{#each rows}}
-								<th>{{name}}</th>
-							{{/each}}
-						</tr>
-					</thead>
-					<tbody id="{{bean.key}}" class="insurance-table">
-						{{#each roleList}}
-						<tr>
-							<td>{{name}}</td>
-							{{#each ../rows}}
-								<th>{{name}}</th>
-							{{/each}}
-						</tr>
-						{{/each}}
-					</tbody>
-				</table>
+				<table id="{{id}}" lay-filter="{{id}}"></table>
 			</div>
 		</div>
-		{{/json}}
+		{{/list}}
 	</script>
 
 	<script src="../../assets/lib/layui/layui.js"></script>

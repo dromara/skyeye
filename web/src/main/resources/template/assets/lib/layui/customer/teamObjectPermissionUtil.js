@@ -2,55 +2,51 @@
 // 团队成员权限工具
 var teamObjectPermissionUtil = {
 
-    template: `{{#json}}
-                        <div class="layui-form-item layui-col-xs12">
-                            <label class="layui-form-label">{{bean.name}}<i class="red">*</i></label>
-                            <div class="layui-input-block">
-                                <table class="layui-table">
-                                    <thead>
-                                        <tr>
-                                            <th>成员</th>
-                                            {{#each rows}}
-                                                <th>{{name}}</th>
-                                            {{/each}}
-                                        </tr>
-                                    </thead>
-                                    <tbody id="{{bean.key}}" class="insurance-table">
-                                        {{#each roleList}}
-                                        <tr>
-                                            <td>{{name}}</td>
-                                            {{#each ../rows}}
-                                                <th>{{name}}</th>
-                                            {{/each}}
-                                        </tr>
-                                        {{/each}}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    {{/json}}`,
-
-    // 新增时的展示
-    insertPageShow: function (objectType, showBoxId, form) {
+    getAuthCols: function (objectType) {
         if (isNull(objectType)) {
-             $(`#${showBoxId}`).html('');
-         } else {
-             jsGetJsonFile("../../json/teamObjectLink.json", function(data) {
-                 var authStrList = data[objectType];
-                 var str = ``;
-                 $.each(authStrList, function(i, item) {
-                     var bean = {
-                         key: item,
-                         name: skyeyeClassEnum[item].name
-                     };
-                     var authBtnJson = skyeyeClassEnumUtil.getEnumDataListByClassName(item);
-                     authBtnJson["bean"] = bean;
-                     str += getDataUseHandlebars($('#authTableTemplate').html(), {json: authBtnJson});
+             return [];
+        } else {
+            var teamObjectType = skyeyeClassEnumUtil.getEnumDataListByClassName("teamObjectType").rows;
+            var pageAuthList = getInPoingArr(teamObjectType, "id", objectType, "pageAuth");
+            if (pageAuthList == null) {
+                return [];
+            }
+             var result = [];
+             $.each(pageAuthList, function(i, enumKey) {
+                 var map = {
+                     id: enumKey,
+                     title: skyeyeClassEnum[enumKey].name
+                 };
+                 // 获取枚举中需要鉴权的内容
+                 var authBtnJson = skyeyeClassEnumUtil.getEnumDataListByClassName(enumKey).rows;
+                 var cols = [];
+                 cols.push({
+                     field: 'name',
+                     title: '名称',
+                     width: 160
                  });
-                 $(`#${showBoxId}`).html(str);
+                 $.each(authBtnJson, function(j, item) {
+                     cols.push({
+                         field: item.id,
+                         title: item.name,
+                         align: 'center',
+                         width: 140,
+                         templet: function(row) {
+                             var roleId = row.pId == '0' ? row.id : row.pId;
+                             var authGroupKey = row.authGroupKey;
+                             var authKey = $(this)[0].field;
+                             var userId = row.pId == '0' ? '' : row.id;
+                             var checkBoxId = authGroupKey + '_' + authKey + '_' + roleId + '_' + userId;
+                             var name = authGroupKey + '_' + authKey + '_' + roleId;
+                             return `<input type="checkbox" id="${checkBoxId}" name="${name}" lay-filter="checkClick"/>`;
+                         }
+                     });
+                 });
+                 map['cols'] = cols;
+                 result.push(map);
              });
+             return result;
          }
-         form.render();
     }
 
 }

@@ -433,12 +433,9 @@ layui.config({
 		//获取选中节点
 		var zTree = ztr.getCheckedNodes(true);
 		for (var i = 0; i < zTree.length; i++) {
-			if(zTree[i].folderType === 'isPeople'){//选中节点是人
-				addToArray({
-					id: zTree[i].id,
-					name: zTree[i].name,
-					email: zTree[i].email
-				});
+			if(zTree[i].folderType === 'isPeople'){
+				// 选中节点是人
+				addToArray(zTree[i]);
 				setUpTreeNodeCheckOrNot(zTree[i].id, true);
 			}
 		}
@@ -504,12 +501,7 @@ layui.config({
 
 		//如果该元素在集合中不存在
 		if(!inArray) {
-			var j = {
-				id: data.id,
-				name: data.name,
-				email: data.email
-			};
-			userOperatorReturnList.push(j);
+			userOperatorReturnList.push(data);
 			showPeople();
 		}
 	}
