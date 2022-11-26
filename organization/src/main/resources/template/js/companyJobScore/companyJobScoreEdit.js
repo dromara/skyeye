@@ -6,126 +6,97 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'jquery', 'winui'], function (exports) {
 	winui.renderColor();
-	layui.use(['form'], function (form) {
-		var index = parent.layer.getFrameIndex(window.name);
-	    var $ = layui.$;
-		var rowNum = 1; //表格的序号
-		var usetableTemplate = $("#usetableTemplate").html();
-	    
-	    showGrid({
-		 	id: "showForm",
-		 	url: reqBasePath + "companyjobscore003",
-		 	params: {rowId: parent.rowId},
-		 	pagination: false,
-			method: "GET",
-		 	template: $("#showBaseTemplate").html(),
-		 	ajaxSendLoadBefore: function(hdb) {
-		 	},
-		 	ajaxSendAfter:function (json) {
+	var index = parent.layer.getFrameIndex(window.name);
+	var $ = layui.$,
+		form = layui.form;
 
-				// 加载列表项
-				$.each(json.bean.modelField, function(i, item) {
-					addRow();
-					$("#fieldId" + (rowNum - 1)).val(item.nameCn + '(' + item.key + ')');
-					$("#fieldId" + (rowNum - 1)).attr("rowKey", item.fieldKey);
-					$("#minMoney" + (rowNum - 1)).val(item.minMoney);
-					$("#maxMoney" + (rowNum - 1)).val(item.maxMoney);
-					$("#remark" + (rowNum - 1)).val(item.remark);
-				});
+	showGrid({
+		id: "showForm",
+		url: reqBasePath + "companyjobscore003",
+		params: {id: parent.rowId},
+		pagination: false,
+		method: "GET",
+		template: $("#beanTemplate").html(),
+		ajaxSendLoadBefore: function(hdb) {
+		},
+		ajaxSendAfter:function (json) {
+			skyeyeClassEnumUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", json.bean.enabled, form);
 
-				matchingLanguage();
-				form.render();
-		 	    form.on('submit(formEditBean)', function (data) {
-		 	        if (winui.verifyForm(data.elem)) {
-						// 获取已选字段数据
-						var rowTr = $("#useTable tr");
-						var tableData = new Array();
-						$.each(rowTr, function(i, item) {
-							// 获取行编号
-							var rowNum = $(item).attr("trcusid").replace("tr", "");
-							var row = {
-								fieldKey: $("#fieldId" + rowNum).attr("rowKey"),
-								minMoney: $("#minMoney" + rowNum).val(),
-								maxMoney: $("#maxMoney" + rowNum).val(),
-								sortNo: (i + 1),
-								remark: $("#remark" + rowNum).val()
-							};
-							tableData.push(row);
-						});
-						var params = {
-							nameCn: $("#nameCn").val(),
-							nameEn: $("#nameEn").val(),
-							rowId: parent.rowId,
-							jobId: parent.jobId,
-							fieldStr: JSON.stringify(tableData)
-		 	        	};
-		 	        	AjaxPostUtil.request({url: reqBasePath + "companyjobscore004", params: params, type: 'json', method: "PUT", callback: function (json) {
-							parent.layer.close(index);
-							parent.refreshCode = '0';
-		 	        	}});
-		 	        }
-		 	        return false;
-		 	    });
-		 	}
-		});
+			initTable();
+			initTableChooseUtil.deleteAllRow('fieldList');
+			$.each(json.bean.scoreFields, function(i, item) {
+				item['fieldId'] = item.fieldName + '(' + item.fieldKey + ')';
+				var trcusid = initTableChooseUtil.resetData('fieldList', item);
+				// 获取表格行号
+				var thisRowKey = trcusid.replace("tr", "");
+				$("#fieldId" + thisRowKey.toString()).attr("rowKey", item.fieldKey);
+			});
 
-		// 新增行
-		$("body").on("click", "#addRow", function() {
-			addRow();
-		});
-
-		// 删除行
-		$("body").on("click", "#deleteRow", function() {
-			deleteRow();
-		});
-
-		// 新增行
-		function addRow() {
-			var par = {
-				id: "row" + rowNum.toString(), //checkbox的id
-				trId: "tr" + rowNum.toString(), //行的id
-				fieldId: "fieldId" + rowNum.toString(), //字段id
-				minMoney: "minMoney"  + rowNum.toString(), //最小薪资范围id
-				maxMoney: "maxMoney" + rowNum.toString(), //最大薪资范围id
-				remark: "remark" + rowNum.toString() //备注id
-			};
-			$("#useTable").append(getDataUseHandlebars(usetableTemplate, par));
-			form.render('select');
-			form.render('checkbox');
-			rowNum++;
+			matchingLanguage();
+			form.render();
+			form.on('submit(formEditBean)', function (data) {
+				if (winui.verifyForm(data.elem)) {
+					var result = initTableChooseUtil.getDataList('fieldList');
+					if (!result.checkResult) {
+						return false;
+					}
+					var tableData = [].concat(result.dataList);
+					$.each(tableData, function(i, item) {
+						var thisRowKey = item["trcusid"].replace("tr", "");
+						item['fieldKey'] = $("#fieldId" + thisRowKey).attr('rowKey');
+					});
+					var params = {
+						name: $("#name").val(),
+						jobId: parent.jobId,
+						enabled: $("#enabled input:radio:checked").val(),
+						scoreFields: JSON.stringify(tableData),
+						id: parent.rowId,
+				};
+					AjaxPostUtil.request({url: reqBasePath + "writeCompanyJobScoreMation", params: params, type: 'json', method: "POST", callback: function (json) {
+						parent.layer.close(index);
+						parent.refreshCode = '0';
+					}});
+				}
+				return false;
+			});
 		}
+	});
 
-		// 删除行
-		function deleteRow() {
-			var checkRow = $("#useTable input[type='checkbox'][name='tableCheckRow']:checked");
-			if(checkRow.length > 0) {
-				$.each(checkRow, function(i, item) {
-					$(item).parent().parent().remove();
-				});
-			} else {
-				winui.window.msg('请选择要删除的行', {icon: 2, time: 2000});
-			}
-		}
-
-		// 字段选择
-		$("body").on("click", ".chooseFieldBtn", function (e) {
-			var trId = $(this).parent().parent().attr("trcusid");
-			_openNewWindows({
-				url: "../../tpl/wagesFieldType/wagesFieldTypeChoose.html",
-				title: "选择薪资字段",
-				pageId: "productlist",
-				area: ['90vw', '90vh'],
-				callBack: function (refreshCode) {
-					// 获取表格行号
-					var thisRowNum = trId.replace("tr", "");
-					// 表格名称赋值
-					$("#fieldId" + thisRowNum.toString()).val(fieldMation.nameCn + '(' + fieldMation.key + ')');
-					$("#fieldId" + thisRowNum.toString()).attr("rowKey", fieldMation.key);
-				}});
+	function initTable() {
+		initTableChooseUtil.initTable({
+			id: "fieldList",
+			cols: [
+				{id: 'fieldId', title: '字段', formType: 'chooseInput', width: '120', iconClassName: 'chooseFieldBtn', verify: 'required'},
+				{id: 'minMoney', title: '最小薪资范围', formType: 'input', width: '100', verify: 'required|money', value: '0'},
+				{id: 'maxMoney', title: '最大薪资范围', formType: 'input', width: '100', verify: 'required|money', value: '0'},
+				{id: 'remark', title: '备注', formType: 'input', width: '100'}
+			],
+			deleteRowCallback: function (trcusid) {
+			},
+			addRowCallback: function (trcusid) {
+			},
+			form: form
 		});
+	}
 
-	    $("body").on("click", "#cancle", function() {
-	    	parent.layer.close(index);
-	    });
+	// 字段选择
+	$("body").on("click", ".chooseFieldBtn", function (e) {
+		var trId = $(this).parent().parent().attr("trcusid");
+		_openNewWindows({
+			url: "../../tpl/wagesFieldType/wagesFieldTypeChoose.html",
+			title: "选择薪资字段",
+			pageId: "wagesFieldTypeChoose",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+				// 获取表格行号
+				var thisRowKey = trId.replace("tr", "");
+				// 表格名称赋值
+				$("#fieldId" + thisRowKey.toString()).val(fieldMation.name + '(' + fieldMation.key + ')');
+				$("#fieldId" + thisRowKey.toString()).attr("rowKey", fieldMation.key);
+			}});
+	});
+
+	$("body").on("click", "#cancle", function() {
+		parent.layer.close(index);
 	});
 });

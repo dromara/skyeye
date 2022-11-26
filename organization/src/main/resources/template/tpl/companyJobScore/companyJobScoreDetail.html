@@ -18,16 +18,16 @@
 			<div class="layui-form-item layui-col-xs12">
 				<span class="hr-title">基础信息</span><hr>
 			</div>
-			<div class="layui-form-item layui-col-xs12">
+			<div class="layui-form-item layui-col-xs6">
 				<label class="layui-form-label">中文名称：</label>
 				<div class="layui-input-block ver-center">
-					{{nameCn}}
+					{{name}}
 				</div>
 			</div>
-			<div class="layui-form-item layui-col-xs12">
-				<label class="layui-form-label">英文名称：</label>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">状态：</label>
 				<div class="layui-input-block ver-center">
-					{{nameEn}}
+					{{enabled}}
 				</div>
 			</div>
 			<div class="layui-form-item layui-col-xs12">
@@ -43,6 +43,14 @@
 						</tr>
 						</thead>
 						<tbody id="useTable" class="insurance-table">
+						{{#each scoreFields}}
+						<tr>
+							<td>{{fieldName}}({{fieldKey}})</td>
+							<td>{{minMoney}}</td>
+							<td>{{maxMoney}}</td>
+							<td>{{remark}}</td>
+						</tr>
+						{{/each}}
 						</tbody>
 					</table>
 				</div>
@@ -50,16 +58,6 @@
 		{{/bean}}
 	</script>
 
-	<!-- usetableTemplate -->
-	<script type="text/x-handlebars-template" id="usetableTemplate">
-		<tr trcusid="{{trId}}">
-			<td id="{{fieldId}}"></td>
-			<td id="{{minMoney}}"></td>
-			<td id="{{maxMoney}}"></td>
-			<td id="{{remark}}"></td>
-		</tr>
-	</script>
-	
 	<script src="../../assets/lib/layui/layui.js"></script>
    	<script src="../../assets/lib/layui/custom.js"></script>
    	<script type="text/javascript">
