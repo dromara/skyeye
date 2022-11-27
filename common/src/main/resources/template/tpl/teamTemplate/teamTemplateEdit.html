@@ -15,18 +15,22 @@
 
 	<script type="text/x-handlebars-template" id="showTemplate">
 		{{#bean}}
+		<div class="layui-form-item layui-col-xs12">
+			<span class="hr-title">基本信息</span><hr>
+		</div>
 		<div class="layui-form-item layui-col-xs6">
-			<label class="layui-form-label">名称<i class="red">*</i></label>
+			<label class="layui-form-label">团队名称<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="dictName" name="dictName" win-verify="required" placeholder="请输入名称" class="layui-input" value="{{dictName}}"/>
-				<div class="layui-form-mid layui-word-aux">名称不能重复。</div>
+				<input type="text" id="name" name="name" win-verify="required" placeholder="请输入团队名称" class="layui-input" value="{{name}}"/>
+				<div class="layui-form-mid layui-word-aux">团队名称不能重复。</div>
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs6">
-			<label class="layui-form-label">编码<i class="red">*</i></label>
+			<label class="layui-form-label">适用对象<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="dictCode" name="dictCode" win-verify="required" placeholder="请输入编码" class="layui-input" value="{{dictCode}}"/>
-				<div class="layui-form-mid layui-word-aux">编码不能重复。</div>
+				<select lay-filter="objectType" lay-search="" id="objectType" win-verify="required">
+
+				</select>
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
@@ -34,18 +38,35 @@
 			<div class="layui-input-block winui-radio" id="enabled">
 			</div>
 		</div>
-		<div class="layui-form-item layui-col-xs6" id="dictTypeBox">
-			<label class="layui-form-label">字典类型<i class="red">*</i></label>
-			<div class="layui-input-block winui-radio">
-				<input type="radio" name="dictType" value="1" title="一级字典" lay-filter="dictType" />
-				<input type="radio" name="dictType" value="2" title="多级字典" lay-filter="dictType" />
-			</div>
-		</div>
 		<div class="layui-form-item layui-col-xs12">
 			<label class="layui-form-label">备注</label>
 			<div class="layui-input-block">
 				<textarea id="remark" name="remark" placeholder="请输入备注" class="layui-textarea" style="height: 100px;" maxlength="200">{{remark}}</textarea>
 			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<span class="hr-title">成员信息</span><hr>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">成员信息：</label>
+			<div class="layui-input-block">
+				<div class="winui-tip alert-info" id="showInfo">一个用户在一个团队中只能属于一个角色。</div>
+				<div class="winui-toolbar">
+					<div class="winui-tool" style="text-align: left;">
+						<button id="addRole" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>添加角色</button>
+					</div>
+				</div>
+				<div style="margin:auto 10px;">
+					<table id="messageTable" lay-filter="messageTable"></table>
+				</div>
+			</div>
+		</div>
+
+		<div class="layui-form-item layui-col-xs12">
+			<span class="hr-title">权限信息</span><hr>
+		</div>
+		<div class="layui-form-item layui-col-xs12" id="authList">
+
 		</div>
 		<div class="layui-form-item layui-col-xs12">
 			<div class="layui-input-block">
@@ -56,10 +77,30 @@
 		{{/bean}}
 	</script>
 
+	<script type="text/html" id="tableBar">
+		{{# if(d.pId == '0'){ }}
+		<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="addUser">添加成员</a>
+		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="removeRole">移除</a>
+		{{# } else { }}
+		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="removeUser">移除</a>
+		{{# } }}
+	</script>
+
+	<script type="text/x-handlebars-template" id="authTableTemplate">
+		{{#list}}
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">{{title}}<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<table id="{{id}}" lay-filter="{{id}}"></table>
+			</div>
+		</div>
+		{{/list}}
+	</script>
+
 	<script src="../../assets/lib/layui/layui.js"></script>
    	<script src="../../assets/lib/layui/custom.js"></script>
    	<script type="text/javascript">
-        layui.config({base: '../../js/sysDictType/'}).use('sysDictTypeEdit');
+        layui.config({base: '../../js/teamTemplate/'}).use('teamTemplateEdit');
     </script>
 </body>
 </html>

@@ -13,6 +13,8 @@ layui.config({
 		form = layui.form;
 	textool.init({eleId: 'remark', maxlength: 200});
 	var treeTableData = [];
+	// 已经选中的权限对应关系
+	var checkTrueList = [];
 
 	skyeyeClassEnumUtil.showEnumDataListByClassName("teamObjectType", 'select', "objectType", '', form);
 	skyeyeClassEnumUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", '', form);
@@ -88,32 +90,85 @@ layui.config({
 	function reloadTreeTable() {
 		var data = $.extend(true, [], treeTableData);
 		tableTree.reload("messageTable", {data: data});
+		restCheckbox();
 		loadAuthList();
 	}
 
 	loadAuthList();
 	form.on('select(objectType)', function(data) {
+		checkTrueList = [];
 		loadAuthList();
 	});
 
 	matchingLanguage();
 	form.render();
 	form.on('submit(formAddBean)', function (data) {
-		console.log(treeTableData)
 		if (winui.verifyForm(data.elem)) {
+			var teamRoleList = getTeamRoleList();
+			if (teamRoleList.length == 0) {
+				winui.window.msg('团队成员不能为空', {icon: 2, time: 2000});
+				return false;
+			}
+			var teamObjectPermissionList = getTeamObjectPermissionList();
 			var params = {
-				dictName: $("#dictName").val(),
-				dictCode: $("#dictCode").val(),
+				name: $("#name").val(),
+				objectType: $("#objectType").val(),
 				enabled: $("#enabled input:radio:checked").val(),
 				remark: $("#remark").val(),
+				teamRoleList: JSON.stringify(teamRoleList),
+				teamObjectPermissionList: JSON.stringify(teamObjectPermissionList)
 			};
-			AjaxPostUtil.request({url: reqBasePath + "writeDictTypeMation", params: params, type: 'json', method: "POST", callback: function (json) {
+			AjaxPostUtil.request({url: reqBasePath + "writeTeamTemplate", params: params, type: 'json', method: "POST", callback: function (json) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			}});
 		}
 		return false;
 	});
+
+	function getTeamRoleList() {
+		var teamRoleList = [];
+		$.each(treeTableData, function (i, item) {
+			var teamRole = {};
+			if (item.pId == '0') {
+				// 角色
+				teamRole['roleId'] = item.id;
+				// 查询这个角色下的用户
+				var roleUserList = [];
+				$.each(treeTableData, function (j, bean) {
+					if (bean.pId == item.id) {
+						roleUserList.push({
+							userId: bean.id
+						});
+					}
+				});
+				teamRole['teamRoleUserList'] = roleUserList;
+				teamRoleList.push(teamRole);
+			}
+		});
+		return teamRoleList;
+	}
+
+	function getTeamObjectPermissionList() {
+		var checkRow = $("#authList input[type='checkbox']:checked");
+		var teamObjectPermissionList = [];
+		$.each(checkRow, function (i, item) {
+			var id = $(item).attr('id');
+			var str = id.split('_');
+			var authGroupKey = str[0];
+			var authKey = str[1];
+			var roleId = str[2];
+			var userId = str[3];
+			teamObjectPermissionList.push({
+				permissionKey: authGroupKey,
+				permissionValue: authKey,
+				ownerId: isNull(userId) ? roleId : userId,
+				ownerKey: isNull(userId) ? sysServiceMation["dictData"]["key"] : sysServiceMation["userInfo"]["key"],
+				fromType: 1
+			});
+		});
+		return teamObjectPermissionList;
+	}
 
 	function loadAuthList() {
 		var data = $.extend(true, [], treeTableData);
@@ -130,14 +185,12 @@ layui.config({
 		});
 
 		form.on('checkbox(checkClick)', function(obj) {
-			// var checkRow = $("#useTable input[type='checkbox'][name='tableCheckRow']:checked");
 			var id = $(this).attr('id');
 			var str = id.split('_');
 			var authGroupKey = str[0];
 			var authKey = str[1];
 			var roleId = str[2];
 			var userId = str[3];
-			var checkBoxId = authGroupKey + '_' + authKey + '_' + roleId + '_' + userId;
 			var name = authGroupKey + '_' + authKey + '_' + roleId;
 			var _table = $(`div[lay-id='${authGroupKey}']`);
 			if (isNull(userId)) {
@@ -157,7 +210,18 @@ layui.config({
 					$(`input[id='${name}_']`).prop("checked", false);
 				}
 			}
+
+			restCheckbox();
 			form.render('checkbox');
+		});
+	}
+
+	function restCheckbox() {
+		// 将所有选中的重新放入 checkTrueList 中，防止出现操作成员信息时无法回显
+		var checkRow = $("#authList input[type='checkbox']:checked");
+		checkTrueList = [];
+		$.each(checkRow, function (i, item) {
+			checkTrueList.push($(item).attr('id'));
 		});
 	}
 

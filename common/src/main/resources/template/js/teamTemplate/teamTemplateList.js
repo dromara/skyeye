@@ -26,7 +26,9 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'name', title: '名称', width: 200 },
+			{ field: 'name', title: '名称', align: 'left', width: 200, templet: function (d) {
+				return '<a lay-event="select" class="notice-title-click">' + d.name + '</a>';
+			}},
 			{ field: 'objectType', title: '适用类型', width: 150, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("teamObjectType", 'id', d.objectType, 'name');
 			}},
@@ -58,6 +60,8 @@ layui.config({
 			del(data, obj);
 		} else if (layEvent === 'edit') { // 编辑
 			edit(data);
+		} else if (layEvent === 'select') { // 详情
+			select(data);
 		}
 	});
 
@@ -83,6 +87,18 @@ layui.config({
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
+			}});
+	}
+
+	// 详情
+	function select(data) {
+		rowId = data.id;
+		_openNewWindows({
+			url: "../../tpl/teamTemplate/teamTemplateDetails.html",
+			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+			pageId: "teamTemplateDetails",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
 			}});
 	}
 
