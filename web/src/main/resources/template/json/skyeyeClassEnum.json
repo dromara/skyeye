@@ -24,7 +24,7 @@
     "skyeyeView": {"name": "视图枚举", "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"},
 
     "teamObjectType": {"name": "团队适用对象枚举", "className": "skyeye-pro#com.skyeye.team.classenum.TeamObjectTypeEnum"},
-    "contactsAuthEnum": {"name": "联系人", "className": "skyeye-pro#com.skyeye.contacts.classenum.ContactsAuthEnum"},
+    "contactsAuthEnum": {"name": "联系人", "className": "skyeye-pro#com.skyeye.contacts.classenum.ContactsAuthEnum", "pageUrl": "../../tpl/contacts/contactsList.html"},
     "documentAuthEnum": {"name": "文档", "className": "skyeye-pro#com.skyeye.document.classenum.DocumentAuthEnum"}
 
 }

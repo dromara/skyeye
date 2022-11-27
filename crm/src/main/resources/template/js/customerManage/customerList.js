@@ -11,6 +11,7 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
+	var serviceClassName = sysServiceMation["crmCustomer"]["key"];
 	// 新增
 	authBtn('1570454924611');
 	// 加载列表数据权限
@@ -57,7 +58,9 @@ layui.config({
         	del(data);
         } else if (layEvent === 'details'){ // 详情
         	details(data);
-        }
+        } else if (layEvent === 'manage'){ // 服务
+			manage(data);
+		}
     });
 	
 	// 新增
@@ -89,11 +92,21 @@ layui.config({
 	
 	// 详情
 	function details(data) {
-		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/customerManage/customerDetails.html",
+			url: "../../tpl/customerManage/customerDetails.html?id=" + data.id,
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "customerDetails",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+			}});
+	}
+
+	// 服务
+	function manage(data) {
+		_openNewWindows({
+			url: "../../tpl/customerManage/customerManage.html?id=" + data.id + "&objectKey=" + serviceClassName,
+			title: '服务',
+			pageId: "customerManage",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}});

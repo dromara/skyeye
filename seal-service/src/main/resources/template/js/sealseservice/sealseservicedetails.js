@@ -93,9 +93,8 @@ layui.config({
 	    
 		// 客户详情
 		$("body").on("click", ".customerNameMation", function() {
-	    	rowId = $(this).attr("rowid");
 			_openNewWindows({
-				url: "../../tpl/customerManage/customerDetails.html",
+				url: "../../tpl/customerManage/customerDetails.html?id=" +$(this).attr("rowid"),
 				title: "客户详情",
 				pageId: "customerDetails",
 				area: ['90vw', '90vh'],

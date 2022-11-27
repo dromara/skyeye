@@ -68,9 +68,8 @@ layui.config({
 	
 	// 详情
 	function details(data) {
-		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/customerManage/customerDetails.html",
+			url: "../../tpl/customerManage/customerDetails.html?id=" + data.id,
 			title: "客户详情",
 			pageId: "customerDetails",
 			area: ['90vw', '90vh'],

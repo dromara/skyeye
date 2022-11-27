@@ -22,6 +22,12 @@
     bottom: 0;
 }
 
+.body-box {
+    margin: 10px;
+    height: calc(100% - 20px);
+    width: calc(100% - 20px);
+}
+
 .winui-desktop-item {
     width: 70px;
     height: 95px;

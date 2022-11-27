@@ -93,6 +93,32 @@ var teamObjectPermissionUtil = {
             });
             return result;
         }
+    },
+
+    /**
+     * 根据受用类型获取需要展示个tab页
+     *
+     * @param objectType
+     * @returns {*[]}
+     */
+    getPageUrl: function (objectType) {
+        if (isNull(objectType)) {
+            return [];
+        } else {
+            var teamObjectType = skyeyeClassEnumUtil.getEnumDataListByClassName("teamObjectType").rows;
+            var pageAuthList = getInPoingArr(teamObjectType, "id", objectType, "pageAuth");
+            if (pageAuthList == null) {
+                return [];
+            }
+            var result = [];
+            $.each(pageAuthList, function(i, enumKey) {
+                result.push({
+                    title: skyeyeClassEnum[enumKey].name,
+                    pageUrl: skyeyeClassEnum[enumKey].pageUrl
+                });
+            });
+            return result;
+        }
     }
 
 }

@@ -40,9 +40,7 @@ layui.config({
 	        }},
 	        { field: 'typeName', title: '客户分类', align: 'left', width: 120 },
 	        { field: 'fromName', title: '客户来源', align: 'left', width: 120 },
-	        { field: 'industryName', title: '所属行业', align: 'left', width: 180 },
-	        { field: 'estimatePrice', title: '预计成交金额（元）', align: 'left', width: 150 },
-	        { field: 'contractPrice', title: '合同金额（元）', align: 'left', width: 120 }
+	        { field: 'industryName', title: '所属行业', align: 'left', width: 180 }
 	    ]],
 	    done: function(res, curr, count){
 	    	matchingLanguage();
@@ -110,9 +108,8 @@ layui.config({
 
 	// 详情
 	function details(data) {
-		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/customerManage/customerDetails.html",
+			url: "../../tpl/customerManage/customerDetails.html?id=" + data.id,
 			title: "客户详情",
 			pageId: "customerDetails",
 			area: ['90vw', '90vh'],

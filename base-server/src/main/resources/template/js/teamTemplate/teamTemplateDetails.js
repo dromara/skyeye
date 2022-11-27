@@ -98,11 +98,11 @@ layui.config({
 	}
 
 	function loadAuthList(objectType) {
-		var data = $.extend(true, [], treeTableData);
 		// 加载该受用类型的团队可以设置哪些权限
 		var colsList = teamObjectPermissionUtil.getAuthColsDetails(objectType);
 		$('#authList').html(getDataUseHandlebars($('#authTableTemplate').html(), {list: colsList}));
 		$.each(colsList, function (i, item) {
+			var data = $.extend(true, [], treeTableData);
 			// 给数据设置权限组的key，
 			$.each(data, function (j, bean) {
 				bean.authGroupKey = item.id;

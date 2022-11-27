@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -10,25 +10,24 @@
     <div class="winui-toolbar">
         <div class="winui-tool">
             <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-            <button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1570454924611"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
+            <button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1596375844035"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
         </div>
     </div>
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
-            {{# if(auth('1570454924611')){ }}
-                <a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-            {{# } }}
-            {{# if(auth('1570454956511')){ }}
-                <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
-            {{# } }}
-            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="manage">服务</a>
+			{{# if(auth('1596375844035')){ }}
+            	<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+			{{# } }}
+			{{# if(auth('1596375863370')){ }}
+            	<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+			{{# } }}
         </script>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
-        layui.config({base: '../../js/customerManage/'}).use('customerList');
+        layui.config({base: '../../js/contacts/'}).use('contactsList');
     </script>
 </body>
 </html>

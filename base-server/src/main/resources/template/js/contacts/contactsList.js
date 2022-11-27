@@ -1,5 +1,8 @@
 var rowId = "";
 
+var objectKey = "";
+var objectId = "";
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -10,13 +13,20 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
+
+	objectKey = GetUrlParam("objectKey");
+	objectId = GetUrlParam("id");
+	if (isNull(objectKey) || isNull(objectId)) {
+		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
+		return false;
+	}
 	
 	authBtn('1596375844035');
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: flowableBasePath + 'customercontact001',
+	    url: reqBasePath + 'queryContactsList',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -24,8 +34,7 @@ layui.config({
 	    limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'contacts', title: '联系人', align: 'left', width: 100 },
-	        { field: 'customerName', title: '所属客户', align: 'left', width: 180 },
+	        { field: 'name', title: '名称', align: 'left', width: 100 },
 	        { field: 'department', title: '部门', align: 'left', width: 100 },
 	        { field: 'job', title: '职位', align: 'left', width: 100 },
 	        { field: 'workPhone', title: '办公电话', align: 'left', width: 100 },
@@ -41,26 +50,29 @@ layui.config({
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称，移动电话", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
 	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'edit') { //编辑
-        	edit(data);
-        } else if (layEvent === 'delete'){ //删除
-        	del(data);
-        }
+		if (layEvent === 'edit') {
+			edit(data);
+		} else if (layEvent === 'delete') {
+			del(data);
+		}
     });
     
     
 	// 新增
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/crmCustomerContact/crmCustomerContactAdd.html", 
+			url: "../../tpl/contacts/contactsAdd.html",
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-			pageId: "crmCustomerContactAdd",
+			pageId: "contactsAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -72,9 +84,9 @@ layui.config({
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/crmCustomerContact/crmCustomerContactEdit.html", 
+			url: "../../tpl/contacts/contactsEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-			pageId: "crmCustomerContactEdit",
+			pageId: "contactsEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -86,41 +98,24 @@ layui.config({
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "customercontact005", params: {contactId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "deleteContactsMationById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
 		});
 	}
-	
+
 	form.render();
-	
-	$("body").on("click", "#formSearch", function() {
-		refreshTable();
-	});
-	
 	$("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
-    }
-    
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-    
-    function getTableParams() {
-    	return {
-    		customerName: $("#customerName").val(),
-    		contacts: $("#contacts").val(),
-    		mobilePhone: $("#mobilePhone").val(),
-    		email: $("#email").val(),
-    		qq: $("#qq").val(),
-    		wechat: $("#wechat").val()
-    	};
-    }
+		loadTable();
+	});
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
+
+	function getTableParams() {
+		return $.extend(true, {objectKey: objectKey, objectId: objectId}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
 	
-    exports('crmCustomerContactList', {});
+    exports('contactsList', {});
 });
