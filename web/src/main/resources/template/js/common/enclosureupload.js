@@ -25,7 +25,6 @@ layui.config({
 		matchingLanguage();
 		form.render();
 	    form.on('submit(fileUploadStart)', function (data) {
-	    	// 表单验证
 	        if (winui.verifyForm(data.elem)) {
 	        	uoloadObj.upload();
 	        }
@@ -221,14 +220,11 @@ function loadUploadMethod(){
 		beforeSend: function(block) {
 			var deferred = WebUploader.Deferred();
 			var params = {
-				//文件唯一标记
 				"md5": md5,
-				//当前分块下标
 				"chunk": block.chunk,
-				//当前分块大小
 				"chunkSize": block.end - block.start
 			};
-			AjaxPostUtil.request({url: reqBasePath + "sysenclosure009", params: params, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: reqBasePath + "checkUploadFileChunks", params: params, type: 'json', callback: function (json) {
 				//分块存在，跳过
 				deferred.reject();
     		}, errorCallback: function () {
@@ -242,7 +238,7 @@ function loadUploadMethod(){
 		//时间点3：所有分块上传成功后调用此函数
 		afterSendFile: function (data) {
 			//如果分块上传成功，则通知后台合并分块
-			AjaxPostUtil.request({url: reqBasePath + "sysenclosure008", params: {md5: md5, folderId: folderId, name: data.name, size: data.size}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: reqBasePath + "uploadFileChunks", params: {md5: md5, folderId: folderId, name: data.name, size: data.size}, type: 'json', callback: function (json) {
 				addToArray(json.bean);
     		}});
 		 }
@@ -269,7 +265,7 @@ function loadUploadMethod(){
 	    fileSizeLimit: 2000 * 1024 * 1024,//最大2GB
         fileSingleSizeLimit: 2000 * 1024 * 1024,
         resize: false,//不压缩
-	    server: reqBasePath + 'sysenclosure007',
+	    server: reqBasePath + 'uploadFile',
 	    fileNumLimit: 300
 	});
 	// 添加“添加文件”的按钮，

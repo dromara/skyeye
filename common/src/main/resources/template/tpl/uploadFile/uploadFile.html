@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <style>
+        #filePicker div:nth-child(2){
+            position: absolute !important;
+            inset: 0px auto auto 130px !important;
+            width: 72px !important;
+            height: 30px !important;
+            overflow: hidden !important;
+            top: 0px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="txtcenter">
+        <form class="layui-form" action="" id="showForm" style="height: 240px;">
+            <div class="layui-form-item layui-col-xs12">
+                <div id="uploader" class="wu-example">
+                    <div class="queueList">
+                        <div id="dndArea" class="placeholder">
+                            <div id="filePicker"></div>
+                            <p>或将文件拖到这里，单次最多可选300个</p>
+                        </div>
+                    </div>
+                    <div class="statusBar" style="display:none;">
+                        <div class="progress">
+                            <span class="text">0%</span>
+                            <span class="percentage"></span>
+                        </div><div class="info"></div>
+                        <div class="btns">
+                            <div id="filePicker2"></div><div class="uploadBtn">开始上传</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base : '../../js/uploadFile/'}).use('uploadFile');
+    </script>
+</body>
+</html>

@@ -174,7 +174,6 @@ layui.config({
 	// 搜索表单
     form.render();
     form.on('submit(formSearch)', function (data) {
-        // 表单验证
         if (winui.verifyForm(data.elem)) {
             refreshTable();
         }
