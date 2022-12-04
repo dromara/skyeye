@@ -67,5 +67,6 @@
 
     "dictData": {"name": "数据字典", "key": "com.skyeye.eve.service.impl.SysDictDataServiceImpl"},
 
-    "contacts": {"name": "联系人", "key": "com.skyeye.contacts.service.impl.ContactsServiceImpl"}
+    "contacts": {"name": "联系人", "key": "com.skyeye.contacts.service.impl.ContactsServiceImpl"},
+    "enclosure": {"name": "附件", "key": "com.skyeye.enclosure.service.impl.SysEnclosureServiceImpl"}
 }

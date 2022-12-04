@@ -4858,6 +4858,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .wu-example {
+    height: calc(100% - 20px);
     position: relative;
     padding: 0px 15px 15px;
     margin: 0;
@@ -4884,10 +4885,10 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 #uploader .placeholder {
-    min-height: 350px;
-    padding-top: 178px;
+    min-height: 90px;
+    padding-top: 110px;
     text-align: center;
-    background: url(../../../images/image.png) center 93px no-repeat;
+    background: url(../../../images/image.png) center 20px no-repeat;
     color: #cccccc;
     font-size: 18px;
     position: relative;
@@ -4976,6 +4977,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 #uploader .queueList {
+    max-height: calc(100% - 20px);
     margin: 10px 5px;
     border: 3px dashed #e6e6e6;
 }
@@ -4994,16 +4996,6 @@ body .layer-ext-winconfirm .layui-layer-content {
     position: absolute !important;
     clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
     clip: rect(1px,1px,1px,1px);
-}
-
-#uploader .placeholder {
-    min-height: 90px;
-    padding-top: 110px;
-    text-align: center;
-    background: url(../../../images/image.png) center 20px no-repeat;
-    color: #cccccc;
-    font-size: 13px;
-    position: relative;
 }
 
 #uploader .placeholder .webuploader-pick {

@@ -40,6 +40,7 @@ var customerJS = {
 	"initTableSearchUtil": "../../assets/lib/layui/customer/tableUtil/initTableSearchUtil.js", // 表格高级查询插件
 	"skyeyeClassEnumUtil": "../../assets/lib/layui/customer/skyeye/skyeyeClassEnumUtil.js", // 动态枚举插件
 	"teamObjectPermissionUtil": "../../assets/lib/layui/customer/teamObjectPermissionUtil.js", // 团队成员权限插件
+	"catalogTreeUtil": "../../assets/lib/layui/customer/tree/catalogTreeUtil.js", // 目录功能的工具类
 };
 
 //系统基础信息

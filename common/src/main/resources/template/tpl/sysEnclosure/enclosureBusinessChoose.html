@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+	<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+	<link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+	<link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+	<link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="layui-tab layui-tab-brief" style="height: calc(100% - 60px);">
+		<ul class="layui-tab-title">
+			<li class="layui-this">本地上传</li>
+			<li>我的附件库</li>
+		</ul>
+		<div class="layui-tab-content">
+			<div class="layui-tab-item layui-show" style="height: 100%">
+				<iframe style="width: 100%; border: 0px; height: 100%" scrolling="no" src="../../tpl/uploadFile/uploadFile.html?type=30"></iframe>
+			</div>
+			<div class="layui-tab-item" style="height: 100%">
+				<ul id="treeDemo" class="ztree fsTree" method="get" isRoot="1"
+					treeIdKey="id" inputs="parentId" treePIdKey="parentId" clickCallbackInputs="parentId:$id" treeName="name" style="height: 240px;"></ul>
+			</div>
+		</div>
+	</div>
+	<div class="layui-col-xs12" style="margin-top: 10px;">
+		<div class="layui-input-block">
+			<button class="winui-btn" type="button" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+			<button class="winui-btn" type="button" id="confimChoose"><language showName="com.skyeye.determine"></language></button>
+		</div>
+	</div>
+
+	<script src="../../assets/lib/layui/layui.js"></script>
+	<script src="../../assets/lib/layui/custom.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery-min.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.all.min.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.exhide.min.js"></script>
+	<script type="text/javascript">
+		layui.config({base : '../../js/sysEnclosure/'}).use('enclosureBusinessChoose');
+	</script>
+</body>
+</html>

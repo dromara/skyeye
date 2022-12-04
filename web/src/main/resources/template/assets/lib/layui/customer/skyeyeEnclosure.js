@@ -51,10 +51,10 @@ var skyeyeEnclosure = {
     initClick: function (id, btnId, callback){
         $("body").on("click", "#" + btnId, function() {
             _openNewWindows({
-                url: "../../tpl/common/enclosureupload.html?boxId=" + id,
+                url: "../../tpl/sysEnclosure/enclosureBusinessChoose.html?boxId=" + id,
                 title: "上传附件",
-                pageId: "enclosureuploadpage",
-                area: ['420px', '420px'],
+                pageId: "enclosureBusinessChoose",
+                area: ['70vw', '70vh'],
                 callBack: function (refreshCode) {
                     // 重新加载dom对象
                     skyeyeEnclosure.loadEnclosureHTML(id, btnId, 1);

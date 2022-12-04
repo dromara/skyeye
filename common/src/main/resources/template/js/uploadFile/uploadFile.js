@@ -7,64 +7,66 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'jquery', 'winui', 'webuploader'], function (exports) {
     winui.renderColor();
-    layui.use(['form'], function (form) {
-        var index = parent.layer.getFrameIndex(window.name);
-        var $ = layui.$;
-        type = GetUrlParam("type");
+    var index = parent.layer.getFrameIndex(window.name);
+    var $ = layui.$,
+        form = layui.form;
+    type = GetUrlParam("type");
+    if (isNull(type)) {
+        winui.window.msg('文件类型不能为空.', {icon: 2, time: 2000});
+        return false;
+    }
 
-        // 初始化上传
-        loadUploadMethod();
-        matchingLanguage();
-        form.render();
-        form.on('submit(fileUploadStart)', function (data) {
-            if (winui.verifyForm(data.elem)) {
-                uoloadObj.upload();
-            }
-            return false;
-        });
-
+    // 初始化上传
+    loadUploadMethod();
+    matchingLanguage();
+    form.render();
+    form.on('submit(fileUploadStart)', function (data) {
+        if (winui.verifyForm(data.elem)) {
+            uoloadObj.upload();
+        }
+        return false;
     });
 });
 
 function loadUploadMethod(){
     $wrap = $('#uploader'),
-        // 文件容器
-        $queue = $('<ul class="filelist"></ul>').appendTo( $wrap.find('.queueList') ),
-        // 状态栏，包括进度和控制按钮
-        $statusBar = $wrap.find('.statusBar'),
-        // 文件总体选择信息。
-        $info = $statusBar.find('.info'),
-        // 上传按钮
-        $upload = $wrap.find('.uploadBtn'),
-        // 没选择文件之前的内容。
-        $placeHolder = $wrap.find('.placeholder'),
-        // 总体进度条
-        $progress = $statusBar.find('.progress').hide(),
-        // 添加的文件数量
-        fileCount = 0,
-        // 添加的文件总大小
-        fileSize = 0,
-        // 优化retina, 在retina下这个值是2
-        ratio = window.devicePixelRatio || 1,
-        // 缩略图大小
-        thumbnailWidth = 110 * ratio,
-        thumbnailHeight = 110 * ratio,
-        // 可能有pedding, ready, uploading, confirm, done.
-        state = 'pedding',
-        // 所有文件的进度信息，key为file id
-        percentages = {},
-        supportTransition = (function(){
-            var s = document.createElement('p').style,
-                r = 'transition' in s ||
-                    'WebkitTransition' in s ||
-                    'MozTransition' in s ||
-                    'msTransition' in s ||
-                    'OTransition' in s;
-            s = null;
-            return r;
-        })(),
-        // WebUploader实例
-        uploader;
+    // 文件容器
+    $queue = $('<ul class="filelist"></ul>').appendTo( $wrap.find('.queueList') ),
+    // 状态栏，包括进度和控制按钮
+    $statusBar = $wrap.find('.statusBar'),
+    // 文件总体选择信息。
+    $info = $statusBar.find('.info'),
+    // 上传按钮
+    $upload = $wrap.find('.uploadBtn'),
+    // 没选择文件之前的内容。
+    $placeHolder = $wrap.find('.placeholder'),
+    // 总体进度条
+    $progress = $statusBar.find('.progress').hide(),
+    // 添加的文件数量
+    fileCount = 0,
+    // 添加的文件总大小
+    fileSize = 0,
+    // 优化retina, 在retina下这个值是2
+    ratio = window.devicePixelRatio || 1,
+    // 缩略图大小
+    thumbnailWidth = 110 * ratio,
+    thumbnailHeight = 110 * ratio,
+    // 可能有pedding, ready, uploading, confirm, done.
+    state = 'pedding',
+    // 所有文件的进度信息，key为file id
+    percentages = {},
+    supportTransition = (function(){
+        var s = document.createElement('p').style,
+            r = 'transition' in s ||
+                'WebkitTransition' in s ||
+                'MozTransition' in s ||
+                'msTransition' in s ||
+                'OTransition' in s;
+        s = null;
+        return r;
+    })(),
+    // WebUploader实例
+    uploader;
     if (!WebUploader.Uploader.support()) {
         alert( 'Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器');
         throw new Error( 'WebUploader does not support the browser you are using.' );
@@ -97,9 +99,9 @@ function loadUploadMethod(){
         beforeSend: function(block) {
             var deferred = WebUploader.Deferred();
             var params = {
-                "md5": md5,
-                "chunk": block.chunk,
-                "chunkSize": block.end - block.start
+                md5: md5,
+                chunk: block.chunk,
+                chunkSize: block.end - block.start
             };
             // 判断指定块是否已经上传
             AjaxPostUtil.request({url: reqBasePath + "checkUploadFileChunks", params: params, type: 'json', method: 'POST', callback: function (json) {
@@ -118,11 +120,14 @@ function loadUploadMethod(){
             var params = {
                 md5: md5,
                 name: data.name,
-                size: data.size
+                size: data.size,
+                type: type
             };
             // 如果分块上传成功，则通知后台合并分块
-            AjaxPostUtil.request({url: reqBasePath + "uploadFileChunks", params: params, type: 'json', method: 'POST', callback: function (json) {
-                // todo 待处理
+            AjaxPostUtil.request({url: reqBasePath + "skyeyeUploadFileChunks", params: params, type: 'json', method: 'POST', callback: function (json) {
+                if (typeof(parent.uploadFileCallback) == "function") {
+                    parent.uploadFileCallback(json);
+                }
             }});
         }
     });
@@ -145,7 +150,7 @@ function loadUploadMethod(){
         fileSizeLimit: 2000 * 1024 * 1024,//最大2GB
         fileSingleSizeLimit: 2000 * 1024 * 1024,
         resize: false,//不压缩
-        server: reqBasePath + 'uploadFile',
+        server: reqBasePath + 'skyeyeUploadFile',
         fileNumLimit: 300
     });
     // 添加“添加文件”的按钮，
