@@ -5,7 +5,7 @@
 智能制造云办公软件，后端采用Springboot框架，前端采用基于layui封装的winUI，打造一款不同风格的办公软件。适用于中型企业等机构的管理。包含30多个应用模块、50多种电子流程，CRM客户、PM项目、ERP采购、库存、ADM行政、HR人事、笔记、知识库、多门店、商城、财务、考勤、HCM薪资、云盘等全面管理，打造全业务覆盖、全流程驱动的云办公。实现一体化智能制造行业的管理，实现管理流程“客户关系->
 线上/线下报价->销售报价->销售合同->生产计划->商品设计->采购->加工制造->入库->发货->售后服务”的高效运作，同时实现企业员工的管理以及内部运作的流程操作，完善了员工从“入职->培训->转正->办公->离职”等多项功能。
 
-- 最新资讯：[2022-11-28 智能制造云办公 v3.8.10 发布，团队管理更新](https://www.oschina.net/news/219615/skyeye-3-8-10-released)
+- 最新资讯：[2022-12-05 智能制造云办公 v3.8.11 发布，团队管理更新](https://www.oschina.net/news/220544)
 - [软件更新历史](https://gitee.com/doc_wei01/skyeye/blob/company_server/HISTORY_UPDATE.md)
 - 开源版请下载`master`分支
 - 企业版当前版本：202209版，发布时间：2022-09-08
@@ -13,7 +13,7 @@
 - [开源版项目文档](https://gitee.com/doc_wei01/skyeye/blob/company_server/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3.md)
 - [企业版项目文档](https://gitee.com/doc_wei01/skyeye/blob/company_server/企业版项目文档.md)
 - 基础模块 (源代码) 针对星球内部用户开放，具体包含功能可查看：[https://docs.qq.com/sheet/DYWZWUWZQUkFTcmh2?tab=BB08J2](https://docs.qq.com/sheet/DYWZWUWZQUkFTcmh2?tab=BB08J2)
-- 此软件为个人软件，暂不能开发票，需要发票的勿扰
+- 此软件为个人软件，暂不能开发票，需要发票的勿扰，企业版报价：https://docs.qq.com/sheet/DYUh5RUlGSkVPeHVo
 - 免费体验账号(只具备查看权限):
   - 地址：http://114.116.253.94:8080/
   - 账号：skyeye
@@ -21,9 +21,9 @@
 
 ### 沟通交流
 
-|                企业部署版(联系作者进知识星球获取)                 |             微信群(进群请修改备注，格式：城市-职位-昵称)             | QQ群 | 微信公众号(获取资料) |
+|                企业部署版(联系作者进知识星球获取)                 |             作者微信(备注，格式：姓名-手机号)             | QQ群 | 微信公众号(获取资料) |
 |:-------------------------------------------------:|:------------------------------------------------:|:--------------------------:|:--------------------------:|
-| <img src="images/mindMap/知识星球.png" width="200px"> | <img src="images/mindMap/微信群.jpg" width="200px"> | <img src="images/mindMap/Skyeye智能制造云办公官方①群群二维码.png" width="200px"> | <img src="images/mindMap/微信公众号.jpg" width="200px"> |
+| <img src="images/mindMap/知识星球.png" width="200px"> | <img src="images/mindMap/微信.jpg" width="200px"> | <img src="images/mindMap/Skyeye智能制造云办公官方①群群二维码.png" width="200px"> | <img src="images/mindMap/微信公众号.jpg" width="200px"> |
 
 #### 功能矩阵
 
