@@ -746,3 +746,81 @@ var areaUtil = {
         return result;
     }
 };
+
+// tab页工具
+var tabPageUtil = {
+
+    manageTabHtml: `<div class="layui-tab layui-tab-brief" lay-filter="manageTab" id="manageTab">
+                        <ul class="layui-tab-title"></ul>
+                        <div class="layui-tab-content"></div>
+                    </div>`,
+
+    headerTemplate: `{{#rows}}<li class="">{{title}}</li>{{/rows}}`,
+
+    contentTemplate: `{{#rows}}
+                        <div class="layui-tab-item" style="height: 100%">
+                            <iframe id="showBean" style="width: 100%; border: 0px; height: 100%" scrolling="no"></iframe>
+                        </div>
+                      {{/rows}}`,
+
+    config: {
+        id: '', // 展示位置
+        prefixData: [], // 集合前面追加的其他需要加载的数据 例如：{title: '详情', pageUrl: '../../tpl/customerManage/customerDetails.html'}
+        suffixData: [], // 集合后面追加的其他需要加载的数据 例如：{title: '详情', pageUrl: '../../tpl/customerManage/customerDetails.html'}
+        element: null, // element对象
+        objectType: '', // 适用对象  例如：客户，项目等
+        pageList: [], // 页面信息
+        object: {
+            objectId: '', // 业务对象id
+            objectKey: '', // 业务对象key
+        }
+    },
+
+    init: function (_config) {
+        tabPageUtil.config = $.extend(true, tabPageUtil.config, _config);
+
+        // 获取页面信息
+        var pageList = teamObjectPermissionUtil.getPageUrl(tabPageUtil.config.objectType);
+        pageList = tabPageUtil.addPageMation(pageList);
+
+        tabPageUtil.config.pageList = pageList;
+        // 初始化设置第一个为默认页面
+        $("#manageTab").find(".layui-tab-title").html(getDataUseHandlebars($('#headerTemplate').html(), {rows: pageList}));
+        $("#manageTab").find(".layui-tab-title").find('li').eq(0).addClass('layui-this');
+
+        $("#manageTab").find(".layui-tab-content").html(getDataUseHandlebars($('#contentTemplate').html(), {rows: pageList}));
+        $("#manageTab").find(".layui-tab-content").find('.layui-tab-item').eq(0).addClass('layui-show');
+        tabPageUtil.setPageUrl(pageList[0]);
+    },
+
+    initEvent: function () {
+        tabPageUtil.config.element.on('tab(manageTab)', function (obj) {
+            var mation = tabPageUtil.config.pageList[obj.index];
+            if (!isNull(mation)) {
+                tabPageUtil.setPageUrl(mation);
+            }
+        });
+    },
+
+    setPageUrl: function (mation) {
+        var url = mation.pageUrl + "?id=" + tabPageUtil.config.object.objectId + "&objectKey=" + tabPageUtil.config.object.objectKey;
+        $("#manageTab").find(".layui-tab-content").find('.layui-show').find('iframe').attr('src', url);
+    },
+
+    addPageMation: function (pageList) {
+        var prefixData = tabPageUtil.config.prefixData;
+        var suffixData = tabPageUtil.config.suffixData;
+        if (!isNull(prefixData)) {
+            $.each(prefixData, function (i, item) {
+                pageList.unshift(item);
+            });
+        }
+        if (!isNull(suffixData)) {
+            $.each(suffixData, function (i, item) {
+                pageList.push(item);
+            });
+        }
+        return pageList;
+    }
+
+};

@@ -26,6 +26,8 @@ layui.config({
 		// 客户分组
 		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerGroup"]["key"], 'select', "groupId", '', form);
 
+		teamObjectPermissionUtil.buildTeamTemplate('teamTemplateId', 1);
+
  		textool.init({eleId: 'addDesc', maxlength: 200});
 
 		skyeyeEnclosure.init('enclosureUpload');

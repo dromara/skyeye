@@ -119,6 +119,19 @@ var teamObjectPermissionUtil = {
             });
             return result;
         }
+    },
+
+    /**
+     * 根据受用对象加载已启用的团队模板列表
+     *
+     * @param id
+     * @param objectType
+     */
+    buildTeamTemplate: function (id, objectType) {
+        AjaxPostUtil.request({url: reqBasePath + "queryEnableTeamTemplateList", params: {objectType: objectType}, type: 'json', method: "GET", callback: function(json) {
+            var selOption = getFileContent('tpl/template/select-option.tpl');
+            $(`#${id}`).html(getDataUseHandlebars(selOption, json));
+        }, async: false});
     }
 
 }

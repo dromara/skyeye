@@ -5,7 +5,7 @@ var customerJS = {
 	"city": "../../json/city.js", // 地址
 	"fontawesomeAll": "../../assets/lib/fontawesome-free-5.11.2/css/all.css", // fontawesome5
 	"fontawesomev4": "../../assets/lib/fontawesome-free-5.11.2/css/v4-shims.css", // fontawesome4兼容版
-	"systemCommonUtil": "../../assets/lib/layui/customer/systemCommonUtil.js", // 系统工具函数
+	"systemCommonUtil": "../../assets/lib/layui/customer/common/systemCommonUtil.js", // 系统工具函数
 	"activitiUtil": "../../assets/lib/layui/customer/activitiUtil.js", // 工作流工具函数
 	"erpOrderUtil": "../../assets/lib/layui/customer/erpOrderUtil.js", // erp工具函数
 	"mailUtil": "../../assets/lib/layui/customer/mailUtil.js", // 通讯录工具函数

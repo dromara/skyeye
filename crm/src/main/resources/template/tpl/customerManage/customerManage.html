@@ -8,31 +8,10 @@
 </head>
 <body>
 	<div class="body-box">
-		<div class="layui-col-xs12" style="height: 100%">
-			<div class="layui-tab layui-tab-brief" lay-filter="manageTab" id="manageTab">
-				<ul class="layui-tab-title">
+		<div class="layui-col-xs12" style="height: 100%" id="tab">
 
-				</ul>
-				<div class="layui-tab-content">
-
-				</div>
-			</div>
 		</div>
 	</div>
-
-	<script type="text/x-handlebars-template" id="headerTemplate">
-		{{#rows}}
-		<li class="">{{title}}</li>
-		{{/rows}}
-	</script>
-
-	<script type="text/x-handlebars-template" id="contentTemplate">
-		{{#rows}}
-		<div class="layui-tab-item" style="height: 100%">
-			<iframe id="showBean" style="width: 100%; border: 0px; height: 100%" scrolling="no"></iframe>
-		</div>
-		{{/rows}}
-	</script>
 
 	<script src="../../assets/lib/layui/layui.js"></script>
    	<script src="../../assets/lib/layui/custom.js"></script>
