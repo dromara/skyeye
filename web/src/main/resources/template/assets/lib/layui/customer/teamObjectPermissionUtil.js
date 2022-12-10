@@ -141,6 +141,7 @@ var teamObjectPermissionUtil = {
     checkTeamBusinessAuthPermission: function (objectId, enumKey) {
         var params = {
             objectId: objectId,
+            enumKey: enumKey,
             enumClassName: skyeyeClassEnum[enumKey].className
         };
         var authPermission = {};
