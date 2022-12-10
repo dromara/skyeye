@@ -37,9 +37,9 @@ layui.config({
 			teamObjectPermissionUtil.buildTeamTemplate('teamTemplateId', 1, json.bean.teamTemplateId);
 
 			textool.init({eleId: 'addDesc', maxlength: 200});
-			if (!isNull(json.bean.chargeUser)){
-				userList = [].concat(json.bean.chargeUser);
-				$.each(json.bean.chargeUser, function(i, item) {
+			if (!isNull(json.bean.chargeUserMation)) {
+				userList.push(json.bean.chargeUserMation);
+				$.each(userList, function(i, item) {
 					$("#relationUserId").val(item.name);
 				});
 			}

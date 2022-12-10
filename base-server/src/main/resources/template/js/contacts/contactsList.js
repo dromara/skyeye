@@ -13,14 +13,15 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-
 	objectKey = GetUrlParam("objectKey");
 	objectId = GetUrlParam("objectId");
 	if (isNull(objectKey) || isNull(objectId)) {
 		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
 		return false;
 	}
-	
+
+	var authPermission = teamObjectPermissionUtil.checkTeamBusinessAuthPermission(objectId, 'contactsAuthEnum');
+
 	authBtn('1596375844035');
 	table.render({
 	    id: 'messageTable',
@@ -45,8 +46,8 @@ layui.config({
 	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 	        { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
-	        { field: 'lastUpdateTime', title: '最后修改时间', align: 'center', width: 100},
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
+	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar' }
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();

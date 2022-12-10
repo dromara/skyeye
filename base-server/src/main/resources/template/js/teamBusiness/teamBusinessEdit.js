@@ -121,11 +121,14 @@ layui.config({
 			var layEvent = obj.event;
 			if (layEvent === 'removeRole') {
 				// 移除角色和该角色下的用户
+				var tmp = [];
 				$.each(treeTableData, function(index, item) {
-					if (item.id == data.id || item.pId == data.id) {
-						treeTableData.splice(index, 1);
+					if (item.id != data.id && item.pId != data.id) {
+						tmp.push(item);
 					}
 				});
+				treeTableData = [].concat(tmp);
+
 				restCheckbox();
 				reloadTreeTable();
 			} else if (layEvent === 'addUser') { // 添加成员

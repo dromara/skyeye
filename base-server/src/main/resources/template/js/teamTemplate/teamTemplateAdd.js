@@ -49,11 +49,14 @@ layui.config({
 			var layEvent = obj.event;
 			if (layEvent === 'removeRole') {
 				// 移除角色和该角色下的用户
+				var tmp = [];
 				$.each(treeTableData, function(index, item) {
-					if (item.id == data.id || item.pId == data.id) {
-						treeTableData.splice(index, 1);
+					if (item.id != data.id && item.pId != data.id) {
+						tmp.push(item);
 					}
 				});
+				treeTableData = [].concat(tmp);
+
 				reloadTreeTable();
 			} else if (layEvent === 'addUser') { // 添加成员
 				var roleId = data.id;
@@ -183,6 +186,11 @@ layui.config({
 			});
 			loadAuthTreeTable(item.id, item.cols, data);
 		});
+
+		$.each(checkTrueList, function (i, id) {
+			$(`input[id='${id}']`).prop("checked", true);
+		});
+		form.render('checkbox');
 
 		form.on('checkbox(checkClick)', function(obj) {
 			var id = $(this).attr('id');

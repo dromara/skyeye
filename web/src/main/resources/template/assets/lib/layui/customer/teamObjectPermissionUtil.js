@@ -136,6 +136,23 @@ var teamObjectPermissionUtil = {
                 $(`#${id}`).val(defaultValue);
             }
         }, async: false});
+    },
+
+    checkTeamBusinessAuthPermission: function (objectId, enumKey) {
+        var params = {
+            objectId: objectId,
+            enumClassName: skyeyeClassEnum[enumKey].className
+        };
+        var authPermission = {};
+        AjaxPostUtil.request({url: reqBasePath + "checkTeamBusinessAuthPermission", params: params, type: 'json', method: "POST", callback: function(json) {
+            authPermission = json.bean;
+            $.each(authPermission, function (key, checkResult) {
+                if (!checkResult) {
+                    $('[auth="' + key + '"]').remove();
+                }
+            });
+        }, async: false});
+        return authPermission;
     }
 
 }
