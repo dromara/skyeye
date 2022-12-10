@@ -18,7 +18,10 @@ layui.config({
 			title: '详情',
 			pageUrl: '../../tpl/customerManage/customerDetails.html'
 		}],
-		suffixData: [],
+		suffixData: [{
+			title: '团队',
+			pageUrl: '../../tpl/teamBusiness/teamBusinessDetails.html'
+		}],
 		element: layui.element,
 		objectType: "1",
 		object: {

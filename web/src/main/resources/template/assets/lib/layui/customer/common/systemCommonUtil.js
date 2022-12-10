@@ -784,13 +784,17 @@ var tabPageUtil = {
         pageList = tabPageUtil.addPageMation(pageList);
 
         tabPageUtil.config.pageList = pageList;
+
+        $(`#${tabPageUtil.config.id}`).html(tabPageUtil.manageTabHtml);
         // 初始化设置第一个为默认页面
-        $("#manageTab").find(".layui-tab-title").html(getDataUseHandlebars($('#headerTemplate').html(), {rows: pageList}));
+        $("#manageTab").find(".layui-tab-title").html(getDataUseHandlebars(tabPageUtil.headerTemplate, {rows: pageList}));
         $("#manageTab").find(".layui-tab-title").find('li').eq(0).addClass('layui-this');
 
-        $("#manageTab").find(".layui-tab-content").html(getDataUseHandlebars($('#contentTemplate').html(), {rows: pageList}));
+        $("#manageTab").find(".layui-tab-content").html(getDataUseHandlebars(tabPageUtil.contentTemplate, {rows: pageList}));
         $("#manageTab").find(".layui-tab-content").find('.layui-tab-item').eq(0).addClass('layui-show');
         tabPageUtil.setPageUrl(pageList[0]);
+
+        tabPageUtil.initEvent();
     },
 
     initEvent: function () {
@@ -820,6 +824,10 @@ var tabPageUtil = {
                 pageList.push(item);
             });
         }
+        // 移除权限文字
+        $.each(pageList, function (i, item) {
+            item.title = item.title.replace('权限', '');
+        });
         return pageList;
     }
 
