@@ -1,4 +1,6 @@
 
+var userList = new Array();
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -28,6 +30,11 @@ layui.config({
 		ajaxSendAfter: function (json) {
 			skyeyeClassEnumUtil.showEnumDataListByClassName("teamObjectType", 'select', "objectType", json.bean.objectType, form);
 			skyeyeClassEnumUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", json.bean.enabled, form);
+
+			userList.push(json.bean.chargeUserMation);
+			$.each(userList, function(i, item) {
+				$("#chargeUser").val(item.name);
+			});
 
 			loadTreeTable();
 			// 解析成员信息
@@ -82,6 +89,7 @@ layui.config({
 						enabled: $("#enabled input:radio:checked").val(),
 						remark: $("#remark").val(),
 						teamRoleList: JSON.stringify(teamRoleList),
+						chargeUser: userList[0].id,
 						teamObjectPermissionList: JSON.stringify(teamObjectPermissionList)
 					};
 					AjaxPostUtil.request({url: reqBasePath + "writeTeamTemplate", params: params, type: 'json', method: "POST", callback: function (json) {
@@ -316,6 +324,22 @@ layui.config({
 					winui.window.msg("角色重复", {icon: 2, time: 2000});
 				}
 			}});
+	});
+
+	// 团队经理选择
+	$("body").on("click", "#chargeUserSelPeople", function (e) {
+		systemCommonUtil.userReturnList = [].concat(userList);
+		systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+		systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+		systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
+		systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+			// 重置数据
+			userList = [].concat(userReturnList);
+			// 添加选择
+			$.each(userList, function(i, item) {
+				$("#chargeUser").val(item.name);
+			});
+		});
 	});
 
 	$("body").on("click", "#cancle", function() {

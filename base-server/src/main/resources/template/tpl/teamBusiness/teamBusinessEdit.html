@@ -16,6 +16,17 @@
 	<script type="text/x-handlebars-template" id="showTemplate">
 		{{#bean}}
 		<div class="layui-form-item layui-col-xs12">
+			<span class="hr-title">基本信息</span><hr>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">团队经理<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="chargeUser" name="chargeUser" win-verify="required" placeholder="请选择团队经理" class="layui-input" readonly="readonly"/>
+				<i class="fa fa-user-plus input-icon" id="chargeUserSelPeople"></i>
+				<div class="layui-form-mid layui-word-aux">团队经理拥有所有的权限。</div>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
 			<span class="hr-title">成员信息</span><hr>
 		</div>
 		<div class="layui-form-item layui-col-xs12">

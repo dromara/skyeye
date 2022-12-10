@@ -19,7 +19,7 @@
 			{{# if(auth('1656731571539')){ }}
 				<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 			{{# } }}
-			{{# if(auth('1656731583257')){ }}
+			{{# if(auth('1656731583257') && d.isUsed != 1){ }}
 				<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
 			{{# } }}
 		</script>

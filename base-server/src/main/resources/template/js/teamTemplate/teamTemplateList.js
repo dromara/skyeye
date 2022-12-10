@@ -38,6 +38,7 @@ layui.config({
 			{ field: 'isUsed', title: '使用状态', align: 'center', width: 100, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("isUsed", 'id', d.isUsed, 'name');
 			}},
+			{ field: 'chargeUserName', title: '团队经理', width: 120 },
 			{ field: 'remark', title: '备注', width: 300 },
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
