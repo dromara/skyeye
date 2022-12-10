@@ -11,7 +11,8 @@ layui.config({
 		tableTree = layui.tableTreeDj,
 		form = layui.form;
 	var objectKey = GetUrlParam("objectKey");
-	var objectId = GetUrlParam("id");
+	var objectId = GetUrlParam("objectId");
+	var objectType = GetUrlParam("objectType");
 
 	var treeTableData = [];
 	// 已经选中的权限对应关系
@@ -20,7 +21,7 @@ layui.config({
 	showGrid({
 		id: "showForm",
 		url: reqBasePath + "queryTeamBusiness",
-		params: {businessId: objectId},
+		params: {objectId: objectId},
 		pagination: false,
 		method: "GET",
 		template: $("#showTemplate").html(),
@@ -59,7 +60,7 @@ layui.config({
 				}
 			});
 
-			reloadTreeTable(json.bean.objectType);
+			reloadTreeTable();
 			matchingLanguage();
 			form.render();
 		}
@@ -90,13 +91,13 @@ layui.config({
 	}
 
 	// 刷新成员树表格
-	function reloadTreeTable(objectType) {
+	function reloadTreeTable() {
 		var data = $.extend(true, [], treeTableData);
 		tableTree.reload("messageTable", {data: data});
 		loadAuthList(objectType);
 	}
 
-	function loadAuthList(objectType) {
+	function loadAuthList() {
 		// 加载该受用类型的团队可以设置哪些权限
 		var colsList = teamObjectPermissionUtil.getAuthColsDetails(objectType);
 		$('#authList').html(getDataUseHandlebars($('#authTableTemplate').html(), {list: colsList}));
@@ -129,6 +130,11 @@ layui.config({
 			defaultShow: true,
 		});
 	}
+
+	$("body").on("click", "#edit", function() {
+		location.href = "../../tpl/teamBusiness/teamBusinessEdit.html?objectId=" + objectId + "&objectKey=" + objectKey
+			+ "&objectType=" + objectType;
+	});
 
 	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);

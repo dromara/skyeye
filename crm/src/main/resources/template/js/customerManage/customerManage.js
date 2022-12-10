@@ -9,7 +9,7 @@ layui.config({
 	var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$,
     	form = layui.form;
-	var id = GetUrlParam("id");
+	var objectId = GetUrlParam("objectId");
 	var objectKey = GetUrlParam("objectKey");
 
 	tabPageUtil.init({
@@ -18,14 +18,10 @@ layui.config({
 			title: '详情',
 			pageUrl: '../../tpl/customerManage/customerDetails.html'
 		}],
-		suffixData: [{
-			title: '团队',
-			pageUrl: '../../tpl/teamBusiness/teamBusinessDetails.html'
-		}],
 		element: layui.element,
 		objectType: "1",
 		object: {
-			objectId: id,
+			objectId: objectId,
 			objectKey: objectKey,
 		}
 	});

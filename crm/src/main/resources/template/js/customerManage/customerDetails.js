@@ -15,7 +15,7 @@ layui.config({
     	table = layui.table,
     	element = layui.element;
     
-    var customerId = GetUrlParam("id");
+    var customerId = GetUrlParam("objectId");
     
     var tabTable = {
     	tab0: {load: true, initMethod: opportunityList}, // 商机列表

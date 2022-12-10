@@ -15,7 +15,7 @@ layui.config({
 		table = layui.table;
 
 	objectKey = GetUrlParam("objectKey");
-	objectId = GetUrlParam("id");
+	objectId = GetUrlParam("objectId");
 	if (isNull(objectKey) || isNull(objectId)) {
 		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
 		return false;

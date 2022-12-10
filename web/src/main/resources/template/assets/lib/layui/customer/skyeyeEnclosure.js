@@ -32,13 +32,26 @@ var skyeyeEnclosure = {
         $.each(param, function (boxId, data) {
             // 按钮id
             var btnId = boxId + "Btn";
+            var dataList = skyeyeEnclosure.getDataList(data);
             // 初始化数据
-            $("#" + boxId).attr(skyeyeEnclosure.enclosureListKey, JSON.stringify(isNull(data) ? [] : data));
+            $("#" + boxId).attr(skyeyeEnclosure.enclosureListKey, JSON.stringify(dataList));
             // 加载dom对象
             skyeyeEnclosure.loadEnclosureHTML(boxId, btnId, 1);
             // 添加[附件上传]按钮的监听事件
             skyeyeEnclosure.initClick(boxId, btnId, callback);
         });
+    },
+
+    getDataList: function (data) {
+        var dataList = [];
+        if (!isNull(data)) {
+            if (!isNull(data.enclosureInfoList)) {
+                dataList = [].concat(data.enclosureInfoList);
+            } else {
+                dataList = [].concat(data);
+            }
+        }
+        return dataList;
     },
 
     /**
@@ -74,8 +87,9 @@ var skyeyeEnclosure = {
         $.each(param, function (boxId, data) {
             // 按钮id
             var btnId = boxId + "Btn";
+            var dataList = skyeyeEnclosure.getDataList(data);
             // 初始化数据
-            $("#" + boxId).attr(skyeyeEnclosure.enclosureListKey, JSON.stringify(isNull(data) ? [] : data));
+            $("#" + boxId).attr(skyeyeEnclosure.enclosureListKey, JSON.stringify(dataList));
             // 加载dom对象
             skyeyeEnclosure.loadEnclosureHTML(boxId, btnId, 2);
         });

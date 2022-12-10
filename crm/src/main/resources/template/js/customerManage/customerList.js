@@ -67,7 +67,7 @@ layui.config({
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/customerManage/customerAdd.html",
-			title: "新增客户",
+			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "customerAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
@@ -81,7 +81,7 @@ layui.config({
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/customerManage/customerEdit.html",
-			title: "编辑客户",
+			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "customerEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
@@ -93,7 +93,7 @@ layui.config({
 	// 详情
 	function details(data) {
 		_openNewWindows({
-			url: "../../tpl/customerManage/customerDetails.html?id=" + data.id,
+			url: "../../tpl/customerManage/customerDetails.html?objectId=" + data.id,
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "customerDetails",
 			area: ['90vw', '90vh'],
@@ -104,7 +104,7 @@ layui.config({
 	// 服务
 	function manage(data) {
 		_openNewWindows({
-			url: "../../tpl/customerManage/customerManage.html?id=" + data.id + "&objectKey=" + serviceClassName,
+			url: "../../tpl/customerManage/customerManage.html?objectId=" + data.id + "&objectKey=" + serviceClassName,
 			title: '服务',
 			pageId: "customerManage",
 			area: ['90vw', '90vh'],
@@ -116,7 +116,7 @@ layui.config({
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "customer006", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "deleteCustomerMationById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});

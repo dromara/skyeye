@@ -126,11 +126,15 @@ var teamObjectPermissionUtil = {
      *
      * @param id
      * @param objectType
+     * @param defaultValue
      */
-    buildTeamTemplate: function (id, objectType) {
+    buildTeamTemplate: function (id, objectType, defaultValue) {
         AjaxPostUtil.request({url: reqBasePath + "queryEnableTeamTemplateList", params: {objectType: objectType}, type: 'json', method: "GET", callback: function(json) {
             var selOption = getFileContent('tpl/template/select-option.tpl');
             $(`#${id}`).html(getDataUseHandlebars(selOption, json));
+            if (!isNull(defaultValue)) {
+                $(`#${id}`).val(defaultValue);
+            }
         }, async: false});
     }
 
