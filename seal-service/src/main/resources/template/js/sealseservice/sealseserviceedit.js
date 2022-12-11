@@ -2,9 +2,6 @@
 //工单接收人信息
 var serviceUser = {};
 
-//已经选择的客户信息
-var customerMation = {};
-
 // 工单信息
 layui.config({
 	base: basePath, 
@@ -46,9 +43,11 @@ layui.config({
 		        $("#productWarranty").val(json.bean.productWarranty);
 		        
 		        //客户信息赋值
-		       	customerMation.id = json.bean.customerId;
-		       	customerMation.customName = json.bean.customerName;
-		       	$("#customName").val(customerMation.customName);
+				sysCustomerUtil.customerMation = {
+					id: json.bean.customerId,
+					customName: json.bean.customerName
+				};
+		       	$("#customName").val(sysCustomerUtil.customerMation.customName);
 
 				// 售后服务类型
 				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceType"]["key"], 'select', "typeId", json.bean.typeId, form);
@@ -114,8 +113,7 @@ layui.config({
 		 	        	var params = {
 		        			typeId: $("#typeId").val(),//服务类型，不可为空
 		        			declarationTime: $("#declarationTime").val(),//报单时间，不可为空
-		        			customerId: customerMation.id,//客户-可为空
-        					customerName: customerMation.customName,//客户名称-可为空
+		        			customerId: sysCustomerUtil.customerMation.id,//客户-可为空
 		        			contacts: $("#contacts").val(),//联系人，不可为空
 		        			phone: $("#phone").val(),//联系电话，不可为空
 		        			email: $("#email").val(),//联系邮箱，不可为空
@@ -325,18 +323,13 @@ layui.config({
  	    
  	    //客户选择
  	    $("body").on("click", "#customMationSel", function (e) {
-			_openNewWindows({
-				url: "../../tpl/customerManage/customerChoose.html",
-				title: "选择客户",
-				pageId: "customerChoose",
- 				area: ['90vw', '90vh'],
- 				callBack: function (refreshCode) {
-					$("#customName").val(customerMation.customName);
-					$("#contacts").val(customerMation.contacts);
-					$("#phone").val(customerMation.mobilePhone);
-					$("#email").val(customerMation.email);
-					$("#qq").val(customerMation.qq);
- 				}});
+			sysCustomerUtil.openSysCustomerChoosePage(function (customerMation) {
+				$("#customName").val(customerMation.customName);
+				$("#contacts").val(customerMation.contacts);
+				$("#phone").val(customerMation.mobilePhone);
+				$("#email").val(customerMation.email);
+				$("#qq").val(customerMation.qq);
+			});
  	    });
 	    
 	    $("body").on("click", "#cancle", function() {

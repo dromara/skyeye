@@ -49,65 +49,9 @@ layui.config({
 				form.render('select');
 			});
 
-			customerId();
-			function customerId(){
-				//客户
-				showGrid({
-					id: "customerId",
-					url: flowableBasePath + "customer007",
-					params: {},
-					pagination: false,
-					template: getFileContent('tpl/template/select-option.tpl'),
-					ajaxSendLoadBefore: function(hdb) {
-					},
-					ajaxSendAfter:function(j){
-						customerList = j.rows;
-						$("#customerId").val(json.bean.customerId);
-						if (!isNull(json.bean.customerId)){
-							contractId(json.bean.customerId, 1);
-						}
-						form.render('select');
-					}
-				});
-
-				form.on('select(customerId)', function(data) {
-					if (!isNull(data.value) && data.value != '请选择') {
-						contractId(data.value, 2);
-						$.each(customerList, function(i, item) {
-							if (data.value == item.id) {
-								$("#contactName").val(item.contacts);
-								$("#telphone").val(item.workPhone);
-								$("#mobile").val(item.mobilePhone);
-								$("#mail").val(item.email);
-								$("#qq").val(item.qq);
-								return false;
-							}
-						});
-					} else {
-						$("#contractId").html("");
-						form.render('select');
-					}
-				});
-			}
-
-			function contractId(id, type){
-				//合同
-				showGrid({
-					id: "contractId",
-					url: flowableBasePath + "mycrmcontract008",
-					params: {id: id},
-					pagination: false,
-					template: getFileContent('tpl/template/select-option.tpl'),
-					ajaxSendLoadBefore: function(hdb) {
-					},
-					ajaxSendAfter:function(j){
-						if(type == 1){
-							$("#contractId").val(json.bean.contractId);
-						}
-						form.render('select');
-					}
-				});
-			}
+			sysCustomerUtil.customerMation = {
+				id: json.bean.customerId
+			};
 
 			// 附件回显
 			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.businessEnclosureInfo});
@@ -158,7 +102,7 @@ layui.config({
 			estimatedWorkload: $("#estimatedWorkload").val(),
 			estimatedCost: $("#estimatedCost").val(),
 			businessContent: $("#businessContent").val(),
-			customerId: $("#customerId").val(),
+			customerId: sysCustomerUtil.customerMation.id,
 			departmentId: $("#departmentId").val(),
 			typeId: $("#typeId").val(),
 			contractId: $("#contractId").val(),
@@ -177,6 +121,34 @@ layui.config({
 			parent.refreshCode = '0';
 		}});
 	}
+
+	function contractId(id){
+		//合同
+		showGrid({
+			id: "contractId",
+			url: flowableBasePath + "mycrmcontract008",
+			params: {id: id},
+			pagination: false,
+			template: getFileContent('tpl/template/select-option.tpl'),
+			ajaxSendLoadBefore: function(hdb) {
+			},
+			ajaxSendAfter:function (json) {
+				form.render('select');
+			}
+		});
+	}
+
+	$("body").on("click", "#customMationSel", function (e) {
+		sysCustomerUtil.openSysCustomerChoosePage(function (customerMation) {
+			contractId(customerMation.id);
+			$("#customName").val(customerMation.customName);
+			$("#telphone").val(customerMation.workPhone);
+			$("#mobile").val(customerMation.mobilePhone);
+			$("#mail").val(customerMation.email);
+			$("#qq").val(customerMation.qq);
+		});
+	});
+
 
 	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);

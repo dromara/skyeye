@@ -3,9 +3,6 @@ var chooseOrderNum = "";
 // 选取的未完成售后服务工单id
 var chooseOrderId = "";
 
-// 已经选择的客户信息
-var customerMation = {};
-
 // 配件申领单
 layui.config({
 	base: basePath,
@@ -100,11 +97,7 @@ layui.config({
 		skyeyeEnclosure.init('enclosureUpload');
 		form.on('submit(formAddBean)', function(data) {
 			if(winui.verifyForm(data.elem)) {
-				if(isNull(customerMation.id)){
-					winui.window.msg('请选择客户.', {icon: 2, time: 2000});
-					return false;
-				}
-				//获取已选备件数据
+				// 获取已选备件数据
 				var rowTr = $("#useTable tr");
 				if(rowTr.length == 0) {
 					winui.window.msg('请选择备件.', {icon: 2, time: 2000});
@@ -152,7 +145,7 @@ layui.config({
 				}
 
 				var params = {
-					customerId: customerMation.id,//客户
+					customerId: sysCustomerUtil.customerMation.id,//客户
 					applyTime: $("#operTime").val(),
 					remark: $("#remark").val(),
 					applyMaterialStr: JSON.stringify(tableData),
@@ -239,14 +232,9 @@ layui.config({
 
 	    // 客户选择
  	    $("body").on("click", "#customMationSel", function (e) {
-			_openNewWindows({
-				url: "../../tpl/customerManage/customerChoose.html",
-				title: "选择客户",
-				pageId: "customerChoose",
- 				area: ['90vw', '90vh'],
- 				callBack: function (refreshCode) {
-					$("#customName").val(customerMation.customName);
- 				}});
+			sysCustomerUtil.openSysCustomerChoosePage(function (customerMation) {
+				$("#customName").val(customerMation.customName);
+			});
  	    });
 
 		// 商品选择

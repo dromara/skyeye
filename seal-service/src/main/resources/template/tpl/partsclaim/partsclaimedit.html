@@ -34,9 +34,9 @@
 	<script type="text/x-handlebars-template" id="beanTemplate">
 		{{#bean}}
 			<div class="layui-form-item layui-col-xs6">
-		        <label class="layui-form-label">客户</label>
+		        <label class="layui-form-label">客户<i class="red">*</i></label>
 		        <div class="layui-input-block">
-		            <input type="text" id="customName" name="customName" placeholder="请选择客户" class="layui-input" readonly="readonly"/>
+		            <input type="text" id="customName" name="customName" win-verify="required" placeholder="请选择客户" class="layui-input" readonly="readonly"/>
 		            <i class="fa fa-plus-circle input-icon" id="customMationSel"></i>
 		        </div>
 		    </div>

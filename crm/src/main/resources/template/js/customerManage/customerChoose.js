@@ -13,25 +13,19 @@ layui.config({
 		form = layui.form,
 		table = layui.table;
 
-	// 客户分类
-	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerType"]["key"], 'select', "typeId", '', form);
-
-	// 客户来源
-	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerFrom"]["key"], 'select', "fromId", '', form);
-
-	// 客户所属行业
-	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerIndustry"]["key"], 'select', "industryId", '', form);
+	// 加载列表数据权限
+	loadAuthBtnGroup('messageTable', '1570455037177');
 
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: flowableBasePath + 'customercommonchoose001',
+	    url: flowableBasePath + 'customer001',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
-	    limits: [8, 16, 24, 32, 40, 48, 56],
-	    limit: 8,
+		limits: getLimits(),
+		limit: getLimit(),
 	    cols: [[
 	    	{ type: 'radio'},
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
@@ -74,56 +68,25 @@ layui.config({
 				var click = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
 				click.find("input[type='radio']").prop("checked", true);
 				form.render();
-			})
+			});
+
+			initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入客户名称", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
-	table.on('tool(messageTable)', function (obj) {
-        var data = obj.data;
-        var layEvent = obj.event;
-        if (layEvent === 'details'){ //详情
-        	details(data);
-        }
-    });
-
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			refreshTable();
-		}
-		return false;
-	});
-	
 	$("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
-    }
-    
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
+		loadTable();
+	});
 
-	// 详情
-	function details(data) {
-		_openNewWindows({
-			url: "../../tpl/customerManage/customerDetails.html?id=" + data.id,
-			title: "客户详情",
-			pageId: "customerDetails",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-			}});
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
 	}
 
 	function getTableParams() {
-    	return {
-    		name: $("#customerName").val(),
-			typeId: $("#typeId").val(),
-			fromId: $("#fromId").val(),
-			industryId: $("#industryId").val()
-    	};
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 
     exports('customerChoose', {});

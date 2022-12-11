@@ -1,3 +1,4 @@
+
 var rowId = "";
 layui.config({
 	base: basePath, 
@@ -6,26 +7,11 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
 	
 	authBtn('1573887926771');//列表
-	
-	//客户
-	showGrid({
-	 	id: "customer",
-	 	url: flowableBasePath + "customer007",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb) {
-	 	},
-	 	ajaxSendAfter:function(j){
-	 		form.render('select');
-	 	}
-	});
 	
 	// 全部合同列表
 	table.render({
@@ -122,7 +108,6 @@ layui.config({
     function getTableParams() {
     	return {
     		title: $("#title").val(),
-    		customer: $("#customer").val(),
     		state: $("#state").val(),
     		createTime: $("#createTime").val()
     	};

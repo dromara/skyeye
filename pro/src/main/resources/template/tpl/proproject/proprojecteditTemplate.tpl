@@ -43,11 +43,10 @@
         </div>
     </div>
     <div class="layui-form-item layui-col-xs6">
-        <label class="layui-form-label">客户名称</label>
+        <label class="layui-form-label">客户<i class="red">*</i></label>
         <div class="layui-input-block">
-			<select id="customerId" name="customerId" lay-filter="customerId" lay-search="">
-				
-			</select>
+            <input type="text" id="customName" name="customName" placeholder="请选择客户" class="layui-input" readonly="readonly" win-verify="required"/>
+            <i class="fa fa-plus-circle input-icon" id="customMationSel"></i>
         </div>
     </div>
     <div class="layui-form-item layui-col-xs6">

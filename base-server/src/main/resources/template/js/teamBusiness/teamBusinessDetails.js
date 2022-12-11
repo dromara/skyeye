@@ -27,6 +27,11 @@ layui.config({
 		template: $("#showTemplate").html(),
 		ajaxSendLoadBefore: function(hdb, json) {},
 		ajaxSendAfter: function (json) {
+			systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
+				if (data.bean.id != json.bean.chargeUser) {
+					$("#teamAuthEdit").remove();
+				}
+			});
 			loadTreeTable();
 			// 解析成员信息
 			$.each(json.bean.teamRoleList, function (i, item) {

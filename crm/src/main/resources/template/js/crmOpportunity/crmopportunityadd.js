@@ -3,9 +3,6 @@ var responsIdList = new Array();// 商机负责人返回的集合或者进行回
 var partIdList = new Array();// 商机参与人返回的集合或者进行回显的集合
 var followIdList = new Array();// 商机关注人返回的集合或者进行回显的集合
 
-// 已经选择的客户信息
-var customerMation = {};
-
 // 客户商机
 layui.config({
 	base: basePath,
@@ -58,10 +55,6 @@ layui.config({
     });
 
     function saveData(subType, approvalId) {
-        if(isNull(customerMation.id)){
-            winui.window.msg('请选择客户.', {icon: 2, time: 2000});
-            return false;
-        }
         var params = {
             title: $("#title").val(),
             city: $("#city").val(),
@@ -76,7 +69,7 @@ layui.config({
             email: $("#email").val(),
             qq: $("#qq").val(),
             businessNeed: $("#businessNeed").val(),
-            customerId: customerMation.id,
+            customerId: sysCustomerUtil.customerMation.id,
             fromId: $("#fromId").val(),
             subDepartments: $("#subDepartments").val(),
             enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
@@ -162,24 +155,19 @@ layui.config({
     
     // 客户选择
     $("body").on("click", "#customMationSel", function (e) {
-        _openNewWindows({
-            url: "../../tpl/customerManage/customerChoose.html",
-            title: "选择客户",
-            pageId: "customerChoose",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-                $("#customName").val(customerMation.customName);
-                $("#industryName").html(customerMation.industryName);
-                $("#city").val(customerMation.city);
-                $("#detailAddress").val(customerMation.detailAddress);
-                $("#contacts").val(customerMation.contacts);
-                $("#department").val(customerMation.department);
-                $("#job").val(customerMation.job);
-                $("#workPhone").val(customerMation.workPhone);
-                $("#mobilePhone").val(customerMation.mobilePhone);
-                $("#email").val(customerMation.email);
-                $("#qq").val(customerMation.qq);
-			}});
+        sysCustomerUtil.openSysCustomerChoosePage(function (customerMation) {
+            $("#customName").val(customerMation.customName);
+            $("#industryName").html(customerMation.industryName);
+            $("#city").val(customerMation.city);
+            $("#detailAddress").val(customerMation.detailAddress);
+            $("#contacts").val(customerMation.contacts);
+            $("#department").val(customerMation.department);
+            $("#job").val(customerMation.job);
+            $("#workPhone").val(customerMation.workPhone);
+            $("#mobilePhone").val(customerMation.mobilePhone);
+            $("#email").val(customerMation.email);
+            $("#qq").val(customerMation.qq);
+        });
     });
     
 	$("body").on("click", "#cancle", function() {

@@ -11,15 +11,6 @@ layui.config({
 		form = layui.form,
 		table = layui.table;
 
-	// 客户分类
-	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerType"]["key"], 'select', "typeId", '', form);
-
-	// 客户来源
-	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerFrom"]["key"], 'select', "fromId", '', form);
-
-	// 客户所属行业
-	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerIndustry"]["key"], 'select', "industryId", '', form);
-
 	// 公海客户群
 	table.render({
 	    id: 'messageTable',
@@ -47,60 +38,46 @@ layui.config({
 	    ]],
 	    done: function (json) {
 	    	matchingLanguage();
-	    	var str = "超过" + json.bean. noDocumentaryDayNum + "天未跟单";
-	    	if(parseInt(json.bean.noChargeId) == 1){
-	    		str += '，或者未指定负责人';
-	    	}
-	    	str += '的客户。';
+	    	var str = "超过" + json.bean.noDocumentaryDayNum + "天未跟单的客户。";
 	    	$("#showInfo").html(str);
+
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入客户名称", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
 	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'details'){ // 详情
+        if (layEvent === 'details') { // 详情
         	details(data);
         }
     });
 	
-	form.render();
-	
 	// 详情
 	function details(data) {
 		_openNewWindows({
-			url: "../../tpl/customerManage/customerDetails.html?id=" + data.id,
-			title: "客户详情",
+			url: "../../tpl/customerManage/customerDetails.html?objectId=" + data.id,
+			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "customerDetails",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}});
 	}
-	
-	$("body").on("click", "#formSearch", function() {
-		refreshTable();
-	});
-	
+
+	form.render();
 	$("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
-    }
-    
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-    
-    function getTableParams() {
-    	return {
-    		name: $("#customerName").val(),
-    		typeId: $("#typeId").val(),
-    		fromId: $("#fromId").val(),
-    		industryId: $("#industryId").val()
-    	};
-    }
+		loadTable();
+	});
+
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
+
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
 	
     exports('customerInternationalList', {});
 });

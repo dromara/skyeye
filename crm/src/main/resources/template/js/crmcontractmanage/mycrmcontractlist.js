@@ -14,20 +14,6 @@ layui.config({
 	authBtn('1573888009852');//列表
 	authBtn('1573888019541');//新增
 	
-	// 客户
-	showGrid({
-	 	id: "customer",
-	 	url: flowableBasePath + "customer007",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb) {
-	 	},
-	 	ajaxSendAfter:function(j){
-	 		form.render('select');
-	 	}
-	});
-	
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
@@ -253,7 +239,6 @@ layui.config({
 	function getTableParams() {
 		return {
 			title: $("#title").val(),
-			customer: $("#customer").val(),
 			state: $("#state").val(),
 			createTime: $("#createTime").val()
 		}

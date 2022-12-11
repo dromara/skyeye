@@ -1,6 +1,4 @@
 
-var userList = new Array();// 选择用户返回的集合或者进行回显的集合
-
 // 新增客户
 layui.config({
 	base: basePath, 
@@ -28,7 +26,7 @@ layui.config({
 
 	teamObjectPermissionUtil.buildTeamTemplate('teamTemplateId', 1);
 
-	textool.init({eleId: 'addDesc', maxlength: 200});
+	textool.init({eleId: 'remark', maxlength: 200});
 
 	skyeyeEnclosure.init('enclosureUpload');
 
@@ -47,27 +45,20 @@ layui.config({
 				fax: $("#fax").val(),
 				corRepresentative: $("#corRepresentative").val(),
 				regCapital: $("#regCapital").val(),
-				addDesc: $("#addDesc").val(),
+				remark: $("#remark").val(),
 				bankAccount: $("#bankAccount").val(),
 				accountName: $("#accountName").val(),
 				bankName: $("#bankName").val(),
 				bankAddress: $("#bankAddress").val(),
 				dutyParagraph: $("#dutyParagraph").val(),
 				financePhone: $("#financePhone").val(),
-				mechanicName: $("#mechanicName").val(),
-				mechanicPhone: $("#mechanicPhone").val(),
 				groupId: $("#groupId").val(),
 				typeId: $("#typeId").val(),
 				fromId: $("#fromId").val(),
 				industryId: $("#industryId").val(),
 				teamTemplateId: $("#teamTemplateId").val(),
-				chargeUser: '',
 				enclosureInfo: JSON.stringify({enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')})
 			};
-			// 负责人
-			if(userList.length > 0 ){
-				params.chargeUser = userList[0].id;
-			}
 
 			AjaxPostUtil.request({url: flowableBasePath + "writeCustomerMation", params: params, type: 'json', method: 'POST', callback: function (json) {
 				parent.layer.close(index);
@@ -75,22 +66,6 @@ layui.config({
 			}});
 		}
 		return false;
-	});
-
-	// 负责人选择
-	$("body").on("click", "#userNameSelPeople", function (e) {
-		systemCommonUtil.userReturnList = [].concat(userList);
-		systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
-		systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
-		systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
-		systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
-			// 重置数据
-			userList = [].concat(userReturnList);
-			// 添加选择
-			$.each(userList, function(i, item) {
-				$("#relationUserId").val(item.name);
-			});
-		});
 	});
 
 	$("body").on("click", "#cancle", function() {

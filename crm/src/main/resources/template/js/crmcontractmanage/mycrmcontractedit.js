@@ -1,9 +1,6 @@
 var userList = new Array();//选择用户返回的集合或者进行回显的集合
 var processInstanceId = "";
 
-//已经选择的客户信息
-var customerMation = {};
-
 // 合同信息
 layui.config({
 	base: basePath, 
@@ -64,7 +61,7 @@ layui.config({
 			});
 
 			// 客户id赋值
-			customerMation = {
+			sysCustomerUtil.customerMation = {
 				id: json.bean.customerId
 			};
 
@@ -97,21 +94,16 @@ layui.config({
 
 	// 客户选择
 	$("body").on("click", "#customMationSel", function (e) {
-		_openNewWindows({
-			url: "../../tpl/customerManage/customerChoose.html",
-			title: "选择客户",
-			pageId: "customerChoose",
-			area: ['100vw', '100vh'],
-			callBack: function (refreshCode) {
-				$("#customName").val(customerMation.customName);
-				$("#contacts").val(customerMation.contacts);
-				$("#city").val(customerMation.city);
-				$("#detailAddress").val(customerMation.detailAddress);
-				$("#workPhone").val(customerMation.workPhone);
-				$("#mobilePhone").val(customerMation.mobilePhone);
-				$("#email").val(customerMation.email);
-				$("#qq").val(customerMation.qq);
-			}});
+		sysCustomerUtil.openSysCustomerChoosePage(function (customerMation){
+			$("#customName").val(customerMation.customName);
+			$("#contacts").val(customerMation.contacts);
+			$("#city").val(customerMation.city);
+			$("#detailAddress").val(customerMation.detailAddress);
+			$("#workPhone").val(customerMation.workPhone);
+			$("#mobilePhone").val(customerMation.mobilePhone);
+			$("#email").val(customerMation.email);
+			$("#qq").val(customerMation.qq);
+		});
 	});
 
 	// 保存为草稿
@@ -141,11 +133,6 @@ layui.config({
 	});
 
 	function saveData(subType, approvalId) {
-		if(isNull(customerMation.id)){
-			winui.window.msg("请选择客户", {icon: 2, time: 2000});
-			return false;
-		}
-
 		var params = {
 			rowId: parent.rowId,
 			city: $("#city").val(),
@@ -163,7 +150,7 @@ layui.config({
 			qq: $("#qq").val(),
 			technicalTerms: $("#technicalTerms").val(),
 			businessTerms: $("#businessTerms").val(),
-			customerId: customerMation.id,
+			customerId: sysCustomerUtil.customerMation.id,
 			departmentId: $("#departmentId").val(),
 			relationUserId: systemCommonUtil.tagEditorGetAllData('relationUserId', userList),
 			enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),

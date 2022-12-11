@@ -1,5 +1,3 @@
-// 已经选择的客户信息
-var customerMation = {};
 
 // 根据那一列的值进行变化,默认根据数量
 var showTdByEdit = 'rkNum';
@@ -152,7 +150,7 @@ layui.config({
 		}
 
 		var params = {
-			supplierId: customerMation.id,//客户
+			supplierId: sysCustomerUtil.customerMation.id,//客户
 			operTime: $("#operTime").val(),
 			accountId: $("#accountId").val(),
 			payType: $("#payType").val(),
@@ -174,19 +172,13 @@ layui.config({
 
 	// 客户选择
 	$("body").on("click", "#customMationSel", function (e) {
-		_openNewWindows({
-			url: "../../tpl/customerManage/customerChoose.html",
-			title: "选择客户",
-			pageId: "customerChoose",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-				$("#customName").val(customerMation.customName);
-			}});
+		sysCustomerUtil.openSysCustomerChoosePage(function (customerMation) {
+			$("#customName").val(customerMation.customName);
+		});
 	});
 
 	// 加载商品选择事件
 	initChooseProductBtnEnent(form, function(trId, chooseProductMation) {
-		// 商品赋值
 		allChooseProduct[trId] = chooseProductMation;
 	});
 

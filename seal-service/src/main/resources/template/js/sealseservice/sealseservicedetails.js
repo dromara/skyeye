@@ -94,8 +94,8 @@ layui.config({
 		// 客户详情
 		$("body").on("click", ".customerNameMation", function() {
 			_openNewWindows({
-				url: "../../tpl/customerManage/customerDetails.html?id=" +$(this).attr("rowid"),
-				title: "客户详情",
+				url: "../../tpl/customerManage/customerDetails.html?objectId=" +$(this).attr("rowid"),
+				title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 				pageId: "customerDetails",
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {
