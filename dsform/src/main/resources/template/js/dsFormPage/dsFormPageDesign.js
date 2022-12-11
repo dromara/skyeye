@@ -293,7 +293,7 @@ layui.config({
 		var newParams = jsonArray[inDataIndex];
 		newParams.labelContent = $("#title").val();
 		newParams.placeholder = $("#placeholder").val();
-		newParams.requireId = arr.join(",");
+		newParams.require = arr.join(",");
 		newParams.value = $("#defaultValue").val();
 		newParams.defaultWidth = $("#defaultWidth").val();
 		newParams.keyId = $("#keyId").val();
@@ -403,14 +403,8 @@ layui.config({
     
     // 初始化限制条件
 	function initRequire(item) {
-		AjaxPostUtil.request({url: flowableBasePath + "dsformlimitrequirement006", params: {}, type: 'json', callback: function (json) {
-			var jsonStr = getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json);//模板和数据结合
-			$("#require").html(jsonStr);
-			if (!isNull(item.requireId)){
-				$("#require").val(item.requireId.split(","));//给这个元素赋值
-			}
-			form.render();
-   		}});
+		skyeyeClassEnumUtil.showEnumDataListByClassName("verificationParams", 'verificationSelect', "require", item.require, form);
+		form.render();
 	}
 	
 	$("body").on("keyup", ".keyIdName", function() {

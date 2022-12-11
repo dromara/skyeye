@@ -18,7 +18,7 @@ layui.config({
 		});
 		element.init();
 
-	    var templateContent = CodeMirror.fromTextArea(document.getElementById("templateContent"), {
+	    var content = CodeMirror.fromTextArea(document.getElementById("content"), {
             mode : "xml",  // 模式
             theme : "eclipse",  // CSS样式选择
             indentUnit : 4,  // 缩进单位，默认2
@@ -36,8 +36,8 @@ layui.config({
 	    form.on('submit(formAddBean)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
 	        	var params = {
-        			templateName: $("#templateName").val(),
-        			templateContent: encodeURIComponent(templateContent.getValue())
+					name: $("#name").val(),
+					content: encodeURIComponent(content.getValue())
 	        	};
 	        	AjaxPostUtil.request({url: flowableBasePath + "writeDsFormDisplayTemplate", params: params, type: 'json', method: 'POST', callback: function (json) {
 					parent.layer.close(index);

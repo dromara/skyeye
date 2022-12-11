@@ -25,12 +25,18 @@
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
-			<span class="hr-title">组件信息</span><hr>
+			<span class="hr-title">基本信息</span><hr>
 		</div>
-		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">组件标题<i class="red">*</i></label>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">编码<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="contentName" name="contentName" win-verify="required" placeholder="请输入组件标题" class="layui-input" maxlength="20" value="{{contentName}}"/>
+				<input type="text" id="numCode" name="numCode" win-verify="required" placeholder="请输入编码" class="layui-input" maxlength="100" value="{{numCode}}"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">名称<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="name" name="name" win-verify="required" placeholder="请输入名称" class="layui-input" maxlength="20" value="{{name}}"/>
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs6">
@@ -42,31 +48,33 @@
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">HTML脚本类型<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<select id="htmlType" name="htmlType" class="layui-input" win-verify="required" lay-filter="selectParent">
-					<option value="html">html</option>
-				</select>
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs12">
 			<label class="layui-form-label">HTML脚本<i class="red">*</i></label>
 			<div class="layui-input-block">
 				<textarea id="htmlContent">{{htmlContent}}</textarea>
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">JS脚本类型<i class="red">*</i></label>
+			<label class="layui-form-label">初始化JS脚本</label>
 			<div class="layui-input-block">
-				<select id="jsType" name="jsType" class="layui-input" win-verify="required" lay-filter="selectParent">
-					<option value="javascript">javascript</option>
-				</select>
+				<textarea id="jsContent">{{jsContent}}</textarea>
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">JS脚本</label>
+			<label class="layui-form-label">获取值的JS脚本</label>
 			<div class="layui-input-block">
-				<textarea id="jsContent">{{jsContent}}</textarea>
+				<textarea id="jsValue">{{jsValue}}</textarea>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">获取显示值的JS脚本</label>
+			<div class="layui-input-block">
+				<textarea id="jsDisplayValue">{{jsDisplayValue}}</textarea>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">设置值的JS脚本</label>
+			<div class="layui-input-block">
+				<textarea id="jsFitValue">{{jsFitValue}}</textarea>
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
@@ -78,7 +86,7 @@
 		<div class="layui-form-item layui-col-xs12 layui-hide dataTpl">
 			<label class="layui-form-label">数据展示模板<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<select id="dataShowTpl" name="dataShowTpl" lay-filter="dataShowTpl">
+				<select id="displayTemplateId" name="displayTemplateId" lay-filter="displayTemplateId">
 
 				</select>
 			</div>

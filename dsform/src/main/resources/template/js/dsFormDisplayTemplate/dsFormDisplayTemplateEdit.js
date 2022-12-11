@@ -3,9 +3,9 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'element'], function (exports) {
+}).define(['window', 'jquery', 'winui'], function (exports) {
 	winui.renderColor();
-	layui.use(['form', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx', 'solr', 'sql', 'vue'], function (form) {
+	layui.use(['codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx', 'solr', 'sql', 'vue'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
 			element = layui.element,
@@ -22,7 +22,7 @@ layui.config({
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		
-		 		var templateContent = CodeMirror.fromTextArea(document.getElementById("templateContent"), {
+		 		var content = CodeMirror.fromTextArea(document.getElementById("content"), {
 		            mode : "xml",  // 模式
 		            theme : "eclipse",  // CSS样式选择
 		            indentUnit : 4,  // 缩进单位，默认2
@@ -48,8 +48,8 @@ layui.config({
 		 		form.on('submit(formEditBean)', function (data) {
 			        if (winui.verifyForm(data.elem)) {
 			        	var params = {
-		        			templateName: $("#templateName").val(),
-		        			templateContent: encodeURIComponent(templateContent.getValue()),
+							name: $("#name").val(),
+							content: encodeURIComponent(content.getValue()),
 		        			id: parent.rowId
 			        	};
 			        	AjaxPostUtil.request({url: flowableBasePath + "writeDsFormDisplayTemplate", params: params, type: 'json', method: 'POST', callback: function (json) {

@@ -39,9 +39,9 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'templateName', title: '标题', width: 180 },
+	        { field: 'name', title: '标题', width: 180 },
 	        { field: 'id', title: '脚本', align: 'center', width: 80, templet: function (d) {
-	        	if (!isNull(d.templateContent)) {
+	        	if (!isNull(d.content)) {
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="templateContent"></i>';
 	        	} else {
 	        		return '无';
@@ -69,7 +69,7 @@ layui.config({
         } else if (layEvent === 'edit') { //编辑
         	edit(data);
         } else if (layEvent === 'templateContent') { // 模板内容
-        	editor.setValue(data.templateContent);
+        	editor.setValue(data.content);
         	layer.open({
 	            id: '模板内容',
 	            type: 1,

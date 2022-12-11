@@ -54,6 +54,13 @@ var skyeyeClassEnumUtil = {
                 });
             }
             form.render('radio');
+        } else if (showType == 'verificationSelect') {
+            var str = `<option value="">全部</option>{{#each rows}}<option value="{{formerRequirement}}">{{name}}</option>{{/each}}`;
+            $("#" + showBoxId).html(getDataUseHandlebars(str, json));
+            if (!isNull(defaultId)) {
+                $("#" + showBoxId).val(defaultId.split(","));
+            }
+            form.render('select');
         }
         if (typeof (callback) == "function") {
             callback(json);

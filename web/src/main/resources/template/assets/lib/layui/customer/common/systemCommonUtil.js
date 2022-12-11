@@ -837,3 +837,23 @@ var tabPageUtil = {
     }
 
 };
+
+// 代码编辑器
+var codeUtil = {
+
+    getConfig: function (mode) {
+        return {
+            mode : mode,  // 模式
+            theme : "eclipse",  // CSS样式选择
+            indentUnit : 4,  // 缩进单位，默认2
+            smartIndent : true,  // 是否智能缩进
+            tabSize : 4,  // Tab缩进，默认4
+            readOnly : false,  // 是否只读，默认false
+            showCursorWhenSelecting : true,
+            lineNumbers : true,  // 是否显示行号
+            styleActiveLine: true, //line选择是是否加亮
+            matchBrackets: true,
+        };
+    }
+
+};
