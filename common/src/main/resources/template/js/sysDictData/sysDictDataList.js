@@ -22,11 +22,16 @@ layui.config({
 	fsTree.render({
 		id: "treeDemo",
 		url: reqBasePath + "queryDictTypeListByEnabled?enabled=1",
+		checkEnable: false,
+		showLine: false,
+		showIcon: true,
+		addDiyDom: ztreeUtil.addDiyDom,
 		clickCallback: onClickTree,
 		onDblClick: onClickTree
 	}, function(id) {
 		fuzzySearch(id, '#name', null, true);
 		initLoadTable();
+		ztreeUtil.initEventListener(id);
 	});
 
 	//异步加载的方法

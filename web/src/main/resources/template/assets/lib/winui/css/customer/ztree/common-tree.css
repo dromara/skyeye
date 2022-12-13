@@ -1,0 +1,112 @@
+
+.ztree {
+    color: white;
+    padding: 0px;
+    margin-top: 10px;
+    height: calc(100% - 10px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.ztree li ul {
+    width: 100%;
+    padding: 0px !important;
+}
+
+.ztree li {
+    line-height: 21px;
+    width: 100%;
+}
+
+.ztree li span.button.ico_docu {
+    vertical-align: middle;
+    background-size: 20px !important;
+}
+
+.ztree li .mouseOver {
+    background: rgba(204, 232, 255);
+}
+
+.ztree li a:HOVER {
+    text-decoration: none !important;
+}
+
+.ztree li a:ACTIVE {
+    background: rgba(234, 234, 234, 0.33);
+    border-color: transparent;
+}
+
+.ztree li .layui-btn-dropdown {
+    float: right;
+    margin-right: 5px;
+    width: 16px;
+    height: 16px;
+    background: rgba(255, 255, 255, 1);
+    display: none;
+    margin-top: -25px;
+    position: relative;
+}
+
+.ztree li .layui-btn-dropdown button {
+    display: block;
+    border-radius: 0px;
+}
+
+.ztree li .layui-btn-dropdown button i {
+    padding: 0px !important;
+    font: normal normal normal 14px/1 FontAwesome !important;
+    color: gray;
+}
+
+.ztree li a {
+    height: 30px;
+    padding: 1px 3px 0px 5px;
+    font-size: 12px;
+    text-decoration: none;
+    width: 100%;
+    line-height: 30px;
+}
+
+.ztree li a.curSelectedNode {
+    height: 30px;
+    border: 0px;
+    padding-top: 1px;
+    background: rgba(231, 237, 248);
+    border-color: transparent;
+}
+
+.ztree li span.button.ico_open {
+    vertical-align: middle;
+    background-size: 20px !important;
+}
+
+.ztree li span.button.ico_close {
+    vertical-align: middle;
+    background-size: 20px !important;
+}
+
+.ztree li span.button {
+    width: 20px;
+    height: 20px;
+}
+
+.ztree li span.button.noline_close {
+    background-position: 4px 4px;
+    background-image: url("../../../../../images/ztree-right-icon.png");
+    background-size: 10px;
+}
+
+.ztree li span.button.noline_open {
+    background-position: 4px 4px;
+    background-image: url("../../../../../images/ztree-right-icon.png");
+    background-size: 10px;
+    transform: rotate(90deg);
+    -ms-transform: rotate(90deg); /* IE 9 */
+    -moz-transform: rotate(90deg); /* Firefox */
+    -webkit-transform: rotate(90deg); /* Safari and Chrome */
+    -o-transform: rotate(90deg); /* Opera */
+}
+
+.ztree li span.button.ico_loading {
+    margin-top: 5px;
+}

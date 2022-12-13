@@ -857,3 +857,43 @@ var codeUtil = {
     }
 
 };
+
+// 树结构工具
+var ztreeUtil = {
+
+    addDiyDom: function (treeId, treeNode) {
+        // css样式以及位置调整
+        var spaceWidth = 8;
+        var switchObj = $("#" + treeNode.tId + "_switch"),
+            icoObj = $("#" + treeNode.tId + "_ico");
+        switchObj.remove();
+        icoObj.before(switchObj);
+        if (isNull(treeNode.icon)) {
+            // 如果图标为空，就移除dom元素
+            icoObj.remove();
+        }
+        if (treeNode.level >= 1) {
+            var spaceStr = "<span style='display: inline-block;width:" + (spaceWidth * treeNode.level) + "px'></span>";
+            switchObj.before(spaceStr);
+        }
+
+        // 操作数据
+        var aObj = $("#" + treeNode.tId + "_a");
+        if ($("#diyBtn_" + treeNode.id).length > 0) return;
+        aObj.after("");
+        aObj.addClass("tree_a");
+        aObj.attr("ztreerowid", treeNode.id);
+    },
+
+    initEventListener: function (treeId) {
+        // 树的动画效果
+        $("body").on("mouseover", `#${treeId} a`, function (e) {
+            $(`#${treeId}`).find("a").removeClass('mouseOver');
+            $(this).addClass('mouseOver');
+        });
+        $("body").on("mouseleave", `#${treeId}`, function (e) {
+            $(`#${treeId}`).find("a").removeClass('mouseOver');
+        });
+    }
+
+}

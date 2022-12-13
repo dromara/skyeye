@@ -23,7 +23,7 @@ layui.config({
 		parent.$("#noteTitle").val(json.bean.title);
 		ue.addListener("ready", function () {
 			ue.setContent(isNull(json.bean.content) ? "" : json.bean.content);
-			var height = $(".file-console").height() - $(".edui-editor-toolbarbox").height() - $(".edui-editor-bottomContainer").height() - 15;
+			var height = $(".manage-console").height() - $(".edui-editor-toolbarbox").height() - $(".edui-editor-bottomContainer").height() - 15;
 			$(".edui-editor-iframeholder").css({'height': height});
 			// ctrl+s保存事件
 			UE.dom.domUtils.on(ue.body, "keydown", function (e) {

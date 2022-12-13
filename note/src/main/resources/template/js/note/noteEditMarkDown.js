@@ -11,8 +11,8 @@ layui.config({
     var loadChange = 0;
 
     var layEditor = editormd("content", {
-        width: ($(".file-console").width() - 5),
-        height: ($(".file-console").height() - 20),
+        width: ($(".manage-console").width() - 5),
+        height: ($(".manage-console").height() - 20),
         path : 'editormd/lib/',
         theme : "default",
         previewTheme : "default",

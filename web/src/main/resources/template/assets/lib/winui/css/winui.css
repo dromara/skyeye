@@ -4107,14 +4107,14 @@ body .layer-ext-winconfirm .layui-layer-content {
     padding: 10px;
 }
 
-.file-console{
+.manage-console {
 	width: 100%;
 	height: 100%;
 	margin: 0 auto;
 	background-color: #FCFCFC;
 }
 
-.file-console-left{
+.manage-console-left {
 	position: relative;
 	float: left;
 	height: 100%;
@@ -4212,7 +4212,7 @@ body .layer-ext-winconfirm .layui-layer-content {
     margin-bottom: 5px;
 }
 
-.file-console-right{
+.manage-console-right {
 	height: 100%;
 	box-sizing: border-box;
 	overflow: hidden;
