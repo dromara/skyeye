@@ -8,32 +8,14 @@ layui.config({
 	winui.renderColor();
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
-	    var $ = layui.$,
-			eleTree = layui.eleTree;
+	    var $ = layui.$;
 	    
-	    //初始化类型
 		function initType(){
-			var el5;
-			el5 = eleTree.render({
-				elem: '.ele5',
-				url: sysMainMation.knowlgBasePath + "knowledgetype008",
-				defaultExpandAll: true,
-				expandOnClickNode: false,
-				highlightCurrent: true
+			treeSelectUtil.init({
+				eleTree: layui.eleTree,
+				elem: 'typeId',
+				url: sysMainMation.knowlgBasePath + "knowledgetype008"
 			});
-			$(".ele5").hide();
-			$("#typeId").on("click",function (e) {
-				e.stopPropagation();
-				$(".ele5").toggle();
-			});
-			eleTree.on("nodeClick(data5)",function(d) {
-				$("#typeId").val(d.data.currentData.name);
-				$("#typeId").attr("typeId", d.data.currentData.id);
-				$(".ele5").hide();
-			})
-			$(document).on("click",function() {
-				$(".ele5").hide();
-			})
 		}
 
 		showGrid({

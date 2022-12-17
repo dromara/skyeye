@@ -899,4 +899,66 @@ var ztreeUtil = {
         });
     }
 
-}
+};
+
+// 树状下拉框工具
+var treeSelectUtil = {
+
+    config: {
+        eleTree: null,
+        elem: '',
+        url: '',
+        idKey: 'id',
+        nameKey: 'name',
+        defaultId: ''
+    },
+
+    init: function (_config) {
+        treeSelectUtil.config = $.extend(true, treeSelectUtil.config, _config);
+
+        treeSelectUtil.initShow();
+    },
+
+    initShow: function () {
+        $(`#${treeSelectUtil.config.elem}`).after(`<div class="eleTree ele5" lay-filter="data5"></div>`);
+        treeSelectUtil.config.eleTree.render({
+            elem: '.ele5',
+            url: treeSelectUtil.config.url,
+            defaultExpandAll: true,
+            expandOnClickNode: false,
+            highlightCurrent: true,
+            request: {
+                name: treeSelectUtil.config.nameKey,
+                key: treeSelectUtil.config.idKey,
+            },
+            done: function (res) {
+                // 设置默认值
+                if (!isNull(treeSelectUtil.config.defaultId)) {
+                    var html = $(".ele5").find(`div[data-id='${treeSelectUtil.config.defaultId}']`).find('.eleTree-node-content-label').html();
+                    $(`#${treeSelectUtil.config.elem}`).val(html);
+                    $(`#${treeSelectUtil.config.elem}`).attr(`${treeSelectUtil.config.elem}`, treeSelectUtil.config.defaultId);
+                }
+            }
+        });
+
+        $(".ele5").hide();
+        $(`#${treeSelectUtil.config.elem}`).on("click", function (e) {
+            e.stopPropagation();
+            $(".ele5").toggle();
+        });
+        treeSelectUtil.config.eleTree.on("nodeClick(data5)", function(d) {
+            if (d.data.currentData.disabled) {
+                d.event.stopPropagation();
+                return false;
+            }
+            $(`#${treeSelectUtil.config.elem}`).val(d.data.currentData[treeSelectUtil.config.nameKey]);
+            $(`#${treeSelectUtil.config.elem}`).attr(`${treeSelectUtil.config.elem}`, d.data.currentData[treeSelectUtil.config.idKey]);
+            $(".ele5").hide();
+        })
+        $(document).on("click",function() {
+            $(".ele5").hide();
+        })
+    }
+
+};
+

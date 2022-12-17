@@ -43,7 +43,7 @@ layui.config({
 			{ field: 'modelId', title: '模型ID', width: 100 },
 			{ field: 'modelKey', title: '模型key', width: 250 },
 			{ field: 'version', title: '版本', width: 80, templet: function (d) {return d.model.version}},
-			{ field: 'serviceName', title: '工作流业务模型', width: 140 },
+			{ field: 'serviceClassName', title: '适用对象', width: 400 },
 			{ field: 'deploymentId', title: '发布状态', align: "center", width: 80, templet: function (d) {
 				if (isNull(d.model.deploymentId)) {
 					return "<span class='state-new'>未发布</span>";

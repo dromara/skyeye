@@ -9,7 +9,6 @@
         <label class="layui-form-label">所属类型<i class="red">*</i></label>
         <div class="layui-input-block">
             <input type="text" id="typeId" name="typeId" placeholder="请选择类型" class="layui-input" readonly="readonly" typeId=""/>
-            <div class="eleTree ele5" lay-filter="data5"></div>
         </div>
     </div>
     <div class="layui-form-item layui-col-xs12">

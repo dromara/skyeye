@@ -16,6 +16,9 @@
 	<script type="text/x-handlebars-template" id="beanTemplate">
 		{{#bean}}
 		<div class="layui-form-item layui-col-xs12">
+			<span class="hr-title">基本信息</span><hr>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
 			<label class="layui-form-label">模型名称<i class="red">*</i></label>
 			<div class="layui-input-block">
 				<input type="text" id="flowName" name="flowName" win-verify="required" placeholder="请输入模型名称" class="layui-input" value="{{flowName}}"/>
@@ -28,31 +31,10 @@
 				<div class="layui-form-mid layui-word-aux">在系统中保持唯一。</div>
 			</div>
 		</div>
-		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">工作流业务模型</label>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">适用对象<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="serviceClassName" name="serviceClassName" placeholder="请选择工作流业务模型" class="layui-input" readonly
-					   value="{{serviceName}}" className="{{serviceClassName}}"/>
-				<i class="fa fa-user-plus input-icon" id="serviceClassNameSel"></i>
-				<div class="layui-form-mid layui-word-aux" style="width: 100%;">动态表单类型的工作流可不选择业务模型</div>
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">关联业务数据<i class="red">*</i></label>
-			<div class="layui-input-block ver-center" id="businessLinkType">
-
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs12 business">
-			<label class="layui-form-label">属性字段<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<input type="text" id="businessKey" name="businessKey" placeholder="请输入属性字段" class="layui-input" value="{{businessKey}}"/>
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs12 business">
-			<label class="layui-form-label">属性值<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<input type="text" id="businessData" name="businessData" placeholder="请输入属性值" class="layui-input" value="{{businessData}}"/>
+				<input type="text" id="serviceClassName" name="serviceClassName" placeholder="请选择适用对象" class="layui-input" readonly="readonly" typeId=""/>
 			</div>
 		</div>
 
