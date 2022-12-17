@@ -781,6 +781,9 @@ var tabPageUtil = {
 
     init: function (_config) {
         tabPageUtil.config = $.extend(true, tabPageUtil.config, _config);
+        if (_config.suffixData == null) {
+            tabPageUtil.config.suffixData = [];
+        }
 
         // 获取页面信息
         var pageList = teamObjectPermissionUtil.getPageUrl(tabPageUtil.config.objectType);

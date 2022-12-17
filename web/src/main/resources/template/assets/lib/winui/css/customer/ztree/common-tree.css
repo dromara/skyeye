@@ -3,7 +3,7 @@
     color: white;
     padding: 0px;
     margin-top: 10px;
-    height: calc(100% - 10px);
+    height: calc(100% - 45px);
     overflow-y: auto;
     overflow-x: hidden;
 }

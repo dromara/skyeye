@@ -26,18 +26,19 @@ layui.config({
 
     // 异步加载的方法
     function onClickTree(event, treeId, treeNode) {
-        console.log(treeNode);
+        if (treeNode.level != 3) {
+            return false;
+        }
         tabPageUtil.init({
             id: 'tab',
             prefixData: [{
                 title: '详情',
-                pageUrl: '../../tpl/customerManage/customerDetails.html'
+                pageUrl: '../../tpl/classServer/classServerDetails.html'
             }],
+            suffixData: null,
             element: layui.element,
-            objectType: "1",
             object: {
-                objectId: objectId,
-                objectKey: objectKey,
+                objectId: treeNode.id
             }
         });
     }
