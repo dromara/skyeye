@@ -1,4 +1,6 @@
 
+var chooseTreeNode;
+
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -14,6 +16,7 @@ layui.config({
         id: "treeDemo",
         url: reqBasePath + "queryServiceClassForTree",
         checkEnable: false,
+        loadEnable: false,
         showLine: false,
         showIcon: true,
         addDiyDom: ztreeUtil.addDiyDom,
@@ -29,13 +32,30 @@ layui.config({
         if (treeNode.level != 3) {
             return false;
         }
+        chooseTreeNode = treeNode;
+        var defaultList = [{
+            title: '详情',
+            pageUrl: '../../tpl/classServer/classServerDetails.html'
+        }, {
+            title: '属性信息',
+            pageUrl: '../../tpl/classServer/classServerAttrList.html'
+        }];
+
+        if (chooseTreeNode.classMation.flowable) {
+            defaultList.push({
+                title: '流程信息',
+                pageUrl: '../../tpl/classServer/classServerProcessList.html'
+            });
+            defaultList.push({
+                title: '流程属性信息',
+                pageUrl: '../../tpl/classServer/classServerProcessAttrList.html'
+            });
+        }
+
         tabPageUtil.init({
             id: 'tab',
-            prefixData: [{
-                title: '详情',
-                pageUrl: '../../tpl/classServer/classServerDetails.html'
-            }],
-            suffixData: null,
+            prefixData: [],
+            suffixData: defaultList,
             element: layui.element,
             object: {
                 objectId: treeNode.id
