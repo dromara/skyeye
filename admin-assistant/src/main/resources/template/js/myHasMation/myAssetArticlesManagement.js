@@ -27,7 +27,7 @@ layui.config({
 	    	limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', type: 'numbers' },
-				{ field: 'articlesName', title: '用品名称', align: 'left', rowspan: '3', width: 120 },
+				{ field: 'name', title: '用品名称', align: 'left', rowspan: '3', width: 120 },
 				{ field: 'articlesNum', title: '用品编号', align: 'left', rowspan: '3', width: 200 },
 				{ field: 'specifications', title: '用品规格', align: 'left', rowspan: '3', width: 80 },
 				{ field: 'typeName', title: '用品类型', align: 'left', rowspan: '3', width: 120 },

@@ -15,9 +15,10 @@ layui.config({
 
 	    showGrid({
 		 	id: "showForm",
-		 	url: flowableBasePath + "assetarticles015",
-		 	params: {rowId: parent.rowId},
+		 	url: flowableBasePath + "assetarticles013",
+		 	params: {id: parent.rowId},
 		 	pagination: false,
+			method: 'GET',
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb) {
 		 		hdb.registerHelper("compare1", function(v1, options) {
@@ -33,8 +34,8 @@ layui.config({
 				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["admAssetArticlesType"]["key"], 'select', "typeId", json.bean.typeId, form);
 
 		 		var userNames = [];
-		 		userList = [].concat(json.bean.assetAdmin);
-		 		$.each(json.bean.assetAdmin, function(i, item) {
+		 		userList = [].concat(json.bean.assetAdminMation);
+		 		$.each(json.bean.assetAdminMation, function(i, item) {
 		 			userNames.push(item.name);
 		 		});
 		 		// 管理人员选择
@@ -55,15 +56,15 @@ layui.config({
 		 	        if (winui.verifyForm(data.elem)) {
 		 	        	var params = {
 	 	        			id: parent.rowId,
-	 	        			articlesName: $("#articlesName").val(),
+							name: $("#name").val(),
 	 	        			typeId: $("#typeId").val(),
 	 	        			specifications: $("#specifications").val(),
 	 	        			unitOfMeasurement: $("#unitOfMeasurement").val(),
 	 	        			initialNum: json.bean.initialNum,
 	 	        			residualNum: $("#residualNum").val(),
 	 	        			storageArea: $("#storageArea").val(),
-	 	        			roomAddDesc: $("#roomAddDesc").val(),
-							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
+							remark: $("#remark").val(),
+							enclosureInfo: JSON.stringify({enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')}),
 							assetAdmin: systemCommonUtil.tagEditorGetItemData('assetAdmin', userList)
 	 	 	        	};
 	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "writeAssetArticlesMation", params: params, type: 'json', method: "POST", callback: function (json) {

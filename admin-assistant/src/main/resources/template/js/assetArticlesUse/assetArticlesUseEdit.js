@@ -56,7 +56,7 @@ layui.config({
 					resetAssetList(thisRowNum, list); //重置选择行的用品列表
 				} else {
 					//类型对应的用品不存在js对象中
-					AjaxPostUtil.request({url: flowableBasePath + "assetarticles018", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
+					AjaxPostUtil.request({url: flowableBasePath + "assetarticles018", params: {typeId: thisRowValue}, type: 'json', method: 'GET', callback: function(json) {
 						assetArticles.push({
 							id: thisRowValue,
 							list: json.rows
@@ -238,7 +238,7 @@ layui.config({
 				form.render('select');
 			} else {
 				//类型对应的用品不存在js对象中
-				AjaxPostUtil.request({url: flowableBasePath + "assetarticles018", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
+				AjaxPostUtil.request({url: flowableBasePath + "assetarticles018", params: {typeId: thisRowValue}, type: 'json', method: 'GET', callback: function(json) {
 					assetArticles.push({
 						id: thisRowValue,
 						list: json.rows

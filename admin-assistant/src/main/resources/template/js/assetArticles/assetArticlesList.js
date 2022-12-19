@@ -11,13 +11,10 @@ layui.config({
 		form = layui.form,
 		table = layui.table;
 
-	// 用品类别
-	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["admAssetArticlesType"]["key"], 'select', "typeId", '', form);
-
 	// 用品列表
 	table.render({
-		id: 'liebiaoTable',
-		elem: '#liebiaoTable',
+		id: 'messageTable',
+		elem: '#messageTable',
 		method: 'post',
 		url: flowableBasePath + 'assetarticles012',
 		where: getTableParams(),
@@ -27,55 +24,59 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'articlesName', title: '名称', width: 200, templet: function (d) {
-				return '<a lay-event="liebiaoDedails" class="notice-title-click">' + d.articlesName + '</a>';
+			{ field: 'name', title: '名称', width: 200, templet: function (d) {
+				return '<a lay-event="dedails" class="notice-title-click">' + d.name + '</a>';
 			}},
 			{ field: 'typeName', title: '类别', width: 200 },
 			{ field: 'articlesNum', title: '编号', width: 270},
 			{ field: 'specifications', title: '规格', width: 100},
 			{ field: 'residualNum', title: '库存数量', width: 100 },
-			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#liebiaoTableBar'}
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#liebiaoTableBar' }
 		]],
 		done: function(json) {
 			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 		}
 	});
 
-	// 用品列表的操作事件
-	table.on('tool(liebiaoTable)', function (obj) {
+	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'liebiaoDedails') { //用品详情
-        	liebiaoDedails(data);
-        } else if (layEvent === 'liebiaoEdit') { //用品编辑
-        	liebiaoEdit(data);
-        } else if (layEvent === 'liebiaoDelete') { //删除用品
-        	liebiaoDelete(data);
+        if (layEvent === 'dedails') { //用品详情
+        	details(data);
+        } else if (layEvent === 'edit') { //用品编辑
+        	edit(data);
+        } else if (layEvent === 'delet') { //删除用品
+        	delet(data);
         }
     });
 	
-	form.render();
-	
 	// 新增用品
-	$("body").on("click", "#addArticlesBean", function() {
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/assetarticles/assetarticlesadd.html", 
-			title: "新增用品",
-			pageId: "assetarticlesadd",
+			url: "../../tpl/assetArticles/assetArticlesAdd.html",
+			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+			pageId: "assetArticlesAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadLiebiaoTable();
+				loadTable();
 			}});
     });
 	
 	// 用品详情
-	function liebiaoDedails(data) {
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/assetarticles/assetarticlesdetails.html", 
-			title: "用品详情",
-			pageId: "assetarticlesdetails",
+			url: "../../tpl/assetArticles/assetArticlesDetails.html",
+			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+			pageId: "assetArticlesDetails",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}
@@ -83,23 +84,23 @@ layui.config({
 	}
 	
 	// 删除用品
-	function liebiaoDelete(data) {
+	function delet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "assetarticles014", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "assetarticles014", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-				loadLiebiaoTable();
+				loadTable();
     		}});
 		});
 	}
     
 	// 编辑用品
-	function liebiaoEdit(data) {
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/assetarticles/assetarticlesedit.html", 
-			title: "编辑用品",
-			pageId: "assetarticlesedit",
+			url: "../../tpl/assetArticles/assetArticlesEdit.html",
+			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
+			pageId: "assetArticlesEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -107,28 +108,19 @@ layui.config({
 			}
 		});
 	}
-	
-    // 刷新用品数据
-    $("body").on("click", "#reloadLieBiaoTable", function() {
+
+	form.render();
+	$("body").on("click", "#reloadTable", function() {
 		loadTable();
-    });
-    
-    // 刷新用品列表数据
-    function loadTable() {
-    	table.reloadData("liebiaoTable", {where: getTableParams()});
-    }
-    
-	// 搜索列表表单
-	$("body").on("click", "#liebiaoSearch", function() {
-    	table.reloadData("liebiaoTable", {page: {curr: 1}, where: getTableParams()});
 	});
-	
-    function getTableParams() {
-    	return {
-    		articlesName: $("#articlesName").val(),
-    		typeId: $("#typeId").val()
-    	};
-    }
+
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
+
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
     
     exports('assetArticlesList', {});
 });

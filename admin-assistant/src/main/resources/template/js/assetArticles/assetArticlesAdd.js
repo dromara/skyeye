@@ -22,14 +22,14 @@ layui.config({
  	    form.on('submit(formAddBean)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
  	        	var params = {
-        			articlesName: $("#articlesName").val(),
+					name: $("#name").val(),
         			typeId: $("#typeId").val(),
         			specifications: $("#specifications").val(),
         			unitOfMeasurement: $("#unitOfMeasurement").val(),
         			initialNum: $("#initialNum").val(),
         			storageArea: $("#storageArea").val(),
-        			roomAddDesc: $("#roomAddDesc").val(),
-					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
+        			remark: $("#remark").val(),
+					enclosureInfo: JSON.stringify({enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')}),
 					assetAdmin: systemCommonUtil.tagEditorGetItemData('assetAdmin', userList)
  	        	};
  	        	AjaxPostUtil.request({url: flowableBasePath + "writeAssetArticlesMation", params: params, type: 'json', method: "POST", callback: function (json) {
