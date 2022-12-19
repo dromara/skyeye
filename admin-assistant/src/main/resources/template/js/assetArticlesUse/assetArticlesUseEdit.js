@@ -174,7 +174,7 @@ layui.config({
 			subType: subType, // 1：保存为草稿  2.提交到工作流  3.在工作流中编辑
 			approvalId: approvalId,
 		};
-		AjaxPostUtil.request({url: flowableBasePath + "assetarticles022", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "writeAssetArticlesApplyUse", params: params, type: 'json', method: 'POST', callback: function(json) {
 			parent.layer.close(index);
 			parent.refreshCode = '0';
 		}});
