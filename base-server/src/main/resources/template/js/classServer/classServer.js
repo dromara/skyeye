@@ -38,7 +38,7 @@ layui.config({
             pageUrl: '../../tpl/classServer/classServerDetails.html'
         }, {
             title: '属性信息',
-            pageUrl: '../../tpl/classServer/classServerAttrList.html'
+            pageUrl: '../../tpl/attr/attrList.html'
         }];
 
         if (chooseTreeNode.classMation.flowable) {
@@ -48,7 +48,7 @@ layui.config({
             });
             defaultList.push({
                 title: '流程属性信息',
-                pageUrl: '../../tpl/classServer/classServerProcessAttrList.html'
+                pageUrl: '../../tpl/processAttr/processAttrList.html'
             });
         }
 

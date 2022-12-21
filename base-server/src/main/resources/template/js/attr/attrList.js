@@ -22,7 +22,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + '',
+	    url: reqBasePath + 'queryAttrDefinitionList',
 	    where: {className: objectId},
 	    even: true,
 	    page: false,
@@ -55,5 +55,5 @@ layui.config({
 	
 	form.render();
 
-    exports('classServerProcessAttrList', {});
+    exports('attrList', {});
 });
