@@ -86,9 +86,9 @@ layui.config({
 			return false;
 		}
 		_openNewWindows({
-			url: "../../tpl/processAttr/teamTemplateEdit.html",
+			url: "../../tpl/processAttr/processAttrEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-			pageId: "teamTemplateEdit",
+			pageId: "processAttrEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
