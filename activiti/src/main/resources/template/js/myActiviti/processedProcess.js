@@ -77,9 +77,9 @@ layui.config({
 		//历史审批任务id
 		hisTaskId = data.hisTaskId;
 		_openNewWindows({
-			url: "../../tpl/activiticommon/activitiwithdraw.html", 
+			url: "../../tpl/activitiCommon/revokeActiviti.html",
 			title: "撤回",
-			pageId: "activitiwithdraw",
+			pageId: "revokeActiviti",
 			area: ['70vw', '40vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});

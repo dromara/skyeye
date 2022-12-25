@@ -37,12 +37,17 @@ var activitiUtil = {
      * @param data
      */
     activitiDetails: function (data) {
+        var tmpList = ['com.skyeye.eve.articles.service.impl.AssetArticlesApplyUseServiceImpl'];
         taskType = data.taskType;
         processInstanceId = data.processInstanceId;
+        var url = "../../tpl/activitiCommon/processDetails.html";
+        if (tmpList.indexOf(data.serviceClassName) >= 0) {
+            url = "../../tpl/activitiCommon/processInstanceDetails.html";
+        }
         _openNewWindows({
-            url: "../../tpl/activiticommon/myactivitidetails.html",
+            url: url,
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "myactivitidetails",
+            pageId: "processDetails",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
             }

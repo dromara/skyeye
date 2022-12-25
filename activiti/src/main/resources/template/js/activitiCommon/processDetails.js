@@ -134,5 +134,5 @@ layui.config({
     
     form.render();
     
-    exports('myactivitidetailspagesub', {});
+    exports('processDetails', {});
 });
