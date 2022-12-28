@@ -38,7 +38,7 @@ layui.config({
 	    limit: getLimit(),
 	    cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'attrKey', title: '属性', align: 'left', width: 150 },
+			{ field: 'label', title: '属性', align: 'left', width: 150 },
 			{ field: 'proportion', title: '宽度比例', align: 'left', width: 120, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("widthScale", 'id', d.proportion, 'name');
 			}},

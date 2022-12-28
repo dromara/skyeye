@@ -27,7 +27,9 @@ layui.config({
     	tableTemplate = $("#tableTemplate").html(),//表格展示
 		voucherTemplate = $("#voucherTemplate").html();//凭证展示
 
-    AjaxPostUtil.request({url: flowableBasePath + "activitimode025", params: {processInstanceId: processInstanceId}, type: 'json', method: 'GET', callback: function(j){
+    AjaxPostUtil.request({url: flowableBasePath + "queryBusinessData", params: {processInstanceId: processInstanceId}, type: 'json', method: 'POST', callback: function(json) {
+		console.log(json);
+		dsFormUtil.initSequenceDataDetails('showForm', json.rows);
 		var jsonStr = "";//实体json对象
 		var str = "";
 		$.each(j.rows, function(i, item) {

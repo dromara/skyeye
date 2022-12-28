@@ -30,9 +30,6 @@
 			</ul>
 			<div class="layui-tab-content">
 				<div class="layui-tab-item layui-show">
-					<div class="layui-form-item layui-col-xs12">
-			   			<span class="hr-title" id="activitiTitle"></span><hr>
-			    	</div>
 			    	<div id="showForm" style="height: auto; width: 100%; float: left;">
 			    		
 			    	</div>
@@ -49,80 +46,6 @@
 		</div>
 	</div>
 	
-	<!-- 文本展示 -->
-	<script type="text/x-handlebars-template" id="textTemplate">
-        {{#bean}}
-            <div class="layui-form-item layui-col-xs{{proportion}}">
-	            <label class="layui-form-label">{{name}}：</label>
-	            <div class="layui-input-block ver-center">
-        			{{value}}
-        		</div>
-	        </div>
-        {{/bean}}
-    </script>
-    
-    <!-- 附件展示 -->
-    <script type="text/x-handlebars-template" id="enclosureTemplate">
-        {{#bean}}
-            <div class="layui-form-item layui-col-xs{{proportion}}">
-	            <label class="layui-form-label">{{name}}：</label>
-	            <div class="layui-input-block ver-center">
-        			{{#each value}}
-						<a rowid="{{id}}" class="enclosureItem" rowpath="{{fileAddress}}" href="javascript:;" style="color:blue;">{{name}}</a><br>
-					{{/each}}
-        		</div>
-	        </div>
-        {{/bean}}
-    </script>
-    
-    <!-- 富文本展示 -->
-    <script type="text/x-handlebars-template" id="eichTextTemplate">
-        {{#bean}}
-            <div class="layui-form-item layui-col-xs{{proportion}}">
-	            <label class="layui-form-label">{{name}}：</label>
-	            <div class="layui-input-block ver-center">
-        			{{{value}}}
-        		</div>
-	        </div>
-        {{/bean}}
-    </script>
-    
-    <!-- 图片展示 -->
-    <script type="text/x-handlebars-template" id="picTemplate">
-        {{#bean}}
-            <div class="layui-form-item layui-col-xs{{proportion}}">
-	            <label class="layui-form-label">{{name}}：</label>
-	            <div class="layui-input-block ver-center">
-        			{{#each photo}}
-                        <img src="{{photoValue}}" class="photo-img">
-                    {{/each}}
-        		</div>
-	        </div>
-        {{/bean}}
-    </script>
-    
-    <!-- 表格展示 -->
-    <script type="text/x-handlebars-template" id="tableTemplate">
-        {{#bean}}
-            <div class="layui-form-item layui-col-xs{{proportion}}">
-	            <label class="layui-form-label">{{name}}：</label>
-	            <div class="layui-input-block ver-center" id="showTable{{orderBy}}">
-        		</div>
-	        </div>
-        {{/bean}}
-    </script>
-
-	<!-- 凭证展示 -->
-	<script type="text/x-handlebars-template" id="voucherTemplate">
-		{{#bean}}
-		<div class="layui-form-item layui-col-xs{{proportion}}">
-			<label class="layui-form-label">{{name}}：</label>
-			<div class="layui-input-block ver-center" id="showVoucher{{orderBy}}" style="overflow-x: auto;">
-			</div>
-		</div>
-		{{/bean}}
-	</script>
-    
     <!-- 时间线审批历史列表模板 -->
     <script type="text/x-handlebars-template" id="timeTreeApprovalHistory">
 		{{#bean}}

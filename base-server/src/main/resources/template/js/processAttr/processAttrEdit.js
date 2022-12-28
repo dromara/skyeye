@@ -11,6 +11,7 @@ layui.config({
 		form = layui.form,
 		table = layui.table,
 		soulTable = layui.soulTable;
+	var childServiceClassName = '';
 	var tableDataList = new Array();
 	var alignmentData;
 	var rowNum = 1;
@@ -47,9 +48,10 @@ layui.config({
 						winui.window.msg('请选择表格属性.', {icon: 2, time: 2000});
 						return false;
 					}
+					console.log(tableDataList)
 					$.each(tableDataList, function (i, item) {
 						item.id = null;
-						item.className = parent.objectId;
+						item.className = childServiceClassName;
 						item.parentAttrKey = $("#attrKey").val();
 						item.orderBy = i + 1;
 						item.actFlowId = parent.$("#actFlowId").val();
@@ -101,6 +103,9 @@ layui.config({
 			var childAttr = [];
 			AjaxPostUtil.request({url: reqBasePath + "queryChildAttrDefinitionList", params: params, type: 'json', method: "POST", callback: function (json) {
 				childAttr = [].concat(json.rows);
+				if (childAttr.length > 0) {
+					childServiceClassName = childAttr[0].className;
+				}
 			}, async: false});
 			table.render({
 				id: 'messageTable',
@@ -145,7 +150,7 @@ layui.config({
 					}},
 					{ field: 'templet', title: '脚本', align: 'left', width: 240, templet: function (d) {
 						return `<input type="text" id="templet${d.id}" placeholder="请填写脚本" cus-id="${d.id}" class="layui-input tableInput" ` +
-							`value="` + (isNull(d.templet) ? "" : d.templet) + `"/>`;
+							`value='` + (isNull(d.templet) ? "" : d.templet) + `'/>`;
 					}},
 				]],
 				done: function(json) {
@@ -163,13 +168,13 @@ layui.config({
 
 	form.on('select(tableSelect)', function(data) {
 		var id = data.elem.id;
-		buildData($(`#${id}`))
+		buildData($(`#${id}`));
 	});
 	$("body").on("input", ".tableInput", function () {
-		buildData($(this))
+		buildData($(this));
 	});
 	$("body").on("change", ".tableInput", function () {
-		buildData($(this))
+		buildData($(this));
 	});
 
 	function buildData(_this) {

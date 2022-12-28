@@ -11,6 +11,7 @@ layui.config({
 		form = layui.form,
 		table = layui.table,
 		soulTable = layui.soulTable;
+	var childServiceClassName = '';
 	var tableDataList = new Array();
 	var rowNum = 1;
 	$("#tableBox").hide();
@@ -47,6 +48,9 @@ layui.config({
 			var childAttr = [];
 			AjaxPostUtil.request({url: reqBasePath + "queryChildAttrDefinitionList", params: params, type: 'json', method: "POST", callback: function (json) {
 				childAttr = [].concat(json.rows);
+				if (childAttr.length > 0) {
+					childServiceClassName = childAttr[0].className;
+				}
 			}, async: false});
 			table.render({
 				id: 'messageTable',
@@ -140,7 +144,7 @@ layui.config({
 				}
 				$.each(tableDataList, function (i, item) {
 					item.id = null;
-					item.className = parent.objectId;
+					item.className = childServiceClassName;
 					item.parentAttrKey = $("#attrKey").val();
 					item.orderBy = i + 1;
 					item.actFlowId = parent.$("#actFlowId").val();

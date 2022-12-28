@@ -1,4 +1,5 @@
 
+
 var rowId = "";
 
 layui.config({
@@ -12,7 +13,7 @@ layui.config({
 		form = layui.form,
 		table = layui.table;
 
-	// 未申领的资产明细列表
+	// 资产明细列表
 	table.render({
 		id: 'messageTable',
 		elem: '#messageTable',
@@ -64,6 +65,7 @@ layui.config({
 	// 详情
 	function details(data) {
 		rowId = data.id;
+		// todo 资产明细列表
 		_openNewWindows({
 			url: "",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],

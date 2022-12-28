@@ -1,3 +1,4 @@
+
 // 动态表单工具函数
 var dsFormUtil = {
 
@@ -12,10 +13,13 @@ var dsFormUtil = {
     mastHaveImport: ['laydate', 'layedit', 'colorpicker', 'slider', 'fileUpload', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx', 'solr', 'sql', 'vue',
         'matchbrackets', 'closebrackets', 'showHint', 'anywordHint', 'lint', 'jsonLint', 'foldcode', 'foldgutter', 'braceFold', 'commentFold', 'form'],
     showType: {
-        '1': '{{#bean}}<div class="layui-form-item {{defaultWidth}}"><label class="layui-form-label">{{labelContent}}：</label><div class="layui-input-block ver-center">{{text}}</div></div>{{/bean}}', // 文本展示
-        '2': '{{#bean}}<div class="layui-form-item {{defaultWidth}}"><label class="layui-form-label">{{labelContent}}：</label><div class="layui-input-block ver-center">{{#each text}}<a rowid="{{id}}" class="enclosureItem" rowpath="{{fileAddress}}" href="javascript:;" style="color:blue;">{{name}}</a><br>{{/each}}</div></div>{{/bean}}', // 附件展示
-        '3': '{{#bean}}<div class="layui-form-item {{defaultWidth}}"><label class="layui-form-label">{{labelContent}}：</label><div class="layui-input-block ver-center">{{{text}}}</div></div>{{/bean}}', // 富文本展示
-        '4': '{{#bean}}<div class="layui-form-item {{defaultWidth}}"><label class="layui-form-label">{{labelContent}}：</label><div class="layui-input-block ver-center">{{#each photo}}<img src="{{photoValue}}" class="photo-img">{{/each}}</div></div>{{/bean}}', // 图片展示
+        '1': '{{#bean}}<div class="layui-form-item {{proportion}}"><label class="layui-form-label">{{label}}：</label><div class="layui-input-block ver-center">{{displayValue}}</div></div>{{/bean}}', // 文本展示
+        '2': '{{#bean}}<div class="layui-form-item {{proportion}}"><label class="layui-form-label">{{label}}：</label><div class="layui-input-block ver-center">{{#each displayValue}}<a rowid="{{id}}" class="enclosureItem" rowpath="{{fileAddress}}" href="javascript:;" style="color:blue;">{{name}}</a><br>{{/each}}</div></div>{{/bean}}', // 附件展示
+        '3': '{{#bean}}<div class="layui-form-item {{proportion}}"><label class="layui-form-label">{{label}}：</label><div class="layui-input-block ver-center">{{{displayValue}}}</div></div>{{/bean}}', // 富文本展示
+        '4': '{{#bean}}<div class="layui-form-item {{proportion}}"><label class="layui-form-label">{{label}}：</label><div class="layui-input-block ver-center">{{#each photo}}<img src="{{photoValue}}" class="photo-img">{{/each}}</div></div>{{/bean}}', // 图片展示
+        '5': '{{#bean}}<div class="layui-form-item {{proportion}}"><label class="layui-form-label">{{label}}：</label><div class="layui-input-block ver-center" id="showTable{{orderBy}}">' +
+            '<table id="messageTable{{orderBy}}" lay-filter="messageTable{{orderBy}}"></table></div></div>{{/bean}}', // 表格展示
+        '6': '{{#bean}}<div class="layui-form-item {{proportion}}"><label class="layui-form-label">{{label}}：</label><div class="layui-input-block ver-center" id="showVoucher{{orderBy}}"></div></div>{{/bean}}', // 凭证展示
     },
 
     /**
@@ -301,13 +305,10 @@ var dsFormUtil = {
             var jsonStr = {
                 bean: item
             };
-            if(item.showType == 1){//文本展示
-            } else if (item.showType == 2){//附件展示
-            } else if (item.showType == 3){//富文本展示
-            } else if (item.showType == 4){//图片展示
+            if (item.showType == 4) { // 图片展示
                 var photoValue = [];
-                if (!isNull(jsonStr.bean.text)){
-                    photoValue = item.text.split(",");
+                if (!isNull(jsonStr.bean.displayValue)){
+                    photoValue = item.displayValue.split(",");
                 }
                 var rows = [];
                 $.each(photoValue, function(j, row){
@@ -315,9 +316,50 @@ var dsFormUtil = {
                 });
                 jsonStr.bean.photo = rows;
             }
+
+            // 加载html
             var str = getDataUseHandlebars(dsFormUtil.showType[item.showType], jsonStr);
             $("#" + customBoxId).append(str);
+
+            if (item.showType == 5) { // 表格展示
+                var _js = `<script>
+                        layui.define(["jquery", 'table'], function(exports) {
+                            var jQuery = layui.jquery,
+                                table = layui.table;
+                            table.render({
+                                id: "messageTable${item.orderBy}",
+                                elem: "#messageTable${item.orderBy}",
+                                data: ` + JSON.stringify(item.displayValue) + `,
+                                page: false,
+                                cols: ` + JSON.stringify(dsFormUtil.getTableHead(item.attrTransformTableList)) + `
+                            });
+                        });
+                       </script>`;
+                console.log(_js)
+                $("#" + customBoxId).append(_js);
+            } else  if (item.showType == 6) { // 凭证展示
+                var boxId = "showVoucher" + item.orderBy;
+                // 初始化凭证
+                voucherUtil.initDataDetails(boxId, item.value);
+            }
         });
+    },
+
+    getTableHead: function (attrTransformTableList) {
+        var header = [];
+        $.each(attrTransformTableList, function (i, item) {
+            var field = {
+                field: item.attrKey,
+                title: item.label,
+                align: item.align,
+                width: item.width
+            };
+            if (!isNull(item.templet)) {
+                field['templet'] = item.templet;
+            }
+            header.push(field);
+        });
+        return [header];
     },
 
     /**

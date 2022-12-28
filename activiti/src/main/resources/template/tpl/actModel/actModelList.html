@@ -34,19 +34,9 @@
 	    	<div style="margin:auto 10px;">
         		<table id="messageTable" lay-filter="messageTable"></table>
         		<script type="text/html" id="tableBar">
-					{{# if(d.state == 3){ }}
-						{{# if(auth('1564106558827')){ }}
-            				<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-						{{# } }}
-						{{# if(auth('1564106622099')){ }}
-            				<a class="layui-btn layui-btn-xs" lay-event="up">上线</a>
-						{{# } }}
-						{{# if(auth('1564106604765')){ }}
-            				<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">移除</a>
-						{{# } }}
-					{{# } else if (d.state == 2 && auth('1564106635178')){ }}
+					{{# if (d.state == 2 && auth('1564106635178')){ }}
             			<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="down">下线</a>
-					{{# } else if (d.state == 1){ }}
+					{{# } else if (d.state == 1 || d.state == 3) { }}
 						{{# if(auth('1564106558827')){ }}
             				<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 						{{# } }}
