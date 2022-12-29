@@ -1,3 +1,4 @@
+/*时间树,插件：flow*/
 @charset "utf-8";
 * {
 	margin: 0;
@@ -8,10 +9,6 @@
 a,
 img {
 	border: 0
-}
-
-body {
-	font: 12px/180% Arial, Helvetica, sans-serif, "新宋体"
 }
 
 .demo {

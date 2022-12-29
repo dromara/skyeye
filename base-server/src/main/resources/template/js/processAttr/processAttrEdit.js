@@ -48,7 +48,6 @@ layui.config({
 						winui.window.msg('请选择表格属性.', {icon: 2, time: 2000});
 						return false;
 					}
-					console.log(tableDataList)
 					$.each(tableDataList, function (i, item) {
 						item.id = null;
 						item.className = childServiceClassName;

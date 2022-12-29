@@ -322,21 +322,14 @@ var dsFormUtil = {
             $("#" + customBoxId).append(str);
 
             if (item.showType == 5) { // 表格展示
-                var _js = `<script>
-                        layui.define(["jquery", 'table'], function(exports) {
-                            var jQuery = layui.jquery,
-                                table = layui.table;
-                            table.render({
-                                id: "messageTable${item.orderBy}",
-                                elem: "#messageTable${item.orderBy}",
-                                data: ` + JSON.stringify(item.displayValue) + `,
-                                page: false,
-                                cols: ` + JSON.stringify(dsFormUtil.getTableHead(item.attrTransformTableList)) + `
-                            });
-                        });
-                       </script>`;
-                console.log(_js)
-                $("#" + customBoxId).append(_js);
+                var table = layui.table;
+                table.render({
+                    id: "messageTable" + item.orderBy,
+                    elem: "#messageTable" + item.orderBy,
+                    data: item.displayValue,
+                    page: false,
+                    cols: dsFormUtil.getTableHead(item.attrTransformTableList)
+                });
             } else  if (item.showType == 6) { // 凭证展示
                 var boxId = "showVoucher" + item.orderBy;
                 // 初始化凭证
@@ -352,10 +345,11 @@ var dsFormUtil = {
                 field: item.attrKey,
                 title: item.label,
                 align: item.align,
-                width: item.width
+                width: item.width,
+                templet: null
             };
             if (!isNull(item.templet)) {
-                field['templet'] = item.templet;
+                field['templet'] = eval('(' + item.templet + ')');
             }
             header.push(field);
         });
