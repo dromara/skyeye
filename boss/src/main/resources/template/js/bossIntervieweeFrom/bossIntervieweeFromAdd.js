@@ -11,7 +11,7 @@ layui.config({
 	    var $ = layui.$,
 	    	textool = layui.textool;
 	    
-	    textool.init({eleId: 'desc', maxlength: 400});
+	    textool.init({eleId: 'remark', maxlength: 400});
 	    
 	    matchingLanguage();
  		form.render();
@@ -20,9 +20,9 @@ layui.config({
  	        	var params = {
 					title: $("#title").val(),
 					fromUrl: $("#fromUrl").val(),
- 	        		desc: $("#desc").val()
+					remark: $("#remark").val()
  	        	};
- 	        	AjaxPostUtil.request({url: flowableBasePath + "bossIntervieweeFrom002", params: params, type: 'json', method: "POST", callback: function (json) {
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "writeBossIntervieweeFrom", params: params, type: 'json', method: "POST", callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
  	        	}});

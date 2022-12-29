@@ -19,7 +19,7 @@ layui.config({
 			method: "GET",
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendAfter:function (json) {
-		 		textool.init({eleId: 'desc', maxlength: 500});
+		 		textool.init({eleId: 'remark', maxlength: 500});
 
 			    matchingLanguage();
 		 	    form.on('submit(formEditBean)', function (data) {
@@ -28,10 +28,10 @@ layui.config({
 		 	        		id: parent.rowId,
 							title: $("#title").val(),
 							fromUrl: $("#fromUrl").val(),
-							desc: $("#desc").val()
+							remark: $("#remark").val()
 		 	        	};
 
-		 	        	AjaxPostUtil.request({url: flowableBasePath + "bossIntervieweeFrom005", params: params, type: 'json', method: "PUT", callback: function (json) {
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "writeBossIntervieweeFrom", params: params, type: 'json', method: "POST", callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 		 	        	}});
