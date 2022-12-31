@@ -28,9 +28,15 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'processInstanceId', title: '流程ID', width: 100 },
-	        { field: 'taskType', title: '类型', width: 100 },
-	        { field: 'createName', title: '申请人', width: 120},
-	        { field: 'createTime', title: '申请时间', align: 'center', width: 150 },
+			{ field: 'taskType', title: '类型', width: 150, templet: function (d) {
+				return d.processMation.title;
+			}},
+			{ field: 'createName', title: '申请人', width: 120, templet: function (d) {
+				return d.processMation.createName;
+			}},
+			{ field: 'createTime', title: '申请时间', align: 'center', width: 150, templet: function (d) {
+				return d.processMation.createTime;
+			}},
 	        { field: 'name', title: '我处理的节点', width: 130, templet: function (d) {
 	        	return '[' + d.name + ']';
 	        }},

@@ -41,7 +41,8 @@ var activitiUtil = {
         taskType = data.taskType;
         processInstanceId = data.processInstanceId;
         var url = "../../tpl/activitiCommon/processDetails.html";
-        if (tmpList.indexOf(data.serviceClassName) >= 0) {
+        if (tmpList.indexOf(data.serviceClassName) >= 0
+            || tmpList.indexOf(data.processMation.objectKey) >= 0) {
             url = "../../tpl/activitiCommon/processInstanceDetails.html";
         }
         _openNewWindows({

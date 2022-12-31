@@ -35,9 +35,15 @@ layui.config({
 	        { field: 'processInstanceId', title: '流程ID', width: 280, templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.processInstanceId + '</a>';
 			}},
-	        { field: 'taskType', title: '类型', width: 150 },
-	        { field: 'createName', title: '申请人', width: 120},
-	        { field: 'createTime', title: '申请时间', align: 'center', width: 150 },
+	        { field: 'taskType', title: '类型', width: 150, templet: function (d) {
+				return d.processMation.title;
+			}},
+	        { field: 'createName', title: '申请人', width: 120, templet: function (d) {
+				return d.processMation.createName;
+			}},
+	        { field: 'createTime', title: '申请时间', align: 'center', width: 150, templet: function (d) {
+				return d.processMation.createTime;
+			}},
 	        { field: 'name', title: '当前节点', width: 130, templet: function (d) {
 	        	return '[' + d.name + ']';
 	        }},
