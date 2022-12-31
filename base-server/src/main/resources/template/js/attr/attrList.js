@@ -6,11 +6,12 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form', 'soulTable'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		table = layui.table;
+		table = layui.table,
+		soulTable = layui.soulTable;
 
 	objectId = GetUrlParam("objectId");
 	if (isNull(objectId)) {
@@ -26,6 +27,11 @@ layui.config({
 	    where: getTableParams(),
 	    even: true,
 	    page: false,
+		overflow: {
+			type: 'tips',
+			header: true,
+			total: true
+		},
 	    limits: getLimits(),
 	    limit: getLimit(),
 	    cols: [[
@@ -50,6 +56,7 @@ layui.config({
 			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar' }
 		]],
 	    done: function(json) {
+			soulTable.render(this);
 	    	matchingLanguage();
 	    }
 	});
@@ -72,7 +79,7 @@ layui.config({
 				className: objectId,
 				attrKey: data.attrKey
 			};
-			AjaxPostUtil.request({url: flowableBasePath + "deleteAttrDefinitionCustom", params: params, type: 'json', method: 'DELETE', callback: function (json) {
+			AjaxPostUtil.request({url: reqBasePath + "deleteAttrDefinitionCustom", params: params, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg('还原成功', {icon: 1, time: 2000});
 				loadTable();
 			}});
