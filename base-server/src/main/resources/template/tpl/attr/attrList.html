@@ -9,6 +9,12 @@
 <body>
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
+        <script type="text/html" id="tableBar">
+            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+            {{# if(!isNull(d.attrDefinitionCustomId)) { }}
+                <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="restore">还原</a>
+            {{# } }}
+        </script>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>

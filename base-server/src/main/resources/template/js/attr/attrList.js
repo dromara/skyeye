@@ -23,7 +23,7 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: reqBasePath + 'queryAttrDefinitionList',
-	    where: {className: objectId},
+	    where: getTableParams(),
 	    even: true,
 	    page: false,
 	    limits: getLimits(),
@@ -46,14 +46,61 @@ layui.config({
 					return '是';
 				}
 				return '否';
-			}}
+			}},
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar' }
 		]],
 	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});
-	
-	form.render();
 
+	table.on('tool(messageTable)', function (obj) {
+		var data = obj.data;
+		var layEvent = obj.event;
+		if (layEvent === 'edit') { // 编辑
+			edit(data);
+		} else if (layEvent === 'restore') { // 还原
+			restore(data);
+		}
+	});
+
+	// 删除
+	function restore(data) {
+		layer.confirm('还原操作', {icon: 3, title: '确定还原该数据吗？'}, function (index) {
+			layer.close(index);
+			var params = {
+				className: objectId,
+				attrKey: data.attrKey
+			};
+			AjaxPostUtil.request({url: flowableBasePath + "deleteAttrDefinitionCustom", params: params, type: 'json', method: 'DELETE', callback: function (json) {
+				winui.window.msg('还原成功', {icon: 1, time: 2000});
+				loadTable();
+			}});
+		});
+	}
+
+	// 编辑
+	function edit(data) {
+		_openNewWindows({
+			url: "../../tpl/attr/writeAttr.html?className=" + objectId + '&attrKey=' + data.attrKey,
+			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
+			pageId: "writeAttr",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}
+		});
+	}
+
+	form.render();
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
+
+	function getTableParams() {
+		return {className: objectId};
+	}
+	
     exports('attrList', {});
 });

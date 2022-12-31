@@ -31,7 +31,7 @@ layui.config({
 		initTable();
 
 		initTableChooseUtil.deleteAllRow('articlesList');
-		$.each(json.bean.assetArticles, function(i, item) {
+		$.each(json.bean.applyUseLnk, function(i, item) {
 			var list = findArticlesByTypeId(item.assetArticles.typeId);
 			var params = {
 				"typeId": {
@@ -188,7 +188,7 @@ layui.config({
 			id: parent.rowId,
 			title: $("#title").html(),
 			remark: $("#remark").val(),
-			assetArticles: JSON.stringify(tableData),
+			applyUseLnk: JSON.stringify(tableData),
 			enclosureInfo: JSON.stringify({enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')}),
 			formSubType: subType,
 			approvalId: approvalId,

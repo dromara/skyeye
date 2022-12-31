@@ -157,7 +157,7 @@ layui.config({
 		var params = {
 			title: $("#title").html(),
 			remark: $("#remark").val(),
-			assetArticles: JSON.stringify(tableData),
+			applyUseLnk: JSON.stringify(tableData),
 			enclosureInfo: JSON.stringify({enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')}),
 			formSubType: subType,
 			approvalId: approvalId
