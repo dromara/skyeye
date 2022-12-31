@@ -65,7 +65,7 @@ layui.config({
 				},
 				cols: [[
 					{ type: 'checkbox', align: 'center' },
-					{ field: 'attrKey', title: '属性', align: 'left', width: 150, templet: function (d) {
+					{ field: 'attrKey', title: '属性<i class="red">*</i>', align: 'left', width: 150, templet: function (d) {
 						var _html = `<select lay-filter="tableSelect" lay-search="" id="attrKey${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
 						$.each(childAttr, function (i, item) {
 							if (item.attrKey == d.attrKey) {
@@ -77,7 +77,11 @@ layui.config({
 						_html += `</select>`;
 						return _html;
 					}},
-					{ field: 'align', title: '对齐方式', align: 'left', width: 120, templet: function (d) {
+					{ field: 'name', title: '名称', align: 'left', width: 120, templet: function (d) {
+						return `<input type="text" id="name${d.id}" placeholder="请填写名称" cus-id="${d.id}" class="layui-input tableInput" ` +
+							`value="` + (isNull(d.name) ? "" : d.name) + `"/>`;
+					}},
+					{ field: 'align', title: '对齐方式<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
 						var _html = `<select lay-filter="tableSelect" lay-search="" id="align${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
 						$.each(alignmentData.rows, function (i, item) {
 							if (item.id == d.align) {
@@ -89,11 +93,11 @@ layui.config({
 						_html += `</select>`;
 						return _html;
 					}},
-					{ field: 'width', title: '宽度', align: 'left', width: 120, templet: function (d) {
+					{ field: 'width', title: '宽度<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
 						return `<input type="text" id="width${d.id}" placeholder="请填写宽度" cus-id="${d.id}" class="layui-input tableInput" win-verify="required|number" ` +
 							`value="` + (isNull(d.width) ? "" : d.width) + `"/>`;
 					}},
-					{ field: 'templet', title: '脚本', align: 'left', width: 240, templet: function (d) {
+					{ field: 'templet', title: '脚本', align: 'left', width: 300, templet: function (d) {
 						return `<input type="text" id="templet${d.id}" placeholder="请填写脚本" cus-id="${d.id}" class="layui-input tableInput" ` +
 							`value="` + (isNull(d.templet) ? "" : d.templet) + `"/>`;
 					}},
@@ -138,17 +142,18 @@ layui.config({
 	form.on('submit(formAddBean)', function (data) {
 		if (winui.verifyForm(data.elem)) {
 			if ($("#showType").val() == 5) {
-				if (tableDataList.length == 0) {
+				if (table.cache.messageTable.length == 0) {
 					winui.window.msg('请选择表格属性.', {icon: 2, time: 2000});
 					return false;
 				}
-				$.each(tableDataList, function (i, item) {
+				$.each(table.cache.messageTable, function (i, item) {
 					item.id = null;
 					item.className = childServiceClassName;
 					item.parentAttrKey = $("#attrKey").val();
 					item.orderBy = i + 1;
 					item.actFlowId = parent.$("#actFlowId").val();
 				});
+				tableDataList = [].concat(table.cache.messageTable);
 			} else {
 				tableDataList = new Array();
 			}
