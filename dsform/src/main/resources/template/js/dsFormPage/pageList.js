@@ -13,13 +13,6 @@ layui.config({
 	
 	authBtn('1567731484858');
 
-	dsFormUtil.loadDsFormPageTypeByPId("firstTypeId", "0");
-	form.on('select(firstTypeId)', function(data) {
-		var thisRowValue = data.value;
-		dsFormUtil.loadDsFormPageTypeByPId("secondTypeId", isNull(thisRowValue) ? "-" : thisRowValue);
-		form.render('select');
-	});
-
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
@@ -33,8 +26,6 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'pageName', title: '页面名称', align: 'left', width: 120 },
-			{ field: 'firstTypeName', title: '一级分类', align: 'left', width: 120 },
-			{ field: 'secondTypeName', title: '二级分类', align: 'left', width: 120 },
 	        { field: 'pageDesc', title: '页面简介', align: 'left', width: 350 },
 	        { field: 'pageNum', title: '页面编号', align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
@@ -125,9 +116,7 @@ layui.config({
 
     function getTableParams() {
     	return {
-			pageName: $("#pageName").val(),
-			firstTypeId: $("#firstTypeId").val(),
-			secondTypeId: $("#secondTypeId").val()
+			pageName: $("#pageName").val()
     	};
 	}
 

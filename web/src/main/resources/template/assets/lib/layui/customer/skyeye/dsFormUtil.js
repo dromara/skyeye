@@ -86,27 +86,6 @@ var dsFormUtil = {
     },
 
     /**
-     * 根据父id加载动态表单页面分类信息
-     *
-     * @param domId 要加载的dom对象的id
-     * @param parentId 父id
-     */
-    loadDsFormPageTypeByPId: function (domId, parentId) {
-        showGrid({
-            id: domId,
-            url: flowableBasePath + "dsformpagetype006",
-            params: {parentId: parentId, language: languageType},
-            pagination: false,
-            method: "GET",
-            template: getFileContent('tpl/template/select-option.tpl'),
-            ajaxSendLoadBefore: function(hdb) {
-            },
-            ajaxSendAfter: function (json) {
-            }
-        });
-    },
-
-    /**
      * 加载动态表单到页面
      *
      * @param showBoxId 要追加的boxid后面

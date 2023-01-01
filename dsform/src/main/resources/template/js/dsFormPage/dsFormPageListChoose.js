@@ -34,14 +34,6 @@ layui.config({
 		$("#saveCheckBox").hide();
 	}
 
-	dsFormUtil.loadDsFormPageTypeByPId("firstTypeId", "0");
-
-	form.on('select(firstTypeId)', function(data) {
-		var thisRowValue = data.value;
-		dsFormUtil.loadDsFormPageTypeByPId("secondTypeId", isNull(thisRowValue) ? "-" : thisRowValue);
-		form.render('select');
-	});
-
 	var tableList = [];
 	table.render({
 	    id: 'messageTable',
@@ -56,8 +48,6 @@ layui.config({
 	    cols: [[
 	    	{ type: parent.dsFormUtil.chooseType ? 'checkbox' : 'radio', fixed: 'left'},
 			{ field: 'pageName', title: '页面名称', align: 'left', width: 120 },
-			{ field: 'firstTypeName', title: '一级分类', align: 'left', width: 120 },
-			{ field: 'secondTypeName', title: '二级分类', align: 'left', width: 120 },
 			{ field: 'pageDesc', title: '页面简介', align: 'left', width: 350 },
 			{ field: 'pageNum', title: '页面编号', align: 'center', width: 150 },
 	    ]],
@@ -131,9 +121,7 @@ layui.config({
 
 	function getTableParams() {
 		return {
-			pageName: $("#pageName").val(),
-			firstTypeId: $("#firstTypeId").val(),
-			secondTypeId: $("#secondTypeId").val()
+			pageName: $("#pageName").val()
 		};
 	}
 	
