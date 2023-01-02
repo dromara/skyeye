@@ -25,13 +25,16 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'pageName', title: '页面名称', align: 'left', width: 120 },
-	        { field: 'pageDesc', title: '页面简介', align: 'left', width: 350 },
-	        { field: 'pageNum', title: '页面编号', align: 'center', width: 150 },
+	        { field: 'name', title: '名称', align: 'left', width: 120 },
+	        { field: 'remark', title: '简介', align: 'left', width: 350 },
+	        { field: 'numCode', title: '编号', align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -60,7 +63,7 @@ layui.config({
 			}});
     });
 
-	// 表单控件
+	// 表单设计
 	function control(data) {
 		rowId = data.id;
 		_openNewWindows({
@@ -76,7 +79,7 @@ layui.config({
 	function delet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "dsformpage005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "deleteDsFormPage", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -98,26 +101,16 @@ layui.config({
 	}
 
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-		}
-		return false;
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
 	});
 
-	// 刷新数据
-    $("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
-    }
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
 
-    function getTableParams() {
-    	return {
-			pageName: $("#pageName").val()
-    	};
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 
     exports('pageList', {});

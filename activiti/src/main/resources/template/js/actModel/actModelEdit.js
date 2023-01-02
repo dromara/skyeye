@@ -27,44 +27,6 @@ layui.config({
 
 		 		textool.init({eleId: 'remark', maxlength: 200});
 		 		
-		 		// 初始化动态表单
-				showGrid({
-					id: "dsFormId",
-					url: flowableBasePath + "actmodletype020",
-					params: {},
-					pagination: false,
-					template: getFileContent('tpl/template/select-option-must.tpl'),
-					ajaxSendAfter: function (data) {
-						form.render('select');
-						$("#dsFormId").val(json.bean.dsFormId);
-					}
-				})
-		 		
-		 		// 设置页面类型
-		 		$("input:radio[name=pageTypes][value=" + json.bean.pageTypes + "]").attr("checked", true);
-
-				if (json.bean.pageTypes == 1) {
-					$(".TypeIsTwo").addClass("layui-hide");
-					$(".TypeIsOne").removeClass("layui-hide");
-				} else {
-					$(".TypeIsTwo").removeClass("layui-hide");
-					$(".TypeIsOne").addClass("layui-hide");
-				}
-		 		
-		 		// 页面类型变化事件
-		 		form.on('radio(pageTypes)', function (data) {
-		 			var val = data.value;
-					if (val == 1) {
-						// 指定页面
-						$(".TypeIsTwo").addClass("layui-hide");
-						$(".TypeIsOne").removeClass("layui-hide");
-					} else if (val == 2) {
-						// 动态表单
-						$(".TypeIsTwo").removeClass("layui-hide");
-						$(".TypeIsOne").addClass("layui-hide");
-					}
-		        });
-		 		
 		        matchingLanguage();
 		 		form.render();
 		 	    form.on('submit(formEditBean)', function (data) {
@@ -72,39 +34,14 @@ layui.config({
 		 	        	var params = {
 		 	        		id: parent.rowId,
 		 	        		title: $("#title").val(),
-		 	        		pageTypes: data.field.pageTypes,
 		 	        		tokenUrl: $("#tokenUrl").val(),
 		 	        		remark: $("#remark").val(),
 							commonUsed: data.field.commonUsed,
-							actFlowId: $("#actFlowId").attr("actFlowId")
+							actFlowId: $("#actFlowId").attr("actFlowId"),
+							addPageUrl: $("#addPageUrl").val(),
+							editPageUrl: $("#editPageUrl").val(),
+							revokeMapping: $("#revokeMapping").val()
 		 	        	};
-						if (params.pageTypes == 1) {
-							params.addPageUrl = $("#addPageUrl").val();
-							params.editPageUrl = $("#editPageUrl").val();
-							params.revokeMapping = $("#revokeMapping").val();
-							if (isNull(params.addPageUrl)) {
-								winui.window.msg("请输入新增页面地址", {icon: 2, time: 2000});
-								return false;
-							}
-							if (isNull(params.editPageUrl)) {
-								winui.window.msg("请输入编辑页面地址", {icon: 2, time: 2000});
-								return false;
-							}
-							if (isNull(params.revokeMapping)) {
-								winui.window.msg("请输入撤销接口", {icon: 2, time: 2000});
-								return false;
-							}
-							params.dsFormId = "";
-						} else if (params.pageTypes == 2) {
-							params.addPageUrl = "";
-							params.editPageUrl = "";
-							params.revokeMapping = "";
-							params.dsFormId = $("#dsFormId").val();
-							if (isNull(params.dsFormId)) {
-								winui.window.msg("请选择表单页面", {icon: 2, time: 2000});
-								return false;
-							}
-						}
 						// 获取图标信息
 						params = systemCommonUtil.getIconChoose(params);
 						if (!params["iconChooseResult"]) {

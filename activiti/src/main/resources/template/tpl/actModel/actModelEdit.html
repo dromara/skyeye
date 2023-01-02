@@ -30,39 +30,24 @@
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">流程类型<i class="red">*</i></label>
-			<div class="layui-input-block winui-radio">
-				<input type="radio" name="pageTypes" value="1" title="指定业务" lay-filter="pageTypes"/>
-				<input type="radio" name="pageTypes" value="2" title="动态表单" lay-filter="pageTypes"/>
-			</div>
-		</div>
-		<div class="layui-form-item TypeIsOne layui-col-xs12">
 			<label class="layui-form-label">新增页面<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="addPageUrl" name="addPageUrl" placeholder="请输入页面URL" class="layui-input" value="{{addPageUrl}}"/>
+				<input type="text" id="addPageUrl" name="addPageUrl" win-verify="required" placeholder="请输入页面URL" class="layui-input" value="{{addPageUrl}}"/>
 				<div class="layui-form-mid layui-word-aux">格式为：../../tpl/model/modelAdd.html</div>
 			</div>
 		</div>
-		<div class="layui-form-item TypeIsOne layui-col-xs12">
+		<div class="layui-form-item layui-col-xs12">
 			<label class="layui-form-label">编辑页面<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="editPageUrl" name="editPageUrl" placeholder="请输入页面URL" class="layui-input" value="{{editPageUrl}}"/>
+				<input type="text" id="editPageUrl" name="editPageUrl" win-verify="required" placeholder="请输入页面URL" class="layui-input" value="{{editPageUrl}}"/>
 				<div class="layui-form-mid layui-word-aux">格式为：../../tpl/model/modelEdit.html</div>
 			</div>
 		</div>
-		<div class="layui-form-item TypeIsOne layui-col-xs12">
+		<div class="layui-form-item layui-col-xs12">
 			<label class="layui-form-label">撤销接口<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="revokeMapping" name="revokeMapping" placeholder="请输入撤销接口" class="layui-input" value="{{revokeMapping}}"/>
+				<input type="text" id="revokeMapping" name="revokeMapping" win-verify="required" placeholder="请输入撤销接口" class="layui-input" value="{{revokeMapping}}"/>
 				<div class="layui-form-mid layui-word-aux">格式为：bbb001；直接填写接口名即可</div>
-			</div>
-		</div>
-		<div class="layui-form-item TypeIsTwo layui-col-xs12">
-			<label class="layui-form-label">表单页面<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<select lay-filter="dsFormId" lay-search="" id="dsFormId" name="dsFormId">
-
-				</select>
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12" id="iconMation">

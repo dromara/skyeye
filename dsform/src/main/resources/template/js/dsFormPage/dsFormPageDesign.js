@@ -35,16 +35,17 @@ layui.config({
 			if(typeof item.aData == 'string'){
 				obj = JSON.parse(item.aData);
 			}
-			item.context = getDataUseHandlebars(item.templateContent, obj);
+			item.context = getDataUseHandlebars(item.dsFormComponent.templateContent, obj);
 		} else if (item.associatedDataTypes == 2){//接口
 			AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params: {interfa: item.aData}, type: 'json', callback: function(j){
 				var obj = JSON.parse(j.bean.aData);
-				item.context = getDataUseHandlebars(item.templateContent, obj);
+				item.context = getDataUseHandlebars(item.dsFormComponent.templateContent, obj);
 	   		}, async: false});
 		}
+		item.value = item.defaultValue;
 		var jsonStr = {bean: item};
-		var html = getDataUseHandlebars('{{#bean}}' + item.htmlContent + '{{/bean}}', jsonStr);
-		var html_js = getDataUseHandlebars('{{#bean}}' + item.jsContent + '{{/bean}}', jsonStr);
+		var html = getDataUseHandlebars('{{#bean}}' + item.dsFormComponent.htmlContent + '{{/bean}}', jsonStr);
+		var html_js = getDataUseHandlebars('{{#bean}}' + item.dsFormComponent.jsContent + '{{/bean}}', jsonStr);
 		var jsCon = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + html_js + '})(jQuery);});</script>';
 		$(html).appendTo($("#showForm").get(0)).attr("rowid", item.id);
 		$("#showForm").append(jsCon);
@@ -54,12 +55,7 @@ layui.config({
 
 	function loadPageMation(json){
 		$.each(json.rows, function(i, item) {
-			if(parseInt(item.state) == 1){
-				// 加载非删除状态的数据
-				loadNewControl(item);
-			} else {
-				jsonArray.push(item);
-			}
+			loadNewControl(item);
 		});
 		loadFormItemDrop();
 		matchingLanguage();
@@ -96,11 +92,11 @@ layui.config({
 				$.each(json.bean, function (key, value) {
 					$.each(value, function (j, bean) {
 						bean.logo = systemCommonUtil.initIconShow(bean);
+						formPageControl.push(bean);
 					});
 				});
 			},
 		 	ajaxSendAfter:function (json) {
-		 		formPageControl = [].concat(json.rows);
 		 		form.render();
 		 	}
 		});
@@ -110,12 +106,8 @@ layui.config({
 	    $(".draggable").draggable({
 	        appendTo: "body",
 	        helper: "clone",
-			drag: function (event, ui) {
-	        	
-			},
-			stop: function () {
-
-			}
+			drag: function (event, ui) {},
+			stop: function () {}
 	    });
 	    $(".droppable").droppable({
 	        accept: ".draggable",
@@ -157,16 +149,14 @@ layui.config({
 		});
 		var params  = {
     		pageId: rowId,
-			defaultWidth: 'layui-col-xs12',
+			width: 'layui-col-xs12',
 			title: '标题',
 			linkedData: linkedData,
 			require: '',
 			placeholder: '',
 			defaultValue: '',
 			formContentId: id,
-			editableNodeId: '',
-			editableNodeName: '',
-			keyId: ''
+			attrKey: ''
 			
        	};
 		if(linkedData == 1){
@@ -183,28 +173,15 @@ layui.config({
     		params.associatedDataTypes = "";
     		params.aData = "";
     	}
-       	params = getDataScript(params);
        	// 保存控件
        	reqSaveData(params, templateContent);
-	}
-	
-	// 获取该控件的脚本信息
-	function getDataScript(params){
-		AjaxPostUtil.request({url: flowableBasePath + "queryDsFormContentMationById", params: {id: params.formContentId}, type: 'json', method: 'GET', callback: function (json) {
-			params.htmlContent = encodeURIComponent(json.bean.htmlContent);
-			params.jsContent = encodeURIComponent(json.bean.jsContent);
-    	}, async: false});
-    	return params;
 	}
 	
 	// 保存“新增控件”
     function reqSaveData(params, templateContent){
     	AjaxPostUtil.request({url: flowableBasePath + "dsformpage003", params: params, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-			var templateJson = json.bean;
-			templateJson.biaoJi = "1";
-			templateJson.templateContent = templateContent;
-			loadNewControl(templateJson);
+			loadNewControl(json.bean);
 			loadFormItemDrop();
 		}, async: false});
     }
@@ -230,14 +207,14 @@ layui.config({
 							obj = JSON.stringify(item.aData);
 						}
 						// json串
-						$("#JsonData").val(obj);
+						$("#jsonData").val(obj);
 					} else if (associatedDataTypes == "2") {
 						// 接口
-						$("#nterfac").val(item.aData);
+						$("#interfa").val(item.aData);
 					}
 					$("input:radio[name=associatedDataTypes][value=" + associatedDataTypes + "]").attr("checked", true);
 				}
-				$("#defaultWidth").val(item.defaultWidth);
+				$("#width").val(item.width);
 				form.render();
 				form.on('submit(formAddBean)', function (data) {
 					if (winui.verifyForm(data.elem)) {
@@ -251,16 +228,11 @@ layui.config({
 		 		form.on('select(require)',function(data) {
 		 			arr = data.value;
 		 		});
+
+				if (!isNull(item.require)) {
+					arr = item.require.split(",");
+				}
 				
-				// 可编辑节点Id
-			    $('#editableNodeId').tagEditor({
-			        placeholder: '请输入可编辑节点Id'
-			    });
-			    
-			    // 可编辑节点名称
-			    $('#editableNodeName').tagEditor({
-			        placeholder: '请输入可编辑节点名称'
-			    });
 				initRequire(item);
 				matchingLanguage();
 				return;
@@ -274,7 +246,7 @@ layui.config({
 		$("#showForm div[rowid='" + rowid + "']").remove();
 		$.each(jsonArray, function(i, item) {
 			if(item.id === rowid){
-				jsonArray[i].state = 0;
+				jsonArray[i].deleteFlag = 1;
 			}
 		});
 		$("#btnBoxDesignForm").empty();
@@ -291,14 +263,12 @@ layui.config({
     		return;
     	}
 		var newParams = jsonArray[inDataIndex];
-		newParams.labelContent = $("#title").val();
+		newParams.title = $("#title").val();
 		newParams.placeholder = $("#placeholder").val();
 		newParams.require = arr.join(",");
-		newParams.value = $("#defaultValue").val();
-		newParams.defaultWidth = $("#defaultWidth").val();
-		newParams.keyId = $("#keyId").val();
-		newParams.editableNodeId = data.field.editableNodeId;
-		newParams.editableNodeName = data.field.editableNodeName;
+		newParams.defaultValue = $("#defaultValue").val();
+		newParams.width = $("#width").val();
+		newParams.attrKey = $("#attrKey").val();
 		var linkedData; //控件关联的数据
 		var defaultData; //选择事件的默认数据
 		var tplContentVal; //数据展示模板的内容的值
@@ -320,7 +290,7 @@ layui.config({
 		if (newParams.linkedData == 1) {
 			newParams.associatedDataTypes = data.field.associatedDataTypes;
 			if (newParams.associatedDataTypes == 1) {
-				var defaultDataStr = $("#JsonData").val();
+				var defaultDataStr = $("#jsonData").val();
 				if (isNull(defaultDataStr)) {
 					winui.window.msg("请填写Json串！", {icon: 2, time: 2000});
 					return false;
@@ -339,7 +309,7 @@ layui.config({
 					}
 				}
 			} else if (newParams.associatedDataTypes == 2) {
-				var interfa = $("#nterfac").val();
+				var interfa = $("#interfa").val();
 				if (interfa.length == 0) {
 					winui.window.msg("请填写接口！", {icon: 2, time: 2000});
 					return false;
@@ -368,18 +338,16 @@ layui.config({
     	// 对控件进行排序
     	sortNodeData();
     	$("#showForm").empty();
-    	jsonArray.sort(getSortFun('asc','orderBy'));
+    	jsonArray.sort(getSortFun('asc', 'orderBy'));
     	var newJson = [].concat(jsonArray);
     	jsonArray = [];
     	loadPageMation({rows: newJson});
     }
     
-    function sortNodeData(){
+    function sortNodeData() {
     	$.each(jsonArray, function(i, item) {
-    		if(parseInt(item.state) == 1){
-	    		var inIndex = $("#showForm div[rowid='" + item.id + "']").index();
-	    		jsonArray[i].orderBy = inIndex / 2 + 1;
-    		}
+			var inIndex = $("#showForm div[rowid='" + item.id + "']").index();
+			jsonArray[i].orderBy = inIndex;
     	});
     }
     
@@ -407,14 +375,10 @@ layui.config({
 		form.render();
 	}
 	
-	$("body").on("keyup", ".keyIdName", function() {
-		$(this).val($(this).val().replace(/[^\w\.\/]/ig,''));
-	});
-    
-	//保存
+	// 保存
 	$("body").on("click", "#save", function() {
 		sortDataIn();
-		if(jsonArray.length == 0){
+		if (jsonArray.length == 0) {
 			winui.window.msg('保存页面不能为空！', {icon: 2, time: 2000});
 			return;
 		}

@@ -265,13 +265,6 @@ layui.config({
 					return '<a lay-event="dedails" class="notice-title-click">' + d.title + '</a>';
 				}},
 		        { field: 'actFlowName', title: '工作流模型', align: 'left', width: 120},
-				{ field: 'pageTypes', title: '流程类型', align: 'center', width: 120, templet: function (d) {
-					if (d.pageTypes == 1) {
-						return "指定业务";
-					} else if (d.pageTypes == 2) {
-						return "动态表单";
-					}
-				}},
 		        { field: 'addPageUrl', title: '新增页面', align: 'left', width: 200 },
 		        { field: 'editPageUrl', title: '编辑页面', align: 'left', width: 200 },
 		        { field: 'iconBg', title: '背景', align: 'center', width: 80 },

@@ -47,9 +47,9 @@ layui.config({
 	    limit: getLimit(),
 	    cols: [[
 	    	{ type: parent.dsFormUtil.chooseType ? 'checkbox' : 'radio', fixed: 'left'},
-			{ field: 'pageName', title: '页面名称', align: 'left', width: 120 },
-			{ field: 'pageDesc', title: '页面简介', align: 'left', width: 350 },
-			{ field: 'pageNum', title: '页面编号', align: 'center', width: 150 },
+			{ field: 'name', title: '名称', align: 'left', width: 120 },
+			{ field: 'remark', title: '简介', align: 'left', width: 350 },
+			{ field: 'numCode', title: '页面编号', align: 'center', width: 150 },
 	    ]],
 	    done: function(res, curr, count){
 			matchingLanguage();
@@ -85,6 +85,10 @@ layui.config({
 					form.render();
 				});
 			}
+
+			initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入名称", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -108,21 +112,16 @@ layui.config({
 	});
 
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-		}
-		return false;
-	});
-	
 	$("body").on("click", "#reloadTable", function() {
+		loadTable();
+	});
+
+	function loadTable() {
 		table.reloadData("messageTable", {where: getTableParams()});
-    });
+	}
 
 	function getTableParams() {
-		return {
-			pageName: $("#pageName").val()
-		};
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
     exports('dsFormPageListChoose', {});

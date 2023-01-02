@@ -13,7 +13,7 @@ layui.config({
 	showGrid({
 		id: "showForm",
 		url: flowableBasePath + "dsformpage006",
-		params: {rowId:parent.rowId},
+		params: {id: parent.rowId},
 		pagination: false,
 		method: "GET",
 		template: $("#showTemplate").html(),
@@ -24,11 +24,11 @@ layui.config({
 			form.on('submit(formEditBean)', function (data) {
 				if (winui.verifyForm(data.elem)) {
 					var params = {
-						rowId: parent.rowId,
-						pageName: $("#pageName").val(),
-						pageDesc: $("#pageDesc").val()
+						id: parent.rowId,
+						name: $("#name").val(),
+						remark: $("#remark").val()
 					};
-					AjaxPostUtil.request({url: flowableBasePath + "dsformpage007", params: params, type: 'json', method: "PUT", callback: function (json) {
+					AjaxPostUtil.request({url: flowableBasePath + "writeDsFormPage", params: params, type: 'json', method: "POST", callback: function (json) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';
 					}});

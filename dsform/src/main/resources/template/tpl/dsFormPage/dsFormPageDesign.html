@@ -52,7 +52,7 @@
 		<div class="layui-form-item layui-col-xs12">
 			<label class="layui-form-label">名称<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="title" name="title" win-verify="required" placeholder="请输入控件名称" class="layui-input" maxlength="18" value="{{labelContent}}"/>
+				<input type="text" id="title" name="title" win-verify="required" placeholder="请输入控件名称" class="layui-input" maxlength="18" value="{{title}}"/>
 			</div>
 		</div>
 		<div id="isAssociated" class="layui-hide">
@@ -66,13 +66,13 @@
 			<div class="layui-form-item layui-col-xs12 TypeIsOne">
 				<label class="layui-form-label">Json串<i class="red">*</i></label>
 				<div class="layui-input-block">
-					<textarea id="JsonData" name="JsonData" class="layui-textarea"></textarea>
+					<textarea id="jsonData" name="jsonData" class="layui-textarea"></textarea>
 				</div>
 			</div>
 			<div class="layui-form-item layui-col-xs12 TypeIsTwo layui-hide">
 				<label class="layui-form-label">接口<i class="red">*</i></label>
 				<div class="layui-input-block">
-					<input type="text" id="nterfac" name="nterfac" class="layui-input" placeholder="例如：http://localhost:8081/queryDsFormComponentMationToShow"/>
+					<input type="text" id="interfa" name="interfa" class="layui-input" placeholder="例如：http://localhost:8081/queryDsFormComponentMationToShow"/>
 				</div>
 			</div>
 		</div>
@@ -99,7 +99,7 @@
 		<div class="layui-form-item layui-col-xs12">
 			<label class="layui-form-label">宽度<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<select lay-filter="defaultWidth" lay-search="" id="defaultWidth" name="defaultWidth">
+				<select lay-filter="width" lay-search="" id="width" name="width">
 					<option value="layui-col-xs9">3/4</option>
 					<option value="layui-col-xs4">1/3</option>
 					<option value="layui-col-xs6">1/2</option>
@@ -108,21 +108,9 @@
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">控件Id</label>
+			<label class="layui-form-label">属性</label>
 			<div class="layui-input-block">
-				<input type="text" id="keyId" name="keyId" placeholder="只接受英文、数字" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" class="layui-input" maxlength="30" value="{{keyId}}"/>
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">可编辑节点Id</label>
-			<div class="layui-input-block">
-				<input type="text" id="editableNodeId" name="editableNodeId" placeholder="可编辑节点Id" class="layui-input" value="{{editableNodeId}}" />
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">可编辑节点名称</label>
-			<div class="layui-input-block">
-				<input type="text" id="editableNodeName" name="editableNodeName" placeholder="可编辑节点名称" class="layui-input" value="{{editableNodeName}}" />
+				<input type="text" id="attrKey" name="attrKey" placeholder="只接受英文、数字" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" class="layui-input" maxlength="30" value="{{attrKey}}"/>
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">

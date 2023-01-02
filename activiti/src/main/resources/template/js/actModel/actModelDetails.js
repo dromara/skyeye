@@ -18,16 +18,6 @@ layui.config({
 		method: 'GET',
 		template: $("#beanTemplate").html(),
 		ajaxSendAfter:function (json) {
-			if(json.bean.pageTypes == 1){
-				$("#pageTypes").html('指定业务');
-				$(".TypeIsTwo").addClass("layui-hide");
-				$(".TypeIsOne").removeClass("layui-hide");
-			} else {
-				$("#pageTypes").html('动态表单');
-				$(".TypeIsTwo").removeClass("layui-hide");
-				$(".TypeIsOne").addClass("layui-hide");
-			}
-
 			if(json.bean.iconType == 1){
 				$("#iconType").html('Icon');
 				$(".iconTypeIsTwo").addClass("layui-hide");

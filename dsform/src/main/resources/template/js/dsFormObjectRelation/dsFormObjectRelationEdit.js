@@ -27,7 +27,7 @@ layui.config({
                     addRow();
                     $("#dsFormChooseList" + (rowNum - 1)).val(item.pageNum);
                     $("#dsFormChooseList" + (rowNum - 1)).attr("dataId", item.id);
-                    $("#pageName" + (rowNum - 1)).html(item.pageName);
+                    $("#name" + (rowNum - 1)).html(item.name);
                 })
             } else {
                 addRow();
@@ -75,7 +75,7 @@ layui.config({
             id: "row" + rowNum.toString(), //checkbox的id
             trId: "tr" + rowNum.toString(), //行的id
             dsFormChooseList: "dsFormChooseList"  + rowNum.toString(), // 动态表单选择id
-            pageName: "pageName" + rowNum.toString() // 动态表单页面名称id
+            name: "name" + rowNum.toString() // 动态表单页面名称id
         };
         $("#useTable").append(getDataUseHandlebars(usetableTemplate, par));
         form.render('checkbox');
@@ -86,9 +86,9 @@ layui.config({
         $("body").on("click", "#" + btnId, function (e) {
             dsFormUtil.chooseType = false; // 单选
             dsFormUtil.openDsFormPageChoosePage(function (){
-                $("#" + par.dsFormChooseList).val(dsFormUtil.dsFormChooseMation.pageNum);
+                $("#" + par.dsFormChooseList).val(dsFormUtil.dsFormChooseMation.numCode);
                 $("#" + par.dsFormChooseList).attr("dataId", dsFormUtil.dsFormChooseMation.id);
-                $("#" + par.pageName).html(dsFormUtil.dsFormChooseMation.pageName);
+                $("#" + par.name).html(dsFormUtil.dsFormChooseMation.name);
             });
         });
     }

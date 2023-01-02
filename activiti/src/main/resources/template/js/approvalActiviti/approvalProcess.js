@@ -2,9 +2,6 @@
 var jsonArray = [];//表单项
 var layedit, form;
 
-// 当前审批的表单是动态表单还是静态页面
-var pageTypes = "";
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -37,7 +34,6 @@ layui.config({
 		voucherTemplate = $("#voucherTemplate").html();//凭证展示
 
     AjaxPostUtil.request({url: flowableBasePath + "activitimode016", params: {taskId: taskId, processInstanceId: processInstanceId}, type: 'json', method: 'GET', callback: function(j){
-		pageTypes = isNull(j.bean.pageTypes) ? '1' : j.bean.pageTypes;
 		var jsonStr = "";//实体json对象
 		var str = "";
 		//获取该节点的id和名称
@@ -340,7 +336,6 @@ layui.config({
 	    			flag: $("input[name='flag']:checked").val(),
 	    			processInstanceId: processInstanceId,
 	    			editStr: (params.length > 0) ? JSON.stringify(params) : "",
-	    			pageTypes: pageTypes,
 					approverId: activitiUtil.getApprovalPersonId()
 	            };
 	            AjaxPostUtil.request({url: flowableBasePath + "activitimode005", params: jStr, type: 'json', callback: function (json) {
