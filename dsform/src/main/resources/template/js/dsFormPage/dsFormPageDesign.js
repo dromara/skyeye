@@ -30,13 +30,13 @@ layui.config({
  	
  	// 加载新增加的控件信息
     function loadNewControl(item) {
-    	if(item.associatedDataTypes == 1){//json串
+    	if (item.associatedDataTypes == 1) {//json串
 			var obj = item.aData;
 			if(typeof item.aData == 'string'){
 				obj = JSON.parse(item.aData);
 			}
 			item.context = getDataUseHandlebars(item.dsFormComponent.templateContent, obj);
-		} else if (item.associatedDataTypes == 2){//接口
+		} else if (item.associatedDataTypes == 2) {//接口
 			AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params: {interfa: item.aData}, type: 'json', callback: function(j){
 				var obj = JSON.parse(j.bean.aData);
 				item.context = getDataUseHandlebars(item.dsFormComponent.templateContent, obj);

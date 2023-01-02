@@ -29,6 +29,9 @@ layui.config({
 			{ field: 'numCode', title: '编码', width: 120 },
 	        { field: 'name', title: '名称', width: 120 },
 			{ field: 'typeName', title: '分类', width: 120 },
+			{ field: 'showType', title: '显示类型', width: 120, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("dsFormShowType", 'id', d.showType, 'name');
+			}},
 			{ field: 'id', title: '图标', align: 'center', width: 60, templet: function (d) {
 				return systemCommonUtil.initIconShow(d);
 			}},

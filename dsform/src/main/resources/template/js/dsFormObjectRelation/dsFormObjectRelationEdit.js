@@ -25,7 +25,7 @@ layui.config({
             if (!isNull(json.bean.dsFormPageMations)) {
                 $.each(json.bean.dsFormPageMations, function (i, item) {
                     addRow();
-                    $("#dsFormChooseList" + (rowNum - 1)).val(item.pageNum);
+                    $("#dsFormChooseList" + (rowNum - 1)).val(item.numCode);
                     $("#dsFormChooseList" + (rowNum - 1)).attr("dataId", item.id);
                     $("#name" + (rowNum - 1)).html(item.name);
                 })
@@ -85,7 +85,7 @@ layui.config({
         var btnId = par.dsFormChooseList + "Btn";
         $("body").on("click", "#" + btnId, function (e) {
             dsFormUtil.chooseType = false; // 单选
-            dsFormUtil.openDsFormPageChoosePage(function (){
+            dsFormUtil.openDsFormPageChoosePage(function () {
                 $("#" + par.dsFormChooseList).val(dsFormUtil.dsFormChooseMation.numCode);
                 $("#" + par.dsFormChooseList).attr("dataId", dsFormUtil.dsFormChooseMation.id);
                 $("#" + par.name).html(dsFormUtil.dsFormChooseMation.name);

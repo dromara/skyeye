@@ -47,6 +47,7 @@ layui.config({
 
 			// 组件分类
 			sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["dsFormContentType"]["key"], 'select', "dsFormContentType", json.bean.typeId, form);
+			skyeyeClassEnumUtil.showEnumDataListByClassName("dsFormShowType", 'select', "showType", json.bean.showType, form);
 
 			// 根据类型获取部分功能的使用说明
 			systemCommonUtil.queryExplainMationByType(2, function (json) {
@@ -140,6 +141,7 @@ layui.config({
 							jsDisplayValue: encodeURIComponent(jsDisplayValue.getValue()),
 							jsFitValue: encodeURIComponent(jsFitValue.getValue()),
 							typeId: $("#dsFormContentType").val(),
+							showType: $("#showType").val(),
 							linkedData: '2',
 							displayTemplateId: '',
 							defaultData: '',

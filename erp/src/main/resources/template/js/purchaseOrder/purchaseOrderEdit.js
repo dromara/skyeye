@@ -78,9 +78,9 @@ layui.config({
 			initTableChooseUtil.deleteAllRow('productList');
 			$.each(json.bean.norms, function(i, item) {
 				var params = {
-					"materialId": item.product.materialName + "(" + item.product.materialModel + ")",
+					"materialId": item.materialName + "(" + item.materialModel + ")",
 					"mUnitId": {
-						"html": getDataUseHandlebars(selOption, {rows: item.product.unitList}),
+						"html": getDataUseHandlebars(selOption, {rows: item.unitList}),
 						"value": item.mUnitId
 					},
 					"allStock": item.allStock,
@@ -95,7 +95,7 @@ layui.config({
 				};
 				var trcusid = initTableChooseUtil.resetData('productList', params);
 				// 将规格所属的商品信息加入到对象中存储
-				allChooseProduct[trcusid] = item.product;
+				allChooseProduct[trcusid] = item;
 			});
 
 			textool.init({eleId: 'remark', maxlength: 200});
