@@ -17,6 +17,8 @@ layui.config({
 		// 加载图标信息
 		systemCommonUtil.initIconChooseHtml('iconMation', form, colorpicker, 17);
 
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["actModelType"]["key"], 'select', "typeId", '', form);
+
 	    textool.init({eleId: 'remark', maxlength: 200});
 
  		matchingLanguage();
@@ -24,7 +26,7 @@ layui.config({
  	    form.on('submit(formAddBean)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
  	        	var params = {
- 	        		typeId: parent.rowId,
+ 	        		typeId: $("#typeId").val(),
  	        		title: $("#typeName").val(),
  	        		tokenUrl: $("#tokenUrl").val(),
  	        		remark: $("#remark").val(),

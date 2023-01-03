@@ -38,7 +38,7 @@ layui.config({
 		refreshTable();
 	});
 
-	function initTable(){
+	function initTable() {
 		if(checkType == '2'){
 			var ids = [];
 			$.each(parent.erpOrderUtil.chooseProductMation, function(i, item) {

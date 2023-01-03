@@ -94,6 +94,7 @@ var sysDictDataUtil = {
                 $("#" + showBoxId).append(_html + _js);
             } else if (showType == 'selectTree') {
                 var _html = sysDictDataUtil.getShowTteeHtml(showBoxId, '1');
+                _html += `<link href="../../assets/lib/winui/css/customer/ztree/common-tree.css" rel="stylesheet" />`;
                 var _js = `<script>
                             layui.define(["jquery", 'fsTree'], function(exports) {
                                 var jQuery = layui.jquery,
@@ -107,10 +108,12 @@ var sysDictDataUtil = {
                                         showLine: false,
                                         showIcon: true,
                                         expandSpeed: 'fast',
+                                        addDiyDom: ztreeUtil.addDiyDom,
                                         clickCallback: onClickTree,
                                         onDblClick: onClickTree
                                     }, function(id) {
                                         fuzzySearch(id, '#${showBoxId}Name', null, true);
+                                        ztreeUtil.initEventListener(id);
                                     });
                                     function onClickTree(event, treeId, treeNode) {
                                         var chooseId;
@@ -140,7 +143,7 @@ var sysDictDataUtil = {
         var _html = `<link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
                     <link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
                     <div class="layui-inline" style="width: 100%">
-                        <div class="layui-input-inline">
+                        <div class="layui-input-inline" style="width: 100%">
                             <input type="text" id="${showBoxId}Name" name="${showBoxId}Name" placeholder="请输入要搜索的节点" class="layui-input" />
                             <input type="hidden" id="${showBoxId}Choose" name="${showBoxId}Choose" class="layui-input" />
                         </div>

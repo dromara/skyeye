@@ -52,5 +52,7 @@
 
     "knowledgeType": {"name": "知识库-知识类型", "key": "KNOWLEDGE_TYPE"},
 
-    "ifsOrderType": {"name": "IFS-财务单据类型", "key": "IFS_ORDER_TYPE"}
+    "ifsOrderType": {"name": "IFS-财务单据类型", "key": "IFS_ORDER_TYPE"},
+
+    "actModelType": {"name": "工作流-模型分类", "key": "ACT_MODEL_TYPE"}
 }

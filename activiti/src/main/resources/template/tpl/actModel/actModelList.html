@@ -7,56 +7,44 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-	<div style="margin:0 auto; height: 100%;">
-		<div class="light-app-left">
-			<div class="operator-user-group">
-				<a id="addBean" title="新增实体类型" auth="1564106543479"><i class="fa fa-plus"></i></a>
-				<a id="flashGroup" title="刷新实体类型"><i class="fa fa-undo fa-fw"></i></a>
-			</div>
-			<div class="setting" id="setting">
-			</div>
-			<script type="text/x-handlehars-template" id="modleTypeTemplate">
-				{{#each rows}}
-					<a rowid="{{id}}" rowname="{{name}}" class="setting-a" title="{{name}}">
-						<span>{{name}}</span>
-						<div class="{{stateColor}}"></div>
-					</a>
-				{{/each}}
-			</script>	
+	<div class="winui-toolbar">
+		<div class="winui-tool">
+			<button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+			<button id="addModle" class="winui-toolbtn search-table-btn-right" auth="1564106558827"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
 		</div>
-	    <div class="light-app-right" id="showForm">
-	        <div class="winui-toolbar">
-		        <div class="winui-tool">
-		        	<button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-		            <button id="addModle" class="winui-toolbtn search-table-btn-right" auth="1564106558827"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
-		        </div>
-		    </div>
-	    	<div style="margin:auto 10px;">
-        		<table id="messageTable" lay-filter="messageTable"></table>
-        		<script type="text/html" id="tableBar">
+	</div>
+	<div style="margin: auto 10px; height: calc(100% - 50px);">
+		<div style="width: 200px; float: left; height: 100%; overflow-y: auto;" id="typeList">
+
+		</div>
+		<div style="width: calc(100% - 200px); float: left;">
+			<div style="margin: auto 10px;">
+				<table id="messageTable" lay-filter="messageTable"></table>
+				<script type="text/html" id="tableBar">
 					{{# if (d.state == 2 && auth('1564106635178')){ }}
-            			<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="down">下线</a>
+						<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="down">下线</a>
 					{{# } else if (d.state == 1 || d.state == 3) { }}
-						{{# if(auth('1564106558827')){ }}
-            				<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-						{{# } }}
 						{{# if(auth('1564106622099')){ }}
-            				<a class="layui-btn layui-btn-xs" lay-event="up">上线</a>
+							<a class="layui-btn layui-btn-xs" lay-event="up">上线</a>
 						{{# } }}
 						{{# if(auth('1564106604765')){ }}
-            				<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">移除</a>
+							<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">移除</a>
 						{{# } }}
 					{{# } }}
+					{{# if(auth('1564106558827')){ }}
+						<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+					{{# } }}
 					{{# if(auth('1564106666914')){ }}
-            			<a class="layui-btn layui-btn-xs" lay-event="upMove">上移</a>
+						<a class="layui-btn layui-btn-xs" lay-event="upMove">上移</a>
 					{{# } }}
 					{{# if(auth('1564106692345')){ }}
-            			<a class="layui-btn layui-btn-xs" lay-event="downMove">下移</a>
+						<a class="layui-btn layui-btn-xs" lay-event="downMove">下移</a>
 					{{# } }}
 				</script>
-        	</div>
-	    </div>
+			</div>
+		</div>
 	</div>
+
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">

@@ -15,10 +15,16 @@
 	
 	<script type="text/x-handlebars-template" id="beanTemplate">
 		{{#bean}}
-			<div class="layui-form-item layui-col-xs12">
+			<div class="layui-form-item layui-col-xs6">
 				<label class="layui-form-label">流程名称：</label>
 				<div class="layui-input-block ver-center">
 					{{title}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">所属类型：</label>
+				<div class="layui-input-block ver-center">
+					{{typeName}}
 				</div>
 			</div>
 			<div class="layui-form-item layui-col-xs12">

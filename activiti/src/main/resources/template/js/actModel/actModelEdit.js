@@ -25,6 +25,7 @@ layui.config({
 				// 加载图标信息
 				systemCommonUtil.initEditIconChooseHtml('iconMation', form, colorpicker, 17, json.bean);
 
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["actModelType"]["key"], 'select', "typeId", json.bean.typeId, form);
 		 		textool.init({eleId: 'remark', maxlength: 200});
 		 		
 		        matchingLanguage();
@@ -40,7 +41,8 @@ layui.config({
 							actFlowId: $("#actFlowId").attr("actFlowId"),
 							addPageUrl: $("#addPageUrl").val(),
 							editPageUrl: $("#editPageUrl").val(),
-							revokeMapping: $("#revokeMapping").val()
+							revokeMapping: $("#revokeMapping").val(),
+							typeId: $("#typeId").val()
 		 	        	};
 						// 获取图标信息
 						params = systemCommonUtil.getIconChoose(params);
