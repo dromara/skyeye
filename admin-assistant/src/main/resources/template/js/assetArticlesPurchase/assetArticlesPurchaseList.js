@@ -5,24 +5,19 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		laydate = layui.laydate,
 		table = layui.table;
 	var serviceClassName = sysServiceMation["assetArticlesPurchase"]["key"];
 	
-	// 新增用品采购
 	authBtn('1596958747047');
 	
-	// '用品采购'页面的选取时间段表格
-	laydate.render({elem: '#caigouCreateTime', range: '~'});
-	
-	// 展示用品采购列表
+	// 用品采购列表
 	table.render({
-		id: 'caigouTable',
-		elem: '#caigouTable',
+		id: 'messageTable',
+		elem: '#messageTable',
 		method: 'post',
 		url: flowableBasePath + 'assetarticles025',
 		where: getTableParams(),
@@ -35,42 +30,48 @@ layui.config({
 			{ field: 'title', title: '标题', width: 300, templet: function (d) {
 				return '<a lay-event="caigouDedails" class="notice-title-click">' + d.title + '</a>';
 			}},
-			{ field: 'oddNum', title: '单号', width: 200 },
+			{ field: 'oddNumber', title: '单号', width: 200, align: 'center' },
 			{ field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
 				return '<a lay-event="caigouProcessDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 			}},
-			{ field: 'stateName', title: '状态', width: 90, templet: function (d) {
+			{ field: 'state', title: '状态', width: 90, templet: function (d) {
 				return activitiUtil.showStateName2(d.state, 1);
 			}},
-			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150 },
-			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#caigouTableBar'}
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#messageTableBar' }
 		]],
 		done: function(json) {
 			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单号，标题", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 		}
 	});
 
 	// 用品采购的操作事件
-	table.on('tool(caigouTable)', function (obj) {
+	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'caigouDedails') { //采购详情
-        	caigouDedails(data);
-        } else if (layEvent === 'caigouEdit') { //编辑采购申请
-        	caigouEdit(data);
-        } else if (layEvent === 'caigouSubApproval') { //采购提交审批
-        	caigouSubApproval(data);
-        } else if (layEvent === 'caigouCancellation') {//采购作废
-        	caigouCancellation(data);
-        } else if (layEvent === 'caigouProcessDetails') {//采购流程详情
+        if (layEvent === 'details') { //采购详情
+			details(data);
+        } else if (layEvent === 'edit') { //编辑采购申请
+			edit(data);
+        } else if (layEvent === 'subApproval') { //采购提交审批
+			subApproval(data);
+        } else if (layEvent === 'cancellation') {//采购作废
+			cancellation(data);
+        } else if (layEvent === 'processDetails') {//采购流程详情
 			activitiUtil.activitiDetails(data);
-        } else if (layEvent === 'caigouRevoke') {//撤销采购申请
-        	caigouRevoke(data);
+        } else if (layEvent === 'revoke') {//撤销采购申请
+			revoke(data);
         }
     });
 	
-	// 添加用品采购
-	$("body").on("click", "#addCaigouBean", function() {
+	// 添加
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/assetArticlesPurchase/assetArticlesPurchaseAdd.html", 
 			title: "用品采购申请",
@@ -78,24 +79,24 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadCaigouTable();
+				loadmessageTable();
 			}});
     });
 	
-	// 撤销用品采购
-	function caigouRevoke(data) {
+	// 撤销
+	function revoke(data) {
 		var msg = '确认撤销该用品采购申请吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "assetarticles035", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
-				loadCaigouTable();
+				loadmessageTable();
     		}});
 		});
 	}
 	
-	// 编辑用品采购申请
-	function caigouEdit(data) {
+	// 编辑
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/assetArticlesPurchase/assetArticlesPurchaseEdit.html", 
@@ -104,13 +105,13 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadCaigouTable();
+				loadmessageTable();
 			}
 		});
 	}
 	
 	// 用品采购提交审批
-	function caigouSubApproval(data) {
+	function subApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
 			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
@@ -120,26 +121,26 @@ layui.config({
 				};
 				AjaxPostUtil.request({url: flowableBasePath + "assetarticles027", params: params, type: 'json', callback: function (json) {
 					winui.window.msg("提交成功", {icon: 1, time: 2000});
-					loadCaigouTable();
+					loadmessageTable();
 				}});
 			});
 		});
 	}
 
 	// 用品采购作废
-	function caigouCancellation(data) {
+	function cancellation(data) {
 		var msg = '确认作废该条采购申请吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "assetarticles031", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadCaigouTable();
+				loadmessageTable();
     		}});
 		});
 	}
 	
 	// 用品采购详情
-	function caigouDedails(data) {
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/assetArticlesPurchase/assetArticlesPurchaseDetails.html", 
@@ -152,35 +153,16 @@ layui.config({
 	}
 
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			table.reloadData("caigouTable", {page: {curr: 1}, where: getTableParams()});
-		}
-		return false;
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
 	});
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
 
-	// 刷新采购数据
-    $("body").on("click", "#reloadCaigouTable", function() {
-    	loadCaigouTable();
-    });
-    
-	// 刷新采购列表数据
-    function loadCaigouTable(){
-    	table.reloadData("caigouTable", {where: getTableParams()});
-    }
-    
-    function getTableParams() {
-    	var startTime = "", endTime = "";
-		if (!isNull($("#caigouCreateTime").val())) {
-    		startTime = $("#caigouCreateTime").val().split('~')[0].trim() + ' 00:00:00';
-    		endTime = $("#caigouCreateTime").val().split('~')[1].trim() + ' 23:59:59';
-    	}
-    	return {
-    		state: $("#caigouState").val(),
-    		startTime: startTime,
-    		endTime: endTime
-    	};
-    }
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
     
     exports('assetArticlesPurchaseList', {});
 });

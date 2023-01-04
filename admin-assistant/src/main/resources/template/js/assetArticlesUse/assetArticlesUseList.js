@@ -16,8 +16,8 @@ layui.config({
 	
 	// 用品领用列表
 	table.render({
-		id: 'lingyongTable',
-		elem: '#lingyongTable',
+		id: 'messageTable',
+		elem: '#messageTable',
 		method: 'post',
 		url: flowableBasePath + 'assetarticles017',
 		where: getTableParams(),
@@ -41,17 +41,17 @@ layui.config({
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#lingyongTableBar' }
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#messageTableBar' }
 		]],
 		done: function(json) {
 			matchingLanguage();
 			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单号，标题", function () {
-				table.reloadData("lingyongTable", {page: {curr: 1}, where: getTableParams()});
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 		}
 	});
 
-	table.on('tool(lingyongTable)', function (obj) {
+	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'details') { //领用详情
@@ -73,7 +73,7 @@ layui.config({
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/assetArticlesUse/assetArticlesUseAdd.html", 
-			title: "添加用品领用申请",
+			title: "用品领用申请",
 			pageId: "assetArticlesUseAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
@@ -156,11 +156,11 @@ layui.config({
 		loadTable();
 	});
 	function loadTable() {
-		table.reloadData("lingyongTable", {where: getTableParams()});
+		table.reloadData("messageTable", {where: getTableParams()});
 	}
 
 	function getTableParams() {
-		return $.extend(true, {}, initTableSearchUtil.getSearchValue("lingyongTable"));
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
     
     exports('assetArticlesUseList', {});
