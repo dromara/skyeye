@@ -49,12 +49,12 @@
     "checkWorkCancelLeave": {"name": "销假申请", "key": "com.skyeye.eve.service.impl.CheckWorkCancelLeaveServiceImpl"},
     "checkWorkBusinessTrip": {"name": "出差申请", "key": "com.skyeye.eve.service.impl.CheckWorkBusinessTripServiceImpl"},
 
-    "assetManageUse": {"name": "资产领用", "key": "com.skyeye.eve.assets.service.impl.AssetApplyUseServiceImpl"},
-    "assetManageReturn": {"name": "资产归还", "key": "com.skyeye.eve.assets.service.impl.AssetApplyReturnServiceImpl"},
-    "assetManagePurchase": {"name": "资产采购", "key": "com.skyeye.eve.assets.service.impl.AssetApplyPurchaseServiceImpl"},
+    "assetManageUse": {"name": "资产领用", "key": "com.skyeye.eve.assets.service.impl.AssetUseServiceImpl"},
+    "assetManageReturn": {"name": "资产归还", "key": "com.skyeye.eve.assets.service.impl.AssetReturnServiceImpl"},
+    "assetManagePurchase": {"name": "资产采购", "key": "com.skyeye.eve.assets.service.impl.AssetPurchaseServiceImpl"},
 
-    "assetArticlesUse": {"name": "用品领用", "key": "com.skyeye.eve.articles.service.impl.AssetArticlesApplyUseServiceImpl"},
-    "assetArticlesPurchase": {"name": "用品采购", "key": "com.skyeye.eve.articles.service.impl.AssetArticlesApplyPurchaseServiceImpl"},
+    "assetArticlesUse": {"name": "用品领用", "key": "com.skyeye.eve.articles.service.impl.ArticlesUseServiceImpl"},
+    "assetArticlesPurchase": {"name": "用品采购", "key": "com.skyeye.eve.articles.service.impl.ArticlesPurchaseServiceImpl"},
 
     "incomeOrder": {"name": "财务明细账", "key": "com.skyeye.service.impl.IncomeServiceImpl"},
 
