@@ -71,7 +71,7 @@ layui.config({
         }
     });
 
-	var tmpList = ['com.skyeye.eve.articles.service.impl.AssetArticlesApplyUseServiceImpl'];
+	var tmpList = ['com.skyeye.eve.articles.service.impl.ArticlesUseServiceImpl'];
 	// 提交任务
 	function subTasks(data, obj){
 		taskId = data.id;

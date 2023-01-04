@@ -37,12 +37,12 @@ var activitiUtil = {
      * @param data
      */
     activitiDetails: function (data) {
-        var tmpList = ['com.skyeye.eve.articles.service.impl.AssetArticlesApplyUseServiceImpl'];
+        var tmpList = ['com.skyeye.eve.articles.service.impl.ArticlesUseServiceImpl'];
         taskType = data.taskType;
         processInstanceId = data.processInstanceId;
         var url = "../../tpl/activitiCommon/processDetails.html";
         if (tmpList.indexOf(data.serviceClassName) >= 0
-            || tmpList.indexOf(data.processMation.objectKey) >= 0) {
+            || (tmpList.indexOf(data.processMation.objectKey) >= 0 && data.processMation != null)) {
             url = "../../tpl/activitiCommon/processInstanceDetails.html";
         }
         _openNewWindows({
