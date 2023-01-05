@@ -6,20 +6,15 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'jquery', 'winui'], function (exports) {
 	winui.renderColor();
-	layui.use(['form'], function (form) {
-	    var $ = layui.$;
+	var $ = layui.$,
+		form = layui.form;
 
-	    AjaxPostUtil.request({url: flowableBasePath + "assetarticles026", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
-			// 状态
-			json.bean.stateName = activitiUtil.showStateName2(json.bean.state, 1);
+	AjaxPostUtil.request({url: flowableBasePath + "queryArticlesPurchaseById", params: {id: parent.rowId}, type: 'json', method: 'GET', callback: function (json) {
+		$("#showForm").html(getDataUseHandlebars($("#useTemplate").html(), json));
 
-			$("#showForm").html(getDataUseHandlebars($("#useTemplate").html(), json));
-
-			// 附件回显
-			skyeyeEnclosure.showDetails({"enclosureUploadBtn": json.bean.enclosureInfo});
-
-			matchingLanguage();
-	    }});
-
-	});
+		// 附件回显
+		skyeyeEnclosure.showDetails({"enclosureUploadBtn": json.bean.enclosureInfo});
+		matchingLanguage();
+		form.render();
+	}});
 });

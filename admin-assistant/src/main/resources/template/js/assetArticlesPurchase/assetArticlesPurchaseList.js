@@ -28,11 +28,11 @@ layui.config({
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'title', title: '标题', width: 300, templet: function (d) {
-				return '<a lay-event="caigouDedails" class="notice-title-click">' + d.title + '</a>';
+				return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 			}},
 			{ field: 'oddNumber', title: '单号', width: 200, align: 'center' },
 			{ field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
-				return '<a lay-event="caigouProcessDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+				return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 			}},
 			{ field: 'state', title: '状态', width: 90, templet: function (d) {
 				return activitiUtil.showStateName2(d.state, 1);
@@ -79,7 +79,7 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadmessageTable();
+				loadTable();
 			}});
     });
 	
@@ -90,7 +90,7 @@ layui.config({
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "assetarticles035", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
-				loadmessageTable();
+				loadTable();
     		}});
 		});
 	}
@@ -105,7 +105,7 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadmessageTable();
+				loadTable();
 			}
 		});
 	}
@@ -116,12 +116,12 @@ layui.config({
 			layer.close(index);
 			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				var params = {
-					rowId: data.id,
+					id: data.id,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url: flowableBasePath + "assetarticles027", params: params, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: flowableBasePath + "assetarticles027", params: params, type: 'json', method: 'POST', callback: function (json) {
 					winui.window.msg("提交成功", {icon: 1, time: 2000});
-					loadmessageTable();
+					loadTable();
 				}});
 			});
 		});
@@ -132,9 +132,9 @@ layui.config({
 		var msg = '确认作废该条采购申请吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "assetarticles031", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "assetarticles031", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadmessageTable();
+				loadTable();
     		}});
 		});
 	}

@@ -12,90 +12,123 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form;
 	var serviceClassName = sysServiceMation["assetArticlesPurchase"]["key"];
-	var rowNum = 1; //表格的序号
 	var typeHtml = "";
-
-	var usetableTemplate = $("#usetableTemplate").html();
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 
-	var sTableData = "";
-
-	AjaxPostUtil.request({url: flowableBasePath + "assetarticles028", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
-		$("#useTitle").html(json.bean.title);
-		$("#useName").html(json.bean.userName);
+	AjaxPostUtil.request({url: flowableBasePath + "queryArticlesPurchaseById", params: {id: parent.rowId}, type: 'json', method: 'GET', callback: function(json) {
+		$("#title").html(json.bean.title);
+		$("#useName").html(json.bean.createName);
 		$("#remark").val(json.bean.remark);
 		// 附件回显
 		skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
-		if(json.bean.state == '1'){
-			$(".typeTwo").removeClass("layui-hide");
-		} else {
-			$(".typeOne").removeClass("layui-hide");
-		}
-		sTableData = json.bean.goods;
-		initTypeHtml();
-
-		matchingLanguage();
-	}});
-
-	function initTypeHtml() {
 		// 用品类别
 		sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["admAssetArticlesType"]["key"], function (data) {
 			typeHtml = getDataUseHandlebars(selOption, data);
 		});
+		initTable();
 
+		initTableChooseUtil.deleteAllRow('articlesList');
+		$.each(json.bean.purchaseLink, function(i, item) {
+			var list = findArticlesByTypeId(item.assetArticles.typeId);
+			var params = {
+				"typeId": {
+					"value": item.assetArticles.typeId
+				},
+				"articleId": {
+					"html": getDataUseHandlebars(selOption, {rows: list}),
+					"value": item.articleId
+				},
+				"specifications": item.assetArticles.specifications,
+				"residualNum": item.assetArticles.residualNum,
+				"applyPurchaseNum": item.applyPurchaseNum,
+				"remark": item.remark
+			};
+			initTableChooseUtil.resetData('articlesList', params);
+		});
+
+		matchingLanguage();
 		form.render();
-		//类型加载变化事件
-		form.on('select(selectTypeProperty)', function(data) {
-			var thisRowNum = data.elem.id.replace("typeId", "");
-			var thisRowValue = data.value;
-			if (!isNull(thisRowValue) && thisRowValue != '请选择') {
-				if(inPointArray(thisRowValue, assetArticles)) {
-					//类型对应的用品存在js对象中
-					var list = getListPointArray(thisRowValue, assetArticles);
-					resetAssetList(thisRowNum, list); //重置选择行的用品列表
-				} else {
-					//类型对应的用品不存在js对象中
-					AjaxPostUtil.request({url: flowableBasePath + "assetarticles018", params: {typeId: thisRowValue}, type: 'json', method: 'GET', callback: function(json) {
-						assetArticles.push({
-							id: thisRowValue,
-							list: json.rows
-						});
-						resetAssetList(thisRowNum, json.rows); //重置选择行的用品列表
-					}});
-				}
-			}
-		});
+	}});
 
-		//商品加载变化事件
-		form.on('select(selectAssetarProperty)', function(data) {
-			var thisRowNum = data.elem.id.replace("assetarId", "");
-			var thisRowValue = data.value;
-			var thisRowTypeChooseId = $("#typeId" + thisRowNum).val();
-			if (!isNull(thisRowValue) && thisRowValue != '请选择') {
-				var list = getListPointArray(thisRowTypeChooseId, assetArticles);
-				$.each(list, function(i, item) {
-					if(item.id === thisRowValue) {
-						$("#specificationsName" + thisRowNum).html(item.specificationsName);
-						$("#residualNum" + thisRowNum).html(item.residualNum);
-						return false;
-					}
+	function initTable() {
+		initTableChooseUtil.initTable({
+			id: "articlesList",
+			cols: [
+				{id: 'typeId', title: '类别', formType: 'select', width: '150', verify: 'required', layFilter: 'selectTypeProperty', modelHtml: typeHtml},
+				{id: 'articleId', title: '用品', formType: 'select', width: '150', verify: 'required', layFilter: 'selectAssetarProperty'},
+				{id: 'specifications', title: '规格(单位)', formType: 'detail', width: '80'},
+				{id: 'residualNum', title: '库存', formType: 'detail', width: '80'},
+				{id: 'applyPurchaseNum', title: '采购数量', formType: 'input', width: '80', verify: 'required|number', value: '1'},
+				{id: 'remark', title: '备注', formType: 'input', width: '100'}
+			],
+			deleteRowCallback: function (trcusid) {
+			},
+			addRowCallback: function (trcusid) {
+			},
+			form: form,
+			minData: 1
+		});
+	}
+
+	// 类型加载变化事件
+	form.on('select(selectTypeProperty)', function(data) {
+		var thisRowNum = data.elem.id.replace("typeId", "");
+		var thisRowValue = data.value;
+		if (!isNull(thisRowValue) && thisRowValue != '请选择') {
+			var list = findArticlesByTypeId(thisRowValue);
+			resetAssetList(thisRowNum, list);
+		}
+	});
+
+	function findArticlesByTypeId(typeId) {
+		var list;
+		if (judgeInPoingArr(assetArticles, 'id', typeId)) {
+			// 类型对应的用品存在js对象中
+			list = getInPoingArr(assetArticles, 'id', typeId, 'list');
+		} else {
+			// 类型对应的用品不存在js对象中
+			AjaxPostUtil.request({url: flowableBasePath + "assetarticles018", params: {typeId: typeId}, type: 'json', method: 'GET', callback: function (json) {
+				assetArticles.push({
+					id: typeId,
+					list: json.rows
 				});
-			} else {
-				$("#specificationsName" + thisRowNum).html(""); //重置规格为空
-				$("#residualNum" + thisRowNum).html(""); //重置库存为空
-			}
-		});
-		//加载表格数据
-		initTableAssetList();
+				list = json.rows;
+			}, async: false});
+		}
+		return list;
 	}
 
-	//加载表格数据
-	function initTableAssetList() {
-		$.each(sTableData, function(i, item) {
-			addDataRow(item);
+	// 根据类型重置用户列表
+	function resetAssetList(thisRowNum, list) {
+		var sHtml = getDataUseHandlebars(selOption, {
+			rows: list
 		});
+		$("#articleId" + thisRowNum).html(sHtml);
+		$("#specifications" + thisRowNum).html("");
+		$("#residualNum" + thisRowNum).html("");
+		form.render('select');
 	}
+
+	// 商品加载变化事件
+	form.on('select(selectAssetarProperty)', function(data) {
+		var thisRowNum = data.elem.id.replace("articleId", "");
+		var thisRowValue = data.value;
+		var thisRowTypeChooseId = $("#typeId" + thisRowNum).val();
+		if (!isNull(thisRowValue) && thisRowValue != '请选择') {
+			var list = getInPoingArr(assetArticles, 'id', thisRowTypeChooseId, 'list');
+			$.each(list, function (i, item) {
+				if (item.id === thisRowValue) {
+					$("#specifications" + thisRowNum).html(item.specificationsName);
+					$("#residualNum" + thisRowNum).html(item.residualNum);
+					return false;
+				}
+			});
+		} else {
+			$("#specifications" + thisRowNum).html("");
+			$("#residualNum" + thisRowNum).html("");
+		}
+	});
 
 	// 保存为草稿
 	form.on('submit(formEditBean)', function(data) {
@@ -115,206 +148,46 @@ layui.config({
 		return false;
 	});
 
-	// 工作流中保存
-	form.on('submit(subBean)', function(data) {
-		if(winui.verifyForm(data.elem)) {
-			saveData('3', "");
-		}
-		return false;
-	});
-
 	function saveData(subType, approvalId) {
-		// 获取已选用品数据
-		var rowTr = $("#useTable tr");
-		if(rowTr.length == 0) {
-			winui.window.msg('请选择需要采购的用品~', {icon: 2, time: 2000});
+		var result = initTableChooseUtil.getDataList('articlesList');
+		if (!result.checkResult) {
 			return false;
 		}
-		var tableData = new Array();
-		var noError = false; //循环遍历表格数据时，是否有其他错误信息
-		$.each(rowTr, function(i, item) {
-			var rowNum = $(item).attr("trcusid").replace("tr", "");
-			var residualNum = parseInt($("#residualNum" + rowNum).html());
-			if(parseInt($("#purchaseNum" + rowNum).val()) == 0) {
-				$("#purchaseNum" + rowNum).addClass("layui-form-danger");
-				$("#purchaseNum" + rowNum).focus();
+		var noError = false;
+		var tableData = [];
+		$.each(result.dataList, function (i, item) {
+			var rowNum = item["trcusid"].replace("tr", "");
+			if (parseInt(item.applyUseNum) == 0) {
+				$("#applyUseNum" + rowNum).addClass("layui-form-danger");
+				$("#applyUseNum" + rowNum).focus();
 				winui.window.msg('采购数量不能为0', {icon: 2, time: 2000});
 				noError = true;
 				return false;
 			}
-			if(inTableDataArrayByAssetarId($("#assetarId" + rowNum).val(), tableData)){
-				winui.window.msg('采购单存在相同的用品', {icon: 2, time: 2000});
+			if (judgeInPoingArr(tableData, 'articleId', $("#articleId" + rowNum).val())) {
+				winui.window.msg('领用单存在相同的用品', {icon: 2, time: 2000});
 				noError = true;
 				return false;
 			}
-			var row = {
-				typeId: $("#typeId" + rowNum).val(),
-				assetarId: $("#assetarId" + rowNum).val(),
-				purchaseNum: $("#purchaseNum" + rowNum).val(),
-				remark: $("#remark" + rowNum).val()
-			};
-			tableData.push(row);
+			tableData.push(item);
 		});
-		if(noError) {
+		if (noError) {
 			return false;
 		}
 
 		var params = {
+			id: parent.rowId,
+			title: $("#title").html(),
 			remark: $("#remark").val(),
-			assetArticlesStr: JSON.stringify(tableData),
-			rowId: parent.rowId,
-			enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
-			subType: subType, // 1：保存为草稿  2.提交到工作流  3.在工作流中编辑
-			approvalId: approvalId,
+			purchaseLink: JSON.stringify(tableData),
+			enclosureInfo: JSON.stringify({enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')}),
+			formSubType: subType,
+			approvalId: approvalId
 		};
-		AjaxPostUtil.request({url: flowableBasePath + "assetarticles029", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "writeArticlesPurchasee", params: params, type: 'json', method: 'POST', callback: function(json) {
 			parent.layer.close(index);
 			parent.refreshCode = '0';
 		}});
-	}
-
-	//判断选中的用品是否也在数组中
-	function inTableDataArrayByAssetarId(str, array) {
-		var isIn = false;
-		$.each(array, function(i, item) {
-			if(item.assetarId === str) {
-				isIn = true;
-				return false;
-			}
-		});
-		return isIn;
-	}
-
-	//新增行
-	$("body").on("click", "#addRow", function() {
-		addRow();
-	});
-
-	//删除行
-	$("body").on("click", "#deleteRow", function() {
-		deleteRow();
-	});
-
-	//加载数据行行
-	function addDataRow(item) {
-		var thisRowNum = rowNum.toString();
-		var par = {
-			id: "row" + thisRowNum, //checkbox的id
-			trId: "tr" + thisRowNum, //行的id
-			typeId: "typeId" + thisRowNum, //类型id
-			assetarId: "assetarId" + thisRowNum, //用品id
-			specificationsName: "specificationsName" + thisRowNum, //规格id
-			residualNum: "residualNum" + thisRowNum, //库存id
-			purchaseNum: "purchaseNum" + thisRowNum, //采购数量id
-			remark: "remark" + thisRowNum //备注id
-		};
-		$("#useTable").append(getDataUseHandlebars(usetableTemplate, par));
-
-		//赋值给用品类别
-		$("#" + "typeId" + thisRowNum).html(typeHtml);
-
-		//数据回显
-		$("#typeId" + thisRowNum).val(item.typeId);
-		$("#specificationsName" + thisRowNum).html(item.specificationsName);
-		$("#remark" + thisRowNum).val(item.remark);
-		$("#residualNum" + thisRowNum).html(item.residualNum);
-		$("#purchaseNum" + thisRowNum).val(item.applyPurchaseNum);
-		var thisRowValue = item.typeId;
-		if (!isNull(thisRowValue) && thisRowValue != '请选择') {
-			if(inPointArray(thisRowValue, assetArticles)) {
-				//类型对应的用品存在js对象中
-				var list = getListPointArray(thisRowValue, assetArticles);
-				//重置选择行的用品列表
-				var sHtml = getDataUseHandlebars(selOption, {rows: list});
-				$("#assetarId" + thisRowNum).html(sHtml); //重置商品列表下拉框
-				$("#assetarId" + thisRowNum).val(item.articleId);
-				form.render('select');
-			} else {
-				//类型对应的用品不存在js对象中
-				AjaxPostUtil.request({url: flowableBasePath + "assetarticles018", params: {typeId: thisRowValue}, type: 'json', method: 'GET', callback: function(json) {
-					assetArticles.push({
-						id: thisRowValue,
-						list: json.rows
-					});
-					//重置选择行的用品列表
-					var sHtml = getDataUseHandlebars(selOption, json);
-					$("#assetarId" + thisRowNum).html(sHtml); //重置商品列表下拉框
-					$("#assetarId" + thisRowNum).val(item.articleId);
-					form.render('select');
-				}, async: false});
-			}
-		}
-
-		form.render('select');
-		form.render('checkbox');
-		rowNum++;
-	}
-
-	//新增行
-	function addRow() {
-		var par = {
-			id: "row" + rowNum.toString(), //checkbox的id
-			trId: "tr" + rowNum.toString(), //行的id
-			typeId: "typeId" + rowNum.toString(), //类型id
-			assetarId: "assetarId" + rowNum.toString(), //用品id
-			specificationsName: "specificationsName" + rowNum.toString(), //规格id
-			residualNum: "residualNum" + rowNum.toString(), //库存id
-			purchaseNum: "purchaseNum" + rowNum.toString(), //采购数量id
-			remark: "remark" + rowNum.toString() //备注id
-		};
-		$("#useTable").append(getDataUseHandlebars(usetableTemplate, par));
-		//赋值给用品类别
-		$("#" + "typeId" + rowNum.toString()).html(typeHtml);
-		form.render('select');
-		form.render('checkbox');
-		rowNum++;
-	}
-
-	//删除行
-	function deleteRow() {
-		var checkRow = $("#useTable input[type='checkbox'][name='tableCheckRow']:checked");
-		if(checkRow.length > 0) {
-			$.each(checkRow, function(i, item) {
-				$(item).parent().parent().remove();
-			});
-		} else {
-			winui.window.msg('请选择要删除的行', {icon: 2, time: 2000});
-		}
-	}
-
-	//根据类型重置用户列表
-	function resetAssetList(thisRowNum, list) {
-		var sHtml = getDataUseHandlebars(selOption, {
-			rows: list
-		});
-		$("#assetarId" + thisRowNum).html(sHtml); //重置商品列表下拉框
-		$("#specificationsName" + thisRowNum).html(""); //重置规格为空
-		$("#residualNum" + thisRowNum).html(""); //重置库存为空
-		form.render('select');
-	}
-
-	//判断是否在数组中
-	function inPointArray(str, array) {
-		var isIn = false;
-		$.each(array, function(i, item) {
-			if(item.id === str) {
-				isIn = true;
-				return false;
-			}
-		});
-		return isIn;
-	}
-
-	//获取指定key对应的集合
-	function getListPointArray(str, array) {
-		var isList = [];
-		$.each(array, function(i, item) {
-			if(item.id === str) {
-				$.extend(true, isList, item.list);
-				return false;
-			}
-		});
-		return isList;
 	}
 
 	$("body").on("click", "#cancle", function() {

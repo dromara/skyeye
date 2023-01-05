@@ -35,15 +35,9 @@
 		        </div>
 		    </div>
 		    <div class="layui-form-item layui-col-xs6">
-		        <label class="layui-form-label">步骤：</label>
-		        <div class="layui-input-block ver-center">
-		            填单
-		        </div>
-		    </div>
-		    <div class="layui-form-item layui-col-xs6">
 		        <label class="layui-form-label">责任人：</label>
 		        <div class="layui-input-block ver-center">
-		            {{userName}}
+		            {{createName}}
 		        </div>
 		    </div>
 		    <div class="layui-form-item layui-col-xs12">
@@ -56,19 +50,17 @@
 		                        <th>用品名称</th>
 		                        <th style="min-width: 100px;">规格(单位)</th>
 		                        <th style="min-width: 50px;">采购数量</th>
-		                        <th style="min-width: 50px;">实际采购量</th>
 								<th>状态</th>
 								<th>备注</th>
 		                    </tr>
 		                </thead>
 		                <tbody id="useTable" class="insurance-table">
-							{{#each goods}}
+							{{#each purchaseLink}}
 								<tr>
-									<td>{{typeName}}</td>
-									<td>{{articleName}}</td>
-									<td>{{specificationsName}}</td>
+									<td>{{assetArticles.typeName}}</td>
+									<td>{{assetArticles.name}}</td>
+									<td>{{assetArticles.specifications}}</td>
 									<td>{{applyPurchaseNum}}</td>
-									<td>{{actualPurchaseNum}}</td>
 									<td>{{stateName}}</td>
 									<td>{{remark}}</td>
 								</tr>
