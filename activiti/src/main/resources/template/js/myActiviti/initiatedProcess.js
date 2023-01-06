@@ -60,11 +60,11 @@ layui.config({
 	        	}
 	        }},
 	        { field: 'weatherEnd', title: '审批进度', align: 'left', width: 80, templet: function (d) {
-	        	if(d.weatherEnd == 0){
-	        		return "<span class='state-down'>进行中</span>";
-	        	} else {
-	        		return "<span class='state-up'>已完成</span>";
-	        	}
+				if (d.weatherEnd == 1) {
+					return "<span class='state-up'>已完成</span>";
+				} else {
+					return "<span class='state-down'>进行中</span>";
+				}
 	        }},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#myStartTableBar'}
 	    ]],
