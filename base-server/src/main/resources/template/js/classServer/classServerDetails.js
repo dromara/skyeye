@@ -20,14 +20,14 @@ layui.config({
 
     showGrid({
         id: "showForm",
-        url: reqBasePath + "queryServiceClass",
+        url: reqBasePath + "queryServiceBeanCustom",
         params: {className: objectId},
         pagination: false,
         method: 'GET',
         template: $("#beanTemplate").html(),
         ajaxSendLoadBefore: function (hdb, json) {
-            json.bean.tenantName = skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("tenantEnum", 'enumFiledName', json.bean.tenant, 'name');
-            json.bean.flowableName = json.bean.flowable ? '是' : '否';
+            json.bean.serviceBean.tenantName = skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("tenantEnum", 'enumFiledName', json.bean.serviceBean.tenant, 'name');
+            json.bean.serviceBean.flowableName = json.bean.serviceBean.flowable ? '是' : '否';
         },
         ajaxSendAfter: function (json) {
             matchingLanguage();
