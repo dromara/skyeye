@@ -133,7 +133,6 @@ layui.config({
 	}
 
 	form.render();
-	// 刷新数据
     $("body").on("click", "#assetlistreloadTable", function() {
     	loadassetTable();
     });

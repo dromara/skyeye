@@ -202,7 +202,6 @@ layui.config({
 					// 将规格所属的商品信息加入到对象中存储
 					allChooseProduct[trcusid] = item.product;
 				});
-				// 渲染
 				form.render();
 
 				// 计算价格
