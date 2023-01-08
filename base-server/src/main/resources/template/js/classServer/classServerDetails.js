@@ -18,20 +18,35 @@ layui.config({
         return false;
     }
 
-    showGrid({
-        id: "showForm",
-        url: reqBasePath + "queryServiceBeanCustom",
-        params: {className: objectId},
-        pagination: false,
-        method: 'GET',
-        template: $("#beanTemplate").html(),
-        ajaxSendLoadBefore: function (hdb, json) {
-            json.bean.serviceBean.tenantName = skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("tenantEnum", 'enumFiledName', json.bean.serviceBean.tenant, 'name');
-            json.bean.serviceBean.flowableName = json.bean.serviceBean.flowable ? '是' : '否';
-        },
-        ajaxSendAfter: function (json) {
-            matchingLanguage();
-            form.render();
-        }
+    loadDetail();
+    function loadDetail() {
+        showGrid({
+            id: "showForm",
+            url: reqBasePath + "queryServiceBeanCustom",
+            params: {className: objectId},
+            pagination: false,
+            method: 'GET',
+            template: $("#beanTemplate").html(),
+            ajaxSendLoadBefore: function (hdb, json) {
+                json.bean.serviceBean.tenantName = skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("tenantEnum", 'enumFiledName', json.bean.serviceBean.tenant, 'name');
+                json.bean.serviceBean.flowableName = json.bean.serviceBean.flowable ? '是' : '否';
+            },
+            ajaxSendAfter: function (json) {
+                matchingLanguage();
+                form.render();
+            }
+        });
+    }
+
+    $("body").on("click", "#editBean", function() {
+        _openNewWindows({
+            url: "../../tpl/classServer/classServerEdit.html?objectId=" + objectId,
+            title: systemLanguage["com.skyeye.editPageTitle"][languageType],
+            pageId: "classServerEdit",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadDetail();
+            }});
     });
 });
