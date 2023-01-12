@@ -8,7 +8,7 @@
 - 最新资讯：[2023-01-09 智能制造云办公 v3.8.14 大版本发布](https://www.oschina.net/news/224259)
 - [软件更新历史](https://gitee.com/doc_wei01/skyeye/blob/company_server/HISTORY_UPDATE.md)
 - 开源版请下载`master`分支
-- 企业版当前版本：202209版，发布时间：2022-09-08
+- 企业版当前版本：202301版
 - 作者本人承诺，知识星球人数达到1000人，即开放所有功能模块源代码(仅供星球内部成员使用)
 - [开源版项目文档](https://gitee.com/doc_wei01/skyeye/blob/company_server/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3.md)
 - [企业版项目文档](https://gitee.com/doc_wei01/skyeye/blob/company_server/企业版项目文档.md)
