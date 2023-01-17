@@ -23,13 +23,13 @@ layui.config({
  	    form.on('submit(formAddBean)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
  	        	var params = {
-        			assetName: $("#assetName").val(),
+					name: $("#name").val(),
 					numberPrefix: $("#numberPrefix").val(),
         			specifications: $("#specifications").val(),
 					readPrice: $("#readPrice").val(),
-					describe: $("#describe").val(),
+					remark: $("#remark").val(),
 					typeId: $("#typeId").val(),
-					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
+					enclosureInfo: JSON.stringify({enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')}),
 					assetImg: $("#assetImg").find("input[type='hidden'][name='upload']").attr("oldurl")
  	        	};
 				if (isNull(params.assetImg)) {

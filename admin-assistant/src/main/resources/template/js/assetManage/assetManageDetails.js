@@ -14,11 +14,12 @@ layui.config({
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "asset006",
-		 	params: {rowId: parent.rowId},
+		 	params: {id: parent.rowId},
 		 	pagination: false,
+			method: 'GET',
 			template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb, json) {
-				json.bean.describe = stringManipulation.textAreaShow(json.bean.describe);
+				json.bean.remark = stringManipulation.textAreaShow(json.bean.remark);
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		$("#assetImg").attr("src", fileBasePath + json.bean.assetImg);

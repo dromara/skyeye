@@ -28,13 +28,13 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'assetName', title: '资产名称', width: 120, templet: function (d) {
-				return '<a lay-event="assetlistdetails" class="notice-title-click">' + d.assetName + '</a>';
+			{ field: 'name', title: '资产名称', width: 120, templet: function (d) {
+				return '<a lay-event="assetlistdetails" class="notice-title-click">' + d.name + '</a>';
 			}},
 			{ field: 'assetImg', title: '图片', align: 'center', width: 60, templet: function (d) {
 				return '<img src="' + systemCommonUtil.getFilePath(d.assetImg) + '" class="photo-img" lay-event="assetImg">';
 			}},
-			{ field: 'typeId', title: '资产类型', width: 100 },
+			{ field: 'typeName', title: '资产类型', width: 100 },
 			{ field: 'id', title: '明细', align: 'center', width: 80, templet: function (d) {
 				return '<a lay-event="assetReport" class="notice-title-click">明细</a>';
 			}},
@@ -98,7 +98,7 @@ layui.config({
 	function assetlistdelet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "asset003", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "asset003", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadassetTable();
     		}});

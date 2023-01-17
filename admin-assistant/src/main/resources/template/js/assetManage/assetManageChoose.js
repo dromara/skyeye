@@ -48,7 +48,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: flowableBasePath + 'queryAllAssetMationToChoose',
+	    url: flowableBasePath + 'asset001',
 	    where: getTableParams(),
 		even: true,
 	    page: true,
@@ -57,13 +57,13 @@ layui.config({
 	    cols: [[
 	    	{ type: assetCheckType ? 'checkbox' : 'radio', fixed: 'left'},
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
-			{ field: 'assetName', title: '资产名称', width: 120, templet: function (d) {
-				return '<a lay-event="assetlistdetails" class="notice-title-click">' + d.assetName + '</a>';
+			{ field: 'name', title: '资产名称', width: 120, templet: function (d) {
+				return '<a lay-event="assetlistdetails" class="notice-title-click">' + d.name + '</a>';
 			}},
 			{ field: 'assetImg', title: '图片', align: 'center', width: 60, templet: function (d) {
 				return '<img src="' + systemCommonUtil.getFilePath(d.assetImg) + '" class="photo-img" lay-event="assetImg">';
 			}},
-			{ field: 'typeId', title: '资产类型', width: 100 },
+			{ field: 'typeName', title: '资产类型', width: 100 },
 			{ field: 'numberPrefix', title: '资产编号前缀', width: 140 },
 			{ field: 'readPrice', title: '参考价', width: 80 },
 		]],

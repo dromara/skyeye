@@ -13,8 +13,9 @@ layui.config({
 
 	    showGrid({
 		 	id: "showForm",
-		 	url: flowableBasePath + "asset004",
-		 	params: {rowId: parent.rowId},
+		 	url: flowableBasePath + "asset006",
+		 	params: {id: parent.rowId},
+			method: 'GET',
 		 	pagination: false,
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb) {
@@ -42,13 +43,13 @@ layui.config({
 		 	        if (winui.verifyForm(data.elem)) {
 		 	        	var params = {
 	 	        			id: parent.rowId,
-							assetName: $("#assetName").val(),
+							name: $("#name").val(),
 							numberPrefix: $("#numberPrefix").val(),
 							specifications: $("#specifications").val(),
 							readPrice: $("#readPrice").val(),
-							describe: $("#describe").val(),
+							remark: $("#remark").val(),
 							typeId: $("#typeId").val(),
-							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
+							enclosureInfo: JSON.stringify({enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')}),
 							assetImg: $("#assetImg").find("input[type='hidden'][name='upload']").attr("oldurl")
 						};
 						if (isNull(params.assetImg)) {
