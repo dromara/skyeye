@@ -39,6 +39,9 @@ layui.config({
         }, {
             title: '属性信息',
             pageUrl: '../../tpl/attr/attrList.html'
+        }, {
+            title: '表单布局',
+            pageUrl: '../../tpl/dsFormPage/pageList.html'
         }];
 
         if (chooseTreeNode.classMation.flowable) {

@@ -107,6 +107,10 @@ layui.config({
 	}
 
 	form.render();
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
+	});
+
 	function loadTable() {
 		table.reloadData("messageTable", {where: getTableParams()});
 	}

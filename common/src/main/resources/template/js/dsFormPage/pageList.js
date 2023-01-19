@@ -1,26 +1,38 @@
 
 var rowId = "";
+var objectId = "";
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form', 'soulTable'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		table = layui.table;
-	
-	authBtn('1567731484858');
+		table = layui.table,
+		soulTable = layui.soulTable;
+
+	objectId = GetUrlParam("objectId");
+	if (isNull(objectId)) {
+		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
+		return false;
+	}
 
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'dsformpage001',
+	    url: reqBasePath + 'queryDsFormPageList',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
+		overflow: {
+			type: 'tips',
+			header: true,
+			total: true
+		},
 		limits: getLimits(),
 		limit: getLimit(),
 	    cols: [[
@@ -28,6 +40,9 @@ layui.config({
 	        { field: 'name', title: '名称', align: 'left', width: 120 },
 	        { field: 'remark', title: '简介', align: 'left', width: 350 },
 	        { field: 'numCode', title: '编号', width: 150 },
+			{ field: 'typeName', title: '类型', align: 'left', width: 120, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("dsFormPageType", 'id', d.typeName, 'name');
+			}},
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
@@ -35,10 +50,8 @@ layui.config({
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar' }
 	    ]],
 	    done: function(json) {
+			soulTable.render(this);
 	    	matchingLanguage();
-			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
-				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-			});
 	    }
 	});
 	
@@ -114,7 +127,7 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+		return {className: objectId};
 	}
 
     exports('pageList', {});

@@ -46,7 +46,6 @@
         <module>erp</module>
         <module>email</module>
         <module>ehr</module>
-        <module>dsform</module>
         <module>disk-cloud</module>
         <module>crm</module>
         <module>common</module>

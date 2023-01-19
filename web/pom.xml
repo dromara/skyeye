@@ -254,13 +254,6 @@
             <version>1-SNAPSHOT</version>
         </dependency>
 
-        <!-- 动态表单模块 -->
-        <dependency>
-            <groupId>com.skyeye.web</groupId>
-            <artifactId>dsform</artifactId>
-            <version>1-SNAPSHOT</version>
-        </dependency>
-
         <!-- 云文件模块 -->
         <dependency>
             <groupId>com.skyeye.web</groupId>
