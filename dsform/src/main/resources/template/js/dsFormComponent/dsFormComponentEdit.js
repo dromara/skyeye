@@ -16,7 +16,7 @@ layui.config({
 
 	showGrid({
 		id: "showForm",
-		url: flowableBasePath + "queryDsFormComponentMationById",
+		url: reqBasePath + "queryDsFormComponentMationById",
 		params: {id: parent.rowId},
 		pagination: false,
 		method: 'GET',
@@ -66,9 +66,9 @@ layui.config({
 			if (json.bean.linkedData == 1) {
 				$(".dataTpl").removeClass("layui-hide");
 				initDisplayTemplate(json.bean.displayTemplateId);//初始化关联的数据类型
-				var str = '<textarea class="layui-textarea" readonly>' + json.bean.templateContent + '</textarea>';
+				var str = '<textarea class="layui-textarea" readonly>' + json.bean.dsFormDisplayTemplate.content + '</textarea>';
 				$("#templateContent").html(str);
-				tplContentVal = strMatchAllByTwo(json.bean.templateContent, '{{', '}}');//取出数据模板中用{{}}包裹的词
+				tplContentVal = strMatchAllByTwo(json.bean.dsFormDisplayTemplate.content, '{{', '}}');//取出数据模板中用{{}}包裹的词
 				removeByValue(tplContentVal, "#each this");
 				removeByValue(tplContentVal, "/each");
 			}
@@ -93,7 +93,7 @@ layui.config({
 				initDatatpl = true;
 				showGrid({
 					id: "displayTemplateId",
-					url: flowableBasePath + "dsformdisplaytemplate006",
+					url: reqBasePath + "dsformdisplaytemplate006",
 					params: {},
 					pagination: false,
 					method: 'GET',
@@ -114,9 +114,9 @@ layui.config({
 				} else {
 					$.each(jsonStr, function(i, item) {
 						if (displayTemplateValue == item.id) {
-							var str = '<textarea class="layui-textarea" readonly>' + item.templateContent + '</textarea>';
+							var str = '<textarea class="layui-textarea" readonly>' + item.content + '</textarea>';
 							$("#templateContent").html(str);
-							tplContentVal = strMatchAllByTwo(item.templateContent, '{{','}}');//取出数据模板中用{{}}包裹的词
+							tplContentVal = strMatchAllByTwo(item.content, '{{','}}');//取出数据模板中用{{}}包裹的词
 							removeByValue(tplContentVal, "#each this");
 							removeByValue(tplContentVal, "/each");
 							return false;
@@ -180,7 +180,7 @@ layui.config({
 							return false;
 						}
 
-						AjaxPostUtil.request({url: flowableBasePath + "writeDsFormComponent", params: params, type: 'json', method: 'POST', callback: function (json) {
+						AjaxPostUtil.request({url: reqBasePath + "writeDsFormComponent", params: params, type: 'json', method: 'POST', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 						}});

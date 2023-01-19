@@ -13,7 +13,7 @@ layui.config({
 	    
 		showGrid({
 		 	id: "showForm",
-		 	url: flowableBasePath + "dsformdisplaytemplate004",
+		 	url: reqBasePath + "dsformdisplaytemplate004",
 		 	params: {id: parent.rowId},
 		 	pagination: false,
 			method: 'GET',
@@ -52,7 +52,7 @@ layui.config({
 							content: encodeURIComponent(content.getValue()),
 		        			id: parent.rowId
 			        	};
-			        	AjaxPostUtil.request({url: flowableBasePath + "writeDsFormDisplayTemplate", params: params, type: 'json', method: 'POST', callback: function (json) {
+			        	AjaxPostUtil.request({url: reqBasePath + "writeDsFormDisplayTemplate", params: params, type: 'json', method: 'POST', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 			 	   		}});

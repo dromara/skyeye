@@ -19,7 +19,7 @@ layui.config({
 	
 	authBtn('1567732055673');//保存控件
 	
-	AjaxPostUtil.request({url: flowableBasePath + "dsformpage004", params: {pageId: parent.rowId}, type: 'json', method: 'GET', callback: function (json) {
+	AjaxPostUtil.request({url: reqBasePath + "dsformpage004", params: {pageId: parent.rowId}, type: 'json', method: 'GET', callback: function (json) {
 		// 加载表单控件
 		loadLeftBoxItem();
 		// 加载拖拽
@@ -37,7 +37,7 @@ layui.config({
 			}
 			item.context = getDataUseHandlebars(item.dsFormComponent.templateContent, obj);
 		} else if (item.associatedDataTypes == 2) {//接口
-			AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params: {interfa: item.aData}, type: 'json', callback: function(j){
+			AjaxPostUtil.request({url: reqBasePath + "dsformpage011", params: {interfa: item.aData}, type: 'json', callback: function(j){
 				var obj = JSON.parse(j.bean.aData);
 				item.context = getDataUseHandlebars(item.dsFormComponent.templateContent, obj);
 	   		}, async: false});
@@ -83,7 +83,7 @@ layui.config({
  	function loadLeftBoxItem(){
  		showGrid({
 		 	id: "btnBox",
-		 	url: flowableBasePath + "queryDsFormComponentMationToShow",
+		 	url: reqBasePath + "queryAllDsFormComponentList",
 		 	params: {},
 		 	pagination: false,
 			method: 'GET',
@@ -179,7 +179,7 @@ layui.config({
 	
 	// 保存“新增控件”
     function reqSaveData(params, templateContent){
-    	AjaxPostUtil.request({url: flowableBasePath + "dsformpage003", params: params, type: 'json', callback: function (json) {
+    	AjaxPostUtil.request({url: reqBasePath + "dsformpage003", params: params, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			loadNewControl(json.bean);
 			loadFormItemDrop();
@@ -382,7 +382,7 @@ layui.config({
 			winui.window.msg('保存页面不能为空！', {icon: 2, time: 2000});
 			return;
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "dsformpage009", params: {formedit: JSON.stringify(jsonArray)}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "dsformpage009", params: {formedit: JSON.stringify(jsonArray)}, type: 'json', callback: function (json) {
 			winui.window.msg("保存成功", {icon: 1, time: 2000});
 			parent.refreshCode = '0';
    		}});

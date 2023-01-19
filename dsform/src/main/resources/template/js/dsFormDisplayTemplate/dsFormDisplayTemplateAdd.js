@@ -39,7 +39,7 @@ layui.config({
 					name: $("#name").val(),
 					content: encodeURIComponent(content.getValue())
 	        	};
-	        	AjaxPostUtil.request({url: flowableBasePath + "writeDsFormDisplayTemplate", params: params, type: 'json', method: 'POST', callback: function (json) {
+	        	AjaxPostUtil.request({url: reqBasePath + "writeDsFormDisplayTemplate", params: params, type: 'json', method: 'POST', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});

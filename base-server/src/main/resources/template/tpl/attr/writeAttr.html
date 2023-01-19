@@ -27,7 +27,27 @@
 		<div class="layui-form-item layui-col-xs6">
 			<label class="layui-form-label">名称<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="name" name="name" win-verify="required" placeholder="请输入名称" class="layui-input" maxlength="10" value="{{name}}"/>
+				<input type="text" id="name" name="name" win-verify="required" placeholder="请输入名称" class="layui-input" maxlength="100" value="{{name}}"/>
+			</div>
+		</div>
+		<div class="inputParams">
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">组件</label>
+				<div class="layui-input-block">
+					<input type="text" id="componentId" name="componentId" placeholder="请选择组件" class="layui-input" readonly="readonly" componentId=""/>
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">最小长度</label>
+				<div class="layui-input-block">
+					<input type="text" id="minLength" name="minLength" win-verify="number" placeholder="请输入最小长度" class="layui-input" value="{{minLength}}"/>
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">最大长度</label>
+				<div class="layui-input-block">
+					<input type="text" id="maxLength" name="maxLength" win-verify="number" placeholder="请输入最大长度" class="layui-input" value="{{maxLength}}"/>
+				</div>
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">

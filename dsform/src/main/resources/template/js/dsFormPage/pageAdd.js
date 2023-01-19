@@ -18,7 +18,7 @@ layui.config({
 				name: $("#name").val(),
 				remark: $("#remark").val()
 			};
-			AjaxPostUtil.request({url: flowableBasePath + "writeDsFormPage", params: params, type: 'json', method: "POST", callback: function (json) {
+			AjaxPostUtil.request({url: reqBasePath + "writeDsFormPage", params: params, type: 'json', method: "POST", callback: function (json) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			}});

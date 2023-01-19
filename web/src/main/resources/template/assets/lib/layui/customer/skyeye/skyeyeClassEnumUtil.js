@@ -1,4 +1,5 @@
 
+// 枚举类相关的工具类
 var skyeyeClassEnumUtil = {
 
     classEnumMap: {},
@@ -15,56 +16,7 @@ var skyeyeClassEnumUtil = {
      */
     showEnumDataListByClassName: function (code, showType, showBoxId, defaultId, form, callback) {
         var json = skyeyeClassEnumUtil.getEnumDataListByClassName(code);
-        if (showType == 'select') {
-            $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
-            if (!isNull(defaultId)) {
-                $("#" + showBoxId).val(defaultId);
-            } else {
-                $.each(json.rows, function (i, item) {
-                    if (item.isDefault) {
-                        $("#" + showBoxId).val(item.id);
-                    }
-                });
-            }
-            form.render('select');
-        } else if (showType == 'checkbox') {
-            $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/checkbox-property.tpl'), json));
-            if (!isNull(defaultId)) {
-                var arr = defaultId.split(",");
-                for(var i = 0; i < arr.length; i++){
-                    $('input:checkbox[rowId="' + arr[i] + '"]').attr("checked", true);
-                }
-            } else {
-                $.each(json.rows, function (i, item) {
-                    if (item.isDefault) {
-                        $('input:checkbox[rowId="' + item.id + '"]').attr("checked", true);
-                    }
-                });
-            }
-            form.render('checkbox');
-        } else if (showType == 'radio') {
-            $("#" + showBoxId).html(getDataUseHandlebars('{{#each rows}}<input type="radio" name="' + showBoxId + 'Name" value="{{id}}" title="{{name}}" />{{/each}}', json));
-            if (!isNull(defaultId)) {
-                $("#" + showBoxId + " input:radio[name=" + showBoxId + "Name][value=" + defaultId + "]").attr("checked", true);
-            } else {
-                $.each(json.rows, function (i, item) {
-                    if (item.isDefault) {
-                        $("#" + showBoxId + " input:radio[name=" + showBoxId + "Name][value=" + item.id + "]").attr("checked", true);
-                    }
-                });
-            }
-            form.render('radio');
-        } else if (showType == 'verificationSelect') {
-            var str = `<option value="">全部</option>{{#each rows}}<option value="{{formerRequirement}}">{{name}}</option>{{/each}}`;
-            $("#" + showBoxId).html(getDataUseHandlebars(str, json));
-            if (!isNull(defaultId)) {
-                $("#" + showBoxId).val(defaultId.split(","));
-            }
-            form.render('select');
-        }
-        if (typeof (callback) == "function") {
-            callback(json);
-        }
+        dataShowType.showData(json, showType, showBoxId, defaultId, form, callback);
     },
 
     getEnumDataNameByClassName: function (code, key, value, getKey) {

@@ -39,7 +39,12 @@ layui.config({
 			{ field: 'attrKey', title: '属性', align: 'left', width: 150 },
 			{ field: 'name', title: '名称', align: 'left', width: 120 },
 			{ field: 'attrType', title: '类型', align: 'left', width: 120 },
-			{ field: 'remark', title: '备注', align: 'left', width: 150 },
+			{ field: 'componentName', title: '关联组件', align: 'left', width: 140, templet: function (d) {
+				if (!isNull(d.dsFormComponent)) {
+					return d.dsFormComponent.name;
+				}
+				return '';
+			}},
 			{ field: 'required', title: '限制条件', align: 'left', width: 140 },
 			{ field: 'modelAttribute', title: '是否模型属性', align: 'center', width: 100, templet: function (d) {
 				if (d.modelAttribute) {
@@ -53,6 +58,7 @@ layui.config({
 				}
 				return '否';
 			}},
+			{ field: 'remark', title: '备注', align: 'left', width: 150 },
 			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar' }
 		]],
 	    done: function(json) {

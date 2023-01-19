@@ -967,3 +967,153 @@ var treeSelectUtil = {
 
 };
 
+// 数据展示方式
+var dataShowType = {
+
+    /**
+     * 展示数据
+     *
+     * @param json 数据
+     * @param showType 展示类型
+     * @param showBoxId 展示位置
+     * @param defaultId 默认回显值
+     * @param form form对象
+     * @param callback 回调函数
+     * @param chooseCallback 如果是提供选择的树插件类型，则具备点击节点的回调事件
+     */
+    showData: function (json, showType, showBoxId, defaultId, form, callback, chooseCallback) {
+        if (showType == 'select') {
+            // 下拉框
+            $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
+            if (!isNull(defaultId)) {
+                $("#" + showBoxId).val(defaultId);
+            } else {
+                $.each(json.rows, function (i, item) {
+                    if (item.isDefault) {
+                        $("#" + showBoxId).val(item.id);
+                    }
+                });
+            }
+            form.render('select');
+        } else if (showType == 'checkbox') {
+            // 多选框
+            $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/checkbox-property.tpl'), json));
+            if (!isNull(defaultId)) {
+                var arr = defaultId.split(",");
+                for(var i = 0; i < arr.length; i++){
+                    $('input:checkbox[rowId="' + arr[i] + '"]').attr("checked", true);
+                }
+            } else {
+                $.each(json.rows, function (i, item) {
+                    if (item.isDefault) {
+                        $('input:checkbox[rowId="' + item.id + '"]').attr("checked", true);
+                    }
+                });
+            }
+            form.render('checkbox');
+        } else if (showType == 'radio') {
+            // 单选框
+            $("#" + showBoxId).html(getDataUseHandlebars('{{#each rows}}<input type="radio" name="' + showBoxId + 'Name" value="{{id}}" title="{{name}}" />{{/each}}', json));
+            if (!isNull(defaultId)) {
+                $("#" + showBoxId + " input:radio[name=" + showBoxId + "Name][value=" + defaultId + "]").attr("checked", true);
+            } else {
+                $.each(json.rows, function (i, item) {
+                    if (item.isDefault) {
+                        $("#" + showBoxId + " input:radio[name=" + showBoxId + "Name][value=" + item.id + "]").attr("checked", true);
+                    }
+                });
+            }
+            form.render('radio');
+        } else if (showType == 'verificationSelect') {
+            // 多选下拉框
+            var str = `<option value="">全部</option>{{#each rows}}<option value="{{formerRequirement}}">{{name}}</option>{{/each}}`;
+            $("#" + showBoxId).html(getDataUseHandlebars(str, json));
+            if (!isNull(defaultId)) {
+                $("#" + showBoxId).val(defaultId.split(","));
+            }
+            form.render('select');
+        } else if (showType == 'radioTree') {
+            // 单选框树
+            var _html = sysDictDataUtil.getShowTteeHtml(showBoxId, '0');
+            var _js = `<script>
+                        layui.define(["jquery", 'fsTree'], function(exports) {
+                            var jQuery = layui.jquery,
+                                fsTree = layui.fsTree;
+                            (function($) {
+                                var ${showBoxId}Object;
+                                fsTree.render({
+                                    id: "${showBoxId}Tree",
+                                    simpleData: '` + JSON.stringify(json.treeRows) + `',
+                                    checkEnable: true,
+                                    loadEnable: false,
+                                    chkStyle: "radio",
+                                    showLine: false,
+                                    showIcon: true,
+                                    expandSpeed: 'fast',
+                                    onCheck: function (event, treeId, treeNode) {
+                                        $('#${showBoxId}').attr('chooseId', treeNode.id);
+                                    }
+                                }, function(id) {
+                                    ${showBoxId}Object = $.fn.zTree.getZTreeObj(id);
+                                    fuzzySearch(id, '#${showBoxId}Name', null, true);
+                                });
+                                if (` + !isNull(defaultId) + `) {
+                                    var zTree = ${showBoxId}Object.getCheckedNodes(false);
+                                    for (var i = 0; i < zTree.length; i++) {
+                                        if(zTree[i].id == '` + defaultId + `'){
+                                            ${showBoxId}Object.checkNode(zTree[i], true, true);
+                                            $('#${showBoxId}').attr('chooseId', zTree[i].id);
+                                        }
+                                    }
+                                }
+                            })(jQuery);});
+                       </script>`;
+            $("#" + showBoxId).append(_html + _js);
+        } else if (showType == 'selectTree') {
+            // 提供选择的树插件
+            var _html = sysDictDataUtil.getShowTteeHtml(showBoxId, '1');
+            _html += `<link href="../../assets/lib/winui/css/customer/ztree/common-tree.css" rel="stylesheet" />`;
+            var _js = `<script>
+                        layui.define(["jquery", 'fsTree'], function(exports) {
+                            var jQuery = layui.jquery,
+                                fsTree = layui.fsTree;
+                            (function($) {
+                                fsTree.render({
+                                    id: "${showBoxId}Tree",
+                                    simpleData: '` + JSON.stringify(json.treeRows) + `',
+                                    checkEnable: false,
+                                    loadEnable: false,
+                                    showLine: false,
+                                    showIcon: true,
+                                    expandSpeed: 'fast',
+                                    addDiyDom: ztreeUtil.addDiyDom,
+                                    clickCallback: onClickTree,
+                                    onDblClick: onClickTree
+                                }, function(id) {
+                                    fuzzySearch(id, '#${showBoxId}Name', null, true);
+                                    ztreeUtil.initEventListener(id);
+                                });
+                                function onClickTree(event, treeId, treeNode) {
+                                    var chooseId;
+                                    if (treeNode == undefined || treeNode.id == 0) {
+                                        chooseId = "";
+                                    } else {
+                                        chooseId = treeNode.id;
+                                    }
+                                    $('#${showBoxId}Choose').val(chooseId).change();
+                                }
+                            })(jQuery);});
+                       </script>`;
+            $("#" + showBoxId).append(_html + _js);
+            $("#" + showBoxId + "Choose").on("change", function() {
+                if (typeof (chooseCallback) == "function") {
+                    chooseCallback($(this).val());
+                }
+            });
+        }
+        if (typeof (callback) == "function") {
+            callback(json);
+        }
+    }
+
+};
