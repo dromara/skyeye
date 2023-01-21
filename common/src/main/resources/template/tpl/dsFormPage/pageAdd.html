@@ -12,12 +12,19 @@
 			<div class="layui-form-item layui-col-xs12">
 				<span class="hr-title">基本信息</span><hr>
 			</div>
-	        <div class="layui-form-item layui-col-xs12">
+	        <div class="layui-form-item layui-col-xs6">
 		        <label class="layui-form-label">名称<i class="red">*</i></label>
 		        <div class="layui-input-block">
 		        	<input type="text" id="name" name="name" win-verify="required" placeholder="请输入名称" class="layui-input"/>
 		        </div>
 		    </div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">布局类型</label>
+				<div class="layui-input-block">
+					<select lay-filter="type" lay-search="" win-verify="required" id="type" name="type">
+					</select>
+				</div>
+			</div>
 		    <div class="layui-form-item layui-col-xs12">
 		    	<label class="layui-form-label">简介</label>
 		        <div class="layui-input-block">

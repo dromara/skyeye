@@ -19,6 +19,7 @@ layui.config({
 		template: $("#showTemplate").html(),
 		ajaxSendAfter:function (json) {
 
+			skyeyeClassEnumUtil.showEnumDataListByClassName("dsFormPageType", 'select', "type", json.bean.type, form);
 			matchingLanguage();
 			form.render();
 			form.on('submit(formEditBean)', function (data) {
@@ -26,7 +27,9 @@ layui.config({
 					var params = {
 						id: parent.rowId,
 						name: $("#name").val(),
-						remark: $("#remark").val()
+						remark: $("#remark").val(),
+						type: $("#type").val(),
+						className: parent.objectId
 					};
 					AjaxPostUtil.request({url: reqBasePath + "writeDsFormPage", params: params, type: 'json', method: "POST", callback: function (json) {
 						parent.layer.close(index);

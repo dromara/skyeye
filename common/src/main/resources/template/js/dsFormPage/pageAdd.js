@@ -10,13 +10,17 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form;
 
+	skyeyeClassEnumUtil.showEnumDataListByClassName("dsFormPageType", 'select', "type", '', form);
+
 	matchingLanguage();
 	form.render();
 	form.on('submit(formAddBean)', function (data) {
 		if (winui.verifyForm(data.elem)) {
 			var params = {
 				name: $("#name").val(),
-				remark: $("#remark").val()
+				remark: $("#remark").val(),
+				type: $("#type").val(),
+				className: parent.objectId
 			};
 			AjaxPostUtil.request({url: reqBasePath + "writeDsFormPage", params: params, type: 'json', method: "POST", callback: function (json) {
 				parent.layer.close(index);

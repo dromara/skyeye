@@ -38,10 +38,10 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'name', title: '名称', align: 'left', width: 120 },
-	        { field: 'remark', title: '简介', align: 'left', width: 350 },
+	        { field: 'remark', title: '简介', align: 'left', width: 200 },
 	        { field: 'numCode', title: '编号', width: 150 },
-			{ field: 'typeName', title: '类型', align: 'left', width: 120, templet: function (d) {
-				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("dsFormPageType", 'id', d.typeName, 'name');
+			{ field: 'type', title: '类型', align: 'left', width: 120, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("dsFormPageType", 'id', d.type, 'name');
 			}},
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
@@ -83,7 +83,7 @@ layui.config({
 	// 表单设计
 	function control(data) {
 		rowId = data.id;
-		_openNewWindows({
+		parent.parent._openNewWindows({
 			url: "../../tpl/dsFormPage/dsFormPageDesign.html",
 			title: "表单设计",
 			pageId: "dsFormPageDesign",
