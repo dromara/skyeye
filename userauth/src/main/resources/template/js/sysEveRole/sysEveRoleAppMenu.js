@@ -60,10 +60,10 @@ layui.config({
 	    /********* tree 处理   start *************/
 		var tree;
 
-		AjaxPostUtil.request({url: reqBasePath + "sys038", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
-			$("#roleName").text(json.bean.roleName);
-			$("#roleDesc").text(json.bean.roleDesc);
-			checkeRows = json.rows;
+		AjaxPostUtil.request({url: reqBasePath + "querySysRoleById", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
+			$("#name").text(json.bean.name);
+			$("#remark").text(json.bean.remark);
+			checkeRows = json.bean.appMenuIds;
 
 			tree = fsTree.render({
 				id: "treeDemo",
@@ -80,7 +80,7 @@ layui.config({
 				var zTree = zTreeObj.getCheckedNodes(false);
 				for (var i = 0; i < zTree.length; i++) {
 					for(var j = 0; j < checkeRows.length; j++){
-						if(zTree[i].id == checkeRows[j].menuId){
+						if(zTree[i].id == checkeRows[j]){
 							zTreeObj.checkNode(zTree[i], true);
 						}
 					}

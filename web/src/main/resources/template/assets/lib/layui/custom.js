@@ -284,11 +284,11 @@ function auth(urlNum) {
 				return true;
 			} else {
 				// 数据权限分组不为空
-				if (authList[i].children.length > 0) {
+				if (!isNull(authList[i].children) && authList[i].children.length > 0) {
 					var dataGroup = authList[i].children;
 					for (var j = 0; j < dataGroup.length; j++) {
 						// 数据权限不为空
-						if (dataGroup[j].children.length > 0) {
+						if (!isNull(dataGroup[j].children) && dataGroup[j].children.length > 0) {
 							var dataAuthPoint = dataGroup[j].children;
 							for (var k = 0; k < dataAuthPoint.length; k++) {
 								if (dataAuthPoint[k].menuNum === urlNum) {

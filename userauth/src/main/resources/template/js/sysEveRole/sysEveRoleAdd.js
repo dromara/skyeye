@@ -18,11 +18,11 @@ layui.config({
 	form.on('submit(formAddBean)', function (data) {
 		if (winui.verifyForm(data.elem)) {
 			var params = {
-				roleName: $("#roleName").val(),
-				roleDesc: $("#roleDesc").val()
+				name: $("#name").val(),
+				remark: $("#remark").val()
 			};
 
-			AjaxPostUtil.request({url: reqBasePath + "sys015", params: params, type: 'json', method: "POST", callback: function (json) {
+			AjaxPostUtil.request({url: reqBasePath + "writeSysRole", params: params, type: 'json', method: "POST", callback: function (json) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			}});

@@ -16,10 +16,10 @@
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
-			{{# if(auth('1552900944072')) { }}
+			{{# if(auth('1552954959607')) { }}
             	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 			{{# } }}
-			{{# if(d.userNum == 0 && auth('1552877034665')) { }}
+			{{# if(auth('1552877034665')) { }}
 				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
 			{{# } }}
 			{{# if(auth('1644726632357')) { }}

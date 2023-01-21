@@ -25,11 +25,12 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'roleName', title: '角色名称', width: 120 },
-	        { field: 'roleDesc', title: '角色描述', width: 520 },
-	        { field: 'userNum', title: '使用用户数量', width: 150 },
-	        { field: 'parentName', title: '父角色', width: 150 },
-	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+	        { field: 'name', title: '角色名称', width: 120 },
+	        { field: 'remark', title: '角色描述', width: 520 },
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar' }
 	    ]],
 	    done: function(json) {
@@ -58,7 +59,7 @@ layui.config({
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], { icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType] }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "sys018", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "deleteRoleById", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -87,7 +88,9 @@ layui.config({
             title: "手机端菜单授权",
             pageId: "sysEveRoleAppMenu",
             area: ['90vw', '90vh'],
-            callBack: function (refreshCode) {}});
+            callBack: function (refreshCode) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+			}});
     }
 
 	// PC端菜单授权
@@ -98,7 +101,9 @@ layui.config({
 			title: "PC端菜单授权",
 			pageId: "sysEveRolePCMenu",
 			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {}});
+			callBack: function (refreshCode) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+			}});
 	}
 	
     // 新增角色
@@ -115,7 +120,6 @@ layui.config({
     });
 
 	form.render();
-	// 刷新数据
 	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
