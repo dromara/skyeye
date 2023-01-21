@@ -18,12 +18,18 @@ layui.config({
 		form = layui.form;
 	
 	authBtn('1567732055673');//保存控件
+	var className = GetUrlParam("className");
+	if (isNull(className)) {
+		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
+		return false;
+	}
+
+	// 加载表单控件
+	loadLeftBoxItem();
+	// 加载属性
+	loadClassAttr();
 	
 	AjaxPostUtil.request({url: reqBasePath + "dsformpage004", params: {pageId: parent.rowId}, type: 'json', method: 'GET', callback: function (json) {
-		// 加载表单控件
-		loadLeftBoxItem();
-		// 加载拖拽
-		setup_draggable();
 		// 加载页面内容
 		loadPageMation(json);
  	}});
@@ -80,7 +86,7 @@ layui.config({
  	}
  	
  	// 加载表单控件
- 	function loadLeftBoxItem(){
+ 	function loadLeftBoxItem() {
  		showGrid({
 		 	id: "btnBox",
 		 	url: reqBasePath + "queryAllDsFormComponentList",
@@ -98,36 +104,57 @@ layui.config({
 			},
 		 	ajaxSendAfter:function (json) {
 		 		form.render();
+				$(".draggable").draggable({
+					appendTo: "body",
+					helper: "clone",
+					drag: function (event, ui) {},
+					stop: function () {}
+				});
+				$(".droppable").droppable({
+					accept: ".draggable",
+					helper: "clone",
+					hoverClass: "droppable-active",
+					drop: function(event, ui) {
+						$(".empty-form").remove();
+						var _this = $(ui.draggable);
+						if (!_this.hasClass("dropped")) {
+							getFormPageControlContent(_this.attr("rowid"));
+						} else {
+							if ($(this)[0] != _this.parent()[0]) {
+								var $el = _this.clone().appendTo(this);
+								_this.remove()
+							}
+						}
+					}
+				}).sortable();
 		 	}
 		});
  	}
+
+	// 加载属性
+	function loadClassAttr() {
+		showGrid({
+			id: "attrBox",
+			url: reqBasePath + "queryAttrDefinitionList",
+			params: {className: className},
+			pagination: false,
+			method: 'POST',
+			template: $("#leftAttrBoxItem").html(),
+			ajaxSendLoadBefore: function (hdb, json) {
+				$.each(json.rows, function (i, item) {
+					if (isNull(item.dsFormComponent)) {
+						item.class = "no-choose";
+					} else {
+						item.iLabelClass = "i-label-class";
+					}
+				});
+			},
+			ajaxSendAfter:function (json) {
+
+			}
+		});
+	}
  	
- 	var setup_draggable = function() {
-	    $(".draggable").draggable({
-	        appendTo: "body",
-	        helper: "clone",
-			drag: function (event, ui) {},
-			stop: function () {}
-	    });
-	    $(".droppable").droppable({
-	        accept: ".draggable",
-	        helper: "clone",
-	        hoverClass: "droppable-active",
-			drop: function(event, ui) {
-	        	$(".empty-form").remove();
-	        	var _this = $(ui.draggable);
-	            if (!_this.hasClass("dropped")) {
-	            	getFormPageControlContent(_this.attr("rowid"));
-	            } else {
-	                if ($(this)[0] != _this.parent()[0]) {
-	                    var $el = _this.clone().appendTo(this);
-	                    _this.remove()
-	                }
-	            }
-	        }
-	    }).sortable();
-	};
-	
 	function getFormPageControlContent(id) {
 		var linkedData; //控件关联的数据
 		var defaultData; //选择事件的默认数据

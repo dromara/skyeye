@@ -10,12 +10,31 @@
     display: inline-block;
     background: #fff;
     color: #000;
-    width: 85px;
     height: 70px;
     line-height: 1;
     text-align: center;
     cursor: pointer;
     z-index: 2;
+}
+
+.attr-mation {
+    height: 28px;
+    line-height: 28px;
+    text-align: left;
+    padding: 0px 10px;
+}
+
+.no-choose {
+    cursor: not-allowed;
+    color: grey;
+}
+
+.attr-mation .fa {
+    margin-right: 5px;
+}
+
+.attr-mation .i-label-class {
+    cursor: move;
 }
 
 .btntext:hover {

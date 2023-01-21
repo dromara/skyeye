@@ -84,7 +84,7 @@ layui.config({
 	function control(data) {
 		rowId = data.id;
 		parent.parent._openNewWindows({
-			url: "../../tpl/dsFormPage/dsFormPageDesign.html",
+			url: "../../tpl/dsFormPage/dsFormPageDesign.html?className=" + objectId,
 			title: "表单设计",
 			pageId: "dsFormPageDesign",
 			area: ['100vw', '100vh'],

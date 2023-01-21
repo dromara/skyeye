@@ -9,13 +9,22 @@
 	<link href="dsFormPageDesign.css" rel="stylesheet" />
 </head>
 	<body style="background-color: rgb(234, 234, 234)">
-		<div class="winui-toolbar" style="position: fixed; width: 100%; z-index: 100;">
+		<div class="winui-toolbar" style="position: fixed; width: calc(100% - 10px); z-index: 100; text-align: right">
 	        <div class="winui-tool">
 	            <button id="save" class="winui-toolbtn" auth="1567732055673"><i class="fa fa-save" aria-hidden="true"></i><language showName="com.skyeye.save"></language></button>
 	        </div>
 	    </div>
-	    <div class="left-box-form" id="btnBox">
-		    
+	    <div class="left-box-form">
+			<div class="layui-tab layui-tab-brief">
+				<ul class="layui-tab-title">
+					<li class="layui-this">基本组件</li>
+					<li class="">属性</li>
+				</ul>
+				<div class="layui-tab-content">
+					<div class="layui-tab-item layui-show" id="btnBox"></div>
+					<div class="layui-tab-item" id="attrBox"></div>
+				</div>
+			</div>
 		</div>
 	    <div class="center-box-form">
 		    <form class="layui-form droppable sortable ui-droppable ui-sortable" action="" id="showForm" autocomplete="off">
@@ -44,6 +53,16 @@
 					</label>
 				</div>
 			{{/each}}
+		{{/each}}
+	</script>
+
+	<script type="text/html" id="leftAttrBoxItem">
+		{{#each rows}}
+			<div class="form-group draggable ui-draggable btntext attr-mation layui-col-xs12 {{class}}" rowid="{{attrKey}}">
+				<label class="col-sm-12 {{class}}">
+					<i class="fa fa-arrows fa-fw {{iLabelClass}}"></i>{{name}}
+				</label>
+			</div>
 		{{/each}}
 	</script>
 
