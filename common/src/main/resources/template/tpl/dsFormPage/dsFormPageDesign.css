@@ -1,6 +1,6 @@
+
 .left-box-form {
-    min-height: calc(100% - 60px);
-    top: 55px;
+    height: 100%;
     background-color: white;
     position: fixed;
     width: 266px;
@@ -74,23 +74,34 @@
 }
 
 .center-box-form {
-    width: calc(100% - 610px);
+    width: calc(100% - 620px);
     margin-left: 280px;
-    min-height: calc(100% - 60px);
-    top: 55px;
+    height: 100%;
     background-color: white;
     z-index: 1;
     position: absolute;
     overflow: auto;
 }
 
+.center-box-form-toolbar {
+    width: calc(100% - 613px);
+    margin-left: 266px;
+    margin-bottom: 10px;
+    background-color: white;
+    text-align: right;
+    border-left: 1px solid #ececec;
+    border-right: 1px solid #ececec;
+    height: 40px;
+    padding: 0px 10px;
+}
+
 .right-box-form {
-    min-height: calc(100% - 60px);
-    top: 55px;
+    height: 100%;
     background-color: white;
     position: fixed;
     width: 320px;
     right: 0px;
+    top: 0px;
     padding-right: 5px;
     padding-top: 5px;
 }
@@ -109,17 +120,31 @@
     min-height: 600px;
 }
 
-.ui-sortable-placeholder {
+.center-box-form .ui-sortable-placeholder {
     border: 1px dashed #cecece !important;
     visibility: visible !important;
-    background: #e7eaec
+    background: #e7eaec;
+    margin: 0 0 23px !important;
 }
 
-.ui-sortable-placeholder-choose {
+.center-box-form .ui-sortable-placeholder-choose {
     visibility: visible !important;
     border: 1px #d9534f dashed;
 }
 
-.ibox.ui-sortable-placeholder {
-    margin: 0 0 23px !important
+.btn-base {
+    display: none;
+    text-align: right;
+}
+
+.btn-base button {
+    color: white;
+    width: 21px;
+    height: 21px;
+    border: 0px;
+    background-color: #2e73ff;
+}
+
+.btn-base .btn-danger {
+    background-color: red;
 }

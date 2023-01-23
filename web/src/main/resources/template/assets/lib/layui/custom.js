@@ -712,7 +712,7 @@ function uploadImg(file, Editor) {
  * @param d 员工参数
  * @returns {string}
  */
-function getStaffStateName(d){
+function getStaffStateName(d) {
 	if(d.state == '1'){
 		return "<span class='state-up'>在职</span>";
 	} else if (d.state == '2'){
@@ -734,7 +734,7 @@ function getStaffStateName(d){
  * @param value 要比较的值
  * @returns {boolean}
  */
-function judgeInPoingArr(array, key, value){
+function judgeInPoingArr(array, key, value) {
 	for(var i = 0; i < array.length; i++){
 		if(array[i][key] == value){
 			return true;
@@ -752,7 +752,7 @@ function judgeInPoingArr(array, key, value){
  * @param getKey 要获取的值
  * @returns {null|*}
  */
-function getInPoingArr(array, key, value, getKey){
+function getInPoingArr(array, key, value, getKey) {
 	for(var i = 0; i < array.length; i++){
 		if(array[i][key] == value){
 			if(isNull(getKey)){
@@ -771,7 +771,7 @@ function getInPoingArr(array, key, value, getKey){
  * @param value 要比较的值
  * @returns {null|*}
  */
-function getArrIndexOfPointStr(array, value){
+function getArrIndexOfPointStr(array, value) {
 	for(var i = 0; i < array.length; i++){
 		if(value.indexOf(array[i]) > -1){
 			return array[i];
@@ -997,7 +997,7 @@ function showPicDisk(imgs){
  * 获取随机值
  * @return {}
  */
-function getRandomValueToString(){
+function getRandomValueToString() {
 	return Date.parse(new Date()) + "" + getRandom(999);
 }
 
@@ -1006,7 +1006,7 @@ function getRandomValueToString(){
  * @param {} n
  * @return {}
  */
-function getRandom(n){
+function getRandom(n) {
 	return Math.floor(Math.random() * n + 1);
 }
 

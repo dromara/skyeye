@@ -135,25 +135,35 @@ var dsFormUtil = {
         });
     },
 
-    setValue: function (customBoxId, item, i) {
-        if (item.associatedDataTypes == 1) {//json串
-            var obj = item.aData;
-            if(typeof item.aData == 'string'){
-                obj = JSON.parse(item.aData);
+    /**
+     * 加载组件信息
+     *
+     * @param boxId
+     * @param content
+     */
+    loadComponent: function (boxId, content) {
+        var component = content.dsFormComponent;
+        console.log(component)
+        if (component.linkedData == 1) {
+            // 关联数据
+            var obj = isNull(content.aData) ? [] : content.aData;
+            if(typeof obj == 'string'){
+                obj = JSON.parse(obj);
             }
-            item.context = getDataUseHandlebars(item.dsFormComponent.templateContent, obj);
-        } else if (item.associatedDataTypes == 2) {//接口
-            AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params: {interfa: item.aData}, type: 'json', callback: function(j) {
-                var obj = JSON.parse(j.bean.aData);
-                item.context = getDataUseHandlebars(item.dsFormComponent.templateContent, obj);
-            }, async: false});
+            content.context = getDataUseHandlebars(content.dsFormDisplayTemplate.content, obj);
         }
 
-        var jsonStr = {bean: item};
-        var html = getDataUseHandlebars('{{#bean}}' + item.dsFormComponent.htmlContent + '{{/bean}}', jsonStr);
-        var html_js = getDataUseHandlebars('{{#bean}}' + item.dsFormComponent.jsContent + '{{/bean}}', jsonStr);
+        var jsonStr = {bean: content};
+        var html = getDataUseHandlebars('{{#bean}}' + component.htmlContent + '{{/bean}}', jsonStr);
+        var html_js = getDataUseHandlebars('{{#bean}}' + component.jsContent + '{{/bean}}', jsonStr);
         var jsCon = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + html_js + '})(jQuery);});</script>';
-        $("#" + customBoxId).append(html + jsCon);
+        $("#" + boxId).append(html + jsCon);
+        return content;
+    },
+
+    setValue: function (customBoxId, item, i) {
+        // 加载组件
+        dsFormUtil.loadComponent(customBoxId, item);
 
         // 给能通过id赋值的控件赋值
         $("#" + item.id).val(item.value);

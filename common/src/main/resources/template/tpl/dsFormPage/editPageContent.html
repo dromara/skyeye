@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/css/codemirror.css" rel="stylesheet" />
+</head>
+<body>
+    <div style="margin:0 auto;padding:20px;">
+        <form class="layui-form" action="" id="showForm" autocomplete="off">
+
+        </form>
+    </div>
+
+    <script type="text/html" id="controlItemEdit">
+        {{#bean}}
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">名称<i class="red">*</i></label>
+            <div class="layui-input-block">
+                <input type="text" id="title" name="title" win-verify="required" placeholder="请输入控件名称" class="layui-input" maxlength="18" value="{{title}}"/>
+            </div>
+        </div>
+        <div id="isAssociated" class="layui-hide">
+            <div class="layui-form-item layui-col-xs12 layui-hide dataTpl">
+                <label class="layui-form-label">数据来源<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <select id="dataType" name="dataType" lay-search="" lay-filter="dataType">
+
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12 layui-hide defaultDataBox">
+                <label class="layui-form-label">数据展示模板<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <select id="displayTemplateId" name="displayTemplateId" lay-search="" lay-filter="displayTemplateId">
+
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12 layui-hide defaultDataBox">
+                <div class="layui-input-block" id="templateContent">
+
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12 layui-hide defaultDataBox">
+                <label class="layui-form-label">默认数据<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <textarea id="defaultData" name="defaultData" class="layui-textarea"></textarea>
+                    <div class="layui-form-mid layui-word-aux">数据样式为：[{"id":"1","name":"男",...},{"id":"2","name":"女",...}]</div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">提示语</label>
+            <div class="layui-input-block winui-radio">
+                <input type="text" id="placeholder" name="placeholder" win-verify="" placeholder="请输入控件提示语" class="layui-input" maxlength="30" value="{{placeholder}}"/>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">限制条件</label>
+            <div class="layui-input-block">
+                <select lay-filter="require" multiple lay-search="" id="require" name="require">
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">默认值</label>
+            <div class="layui-input-block">
+                <input type="text" id="defaultValue" name="defaultValue" win-verify="" placeholder="请输入默认值" class="layui-input" maxlength="50" value="{{value}}"/>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">宽度<i class="red">*</i></label>
+            <div class="layui-input-block">
+                <select lay-filter="width" lay-search="" id="width" name="width">
+                    <option value="layui-col-xs9">3/4</option>
+                    <option value="layui-col-xs4">1/3</option>
+                    <option value="layui-col-xs6">1/2</option>
+                    <option value="layui-col-xs12">1</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">属性</label>
+            <div class="layui-input-block">
+                <input type="text" id="attrKey" name="attrKey" placeholder="只接受英文、数字" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" class="layui-input" maxlength="30" value="{{attrKey}}"/>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <div class="layui-input-block">
+                <button class="winui-btn" lay-submit lay-filter="formAddBean"><language showName="com.skyeye.save"></language></button>
+            </div>
+        </div>
+        {{/bean}}
+    </script>
+
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/dsFormPage/'}).use('editPageContent');
+    </script>
+</body>
+</html>

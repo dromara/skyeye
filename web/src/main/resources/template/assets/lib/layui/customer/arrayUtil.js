@@ -31,7 +31,7 @@ var arrayUtil = {
         if(inArray != -1) {
             list.splice(inArray, 1);
         }
-        return list;
+        return [].concat(list);
     }
 
 }
