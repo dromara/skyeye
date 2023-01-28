@@ -163,20 +163,12 @@ layui.config({
 	}
  	
 	function getFormPageControlContent(id) {
-		var dsFormComponent = {};
-		$.each(componentList, function(i, item) {
-			if(item.id == id){
-				dsFormComponent = item;
-			}
-		});
+		var dsFormComponent = getInPoingArr(componentList, 'id', id);
+
 		var params  = {
 			width: 'layui-col-xs12',
 			title: dsFormComponent.name,
-			require: '',
-			placeholder: '',
-			defaultValue: '',
 			formContentId: id,
-			attrKey: '',
 			dsFormComponent: dsFormComponent,
 			id: getRandomValueToString()
        	};
@@ -191,13 +183,8 @@ layui.config({
     	$(this).addClass("ui-sortable-placeholder-choose");
     	var contentId = $(this).attr("contentId");
 		$("#showForm div[contentId='" + contentId + "']").find('.btn-base').show();
-    	$.each(contentList, function(i, item) {
-			if(item.id === contentId){
-				contentData = item;
-				$("#editPageContent").attr("src", "../../tpl/dsFormPage/editPageContent.html");
-				return;
-			}
-		});
+		contentData = getInPoingArr(contentList, 'id', contentId);
+		$("#editPageContent").attr("src", "../../tpl/dsFormPage/editPageContent.html");
     });
     
     function sortDataIn() {

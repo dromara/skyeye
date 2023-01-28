@@ -13,10 +13,11 @@ var skyeyeClassEnumUtil = {
      * @param defaultId 默认回显值
      * @param form form对象
      * @param callback 回调函数
+     * @param valueKey value展示的key
      */
-    showEnumDataListByClassName: function (code, showType, showBoxId, defaultId, form, callback) {
+    showEnumDataListByClassName: function (code, showType, showBoxId, defaultId, form, callback, valueKey) {
         var json = skyeyeClassEnumUtil.getEnumDataListByClassName(code);
-        dataShowType.showData(json, showType, showBoxId, defaultId, form, callback);
+        dataShowType.showData(json, showType, showBoxId, defaultId, form, callback, valueKey);
     },
 
     getEnumDataNameByClassName: function (code, key, value, getKey) {

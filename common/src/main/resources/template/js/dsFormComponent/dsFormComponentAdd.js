@@ -19,6 +19,8 @@ layui.config({
 	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["dsFormContentType"]["key"], 'select', "dsFormContentType", '', form);
 	// 组件展示类型
 	skyeyeClassEnumUtil.showEnumDataListByClassName("dsFormShowType", 'select', "showType", '', form);
+	// 组件关联属性
+	skyeyeClassEnumUtil.showEnumDataListByClassName("componentAttr", 'verificationSelect', "attrKeys", '', form);
 
 	// 根据类型获取部分功能的使用说明
 	systemCommonUtil.queryExplainMationByType(2, function(json) {
@@ -56,6 +58,7 @@ layui.config({
 				jsFitValue: encodeURIComponent(jsFitValue.getValue()),
 				typeId: $("#dsFormContentType").val(),
 				showType: $("#showType").val(),
+				attrKeys: $('#attrKeys').attr('value'),
 				linkedData: '2'
 			};
 			if ($("#linkedData").val() == 'true') {

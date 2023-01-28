@@ -150,7 +150,9 @@ var dsFormUtil = {
             if(typeof obj == 'string'){
                 obj = JSON.parse(obj);
             }
-            content.context = getDataUseHandlebars(content.dsFormDisplayTemplate.content, obj);
+            if (!isNull(content.dsFormDisplayTemplate)) {
+                content.context = getDataUseHandlebars(content.dsFormDisplayTemplate.content, obj);
+            }
         }
 
         var jsonStr = {bean: content};

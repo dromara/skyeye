@@ -542,9 +542,9 @@ function getPieChatOption(title, subtext, data){
 }
 
 // 移除指定value值
-function removeByValue(arr, val){
-	for(var i = 0; i < arr.length; i++){
-		if(arr[i] == val) {
+function removeByValue(arr, val) {
+	for (var i = 0; i < arr.length; i++) {
+		if (arr[i] == val) {
 			arr.splice(i, 1);
 			break;
 		}
@@ -552,11 +552,11 @@ function removeByValue(arr, val){
 }
 
 // 取出json串的键
-function getOutKey(arr){
+function getOutKey(arr) {
 	var jsonObj = $.parseJSON(arr);
 	var a = [];
 	var b = [];
-	for(var i = 0; i < jsonObj.length; i++){
+	for (var i = 0; i < jsonObj.length; i++) {
 		for (var key in jsonObj[i])
 			a.push(key);
 		b.push(a);

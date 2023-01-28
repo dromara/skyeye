@@ -980,8 +980,9 @@ var dataShowType = {
      * @param form form对象
      * @param callback 回调函数
      * @param chooseCallback 如果是提供选择的树插件类型，则具备点击节点的回调事件
+     * @param valueKey value展示的key
      */
-    showData: function (json, showType, showBoxId, defaultId, form, callback, chooseCallback) {
+    showData: function (json, showType, showBoxId, defaultId, form, callback, chooseCallback, valueKey) {
         if (showType == 'select') {
             // 下拉框
             $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
@@ -1026,12 +1027,73 @@ var dataShowType = {
             form.render('radio');
         } else if (showType == 'verificationSelect') {
             // 多选下拉框
-            var str = `<option value="">全部</option>{{#each rows}}<option value="{{formerRequirement}}">{{name}}</option>{{/each}}`;
-            $("#" + showBoxId).html(getDataUseHandlebars(str, json));
-            if (!isNull(defaultId)) {
-                $("#" + showBoxId).val(defaultId.split(","));
-            }
-            form.render('select');
+            var html = `<div id="${showBoxId}Div" class="xm-select-demo"></div>`;
+            $("#" + showBoxId).html(html);
+            var optionValueKey = isNull(valueKey) ? "id" : valueKey;
+            layui.define(["xmSelect"], function(exports) {
+                var xmSelect = layui.xmSelect;
+                var data = [].concat(json.rows);
+                // 设置选中值
+                var chooseId = [];
+                if (!isNull(defaultId)) {
+                    var defaultIds = defaultId.split(",");
+                    $.each(defaultIds, function (m, str) {
+                        $.each(data, function (i, item) {
+                            if (item[optionValueKey] == str) {
+                                item.selected = true;
+                                chooseId.push(str);
+                            }
+                        });
+                    });
+                }
+                // 设置默认选中
+                $.each(data, function (i, item) {
+                    if (item.isDefault && !item.selected) {
+                        item.selected = true;
+                        chooseId.push(item[optionValueKey]);
+                    }
+                });
+                $(`#${showBoxId}`).attr('value', JSON.stringify(chooseId));
+
+                var _select = xmSelect.render({
+                    el: `#${showBoxId}Div`,
+                    data: json.rows,
+                    autoRow: true,
+                    model: {
+                        label: {
+                            type: 'block',
+                            block: {
+                                // 最大显示数量, 0:不限制
+                                showCount: 3,
+                                // 是否显示删除图标
+                                showIcon: true,
+                            }
+                        }
+                    },
+                    theme: {
+                        color: '#0089ff',
+                    },
+                    prop: {
+                        name: 'name',
+                        value: optionValueKey
+                    },
+                    filterable: true,
+                    toolbar: {
+                        show: true,
+                        list: ['ALL', 'REVERSE', 'CLEAR']
+                    },
+                    on: function(data) {
+                        var arr = data.arr;
+                        var newChooseId = [];
+                        $.each(arr, function (i, item) {
+                            newChooseId.push(item[optionValueKey]);
+                        });
+                        $(`#${showBoxId}`).attr('value', JSON.stringify(newChooseId));
+                    },
+                    done: function(data) {
+                    }
+                });
+            });
         } else if (showType == 'radioTree') {
             // 单选框树
             var _html = sysDictDataUtil.getShowTteeHtml(showBoxId, '0');

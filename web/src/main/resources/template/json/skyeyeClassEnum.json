@@ -35,6 +35,7 @@
     "disCussionAuthEnum": {"name": "讨论帖权限", "className": "skyeye-pro#com.skyeye.discussion.classenum.DisCussionAuthEnum"},
 
     "dsFormPageType": {"name": "表单布局类型", "className": "skyeye-pro#com.skyeye.dsform.classenum.DsFormPageType"},
-    "pageComponentDataType": {"name": "表单布局里面的组件关联的数据类型", "className": "skyeye-pro#com.skyeye.dsform.classenum.PageComponentDataType"}
+    "pageComponentDataType": {"name": "表单布局里面的组件关联的数据类型", "className": "skyeye-pro#com.skyeye.dsform.classenum.PageComponentDataType"},
+    "componentAttr": {"name": "组件关联的属性", "className": "skyeye-pro#com.skyeye.dsform.classenum.ComponentAttr"}
 
 }

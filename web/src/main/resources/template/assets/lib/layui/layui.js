@@ -325,6 +325,7 @@ function getCookie(name) {
 			ruleCode: 'ruleCode/ruleCode', // 编码规则
 			sortable: 'skuTable/sortable', // 表格排序
 			skuTable: 'skuTable/skuTable', // 商品规格
+			xmSelect: 'xm-select/xm-select', // 多选下拉框插件
 		};
 
 	// 记录基础数据

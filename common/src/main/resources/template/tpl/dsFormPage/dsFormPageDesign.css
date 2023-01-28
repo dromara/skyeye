@@ -76,7 +76,7 @@
 .center-box-form {
     width: calc(100% - 620px);
     margin-left: 280px;
-    height: 100%;
+    height: calc(100% - 50px);
     background-color: white;
     z-index: 1;
     position: absolute;
