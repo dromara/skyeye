@@ -19,6 +19,13 @@
   - 账号：skyeye
   - 密码：123456
 
+### 演示视频
+
+| 视频 | 视频 | 视频 | 视频 | 视频 |
+|----|----|----|----|----|
+| [多桌面任务](https://www.bilibili.com/video/BV1yb41127oB/)   |  [聊天](https://www.bilibili.com/video/BV11b41127FV)  |  [日程](https://www.bilibili.com/video/BV1vb411i75M)  |  [ERP + 生产 202007版](https://www.bilibili.com/video/BV1yA411e7mm)  | [ERP + 生产 202109升级模块](https://www.bilibili.com/video/BV1vR4y1p7ka)   |
+| [报表设计器 Echarts模型制作](https://www.bilibili.com/video/BV1kB4y167uz/) |||||
+
 ### 沟通交流
 
 |                企业部署版(联系作者进知识星球获取)                 | 作者微信(添加时请备注个人信息：姓名-联系方式)，其余一律不通过 | QQ群 | 微信公众号(获取资料) |
