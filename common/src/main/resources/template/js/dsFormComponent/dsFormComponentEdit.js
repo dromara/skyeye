@@ -58,6 +58,7 @@ layui.config({
 			element.init();
 
 			var htmlEditor = CodeMirror.fromTextArea(document.getElementById("htmlContent"), codeUtil.getConfig('xml'));
+			var htmlDataFromEditor = CodeMirror.fromTextArea(document.getElementById("htmlDataFrom"), codeUtil.getConfig('xml'));
 			var jsEditor = CodeMirror.fromTextArea(document.getElementById("jsContent"), codeUtil.getConfig('text/javascript'));
 			var jsValue = CodeMirror.fromTextArea(document.getElementById("jsValue"), codeUtil.getConfig('text/javascript'));
 			var jsDisplayValue = CodeMirror.fromTextArea(document.getElementById("jsDisplayValue"), codeUtil.getConfig('text/javascript'));
@@ -79,6 +80,7 @@ layui.config({
 							numCode: $("#numCode").val(),
 							name: $("#name").val(),
 							htmlContent: encodeURIComponent(htmlEditor.getValue()),
+							htmlDataFrom: encodeURIComponent(htmlDataFromEditor.getValue()),
 							jsContent: encodeURIComponent(jsEditor.getValue()),
 							jsValue: encodeURIComponent(jsValue.getValue()),
 							jsDisplayValue: encodeURIComponent(jsDisplayValue.getValue()),

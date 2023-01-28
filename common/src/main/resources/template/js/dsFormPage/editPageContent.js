@@ -97,8 +97,7 @@ layui.config({
                     if (isJSON(defaultDataStr)) {
                         var defaultKey = getOutKey(defaultDataStr);//取出json串的键
                         // 获取数据展示模板
-                        var displayTemplate = getInPoingArr(displayTemplateList, 'id', $("#displayTemplateId").val());
-                        var tplContentVal = strMatchAllByTwo(displayTemplate.content, '{{', '}}');//取出数据模板中用{{}}包裹的词
+                        var tplContentVal = strMatchAllByTwo(data.dsFormComponent.htmlDataFrom, '{{', '}}');//取出数据模板中用{{}}包裹的词
                         removeByValue(tplContentVal, "#each this");
                         removeByValue(tplContentVal, "/each");
                         if (subset(tplContentVal, defaultKey)) {
@@ -144,7 +143,6 @@ layui.config({
         $("#dataTypeObjectBox").html(dataTypeObject[value]);
         if (value == 1) {
             // 自定义
-            initDisplayTemplate();
         } else if (value == 2) {
             // 枚举
             initEnumData();
