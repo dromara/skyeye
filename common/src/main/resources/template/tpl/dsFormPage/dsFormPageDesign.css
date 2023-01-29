@@ -15,6 +15,8 @@
     text-align: center;
     cursor: pointer;
     z-index: 2;
+    width: 33%;
+    float: left;
 }
 
 .attr-mation {
@@ -22,6 +24,7 @@
     line-height: 28px;
     text-align: left;
     padding: 0px 10px;
+    width: calc(100% - 20px);
 }
 
 .no-choose {

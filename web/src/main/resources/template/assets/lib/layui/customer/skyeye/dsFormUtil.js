@@ -143,16 +143,14 @@ var dsFormUtil = {
      */
     loadComponent: function (boxId, content) {
         var component = content.dsFormComponent;
-        console.log(component)
         if (component.linkedData == 1) {
             // 关联数据
-            var obj = isNull(content.aData) ? [] : content.aData;
-            if(typeof obj == 'string'){
-                obj = JSON.parse(obj);
-            }
-            if (!isNull(content.dsFormDisplayTemplate)) {
-                content.context = getDataUseHandlebars(content.dsFormDisplayTemplate.content, obj);
-            }
+            content = dsFormUtil.getContentLinkedData(content);
+        }
+        if (isNull(content.attrDefinition)) {
+            content.title = component.name;
+        } else {
+            content.title = content.attrDefinition.name;
         }
 
         var jsonStr = {bean: content};
@@ -160,6 +158,34 @@ var dsFormUtil = {
         var html_js = getDataUseHandlebars('{{#bean}}' + component.jsContent + '{{/bean}}', jsonStr);
         var jsCon = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + html_js + '})(jQuery);});</script>';
         $("#" + boxId).append(html + jsCon);
+        return content;
+    },
+
+    getContentLinkedData: function (content) {
+        var json = {};
+        var dataType = content.dataType;
+        if (isNull(content.objectId) && isNull(content.defaultData)) {
+            return content;
+        }
+        if (dataType == 1) {
+            // 自定义
+            var obj = isNull(content.defaultData) ? [] : content.defaultData;
+            if(typeof obj == 'string'){
+                obj = JSON.parse(obj);
+            }
+            json = obj;
+        } else if (dataType == 2) {
+            // 枚举
+            json = skyeyeClassEnumUtil.getEnumDataListByClassName(content.objectId).rows;
+        } else if (dataType == 3) {
+            // 数据字典
+            sysDictDataUtil.queryDictDataListByDictTypeCode(content.objectId, function (data) {
+                json = data.rows;
+            });
+        }
+        if (!isNull(content.dsFormComponent.htmlDataFrom)) {
+            content.context = getDataUseHandlebars(content.dsFormComponent.htmlDataFrom, json);
+        }
         return content;
     },
 

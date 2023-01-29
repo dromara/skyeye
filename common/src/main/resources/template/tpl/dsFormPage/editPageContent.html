@@ -20,14 +20,11 @@
             <span class="hr-title">基本信息</span><hr>
         </div>
         <div class="layui-form-item layui-hide layui-col-xs12" id="attrKeyBox">
-            <label class="layui-form-label">关联属性：</label>
+            <label class="layui-form-label">关联属性<i class="red">*</i></label>
             <div class="layui-input-block">
-            </div>
-        </div>
-        <div class="layui-form-item layui-hide layui-col-xs12" id="titleBox">
-            <label class="layui-form-label">名称<i class="red">*</i></label>
-            <div class="layui-input-block">
-                <input type="text" id="title" name="title" win-verify="required" placeholder="请输入控件名称" class="layui-input" maxlength="18" value="{{title}}"/>
+                <select lay-filter="attrKey" lay-search="" id="attrKey" name="width" win-verify="required">
+
+                </select>
             </div>
         </div>
         <div class="layui-form-item layui-hide layui-col-xs12" id="placeholderBox">
@@ -52,10 +49,7 @@
             <label class="layui-form-label">宽度<i class="red">*</i></label>
             <div class="layui-input-block">
                 <select lay-filter="width" lay-search="" id="width" name="width">
-                    <option value="layui-col-xs9">3/4</option>
-                    <option value="layui-col-xs4">1/3</option>
-                    <option value="layui-col-xs6">1/2</option>
-                    <option value="layui-col-xs12">1</option>
+
                 </select>
             </div>
         </div>

@@ -40,6 +40,33 @@ layui.config({
 
     $("#showForm").html(getDataUseHandlebars($("#controlItemEdit").html(), {bean: data}));
 
+    // 属性信息
+    var attrs = [];
+    $.each(parent.attrList, function (i, item) {
+        // 获取已经绑定组件的属性并且适用于当前组件的属性
+        if (!isNull(item.dsFormComponent) && data.dsFormComponent.id == item.dsFormComponent.id) {
+            attrs.push({
+                id: item.attrKey,
+                name: item.name
+            })
+        }
+    });
+    $("#attrKey").html(getDataUseHandlebars(selOption, {rows: attrs}));
+    $("#attrKey").val(data.attrKey);
+    form.on('select(attrKey)', function(data) {
+        if (!isNull(data.value)) {
+            // 判断该属性是否已经存在
+            var temp = getInPoingArr(parent.contentList, 'attrKey', data.value);
+            if (!isNull(temp)) {
+                winui.window.msg('该属性已存在于布局，请重新选择.', {icon: 2, time: 2000});
+                $("#attrKey").val('');
+            }
+        }
+    });
+
+    // 宽度
+    skyeyeClassEnumUtil.showEnumDataListByClassName("widthScale", 'select', "width", data.width, form);
+
     // 加载组件关联的属性
     $.each(data.dsFormComponent.attrKeys, function (i, item) {
         $("#" + item).removeClass("layui-hide");
@@ -64,26 +91,25 @@ layui.config({
     form.render();
     form.on('submit(formAddBean)', function (data) {
         if (winui.verifyForm(data.elem)) {
-            saveNodeData(data, data.id);
-            winui.window.msg("保存成功", {icon: 1, time: 2000});
+            saveNodeData();
         }
         return false;
     });
 
-    function saveNodeData(data, contentId) {
+    function saveNodeData() {
         var inDataIndex = -1;
-        $.each(contentList, function (i, item) {
-            if (item.id === contentId) {
+        $.each(parent.contentList, function (i, item) {
+            if (item.id === data.id) {
                 inDataIndex = i;
             }
         });
-        var newParams = contentList[inDataIndex];
-        newParams.title = $("#title").val();
+        var newParams = parent.contentList[inDataIndex];
         newParams.placeholder = $("#placeholder").val();
         newParams.require = isNull($('#require').attr('value')) ? [] : $('#require').attr('value');
         newParams.defaultValue = $("#defaultValue").val();
         newParams.width = $("#width").val();
         newParams.attrKey = $("#attrKey").val();
+        newParams.attrDefinition = getInPoingArr(parent.attrList, 'attrKey', $("#attrKey").val());
 
         if (newParams.dsFormComponent.linkedData == 1) {
             newParams.dataType = $("#dataType").val();
@@ -112,21 +138,32 @@ layui.config({
                     }
                 }
             } else {
-                var objectId = $("#objectId").val();
-                if (isNull(objectId)) {
-                    winui.window.msg("请选择数据.", {icon: 2, time: 2000});
-                    return false;
-                }
-                newParams.objectId = objectId;
+                newParams.objectId = $("#objectId").val();
             }
         }
-        contentList = contentList.map(t => {
-            return t.id === contentId ? newParams : t;
+        parent.contentList = parent.contentList.map(t => {
+            return t.id === data.id ? newParams : t;
         });
-        sortDataIn();
+        parent.sortDataIn();
         $(".mask-req-str").remove();
     }
 
+    function loadDataMation(value) {
+        $("#dataTypeObjectBox").html(dataTypeObject[value]);
+        if (value == 1) {
+            // 自定义
+        } else if (value == 2) {
+            // 枚举
+            initEnumData();
+        } else if (value == 3) {
+            // 数据字典
+            initDictData();
+        }
+    }
+
+    /**
+     * 加载枚举类可选列表
+     */
     function initEnumData() {
         var arr = [];
         $.each(skyeyeClassEnum, function (key, value) {
@@ -139,14 +176,14 @@ layui.config({
         form.render('select');
     }
 
-    function loadDataMation(value) {
-        $("#dataTypeObjectBox").html(dataTypeObject[value]);
-        if (value == 1) {
-            // 自定义
-        } else if (value == 2) {
-            // 枚举
-            initEnumData();
-        }
+    /**
+     * 加载数据字典可选列表
+     */
+    function initDictData() {
+        AjaxPostUtil.request({url: reqBasePath + "queryDictTypeListByEnabled", params: {enabled: 1}, type: 'json', method: 'GET', callback: function (json) {
+            $("#objectId").html(getDataUseHandlebars(selOption, json));
+            form.render('select');
+        }});
     }
 
 });
