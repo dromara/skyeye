@@ -42,6 +42,9 @@ layui.config({
         }, {
             title: '表单布局',
             pageUrl: '../../tpl/dsFormPage/pageList.html'
+        }, {
+            title: '操作按钮',
+            pageUrl: '../../tpl/operate/operateList.html'
         }];
 
         if (chooseTreeNode.classMation.flowable) {

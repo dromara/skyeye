@@ -27,7 +27,6 @@ layui.config({
 	// 表单控件集合
 	var componentList = [];
 	
-	authBtn('1567732055673');//保存控件
 	var className = GetUrlParam("className");
 	if (isNull(className)) {
 		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
