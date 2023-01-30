@@ -180,6 +180,7 @@ layui.config({
 			width: 'layui-col-xs12',
 			formContentId: id,
 			dsFormComponent: dsFormComponent,
+			title: dsFormComponent.name,
 			attrKey: attrKey,
 			attrDefinition: !isNull(attrKey) ? getInPoingArr(attrList, 'attrKey', attrKey) : null,
 			id: getRandomValueToString()
@@ -231,7 +232,7 @@ layui.config({
 	$("body").on("click", "#save", function() {
 		for (var i = 0; i < contentList.length; i++) {
 			var item = contentList[i];
-			if (isNull(item.attrKey)) {
+			if (isNull(item.attrKey) && $.inArray('attrKeyBox', item.dsFormComponent.attrKeys) >= 0) {
 				winui.window.msg("存在无关联属性的组件，请移除.", {icon: 2, time: 2000});
 				initFormItemClick($("#showForm div[contentId='" + item.id + "']"));
 				return false;

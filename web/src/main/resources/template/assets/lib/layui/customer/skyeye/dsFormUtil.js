@@ -147,9 +147,7 @@ var dsFormUtil = {
             // 关联数据
             content = dsFormUtil.getContentLinkedData(content);
         }
-        if (isNull(content.attrDefinition)) {
-            content.title = component.name;
-        } else {
+        if (!isNull(content.attrDefinition)) {
             content.title = content.attrDefinition.name;
         }
 

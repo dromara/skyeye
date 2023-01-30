@@ -104,12 +104,20 @@ layui.config({
             }
         });
         var newParams = parent.contentList[inDataIndex];
+        newParams.title = $("#title").val();
         newParams.placeholder = $("#placeholder").val();
         newParams.require = isNull($('#require').attr('value')) ? [] : $('#require').attr('value');
         newParams.defaultValue = $("#defaultValue").val();
         newParams.width = $("#width").val();
         newParams.attrKey = $("#attrKey").val();
-        newParams.attrDefinition = getInPoingArr(parent.attrList, 'attrKey', $("#attrKey").val());
+
+        if (!$("#attrKeyBox").hasClass('layui-hide') && isNull($("#attrKey").val())) {
+            winui.window.msg("请选择关联属性.", {icon: 2, time: 2000});
+            return false;
+        }
+        if (!isNull($("#attrKey").val())) {
+            newParams.attrDefinition = getInPoingArr(parent.attrList, 'attrKey', $("#attrKey").val());
+        }
 
         if (newParams.dsFormComponent.linkedData == 1) {
             newParams.dataType = $("#dataType").val();

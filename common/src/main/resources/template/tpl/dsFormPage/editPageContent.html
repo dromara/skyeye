@@ -22,9 +22,15 @@
         <div class="layui-form-item layui-hide layui-col-xs12" id="attrKeyBox">
             <label class="layui-form-label">关联属性<i class="red">*</i></label>
             <div class="layui-input-block">
-                <select lay-filter="attrKey" lay-search="" id="attrKey" name="width" win-verify="required">
+                <select lay-filter="attrKey" lay-search="" id="attrKey" name="attrKey">
 
                 </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide layui-col-xs12" id="titleBox">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-block">
+                <input type="text" id="title" name="title" placeholder="请输入标题" class="layui-input" maxlength="18" value="{{title}}"/>
             </div>
         </div>
         <div class="layui-form-item layui-hide layui-col-xs12" id="placeholderBox">
