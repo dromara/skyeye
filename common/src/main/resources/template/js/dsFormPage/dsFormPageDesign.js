@@ -232,7 +232,7 @@ layui.config({
 		for (var i = 0; i < contentList.length; i++) {
 			var item = contentList[i];
 			if (isNull(item.attrKey)) {
-				winui.window.msg("存在无关联属性组件，请移除.", {icon: 2, time: 2000});
+				winui.window.msg("存在无关联属性的组件，请移除.", {icon: 2, time: 2000});
 				initFormItemClick($("#showForm div[contentId='" + item.id + "']"));
 				return false;
 			}
