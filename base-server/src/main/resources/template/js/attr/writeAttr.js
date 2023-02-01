@@ -10,6 +10,33 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		textool = layui.textool;
+	var selOption = getFileContent('tpl/template/select-option.tpl');
+
+	// 不同的数据来源对应不同的html
+	var dataTypeObject = {
+		"1": `<div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">默认数据<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <textarea id="defaultData" name="defaultData" win-verify="required" class="layui-textarea"></textarea>
+                    <div class="layui-form-mid layui-word-aux">数据样式为：[{"id":"1","name":"男",...},{"id":"2","name":"女",...}]</div>
+                </div>
+            </div>`,
+		"2": `<div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">枚举数据<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <select id="objectId" name="objectId" lay-search="" win-verify="required" lay-filter="objectId"></select>
+                </div>
+            </div>`,
+		"3": `<div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">数据字典<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <select id="objectId" name="objectId" lay-search="" win-verify="required" lay-filter="objectId"></select>
+                </div>
+            </div>`
+	};
+
+	// 表单控件集合
+	var componentList = [];
 
 	var className = GetUrlParam('className');
 	var attrKey = GetUrlParam('attrKey');
@@ -23,11 +50,23 @@ layui.config({
 			eleTree: layui.eleTree,
 			elem: 'componentId',
 			url: reqBasePath + "queryAllDsFormComponentList",
-			defaultId: json.bean.componentId
+			defaultId: json.bean.componentId,
+			ajaxCallback: function (data) {
+				$.each(data.rows, function (i, item) {
+					if (!isNull(item.children)) {
+						componentList = componentList.concat(item.children);
+					}
+				});
+				var value = dataType == 1 ? json.bean.defaultData : json.bean.objectId;
+				loadLinkData(json.bean.componentId, json.bean.dataType, value);
+			},
+			clickCallback: function (chooseId) {
+				loadLinkData(chooseId, '', '');
+			}
 		});
 
 		// 如果不是入参属性，则不能设置特定的一些值
-		if (!json.bean.attrDefinition.whetherInputParams) {
+		if (!json.bean.whetherInputParams) {
 			$('.inputParams').hide();
 		}
 
@@ -46,6 +85,38 @@ layui.config({
 					remark: $("#remark").val(),
 					id: id
 				};
+
+				var dsFormComponent = getInPoingArr(componentList, 'id', params.componentId);
+				if (!isNull(dsFormComponent) && dsFormComponent.linkedData == 1) {
+					params.dataType = $("#dataType").val();
+					if (params.dataType == 1) {
+						// 自定义
+						var defaultDataStr = $("#defaultData").val();
+						if (isNull(defaultDataStr)) {
+							winui.window.msg("请填写Json串！", {icon: 2, time: 2000});
+							return false;
+						} else {
+							if (isJSON(defaultDataStr)) {
+								var defaultKey = getOutKey(defaultDataStr);//取出json串的键
+								// 获取数据展示模板
+								var tplContentVal = strMatchAllByTwo(dsFormComponent.htmlDataFrom, '{{', '}}');//取出数据模板中用{{}}包裹的词
+								removeByValue(tplContentVal, "#each this");
+								removeByValue(tplContentVal, "/each");
+								if (subset(tplContentVal, defaultKey)) {
+									params.defaultData = defaultDataStr;
+								} else {
+									winui.window.msg('json串内容有误，请重新填写!', {icon: 2, time: 2000});
+									return false;
+								}
+							} else {
+								winui.window.msg('json串格式不正确，请重新填写!', {icon: 2, time: 2000});
+								return false;
+							}
+						}
+					} else {
+						params.objectId = $("#objectId").val();
+					}
+				}
 				AjaxPostUtil.request({url: reqBasePath + "saveAttrDefinitionCustom", params: params, type: 'json', method: "POST", callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
@@ -55,7 +126,65 @@ layui.config({
 		});
 	}});
 
+	function loadLinkData(componentId, dataType, value) {
+		var dsFormComponent = getInPoingArr(componentList, 'id', componentId);
+		if (!isNull(dsFormComponent) && dsFormComponent.linkedData == 1) {
+			// 允许关联数据
+			$("#linkDataBox").removeClass("layui-hide");
+			// 数据来源类型
+			skyeyeClassEnumUtil.showEnumDataListByClassName("attrKeyDataType", 'select', "dataType", dataType, form);
+			form.on('select(dataType)', function(data) {
+				loadDataMation($('#dataType').val(), '');
+			});
+			loadDataMation(dataType, value);
+		} else {
+			$("#linkDataBox").addClass("layui-hide");
+		}
+	}
+
+	function loadDataMation(dataType, value) {
+		$("#dataTypeObjectBox").html(dataTypeObject[dataType]);
+		if (dataType == 1) {
+			// 自定义
+			$("#defaultData").val(value);
+		} else if (dataType == 2) {
+			// 枚举
+			initEnumData();
+			$("#objectId").val(value);
+		} else if (dataType == 3) {
+			// 数据字典
+			initDictData();
+			$("#objectId").val(value);
+		}
+		form.render('select');
+	}
+
+	/**
+	 * 加载枚举类可选列表
+	 */
+	function initEnumData() {
+		var arr = [];
+		$.each(skyeyeClassEnum, function (key, value) {
+			arr.push({
+				id: key,
+				name: value.name
+			})
+		});
+		$("#objectId").html(getDataUseHandlebars(selOption, {rows: arr}));
+		form.render('select');
+	}
+
+	/**
+	 * 加载数据字典可选列表
+	 */
+	function initDictData() {
+		AjaxPostUtil.request({url: reqBasePath + "queryDictTypeListByEnabled", params: {enabled: 1}, type: 'json', method: 'GET', callback: function (json) {
+			$("#objectId").html(getDataUseHandlebars(selOption, json));
+		}, async: false});
+	}
+
 	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);
 	});
+
 });

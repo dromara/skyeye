@@ -915,7 +915,9 @@ var treeSelectUtil = {
         url: '',
         idKey: 'id',
         nameKey: 'name',
-        defaultId: ''
+        defaultId: '',
+        ajaxCallback: null,
+        clickCallback: null
     },
 
     init: function (_config) {
@@ -943,6 +945,9 @@ var treeSelectUtil = {
                     $(`#${treeSelectUtil.config.elem}`).val(html);
                     $(`#${treeSelectUtil.config.elem}`).attr(`${treeSelectUtil.config.elem}`, treeSelectUtil.config.defaultId);
                 }
+                if (typeof treeSelectUtil.config.ajaxCallback == "function") {
+                    treeSelectUtil.config.ajaxCallback(res);
+                }
             }
         });
 
@@ -958,6 +963,9 @@ var treeSelectUtil = {
             }
             $(`#${treeSelectUtil.config.elem}`).val(d.data.currentData[treeSelectUtil.config.nameKey]);
             $(`#${treeSelectUtil.config.elem}`).attr(`${treeSelectUtil.config.elem}`, d.data.currentData[treeSelectUtil.config.idKey]);
+            if (typeof treeSelectUtil.config.clickCallback == "function") {
+                treeSelectUtil.config.clickCallback(d.data.currentData[treeSelectUtil.config.idKey]);
+            }
             $(".ele5").hide();
         })
         $(document).on("click",function() {

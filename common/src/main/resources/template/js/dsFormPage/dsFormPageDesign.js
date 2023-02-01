@@ -119,10 +119,11 @@ layui.config({
 			template: $("#leftAttrBoxItem").html(),
 			ajaxSendLoadBefore: function (hdb, json) {
 				$.each(json.rows, function (i, item) {
-					if (isNull(item.dsFormComponent)) {
+					if (isNull(item.attrDefinitionCustom) || isNull(item.attrDefinitionCustom.dsFormComponent)) {
 						item.class = "no-choose";
 						item.showTitle = noComponentTitle;
 					} else {
+						item.name = item.attrDefinitionCustom.name;
 						var temp = getInPoingArr(contentList, 'attrKey', item.attrKey);
 						if (!isNull(temp)) {
 							item.class = "no-choose";

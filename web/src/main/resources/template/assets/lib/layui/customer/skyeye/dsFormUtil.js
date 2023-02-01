@@ -148,7 +148,11 @@ var dsFormUtil = {
             content = dsFormUtil.getContentLinkedData(content);
         }
         if (!isNull(content.attrDefinition)) {
-            content.title = content.attrDefinition.name;
+            if (!isNull(content.attrDefinition.attrDefinitionCustom)) {
+                content.title = content.attrDefinition.attrDefinitionCustom.name;
+            } else {
+                content.title = content.attrDefinition.name;
+            }
         }
 
         var jsonStr = {bean: content};
