@@ -73,9 +73,9 @@ layui.config({
 	// 添加
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/dsFormPage/pageAdd.html",
+			url: "../../tpl/operate/writeOperate.html",
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-			pageId: "pageAdd",
+			pageId: "writeOperate",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
