@@ -165,23 +165,27 @@ var dsFormUtil = {
 
     getContentLinkedData: function (content) {
         var json = {};
-        var dataType = content.dataType;
-        if (isNull(content.objectId) && isNull(content.defaultData)) {
+        if (isNull(content.attrDefinition) || isNull(content.attrDefinition.attrDefinitionCustom)) {
+            return content;
+        }
+        var customAttr = content.attrDefinition.attrDefinitionCustom;
+        var dataType = customAttr.dataType;
+        if (isNull(customAttr.objectId) && isNull(customAttr.defaultData)) {
             return content;
         }
         if (dataType == 1) {
             // 自定义
-            var obj = isNull(content.defaultData) ? [] : content.defaultData;
+            var obj = isNull(customAttr.defaultData) ? [] : customAttr.defaultData;
             if(typeof obj == 'string'){
                 obj = JSON.parse(obj);
             }
             json = obj;
         } else if (dataType == 2) {
             // 枚举
-            json = skyeyeClassEnumUtil.getEnumDataListByClassName(content.objectId).rows;
+            json = skyeyeClassEnumUtil.getEnumDataListByClassName(customAttr.objectId).rows;
         } else if (dataType == 3) {
             // 数据字典
-            sysDictDataUtil.queryDictDataListByDictTypeCode(content.objectId, function (data) {
+            sysDictDataUtil.queryDictDataListByDictTypeCode(customAttr.objectId, function (data) {
                 json = data.rows;
             });
         }
