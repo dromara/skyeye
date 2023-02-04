@@ -171,7 +171,6 @@ layui.config({
 					params: apiParams
 				};
 				params.businessApi = JSON.stringify(businessApi);
-				params.operateOpenPage = JSON.stringify({});
 			} else {
 				var dataList = initTableChooseUtil.getDataList('apiParams').dataList;
 				var pageParams = {};
@@ -186,7 +185,6 @@ layui.config({
 					params: pageParams
 				};
 				params.operateOpenPage = JSON.stringify(operateOpenPage);
-				params.businessApi = JSON.stringify({});
 			}
 
 			AjaxPostUtil.request({url: reqBasePath + "writeOperate", params: params, type: 'json', method: 'POST', callback: function (json) {
