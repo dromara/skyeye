@@ -1,4 +1,6 @@
 
+
+// todo 待删除
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -84,12 +86,13 @@ layui.config({
         // 加载动添表单选择按钮的点击事件
         var btnId = par.dsFormChooseList + "Btn";
         $("body").on("click", "#" + btnId, function (e) {
-            dsFormUtil.chooseType = false; // 单选
-            dsFormUtil.openDsFormPageChoosePage(function () {
-                $("#" + par.dsFormChooseList).val(dsFormUtil.dsFormChooseMation.numCode);
-                $("#" + par.dsFormChooseList).attr("dataId", dsFormUtil.dsFormChooseMation.id);
-                $("#" + par.name).html(dsFormUtil.dsFormChooseMation.name);
-            });
+            // todo 待删除
+            // dsFormUtil.chooseType = false; // 单选
+            // dsFormUtil.openDsFormPageChoosePage(function () {
+            //     $("#" + par.dsFormChooseList).val(dsFormUtil.dsFormChooseMation.numCode);
+            //     $("#" + par.dsFormChooseList).attr("dataId", dsFormUtil.dsFormChooseMation.id);
+            //     $("#" + par.name).html(dsFormUtil.dsFormChooseMation.name);
+            // });
         });
     }
 

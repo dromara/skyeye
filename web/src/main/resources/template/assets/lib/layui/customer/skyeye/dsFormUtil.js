@@ -2,10 +2,6 @@
 // 动态表单工具函数
 var dsFormUtil = {
 
-    dsFormChooseList: [], // 动态表单选择页面类型为【多选】时返回的参数
-    dsFormChooseMation: {}, // 动态表单选择页面类型为【单选】时返回的参数
-    chooseType: true, // 动态表单选择页面类型，true：多选；false：单选
-
     dsFormDataKey: "initData",
     dsFormBtnTemplate: '<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="{{btnId}}">表单选择</button>',
     customDsFormBox: '<div class="layui-form-item layui-col-xs12"><span class="hr-title">{{dsFormPage.name}}</span><hr></div><div id="{{dsFormPage.id}}" class="ds-form-page layui-col-xs12"></div>',
@@ -28,6 +24,7 @@ var dsFormUtil = {
      *
      * @param callback 回调函数
      */
+    dsFormChooseMation: {}, // 动态表单选择页面类型为【单选】时返回的参数
     openDsFormPageChoosePage: function (callback) {
         _openNewWindows({
             url: "../../tpl/dsFormPage/dsFormPageListChoose.html",
@@ -36,27 +33,9 @@ var dsFormUtil = {
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 if(typeof(callback) == "function") {
-                    callback(dsFormUtil.dsFormChooseList);
+                    callback(dsFormUtil.dsFormChooseMation);
                 }
             }});
-    },
-
-    /**
-     * 初始化表单选择按钮信息 todo 目前没有用到
-     *
-     * @param id dom对象的id
-     */
-    initDsFormChooseBtn: function(id, initData) {
-        var btnId = id + 'Btn';
-        $("#" + id).attr(dsFormUtil.dsFormDataKey, JSON.stringify(initData));
-        dsFormUtil.initData(id, btnId);
-        $("body").on("click", "#" + btnId, function (e) {
-            dsFormUtil.dsFormChooseList = [].concat(JSON.parse($("#" + id).attr("initData")));
-            dsFormUtil.openDsFormPageChoosePage(function (){
-                $("#" + id).attr(dsFormUtil.dsFormDataKey, JSON.stringify(dsFormUtil.dsFormChooseList));
-                dsFormUtil.initData(id, btnId);
-            });
-        });
     },
 
     /**

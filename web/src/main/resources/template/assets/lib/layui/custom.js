@@ -80,6 +80,30 @@ function initBaseParams(){
 	reportBasePath = sysMainMation.reportBasePath;
 }
 
+var serviceMap = [
+	{"id": "sysMainMation.reqBasePath", "name": "基础服务"},
+	{"id": "sysMainMation.shopBasePath", "name": "商城服务"},
+	{"id": "sysMainMation.flowableBasePath", "name": "工作流相关功能的服务"},
+	{"id": "sysMainMation.schoolBasePath", "name": "学校服务"},
+	{"id": "sysMainMation.reportBasePath", "name": "报表服务"},
+	{"id": "sysMainMation.surveyBasePath", "name": "问卷服务"},
+	{"id": "sysMainMation.noteBasePath", "name": "笔记服务"},
+	{"id": "sysMainMation.workplanBasePath", "name": "工作计划服务"},
+	{"id": "sysMainMation.rmprogramBasePath", "name": "小程序设计服务"},
+	{"id": "sysMainMation.knowlgBasePath", "name": "知识库服务"},
+	{"id": "sysMainMation.mailBasePath", "name": "通讯录服务"},
+	{"id": "sysMainMation.diskCloudBasePath", "name": "云盘服务"},
+	{"id": "sysMainMation.emailBasePath", "name": "邮箱服务"},
+	{"id": "sysMainMation.scheduleBasePath", "name": "日程服务"},
+	{"id": "sysMainMation.businessFlowBasePath", "name": "业务流程规划服务"},
+	{"id": "sysMainMation.noticeBasePath", "name": "公告服务"},
+	{"id": "sysMainMation.forumBasePath", "name": "论坛服务"},
+	{"id": "sysMainMation.jobdiaayBasePath", "name": "日报服务"},
+	{"id": "sysMainMation.ehrBasePath", "name": "EHR服务"},
+	{"id": "sysMainMation.lightAppBasePath", "name": "轻应用服务"},
+	{"id": "sysMainMation.wagesBasePath", "name": "薪资服务"},
+]
+
 function getRequestHeaders() {
 	return {
 		userToken: getCookie('userToken'),
