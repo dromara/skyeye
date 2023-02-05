@@ -26,6 +26,7 @@
     "widthScale": {"name": "宽度比例枚举", "className": "skyeye-pro#com.skyeye.attr.classenum.WidthScale"},
     "dsFormShowType": {"name": "组件展示类型枚举", "className": "skyeye-pro#com.skyeye.attr.classenum.DsFormShowType"},
     "alignment": {"name": "对齐方式枚举", "className": "skyeye-pro#com.skyeye.attr.classenum.Alignment"},
+    "fixedType": {"name": "表格列固定位置枚举", "className": "skyeye-pro#com.skyeye.dsform.classenum.FixedType"},
 
     "tenantEnum": {"name": "租户枚举", "className": "skyeye-pro#com.skyeye.common.enumeration.TenantEnum"},
 

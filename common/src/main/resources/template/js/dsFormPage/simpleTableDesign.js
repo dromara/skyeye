@@ -13,6 +13,12 @@ layui.config({
         soulTable = layui.soulTable;
     var selOption = getFileContent('tpl/template/select-option.tpl');
 
+    // 获取属性
+    AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: {className: parent.objectId}, type: 'json', method: "POST", callback: function (data) {
+        $("#attrKey").html(getDataUseHandlebars(`<option value="">全部</option>{{#each rows}}<option value="{{attrKey}}">{{name}}</option>{{/each}}`, data));
+        $("#attrKey").val(json.bean.attrKey);
+    }, async: false});
+
     matchingLanguage();
     form.render();
     form.on('submit(formWriteBean)', function (data) {
