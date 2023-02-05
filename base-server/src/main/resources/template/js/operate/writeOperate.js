@@ -89,8 +89,75 @@ layui.config({
 		attrHtml = getDataUseHandlebars(`<option value="">全部</option>{{#each rows}}<option value="{{attrKey}}">{{name}}</option>{{/each}}`, json);
 	}, async: false});
 
-	skyeyeClassEnumUtil.showEnumDataListByClassName("operatePosition", 'select', "position", '', form);
-	skyeyeClassEnumUtil.showEnumDataListByClassName("eventType", 'select', "eventType", '', form);
+	if (!isNull(parent.rowId)) {
+		AjaxPostUtil.request({url: reqBasePath + "queryOperateById", params: {id: parent.rowId}, type: 'json', method: 'GET', callback: function (json) {
+			$("#name").val(json.bean.name);
+			$("#authPointNum").val(json.bean.authPointNum);
+			$("#orderBy").val(json.bean.orderBy);
+			skyeyeClassEnumUtil.showEnumDataListByClassName("operatePosition", 'select', "position", json.bean.position, form);
+			skyeyeClassEnumUtil.showEnumDataListByClassName("eventType", 'select', "eventType", json.bean.eventType, form);
+			if (json.bean.position == 'actionBar') {
+				$('#positionChangeBox').html(_html['color']);
+				skyeyeClassEnumUtil.showEnumDataListByClassName("buttonColorType", 'select', "color", json.bean.color, form);
+			}
+
+			if (json.bean.eventType == 'ajax') {
+				var businessApi = json.bean.businessApi;
+				$('#eventTypeChangeBox').html(_html['businessApi']);
+				$("#serviceStr").html(getDataUseHandlebars(selOption, {rows: serviceMap}));
+				$("#serviceStr").val(businessApi.serviceStr);
+				$("#api").val(businessApi.api);
+				skyeyeClassEnumUtil.showEnumDataListByClassName("httpMethodEnum", 'select', "method", businessApi.method, form);
+
+				loadParamsTable('apiParams');
+				initTableChooseUtil.deleteAllRow('apiParams');
+				$.each(businessApi.params, function(key, value) {
+					var params = {
+						"key": key,
+						"attrKey": {
+							"html": attrHtml,
+							"value": value
+						}
+					};
+					initTableChooseUtil.resetData('apiParams', params);
+				});
+			} else {
+				var operateOpenPage = json.bean.operateOpenPage;
+				$('#eventTypeChangeBox').html(_html['operateOpenPage']);
+				$('#typeChangeBox').html(_html['customPageUrl']);
+				$("#openPageName").val(operateOpenPage.name);
+				var type = operateOpenPage.type ? "1" : "2";
+				$("input:radio[name=type][value=" + type + "]").attr("checked", true);
+				if (type == 1) {
+					$('#typeChangeBox').html(_html['customPageUrl']);
+					$("#pageUrl").val(operateOpenPage.pageUrl);
+				} else {
+					$('#typeChangeBox').html(_html['dsFormPage']);
+					dsFormUtil.dsFormChooseMation = operateOpenPage.dsFormPage;
+					var serviceName = operateOpenPage.dsFormPage.serviceBeanCustom.serviceBean.name;
+					$("#pageUrl").val(serviceName + '【' + operateOpenPage.dsFormPage.name + '】');
+				}
+
+				loadParamsTable('pageParams');
+				initTableChooseUtil.deleteAllRow('pageParams');
+				$.each(operateOpenPage.params, function(key, value) {
+					var params = {
+						"key": key,
+						"attrKey": {
+							"html": attrHtml,
+							"value": value
+						}
+					};
+					initTableChooseUtil.resetData('pageParams', params);
+				});
+			}
+
+		}, async: false});
+	} else {
+		skyeyeClassEnumUtil.showEnumDataListByClassName("operatePosition", 'select', "position", '', form);
+		skyeyeClassEnumUtil.showEnumDataListByClassName("eventType", 'select', "eventType", '', form);
+	}
+
 	form.on('select(position)', function(data) {
 		if (data.value == 'actionBar') {
 			// 操作栏
@@ -152,10 +219,11 @@ layui.config({
 				className: parent.objectId,
 				name: $("#name").val(),
 				position: $("#position").val(),
-				color: $("#color").val(),
+				color: isNull($("#color").val()) ? '' : $("#color").val(),
 				authPointNum: $("#authPointNum").val(),
 				eventType: $("#eventType").val(),
 				orderBy: $("#orderBy").val(),
+				id: isNull(parent.rowId) ? '' : parent.rowId
 			};
 
 			if (params.eventType == 'ajax') {
@@ -172,7 +240,7 @@ layui.config({
 				};
 				params.businessApi = JSON.stringify(businessApi);
 			} else {
-				var dataList = initTableChooseUtil.getDataList('apiParams').dataList;
+				var dataList = initTableChooseUtil.getDataList('pageParams').dataList;
 				var pageParams = {};
 				$.each(dataList, function (i, item) {
 					pageParams[item.key] = item.attrKey;

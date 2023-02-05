@@ -72,22 +72,15 @@ layui.config({
 
 	// 添加
 	$("body").on("click", "#addBean", function() {
-    	_openNewWindows({
-			url: "../../tpl/operate/writeOperate.html",
-			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-			pageId: "writeOperate",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadTable();
-			}});
+		rowId = '';
+		openWritePage();
     });
 
 	// 删除
 	function delet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "deleteDsFormPage", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "deleteOperateById", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -97,10 +90,14 @@ layui.config({
 	// 编辑
 	function edit(data) {
 		rowId = data.id;
+		openWritePage();
+	}
+
+	function openWritePage() {
 		_openNewWindows({
-			url: "../../tpl/dsFormPage/pageEdit.html",
-			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-			pageId: "pageEdit",
+			url: "../../tpl/operate/writeOperate.html",
+			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+			pageId: "writeOperate",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
