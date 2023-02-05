@@ -96,7 +96,7 @@ layui.config({
 	function openWritePage() {
 		_openNewWindows({
 			url: "../../tpl/operate/writeOperate.html",
-			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+			title: systemLanguage["com.skyeye.recordPageTitle"][languageType],
 			pageId: "writeOperate",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {

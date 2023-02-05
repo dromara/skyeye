@@ -49,7 +49,7 @@ layui.config({
 	    cols: [[
 	    	{ type: 'radio', fixed: 'left' },
 			{ field: 'name', title: '名称', align: 'left', width: 120 },
-			{ field: 'remark', title: '简介', align: 'left', width: 350 },
+			{ field: 'remark', title: '简介', align: 'left', width: 200 },
 			{ field: 'numCode', title: '页面编号', align: 'center', width: 150 },
 			{ field: 'type', title: '类型', align: 'left', width: 120, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("dsFormPageType", 'id', d.type, 'name');

@@ -63,21 +63,15 @@ layui.config({
         } else if (layEvent === 'delet'){ // 删除
         	delet(data);
         } else if (layEvent === 'edit'){ // 编辑
-        	edit(data);
+			rowId = data.id;
+			openWritePage();
         }
     });
 
 	// 添加
 	$("body").on("click", "#addBean", function() {
-    	_openNewWindows({
-			url: "../../tpl/dsFormPage/pageAdd.html",
-			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-			pageId: "pageAdd",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadTable();
-			}});
+		rowId = '';
+		openWritePage();
     });
 
 	// 表单设计
@@ -102,13 +96,11 @@ layui.config({
 		});
 	}
 
-	// 编辑
-	function edit(data) {
-		rowId = data.id;
+	function openWritePage() {
 		_openNewWindows({
-			url: "../../tpl/dsFormPage/pageEdit.html",
-			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-			pageId: "pageEdit",
+			url: "../../tpl/dsFormPage/writePage.html",
+			title: systemLanguage["com.skyeye.recordPageTitle"][languageType],
+			pageId: "writePage",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
