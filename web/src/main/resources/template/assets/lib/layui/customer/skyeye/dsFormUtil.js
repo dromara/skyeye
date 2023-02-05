@@ -76,9 +76,9 @@ var dsFormUtil = {
             dsFormObjectRelationCode: isNull(code) ? "" : code,
             dsFormObjectRelationId: isNull(dsFormObjectRelationId) ? "" : dsFormObjectRelationId
         };
-        AjaxPostUtil.request({url: reqBasePath + "dsFormObjectRelation006", params: params, method: "GET", type: 'json', callback: function(json) {
-            dsFormUtil.loadAddDsFormItem(showBoxId, json);
-        }, async: false});
+        // AjaxPostUtil.request({url: reqBasePath + "dsFormObjectRelation006", params: params, method: "GET", type: 'json', callback: function(json) {
+        //     dsFormUtil.loadAddDsFormItem(showBoxId, json);
+        // }, async: false});
     },
 
     loadAddDsFormItem: function(showBoxId, json) {
@@ -233,7 +233,8 @@ var dsFormUtil = {
             dsFormPageSequenceList: JSON.stringify(result),
             objectId: objectId
         }
-        AjaxPostUtil.request({url: flowableBasePath + "dsformpage014", params: params, type: 'json', method: "POST", callback: function(json) {
+        // todo 待修改
+        AjaxPostUtil.request({url: flowableBasePath + "", params: params, type: 'json', method: "POST", callback: function(json) {
         }, async: false});
     },
 
@@ -309,7 +310,8 @@ var dsFormUtil = {
      * @param objectId 绑定的objectId
      */
     loadPageShowDetailsByObjectId: function(showBoxId, objectId) {
-        AjaxPostUtil.request({url: flowableBasePath + "dsformpage015", params: {objectId: objectId}, method: "GET", type: 'json', callback: function(json) {
+        // todo 待修改
+        AjaxPostUtil.request({url: flowableBasePath + "", params: {objectId: objectId}, method: "GET", type: 'json', callback: function(json) {
             $.each(json.rows, function(j, bean) {
                 var customBoxId = bean.dsFormPage.id;
                 $("#" + showBoxId).append(getDataUseHandlebars(dsFormUtil.customDsFormBox, bean));
@@ -434,7 +436,8 @@ var dsFormUtil = {
      * @param objectId 绑定的objectId
      */
     loadPageToEditByObjectId: function(showBoxId, objectId) {
-        AjaxPostUtil.request({url: flowableBasePath + "dsformpage015", params: {objectId: objectId}, method: "GET", type: 'json', callback: function (json) {
+        // todo 待修改
+        AjaxPostUtil.request({url: flowableBasePath + "", params: {objectId: objectId}, method: "GET", type: 'json', callback: function (json) {
             dsFormUtil.loadEditDsFormItem(showBoxId, json);
         }, async: false});
     },
