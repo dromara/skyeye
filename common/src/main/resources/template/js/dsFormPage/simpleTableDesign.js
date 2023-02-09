@@ -12,12 +12,26 @@ layui.config({
         table = layui.table,
         soulTable = layui.soulTable;
     var tableDataList = new Array();
-    var selOption = getFileContent('tpl/template/select-option.tpl');
+    var rowNum = 1;
+
+    var pageId = GetUrlParam("pageId");
+    var className = GetUrlParam("className");
+    if (isNull(className)) {
+        winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
+        return false;
+    }
 
     // 获取属性
     var attrList = [];
-    AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: {className: parent.objectId}, type: 'json', method: "POST", callback: function (data) {
+    AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: {className: className}, type: 'json', method: "POST", callback: function (data) {
         attrList = [].concat(data.rows);
+    }, async: false});
+
+    var alignmentData = skyeyeClassEnumUtil.getEnumDataListByClassName("alignment");
+    var fixedTypeData = skyeyeClassEnumUtil.getEnumDataListByClassName("fixedType");
+
+    AjaxPostUtil.request({url: reqBasePath + "dsformpage006", params: {id: pageId}, type: 'json', method: "GET", callback: function (data) {
+        tableDataList = isNull(data.bean.tableColumnList) ? [] : data.bean.tableColumnList;
     }, async: false});
 
     table.render({
@@ -45,14 +59,22 @@ layui.config({
                 _html += `</select>`;
                 return _html;
             }},
-            { field: 'name', title: '名称', align: 'left', width: 120, templet: function (d) {
-                return `<input type="text" id="name${d.id}" placeholder="请填写名称" cus-id="${d.id}" class="layui-input tableInput" ` +
-                    `value="` + (isNull(d.name) ? "" : d.name) + `"/>`;
-            }},
             { field: 'align', title: '对齐方式<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
                 var _html = `<select lay-filter="tableSelect" lay-search="" id="align${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
                 $.each(alignmentData.rows, function (i, item) {
                     if (item.id == d.align) {
+                        _html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
+                    } else {
+                        _html += `<option value="${item.id}">${item.name}</option>`;
+                    }
+                });
+                _html += `</select>`;
+                return _html;
+            }},
+            { field: 'fixed', title: '固定位置', align: 'left', width: 120, templet: function (d) {
+                var _html = `<select lay-filter="tableSelect" lay-search="" id="fixed${d.id}" cus-id="${d.id}"><option value="">全部</option>`;
+                $.each(fixedTypeData.rows, function (i, item) {
+                    if (item.id == d.fixed) {
                         _html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
                     } else {
                         _html += `<option value="${item.id}">${item.name}</option>`;
@@ -79,24 +101,84 @@ layui.config({
         }
     });
 
+    form.on('select(tableSelect)', function(data) {
+        var id = data.elem.id;
+        buildData($(`#${id}`));
+    });
+    $("body").on("input", ".tableInput", function () {
+        buildData($(this));
+    });
+    $("body").on("change", ".tableInput", function () {
+        buildData($(this));
+    });
+
+    function buildData(_this) {
+        var id = _this.attr('cus-id');
+        var key = _this.attr('id').replace(id, '');
+        $.each(tableDataList, function (j, item) {
+            if (item.id == id) {
+                item[key] = _this.val();
+            }
+        });
+    }
+
     matchingLanguage();
     form.render();
     form.on('submit(formWriteBean)', function (data) {
         if (winui.verifyForm(data.elem)) {
+            if (table.cache.messageTable.length == 0) {
+                winui.window.msg('请选择表格属性.', {icon: 2, time: 2000});
+                return false;
+            }
+            $.each(table.cache.messageTable, function (i, item) {
+                item.id = null;
+                item.orderBy = i + 1;
+            });
+            tableDataList = [].concat(table.cache.messageTable);
+
             var params = {
-                id: isNull(parent.rowId) ? '' : parent.rowId,
-                name: $("#name").val(),
-                remark: $("#remark").val(),
-                type: $("#type").val(),
-                className: parent.objectId
+                pageId: pageId,
+                tableColumnList: JSON.stringify(tableDataList)
             };
-            AjaxPostUtil.request({url: reqBasePath + "writeDsFormPage", params: params, type: 'json', method: "POST", callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "writeDsFormPageTable", params: params, type: 'json', method: "POST", callback: function (json) {
                 parent.layer.close(index);
                 parent.refreshCode = '0';
             }});
         }
         return false;
     });
+
+    $("body").on("click", "#addRow", function() {
+        addRow();
+    });
+
+    $("body").on("click", "#deleteRow", function() {
+        deleteRow();
+    });
+
+    // 新增行
+    function addRow() {
+        tableDataList = [].concat(table.cache.messageTable);
+        tableDataList.push({id: rowNum});
+        table.reloadData("messageTable", {data: tableDataList});
+        rowNum++;
+    }
+
+    // 删除行
+    function deleteRow() {
+        tableDataList = [].concat(table.cache.messageTable);
+        var check_box = table.checkStatus('messageTable').data;
+        for (var i = 0;  i < check_box.length; i++){
+            var list = [];
+            $.each(tableDataList, function(j, item) {
+                if(item.id != check_box[i].id){
+                    list.push(item);
+                }
+            });
+            tableDataList = [].concat(list);
+        }
+        table.reloadData("messageTable", {data: tableDataList});
+    }
 
     $("body").on("click", "#cancle", function() {
         parent.layer.close(index);

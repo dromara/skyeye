@@ -76,9 +76,14 @@ layui.config({
 
 	// 表单设计
 	function control(data) {
+		var url = '../../tpl/dsFormPage/dsFormPageDesign.html';
+		if (data.type == 'simpleTable') {
+			url = '../../tpl/dsFormPage/simpleTableDesign.html';
+		}
+		url += '?className=' + objectId + '&pageId=' + data.id;
 		parent.parent._openNewWindows({
-			url: "../../tpl/dsFormPage/dsFormPageDesign.html?className=" + objectId + "&pageId=" + data.id,
-			title: "表单设计",
+			url: url,
+			title: "布局设计",
 			pageId: "dsFormPageDesign",
 			area: ['100vw', '100vh'],
 			callBack: function (refreshCode) {
