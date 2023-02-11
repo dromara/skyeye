@@ -55,7 +55,7 @@ layui.config({
     $("#width").val(data.width);
 
     // 属性的限制条件
-    skyeyeClassEnumUtil.showEnumDataListByClassName("verificationParams", 'verificationSelect', "require", data.require, form, 'formerRequirement');
+    skyeyeClassEnumUtil.showEnumDataListByClassName("verificationParams", 'verificationSelect', "require", data.require, form, null, 'formerRequirement');
 
     matchingLanguage();
     form.render();

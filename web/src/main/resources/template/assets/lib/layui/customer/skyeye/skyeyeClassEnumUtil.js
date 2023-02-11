@@ -17,7 +17,7 @@ var skyeyeClassEnumUtil = {
      */
     showEnumDataListByClassName: function (code, showType, showBoxId, defaultId, form, callback, valueKey) {
         var json = skyeyeClassEnumUtil.getEnumDataListByClassName(code);
-        dataShowType.showData(json, showType, showBoxId, defaultId, form, callback, valueKey);
+        dataShowType.showData(json, showType, showBoxId, defaultId, form, callback, null, valueKey);
     },
 
     getEnumDataNameByClassName: function (code, key, value, getKey) {

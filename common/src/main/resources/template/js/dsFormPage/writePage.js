@@ -23,10 +23,20 @@ layui.config({
 			$("#serviceStr").val(businessApi.serviceStr);
 			$("#api").val(businessApi.api);
 			skyeyeClassEnumUtil.showEnumDataListByClassName("httpMethodEnum", 'select', "method", businessApi.method, form);
+
+			loadOperate(json.bean.operateIdList);
 		}});
 	} else {
 		skyeyeClassEnumUtil.showEnumDataListByClassName("dsFormPageType", 'select', "type", '', form);
 		skyeyeClassEnumUtil.showEnumDataListByClassName("httpMethodEnum", 'select', "method", '', form);
+		loadOperate(null);
+	}
+
+	function loadOperate(defaultValue) {
+		AjaxPostUtil.request({url: reqBasePath + "queryOperateList", params: {className: parent.objectId}, type: 'json', method: 'POST', callback: function (json) {
+			var value = isNull(defaultValue) ? '' : defaultValue.toString();
+			dataShowType.showData(json, 'verificationSelect', 'operateIdList', value, form);
+		}});
 	}
 
 	matchingLanguage();
@@ -38,7 +48,8 @@ layui.config({
 				name: $("#name").val(),
 				remark: $("#remark").val(),
 				type: $("#type").val(),
-				className: parent.objectId
+				className: parent.objectId,
+				operateIdList: isNull($('#operateIdList').attr('value')) ? [] : $('#operateIdList').attr('value')
 			};
 			var businessApi = {
 				serviceStr: $("#serviceStr").val(),
