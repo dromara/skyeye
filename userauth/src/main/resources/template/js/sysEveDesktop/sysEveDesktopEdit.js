@@ -18,7 +18,7 @@ layui.config({
 			method: "GET",
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendAfter:function (json) {
-				$("input:radio[name=state][value=" + json.bean.state + "]").attr("checked", true);
+				skyeyeClassEnumUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", json.bean.enabled, form);
 				// 初始化上传
 				$("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 12, json.bean.logo, 1));
 		 		matchingLanguage();
@@ -27,10 +27,9 @@ layui.config({
 		 	        if (winui.verifyForm(data.elem)) {
 		 	        	var params = {
 		 	        		id: parent.rowId,
-		 	        		desktopName: $("#desktopName").val(),
-		 	        		desktopCnName: $("#desktopCnName").val(),
+							name: $("#name").val(),
 							desktopCode: $("#code").val(),
-							state: $("input[name='state']:checked").val(),
+							enabled: $("#enabled input:radio:checked").val(),
 							appPageUrl: $("#appPageUrl").val(),
 							logo: $("#logo").find("input[name='upload']").attr("oldurl")
 		 	        	};

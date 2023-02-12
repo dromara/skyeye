@@ -1187,3 +1187,71 @@ var dataShowType = {
     }
 
 };
+
+// 桌面菜单显示工具
+var desktopMenuUtil = {
+
+    /**
+     * 获取左下角菜单图标
+     *
+     * @param menu
+     * @returns {{winIcon: string, icon: string}}
+     */
+    getMenuIcon: function (menu) {
+        var icon, winIcon;
+        if (parseInt(menu.iconType) == 1) {
+            // icon
+            icon = `<i class="fa fa-fw ${menu.icon}" style="color: ${menu.iconColor}"></i>`;
+            winIcon = `win-icon="${menu.icon}"`;
+        } else if (parseInt(menu.iconType) == 2) {
+            // 图片
+            icon = `<img src="${fileBasePath}${menu.iconPic}" />`;
+            winIcon = `win-icon="${menu.iconPic}"`;
+        }
+        return {
+            icon: icon,
+            winIcon: winIcon
+        };
+    },
+
+    /**
+     * 获取桌面菜单图标
+     *
+     * @param menu
+     * @returns {{winIcon: string, icon: string}}
+     */
+    getDecktopMenuIcon: function (menu) {
+        var icon, smallIcon, menuIcon, isFaIcon;
+        if (parseInt(menu.iconType) == 1) {
+            // icon
+            smallIcon = `<i class="fa fa-fw icon-drawer-icon ${menu.icon}" style="color: ${menu.iconColor}; background-color: ${menu.iconBg}" win-i-id="${menu.id}"></i>`;
+            icon = `<i class="fa fa-fw ${menu.icon}" style="color: ${menu.iconColor}; background-color: ${menu.iconBg}" win-i-id="${menu.id}"></i>`;
+            menuIcon = `win-icon="${menu.icon}"`;
+            isFaIcon = "winui-icon-font";
+        } else if (parseInt(menu.iconType) == 2) {
+            // 图片
+            smallIcon = `<i class="fa icon-drawer-icon" win-i-id="${menu.id}"><img src="${fileBasePath}${menu.iconPic}" class="desktop-img"/></i>`;
+            icon = `<img src="${fileBasePath}${menu.iconPic}" class="desktop-img"/>`;
+            menuIcon = `win-icon="${menu.iconPic}"`;
+            isFaIcon = "winui-icon-img";
+        }
+        return {
+            icon: icon,
+            smallIcon: smallIcon,
+            menuIcon: menuIcon,
+            isFaIcon: isFaIcon
+        };
+    },
+
+    getTraditionPageMenuIcon: function (menu) {
+        if(menu.iconType === 1){
+            // icon
+            return '<i class="fa ' + menu.icon + ' fa-fw"></i>';
+        } else if (menu.iconType === 2){
+            // 图片
+            return '<img src="' + fileBasePath + menu.iconPic + '" />';
+        }
+        return '';
+    }
+
+};

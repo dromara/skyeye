@@ -53,24 +53,16 @@ layui.config({
     //加载菜单数据
     function loadMenuListToShow(){
     	//获取桌面消息
-        AjaxPostUtil.request({url: reqBasePath + "login009", params: {language: languageType}, type: 'json', method: "GET", callback: function(l){
+        AjaxPostUtil.request({url: reqBasePath + "login009", params: {}, type: 'json', method: "GET", callback: function(l){
 			var str = "";//顶部桌面字符串
 			var menuBoxStr = "";//多个菜单的字符串
-			var jsonStr = {};
-			var defaultName = (languageType == "zh" ? "默认桌面" : "Default desktop");
-			jsonStr = {
-				bean: {
-					id: 'winfixedpage00000000',
-					name: defaultName,
-					show: 'block',
-					chooseDeskTop: ' select'
-				}
-			};
-			str += getDataUseHandlebars(desktopTemplate, jsonStr);
-			menuBoxStr += getDataUseHandlebars(menuBoxTemplate, jsonStr);
 			$.each(l.rows, function(i, row){
 				row.show = 'none';
-				jsonStr = {
+				if (i == 0) {
+					row.show = 'block';
+					row.chooseDeskTop = ' select';
+				}
+				var jsonStr = {
 					bean: row
 				};
 				str += getDataUseHandlebars(desktopTemplate, jsonStr);
@@ -87,14 +79,7 @@ layui.config({
 				var menuStr;
 				$.each(json.rows, function(i, row){
 					menuStr = "";
-					if(row.menuIconType === 1){//icon
-						row.icon = '<i class="fa ' + row.icon + ' fa-fw"></i>';
-					} else if (row.menuIconType === 2){//图片
-						row.icon = '<img src="' + fileBasePath + row.menuIconPic + '" />';
-					}
-					if(languageType == 'cn'){
-						row.name = row.menuNameEn;
-					}
+					row.icon = desktopMenuUtil.getTraditionPageMenuIcon(row);
 					if(row.pageURL != '--'){
 						//一级菜单
 						menuStr = getDataUseHandlebars(menuTemplate, {bean: row});
@@ -108,14 +93,7 @@ layui.config({
 						//二级菜单
 						if (!isNull(row.childs)){
 							$.each(row.childs, function(j, child){
-								if(child.menuIconType === 1){//icon
-									child.icon = '<i class="fa ' + child.icon + ' fa-fw"></i>';
-								} else if (child.menuIconType === 2){//图片
-									child.icon = '<img src="' + fileBasePath + child.menuIconPic + '" />';
-								}
-								if(languageType == 'cn'){
-									child.name = child.menuNameEn;
-								}
+								child.icon = desktopMenuUtil.getTraditionPageMenuIcon(child);
 								data.push({id: child.id, name: child.name, pageURL: child.pageURL, winName: isNull(row.deskTopId) ? defaultName : $(".desktop-menu-box").find("li[rowid='" + row.deskTopId + "']").find('span').html()});
 							});
 						}

@@ -13,18 +13,11 @@
     			<span class="hr-title">基本信息</span><hr>
 	    	</div>
 	        <div class="layui-form-item layui-col-xs6">
-		        <label class="layui-form-label">中文名称<i class="red">*</i></label>
+		        <label class="layui-form-label">名称<i class="red">*</i></label>
 		        <div class="layui-input-block">
-		        	<input type="text" id="desktopName" name="desktopName" win-verify="required" placeholder="请输入桌面名称" class="layui-input"/>
+		        	<input type="text" id="name" name="name" win-verify="required" placeholder="请输入名称" class="layui-input"/>
 					<div class="layui-form-mid layui-word-aux">该名称在系统中唯一。</div>
 		        </div>
-		    </div>
-		    <div class="layui-form-item layui-col-xs6">
-		        <label class="layui-form-label">英文名称<i class="red">*</i></label>
-		        <div class="layui-input-block">
-		        	<input type="text" id="desktopCnName" name="desktopCnName" win-verify="required" placeholder="请输入英文名称" class="layui-input"/>
-					<div class="layui-form-mid layui-word-aux">该名称可重复。</div>
-				</div>
 		    </div>
 			<div class="layui-form-item layui-col-xs6">
 				<label class="layui-form-label">编码<i class="red">*</i></label>
@@ -35,9 +28,8 @@
 			</div>
 			<div class="layui-form-item layui-col-xs12">
 				<label class="layui-form-label">状态<i class="red">*</i></label>
-				<div class="layui-input-block winui-radio">
-					<input type="radio" name="state" value="1" title="启用" lay-filter="state" checked="checked" />
-					<input type="radio" name="state" value="2" title="禁用" lay-filter="state" />
+				<div class="layui-input-block winui-radio" id="enabled">
+
 				</div>
 			</div>
 			<div class="layui-form-item layui-col-xs12">

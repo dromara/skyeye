@@ -30,21 +30,25 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { field: 'menuName', title: '菜单名称', width: 120 },
-		        { field: 'menuNameEn', title: '英文名称', width: 150 },
+		        { field: 'name', title: '菜单名称', width: 120 },
 		        { field: 'id', title: '图标', align: 'center', width: 60, templet: function (d) {
 		        	return systemCommonUtil.initIconShow(d);
 		        }},
 				{ field: 'orderNum', title: '排序', align: 'center', width: 80 },
-		        { field: 'menuLevel', title: '菜单类型', align: 'center', width: 100, templet: function (d) {
-		        	return d.menuLevel == 0 ? '父菜单' : '子菜单';
+		        { field: 'level', title: '菜单类型', align: 'center', width: 100, templet: function (d) {
+		        	return d.level == 0 ? '父菜单' : '子菜单';
 		        }},
-		        { field: 'desktopName', title: '所属桌面', width: 120 },
+		        { field: 'desktopName', title: '所属桌面', width: 120, templet: function (d) {
+					if (isNull(d.sysDesktop)) {
+						return '';
+					}
+					return d.sysDesktop.name;
+				}},
 		        { field: 'isShare', title: '共享', align: 'center', width: 80, templet: function (d) {
 					return d.isShare == 0 ? '否' : '是';
 		        }},
-		        { field: 'menuParentName', title: '父菜单', width: 100 },
-		        { field: 'menuUrl', title: '菜单链接', width: 160 },
+		        { field: 'parentName', title: '父菜单', width: 100 },
+		        { field: 'pageUrl', title: '菜单链接', width: 160 },
 				{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 				{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 				{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
@@ -60,7 +64,7 @@ layui.config({
 		}, {
 			keyId: 'id',
 			keyPid: 'parentId',
-			title: 'menuName',
+			title: 'name',
 		});
 
 		tableTree.getTable().on('tool(messageTable)', function (obj) {
@@ -109,7 +113,7 @@ layui.config({
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "sys011", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "deleteMenuById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});

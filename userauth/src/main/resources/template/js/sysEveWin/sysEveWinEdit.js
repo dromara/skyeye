@@ -13,7 +13,7 @@ layui.config({
 			textool = layui.textool;
 	    
 	    AjaxPostUtil.request({url: reqBasePath + "sysevewin003", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
-			$("#sysName").val(json.bean.sysName);
+			$("#name").val(json.bean.name);
 			$("#sysUrl").val(json.bean.sysUrl);
 			$("#content").val(json.bean.content);
 			textool.init({eleId: 'content', maxlength: 200});
@@ -23,7 +23,7 @@ layui.config({
 	    form.on('submit(formEditBean)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
         		var params = {
-					sysName: $("#sysName").val(),
+					name: $("#name").val(),
 					content: $("#content").val(),
 					sysUrl: $("#sysUrl").val(),
     				id: parent.rowId,

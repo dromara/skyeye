@@ -18,13 +18,7 @@
 		<div class="layui-form-item layui-col-xs6">
 			<label class="layui-form-label">菜单名称<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="menuName" name="menuName" win-verify="required" placeholder="请输入菜单名称" class="layui-input" value="{{menuName}}" />
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs6">
-			<label class="layui-form-label">英文名称<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<input type="text" id="menuNameEn" name="menuNameEn" win-verify="required" placeholder="请输入英文名称" class="layui-input" value="{{menuNameEn}}" />
+				<input type="text" id="name" name="name" win-verify="required" placeholder="请输入菜单名称" class="layui-input" value="{{name}}" />
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12" id="iconMation">
@@ -33,7 +27,7 @@
 		<div class="layui-form-item layui-col-xs12">
 			<label class="layui-form-label">菜单地址<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="menuUrl" name="menuUrl" win-verify="required" placeholder="请输入菜单地址" class="layui-input" value="{{menuUrl}}" />
+				<input type="text" id="pageUrl" name="pageUrl" win-verify="required" placeholder="请输入菜单地址" class="layui-input" value="{{pageUrl}}" />
 				<div class="layui-form-mid layui-word-aux">如果是一级菜单,格式为：--<br>如果是子菜单,格式为：../../tpl/model/modellist.html</div>
 			</div>
 		</div>
@@ -48,7 +42,7 @@
 		<div class="layui-form-item layui-col-xs6">
 			<label class="layui-form-label">所属服务<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<select id="menuSysWinId" name="menuSysWinId" class="menuSysWinId" win-verify="required" lay-filter="selectMenuSysWinId" lay-search="">
+				<select id="sysWinId" name="sysWinId" win-verify="required" lay-filter="sysWinId" lay-search="">
 
 				</select>
 			</div>
@@ -56,8 +50,8 @@
 		<div class="layui-form-item layui-col-xs6">
 			<label class="layui-form-label">菜单类型<i class="red">*</i></label>
 			<div class="layui-input-block winui-radio">
-				<input type="radio" name="menuLevel" value="0" title="父菜单" lay-filter="menuLevel"/>
-				<input type="radio" name="menuLevel" value="1" title="子菜单" lay-filter="menuLevel"/>
+				<input type="radio" name="level" value="0" title="父菜单" lay-filter="level"/>
+				<input type="radio" name="level" value="1" title="子菜单" lay-filter="level"/>
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs6" id="parentIdBox">
@@ -68,15 +62,15 @@
 		<div class="layui-form-item layui-col-xs12">
 			<label class="layui-form-label">打开方式<i class="red">*</i></label>
 			<div class="layui-input-block winui-radio">
-				<input type="radio" name="menuType" value="html" title="当前页面打开" lay-filter="menuType"/>
-				<input type="radio" name="menuType" value="win" title="新窗口打开" lay-filter="menuType"/>
+				<input type="radio" name="type" value="html" title="当前页面打开" lay-filter="type"/>
+				<input type="radio" name="type" value="win" title="新窗口打开" lay-filter="type"/>
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs6">
 			<label class="layui-form-label">系统菜单<i class="red">*</i></label>
 			<div class="layui-input-block winui-radio">
-				<input type="radio" name="menuSysType" value="1" title="是" lay-filter="menuSysType" checked/>
-				<input type="radio" name="menuSysType" value="2" title="否" lay-filter="menuSysType" />
+				<input type="radio" name="sysType" value="1" title="是" lay-filter="sysType" checked/>
+				<input type="radio" name="sysType" value="2" title="否" lay-filter="sysType" />
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs6">

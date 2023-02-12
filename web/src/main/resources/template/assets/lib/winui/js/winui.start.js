@@ -21,86 +21,57 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
         if (this.data === null) return;
         var html = '';
         $(this.data).each(function (index, item) {
-        	if(languageType == 'cn'){
-				item.name = item.menuNameEn;
-			}
-            var id = isNull(item.id) ? '' : 'win-id="' + item.id + '"',
-                url = isNull(item.pageURL) ? '' : 'win-url="' + item.pageURL + '"',
-                title = isNull(item.name) ? '' : 'win-title="' + item.name + '"',
-                opentype = isNull(item.openType) ? '' : 'win-opentype="' + item.openType + '"',
-                maxopen = isNull(item.maxOpen) ? '' : 'win-maxopen="' + item.maxOpen + '"',
-                winIcon = isNull(item.icon) ? '' : 'win-icon="' + item.icon + '"',
+            var id = 'win-id="' + item.id + '"',
+                url = 'win-url="' + item.pageURL + '"',
+                title = 'win-title="' + item.name + '"',
+                opentype = 'win-opentype="' + item.openType + '"',
+                maxopen = 'win-maxopen="' + item.maxOpen + '"',
                 isParent = item.childs ? ' parent' : '',
-        		menuIconBg = isNull(item.menuIconBg) ? '' : 'win-menuIconBg="' + item.menuIconBg + '"',
-				menuIconColor = isNull(item.menuIconColor) ? '' : 'win-menuIconColor="' + item.menuIconColor + '"',
+        		menuIconBg = isNull(item.iconBg) ? '' : 'win-menuIconBg="' + item.iconBg + '"',
+				menuIconColor = isNull(item.iconColor) ? '' : 'win-menuIconColor="' + item.iconColor + '"',
                 menuSysWinUrl = isNull(item.sysWinUrl) ? '' : 'win-sysWinUrl="' + item.sysWinUrl + '"',
 				menuDeskTopId = 'win-menuDeskTopId="' + item.deskTopId + '"';
-            var icon = "";
-        	if(item.menuIconType === '1' || item.menuIconType == 1){//icon
-        		if (!isNull(item.menuIconColor)){
-        			icon = '<i class="fa ' + item.icon + ' fa-fw" style="color: ' + item.menuIconColor + '"></i>';
-        		} else {
-        			icon = '<i class="fa ' + item.icon + ' fa-fw"></i>';
-        		}
-        		winIcon = (item.icon == '' || item.icon == undefined) ? '' : 'win-icon="' + item.icon + '"';
-        	} else if (item.menuIconType === '2' || item.menuIconType == 2){//图片
-        		icon = '<img src="' + fileBasePath + item.menuIconPic + '" />';
-        		winIcon = (item.menuIconPic == '' || item.menuIconPic == undefined) ? '' : 'win-icon="' + item.menuIconPic + '"';
-        	}
-            if(index == 0){
-            	var extend = item.extend ? ' layui-nav-itemed' : '';
+            var iconParams = desktopMenuUtil.getMenuIcon(item);
+            var extend
+            if (index == 0) {
+                extend = item.extend ? ' layui-nav-itemed' : '';
             } else {
-            	var extend = '';
+                extend = '';
             }
-            html += '<li class="layui-nav-item ' + isParent + ' ' + extend + '" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxopen + ' ' + winIcon + ' ' + menuIconBg + ' ' + menuIconColor + ' ' + menuSysWinUrl + ' ' + menuDeskTopId + '>';
+            html += `<li class="layui-nav-item ${isParent} ${extend}" ${id} ${url} ${title} ${opentype} ${maxopen} ${iconParams.winIcon} ${menuIconBg} ${menuIconColor} ${menuSysWinUrl} ${menuDeskTopId}>`;
             if (!isNull(item.menuIconBg)){
             	html += '<a><div class="winui-menu-icon" style="background-color: ' + item.menuIconBg + '!important;">';
             } else {
             	html += '<a><div class="winui-menu-icon">';
             }
-            html += icon;
+            html += iconParams.icon;
             html += '</div>';
             html += '<span class="winui-menu-name">' + item.name + '</span></a>';
             if (item.childs) {
                 html += '<dl class="layui-nav-child">';
                 $(item.childs).each(function (cIndex, cItem) {
-                	if(languageType == 'cn'){
-						cItem.name = cItem.menuNameEn;
-					}
-                    var cId = (cItem.id == '' || cItem.id == undefined) ? '' : 'win-id="' + cItem.id + '"',
-                        cUrl = (cItem.pageURL == '' || cItem.pageURL == undefined) ? '' : 'win-url="' + cItem.pageURL + '"',
-                        cTitle = isNull(cItem.name) ? '' : 'win-title="' + cItem.name + '"',
-                        cOpentype = (cItem.openType == '' || cItem.openType == undefined) ? '' : 'win-opentype="' + cItem.openType + '"',
-                        cMaxopen = (cItem.maxOpen == '' || cItem.maxOpen == undefined) ? '' : 'win-maxopen="' + cItem.maxOpen + '"',
-                        cWinIcon = (cItem.icon == '' || cItem.icon == undefined) ? '' : 'win-icon="' + cItem.icon + '"',
-                		cmenuIconBg = (cItem.menuIconBg == '' || cItem.menuIconBg == undefined) ? '' : 'win-menuIconBg="' + cItem.menuIconBg + '"',
+                    var cId = 'win-id="' + cItem.id + '"',
+                        cUrl = 'win-url="' + cItem.pageURL + '"',
+                        cTitle = 'win-title="' + cItem.name + '"',
+                        cOpentype = 'win-opentype="' + cItem.openType + '"',
+                        cMaxopen = 'win-maxopen="' + cItem.maxOpen + '"',
+                		cmenuIconBg = 'win-menuIconBg="' + cItem.menuIconBg + '"',
         				cmenuIconColor = (cItem.menuIconColor == '' || cItem.menuIconColor == undefined) ? '' : 'win-menuIconColor="' + cItem.menuIconColor + '"',
                         cmenuSysWinUrl = isNull(cItem.sysWinUrl) ? '' : 'win-sysWinUrl="' + cItem.sysWinUrl + '"',
 						menuDeskTopId = 'win-menuDeskTopId="' + cItem.deskTopId + '"';;
-                    var cicon = "";
-                    if(cItem.menuIconType === '1' || cItem.menuIconType == 1){//icon
-                    	cWinIcon = (cItem.icon == '' || cItem.icon == undefined) ? '' : 'win-icon="' + cItem.icon + '"';
-                    	if (!isNull(cItem.menuIconColor)){
-                        	cicon = '<i class="fa ' + cItem.icon + ' fa-fw" style="color: ' + cItem.menuIconColor + '"></i>';
-                        } else {
-                        	cicon = '<i class="fa ' + cItem.icon + ' fa-fw"></i>';
-                        }
-                	} else if (cItem.menuIconType === '2' || cItem.menuIconType == 2){//图片
-                		cicon = '<img src="' + fileBasePath + cItem.menuIconPic + '" />';
-                		cWinIcon = (cItem.menuIconPic == '' || cItem.menuIconPic == undefined) ? '' : 'win-icon="' + cItem.menuIconPic + '"'
-                	}
-                    html += '<dd ' + cId + ' ' + cUrl + ' ' + cTitle + ' ' + cOpentype + ' ' + cMaxopen + ' ' + cWinIcon + ' ' + cmenuIconBg + ' ' + cmenuIconColor + ' ' + cmenuSysWinUrl + ' ' + menuDeskTopId + '>';
+                    var cIconParams = desktopMenuUtil.getMenuIcon(cItem);
+                    html += `<dd ${cId} ${cUrl} ${cTitle} ${cOpentype} ${cMaxopen} ${cIconParams.winIcon} ${cmenuIconBg} ${cmenuIconColor} ${cmenuSysWinUrl} ${ menuDeskTopId}>`;
                     if (!isNull(cItem.menuIconBg)){
                     	html += '<a><div class="winui-menu-icon" style="background-color: ' + cItem.menuIconBg + '!important;">';
                     } else {
                     	html += '<a><div class="winui-menu-icon">';
                     }
-                    html += cicon;
+                    html += cIconParams.icon;
                     html += '</div>';
                     html += '<span class="winui-menu-name">' + cItem.name + '</span></a>';
                 });
                 html += '</dl>';
-            }
+            }``
             html += '</li>';
         });
         $('.winui-menu').html(html);

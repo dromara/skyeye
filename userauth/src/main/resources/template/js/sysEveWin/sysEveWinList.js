@@ -26,7 +26,7 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'sysName', title: '名称', width: 180 },
+	        { field: 'name', title: '名称', width: 180 },
 	        { field: 'sysUrl', title: '地址', width: 240 },
 			{ field: 'content', title: '介绍', width: 300 },
 	        { field: 'menuNum', title: '菜单数量', width: 100 },

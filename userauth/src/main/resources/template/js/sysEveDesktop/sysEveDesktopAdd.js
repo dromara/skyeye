@@ -10,6 +10,7 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
 
+		skyeyeClassEnumUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", '', form);
 		// 初始化上传
 		$("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 12, '', 1));
 	    matchingLanguage();
@@ -17,10 +18,9 @@ layui.config({
  	    form.on('submit(formAddBean)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
  	        	var params = {
- 	        		desktopName: $("#desktopName").val(),
- 	        		desktopCnName: $("#desktopCnName").val(),
+ 	        		name: $("#name").val(),
 					desktopCode: $("#code").val(),
-					state: $("input[name='state']:checked").val(),
+					enabled: $("#enabled input:radio:checked").val(),
 					appPageUrl: $("#appPageUrl").val(),
 					logo: $("#logo").find("input[name='upload']").attr("oldurl")
  	        	};

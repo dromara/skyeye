@@ -19,7 +19,7 @@ layui.config({
 	    form.on('submit(formAddBean)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
         		var params = {
-    				sysName: $("#sysName").val(),
+					name: $("#name").val(),
 					content: $("#content").val(),
 					sysUrl: $("#sysUrl").val(),
         		};

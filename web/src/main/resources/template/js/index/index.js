@@ -25,6 +25,7 @@ layui.config({
     var $ = layui.jquery,
     	form = layui.form,
     	element = layui.element;
+	var selOption = getFileContent('tpl/template/select-option-must.tpl');
     var winuiLoad;
 	layim = layui.layim;
     
@@ -88,17 +89,14 @@ layui.config({
 		}
 
 		// 获取桌面消息
-		AjaxPostUtil.request({url: reqBasePath + "login009", params: {language: languageType}, type: 'json', method: "GET", callback: function(l){
+		AjaxPostUtil.request({url: reqBasePath + "login009", params: {}, type: 'json', method: "GET", callback: function(desktopResult){
 			var deskTopName = new Array();
-			var defaultName = (languageType == "zh" ? "默认桌面" : "Default desktop");
-			deskTopName.push(defaultName);
-			var desktopSel = '<option value="winfixedpage00000000">' + defaultName + '</option>';
 			//初始化桌面
-			$.each(l.rows, function(i, item) {
+			$.each(desktopResult.rows, function(i, item) {
 				deskTopName.push(item.name);
-				desktopSel += '<option value="' + item.id + '">' + item.name + '</option>';
 				$("#winui-desktop").append('<article class="desktop-item-page section" id="' + item.id + '" art-title="' + item.name + '"></article>');
 			});
+
 			$('#winui-desktop').fullpage({
 				'navigation': true,
 				scrollingSpeed: 500,
@@ -109,7 +107,7 @@ layui.config({
 					$("#desktop-sel").val(id);
 				}
 			});
-			$("#desktop-sel").html(desktopSel);
+			$("#desktop-sel").html(getDataUseHandlebars(selOption, desktopResult));
 			$("#winui-desktop").find(".desktop-item-page").html("");
 			$("body").on('change', '#desktop-sel', function (e) {
 				var val = $("#desktop-sel").prop('selectedIndex');
@@ -923,7 +921,7 @@ layui.config({
         var url = $this.attr('win-url');
         var menuIconBg = $this.attr("win-menuiconbg");
         var menuIconColor = $this.attr("win-menuiconcolor");
-        var menuIcon = $this.attr("win-icon");
+        var menuIcon = isNull($this.attr("win-icon")) ? '' : $this.attr("win-icon");
 		var menuSysWinUrl = $this.attr("win-sysWinUrl");
         var str = '', iconStr = '';
         if(menuIcon.indexOf('fa-') != -1){//icon图标

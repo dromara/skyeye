@@ -26,7 +26,7 @@ layui.config({
 
 		// 所属系统
 		showGrid({
-			id: "menuSysWinId",
+			id: "sysWinId",
 			url: reqBasePath + "querySysEveWinList",
 			params: {},
 			pagination: false,
@@ -39,7 +39,7 @@ layui.config({
 		});
 
  		// 菜单类型变化事件
- 		form.on('radio(menuLevel)', function (data) {
+ 		form.on('radio(level)', function (data) {
  			var val = data.value;
 			if (val == 0) {
 				$("#lockParentSel").html("");
@@ -53,17 +53,16 @@ layui.config({
  		
  	    form.on('submit(formAddMenu)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
-				var menuLevel = $("input[name='menuLevel']:checked").val();
+				var level = $("input[name='level']:checked").val();
  	        	var params = {
-        			menuName: $("#menuName").val(),
-        			menuNameEn: $("#menuNameEn").val(),
-					sysWinId: $("#menuSysWinId").val(),
+					name: $("#name").val(),
+					sysWinId: $("#sysWinId").val(),
 					desktopId: $("#desktop").val(),
-        			menuUrl: $("#menuUrl").val(),
-        			menuType: $("input[name='menuType']:checked").val(),
-					menuLevel: menuLevel,
-					parentId: menuLevel == 0 ? "0" : $("#menuParent").val(),
-					menuSysType: $("input[name='menuSysType']:checked").val(),
+					pageUrl: $("#pageUrl").val(),
+					type: $("input[name='type']:checked").val(),
+					level: level,
+					parentId: level == 0 ? "0" : $("#menuParent").val(),
+					sysType: $("input[name='sysType']:checked").val(),
 					isShare: $("input[name='isShare']:checked").val(),
  	        	};
 
@@ -72,7 +71,7 @@ layui.config({
 				if (!params["iconChooseResult"]) {
 					return false;
 				}
- 	        	AjaxPostUtil.request({url: reqBasePath + "sys007", params: params, type: 'json', callback: function(json) {
+ 	        	AjaxPostUtil.request({url: reqBasePath + "writeMenu", params: params, type: 'json', method: 'POST', callback: function(json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});
@@ -85,7 +84,7 @@ layui.config({
  	    	AjaxPostUtil.request({url: reqBasePath + "sys009", params: {parentId: '0'}, type: 'json', method: 'GET', callback: function (json) {
 				var str = '<select id="menuParent" lay-filter="selectParent" win-verify="required" lay-search=""><option value="">请选择</option>';
 				for(var i = 0; i < json.rows.length; i++){
-					str += '<option value="' + json.rows[i].id + '">' + json.rows[i].desktopName + '---------' + json.rows[i].menuName + '</option>';
+					str += '<option value="' + json.rows[i].id + '">' + json.rows[i].sysDesktop.name + '---------' + json.rows[i].name + '</option>';
 				}
 				str += '</select>';
 				$("#lockParentSel").append(str);

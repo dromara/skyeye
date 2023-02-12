@@ -21,13 +21,7 @@
 		<div class="layui-form-item layui-col-xs6">
 			<label class="layui-form-label">菜单名称：</label>
 			<div class="layui-input-block ver-center">
-				{{menuName}}
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs6">
-			<label class="layui-form-label">英文名称：</label>
-			<div class="layui-input-block ver-center">
-				{{menuNameEn}}
+				{{name}}
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
@@ -38,7 +32,7 @@
 		<div class="layui-form-item layui-col-xs12">
 			<label class="layui-form-label">菜单地址：</label>
 			<div class="layui-input-block ver-center">
-				{{menuUrl}}
+				{{pageUrl}}
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs6">
@@ -55,7 +49,7 @@
 		</div>
 		<div class="layui-form-item layui-col-xs6">
 			<label class="layui-form-label">菜单类型：</label>
-			<div class="layui-input-block ver-center" id="menuLevel">
+			<div class="layui-input-block ver-center" id="level">
 
 			</div>
 		</div>
@@ -68,13 +62,13 @@
 		<div class="layui-form-item layui-col-xs12">
 			<label class="layui-form-label">打开方式：</label>
 			<div class="layui-input-block ver-center">
-				{{menuType}}
+				{{type}}
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs6">
 			<label class="layui-form-label">系统菜单：</label>
 			<div class="layui-input-block ver-center">
-				{{menuSysTypeName}}
+				{{sysTypeName}}
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs6">
@@ -96,21 +90,6 @@
 			<label class="layui-form-label">权限点数量：</label>
 			<div class="layui-input-block ver-center">
 				{{authpointNum}}
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs12">
-			<span class="hr-title">创建信息</span><hr>
-		</div>
-		<div class="layui-form-item layui-col-xs6">
-			<label class="layui-form-label">创建人：</label>
-			<div class="layui-input-block ver-center">
-				{{userName}}
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs6">
-			<label class="layui-form-label">创建时间：</label>
-			<div class="layui-input-block ver-center">
-				{{createTime}}
 			</div>
 		</div>
 		{{/bean}}

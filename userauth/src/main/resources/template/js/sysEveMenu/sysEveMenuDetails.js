@@ -21,9 +21,9 @@ layui.config({
 	        	$("#icon").html(systemCommonUtil.initIconShow(json.bean));
 	        	
 	        	if(json.bean.parentId == '0'){
-	        		$("#menuLevel").html("父菜单");
+	        		$("#level").html("父菜单");
 	        	} else {
-	        		$("#menuLevel").html( "子菜单");
+	        		$("#level").html( "子菜单");
 	        	}
 	        	matchingLanguage();
 		 		form.render();

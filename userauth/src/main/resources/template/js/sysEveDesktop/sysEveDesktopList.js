@@ -25,8 +25,7 @@ layui.config({
     	limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'desktopName', title: '桌面名称', align: 'left', width: 150 },
-	        { field: 'desktopCnName', title: '英文名称', align: 'left', width: 150 },
+	        { field: 'name', title: '桌面名称', align: 'left', width: 150 },
 			{ field: 'code', title: '编码', align: 'left', width: 120 },
 			{ field: 'logo', title: 'LOGO', align: 'center', width: 60, templet: function (d) {
 				if(isNull(d.logo)){
@@ -37,12 +36,8 @@ layui.config({
 			}},
 	        { field: 'allNum', title: '菜单数量', align: 'center', width: 100 },
 			{ field: 'orderBy', title: '序号', align: 'center', width: 80 },
-	        { field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
-	        	if(d.state == '2'){
-	        		return "<span class='state-down'>禁用</span>";
-	        	} else if (d.state == '1'){
-	        		return "<span class='state-up'>启用</span>";
-	        	}
+	        { field: 'enabled', title: '状态', width: 80, align: 'center', templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("commonEnable", 'id', d.enabled, 'name');
 	        }},
 			{ field: 'appPageUrl', title: 'APP跳转地址', align: 'left', width: 180 },
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
@@ -145,8 +140,6 @@ layui.config({
 	}
 
 	form.render();
-
-	// 刷新数据
     $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
