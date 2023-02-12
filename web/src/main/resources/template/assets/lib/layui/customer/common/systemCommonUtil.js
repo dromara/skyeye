@@ -321,6 +321,10 @@ var systemCommonUtil = {
         t.next().css("cursor", "not-allowed");
     },
 
+    checkUrl: function (url) {
+        return (url.startsWith('../') || url.startsWith('--'));
+    },
+
     /**
      * 对页面url添加版本控制
      *
@@ -1253,5 +1257,25 @@ var desktopMenuUtil = {
         }
         return '';
     }
+
+};
+
+// 公共的一些html脚本
+var commonHtml = {
+
+    'customPageUrl': `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label">页面地址<i class="red">*</i></label>
+                        <div class="layui-input-block">
+                            <input type="text" id="pageUrl" name="pageUrl" placeholder="请输入页面地址" win-verify="required" class="layui-input" maxlength="200"/>
+                            <div class="layui-form-mid layui-word-aux">如果不想跳转，可填写：--<br>如果想跳转,格式为：../../tpl/model/modellist.html</div>
+                        </div>
+                    </div>`,
+    'dsFormPage': `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label">表单布局<i class="red">*</i></label>
+                        <div class="layui-input-block">
+                            <input type="text" id="pageUrl" name="pageUrl" placeholder="请选择表单布局" win-verify="required" class="layui-input" readonly="readonly"/>
+                            <i class="fa fa-plus-circle input-icon chooseBtn" style="top: 12px;"></i>
+                        </div>
+                    </div>`,
 
 };

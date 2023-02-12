@@ -952,15 +952,27 @@ layui.config({
         var id = $this.attr('win-id');
         var type = parseInt($this.attr('win-opentype'));
         var maxOpen = parseInt($this.attr('win-maxopen')) || -1;
-        if (url == 'theme') {
-            winui.window.openTheme(loadBottomMenuIcon);
-            return;
-        }
-        if (!url || !title || !id) {
-            winui.window.msg('菜单配置错误（菜单链接、标题、id缺一不可）');
-            return;
-        }
-        url = indexMenu.getUrlPath(url, menuSysWinUrl);
+		if (!url || !title || !id) {
+			winui.window.msg('菜单配置错误（菜单链接、标题、id缺一不可）');
+			return;
+		}
+		// 自定义页面
+		if (url == 'theme') {
+			winui.window.openTheme(loadBottomMenuIcon);
+			return;
+		}
+
+		if (systemCommonUtil.checkUrl(url)) {
+			// 自定义页面
+			if (url == 'theme') {
+				winui.window.openTheme(loadBottomMenuIcon);
+				return;
+			}
+			url = indexMenu.getUrlPath(url, menuSysWinUrl);
+		} else {
+			url = dsFormPageUrl + url;
+		}
+
         if (type === 1) {
         	// 新窗口打开
 			window.open(url);

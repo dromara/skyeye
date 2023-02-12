@@ -56,6 +56,8 @@ if(isNull(localStorage.getItem("sysMainMation"))){
 	initBaseParams();
 }
 
+var dsFormPageUrl = "../../tpl/dsFormPage/pageShow.html?pageId=";
+
 var skyeyeVersion;
 // 文件路径
 var fileBasePath;

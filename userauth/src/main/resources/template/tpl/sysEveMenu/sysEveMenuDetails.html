@@ -30,21 +30,27 @@
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">页面类型：</label>
+			<div class="layui-input-block ver-center">
+				{{pageType}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
 			<label class="layui-form-label">菜单地址：</label>
 			<div class="layui-input-block ver-center">
-				{{pageUrl}}
+				{{pageName}}
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs6">
 			<label class="layui-form-label">所属桌面：</label>
 			<div class="layui-input-block ver-center">
-				{{desktopName}}
+				{{sysDesktop.name}}
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs6">
 			<label class="layui-form-label">所属服务：</label>
 			<div class="layui-input-block ver-center">
-				{{sysWinName}}
+				{{sysWin.name}}
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs6">
@@ -56,7 +62,7 @@
 		<div class="layui-form-item layui-col-xs6">
 			<label class="layui-form-label">父菜单：</label>
 			<div class="layui-input-block ver-center">
-				{{menuParentName}}
+				{{parentMenu.name}}
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
@@ -75,21 +81,6 @@
 			<label class="layui-form-label">同步共享：</label>
 			<div class="layui-input-block ver-center">
 				{{isShareName}}
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs12">
-			<span class="hr-title">使用信息</span><hr>
-		</div>
-		<div class="layui-form-item layui-col-xs6">
-			<label class="layui-form-label">角色使用量：</label>
-			<div class="layui-input-block ver-center">
-				{{roleNum}}
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs6">
-			<label class="layui-form-label">权限点数量：</label>
-			<div class="layui-input-block ver-center">
-				{{authpointNum}}
 			</div>
 		</div>
 		{{/bean}}

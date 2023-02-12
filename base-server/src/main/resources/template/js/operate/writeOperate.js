@@ -69,19 +69,6 @@ layui.config({
 									
 								</div>
 							</div>`,
-		'customPageUrl': `<div class="layui-form-item layui-col-xs12">
-							<label class="layui-form-label">页面地址<i class="red">*</i></label>
-							<div class="layui-input-block">
-								<input type="text" id="pageUrl" name="pageUrl" placeholder="请输入页面地址" win-verify="required" class="layui-input" maxlength="200"/>
-							</div>
-						</div>`,
-		'dsFormPage': `<div class="layui-form-item layui-col-xs12">
-							<label class="layui-form-label">表单布局<i class="red">*</i></label>
-							<div class="layui-input-block">
-								<input type="text" id="pageUrl" name="pageUrl" placeholder="请选择表单布局" win-verify="required" class="layui-input" readonly="readonly"/>
-								<i class="fa fa-plus-circle input-icon chooseBtn" style="top: 12px;"></i>
-							</div>
-						</div>`,
 	};
 
 	var attrHtml = '';
@@ -124,15 +111,15 @@ layui.config({
 			} else {
 				var operateOpenPage = json.bean.operateOpenPage;
 				$('#eventTypeChangeBox').html(_html['operateOpenPage']);
-				$('#typeChangeBox').html(_html['customPageUrl']);
+				$('#typeChangeBox').html(commonHtml['customPageUrl']);
 				$("#openPageName").val(operateOpenPage.name);
 				var type = operateOpenPage.type ? "1" : "2";
 				$("input:radio[name=type][value=" + type + "]").attr("checked", true);
 				if (type == 1) {
-					$('#typeChangeBox').html(_html['customPageUrl']);
+					$('#typeChangeBox').html(commonHtml['customPageUrl']);
 					$("#pageUrl").val(operateOpenPage.pageUrl);
 				} else {
-					$('#typeChangeBox').html(_html['dsFormPage']);
+					$('#typeChangeBox').html(commonHtml['dsFormPage']);
 					dsFormUtil.dsFormChooseMation = operateOpenPage.dsFormPage;
 					var serviceName = operateOpenPage.dsFormPage.serviceBeanCustom.serviceBean.name;
 					$("#pageUrl").val(serviceName + '【' + operateOpenPage.dsFormPage.name + '】');
@@ -182,7 +169,7 @@ layui.config({
 		} else {
 			// 新开页面
 			$('#eventTypeChangeBox').html(_html['operateOpenPage']);
-			$('#typeChangeBox').html(_html['customPageUrl']);
+			$('#typeChangeBox').html(commonHtml['customPageUrl']);
 			loadParamsTable('pageParams');
 		}
 		form.render();
@@ -190,9 +177,9 @@ layui.config({
 
 	form.on('radio(type)', function (data) {
 		if (data.value == 1) {
-			$('#typeChangeBox').html(_html['customPageUrl']);
+			$('#typeChangeBox').html(commonHtml['customPageUrl']);
 		} else {
-			$('#typeChangeBox').html(_html['dsFormPage']);
+			$('#typeChangeBox').html(commonHtml['dsFormPage']);
 		}
 	});
 

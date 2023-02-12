@@ -24,12 +24,14 @@
 		<div class="layui-form-item layui-col-xs12" id="iconMation">
 
 		</div>
-		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">菜单地址<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<input type="text" id="pageUrl" name="pageUrl" win-verify="required" placeholder="请输入菜单地址" class="layui-input" value="{{pageUrl}}" />
-				<div class="layui-form-mid layui-word-aux">如果是一级菜单,格式为：--<br>如果是子菜单,格式为：../../tpl/model/modellist.html</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">页面类型<i class="red">*</i></label>
+			<div class="layui-input-block winui-radio">
+				<input type="radio" name="pageType" value="1" title="自定义页面" lay-filter="pageType" checked/>
+				<input type="radio" name="pageType" value="2" title="表单布局" lay-filter="pageType" />
 			</div>
+		</div>
+		<div id="typeChangeBox">
 		</div>
 		<div class="layui-form-item layui-col-xs6">
 			<label class="layui-form-label">所属桌面</label>

@@ -58,6 +58,18 @@ layui.config({
 				$("input:radio[name='sysType'][value='" + json.bean.sysType + "']").attr("checked", true);
 				$("input:radio[name='isShare'][value='" + json.bean.isShare + "']").attr("checked", true);
 
+				var type = json.bean.pageType ? "1" : "2";
+				$("input:radio[name=pageType][value=" + type + "]").attr("checked", true);
+				if (type == 1) {
+					$('#typeChangeBox').html(commonHtml['customPageUrl']);
+					$("#pageUrl").val(json.bean.pageUrl);
+				} else {
+					$('#typeChangeBox').html(commonHtml['dsFormPage']);
+					dsFormUtil.dsFormChooseMation = json.bean.dsFormPage;
+					var serviceName = json.bean.dsFormPage.serviceBeanCustom.serviceBean.name;
+					$("#pageUrl").val(serviceName + '【' + json.bean.dsFormPage.name + '】');
+				}
+
 		 		matchingLanguage();
 		 		form.render();
 		 		
@@ -73,15 +85,25 @@ layui.config({
 					}
 					form.render('select');
 				});
+
+				form.on('radio(pageType)', function (data) {
+					if (data.value == 1) {
+						$('#typeChangeBox').html(commonHtml['customPageUrl']);
+					} else {
+						$('#typeChangeBox').html(commonHtml['dsFormPage']);
+					}
+				});
 		 		
 		 	    form.on('submit(formEditMenu)', function (data) {
 		 	        if (winui.verifyForm(data.elem)) {
 						var level = $("input[name='level']:checked").val();
+						var pageType = $("input[name='pageType']:checked").val();
 		 	        	var params = {
 							name: $("#name").val(),
 							sysWinId: $("#sysWinId").val(),
 							desktopId: $("#desktop").val(),
-							pageUrl: $("#pageUrl").val(),
+							pageType: pageType == 1 ? true : false,
+							pageUrl: pageType == 1 ? $("#pageUrl").val() : dsFormUtil.dsFormChooseMation.id,
 							type: $("input[name='type']:checked").val(),
 							level: level,
 							parentId: level == 0 ? "0" : $("#menuParent").val(),
@@ -117,6 +139,13 @@ layui.config({
 				$("#lockParentSel").append(str);
 			}, async: false});
  	    }
+
+		$("body").on("click", ".chooseBtn", function() {
+			dsFormUtil.openDsFormPageChoosePage(function (dsFormChoose) {
+				var serviceName = dsFormChoose.serviceBeanCustom.serviceBean.name;
+				$("#pageUrl").val(serviceName + '【' + dsFormChoose.name + '】');
+			});
+		});
  	    
  	    // 取消
 	    $("body").on("click", "#cancle", function() {

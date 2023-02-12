@@ -50,15 +50,26 @@ layui.config({
 			}
 			form.render('select');
         });
+
+		$('#typeChangeBox').html(commonHtml['customPageUrl']);
+		form.on('radio(pageType)', function (data) {
+			if (data.value == 1) {
+				$('#typeChangeBox').html(commonHtml['customPageUrl']);
+			} else {
+				$('#typeChangeBox').html(commonHtml['dsFormPage']);
+			}
+		});
  		
  	    form.on('submit(formAddMenu)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
 				var level = $("input[name='level']:checked").val();
+				var pageType = $("input[name='pageType']:checked").val();
  	        	var params = {
 					name: $("#name").val(),
 					sysWinId: $("#sysWinId").val(),
 					desktopId: $("#desktop").val(),
-					pageUrl: $("#pageUrl").val(),
+					pageType: pageType == 1 ? true : false,
+					pageUrl: pageType == 1 ? $("#pageUrl").val() : dsFormUtil.dsFormChooseMation.id,
 					type: $("input[name='type']:checked").val(),
 					level: level,
 					parentId: level == 0 ? "0" : $("#menuParent").val(),
@@ -90,6 +101,13 @@ layui.config({
 				$("#lockParentSel").append(str);
  	   		}, async: false});
  	    }
+
+		$("body").on("click", ".chooseBtn", function() {
+			dsFormUtil.openDsFormPageChoosePage(function (dsFormChoose) {
+				var serviceName = dsFormChoose.serviceBeanCustom.serviceBean.name;
+				$("#pageUrl").val(serviceName + '【' + dsFormChoose.name + '】');
+			});
+		});
  	    
  	    // 取消
 	    $("body").on("click", "#cancle", function() {

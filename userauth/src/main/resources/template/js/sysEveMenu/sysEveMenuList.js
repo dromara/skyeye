@@ -47,7 +47,6 @@ layui.config({
 		        { field: 'isShare', title: '共享', align: 'center', width: 80, templet: function (d) {
 					return d.isShare == 0 ? '否' : '是';
 		        }},
-		        { field: 'parentName', title: '父菜单', width: 100 },
 		        { field: 'pageUrl', title: '菜单链接', width: 160 },
 				{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 				{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
@@ -148,7 +147,7 @@ layui.config({
 	
 	// 上移
 	function topOne(data) {
-		AjaxPostUtil.request({url: reqBasePath + "sys022", params: {rowId: data.id}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "sys022", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
@@ -156,7 +155,7 @@ layui.config({
 	
 	// 下移
 	function lowerOne(data) {
-		AjaxPostUtil.request({url: reqBasePath + "sys023", params: {rowId: data.id}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "sys023", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});

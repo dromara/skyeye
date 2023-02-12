@@ -37,7 +37,7 @@
 		{{# if(auth('1552957538820')){ }}
 			<a class="layui-btn layui-btn-xs" lay-event="lower">下移</a>
 		{{# } }}
-		{{# if((d.roleNum == 0 || isNull(d.roleNum)) && auth('1552957567975')){ }}
+		{{# if(auth('1552957567975')){ }}
 			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
 		{{# } }}
 		{{# if(auth('1552957843505')){ }}
