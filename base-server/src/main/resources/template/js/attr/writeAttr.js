@@ -68,6 +68,9 @@ layui.config({
 		// 如果不是入参属性，则不能设置特定的一些值
 		if (!json.bean.whetherInputParams) {
 			$('.inputParams').hide();
+			skyeyeClassEnumUtil.showEnumDataListByClassName("dsFormShowType", 'select', "showType", json.bean.showType, form);
+		} else {
+			$('.propertyParams').hide();
 		}
 
 		var id = isNull(json.bean.id) ? '' : json.bean.id;
@@ -83,6 +86,7 @@ layui.config({
 					minLength: $("#minLength").val(),
 					maxLength: $("#maxLength").val(),
 					remark: $("#remark").val(),
+					showType: isNull($("#showType").val()) ? "" : $("#showType").val(),
 					id: id
 				};
 

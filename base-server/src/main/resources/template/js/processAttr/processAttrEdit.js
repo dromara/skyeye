@@ -15,19 +15,29 @@ layui.config({
 	var tableDataList = new Array();
 	var alignmentData;
 	var rowNum = 1;
+	var attrMap = {};
 	AjaxPostUtil.request({url: reqBasePath + "queryAttrTransformById", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
 		$("#showForm").html(getDataUseHandlebars($("#beanTemplate").html(), json));
 
 		AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: {className: parent.objectId}, type: 'json', method: "POST", callback: function (data) {
-			$("#attrKey").html(getDataUseHandlebars(`<option value="">全部</option>{{#each rows}}<option value="{{attrKey}}">{{name}}</option>{{/each}}`, data));
+			var str = '<option value="">请选择</option>';
+			$.each(data.rows, function (i, item) {
+				if (isNull(item.attrDefinitionCustom) || (isNull(item.attrDefinitionCustom.dsFormComponent) && isNull(item.showType))) {
+					str += `<option value="{{attrKey}}" disabled="">{{name}}</option>`;
+				} else {
+					attrMap[item.attrKey] = item;
+					str += `<option value="{{attrKey}}">{{name}}</option>`;
+				}
+			});
+			$("#attrKey").html(str);
 			$("#attrKey").val(json.bean.attrKey);
 		}, async: false});
 
-		skyeyeClassEnumUtil.showEnumDataListByClassName("dsFormShowType", 'select', "showType", json.bean.showType, form);
 		skyeyeClassEnumUtil.showEnumDataListByClassName("widthScale", 'select', "proportion", json.bean.proportion, form);
 		alignmentData = skyeyeClassEnumUtil.getEnumDataListByClassName("alignment");
 
-		if (json.bean.showType == 5) {
+		var showType = getShowType($("#attrKey").val());
+		if (showType == 5) {
 			$("#tableBox").show();
 			$.each(json.bean.attrTransformTableList, function(j, item) {
 				item.id = rowNum;
@@ -43,7 +53,8 @@ layui.config({
 		form.render();
 		form.on('submit(formEditBean)', function (data) {
 			if (winui.verifyForm(data.elem)) {
-				if ($("#showType").val() == 5) {
+				var showType = getShowType($("#attrKey").val());
+				if (showType == 5) {
 					if (table.cache.messageTable.length == 0) {
 						winui.window.msg('请选择表格属性.', {icon: 2, time: 2000});
 						return false;
@@ -64,7 +75,6 @@ layui.config({
 					className: parent.objectId,
 					attrKey: $("#attrKey").val(),
 					orderBy: $("#orderBy").val(),
-					showType: $("#showType").val(),
 					attrTransformTableList: JSON.stringify(tableDataList),
 					proportion: $("#proportion").val(),
 					actFlowId: parent.$("#actFlowId").val(),
@@ -80,22 +90,22 @@ layui.config({
 	}, async: false});
 
 	form.on('select(attrKey)', function(data) {
-		tableDataList = new Array();
-		buildTable();
-	});
-	form.on('select(showType)', function(data) {
-		var value = data.value;
-		if (value == 5) {
-			$("#tableBox").show();
-		} else {
+		if (isNull($("#attrKey").val())) {
 			$("#tableBox").hide();
+		} else {
+			tableDataList = new Array();
+			buildTable();
 		}
-		tableDataList = new Array();
-		buildTable();
 	});
 
+	function getShowType(attrKey) {
+		var attr = attrMap[attrKey];
+		return dsFormUtil.getShowType(attr);
+	}
+
 	function buildTable() {
-		if ($("#showType").val() == 5 && !isNull($("#attrKey").val())) {
+		var showType = getShowType($("#attrKey").val());
+		if (showType == 5) {
 			var params = {
 				className: parent.objectId,
 				attrKey: $("#attrKey").val()
@@ -166,7 +176,9 @@ layui.config({
 				}
 			});
 		} else {
+			tableDataList = new Array();
 			table.reloadData("messageTable", {data: tableDataList});
+			$("#tableBox").hide();
 		}
 	}
 

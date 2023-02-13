@@ -50,6 +50,10 @@ layui.config({
 				}
 				return '';
 			}},
+			{ field: 'showType', title: '显示类型', align: 'left', width: 120, templet: function (d) {
+				var showType = dsFormUtil.getShowType(d);
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("dsFormShowType", 'id', showType, 'name');
+			}},
 			{ field: 'required', title: '限制条件', align: 'left', width: 140 },
 			{ field: 'modelAttribute', title: '是否模型属性', align: 'center', width: 100, templet: function (d) {
 				if (d.modelAttribute) {

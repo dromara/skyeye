@@ -42,9 +42,6 @@ layui.config({
 			{ field: 'proportion', title: '宽度比例', align: 'left', width: 120, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("widthScale", 'id', d.proportion, 'name');
 			}},
-			{ field: 'showType', title: '显示类型', align: 'left', width: 120, templet: function (d) {
-				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("dsFormShowType", 'id', d.showType, 'name');
-			}},
 			{ field: 'orderBy', title: '排序', align: 'left', width: 100 },
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },

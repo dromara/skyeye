@@ -126,13 +126,7 @@ var dsFormUtil = {
             // 关联数据
             content = dsFormUtil.getContentLinkedData(content);
         }
-        if (!isNull(content.attrDefinition)) {
-            if (!isNull(content.attrDefinition.attrDefinitionCustom)) {
-                content.title = content.attrDefinition.attrDefinitionCustom.name;
-            } else {
-                content.title = content.attrDefinition.name;
-            }
-        }
+        content.title = dsFormUtil.getLable(content.attrDefinition);
 
         var jsonStr = {bean: content};
         var html = getDataUseHandlebars('{{#bean}}' + component.htmlContent + '{{/bean}}', jsonStr);
@@ -140,6 +134,17 @@ var dsFormUtil = {
         var jsCon = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + html_js + '})(jQuery);});</script>';
         $("#" + boxId).append(html + jsCon);
         return content;
+    },
+
+    getLable: function (attr) {
+        if (!isNull(attr)) {
+            if (!isNull(attr.attrDefinitionCustom)) {
+                return attr.attrDefinitionCustom.name;
+            } else {
+                return attr.name;
+            }
+        }
+        return '';
     },
 
     getContentLinkedData: function (content) {
@@ -375,26 +380,28 @@ var dsFormUtil = {
      */
     initSequenceDataDetails: function (customBoxId, rows) {
         $.each(rows, function (i, item) {
+            item.label = dsFormUtil.getLable(item.attrDefinition);
             var jsonStr = {
                 bean: item
             };
-            if (item.showType == 4) { // 图片展示
+            var showType = dsFormUtil.getShowType(item.attrDefinition);
+            if (showType == 4) { // 图片展示
                 var photoValue = [];
                 if (!isNull(jsonStr.bean.displayValue)) {
                     photoValue = item.displayValue.split(",");
                 }
                 var rows = [];
-                $.each(photoValue, function(j, row){
+                $.each(photoValue, function(j, row) {
                     rows.push({photoValue: row});
                 });
                 jsonStr.bean.photo = rows;
             }
 
             // 加载html
-            var str = getDataUseHandlebars(dsFormUtil.showType[item.showType], jsonStr);
+            var str = getDataUseHandlebars(dsFormUtil.showType[showType], jsonStr);
             $("#" + customBoxId).append(str);
 
-            if (item.showType == 5) { // 表格展示
+            if (showType == 5) { // 表格展示
                 var table = layui.table;
                 table.render({
                     id: "messageTable" + item.orderBy,
@@ -403,12 +410,23 @@ var dsFormUtil = {
                     page: false,
                     cols: dsFormUtil.getTableHead(item.attrTransformTableList)
                 });
-            } else  if (item.showType == 6) { // 凭证展示
+            } else  if (showType == 6) { // 凭证展示
                 var boxId = "showVoucher" + item.orderBy;
                 // 初始化凭证
                 voucherUtil.initDataDetails(boxId, item.value);
             }
         });
+    },
+
+    getShowType: function (attr) {
+        if (!isNull(attr.attrDefinitionCustom)) {
+            if (!isNull(attr.attrDefinitionCustom.dsFormComponent)) {
+                return attr.attrDefinitionCustom.dsFormComponent.showType;
+            } else {
+                return attr.attrDefinitionCustom.showType;
+            }
+        }
+        return null;
     },
 
     getTableHead: function (attrTransformTableList) {
