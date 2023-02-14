@@ -9,18 +9,15 @@
 - [2023年全年更新计划](https://mp.weixin.qq.com/s/deBkHLLeo1JDy6nqhvtWZg)
 - [软件更新历史](https://gitee.com/doc_wei01/skyeye/blob/company_server/HISTORY_UPDATE.md)
 - 开源版请下载`master`分支
-- 企业版当前版本：202301版
 - 作者本人承诺，知识星球人数达到1000人，即开放所有功能模块源代码(仅供星球内部成员使用)
-- [开源版项目文档](https://gitee.com/doc_wei01/skyeye/blob/company_server/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3.md)
-- [企业版项目文档](https://gitee.com/doc_wei01/skyeye/blob/company_server/企业版项目文档.md)
 - 基础模块 (源代码) 针对星球内部用户开放，具体包含功能可查看：[https://docs.qq.com/sheet/DYWZWUWZQUkFTcmh2?tab=BB08J2](https://docs.qq.com/sheet/DYWZWUWZQUkFTcmh2?tab=BB08J2)
 - 此软件为个人软件，暂不能开发票，需要发票的勿扰，企业版报价：https://docs.qq.com/sheet/DYUh5RUlGSkVPeHVo
 
 ### 沟通交流
 
-| 企业部署版 | 作者微信(添加时请备注个人信息：姓名-联系方式)，其余一律不通过 |                      QQ群                      |         微信公众号(文档类资料)          |           微信小程序(操作视频/介绍视频等)           |
-|:-----:|:--------------------------------:|:---------------------------------------------:|:-----------------------------:|:-------------------------------------:|
-| ![](images/mindMap/知识星球.png) |    ![](images/mindMap/微信.jpg)    | ![](images/mindMap/Skyeye智能制造云办公官方①群群二维码.png) | ![](images/mindMap/微信公众号.jpg) | ![](images/mindMap/Skyeye视频微信小程序.jpg) |
+| 企业部署版 | 作者微信(添加时请备注个人信息：姓名-联系方式)，其余一律不通过 |          QQ群      |   微信小程序(Skyeye相关资料)           |
+|:-----:|:--------------------------------:|:--------------------:|:-------------------------------------:|
+| ![](images/mindMap/知识星球.png) |    ![](images/mindMap/微信.jpg)    | ![](images/mindMap/Skyeye智能制造云办公官方①群群二维码.png) | ![](images/mindMap/Skyeye视频微信小程序.jpg) |
 
 #### 功能矩阵
 
