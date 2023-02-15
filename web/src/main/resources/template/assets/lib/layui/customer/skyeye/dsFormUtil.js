@@ -362,7 +362,7 @@ var dsFormUtil = {
                     elem: "#messageTable" + item.orderBy,
                     data: item.displayValue,
                     page: false,
-                    cols: dsFormUtil.getTableHead(item.attrTransformTableList)
+                    cols: dsFormUtil.getTableHead({}, item.attrTransformTableList)
                 });
             } else  if (showType == 6) { // 凭证展示
                 var boxId = "showVoucher" + item.orderBy;
@@ -402,14 +402,7 @@ var dsFormUtil = {
             $("#" + customBoxId).append(str);
 
             if (showType == 5) { // 表格展示
-                var table = layui.table;
-                table.render({
-                    id: "messageTable" + item.orderBy,
-                    elem: "#messageTable" + item.orderBy,
-                    data: item.displayValue,
-                    page: false,
-                    cols: dsFormUtil.getTableHead(item.attrTransformTableList)
-                });
+                dsFormTableUtil.intStaticTable("messageTable" + item.orderBy, item.displayValue, item.attrTransformTableList);
             } else  if (showType == 6) { // 凭证展示
                 var boxId = "showVoucher" + item.orderBy;
                 // 初始化凭证
@@ -418,6 +411,7 @@ var dsFormUtil = {
         });
     },
 
+    // 获取属性的数据展示类型
     getShowType: function (attr) {
         if (!isNull(attr.attrDefinitionCustom)) {
             if (!isNull(attr.attrDefinitionCustom.dsFormComponent)) {
@@ -427,24 +421,6 @@ var dsFormUtil = {
             }
         }
         return null;
-    },
-
-    getTableHead: function (attrTransformTableList) {
-        var header = [];
-        $.each(attrTransformTableList, function (i, item) {
-            var field = {
-                field: item.attrKey,
-                title: item.label,
-                align: item.align,
-                width: item.width,
-                templet: null
-            };
-            if (!isNull(item.templet)) {
-                field['templet'] = eval('(' + item.templet + ')');
-            }
-            header.push(field);
-        });
-        return [header];
     },
 
     /**
@@ -459,5 +435,131 @@ var dsFormUtil = {
             dsFormUtil.loadEditDsFormItem(showBoxId, json);
         }, async: false});
     },
+
+};
+
+var dsFormTableUtil = {
+
+    tableId: '',
+
+    // 初始化静态数据的表格
+    intStaticTable: function (id, data, tableColumnList) {
+        var table = layui.table;
+        table.render({
+            id: id,
+            elem: id,
+            data: data,
+            page: false,
+            cols: dsFormUtil.getTableHead({}, tableColumnList)
+        });
+    },
+
+    // 初始化动态表格
+    initDynamicTable: function (id, pageMation) {
+        var tableColumnList = pageMation.tableColumnList;
+        $.each(tableColumnList, function (i, item) {
+            item.label = dsFormUtil.getLable(item.attrDefinition);
+        });
+        dsFormTableUtil.tableId = id;
+
+        // 加载表格
+        layui.define(["jquery", 'form', 'table'], function(exports) {
+            var table = layui.table;
+            var form = layui.form;
+            var api = pageMation.businessApi;
+            var url = "";
+            eval('url = ' + api.serviceStr + ' + "' + api.api + '"');
+            table.render({
+                id: id,
+                elem: `#${id}`,
+                method: api.method,
+                url: url,
+                where: dsFormTableUtil.getTableParams(),
+                even: true,
+                page: true,
+                overflow: {type: 'tips', header: true, total: true},
+                limits: getLimits(),
+                limit: getLimit(),
+                cols: dsFormTableUtil.getTableHead({
+                    serialNumColumn: true,
+                    operateColumn: true
+                }, tableColumnList),
+                done: function(json) {
+                    matchingLanguage();
+                    initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入", function () {
+                        table.reloadData(id, {page: {curr: 1}, where: dsFormTableUtil.getTableParams()});
+                    });
+                }
+            });
+            dsFormTableUtil.initEvent(table, form);
+        });
+    },
+
+    getTableHead: function (column, tableColumnList) {
+        var header = [];
+        if (!isNull(column.serialNumColumn) && column.serialNumColumn) {
+            header.push({
+                title: systemLanguage["com.skyeye.serialNumber"][languageType],
+                type: 'numbers'
+            });
+        }
+        $.each(tableColumnList, function (i, item) {
+            var field = {
+                field: item.attrKey,
+                title: item.label,
+                align: item.align,
+                width: item.width,
+                templet: null
+            };
+            if (!isNull(item.templet)) {
+                field['templet'] = eval('(' + item.templet + ')');
+            }
+            header.push(field);
+        });
+        if (!isNull(column.operateColumn) && column.operateColumn) {
+            header.push({
+                title: systemLanguage["com.skyeye.operation"][languageType],
+                fixed: 'right',
+                width: dsFormTableUtil.calcOperateColumnWidth(),
+                align: 'center',
+                toolbar: '#actionBar'
+            });
+        }
+        return [header];
+    },
+
+    initEvent: function (table, form) {
+        form.render();
+        $("body").on("click", "#reloadTable", function() {
+            loadTable();
+        });
+
+        function loadTable() {
+            table.reloadData(dsFormTableUtil.tableId, {where: dsFormTableUtil.getTableParams()});
+        }
+
+    },
+
+    getTableParams: function() {
+        return $.extend(true, {}, initTableSearchUtil.getSearchValue(dsFormTableUtil.tableId));
+    },
+
+    // 计算操作列的宽度
+    calcOperateColumnWidth: function () {
+        var _a = $('#actionBar').find('a');
+        var width = 100;
+        // 获取操作列中有多少个按钮，公式：文字的数量 * 12(一个文字的宽度) + 按钮的数量 * 10(按钮的内边距) + (按钮的数量 - 1) * 10(按钮外边距) + 16(操作列的内边距)
+        if (!isNull(_a) && _a.length > 0) {
+            var btnName = '';
+            $.each(_a, function (i, item) {
+                btnName += $(item).html();
+            });
+            if (!isNull(btnName)) {
+                var length = btnName.length;
+                width = 12 * length + _a.length * 10 + (_a.length - 1) * 10 + 16;
+            }
+        }
+        return width;
+    }
 
 };
