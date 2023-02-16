@@ -26,6 +26,17 @@ layui.config({
     }});
 
     var pageHtml = {
+        'create': `<div style="margin:0 auto;padding:20px;">
+                        <form class="layui-form" action="" id="showForm" autocomplete="off">
+                            <div id="content"></div>
+                            <div class="layui-form-item layui-col-xs12">
+                                <div class="layui-input-block">
+                                    <button class="winui-btn" type="button" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+                                    <button class="winui-btn" lay-submit lay-filter="formWriteBean"><language showName="com.skyeye.save"></language></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>`,
 
         'simpleTable': `<div class="winui-toolbar">
                             <div class="winui-tool" id="toolBar">
@@ -47,36 +58,15 @@ layui.config({
         var html = pageHtml[pageMation.type];
         $("body").append(html);
 
-        // 加载操作
-        initOperate();
         // 加载页面
         initPage();
     }
 
-    // 加载操作信息
-    var operateMap = {};
-    function initOperate() {
-        var operateList = pageMation.operateList;
-        if (isNull(operateList)) {
-            return false;
-        }
-        $.each(operateList, function (i, item) {
-            operateMap[item.id] = item;
-            if (item.position == 'toolBar') {
-                // 工具栏
-                $(`#${item.position}`).append(`<button id="${item.id}" class="winui-toolbtn search-table-btn-right item-click"><i class="fa fa-plus" aria-hidden="true"></i>${item.name}</button>`);
-            } else if (item.position == 'actionBar') {
-                // 操作栏
-                $(`#${item.position}`).append(`<a class="layui-btn layui-btn-xs ${item.color}" lay-event="${item.id}">${item.name}</a>`);
-            } else if (item.position == 'rightMenuBar') {
-                // 右键菜单栏
-
-            }
-        });
-    }
-
     function initPage() {
-        if (pageMation.type == 'simpleTable') {
+        if (pageMation.type == 'create') {
+            // 创建布局
+            dsFormUtil.initCreatePage('content', pageMation);
+        } else if (pageMation.type == 'simpleTable') {
             // 基本表格
             dsFormTableUtil.initDynamicTable('messageTable', pageMation);
         }

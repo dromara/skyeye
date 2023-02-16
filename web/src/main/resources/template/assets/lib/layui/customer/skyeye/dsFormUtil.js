@@ -2,10 +2,6 @@
 // 动态表单工具函数
 var dsFormUtil = {
 
-    dsFormDataKey: "initData",
-    dsFormBtnTemplate: '<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="{{btnId}}">表单选择</button>',
-    customDsFormBox: '<div class="layui-form-item layui-col-xs12"><span class="hr-title">{{dsFormPage.name}}</span><hr></div><div id="{{dsFormPage.id}}" class="ds-form-page layui-col-xs12"></div>',
-    customWriteDsFormBox: '<div class="layui-form-item layui-col-xs12"><span class="hr-title">{{name}}</span><hr></div><div id="{{id}}" class="ds-form-page layui-col-xs12"></div>',
     // 必须包含的包
     mastHaveImport: ['laydate', 'layedit', 'colorpicker', 'slider', 'fileUpload', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx', 'solr', 'sql', 'vue',
         'matchbrackets', 'closebrackets', 'showHint', 'anywordHint', 'lint', 'jsonLint', 'foldcode', 'foldgutter', 'braceFold', 'commentFold', 'form'],
@@ -39,61 +35,38 @@ var dsFormUtil = {
     },
 
     /**
-     * 加载数据
+     * 加载动态表单(新增操作)
      *
-     * @param id box的id
-     * @param btnId 按钮id
+     * @param showBoxId 表单展示位置id
+     * @param pageMation 页面信息
      */
-    initData: function(id, btnId) {
-        var btnHtml = getDataUseHandlebars(dsFormUtil.dsFormBtnTemplate, {btnId: btnId});
-        var str = "";
-        var dsFormChooseList = JSON.parse($("#" + id).attr(dsFormUtil.dsFormDataKey));
-        $.each(dsFormChooseList, function(i, item) {
-            str += '<br><a rowid="' + item.id + '" class="dsFormItem" href="javascript:;" style="color:blue;">' + item.pageName + '</a>';
-        });
-        str = btnHtml + str;
-        $("#" + id).html(str);
-    },
-
-    /**
-     * 获取数据
-     *
-     * @param id box的id
-     * @returns {*[]}
-     */
-    getJSONDsFormListByBoxId: function (id) {
-        return [].concat(JSON.parse($("#" + id).attr(dsFormUtil.dsFormDataKey)));
+    loadPageByCode: function(showBoxId, pageMation) {
+        // todo 待删除
     },
 
     /**
      * 加载动态表单(新增操作)
      *
-     * @param showBoxId 要追加的boxid后面
-     * @param code 动态表单-----业务逻辑表单关联表中的code
+     * @param showBoxId 表单展示位置id
+     * @param pageMation 页面信息
      */
-    loadPageByCode: function(showBoxId, code, dsFormObjectRelationId) {
-        var params = {
-            dsFormObjectRelationCode: isNull(code) ? "" : code,
-            dsFormObjectRelationId: isNull(dsFormObjectRelationId) ? "" : dsFormObjectRelationId
-        };
-        // AjaxPostUtil.request({url: reqBasePath + "dsFormObjectRelation006", params: params, method: "GET", type: 'json', callback: function(json) {
-        //     dsFormUtil.loadAddDsFormItem(showBoxId, json);
-        // }, async: false});
-    },
+    initCreatePage: function(showBoxId, pageMation) {
+        layui.define(["jquery", 'form'], function(exports) {
+            var form = layui.form;
+            $.each(pageMation.dsFormPageContents, function(j, dsFormContent) {
+                dsFormUtil.loadComponent(showBoxId, dsFormContent);
+            });
+            matchingLanguage();
+            form.render();
 
-    loadAddDsFormItem: function(showBoxId, json) {
-        $.each(json.rows, function(j, bean) {
-            var customBoxId = bean.id;
-            $("#" + showBoxId).append(getDataUseHandlebars(dsFormUtil.customWriteDsFormBox, bean));
-            dsFormUtil.loadDsFormItemToAdd(customBoxId, bean.content);
+            dsFormUtil.initEvent();
         });
-        form.render();
     },
 
-    loadDsFormItemToAdd: function (customBoxId, rows) {
-        $.each(rows, function(i, item) {
-            item.value = item.defaultValue;
-            dsFormUtil.setValue(customBoxId, item, i);
+    initEvent: function () {
+        $("body").on("click", "#cancle", function() {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
         });
     },
 
@@ -126,7 +99,7 @@ var dsFormUtil = {
             // 关联数据
             content = dsFormUtil.getContentLinkedData(content);
         }
-        content.title = dsFormUtil.getLable(content.attrDefinition);
+        content.title = dsFormUtil.getLable(content);
 
         var jsonStr = {bean: content};
         var html = getDataUseHandlebars('{{#bean}}' + component.htmlContent + '{{/bean}}', jsonStr);
@@ -136,7 +109,8 @@ var dsFormUtil = {
         return content;
     },
 
-    getLable: function (attr) {
+    getLable: function (content) {
+        var attr = content.attrDefinition;
         if (!isNull(attr)) {
             if (!isNull(attr.attrDefinitionCustom)) {
                 return attr.attrDefinitionCustom.name;
@@ -144,7 +118,7 @@ var dsFormUtil = {
                 return attr.name;
             }
         }
-        return '';
+        return content.title;
     },
 
     getContentLinkedData: function (content) {
@@ -380,7 +354,7 @@ var dsFormUtil = {
      */
     initSequenceDataDetails: function (customBoxId, rows) {
         $.each(rows, function (i, item) {
-            item.label = dsFormUtil.getLable(item.attrDefinition);
+            item.label = dsFormUtil.getLable(item);
             var jsonStr = {
                 bean: item
             };
@@ -432,15 +406,63 @@ var dsFormUtil = {
     loadPageToEditByObjectId: function(showBoxId, objectId) {
         // todo 待修改
         AjaxPostUtil.request({url: flowableBasePath + "", params: {objectId: objectId}, method: "GET", type: 'json', callback: function (json) {
-            dsFormUtil.loadEditDsFormItem(showBoxId, json);
+            // dsFormUtil.loadEditDsFormItem(showBoxId, json);
         }, async: false});
     },
+
+    // 执行事件
+    executeEvent: function (operate, data) {
+        if (operate.eventType == 'openPage') {
+            // 打开新页面
+            var operateOpenPage = operate.operateOpenPage;
+            var url = operateOpenPage.type ? operateOpenPage.pageUrl : dsFormPageUrl + operateOpenPage.pageUrl;
+            url = systemCommonUtil.getHasVersionUrl(url);
+            // 构建参数
+            if (!isNull(data)) {
+                $.each(operateOpenPage.params, function (key, valueKey) {
+                    var value = data[valueKey];
+                    url += `&${key}=${value}`;
+                });
+            }
+            _openNewWindows({
+                url: url,
+                title: operateOpenPage.name,
+                pageId: 'page' + operate.id,
+                area: ['90vw', '90vh'],
+                callBack: function (refreshCode) {
+                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                    dsFormTableUtil.loadTable();
+                }});
+        } else if (operate.eventType == 'ajax') {
+            // 发送请求
+            var businessApi = operate.businessApi;
+            layer.confirm('确定执行该操作吗？', {icon: 3, title: '操作'}, function (index) {
+                layer.close(index);
+                var url = "";
+                eval('url = ' + businessApi.serviceStr + ' + "' + businessApi.api + '"');
+                // 构建参数
+                var params = {};
+                if (!isNull(data)) {
+                    $.each(businessApi.params, function (key, valueKey) {
+                        params[key] = data[valueKey]
+                    });
+                }
+                AjaxPostUtil.request({url: url, params: params, type: 'json', method: businessApi.method, callback: function (json) {
+                    winui.window.msg('操作成功', {icon: 1, time: 2000});
+                    dsFormTableUtil.loadTable();
+                }});
+            });
+        }
+    }
 
 };
 
 var dsFormTableUtil = {
 
     tableId: '',
+
+    // 操作信息
+    operateMap: {},
 
     // 初始化静态数据的表格
     intStaticTable: function (id, data, tableColumnList) {
@@ -458,8 +480,10 @@ var dsFormTableUtil = {
     initDynamicTable: function (id, pageMation) {
         var tableColumnList = pageMation.tableColumnList;
         $.each(tableColumnList, function (i, item) {
-            item.label = dsFormUtil.getLable(item.attrDefinition);
+            item.label = dsFormUtil.getLable(item);
         });
+        // 加载操作信息
+        dsFormTableUtil.initOperate(pageMation);
         dsFormTableUtil.tableId = id;
 
         // 加载表格
@@ -491,7 +515,36 @@ var dsFormTableUtil = {
                     });
                 }
             });
+            table.on(`tool(${id})`, function (obj) {
+                var data = obj.data;
+                var layEvent = obj.event;
+                var operate = dsFormTableUtil.operateMap[layEvent];
+                if (!isNull(operate)) {
+                    dsFormUtil.executeEvent(operate, data);
+                }
+            });
             dsFormTableUtil.initEvent(table, form);
+        });
+    },
+
+    // 加载操作
+    initOperate: function (pageMation) {
+        var operateList = pageMation.operateList;
+        if (isNull(operateList)) {
+            return false;
+        }
+        $.each(operateList, function (i, item) {
+            dsFormTableUtil.operateMap[item.id] = item;
+            if (item.position == 'toolBar') {
+                // 工具栏
+                $(`#${item.position}`).append(`<button id="${item.id}" class="winui-toolbtn search-table-btn-right item-click"><i class="fa fa-plus" aria-hidden="true"></i>${item.name}</button>`);
+            } else if (item.position == 'actionBar') {
+                // 操作栏
+                $(`#${item.position}`).append(`<a class="layui-btn layui-btn-xs ${item.color}" lay-event="${item.id}">${item.name}</a>`);
+            } else if (item.position == 'rightMenuBar') {
+                // 右键菜单栏
+
+            }
         });
     },
 
@@ -531,13 +584,21 @@ var dsFormTableUtil = {
     initEvent: function (table, form) {
         form.render();
         $("body").on("click", "#reloadTable", function() {
-            loadTable();
+            dsFormTableUtil.loadTable();
         });
 
-        function loadTable() {
-            table.reloadData(dsFormTableUtil.tableId, {where: dsFormTableUtil.getTableParams()});
-        }
+        $("body").on("click", ".item-click", function() {
+            var id = $(this).attr('id');
+            var operate = dsFormTableUtil.operateMap[id];
+            if (!isNull(operate)) {
+                dsFormUtil.executeEvent(operate, null);
+            }
+        });
 
+    },
+
+    loadTable: function () {
+        layui.table.reloadData(dsFormTableUtil.tableId, {where: dsFormTableUtil.getTableParams()});
     },
 
     getTableParams: function() {
