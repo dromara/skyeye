@@ -47,6 +47,28 @@ var dsFormUtil = {
     },
 
     /**
+     * 加载动态表单(编辑操作)
+     *
+     * @param showBoxId
+     * @param pageMation
+     * @param data
+     */
+    initEditPage: function(showBoxId, pageMation, data) {
+        dsFormUtil.initCreatePage(showBoxId, pageMation);
+        $.each(dsFormUtil.pageMation.dsFormPageContents, function (i, content) {
+            if (!isNull(content.attrDefinition)) {
+                // 获取组件中设置值的脚本
+                var dsFormComponent = content.dsFormComponent;
+                var setValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsFitValue + '{{/this}}', content);
+                // value参数不能删除，用于组件的赋值脚本使用
+                var value = data[content.attrDefinition.attrKey];
+                eval(setValueScript);
+            }
+        });
+        layui.form.render();
+    },
+
+    /**
      * 加载动态表单(新增操作)
      *
      * @param showBoxId 表单展示位置id
@@ -85,6 +107,10 @@ var dsFormUtil = {
                         params[content.attrDefinition.attrKey] = value;
                     }
                 });
+                if (dsFormUtil.pageMation.type == 'edit') {
+                    // 编辑布局
+                    params["id"] = GetUrlParam("id");
+                }
                 // 发送请求
                 dsFormUtil.sendRequest({
                     businessApi: dsFormUtil.pageMation.businessApi,
@@ -98,24 +124,6 @@ var dsFormUtil = {
                 });
             }
             return false;
-        });
-
-    },
-
-    loadEditDsFormItem: function(showBoxId, json) {
-        $.each(json.rows, function(j, bean) {
-            var customBoxId = bean.pageId;
-            $("#" + showBoxId).append(getDataUseHandlebars(dsFormUtil.customWriteDsFormBox, bean.dsFormPage));
-            dsFormUtil.loadDsFormItemToEdit(customBoxId, bean.dsFormPageDataList);
-        });
-        form.render();
-    },
-
-    loadDsFormItemToEdit: function (customBoxId, rows) {
-        $.each(rows, function(i, item) {
-            var pageComponent = item.dsFormPageContent;
-            pageComponent.value = item.value;
-            dsFormUtil.setValue(customBoxId, pageComponent, i);
         });
     },
 

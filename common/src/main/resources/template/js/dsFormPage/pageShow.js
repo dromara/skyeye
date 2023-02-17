@@ -26,7 +26,7 @@ layui.config({
     }});
 
     var pageHtml = {
-        'create': `<div style="margin:0 auto;padding:20px;">
+        'createOrEdit': `<div style="margin:0 auto;padding:20px;">
                         <form class="layui-form" action="" id="showForm" autocomplete="off">
                             <div id="content"></div>
                             <div class="layui-form-item layui-col-xs12">
@@ -55,7 +55,12 @@ layui.config({
     // 初始化加载
     function init() {
         console.log(pageMation);
-        var html = pageHtml[pageMation.type];
+        var html;
+        if (pageMation.type == 'create' || pageMation.type == 'edit') {
+            html = pageHtml['createOrEdit'];
+        } else {
+            html = pageHtml[pageMation.type];
+        }
         $("body").append(html);
 
         // 加载页面
@@ -66,6 +71,15 @@ layui.config({
         if (pageMation.type == 'create') {
             // 创建布局
             dsFormUtil.initCreatePage('content', pageMation);
+        } else if (pageMation.type == 'edit') {
+            // 编辑布局
+            var params = {
+                objectId: GetUrlParam("id"),
+                objectKey: pageMation.className
+            };
+            AjaxPostUtil.request({url: reqBasePath + "queryBusinessDataByObject", params: params, type: 'json', method: 'POST', callback: function (json) {
+                dsFormUtil.initEditPage('content', pageMation, json.bean);
+            }});
         } else if (pageMation.type == 'simpleTable') {
             // 基本表格
             dsFormTableUtil.initDynamicTable('messageTable', pageMation);
