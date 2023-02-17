@@ -15,6 +15,8 @@ var dsFormUtil = {
         '6': '{{#bean}}<div class="layui-form-item {{proportion}}"><label class="layui-form-label">{{label}}：</label><div class="layui-input-block ver-center" id="showVoucher{{orderBy}}"></div></div>{{/bean}}', // 凭证展示
     },
 
+    pageMation: {},
+
     /**
      * 动态表单选择页面
      *
@@ -51,6 +53,7 @@ var dsFormUtil = {
      * @param pageMation 页面信息
      */
     initCreatePage: function(showBoxId, pageMation) {
+        dsFormUtil.pageMation = pageMation;
         layui.define(["jquery", 'form'], function(exports) {
             var form = layui.form;
             $.each(pageMation.dsFormPageContents, function(j, dsFormContent) {
@@ -59,15 +62,44 @@ var dsFormUtil = {
             matchingLanguage();
             form.render();
 
-            dsFormUtil.initEvent();
+            dsFormUtil.initEvent(form);
         });
     },
 
-    initEvent: function () {
+    initEvent: function (form) {
         $("body").on("click", "#cancle", function() {
             var index = parent.layer.getFrameIndex(window.name);
             parent.layer.close(index);
         });
+
+        form.on('submit(formWriteBean)', function (data) {
+            if (winui.verifyForm(data.elem) && !isNull(dsFormUtil.pageMation)) {
+                var params = {};
+                $.each(dsFormUtil.pageMation.dsFormPageContents, function (i, content) {
+                    if (!isNull(content.attrDefinition)) {
+                        // 获取组件中获取值的脚本
+                        var dsFormComponent = content.dsFormComponent;
+                        var getValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsValue + '{{/this}}', content);
+                        var value = "";
+                        eval('value = ' + getValueScript);
+                        params[content.attrDefinition.attrKey] = value;
+                    }
+                });
+                // 发送请求
+                dsFormUtil.sendRequest({
+                    businessApi: dsFormUtil.pageMation.businessApi,
+                    params: params,
+                    loadTable: false,
+                    callback: function () {
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        parent.refreshCode = '0';
+                    }
+                });
+            }
+            return false;
+        });
+
     },
 
     loadEditDsFormItem: function(showBoxId, json) {
@@ -104,7 +136,7 @@ var dsFormUtil = {
         var jsonStr = {bean: content};
         var html = getDataUseHandlebars('{{#bean}}' + component.htmlContent + '{{/bean}}', jsonStr);
         var html_js = getDataUseHandlebars('{{#bean}}' + component.jsContent + '{{/bean}}', jsonStr);
-        var jsCon = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + html_js + '})(jQuery);});</script>';
+        var jsCon = `<script>${html_js}</script>`;
         $("#" + boxId).append(html + jsCon);
         return content;
     },
@@ -438,8 +470,6 @@ var dsFormUtil = {
             var businessApi = operate.businessApi;
             layer.confirm('确定执行该操作吗？', {icon: 3, title: '操作'}, function (index) {
                 layer.close(index);
-                var url = "";
-                eval('url = ' + businessApi.serviceStr + ' + "' + businessApi.api + '"');
                 // 构建参数
                 var params = {};
                 if (!isNull(data)) {
@@ -447,12 +477,29 @@ var dsFormUtil = {
                         params[key] = data[valueKey]
                     });
                 }
-                AjaxPostUtil.request({url: url, params: params, type: 'json', method: businessApi.method, callback: function (json) {
-                    winui.window.msg('操作成功', {icon: 1, time: 2000});
-                    dsFormTableUtil.loadTable();
-                }});
+                dsFormUtil.sendRequest({
+                    businessApi: businessApi,
+                    params: params,
+                    loadTable: true
+                });
             });
         }
+    },
+
+    sendRequest: function (inputParams) {
+        var businessApi = inputParams.businessApi;
+        var params = inputParams.params;
+        var url = "";
+        eval('url = ' + businessApi.serviceStr + ' + "' + businessApi.api + '"');
+        AjaxPostUtil.request({url: url, params: params, type: 'json', method: businessApi.method, callback: function (json) {
+            winui.window.msg('操作成功', {icon: 1, time: 2000});
+            if (inputParams.loadTable) {
+                dsFormTableUtil.loadTable();
+            }
+            if (typeof (inputParams.callback) == "function") {
+                inputParams.callback();
+            }
+        }});
     }
 
 };
