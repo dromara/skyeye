@@ -146,6 +146,11 @@ var dsFormUtil = {
         var html_js = getDataUseHandlebars('{{#bean}}' + component.jsContent + '{{/bean}}', jsonStr);
         var jsCon = `<script>${html_js}</script>`;
         $("#" + boxId).append(html + jsCon);
+        console.log(content);
+        if (content.require.indexOf('required') >= 0) {
+            $(`div[contentId='${content.id}']`).find('label').append('<i class="red">*</i>');
+        }
+
         return content;
     },
 

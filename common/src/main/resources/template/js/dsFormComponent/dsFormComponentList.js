@@ -32,6 +32,9 @@ layui.config({
 			{ field: 'showType', title: '显示类型', width: 120, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("dsFormShowType", 'id', d.showType, 'name');
 			}},
+			{ field: 'applyRange', title: '适用对象范围', width: 120, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("componentApplyRange", 'id', d.applyRange, 'name');
+			}},
 			{ field: 'id', title: '图标', align: 'center', width: 60, templet: function (d) {
 				return systemCommonUtil.initIconShow(d);
 			}},

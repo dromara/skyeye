@@ -23,6 +23,8 @@ layui.config({
 	skyeyeClassEnumUtil.showEnumDataListByClassName("componentAttr", 'verificationSelect', "attrKeys", '', form);
 	// 组件适用范围
 	skyeyeClassEnumUtil.showEnumDataListByClassName("componentApplyRange", 'radio', "applyRange", '', form);
+	// 适用表单布局
+	skyeyeClassEnumUtil.showEnumDataListByClassName("dsFormPageType", 'verificationSelect', "applyFormType", '', form);
 
 	// 根据类型获取部分功能的使用说明
 	systemCommonUtil.queryExplainMationByType(2, function(json) {
@@ -37,15 +39,19 @@ layui.config({
 	});
 
 	$("#applyObjectBox").hide();
+	var loadApplyObject = false;
 	form.on('radio(applyRangeFilter)', function (data) {
 		if (data.value == 1) {
 			$("#applyObjectBox").hide();
 		} else {
 			$("#applyObjectBox").show();
-			AjaxPostUtil.request({url: reqBasePath + "queryServiceClassForTree", params: {}, type: 'json', method: 'GET', callback: function(json) {
-				json.treeRows = json.rows;
-				dataShowType.showData(json, 'checkboxTree', 'applyObject', '', form);
-			}});
+			if (!loadApplyObject) {
+				AjaxPostUtil.request({url: reqBasePath + "queryServiceClassForTree", params: {}, type: 'json', method: 'GET', callback: function(json) {
+					loadApplyObject = true;
+					json.treeRows = json.rows;
+					dataShowType.showData(json, 'checkboxTree', 'applyObject', '', form);
+				}});
+			}
 		}
 	});
 
@@ -77,7 +83,8 @@ layui.config({
 				showType: $("#showType").val(),
 				attrKeys: $('#attrKeys').attr('value'),
 				applyRange: $("#applyRange input:radio:checked").val(),
-				applyObject: $("#applyObject").attr("chooseId"),
+				applyObject: isNull($("#applyObject").attr("chooseId")) ? JSON.stringify([]) : $("#applyObject").attr("chooseId"),
+				applyFormType: $('#applyFormType').attr('value'),
 				linkedData: '2'
 			};
 			if ($("#linkedData").val() == 'true') {

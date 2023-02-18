@@ -55,7 +55,8 @@ layui.config({
     $("#width").val(data.width);
 
     // 属性的限制条件
-    skyeyeClassEnumUtil.showEnumDataListByClassName("verificationParams", 'verificationSelect', "require", data.require, form, null, 'formerRequirement');
+    var require = isNull(data.require) ? '' : data.require.toString();
+    skyeyeClassEnumUtil.showEnumDataListByClassName("verificationParams", 'verificationSelect', "require", require, form, null, 'formerRequirement');
 
     matchingLanguage();
     form.render();
@@ -73,10 +74,11 @@ layui.config({
                 inDataIndex = i;
             }
         });
+        console.log($('#require').attr('value'))
         var newParams = parent.contentList[inDataIndex];
         newParams.title = $("#title").val();
         newParams.placeholder = $("#placeholder").val();
-        newParams.require = isNull($('#require').attr('value')) ? [] : $('#require').attr('value');
+        newParams.require = isNull($('#require').attr('value')) ? [] : JSON.parse($('#require').attr('value'));
         newParams.defaultValue = $("#defaultValue").val();
         newParams.width = $("#width").val();
         newParams.attrKey = $("#attrKey").val();

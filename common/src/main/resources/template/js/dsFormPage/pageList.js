@@ -38,11 +38,11 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'name', title: '名称', align: 'left', width: 120 },
-	        { field: 'remark', title: '简介', align: 'left', width: 200 },
-	        { field: 'numCode', title: '编号', width: 150 },
+			{ field: 'numCode', title: '编号', width: 150 },
 			{ field: 'type', title: '类型', align: 'left', width: 120, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("dsFormPageType", 'id', d.type, 'name');
 			}},
+			{ field: 'remark', title: '简介', align: 'left', width: 200 },
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
@@ -80,7 +80,7 @@ layui.config({
 		if (data.type == 'simpleTable') {
 			url = '../../tpl/dsFormPage/simpleTableDesign.html';
 		}
-		url += '?className=' + objectId + '&pageId=' + data.id;
+		url += '?className=' + objectId + '&pageId=' + data.id + '&pageType=' + data.type;
 		parent.parent._openNewWindows({
 			url: url,
 			title: "布局设计",

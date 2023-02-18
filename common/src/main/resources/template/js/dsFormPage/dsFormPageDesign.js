@@ -28,6 +28,7 @@ layui.config({
 	var componentList = [];
 	
 	var className = GetUrlParam("className");
+	var pageType = GetUrlParam("pageType");
 	if (isNull(className)) {
 		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
 		return false;
@@ -89,7 +90,7 @@ layui.config({
  		showGrid({
 		 	id: "btnBox",
 		 	url: reqBasePath + "queryAllDsFormComponentList",
-		 	params: {},
+		 	params: {serviceClassName: className, dsFormPageType: pageType},
 		 	pagination: false,
 			method: 'GET',
 		 	template: $("#leftBoxItem").html(),

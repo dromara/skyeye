@@ -32,6 +32,7 @@ layui.config({
 			$("#name").val(json.bean.name);
 			$("#remark").val(json.bean.remark);
 			skyeyeClassEnumUtil.showEnumDataListByClassName("dsFormPageType", 'select', "type", json.bean.type, form);
+			$("#type").attr("disabled", true);
 
 			var businessApi = json.bean.businessApi;
 			$("#serviceStr").val(businessApi.serviceStr);
