@@ -29,6 +29,7 @@ layui.config({
 
     var alignmentData = skyeyeClassEnumUtil.getEnumDataListByClassName("alignment");
     var fixedTypeData = skyeyeClassEnumUtil.getEnumDataListByClassName("fixedType");
+    var whetherEnumData = skyeyeClassEnumUtil.getEnumDataListByClassName("whetherEnum");
 
     AjaxPostUtil.request({url: reqBasePath + "dsformpage006", params: {id: pageId}, type: 'json', method: "GET", callback: function (data) {
         tableDataList = isNull(data.bean.tableColumnList) ? [] : data.bean.tableColumnList;
@@ -48,7 +49,7 @@ layui.config({
         cols: [[
             { type: 'checkbox', align: 'center' },
             { field: 'attrKey', title: '属性<i class="red">*</i>', align: 'left', width: 150, templet: function (d) {
-                var _html = `<select lay-filter="tableSelect" lay-search="" id="attrKey${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+                var _html = `<select lay-filter="tableSelect" lay-search="" id="attrKey${d.id}" cus-id="${d.id}" win-verify="required"><option value="">请选择</option>`;
                 $.each(attrList, function (i, item) {
                     if (item.attrKey == d.attrKey) {
                         _html += `<option value="${item.attrKey}" selected="selected">${item.name}</option>`;
@@ -60,7 +61,7 @@ layui.config({
                 return _html;
             }},
             { field: 'align', title: '对齐方式<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
-                var _html = `<select lay-filter="tableSelect" lay-search="" id="align${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+                var _html = `<select lay-filter="tableSelect" lay-search="" id="align${d.id}" cus-id="${d.id}" win-verify="required"><option value="">请选择</option>`;
                 $.each(alignmentData.rows, function (i, item) {
                     if (item.id == d.align) {
                         _html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
@@ -72,9 +73,21 @@ layui.config({
                 return _html;
             }},
             { field: 'fixed', title: '固定位置', align: 'left', width: 120, templet: function (d) {
-                var _html = `<select lay-filter="tableSelect" lay-search="" id="fixed${d.id}" cus-id="${d.id}"><option value="">全部</option>`;
+                var _html = `<select lay-filter="tableSelect" lay-search="" id="fixed${d.id}" cus-id="${d.id}"><option value="">请选择</option>`;
                 $.each(fixedTypeData.rows, function (i, item) {
                     if (item.id == d.fixed) {
+                        _html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
+                    } else {
+                        _html += `<option value="${item.id}">${item.name}</option>`;
+                    }
+                });
+                _html += `</select>`;
+                return _html;
+            }},
+            { field: 'hide', title: '默认隐藏', align: 'left', width: 120, templet: function (d) {
+                var _html = `<select lay-filter="tableSelect" lay-search="" id="hide${d.id}" cus-id="${d.id}"><option value="">请选择</option>`;
+                $.each(whetherEnumData.rows, function (i, item) {
+                    if (item.id == d.hide) {
                         _html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
                     } else {
                         _html += `<option value="${item.id}">${item.name}</option>`;

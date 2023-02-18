@@ -554,8 +554,9 @@ var dsFormTableUtil = {
                 method: api.method,
                 url: url,
                 where: dsFormTableUtil.getTableParams(),
+                toolbar: true,
                 even: true,
-                page: true,
+                page: pageMation.isPage == 1 ? true : false,
                 overflow: {type: 'tips', header: true, total: true},
                 limits: getLimits(),
                 limit: getLimit(),
@@ -565,7 +566,7 @@ var dsFormTableUtil = {
                 }, tableColumnList),
                 done: function(json) {
                     matchingLanguage();
-                    initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入", function () {
+                    initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, pageMation.searchTips, function () {
                         table.reloadData(id, {page: {curr: 1}, where: dsFormTableUtil.getTableParams()});
                     });
                 }
@@ -590,15 +591,18 @@ var dsFormTableUtil = {
         }
         $.each(operateList, function (i, item) {
             dsFormTableUtil.operateMap[item.id] = item;
-            if (item.position == 'toolBar') {
-                // 工具栏
-                $(`#${item.position}`).append(`<button id="${item.id}" class="winui-toolbtn search-table-btn-right item-click"><i class="fa fa-plus" aria-hidden="true"></i>${item.name}</button>`);
-            } else if (item.position == 'actionBar') {
-                // 操作栏
-                $(`#${item.position}`).append(`<a class="layui-btn layui-btn-xs ${item.color}" lay-event="${item.id}">${item.name}</a>`);
-            } else if (item.position == 'rightMenuBar') {
-                // 右键菜单栏
+            if (isNull(item.authPointNum) || (!isNull(item.authPointNum) && auth(item.authPointNum))) {
+                // 权限校验
+                if (item.position == 'toolBar') {
+                    // 工具栏
+                    $(`#${item.position}`).append(`<button id="${item.id}" class="winui-toolbtn search-table-btn-right item-click"><i class="fa fa-plus" aria-hidden="true"></i>${item.name}</button>`);
+                } else if (item.position == 'actionBar') {
+                    // 操作栏
+                    $(`#${item.position}`).append(`<a class="layui-btn layui-btn-xs ${item.color}" lay-event="${item.id}">${item.name}</a>`);
+                } else if (item.position == 'rightMenuBar') {
+                    // 右键菜单栏
 
+                }
             }
         });
     },
@@ -608,7 +612,8 @@ var dsFormTableUtil = {
         if (!isNull(column.serialNumColumn) && column.serialNumColumn) {
             header.push({
                 title: systemLanguage["com.skyeye.serialNumber"][languageType],
-                type: 'numbers'
+                type: 'numbers',
+                fixed: 'left'
             });
         }
         $.each(tableColumnList, function (i, item) {
@@ -617,6 +622,8 @@ var dsFormTableUtil = {
                 title: item.label,
                 align: item.align,
                 width: item.width,
+                fixed: isNull(item.fixed) ? '' : item.fixed,
+                hide: (!isNull(item.hide) && item.hide == 1) ? true : false,
                 templet: null
             };
             if (!isNull(item.templet)) {

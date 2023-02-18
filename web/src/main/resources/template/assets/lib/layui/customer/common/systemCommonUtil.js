@@ -1027,7 +1027,7 @@ var dataShowType = {
         } else if (showType == 'radio') {
             // 单选框
             $("#" + showBoxId).html(getDataUseHandlebars('{{#each rows}}<input type="radio" name="' + showBoxId + 'Name" value="{{id}}" title="{{name}}" />{{/each}}', json));
-            if (!isNull(defaultId)) {
+            if (!isNull(defaultId) || defaultId == 0) {
                 $("#" + showBoxId + " input:radio[name=" + showBoxId + "Name][value=" + defaultId + "]").attr("checked", true);
             } else {
                 $.each(json.rows, function (i, item) {

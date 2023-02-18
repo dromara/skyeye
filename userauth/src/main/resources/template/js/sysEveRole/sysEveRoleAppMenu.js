@@ -12,7 +12,7 @@ layui.config({
 		    form = layui.form,
 			fsTree = layui.fsTree,
 			fsCommon = layui.fsCommon;
-	    
+	    var id = GetUrlParam("id");
 	    var checkeRows = '';
 	    
 	    matchingLanguage();
@@ -45,7 +45,7 @@ layui.config({
 		        	var params = {
 	        			menuIds: menuIds,
 	        			pointIds: pointIds,
-	        			id: parent.rowId
+	        			id: id
 		        	};
 		        	
 		        	AjaxPostUtil.request({url: reqBasePath + "sys039", params: params, type: 'json', callback: function (json) {
@@ -60,7 +60,7 @@ layui.config({
 	    /********* tree 处理   start *************/
 		var tree;
 
-		AjaxPostUtil.request({url: reqBasePath + "querySysRoleById", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "querySysRoleById", params: {id: id}, type: 'json', method: "GET", callback: function (json) {
 			$("#name").text(json.bean.name);
 			$("#remark").text(json.bean.remark);
 			checkeRows = json.bean.appMenuIds;

@@ -3436,11 +3436,12 @@ hr,
 .layui-table-tool {
 	position: relative;
 	width: 100%;
-	height: 50px;
+	height: 35px;
 	line-height: 30px;
-	padding: 10px 15px;
+	padding: 0px 15px;
 	border-width: 0;
 	border-bottom-width: 1px;
+	text-align: right;
 }
 
 .layui-table-page {
