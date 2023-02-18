@@ -1026,8 +1026,8 @@ var dataShowType = {
             form.render('checkbox');
         } else if (showType == 'radio') {
             // 单选框
-            $("#" + showBoxId).html(getDataUseHandlebars('{{#each rows}}<input type="radio" name="' + showBoxId + 'Name" value="{{id}}" title="{{name}}" />{{/each}}', json));
-            if (!isNull(defaultId) || defaultId == 0) {
+            $("#" + showBoxId).html(getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${showBoxId}Name" lay-filter="${showBoxId}Filter" value="{{id}}" title="{{name}}" />{{/each}}`, json));
+            if (!isNull(defaultId) || defaultId + '' == '0') {
                 $("#" + showBoxId + " input:radio[name=" + showBoxId + "Name][value=" + defaultId + "]").attr("checked", true);
             } else {
                 $.each(json.rows, function (i, item) {
@@ -1106,8 +1106,8 @@ var dataShowType = {
                     }
                 });
             });
-        } else if (showType == 'radioTree') {
-            // 单选框树
+        } else if (showType == 'radioTree' || showType == 'checkboxTree') {
+            // 单选框树/多选框树
             var _html = sysDictDataUtil.getShowTteeHtml(showBoxId, '0');
             var _js = `<script>
                         layui.define(["jquery", 'fsTree'], function(exports) {
@@ -1120,12 +1120,21 @@ var dataShowType = {
                                     simpleData: '` + JSON.stringify(json.treeRows) + `',
                                     checkEnable: true,
                                     loadEnable: false,
-                                    chkStyle: "radio",
+                                    chkStyle: '${showType}' == 'radioTree' ? "radio" : "checkbox",
                                     showLine: false,
                                     showIcon: true,
                                     expandSpeed: 'fast',
                                     onCheck: function (event, treeId, treeNode) {
-                                        $('#${showBoxId}').attr('chooseId', treeNode.id);
+                                        if ('${showType}' == 'checkboxTree') {
+                                            var zTree = ${showBoxId}Object.getCheckedNodes(true);
+                                            var ids = [];
+                                            $.each(zTree, function(i, item) {
+                                                ids.push(item.id);
+                                            });
+                                            $('#${showBoxId}').attr('chooseId', JSON.stringify(ids));
+                                        } else {
+                                            $('#${showBoxId}').attr('chooseId', treeNode.id);
+                                        }
                                     }
                                 }, function(id) {
                                     ${showBoxId}Object = $.fn.zTree.getZTreeObj(id);
@@ -1134,10 +1143,19 @@ var dataShowType = {
                                 if (` + !isNull(defaultId) + `) {
                                     var zTree = ${showBoxId}Object.getCheckedNodes(false);
                                     for (var i = 0; i < zTree.length; i++) {
-                                        if(zTree[i].id == '` + defaultId + `'){
-                                            ${showBoxId}Object.checkNode(zTree[i], true, true);
-                                            $('#${showBoxId}').attr('chooseId', zTree[i].id);
+                                        if ('${showType}' == 'checkboxTree') {
+                                            if($.inArray(zTree[i].id, ${defaultId}) >= 0){
+                                                ${showBoxId}Object.checkNode(zTree[i], true, true);
+                                            }
+                                        } else {
+                                            if(zTree[i].id == '` + defaultId + `'){
+                                                ${showBoxId}Object.checkNode(zTree[i], true, true);
+                                                $('#${showBoxId}').attr('chooseId', zTree[i].id);
+                                            }
                                         }
+                                    }
+                                    if ('${showType}' == 'checkboxTree') {
+                                        $('#${showBoxId}').attr('chooseId', JSON.stringify(` + defaultId + `));
                                     }
                                 }
                             })(jQuery);});

@@ -49,6 +49,8 @@ layui.config({
 			// 组件关联属性
 			var attrKeys = isNull(json.bean.attrKeys) ? '' : json.bean.attrKeys.toString();
 			skyeyeClassEnumUtil.showEnumDataListByClassName("componentAttr", 'verificationSelect', "attrKeys", attrKeys, form);
+			// 组件适用范围
+			skyeyeClassEnumUtil.showEnumDataListByClassName("componentApplyRange", 'radio', "applyRange", json.bean.applyRange, form);
 
 			// 根据类型获取部分功能的使用说明
 			systemCommonUtil.queryExplainMationByType(2, function (json) {
@@ -67,6 +69,11 @@ layui.config({
 			// 是否关联数据
 			form.on('switch(linkedData)', function (data) {
 				$(data.elem).val(data.elem.checked);
+			});
+
+			loadRange(json.bean.applyRange, json.bean.applyObject);
+			form.on('radio(applyRangeFilter)', function (data) {
+				loadRange(data.value, null);
 			});
 
 			matchingLanguage();
@@ -89,6 +96,8 @@ layui.config({
 							showType: $("#showType").val(),
 							linkedData: '2',
 							attrKeys: $('#attrKeys').attr('value'),
+							applyRange: $("#applyRange input:radio:checked").val(),
+							applyObject: $("#applyObject").attr("chooseId"),
 							id: parent.rowId
 						};
 						if ($("#linkedData").val() == 'true') {
@@ -112,6 +121,18 @@ layui.config({
 
 		}
 	});
+
+	function loadRange(type, defaultValue) {
+		if (type == 1) {
+			$("#applyObjectBox").hide();
+		} else {
+			$("#applyObjectBox").show();
+			AjaxPostUtil.request({url: reqBasePath + "queryServiceClassForTree", params: {}, type: 'json', method: 'GET', callback: function(json) {
+				json.treeRows = json.rows;
+				dataShowType.showData(json, 'checkboxTree', 'applyObject', JSON.stringify(defaultValue), form);
+			}});
+		}
+	}
 
 	// 取消
 	$("body").on("click", "#cancle", function() {

@@ -4,7 +4,7 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui'].concat(dsFormUtil.mastHaveImport), function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'eleTree'].concat(dsFormUtil.mastHaveImport), function (exports) {
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
@@ -21,6 +21,8 @@ layui.config({
 	skyeyeClassEnumUtil.showEnumDataListByClassName("dsFormShowType", 'select', "showType", '', form);
 	// 组件关联属性
 	skyeyeClassEnumUtil.showEnumDataListByClassName("componentAttr", 'verificationSelect', "attrKeys", '', form);
+	// 组件适用范围
+	skyeyeClassEnumUtil.showEnumDataListByClassName("componentApplyRange", 'radio', "applyRange", '', form);
 
 	// 根据类型获取部分功能的使用说明
 	systemCommonUtil.queryExplainMationByType(2, function(json) {
@@ -32,6 +34,19 @@ layui.config({
 	// 是否关联数据
 	form.on('switch(linkedData)', function (data) {
 		$(data.elem).val(data.elem.checked);
+	});
+
+	$("#applyObjectBox").hide();
+	form.on('radio(applyRangeFilter)', function (data) {
+		if (data.value == 1) {
+			$("#applyObjectBox").hide();
+		} else {
+			$("#applyObjectBox").show();
+			AjaxPostUtil.request({url: reqBasePath + "queryServiceClassForTree", params: {}, type: 'json', method: 'GET', callback: function(json) {
+				json.treeRows = json.rows;
+				dataShowType.showData(json, 'checkboxTree', 'applyObject', '', form);
+			}});
+		}
 	});
 
 	var htmlEditor = CodeMirror.fromTextArea(document.getElementById("htmlContent"), codeUtil.getConfig('xml'));
@@ -61,6 +76,8 @@ layui.config({
 				typeId: $("#dsFormContentType").val(),
 				showType: $("#showType").val(),
 				attrKeys: $('#attrKeys').attr('value'),
+				applyRange: $("#applyRange input:radio:checked").val(),
+				applyObject: $("#applyObject").attr("chooseId"),
 				linkedData: '2'
 			};
 			if ($("#linkedData").val() == 'true') {
