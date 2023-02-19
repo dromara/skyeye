@@ -982,6 +982,16 @@ var treeSelectUtil = {
 // 数据展示方式
 var dataShowType = {
 
+    showDataType: [
+        {id: 'select', name: '下拉框'},
+        {id: 'checkbox', name: '多选框'},
+        {id: 'radio', name: '单选框'},
+        {id: 'verificationSelect', name: '多选下拉框'},
+        {id: 'radioTree', name: '单选框树'},
+        {id: 'checkboxTree', name: '多选框树'},
+        {id: 'selectTree', name: '树结构展示'}
+    ],
+
     /**
      * 展示数据
      *
@@ -995,6 +1005,7 @@ var dataShowType = {
      * @param valueKey value展示的key
      */
     showData: function (json, showType, showBoxId, defaultId, form, callback, chooseCallback, valueKey) {
+        $("#" + showBoxId).html('');
         if (showType == 'select') {
             // 下拉框
             $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));

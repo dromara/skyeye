@@ -140,14 +140,19 @@ var dsFormUtil = {
             content = dsFormUtil.getContentLinkedData(content);
         }
         content.title = dsFormUtil.getLable(content);
+        if (isNull(content.attrDefinition)) {
+            content.attrDefinition = {};
+        }
 
         var jsonStr = {bean: content};
+        // 对象的传递转换，用于组件使用，组件中需要使用 {{{attrDefinitionJson}}} 接收
+        jsonStr.bean.attrDefinitionJson = JSON.stringify(jsonStr.bean.attrDefinition);
         var html = getDataUseHandlebars('{{#bean}}' + component.htmlContent + '{{/bean}}', jsonStr);
         var html_js = getDataUseHandlebars('{{#bean}}' + component.jsContent + '{{/bean}}', jsonStr);
         var jsCon = `<script>${html_js}</script>`;
         $("#" + boxId).append(html + jsCon);
-        console.log(content);
-        if (content.require.indexOf('required') >= 0) {
+
+        if (!isNull(content.require) && content.require.indexOf('required') >= 0) {
             $(`div[contentId='${content.id}']`).find('label').append('<i class="red">*</i>');
         }
 
@@ -156,7 +161,7 @@ var dsFormUtil = {
 
     getLable: function (content) {
         var attr = content.attrDefinition;
-        if (!isNull(attr)) {
+        if (!isNull(attr) && !$.isEmptyObject(attr)) {
             if (!isNull(attr.attrDefinitionCustom)) {
                 return attr.attrDefinitionCustom.name;
             } else {

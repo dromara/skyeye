@@ -49,7 +49,7 @@ layui.config({
 		treeSelectUtil.init({
 			eleTree: layui.eleTree,
 			elem: 'componentId',
-			url: reqBasePath + "queryAllDsFormComponentList",
+			url: reqBasePath + "queryAllDsFormComponentList?serviceClassName=" + className,
 			defaultId: json.bean.componentId,
 			ajaxCallback: function (data) {
 				$.each(data.rows, function (i, item) {
@@ -159,6 +159,9 @@ layui.config({
 			// 数据字典
 			initDictData();
 			$("#objectId").val(value);
+		} else {
+			$("#dataTypeObjectBox").html(dataTypeObject["2"]);
+			$("#objectId").html("<option value=''>请选择</option>");
 		}
 		form.render('select');
 	}

@@ -17,6 +17,49 @@ var packageType = ["zip", "rar"];
 var epubType = ["epub"];
 var aceType = ["txt", "sql", "java", "css", "html", "htm", "json", "js", "tpl"];
 
+var fileTypeList = [
+	{id: "imageType", name: "图片资源", value: imageType},
+	{id: "officeType", name: "OFFICE办公文件", value: officeType},
+	{id: "vedioType", name: "视频资源", value: vedioType},
+	{id: "audioType", name: "音频资源", value: audioType},
+	{id: "packageType", name: "压缩包", value: packageType},
+	{id: "epubType", name: "epub小说资源", value: epubType},
+	{id: "aceType", name: "其他文件", value: aceType},
+];
+
+var dataTypeList = [
+	{id: 1, name: "小程序资源"},
+	{id: 2, name: "系统桌面背景自定义图片-1"},
+	{id: 3, name: "系统桌面锁屏背景自定义图片-1"},
+	{id: 4, name: "系统桌面背景自定义图片-2"},
+	{id: 5, name: "系统桌面锁屏背景自定义图片-2"},
+	{id: 6, name: "用户头像"},
+	{id: 7, name: "聊天群组头像"},
+	{id: 8, name: "系统图片"},
+	{id: 9, name: "聊天图片"},
+	{id: 10, name: "聊天附件"},
+	{id: 11, name: "富文本内容图片"},
+	{id: 12, name: "菜单/桌面logo图片"},
+	{id: 13, name: "富文本编辑图片"},
+	{id: 14, name: "工单图片"},
+	{id: 15, name: "学生照图片"},
+	{id: 16, name: "考试题库文件"},
+	{id: 17, name: "流程配置图片"},
+	{id: 18, name: "报表基础设置背景图"},
+	{id: 19, name: "报表文字模型logo"},
+	{id: 20, name: "编辑器素材logo图片"},
+	{id: 21, name: "财务模块-凭证文件"},
+	{id: 22, name: "商城模块-套餐文件"},
+	{id: 23, name: "代码生成器"},
+	{id: 24, name: "网盘--文件管理"},
+	{id: 25, name: "报表管理--echarts模型图片"},
+	{id: 26, name: "ERP--生产模块获取条形码"},
+	{id: 27, name: "资产文件保存路径"},
+	{id: 28, name: "资产条形码"},
+	{id: 29, name: "ERP商品规格图片"},
+	{id: 30, name: "附件"},
+];
+
 //系统cookies从哪里获取， true：从用户登陆获取；false：跨域获取
 var getCookiesByUrl = true;
 
