@@ -134,6 +134,9 @@ var dsFormUtil = {
      * @param content
      */
     loadComponent: function (boxId, content) {
+        if (!dsFormUtil.checkLoadHandlebar) {
+            dsFormUtil.loadHandlebar();
+        }
         var component = content.dsFormComponent;
         if (component.linkedData == 1) {
             // 关联数据
@@ -145,8 +148,6 @@ var dsFormUtil = {
         }
 
         var jsonStr = {bean: content};
-        // 对象的传递转换，用于组件使用，组件中需要使用 {{{attrDefinitionJson}}} 接收
-        jsonStr.bean.attrDefinitionJson = JSON.stringify(jsonStr.bean.attrDefinition);
         var html = getDataUseHandlebars('{{#bean}}' + component.htmlContent + '{{/bean}}', jsonStr);
         var html_js = getDataUseHandlebars('{{#bean}}' + component.jsContent + '{{/bean}}', jsonStr);
         var jsCon = `<script>${html_js}</script>`;
@@ -157,6 +158,15 @@ var dsFormUtil = {
         }
 
         return content;
+    },
+
+    checkLoadHandlebar: false,
+    loadHandlebar: function () {
+        dsFormUtil.checkLoadHandlebar = true;
+        // 加载json对象
+        Handlebars.registerHelper('json', function(context) {
+            return JSON.stringify(context);
+        });
     },
 
     getLable: function (content) {

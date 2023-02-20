@@ -10,8 +10,7 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
 			textool = layui.textool;
-		var selOption = getFileContent('tpl/template/select-option.tpl');
-	    
+
 	    showGrid({
 		 	id: "showForm",
 		 	url: reqBasePath + "queryCodeRuleMationById",

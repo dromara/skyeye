@@ -121,7 +121,7 @@ function setRequestHeaders(xmlhttp) {
 
 // 编辑加载自定义的js文件
 layui.each(customerJS, function(key, jsPath){
-	if(jsPath.lastIndexOf(".js") >=0){
+	if (jsPath.lastIndexOf(".js") >= 0) {
 		document.write('<script type="text/javascript" src="' + jsPath + '?v=' + skyeyeVersion + '"></script>');
 	} else {
 		document.write('<link rel="stylesheet" type="text/css" href="' + jsPath + '?v=' + skyeyeVersion + '"/>');
