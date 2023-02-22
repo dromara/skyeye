@@ -56,13 +56,21 @@ var dsFormUtil = {
     initEditPage: function(showBoxId, pageMation, data) {
         dsFormUtil.initCreatePage(showBoxId, pageMation);
         $.each(dsFormUtil.pageMation.dsFormPageContents, function (i, content) {
-            if (!isNull(content.attrDefinition)) {
+            var attrDefinition = content.attrDefinition;
+            if (!isNull(attrDefinition) && !$.isEmptyObject(attrDefinition)) {
                 // 获取组件中设置值的脚本
                 var dsFormComponent = content.dsFormComponent;
-                var setValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsFitValue + '{{/this}}', content);
-                // value参数不能删除，用于组件的赋值脚本使用
-                var value = data[content.attrDefinition.attrKey];
-                eval(setValueScript);
+                var value = data[attrDefinition.attrKey];
+                content["value"] = value;
+                var jsFitValue = dsFormComponent.jsFitValue;
+                if (!isNull(jsFitValue) && jsFitValue.startsWith('layui.define')) {
+                    var setValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsFitValue + '{{/this}}', content);
+                    $(`#script${content.id}`).remove();
+                    $(`div[contentId="${content.id}"]`).after(`<script id="script${content.id}">${setValueScript}</script>`);
+                } else {
+                    var setValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsFitValue + '{{/this}}', content);
+                    eval(setValueScript);
+                }
             }
         });
         layui.form.render();
@@ -98,7 +106,7 @@ var dsFormUtil = {
             if (winui.verifyForm(data.elem) && !isNull(dsFormUtil.pageMation)) {
                 var params = {};
                 $.each(dsFormUtil.pageMation.dsFormPageContents, function (i, content) {
-                    if (!isNull(content.attrDefinition)) {
+                    if (!isNull(content.attrDefinition) && !$.isEmptyObject(content.attrDefinition)) {
                         // 获取组件中获取值的脚本
                         var dsFormComponent = content.dsFormComponent;
                         var getValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsValue + '{{/this}}', content);
@@ -150,7 +158,7 @@ var dsFormUtil = {
         var jsonStr = {bean: content};
         var html = getDataUseHandlebars('{{#bean}}' + component.htmlContent + '{{/bean}}', jsonStr);
         var html_js = getDataUseHandlebars('{{#bean}}' + component.jsContent + '{{/bean}}', jsonStr);
-        var jsCon = `<script>${html_js}</script>`;
+        var jsCon = `<script id="script${content.id}">${html_js}</script>`;
         $("#" + boxId).append(html + jsCon);
 
         if (!isNull(content.require) && content.require.indexOf('required') >= 0) {
@@ -691,7 +699,7 @@ var dsFormTableUtil = {
     calcOperateColumnWidth: function () {
         var _a = $('#actionBar').find('a');
         var width = 100;
-        // 获取操作列中有多少个按钮，公式：文字的数量 * 12(一个文字的宽度) + 按钮的数量 * 10(按钮的内边距) + (按钮的数量 - 1) * 10(按钮外边距) + 16(操作列的内边距)
+        // 获取操作列中有多少个按钮，公式：文字的数量 * 14(一个文字的宽度) + 按钮的数量 * 10(按钮的内边距) + (按钮的数量 - 1) * 10(按钮外边距) + 16(操作列的内边距)
         if (!isNull(_a) && _a.length > 0) {
             var btnName = '';
             $.each(_a, function (i, item) {
@@ -699,7 +707,7 @@ var dsFormTableUtil = {
             });
             if (!isNull(btnName)) {
                 var length = btnName.length;
-                width = 12 * length + _a.length * 10 + (_a.length - 1) * 10 + 16;
+                width = 14 * length + _a.length * 10 + (_a.length - 1) * 10 + 16;
             }
         }
         return width;

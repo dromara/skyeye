@@ -123,7 +123,9 @@ layui.config({
                 var id = $(item).attr('cus-id');
                 var tableData = getInPoingArr(tableDataList, 'id', id);
                 var jsEditor = CodeMirror.fromTextArea(document.getElementById("templet" + id), codeUtil.getConfig('text/javascript'));
-                jsEditor.setValue(tableData.templet);
+                if (!isNull(tableData.templet)) {
+                    jsEditor.setValue(tableData.templet);
+                }
                 jsEditorMap[id] = jsEditor;
             });
 

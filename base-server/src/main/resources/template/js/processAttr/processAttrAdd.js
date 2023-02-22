@@ -71,11 +71,12 @@ layui.config({
 				even: true,
 				page: false,
 				rowDrag: {
-					trigger: 'row',
+					trigger: '.drag-row',
 					done: function(obj) {}
 				},
 				cols: [[
 					{ type: 'checkbox', align: 'center' },
+					{ field: 'test', title: '', align: 'left', width: 40, templet: function (d) {return '<i class="fa fa-arrows drag-row" />';}},
 					{ field: 'attrKey', title: '属性<i class="red">*</i>', align: 'left', width: 150, templet: function (d) {
 						var _html = `<select lay-filter="tableSelect" lay-search="" id="attrKey${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
 						$.each(childAttr, function (i, item) {

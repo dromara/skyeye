@@ -171,10 +171,6 @@ layui.config({
         newParams.width = $("#width").val();
         newParams.attrKey = $("#attrKey").val();
 
-        if (!$("#attrKeyBox").hasClass('layui-hide') && isNull($("#attrKey").val())) {
-            winui.window.msg("请选择关联属性.", {icon: 2, time: 2000});
-            return false;
-        }
         if (!isNull($("#attrKey").val())) {
             newParams.attrDefinition = getInPoingArr(parent.attrList, 'attrKey', $("#attrKey").val());
         }

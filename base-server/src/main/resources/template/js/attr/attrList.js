@@ -36,13 +36,13 @@ layui.config({
 	    limit: getLimit(),
 	    cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'attrKey', title: '属性', align: 'left', width: 150 },
 			{ field: 'name', title: '名称', align: 'left', width: 120, templet: function (d) {
 				if (!isNull(d.attrDefinitionCustom)) {
 					return d.attrDefinitionCustom.name;
 				}
 				return d.name;
 			}},
+			{ field: 'attrKey', title: '属性', align: 'left', width: 150 },
 			{ field: 'attrType', title: '类型', align: 'left', width: 120 },
 			{ field: 'componentName', title: '关联组件', align: 'left', width: 140, templet: function (d) {
 				if (!isNull(d.attrDefinitionCustom) && !isNull(d.attrDefinitionCustom.dsFormComponent)) {

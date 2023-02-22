@@ -1006,9 +1006,14 @@ var dataShowType = {
      */
     showData: function (json, showType, showBoxId, defaultId, form, callback, chooseCallback, valueKey) {
         $("#" + showBoxId).html('');
+        $("#" + showBoxId).attr('showType', showType);
         if (showType == 'select') {
             // 下拉框
-            $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
+            if ($("#" + showBoxId).is('select')) {
+                $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
+            } else {
+                $("#" + showBoxId).html('<select>' + getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json) + '</select>');
+            }
             if (!isNull(defaultId)) {
                 $("#" + showBoxId).val(defaultId);
             } else {
@@ -1024,7 +1029,7 @@ var dataShowType = {
             $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/checkbox-property.tpl'), json));
             if (!isNull(defaultId)) {
                 var arr = defaultId.split(",");
-                for(var i = 0; i < arr.length; i++){
+                for (var i = 0; i < arr.length; i++) {
                     $('input:checkbox[rowId="' + arr[i] + '"]').attr("checked", true);
                 }
             } else {
@@ -1217,6 +1222,38 @@ var dataShowType = {
         if (typeof (callback) == "function") {
             callback(json);
         }
+    },
+    
+    getData: function (showBoxId) {
+        var showType = $("#" + showBoxId).attr('showType');
+        var value;
+        if (showType == 'select') {
+            // 下拉框
+            if ($("#" + showBoxId).is('select')) {
+                value = $("#" + showBoxId).val();
+            } else {
+                value = $("#" + showBoxId).find('select').val();
+            }
+        } else if (showType == 'checkbox') {
+            // 多选框
+            var checkRow = $(`#${showBoxId} input[type='checkbox']:checked`);
+            var checkTrueList = [];
+            $.each(checkRow, function (i, item) {
+                checkTrueList.push($(item).attr('id'));
+            });
+            value = checkTrueList;
+        } else if (showType == 'radio') {
+            // 单选框
+            value = $(`#${showBoxId} input:radio:checked`).val()
+        } else if (showType == 'verificationSelect') {
+            // 多选下拉框
+            value = $(`#${showBoxId}`).attr('value')
+        } else if (showType == 'radioTree' || showType == 'checkboxTree') {
+            // 单选框树/多选框树
+            value = $(`#${showBoxId}`).attr('chooseId');
+        } else if (showType == 'selectTree') {
+        }
+        return value;
     }
 
 };
