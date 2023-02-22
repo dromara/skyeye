@@ -4,7 +4,7 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'form', 'soulTable', 'table'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'form', 'soulTable', 'table'].concat(dsFormUtil.mastHaveImport), function (exports) {
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
@@ -60,6 +60,7 @@ layui.config({
 						return false;
 					}
 					$.each(table.cache.messageTable, function (i, item) {
+						item.templet = jsEditorMap[item.id].getValue();
 						item.id = null;
 						item.className = childServiceClassName;
 						item.parentAttrKey = $("#attrKey").val();
@@ -75,7 +76,7 @@ layui.config({
 					className: parent.objectId,
 					attrKey: $("#attrKey").val(),
 					orderBy: $("#orderBy").val(),
-					attrTransformTableList: JSON.stringify(tableDataList),
+					attrTransformTableList: encodeURIComponent(JSON.stringify(tableDataList)),
 					proportion: $("#proportion").val(),
 					actFlowId: parent.$("#actFlowId").val(),
 					id: parent.rowId
@@ -103,6 +104,7 @@ layui.config({
 		return dsFormUtil.getShowType(attr);
 	}
 
+	var jsEditorMap = {};
 	function buildTable() {
 		var showType = getShowType($("#attrKey").val());
 		if (showType == 5) {
@@ -162,9 +164,8 @@ layui.config({
 						return `<input type="text" id="width${d.id}" placeholder="请填写宽度" cus-id="${d.id}" class="layui-input tableInput" win-verify="required|number" ` +
 							`value="` + (isNull(d.width) ? "" : d.width) + `"/>`;
 					}},
-					{ field: 'templet', title: '脚本', align: 'left', width: 300, templet: function (d) {
-						return `<input type="text" id="templet${d.id}" placeholder="请填写脚本" cus-id="${d.id}" class="layui-input tableInput" ` +
-							`value='` + (isNull(d.templet) ? "" : d.templet) + `'/>`;
+					{ field: 'templetBox', title: '脚本', align: 'left', width: 700, templet: function (d) {
+						return `<textarea id="templet${d.id}" placeholder="请填写脚本" cus-id="${d.id}" class="tableInput templateClass"></textarea>`;
 					}},
 				]],
 				done: function(json) {
@@ -173,6 +174,15 @@ layui.config({
 						$(`div[lay-id='messageTable']`).find('.layui-table-body').append('<div class="place-holder"></div>');
 					}
 					soulTable.render(this);
+
+					jsEditorMap = {};
+					$.each($(".templateClass"), function (i, item) {
+						var id = $(item).attr('cus-id');
+						var tableData = getInPoingArr(tableDataList, 'id', id);
+						var jsEditor = CodeMirror.fromTextArea(document.getElementById("templet" + id), codeUtil.getConfig('text/javascript'));
+						jsEditor.setValue(tableData.templet);
+						jsEditorMap[id] = jsEditor;
+					});
 				}
 			});
 		} else {

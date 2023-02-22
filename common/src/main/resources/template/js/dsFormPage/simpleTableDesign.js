@@ -4,7 +4,7 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'form', 'soulTable', 'table'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'form', 'soulTable', 'table'].concat(dsFormUtil.mastHaveImport), function (exports) {
     winui.renderColor();
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$,
@@ -25,6 +25,11 @@ layui.config({
     var attrList = [];
     AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: {className: className}, type: 'json', method: "POST", callback: function (data) {
         attrList = [].concat(data.rows);
+        $.each(attrList, function (i, item) {
+            if (!isNull(item.attrDefinitionCustom)) {
+                item.name = item.attrDefinitionCustom.name;
+            }
+        });
     }, async: false});
 
     var alignmentData = skyeyeClassEnumUtil.getEnumDataListByClassName("alignment");
@@ -35,6 +40,7 @@ layui.config({
         tableDataList = isNull(data.bean.tableColumnList) ? [] : data.bean.tableColumnList;
     }, async: false});
 
+    var jsEditorMap = {};
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
@@ -43,11 +49,12 @@ layui.config({
         even: true,
         page: false,
         rowDrag: {
-            trigger: 'row',
+            trigger: '.drag-row',
             done: function(obj) {}
         },
         cols: [[
             { type: 'checkbox', align: 'center' },
+            { field: 'test', title: '', align: 'left', width: 40, templet: function (d) {return '<i class="fa fa-arrows drag-row" />';}},
             { field: 'attrKey', title: '属性<i class="red">*</i>', align: 'left', width: 150, templet: function (d) {
                 var _html = `<select lay-filter="tableSelect" lay-search="" id="attrKey${d.id}" cus-id="${d.id}" win-verify="required"><option value="">请选择</option>`;
                 $.each(attrList, function (i, item) {
@@ -96,13 +103,12 @@ layui.config({
                 _html += `</select>`;
                 return _html;
             }},
-            { field: 'width', title: '宽度<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
+            { field: 'width', title: '宽度(px)<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
                 return `<input type="text" id="width${d.id}" placeholder="请填写宽度" cus-id="${d.id}" class="layui-input tableInput" win-verify="required|number" ` +
                     `value="` + (isNull(d.width) ? "" : d.width) + `"/>`;
             }},
-            { field: 'templet', title: '脚本', align: 'left', width: 300, templet: function (d) {
-                return `<input type="text" id="templet${d.id}" placeholder="请填写脚本" cus-id="${d.id}" class="layui-input tableInput" ` +
-                    `value='` + (isNull(d.templet) ? "" : d.templet) + `'/>`;
+            { field: 'templetBox', title: '脚本', align: 'left', width: 700, templet: function (d) {
+                return `<textarea id="templet${d.id}" placeholder="请填写脚本" cus-id="${d.id}" class="tableInput templateClass"></textarea>`;
             }},
         ]],
         done: function(json) {
@@ -111,6 +117,16 @@ layui.config({
                 $(`div[lay-id='messageTable']`).find('.layui-table-body').append('<div class="place-holder"></div>');
             }
             soulTable.render(this);
+
+            jsEditorMap = {};
+            $.each($(".templateClass"), function (i, item) {
+                var id = $(item).attr('cus-id');
+                var tableData = getInPoingArr(tableDataList, 'id', id);
+                var jsEditor = CodeMirror.fromTextArea(document.getElementById("templet" + id), codeUtil.getConfig('text/javascript'));
+                jsEditor.setValue(tableData.templet);
+                jsEditorMap[id] = jsEditor;
+            });
+
         }
     });
 
@@ -143,15 +159,16 @@ layui.config({
                 winui.window.msg('请选择表格属性.', {icon: 2, time: 2000});
                 return false;
             }
-            $.each(table.cache.messageTable, function (i, item) {
-                item.id = null;
-                item.orderBy = i + 1;
-            });
             tableDataList = [].concat(table.cache.messageTable);
-
+            $.each(tableDataList, function (i, item) {
+                item.orderBy = i + 1;
+                item.templet = jsEditorMap[item.id].getValue();
+                item.id = null;
+                delete item["attrDefinition"];
+            });
             var params = {
                 pageId: pageId,
-                tableColumnList: JSON.stringify(tableDataList)
+                tableColumnList: encodeURIComponent(JSON.stringify(tableDataList))
             };
             AjaxPostUtil.request({url: reqBasePath + "writeDsFormPageTable", params: params, type: 'json', method: "POST", callback: function (json) {
                 parent.layer.close(index);

@@ -28,7 +28,7 @@ layui.config({
 	        { field: 'name', title: '桌面名称', align: 'left', width: 150 },
 			{ field: 'code', title: '编码', align: 'left', width: 120 },
 			{ field: 'logo', title: 'LOGO', align: 'center', width: 60, templet: function (d) {
-				if(isNull(d.logo)){
+				if (isNull(d.logo)) {
 					return '<img src="../../assets/images/os_windows.png" class="photo-img">';
 				} else {
 					return '<img src="' + systemCommonUtil.getFilePath(d.logo) + '" class="photo-img" lay-event="logo">';
