@@ -3162,11 +3162,12 @@ hr,
 }
 
 .layui-table-tool-panel {
-	position: absolute;
-	top: 29px;
-	left: -1px;
+	position: fixed;
+	margin-top: 10px;
+	right: 20px;
 	padding: 5px 0;
 	min-width: 150px;
+	width: max-content;
 	min-height: 40px;
 	border: 1px solid #d2d2d2;
 	text-align: left;
