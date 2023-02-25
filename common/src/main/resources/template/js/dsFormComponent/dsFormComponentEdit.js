@@ -51,9 +51,8 @@ layui.config({
 			skyeyeClassEnumUtil.showEnumDataListByClassName("componentAttr", 'verificationSelect', "attrKeys", attrKeys, form);
 			// 组件适用范围
 			skyeyeClassEnumUtil.showEnumDataListByClassName("componentApplyRange", 'radio', "applyRange", json.bean.applyRange, form);
-			// 适用表单布局
-			var applyFormType = isNull(json.bean.applyFormType) ? '' : json.bean.applyFormType.toString();
-			skyeyeClassEnumUtil.showEnumDataListByClassName("dsFormPageType", 'verificationSelect', "applyFormType", applyFormType, form);
+			// 组件获取的值的合入接口入参的方式
+			skyeyeClassEnumUtil.showEnumDataListByClassName("componentValueMergType", 'radio', "valueMergType", json.bean.valueMergType, form);
 
 			// 根据类型获取部分功能的使用说明
 			systemCommonUtil.queryExplainMationByType(2, function (json) {
@@ -101,7 +100,7 @@ layui.config({
 							attrKeys: $('#attrKeys').attr('value'),
 							applyRange: $("#applyRange input:radio:checked").val(),
 							applyObject: isNull($("#applyObject").attr("chooseId")) ? JSON.stringify([]) : $("#applyObject").attr("chooseId"),
-							applyFormType: $('#applyFormType').attr('value'),
+							valueMergType: dataShowType.getData('valueMergType'),
 							id: parent.rowId
 						};
 						if ($("#linkedData").val() == 'true') {

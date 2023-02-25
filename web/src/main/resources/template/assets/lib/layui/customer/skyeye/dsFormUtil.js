@@ -61,7 +61,11 @@ var dsFormUtil = {
                 // 获取组件中设置值的脚本
                 var dsFormComponent = content.dsFormComponent;
                 var value = data[attrDefinition.attrKey];
+                if (dsFormComponent.valueMergType == 'extend') {
+                    value = data;
+                }
                 content["value"] = value;
+                content["pageType"] = 'edit';
                 var jsFitValue = dsFormComponent.jsFitValue;
                 if (!isNull(jsFitValue) && jsFitValue.startsWith('layui.define')) {
                     var setValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsFitValue + '{{/this}}', content);
@@ -87,6 +91,7 @@ var dsFormUtil = {
         layui.define(["jquery", 'form'], function(exports) {
             var form = layui.form;
             $.each(pageMation.dsFormPageContents, function(j, dsFormContent) {
+                dsFormContent["pageType"] = pageMation.type;
                 dsFormUtil.loadComponent(showBoxId, dsFormContent);
             });
             matchingLanguage();
@@ -112,7 +117,11 @@ var dsFormUtil = {
                         var getValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsValue + '{{/this}}', content);
                         var value = "";
                         eval('value = ' + getValueScript);
-                        params[content.attrDefinition.attrKey] = value;
+                        if (dsFormComponent.valueMergType == 'extend') {
+                            params = $.extend(true, params, value);
+                        } else {
+                            params[content.attrDefinition.attrKey] = value;
+                        }
                     }
                 });
                 if (dsFormUtil.pageMation.type == 'edit') {

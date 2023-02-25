@@ -28,7 +28,6 @@ layui.config({
 	var componentList = [];
 	
 	var className = GetUrlParam("className");
-	var pageType = GetUrlParam("pageType");
 	if (isNull(className)) {
 		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
 		return false;
@@ -90,7 +89,7 @@ layui.config({
  		showGrid({
 		 	id: "btnBox",
 		 	url: reqBasePath + "queryAllDsFormComponentList",
-		 	params: {serviceClassName: className, dsFormPageType: pageType},
+		 	params: {serviceClassName: className},
 		 	pagination: false,
 			method: 'GET',
 		 	template: $("#leftBoxItem").html(),
@@ -242,7 +241,7 @@ layui.config({
 		sortDataIn();
 		var params = {
 			pageId: pageId,
-			dsFormPageContentList: JSON.stringify(contentList)
+			dsFormPageContentList: encodeURIComponent(JSON.stringify(contentList))
 		}
 		AjaxPostUtil.request({url: reqBasePath + "writeDsFormPageContent", params: params, type: 'json', method: 'POST', callback: function (json) {
 			winui.window.msg("保存成功", {icon: 1, time: 2000});
