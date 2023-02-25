@@ -57,7 +57,12 @@ layui.config({
 						componentList = componentList.concat(item.children);
 					}
 				});
-				var value = dataType == 1 ? json.bean.defaultData : json.bean.objectId;
+				var value;
+				if (dataType == 4) {
+					value = json.bean.businessApi;
+				} else {
+					value = dataType == 1 ? json.bean.defaultData : json.bean.objectId;
+				}
 				loadLinkData(json.bean.componentId, json.bean.dataType, value);
 			},
 			clickCallback: function (chooseId) {
@@ -87,6 +92,7 @@ layui.config({
 					maxLength: $("#maxLength").val(),
 					remark: $("#remark").val(),
 					showType: isNull($("#showType").val()) ? "" : $("#showType").val(),
+					dataType: '',
 					id: id
 				};
 
@@ -94,7 +100,7 @@ layui.config({
 				if (!isNull(dsFormComponent) && dsFormComponent.linkedData == 1) {
 					params.dataType = $("#dataType").val();
 					if (params.dataType == 1) {
-						// 自定义
+						// 自定义json
 						var defaultDataStr = $("#defaultData").val();
 						if (isNull(defaultDataStr)) {
 							winui.window.msg("请填写Json串！", {icon: 2, time: 2000});
@@ -117,6 +123,20 @@ layui.config({
 								return false;
 							}
 						}
+					} else if (params.dataType == 4) {
+						// 自定义接口
+						var dataList = initTableChooseUtil.getDataList('apiParams').dataList;
+						var apiParams = {};
+						$.each(dataList, function (i, item) {
+							apiParams[item.key] = item.value;
+						});
+						var businessApi = {
+							serviceStr: $("#serviceStr").val(),
+							api: $("#api").val(),
+							method: $("#method").val(),
+							params: apiParams
+						};
+						params.businessApi = JSON.stringify(businessApi);
 					} else {
 						params.objectId = $("#objectId").val();
 					}
@@ -159,11 +179,47 @@ layui.config({
 			// 数据字典
 			initDictData();
 			$("#objectId").val(value);
+		} else if (dataType == 4) {
+			// 自定义
+			$("#dataTypeObjectBox").html(commonHtml['businessApi']);
+			$("#serviceStr").html(getDataUseHandlebars(selOption, {rows: serviceMap}));
+			loadParamsTable('apiParams');
+			if (!isNull(value)) {
+				$("#serviceStr").val(value.serviceStr);
+				$("#api").val(value.api);
+				skyeyeClassEnumUtil.showEnumDataListByClassName("httpMethodEnum", 'select', "method", businessApi.method, form);
+
+				initTableChooseUtil.deleteAllRow('apiParams');
+				$.each(operateOpenPage.params, function(key, value) {
+					var params = {
+						"key": key,
+						"value": value
+					};
+					initTableChooseUtil.resetData('apiParams', params);
+				});
+			} else {
+				skyeyeClassEnumUtil.showEnumDataListByClassName("httpMethodEnum", 'select', "method", '', form);
+			}
 		} else {
 			$("#dataTypeObjectBox").html(dataTypeObject["2"]);
 			$("#objectId").html("<option value=''>请选择</option>");
 		}
 		form.render('select');
+	}
+
+	function loadParamsTable(id) {
+		initTableChooseUtil.initTable({
+			id: id,
+			cols: [
+				{id: 'key', title: '入参Key', formType: 'input', width: '150', verify: 'required'},
+				{id: 'value', title: '值', formType: 'input', width: '150', verify: 'required'}
+			],
+			deleteRowCallback: function (trcusid) {
+			},
+			addRowCallback: function (trcusid) {
+			},
+			form: form
+		});
 	}
 
 	/**

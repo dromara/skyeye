@@ -44,6 +44,12 @@ layui.config({
 			}},
 			{ field: 'attrKey', title: '属性', align: 'left', width: 150 },
 			{ field: 'attrType', title: '类型', align: 'left', width: 120 },
+			{ field: 'whetherInputParams', title: '是否入参', align: 'center', width: 100, templet: function (d) {
+				if (d.whetherInputParams) {
+					return '是';
+				}
+				return '否';
+			}},
 			{ field: 'componentName', title: '关联组件', align: 'left', width: 140, templet: function (d) {
 				if (!isNull(d.attrDefinitionCustom) && !isNull(d.attrDefinitionCustom.dsFormComponent)) {
 					return d.attrDefinitionCustom.dsFormComponent.name;
@@ -57,12 +63,6 @@ layui.config({
 			{ field: 'required', title: '限制条件', align: 'left', width: 140 },
 			{ field: 'modelAttribute', title: '是否模型属性', align: 'center', width: 100, templet: function (d) {
 				if (d.modelAttribute) {
-					return '是';
-				}
-				return '否';
-			}},
-			{ field: 'whetherInputParams', title: '是否作为入参', align: 'center', width: 100, templet: function (d) {
-				if (d.whetherInputParams) {
 					return '是';
 				}
 				return '否';

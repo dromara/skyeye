@@ -18,33 +18,6 @@ layui.config({
 						<select id="color" name="color" lay-filter="color" win-verify="required"></select>
 					</div>
 				</div>`,
-		'businessApi': `<div class="layui-form-item layui-col-xs12">
-							<span class="hr-title">请求事件</span><hr>
-						</div>
-						<div class="layui-form-item layui-col-xs6">
-							<label class="layui-form-label">所属服务<i class="red">*</i></label>
-							<div class="layui-input-block">
-								<select id="serviceStr" name="serviceStr" lay-filter="serviceStr" win-verify="required"></select>
-							</div>
-						</div>
-						<div class="layui-form-item layui-col-xs6">
-							<label class="layui-form-label">接口地址<i class="red">*</i></label>
-							<div class="layui-input-block">
-								<input type="text" id="api" name="api" placeholder="请输入接口地址" win-verify="required" class="layui-input" maxlength="200"/>
-							</div>
-						</div>
-						<div class="layui-form-item layui-col-xs6">
-							<label class="layui-form-label">请求方式<i class="red">*</i></label>
-							<div class="layui-input-block">
-								<select id="method" name="method" lay-filter="method" win-verify="required"></select>
-							</div>
-						</div>
-						<div class="layui-form-item layui-col-xs12">
-							<label class="layui-form-label">接口入参</label>
-							<div class="layui-input-block" id="apiParams">
-								
-							</div>
-						</div>`,
 		'operateOpenPage': `<div class="layui-form-item layui-col-xs12">
 								<span class="hr-title">新开页面</span><hr>
 							</div>
@@ -90,7 +63,7 @@ layui.config({
 
 			if (json.bean.eventType == 'ajax') {
 				var businessApi = json.bean.businessApi;
-				$('#eventTypeChangeBox').html(_html['businessApi']);
+				$('#eventTypeChangeBox').html(commonHtml['businessApi']);
 				$("#serviceStr").html(getDataUseHandlebars(selOption, {rows: serviceMap}));
 				$("#serviceStr").val(businessApi.serviceStr);
 				$("#api").val(businessApi.api);
@@ -162,7 +135,7 @@ layui.config({
 		}
 		if (data.value == 'ajax') {
 			// 请求事件
-			$('#eventTypeChangeBox').html(_html['businessApi']);
+			$('#eventTypeChangeBox').html(commonHtml['businessApi']);
 			$("#serviceStr").html(getDataUseHandlebars(selOption, {rows: serviceMap}));
 			skyeyeClassEnumUtil.showEnumDataListByClassName("httpMethodEnum", 'select', "method", '', form);
 			loadParamsTable('apiParams');
