@@ -30,6 +30,7 @@ layui.config({
             ajaxSendLoadBefore: function (hdb, json) {
                 json.bean.serviceBean.tenantName = skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("tenantEnum", 'enumFiledName', json.bean.serviceBean.tenant, 'name');
                 json.bean.serviceBean.flowableName = json.bean.serviceBean.flowable ? '是' : '否';
+                json.bean.serviceBean.teamAuthName = json.bean.serviceBean.teamAuth ? '是' : '否';
             },
             ajaxSendAfter: function (json) {
                 matchingLanguage();

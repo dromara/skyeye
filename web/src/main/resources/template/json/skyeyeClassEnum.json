@@ -44,6 +44,8 @@
     "componentValueMergType": {"name": "组件关联的属性", "className": "skyeye-pro#com.skyeye.dsform.classenum.ComponentValueMergType"},
     "buttonColorType": {"name": "操作按钮颜色", "className": "skyeye-pro#com.skyeye.attr.classenum.ButtonColorType"},
     "eventType": {"name": "操作按钮事件类型", "className": "skyeye-pro#com.skyeye.operate.classenum.EventType"},
-    "operatePosition": {"name": "操作按钮展示位置", "className": "skyeye-pro#com.skyeye.operate.classenum.OperatePosition"}
+    "operatePosition": {"name": "操作按钮展示位置", "className": "skyeye-pro#com.skyeye.operate.classenum.OperatePosition"},
 
+    "crmContractStateEnum": {"name": "CRM客户合同状态", "className": "skyeye-crm#com.skyeye.contract.classenum.CrmContractStateEnum"},
+    "crmContractAuthEnum": {"name": "CRM客户合同权限", "className": "skyeye-crm#com.skyeye.contract.classenum.CrmContractAuthEnum"}
 }
