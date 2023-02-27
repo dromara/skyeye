@@ -22,6 +22,18 @@ layui.config({
 							<div class="layui-input-block">
 								<input type="text" id="searchTips" name="searchTips" win-verify="required" placeholder="请输入提示语" class="layui-input"/>
 							</div>
+						</div>
+						<div class="layui-form-item layui-col-xs6">
+							<label class="layui-form-label">是否开启数据权限<i class="red">*</i></label>
+							<div class="layui-input-block" id="isDataAuth">
+								
+							</div>
+						</div>`,
+		'isDataAuth': `<div class="layui-form-item layui-col-xs6" id="dataAuthPointNumBox">
+							<label class="layui-form-label">数据权限点编号<i class="red">*</i></label>
+							<div class="layui-input-block">
+								<input type="text" id="dataAuthPointNum" name="dataAuthPointNum" win-verify="required" placeholder="请输入数据权限点编号" class="layui-input"/>
+							</div>
 						</div>`
 	};
 
@@ -64,11 +76,27 @@ layui.config({
 		if (type == 'simpleTable') {
 			$('#otherDom').html(pageHtml[type]);
 			skyeyeClassEnumUtil.showEnumDataListByClassName("whetherEnum", 'radio', "isPage", data.isPage, form);
+			// 数据权限信息
+			skyeyeClassEnumUtil.showEnumDataListByClassName("whetherEnum", 'radio', "isDataAuth", data.isDataAuth, form);
+			if (dataShowType.getData("isDataAuth") == 1) {
+				$('#otherDom').append(pageHtml['isDataAuth']);
+			} else {
+				$('#dataAuthPointNumBox').remove();
+			}
+
 			$("#searchTips").val(data.searchTips);
 		} else {
 			$('#otherDom').html('');
 		}
 	}
+
+	form.on('radio(isDataAuthFilter)', function(data) {
+		if (dataShowType.getData("isDataAuth") == 1) {
+			$('#otherDom').append(pageHtml['isDataAuth']);
+		} else {
+			$('#dataAuthPointNumBox').remove();
+		}
+	});
 
 	matchingLanguage();
 	form.render();
@@ -80,12 +108,17 @@ layui.config({
 				remark: $("#remark").val(),
 				type: $("#type").val(),
 				className: parent.objectId,
-				operateIdList: isNull($('#operateIdList').attr('value')) ? [] : $('#operateIdList').attr('value')
+				isDataAuth: dataShowType.getData("isDataAuth"),
+				operateIdList: isNull($('#operateIdList').attr('value')) ? [] : $('#operateIdList').attr('value'),
+				dataAuthPointNum: ''
 			};
 
 			if (params.type == 'simpleTable') {
-				params['isPage'] = $("#isPage input:radio:checked").val();
+				params['isPage'] = dataShowType.getData("isPage");
 				params['searchTips'] = $("#searchTips").val();
+				if (params.isDataAuth == 1) {
+					params.dataAuthPointNum = $('#dataAuthPointNum').val();
+				}
 			}
 
 			var businessApi = {

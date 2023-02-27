@@ -345,7 +345,7 @@ function authBtn(urlNum) {
 }
 
 /**
- * 加载列表接口的数据权限菜单，因为要和表格搜索结合到一起，所以监听事件是要去initTableSearchUtil.js中查看
+ * 加载列表接口的数据权限菜单，因为要和表格搜索结合到一起，所以监听事件是要去 initTableSearchUtil.js中查看
  *
  * @param tableId 表格id
  * @param urlNum 权限点id
