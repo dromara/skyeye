@@ -129,13 +129,15 @@ var teamObjectPermissionUtil = {
      * @param defaultValue
      */
     buildTeamTemplate: function (id, objectType, defaultValue) {
-        AjaxPostUtil.request({url: reqBasePath + "queryEnableTeamTemplateList", params: {objectType: objectType}, type: 'json', method: "GET", callback: function(json) {
-            var selOption = getFileContent('tpl/template/select-option.tpl');
-            $(`#${id}`).html(getDataUseHandlebars(selOption, json));
-            if (!isNull(defaultValue)) {
-                $(`#${id}`).val(defaultValue);
-            }
-        }, async: false});
+        if (!isNull(objectType)) {
+            AjaxPostUtil.request({url: reqBasePath + "queryEnableTeamTemplateList", params: {objectType: objectType}, type: 'json', method: "GET", callback: function(json) {
+                var selOption = getFileContent('tpl/template/select-option.tpl');
+                $(`#${id}`).html(getDataUseHandlebars(selOption, json));
+                if (!isNull(defaultValue)) {
+                    $(`#${id}`).val(defaultValue);
+                }
+            }, async: false});
+        }
     },
 
     checkTeamBusinessAuthPermission: function (objectId, enumKey) {

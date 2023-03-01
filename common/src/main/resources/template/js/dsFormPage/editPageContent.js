@@ -84,6 +84,14 @@ layui.config({
                                 </select>
                             </div>
                         </div>`,
+        'teamObjectTypeBox': `<div class="layui-form-item layui-col-xs12">
+                            <label class="layui-form-label">团队适用对象<i class="red">*</i></label>
+                            <div class="layui-input-block">
+                                <select lay-filter="teamObjectType" lay-search="" id="teamObjectType" name="teamObjectType" win-verify="required">
+                
+                                </select>
+                            </div>
+                        </div>`,
     };
 
     // 加载组件关联的属性
@@ -142,6 +150,9 @@ layui.config({
     // 数据展示类型
     dataShowType.showData({rows: dataShowType.showDataType}, 'select', "dataShowType", data.dataShowType, form, null, null, null);
 
+    // 团队适用对象
+    skyeyeClassEnumUtil.showEnumDataListByClassName("teamObjectType", 'select', "teamObjectType", data.teamObjectType, form);
+
     matchingLanguage();
     form.render();
     form.on('submit(formAddBean)', function (data) {
@@ -170,6 +181,7 @@ layui.config({
         newParams.defaultValue = $("#defaultValue").val();
         newParams.width = $("#width").val();
         newParams.attrKey = $("#attrKey").val();
+        newParams.teamObjectType = $("#teamObjectType").val();
 
         if (!isNull($("#attrKey").val())) {
             newParams.attrDefinition = getInPoingArr(parent.attrList, 'attrKey', $("#attrKey").val());
