@@ -242,7 +242,7 @@ layui.config({
 	 */
 	function initDictData() {
 		AjaxPostUtil.request({url: reqBasePath + "queryDictTypeListByEnabled", params: {enabled: 1}, type: 'json', method: 'GET', callback: function (json) {
-			$("#objectId").html(getDataUseHandlebars(selOption, json));
+			$("#objectId").html(getDataUseHandlebars(`<option value="">请选择</option>{{#each rows}}<option value="{{dictCode}}">{{name}}</option>{{/each}}`, json));
 		}, async: false});
 	}
 

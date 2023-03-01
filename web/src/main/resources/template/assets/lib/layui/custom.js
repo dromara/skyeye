@@ -104,6 +104,7 @@ var serviceMap = [
 	{"id": "sysMainMation.ehrBasePath", "name": "EHR服务"},
 	{"id": "sysMainMation.lightAppBasePath", "name": "轻应用服务"},
 	{"id": "sysMainMation.wagesBasePath", "name": "薪资服务"},
+	{"id": "sysMainMation.crmBasePath", "name": "CRM服务"},
 ]
 
 function getRequestHeaders() {

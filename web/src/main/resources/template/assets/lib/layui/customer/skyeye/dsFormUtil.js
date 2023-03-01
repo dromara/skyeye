@@ -583,6 +583,12 @@ var dsFormTableUtil = {
             var table = layui.table;
             var form = layui.form;
             var api = pageMation.businessApi;
+
+            if (pageMation.isDataAuth == 1) {
+                // 开启数据权限
+                loadAuthBtnGroup(`${id}`, pageMation.dataAuthPointNum);
+            }
+
             var url = "";
             eval('url = ' + api.serviceStr + ' + "' + api.api + '"');
             table.render({
