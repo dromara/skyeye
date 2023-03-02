@@ -181,8 +181,15 @@ var dsFormUtil = {
     loadHandlebar: function () {
         dsFormUtil.checkLoadHandlebar = true;
         // 加载json对象
-        Handlebars.registerHelper('json', function(context) {
-            return JSON.stringify(context);
+        Handlebars.registerHelper('json', function(context, type) {
+            if (!isNull(context)) {
+                return JSON.stringify(context);
+            }
+            if (type == 'array') {
+                return JSON.stringify([]);
+            } else {
+                return JSON.stringify({});
+            }
         });
     },
 

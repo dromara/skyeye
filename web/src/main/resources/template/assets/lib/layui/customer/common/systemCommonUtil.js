@@ -1015,7 +1015,11 @@ var dataShowType = {
                 $("#" + showBoxId).html('<select>' + getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json) + '</select>');
             }
             if (!isNull(defaultId)) {
-                $("#" + showBoxId).val(defaultId);
+                if ($("#" + showBoxId).is('select')) {
+                    $("#" + showBoxId).val(defaultId);
+                } else {
+                    $("#" + showBoxId).find('select').val(defaultId);
+                }
             } else {
                 $.each(json.rows, function (i, item) {
                     if (item.isDefault) {

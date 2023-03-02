@@ -80,6 +80,7 @@ layui.config({
 			skyeyeClassEnumUtil.showEnumDataListByClassName("whetherEnum", 'radio', "isDataAuth", data.isDataAuth, form);
 			if (dataShowType.getData("isDataAuth") == 1) {
 				$('#otherDom').append(pageHtml['isDataAuth']);
+				$('#dataAuthPointNum').val(data.dataAuthPointNum);
 			} else {
 				$('#dataAuthPointNumBox').remove();
 			}
