@@ -24,6 +24,14 @@ layui.config({
             winui.window.msg("该布局信息不存在", {icon: 2, time: 2000});
             return false;
         } else {
+            if (pageMation.serviceBeanCustom.serviceBean.teamAuth) {
+                objectKey = GetUrlParam("objectKey");
+                objectId = GetUrlParam("objectId");
+                if (isNull(objectKey) || isNull(objectId)) {
+                    winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
+                    return false;
+                }
+            }
             init();
         }
     }});

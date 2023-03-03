@@ -46,8 +46,8 @@
     "eventType": {"name": "操作按钮事件类型", "className": "skyeye-pro#com.skyeye.operate.classenum.EventType"},
     "operatePosition": {"name": "操作按钮展示位置", "className": "skyeye-pro#com.skyeye.operate.classenum.OperatePosition"},
 
-    "crmContractStateEnum": {"name": "CRM客户合同状态", "className": "skyeye-crm#com.skyeye.contract.classenum.CrmContractStateEnum"},
-    "crmContractAuthEnum": {"name": "CRM客户合同权限", "className": "skyeye-crm#com.skyeye.contract.classenum.CrmContractAuthEnum"},
-    "crmOpportunityStateEnum": {"name": "CRM客户商机状态", "className": "skyeye-crm#com.skyeye.opportunity.classenum.CrmOpportunityStateEnum"},
-    "crmOpportunityAuthEnum": {"name": "CRM客户商机权限", "className": "skyeye-crm#com.skyeye.opportunity.classenum.CrmOpportunityAuthEnum"}
+    "crmContractStateEnum": {"name": "合同状态", "className": "skyeye-crm#com.skyeye.contract.classenum.CrmContractStateEnum"},
+    "crmContractAuthEnum": {"name": "合同权限", "className": "skyeye-crm#com.skyeye.contract.classenum.CrmContractAuthEnum"},
+    "crmOpportunityStateEnum": {"name": "商机状态", "className": "skyeye-crm#com.skyeye.opportunity.classenum.CrmOpportunityStateEnum"},
+    "crmOpportunityAuthEnum": {"name": "商机权限", "className": "skyeye-crm#com.skyeye.opportunity.classenum.CrmOpportunityAuthEnum"}
 }

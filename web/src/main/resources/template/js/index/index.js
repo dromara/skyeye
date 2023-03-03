@@ -962,16 +962,7 @@ layui.config({
 			return;
 		}
 
-		if (systemCommonUtil.checkUrl(url)) {
-			// 自定义页面
-			if (url == 'theme') {
-				winui.window.openTheme(loadBottomMenuIcon);
-				return;
-			}
-			url = indexMenu.getUrlPath(url, menuSysWinUrl);
-		} else {
-			url = dsFormPageUrl + url;
-		}
+		url = systemCommonUtil.getUrl(url, menuSysWinUrl);
 
         if (type === 1) {
         	// 新窗口打开

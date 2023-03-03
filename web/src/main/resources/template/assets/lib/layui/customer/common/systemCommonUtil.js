@@ -326,6 +326,23 @@ var systemCommonUtil = {
     },
 
     /**
+     * 获取url地址
+     *
+     * @param url 系统自定义路径
+     * @param menuSysWinUrl 分布式系统域名
+     * @returns {string|*}
+     */
+    getUrl: function (url, menuSysWinUrl) {
+        if (systemCommonUtil.checkUrl(url)) {
+            // 自定义页面
+            url = indexMenu.getUrlPath(url, menuSysWinUrl);
+        } else {
+            url = dsFormPageUrl + url;
+        }
+        return url
+    },
+
+    /**
      * 对页面url添加版本控制
      *
      * @param url

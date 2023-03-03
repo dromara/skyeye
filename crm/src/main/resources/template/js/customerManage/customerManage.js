@@ -16,7 +16,7 @@ layui.config({
 		id: 'tab',
 		prefixData: [{
 			title: '详情',
-			pageUrl: '../../tpl/customerManage/customerDetails.html'
+			pageUrl: systemCommonUtil.getUrl('', null)
 		}],
 		element: layui.element,
 		objectType: "1",

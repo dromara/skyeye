@@ -128,6 +128,12 @@ var dsFormUtil = {
                     // 编辑布局
                     params["id"] = GetUrlParam("id");
                 }
+                var teamAuth = dsFormUtil.pageMation.serviceBeanCustom.serviceBean.teamAuth;
+                if (teamAuth) {
+                    // 开启团队权限
+                    params['objectId'] = objectId;
+                    params['objectKey'] = objectKey;
+                }
                 // 发送请求
                 dsFormUtil.sendRequest({
                     businessApi: dsFormUtil.pageMation.businessApi,
@@ -508,6 +514,12 @@ var dsFormUtil = {
                     url += `&${key}=${value}`;
                 });
             }
+            var teamAuth = dsFormUtil.pageMation.serviceBeanCustom.serviceBean.teamAuth;
+            if (teamAuth) {
+                // 开启团队权限
+                url += `&objectId=${objectId}`;
+                url += `&objectKey=${objectKey}`;
+            }
             _openNewWindows({
                 url: url,
                 title: operateOpenPage.name,
@@ -577,6 +589,7 @@ var dsFormTableUtil = {
 
     // 初始化动态表格
     initDynamicTable: function (id, pageMation) {
+        dsFormUtil.pageMation = pageMation;
         var tableColumnList = pageMation.tableColumnList;
         $.each(tableColumnList, function (i, item) {
             item.label = dsFormUtil.getLable(item);
@@ -676,8 +689,9 @@ var dsFormTableUtil = {
                 hide: (!isNull(item.hide) && item.hide == 1) ? true : false,
                 templet: null
             };
-            if (!isNull(item.templet)) {
-                field['templet'] = eval('(' + item.templet + ')');
+            var templet = dsFormTableUtil.getTemplateFun(item);
+            if (!isNull(templet)) {
+                field['templet'] = eval('(' + templet + ')');
             }
             header.push(field);
         });
@@ -691,6 +705,39 @@ var dsFormTableUtil = {
             });
         }
         return [header];
+    },
+
+    getTemplateFun: function (item) {
+        if (!isNull(item.templet)) {
+            return item.templet;
+        } else {
+            if (isNull(item.attrDefinition) || isNull(item.attrDefinition.attrDefinitionCustom)) {
+                return null;
+            }
+            var customAttr = item.attrDefinition.attrDefinitionCustom;
+            var dataType = customAttr.dataType;
+            if (isNull(customAttr.objectId) && isNull(customAttr.defaultData)) {
+                return null;
+            }
+            if (dataType == 1) {
+                // 自定义
+                var obj = isNull(customAttr.defaultData) ? [] : customAttr.defaultData;
+                if (typeof obj == 'string') {
+                    obj = JSON.parse(obj);
+                }
+                return `function (d) {
+                    var json = ${obj};
+                    return getInPoingArr(json, "id", d.${item.attrKey}, "name");
+                }`;
+            } else if (dataType == 2) {
+                // 枚举
+                return `function (d) {return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey('${customAttr.objectId}', 'id', d.${item.attrKey}, 'name');}`;
+            } else if (dataType == 3) {
+                // 数据字典
+                return `function (d) {return sysDictDataUtil.getDictDataNameByCodeAndKey('${customAttr.objectId}', d.${item.attrKey});}`;
+            }
+        }
+        return null;
     },
 
     initEvent: function (table, form) {

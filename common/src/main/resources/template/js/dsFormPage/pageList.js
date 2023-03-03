@@ -79,6 +79,8 @@ layui.config({
 		var url = '../../tpl/dsFormPage/dsFormPageDesign.html';
 		if (data.type == 'simpleTable') {
 			url = '../../tpl/dsFormPage/simpleTableDesign.html';
+		} else if (data.type == 'details') {
+			url = '../../tpl/dsFormPage/dsFormDetailsPageDesign.html';
 		}
 		url += '?className=' + objectId + '&pageId=' + data.id + '&pageType=' + data.type;
 		parent.parent._openNewWindows({
