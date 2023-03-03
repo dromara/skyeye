@@ -1005,32 +1005,35 @@ var dataShowType = {
      * @param valueKey value展示的key
      */
     showData: function (json, showType, showBoxId, defaultId, form, callback, chooseCallback, valueKey) {
-        $("#" + showBoxId).html('');
-        $("#" + showBoxId).attr('showType', showType);
+        var _box = $("#" + showBoxId);
+        _box.html('');
+        _box.attr('showType', showType);
+        var winRequired = _box.attr('win-required');
+        winRequired = isNull(winRequired) ? '' : `win-verify='${winRequired}'`;
         if (showType == 'select') {
             // 下拉框
-            if ($("#" + showBoxId).is('select')) {
-                $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
+            if (_box.is('select')) {
+                _box.html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
             } else {
-                $("#" + showBoxId).html('<select>' + getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json) + '</select>');
+                _box.html(`<select ${winRequired} lay-search="">` + getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json) + '</select>');
             }
             if (!isNull(defaultId)) {
-                if ($("#" + showBoxId).is('select')) {
-                    $("#" + showBoxId).val(defaultId);
+                if (_box.is('select')) {
+                    _box.val(defaultId);
                 } else {
-                    $("#" + showBoxId).find('select').val(defaultId);
+                    _box.find('select').val(defaultId);
                 }
             } else {
                 $.each(json.rows, function (i, item) {
                     if (item.isDefault) {
-                        $("#" + showBoxId).val(item.id);
+                        _box.val(item.id);
                     }
                 });
             }
             form.render('select');
         } else if (showType == 'checkbox') {
             // 多选框
-            $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/checkbox-property.tpl'), json));
+            _box.html(getDataUseHandlebars(getFileContent('tpl/template/checkbox-property.tpl'), json));
             if (!isNull(defaultId)) {
                 var arr = defaultId.split(",");
                 for (var i = 0; i < arr.length; i++) {
@@ -1046,7 +1049,7 @@ var dataShowType = {
             form.render('checkbox');
         } else if (showType == 'radio') {
             // 单选框
-            $("#" + showBoxId).html(getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${showBoxId}Name" lay-filter="${showBoxId}Filter" value="{{id}}" title="{{name}}" />{{/each}}`, json));
+            _box.html(getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${showBoxId}Name" lay-filter="${showBoxId}Filter" value="{{id}}" title="{{name}}" />{{/each}}`, json));
             if (!isNull(defaultId) || defaultId + '' == '0') {
                 $("#" + showBoxId + " input:radio[name=" + showBoxId + "Name][value=" + defaultId + "]").attr("checked", true);
             } else {
@@ -1060,7 +1063,7 @@ var dataShowType = {
         } else if (showType == 'verificationSelect') {
             // 多选下拉框
             var html = `<div id="${showBoxId}Div" class="xm-select-demo"></div>`;
-            $("#" + showBoxId).html(html);
+            _box.html(html);
             var optionValueKey = isNull(valueKey) ? "id" : valueKey;
             layui.define(["xmSelect"], function(exports) {
                 var xmSelect = layui.xmSelect;
@@ -1180,7 +1183,7 @@ var dataShowType = {
                                 }
                             })(jQuery);});
                        </script>`;
-            $("#" + showBoxId).append(_html + _js);
+            _box.append(_html + _js);
         } else if (showType == 'selectTree') {
             // 提供选择的树插件
             var _html = sysDictDataUtil.getShowTteeHtml(showBoxId, '1');
@@ -1216,7 +1219,7 @@ var dataShowType = {
                                 }
                             })(jQuery);});
                        </script>`;
-            $("#" + showBoxId).append(_html + _js);
+            _box.append(_html + _js);
             $("#" + showBoxId + "Choose").on("change", function() {
                 if (typeof (chooseCallback) == "function") {
                     chooseCallback($(this).val());
