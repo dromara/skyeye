@@ -16,7 +16,11 @@ layui.config({
 		id: 'tab',
 		prefixData: [{
 			title: '详情',
-			pageUrl: systemCommonUtil.getUrl('', null)
+			pageUrl: systemCommonUtil.getUrl('FP2023030300001&id=' + objectId, null)
+		}],
+		suffixData: [{
+			title: '团队',
+			pageUrl: '../../tpl/teamBusiness/teamBusinessDetails.html'
 		}],
 		element: layui.element,
 		objectType: "1",

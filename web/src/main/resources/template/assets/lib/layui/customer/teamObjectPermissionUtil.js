@@ -140,6 +140,17 @@ var teamObjectPermissionUtil = {
         }
     },
 
+    // 获取团队模板信息
+    getTeamTemplate: function (id) {
+        var teamTemplate = {};
+        if (!isNull(id)) {
+            AjaxPostUtil.request({url: reqBasePath + "queryTeamTemplateById", params: {id: id}, type: 'json', method: "GET", callback: function(json) {
+                teamTemplate = json.bean;
+            }, async: false});
+        }
+        return teamTemplate;
+    },
+
     checkTeamBusinessAuthPermission: function (objectId, enumKey) {
         var params = {
             objectId: objectId,

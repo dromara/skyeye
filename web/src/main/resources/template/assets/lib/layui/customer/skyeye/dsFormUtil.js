@@ -6,13 +6,46 @@ var dsFormUtil = {
     mastHaveImport: ['laydate', 'layedit', 'colorpicker', 'slider', 'fileUpload', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx', 'solr', 'sql', 'vue',
         'matchbrackets', 'closebrackets', 'showHint', 'anywordHint', 'lint', 'jsonLint', 'foldcode', 'foldgutter', 'braceFold', 'commentFold', 'form'],
     showType: {
-        '1': '{{#bean}}<div class="layui-form-item {{proportion}}"><label class="layui-form-label">{{label}}：</label><div class="layui-input-block ver-center">{{displayValue}}</div></div>{{/bean}}', // 文本展示
-        '2': '{{#bean}}<div class="layui-form-item {{proportion}}"><label class="layui-form-label">{{label}}：</label><div class="layui-input-block ver-center">{{#each displayValue.enclosureInfoList}}<a rowid="{{id}}" class="enclosureItem" rowpath="{{fileAddress}}" href="javascript:;" style="color:blue;">{{name}}</a><br>{{/each}}</div></div>{{/bean}}', // 附件展示
-        '3': '{{#bean}}<div class="layui-form-item {{proportion}}"><label class="layui-form-label">{{label}}：</label><div class="layui-input-block ver-center">{{{displayValue}}}</div></div>{{/bean}}', // 富文本展示
-        '4': '{{#bean}}<div class="layui-form-item {{proportion}}"><label class="layui-form-label">{{label}}：</label><div class="layui-input-block ver-center">{{#each photo}}<img src="{{photoValue}}" class="photo-img">{{/each}}</div></div>{{/bean}}', // 图片展示
-        '5': '{{#bean}}<div class="layui-form-item {{proportion}}"><label class="layui-form-label">{{label}}：</label><div class="layui-input-block ver-center" id="showTable{{orderBy}}">' +
-            '<table id="messageTable{{orderBy}}" lay-filter="messageTable{{orderBy}}"></table></div></div>{{/bean}}', // 表格展示
-        '6': '{{#bean}}<div class="layui-form-item {{proportion}}"><label class="layui-form-label">{{label}}：</label><div class="layui-input-block ver-center" id="showVoucher{{orderBy}}"></div></div>{{/bean}}', // 凭证展示
+        '1': `{{#bean}}
+                <div class="layui-form-item {{width}}" controlType="{{dsFormComponent.numCode}}" contentId="{{id}}">
+                    <label class="layui-form-label">{{title}}：</label>
+                    <div class="layui-input-block ver-center">{{value}}</div>
+                </div>
+             {{/bean}}`, // 文本展示
+        '2': `{{#bean}}
+                <div class="layui-form-item {{width}}" controlType="{{dsFormComponent.numCode}}" contentId="{{id}}">
+                    <label class="layui-form-label">{{title}}：</label>
+                    <div class="layui-input-block ver-center">
+                    {{#each value.enclosureInfoList}}<a rowid="{{id}}" class="enclosureItem" rowpath="{{fileAddress}}" href="javascript:;" style="color:blue;">{{name}}</a><br>{{/each}}
+                    </div>
+                </div>
+             {{/bean}}`, // 附件展示
+        '3': `{{#bean}}
+                <div class="layui-form-item {{width}}" controlType="{{dsFormComponent.numCode}}" contentId="{{id}}">
+                    <label class="layui-form-label">{{title}}：</label>
+                    <div class="layui-input-block ver-center">{{{value}}}</div>
+                </div>
+             {{/bean}}`, // 富文本展示
+        '4': `{{#bean}}
+                <div class="layui-form-item {{width}}" controlType="{{dsFormComponent.numCode}}" contentId="{{id}}">
+                    <label class="layui-form-label">{{title}}：</label>
+                    <div class="layui-input-block ver-center">{{#each photo}}<img src="{{this}}" class="photo-img">{{/each}}</div>
+                </div>
+             {{/bean}}`, // 图片展示
+        '5': `{{#bean}}
+                <div class="layui-form-item {{width}}" controlType="{{dsFormComponent.numCode}}" contentId="{{id}}">
+                    <label class="layui-form-label">{{title}}：</label>
+                    <div class="layui-input-block ver-center" id="showTable{{orderBy}}">
+                        <table id="messageTable{{orderBy}}" lay-filter="messageTable{{orderBy}}"></table>
+                    </div>
+                </div>
+             {{/bean}}`, // 表格展示
+        '6': `{{#bean}}
+                <div class="layui-form-item {{width}}" controlType="{{dsFormComponent.numCode}}" contentId="{{id}}">
+                    <label class="layui-form-label">{{title}}：</label>
+                    <div class="layui-input-block ver-center" id="showVoucher{{orderBy}}"></div>
+                </div>
+             {{/bean}}`, // 凭证展示
     },
 
     pageMation: {},
@@ -65,6 +98,32 @@ var dsFormUtil = {
                     var setValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsFitValue + '{{/this}}', content);
                     eval(setValueScript);
                 }
+            }
+        });
+        layui.form.render();
+    },
+
+    /**
+     * 加载动态表单(详情操作)
+     *
+     * @param showBoxId
+     * @param pageMation
+     * @param data
+     */
+    initDetailsPage: function(showBoxId, pageMation, data) {
+        dsFormUtil.pageMation = pageMation;
+        $.each(dsFormUtil.pageMation.dsFormPageContents, function (i, content) {
+            var attrDefinition = content.attrDefinition;
+            if (!isNull(attrDefinition) && !$.isEmptyObject(attrDefinition)) {
+                // 获取组件中设置值的脚本
+                var dsFormComponent = content.dsFormComponent;
+                var value = data[attrDefinition.attrKey];
+                if (dsFormComponent.valueMergType == 'extend') {
+                    value = data;
+                }
+                dsFormUtil.loadComponentValueDetails(showBoxId, content, value);
+            } else {
+                dsFormUtil.loadComponentValueDetails(showBoxId, content, null);
             }
         });
         layui.form.render();
@@ -166,8 +225,72 @@ var dsFormUtil = {
         var jsCon = `<script id="script${content.id}">${html_js}</script>`;
         $("#" + boxId).append(html + jsCon);
 
-        if (!isNull(content.require) && content.require.indexOf('required') >= 0) {
+        if (!isNull(content.require)) {
+            dsFormUtil.setIsRequired(content);
+        }
+        dsFormUtil.setIsEdit(content);
+
+        return content;
+    },
+
+    // 设置必填标识
+    setIsRequired: function (content) {
+        if (content.require.indexOf('required') >= 0) {
             $(`div[contentId='${content.id}']`).find('label').append('<i class="red">*</i>');
+        }
+    },
+
+    // 设置是否可以编辑
+    setIsEdit: function (content) {
+        if (content.isEdit == 0) {
+            $(`div[contentId='${content.id}']`).find('select').attr('disabled', true);
+            $(`div[contentId='${content.id}']`).find('input').attr('disabled', true);
+        }
+    },
+
+    /**
+     * 加载组件详情信息
+     *
+     * @param boxId
+     * @param content
+     */
+    loadComponentValueDetails: function (boxId, content, value) {
+        if (!dsFormUtil.checkLoadHandlebar) {
+            dsFormUtil.loadHandlebar();
+        }
+        var component = content.dsFormComponent;
+        if (component.linkedData == 1) {
+            // 关联数据
+            content = dsFormUtil.getContentLinkedData(content);
+        }
+        content.title = dsFormUtil.getLable(content);
+        var showType = dsFormUtil.getShowType(content.attrDefinition);
+        if (isNull(showType)) {
+            var jsonStr = {bean: content};
+            var html = getDataUseHandlebars('{{#bean}}' + component.htmlContent + '{{/bean}}', jsonStr);
+            var html_js = getDataUseHandlebars('{{#bean}}' + component.jsContent + '{{/bean}}', jsonStr);
+            var jsCon = `<script id="script${content.id}">${html_js}</script>`;
+            $("#" + boxId).append(html + jsCon);
+        } else {
+            content.value = dsFormUtil.getContentLinkedDataValue(content, value);
+            if (showType == 4) { // 图片展示
+                var photoValue = [];
+                if (!isNull(value)) {
+                    photoValue = value.split(",");
+                }
+                content.photo = photoValue;
+            }
+            // 加载html
+            var str = getDataUseHandlebars(dsFormUtil.showType[showType], {bean: content});
+            $("#" + boxId).append(str);
+
+            if (showType == 5) { // 表格展示
+                dsFormTableUtil.intStaticTable("messageTable" + content.orderBy, value, content.attrTransformTableList);
+            } else  if (showType == 6) { // 凭证展示
+                var boxId = "showVoucher" + content.orderBy;
+                // 初始化凭证
+                voucherUtil.initDataDetails(boxId, value);
+            }
         }
 
         return content;
@@ -233,6 +356,43 @@ var dsFormUtil = {
         return content;
     },
 
+    getContentLinkedDataValue: function (content, value) {
+        if (isNull(value)) {
+            return null;
+        }
+        if (isNull(content.attrDefinition) || isNull(content.attrDefinition.attrDefinitionCustom)) {
+            return null;
+        }
+        var customAttr = content.attrDefinition.attrDefinitionCustom;
+        if (!isNull(customAttr.dsFormComponent)) {
+            // 团队模板类型的组件，value值单独转换
+            if (customAttr.dsFormComponent.numCode == 'teamTemplate') {
+                return teamObjectPermissionUtil.getTeamTemplate(value).name;
+            }
+        }
+
+        if (isNull(customAttr.objectId) && isNull(customAttr.defaultData)) {
+            return value;
+        }
+
+        var dataType = customAttr.dataType;
+        if (dataType == 1) {
+            // 自定义
+            var obj = isNull(customAttr.defaultData) ? [] : customAttr.defaultData;
+            if (typeof obj == 'string') {
+                obj = JSON.parse(obj);
+            }
+            return getInPoingArr(json, "id", value, "name");
+        } else if (dataType == 2) {
+            // 枚举
+            return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey(customAttr.objectId, 'id', value, 'name');
+        } else if (dataType == 3) {
+            // 数据字典
+            return sysDictDataUtil.getDictDataNameByCodeAndKey(customAttr.objectId, value);
+        }
+        return value;
+    },
+
     /**
      * 目前用于工作流详情展示
      *
@@ -246,35 +406,14 @@ var dsFormUtil = {
                 bean: item
             };
             var showType = dsFormUtil.getShowType(item.attrDefinition);
-            if (showType == 4) { // 图片展示
-                var photoValue = [];
-                if (!isNull(jsonStr.bean.displayValue)) {
-                    photoValue = item.displayValue.split(",");
-                }
-                var rows = [];
-                $.each(photoValue, function(j, row) {
-                    rows.push({photoValue: row});
-                });
-                jsonStr.bean.photo = rows;
-            }
+            // todo 待删除
 
-            // 加载html
-            var str = getDataUseHandlebars(dsFormUtil.showType[showType], jsonStr);
-            $("#" + customBoxId).append(str);
-
-            if (showType == 5) { // 表格展示
-                dsFormTableUtil.intStaticTable("messageTable" + item.orderBy, item.displayValue, item.attrTransformTableList);
-            } else  if (showType == 6) { // 凭证展示
-                var boxId = "showVoucher" + item.orderBy;
-                // 初始化凭证
-                voucherUtil.initDataDetails(boxId, item.value);
-            }
         });
     },
 
     // 获取属性的数据展示类型
     getShowType: function (attr) {
-        if (!isNull(attr.attrDefinitionCustom)) {
+        if (!isNull(attr) && !isNull(attr.attrDefinitionCustom)) {
             if (!isNull(attr.attrDefinitionCustom.dsFormComponent)) {
                 return attr.attrDefinitionCustom.dsFormComponent.showType;
             } else {

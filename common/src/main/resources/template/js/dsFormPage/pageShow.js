@@ -59,7 +59,13 @@ layui.config({
                             <script type="text/html" id="actionBar">
                                 
                             </script>
-                        </div>`
+                        </div>`,
+
+        'details': `<div style="margin:0 auto;padding:20px;">
+                        <form class="layui-form" action="" id="showForm" autocomplete="off">
+                            <div id="content"></div>
+                        </form>
+                    </div>`,
 
     };
 
@@ -84,17 +90,34 @@ layui.config({
             dsFormUtil.initCreatePage('content', pageMation);
         } else if (pageMation.type == 'edit') {
             // 编辑布局
-            var params = {
-                objectId: GetUrlParam("id"),
-                objectKey: pageMation.className
-            };
-            AjaxPostUtil.request({url: reqBasePath + "queryBusinessDataByObject", params: params, type: 'json', method: 'POST', callback: function (json) {
-                dsFormUtil.initEditPage('content', pageMation, json.bean);
-            }});
+            getBusinessData(function (data) {
+                dsFormUtil.initEditPage('content', pageMation, data);
+            });
+        }  else if (pageMation.type == 'details') {
+            // 详情布局
+            getBusinessData(function (data) {
+                dsFormUtil.initDetailsPage('content', pageMation, data);
+            });
         } else if (pageMation.type == 'simpleTable') {
             // 基本表格
             dsFormTableUtil.initDynamicTable('messageTable', pageMation);
         }
+    }
+
+    function getBusinessData(callback) {
+        if (isNull(GetUrlParam("id"))) {
+            winui.window.msg("业务数据id为空", {icon: 2, time: 2000});
+            return false;
+        }
+        var params = {
+            objectId: GetUrlParam("id"),
+            objectKey: pageMation.className
+        };
+        AjaxPostUtil.request({url: reqBasePath + "queryBusinessDataByObject", params: params, type: 'json', method: 'POST', callback: function (json) {
+            if(typeof(callback) == "function") {
+                callback(json.bean);
+            }
+        }});
     }
 
     exports('pageShow', {});

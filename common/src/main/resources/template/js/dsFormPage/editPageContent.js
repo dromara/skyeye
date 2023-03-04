@@ -13,6 +13,7 @@ layui.config({
         $("#showForm").html('');
         return false;
     }
+    var pageType = GetUrlParam("pageType");
     var selOption = getFileContent('tpl/template/select-option.tpl');
 
     var html = {
@@ -92,12 +93,28 @@ layui.config({
                                 </select>
                             </div>
                         </div>`,
+        'isEditBox': `<div class="layui-form-item layui-col-xs12">
+                            <label class="layui-form-label">是否可以编辑</label>
+                            <div class="layui-input-block" id="isEdit">
+                                
+                            </div>
+                        </div>`,
     };
+    // 详情类布局才展示的组件属性
+    var detailsPageAttr = ['attrKeyBox', 'titleBox', 'widthBox'];
 
     // 加载组件关联的属性
     $.each(html, function (key, value) {
-        if (data.dsFormComponent.attrKeys.indexOf(key) >= 0) {
-            $("#contentBox").append(value);
+        if (pageType == 'details') {
+            // 详情布局
+            if (data.dsFormComponent.attrKeys.indexOf(key) >= 0 && detailsPageAttr.indexOf(key) >= 0) {
+                $("#contentBox").append(value);
+            }
+        } else {
+            // 新增和编辑布局
+            if (data.dsFormComponent.attrKeys.indexOf(key) >= 0) {
+                $("#contentBox").append(value);
+            }
         }
     });
 
@@ -153,6 +170,9 @@ layui.config({
     // 团队适用对象
     skyeyeClassEnumUtil.showEnumDataListByClassName("teamObjectType", 'select', "teamObjectType", data.teamObjectType, form);
 
+    // 是否可以编辑
+    skyeyeClassEnumUtil.showEnumDataListByClassName("whetherEnum", 'radio', "isEdit", data.isEdit, form);
+
     matchingLanguage();
     form.render();
     form.on('submit(formAddBean)', function (data) {
@@ -182,6 +202,7 @@ layui.config({
         newParams.width = $("#width").val();
         newParams.attrKey = $("#attrKey").val();
         newParams.teamObjectType = $("#teamObjectType").val();
+        newParams.isEdit = dataShowType.getData("isEdit");
 
         if (!isNull($("#attrKey").val())) {
             newParams.attrDefinition = getInPoingArr(parent.attrList, 'attrKey', $("#attrKey").val());

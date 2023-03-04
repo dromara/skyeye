@@ -815,10 +815,7 @@ var tabPageUtil = {
         tabPageUtil.config = {
             id: '', // 展示位置
             prefixData: [], // 集合前面追加的其他需要加载的数据 例如：{title: '详情', pageUrl: '../../tpl/customerManage/customerDetails.html'}
-            suffixData: [{
-                title: '团队',
-                pageUrl: '../../tpl/teamBusiness/teamBusinessDetails.html'
-            }], // 集合后面追加的其他需要加载的数据 例如：{title: '详情', pageUrl: '../../tpl/customerManage/customerDetails.html'}
+            suffixData: [], // 集合后面追加的其他需要加载的数据 例如：{title: '详情', pageUrl: '../../tpl/customerManage/customerDetails.html'}
             element: null, // element对象
             objectType: '', // 适用对象  例如：客户，项目等
             pageList: [], // 页面信息

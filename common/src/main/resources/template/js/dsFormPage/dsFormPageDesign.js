@@ -26,8 +26,10 @@ layui.config({
 	var noComponentTitle = "未绑定组件，不可选择.";
 	// 表单控件集合
 	var componentList = [];
-	
+
 	var className = GetUrlParam("className");
+	var pageType = GetUrlParam("pageType");
+	var editContentPageUrl = '../../tpl/dsFormPage/editPageContent.html?pageType=' + pageType;
 	if (isNull(className)) {
 		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
 		return false;
@@ -43,7 +45,13 @@ layui.config({
  	
  	// 加载新增加的控件信息
     function loadNewControl(item) {
-		item = dsFormUtil.loadComponent('showForm', item);
+		if (pageType == 'details') {
+			// 详情布局
+			item = dsFormUtil.loadComponentValueDetails('showForm', item, null);
+		} else {
+			// 新增和编辑布局
+			item = dsFormUtil.loadComponent('showForm', item);
+		}
 		$("#showForm div[contentId='" + item.id + "']").append(`<div class="btn-base">
 			<button type="button" class="btn btn-danger removeThis" title="删除"><i class="fa fa-trash"></i></button>
 		</div>`);
@@ -73,7 +81,7 @@ layui.config({
 		}
 		contentList = arrayUtil.removeArrayPointKey(contentList, 'id', contentId);
 		contentData = null;
-		$("#editPageContent").attr("src", "../../tpl/dsFormPage/editPageContent.html");
+		$("#editPageContent").attr("src", editContentPageUrl);
 	});
 
 	function loadPageMation(json) {
@@ -201,7 +209,7 @@ layui.config({
 		var contentId = _this.attr("contentId");
 		$("#showForm div[contentId='" + contentId + "']").find('.btn-base').show();
 		contentData = getInPoingArr(contentList, 'id', contentId);
-		$("#editPageContent").attr("src", "../../tpl/dsFormPage/editPageContent.html");
+		$("#editPageContent").attr("src", editContentPageUrl);
 	}
 
 	sortDataIn = function () {

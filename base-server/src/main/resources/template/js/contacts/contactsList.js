@@ -1,4 +1,3 @@
-var rowId = "";
 
 var objectKey = "";
 var objectId = "";
@@ -22,7 +21,6 @@ layui.config({
 
 	var authPermission = teamObjectPermissionUtil.checkTeamBusinessAuthPermission(objectId, 'contactsAuthEnum');
 
-	authBtn('1596375844035');
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
@@ -80,7 +78,7 @@ layui.config({
 	// 新增
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/contacts/contactsAdd.html",
+			url: systemCommonUtil.getUrl('FP2023030400002&objectId=' + objectId + '&objectKey=' + objectKey, null),
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "contactsAdd",
 			area: ['90vw', '90vh'],
@@ -92,9 +90,8 @@ layui.config({
 	
 	// 编辑
 	function edit(data) {
-		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/contacts/contactsEdit.html",
+			url: systemCommonUtil.getUrl('FP2023030400003&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "contactsEdit",
 			area: ['90vw', '90vh'],
