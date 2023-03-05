@@ -11,6 +11,9 @@ var sortDataIn;
 // 业务对象的属性信息
 var attrList = [];
 
+// 这两个参数为开启团队权限的对象拥有，这里没有实际用处，用于加载组件时临时有用。
+var objectId = '', objectKey = '';
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -226,13 +229,13 @@ layui.config({
     }
 
 	var tip_index;
-	$("body").on("mouseenter", ".attr-mation", function (e) {
+	$("body").on("mouseenter", ".attr-mation, .component", function (e) {
 		var title = $(this).attr('title');
 		if (isNull(title)) {
 			return false;
 		}
 		tip_index = layer.tips(title, this, {time: 0, tips: 3});
-	}).on('mouseleave', ".attr-mation", function() {
+	}).on('mouseleave', ".attr-mation, .component", function() {
 		layer.close(tip_index);
 	});
     

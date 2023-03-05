@@ -297,11 +297,11 @@ var systemCommonUtil = {
     tagEditorGetAllData: function (id, list) {
         var tags = $('#' + id).tagEditor('getTags')[0].tags;
         if (list.length == 0 || isNull(tags)) {
-            return "";
+            return [];
         } else {
-            var ids = "";
+            var ids = [];
             $.each(list, function (i, item) {
-                ids += item.id + ',';
+                ids.push(item.id);
             });
             return ids;
         }

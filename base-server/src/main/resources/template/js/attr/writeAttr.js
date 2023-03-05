@@ -58,10 +58,10 @@ layui.config({
 					}
 				});
 				var value;
-				if (dataType == 4) {
+				if (json.bean.dataType == 4) {
 					value = json.bean.businessApi;
 				} else {
-					value = dataType == 1 ? json.bean.defaultData : json.bean.objectId;
+					value = json.bean.dataType == 1 ? json.bean.defaultData : json.bean.objectId;
 				}
 				loadLinkData(json.bean.componentId, json.bean.dataType, value);
 			},
@@ -180,17 +180,17 @@ layui.config({
 			initDictData();
 			$("#objectId").val(value);
 		} else if (dataType == 4) {
-			// 自定义
+			// 自定义接口
 			$("#dataTypeObjectBox").html(commonHtml['businessApi']);
 			$("#serviceStr").html(getDataUseHandlebars(selOption, {rows: serviceMap}));
 			loadParamsTable('apiParams');
 			if (!isNull(value)) {
 				$("#serviceStr").val(value.serviceStr);
 				$("#api").val(value.api);
-				skyeyeClassEnumUtil.showEnumDataListByClassName("httpMethodEnum", 'select', "method", businessApi.method, form);
+				skyeyeClassEnumUtil.showEnumDataListByClassName("httpMethodEnum", 'select', "method", value.method, form);
 
 				initTableChooseUtil.deleteAllRow('apiParams');
-				$.each(operateOpenPage.params, function(key, value) {
+				$.each(value.params, function(key, value) {
 					var params = {
 						"key": key,
 						"value": value
@@ -212,7 +212,7 @@ layui.config({
 			id: id,
 			cols: [
 				{id: 'key', title: '入参Key', formType: 'input', width: '150', verify: 'required'},
-				{id: 'value', title: '值', formType: 'input', width: '150', verify: 'required'}
+				{id: 'value', title: '值(目前仅支持objectId和objectKey的传值)', formType: 'input', width: '150', verify: 'required'}
 			],
 			deleteRowCallback: function (trcusid) {
 			},

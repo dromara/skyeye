@@ -219,6 +219,10 @@ var dsFormUtil = {
             content.attrDefinition = {};
         }
 
+        if (!isNull(content.require)) {
+            content.require = content.require.join('|');
+        }
+
         var jsonStr = {bean: content};
         var html = getDataUseHandlebars('{{#bean}}' + component.htmlContent + '{{/bean}}', jsonStr);
         var html_js = getDataUseHandlebars('{{#bean}}' + component.jsContent + '{{/bean}}', jsonStr);
@@ -324,6 +328,7 @@ var dsFormUtil = {
         return content.title;
     },
 
+    // 获取属性关联的数据值来源信息
     getContentLinkedData: function (content) {
         var json = {};
         if (isNull(content.attrDefinition) || isNull(content.attrDefinition.attrDefinitionCustom)) {
@@ -331,7 +336,7 @@ var dsFormUtil = {
         }
         var customAttr = content.attrDefinition.attrDefinitionCustom;
         var dataType = customAttr.dataType;
-        if (isNull(customAttr.objectId) && isNull(customAttr.defaultData)) {
+        if (isNull(customAttr.objectId) && isNull(customAttr.defaultData) && isNull(customAttr.businessApi) && $.isEmptyObject(customAttr.businessApi)) {
             return content;
         }
         if (dataType == 1) {
@@ -349,6 +354,20 @@ var dsFormUtil = {
             sysDictDataUtil.queryDictDataListByDictTypeCode(customAttr.objectId, function (data) {
                 json = data.rows;
             });
+        } else if (dataType == 4) {
+            // 自定义接口
+            var businessApi = customAttr.businessApi;
+            var params = {};
+            $.each(businessApi.params, function (key, value) {
+                var realValue = "";
+                eval('realValue = ' + value);
+                params[key] = realValue;
+            });
+            var url = "";
+            eval('url = ' + businessApi.serviceStr + ' + "' + businessApi.api + '"');
+            AjaxPostUtil.request({url: url, params: params, type: 'json', method: businessApi.method, callback: function (data) {
+                json = data.rows;
+            }, async: false});
         }
         if (!isNull(content.dsFormComponent.htmlDataFrom)) {
             content.context = getDataUseHandlebars(content.dsFormComponent.htmlDataFrom, json);
@@ -356,6 +375,7 @@ var dsFormUtil = {
         return content;
     },
 
+    // 获取显示值
     getContentLinkedDataValue: function (content, value) {
         if (isNull(value)) {
             return null;
@@ -371,7 +391,7 @@ var dsFormUtil = {
             }
         }
 
-        if (isNull(customAttr.objectId) && isNull(customAttr.defaultData)) {
+        if (isNull(customAttr.objectId) && isNull(customAttr.defaultData) && isNull(customAttr.businessApi) && $.isEmptyObject(customAttr.businessApi)) {
             return value;
         }
 
@@ -389,6 +409,22 @@ var dsFormUtil = {
         } else if (dataType == 3) {
             // 数据字典
             return sysDictDataUtil.getDictDataNameByCodeAndKey(customAttr.objectId, value);
+        } else if (dataType == 4) {
+            // 自定义接口
+            var businessApi = customAttr.businessApi;
+            var params = {};
+            $.each(businessApi.params, function (key, value) {
+                var realValue = "";
+                eval('realValue = ' + value);
+                params[key] = realValue;
+            });
+            var url = "";
+            var obj = [];
+            eval('url = ' + businessApi.serviceStr + ' + "' + businessApi.api + '"');
+            AjaxPostUtil.request({url: url, params: params, type: 'json', method: businessApi.method, callback: function (json) {
+                obj = json.beans;
+            }, async: false});
+            return getInPoingArr(obj, "id", value, "name");
         }
         return value;
     },
@@ -639,7 +675,7 @@ var dsFormTableUtil = {
             }
             var customAttr = item.attrDefinition.attrDefinitionCustom;
             var dataType = customAttr.dataType;
-            if (isNull(customAttr.objectId) && isNull(customAttr.defaultData)) {
+            if (isNull(customAttr.objectId) && isNull(customAttr.defaultData) && isNull(customAttr.businessApi) && $.isEmptyObject(customAttr.businessApi)) {
                 return null;
             }
             if (dataType == 1) {
@@ -658,6 +694,25 @@ var dsFormTableUtil = {
             } else if (dataType == 3) {
                 // 数据字典
                 return `function (d) {return sysDictDataUtil.getDictDataNameByCodeAndKey('${customAttr.objectId}', d.${item.attrKey});}`;
+            } else if (dataType == 4) {
+                // 自定义接口
+                var businessApi = customAttr.businessApi;
+                var params = {};
+                $.each(businessApi.params, function (key, value) {
+                    var realValue = "";
+                    eval('realValue = ' + value);
+                    params[key] = realValue;
+                });
+                var url = "";
+                var obj = [];
+                eval('url = ' + businessApi.serviceStr + ' + "' + businessApi.api + '"');
+                AjaxPostUtil.request({url: url, params: params, type: 'json', method: businessApi.method, callback: function (json) {
+                    obj = json.beans;
+                }, async: false});
+                return `function (d) {
+                    var json = ${obj};
+                    return getInPoingArr(json, "id", d.${item.attrKey}, "name");
+                }`;
             }
         }
         return null;

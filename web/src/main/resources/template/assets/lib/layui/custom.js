@@ -829,6 +829,9 @@ function getUserStaffHtmlMationByStaffId(staffId){
  */
 var stringManipulation = {
 	textAreaShow: function(str){
+		if (isNull(str)) {
+			return '';
+		}
 		// IE7-8、IE9、FF、chrome。解决textarea中输入的文字，输出到div中文字不换自动换行的问题
 		return str.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>');
 	}

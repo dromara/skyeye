@@ -99,6 +99,41 @@ layui.config({
                                 
                             </div>
                         </div>`,
+        'dateTimeTypeBox': `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label">日期类型<i class="red">*</i></label>
+                        <div class="layui-input-block" id="dateTimeType">
+                        </div>
+                    </div>`,
+        'userSelBox': `<div class="layui-form-item layui-col-xs12">
+                            <label class="layui-form-label">是否包含自己<i class="red">*</i></label>
+                            <div class="layui-input-block">
+                                <select lay-filter="chooseOrNotMy" lay-search="" id="chooseOrNotMy" name="chooseOrNotMy" win-verify="required">
+                                    <option value="">请选择</option>
+                                    <option value="1">包含</option>
+                                    <option value="2">不包含</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-col-xs12">
+                            <label class="layui-form-label">绑定邮箱<i class="red">*</i></label>
+                            <div class="layui-input-block">
+                                <select lay-filter="chooseOrNotEmail" lay-search="" id="chooseOrNotEmail" name="chooseOrNotEmail" win-verify="required">
+                                    <option value="">请选择</option>
+                                    <option value="1">必须</option>
+                                    <option value="2">非必须</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-col-xs12">
+                            <label class="layui-form-label">选择类型<i class="red">*</i></label>
+                            <div class="layui-input-block">
+                                <select lay-filter="checkType" lay-search="" id="checkType" name="checkType" win-verify="required">
+                                    <option value="">请选择</option>
+                                    <option value="1">多选</option>
+                                    <option value="2">单选</option>
+                                </select>
+                            </div>
+                        </div>`,
     };
     // 详情类布局才展示的组件属性
     var detailsPageAttr = ['attrKeyBox', 'titleBox', 'widthBox'];
@@ -122,6 +157,10 @@ layui.config({
     $("#placeholder").val(data.placeholder);
     $("#defaultValue").val(data.defaultValue);
     $("#uploadNum").val(data.uploadNum);
+
+    $("#chooseOrNotMy").val(data.chooseOrNotMy);
+    $("#chooseOrNotEmail").val(data.chooseOrNotEmail);
+    $("#checkType").val(data.checkType);
 
     // 属性信息
     var attrs = [];
@@ -173,6 +212,9 @@ layui.config({
     // 是否可以编辑
     skyeyeClassEnumUtil.showEnumDataListByClassName("whetherEnum", 'radio', "isEdit", data.isEdit, form);
 
+    // 日期类型
+    skyeyeClassEnumUtil.showEnumDataListByClassName("dateTimeType", 'select', "dateTimeType", data.dateTimeType, form);
+
     matchingLanguage();
     form.render();
     form.on('submit(formAddBean)', function (data) {
@@ -203,6 +245,11 @@ layui.config({
         newParams.attrKey = $("#attrKey").val();
         newParams.teamObjectType = $("#teamObjectType").val();
         newParams.isEdit = dataShowType.getData("isEdit");
+        newParams.dateTimeType = dataShowType.getData("dateTimeType");
+
+        newParams.chooseOrNotMy = $("#chooseOrNotMy").val();
+        newParams.chooseOrNotEmail = $("#chooseOrNotEmail").val();
+        newParams.checkType = $("#checkType").val();
 
         if (!isNull($("#attrKey").val())) {
             newParams.attrDefinition = getInPoingArr(parent.attrList, 'attrKey', $("#attrKey").val());

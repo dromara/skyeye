@@ -4,12 +4,13 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui'].concat(dsFormUtil.mastHaveImport), function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'textool'].concat(dsFormUtil.mastHaveImport), function (exports) {
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
 		element = layui.element,
 		colorpicker = layui.colorpicker,
+		textool = layui.textool;
 		form = layui.form;
 
 	showGrid({
@@ -19,7 +20,7 @@ layui.config({
 		pagination: false,
 		method: 'GET',
 		template: $("#beanTemplate").html(),
-		ajaxSendLoadBefore: function(hdb) {
+		ajaxSendLoadBefore: function(hdb, json) {
 			hdb.registerHelper("compare2", function (v1, options) {
 				if (v1 == '1') {
 					return 'checked';
@@ -38,6 +39,7 @@ layui.config({
 					return 'false';
 				}
 			});
+			json.bean.remark = stringManipulation.textAreaShow(json.bean.remark);
 		},
 		ajaxSendAfter: function(json) {
 			// 加载图标信息
@@ -53,6 +55,8 @@ layui.config({
 			skyeyeClassEnumUtil.showEnumDataListByClassName("componentApplyRange", 'radio', "applyRange", json.bean.applyRange, form);
 			// 组件获取的值的合入接口入参的方式
 			skyeyeClassEnumUtil.showEnumDataListByClassName("componentValueMergType", 'radio', "valueMergType", json.bean.valueMergType, form);
+
+			textool.init({eleId: 'remark', maxlength: 200});
 
 			// 根据类型获取部分功能的使用说明
 			systemCommonUtil.queryExplainMationByType(2, function (json) {
@@ -101,6 +105,7 @@ layui.config({
 							applyRange: $("#applyRange input:radio:checked").val(),
 							applyObject: isNull($("#applyObject").attr("chooseId")) ? JSON.stringify([]) : $("#applyObject").attr("chooseId"),
 							valueMergType: dataShowType.getData('valueMergType'),
+							remark: $("#remark").val(),
 							id: parent.rowId
 						};
 						if ($("#linkedData").val() == 'true') {

@@ -5,6 +5,7 @@
     "verificationParams": {"name": "字段校验枚举", "className": "skyeye-pro#com.skyeye.common.enumeration.VerificationParamsEnum"},
     "isUsed": {"name": "是否使用的枚举", "className": "skyeye-pro#com.skyeye.common.enumeration.IsUsedEnum"},
     "whetherEnum": {"name": "是否的枚举", "className": "skyeye-pro#com.skyeye.common.enumeration.WhetherEnum"},
+    "dateTimeType": {"name": "日期类型", "className": "skyeye-pro#com.skyeye.dsform.classenum.DateTimeType"},
 
     "bossInterviewArrangementState": {"name": "面试安排状态枚举类", "className": "skyeye-flowable#com.skyeye.service.enumclass.BossInterviewArrangementState"},
     "bossInterviewArrangementState1": {

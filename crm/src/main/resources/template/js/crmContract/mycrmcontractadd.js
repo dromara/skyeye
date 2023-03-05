@@ -44,7 +44,10 @@ layui.config({
 		placeholder: '请选择关联人员',
 		editorTag: false,
 		beforeTagDelete: function(field, editor, tags, val) {
-			userList = [].concat(arrayUtil.removeArrayPointName(userList, val));
+			var listVal = $("#").attr('list');
+			var list = isNull(listVal) ? [] : JSON.parse(listVal);
+			list = [].concat(arrayUtil.removeArrayPointName(list, val));
+			$("#").attr('list', JSON.stringify(list));
 		}
 	});
 	// 关联人员选择选择

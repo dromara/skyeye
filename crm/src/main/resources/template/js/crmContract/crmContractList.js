@@ -134,8 +134,8 @@ layui.config({
 
 	// 新增
 	$("body").on("click", "#addBean", function() {
-    	_openNewWindows({
-			url: systemCommonUtil.getUrl('FP2023030400002&objectId=' + objectId + '&objectKey=' + objectKey, null),
+    	parent._openNewWindows({
+			url: systemCommonUtil.getUrl('FP2023030500001&objectId=' + objectId + '&objectKey=' + objectKey, null),
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "contactsAdd",
 			area: ['90vw', '90vh'],
@@ -147,7 +147,7 @@ layui.config({
 	
 	// 编辑
 	function edit(data) {
-		_openNewWindows({
+		parent._openNewWindows({
 			url: systemCommonUtil.getUrl('FP2023030400003&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "contactsEdit",
