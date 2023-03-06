@@ -71,18 +71,13 @@ layui.config({
         }
     });
 
-	var tmpList = ['com.skyeye.eve.articles.service.impl.ArticlesUseServiceImpl', 'com.skyeye.eve.articles.service.impl.ArticlesPurchaseServiceImpl'];
 	// 提交任务
 	function subTasks(data, obj){
 		taskId = data.id;
 		taskType = data.taskType;
 		processInstanceId = data.processInstanceId;
-		var url = "../../tpl/approvalActiviti/approvalProcess.html";
-		if (tmpList.indexOf(data.processMation.objectKey) >= 0) {
-			url = "../../tpl/approvalActiviti/approvalProcessTask.html";
-		}
 		_openNewWindows({
-			url: url,
+			url: "../../tpl/approvalActiviti/approvalProcessTask.html",
 			title: "流程审批",
 			pageId: "approvalProcess",
 			area: ['90vw', '90vh'],

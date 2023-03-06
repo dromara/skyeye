@@ -37,16 +37,10 @@ var activitiUtil = {
      * @param data
      */
     activitiDetails: function (data) {
-        var tmpList = ['com.skyeye.eve.articles.service.impl.ArticlesUseServiceImpl', 'com.skyeye.eve.articles.service.impl.ArticlesPurchaseServiceImpl'];
         taskType = data.taskType;
         processInstanceId = data.processInstanceId;
-        var url = "../../tpl/activitiCommon/processDetails.html";
-        if (tmpList.indexOf(data.serviceClassName) >= 0
-            || (data.processMation != null && tmpList.indexOf(data.processMation.objectKey) >= 0)) {
-            url = "../../tpl/activitiCommon/processInstanceDetails.html";
-        }
         _openNewWindows({
-            url: url,
+            url: "../../tpl/activitiCommon/processInstanceDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "processDetails",
             area: ['90vw', '90vh'],
