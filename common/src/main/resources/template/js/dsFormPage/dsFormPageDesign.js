@@ -1,5 +1,6 @@
 
 var pageId = GetUrlParam("pageId");
+var className = GetUrlParam("className");
 var layedit, form;
 
 // 选中的表单布局组件信息
@@ -30,7 +31,6 @@ layui.config({
 	// 表单控件集合
 	var componentList = [];
 
-	var className = GetUrlParam("className");
 	var pageType = GetUrlParam("pageType");
 	var editContentPageUrl = '../../tpl/dsFormPage/editPageContent.html?pageType=' + pageType;
 	if (isNull(className)) {

@@ -28,13 +28,19 @@ layui.config({
 							<div class="layui-input-block" id="isDataAuth">
 								
 							</div>
-						</div>`,
+						</div>`, // 基础表格布局
 		'isDataAuth': `<div class="layui-form-item layui-col-xs6" id="dataAuthPointNumBox">
 							<label class="layui-form-label">数据权限点编号<i class="red">*</i></label>
 							<div class="layui-input-block">
 								<input type="text" id="dataAuthPointNum" name="dataAuthPointNum" win-verify="required" placeholder="请输入数据权限点编号" class="layui-input"/>
 							</div>
-						</div>`
+						</div>`,
+		'processAttr': `<div class="layui-form-item layui-col-xs12">
+                            <label class="layui-form-label">流程<i class="red">*</i></label>
+                            <div class="layui-input-block">
+                                <select lay-filter="actFlowId" lay-search="" id="actFlowId" name="actFlowId" win-verify="required"></select>
+                            </div>
+                        </div>`, // 流程属性布局
 	};
 
 	$("#serviceStr").html(getDataUseHandlebars(selOption, {rows: serviceMap}));
@@ -86,6 +92,17 @@ layui.config({
 			}
 
 			$("#searchTips").val(data.searchTips);
+		} else if (type == 'processAttr') {
+			$('#otherDom').html(pageHtml[type]);
+			AjaxPostUtil.request({url: flowableBasePath + 'queryActFlowListByClassName', params: {className: parent.objectId}, type: 'json', method: "POST", callback: function (json) {
+				$("#actFlowId").html(getDataUseHandlebars(`{{#each rows}}<option value="{{id}}">{{flowName}}</option>{{/each}}`, json));
+				if (!isNull(data.actFlowId)) {
+					$("#actFlowId").val(data.actFlowId);
+					// 禁止更换流程
+					$("#actFlowId").attr("disabled", true);
+				}
+				form.render('select');
+			}, async: false});
 		} else {
 			$('#otherDom').html('');
 		}
@@ -120,6 +137,10 @@ layui.config({
 				if (params.isDataAuth == 1) {
 					params.dataAuthPointNum = $('#dataAuthPointNum').val();
 				}
+			}
+
+			if (params.type == 'processAttr') {
+				params['actFlowId'] = $("#actFlowId").val();
 			}
 
 			var businessApi = {

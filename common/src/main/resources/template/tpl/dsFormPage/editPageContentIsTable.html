@@ -33,32 +33,6 @@
 
 	<script type="text/x-handlebars-template" id="beanTemplate">
 		{{#bean}}
-		<div class="layui-form-item layui-col-xs12">
-			<span class="hr-title">基本信息</span><hr>
-		</div>
-		<div class="layui-form-item layui-col-xs6">
-			<label class="layui-form-label">属性<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<select lay-filter="attrKey" lay-search="" id="attrKey" win-verify="required">
-
-				</select>
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs6">
-			<label class="layui-form-label">宽度比例<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<select lay-filter="proportion" lay-search="" id="proportion" win-verify="required">
-
-				</select>
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs6">
-			<label class="layui-form-label">序号<i class="red">*</i></label>
-			<div class="layui-input-block">
-				<input type="text" id="orderBy" name="orderBy" win-verify="required|number" placeholder="请输入序号" class="layui-input" value="{{orderBy}}"/>
-				<div class="layui-form-mid layui-word-aux">序号越大越往后。</div>
-			</div>
-		</div>
 		<div class="layui-form-item layui-col-xs12" id="tableBox">
 			<label class="layui-form-label">表格属性<i class="red">*</i></label>
 			<div class="layui-input-block">
@@ -88,7 +62,7 @@
 	<script src="../../assets/lib/layui/layui.js"></script>
    	<script src="../../assets/lib/layui/custom.js"></script>
    	<script type="text/javascript">
-		layui.config({base: '../../js/processAttr/'}).use('processAttrEdit');
+		layui.config({base: '../../js/dsFormPage/'}).use('editPageContentIsTable');
 	</script>
 </body>
 </html>

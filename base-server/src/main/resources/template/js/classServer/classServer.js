@@ -52,10 +52,6 @@ layui.config({
                 title: '流程信息',
                 pageUrl: '../../tpl/classServer/classServerProcessList.html'
             });
-            defaultList.push({
-                title: '流程属性信息',
-                pageUrl: '../../tpl/processAttr/processAttrList.html'
-            });
         }
 
         tabPageUtil.init({

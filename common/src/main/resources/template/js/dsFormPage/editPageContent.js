@@ -134,6 +134,12 @@ layui.config({
                                 </select>
                             </div>
                         </div>`,
+        'tableAttrBox': `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label">表格属性<i class="red">*</i></label>
+                        <div class="layui-input-block" id="attrTransformTableList" data-json="[]">
+                            <button id="attrTransformTableListConfig" type="button" class="winui-toolbtn search-table-btn-right">属性配置</button>
+                        </div>
+                    </div>`,
     };
     // 详情类布局才展示的组件属性
     var detailsPageAttr = ['attrKeyBox', 'titleBox', 'widthBox'];
@@ -187,6 +193,7 @@ layui.config({
                 $("#attrKey").val('');
             }
         }
+        $("#attrTransformTableList").attr('data-json', JSON.stringify([]));
     });
 
     // 宽度
@@ -214,6 +221,17 @@ layui.config({
 
     // 日期类型
     skyeyeClassEnumUtil.showEnumDataListByClassName("dateTimeType", 'select', "dateTimeType", data.dateTimeType, form);
+
+    $("body").on("click", "#attrTransformTableListConfig", function() {
+        parent._openNewWindows({
+            url: "../../tpl/dsFormPage/editPageContentIsTable.html?pageType=" + pageType,
+            title: '表格属性配置',
+            pageId: "editPageContentIsTable",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+
+            }});
+    });
 
     matchingLanguage();
     form.render();
