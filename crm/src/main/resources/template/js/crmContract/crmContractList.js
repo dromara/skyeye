@@ -43,13 +43,13 @@ layui.config({
 				return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 			}},
 			{ field: 'state', title: '状态', width: 90, templet: function (d) {
-				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("crmContractStateEnum", 'id', state, 'name');
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("crmContractStateEnum", 'id', d.state, 'name');
 			}},
 	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 	        { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, templet: function (d) {
+	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, templet: function (d) {
 				var str = '';
 				if (d.editRow == 1) {
 					if (authPermission['submitToApproval']) {
@@ -148,7 +148,7 @@ layui.config({
 	// 编辑
 	function edit(data) {
 		parent._openNewWindows({
-			url: systemCommonUtil.getUrl('FP2023030400003&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
+			url: systemCommonUtil.getUrl('FP2023030500002&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "contactsEdit",
 			area: ['90vw', '90vh'],
@@ -160,9 +160,8 @@ layui.config({
 
 	// 详情
 	function details(data) {
-		rowId = data.id;
-		_openNewWindows({
-			url: "../../tpl/crmcontractmanage/mycrmcontractdetails.html",
+		parent._openNewWindows({
+			url: systemCommonUtil.getUrl('FP2023030600001&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "crmcontractdetails",
 			area: ['90vw', '90vh'],

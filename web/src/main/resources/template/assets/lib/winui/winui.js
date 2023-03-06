@@ -126,9 +126,9 @@
                     '请输入正确的身份证号',
                     '身份证校验'
                 ], 
-            	double: [//验证小数点后两位,一般用于金钱验证
-                     /(^$)|^[0-9]+(.[0-9]{1,2})?$/,
-                     '请输入正确正数,小数点后最多两位',
+            	double: [
+                     /(^$)|^[0-9]+(.[0-9]{1,6})?$/,
+                     '请输入正确正数,小数点后最多六位',
                     '小数点后两位校验'
                 ], 
             	postcode: [
@@ -137,8 +137,8 @@
                     '邮编校验'
                 ],
                 money: [
-                	/(^$)|^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/,
-                	'请输入正确的金额, 可保留小数点后两位',
+                	/(^$)|^0{1}([.]\d{1,6})?$|^[1-9]\d*([.]{1}[0-9]{1,6})?$/,
+                	'请输入正确的金额, 可保留小数点后六位',
                     '金钱校验'
                 ],
                 percentage: [
@@ -452,7 +452,13 @@
         		$("body").find(".mask-req-str").remove();
         		$("body").append(maskReqStr);
                 layui.each(verifyElem, function (index, item) {
-                    var othis = $(this), ver = othis.attr('win-verify').split('|');
+                    var othis = $(this);
+                    var ver;
+                    if (othis.attr('win-verify').indexOf(",") >= 0) {
+                        ver = othis.attr('win-verify').split(',');
+                    } else {
+                        ver = othis.attr('win-verify').split('|');
+                    }
                     var tips = '';
                     var value = othis.val();
                     // 如果是单选，则获取单选的值

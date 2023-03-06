@@ -43,7 +43,7 @@ layui.config({
                             <div class="layui-form-item layui-col-xs12">
                                 <div class="layui-input-block">
                                     <button class="winui-btn" type="button" id="cancle"><language showName="com.skyeye.cancel"></language></button>
-                                    <button class="winui-btn" lay-submit lay-filter="formWriteBean"><language showName="com.skyeye.save"></language></button>
+                                    <button class="winui-btn" lay-submit lay-filter="formWriteBean" id="formWriteBean"><language showName="com.skyeye.save"></language></button>
                                 </div>
                             </div>
                         </form>
@@ -79,6 +79,10 @@ layui.config({
             html = pageHtml[pageMation.type];
         }
         $("body").append(html);
+        // 加载工作流的提交按钮信息
+        if (pageMation.type == 'create' || pageMation.type == 'edit') {
+            initSaveForDraftBtn();
+        }
 
         // 加载页面
         initPage();
@@ -101,6 +105,15 @@ layui.config({
         } else if (pageMation.type == 'simpleTable') {
             // 基本表格
             dsFormTableUtil.initDynamicTable('messageTable', pageMation);
+        }
+    }
+
+    function initSaveForDraftBtn() {
+        var flowable = pageMation.serviceBeanCustom.serviceBean.flowable;
+        if (flowable) {
+            // 开启工作流
+            $('#formWriteBean').before(`<button class="winui-btn" lay-submit lay-filter="formSaveDraft" id="formSaveDraft">保存为草稿</button>`);
+            $('#formWriteBean').html('提交');
         }
     }
 

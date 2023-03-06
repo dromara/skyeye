@@ -46,6 +46,13 @@ var dsFormUtil = {
                     <div class="layui-input-block ver-center" id="showVoucher{{orderBy}}"></div>
                 </div>
              {{/bean}}`, // 凭证展示
+        '7': ``, // 脚本展示
+        '8': `{{#bean}}
+                <div class="layui-form-item {{width}}" controlType="{{dsFormComponent.numCode}}" contentId="{{id}}">
+                    <label class="layui-form-label">{{title}}：</label>
+                    <div class="layui-input-block ver-center">{{#each value}}<span class="layui-badge layui-bg-blue skyeye-badge">{{name}}</span>{{/each}}</div>
+                </div>
+             {{/bean}}`, // Id转Mation取值转换后的展示
     },
 
     pageMation: {},
@@ -83,10 +90,7 @@ var dsFormUtil = {
             if (!isNull(attrDefinition) && !$.isEmptyObject(attrDefinition)) {
                 // 获取组件中设置值的脚本
                 var dsFormComponent = content.dsFormComponent;
-                var value = data[attrDefinition.attrKey];
-                if (dsFormComponent.valueMergType == 'extend') {
-                    value = data;
-                }
+                var value = dsFormUtil.getValueDataFromBusinessForEdit(content, data);
                 content["value"] = value;
                 content["pageType"] = 'edit';
                 var jsFitValue = dsFormComponent.jsFitValue;
@@ -103,6 +107,30 @@ var dsFormUtil = {
         layui.form.render();
     },
 
+    // 获取业务数据中实际的值
+    getValueDataFromBusinessForEdit: function (content, data) {
+        var attrDefinition = content.attrDefinition;
+        var dsFormComponent = content.dsFormComponent;
+        var value = data[attrDefinition.attrKey];
+        if (dsFormComponent.valueMergType == 'extend') {
+            value = data;
+        }
+        var showType = dsFormUtil.getShowType(content.attrDefinition);
+        if (showType == 8 && dsFormComponent.numCode == 'userStaffChoose') {
+            var key = attrDefinition.attrKey;
+            // 例如：将key由relationUserId变为relationUserMation
+            key = key.replace("Id", "") + "Mation";
+            value = data[key];
+            if (!isNull(value) && !$.isEmptyObject(value)) {
+                // 判断值是否为对象，如果是对象，则组装成数组
+                if (!$.isArray(value)) {
+                    value = [].concat(value);
+                }
+            }
+        }
+        return value;
+    },
+
     /**
      * 加载动态表单(详情操作)
      *
@@ -116,14 +144,15 @@ var dsFormUtil = {
             var attrDefinition = content.attrDefinition;
             if (!isNull(attrDefinition) && !$.isEmptyObject(attrDefinition)) {
                 // 获取组件中设置值的脚本
+                var attrDefinition = content.attrDefinition;
                 var dsFormComponent = content.dsFormComponent;
                 var value = data[attrDefinition.attrKey];
                 if (dsFormComponent.valueMergType == 'extend') {
                     value = data;
                 }
-                dsFormUtil.loadComponentValueDetails(showBoxId, content, value);
+                dsFormUtil.loadComponentValueDetails(showBoxId, content, value, data);
             } else {
-                dsFormUtil.loadComponentValueDetails(showBoxId, content, null);
+                dsFormUtil.loadComponentValueDetails(showBoxId, content, null, data);
             }
         });
         layui.form.render();
@@ -156,46 +185,74 @@ var dsFormUtil = {
             parent.layer.close(index);
         });
 
-        form.on('submit(formWriteBean)', function (data) {
+        // 保存为草稿
+        form.on('submit(formSaveDraft)', function (data) {
             if (winui.verifyForm(data.elem) && !isNull(dsFormUtil.pageMation)) {
-                var params = {};
-                $.each(dsFormUtil.pageMation.dsFormPageContents, function (i, content) {
-                    if (!isNull(content.attrDefinition) && !$.isEmptyObject(content.attrDefinition)) {
-                        // 获取组件中获取值的脚本
-                        var dsFormComponent = content.dsFormComponent;
-                        var getValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsValue + '{{/this}}', content);
-                        var value = "";
-                        eval('value = ' + getValueScript);
-                        if (dsFormComponent.valueMergType == 'extend') {
-                            params = $.extend(true, params, value);
-                        } else {
-                            params[content.attrDefinition.attrKey] = value;
-                        }
-                    }
-                });
-                if (dsFormUtil.pageMation.type == 'edit') {
-                    // 编辑布局
-                    params["id"] = GetUrlParam("id");
-                }
-                var teamAuth = dsFormUtil.pageMation.serviceBeanCustom.serviceBean.teamAuth;
-                if (teamAuth) {
-                    // 开启团队权限
-                    params['objectId'] = objectId;
-                    params['objectKey'] = objectKey;
-                }
-                // 发送请求
-                dsFormUtil.sendRequest({
-                    businessApi: dsFormUtil.pageMation.businessApi,
-                    params: params,
-                    loadTable: false,
-                    callback: function () {
-                        var index = parent.layer.getFrameIndex(window.name);
-                        parent.layer.close(index);
-                        parent.refreshCode = '0';
-                    }
-                });
+                dsFormUtil.saveData("1", null);
             }
             return false;
+        });
+
+        // 保存/提交
+        form.on('submit(formWriteBean)', function (data) {
+            if (winui.verifyForm(data.elem) && !isNull(dsFormUtil.pageMation)) {
+                var flowable = dsFormUtil.pageMation.serviceBeanCustom.serviceBean.flowable;
+                if (flowable) {
+                    activitiUtil.startProcess(dsFormUtil.pageMation.serviceBeanCustom.serviceBean.className, null, function (approvalId) {
+                        dsFormUtil.saveData("2", approvalId);
+                    });
+                } else {
+                    dsFormUtil.saveData(null, null);
+                }
+            }
+            return false;
+        });
+    },
+
+    // 保存数据
+    saveData: function (formSubType, approvalId) {
+        var params = {};
+        $.each(dsFormUtil.pageMation.dsFormPageContents, function (i, content) {
+            if (!isNull(content.attrDefinition) && !$.isEmptyObject(content.attrDefinition)) {
+                // 获取组件中获取值的脚本
+                var dsFormComponent = content.dsFormComponent;
+                var getValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsValue + '{{/this}}', content);
+                var value = "";
+                eval('value = ' + getValueScript);
+                if (dsFormComponent.valueMergType == 'extend') {
+                    params = $.extend(true, params, value);
+                } else {
+                    params[content.attrDefinition.attrKey] = value;
+                }
+            }
+        });
+        if (dsFormUtil.pageMation.type == 'edit') {
+            // 编辑布局
+            params["id"] = GetUrlParam("id");
+        }
+        var teamAuth = dsFormUtil.pageMation.serviceBeanCustom.serviceBean.teamAuth;
+        if (teamAuth) {
+            // 开启团队权限
+            params['objectId'] = objectId;
+            params['objectKey'] = objectKey;
+        }
+
+        var flowable = dsFormUtil.pageMation.serviceBeanCustom.serviceBean.flowable;
+        if (flowable) {
+            params["formSubType"] = formSubType;
+            params["approvalId"] = approvalId;
+        }
+
+        // 发送请求
+        dsFormUtil.sendRequest({
+            businessApi: dsFormUtil.pageMation.businessApi,
+            params: params,
+            loadTable: false,
+            callback: function () {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                parent.refreshCode = '0';
+            }
         });
     },
 
@@ -217,10 +274,6 @@ var dsFormUtil = {
         content.title = dsFormUtil.getLable(content);
         if (isNull(content.attrDefinition)) {
             content.attrDefinition = {};
-        }
-
-        if (!isNull(content.require)) {
-            content.require = content.require.join('|');
         }
 
         var jsonStr = {bean: content};
@@ -258,7 +311,7 @@ var dsFormUtil = {
      * @param boxId
      * @param content
      */
-    loadComponentValueDetails: function (boxId, content, value) {
+    loadComponentValueDetails: function (boxId, content, value, data) {
         if (!dsFormUtil.checkLoadHandlebar) {
             dsFormUtil.loadHandlebar();
         }
@@ -276,7 +329,7 @@ var dsFormUtil = {
             var jsCon = `<script id="script${content.id}">${html_js}</script>`;
             $("#" + boxId).append(html + jsCon);
         } else {
-            content.value = dsFormUtil.getContentLinkedDataValue(content, value);
+            content.value = dsFormUtil.getContentLinkedDataValue(content, value, data);
             if (showType == 4) { // 图片展示
                 var photoValue = [];
                 if (!isNull(value)) {
@@ -376,56 +429,71 @@ var dsFormUtil = {
     },
 
     // 获取显示值
-    getContentLinkedDataValue: function (content, value) {
+    getContentLinkedDataValue: function (content, value, data) {
         if (isNull(value)) {
             return null;
         }
-        if (isNull(content.attrDefinition) || isNull(content.attrDefinition.attrDefinitionCustom)) {
+        var attrDefinition = content.attrDefinition;
+        if (isNull(attrDefinition) || isNull(attrDefinition.attrDefinitionCustom)) {
             return null;
         }
-        var customAttr = content.attrDefinition.attrDefinitionCustom;
+        var customAttr = attrDefinition.attrDefinitionCustom;
+
+        if (!isNull(customAttr.objectId) || !isNull(customAttr.defaultData) || !$.isEmptyObject(customAttr.businessApi)) {
+            var dataType = customAttr.dataType;
+            if (dataType == 1) {
+                // 自定义
+                var obj = isNull(customAttr.defaultData) ? [] : customAttr.defaultData;
+                if (typeof obj == 'string') {
+                    obj = JSON.parse(obj);
+                }
+                return getInPoingArr(json, "id", value, "name");
+            } else if (dataType == 2) {
+                // 枚举
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey(customAttr.objectId, 'id', value, 'name');
+            } else if (dataType == 3) {
+                // 数据字典
+                return sysDictDataUtil.getDictDataNameByCodeAndKey(customAttr.objectId, value);
+            } else if (dataType == 4) {
+                // 自定义接口
+                var businessApi = customAttr.businessApi;
+                var params = {};
+                $.each(businessApi.params, function (key, value) {
+                    var realValue = "";
+                    eval('realValue = ' + value);
+                    params[key] = realValue;
+                });
+                var url = "";
+                var obj = [];
+                eval('url = ' + businessApi.serviceStr + ' + "' + businessApi.api + '"');
+                AjaxPostUtil.request({url: url, params: params, type: 'json', method: businessApi.method, callback: function (json) {
+                    obj = json.rows;
+                }, async: false});
+                return getInPoingArr(obj, "id", value, "name");
+            }
+        }
+
         if (!isNull(customAttr.dsFormComponent)) {
             // 团队模板类型的组件，value值单独转换
             if (customAttr.dsFormComponent.numCode == 'teamTemplate') {
                 return teamObjectPermissionUtil.getTeamTemplate(value).name;
             }
-        }
 
-        if (isNull(customAttr.objectId) && isNull(customAttr.defaultData) && isNull(customAttr.businessApi) && $.isEmptyObject(customAttr.businessApi)) {
-            return value;
-        }
-
-        var dataType = customAttr.dataType;
-        if (dataType == 1) {
-            // 自定义
-            var obj = isNull(customAttr.defaultData) ? [] : customAttr.defaultData;
-            if (typeof obj == 'string') {
-                obj = JSON.parse(obj);
+            // 用户组件，value值特殊处理
+            if (customAttr.dsFormComponent.numCode == 'userStaffChoose') {
+                var key = attrDefinition.attrKey;
+                // 例如：将key由relationUserId变为relationUserMation
+                key = key.replace("Id", "") + "Mation";
+                value = data[key];
+                if (!isNull(value) && !$.isEmptyObject(value)) {
+                    // 判断值是否为对象，如果是对象，则组装成数组
+                    if (!$.isArray(value)) {
+                        value = [].concat(value);
+                    }
+                }
             }
-            return getInPoingArr(json, "id", value, "name");
-        } else if (dataType == 2) {
-            // 枚举
-            return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey(customAttr.objectId, 'id', value, 'name');
-        } else if (dataType == 3) {
-            // 数据字典
-            return sysDictDataUtil.getDictDataNameByCodeAndKey(customAttr.objectId, value);
-        } else if (dataType == 4) {
-            // 自定义接口
-            var businessApi = customAttr.businessApi;
-            var params = {};
-            $.each(businessApi.params, function (key, value) {
-                var realValue = "";
-                eval('realValue = ' + value);
-                params[key] = realValue;
-            });
-            var url = "";
-            var obj = [];
-            eval('url = ' + businessApi.serviceStr + ' + "' + businessApi.api + '"');
-            AjaxPostUtil.request({url: url, params: params, type: 'json', method: businessApi.method, callback: function (json) {
-                obj = json.beans;
-            }, async: false});
-            return getInPoingArr(obj, "id", value, "name");
         }
+
         return value;
     },
 
