@@ -89,17 +89,19 @@ layui.config({
     }
 
     function initPage() {
+        var businessId = GetUrlParam("id");
+        var serviceClassName = pageMation.className;
         if (pageMation.type == 'create') {
             // 创建布局
             dsFormUtil.initCreatePage('content', pageMation);
         } else if (pageMation.type == 'edit') {
             // 编辑布局
-            getBusinessData(function (data) {
+            dsFormUtil.getBusinessData(businessId, serviceClassName, function (data) {
                 dsFormUtil.initEditPage('content', pageMation, data);
             });
         }  else if (pageMation.type == 'details') {
             // 详情布局
-            getBusinessData(function (data) {
+            dsFormUtil.getBusinessData(businessId, serviceClassName, function (data) {
                 dsFormUtil.initDetailsPage('content', pageMation, data);
             });
         } else if (pageMation.type == 'simpleTable') {
@@ -115,22 +117,6 @@ layui.config({
             $('#formWriteBean').before(`<button class="winui-btn" lay-submit lay-filter="formSaveDraft" id="formSaveDraft">保存为草稿</button>`);
             $('#formWriteBean').html('提交');
         }
-    }
-
-    function getBusinessData(callback) {
-        if (isNull(GetUrlParam("id"))) {
-            winui.window.msg("业务数据id为空", {icon: 2, time: 2000});
-            return false;
-        }
-        var params = {
-            objectId: GetUrlParam("id"),
-            objectKey: pageMation.className
-        };
-        AjaxPostUtil.request({url: reqBasePath + "queryBusinessDataByObject", params: params, type: 'json', method: 'POST', callback: function (json) {
-            if(typeof(callback) == "function") {
-                callback(json.bean);
-            }
-        }});
     }
 
     exports('pageShow', {});

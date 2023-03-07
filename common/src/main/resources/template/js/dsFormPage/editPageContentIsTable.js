@@ -16,6 +16,21 @@ layui.config({
 	var alignmentData = skyeyeClassEnumUtil.getEnumDataListByClassName("alignment");
 	var rowNum = 1;
 	var pageType = GetUrlParam("pageType");
+
+	var parentAttrKey = GetUrlParam("attrKey");
+	var parentClassName = GetUrlParam("className");
+	var params = {
+		className: parentClassName,
+		attrKey: parentAttrKey
+	};
+	var childAttr = [];
+	AjaxPostUtil.request({url: reqBasePath + "queryChildAttrDefinitionList", params: params, type: 'json', method: "POST", callback: function (json) {
+		childAttr = [].concat(json.rows);
+		if (childAttr.length > 0) {
+			childServiceClassName = childAttr[0].className;
+		}
+	}, async: false});
+
 	var cols = [];
 	if (pageType == 'processAttr') {
 		// 流程属性布局
@@ -23,8 +38,16 @@ layui.config({
 			{ type: 'checkbox', align: 'center' },
 			{ field: 'test', title: '', align: 'left', width: 40, templet: function (d) {return '<i class="fa fa-arrows drag-row" />';}},
 			{ field: 'attrKey', title: '属性<i class="red">*</i>', align: 'left', width: 150, templet: function (d) {
-				return `<input type="text" id="attrKey${d.id}" placeholder="请填写属性Key" cus-id="${d.id}" win-verify="required" class="layui-input tableInput" ` +
-					`value="` + (isNull(d.attrKey) ? "" : d.attrKey) + `"/>`;
+				var _html = `<select lay-filter="tableSelect" lay-search="" id="attrKey${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+				$.each(childAttr, function (i, item) {
+					if (item.attrKey == d.attrKey) {
+						_html += `<option value="${item.attrKey}" selected="selected">${item.name}</option>`;
+					} else {
+						_html += `<option value="${item.attrKey}">${item.name}</option>`;
+					}
+				});
+				_html += `</select>`;
+				return _html;
 			}},
 			{ field: 'name', title: '名称', align: 'left', width: 120, templet: function (d) {
 				return `<input type="text" id="name${d.id}" placeholder="请填写名称" cus-id="${d.id}" win-verify="required" class="layui-input tableInput" ` +
@@ -56,8 +79,16 @@ layui.config({
 			{ type: 'checkbox', align: 'center' },
 			{ field: 'test', title: '', align: 'left', width: 40, templet: function (d) {return '<i class="fa fa-arrows drag-row" />';}},
 			{ field: 'attrKey', title: '属性<i class="red">*</i>', align: 'left', width: 150, templet: function (d) {
-				return `<input type="text" id="attrKey${d.id}" placeholder="请填写属性Key" cus-id="${d.id}" win-verify="required" class="layui-input tableInput" ` +
-					`value="` + (isNull(d.attrKey) ? "" : d.attrKey) + `"/>`;
+				var _html = `<select lay-filter="tableSelect" lay-search="" id="attrKey${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+				$.each(childAttr, function (i, item) {
+					if (item.attrKey == d.attrKey) {
+						_html += `<option value="${item.attrKey}" selected="selected">${item.name}</option>`;
+					} else {
+						_html += `<option value="${item.attrKey}">${item.name}</option>`;
+					}
+				});
+				_html += `</select>`;
+				return _html;
 			}},
 			{ field: 'name', title: '名称', align: 'left', width: 120, templet: function (d) {
 				return `<input type="text" id="name${d.id}" placeholder="请填写名称" cus-id="${d.id}" win-verify="required" class="layui-input tableInput" ` +

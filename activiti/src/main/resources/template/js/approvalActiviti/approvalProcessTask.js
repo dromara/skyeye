@@ -1,40 +1,36 @@
 
-var layedit, form;
+// 以下两个参数开启团队权限时有值
+var objectId = '', objectKey = '';
+var pageMation;
 
 layui.config({
     base: basePath,
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'layedit', 'colorpicker', 'slider', 'fileUpload', 'codemirror', 'xml', 'clike',
-			'css', 'htmlmixed', 'javascript', 'nginx', 'solr', 'sql', 'vue', 'form', "table", 'flow'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'flow'], function (exports) {
     winui.renderColor();
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$,
-    	flow = layui.flow;
-    form = layui.form,
-    layedit = layui.layedit;
-    
+    	flow = layui.flow,
+    	form = layui.form;
+
     var taskId = parent.taskId;
     var processInstanceId = parent.processInstanceId;
-    var taskType = parent.taskType;
-    
-    $("#activitiTitle").html(taskType);
-    
+
     // 时间线审批历史列表模板
 	var timeTreeApprovalHistory = $("#timeTreeApprovalHistory").html();
 
-	AjaxPostUtil.request({url: flowableBasePath + "queryBusinessData", params: {processInstanceId: processInstanceId}, type: 'json', method: 'POST', callback: function(data) {
+	AjaxPostUtil.request({url: flowableBasePath + "queryProcessInstance", params: {processInstanceId: processInstanceId}, type: 'json', method: 'POST', callback: function(data) {
 		// 加载业务数据
-		dsFormUtil.initSequenceDataDetails('showForm', data.rows);
+		activitiUtil.loadBusiness(data.bean.objectId, data.bean.objectKey, data.bean.actFlowId, 'edit');
+
 	}, async: false});
     
     AjaxPostUtil.request({url: flowableBasePath + "activitimode016", params: {taskId: taskId, processInstanceId: processInstanceId}, type: 'json', method: 'GET', callback: function(j){
 		// 获取该节点的id和名称，todo 后续会使用
 		var editableNodeId = j.bean.taskKey;
 		var editableNodeName = j.bean.taskKeyName;
-
-		$("#activitiTitle").html(j.bean.title);
 
 		// 加载流程图片
 		$("#processInstanceIdImg").attr("src", fileBasePath + 'images/upload/activiti/' + processInstanceId + ".png?cdnversion=" + Math.ceil(new Date() / 3600000));

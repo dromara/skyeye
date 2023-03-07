@@ -50,6 +50,47 @@ var activitiUtil = {
     },
 
     /**
+     * 根据业务对象的serviceClassName和流程模型id加载表单布局
+     *
+     * @param businessId 业务数据id
+     * @param serviceClassName 业务对象的serviceClassName
+     * @param actFlowId 流程模型id
+     * @param showType 展示类型  details: 详情  edit: 编辑
+     */
+    loadBusiness: function (businessId, serviceClassName, actFlowId, showType) {
+        var params = {
+            serviceClassName: serviceClassName,
+            actFlowId: actFlowId
+        };
+        AjaxPostUtil.request({url: reqBasePath + "queryDsFormPageForProcess", params: params, type: 'json', method: 'GET', callback: function (json) {
+            pageMation = json.bean;
+            if (isNull(pageMation)) {
+                winui.window.msg("该布局信息不存在", {icon: 2, time: 2000});
+                return false;
+            } else {
+                // 这里为什么要给objectId和objectKey赋值，因为表单组件中有用到该值
+                if (showType == 'details') {
+                    dsFormUtil.getBusinessData(businessId, serviceClassName, function (data) {
+                        if (pageMation.serviceBeanCustom.serviceBean.teamAuth) {
+                            objectId = data.objectId;
+                            objectKey = data.objectKey;
+                        }
+                        dsFormUtil.initDetailsPage('showForm', pageMation, data);
+                    });
+                } else if (showType == 'edit') {
+                    dsFormUtil.getBusinessData(businessId, serviceClassName, function (data) {
+                        if (pageMation.serviceBeanCustom.serviceBean.teamAuth) {
+                            objectId = data.objectId;
+                            objectKey = data.objectKey;
+                        }
+                        dsFormUtil.initEditPage('showForm', pageMation, data);
+                    });
+                }
+            }
+        }});
+    },
+
+    /**
      * 加载审批人选择项
      *
      * @param appendDomId 指定dom结构后面加载

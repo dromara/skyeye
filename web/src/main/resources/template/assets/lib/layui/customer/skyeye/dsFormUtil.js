@@ -57,6 +57,22 @@ var dsFormUtil = {
 
     pageMation: {},
 
+    getBusinessData: function (businessId, serviceClassName, callback) {
+        if (isNull(businessId)) {
+            winui.window.msg("业务数据id为空", {icon: 2, time: 2000});
+            return false;
+        }
+        var params = {
+            objectId: businessId,
+            objectKey: serviceClassName
+        };
+        AjaxPostUtil.request({url: reqBasePath + "queryBusinessDataByObject", params: params, type: 'json', method: 'POST', callback: function (json) {
+            if(typeof(callback) == "function") {
+                callback(json.bean);
+            }
+        }});
+    },
+
     /**
      * 动态表单选择页面
      *

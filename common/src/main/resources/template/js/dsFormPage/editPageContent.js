@@ -224,12 +224,11 @@ layui.config({
 
     $("body").on("click", "#attrTransformTableListConfig", function() {
         parent._openNewWindows({
-            url: "../../tpl/dsFormPage/editPageContentIsTable.html?pageType=" + pageType,
+            url: "../../tpl/dsFormPage/editPageContentIsTable.html?attrKey=" + $("#attrKey").val() + '&className=' + parent.className + '&pageType=' + pageType,
             title: '表格属性配置',
             pageId: "editPageContentIsTable",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
-
             }});
     });
 
