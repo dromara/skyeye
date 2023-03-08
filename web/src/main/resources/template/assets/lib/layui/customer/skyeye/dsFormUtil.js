@@ -50,9 +50,15 @@ var dsFormUtil = {
         '8': `{{#bean}}
                 <div class="layui-form-item {{width}}" controlType="{{dsFormComponent.numCode}}" contentId="{{id}}">
                     <label class="layui-form-label">{{title}}：</label>
-                    <div class="layui-input-block ver-center">{{#each value}}<span class="layui-badge layui-bg-blue skyeye-badge">{{name}}</span>{{/each}}</div>
+                    <div class="layui-input-block ver-center">{{#each value}}{{name}}&nbsp;&nbsp;&nbsp;&nbsp;{{/each}}</div>
                 </div>
              {{/bean}}`, // Id转Mation取值转换后的展示
+        '8-1': `{{#bean}}
+                <div class="layui-form-item {{width}}" controlType="{{dsFormComponent.numCode}}" contentId="{{id}}">
+                    <label class="layui-form-label">{{title}}：</label>
+                    <div class="layui-input-block ver-center">{{#each value}}<span class="layui-badge layui-bg-blue skyeye-badge">{{name}}</span>{{/each}}</div>
+                </div>
+             {{/bean}}`, // Id转Mation取值转换后的展示(用户组件)
     },
 
     pageMation: {},
@@ -100,27 +106,44 @@ var dsFormUtil = {
      * @param data
      */
     initEditPage: function(showBoxId, pageMation, data) {
-        dsFormUtil.initCreatePage(showBoxId, pageMation);
-        $.each(dsFormUtil.pageMation.dsFormPageContents, function (i, content) {
-            var attrDefinition = content.attrDefinition;
-            if (!isNull(attrDefinition) && !$.isEmptyObject(attrDefinition)) {
-                // 获取组件中设置值的脚本
-                var dsFormComponent = content.dsFormComponent;
-                var value = dsFormUtil.getValueDataFromBusinessForEdit(content, data);
-                content["value"] = value;
-                content["pageType"] = 'edit';
-                var jsFitValue = dsFormComponent.jsFitValue;
-                if (!isNull(jsFitValue) && jsFitValue.startsWith('layui.define')) {
-                    var setValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsFitValue + '{{/this}}', content);
-                    $(`#script${content.id}`).remove();
-                    $(`div[contentId="${content.id}"]`).after(`<script id="script${content.id}">${setValueScript}</script>`);
+        dsFormUtil.pageMation = pageMation;
+        layui.define(["jquery", 'form'], function(exports) {
+            var form = layui.form;
+            $.each(dsFormUtil.pageMation.dsFormPageContents, function (i, dsFormContent) {
+                var attrDefinition = dsFormContent.attrDefinition;
+                dsFormContent["pageType"] = pageMation.type;
+                if (!isNull(attrDefinition) && !$.isEmptyObject(attrDefinition)) {
+                    var dsFormComponent = dsFormContent.dsFormComponent;
+                    if (dsFormContent.isEdit == 0) {
+                        // 不可以编辑
+                        var value = data[attrDefinition.attrKey];
+                        if (dsFormComponent.valueMergType == 'extend') {
+                            value = data;
+                        }
+                        dsFormUtil.loadComponentValueDetails(showBoxId, dsFormContent, value, data);
+                    } else {
+                        dsFormUtil.loadComponent(showBoxId, dsFormContent);
+                        var value = dsFormUtil.getValueDataFromBusinessForEdit(dsFormContent, data);
+                        dsFormContent["value"] = value;
+                        var jsFitValue = dsFormComponent.jsFitValue;
+                        if (!isNull(jsFitValue) && jsFitValue.startsWith('layui.define')) {
+                            var setValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsFitValue + '{{/this}}', dsFormContent);
+                            $(`#script${dsFormContent.id}`).remove();
+                            $(`div[contentId="${dsFormContent.id}"]`).after(`<script id="script${dsFormContent.id}">${setValueScript}</script>`);
+                        } else {
+                            var setValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsFitValue + '{{/this}}', dsFormContent);
+                            eval(setValueScript);
+                        }
+                    }
                 } else {
-                    var setValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsFitValue + '{{/this}}', content);
-                    eval(setValueScript);
+                    dsFormUtil.loadComponent(showBoxId, dsFormContent);
                 }
-            }
+            });
+            matchingLanguage();
+            form.render();
+
+            dsFormUtil.initEvent(form);
         });
-        layui.form.render();
     },
 
     // 获取业务数据中实际的值
@@ -301,8 +324,6 @@ var dsFormUtil = {
         if (!isNull(content.require)) {
             dsFormUtil.setIsRequired(content);
         }
-        dsFormUtil.setIsEdit(content);
-
         return content;
     },
 
@@ -310,14 +331,6 @@ var dsFormUtil = {
     setIsRequired: function (content) {
         if (content.require.indexOf('required') >= 0) {
             $(`div[contentId='${content.id}']`).find('label').append('<i class="red">*</i>');
-        }
-    },
-
-    // 设置是否可以编辑
-    setIsEdit: function (content) {
-        if (content.isEdit == 0) {
-            $(`div[contentId='${content.id}']`).find('select').attr('disabled', true);
-            $(`div[contentId='${content.id}']`).find('input').attr('disabled', true);
         }
     },
 
@@ -354,7 +367,12 @@ var dsFormUtil = {
                 content.photo = photoValue;
             }
             // 加载html
-            var str = getDataUseHandlebars(dsFormUtil.showType[showType], {bean: content});
+            var str = '';
+            if (component.numCode == 'userStaffChoose') {
+                str = getDataUseHandlebars(dsFormUtil.showType['8-1'], {bean: content});
+            } else {
+                str = getDataUseHandlebars(dsFormUtil.showType[showType], {bean: content});
+            }
             $("#" + boxId).append(str);
 
             if (showType == 5) { // 表格展示
@@ -490,13 +508,15 @@ var dsFormUtil = {
         }
 
         if (!isNull(customAttr.dsFormComponent)) {
+            var showType = dsFormUtil.getShowType(attrDefinition);
+            var numCode = customAttr.dsFormComponent.numCode;
             // 团队模板类型的组件，value值单独转换
-            if (customAttr.dsFormComponent.numCode == 'teamTemplate') {
+            if (numCode == 'teamTemplate') {
                 return teamObjectPermissionUtil.getTeamTemplate(value).name;
             }
 
-            // 用户组件，value值特殊处理
-            if (customAttr.dsFormComponent.numCode == 'userStaffChoose') {
+            // Id转Mation取值转换
+            if (showType == 8) {
                 var key = attrDefinition.attrKey;
                 // 例如：将key由relationUserId变为relationUserMation
                 key = key.replace("Id", "") + "Mation";

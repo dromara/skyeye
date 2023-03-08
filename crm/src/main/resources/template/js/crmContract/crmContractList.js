@@ -56,7 +56,7 @@ layui.config({
 						str += '<a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>';
 					}
 					if (authPermission['edit']) {
-						str += '<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>';
+						str += '<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>';
 					}
 					if (authPermission['delete']) {
 						str += '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>';
@@ -77,12 +77,7 @@ layui.config({
 				}
 				if (d.state == 'executing') {
 					if (authPermission['close']) {
-						str += '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="close">关闭</a>';
-					}
-				}
-				if (d.state == 'executing') {
-					if (authPermission['close']) {
-						str += '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="close">关闭</a>';
+						str += '<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="close">关闭</a>';
 					}
 					if (authPermission['layAside']) {
 						str += '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="shelve">搁置</a>';
