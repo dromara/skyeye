@@ -7,12 +7,11 @@
 - [2023年全年更新计划](https://mp.weixin.qq.com/s/deBkHLLeo1JDy6nqhvtWZg)
 - [软件更新历史](https://gitee.com/doc_wei01/skyeye/blob/company_server/HISTORY_UPDATE.md)
 - 开源版请下载`master`分支
-- Skyeye企业版基础模块部署包已开放，需要部署或者二开的联系作者获取 ，具体包含功能可查看：[https://docs.qq.com/sheet/DYWZWUWZQUkFTcmh2?tab=BB08J2](https://docs.qq.com/sheet/DYWZWUWZQUkFTcmh2?tab=BB08J2)
-- 企业版报价：https://docs.qq.com/sheet/DYUh5RUlGSkVPeHVo
+-  **企业版价格** ， **开源版二开规则** 请扫描下方小程序查看
 
 ### 沟通交流
 
-| 知识星球 | 作者微信(添加时请备注个人信息：姓名-联系方式)，其余一律不通过 |          QQ群      |   微信小程序(Skyeye相关资料)           |
+| 知识星球 | 作者微信(添加时请备注个人信息：姓名-联系方式)，其余一律不通过 |          QQ群      |   微信小程序           |
 |:-----:|:--------------------------------:|:--------------------:|:-------------------------------------:|
 | ![](images/mindMap/知识星球.png) |    ![](images/mindMap/微信.jpg)    | ![](images/mindMap/Skyeye智能制造云办公官方①群群二维码.png) | ![](images/mindMap/Skyeye视频微信小程序.jpg) |
 
