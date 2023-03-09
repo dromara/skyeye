@@ -4,12 +4,11 @@
 智能制造一体化，采用Springboot + winUI的低代码平台开发模式。包含30多个应用模块、50多种电子流程，CRM、PM、ERP、MES、ADM、EHR、笔记、知识库、项目、门店、商城、财务、多班次考勤、薪资、招聘、云售后、论坛、公告、问卷、报表设计、工作流、日程、云盘等全面管理，实现智能制造行业一体化管理。实现管理流程“客户关系->
 线上/线下报价->销售报价->销售合同->生产计划->商品设计->采购->加工制造->入库->发货->售后服务”的高效运作，同时实现企业员工的管理以及内部运作的流程操作，完善了员工从“入职->培训->转正->办公->离职”等多项功能。
 
--  **作者目前想找一份全职远程办公的工作，有需求的金主可以加我私聊，添加时请备注：远程** 
 - [2023年全年更新计划](https://mp.weixin.qq.com/s/deBkHLLeo1JDy6nqhvtWZg)
 - [软件更新历史](https://gitee.com/doc_wei01/skyeye/blob/company_server/HISTORY_UPDATE.md)
 - 开源版请下载`master`分支
 - Skyeye企业版基础模块部署包已开放，需要部署或者二开的联系作者获取 ，具体包含功能可查看：[https://docs.qq.com/sheet/DYWZWUWZQUkFTcmh2?tab=BB08J2](https://docs.qq.com/sheet/DYWZWUWZQUkFTcmh2?tab=BB08J2)
-- 此软件为个人软件，暂不能开发票，需要发票的勿扰，企业版报价：https://docs.qq.com/sheet/DYUh5RUlGSkVPeHVo
+- 企业版报价：https://docs.qq.com/sheet/DYUh5RUlGSkVPeHVo
 
 ### 沟通交流
 
