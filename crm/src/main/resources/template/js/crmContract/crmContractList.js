@@ -164,17 +164,6 @@ layui.config({
 			}});
 	}
 	
-	// 删除
-	function del(data, obj) {
-		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
-			layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.crmBasePath + "deleteContactsMationById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
-				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-				loadTable();
-    		}});
-		});
-	}
-
 	// 提交审批
 	function subApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {

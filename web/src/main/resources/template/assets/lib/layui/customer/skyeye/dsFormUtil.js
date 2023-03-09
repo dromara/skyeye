@@ -122,6 +122,7 @@ var dsFormUtil = {
                         }
                         dsFormUtil.loadComponentValueDetails(showBoxId, dsFormContent, value, data);
                     } else {
+                        // 可以编辑
                         dsFormUtil.loadComponent(showBoxId, dsFormContent);
                         var value = dsFormUtil.getValueDataFromBusinessForEdit(dsFormContent, data);
                         dsFormContent["value"] = value;
