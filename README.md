@@ -7,7 +7,8 @@
 - [2023年全年更新计划](https://mp.weixin.qq.com/s/deBkHLLeo1JDy6nqhvtWZg)
 - [软件更新历史](https://gitee.com/doc_wei01/skyeye/blob/company_server/HISTORY_UPDATE.md)
 - 开源版请下载`master`分支
--  **企业版价格** ， **开源版二开规则** 请扫描下方小程序查看
+- **企业版价格**， **开源版二开规则**， **文档**， **相关视频** 等资料请扫描下方小程序查看
+
 
 ### 沟通交流
 
