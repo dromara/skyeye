@@ -19,7 +19,7 @@ layui.config({
 		crmCustomerIndustry: sysDictData["crmCustomerIndustry"]["key"],
 		crmCustomerGroup: sysDictData["crmCustomerGroup"]["key"],
 	};
-	AjaxPostUtil.request({url: reqBasePath + "crmpage002", params: params, type: 'json', method: "POST", callback: function (json) {
+	AjaxPostUtil.request({url: sysMainMation.crmBasePath + "crmpage002", params: params, type: 'json', method: "POST", callback: function (json) {
 		renderCharts(json.bean);
 		matchingLanguage();
 	}});

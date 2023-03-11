@@ -28,7 +28,7 @@ layui.config({
 	initNewInsertNumByYear(year);
 	// 获取指定年度的客户新增量，联系人新增量
 	function initNewInsertNumByYear(year){
-		AjaxPostUtil.request({url: reqBasePath + "crmpage001", params: {year: year}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.crmBasePath + "crmpage001", params: {year: year}, type: 'json', callback: function (json) {
 			renderCharts1(json.rows);
 			matchingLanguage();
    		}});

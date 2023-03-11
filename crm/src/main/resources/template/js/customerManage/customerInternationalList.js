@@ -16,7 +16,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: flowableBasePath + 'customer012',
+	    url: sysMainMation.crmBasePath + 'customer012',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -27,9 +27,15 @@ layui.config({
 	        { field: 'name', title: '客户名称', align: 'left', width: 300, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
 	        }},
-	        { field: 'typeName', title: '客户分类', align: 'left', width: 120 },
-	        { field: 'fromName', title: '客户来源', align: 'left', width: 120 },
-	        { field: 'industryName', title: '所属行业', align: 'left', width: 180 },
+	        { field: 'typeId', title: '客户分类', align: 'left', width: 120, templet: function (d) {
+				return sysDictDataUtil.getDictDataNameByCodeAndKey("CRM_CUSTOMER_TYPE", d.typeId);
+			}},
+	        { field: 'fromId', title: '客户来源', align: 'left', width: 120, templet: function (d) {
+				return sysDictDataUtil.getDictDataNameByCodeAndKey("CRM_CUSTOMER_FROM", d.fromId);
+			}},
+	        { field: 'industryId', title: '所属行业', align: 'left', width: 180, templet: function (d) {
+				return sysDictDataUtil.getDictDataNameByCodeAndKey("CRM_CUSTOMER_INDUSTRY", d.industryId);
+			}},
 	        { field: 'noDocumentaryDayNum', title: '未跟单天数', align: 'left', width: 100 },
 	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 100 },
@@ -58,7 +64,7 @@ layui.config({
 	// 详情
 	function details(data) {
 		_openNewWindows({
-			url: "../../tpl/customerManage/customerDetails.html?objectId=" + data.id,
+			url: "../../tpl/customerManage/customerManage.html?objectId=" + data.id + "&objectKey=" + data.serviceClassName,
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "customerDetails",
 			area: ['90vw', '90vh'],

@@ -28,7 +28,7 @@ layui.config({
 	initContractNewInsert(year);
 	// 获取合同在指定年度的月新增量
 	function initContractNewInsert(year){
-		AjaxPostUtil.request({url: reqBasePath + "crmpage004", params: {year: year}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.crmBasePath + "crmpage004", params: {year: year}, type: 'json', callback: function (json) {
 			renderCharts1(json.rows);
 			matchingLanguage();
    		}});

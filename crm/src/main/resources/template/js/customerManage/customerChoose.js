@@ -20,7 +20,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: flowableBasePath + 'customer001',
+	    url: sysMainMation.crmBasePath + 'customer001',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -32,9 +32,15 @@ layui.config({
 	        { field: 'name', title: '客户名称', align: 'left', width: 200, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
 	        }},
-	        { field: 'typeName', title: '客户分类', align: 'left', width: 120 },
-	        { field: 'fromName', title: '客户来源', align: 'left', width: 120 },
-	        { field: 'industryName', title: '所属行业', align: 'left', width: 180 }
+			{ field: 'typeId', title: '客户分类', align: 'left', width: 120, templet: function (d) {
+				return sysDictDataUtil.getDictDataNameByCodeAndKey("CRM_CUSTOMER_TYPE", d.typeId);
+			}},
+			{ field: 'fromId', title: '客户来源', align: 'left', width: 120, templet: function (d) {
+				return sysDictDataUtil.getDictDataNameByCodeAndKey("CRM_CUSTOMER_FROM", d.fromId);
+			}},
+			{ field: 'industryId', title: '所属行业', align: 'left', width: 180, templet: function (d) {
+				return sysDictDataUtil.getDictDataNameByCodeAndKey("CRM_CUSTOMER_INDUSTRY", d.industryId);
+			}},
 	    ]],
 	    done: function(res, curr, count){
 	    	matchingLanguage();
@@ -43,22 +49,8 @@ layui.config({
 				dubClick.find("input[type='radio']").prop("checked", true);
 				form.render();
 				var id = JSON.stringify(dubClick.data('index'));
-				var obj = res.rows[id];
-				var customerMation = {
-					id: obj.id,
-					customName: obj.name,
-					contacts: obj.contacts,
-					mobilePhone: obj.mobilePhone,
-					email: obj.email,
-					qq: obj.qq,
-					city: obj.city,
-					detailAddress: obj.detailAddress,
-					workPhone: obj.workPhone,
-					industryName: obj.industryName,
-					department: obj.department,
-					job: obj.job
-				}
-				parent.customerMation = customerMation;
+
+				parent.customerMation = res.rows[id];
 				parent.sysCustomerUtil.customerMation = customerMation;
 				parent.layer.close(index);
 				parent.refreshCode = '0';

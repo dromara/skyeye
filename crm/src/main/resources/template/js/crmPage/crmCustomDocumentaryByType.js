@@ -32,7 +32,7 @@ layui.config({
 			year: year,
 			crmDocumentaryType: sysDictData["crmDocumentaryType"]["key"]
 		};
-		AjaxPostUtil.request({url: reqBasePath + "crmpage003", params: params, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.crmBasePath + "crmpage003", params: params, type: 'json', callback: function (json) {
 			renderCharts1(json.rows);
 			matchingLanguage();
    		}});
