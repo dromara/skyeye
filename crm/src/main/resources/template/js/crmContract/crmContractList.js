@@ -132,7 +132,7 @@ layui.config({
     	parent._openNewWindows({
 			url: systemCommonUtil.getUrl('FP2023030500001&objectId=' + objectId + '&objectKey=' + objectKey, null),
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-			pageId: "contactsAdd",
+			pageId: "crmContractAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -145,7 +145,7 @@ layui.config({
 		parent._openNewWindows({
 			url: systemCommonUtil.getUrl('FP2023030500002&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-			pageId: "contactsEdit",
+			pageId: "crmContractEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -158,7 +158,7 @@ layui.config({
 		parent._openNewWindows({
 			url: systemCommonUtil.getUrl('FP2023030600001&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "crmcontractdetails",
+			pageId: "crmContractDetails",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}});

@@ -50,5 +50,7 @@
     "crmContractStateEnum": {"name": "合同状态", "className": "skyeye-crm#com.skyeye.contract.classenum.CrmContractStateEnum"},
     "crmContractAuthEnum": {"name": "合同权限", "className": "skyeye-crm#com.skyeye.contract.classenum.CrmContractAuthEnum", "pageUrl": "../../tpl/crmContract/crmContractList.html"},
     "crmOpportunityStateEnum": {"name": "商机状态", "className": "skyeye-crm#com.skyeye.opportunity.classenum.CrmOpportunityStateEnum"},
-    "crmOpportunityAuthEnum": {"name": "商机权限", "className": "skyeye-crm#com.skyeye.opportunity.classenum.CrmOpportunityAuthEnum", "pageUrl": "../../tpl/crmOpportunity/crmOpportunityList.html"}
+    "crmOpportunityAuthEnum": {"name": "商机权限", "className": "skyeye-crm#com.skyeye.opportunity.classenum.CrmOpportunityAuthEnum", "pageUrl": "../../tpl/crmOpportunity/crmOpportunityList.html"},
+    "crmDocumentaryAuthEnum": {"name": "跟单权限", "className": "skyeye-crm#com.skyeye.documentary.classenum.CrmDocumentaryAuthEnum", "pageUrl": "../../tpl/documentary/crmDocumentaryList.html"}
+
 }
