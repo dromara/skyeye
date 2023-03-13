@@ -105,7 +105,7 @@ var serviceMap = [
 	{"id": "sysMainMation.lightAppBasePath", "name": "轻应用服务"},
 	{"id": "sysMainMation.wagesBasePath", "name": "薪资服务"},
 	{"id": "sysMainMation.crmBasePath", "name": "CRM服务"},
-	{"id": "sysMainMation.ifsBasePath", "name": "ifs财务服务"},
+	{"id": "sysMainMation.ifsBasePath", "name": "IFS财务服务"},
 	{"id": "sysMainMation.erpBasePath", "name": "ERP服务"},
 ]
 
