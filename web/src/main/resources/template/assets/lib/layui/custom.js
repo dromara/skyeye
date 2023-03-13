@@ -16,7 +16,6 @@ var customerJS = {
 	"dsFormUtil": "../../assets/lib/layui/customer/skyeye/dsFormUtil.js", // 动态表单工具函数
 	"systemModelUtil": "../../assets/lib/layui/customer/systemModelUtil.js", // 系统编辑器模板工具函数
 	"ueEditorUtil": "../../assets/lib/layui/customer/ueEditorUtil.js", // ueEditor编辑器工具函数
-	"accountSubjectUtil": "../../assets/lib/layui/customer/accountSubjectUtil.js", // 财务会计相关的工具函数
 	"sysCustomerUtil": "../../assets/lib/layui/customer/sysCustomerUtil.js", // CRM相关的工具函数
 	"sysIfsUtil": "../../assets/lib/layui/customer/sysIfsUtil.js", // 财务相关的工具函数
 	"sysFileUtil": "../../assets/lib/layui/customer/sysFileUtil.js", // 系统文件相关处理工具

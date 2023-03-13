@@ -1,4 +1,3 @@
-var rowId = "";
 
 layui.config({
 	base: basePath, 
@@ -12,17 +11,13 @@ layui.config({
 		form = layui.form,
 		table = layui.table;
 		
-	// 设置提示信息
 	$("#showInfo").html("会计科目选择规则：双击指定行即可选中。");
 
-	var selTemplate = getFileContent('tpl/template/select-option.tpl');
-	$("#type").html(getDataUseHandlebars(selTemplate, {rows: accountSubjectUtil.accountSubjectType}));
-	
 	table.render({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-		url: flowableBasePath + 'ifsaccountsubject001',
+		url: sysMainMation.ifsBasePath + 'ifsaccountsubject001',
 		where: getTableParams(),
 		even: true,
 		page: true,
@@ -30,20 +25,22 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ type: 'radio'},
-			{ field: 'num', title: '编号', align: 'left', width: 180},
-			{ field: 'name', title: '会计科目名称', align: 'left', width: 200, templet: function (d) {
-				return '<a lay-event="select" class="notice-title-click">' + d.name + '</a>';
-			}},
+			{ field: 'num', title: '编号', align: 'left', width: 180 },
+			{ field: 'name', title: '名称', align: 'left', width: 200 },
 			{ field: 'type', title: '类型', align: 'center', width: 120, templet: function (d) {
-				return getInPoingArr(accountSubjectUtil.accountSubjectType, "id", d.type, "name");
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("accountSubjectType", 'id', d.type, 'name');
 			}},
 			{ field: 'amountDirection', title: '余额方向', align: 'center', width: 80, templet: function (d) {
-				return sysIfsUtil.getAmountDirectionById(d.amountDirection);
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("amountDirection", 'id', d.amountDirection, 'name');
 			}},
-			{ field: 'remark', title: '备注', align: 'left', width: 200}
+			{ field: 'remark', title: '备注', align: 'left', width: 200 }
 		]],
 		done: function(res, curr, count){
 			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入名称", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
+
 			$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
 				var dubClick = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
 				dubClick.find("input[type='radio']").prop("checked", true);
@@ -64,37 +61,13 @@ layui.config({
 		}
 	});
 
-	table.on('tool(messageTable)', function (obj) {
-		var data = obj.data;
-		var layEvent = obj.event;
-	});
-
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			refreshTable();
-		}
-		return false;
-	});
-	
 	$("body").on("click", "#reloadTable", function() {
-    	loadTable();
+		table.reloadData("messageTable", {where: getTableParams()});
     });
     
-    function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
-    }
-    
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-
 	function getTableParams() {
-		return {
-			name: $("#name").val(),
-			state: 1, // 已启用
-			type: $("#type").val()
-		};
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
     exports('ifsAccountSubjectListChoose', {});

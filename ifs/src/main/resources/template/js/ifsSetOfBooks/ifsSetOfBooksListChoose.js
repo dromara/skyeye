@@ -1,6 +1,4 @@
 
-var rowId = "";
-
 layui.config({
     base: basePath,
     version: skyeyeVersion

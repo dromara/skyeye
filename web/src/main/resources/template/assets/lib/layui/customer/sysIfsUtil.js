@@ -59,15 +59,6 @@ var sysIfsUtil = {
                 }
             }
         });
-    },
-
-    // 余额方向
-    amountDirection: [
-        {"id": "1", "name": "借"},
-        {"id": "2", "name": "贷"}
-    ],
-    getAmountDirectionById: function (id) {
-        return getInPoingArr(sysIfsUtil.amountDirection, "id", id, "name");
     }
 
 }
