@@ -7,22 +7,22 @@
     "whetherEnum": {"name": "是否的枚举", "className": "skyeye-pro#com.skyeye.common.enumeration.WhetherEnum"},
     "dateTimeType": {"name": "日期类型", "className": "skyeye-pro#com.skyeye.dsform.classenum.DateTimeType"},
 
-    "bossInterviewArrangementState": {"name": "面试安排状态枚举类", "className": "skyeye-flowable#com.skyeye.service.enumclass.BossInterviewArrangementState"},
+    "bossInterviewArrangementState": {"name": "面试安排状态枚举类", "className": "skyeye-flowable#com.skyeye.service.classenum.BossInterviewArrangementState"},
     "bossInterviewArrangementState1": {
         "name": "面试安排状态枚举类-获取我录入的人员需求关联的面试者信息列表",
-        "className": "skyeye-flowable#com.skyeye.service.enumclass.BossInterviewArrangementState",
+        "className": "skyeye-flowable#com.skyeye.service.classenum.BossInterviewArrangementState",
         "filterKey": "id",
         "filterValue": "2,3,4,5,6,7"
     },
     "bossInterviewArrangementState2": {
         "name": "面试安排状态枚举类-获取面试官为当前登录用户的面试者信息列表",
-        "className": "skyeye-flowable#com.skyeye.service.enumclass.BossInterviewArrangementState",
+        "className": "skyeye-flowable#com.skyeye.service.classenum.BossInterviewArrangementState",
         "filterKey": "id",
         "filterValue": "3,4,5"
     },
 
-    "materialFromType": {"name": "商品来源类型枚举类", "className": "skyeye-flowable#com.skyeye.material.enumclass.MaterialFromType"},
-    "materialType": {"name": "商品类型枚举类", "className": "skyeye-flowable#com.skyeye.material.enumclass.MaterialType"},
+    "materialFromType": {"name": "商品来源类型枚举类", "className": "skyeye-erp#com.skyeye.material.classenum.MaterialFromType"},
+    "materialType": {"name": "商品类型枚举类", "className": "skyeye-erp#com.skyeye.material.classenum.MaterialType"},
 
     "skyeyeView": {"name": "视图枚举", "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"},
     "widthScale": {"name": "宽度比例枚举", "className": "skyeye-pro#com.skyeye.attr.classenum.WidthScale"},
@@ -51,6 +51,11 @@
     "crmContractAuthEnum": {"name": "合同权限", "className": "skyeye-crm#com.skyeye.contract.classenum.CrmContractAuthEnum", "pageUrl": "../../tpl/crmContract/crmContractList.html"},
     "crmOpportunityStateEnum": {"name": "商机状态", "className": "skyeye-crm#com.skyeye.opportunity.classenum.CrmOpportunityStateEnum"},
     "crmOpportunityAuthEnum": {"name": "商机权限", "className": "skyeye-crm#com.skyeye.opportunity.classenum.CrmOpportunityAuthEnum", "pageUrl": "../../tpl/crmOpportunity/crmOpportunityList.html"},
-    "crmDocumentaryAuthEnum": {"name": "跟单权限", "className": "skyeye-crm#com.skyeye.documentary.classenum.CrmDocumentaryAuthEnum", "pageUrl": "../../tpl/documentary/crmDocumentaryList.html"}
+    "crmDocumentaryAuthEnum": {"name": "跟单权限", "className": "skyeye-crm#com.skyeye.documentary.classenum.CrmDocumentaryAuthEnum", "pageUrl": "../../tpl/documentary/crmDocumentaryList.html"},
 
+    "accountSubjectType": {"name": "会计科目类型", "className": "skyeye-ifs#com.skyeye.subject.classenum.AccountSubjectType"},
+    "amountDirection": {"name": "余额方向", "className": "skyeye-ifs#com.skyeye.subject.classenum.AmountDirection"},
+    "incomeAndExpenseType": {"name": "收支项目类型", "className": "skyeye-ifs#com.skyeye.incomeandexpense.classenum.IncomeAndExpenseType"},
+    "voucherState": {"name": "凭证状态", "className": "skyeye-ifs#com.skyeye.voucher.classenum.VoucherState"},
+    "voucherType": {"name": "凭证类型", "className": "skyeye-ifs#com.skyeye.voucher.classenum.VoucherType"}
 }
