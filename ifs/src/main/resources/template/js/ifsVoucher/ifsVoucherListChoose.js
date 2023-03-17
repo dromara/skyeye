@@ -9,75 +9,73 @@ layui.config({
 	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
 		form = layui.form;
+
+	$("#showInfo").html("凭证选择规则：双击指定行即可选中。");
 	
-    showGrid({
-	 	id: "showForm",
-	 	url: flowableBasePath + "ifsVoucher001",
-	 	params: getTableParams(),
-	 	pagination: true,
-	 	pagesize: 18,
-	 	template: $("#beanTemplate").html(),
-	 	ajaxSendLoadBefore: function(hdb) {
-	 		hdb.registerHelper("compare1", function(v1, options){
-	 			var fileExt = sysFileUtil.getFileExt(v1);
-	 			if($.inArray(fileExt[0], imageType) >= 0){
-					return fileBasePath + v1;
-				}
-	 			return '../../assets/images/doc.png';
-			});
-			hdb.registerHelper("compare2", function(v1, options){
-				if(v1 == 1){
-					return '<a class="layui-btn layui-btn-xs choose">选择</a>';
-				}
-				return '';
-			});
-			hdb.registerHelper("compare3", function(v1, options){
-				if(v1 == 1){
-					return "<span class='state-down'>未整理</span>";
-				}
-				return "<span class='state-up'>已整理</span>";
-			});
-	 	},
-	 	options: {'click .sel': function(index, row){
-				var fileExt = sysFileUtil.getFileExt(row.voucherPath);
+	table.render({
+		id: 'messageTable',
+		elem: '#messageTable',
+		method: 'post',
+		url: sysMainMation.ifsBasePath + 'ifsVoucher001',
+		where: getTableParams(),
+		even: true,
+		page: true,
+		limits: getLimits(),
+		limit: getLimit(),
+		cols: [[
+			{ type: 'radio'},
+			{ field: 'name', title: '名称', width: 150 },
+			{ field: 'path', title: '展示', width: 80, align: 'center', templet: function (d) {
+				var fileExt = sysFileUtil.getFileExt(d.path);
 				if($.inArray(fileExt[0], imageType) >= 0){
-					systemCommonUtil.showPicImg(fileBasePath + row.voucherPath);
-				} else {
-					sysFileUtil.download(row.voucherPath, row.fileName);
+					return '<img src="' + fileBasePath + d.path + '" class="photo-img" lay-event="logo">';
 				}
-	 		},
-			'click .choose': function(i, row){
-				parent.sysIfsUtil.chooseVoucherMation = row;
+				return '<img src="../../assets/images/doc.png" class="photo-img" lay-event="logo">';
+			}},
+			{ field: 'state', title: '状态', width: 80, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("voucherState", 'id', d.state, 'name');
+			}},
+		]],
+		done: function(res, curr, count){
+			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入名称", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
+
+			for (var i = 0; i < res.rows.length; i++) {
+				// 已整理的不可选中
+				if(res.rows[i].state != 1){
+					systemCommonUtil.disabledRow(res.rows[i].LAY_TABLE_INDEX, 'radio');
+				}
+			}
+
+			$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
+				var dubClick = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
+				dubClick.find("input[type='radio']").prop("checked", true);
+				form.render();
+				var chooseIndex = JSON.stringify(dubClick.data('index'));
+				var obj = res.rows[chooseIndex];
+				parent.sysIfsUtil.chooseVoucherMation = obj;
+
 				parent.refreshCode = '0';
 				parent.layer.close(index);
-			}
-	 	},
-	 	ajaxSendAfter:function (json) {
-	 		matchingLanguage();
-	 	}
-    });
+			});
+
+			$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('click',function(){
+				var click = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
+				click.find("input[type='radio']").prop("checked", true);
+				form.render();
+			})
+		}
+	});
 
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			refreshGrid("showForm", {params: getTableParams()});
-		}
-		return false;
-	});
-
-	// 刷新数据
 	$("body").on("click", "#reloadTable", function() {
-		loadTable();
+		table.reloadData("messageTable", {where: getTableParams()});
 	});
-    
-    function loadTable() {
-    	refreshGrid("showForm", {params: getTableParams()});
-    }
 
 	function getTableParams() {
-		return {
-			state: $("#state").val(),
-		};
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
     
     exports('ifsVoucherListChoose', {});

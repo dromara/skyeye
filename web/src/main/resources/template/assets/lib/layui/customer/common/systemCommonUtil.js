@@ -7,7 +7,7 @@ var systemCommonUtil = {
      * @param callback 回执函数
      */
     getSysAccountListByType: function (callback) {
-        AjaxPostUtil.request({url: flowableBasePath + "account009", params: {}, type: 'json', method: "GET", callback: function(json) {
+        AjaxPostUtil.request({url: sysMainMation.ifsBasePath + "account009", params: {}, type: 'json', method: "GET", callback: function(json) {
             if(typeof(callback) == "function") {
                 callback(json);
             }

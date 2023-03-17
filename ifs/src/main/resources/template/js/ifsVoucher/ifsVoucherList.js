@@ -8,76 +8,89 @@ layui.config({
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		upload = layui.upload;
+		upload = layui.upload,
+		table = layui.table;
+	var exts = imageType.concat(officeType).join('|');
+	$("#showInfo").html("仅支持以下格式的凭证文件：【" + imageType.concat(officeType).join(', ') + "】");
 	
 	authBtn('1641208147247');
-	
-    showGrid({
-	 	id: "showForm",
-	 	url: flowableBasePath + "ifsVoucher001",
-	 	params: getTableParams(),
-	 	pagination: true,
-	 	pagesize: 18,
-	 	template: $("#beanTemplate").html(),
-	 	ajaxSendLoadBefore: function(hdb) {
-	 		hdb.registerHelper("compare1", function(v1, options){
-	 			var fileExt = sysFileUtil.getFileExt(v1);
-	 			if($.inArray(fileExt[0], imageType) >= 0){
-					return fileBasePath + v1;
-				}
-	 			return '../../assets/images/doc.png';
-			});
-			hdb.registerHelper("compare2", function(v1, options){
-				if(v1 == 1){
-					return '<a class="layui-btn layui-btn-danger layui-btn-xs del" auth="1641208155066"><language showName="com.skyeye.deleteBtn"></language></a>';
-				}
-				return '';
-			});
-			hdb.registerHelper("compare3", function(v1, options){
-				if(v1 == 1){
-					return "<span class='state-down'>未整理</span>";
-				}
-				return "<span class='state-up'>已整理</span>";
-			});
-	 	},
-	 	options: {'click .del':function(index, row){
-				layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
-					layer.close(index);
-		            AjaxPostUtil.request({url: flowableBasePath + "ifsVoucher003", params: {rowId: row.id}, type: 'json', method: "DELETE", callback: function (json) {
-						winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-						loadTable();
-		    		}});
-				});
-	 		}, 'click .sel':function(index, row){
-				var fileExt = sysFileUtil.getFileExt(row.voucherPath);
-				if($.inArray(fileExt[0], imageType) >= 0){
-					systemCommonUtil.showPicImg(fileBasePath + row.voucherPath);
-				} else {
-					sysFileUtil.download(row.voucherPath, row.fileName);
-				}
-	 		}
-	 	},
-	 	ajaxSendAfter:function (json) {
-	 		authBtn('1641208155066');
-	 		matchingLanguage();
-	 	}
-    });
 
-    var exts = imageType.concat(officeType).join('|');
-    $("#showInfo").html("仅支持以下格式的凭证文件：【" + imageType.concat(officeType).join(', ') + "】");
+	table.render({
+		id: 'messageTable',
+		elem: '#messageTable',
+		method: 'post',
+		url: sysMainMation.ifsBasePath + "ifsVoucher001",
+		where: getTableParams(),
+		even: true,
+		page: true,
+		limits: getLimits(),
+		limit: getLimit(),
+		cols: [[
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+			{ field: 'name', title: '名称', width: 150 },
+			{ field: 'path', title: '展示', width: 80, align: 'center', templet: function (d) {
+				var fileExt = sysFileUtil.getFileExt(d.path);
+				if($.inArray(fileExt[0], imageType) >= 0){
+					return '<img src="' + fileBasePath + d.path + '" class="photo-img" lay-event="logo">';
+				}
+				return '<img src="../../assets/images/doc.png" class="photo-img" lay-event="logo">';
+			}},
+			{ field: 'state', title: '状态', width: 80, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("voucherState", 'id', d.state, 'name');
+			}},
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 100, toolbar: '#tableBar' }
+		]],
+		done: function(json) {
+			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
+		}
+	});
+
+	table.on('tool(messageTable)', function (obj) {
+		var data = obj.data;
+		var layEvent = obj.event;
+		if (layEvent === 'del') { //删除
+			del(data, obj);
+		} else if (layEvent === 'logo') {
+			var fileExt = sysFileUtil.getFileExt(data.path);
+			if($.inArray(fileExt[0], imageType) >= 0){
+				systemCommonUtil.showPicImg(fileBasePath + data.path);
+			} else {
+				sysFileUtil.download(data.path, data.name);
+			}
+		}
+	});
+
+	// 删除
+	function del(data, obj) {
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
+			layer.close(index);
+			AjaxPostUtil.request({url: sysMainMation.ifsBasePath + "ifsVoucher003", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}});
+		});
+	}
+	
 	upload.render({
-		elem: '#addBean', // 绑定元素
-		url: reqBasePath + 'common003', // 上传接口
+		elem: '#addBean',
+		url: reqBasePath + 'common003',
 		data: {type: 21},
 		exts: exts,
 		done: function(json) {
 			if (json.returnCode == 0) {
 				var param = {
 					type: 1, // 凭证类型  1.原始凭证  2.手工录入凭证
-					voucherPath: json.bean.picUrl,
-					fileName: json.bean.fileName
+					path: json.bean.picUrl,
+					name: json.bean.fileName
 				}
-				AjaxPostUtil.request({url: flowableBasePath + "ifsVoucher002", params: param, type: 'json', method: "POST", callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.ifsBasePath + "ifsVoucher002", params: param, type: 'json', method: "POST", callback: function (json) {
 					winui.window.msg("上传成功", {icon: 1, time: 2000});
 					loadTable();
 	    		}});
@@ -92,26 +105,16 @@ layui.config({
 	});
 
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			refreshGrid("showForm", {params: getTableParams()});
-		}
-		return false;
-	});
-
-	// 刷新数据
 	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
-    
-    function loadTable() {
-    	refreshGrid("showForm", {params: getTableParams()});
-    }
+
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
 
 	function getTableParams() {
-		return {
-			state: $("#state").val(),
-		};
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
     
     exports('ifsVoucherList', {});

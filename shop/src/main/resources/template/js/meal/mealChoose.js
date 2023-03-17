@@ -36,8 +36,8 @@ layui.config({
 						return '<a lay-event="select" class="notice-title-click">' + d.title + '</a>';
 					}},
 				{ field: 'logo', title: 'LOGO', align: 'center', width: 60, templet: function (d) {
-						return '<img src="' + fileBasePath + d.logo + '" class="photo-img" lay-event="logo">';
-					}},
+					return '<img src="' + fileBasePath + d.logo + '" class="photo-img" lay-event="logo">';
+				}},
 				{ field: 'mealNum', title: '可使用次数', width: 120 },
 				{ field: 'type', title: '套餐分类', width: 100, align: "center", templet: function (d) {
 					if(d.type == 1){
