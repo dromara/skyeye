@@ -42,7 +42,7 @@
     "attrKeyDataType": {"name": "表单布局里面的组件关联的数据类型", "className": "skyeye-pro#com.skyeye.attr.classenum.AttrKeyDataType"},
     "componentAttr": {"name": "组件关联的属性", "className": "skyeye-pro#com.skyeye.dsform.classenum.ComponentAttr"},
     "componentApplyRange": {"name": "组件适用范围类型", "className": "skyeye-pro#com.skyeye.dsform.classenum.ComponentApplyRange"},
-    "componentValueMergType": {"name": "组件关联的属性", "className": "skyeye-pro#com.skyeye.dsform.classenum.ComponentValueMergType"},
+    "componentValueMergType": {"name": "组件值合入方式", "className": "skyeye-pro#com.skyeye.dsform.classenum.ComponentValueMergType"},
     "buttonColorType": {"name": "操作按钮颜色", "className": "skyeye-pro#com.skyeye.attr.classenum.ButtonColorType"},
     "eventType": {"name": "操作按钮事件类型", "className": "skyeye-pro#com.skyeye.operate.classenum.EventType"},
     "operatePosition": {"name": "操作按钮展示位置", "className": "skyeye-pro#com.skyeye.operate.classenum.OperatePosition"},

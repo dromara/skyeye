@@ -13,7 +13,6 @@ layui.config({
         table = layui.table;
     var serviceClassName = sysServiceMation["incomeOrder"]["key"];
     authBtn('1571638020191');//新增
-    authBtn('1572313776196');//导出
 
     var orderType = "";
     sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["ifsOrderType"]["key"], 'selectTree', "ifsOrderType", '', form, function () {
@@ -28,7 +27,7 @@ layui.config({
             id: 'messageTable',
             elem: '#messageTable',
             method: 'post',
-            url: flowableBasePath + 'income001',
+            url: sysMainMation.ifsBasePath + 'income001',
             where: getTableParams(),
             even: true,
             page: true,
@@ -63,7 +62,7 @@ layui.config({
             done: function(json) {
                 matchingLanguage();
                 initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单据编号", function () {
-                    table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+                    refreshTable();
                 });
             }
         });
@@ -106,7 +105,7 @@ layui.config({
     // 删除
     function deleteIncome(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
-            AjaxPostUtil.request({url: flowableBasePath + "income005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.ifsBasePath + "income005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -129,7 +128,7 @@ layui.config({
     function revorke(data) {
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "income009", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.ifsBasePath + "income009", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
                 winui.window.msg("提交成功", {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -160,7 +159,7 @@ layui.config({
         });
     }
     function subToData(params){
-        AjaxPostUtil.request({url: flowableBasePath + "income008", params: params, type: 'json', callback: function (json) {
+        AjaxPostUtil.request({url: sysMainMation.ifsBasePath + "income008", params: params, type: 'json', callback: function (json) {
             winui.window.msg("提交成功", {icon: 1, time: 2000});
             loadTable();
         }});
@@ -179,15 +178,6 @@ layui.config({
             }});
     });
 
-    // 导出excel
-    $("body").on("click", "#downloadExcel", function () {
-    	postDownLoadFile({
-			url : flowableBasePath + 'income007',
-			params: getTableParams(),
-			method : 'post'
-		});
-    });
-
     form.render();
     $("body").on("click", "#reloadTable", function() {
         loadTable();
@@ -197,7 +187,7 @@ layui.config({
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function refreshTable(){
+    function refreshTable() {
         table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 

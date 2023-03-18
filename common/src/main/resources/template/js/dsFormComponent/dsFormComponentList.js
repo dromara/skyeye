@@ -28,7 +28,10 @@ layui.config({
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'numCode', title: '编码', width: 250 },
 	        { field: 'name', title: '名称', width: 120 },
-			{ field: 'typeName', title: '分类', width: 120 },
+			{ field: 'typeName', title: '分类', width: 100 },
+			{ field: 'valueMergType', title: '值合入方式', width: 120, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("componentValueMergType", 'id', d.valueMergType, 'name');
+			}},
 			{ field: 'showType', title: '显示类型', width: 120, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("dsFormShowType", 'id', d.showType, 'name');
 			}},
