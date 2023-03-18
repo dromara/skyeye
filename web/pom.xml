@@ -310,6 +310,13 @@
             <version>1-SNAPSHOT</version>
         </dependency>
 
+        <!-- Hutool是一个小而全的Java工具类库，通过静态方法封装，降低相关API的学习成本，提高工作效率 https://apidoc.gitee.com/loolly/hutool/ -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-json</artifactId>
+            <version>5.5.4</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -330,16 +337,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <fork>true</fork>
-                    <webResources>
-                        <resource>
-                            <directory>${basedir}/lib</directory>
-                            <targetPath>WEB-INF/lib</targetPath>
-                            <filtering>false</filtering>
-                            <includes>
-                                <include>**/*.jar</include>
-                            </includes>
-                        </resource>
-                    </webResources>
                 </configuration>
                 <dependencies>
                     <dependency>

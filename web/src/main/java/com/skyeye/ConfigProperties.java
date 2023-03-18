@@ -4,6 +4,7 @@
 
 package com.skyeye;
 
+import cn.hutool.core.date.DateUtil;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,11 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "skyeye.configuation")
 public class ConfigProperties {
 
-    private Map<String,String> config;
+    public ConfigProperties() {
+        System.setProperty("skyeye.year", String.valueOf(DateUtil.thisYear()));
+    }
+
+    private Map<String, String> config;
 
     public Map<String, String> getConfig() {
         return config;

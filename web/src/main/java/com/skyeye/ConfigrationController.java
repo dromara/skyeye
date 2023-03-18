@@ -25,7 +25,7 @@ public class ConfigrationController {
     private ConfigProperties configProperties;
 
     @GetMapping(value = "/getConfigRation")
-    public Map<String, String> getConfigRation(){
+    public Map<String, String> getConfigRation() {
         return configProperties.getConfig();
     }
 

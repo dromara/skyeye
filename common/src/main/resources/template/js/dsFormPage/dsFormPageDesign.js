@@ -211,8 +211,11 @@ layui.config({
 		_this.addClass("ui-sortable-placeholder-choose");
 		var contentId = _this.attr("contentId");
 		$("#showForm div[contentId='" + contentId + "']").find('.btn-base').show();
-		contentData = getInPoingArr(contentList, 'id', contentId);
-		$("#editPageContent").attr("src", editContentPageUrl);
+
+		if (isNull(contentData) || contentData.id != contentId) {
+			contentData = getInPoingArr(contentList, 'id', contentId);
+			$("#editPageContent").attr("src", editContentPageUrl);
+		}
 	}
 
 	sortDataIn = function () {

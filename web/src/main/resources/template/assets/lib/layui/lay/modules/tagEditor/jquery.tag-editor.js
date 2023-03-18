@@ -5,8 +5,7 @@
 	License: http://www.opensource.org/licenses/mit-license.php
 */
 layui.define(["jquery"], function(exports) {
-	var jQuery = layui.jquery;
-(function($){
+	var $ = layui.jquery;
     // modified autoGrowInput - stackoverflow.com/questions/931207
     // lets input fields grow dynamically on change
     $.fn.autoGrowInput=function(o){o=$.extend({maxWidth:250,minWidth:20,comfortZone:0},o);this.filter('input:text').each(function(){var minWidth=o.minWidth||$(this).width(),val=' ',input=$(this),comfortZone=o.comfortZone?o.comfortZone:parseInt(parseInt($(this).css('fontSize'))*0.9),dummy=$('<dummy/>').css({position:'absolute',top:-9999,left:-9999,width:'auto',fontSize:input.css('fontSize'),fontFamily:input.css('fontFamily'),fontWeight:input.css('fontWeight'),letterSpacing:input.css('letterSpacing'),whiteSpace:'nowrap'}),check=function(){if(val===(val=input.val()))return;dummy.html(val.replace(/&/g,'&amp;').replace(/\s/g,'&nbsp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));var newWidth=dummy.width()+comfortZone;if(newWidth>o.maxWidth)newWidth=o.maxWidth;if(newWidth<o.minWidth)newWidth=o.minWidth;if(newWidth!=input.width())input.width(newWidth);};dummy.insertAfter(input);$(this).bind('keyup keydown blur focus autogrow',check);});return this;};
@@ -124,15 +123,15 @@ layui.define(["jquery"], function(exports) {
                         if (d < dist) dist = d, closest_tag = tag;
                     }
                 });
-                
+
                 //是否可编辑节点
                 if(o.editorTag){
-	                if (loc == 'before')
-	                    $(new_tag).insertBefore(closest_tag.closest('li')).find('.tag-editor-tag').click();
-	                else if (loc == 'after')
-	                    $(new_tag).insertAfter(closest_tag.closest('li')).find('.tag-editor-tag').click();
-	                else // empty editor
-	                    $(new_tag).appendTo(ed).find('.tag-editor-tag').click();
+                    if (loc == 'before')
+                        $(new_tag).insertBefore(closest_tag.closest('li')).find('.tag-editor-tag').click();
+                    else if (loc == 'after')
+                        $(new_tag).insertAfter(closest_tag.closest('li')).find('.tag-editor-tag').click();
+                    else // empty editor
+                        $(new_tag).appendTo(ed).find('.tag-editor-tag').click();
                 }
                 return false;
             });
@@ -168,13 +167,13 @@ layui.define(["jquery"], function(exports) {
                     var tag = $(this).html();
                     // guess cursor position in text input
                     var left_percent = Math.abs(($(this).offset().left - e.pageX)/$(this).width()), caret_pos = parseInt(tag.length*left_percent);
-                    
+
                     //是否可编辑节点
                     if(o.editorTag){
-	                    var input = $(this).html('<input type="text" maxlength="'+o.maxLength+'" value="'+tag+'">').addClass('active').find('input');
-    	                    input.data('old_tag', tag).focus().autoGrowInput().trigger('autogrow').caret(caret_pos);
+                        var input = $(this).html('<input type="text" maxlength="'+o.maxLength+'" value="'+tag+'">').addClass('active').find('input');
+                            input.data('old_tag', tag).focus().autoGrowInput().trigger('autogrow').caret(caret_pos);
                     }
-                    
+
                     if (o.autocomplete) {
                         var aco = o.autocomplete;
                         // extend user provided autocomplete select method
@@ -301,11 +300,11 @@ layui.define(["jquery"], function(exports) {
             // create initial tags
             var tags = o.initialTags.length ? o.initialTags : el.val().split(o.dregex);
             $.each(tags, function(i, item) {
-            	var tag = $.trim(item.replace(/ +/, ' '));
-            	if (tag) {
-            		tag_list.push(tag);
-            		ed.append('<li><div class="tag-editor-spacer">&nbsp;'+o.delimiter[0]+'</div><div class="tag-editor-tag">'+tag+'</div><div class="tag-editor-delete"><i></i></div></li>');
-            	}
+                var tag = $.trim(item.replace(/ +/, ' '));
+                if (tag) {
+                    tag_list.push(tag);
+                    ed.append('<li><div class="tag-editor-spacer">&nbsp;'+o.delimiter[0]+'</div><div class="tag-editor-tag">'+tag+'</div><div class="tag-editor-delete"><i></i></div></li>');
+                }
             });
             update_globals(true); // true -> no onChange callback
 
@@ -326,16 +325,19 @@ layui.define(["jquery"], function(exports) {
         clickDelete: false,
         sortable: true, // jQuery UI sortable
         autocomplete: null, // options dict for jQuery UI autocomplete
-		
+
         // 是否可编辑节点信息
         editorTag: true,
-        
+
         // callbacks
         onChange: function(){},
         beforeTagSave: function(){},
         beforeTagDelete: function(){}
     };
-}(jQuery));
 	layui.link(basePath + '../../lib/layui/lay/modules/tagEditor/jquery.tag-editor.css');
-	exports('tagEditor', null);
+	exports('tagEditor', {
+        render: function (id, options) {
+            $(`#${id}`).tagEditor(options);
+        }
+    });
 });
