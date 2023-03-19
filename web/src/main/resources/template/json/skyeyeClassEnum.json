@@ -37,6 +37,8 @@
     "catalogAuthEnum": {"name": "目录权限", "className": "skyeye-pro#com.skyeye.catalog.classenum.CatalogAuthEnum"},
     "documentAuthEnum": {"name": "文档权限", "className": "skyeye-pro#com.skyeye.document.classenum.DocumentAuthEnum"},
     "disCussionAuthEnum": {"name": "讨论帖权限", "className": "skyeye-pro#com.skyeye.discussion.classenum.DisCussionAuthEnum"},
+    "flowableStateEnum": {"name": "工作流状态", "className": "skyeye-pro#com.skyeye.common.enumeration.FlowableStateEnum"},
+    "correspondentEnterEnum": {"name": "往来单位类型", "className": "skyeye-pro#com.skyeye.common.enumeration.CorrespondentEnterEnum", "remark": "往来单位的组件中使用"},
 
     "dsFormPageType": {"name": "表单布局类型", "className": "skyeye-pro#com.skyeye.dsform.classenum.DsFormPageType"},
     "attrKeyDataType": {"name": "表单布局里面的组件关联的数据类型", "className": "skyeye-pro#com.skyeye.attr.classenum.AttrKeyDataType"},

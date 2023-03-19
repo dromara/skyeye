@@ -8,7 +8,8 @@ layui.config({
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
-		form = layui.form;
+		form = layui.form,
+		table = layui.table;
 
 	$("#showInfo").html("凭证选择规则：双击指定行即可选中。");
 	
