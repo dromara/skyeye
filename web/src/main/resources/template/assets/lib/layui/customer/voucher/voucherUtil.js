@@ -64,10 +64,10 @@ var voucherUtil = {
             _this.find(".col_summary").find("textarea").val(data[i].remark); // 摘要
 
             _this.find(".col_voucher").find(".cell_val").attr("dataId", data[i].voucherId); // 凭证
-            _this.find(".col_voucher").find(".cell_val").html(data[i].voucherName);
+            _this.find(".col_voucher").find(".cell_val").html(data[i].voucherMation.name);
 
             _this.find(".col_subject").find(".cell_val").attr("dataId", data[i].subjectId); // 会计科目
-            _this.find(".col_subject").find(".cell_val").html(data[i].subjectName);
+            _this.find(".col_subject").find(".cell_val").html(data[i].subjectMation.name);
 
             if (data[i].directionType == 1){
                 _this.find(".col_debite").find(".cell_val").html(data[i].eachAmount); // 借方金额
@@ -90,9 +90,9 @@ var voucherUtil = {
             _this.find(".col_summary").find("textarea").val(data[i].remark); // 摘要
             _this.find(".col_summary").find("textarea").attr("disabled", true);
 
-            _this.find(".col_voucher").find(".cell_val").html(data[i].voucherName); // 凭证
+            _this.find(".col_voucher").find(".cell_val").html(data[i].voucherMation.name); // 凭证
 
-            _this.find(".col_subject").find(".cell_val").html(data[i].subjectName); // 会计科目
+            _this.find(".col_subject").find(".cell_val").html(data[i].subjectMation.name); // 会计科目
 
             if (data[i].directionType == 1){
                 _this.find(".col_debite").find(".cell_val").html(data[i].eachAmount); // 借方金额
@@ -116,7 +116,7 @@ var voucherUtil = {
                     _this.find(".cell_val").show();
                     sysIfsUtil.openIfsVoucherChoosePage(function (chooseVoucherMation){
                         _this.find(".cell_val").attr("dataId", chooseVoucherMation.id);
-                        _this.find(".cell_val").html(chooseVoucherMation.fileName);
+                        _this.find(".cell_val").html(chooseVoucherMation.name);
                     });
                     break;
                 case 'subject': // 会计科目

@@ -50,8 +50,7 @@ layui.config({
 				form.render();
 				var id = JSON.stringify(dubClick.data('index'));
 
-				parent.customerMation = res.rows[id];
-				parent.sysCustomerUtil.customerMation = customerMation;
+				parent.sysCustomerUtil.customerMation = res.rows[id];
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			});

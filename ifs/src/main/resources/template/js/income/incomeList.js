@@ -50,7 +50,9 @@ layui.config({
                 { field: 'holderKey', title: '往来单位类型', align: 'left', width: 100, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("correspondentEnterEnum", 'id', d.holderKey, 'name');
                 }},
-                { field: 'supplierName', title: '往来单位', align: 'left', width: 150 },
+                { field: 'holderMation', title: '往来单位', align: 'left', width: 150, templet: function (d) {
+                    return d.holderMation.name;
+                }},
                 { field: 'totalPrice', title: '合计金额', align: 'left', width: 120 },
                 { field: 'handsPersonName', title: '经手人', align: 'left', width: 120 },
                 { field: 'operTime', title: '单据日期', align: 'center', width: 120 },
