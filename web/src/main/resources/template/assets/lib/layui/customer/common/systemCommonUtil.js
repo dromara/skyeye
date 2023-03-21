@@ -1179,20 +1179,22 @@ var dataShowType = {
                                 });
                                 if (` + !isNull(defaultId) + `) {
                                     var zTree = ${showBoxId}Object.getCheckedNodes(false);
+                                    var type = '${showType}' == 'radioTree' ? "radio" : "checkbox";
+                                    var tempArray = type == 'checkbox' ? JSON.parse('${defaultId}') : [].push('${defaultId}');
                                     for (var i = 0; i < zTree.length; i++) {
                                         if ('${showType}' == 'checkboxTree') {
-                                            if($.inArray(zTree[i].id, ${defaultId}) >= 0){
+                                            if($.inArray(zTree[i].id, tempArray) >= 0){
                                                 ${showBoxId}Object.checkNode(zTree[i], true, true);
                                             }
                                         } else {
-                                            if(zTree[i].id == '` + defaultId + `'){
+                                            if(zTree[i].id == '${defaultId}'){
                                                 ${showBoxId}Object.checkNode(zTree[i], true, true);
                                                 $('#${showBoxId}').attr('chooseId', zTree[i].id);
                                             }
                                         }
                                     }
                                     if ('${showType}' == 'checkboxTree') {
-                                        $('#${showBoxId}').attr('chooseId', JSON.stringify(` + defaultId + `));
+                                        $('#${showBoxId}').attr('chooseId', JSON.stringify(tempArray));
                                     }
                                 }
                             })(jQuery);});

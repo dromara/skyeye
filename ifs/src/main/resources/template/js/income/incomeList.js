@@ -44,7 +44,7 @@ layui.config({
                 { field: 'state', title: '状态', align: 'left', width: 80, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
                 }},
-                { field: 'type', title: '单据类型', align: 'left', width: 80, templet: function (d) {
+                { field: 'type', title: '单据类型', align: 'left', width: 120, templet: function (d) {
                     return sysDictDataUtil.getDictDataNameByCodeAndKey("IFS_ORDER_TYPE", d.type);
                 }},
                 { field: 'holderKey', title: '往来单位类型', align: 'left', width: 100, templet: function (d) {
@@ -53,7 +53,6 @@ layui.config({
                 { field: 'holderMation', title: '往来单位', align: 'left', width: 150, templet: function (d) {
                     return d.holderMation.name;
                 }},
-                { field: 'totalPrice', title: '合计金额', align: 'left', width: 120 },
                 { field: 'handsPersonName', title: '经手人', align: 'left', width: 120 },
                 { field: 'operTime', title: '单据日期', align: 'center', width: 120 },
                 { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
