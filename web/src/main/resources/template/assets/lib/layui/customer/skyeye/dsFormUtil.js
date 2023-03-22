@@ -40,7 +40,11 @@ var dsFormUtil = {
                     </div>
                 </div>
              {{/bean}}`, // 表格展示
-        '6': `{{#bean}}
+        '6': `
+            <link href="../../assets/lib/winui/css/customer/voucherUtil.css" rel="stylesheet" />
+            <script src="../../assets/lib/layui/customer/voucher/spinbox.js"></script>
+            <script src="../../assets/lib/layui/customer/voucher/voucherUtil.js"></script>
+            {{#bean}}
                 <div class="layui-form-item {{width}}" controlType="{{dsFormComponent.numCode}}" contentId="{{id}}">
                     <label class="layui-form-label">{{title}}：</label>
                     <div class="layui-input-block ver-center" id="showVoucher{{orderBy}}"></div>

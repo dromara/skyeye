@@ -21,9 +21,9 @@ layui.config({
 
 			treeSelectUtil.init({
 				eleTree: layui.eleTree,
-				elem: 'serviceClassName',
+				elem: 'applyServiceClassName',
 				url: reqBasePath + "queryServiceClassForTree",
-				defaultId: json.bean.serviceClassName
+				defaultId: json.bean.applyServiceClassName
 			});
 
 			matchingLanguage();
@@ -34,7 +34,7 @@ layui.config({
 						id: parent.rowId,
 						flowName: $("#flowName").val(),
 						modelKey: $("#modelKey").val(),
-						serviceClassName: $("#serviceClassName").attr("serviceClassName")
+						applyServiceClassName: $("#applyServiceClassName").attr("applyServiceClassName")
 					};
 
 					AjaxPostUtil.request({url: flowableBasePath + "writeActFlowMation", params: params, type: 'json', method: 'POST', callback: function (json) {

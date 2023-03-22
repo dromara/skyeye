@@ -12,7 +12,7 @@ layui.config({
 
 	treeSelectUtil.init({
 		eleTree: layui.eleTree,
-		elem: 'serviceClassName',
+		elem: 'applyServiceClassName',
 		url: reqBasePath + "queryServiceClassForTree"
 	});
 
@@ -23,7 +23,7 @@ layui.config({
 			var params = {
 				flowName: $("#flowName").val(),
 				modelKey: $("#modelKey").val(),
-				serviceClassName: $("#serviceClassName").attr("serviceClassName")
+				applyServiceClassName: $("#serviceClassName").attr("applyServiceClassName")
 			};
 
 			AjaxPostUtil.request({url: flowableBasePath + "writeActFlowMation", params: params, type: 'json', method: 'POST', callback: function (json) {

@@ -118,7 +118,7 @@ layui.config({
     function details(data) {
         rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/income/incomeInfo.html",
+            url: systemCommonUtil.getUrl('FP2023032200001&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "incomeInfo",
             area: ['90vw', '90vh'],

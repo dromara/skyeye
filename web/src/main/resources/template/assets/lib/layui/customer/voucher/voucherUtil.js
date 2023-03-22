@@ -84,6 +84,9 @@ var voucherUtil = {
 
     initDataDetails: function (boxId, data){
         $("#" + boxId).html(voucherUtil.tableHtmlDom);
+        if (isNull(data)) {
+            return false;
+        }
         for(var i = 0; i < data.length; i++){
             voucherUtil.addItem();
             var _this = $("#useTable").find("tr").eq(i);
