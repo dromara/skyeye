@@ -39,8 +39,8 @@ layui.config({
 		    where: getTableParams(),
 			even: true,
 		    page: true,
-		    limits: [8, 16, 24, 32, 40, 48, 56],
-		    limit: 8,
+			limits: getLimits(),
+			limit: getLimit(),
 		    cols: [[
 		    	{ type: 'checkbox'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },

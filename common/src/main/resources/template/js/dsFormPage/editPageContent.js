@@ -137,7 +137,7 @@ layui.config({
         'tableAttrBox': `<div class="layui-form-item layui-col-xs12">
                         <label class="layui-form-label">表格属性<i class="red">*</i></label>
                         <div class="layui-input-block" id="attrTransformTableList" data-json="[]">
-                            <button id="attrTransformTableListConfig" type="button" class="winui-toolbtn search-table-btn-right">属性配置</button>
+                            <button id="attrTransformTableListConfig" type="button" class="winui-toolbtn">属性配置</button>
                         </div>
                     </div>`,
     };
@@ -222,13 +222,19 @@ layui.config({
     // 日期类型
     skyeyeClassEnumUtil.showEnumDataListByClassName("dateTimeType", 'select', "dateTimeType", data.dateTimeType, form);
 
+    // 表格属性的属性配置
+    var attrTransformTableList = isNull(data.attrTransformTableList) ? '[]' : JSON.stringify(data.attrTransformTableList);
+    $("#attrTransformTableListConfig").attr('data', attrTransformTableList);
+
     $("body").on("click", "#attrTransformTableListConfig", function() {
+        parent.temData = $("#attrTransformTableListConfig").attr('data');
         parent._openNewWindows({
-            url: "../../tpl/dsFormPage/editPageContentIsTable.html?attrKey=" + $("#attrKey").val() + '&className=' + parent.className + '&pageType=' + pageType,
+            url: "../../tpl/dsFormPage/editPageContentIsTable.html?attrKey=" + $("#attrKey").val() + '&className=' + parent.className,
             title: '表格属性配置',
             pageId: "editPageContentIsTable",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
+                $("#attrTransformTableListConfig").attr('data', parent.temData);
             }});
     });
 
@@ -267,6 +273,8 @@ layui.config({
         newParams.chooseOrNotMy = $("#chooseOrNotMy").val();
         newParams.chooseOrNotEmail = $("#chooseOrNotEmail").val();
         newParams.checkType = $("#checkType").val();
+
+        newParams.attrTransformTableList = isNull($("#attrTransformTableListConfig").attr('data')) ? [] : JSON.parse($("#attrTransformTableListConfig").attr('data'));
 
         if (!isNull($("#attrKey").val())) {
             newParams.attrDefinition = getInPoingArr(parent.attrList, 'attrKey', $("#attrKey").val());
