@@ -2,6 +2,9 @@
 ## 历史更新资讯
 
 - 2023年
+  - [2023-04-10 智能制造一体化 v3.9.9 发布，招聘+考勤模块更新](https://www.oschina.net/news/236155/win10-skyeye-3-9-9-released)
+  - [2023-04-03 智能制造一体化 v3.9.8 发布，ERP更新](https://www.oschina.net/news/235169/skyeye-3-9-8-released)
+  - [2023-03-27 智能制造一体化 v3.9.7 发布，财务基础更新](https://www.oschina.net/news/234238/win10-skyeye-3-9-7-released)
   - [2023-03-13 智能制造一体化 v3.9.6 发布，工作流 更新](https://www.oschina.net/news/232354/win10-skyeye-3-9-6-released)
   - [2023-03-06 智能制造一体化 v3.9.5 发布，CRM 更新](https://www.oschina.net/news/231340/win10-skyeye-3-9-5-released)
   - [2023-02-27 智能制造一体化 v3.9.4 发布，基础服务更新](https://www.oschina.net/news/230103/skyeye-3-9-4-released)
