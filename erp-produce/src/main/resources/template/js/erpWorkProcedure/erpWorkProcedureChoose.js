@@ -13,7 +13,7 @@ layui.config({
 		tableCheckBoxUtil = layui.tableCheckBoxUtil;
 		
 	var checkType = '1';//工序选择类型：1.单选；2.多选
-	if (!isNull(parent.procedureCheckType)){
+	if (!isNull(parent.procedureCheckType)) {
 		checkType = parent.procedureCheckType;
 	}
 	

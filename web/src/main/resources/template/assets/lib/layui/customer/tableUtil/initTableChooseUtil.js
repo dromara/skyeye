@@ -52,7 +52,7 @@ var initTableChooseUtil = {
             '            <button id="deleteRow' + newOptions.id + '" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>' +
             '        </div>' +
             '    </div>' +
-            '    <table class="layui-table">' +
+            '    <table class="layui-table" style="width: auto">' +
             '         <thead>' +
             '             <tr id="header' + newOptions.id + '"></tr>' +
             '         </thead>' +

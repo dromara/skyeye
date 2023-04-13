@@ -26,13 +26,13 @@ layui.config({
                             </div>
                         </div>`,
         'titleBox': `<div class="layui-form-item layui-col-xs12">
-                        <label class="layui-form-label">标题</label>
+                        <label class="layui-form-label">标题：</label>
                         <div class="layui-input-block">
                             <input type="text" id="title" name="title" placeholder="请输入标题" class="layui-input" />
                         </div>
                     </div>`,
         'placeholderBox': `<div class="layui-form-item layui-col-xs12">
-                            <label class="layui-form-label">提示语</label>
+                            <label class="layui-form-label">提示语：</label>
                             <div class="layui-input-block winui-radio">
                                 <input type="text" id="placeholder" name="placeholder" placeholder="请输入控件提示语" class="layui-input" />
                             </div>
@@ -44,7 +44,7 @@ layui.config({
                             </div>
                         </div>`,
         'defaultValueBox': `<div class="layui-form-item layui-col-xs12">
-                                <label class="layui-form-label">默认值</label>
+                                <label class="layui-form-label">默认值：</label>
                                 <div class="layui-input-block">
                                     <input type="text" id="defaultValue" name="defaultValue" placeholder="请输入默认值" class="layui-input" />
                                 </div>
@@ -94,7 +94,7 @@ layui.config({
                             </div>
                         </div>`,
         'isEditBox': `<div class="layui-form-item layui-col-xs12">
-                            <label class="layui-form-label">是否可以编辑</label>
+                            <label class="layui-form-label">是否可以编辑：</label>
                             <div class="layui-input-block" id="isEdit">
                                 
                             </div>
@@ -136,8 +136,32 @@ layui.config({
                         </div>`,
         'tableAttrBox': `<div class="layui-form-item layui-col-xs12">
                         <label class="layui-form-label">表格属性<i class="red">*</i></label>
-                        <div class="layui-input-block" id="attrTransformTableList" data-json="[]">
+                        <div class="layui-input-block" data="[]">
                             <button id="attrTransformTableListConfig" type="button" class="winui-toolbtn">属性配置</button>
+                        </div>
+                    </div>`,
+        'minDataBox': `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label">最小数据行数：</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="minData" name="minData" placeholder="请输入最小数据行数" class="layui-input" />
+                        </div>
+                    </div>`,
+        'deleteRowCallbackBox': `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label" style="width: 60%;">删除行之后的回调函数：</label>
+                        <div class="layui-input-block" script="">
+                            <button id="deleteRowCallbackConfig" type="button" class="winui-toolbtn writeScript">编写脚本</button>
+                        </div>
+                    </div>`,
+        'addRowCallbackBox': `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label" style="width: 60%;">新增行之后的回调函数：</label>
+                        <div class="layui-input-block" script="">
+                            <button id="addRowCallbackConfig" type="button" class="winui-toolbtn writeScript">编写脚本</button>
+                        </div>
+                    </div>`,
+        'afterScriptBox': `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label" style="width: 60%;">组件加载完成后执行的脚本：</label>
+                        <div class="layui-input-block" script="">
+                            <button id="afterScriptConfig" type="button" class="winui-toolbtn writeScript">编写脚本</button>
                         </div>
                     </div>`,
     };
@@ -193,7 +217,7 @@ layui.config({
                 $("#attrKey").val('');
             }
         }
-        $("#attrTransformTableList").attr('data-json', JSON.stringify([]));
+        $("#attrTransformTableListConfig").parent().attr('data-json', JSON.stringify([]));
     });
 
     // 宽度
@@ -224,17 +248,34 @@ layui.config({
 
     // 表格属性的属性配置
     var attrTransformTableList = isNull(data.attrTransformTableList) ? '[]' : JSON.stringify(data.attrTransformTableList);
-    $("#attrTransformTableListConfig").attr('data', attrTransformTableList);
+    $("#attrTransformTableListConfig").parent().attr('data', attrTransformTableList);
+    $("#minData").val(data.minData);
+    $("#deleteRowCallbackConfig").parent().attr('script', data.deleteRowCallback);
+    $("#addRowCallbackConfig").parent().attr('script', data.addRowCallback);
+    $("#afterScriptConfig").parent().attr('script', data.afterScript);
 
     $("body").on("click", "#attrTransformTableListConfig", function() {
-        parent.temData = $("#attrTransformTableListConfig").attr('data');
+        parent.temData = $("#attrTransformTableListConfig").parent().attr('data');
         parent._openNewWindows({
             url: "../../tpl/dsFormPage/editPageContentIsTable.html?attrKey=" + $("#attrKey").val() + '&className=' + parent.className,
             title: '表格属性配置',
             pageId: "editPageContentIsTable",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
-                $("#attrTransformTableListConfig").attr('data', parent.temData);
+                $("#attrTransformTableListConfig").parent().attr('data', parent.temData);
+            }});
+    });
+
+    $("body").on("click", ".writeScript", function() {
+        var id = $(this).attr("id");
+        parent.scriptData = $(this).parent().attr('script');
+        parent._openNewWindows({
+            url: "../../tpl/dsFormPage/editPageContentIsScript.html",
+            title: '编写脚本',
+            pageId: "editPageContentIsScript",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                $(`#${id}`).parent().attr('script', parent.scriptData);
             }});
     });
 
@@ -274,7 +315,12 @@ layui.config({
         newParams.chooseOrNotEmail = $("#chooseOrNotEmail").val();
         newParams.checkType = $("#checkType").val();
 
-        newParams.attrTransformTableList = isNull($("#attrTransformTableListConfig").attr('data')) ? [] : JSON.parse($("#attrTransformTableListConfig").attr('data'));
+        newParams.attrTransformTableList = isNull($("#attrTransformTableListConfig").parent().attr('data')) ? []
+            : JSON.parse($("#attrTransformTableListConfig").parent().attr('data'));
+        newParams.minData = $("#minData").val();
+        newParams.deleteRowCallback = $("#deleteRowCallbackConfig").parent().attr('script');
+        newParams.addRowCallback = $("#addRowCallbackConfig").parent().attr('script');
+        newParams.afterScript = $("#afterScriptConfig").parent().attr('script');
 
         if (!isNull($("#attrKey").val())) {
             newParams.attrDefinition = getInPoingArr(parent.attrList, 'attrKey', $("#attrKey").val());

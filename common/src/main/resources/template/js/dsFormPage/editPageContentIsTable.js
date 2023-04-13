@@ -16,6 +16,10 @@ layui.config({
 	// 对齐方式
 	var alignmentData = skyeyeClassEnumUtil.getEnumDataListByClassName("alignment");
 	var rowNum = 1;
+	$.each(tableDataList, function (i, item) {
+		item["id"] = rowNum;
+		rowNum++;
+	});
 
 	var parentAttrKey = GetUrlParam("attrKey");
 	var parentClassName = GetUrlParam("className");
@@ -73,6 +77,10 @@ layui.config({
 			_html += `</select>`;
 			return _html;
 		}},
+		{ field: 'layFilter', title: '表单监听Filter', align: 'left', width: 120, templet: function (d) {
+			return `<input type="text" id="layFilter${d.id}" placeholder="表单监听Filter" cus-id="${d.id}" class="layui-input tableInput" ` +
+				`value="` + (isNull(d.layFilter) ? "" : d.layFilter) + `"/>`;
+		}},
 		{ field: 'width', title: '宽度<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
 			return `<input type="text" id="width${d.id}" placeholder="请填写宽度" cus-id="${d.id}" class="layui-input tableInput" win-verify="required|number" ` +
 				`value="` + (isNull(d.width) ? "" : d.width) + `"/>`;
@@ -94,19 +102,23 @@ layui.config({
 		}},
 		{ field: 'dataFrom', title: '数据源', align: 'left', width: 200, templet: function (d) {
 			var disabledClass = d.showType == showType[2].id ? '' : 'layui-btn-disabled';
-			var params = {};
 			var btnName = '选择数据源';
 			if (!isNull(d.dataType)) {
-				params = {
-					dataType: d.dataType,
-					defaultData: d.defaultData,
-					objectId: d.objectId,
-					businessApi: d.businessApi,
-				};
 				btnName = '更换数据源';
 			}
-			var data = JSON.stringify(params);
-			return `<button id="dataFrom${d.id}" type="button" cus-id="${d.id}" class="chooseDataFrom ${disabledClass}" data="${data}">${btnName}</button>`;
+			return `<button id="dataFrom${d.id}" type="button" cus-id="${d.id}" class="chooseDataFrom ${disabledClass}">${btnName}</button>`;
+		}},
+		{ field: 'value', title: '默认值', align: 'left', width: 120, templet: function (d) {
+			return `<input type="text" id="value${d.id}" placeholder="默认值" cus-id="${d.id}" class="layui-input tableInput" ` +
+				`value="` + (isNull(d.value) ? "" : d.value) + `"/>`;
+		}},
+		{ field: 'className', title: 'class属性', align: 'left', width: 120, templet: function (d) {
+			return `<input type="text" id="className${d.id}" placeholder="class属性" cus-id="${d.id}" class="layui-input tableInput" ` +
+				`value="` + (isNull(d.className) ? "" : d.className) + `"/>`;
+		}},
+		{ field: 'iconClassName', title: 'ICON的class属性', align: 'left', width: 150, templet: function (d) {
+			return `<input type="text" id="iconClassName${d.id}" placeholder="ICON的class属性" cus-id="${d.id}" class="layui-input tableInput" ` +
+				`value="` + (isNull(d.iconClassName) ? "" : d.iconClassName) + `"/>`;
 		}},
 	]]
 
@@ -129,8 +141,22 @@ layui.config({
 			}
 
 			$.each(tableDataList, function (i, item) {
+				// 限制条件
 				var require = isNull(item.require) ? '' : item.require.toString();
 				skyeyeClassEnumUtil.showEnumDataListByClassName("verificationParams", 'verificationSelect', "require" + item.id, require, form, null, 'formerRequirement');
+
+				// 数据源
+				var params = {};
+				if (!isNull(item.dataType)) {
+					params = {
+						dataType: item.dataType,
+						defaultData: item.defaultData,
+						objectId: item.objectId,
+						businessApi: item.businessApi,
+					};
+				}
+				var data = JSON.stringify(params);
+				$(`#dataFrom${item.id}`).attr("data", data);
 			});
 
 			soulTable.render(this);
