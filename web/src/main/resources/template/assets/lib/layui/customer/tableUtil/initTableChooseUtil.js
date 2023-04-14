@@ -191,6 +191,8 @@ var initTableChooseUtil = {
                     value = $("#" + tdId).val();
                 } else if (bean.formType == 'detail') {
                     value = $("#" + tdId).html();
+                } else if (item.formType == 'chooseInput') {
+                    value = $("#" + tdId).attr("data-id");
                 }
                 row[bean.id] = value;
             });
@@ -277,6 +279,7 @@ var initTableChooseUtil = {
                 $("#" + tdId).val(value);
             } else if (formType == 'chooseInput') {
                 $("#" + tdId).val(value);
+
             } else if (formType == 'select') {
                 if (!isNull(value["html"])) {
                     $("#" + tdId).html(value["html"]);

@@ -15,6 +15,8 @@ layui.config({
 	var checkType = '1';//工序选择类型：1.单选；2.多选
 	if (!isNull(parent.procedureCheckType)) {
 		checkType = parent.procedureCheckType;
+	} else {
+		checkType = GetUrlParam("checkType");
 	}
 	
 	//设置提示信息

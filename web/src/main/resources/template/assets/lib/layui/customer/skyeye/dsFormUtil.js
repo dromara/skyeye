@@ -325,6 +325,9 @@ var dsFormUtil = {
         var html_js = getDataUseHandlebars('{{#bean}}' + component.jsContent + '{{/bean}}', jsonStr);
         var jsCon = `<script id="script${content.id}">${html_js}</script>`;
         $("#" + boxId).append(html + jsCon);
+        // 组件加载完成后执行的HTML和JS
+        $("#" + boxId).append(content.afterHtml);
+        $("#" + boxId).append(`<script>${content.afterScript}</script>`);
 
         if (!isNull(content.require)) {
             dsFormUtil.setIsRequired(content);
@@ -422,33 +425,38 @@ var dsFormUtil = {
 
     // 获取属性关联的数据值来源信息
     getContentLinkedData: function (content) {
-        var json = {};
         if (isNull(content.attrDefinition) || isNull(content.attrDefinition.attrDefinitionCustom)) {
             return content;
         }
         var customAttr = content.attrDefinition.attrDefinitionCustom;
-        var dataType = customAttr.dataType;
         if (isNull(customAttr.objectId) && isNull(customAttr.defaultData) && isNull(customAttr.businessApi) && $.isEmptyObject(customAttr.businessApi)) {
             return content;
         }
+        content.context = dsFormUtil.getHtmlContentByDataFrom(customAttr, content.dsFormComponent.htmlDataFrom);
+        return content;
+    },
+
+    getHtmlContentByDataFrom: function (obj, htmlDataFrom) {
+        var json = {};
+        var dataType = obj.dataType;
         if (dataType == 1) {
             // 自定义
-            var obj = isNull(customAttr.defaultData) ? [] : customAttr.defaultData;
-            if(typeof obj == 'string'){
+            var obj = isNull(obj.defaultData) ? [] : obj.defaultData;
+            if (typeof obj == 'string') {
                 obj = JSON.parse(obj);
             }
             json = obj;
         } else if (dataType == 2) {
             // 枚举
-            json = skyeyeClassEnumUtil.getEnumDataListByClassName(customAttr.objectId).rows;
+            json = skyeyeClassEnumUtil.getEnumDataListByClassName(obj.objectId).rows;
         } else if (dataType == 3) {
             // 数据字典
-            sysDictDataUtil.queryDictDataListByDictTypeCode(customAttr.objectId, function (data) {
+            sysDictDataUtil.queryDictDataListByDictTypeCode(obj.objectId, function (data) {
                 json = data.rows;
             });
         } else if (dataType == 4) {
             // 自定义接口
-            var businessApi = customAttr.businessApi;
+            var businessApi = obj.businessApi;
             var params = {};
             $.each(businessApi.params, function (key, value) {
                 var realValue = "";
@@ -461,10 +469,10 @@ var dsFormUtil = {
                 json = data.rows;
             }, async: false});
         }
-        if (!isNull(content.dsFormComponent.htmlDataFrom)) {
-            content.context = getDataUseHandlebars(content.dsFormComponent.htmlDataFrom, json);
+        if (!isNull(htmlDataFrom)) {
+            return getDataUseHandlebars(htmlDataFrom, json);
         }
-        return content;
+        return '';
     },
 
     // 获取显示值

@@ -147,21 +147,27 @@ layui.config({
                         </div>
                     </div>`,
         'deleteRowCallbackBox': `<div class="layui-form-item layui-col-xs12">
-                        <label class="layui-form-label" style="width: 60%;">删除行之后的回调函数：</label>
+                        <label class="layui-form-label" style="width: 70%;">删除行之后的回调函数：</label>
                         <div class="layui-input-block" script="">
                             <button id="deleteRowCallbackConfig" type="button" class="winui-toolbtn writeScript">编写脚本</button>
                         </div>
                     </div>`,
         'addRowCallbackBox': `<div class="layui-form-item layui-col-xs12">
-                        <label class="layui-form-label" style="width: 60%;">新增行之后的回调函数：</label>
+                        <label class="layui-form-label" style="width: 70%;">新增行之后的回调函数：</label>
                         <div class="layui-input-block" script="">
                             <button id="addRowCallbackConfig" type="button" class="winui-toolbtn writeScript">编写脚本</button>
                         </div>
                     </div>`,
         'afterScriptBox': `<div class="layui-form-item layui-col-xs12">
-                        <label class="layui-form-label" style="width: 60%;">组件加载完成后执行的脚本：</label>
-                        <div class="layui-input-block" script="">
+                        <label class="layui-form-label" style="width: 70%;">组件加载完成后执行的JS：</label>
+                        <div class="layui-input-block" script="layui.define(['jquery'], function(exports) {\n\tvar form = layui.form;\n\n});">
                             <button id="afterScriptConfig" type="button" class="winui-toolbtn writeScript">编写脚本</button>
+                        </div>
+                    </div>`,
+        'afterHtmlBox': `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label" style="width: 70%;">组件加载完成后执行的HTML：</label>
+                        <div class="layui-input-block" script="">
+                            <button id="afterHtmlConfig" type="button" class="winui-toolbtn writeScript">编写脚本</button>
                         </div>
                     </div>`,
     };
@@ -253,6 +259,7 @@ layui.config({
     $("#deleteRowCallbackConfig").parent().attr('script', data.deleteRowCallback);
     $("#addRowCallbackConfig").parent().attr('script', data.addRowCallback);
     $("#afterScriptConfig").parent().attr('script', data.afterScript);
+    $("#afterHtmlConfig").parent().attr('script', data.afterHtml);
 
     $("body").on("click", "#attrTransformTableListConfig", function() {
         parent.temData = $("#attrTransformTableListConfig").parent().attr('data');
@@ -321,6 +328,7 @@ layui.config({
         newParams.deleteRowCallback = $("#deleteRowCallbackConfig").parent().attr('script');
         newParams.addRowCallback = $("#addRowCallbackConfig").parent().attr('script');
         newParams.afterScript = $("#afterScriptConfig").parent().attr('script');
+        newParams.afterHtml = $("#afterHtmlConfig").parent().attr('script');
 
         if (!isNull($("#attrKey").val())) {
             newParams.attrDefinition = getInPoingArr(parent.attrList, 'attrKey', $("#attrKey").val());

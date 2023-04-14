@@ -17,7 +17,7 @@ layui.config({
 	form.render();
 	form.on('submit(formWriteBean)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			parent.scriptData = encodeURIComponent(jsEditor.getValue());
+			parent.scriptData = jsEditor.getValue();
 			parent.layer.close(index);
 			parent.refreshCode = '0';
 		}
