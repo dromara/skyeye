@@ -201,6 +201,7 @@ var initTableChooseUtil = {
                 row[bean.id] = value;
             });
             row["sortNo"] = i;
+            row["orderBy"] = i;
             dataList.push(row);
         });
         var checkResult = true;
@@ -285,7 +286,9 @@ var initTableChooseUtil = {
                 $("#" + tdId).attr("data-id", value);
                 var key = dsFormUtil.getKeyIdToMation(bean.id);
                 value = data[key];
-                $("#" + tdId).val(value.name || value.title);
+                if (!isNull(value)) {
+                    $("#" + tdId).val(value.name || value.title);
+                }
             } else if (formType == 'select') {
                 if (!isNull(value["html"])) {
                     $("#" + tdId).html(value["html"]);

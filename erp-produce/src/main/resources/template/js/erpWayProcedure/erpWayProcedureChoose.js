@@ -15,71 +15,68 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: flowableBasePath + 'erpwayprocedure009',
+	    url: sysMainMation.erpBasePath + 'erpwayprocedure001',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
-	    limits: [8, 16, 24, 32, 40, 48, 56],
-	    limit: 8,
+		limits: getLimits(),
+		limit: getLimit(),
 	    cols: [[
 	    	{ type: 'radio'},
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'wayNumber', title: '工艺编号', align: 'left', width: 100, templet: function (d) {
-					return '<a lay-event="details" class="notice-title-click">' + d.wayNumber + '</a>';
-				}},
-			{ field: 'wayName', title: '工艺名称', align: 'left', width: 250},
+			{ field: 'number', title: '工艺编号', align: 'left', width: 100 },
+			{ field: 'name', title: '工艺名称', align: 'left', width: 200 },
+			{ field: 'enabled', title: '状态', align: 'center', width: 80, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("commonEnable", 'id', d.enabled, 'name');
+			}}
 	    ]],
 	    done: function(res, curr, count){
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入名称、编号", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
+
+			for (var i = 0; i < res.rows.length; i++) {
+				// 未启用的设置为不可选中
+				if (res.rows[i].enabled != 1) {
+					systemCommonUtil.disabledRow(res.rows[i].LAY_TABLE_INDEX, 'radio');
+				}
+			}
 	    	$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
 				var dubClick = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
-				dubClick.find("input[type='radio']").prop("checked", true);
-				form.render();
-				var id = JSON.stringify(dubClick.data('index'));
-				// 工艺信息
-				parent.wayProcedureMation = res.rows[id];
-				parent.layer.close(index);
-				parent.refreshCode = '0';
+				if (!dubClick.find("input[type='radio']").prop("disabled")) {
+					dubClick.find("input[type='radio']").prop("checked", true);
+					form.render();
+					var chooseIndex = JSON.stringify(dubClick.data('index'));
+					var obj = res.rows[chooseIndex];
+
+					parent.wayProcedureMation = obj;
+					parent.refreshCode = '0';
+					parent.layer.close(index);
+				}
 			});
 			
 			$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('click',function(){
 				var click = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
-				click.find("input[type='radio']").prop("checked", true);
-				form.render();
+				if (!click.find("input[type='radio']").prop("disabled")) {
+					click.find("input[type='radio']").prop("checked", true);
+					form.render();
+				}
 			})
 	    }
 	});
-	
-	table.on('tool(messageTable)', function (obj) {
-        var data = obj.data;
-        var layEvent = obj.event;
-        if (layEvent === 'details'){ //详情
-        	details(data);
-        }
-    });
 
-	// 搜索表单
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
-		}
-		return false;
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
 	});
 
-	$("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
-    }
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
 
-	function getTableParams(){
-		return {
-			wayNumber: $("#wayNumber").val(),
-			wayName: $("#wayName").val()
-		};
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 
     exports('erpWayProcedureChoose', {});

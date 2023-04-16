@@ -18,6 +18,7 @@ layui.config({
 	} else {
 		checkType = GetUrlParam("checkType");
 	}
+	var procedureId = GetUrlParam("procedureId");
 
 	//设置提示信息
 	var s = "车间选择规则：";
@@ -28,12 +29,15 @@ layui.config({
 		//显示保存按钮
 		$("#saveCheckBox").show();
 	}
+	if (!isNull(procedureId)) {
+		s += '2.包含指定工序的车间可以选择；';
+	}
 	s += '如没有查到要选择的车间，请检查车间信息是否满足当前规则。';
 	$("#showInfo").html(s);
 
 	initTable();
 	function initTable(){
-		if(checkType == '2'){
+		if (checkType == '2') {
 			var ids = [];
 			$.each(parent.farmMationList, function(i, item) {
 				ids.push(item.id);
@@ -65,31 +69,53 @@ layui.config({
 	                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("commonEnable", 'id', d.enabled, 'name');
 	            }}
 		    ]],
-		    done: function(res, curr, count){
+		    done: function(res, curr, count) {
 		    	matchingLanguage();
 				initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入名称、车间编号", function () {
 					table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 				});
 
-		    	if(checkType == '1'){
+		    	if (checkType == '1') {
+					for (var i = 0; i < res.rows.length; i++) {
+						// 未启用/指定工序该车间没有的设置为不可选中
+						if (res.rows[i].enabled != 1) {
+							systemCommonUtil.disabledRow(res.rows[i].LAY_TABLE_INDEX, 'radio');
+						}
+						if (!isNull(procedureId) && getInPoingArr(res.rows[i].workProcedureList, "procedureId", procedureId) == null) {
+							systemCommonUtil.disabledRow(res.rows[i].LAY_TABLE_INDEX, 'radio');
+						}
+					}
 			    	$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
 						var dubClick = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
-						dubClick.find("input[type='radio']").prop("checked", true);
-						form.render();
-						var chooseIndex = JSON.stringify(dubClick.data('index'));
-						var obj = res.rows[chooseIndex];
-						parent.farmMation = obj;
-						
-						parent.refreshCode = '0';
-						parent.layer.close(index);
+						if (!dubClick.find("input[type='radio']").prop("disabled")) {
+							dubClick.find("input[type='radio']").prop("checked", true);
+							form.render();
+							var chooseIndex = JSON.stringify(dubClick.data('index'));
+							var obj = res.rows[chooseIndex];
+							parent.farmMation = obj;
+
+							parent.refreshCode = '0';
+							parent.layer.close(index);
+						}
 					});
 					
 					$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('click',function(){
 						var click = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
-						click.find("input[type='radio']").prop("checked", true);
-						form.render();
+						if (!click.find("input[type='radio']").prop("disabled")) {
+							click.find("input[type='radio']").prop("checked", true);
+							form.render();
+						}
 					})
 		    	} else {
+					for (var i = 0; i < res.rows.length; i++) {
+						// 未启用/指定工序该车间没有的设置为不可选中
+						if (res.rows[i].enabled != 1) {
+							systemCommonUtil.disabledRow(res.rows[i].LAY_TABLE_INDEX, 'checkbox');
+						}
+						if (!isNull(procedureId) && getInPoingArr(res.rows[i].workProcedureList, "procedureId", procedureId) == null) {
+							systemCommonUtil.disabledRow(res.rows[i].LAY_TABLE_INDEX, 'checkbox');
+						}
+					}
 		    		// 多选
 		    		tableCheckBoxUtil.checkedDefault({
 						gridId: 'messageTable',

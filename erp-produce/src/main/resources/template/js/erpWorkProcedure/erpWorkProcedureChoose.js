@@ -73,7 +73,7 @@ layui.config({
 					table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 				});
 
-		    	if(checkType == '1'){
+		    	if (checkType == '1') {
 			    	$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
 						var dubClick = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
 						dubClick.find("input[type='radio']").prop("checked", true);

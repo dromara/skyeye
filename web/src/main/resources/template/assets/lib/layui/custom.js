@@ -781,6 +781,9 @@ function judgeInPoingArr(array, key, value) {
  * @returns {null|*}
  */
 function getInPoingArr(array, key, value, getKey) {
+	if (array == null) {
+		return null;
+	}
 	for(var i = 0; i < array.length; i++){
 		if(array[i][key] == value){
 			if(isNull(getKey)){
