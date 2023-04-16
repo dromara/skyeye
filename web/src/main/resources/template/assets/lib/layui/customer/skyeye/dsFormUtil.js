@@ -163,7 +163,7 @@ var dsFormUtil = {
         if (showType == 8 && dsFormComponent.numCode == 'userStaffChoose') {
             var key = attrDefinition.attrKey;
             // 例如：将key由relationUserId变为relationUserMation
-            key = key.replace("Id", "") + "Mation";
+            key = dsFormUtil.getKeyIdToMation(key);
             value = data[key];
             if (!isNull(value) && !$.isEmptyObject(value)) {
                 // 判断值是否为对象，如果是对象，则组装成数组
@@ -532,7 +532,7 @@ var dsFormUtil = {
             if (showType == 8) {
                 var key = attrDefinition.attrKey;
                 // 例如：将key由relationUserId变为relationUserMation
-                key = key.replace("Id", "") + "Mation";
+                key = dsFormUtil.getKeyIdToMation(key);
                 value = data[key];
                 if (!isNull(value) && !$.isEmptyObject(value)) {
                     // 判断值是否为对象，如果是对象，则组装成数组
@@ -544,6 +544,10 @@ var dsFormUtil = {
         }
 
         return value;
+    },
+
+    getKeyIdToMation: function (key) {
+        return key.replace("Id", "") + "Mation";
     },
 
     /**

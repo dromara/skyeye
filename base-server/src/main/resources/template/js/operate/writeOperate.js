@@ -74,10 +74,7 @@ layui.config({
 				$.each(businessApi.params, function(key, value) {
 					var params = {
 						"key": key,
-						"attrKey": {
-							"html": attrHtml,
-							"value": value
-						}
+						"attrKey": value
 					};
 					initTableChooseUtil.resetData('apiParams', params);
 				});
@@ -103,10 +100,7 @@ layui.config({
 				$.each(operateOpenPage.params, function(key, value) {
 					var params = {
 						"key": key,
-						"attrKey": {
-							"html": attrHtml,
-							"value": value
-						}
+						"attrKey": value
 					};
 					initTableChooseUtil.resetData('pageParams', params);
 				});

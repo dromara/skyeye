@@ -13,23 +13,12 @@ layui.config({
 		tableCheckBoxUtil = layui.tableCheckBoxUtil;
 		
 	var checkType = '1';// 车间选择类型：1.单选；2.多选
-	
 	if (!isNull(parent.farmCheckType)){
 		checkType = parent.farmCheckType;
+	} else {
+		checkType = GetUrlParam("checkType");
 	}
-	
-	var selOption = getFileContent('tpl/template/select-option.tpl');
-	
-	AjaxPostUtil.request({url: flowableBasePath + "erpworkprocedure009", params: {}, type: 'json', callback: function(json) {
-		// 加载工序数据
-		$("#procedureId").html(getDataUseHandlebars(selOption, json));
-		if (!isNull(parent.procedureId)){
-			$("#procedureId").val(parent.procedureId);
-		}
-		// 初始化表格
-		initTable();
-	}});
-	
+
 	//设置提示信息
 	var s = "车间选择规则：";
 	if(checkType == "1"){
@@ -41,23 +30,19 @@ layui.config({
 	}
 	s += '如没有查到要选择的车间，请检查车间信息是否满足当前规则。';
 	$("#showInfo").html(s);
-	
+
+	initTable();
 	function initTable(){
 		if(checkType == '2'){
-			//初始化值
 			var ids = [];
 			$.each(parent.farmMationList, function(i, item) {
-				ids.push(item.farmId);
-			});
-			tableCheckBoxUtil.setIds({
-				gridId: 'messageTable',
-				fieldName: 'farmId',
-				ids: ids
+				ids.push(item.id);
 			});
 			tableCheckBoxUtil.init({
 				gridId: 'messageTable',
 				filterId: 'messageTable',
-				fieldName: 'farmId'
+				fieldName: 'id',
+				ids: ids
 			});
 		}
 			
@@ -65,35 +50,27 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: flowableBasePath + 'erpfarm010',
+		    url: sysMainMation.erpBasePath + 'erpfarm001',
 		    where: getTableParams(),
 			even: true,
 		    page: true,
-		    limits: [8, 16, 24, 32, 40, 48, 56],
-		    limit: 8,
+			limits: getLimits(),
+			limit: getLimit(),
 		    cols: [[
 		    	{ type: checkType == '1' ? 'radio' : 'checkbox'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        { field: 'farmNumber', title: '车间编号', align: 'left', width: 100, templet: function (d) {
-                    return '<a lay-event="details" class="notice-title-click">' + d.farmNumber + '</a>';
-                }},
-	            { field: 'farmName', title: '车间名称', align: 'left', width: 250},
-	            { field: 'state', title: '状态', align: 'left', width: 80, templet: function (d) {
-	                if(d.state == '1'){
-	                    return "<span class='state-up'>正常</span>";
-	                } else if (d.state == '2'){
-	                    return "<span class='state-down'>维修整改</span>";
-	                } else {
-	                    return "参数错误";
-	                }
-	            }},
-	            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
-	            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 100 },
-	            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
-	            { field: 'lastUpdateTime', title: '最后修改时间', align: 'center', width: 100}
+		        { field: 'number', title: '车间编号', align: 'left', width: 100 },
+	            { field: 'name', title: '名称', align: 'left', width: 250 },
+	            { field: 'enabled', title: '状态', align: 'center', width: 80, templet: function (d) {
+	                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("commonEnable", 'id', d.enabled, 'name');
+	            }}
 		    ]],
 		    done: function(res, curr, count){
 		    	matchingLanguage();
+				initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入名称、车间编号", function () {
+					table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+				});
+
 		    	if(checkType == '1'){
 			    	$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
 						var dubClick = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
@@ -113,11 +90,10 @@ layui.config({
 						form.render();
 					})
 		    	} else {
-		    		//多选
-		    		//设置选中
+		    		// 多选
 		    		tableCheckBoxUtil.checkedDefault({
 						gridId: 'messageTable',
-						fieldName: 'procedureId'
+						fieldName: 'id'
 					});
 		    	}
 		    }
@@ -131,39 +107,26 @@ layui.config({
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
 		});
-		AjaxPostUtil.request({url: flowableBasePath + "erpfarm011", params: {ids: selectedData.toString()}, type: 'json', callback: function (json) {
-			parent.procedureMationList = [].concat(json.rows);
-			parent.layer.close(index);
-			parent.refreshCode = '0';
-   		}});
+		if (selectedData.length == 0) {
+			winui.window.msg("请选择车间", {icon: 2, time: 2000});
+			return false;
+		}
+		parent.farmMationList = [].concat(selectedData);
+		parent.layer.close(index);
+		parent.refreshCode = '0';
 	});
-	
+
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            refreshTable();
-        }
-        return false;
-    });
-	
 	$("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
-    }
-    
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
+		loadTable();
+	});
+
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
 
 	function getTableParams() {
-		return {
-			farmNumber: $("#farmNumber").val(),
-            farmName: $("#farmName").val(),
-            procedureId: $("#procedureId").val()
-		};
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
     exports('erpFarmChoose', {});

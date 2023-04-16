@@ -63,7 +63,11 @@ var initTableChooseUtil = {
         var headerStr = '<th style="width: 30px;"></th>';
         $.each(newOptions.cols, function (i, item) {
             var colHeaderId = isNull(item.colHeaderId) ? "" : ("id = " + item.colHeaderId);
-            headerStr += '<th style="width: ' + item.width + 'px; white-space: nowrap;" ' + colHeaderId + '>' + item.title + '</th>';
+            var bs = '';
+            if (item.verify.indexOf('required') >= 0) {
+                bs = '<i class="red">*</i>';
+            }
+            headerStr += '<th style="width: ' + item.width + 'px; white-space: nowrap;" ' + colHeaderId + '>' + item.title + bs + '</th>';
         });
         $("#header" + newOptions.id).html(headerStr);
     },
@@ -191,7 +195,7 @@ var initTableChooseUtil = {
                     value = $("#" + tdId).val();
                 } else if (bean.formType == 'detail') {
                     value = $("#" + tdId).html();
-                } else if (item.formType == 'chooseInput') {
+                } else if (bean.formType == 'chooseInput') {
                     value = $("#" + tdId).attr("data-id");
                 }
                 row[bean.id] = value;
@@ -278,13 +282,15 @@ var initTableChooseUtil = {
             if (formType == 'input') {
                 $("#" + tdId).val(value);
             } else if (formType == 'chooseInput') {
-                $("#" + tdId).val(value);
-
+                $("#" + tdId).attr("data-id", value);
+                var key = dsFormUtil.getKeyIdToMation(bean.id);
+                value = data[key];
+                $("#" + tdId).val(value.name || value.title);
             } else if (formType == 'select') {
                 if (!isNull(value["html"])) {
                     $("#" + tdId).html(value["html"]);
                 }
-                $("#" + tdId).val(value["value"]);
+                $("#" + tdId).val(value);
             } else if (formType == 'detail') {
                 $("#" + tdId).html(value);
             }
