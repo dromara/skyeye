@@ -64,7 +64,7 @@ var initTableChooseUtil = {
         $.each(newOptions.cols, function (i, item) {
             var colHeaderId = isNull(item.colHeaderId) ? "" : ("id = " + item.colHeaderId);
             var bs = '';
-            if (item.verify.indexOf('required') >= 0) {
+            if (!isNull(item.verify) && item.verify.indexOf('required') >= 0) {
                 bs = '<i class="red">*</i>';
             }
             headerStr += '<th style="width: ' + item.width + 'px; white-space: nowrap;" ' + colHeaderId + '>' + item.title + bs + '</th>';
