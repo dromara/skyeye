@@ -66,8 +66,9 @@ layui.config({
 	// 加载考勤班次
 	/*showGrid({
 	 	id: "timeId",
-	 	url: flowableBasePath + "checkworktime006",
+	 	url: sysMainMation.checkworkBasePath + "queryEnableCheckWorkTimeList",
 	 	params: {},
+	 	method: 'GET',
 	 	pagination: false,
 	 	template: selTemplate,
 	 	ajaxSendLoadBefore: function(hdb, json){

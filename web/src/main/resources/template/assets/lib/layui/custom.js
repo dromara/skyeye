@@ -106,6 +106,8 @@ var serviceMap = [
 	{"id": "sysMainMation.crmBasePath", "name": "CRM服务"},
 	{"id": "sysMainMation.ifsBasePath", "name": "IFS财务服务"},
 	{"id": "sysMainMation.erpBasePath", "name": "ERP+生产服务"},
+	{"id": "sysMainMation.checkworkBasePath", "name": "考勤服务"},
+	{"id": "sysMainMation.bossBasePath", "name": "招聘服务"},
 ]
 
 function getRequestHeaders() {

@@ -11,29 +11,27 @@ layui.config({
 	    var $ = layui.$;
 	    
 	    //获取列表中已有的仓库库存
-	    var normsStock = [].concat(parent.normsStock);
+	    var normsStockList = [].concat(parent.normsStock);
 	    //要编辑的仓库id
 	    var depotId = parent.chooseDepotId;
-	    $.each(normsStock, function(i, item) {
-    		if(item.depotId === depotId){
-    			$("#stock").val(item.stock);
-    			$("#depotName").html(item.depotName);
-    			return false;
-    		}
-    	});
-    	
+		var normsStock = getInPoingArr(normsStockList, "depotId", depotId, null);
+		if (!isNull(normsStock)) {
+			$("#stock").val(normsStock.stock);
+			$("#name").html(normsStock.depotMation.name);
+		}
+
     	matchingLanguage();
  		form.render();
  	    form.on('submit(formEditBean)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
- 	        	$.each(normsStock, function(i, item) {
+ 	        	$.each(normsStockList, function(i, item) {
  	        		if(item.depotId === depotId){
  	        			item.stock = $("#stock").val();
  	        			return false;
  	        		}
  	        	});
  	        	//赋值给列表
- 	        	parent.normsStock = [].concat(normsStock);
+ 	        	parent.normsStock = [].concat(normsStockList);
     			parent.layer.close(index);
     			parent.refreshCode = '0';
  	        }

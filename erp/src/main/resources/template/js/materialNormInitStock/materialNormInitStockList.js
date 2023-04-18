@@ -23,8 +23,10 @@ layui.config({
         elem: '#messageTable',
         data: $.extend(true, [], normsStock),
 	    cols: [[
-		    { field: 'depotName', title: '仓库', align: 'left', width: 200},
-	        { field: 'stock', title: '初始数量', align: 'left', width: 80},
+		    { field: 'name', title: '仓库', align: 'left', width: 200, templet: function (d) {
+				return d.depotMation.name;
+			}},
+	        { field: 'stock', title: '初始数量', align: 'left', width: 80 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 140, toolbar: '#tableBar'}
 	    ]],
 	    done: function(json) {

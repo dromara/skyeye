@@ -141,8 +141,9 @@ layui.config({
 		 		// 考勤时间段
 		 		showGrid({
 			     	id: "checkTimeBox",
-			     	url: flowableBasePath + "checkworktime006",
+			     	url: sysMainMation.checkworkBasePath + "queryEnableCheckWorkTimeList",
 			     	params: {},
+					method: 'GET',
 			     	pagination: false,
 			     	template: $("#checkTimeStrTemplate").html(),
 			     	ajaxSendLoadBefore: function(hdb) {

@@ -129,6 +129,7 @@ layui.config({
 		data: tableDataList,
 		even: true,
 		page: false,
+		limit: 100,
 		rowDrag: {
 			trigger: '.drag-row',
 			done: function(obj) {}

@@ -396,7 +396,9 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     callBack: function (refreshCode) {
                         var str = "";
                         $.each(normsStock, function(i, item) {
-                            str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '【' + item.stock + '】</span>';
+                            if (!isNull(item.depotMation)) {
+                                str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotMation.name + '【' + item.stock + '】</span>';
+                            }
                         });
                         _this.attr("stock", JSON.stringify(normsStock));
                         _this.parent().html(_this.prop("outerHTML") + str);
@@ -534,7 +536,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                        </div>`;
             $(`#${this.options.otherMationElemId}`).html(str);
             var that = this;
-            AjaxPostUtil.request({url: flowableBasePath + "materialunit006", params: {}, type: 'json', method: "GET", callback: function(json) {
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "materialunit006", params: {}, type: 'json', method: "GET", callback: function(json) {
                 $(`#unitGroupId`).html(getDataUseHandlebars(that.selTemplate, json));
                 that.unitGroupList = json.rows;
             }, async: false});
@@ -564,6 +566,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 			var tableId = this.options.specTableElemId + '-id';
             var that = this,
                 table = `<table class="layui-table" id="${tableId}"><thead><tr><th>规格名</th><th>规格值</th></tr></thead><colgroup><col width="140"></colgroup><tbody>`;
+            console.log(this.data.specData)
             $.each(this.data.specData, function (index, item) {
                 table += `<tr data-num="${item.rowNum}" data-id="${item.rowNum}">`;
                 table += `<td data-num="${item.rowNum}">${item.title} <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.data.specDataDelete ? '' : 'layui-hide'}" data-spec-num="${item.rowNum}"></i></td>`;
@@ -750,7 +753,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                 elem: '.fairy-sku-img',
                 url: reqBasePath + 'common003',
                 data: {type: 29},
-                exts: 'png|jpg|ico|jpeg|gif',
+                exts: imageType.join('|'),
                 accept: 'images',
                 acceptMime: 'image/*',
                 multiple: false,
@@ -796,10 +799,12 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 						tr += '</select></td>';
 						break;
                     case "btn":
-                        value = isNull(value) ? [] : JSON.parse(value);
+                        value = isNull(value) ? [] : ($.isArray(value) ? value : JSON.parse(value));
                         tr += "<td><button type='button' class='layui-btn layui-btn-primary layui-btn-xs stockMore' stock='" + JSON.stringify(value) + "' id='" + id + "'>库存信息</button>";
                         $.each(value, function(i, item) {
-                            tr += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '【' + item.stock + '】</span>';
+                            if (!isNull(item.depotMation)) {
+                                tr += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotMation.name + '【' + item.stock + '】</span>';
+                            }
                         });
                         tr += '</td>';
                         break;
@@ -854,7 +859,9 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                         value = isNull(value) ? [] : JSON.parse(value);
                         div += "<button type='button' class='layui-btn layui-btn-primary layui-btn-xs stockMore' stock='" + JSON.stringify(value) + "' id='" + id + "'>库存信息</button>";
                         $.each(value, function(i, item) {
-                            div += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '【' + item.stock + '】</span>';
+                            if (!isNull(item.depotMation)) {
+                                div += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotMation.name + '【' + item.stock + '】</span>';
+                            }
                         });
                         break;
                     case "input":
@@ -876,7 +883,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             var prependThead = [], prependTbody = [];
 
             // 加载计量单位作为其中的一个规格
-            AjaxPostUtil.request({url: flowableBasePath + "materialunit006", params: {}, type: 'json', method: "GET", callback: function(json) {
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "materialunit006", params: {}, type: 'json', method: "GET", callback: function(json) {
                 var prependTbodyItem = [];
                 $.each(json.rows, function (i, item) {
                     if (item.id == that.data.otherMationData.unitGroupId) {
@@ -999,7 +1006,9 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     case "btn":
                         value = isNull(value) ? [] : JSON.parse(value);
                         $.each(value, function(i, item) {
-                            tr += '<span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '【' + item.stock + '】</span><br>';
+                            if (!isNull(item.depotMation)) {
+                                tr += '<span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotMation.name + '【' + item.stock + '】</span><br>';
+                            }
                         });
                         break;
                     case "input":
@@ -1044,7 +1053,9 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     case "btn":
                         value = isNull(value) ? [] : JSON.parse(value);
                         $.each(value, function(i, item) {
-                            div += '<span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '【' + item.stock + '】</span><br>';
+                            if (!isNull(item.depotMation)) {
+                                div += '<span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotMation.name + '【' + item.stock + '】</span><br>';
+                            }
                         });
                         break;
                     case "input":

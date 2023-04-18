@@ -101,7 +101,7 @@ var erpOrderUtil = {
      */
     deleteOrderMation: function (id, serviceClassName, callback) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index) {
-            AjaxPostUtil.request({url: flowableBasePath + "erpcommon005", params: {rowId: id, serviceClassName: serviceClassName}, method: "DELETE", type: 'json', callback: function(json) {
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon005", params: {rowId: id, serviceClassName: serviceClassName}, method: "DELETE", type: 'json', callback: function(json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 if (typeof (callback) == "function") {
                     callback();
@@ -137,7 +137,7 @@ var erpOrderUtil = {
             serviceClassName: serviceClassName,
             approvalId: approvalId
         };
-        AjaxPostUtil.request({url: flowableBasePath + "erpcommon006", params: params, method: "PUT", type: 'json', callback: function(json) {
+        AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon006", params: params, method: "PUT", type: 'json', callback: function(json) {
             winui.window.msg("提交成功。", {icon: 1, time: 2000});
             if (typeof (callback) == "function") {
                 callback();
@@ -157,7 +157,7 @@ var erpOrderUtil = {
                 processInstanceId: processInstanceId,
                 serviceClassName: serviceClassName
             };
-            AjaxPostUtil.request({url: flowableBasePath + "erpcommon003", params: params, type: 'json', method: "PUT", callback: function(json) {
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon003", params: params, type: 'json', method: "PUT", callback: function(json) {
                 winui.window.msg("撤销成功。", {icon: 1, time: 2000});
                 if (typeof(callback) == "function") {
                     callback();
@@ -196,7 +196,7 @@ var erpOrderUtil = {
      * @param callback 回执函数
      */
     getDepotList: function (callback) {
-        AjaxPostUtil.request({url: flowableBasePath + "storehouse008", params: {}, type: 'json', method: "GET", callback: function(json) {
+        AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryAllStoreHouseList", params: {}, type: 'json', method: "GET", callback: function(json) {
             if (typeof(callback) == "function") {
                 callback(json);
             }

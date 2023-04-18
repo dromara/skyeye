@@ -11,10 +11,9 @@ layui.config({
 	    var $ = layui.$;
 		var selOption = getFileContent('tpl/template/select-option.tpl');
 	    
-	    //获取列表中已有的仓库库存
+	    // 获取列表中已有的仓库库存
 	    var normsStock = [].concat(parent.normsStock);
 	    
-		// 初始化仓库
 		erpOrderUtil.getDepotList(function (json){
 			$("#storeHouseId").html(getDataUseHandlebars(selOption, json));
 			form.render();
@@ -37,7 +36,9 @@ layui.config({
  	        	} else {
 	 	        	normsStock.push({
 	 	        		depotId: $("#storeHouseId").val(),
-	 	        		depotName: $("#storeHouseId").find("option:selected").text(),
+						depotMation: {
+							 name: $("#storeHouseId").find("option:selected").text()
+						},
 						stock: $("#stock").val()
 	 	        	});
 	 	        	// 赋值给列表
