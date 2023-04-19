@@ -37,6 +37,12 @@ layui.config({
                                 <input type="text" id="placeholder" name="placeholder" placeholder="请输入控件提示语" class="layui-input" />
                             </div>
                         </div>`,
+        'remarkBox': `<div class="layui-form-item layui-col-xs12">
+                            <label class="layui-form-label">备注：</label>
+                            <div class="layui-input-block winui-radio">
+                                <input type="text" id="remark" name="remark" placeholder="请输入备注" class="layui-input" />
+                            </div>
+                        </div>`,
         'requireBox': `<div class="layui-form-item layui-col-xs12">
                             <label class="layui-form-label">限制条件</label>
                             <div class="layui-input-block" id="require">
@@ -191,6 +197,7 @@ layui.config({
 
     $("#title").val(data.title);
     $("#placeholder").val(data.placeholder);
+    $("#remark").val(data.remark);
     $("#defaultValue").val(data.defaultValue);
     $("#uploadNum").val(data.uploadNum);
 
@@ -306,6 +313,7 @@ layui.config({
         var newParams = parent.contentList[inDataIndex];
         newParams.title = $("#title").val();
         newParams.placeholder = $("#placeholder").val();
+        newParams.remark = $("#remark").val();
         newParams.require = isNull($('#require').attr('value')) ? [] : JSON.parse($('#require').attr('value'));
         newParams.uploadDataType = isNull($('#uploadDataType').attr('value')) ? [] : JSON.parse($('#uploadDataType').attr('value'));
         newParams.uploadNum = $("#uploadNum").val();

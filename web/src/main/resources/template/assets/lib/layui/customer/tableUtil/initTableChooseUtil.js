@@ -7,6 +7,7 @@ var initTableChooseUtil = {
     options: {
         id: "", // 表格加载的位置
         indexRow: 0, // 表格行计数器
+        placeholder: '', // 描述
         cols: [], // 列属性，{id: 'materialId',
                             // title: '商品',
                             // formType: 'input', formType展示方式 select：下拉框 input：普通输入框 chooseInput：选择输入框 detail：展示,只加载<td></td>
@@ -52,6 +53,7 @@ var initTableChooseUtil = {
             '            <button id="deleteRow' + newOptions.id + '" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>' +
             '        </div>' +
             '    </div>' +
+            '    <div class="layui-form-mid layui-word-aux" style="width: 100%">' + newOptions.placeholder + '</div>' +
             '    <table class="layui-table" style="width: auto">' +
             '         <thead>' +
             '             <tr id="header' + newOptions.id + '"></tr>' +
