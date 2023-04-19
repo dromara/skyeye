@@ -1,6 +1,4 @@
 
-var rowId = "";
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -26,30 +24,40 @@ layui.config({
 		    id: 'messageTable',
 	        elem: '#messageTable',
 	        method: 'post',
-	        url: flowableBasePath + 'material016',
+	        url: sysMainMation.erpBasePath + 'material016',
 	        where: getTableParams(),
 	        even: true,
 	        page: true,
-	        limits: [8, 16, 24, 32, 40, 48, 56],
+			limits: getLimits(),
+			limit: getLimit(),
 	        overflow: {
 	            type: 'tips',
 	            hoverTime: 300, // 悬停时间，单位ms, 悬停 hoverTime 后才会显示，默认为 0
 	            minWidth: 150, // 最小宽度
 	            maxWidth: 500 // 最大宽度
 	        },
-	        limit: 8,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        { field: 'name', title: '商品名称', align: 'left', width: 150, templet: function (d) {
-			        	return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
-			    }},
+		        { field: 'name', title: '产品名称', align: 'left', width: 150 },
 		        { field: 'model', title: '型号', align: 'left', width: 150 },
-		        { field: 'categoryName', title: '所属类型', align: 'center', width: 100 },
-		        { field: 'typeName', title: '商品来源', align: 'left', width: 100 },
-		        { field: 'norms', title: '库存', width: 380, templet: function (d) {
+		        { field: 'categoryId', title: '所属分类', align: 'center', width: 100, templet: function (d) {
+					return sysDictDataUtil.getDictDataNameByCodeAndKey("ERP_MATERIAL_CATEGORY", d.categoryId);
+				}},
+		        { field: 'fromType', title: '产品来源', align: 'center', width: 100, templet: function (d) {
+					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialFromType", 'id', d.fromType, 'name');
+				}},
+				{ field: 'type', title: '产品类型', align: 'left', width: 100, templet: function (d) {
+					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialType", 'id', d.type, 'name');
+				}},
+				{ field: 'unit', title: '产品规格类型', align: 'center', width: 100, templet: function (d) {
+					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialUnit", 'id', d.unit, 'name');
+				}},
+		        { field: 'norms', title: '库存', width: 150, templet: function (d) {
 		        	var str = "";
-		        	$.each(d.norms, function(i, item) {
-		        		str += '<span class="layui-badge layui-bg-blue">' + item.name + '【' + item.allStock + '】</span><br>';
+		        	$.each(d.materialNorms, function(i, item) {
+						if (!isNull(item.overAllStock)) {
+							str += '<span class="layui-badge layui-bg-blue">' + item.name + '【' + item.overAllStock.allStock + '】</span><br>';
+						}
 		        	});
 		        	return str;
 		        }},
@@ -66,29 +74,8 @@ layui.config({
 				});
 		    }
 		});
-		table.on('tool(messageTable)', function (obj) {
-	        var data = obj.data;
-	        var layEvent = obj.event;
-	        if (layEvent === 'details') { // 详情
-	        	details(data);
-	        }
-	    });
-	    
-	    form.render();
 	}
     
-    // 详情
-	function details(data) {
-		rowId = data.id;
-		_openNewWindows({
-			url: "../../tpl/material/materialDetails.html",
-			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "materialDetails",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-			}});
-	}
-
 	form.render();
     $("body").on("click", "#reloadTable", function() {
     	loadTable();

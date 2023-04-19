@@ -1,6 +1,4 @@
 
-var rowId = "";
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -12,18 +10,12 @@ layui.config({
 		form = layui.form,
 		table = layui.table,
 		soulTable = layui.soulTable;
-	var selOption = getFileContent('tpl/template/select-option.tpl');
-
-	// 加载仓库数据
-	erpOrderUtil.getDepotList(function (json){
-		$("#depotId").html(getDataUseHandlebars(selOption, json));
-	});
 
 	table.render({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-		url: flowableBasePath + 'material017',
+		url: sysMainMation.erpBasePath + 'material017',
 		where: getTableParams(),
 		even: true,
 		page: true,
@@ -37,30 +29,34 @@ layui.config({
 		},
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
-			{ field: 'name', title: '商品名称', rowspan: '2', align: 'left', width: 150, templet: function (d) {
-					return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
-			}},
+			{ field: 'name', title: '产品名称', rowspan: '2', align: 'left', width: 150 },
 			{ field: 'model', title: '型号', rowspan: '2', align: 'left', width: 150 },
-			{ field: 'categoryName', title: '所属类型', rowspan: '2', align: 'center', width: 100 },
-			{ field: 'typeName', title: '商品来源', rowspan: '2', align: 'left', width: 100 },
-			{ field: 'unitName', title: '单位', rowspan: '2', align: 'center', width: 80},
-			{ title: '库存', colspan: '3', align: 'center', width: 100},
-			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 }
+			{ field: 'normsName', title: '规格', rowspan: '2', align: 'left', width: 300 },
+			{ field: 'categoryId', title: '所属分类', rowspan: '2', align: 'center', width: 100, templet: function (d) {
+				return sysDictDataUtil.getDictDataNameByCodeAndKey("ERP_MATERIAL_CATEGORY", d.categoryId);
+			}},
+			{ field: 'fromType', title: '产品来源', rowspan: '2', align: 'center', width: 100, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialFromType", 'id', d.fromType, 'name');
+			}},
+			{ field: 'type', title: '产品类型', rowspan: '2', align: 'left', width: 100, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialType", 'id', d.type, 'name');
+			}},
+			{ field: 'unit', title: '产品规格类型', rowspan: '2', align: 'center', width: 100, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialUnit", 'id', d.unit, 'name');
+			}},
+			{ title: '库存', colspan: '2', align: 'center', width: 100 }
 		],[
-			{ field: 'safetyTock', title: '安全存量', align: 'center', width: 80},
-			{ field: 'allStock', title: '当前库存', align: 'center', width: 120}
+			{ field: 'safetyTock', title: '安全存量', align: 'center', width: 80 },
+			{ field: 'allStock', title: '当前库存', align: 'center', width: 120, templet: function (d) {
+				if (!isNull(d.overAllStock)) {
+					return d.overAllStock.allStock;
+				}
+				return "0";
+			}}
 		]],
 		done: function(json) {
 			matchingLanguage();
 			soulTable.render(this);
-		}
-	});
-
-	table.on('tool(messageTable)', function (obj) {
-		var data = obj.data;
-		var layEvent = obj.event;
-		if (layEvent === 'details') { //详情
-			details(data);
 		}
 	});
 
@@ -72,19 +68,7 @@ layui.config({
         return false;
     });
     
-    //详情
-	function details(data) {
-		rowId = data.id;
-		_openNewWindows({
-			url: "../../tpl/material/materialDetails.html",
-			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "materialDetails",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-			}});
-	}
-	
-	//刷新数据
+	// 刷新数据
     $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
