@@ -143,7 +143,7 @@ layui.config({
 
 			$.each(tableDataList, function (i, item) {
 				// 限制条件
-				var require = isNull(item.require) ? '' : item.require.toString();
+				var require = isNull(item.require) ? '' : ($.isArray(item.require) ? item.require.toString() : JSON.parse(item.require).toString());
 				skyeyeClassEnumUtil.showEnumDataListByClassName("verificationParams", 'verificationSelect', "require" + item.id, require, form, null, 'formerRequirement');
 
 				// 数据源
