@@ -182,6 +182,18 @@ layui.config({
                             <button id="afterScriptConfig" type="button" class="winui-toolbtn writeScript">编写脚本</button>
                         </div>
                     </div>`,
+        'editEchoScriptBox': `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label" style="width: 70%; white-space: inherit;">数据编辑回显时执行的脚本，入参为value：</label>
+                        <div class="layui-input-block" script="">
+                            <button id="editEchoScriptConfig" type="button" class="winui-toolbtn writeScript">编写脚本</button>
+                        </div>
+                    </div>`,
+        'dataEchoAfterScriptBox': `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label" style="width: 70%;">数据回显完之后执行的脚本：</label>
+                        <div class="layui-input-block" script="">
+                            <button id="dataEchoAfterScriptConfig" type="button" class="winui-toolbtn writeScript">编写脚本</button>
+                        </div>
+                    </div>`,
         'afterHtmlBox': `<div class="layui-form-item layui-col-xs12">
                         <label class="layui-form-label" style="width: 70%;">组件加载完成后执行的HTML：</label>
                         <div class="layui-input-block" script="">
@@ -284,6 +296,8 @@ layui.config({
     if (!isNull(data.afterScript)) {
         $("#afterScriptConfig").parent().attr('script', data.afterScript);
     }
+    $("#editEchoScriptConfig").parent().attr('script', data.editEchoScript);
+    $("#dataEchoAfterScriptConfig").parent().attr('script', data.dataEchoAfterScript);
     $("#afterHtmlConfig").parent().attr('script', data.afterHtml);
 
     $("body").on("click", "#attrTransformTableListConfig", function() {
@@ -356,6 +370,8 @@ layui.config({
         newParams.addRowCallback = $("#addRowCallbackConfig").parent().attr('script');
         newParams.beforeScript = $("#beforeScriptConfig").parent().attr('script');
         newParams.afterScript = $("#afterScriptConfig").parent().attr('script');
+        newParams.editEchoScript = $("#editEchoScriptConfig").parent().attr('script');
+        newParams.dataEchoAfterScript = $("#dataEchoAfterScriptConfig").parent().attr('script');
         newParams.afterHtml = $("#afterHtmlConfig").parent().attr('script');
 
         if (!isNull($("#attrKey").val())) {

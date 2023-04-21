@@ -296,6 +296,7 @@ var initTableChooseUtil = {
             } else if (formType == 'select') {
                 if (!isNull(value["html"])) {
                     $("#" + tdId).html(value["html"]);
+                    value = data[bean.id]['value'];
                 }
                 $("#" + tdId).val(value);
             } else if (formType == 'detail') {

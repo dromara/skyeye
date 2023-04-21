@@ -1,7 +1,7 @@
 
 // 计算总价
 function calculatedTotalPrice() {
-	var totalAmount = 0, taxLastMoneyPrice = 0;
+	var taxLastMoneyPrice = 0;
 	$.each(initTableChooseUtil.getDataRowIndex(tableId), function (i, item) {
 		// 获取行坐标
 		var thisRowKey = item;
@@ -141,19 +141,17 @@ function calculatedTotalPrice() {
 				$("#taxRate" + thisRowKey).val('0.00');
 			}
 		}
-		totalAmount += parseFloat($("#allPrice" + thisRowKey).val());
 		taxLastMoneyPrice += parseFloat($("#taxLastMoney" + thisRowKey).val());
 	});
-	$("#allPrice").html(totalAmount.toFixed(2));
-	$("#taxLastMoneyPrice").html(taxLastMoneyPrice.toFixed(2));
 
 	// 优惠率计算
 	var discount = parseFloat(isNull($(".discount").val()) ? 0 : $(".discount").val());
 	// 输出优惠金额
 	var discountMoney = (taxLastMoneyPrice * discount / 100).toFixed(2);
-	$(".discountMoney").val(discountMoney);
-	// 输出优惠后的金额
-	$("#discountLastMoney").html((taxLastMoneyPrice - discountMoney).toFixed(2));
+	$(".discountMoney").html(discountMoney);
+	taxLastMoneyPrice.toFixed(2);
+	// 返回最终金额
+	$(".totalPrice").html((taxLastMoneyPrice - discountMoney).toFixed(2));
 }
 
 layui.define(["jquery"], function(exports) {
@@ -179,46 +177,14 @@ layui.define(["jquery"], function(exports) {
 			calculatedTotalPrice();
 		});
 		
-		// 优惠率变化
-		$("body").on("input", ".discount", function() {
-			//获取价格合计
-			var taxLastMoneyPrice = parseFloat(isNull($("#taxLastMoneyPrice").html()) ? 0 : $("#taxLastMoneyPrice").html());
-			var discount = parseFloat(isNull($(this).val()) ? 0 : $(this).val());
-			//输出优惠金额
-			$(".discountMoney").val((taxLastMoneyPrice * discount / 100).toFixed(2));
-			//输出优惠后的金额
-			$("#discountLastMoney").html((taxLastMoneyPrice - (taxLastMoneyPrice * discount / 100)).toFixed(2));
+		// 优惠率变化/优惠金额变化
+		$("body").on("input", ".discount, .discountMoney", function() {
+			calculatedTotalPrice();
 		});
-		$("body").on("change", ".discount", function() {
-			//获取价格合计
-			var taxLastMoneyPrice = parseFloat(isNull($("#taxLastMoneyPrice").html()) ? 0 : $("#taxLastMoneyPrice").html());
-			var discount = parseFloat(isNull($(this).val()) ? 0 : $(this).val());
-			//输出优惠金额
-			$(".discountMoney").val((taxLastMoneyPrice * discount / 100).toFixed(2));
-			//输出优惠后的金额
-			$("#discountLastMoney").html((taxLastMoneyPrice - (taxLastMoneyPrice * discount / 100)).toFixed(2));
+		$("body").on("change", ".discount, .discountMoney", function() {
+			calculatedTotalPrice();
 		});
-		
-		// 优惠金额变化
-		$("body").on("input", ".discountMoney", function() {
-			//获取价格合计
-			var taxLastMoneyPrice = parseFloat(isNull($("#taxLastMoneyPrice").html()) ? 0 : $("#taxLastMoneyPrice").html());
-			var discountMoney = parseFloat(isNull($(this).val()) ? 0 : $(this).val());
-			//输出优惠率
-			$(".discount").val((discountMoney / taxLastMoneyPrice * 100).toFixed(2));
-			//输出优惠后的金额
-			$("#discountLastMoney").html((taxLastMoneyPrice - discountMoney).toFixed(2));
-		});
-		$("body").on("change", ".discountMoney", function() {
-			//获取价格合计
-			var taxLastMoneyPrice = parseFloat(isNull($("#taxLastMoneyPrice").html()) ? 0 : $("#taxLastMoneyPrice").html());
-			var discountMoney = parseFloat(isNull($(this).val()) ? 0 : $(this).val());
-			//输出优惠率
-			$(".discount").val((discountMoney / taxLastMoneyPrice * 100).toFixed(2));
-			//输出优惠后的金额
-			$("#discountLastMoney").html((taxLastMoneyPrice - discountMoney).toFixed(2));
-		});
-		
+
 		// 其他费用变化
 		$("body").on("input", ".otherPrice", function() {
 			calculationPrice();
@@ -226,7 +192,7 @@ layui.define(["jquery"], function(exports) {
 		$("body").on("change", ".otherPrice", function() {
 			calculationPrice();
 		});
-
+		
 	})(jQuery);
 });
 
