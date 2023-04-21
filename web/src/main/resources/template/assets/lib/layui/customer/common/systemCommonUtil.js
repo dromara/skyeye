@@ -1082,6 +1082,9 @@ var dataShowType = {
             layui.define(["xmSelect"], function(exports) {
                 var xmSelect = layui.xmSelect;
                 var data = [].concat(json.rows);
+                $.each(data, function (i, item) {
+                    item.selected = false;
+                });
                 // 设置选中值
                 var chooseId = [];
                 if (!isNull(defaultId)) {

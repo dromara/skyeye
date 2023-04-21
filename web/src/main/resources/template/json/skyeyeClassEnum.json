@@ -6,6 +6,7 @@
     "isUsed": {"name": "是否使用的枚举", "className": "skyeye-pro#com.skyeye.common.enumeration.IsUsedEnum"},
     "whetherEnum": {"name": "是否的枚举", "className": "skyeye-pro#com.skyeye.common.enumeration.WhetherEnum"},
     "dateTimeType": {"name": "日期类型", "className": "skyeye-pro#com.skyeye.dsform.classenum.DateTimeType"},
+    "payTypeEnum": {"name": "付款类型", "className": "skyeye-pro#com.skyeye.common.enumeration.PayTypeEnum"},
 
     "bossInterviewArrangementState": {"name": "面试安排状态枚举类", "className": "skyeye-boss#com.skyeye.arrangement.classenum.ArrangementState"},
     "bossInterviewArrangementState1": {

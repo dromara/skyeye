@@ -4,6 +4,8 @@ var initTableChooseUtil = {
 
     setting: {}, // 支出多个一个页面多个配置文件的加载
 
+    chooseInputDataIdKey: "data-id",
+
     options: {
         id: "", // 表格加载的位置
         indexRow: 0, // 表格行计数器
@@ -198,7 +200,7 @@ var initTableChooseUtil = {
                 } else if (bean.formType == 'detail') {
                     value = $("#" + tdId).html();
                 } else if (bean.formType == 'chooseInput') {
-                    value = $("#" + tdId).attr("data-id");
+                    value = $("#" + tdId).attr(initTableChooseUtil.chooseInputDataIdKey);
                 }
                 row[bean.id] = value;
             });
@@ -285,7 +287,7 @@ var initTableChooseUtil = {
             if (formType == 'input') {
                 $("#" + tdId).val(value);
             } else if (formType == 'chooseInput') {
-                $("#" + tdId).attr("data-id", value);
+                $("#" + tdId).attr(initTableChooseUtil.chooseInputDataIdKey, value);
                 var key = dsFormUtil.getKeyIdToMation(bean.id);
                 value = data[key];
                 if (!isNull(value)) {

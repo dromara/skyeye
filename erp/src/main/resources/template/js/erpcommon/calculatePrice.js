@@ -1,44 +1,44 @@
 
 // 计算总价
 function calculatedTotalPrice() {
-	var allPrice = 0, taxLastMoneyPrice = 0;
-	$.each(initTableChooseUtil.getDataRowIndex('productList'), function (i, item) {
+	var totalAmount = 0, taxLastMoneyPrice = 0;
+	$.each(initTableChooseUtil.getDataRowIndex(tableId), function (i, item) {
 		// 获取行坐标
 		var thisRowKey = item;
 		// 获取数量
-		var rkNum = parseInt(isNull($("#rkNum" + thisRowKey).val()) ? 0 : $("#rkNum" + thisRowKey).val());
+		var operNumber = parseInt(isNull($("#operNumber" + thisRowKey).val()) ? 0 : $("#operNumber" + thisRowKey).val());
 		// 获取单价
 		var unitPrice = parseFloat(isNull($("#unitPrice" + thisRowKey).val()) ? 0 : $("#unitPrice" + thisRowKey).val());
 		// 获取税率
 		var taxRate = parseFloat(isNull($("#taxRate" + thisRowKey).val()) ? 0 : $("#taxRate" + thisRowKey).val()) / 100;
 		if ('rkNum' === showTdByEdit) {//数量
 			//输出金额
-			$("#amountOfMoney" + thisRowKey).val((rkNum * unitPrice).toFixed(2));
+			$("#allPrice" + thisRowKey).val((operNumber * unitPrice).toFixed(2));
 			//输出税额=数量*税率*单价
-			$("#taxMoney" + thisRowKey).val((rkNum * taxRate * unitPrice).toFixed(2));
+			$("#taxMoney" + thisRowKey).val((operNumber * taxRate * unitPrice).toFixed(2));
 			//输出含税单价
 			$("#taxUnitPrice" + thisRowKey).val((taxRate * unitPrice + unitPrice).toFixed(2));
 			//输出合计价税
-			$("#taxLastMoney" + thisRowKey).val((rkNum * taxRate * unitPrice + rkNum * unitPrice).toFixed(2));
+			$("#taxLastMoney" + thisRowKey).val((operNumber * taxRate * unitPrice + operNumber * unitPrice).toFixed(2));
 		} else if ('unitPrice' === showTdByEdit) {//单价
 			//输出金额
-			$("#amountOfMoney" + thisRowKey).val((rkNum * unitPrice).toFixed(2));
+			$("#allPrice" + thisRowKey).val((operNumber * unitPrice).toFixed(2));
 			//输出税额=数量*税率*单价
-			$("#taxMoney" + thisRowKey).val((rkNum * taxRate * unitPrice).toFixed(2));
+			$("#taxMoney" + thisRowKey).val((operNumber * taxRate * unitPrice).toFixed(2));
 			//输出含税单价
 			$("#taxUnitPrice" + thisRowKey).val((taxRate * unitPrice + unitPrice).toFixed(2));
 			//输出合计价税
-			$("#taxLastMoney" + thisRowKey).val((rkNum * taxRate * unitPrice + rkNum * unitPrice).toFixed(2));
+			$("#taxLastMoney" + thisRowKey).val((operNumber * taxRate * unitPrice + operNumber * unitPrice).toFixed(2));
 		} else if ('amountOfMoney' === showTdByEdit) {//金额
 			//获取金额
-			var amountOfMoney = parseFloat(isNull($("#amountOfMoney" + thisRowKey).val()) ? 0 : $("#amountOfMoney" + thisRowKey).val());
+			var allPrice = parseFloat(isNull($("#allPrice" + thisRowKey).val()) ? 0 : $("#allPrice" + thisRowKey).val());
 			//输出税额=金额*税率
-			$("#taxMoney" + thisRowKey).val((amountOfMoney * taxRate).toFixed(2));
+			$("#taxMoney" + thisRowKey).val((allPrice * taxRate).toFixed(2));
 			//输出单价,含税单价,合计价税
-			if (rkNum != 0) {
-				$("#unitPrice" + thisRowKey).val((amountOfMoney / rkNum).toFixed(2));
-				$("#taxUnitPrice" + thisRowKey).val((amountOfMoney / rkNum * taxRate + amountOfMoney / rkNum).toFixed(2));
-				$("#taxLastMoney" + thisRowKey).val((amountOfMoney * taxRate + amountOfMoney).toFixed(2));
+			if (operNumber != 0) {
+				$("#unitPrice" + thisRowKey).val((allPrice / operNumber).toFixed(2));
+				$("#taxUnitPrice" + thisRowKey).val((allPrice / operNumber * taxRate + allPrice / operNumber).toFixed(2));
+				$("#taxLastMoney" + thisRowKey).val((allPrice * taxRate + allPrice).toFixed(2));
 			} else {
 				$("#unitPrice" + thisRowKey).val('0.00');
 				$("#taxUnitPrice" + thisRowKey).val('0.00');
@@ -46,33 +46,33 @@ function calculatedTotalPrice() {
 			}
 		} else if ('taxRate' === showTdByEdit) {//税率
 			//输出金额
-			$("#amountOfMoney" + thisRowKey).val((rkNum * unitPrice).toFixed(2));
+			$("#allPrice" + thisRowKey).val((operNumber * unitPrice).toFixed(2));
 			//输出税额=数量*税率*单价
-			$("#taxMoney" + thisRowKey).val((rkNum * taxRate * unitPrice).toFixed(2));
+			$("#taxMoney" + thisRowKey).val((operNumber * taxRate * unitPrice).toFixed(2));
 			//输出含税单价
 			$("#taxUnitPrice" + thisRowKey).val((taxRate * unitPrice + unitPrice).toFixed(2));
 			//输出合计价税
-			$("#taxLastMoney" + thisRowKey).val((rkNum * taxRate * unitPrice + rkNum * unitPrice).toFixed(2));
+			$("#taxLastMoney" + thisRowKey).val((operNumber * taxRate * unitPrice + operNumber * unitPrice).toFixed(2));
 		} else if ('taxMoney' === showTdByEdit) {//税额
 			//获取税额
 			var taxMoney = parseFloat(isNull($("#taxMoney" + thisRowKey).val()) ? 0 : $("#taxMoney" + thisRowKey).val());
 			//输出金额
-			$("#amountOfMoney" + thisRowKey).val((rkNum * unitPrice).toFixed(2));
+			$("#allPrice" + thisRowKey).val((operNumber * unitPrice).toFixed(2));
 			//获取金额
-			var amountOfMoney = parseFloat(isNull($("#amountOfMoney" + thisRowKey).val()) ? 0 : $("#amountOfMoney" + thisRowKey).val());
+			var allPrice = parseFloat(isNull($("#allPrice" + thisRowKey).val()) ? 0 : $("#allPrice" + thisRowKey).val());
 			//输出含税单价,合计价税,税率
-			if (rkNum != 0) {
+			if (operNumber != 0) {
 				if (unitPrice != 0) {
-					$("#taxUnitPrice" + thisRowKey).val((taxMoney / rkNum + unitPrice).toFixed(2));
-					$("#taxRate" + thisRowKey).val((taxMoney / unitPrice / rkNum * 100).toFixed(2));
+					$("#taxUnitPrice" + thisRowKey).val((taxMoney / operNumber + unitPrice).toFixed(2));
+					$("#taxRate" + thisRowKey).val((taxMoney / unitPrice / operNumber * 100).toFixed(2));
 				} else {
 					$("#taxUnitPrice" + thisRowKey).val('0.00');
 					$("#taxRate" + thisRowKey).val('0.00');
 					$("#unitPrice" + thisRowKey).val('0.00');
-					$("#amountOfMoney" + thisRowKey).val('0.00');
+					$("#allPrice" + thisRowKey).val('0.00');
 				}
-				if (amountOfMoney != 0) {
-					$("#taxLastMoney" + thisRowKey).val((amountOfMoney + taxMoney).toFixed(2));
+				if (allPrice != 0) {
+					$("#taxLastMoney" + thisRowKey).val((allPrice + taxMoney).toFixed(2));
 				} else {
 					$("#taxLastMoney" + thisRowKey).val('0.00');
 				}
@@ -86,27 +86,26 @@ function calculatedTotalPrice() {
 			if (taxUnitPrice == 0) {
 				$("#taxLastMoney" + thisRowKey).val('0.00');
 				$("#unitPrice" + thisRowKey).val('0.00');
-				$("#amountOfMoney" + thisRowKey).val('0.00');
+				$("#allPrice" + thisRowKey).val('0.00');
 				$("#taxMoney" + thisRowKey).val('0.00');
 				$("#taxRate" + thisRowKey).val('0.00');
 				return;
 			}
 			//输出合计价税,税额,税率
 			if (unitPrice != 0) {
-				if (rkNum != 0) {
-					$("#taxLastMoney" + thisRowKey).val((taxUnitPrice * rkNum).toFixed(2));
-					$("#amountOfMoney" + thisRowKey).val((unitPrice * thisRowKey).toFixed(2));
+				if (operNumber != 0) {
+					$("#taxLastMoney" + thisRowKey).val((taxUnitPrice * operNumber).toFixed(2));
+					$("#allPrice" + thisRowKey).val((unitPrice * operNumber).toFixed(2));
 				} else {
 					$("#taxLastMoney" + thisRowKey).val('0.00');
-					$("#amountOfMoney" + thisRowKey).val('0.00');
+					$("#allPrice" + thisRowKey).val('0.00');
 				}
 				$("#taxMoney" + thisRowKey).val((taxUnitPrice - unitPrice).toFixed(2));
 				$("#taxRate" + thisRowKey).val(((taxUnitPrice / unitPrice - 1) * 100).toFixed(2));
-
 			} else {
 				$("#taxLastMoney" + thisRowKey).val('0.00');
 				$("#unitPrice" + thisRowKey).val('0.00');
-				$("#amountOfMoney" + thisRowKey).val('0.00');
+				$("#allPrice" + thisRowKey).val('0.00');
 				$("#taxMoney" + thisRowKey).val('0.00');
 				$("#taxRate" + thisRowKey).val('0.00');
 			}
@@ -116,20 +115,20 @@ function calculatedTotalPrice() {
 			if (taxLastMoney == 0) {
 				$("#taxUnitPrice" + thisRowKey).val('0.00');
 				$("#unitPrice" + thisRowKey).val('0.00');
-				$("#amountOfMoney" + thisRowKey).val('0.00');
+				$("#allPrice" + thisRowKey).val('0.00');
 				$("#taxMoney" + thisRowKey).val('0.00');
 				$("#taxRate" + thisRowKey).val('0.00');
 				return;
 			}
 			//输出含税单价,税额,税率
-			if (rkNum != 0) {
+			if (operNumber != 0) {
 				if (unitPrice != 0) {
-					$("#taxUnitPrice" + thisRowKey).val((taxLastMoney / rkNum).toFixed(2));
-					$("#taxMoney" + thisRowKey).val((taxLastMoney / rkNum - unitPrice).toFixed(2));
-					$("#taxRate" + thisRowKey).val(((taxLastMoney / rkNum / unitPrice - 1) * 100).toFixed(2));
-					$("#amountOfMoney" + thisRowKey).val((unitPrice * rkNum).toFixed(2));
+					$("#taxUnitPrice" + thisRowKey).val((taxLastMoney / operNumber).toFixed(2));
+					$("#taxMoney" + thisRowKey).val((taxLastMoney / operNumber - unitPrice).toFixed(2));
+					$("#taxRate" + thisRowKey).val(((taxLastMoney / operNumber / unitPrice - 1) * 100).toFixed(2));
+					$("#allPrice" + thisRowKey).val((unitPrice * operNumber).toFixed(2));
 				} else {
-					$("#amountOfMoney" + thisRowKey).val('0.00');
+					$("#allPrice" + thisRowKey).val('0.00');
 					$("#taxMoney" + thisRowKey).val('0.00');
 					$("#taxUnitPrice" + thisRowKey).val('0.00');
 					$("#unitPrice" + thisRowKey).val('0.00');
@@ -137,28 +136,24 @@ function calculatedTotalPrice() {
 			} else {
 				$("#taxUnitPrice" + thisRowKey).val('0.00');
 				$("#unitPrice" + thisRowKey).val('0.00');
-				$("#amountOfMoney" + thisRowKey).val('0.00');
+				$("#allPrice" + thisRowKey).val('0.00');
 				$("#taxMoney" + thisRowKey).val('0.00');
 				$("#taxRate" + thisRowKey).val('0.00');
 			}
 		}
-		allPrice += parseFloat($("#amountOfMoney" + thisRowKey).val());
+		totalAmount += parseFloat($("#allPrice" + thisRowKey).val());
 		taxLastMoneyPrice += parseFloat($("#taxLastMoney" + thisRowKey).val());
 	});
-	$("#allPrice").html(allPrice.toFixed(2));
+	$("#allPrice").html(totalAmount.toFixed(2));
 	$("#taxLastMoneyPrice").html(taxLastMoneyPrice.toFixed(2));
 
 	// 优惠率计算
-	var discount = parseFloat(isNull($("#discount").val()) ? 0 : $("#discount").val());
+	var discount = parseFloat(isNull($(".discount").val()) ? 0 : $(".discount").val());
 	// 输出优惠金额
 	var discountMoney = (taxLastMoneyPrice * discount / 100).toFixed(2);
-	$("#discountMoney").val(discountMoney);
+	$(".discountMoney").val(discountMoney);
 	// 输出优惠后的金额
 	$("#discountLastMoney").html((taxLastMoneyPrice - discountMoney).toFixed(2));
-	// 输出本次付款
-	$("#changeAmount").val((taxLastMoneyPrice - discountMoney).toFixed(2));
-	// 输出欠款金额
-	$("#arrears").html('0.00');
 }
 
 layui.define(["jquery"], function(exports) {
@@ -185,69 +180,45 @@ layui.define(["jquery"], function(exports) {
 		});
 		
 		// 优惠率变化
-		$("body").on("input", "#discount", function() {
+		$("body").on("input", ".discount", function() {
 			//获取价格合计
 			var taxLastMoneyPrice = parseFloat(isNull($("#taxLastMoneyPrice").html()) ? 0 : $("#taxLastMoneyPrice").html());
 			var discount = parseFloat(isNull($(this).val()) ? 0 : $(this).val());
 			//输出优惠金额
-			$("#discountMoney").val((taxLastMoneyPrice * discount / 100).toFixed(2));
+			$(".discountMoney").val((taxLastMoneyPrice * discount / 100).toFixed(2));
 			//输出优惠后的金额
 			$("#discountLastMoney").html((taxLastMoneyPrice - (taxLastMoneyPrice * discount / 100)).toFixed(2));
-			//输出本次付款
-			$("#changeAmount").val((taxLastMoneyPrice - (taxLastMoneyPrice * discount / 100)).toFixed(2));
 		});
-		$("body").on("change", "#discount", function() {
+		$("body").on("change", ".discount", function() {
 			//获取价格合计
 			var taxLastMoneyPrice = parseFloat(isNull($("#taxLastMoneyPrice").html()) ? 0 : $("#taxLastMoneyPrice").html());
 			var discount = parseFloat(isNull($(this).val()) ? 0 : $(this).val());
 			//输出优惠金额
-			$("#discountMoney").val((taxLastMoneyPrice * discount / 100).toFixed(2));
+			$(".discountMoney").val((taxLastMoneyPrice * discount / 100).toFixed(2));
 			//输出优惠后的金额
 			$("#discountLastMoney").html((taxLastMoneyPrice - (taxLastMoneyPrice * discount / 100)).toFixed(2));
-			//输出本次付款
-			$("#changeAmount").val((taxLastMoneyPrice - (taxLastMoneyPrice * discount / 100)).toFixed(2));
 		});
 		
 		// 优惠金额变化
-		$("body").on("input", "#discountMoney", function() {
+		$("body").on("input", ".discountMoney", function() {
 			//获取价格合计
 			var taxLastMoneyPrice = parseFloat(isNull($("#taxLastMoneyPrice").html()) ? 0 : $("#taxLastMoneyPrice").html());
 			var discountMoney = parseFloat(isNull($(this).val()) ? 0 : $(this).val());
 			//输出优惠率
-			$("#discount").val((discountMoney / taxLastMoneyPrice * 100).toFixed(2));
+			$(".discount").val((discountMoney / taxLastMoneyPrice * 100).toFixed(2));
 			//输出优惠后的金额
 			$("#discountLastMoney").html((taxLastMoneyPrice - discountMoney).toFixed(2));
-			//输出本次付款
-			$("#changeAmount").val((taxLastMoneyPrice - discountMoney).toFixed(2));
 		});
-		$("body").on("change", "#discountMoney", function() {
+		$("body").on("change", ".discountMoney", function() {
 			//获取价格合计
 			var taxLastMoneyPrice = parseFloat(isNull($("#taxLastMoneyPrice").html()) ? 0 : $("#taxLastMoneyPrice").html());
 			var discountMoney = parseFloat(isNull($(this).val()) ? 0 : $(this).val());
 			//输出优惠率
-			$("#discount").val((discountMoney / taxLastMoneyPrice * 100).toFixed(2));
+			$(".discount").val((discountMoney / taxLastMoneyPrice * 100).toFixed(2));
 			//输出优惠后的金额
 			$("#discountLastMoney").html((taxLastMoneyPrice - discountMoney).toFixed(2));
-			//输出本次付款
-			$("#changeAmount").val((taxLastMoneyPrice - discountMoney).toFixed(2));
 		});
 		
-		// 本次付款变化
-		$("body").on("input", "#changeAmount", function() {
-			//获取优惠后的金额
-			var discountLastMoney = parseFloat(isNull($("#discountLastMoney").html()) ? 0 : $("#discountLastMoney").html());
-			var changeAmount = parseFloat(isNull($("#changeAmount").val()) ? 0 : $("#changeAmount").val());
-			//输出欠款金额
-			$("#arrears").html((discountLastMoney - changeAmount).toFixed(2));
-		});
-		$("body").on("change", "#changeAmount", function() {
-			//获取优惠后的金额
-			var discountLastMoney = parseFloat(isNull($("#discountLastMoney").html()) ? 0 : $("#discountLastMoney").html());
-			var changeAmount = parseFloat(isNull($("#changeAmount").val()) ? 0 : $("#changeAmount").val());
-			//输出欠款金额
-			$("#arrears").html((discountLastMoney - changeAmount).toFixed(2));
-		});
-
 		// 其他费用变化
 		$("body").on("input", ".otherPrice", function() {
 			calculationPrice();

@@ -43,6 +43,12 @@ layui.config({
                                 <input type="text" id="remark" name="remark" placeholder="请输入备注" class="layui-input" />
                             </div>
                         </div>`,
+        'classNameBox': `<div class="layui-form-item layui-col-xs12">
+                            <label class="layui-form-label">class属性：</label>
+                            <div class="layui-input-block winui-radio">
+                                <input type="text" id="className" name="className" placeholder="请输入class属性" class="layui-input" />
+                            </div>
+                        </div>`,
         'requireBox': `<div class="layui-form-item layui-col-xs12">
                             <label class="layui-form-label">限制条件</label>
                             <div class="layui-input-block" id="require">
@@ -164,9 +170,15 @@ layui.config({
                             <button id="addRowCallbackConfig" type="button" class="winui-toolbtn writeScript">编写脚本</button>
                         </div>
                     </div>`,
+        'beforeScriptBox': `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label" style="width: 70%;">组件加载前执行的JS：</label>
+                        <div class="layui-input-block" script="layui.define(['jquery'], function(exports) {\n\tvar form = layui.form;\n\tvar contentId = '{{id}}';\n\n});">
+                            <button id="beforeScriptConfig" type="button" class="winui-toolbtn writeScript">编写脚本</button>
+                        </div>
+                    </div>`,
         'afterScriptBox': `<div class="layui-form-item layui-col-xs12">
                         <label class="layui-form-label" style="width: 70%;">组件加载完成后执行的JS：</label>
-                        <div class="layui-input-block" script="layui.define(['jquery'], function(exports) {\n\tvar form = layui.form;\n\n});">
+                        <div class="layui-input-block" script="layui.define(['jquery'], function(exports) {\n\tvar form = layui.form;\n\tvar contentId = '{{id}}';\n\n});">
                             <button id="afterScriptConfig" type="button" class="winui-toolbtn writeScript">编写脚本</button>
                         </div>
                     </div>`,
@@ -198,6 +210,7 @@ layui.config({
     $("#title").val(data.title);
     $("#placeholder").val(data.placeholder);
     $("#remark").val(data.remark);
+    $("#className").val(data.className);
     $("#defaultValue").val(data.defaultValue);
     $("#uploadNum").val(data.uploadNum);
 
@@ -265,7 +278,12 @@ layui.config({
     $("#minData").val(data.minData);
     $("#deleteRowCallbackConfig").parent().attr('script', data.deleteRowCallback);
     $("#addRowCallbackConfig").parent().attr('script', data.addRowCallback);
-    $("#afterScriptConfig").parent().attr('script', data.afterScript);
+    if (!isNull(data.beforeScript)) {
+        $("#beforeScriptConfig").parent().attr('script', data.beforeScript);
+    }
+    if (!isNull(data.afterScript)) {
+        $("#afterScriptConfig").parent().attr('script', data.afterScript);
+    }
     $("#afterHtmlConfig").parent().attr('script', data.afterHtml);
 
     $("body").on("click", "#attrTransformTableListConfig", function() {
@@ -314,6 +332,7 @@ layui.config({
         newParams.title = $("#title").val();
         newParams.placeholder = $("#placeholder").val();
         newParams.remark = $("#remark").val();
+        newParams.className = $("#className").val();
         newParams.require = isNull($('#require').attr('value')) ? [] : JSON.parse($('#require').attr('value'));
         newParams.uploadDataType = isNull($('#uploadDataType').attr('value')) ? [] : JSON.parse($('#uploadDataType').attr('value'));
         newParams.uploadNum = $("#uploadNum").val();
@@ -335,6 +354,7 @@ layui.config({
         newParams.minData = $("#minData").val();
         newParams.deleteRowCallback = $("#deleteRowCallbackConfig").parent().attr('script');
         newParams.addRowCallback = $("#addRowCallbackConfig").parent().attr('script');
+        newParams.beforeScript = $("#beforeScriptConfig").parent().attr('script');
         newParams.afterScript = $("#afterScriptConfig").parent().attr('script');
         newParams.afterHtml = $("#afterHtmlConfig").parent().attr('script');
 

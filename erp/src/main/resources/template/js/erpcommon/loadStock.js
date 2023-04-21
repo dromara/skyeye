@@ -90,15 +90,16 @@ function mUnitChangeEvent(form, allChooseProduct, unitPriceKey, calcPriceCallbac
     // 商品规格加载变化事件
     form.on('select(selectUnitProperty)', function(data) {
         var thisRowValue = data.value;
-        var thisRowKey = data.elem.id.replace("mUnitId", "").toString();
+        var thisRowKey = data.elem.id.replace("normsId", "").toString();
         // 当前当前行选中的商品信息
         if (!isNull(thisRowValue)) {
             var product = allChooseProduct["tr" + thisRowKey];
-            $.each(product.unitList, function (j, bean) {
+            console.log(product)
+            $.each(product.materialNorms, function (j, bean) {
                 if (thisRowValue == bean.id) {
                     var rkNum = parseInt($("#rkNum" + thisRowKey).val());
                     // 设置单价和金额
-                    var unitPrice = bean[unitPriceKey].toFixed(2);
+                    var unitPrice = parseFloat(bean[unitPriceKey]).toFixed(2);
                     $("#unitPrice" + thisRowKey).val(unitPrice);
                     $("#amountOfMoney" + thisRowKey).val((rkNum * parseFloat(unitPrice)).toFixed(2));
                     return false;
@@ -135,10 +136,11 @@ function initChooseProductBtnEnent (form, callback, calcPriceCallback) {
         erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
             // 获取表格行号
             var thisRowKey = trId.replace("tr", "");
-            // 表格商品名称赋值
-            $("#materialId" + thisRowKey.toString()).val(chooseProductMation.materialName + "(" + chooseProductMation.materialModel + ")");
-            // 表格单位赋值
-            $("#mUnitId" + thisRowKey.toString()).html(getDataUseHandlebars(selOptionHtml, {rows: chooseProductMation.unitList}));
+            // 产品名称赋值
+            $("#materialId" + thisRowKey).val(chooseProductMation.name + "(" + chooseProductMation.model + ")");
+            $("#materialId" + thisRowKey).attr(initTableChooseUtil.chooseInputDataIdKey, chooseProductMation.id);
+            // 规格赋值
+            $("#normsId" + thisRowKey).html(getDataUseHandlebars(selOptionHtml, {rows: chooseProductMation.materialNorms}));
             form.render('select');
             if (typeof callback == "function") {
                 callback(trId, chooseProductMation);

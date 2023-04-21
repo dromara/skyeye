@@ -324,10 +324,13 @@ var dsFormUtil = {
         var html = getDataUseHandlebars('{{#bean}}' + component.htmlContent + '{{/bean}}', jsonStr);
         var html_js = getDataUseHandlebars('{{#bean}}' + component.jsContent + '{{/bean}}', jsonStr);
         var jsCon = `<script id="script${content.id}">${html_js}</script>`;
+
+        var beforeScript = getDataUseHandlebars('{{#bean}}' + content.beforeScript + '{{/bean}}', jsonStr);
+        $("#" + boxId).append(`<script>${beforeScript}</script>`);
         $("#" + boxId).append(html + jsCon);
-        // 组件加载完成后执行的HTML和JS
         $("#" + boxId).append(content.afterHtml);
-        $("#" + boxId).append(`<script>${content.afterScript}</script>`);
+        var afterScript = getDataUseHandlebars('{{#bean}}' + content.afterScript + '{{/bean}}', jsonStr);
+        $("#" + boxId).append(`<script>${afterScript}</script>`);
 
         if (!isNull(content.require)) {
             dsFormUtil.setIsRequired(content);
