@@ -66,7 +66,7 @@ layui.config({
         } else if (layEvent === 'edit') { //编辑
         	edit(data);
         } else if (layEvent === 'subApproval') { //提交审核
-            erpOrderUtil.submitOrderMation(data.id, serviceClassName, data.submitType, serviceClassName, function() {
+            erpOrderUtil.submitOrderMation(data.id, serviceClassName, function() {
                 loadTable();
             });
         } else if (layEvent === 'turnPurchase') { //转采购入库单
@@ -111,7 +111,7 @@ layui.config({
 	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/purchaseOrder/purchaseOrderDetails.html",
+            url:  systemCommonUtil.getUrl('FP2023042000003&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "purchaseOrderDetails",
 			area: ['90vw', '90vh'],

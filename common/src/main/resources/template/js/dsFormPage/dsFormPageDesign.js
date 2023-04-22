@@ -20,7 +20,7 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'dragula', 'tagEditor'].concat(dsFormUtil.mastHaveImport), function (exports) {
+}).define(['window', 'jquery', 'winui', 'dragula', 'tagEditor', 'table'].concat(dsFormUtil.mastHaveImport), function (exports) {
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$;

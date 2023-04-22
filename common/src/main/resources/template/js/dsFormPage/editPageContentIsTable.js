@@ -23,6 +23,7 @@ layui.config({
 
 	var parentAttrKey = GetUrlParam("attrKey");
 	var parentClassName = GetUrlParam("className");
+	var pageType = GetUrlParam("pageType");
 	var params = {
 		className: parentClassName,
 		attrKey: parentAttrKey
@@ -46,81 +47,141 @@ layui.config({
 		{id: "detail", name: "文本"}
 	];
 
-	var cols = [[
-		{ type: 'checkbox', align: 'center' },
-		{ field: 'test', title: '', align: 'left', width: 40, templet: function (d) {return '<i class="fa fa-arrows drag-row" />';}},
-		{ field: 'attrKey', title: '属性<i class="red">*</i>', align: 'left', width: 150, templet: function (d) {
-			var _html = `<select lay-filter="tableSelect" lay-search="" id="attrKey${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
-			$.each(childAttr, function (i, item) {
-				if (item.attrKey == d.attrKey) {
-					_html += `<option value="${item.attrKey}" selected="selected">${item.name}</option>`;
-				} else {
-					_html += `<option value="${item.attrKey}">${item.name}</option>`;
+	var cols;
+	if (pageType == 'details') {
+		cols = [[
+			{ type: 'checkbox', align: 'center' },
+			{ field: 'test', title: '', align: 'left', width: 40, templet: function (d) {return '<i class="fa fa-arrows drag-row" />';}},
+			{ field: 'attrKey', title: '属性<i class="red">*</i>', align: 'left', width: 150, templet: function (d) {
+				var _html = `<select lay-filter="tableSelect" lay-search="" id="attrKey${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+				$.each(childAttr, function (i, item) {
+					if (item.attrKey == d.attrKey) {
+						_html += `<option value="${item.attrKey}" selected="selected">${item.name}</option>`;
+					} else {
+						_html += `<option value="${item.attrKey}">${item.name}</option>`;
+					}
+				});
+				_html += `</select>`;
+				return _html;
+			}},
+			{ field: 'name', title: '显示名称<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
+				return `<input type="text" id="name${d.id}" placeholder="请填写显示名称" cus-id="${d.id}" win-verify="required" class="layui-input tableInput" ` +
+					`value="` + (isNull(d.name) ? "" : d.name) + `"/>`;
+			}},
+			{ field: 'align', title: '对齐方式<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
+				var _html = `<select lay-filter="tableSelect" lay-search="" id="align${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+				$.each(alignmentData.rows, function (i, item) {
+					if (item.id == d.align) {
+						_html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
+					} else {
+						_html += `<option value="${item.id}">${item.name}</option>`;
+					}
+				});
+				_html += `</select>`;
+				return _html;
+			}},
+			{ field: 'width', title: '宽度<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
+				return `<input type="text" id="width${d.id}" placeholder="请填写宽度" cus-id="${d.id}" class="layui-input tableInput" win-verify="required|number" ` +
+					`value="` + (isNull(d.width) ? "" : d.width) + `"/>`;
+			}},
+			{ field: 'showType', title: '显示方式<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
+				var _html = `<select lay-filter="tableSelect" lay-search="" id="showType${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+				$.each(showType, function (i, item) {
+					if (item.id == d.showType) {
+						_html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
+					} else {
+						_html += `<option value="${item.id}">${item.name}</option>`;
+					}
+				});
+				_html += `</select>`;
+				return _html;
+			}},
+			{ field: 'dataFrom', title: '数据源', align: 'left', width: 200, templet: function (d) {
+				var disabledClass = d.showType == showType[2].id ? '' : 'layui-btn-disabled';
+				var btnName = '选择数据源';
+				if (!isNull(d.dataType)) {
+					btnName = '更换数据源';
 				}
-			});
-			_html += `</select>`;
-			return _html;
-		}},
-		{ field: 'name', title: '显示名称<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
-			return `<input type="text" id="name${d.id}" placeholder="请填写显示名称" cus-id="${d.id}" win-verify="required" class="layui-input tableInput" ` +
-				`value="` + (isNull(d.name) ? "" : d.name) + `"/>`;
-		}},
-		{ field: 'align', title: '对齐方式<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
-			var _html = `<select lay-filter="tableSelect" lay-search="" id="align${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
-			$.each(alignmentData.rows, function (i, item) {
-				if (item.id == d.align) {
-					_html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
-				} else {
-					_html += `<option value="${item.id}">${item.name}</option>`;
+				return `<button id="dataFrom${d.id}" type="button" cus-id="${d.id}" class="chooseDataFrom ${disabledClass}">${btnName}</button>`;
+			}}
+		]];
+	} else {
+		cols = [[
+			{ type: 'checkbox', align: 'center' },
+			{ field: 'test', title: '', align: 'left', width: 40, templet: function (d) {return '<i class="fa fa-arrows drag-row" />';}},
+			{ field: 'attrKey', title: '属性<i class="red">*</i>', align: 'left', width: 150, templet: function (d) {
+				var _html = `<select lay-filter="tableSelect" lay-search="" id="attrKey${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+				$.each(childAttr, function (i, item) {
+					if (item.attrKey == d.attrKey) {
+						_html += `<option value="${item.attrKey}" selected="selected">${item.name}</option>`;
+					} else {
+						_html += `<option value="${item.attrKey}">${item.name}</option>`;
+					}
+				});
+				_html += `</select>`;
+				return _html;
+			}},
+			{ field: 'name', title: '显示名称<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
+				return `<input type="text" id="name${d.id}" placeholder="请填写显示名称" cus-id="${d.id}" win-verify="required" class="layui-input tableInput" ` +
+					`value="` + (isNull(d.name) ? "" : d.name) + `"/>`;
+			}},
+			{ field: 'align', title: '对齐方式<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
+				var _html = `<select lay-filter="tableSelect" lay-search="" id="align${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+				$.each(alignmentData.rows, function (i, item) {
+					if (item.id == d.align) {
+						_html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
+					} else {
+						_html += `<option value="${item.id}">${item.name}</option>`;
+					}
+				});
+				_html += `</select>`;
+				return _html;
+			}},
+			{ field: 'layFilter', title: '表单监听Filter', align: 'left', width: 120, templet: function (d) {
+				return `<input type="text" id="layFilter${d.id}" placeholder="表单监听Filter" cus-id="${d.id}" class="layui-input tableInput" ` +
+					`value="` + (isNull(d.layFilter) ? "" : d.layFilter) + `"/>`;
+			}},
+			{ field: 'width', title: '宽度<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
+				return `<input type="text" id="width${d.id}" placeholder="请填写宽度" cus-id="${d.id}" class="layui-input tableInput" win-verify="required|number" ` +
+					`value="` + (isNull(d.width) ? "" : d.width) + `"/>`;
+			}},
+			{ field: 'showType', title: '显示方式<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
+				var _html = `<select lay-filter="tableSelect" lay-search="" id="showType${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+				$.each(showType, function (i, item) {
+					if (item.id == d.showType) {
+						_html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
+					} else {
+						_html += `<option value="${item.id}">${item.name}</option>`;
+					}
+				});
+				_html += `</select>`;
+				return _html;
+			}},
+			{ field: 'require', title: '限制条件', align: 'left', width: 200, templet: function (d) {
+				return `<div id="require${d.id}" cus-id="${d.id}"></div>`;
+			}},
+			{ field: 'dataFrom', title: '数据源', align: 'left', width: 200, templet: function (d) {
+				var disabledClass = d.showType == showType[2].id ? '' : 'layui-btn-disabled';
+				var btnName = '选择数据源';
+				if (!isNull(d.dataType)) {
+					btnName = '更换数据源';
 				}
-			});
-			_html += `</select>`;
-			return _html;
-		}},
-		{ field: 'layFilter', title: '表单监听Filter', align: 'left', width: 120, templet: function (d) {
-			return `<input type="text" id="layFilter${d.id}" placeholder="表单监听Filter" cus-id="${d.id}" class="layui-input tableInput" ` +
-				`value="` + (isNull(d.layFilter) ? "" : d.layFilter) + `"/>`;
-		}},
-		{ field: 'width', title: '宽度<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
-			return `<input type="text" id="width${d.id}" placeholder="请填写宽度" cus-id="${d.id}" class="layui-input tableInput" win-verify="required|number" ` +
-				`value="` + (isNull(d.width) ? "" : d.width) + `"/>`;
-		}},
-		{ field: 'showType', title: '显示方式<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
-			var _html = `<select lay-filter="tableSelect" lay-search="" id="showType${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
-			$.each(showType, function (i, item) {
-				if (item.id == d.showType) {
-					_html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
-				} else {
-					_html += `<option value="${item.id}">${item.name}</option>`;
-				}
-			});
-			_html += `</select>`;
-			return _html;
-		}},
-		{ field: 'require', title: '限制条件', align: 'left', width: 200, templet: function (d) {
-			return `<div id="require${d.id}" cus-id="${d.id}"></div>`;
-		}},
-		{ field: 'dataFrom', title: '数据源', align: 'left', width: 200, templet: function (d) {
-			var disabledClass = d.showType == showType[2].id ? '' : 'layui-btn-disabled';
-			var btnName = '选择数据源';
-			if (!isNull(d.dataType)) {
-				btnName = '更换数据源';
-			}
-			return `<button id="dataFrom${d.id}" type="button" cus-id="${d.id}" class="chooseDataFrom ${disabledClass}">${btnName}</button>`;
-		}},
-		{ field: 'value', title: '默认值', align: 'left', width: 120, templet: function (d) {
-			return `<input type="text" id="value${d.id}" placeholder="默认值" cus-id="${d.id}" class="layui-input tableInput" ` +
-				`value="` + (isNull(d.value) ? "" : d.value) + `"/>`;
-		}},
-		{ field: 'className', title: 'class属性', align: 'left', width: 120, templet: function (d) {
-			return `<input type="text" id="className${d.id}" placeholder="class属性" cus-id="${d.id}" class="layui-input tableInput" ` +
-				`value="` + (isNull(d.className) ? "" : d.className) + `"/>`;
-		}},
-		{ field: 'iconClassName', title: 'ICON的class属性', align: 'left', width: 150, templet: function (d) {
-			return `<input type="text" id="iconClassName${d.id}" placeholder="ICON的class属性" cus-id="${d.id}" class="layui-input tableInput" ` +
-				`value="` + (isNull(d.iconClassName) ? "" : d.iconClassName) + `"/>`;
-		}},
-	]]
+				return `<button id="dataFrom${d.id}" type="button" cus-id="${d.id}" class="chooseDataFrom ${disabledClass}">${btnName}</button>`;
+			}},
+			{ field: 'value', title: '默认值', align: 'left', width: 120, templet: function (d) {
+				return `<input type="text" id="value${d.id}" placeholder="默认值" cus-id="${d.id}" class="layui-input tableInput" ` +
+					`value="` + (isNull(d.value) ? "" : d.value) + `"/>`;
+			}},
+			{ field: 'className', title: 'class属性', align: 'left', width: 120, templet: function (d) {
+				return `<input type="text" id="className${d.id}" placeholder="class属性" cus-id="${d.id}" class="layui-input tableInput" ` +
+					`value="` + (isNull(d.className) ? "" : d.className) + `"/>`;
+			}},
+			{ field: 'iconClassName', title: 'ICON的class属性', align: 'left', width: 150, templet: function (d) {
+				return `<input type="text" id="iconClassName${d.id}" placeholder="ICON的class属性" cus-id="${d.id}" class="layui-input tableInput" ` +
+					`value="` + (isNull(d.iconClassName) ? "" : d.iconClassName) + `"/>`;
+			}},
+		]];
+	}
 
 	table.render({
 		id: 'messageTable',

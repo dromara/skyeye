@@ -202,7 +202,7 @@ layui.config({
                     </div>`,
     };
     // 详情类布局才展示的组件属性
-    var detailsPageAttr = ['attrKeyBox', 'titleBox', 'widthBox'];
+    var detailsPageAttr = ['attrKeyBox', 'titleBox', 'widthBox', 'tableAttrBox'];
 
     // 加载组件关联的属性
     $.each(html, function (key, value) {
@@ -303,7 +303,7 @@ layui.config({
     $("body").on("click", "#attrTransformTableListConfig", function() {
         parent.temData = $("#attrTransformTableListConfig").parent().attr('data');
         parent._openNewWindows({
-            url: "../../tpl/dsFormPage/editPageContentIsTable.html?attrKey=" + $("#attrKey").val() + '&className=' + parent.className,
+            url: "../../tpl/dsFormPage/editPageContentIsTable.html?attrKey=" + $("#attrKey").val() + '&className=' + parent.className + '&pageType=' + pageType,
             title: '表格属性配置',
             pageId: "editPageContentIsTable",
             area: ['90vw', '90vh'],

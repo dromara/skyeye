@@ -118,31 +118,23 @@ var erpOrderUtil = {
      * @param submitType 单据提交类型  1.走工作流提交  2.直接提交
      * @param actKey 该地址为 sysServiceMation.json的key
      */
-    submitOrderMation: function (id, serviceClassName, submitType, actKey, callback) {
+    submitOrderMation: function (id, serviceClassName, callback) {
         layer.confirm('确认要提交吗？', { icon: 3, title: '提交操作' }, function (index) {
             layer.close(index);
-            if (submitType == 1) {
-                activitiUtil.startProcess(actKey, null, function (approvalId) {
-                    erpOrderUtil.submitOrderMationToData(id, serviceClassName, approvalId, callback);
-                });
-            } else {
-                erpOrderUtil.submitOrderMationToData(id, serviceClassName, "", callback);
-            }
+            activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
+                var params = {
+                    rowId: id,
+                    serviceClassName: serviceClassName,
+                    approvalId: approvalId
+                };
+                AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon006", params: params, method: "PUT", type: 'json', callback: function(json) {
+                    winui.window.msg("提交成功。", {icon: 1, time: 2000});
+                    if (typeof (callback) == "function") {
+                        callback();
+                    }
+                }});
+            });
         });
-    },
-
-    submitOrderMationToData: function (id, serviceClassName, approvalId, callback) {
-        var params = {
-            rowId: id,
-            serviceClassName: serviceClassName,
-            approvalId: approvalId
-        };
-        AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon006", params: params, method: "PUT", type: 'json', callback: function(json) {
-            winui.window.msg("提交成功。", {icon: 1, time: 2000});
-            if (typeof (callback) == "function") {
-                callback();
-            }
-        }});
     },
 
     /**

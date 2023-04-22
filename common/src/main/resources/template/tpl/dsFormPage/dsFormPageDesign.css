@@ -113,7 +113,7 @@
     background-color: #eaeaf6 !important;
 }
 
-.center-box-form .layui-form {
+.center-box-form>.layui-form {
     float: left;
     margin-top: 10px;
     position: absolute;

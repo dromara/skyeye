@@ -7,7 +7,7 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery'], function (exports) {
+}).define(['window', 'jquery', 'table'], function (exports) {
     winui.renderColor();
     var $ = layui.$;
     var pageId = GetUrlParam("pageId");

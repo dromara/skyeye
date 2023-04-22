@@ -387,7 +387,9 @@ var dsFormUtil = {
             $("#" + boxId).append(str);
 
             if (showType == 5) { // 表格展示
-                dsFormTableUtil.intStaticTable("messageTable" + content.orderBy, value, content.attrTransformTableList);
+                var result = dsFormUtil.resetTableValue(value, content.attrTransformTableList);
+                console.log(result)
+                dsFormTableUtil.intStaticTable("messageTable" + content.orderBy, result, content.attrTransformTableList);
             } else  if (showType == 6) { // 凭证展示
                 var boxId = "showVoucher" + content.orderBy;
                 // 初始化凭证
@@ -396,6 +398,29 @@ var dsFormUtil = {
         }
 
         return content;
+    },
+
+    resetTableValue: function (data, attrTransformTableList) {
+        if (isNull(data)) {
+            return [];
+        }
+        var result = [];
+        $.each(data, function (i, itemVal) {
+            var map = {};
+            $.each(itemVal, function (key, val) {
+                var attrTransformTable = getInPoingArr(attrTransformTableList, 'attrKey', key);
+                if (!isNull(attrTransformTable) &&
+                    (attrTransformTable.showType == 'chooseInput' || attrTransformTable.showType == 'select')) {
+                    var transKey = dsFormUtil.getKeyIdToMation(key);
+                    var itemData = itemVal[transKey];
+                    map[key] = itemData.name;
+                } else {
+                    map[key] = val;
+                }
+            });
+            result.push(map);
+        });
+        return result;
     },
 
     checkLoadHandlebar: false,
@@ -663,10 +688,14 @@ var dsFormTableUtil = {
         var table = layui.table;
         table.render({
             id: id,
-            elem: id,
+            elem: `#${id}`,
             data: data,
+            even: false,
             page: false,
-            cols: dsFormUtil.getTableHead({}, tableColumnList)
+            limit: 1000,
+            cols: dsFormTableUtil.getTableHead({
+                serialNumColumn: true
+            }, tableColumnList)
         });
     },
 
@@ -762,10 +791,13 @@ var dsFormTableUtil = {
                 fixed: 'left'
             });
         }
+        if (isNull(tableColumnList)) {
+            return [header];
+        }
         $.each(tableColumnList, function (i, item) {
             var field = {
                 field: item.attrKey,
-                title: item.label,
+                title: item.label || item.name,
                 align: item.align,
                 width: item.width,
                 fixed: isNull(item.fixed) ? '' : item.fixed,
