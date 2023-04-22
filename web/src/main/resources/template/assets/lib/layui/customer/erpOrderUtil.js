@@ -101,7 +101,7 @@ var erpOrderUtil = {
      */
     deleteOrderMation: function (id, serviceClassName, callback) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index) {
-            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon005", params: {rowId: id, serviceClassName: serviceClassName}, method: "DELETE", type: 'json', callback: function(json) {
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon005", params: {id: id, serviceClassName: serviceClassName}, method: "DELETE", type: 'json', callback: function(json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 if (typeof (callback) == "function") {
                     callback();
@@ -123,7 +123,7 @@ var erpOrderUtil = {
             layer.close(index);
             activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
                 var params = {
-                    rowId: id,
+                    id: id,
                     serviceClassName: serviceClassName,
                     approvalId: approvalId
                 };

@@ -8,7 +8,7 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'flow'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'flow', 'table'], function (exports) {
     winui.renderColor();
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$,
