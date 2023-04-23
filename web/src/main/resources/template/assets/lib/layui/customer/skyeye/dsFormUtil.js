@@ -484,7 +484,7 @@ var dsFormUtil = {
             });
         } else if (dataType == 4) {
             // 自定义接口
-            var businessApi = obj.businessApi;
+            var businessApi = typeof obj.businessApi == 'string' ? JSON.parse(obj.businessApi) : obj.businessApi;
             var params = {};
             $.each(businessApi.params, function (key, value) {
                 var realValue = "";

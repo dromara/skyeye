@@ -20,10 +20,9 @@ layui.config({
 	var selOption = getFileContent('tpl/template/select-option-must.tpl');
 	
 	initDepotHtml();
-	//初始化仓库
+	// 初始化仓库
 	function initDepotHtml() {
-		AjaxPostUtil.request({url: flowableBasePath + "storehouse009", params: {}, type: 'json', method: "GET", callback: function(json) {
-			//加载仓库数据
+		AjaxPostUtil.request({url: sysMainMation.erpBasePath + "storehouse009", params: {}, type: 'json', method: "GET", callback: function(json) {
 			$("#depotId").html(getDataUseHandlebars(selOption, json));
 			form.render();
 			if(json.rows.length > 0){

@@ -137,7 +137,7 @@ function initChooseProductBtnEnent (form, callback, calcPriceCallback) {
             // 获取表格行号
             var thisRowKey = trId.replace("tr", "");
             // 产品名称赋值
-            $("#materialId" + thisRowKey).val(chooseProductMation.name + "(" + chooseProductMation.model + ")");
+            $("#materialId" + thisRowKey).val(chooseProductMation.name);
             $("#materialId" + thisRowKey).attr(initTableChooseUtil.chooseInputDataIdKey, chooseProductMation.id);
             // 规格赋值
             $("#normsId" + thisRowKey).html(getDataUseHandlebars(selOptionHtml, {rows: chooseProductMation.materialNorms}));
