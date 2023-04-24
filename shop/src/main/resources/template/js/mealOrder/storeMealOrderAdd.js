@@ -3,8 +3,8 @@
 // 表格的序号
 var rowNum = 1;
 
-// 会员信息
-var memberMation = {};
+// 会员id
+var memberId;
 
 // 已选择的套餐信息
 var mealMation = {};
@@ -28,8 +28,7 @@ layui.config({
         var usetableTemplate = $("#usetableTemplate").html();
         var memberCarHtml = "";
 
-        memberMation = parent.memberMation;
-        $("#memberName").html(memberMation.contacts);
+        memberId = parent.memberId;
 
         // 加载我所在的门店
         shopUtil.queryStaffBelongStoreList(function (json){
@@ -54,7 +53,7 @@ layui.config({
         textool.init({eleId: 'remark', maxlength: 400});
 
         var params = {
-            memberId: memberMation.id,
+            memberId: memberId,
             enabled: 1
         };
         // 获取会员拥有的车辆信息(已启用)
@@ -89,7 +88,7 @@ layui.config({
                 var params = {
                     storeId: $("#storeId").val(),
                     natureId: $("#natureId").val(),
-                    memberId: memberMation.id,
+                    memberId: memberId,
                     remark: $("#remark").val(),
                     type: 2,
                     mealList: JSON.stringify(tableData)

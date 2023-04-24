@@ -14,7 +14,7 @@ layui.config({
         table = layui.table;
     authBtn('1644234244354');
 
-    memberId = parent.rowId;
+    memberId = GetUrlParam("id");
 
     table.render({
         id: 'messageTable',

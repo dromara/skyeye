@@ -1,6 +1,6 @@
 var rowId = "";
 
-var memberMation = {};
+var memberId = {};
 
 layui.config({
     base: basePath,
@@ -14,7 +14,7 @@ layui.config({
         table = layui.table;
     authBtn('1644239500255');
 
-    memberMation = parent.memberMation;
+    memberId = GetUrlParam("id");
 
     table.render({
         id: 'messageTable',
@@ -112,7 +112,7 @@ layui.config({
     function getTableParams() {
         return {
             orderNum: $("#orderNum").val(),
-            memberId: memberMation.id
+            memberId: memberId
         };
     }
 
