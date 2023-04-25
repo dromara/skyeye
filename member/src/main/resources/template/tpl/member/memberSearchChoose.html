@@ -7,34 +7,15 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-	<div class="txtcenter" style="margin:0 auto;padding-top:10px;">
-		<div class="winui-tip alert-info" id="showInfo">
-		
-		</div>
-	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
-	        <div class="layui-form-item">
-	            <div class="layui-inline">
-					<label class="layui-form-label">会员称呼</label>
-					<div class="layui-input-inline">
-						<input type="text" id="contacts" name="contacts" placeholder="请输入会员称呼" class="layui-input" />
-					</div>
-					<label class="layui-form-label">手机号码</label>
-					<div class="layui-input-inline">
-						<input type="text" id="phone" name="phone" placeholder="请输入手机号码" class="layui-input" />
-					</div>
-					<label class="layui-form-label">电子邮箱</label>
-					<div class="layui-input-inline">
-						<input type="text" id="email" name="email" placeholder="请输入电子邮箱" class="layui-input" />
-					</div>
-					<button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
-					<button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
-	            </div>
-	        </div>
-	    </form>
+	<div class="winui-tip alert-info" id="showInfo">
+        会员选择规则：
+        1.单选，双击指定行数据即可选中；
+        2.只有启用状态的会员可以选择。
+        如没有查到要选择的会员，请检查会员信息是否满足当前规则。
 	</div>
     <div class="winui-toolbar">
         <div class="winui-tool">
-            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
         </div>
     </div>
 	<div style="margin:auto 10px;">

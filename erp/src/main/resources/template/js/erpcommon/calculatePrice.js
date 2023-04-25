@@ -144,10 +144,15 @@ function calculatedTotalPrice() {
 		taxLastMoneyPrice += parseFloat($("#taxLastMoney" + thisRowKey).val());
 	});
 
-	// 优惠率计算
-	var discount = parseFloat(isNull($(".discount").val()) ? 0 : $(".discount").val());
-	// 输出优惠金额
-	var discountMoney = (taxLastMoneyPrice * discount / 100).toFixed(2);
+	var discountMoney
+	if ($(".discount").length > 0) {
+		// 优惠率计算
+		var discount = parseFloat(isNull($(".discount").val()) ? 0 : $(".discount").val());
+		// 输出优惠金额
+		discountMoney = (taxLastMoneyPrice * discount / 100).toFixed(2);
+	} else {
+		discountMoney = $(".discountMoney").val();
+	}
 	$(".discountMoney").html(discountMoney);
 	taxLastMoneyPrice.toFixed(2);
 	// 返回最终金额
