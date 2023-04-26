@@ -413,7 +413,11 @@ var dsFormUtil = {
                     (attrTransformTable.showType == 'chooseInput' || attrTransformTable.showType == 'select')) {
                     var transKey = dsFormUtil.getKeyIdToMation(key);
                     var itemData = itemVal[transKey];
-                    map[key] = itemData.name;
+                    if (!isNull(itemData)) {
+                        map[key] = itemData.name;
+                    } else {
+                        map[key] = '';
+                    }
                 } else {
                     map[key] = val;
                 }
@@ -505,7 +509,7 @@ var dsFormUtil = {
 
     // 获取显示值
     getContentLinkedDataValue: function (content, value, data) {
-        if (isNull(value)) {
+        if (isNull(value) && value + '' != '0') {
             return null;
         }
         var attrDefinition = content.attrDefinition;
