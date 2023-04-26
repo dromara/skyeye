@@ -144,7 +144,7 @@ function calculatedTotalPrice() {
 		taxLastMoneyPrice += parseFloat($("#taxLastMoney" + thisRowKey).val());
 	});
 
-	var discountMoney
+	var discountMoney;
 	if ($(".discount").length > 0) {
 		// 优惠率计算
 		var discount = parseFloat(isNull($(".discount").val()) ? 0 : $(".discount").val());
@@ -152,6 +152,9 @@ function calculatedTotalPrice() {
 		discountMoney = (taxLastMoneyPrice * discount / 100).toFixed(2);
 	} else {
 		discountMoney = $(".discountMoney").val();
+	}
+	if (isNaN(discountMoney)) {
+		discountMoney = 0;
 	}
 	$(".discountMoney").html(discountMoney);
 	taxLastMoneyPrice.toFixed(2);
