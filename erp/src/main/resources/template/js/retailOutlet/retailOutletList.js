@@ -23,8 +23,8 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
-            { field: 'oddNumber', title: '单据编号', align: 'left', rowspan: '2', width: 200, templet: function (d) {
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+            { field: 'oddNumber', title: '单据编号', align: 'left', width: 200, templet: function (d) {
 		        return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 		    }},
             { field: 'holderMation', title: '会员', align: 'left', width: 150, templet: function (d) {
