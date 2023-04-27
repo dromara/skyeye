@@ -28,6 +28,7 @@
     "materialNormsStockType": {"name": "商品规格库存类型枚举类", "className": "skyeye-erp#com.skyeye.material.classenum.MaterialNormsStockType"},
     "materialInOrderType": {"name": "商品在单据中的类型", "className": "skyeye-erp#com.skyeye.material.classenum.MaterialInOrderType"},
     "depotPutOutType": {"name": "出入库类型枚举类", "className": "skyeye-erp#com.skyeye.depot.classenum.DepotPutOutType"},
+    "erpOrderStateEnum": {"name": "ERP单据状态枚举类", "className": "skyeye-erp#com.skyeye.classenum.ErpOrderStateEnum"},
 
     "skyeyeView": {"name": "视图枚举", "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"},
     "widthScale": {"name": "宽度比例枚举", "className": "skyeye-pro#com.skyeye.attr.classenum.WidthScale"},

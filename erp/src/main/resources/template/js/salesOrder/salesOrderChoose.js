@@ -17,7 +17,7 @@ layui.config({
     var materialCategoryType;
     fsTree.render({
 		id: "materialCategoryType",
-		url: flowableBasePath + "salesorder011",
+		url: sysMainMation.erpBasePath + "salesorder011",
 		checkEnable: false,
 		loadEnable: false,//异步加载
 		showLine: false,
@@ -67,7 +67,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: flowableBasePath + 'salesorder012',
+		    url: sysMainMation.erpBasePath + 'salesorder012',
 		    where: getTableParams(),
 			even: true,
 		    page: false,
