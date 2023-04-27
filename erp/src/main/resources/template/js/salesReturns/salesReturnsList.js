@@ -1,28 +1,22 @@
 
-var rowId = "";
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
     winui.renderColor();
     var $ = layui.$,
         form = layui.form,
-        laydate = layui.laydate,
         table = layui.table;
     var serviceClassName = sysServiceMation["putIsSalesReturns"]["key"];
     authBtn('1571813781842');//添加
-    authBtn('1571991191343');//导出
-        
-    laydate.render({elem: '#operTime', range: '~'});
-        
+
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: flowableBasePath + 'salesreturns001',
+        url: sysMainMation.erpBasePath + 'salesreturns001',
         where: getTableParams(),
         even: true,
         page: true,
@@ -30,40 +24,35 @@ layui.config({
 	    limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
-            { field: 'defaultNumber', title: '单据编号', align: 'left', rowspan: '2', width: 250, templet: function (d) {
-		        var str = '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
+            { field: 'oddNumber', title: '单据编号', align: 'left', rowspan: '2', width: 250, templet: function (d) {
+		        var str = '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 		        if (!isNull(d.linkNumber)){
 		        	str += '<span class="state-new">[转]</span>';
-			        if(d.status == 2){
-			        	str += '<span class="state-up"> [正常]</span>';
-			        } else {
-			        	str += '<span class="state-down"> [预警]</span>';
-			        }
 		        }
 		        return str;
 		    }},
-            { field: 'supplierName', title: '客户', align: 'left', rowspan: '2', width: 150 },
-            { title: '审批模式', align: 'center', colspan: '2'},
-            { field: 'state', title: '状态', align: 'left', rowspan: '2', width: 80, templet: function (d) {
-                return activitiUtil.showStateName(d.state, d.submitType);
-		    }},
-            { field: 'totalPrice', title: '合计金额', align: 'left', rowspan: '2', width: 120},
-            { field: 'taxMoney', title: '含税合计', align: 'left', rowspan: '2', width: 120 },
-            { field: 'discountLastMoney', title: '优惠后金额', align: 'left', rowspan: '2', width: 120 },
-            { field: 'changeAmount', title: '退款', align: 'left', rowspan: '2', width: 120 },
-            { field: 'operPersonName', title: '操作人', align: 'left', rowspan: '2', width: 100},
-            { field: 'operTime', title: '单据日期', align: 'center', rowspan: '2', width: 140 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', rowspan: '2', align: 'center', width: 200, toolbar: '#tableBar'}
-        ],[
-            { field: 'submitType', title: '提交模式', align: 'left', width: 120, templet: function (d) {
-                return erpOrderUtil.getSubmitTypeName(d);
+            { field: 'holderMation', title: '客户', align: 'left', width: 150, templet: function (d) {
+                return d.holderMation.name;
             }},
-            { field: 'processInstanceId', title: '流程实例id', align: 'left', width: 120, templet: function (d) {
-                return erpOrderUtil.getProcessInstanceIdBySubmitType(d);
-            }}
+            { field: 'totalPrice', title: '合计金额', align: 'left', width: 120 },
+            { field: 'operTime', title: '单据日期', align: 'center', width: 140 },
+            { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
+                return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+            }},
+            { field: 'state', title: '状态', width: 90, templet: function (d) {
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
+            }},
+            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
+            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', rowspan: '2', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
 	    done: function(json) {
 	    	matchingLanguage();
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单号", function () {
+                table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+            });
 	    }
     });
 
@@ -71,16 +60,18 @@ layui.config({
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'delete') { //删除
-            deletemember(data);
+            erpOrderUtil.deleteOrderMation(data.id, serviceClassName, function() {
+                loadTable();
+            });
         } else if (layEvent === 'details') { //详情
         	details(data);
         } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        } else if (layEvent === 'submitToSave') { //提交
-            subExamine(data);
-        } else if (layEvent === 'subExamine') { //提交审核
-            subExamine(data);
-        } else if (layEvent === 'activitiProcessDetails') { // 工作流流程详情查看
+        } else if (layEvent === 'subApproval') { //提交审核
+            erpOrderUtil.submitOrderMation(data.id, serviceClassName, function() {
+                loadTable();
+            });
+        } else if (layEvent === 'processDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
             erpOrderUtil.revokeOrderMation(data.processInstanceId, serviceClassName, function() {
@@ -89,25 +80,23 @@ layui.config({
         }
     });
 
-    // 删除
-    function deletemember(data) {
-        erpOrderUtil.deleteOrderMation(data.id, serviceClassName, function() {
-            loadTable();
-        });
-    }
-    
-    // 提交数据
-	function subExamine(data) {
-        erpOrderUtil.submitOrderMation(data.id, serviceClassName, data.submitType, serviceClassName, function() {
-            loadTable();
-        });
-    }
-    
+    // 添加
+    $("body").on("click", "#addBean", function() {
+        _openNewWindows({
+            url:  systemCommonUtil.getUrl('FP2023042700005', null),
+            title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+            pageId: "salesReturnsAdd",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    });
+
     // 编辑
 	function edit(data) {
-		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/salesReturns/salesReturnsEdit.html",
+            url:  systemCommonUtil.getUrl('FP2023042700006&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "salesReturnsEdit",
 			area: ['90vw', '90vh'],
@@ -119,9 +108,8 @@ layui.config({
     
     // 详情
 	function details(data) {
-		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/salesReturns/salesReturnsDetails.html",
+            url:  systemCommonUtil.getUrl('FP2023042700007&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "salesReturnsDetails",
 			area: ['90vw', '90vh'],
@@ -129,57 +117,16 @@ layui.config({
 			}});
 	}
 
-    // 添加
-    $("body").on("click", "#addBean", function() {
-        _openNewWindows({
-            url: "../../tpl/salesReturns/salesReturnsAdd.html",
-            title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-            pageId: "salesReturnsAdd",
-            area: ['90vw', '90vh'],
-            callBack: function (refreshCode) {
-                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                loadTable();
-            }});
-    });
-
     form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
-        }
-        return false;
-    });
-
     $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
-
-    // 刷新
     function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    // 导出excel
-    $("body").on("click", "#downloadExcel", function () {
-    	postDownLoadFile({
-			url : flowableBasePath + 'salesreturns005',
-			params: getTableParams(),
-			method : 'post'
-		});
-    });
-    
     function getTableParams() {
-        var startTime = "";
-        var endTime = "";
-    	if (!isNull($("#operTime").val())) {
-            startTime = $("#operTime").val().split('~')[0].trim() + ' 00:00:00';
-            endTime = $("#operTime").val().split('~')[1].trim() + ' 23:59:59';
-        }
-    	return {
-    		defaultNumber: $("#defaultNumber").val(), 
-    		startTime: startTime,
-    		endTime: endTime
-    	};
+        return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('salesReturnsList', {});
