@@ -23,7 +23,7 @@ layui.config({
 			var params = {
 				flowName: $("#flowName").val(),
 				modelKey: $("#modelKey").val(),
-				applyServiceClassName: $("#serviceClassName").attr("applyServiceClassName")
+				applyServiceClassName: $("#applyServiceClassName").attr("applyServiceClassName")
 			};
 
 			AjaxPostUtil.request({url: flowableBasePath + "writeActFlowMation", params: params, type: 'json', method: 'POST', callback: function (json) {

@@ -35,12 +35,16 @@ layui.config({
 	};
 
 	var id = GetUrlParam('id');
-	var dataFrom = parent.$(`#${id}`).attr('data');
+	var dataFrom = parent.$(`#${id}`).attr('data');debugger
 	dataFrom = isNull(dataFrom) ? {} : JSON.parse(dataFrom);
 
 	var value;
 	if (dataFrom.dataType == 4) {
-		value = dataFrom.businessApi;
+		if (typeof dataFrom.businessApi == 'string') {
+			value = JSON.parse(dataFrom.businessApi);
+		} else {
+			value = dataFrom.businessApi;
+		}
 	} else {
 		value = dataFrom.dataType == 1 ? dataFrom.defaultData : dataFrom.objectId;
 	}
