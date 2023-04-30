@@ -83,7 +83,7 @@ layui.config({
     // 添加
     $("body").on("click", "#addBean", function() {
         _openNewWindows({
-            url:  systemCommonUtil.getUrl('FP2023042000001', null),
+            url: systemCommonUtil.getUrl('FP2023042000001', null),
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "purchaseOrderAdd",
             area: ['90vw', '90vh'],
@@ -96,7 +96,7 @@ layui.config({
     // 编辑
     function edit(data) {
         _openNewWindows({
-            url:  systemCommonUtil.getUrl('FP2023042000002&id=' + data.id, null),
+            url: systemCommonUtil.getUrl('FP2023042000002&id=' + data.id, null),
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "purchaseOrderEdit",
             area: ['90vw', '90vh'],
@@ -109,7 +109,7 @@ layui.config({
     // 详情
 	function details(data) {
 		_openNewWindows({
-            url:  systemCommonUtil.getUrl('FP2023042000003&id=' + data.id, null),
+            url: systemCommonUtil.getUrl('FP2023042000003&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "purchaseOrderDetails",
 			area: ['90vw', '90vh'],
