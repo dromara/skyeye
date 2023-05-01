@@ -14,7 +14,7 @@ layui.config({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-		url: flowableBasePath + 'statistics003',
+		url: sysMainMation.erpBasePath + 'statistics003',
 		where: getTableParams(),
 		even: true,
 		page: true,
@@ -22,9 +22,9 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'materialName', title: '商品名称', align: 'left', width: 250 },
-			{ field: 'materialModel', title: '型号', align: 'left', width: 150 },
-			{ field: 'unitName', title: '单位', align: 'left', width: 80 },
+			{ field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {return d.materialMation.name}},
+			{ field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {return d.materialMation.model}},
+			{ field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {return d.normsMation.name}},
 			{ field: 'currentTock', title: '进货数量', align: 'left', width: 100 },
 			{ field: 'currentTockMoney', title: '进货金额', align: 'left', width: 120 },
 			{ field: 'returnCurrentTock', title: '退货数量', align: 'left', width: 100 },
@@ -45,7 +45,6 @@ layui.config({
         loadTable();
     });
 
-    // 刷新
     function loadTable() {
 		table.reloadData("messageTable", {where: getTableParams()});
     }

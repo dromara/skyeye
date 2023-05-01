@@ -1,5 +1,4 @@
 
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -11,45 +10,41 @@ layui.config({
         form = layui.form,
         table = layui.table;
         
-	initTable();
-	function initTable(){
-	    table.render({
-	        id: 'messageTable',
-	        elem: '#messageTable',
-	        method: 'post',
-	        url: flowableBasePath + 'statistics004',
-	        where: getTableParams(),
-	        even: true,
-	        page: true,
-			limits: getLimits(),
-			limit: getLimit(),
-	        cols: [[
-	            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	            { field: 'materialName', title: '商品名称', align: 'left', width: 250 },
-			    { field: 'materialModel', title: '型号', align: 'left', width: 150 },
-	            { field: 'unitName', title: '单位', align: 'left', width: 80 },
-	            { field: 'currentTock', title: '销售数量', align: 'left', width: 100 },
-	            { field: 'currentTockMoney', title: '销售金额', align: 'left', width: 120 },
-	            { field: 'returnCurrentTock', title: '退货数量', align: 'left', width: 100 },
-	            { field: 'returnCurrentTockMoney', title: '退货金额', align: 'left', width: 120 }
-	        ]],
-		    done: function(json) {
-		    	matchingLanguage();
-				initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form,
-					{value: "请选择日期", type: 'month', defaultValue: getOneYMFormatDate(), required: 'required'},
-					function () {
-					table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-				});
-		    }
-	    });
-	}
+	table.render({
+		id: 'messageTable',
+		elem: '#messageTable',
+		method: 'post',
+		url: sysMainMation.erpBasePath + 'statistics004',
+		where: getTableParams(),
+		even: true,
+		page: true,
+		limits: getLimits(),
+		limit: getLimit(),
+		cols: [[
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+			{ field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {return d.materialMation.name}},
+			{ field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {return d.materialMation.model}},
+			{ field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {return d.normsMation.name}},
+			{ field: 'currentTock', title: '销售数量', align: 'left', width: 100 },
+			{ field: 'currentTockMoney', title: '销售金额', align: 'left', width: 120 },
+			{ field: 'returnCurrentTock', title: '退货数量', align: 'left', width: 100 },
+			{ field: 'returnCurrentTockMoney', title: '退货金额', align: 'left', width: 120 }
+		]],
+		done: function(json) {
+			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form,
+				{value: "请选择日期", type: 'month', defaultValue: getOneYMFormatDate(), required: 'required'},
+				function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
+		}
+	});
 
 	form.render();
 	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
 
-	// 刷新
     function loadTable() {
 		table.reloadData("messageTable", {where: getTableParams()});
     }
