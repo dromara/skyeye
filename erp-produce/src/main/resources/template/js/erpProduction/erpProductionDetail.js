@@ -28,7 +28,6 @@ layui.config({
 			});
 			$("#showForm").html(getDataUseHandlebars($("#mainHtml").html(), json));
 
-			$("#contentIframe").attr("src", "../../tpl/erpcommon/erpOrderFlowLine.html?rowId=" + json.bean.id + "&type=2");
 			matchingLanguage();
 			form.render();
         }});

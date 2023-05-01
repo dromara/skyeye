@@ -44,19 +44,29 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: flowableBasePath + 'material010',
+			url: sysMainMation.erpBasePath + 'material010',
 		    where: getTableParams(),
 			even: true,
 		    page: true,
-		    limits: [8, 16, 24, 32, 40, 48, 56],
-		    limit: 8,
+			limits: getLimits(),
+			limit: getLimit(),
 		    cols: [[
 		    	{ type: 'checkbox'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        { field: 'materialName', title: '商品名称', align: 'left', width: 150 },
-		        { field: 'materialModel', title: '型号', align: 'left', width: 150 },
-		        { field: 'categoryName', title: '所属类型', align: 'left', width: 100 },
-		        { field: 'typeName', title: '商品来源', align: 'left', width: 100 },
+				{ field: 'name', title: '商品名称', align: 'left', width: 150 },
+				{ field: 'model', title: '型号', align: 'left', width: 150 },
+				{ field: 'categoryId', title: '所属分类', align: 'center', width: 100, templet: function (d) {
+					return sysDictDataUtil.getDictDataNameByCodeAndKey("ERP_MATERIAL_CATEGORY", d.categoryId);
+				}},
+				{ field: 'fromType', title: '产品来源', align: 'center', width: 100, templet: function (d) {
+					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialFromType", 'id', d.fromType, 'name');
+				}},
+				{ field: 'type', title: '产品类型', align: 'left', width: 100, templet: function (d) {
+					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialType", 'id', d.type, 'name');
+				}},
+				{ field: 'unit', title: '产品规格类型', align: 'center', width: 100, templet: function (d) {
+					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialUnit", 'id', d.unit, 'name');
+				}},
 		        { field: 'procedureMationList', title: '工序', align: 'left', width: 100, templet: function (d) {
 		        	var str = ""
 		        	$.each(d.procedureMationList, function(i, item) {

@@ -61,8 +61,6 @@ layui.config({
 				$.each(json.bean.material, function(i, item) {
 					item.unitPrice = parseFloat(item.unitPrice).toFixed(2);
 				});
-
-				$("#contentIframe").attr("src", "../../tpl/erpcommon/erpOrderFlowLine.html?rowId=" + json.bean.id + "&type=3");
 			},
 			ajaxSendAfter: function (json) {
 				matchingLanguage();
