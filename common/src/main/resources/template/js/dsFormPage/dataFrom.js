@@ -35,7 +35,7 @@ layui.config({
 	};
 
 	var id = GetUrlParam('id');
-	var dataFrom = parent.$(`#${id}`).attr('data');debugger
+	var dataFrom = parent.$(`#${id}`).attr('data');
 	dataFrom = isNull(dataFrom) ? {} : JSON.parse(dataFrom);
 
 	var value;
