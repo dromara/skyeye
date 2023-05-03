@@ -1,6 +1,4 @@
 
-var rowId = "";
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -95,7 +93,6 @@ layui.config({
 
     // 编辑
     function edit(data) {
-        rowId = data.id;
         _openNewWindows({
             url:  systemCommonUtil.getUrl('FP2023042600006&id=' + data.id, null),
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
@@ -109,7 +106,6 @@ layui.config({
 
     // 详情
 	function details(data) {
-		rowId = data.id;
 		_openNewWindows({
             url:  systemCommonUtil.getUrl('FP2023042600007&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
@@ -121,9 +117,8 @@ layui.config({
 	
     // 转销售出库
 	function turnSales(data) {
-		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/salesOrder/salesOrderToOut.html",
+            url: systemCommonUtil.getUrl('FP2023050300002&id=' + data.id + '&serviceClassName=' + sysServiceMation["outIsSalesOutlet"]["key"], null),
 			title: "转销售出库",
 			pageId: "salesOrderToOut",
 			area: ['90vw', '90vh'],

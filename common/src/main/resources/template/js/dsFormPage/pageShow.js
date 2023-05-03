@@ -1,6 +1,8 @@
 
 // 以下两个参数开启团队权限时有值
 var objectId = '', objectKey = '';
+// 根据以下两个参数判断：工作流的判断是否要根据serviceClassName的判断
+var serviceClassName;
 
 layui.config({
     base: basePath,
@@ -11,6 +13,7 @@ layui.config({
     winui.renderColor();
     var $ = layui.$;
     var pageId = GetUrlParam("pageId");
+    serviceClassName = GetUrlParam("serviceClassName");
     if (isNull(pageId)) {
         winui.window.msg("请传入布局id", {icon: 2, time: 2000});
         return false;
@@ -111,7 +114,7 @@ layui.config({
     }
 
     function initSaveForDraftBtn() {
-        var flowable = pageMation.serviceBeanCustom.serviceBean.flowable;
+        var flowable = dsFormUtil.getFlowable(pageMation);
         if (flowable) {
             // 开启工作流
             $('#formWriteBean').before(`<button class="winui-btn" lay-submit lay-filter="formSaveDraft" id="formSaveDraft">保存为草稿</button>`);

@@ -28,7 +28,7 @@ layui.config({
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'oddNumber', title: '单号', align: 'left', width: 220, templet: function (d) {
 		        var str = '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
-		        if (!isNull(d.linkNumber)){
+		        if (!isNull(d.parentOrderId)) {
 		        	str += '<span class="state-new">[转]</span>';
 		        }
 		        return str;

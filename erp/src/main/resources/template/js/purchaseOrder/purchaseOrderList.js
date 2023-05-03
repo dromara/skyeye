@@ -1,6 +1,4 @@
 
-var rowId = "";
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -119,9 +117,8 @@ layui.config({
 
     // 转采购入库
 	function turnPurchase(data) {
-		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/purchaseOrder/purchaseOrderToPut.html",
+            url: systemCommonUtil.getUrl('FP2023050300001&id=' + data.id + '&serviceClassName=' + sysServiceMation["putIsPurchase"]["key"], null),
 			title: "转采购入库",
 			pageId: "purchaseOrderToPut",
 			area: ['90vw', '90vh'],

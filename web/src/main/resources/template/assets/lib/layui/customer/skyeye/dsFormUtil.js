@@ -240,9 +240,9 @@ var dsFormUtil = {
         // 保存/提交
         form.on('submit(formWriteBean)', function (data) {
             if (winui.verifyForm(data.elem) && !isNull(dsFormUtil.pageMation)) {
-                var flowable = dsFormUtil.pageMation.serviceBeanCustom.serviceBean.flowable;
+                var flowable = dsFormUtil.getFlowable(dsFormUtil.pageMation);
                 if (flowable) {
-                    activitiUtil.startProcess(dsFormUtil.pageMation.serviceBeanCustom.serviceBean.className, null, function (approvalId) {
+                    activitiUtil.startProcess(dsFormUtil.getFlowableServiceClassName(dsFormUtil.pageMation), null, function (approvalId) {
                         dsFormUtil.saveData("2", approvalId);
                     });
                 } else {
@@ -251,6 +251,27 @@ var dsFormUtil = {
             }
             return false;
         });
+    },
+
+    // 判断是否开启工作流
+    temPage: null,
+    getFlowable: function (pageMation) {
+        if (isNull(serviceClassName)) {
+            return pageMation.serviceBeanCustom.serviceBean.flowable;
+        }
+        if (isNull(dsFormUtil.temPage) || $.isEmptyObject(dsFormUtil.temPage)) {
+            AjaxPostUtil.request({url: reqBasePath + "queryServiceBeanCustom", params: {className: serviceClassName}, type: 'json', method: 'GET', callback: function (json) {
+                dsFormUtil.temPage = json.bean;
+            }, async: false});
+        }
+        return dsFormUtil.temPage.serviceBean.flowable;
+    },
+
+    getFlowableServiceClassName: function (pageMation) {
+        if (isNull(serviceClassName)) {
+            return pageMation.serviceBeanCustom.serviceBean.className;
+        }
+        return serviceClassName;
     },
 
     // 保存数据
@@ -281,7 +302,7 @@ var dsFormUtil = {
             params['objectKey'] = objectKey;
         }
 
-        var flowable = dsFormUtil.pageMation.serviceBeanCustom.serviceBean.flowable;
+        var flowable = dsFormUtil.getFlowable(dsFormUtil.pageMation);
         if (flowable) {
             params["formSubType"] = formSubType;
             params["approvalId"] = approvalId;
