@@ -48,7 +48,7 @@ layui.config({
 		 			elem: "#demoTree1",  // 绑定元素
 		 			url: reqBasePath + 'queryCompanyMationListTree', // 异步接口
 		 			dataStyle: 'layuiStyle',
-		 			done: function(json) {
+		 			done: function(data) {
 		 				if($("#demoTree1 li").length > 0){
 		 					for(var i = 0; i < $("#demoTree1 li").length; i++){
 	 							if($("#demoTree1 li").eq(i).attr("data-id") == json.bean.companyId){
@@ -67,7 +67,7 @@ layui.config({
 		 				elem: "#demoTree2",  // 绑定元素
 		 				url: reqBasePath + 'companydepartment006?companyId=' + companyId, // 异步接口
 		 				dataStyle: 'layuiStyle',
-		 				done: function(json) {
+		 				done: function(data) {
 		 					departmentId = "";
 		 					if($("#demoTree2 li").length > 0){
 		 						for(var i = 0; i < $("#demoTree2 li").length; i++){
@@ -98,7 +98,7 @@ layui.config({
 		 				elem: "#demoTree3",  //绑定元素
 		 				url: reqBasePath + 'companyjob006?departmentId=' + departmentId, //异步接口
 		 				dataStyle: 'layuiStyle',
-		 				done: function(json) {
+		 				done: function(data) {
 		 					jobId = "";
 		 					if($("#demoTree3 li").length > 0){
 		 						for(var i = 0; i < $("#demoTree3 li").length; i++){
@@ -120,7 +120,7 @@ layui.config({
 						url: reqBasePath + 'companyjobscore008?jobId=' + jobId,
 						dataStyle: 'layuiStyle',
 						method: 'GET',
-						done: function(json) {
+						done: function(data) {
 							jobScoreId = "";
 							if($("#demoTree4 li").length > 0){
 								for(var i = 0; i < $("#demoTree4 li").length; i++){

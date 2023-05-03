@@ -51,38 +51,10 @@ layui.config({
 		AjaxPostUtil.request({url: reqBasePath + "mainpage004", params: {}, type: 'json', callback: function (json) {
 			$("#knowledgeList").html(getDataUseHandlebars($("#knowledgeContentTemplate").html(), json));
 			matchingLanguage();
-			initHotActModel();
 			form.render();
    		}});
 	}
 
-	function initHotActModel(){
-		showGrid({
-			id: "actModelShow",
-			url: flowableBasePath + "queryHotActModelList",
-			params: {},
-			pagination: false,
-			method: 'GET',
-			template: $("#actModelTemplate").html(),
-			ajaxSendLoadBefore: function(hdb) {
-				// 展示图标
-				hdb.registerHelper("compare1", function(v1, v2, v3, v4, options){
-					var str = "";
-					if(v1 == 1){
-						// icon
-						str = '<i class="fa fa-fw ' + v3 + '" style="font-size: 18px; line-height: 30px; width: 100%; color: ' + v4 + '"></i>';
-					} else {
-						str = '<img src="' + reqBasePath + v2 + '" class="photo-img" style="width: 25px; height: 25px">';
-					}
-					return str;
-				});
-			},
-			ajaxSendAfter:function (json) {
-				matchingLanguage();
-			}
-		});
-	}
-	
 	// 公告详情
 	$("body").on("click", ".notice", function (e) {
 		rowId = $(this).attr("id");
@@ -126,24 +98,5 @@ layui.config({
     	parent.active.tabChange("forumBtn");
 	});
 
-	// 流程任务配置点击
-	$("body").on("click", ".act-model-li", function (e) {
-		var title = $(this).attr("showTitle");
-		var url = $(this).attr("addPageUrl");
-		dsFormId = $(this).attr("dsFormId");
-		if (!isNull(dsFormId)) {
-			// 只有动态表单类型的流程才要工作流模型的id
-			actFlowId = $(this).attr("actFlowId");
-		}
-		_openNewWindows({
-			url: url,
-			title: title,
-			pageId: "openLaunchTaskPage",
-			area: ['100vw', '100vh'],
-			callBack: function (refreshCode) {
-				winui.window.msg("提交成功", {icon: 1, time: 2000});
-			}});
-	});
-    
     exports('mainPage', {});
 });
