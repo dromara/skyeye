@@ -14,7 +14,7 @@ layui.config({
 	
 	initFourNumList();
 	function initFourNumList(){
-		AjaxPostUtil.request({url: reqBasePath + "erppage001", params: {}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erppage001", params: {}, type: 'json', callback: function (json) {
 			$("#salesMoney").html(json.bean.salesMoney);
 			$("#retailMoney").html(json.bean.retailMoney);
 			$("#purchaseMoney").html(json.bean.purchaseMoney);
@@ -25,7 +25,7 @@ layui.config({
 	
 	// 近六个月审核通过的采购订单
 	function initSixMonthPurchase(){
-		AjaxPostUtil.request({url: reqBasePath + "erppage002", params: {}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erppage002", params: {}, type: 'json', callback: function (json) {
 			renderLayer04Left(json.rows);
 			initSixMonthSales();
    		}});
@@ -33,7 +33,7 @@ layui.config({
 	
 	// 近六个月审核通过的销售订单
 	function initSixMonthSales(){
-		AjaxPostUtil.request({url: reqBasePath + "erppage003", params: {}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erppage003", params: {}, type: 'json', callback: function (json) {
 			renderLayer04Left2(json.rows);
 			initSixMonthProfit();
    		}});
@@ -41,7 +41,7 @@ layui.config({
 	
 	// 近12个月审核通过的利润订单
 	function initSixMonthProfit(){
-		AjaxPostUtil.request({url: reqBasePath + "erppage004", params: {}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erppage004", params: {}, type: 'json', callback: function (json) {
 			renderLayer04Left3(json.rows);
 			matchingLanguage();
    		}});
@@ -54,7 +54,7 @@ layui.config({
 		var numStr = new Array();
 		$.each(rows, function(i, item) {
 			nameStr.push(item.yearMonth);
-			numStr.push(item.purchaseMoney);
+			numStr.push(isNull(item.money) ? 0 : item.money);
 		});
 		myChart1.setOption({
 			title: {
@@ -86,7 +86,7 @@ layui.config({
 		var numStr = new Array();
 		$.each(rows, function(i, item) {
 			nameStr.push(item.yearMonth);
-			numStr.push(item.salesMoney);
+			numStr.push(isNull(item.money) ? 0 : item.money);
 		});
 		myChart2.setOption({
 			title: {
@@ -118,7 +118,7 @@ layui.config({
 		var numStr = new Array();
 		$.each(rows, function(i, item) {
 			nameStr.push(item.yearMonth);
-			numStr.push(item.profitMoney);
+			numStr.push(isNull(item.profitMoney) ? 0 : item.profitMoney);
 		});
 		myChart3.setOption({
 			title: {

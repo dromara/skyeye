@@ -72,28 +72,6 @@ var erpOrderUtil = {
     },
 
     /**
-     * 根据根据提交类型以及当前的状态设置按钮
-     *
-     * @param submitType 单据提交类型  1需要审核；2不需要审核
-     * @param state 单据状态
-     */
-    orderEditPageSetBtnBySubmitType: function(submitType, state) {
-        if (submitType == 1) {
-            if (state == 0 || state == 3 || state == 5) {
-                $(".formEditBean").removeClass("layui-hide");
-                $(".formSubOneBean").removeClass("layui-hide");
-            } else if (state == 1) {
-                $(".save").removeClass("layui-hide");
-            }
-        } else if (submitType == 2) {
-            if (state != 1) {
-                $(".formEditBean").removeClass("layui-hide");
-                $(".formSubTwoBean").removeClass("layui-hide");
-            }
-        }
-    },
-
-    /**
      * 删除订单信息
      *
      * @param id 订单id
@@ -156,30 +134,6 @@ var erpOrderUtil = {
                 }
             }});
         });
-    },
-
-    /**
-     * 获取提交类型名称
-     *
-     * @param data
-     * @returns {string}
-     */
-    getSubmitTypeName: function (data) {
-        if (data.submitType == 1) {
-            return '工作流审批';
-        } else if (data.submitType == 2) {
-            return '自主提交';
-        }
-        return '';
-    },
-
-    getProcessInstanceIdBySubmitType: function (data) {
-        if (data.submitType == 1) {
-            return '<a lay-event="activitiProcessDetails" class="notice-title-click">' + data.processInstanceId + '</a>';
-        } else if (data.submitType == 2) {
-            return '不涉及';
-        }
-        return '';
     },
 
     /**
