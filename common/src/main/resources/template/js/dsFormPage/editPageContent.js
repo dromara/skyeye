@@ -200,6 +200,12 @@ layui.config({
                             <button id="afterHtmlConfig" type="button" class="winui-toolbtn writeScript">编写脚本</button>
                         </div>
                     </div>`,
+        'dataChangeBox': `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label" style="width: 70%;">数据变化监听的JS：</label>
+                        <div class="layui-input-block" script="// 入参为：data \n\n">
+                            <button id="dataChangeConfig" type="button" class="winui-toolbtn writeScript">编写脚本</button>
+                        </div>
+                    </div>`,
     };
     // 详情类布局才展示的组件属性
     var detailsPageAttr = ['attrKeyBox', 'titleBox', 'widthBox', 'tableAttrBox'];
@@ -299,6 +305,7 @@ layui.config({
     $("#editEchoScriptConfig").parent().attr('script', data.editEchoScript);
     $("#dataEchoAfterScriptConfig").parent().attr('script', data.dataEchoAfterScript);
     $("#afterHtmlConfig").parent().attr('script', data.afterHtml);
+    $("#dataChangeConfig").parent().attr('script', data.dataChange);
 
     $("body").on("click", "#attrTransformTableListConfig", function() {
         parent.temData = $("#attrTransformTableListConfig").parent().attr('data');
@@ -373,6 +380,7 @@ layui.config({
         newParams.editEchoScript = $("#editEchoScriptConfig").parent().attr('script');
         newParams.dataEchoAfterScript = $("#dataEchoAfterScriptConfig").parent().attr('script');
         newParams.afterHtml = $("#afterHtmlConfig").parent().attr('script');
+        newParams.dataChange = $("#dataChangeConfig").parent().attr('script');
 
         if (!isNull($("#attrKey").val())) {
             newParams.attrDefinition = getInPoingArr(parent.attrList, 'attrKey', $("#attrKey").val());

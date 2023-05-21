@@ -1,6 +1,4 @@
 
-var rowId = "";
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -116,7 +114,6 @@ layui.config({
 
     // 详情
     function details(data) {
-        rowId = data.id;
         _openNewWindows({
             url: systemCommonUtil.getUrl('FP2023032200001&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
@@ -129,7 +126,7 @@ layui.config({
     // 删除
     function deleteIncome(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
-            AjaxPostUtil.request({url: sysMainMation.ifsBasePath + "income005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.ifsBasePath + "income005", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});

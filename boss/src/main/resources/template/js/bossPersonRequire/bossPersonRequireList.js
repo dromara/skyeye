@@ -1,29 +1,24 @@
-var rowId = "";
 
-// 人员需求申请
 layui.config({
     base: basePath,
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
     winui.renderColor();
     var $ = layui.$,
         form = layui.form,
-        laydate = layui.laydate,
         table = layui.table;
     var serviceClassName = sysServiceMation["bossPersonRequire"]["key"];
 
     // 新增
     authBtn('1649569413156');
 
-    laydate.render({elem: '#createTime', range: '~'});
-
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: flowableBasePath + 'queryBossPersonRequireList',
+        url: sysMainMation.bossBasePath + 'queryBossPersonRequireList',
         where: getTableParams(),
         even: true,
         page: true,
@@ -31,29 +26,28 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'createName', title: '申请人', width: 140},
-            { field: 'applyDepartmentName', title: '申请人部门', width: 140},
-            { field: 'recruitJobName', title: '需求岗位', width: 150 },
-            { field: 'recruitDepartmentName', title: '需求部门', width: 140 },
-            { field: 'wages', title: '薪资', width: 120 },
-            { field: 'recruitNum', title: '需求人数', width: 100 },
+            { field: 'oddNumber', title: '单据编号', align: 'left', width: 200, templet: function (d) {
+                return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+            }},
             { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
                 return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
             }},
-            { field: 'stateName', title: '状态', width: 90, templet: function (d) {
-                if(d.state == 6){
-                    return '<span class="state-new">招聘中</span>';
-                } else if(d.state == 7){
-                    return '<span class="state-new">招聘结束</span>';
-                } else{
-                    return activitiUtil.showStateName2(d.state, 1);
-                }
+            { field: 'state', title: '状态', align: 'left', width: 80, templet: function (d) {
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("bossPersonRequireState", 'id', d.state, 'name');
             }},
-            { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], width: 150 },
+            { field: 'wages', title: '薪资范围', width: 120 },
+            { field: 'recruitNum', title: '需求人数', width: 100 },
+            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#messageTableBar'}
         ]],
         done: function(json) {
             matchingLanguage();
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单据编号", function () {
+                refreshTable();
+            });
         }
     });
 
@@ -78,7 +72,7 @@ layui.config({
     // 添加
     $("body").on("click", "#addBean", function() {
         _openNewWindows({
-            url: "../../tpl/bossPersonRequire/bossPersonRequireAdd.html",
+            url: systemCommonUtil.getUrl('', null),
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "bossPersonRequireAdd",
             area: ['90vw', '90vh'],
@@ -88,6 +82,32 @@ layui.config({
             }});
     });
 
+    // 编辑申请
+    function edit(data) {
+        _openNewWindows({
+            url: systemCommonUtil.getUrl('&id=' + data.id, null),
+            title: systemLanguage["com.skyeye.editPageTitle"][languageType],
+            pageId: "bossPersonRequireEdit",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }
+        });
+    }
+
+    // 详情
+    function details(data) {
+        _openNewWindows({
+            url: systemCommonUtil.getUrl('&id=' + data.id, null),
+            title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+            pageId: "bossPersonRequireDetails",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+            }
+        });
+    }
+
     // 撤销
     function revoke(data) {
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
@@ -96,21 +116,6 @@ layui.config({
                 winui.window.msg("提交成功", {icon: 1, time: 2000});
                 loadTable();
             }});
-        });
-    }
-
-    // 编辑申请
-    function edit(data) {
-        rowId = data.id;
-        _openNewWindows({
-            url: "../../tpl/bossPersonRequire/bossPersonRequireEdit.html",
-            title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-            pageId: "bossPersonRequireEdit",
-            area: ['90vw', '90vh'],
-            callBack: function (refreshCode) {
-                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                loadTable();
-            }
         });
     }
 
@@ -142,28 +147,7 @@ layui.config({
         });
     }
 
-    // 详情
-    function details(data) {
-        rowId = data.id;
-        _openNewWindows({
-            url: "../../tpl/bossPersonRequire/bossPersonRequireDetails.html",
-            title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "bossPersonRequireDetails",
-            area: ['90vw', '90vh'],
-            callBack: function (refreshCode) {
-            }
-        });
-    }
-
     form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-        }
-        return false;
-    });
-
-    // 刷新
     $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
@@ -172,17 +156,12 @@ layui.config({
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
+    function refreshTable() {
+        table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+    }
+
     function getTableParams() {
-        var startTime = "", endTime = "";
-        if (!isNull($("#createTime").val())) {
-            startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
-            endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
-        }
-        return {
-            state: $("#state").val(),
-            startTime: startTime,
-            endTime: endTime
-        };
+        return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('bossPersonRequireList', {});
