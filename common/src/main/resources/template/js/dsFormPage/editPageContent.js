@@ -69,6 +69,22 @@ layui.config({
                             </select>
                         </div>
                     </div>`,
+        'preAttributeBox': `<div class="layui-form-item layui-col-xs12">
+                            <label class="layui-form-label">前置属性</label>
+                            <div class="layui-input-block">
+                                <select lay-filter="preAttribute" lay-search="" id="preAttribute" name="preAttribute">
+                
+                                </select>
+                            </div>
+                        </div>`,
+        'postAttributeBox': `<div class="layui-form-item layui-col-xs12">
+                            <label class="layui-form-label">后置属性</label>
+                            <div class="layui-input-block">
+                                <select lay-filter="postAttribute" lay-search="" id="postAttribute" name="postAttribute">
+                
+                                </select>
+                            </div>
+                        </div>`,
         'uploadDataTypeBox': `<div class="layui-form-item layui-col-xs12">
                             <label class="layui-form-label">文件后缀类型<i class="red">*</i></label>
                             <div class="layui-input-block" id="uploadDataType">
@@ -238,15 +254,23 @@ layui.config({
 
     // 属性信息
     var attrs = [];
+    var otherAttrs = [];
     $.each(parent.attrList, function (i, item) {
         // 获取已经绑定组件的属性并且适用于当前组件的属性
         if (!isNull(item.attrDefinitionCustom)) {
             var dsFormComponent = item.attrDefinitionCustom.dsFormComponent;
-            if (!isNull(dsFormComponent) && data.dsFormComponent.id == dsFormComponent.id) {
-                attrs.push({
-                    id: item.attrKey,
-                    name: item.attrDefinitionCustom.name
-                })
+            if (!isNull(dsFormComponent)) {
+                if (data.dsFormComponent.id == dsFormComponent.id) {
+                    attrs.push({
+                        id: item.attrKey,
+                        name: item.attrDefinitionCustom.name
+                    })
+                } else {
+                    otherAttrs.push({
+                        id: item.attrKey,
+                        name: item.attrDefinitionCustom.name
+                    })
+                }
             }
         }
     });
@@ -263,6 +287,10 @@ layui.config({
         }
         $("#attrTransformTableListConfig").parent().attr('data-json', JSON.stringify([]));
     });
+    $("#preAttribute").html(getDataUseHandlebars(selOption, {rows: otherAttrs}));
+    $("#preAttribute").val(data.preAttribute);
+    $("#postAttribute").html(getDataUseHandlebars(selOption, {rows: otherAttrs}));
+    $("#postAttribute").val(data.postAttribute);
 
     // 宽度
     skyeyeClassEnumUtil.showEnumDataListByClassName("widthScale", 'select', "width", data.width, form);
@@ -362,6 +390,8 @@ layui.config({
         newParams.defaultValue = $("#defaultValue").val();
         newParams.width = $("#width").val();
         newParams.attrKey = $("#attrKey").val();
+        newParams.preAttribute = $("#preAttribute").val();
+        newParams.postAttribute = $("#postAttribute").val();
         newParams.teamObjectType = $("#teamObjectType").val();
         newParams.isEdit = dataShowType.getData("isEdit");
         newParams.dateTimeType = dataShowType.getData("dateTimeType");

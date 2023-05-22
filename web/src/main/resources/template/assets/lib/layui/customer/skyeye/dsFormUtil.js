@@ -340,6 +340,9 @@ var dsFormUtil = {
         if (isNull(content.attrDefinition)) {
             content.attrDefinition = {};
         }
+        if (!isNull(content.dataChange)) {
+            content.dataChange = getDataUseHandlebars('{{#bean}}' + content.dataChange + '{{/bean}}', {bean: content});
+        }
 
         var jsonStr = {bean: content};
         var html = getDataUseHandlebars('{{#bean}}' + component.htmlContent + '{{/bean}}', jsonStr);
