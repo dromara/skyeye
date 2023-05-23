@@ -63,7 +63,7 @@ var systemCommonUtil = {
     },
 
     /**
-     * 根据部门id获取岗位集合
+     * 根据部门id获取岗位集合(组件中使用)
      *
      * @param callback 回执函数
      */

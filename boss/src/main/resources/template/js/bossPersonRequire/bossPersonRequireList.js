@@ -46,7 +46,7 @@ layui.config({
         done: function(json) {
             matchingLanguage();
             initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单据编号", function () {
-                refreshTable();
+                table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
             });
         }
     });
@@ -72,7 +72,7 @@ layui.config({
     // 添加
     $("body").on("click", "#addBean", function() {
         _openNewWindows({
-            url: systemCommonUtil.getUrl('', null),
+            url: systemCommonUtil.getUrl('FP2023052100001', null),
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "bossPersonRequireAdd",
             area: ['90vw', '90vh'],
@@ -85,7 +85,7 @@ layui.config({
     // 编辑申请
     function edit(data) {
         _openNewWindows({
-            url: systemCommonUtil.getUrl('&id=' + data.id, null),
+            url: systemCommonUtil.getUrl('FP2023052100002&id=' + data.id, null),
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "bossPersonRequireEdit",
             area: ['90vw', '90vh'],
@@ -99,7 +99,7 @@ layui.config({
     // 详情
     function details(data) {
         _openNewWindows({
-            url: systemCommonUtil.getUrl('&id=' + data.id, null),
+            url: systemCommonUtil.getUrl('FP2023052100003&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "bossPersonRequireDetails",
             area: ['90vw', '90vh'],
@@ -112,7 +112,7 @@ layui.config({
     function revoke(data) {
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "revokeBossPersonRequire", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.bossBasePath + "revokePersonRequire", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
                 winui.window.msg("提交成功", {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -123,12 +123,12 @@ layui.config({
     function subApproval(data) {
         layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
             layer.close(index);
-            activitiUtil.startProcess(serviceClassName, function (approvalId) {
+            activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
                 var params = {
                     id: data.id,
                     approvalId: approvalId
                 };
-                AjaxPostUtil.request({url: flowableBasePath + "editBossPersonRequireToSubApproval", params: params, type: 'json', method: "POST", callback: function (json) {
+                AjaxPostUtil.request({url: sysMainMation.bossBasePath + "submitPersonRequire", params: params, type: 'json', method: "POST", callback: function (json) {
                     winui.window.msg("提交成功", {icon: 1, time: 2000});
                     loadTable();
                 }});
@@ -140,7 +140,7 @@ layui.config({
     function cancellation(data) {
         layer.confirm('确认作废该申请吗？', { icon: 3, title: '作废操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "updateBossPersonRequireToCancellation", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.bossBasePath + "invalidPersonRequire", params: {id: data.id}, type: 'json', method: "POST", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -154,10 +154,6 @@ layui.config({
 
     function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
-    }
-
-    function refreshTable() {
-        table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
     function getTableParams() {
