@@ -13,7 +13,7 @@ layui.config({
 
         showGrid({
             id: "showForm",
-            url: flowableBasePath + "queryBossPersonRequireDetailsById",
+            url: sysMainMation.bossBasePath + "queryBossPersonRequireDetailsById",
             params: {id: parent.rowId},
             pagination: false,
             method: "GET",

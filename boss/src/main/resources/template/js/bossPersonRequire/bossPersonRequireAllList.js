@@ -1,4 +1,3 @@
-var rowId = "";
 
 // 获取所有审批通过状态之后的人员需求申请列表
 layui.config({
@@ -6,14 +5,11 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
     winui.renderColor();
     var $ = layui.$,
         form = layui.form,
-        laydate = layui.laydate,
         table = layui.table;
-
-    laydate.render({elem: '#createTime', range: '~'});
 
     table.render({
         id: 'messageTable',
@@ -70,9 +66,8 @@ layui.config({
 
     // 设置责任人
     function setPersonLiable(data) {
-        rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/bossPersonRequire/bossPersonRequirePersonLiable.html",
+            url: systemCommonUtil.getUrl('FP2023052800001&id=' + data.id, null),
             title: '设置责任人',
             pageId: "bossPersonRequirePersonLiable",
             area: ['90vw', '90vh'],
@@ -85,7 +80,6 @@ layui.config({
 
     // 详情
     function details(data) {
-        rowId = data.id;
         _openNewWindows({
             url: systemCommonUtil.getUrl('FP2023052100003&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
