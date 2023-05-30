@@ -41,6 +41,12 @@ layui.config({
                                 <select lay-filter="actFlowId" lay-search="" id="actFlowId" name="actFlowId" win-verify="required"></select>
                             </div>
                         </div>`, // 流程属性布局
+		'flowabled': `<div class="layui-form-item layui-col-xs6">
+							<label class="layui-form-label">是否开启工作流<i class="red">*</i></label>
+							<div class="layui-input-block" id="isFlowable">
+								
+							</div>
+						</div>`, // 工作流
 	};
 
 	$("#serviceStr").html(getDataUseHandlebars(selOption, {rows: serviceMap}));
@@ -103,6 +109,14 @@ layui.config({
 				}
 				form.render('select');
 			}, async: false});
+		} else if (type == 'create' || type == 'edit') {
+			AjaxPostUtil.request({url: reqBasePath + "queryServiceBeanCustom", params: {className: parent.objectId}, type: 'json', method: 'GET', callback: function (json) {
+				// 判断是否开启了工作流，如果开启了工作流，则将【是否开启工作流】这个选项填充
+				if (json.bean.serviceBean.flowable) {
+					$('#otherDom').html(pageHtml['flowabled']);
+					skyeyeClassEnumUtil.showEnumDataListByClassName("whetherEnum", 'radio', "isFlowable", data.isFlowable + '' != '0' ? 1 : data.isFlowable, form);
+				}
+			}, async: false});
 		} else {
 			$('#otherDom').html('');
 		}
@@ -141,6 +155,11 @@ layui.config({
 
 			if (params.type == 'processAttr') {
 				params['actFlowId'] = $("#actFlowId").val();
+			}
+
+			if (params.type == 'create' || params.type == 'edit') {
+
+				params['isFlowable'] = dataShowType.getData("isFlowable");
 			}
 
 			var businessApi = {

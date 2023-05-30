@@ -257,7 +257,16 @@ var dsFormUtil = {
     temPage: null,
     getFlowable: function (pageMation) {
         if (isNull(serviceClassName)) {
-            return pageMation.serviceBeanCustom.serviceBean.flowable;
+            var flowable = pageMation.serviceBeanCustom.serviceBean.flowable;
+            // 判断业务对象是否开启了工作流
+            if (flowable) {
+                if (isNull(pageMation.isFlowable) || pageMation.isFlowable == 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            return false;
         }
         if (isNull(dsFormUtil.temPage) || $.isEmptyObject(dsFormUtil.temPage)) {
             AjaxPostUtil.request({url: reqBasePath + "queryServiceBeanCustom", params: {className: serviceClassName}, type: 'json', method: 'GET', callback: function (json) {
