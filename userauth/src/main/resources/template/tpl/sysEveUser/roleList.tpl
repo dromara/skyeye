@@ -5,8 +5,8 @@
 			{{#each rows}}
 			    <dt style="width:100%;height: 20px;">
 			        <input type="checkbox" class="cbxmenu" value="{{id}}" lay-skin="primary" lay-filter="cbxmenu" {{isCheck}} />
-			        <font class="cbxmenu-font">{{roleName}}</font>
-			        <h5 class="cbxmenu-font">（{{roleDesc}}）</h5>
+			        <font class="cbxmenu-font">{{nameame}}</font>
+			        <h5 class="cbxmenu-font">（{{remark}}）</h5>
 			        <span class="functions"></span>
 			    </dt>
 			    <br/>
