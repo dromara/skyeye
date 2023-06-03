@@ -260,7 +260,7 @@ var dsFormUtil = {
             var flowable = pageMation.serviceBeanCustom.serviceBean.flowable;
             // 判断业务对象是否开启了工作流
             if (flowable) {
-                if (isNull(pageMation.isFlowable) || pageMation.isFlowable == 1) {
+                if ((isNull(pageMation.isFlowable) && pageMation.isFlowable + "" != "0") || pageMation.isFlowable == 1) {
                     return true;
                 } else {
                     return false;
@@ -287,7 +287,7 @@ var dsFormUtil = {
     saveData: function (formSubType, approvalId) {
         var params = {};
         $.each(dsFormUtil.pageMation.dsFormPageContents, function (i, content) {
-            if (!isNull(content.attrDefinition) && !$.isEmptyObject(content.attrDefinition)) {
+            if (!isNull(content.attrDefinition) && !$.isEmptyObject(content.attrDefinition) && content.isEdit == 1) {
                 // 获取组件中获取值的脚本
                 var dsFormComponent = content.dsFormComponent;
                 var getValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsValue + '{{/this}}', content);
