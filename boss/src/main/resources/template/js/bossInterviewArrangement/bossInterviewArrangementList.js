@@ -19,7 +19,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: flowableBasePath + 'queryMyEntryBossInterviewArrangementList',
+        url: sysMainMation.bossBasePath + 'queryMyEntryBossInterviewArrangementList',
         where: getTableParams(),
         even: true,
         page: true,

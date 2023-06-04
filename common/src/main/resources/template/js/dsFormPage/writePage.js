@@ -158,8 +158,10 @@ layui.config({
 			}
 
 			if (params.type == 'create' || params.type == 'edit') {
-
 				params['isFlowable'] = dataShowType.getData("isFlowable");
+				if (isNull(params['isFlowable'])) {
+					delete params['isFlowable'];
+				}
 			}
 
 			var businessApi = {
