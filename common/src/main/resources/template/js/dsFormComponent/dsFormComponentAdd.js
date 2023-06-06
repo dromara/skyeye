@@ -58,6 +58,33 @@ layui.config({
 		}
 	});
 
+	var detailHtmlContentEditor, detailJsContentEditor;
+	form.on('select(showType)', function (data) {
+		if (data.value == -1) {
+			$("#customerDom").html(`
+				<div class="layui-form-item layui-col-xs12">
+					<span class="hr-title">详情页面脚本信息</span><hr>
+				</div>
+				<div class="layui-form-item layui-col-xs12">
+					<label class="layui-form-label">HTML脚本</label>
+					<div class="layui-input-block">
+						<textarea id="detailHtmlContent"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item layui-col-xs12">
+					<label class="layui-form-label">JS脚本</label>
+					<div class="layui-input-block">
+						<textarea id="detailJsContent"></textarea>
+					</div>
+				</div>
+			`);
+			detailHtmlContentEditor = CodeMirror.fromTextArea(document.getElementById("detailHtmlContent"), codeUtil.getConfig('xml'));
+			detailJsContentEditor = CodeMirror.fromTextArea(document.getElementById("detailJsContent"), codeUtil.getConfig('text/javascript'));
+		} else {
+			$("#customerDom").html('');
+		}
+	});
+
 	var htmlEditor = CodeMirror.fromTextArea(document.getElementById("htmlContent"), codeUtil.getConfig('xml'));
 	var htmlDataFromEditor = CodeMirror.fromTextArea(document.getElementById("htmlDataFrom"), codeUtil.getConfig('xml'));
 	var jsEditor = CodeMirror.fromTextArea(document.getElementById("jsContent"), codeUtil.getConfig('text/javascript'));
@@ -98,6 +125,10 @@ layui.config({
 			params = systemCommonUtil.getIconChoose(params);
 			if (!params["iconChooseResult"]) {
 				return false;
+			}
+			if (params.showType == -1) {
+				params["detailHtmlContent"] = encodeURIComponent(detailHtmlContentEditor.getValue());
+				params["detailJsContent"] = encodeURIComponent(detailJsContentEditor.getValue())
 			}
 			AjaxPostUtil.request({url: reqBasePath + "writeDsFormComponent", params: params, type: 'json', method: 'POST', callback: function(json) {
 				parent.layer.close(index);

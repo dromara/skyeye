@@ -401,6 +401,13 @@ var dsFormUtil = {
             var html_js = getDataUseHandlebars('{{#bean}}' + component.jsContent + '{{/bean}}', jsonStr);
             var jsCon = `<script id="script${content.id}">${html_js}</script>`;
             $("#" + boxId).append(html + jsCon);
+        } else if (showType == -1) {
+            // 组件展示类型为【自定义】
+            var jsonStr = {bean: content};
+            var html = getDataUseHandlebars('{{#bean}}' + component.detailHtmlContent + '{{/bean}}', jsonStr);
+            var html_js = getDataUseHandlebars('{{#bean}}' + component.detailJsContent + '{{/bean}}', jsonStr);
+            var jsCon = `<script id="script${content.id}">${html_js}</script>`;
+            $("#" + boxId).append(html + jsCon);
         } else {
             content.value = dsFormUtil.getContentLinkedDataValue(content, value, data);
             if (showType == 4) { // 图片展示
@@ -421,7 +428,6 @@ var dsFormUtil = {
 
             if (showType == 5) { // 表格展示
                 var result = dsFormUtil.resetTableValue(value, content.attrTransformTableList);
-                console.log(result)
                 dsFormTableUtil.intStaticTable("messageTable" + content.orderBy, result, content.attrTransformTableList);
             } else  if (showType == 6) { // 凭证展示
                 var boxId = "showVoucher" + content.orderBy;
@@ -613,24 +619,6 @@ var dsFormUtil = {
 
     getKeyIdToMation: function (key) {
         return key.replace("Id", "") + "Mation";
-    },
-
-    /**
-     * 目前用于工作流详情展示
-     *
-     * @param customBoxId
-     * @param rows
-     */
-    initSequenceDataDetails: function (customBoxId, rows) {
-        $.each(rows, function (i, item) {
-            item.label = dsFormUtil.getLable(item);
-            var jsonStr = {
-                bean: item
-            };
-            var showType = dsFormUtil.getShowType(item.attrDefinition);
-            // todo 待删除
-
-        });
     },
 
     // 获取属性的数据展示类型

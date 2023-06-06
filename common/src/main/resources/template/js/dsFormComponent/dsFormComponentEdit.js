@@ -82,6 +82,39 @@ layui.config({
 				loadRange(data.value, null);
 			});
 
+			// 加载展示类型为【自定义】的脚本信息
+			loadDetailsPageDom(json.bean.showType, json.bean.detailHtmlContent, json.bean.detailJsContent);
+			var detailHtmlContentEditor, detailJsContentEditor;
+			form.on('select(showType)', function (data) {
+				loadDetailsPageDom(data.value, '', '');
+			});
+
+			function loadDetailsPageDom(value, detailHtmlContent, detailJsContent) {
+				if (value == -1) {
+					$("#customerDom").html(`
+						<div class="layui-form-item layui-col-xs12">
+							<span class="hr-title">详情页面脚本信息</span><hr>
+						</div>
+						<div class="layui-form-item layui-col-xs12">
+							<label class="layui-form-label">HTML脚本</label>
+							<div class="layui-input-block">
+								<textarea id="detailHtmlContent">${detailHtmlContent}</textarea>
+							</div>
+						</div>
+						<div class="layui-form-item layui-col-xs12">
+							<label class="layui-form-label">JS脚本</label>
+							<div class="layui-input-block">
+								<textarea id="detailJsContent">${detailJsContent}</textarea>
+							</div>
+						</div>
+					`);
+					detailHtmlContentEditor = CodeMirror.fromTextArea(document.getElementById("detailHtmlContent"), codeUtil.getConfig('xml'));
+					detailJsContentEditor = CodeMirror.fromTextArea(document.getElementById("detailJsContent"), codeUtil.getConfig('text/javascript'));
+				} else {
+					$("#customerDom").html('');
+				}
+			}
+
 			matchingLanguage();
 			form.render();
 			form.on('submit(formEditBean)', function (data) {
@@ -116,6 +149,11 @@ layui.config({
 						params = systemCommonUtil.getIconChoose(params);
 						if (!params["iconChooseResult"]) {
 							return false;
+						}
+
+						if (params.showType == -1) {
+							params["detailHtmlContent"] = encodeURIComponent(detailHtmlContentEditor.getValue());
+							params["detailJsContent"] = encodeURIComponent(detailJsContentEditor.getValue())
 						}
 
 						AjaxPostUtil.request({url: reqBasePath + "writeDsFormComponent", params: params, type: 'json', method: 'POST', callback: function (json) {
