@@ -1,6 +1,7 @@
 {
     "commonEnable": {"name": "启用/禁用", "className": "skyeye-pro#com.skyeye.common.enumeration.EnableEnum"},
     "commonIsDefault": {"name": "是否默认", "className": "skyeye-pro#com.skyeye.common.enumeration.IsDefaultEnum"},
+    "sexEnum": {"name": "性别", "className": "skyeye-pro#com.skyeye.common.enumeration.SexEnum"},
     "httpMethodEnum": {"name": "http请求方式", "className": "skyeye-pro#com.skyeye.common.enumeration.HttpMethodEnum"},
     "verificationParams": {"name": "字段校验", "className": "skyeye-pro#com.skyeye.common.enumeration.VerificationParamsEnum"},
     "isUsed": {"name": "是否使用", "className": "skyeye-pro#com.skyeye.common.enumeration.IsUsedEnum"},

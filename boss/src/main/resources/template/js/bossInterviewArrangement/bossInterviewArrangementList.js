@@ -65,7 +65,7 @@ layui.config({
     // 添加
     $("body").on("click", "#addBean", function() {
         _openNewWindows({
-            url: "../../tpl/bossInterviewArrangement/bossInterviewArrangementAdd.html",
+            url: systemCommonUtil.getUrl('FP2023060400002', null),
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "bossInterviewArrangementAdd",
             area: ['90vw', '90vh'],
