@@ -888,10 +888,11 @@ var dsFormTableUtil = {
                 var obj = [];
                 eval('url = ' + businessApi.serviceStr + ' + "' + businessApi.api + '"');
                 AjaxPostUtil.request({url: url, params: params, type: 'json', method: businessApi.method, callback: function (json) {
-                    obj = json.beans;
+                    obj = json.rows;
                 }, async: false});
+                obj = JSON.stringify(obj);
                 return `function (d) {
-                    var json = ${obj};
+                    var json = JSON.parse('${obj}');
                     return getInPoingArr(json, "id", d.${item.attrKey}, "name");
                 }`;
             }
