@@ -51,6 +51,7 @@
     "correspondentEnterEnum": {"name": "往来单位类型", "className": "skyeye-pro#com.skyeye.common.enumeration.CorrespondentEnterEnum", "remark": "往来单位的组件中使用"},
 
     "dsFormPageType": {"name": "表单布局类型", "className": "skyeye-pro#com.skyeye.dsform.classenum.DsFormPageType"},
+    "attrSymbols": {"name": "属性与值的对比符号", "className": "skyeye-pro#com.skyeye.attr.classenum.AttrSymbols"},
     "attrKeyDataType": {"name": "表单布局里面的组件关联的数据类型", "className": "skyeye-pro#com.skyeye.attr.classenum.AttrKeyDataType"},
     "componentAttr": {"name": "组件关联的属性", "className": "skyeye-pro#com.skyeye.dsform.classenum.ComponentAttr"},
     "componentApplyRange": {"name": "组件适用范围类型", "className": "skyeye-pro#com.skyeye.dsform.classenum.ComponentApplyRange"},

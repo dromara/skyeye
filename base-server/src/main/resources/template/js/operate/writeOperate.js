@@ -108,6 +108,11 @@ layui.config({
 
 		}, async: false});
 	} else {
+		dsFormColumnUtil.init({
+			id: 'attrSymbolsDesignBox',
+			title: '按钮显示条件',
+			className: parent.objectId
+		});
 		skyeyeClassEnumUtil.showEnumDataListByClassName("operatePosition", 'select', "position", '', form);
 		skyeyeClassEnumUtil.showEnumDataListByClassName("eventType", 'select', "eventType", '', form);
 	}

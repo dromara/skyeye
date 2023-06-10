@@ -943,3 +943,254 @@ var dsFormTableUtil = {
     }
 
 };
+
+// 字段值选择表格
+var dsFormColumnUtil = {
+
+    config: {
+        id: 'skyeye', // 组件展示位置id
+        title: '', // 表格的作用标题
+        className: 'xxx.skyeye', // 业务对象的服务类
+        attrList: [], // 业务对象的服务类对应的属性
+        attrSymbols: [], // 属性与值的对比符号
+    },
+
+    // 表格序号
+    rowNum: 1,
+    // 缓存的表格数据
+    tableDataList: new Array(),
+    // layui的表格对象
+    table: null,
+
+    init: function (config) {
+        // 设置配置信息
+        dsFormColumnUtil.config = config;
+        // 获取属性列表/属性与值的对比符号信息
+        dsFormColumnUtil.getDataList();
+        console.log(dsFormColumnUtil.config.attrList)
+        // 加载盒子
+        dsFormColumnUtil.initHtml();
+        // 加载表格
+        dsFormColumnUtil.initTable();
+        // 加载事件
+        dsFormColumnUtil.initEvent();
+    },
+
+    getDataList: function () {
+        // 获取属性列表
+        AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: {className: dsFormColumnUtil.config.className}, type: 'json', method: "POST", callback: function (data) {
+            var attrList = [].concat(data.rows);
+            $.each(attrList, function (i, item) {
+                if (!isNull(item.attrDefinitionCustom)) {
+                    item.name = item.attrDefinitionCustom.name;
+                }
+                item.name = item.name + '(' + item.attrKey + ')';
+            });
+            dsFormColumnUtil.config.attrList = [].concat(attrList);
+        }, async: false});
+        // 属性与值的对比符号信息
+        dsFormColumnUtil.config.attrSymbols = [].concat(skyeyeClassEnumUtil.getEnumDataListByClassName("attrSymbols").rows);
+    },
+
+    initHtml: function () {
+        var _html = `
+            <style>
+                .layui-table-cell {
+                    height: auto;
+                    text-overflow: inherit;
+                    overflow: visible;
+                    white-space: normal;
+                    word-wrap: break-word;
+                }
+                .layui-table-cell .layui-anim {
+                    height: 180px;
+                }
+                .place-holder {
+                    height: 200px;
+                }
+            </style>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">${dsFormColumnUtil.config.title}<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <div class="winui-tip alert-info">
+                        拖拽表格行可修改顺序。
+                    </div>
+                    <div class="winui-tool" style="text-align: left;">
+                        <button id="addRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增行</button>
+                        <button id="deleteRow" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>
+                    </div>
+                    <table class="layui-table" id="messageTable">
+
+                    </table>
+                </div>
+            </div>`;
+        $(`#${dsFormColumnUtil.config.id}`).html(_html);
+    },
+
+    initTable: function () {
+        layui.define(["jquery", 'form', 'table', 'soulTable'], function(exports) {
+            var form = layui.form,
+                table = layui.table,
+                soulTable = layui.soulTable;
+            dsFormColumnUtil.table = table;
+            table.render({
+                id: 'messageTable',
+                elem: '#messageTable',
+                method: 'get',
+                data: dsFormColumnUtil.tableDataList,
+                even: true,
+                page: false,
+                limit: 100,
+                rowDrag: {
+                    trigger: '.drag-row',
+                    done: function(obj) {}
+                },
+                cols: [[
+                    { type: 'checkbox', align: 'center' },
+                    { field: 'test', title: '', align: 'left', width: 40, templet: function (d) {return '<i class="fa fa-arrows drag-row" />';}},
+                    { field: 'attrKey', title: '属性<i class="red">*</i>', align: 'left', width: 300, templet: function (d) {
+                        var _html = `<select lay-filter="tableSelect" lay-search="" id="attrKey${d.id}" cus-id="${d.id}" win-verify="required"><option value="">请选择</option>`;
+                        $.each(dsFormColumnUtil.config.attrList, function (i, item) {
+                            if (item.attrKey == d.attrKey) {
+                                _html += `<option value="${item.attrKey}" selected="selected">${item.name}</option>`;
+                            } else {
+                                _html += `<option value="${item.attrKey}">${item.name}</option>`;
+                            }
+                        });
+                        _html += `</select>`;
+                        return _html;
+                    }},
+                    { field: 'symbols', title: '比较符号<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
+                        var _html = `<select lay-filter="tableSelect" lay-search="" id="symbols${d.id}" cus-id="${d.id}" win-verify="required"><option value="">请选择</option>`;
+                        $.each(dsFormColumnUtil.config.attrSymbols, function (i, item) {
+                            if (item.id == d.symbols) {
+                                _html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
+                            } else {
+                                _html += `<option value="${item.id}">${item.name}</option>`;
+                            }
+                        });
+                        _html += `</select>`;
+                        return _html;
+                    }},
+                    { field: 'value', title: '值<i class="red">*</i>', align: 'left', width: 150, templet: function (d) {
+                        return `<div id="valueBox${d.id}">` + dsFormColumnUtil.getDomHtml(d) + `</div>`;
+                    }},
+                ]],
+                done: function(json) {
+                    matchingLanguage();
+                    if ($(`div[lay-id='messageTable']`).find('.place-holder').length == 0) {
+                        $(`div[lay-id='messageTable']`).find('.layui-table-body').append('<div class="place-holder"></div>');
+                    }
+                    soulTable.render(this);
+                }
+            });
+
+            form.on('select(tableSelect)', function(data) {
+                var id = data.elem.id;
+                dsFormColumnUtil.buildData($(`#${id}`));
+                if (id.startsWith('attrKey')) {
+                    var idNum = id.replace('attrKey', '');
+                    var item = getInPoingArr(dsFormColumnUtil.tableDataList, 'id', idNum);
+                    $(`#valueBox${idNum}`).html(dsFormColumnUtil.getDomHtml(item));
+                    form.render();
+                }
+            });
+        });
+    },
+
+    getDomHtml: function (d) {
+        if (isNull(d) || isNull(d.id)) {
+            return '';
+        }
+        // 获取属性信息
+        var attrKey = $(`#attrKey${d.id}`).val();
+        if (isNull(attrKey)) {
+            return '';
+        }
+        var displayValue = d.displayValue;
+        var value = d.value;
+        // 获取属性对应的组件编码---todo 后续根据编号加载对应的dom
+        var numCode = dsFormColumnUtil.getAttrKeyNumCode(attrKey);
+        if (isNull(numCode)) {
+            return `<input type="text" id="value${d.id}" placeholder="请输入值" cus-id="${d.id}" class="layui-input tableInput" win-verify="required" ` +
+                `value="` + (isNull(displayValue) ? "" : displayValue) + `"/>`
+        } else {
+            if (numCode == 'enumCardSolt' || numCode == 'dictDataCardSolt') {
+                // 枚举卡槽/数据字典卡槽
+
+            }
+        }
+        return '暂不支持';
+    },
+
+    getAttrKeyNumCode: function (attrKey) {
+        var attrKeyMation = getInPoingArr(dsFormColumnUtil.config.attrList, 'attrKey', attrKey);
+        if (isNull(attrKeyMation) || $.isEmptyObject(attrKeyMation)) {
+            return '';
+        }
+        if (isNull(attrKeyMation.attrDefinitionCustom)) {
+            return '';
+        }
+        if (isNull(attrKeyMation.attrDefinitionCustom.dsFormComponent)) {
+            return '';
+        }
+        return attrKeyMation.attrDefinitionCustom.dsFormComponent.numCode;
+    },
+
+    initEvent: function () {
+        $("body").on("input", ".tableInput", function () {
+            dsFormColumnUtil.buildData($(this));
+        });
+        $("body").on("change", ".tableInput", function () {
+            dsFormColumnUtil.buildData($(this));
+        });
+
+        $("body").on("click", "#addRow", function() {
+            addRow();
+        });
+
+        $("body").on("click", "#deleteRow", function() {
+            deleteRow();
+        });
+
+        // 新增行
+        function addRow() {
+            dsFormColumnUtil.tableDataList = [].concat(dsFormColumnUtil.table.cache.messageTable);
+            dsFormColumnUtil.tableDataList.push({id: dsFormColumnUtil.rowNum});
+            dsFormColumnUtil.table.reloadData("messageTable", {data: dsFormColumnUtil.tableDataList});
+            dsFormColumnUtil.rowNum++;
+        }
+
+        // 删除行
+        function deleteRow() {
+            dsFormColumnUtil.tableDataList = [].concat(dsFormColumnUtil.table.cache.messageTable);
+            var check_box = dsFormColumnUtil.table.checkStatus('messageTable').data;
+            for (var i = 0;  i < check_box.length; i++){
+                var list = [];
+                $.each(dsFormColumnUtil.tableDataList, function(j, item) {
+                    if(item.id != check_box[i].id){
+                        list.push(item);
+                    }
+                });
+                dsFormColumnUtil.tableDataList = [].concat(list);
+            }
+            dsFormColumnUtil.table.reloadData("messageTable", {data: dsFormColumnUtil.tableDataList});
+        }
+    },
+
+    buildData: function (_this) {
+        var id = _this.attr('cus-id');
+        var key = _this.attr('id').replace(id, '');
+        $.each(dsFormColumnUtil.tableDataList, function (j, item) {
+            if (key.startsWith('value')) {
+                item['value'] = _this.val();
+                item['displayValue'] = _this.val();
+            } else {
+                if (item.id == id) {
+                    item[key] = _this.val();
+                }
+            }
+        });
+    }
+
+};
