@@ -798,13 +798,27 @@ var dsFormTableUtil = {
                     $(`#${item.position}`).append(`<button id="${item.id}" class="winui-toolbtn search-table-btn-right item-click"><i class="fa fa-plus" aria-hidden="true"></i>${item.name}</button>`);
                 } else if (item.position == 'actionBar') {
                     // 操作栏
-                    $(`#${item.position}`).append(`<a class="layui-btn layui-btn-xs ${item.color}" lay-event="${item.id}">${item.name}</a>`);
+                    $(`#${item.position}`).append(dsFormTableUtil.initActionBarOperate(item));
                 } else if (item.position == 'rightMenuBar') {
                     // 右键菜单栏
 
                 }
             }
         });
+    },
+
+    initActionBarOperate: function (item) {
+        if (isNull(item.showConditionList) || item.showConditionList.length == 0) {
+            // 没有设置按钮显示的条件
+            return `<a class="layui-btn layui-btn-xs ${item.color}" lay-event="${item.id}">${item.name}</a>`;
+        }
+        var condition = [];
+        $.each(item.showConditionList, function (i, bean) {
+            condition.push(`d.${bean.attrKey} ${bean.symbolsMark} ${bean.value}`);
+        });
+        var conditionStr = condition.join('&&');
+        // 没有设置按钮显示的条件
+        return `{{# if (${conditionStr}) { }}<a class="layui-btn layui-btn-xs ${item.color}" lay-event="${item.id}">${item.name}</a>{{# } }}`;
     },
 
     getTableHead: function (column, tableColumnList) {
@@ -962,12 +976,16 @@ var dsFormColumnUtil = {
     // layui的表格对象
     table: null,
 
-    init: function (config) {
+    init: function (config, tableDataList) {
         // 设置配置信息
         dsFormColumnUtil.config = config;
+        dsFormColumnUtil.tableDataList = isNull(tableDataList) ? [] : tableDataList;
+        $.each(dsFormColumnUtil.tableDataList, function (i, item) {
+            item.id = dsFormColumnUtil.rowNum;
+            dsFormColumnUtil.rowNum++;
+        });
         // 获取属性列表/属性与值的对比符号信息
         dsFormColumnUtil.getDataList();
-        console.log(dsFormColumnUtil.config.attrList)
         // 加载盒子
         dsFormColumnUtil.initHtml();
         // 加载表格
@@ -1060,7 +1078,7 @@ var dsFormColumnUtil = {
                         _html += `</select>`;
                         return _html;
                     }},
-                    { field: 'symbols', title: '比较符号<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
+                    { field: 'symbols', title: '比较符号<i class="red">*</i>', align: 'left', width: 140, templet: function (d) {
                         var _html = `<select lay-filter="tableSelect" lay-search="" id="symbols${d.id}" cus-id="${d.id}" win-verify="required"><option value="">请选择</option>`;
                         $.each(dsFormColumnUtil.config.attrSymbols, function (i, item) {
                             if (item.id == d.symbols) {
@@ -1072,7 +1090,7 @@ var dsFormColumnUtil = {
                         _html += `</select>`;
                         return _html;
                     }},
-                    { field: 'value', title: '值<i class="red">*</i>', align: 'left', width: 150, templet: function (d) {
+                    { field: 'value', title: '值<i class="red">*</i>', align: 'left', width: 160, templet: function (d) {
                         return `<div id="valueBox${d.id}">` + dsFormColumnUtil.getDomHtml(d) + `</div>`;
                     }},
                 ]],
@@ -1104,9 +1122,10 @@ var dsFormColumnUtil = {
         }
         // 获取属性信息
         var attrKey = $(`#attrKey${d.id}`).val();
-        if (isNull(attrKey)) {
+        if (isNull(attrKey) && isNull(d.attrKey)) {
             return '';
         }
+        attrKey = isNull(attrKey) ? d.attrKey : attrKey;
         var displayValue = d.displayValue;
         var value = d.value;
         // 获取属性对应的组件编码---todo 后续根据编号加载对应的dom

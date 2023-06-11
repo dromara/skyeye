@@ -3,25 +3,6 @@
 var bossUtil = {
 
     /**
-     * 打开面试者来源选择页面
-     *
-     * @param callback 回调函数
-     */
-    bossIntervieweeFromChooseMation: {}, // 已经选择的面试者来源信息
-    openBossIntervieweeFromChoosePage: function (callback) {
-        _openNewWindows({
-            url: "../../tpl/bossIntervieweeFrom/bossIntervieweeFromListChoose.html",
-            title: "面试者来源",
-            pageId: "bossIntervieweeFromListChoosePage",
-            area: ['90vw', '90vh'],
-            callBack: function (refreshCode) {
-                if(typeof(callback) == "function") {
-                    callback(bossUtil.bossIntervieweeFromChooseMation);
-                }
-            }});
-    },
-
-    /**
      * 面试安排的状态
      *
      * @param state

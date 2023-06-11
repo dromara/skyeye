@@ -105,7 +105,11 @@ layui.config({
 					initTableChooseUtil.resetData('pageParams', params);
 				});
 			}
-
+			dsFormColumnUtil.init({
+				id: 'attrSymbolsDesignBox',
+				title: '按钮显示条件',
+				className: parent.objectId
+			}, isNull(json.bean.showConditionList) ? [] : json.bean.showConditionList);
 		}, async: false});
 	} else {
 		dsFormColumnUtil.init({
@@ -182,6 +186,7 @@ layui.config({
 				authPointNum: $("#authPointNum").val(),
 				eventType: $("#eventType").val(),
 				orderBy: $("#orderBy").val(),
+				showConditionList: JSON.stringify(dsFormColumnUtil.tableDataList),
 				id: isNull(parent.rowId) ? '' : parent.rowId
 			};
 
