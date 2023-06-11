@@ -28,6 +28,12 @@ layui.config({
 							<div class="layui-input-block" id="isDataAuth">
 								
 							</div>
+						</div>
+						<div class="layui-form-item layui-col-xs6">
+							<label class="layui-form-label">是否开启选择功能<i class="red">*</i></label>
+							<div class="layui-input-block" id="whetherChoose">
+								
+							</div>
 						</div>`, // 基础表格布局
 		'isDataAuth': `<div class="layui-form-item layui-col-xs6" id="dataAuthPointNumBox">
 							<label class="layui-form-label">数据权限点编号<i class="red">*</i></label>
@@ -96,6 +102,8 @@ layui.config({
 			} else {
 				$('#dataAuthPointNumBox').remove();
 			}
+			// 是否开启选择功能
+			skyeyeClassEnumUtil.showEnumDataListByClassName("simpleTableWhetherChoose", 'radio', "whetherChoose", data.whetherChoose, form);
 
 			$("#searchTips").val(data.searchTips);
 		} else if (type == 'processAttr') {
@@ -140,13 +148,15 @@ layui.config({
 				remark: $("#remark").val(),
 				type: $("#type").val(),
 				className: parent.objectId,
-				isDataAuth: dataShowType.getData("isDataAuth"),
 				operateIdList: isNull($('#operateIdList').attr('value')) ? [] : $('#operateIdList').attr('value'),
 				dataAuthPointNum: ''
 			};
 
 			if (params.type == 'simpleTable') {
+				// 表格布局
 				params['isPage'] = dataShowType.getData("isPage");
+				params['whetherChoose'] = dataShowType.getData("whetherChoose");
+				params['isDataAuth'] = dataShowType.getData("isDataAuth");
 				params['searchTips'] = $("#searchTips").val();
 				if (params.isDataAuth == 1) {
 					params.dataAuthPointNum = $('#dataAuthPointNum').val();

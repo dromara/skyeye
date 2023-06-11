@@ -736,14 +736,31 @@ var dsFormTableUtil = {
         dsFormTableUtil.tableId = id;
 
         // 加载表格
-        layui.define(["jquery", 'form', 'table'], function(exports) {
-            var table = layui.table;
+        layui.define(["jquery", 'form', 'table', 'tableCheckBoxUtil'], function(exports) {
+            var table = layui.table,
+                tableCheckBoxUtil = layui.tableCheckBoxUtil;
             var form = layui.form;
             var api = pageMation.businessApi;
 
             if (pageMation.isDataAuth == 1) {
                 // 开启数据权限
                 loadAuthBtnGroup(`${id}`, pageMation.dataAuthPointNum);
+            }
+
+            if (pageMation.whetherChoose == 'checkbox') {
+                // 开启了多选表格
+                var chooseListMation = parent.chooseListMation;
+                var ids = [];
+                $.each(chooseListMation, function (i, item) {
+                    ids.push(item.id);
+                });
+                tableCheckBoxUtil.init({
+                    gridId: id,
+                    filterId: id,
+                    fieldName: 'id',
+                    ids: ids
+                });
+                $("#toolBar").append(`<button class="winui-toolbtn search-table-btn-right" type="button" id="saveCheckBox"><i class="fa fa-save" aria-hidden="true"></i><language showName="com.skyeye.save"></language></button>`);
             }
 
             var url = "";
@@ -755,6 +772,8 @@ var dsFormTableUtil = {
                 url: url,
                 where: dsFormTableUtil.getTableParams(),
                 toolbar: true,
+                // 开启表格选择功能的只显示过滤字段功能
+                defaultToolbar: pageMation.whetherChoose == 'close' ? ['filter', 'exports', 'print'] : ['filter'],
                 even: true,
                 page: pageMation.isPage == 1 ? true : false,
                 overflow: {type: 'tips', header: true, total: true},
@@ -762,7 +781,9 @@ var dsFormTableUtil = {
                 limit: getLimit(),
                 cols: dsFormTableUtil.getTableHead({
                     serialNumColumn: true,
-                    operateColumn: true
+                    whetherChoose: pageMation.whetherChoose,
+                    // 开启表格选择功能的不显示操作列
+                    operateColumn: pageMation.whetherChoose == 'close' ? true : false
                 }, tableColumnList),
                 done: function(json) {
                     matchingLanguage();
@@ -781,6 +802,49 @@ var dsFormTableUtil = {
             });
             dsFormTableUtil.initEvent(table, form);
         });
+    },
+
+    initChooseHtml: function (id, whetherChoose, json, tableCheckBoxUtil) {
+        if (whetherChoose == 'radio') {
+            $(`#${id}`).next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
+                var dubClick = $(`#${id}`).next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
+                dubClick.find("input[type='radio']").prop("checked", true);
+                form.render();
+                var chooseIndex = JSON.stringify(dubClick.data('index'));
+                var obj = res.rows[chooseIndex];
+                parent.chooseItemMation = obj;
+                parent.refreshCode = '0';
+                parent.layer.close(index);
+            });
+
+            $(`#${id}`).next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('click',function(){
+                var click = $(`#${id}`).next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
+                click.find("input[type='radio']").prop("checked", true);
+                form.render();
+            });
+        }
+
+        if (whetherChoose == 'checkbox') {
+            // 设置选中
+            tableCheckBoxUtil.checkedDefault({
+                gridId: id,
+                fieldName: 'id'
+            });
+
+            // 保存
+            $("body").on("click", "#saveCheckBox", function() {
+                var selectedData = tableCheckBoxUtil.getValueList({
+                    gridId: id
+                });
+                if (selectedData.length == 0) {
+                    winui.window.msg("请选择数据", {icon: 2, time: 2000});
+                    return false;
+                }
+                parent.chooseListMation = [].concat(selectedData);
+                parent.layer.close(index);
+                parent.refreshCode = '0';
+            });
+        }
     },
 
     // 加载操作
@@ -823,6 +887,11 @@ var dsFormTableUtil = {
 
     getTableHead: function (column, tableColumnList) {
         var header = [];
+        if (column.whetherChoose == 'radio' || column.whetherChoose == 'checkbox') {
+            header.push({
+                type: column.whetherChoose
+            });
+        }
         if (!isNull(column.serialNumColumn) && column.serialNumColumn) {
             header.push({
                 title: systemLanguage["com.skyeye.serialNumber"][languageType],
