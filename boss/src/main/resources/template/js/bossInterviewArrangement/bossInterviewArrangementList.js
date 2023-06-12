@@ -27,20 +27,31 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'interviewName', title: '面试者', width: 100},
-            { field: 'departmentName', title: '面试部门', width: 140},
-            { field: 'jobName', title: '面试岗位', width: 150 },
+            { field: 'oddNumber', title: '单据编号', align: 'left', width: 200, templet: function (d) {
+                return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+            }},
+            { field: 'interviewMation', title: '面试者', width: 100, templet: function (d) {
+                return d.interviewMation.name;
+            }},
+            { field: 'recruitDepartmentMation', title: '面试部门', width: 140, templet: function (d) {
+                return isNull(d.personRequireMation) ? '' : d.personRequireMation.recruitDepartmentMation.name;
+            }},
+            { field: 'recruitJobMation', title: '面试岗位', width: 150, templet: function (d) {
+                return isNull(d.personRequireMation) ? '' : d.personRequireMation.recruitJobMation.name;
+            }},
             { field: 'interviewTime', title: '面试时间', width: 140, align: 'center' },
-            { field: 'interviewer', title: '面试官', width: 120 },
+            { field: 'interviewer', title: '面试官', width: 120, templet: function (d) {
+                return isNull(d.interviewerMation) ? '' : d.interviewerMation.name;
+            }},
             { field: 'state', title: '面试状态', width: 160, templet: function (d) {
-                return bossUtil.showStateName(d.state);
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("bossInterviewArrangementState", 'id', d.state, 'name');
             }},
             { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], align: 'center', width: 150 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#messageTableBar'}
+            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 140, toolbar: '#messageTableBar'}
         ]],
         done: function(json) {
             matchingLanguage();
-            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入面试者", function () {
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单据编号", function () {
                 table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
             });
         }
@@ -53,8 +64,6 @@ layui.config({
             details(data);
         } else if (layEvent === 'edit') { // 编辑
             edit(data);
-        } else if (layEvent === 'sub') { // 提交
-            sub(data);
         } else if (layEvent === 'cancellation') { // 作废
             cancellation(data);
         } else if (layEvent === 'inductionResult') { // 入职
@@ -77,9 +86,8 @@ layui.config({
 
     // 编辑
     function edit(data) {
-        rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/bossInterviewArrangement/bossInterviewArrangementEdit.html",
+            url: systemCommonUtil.getUrl('FP2023060400003&id=' + data.id, null),
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "bossInterviewArrangementEdit",
             area: ['90vw', '90vh'],
@@ -105,20 +113,6 @@ layui.config({
         });
     }
 
-    // 提交
-    function sub(data) {
-        layer.confirm('确认提交该数据吗？', {icon: 3, title: '提交操作'}, function (index) {
-            layer.close(index);
-            var params = {
-                id: data.id,
-            };
-            AjaxPostUtil.request({url: flowableBasePath + "submitBossInterviewArrangement", params: params, type: 'json', method: "PUT", callback: function (json) {
-                winui.window.msg("提交成功", {icon: 1, time: 2000});
-                loadTable();
-            }});
-        });
-    }
-
     // 作废
     function cancellation(data) {
         layer.confirm('确认作废该申请吗？', { icon: 3, title: '作废操作' }, function (index) {
@@ -132,9 +126,8 @@ layui.config({
 
     // 详情
     function details(data) {
-        rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/bossInterviewArrangement/bossInterviewArrangementDetails.html",
+            url: systemCommonUtil.getUrl('FP2023060400004&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "bossInterviewArrangementDetails",
             area: ['90vw', '90vh'],

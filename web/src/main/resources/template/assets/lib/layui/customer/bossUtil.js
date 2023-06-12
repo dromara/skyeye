@@ -66,16 +66,15 @@ var bossUtil = {
      *
      * @param callback 回调函数
      */
-    bossIntervieweeChooseMation: {}, // 已经选择的面试者信息
     openBossIntervieweeChoosePage: function (callback) {
         _openNewWindows({
-            url: "../../tpl/bossInterviewee/myChargeBossIntervieweeListChoose.html",
+            url: systemCommonUtil.getUrl('FP2023061200001', null),
             title: "面试者",
             pageId: "myChargeBossIntervieweeListChoose",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 if(typeof(callback) == "function") {
-                    callback(bossUtil.bossIntervieweeChooseMation);
+                    callback(chooseItemMation);
                 }
             }});
     },

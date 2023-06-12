@@ -287,7 +287,8 @@ var dsFormUtil = {
     saveData: function (formSubType, approvalId) {
         var params = {};
         $.each(dsFormUtil.pageMation.dsFormPageContents, function (i, content) {
-            if (!isNull(content.attrDefinition) && !$.isEmptyObject(content.attrDefinition) && content.isEdit == 1) {
+            if (!isNull(content.attrDefinition) && !$.isEmptyObject(content.attrDefinition)
+                && (content.isEdit == 1 || (isNull(content.isEdit) && content.isEdit + '' != '0'))) {
                 // 获取组件中获取值的脚本
                 var dsFormComponent = content.dsFormComponent;
                 var getValueScript = getDataUseHandlebars('{{#this}}' + dsFormComponent.jsValue + '{{/this}}', content);
@@ -790,6 +791,7 @@ var dsFormTableUtil = {
                     initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, pageMation.searchTips, function () {
                         table.reloadData(id, {page: {curr: 1}, where: dsFormTableUtil.getTableParams()});
                     });
+                    dsFormTableUtil.initChooseHtml(id, pageMation.whetherChoose, json, tableCheckBoxUtil, form);
                 }
             });
             table.on(`tool(${id})`, function (obj) {
@@ -804,20 +806,21 @@ var dsFormTableUtil = {
         });
     },
 
-    initChooseHtml: function (id, whetherChoose, json, tableCheckBoxUtil) {
+    initChooseHtml: function (id, whetherChoose, json, tableCheckBoxUtil, form) {
         if (whetherChoose == 'radio') {
-            $(`#${id}`).next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
+            $(`#${id}`).next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function() {
                 var dubClick = $(`#${id}`).next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
                 dubClick.find("input[type='radio']").prop("checked", true);
                 form.render();
                 var chooseIndex = JSON.stringify(dubClick.data('index'));
-                var obj = res.rows[chooseIndex];
+                var obj = json.rows[chooseIndex];
                 parent.chooseItemMation = obj;
                 parent.refreshCode = '0';
+                var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);
             });
 
-            $(`#${id}`).next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('click',function(){
+            $(`#${id}`).next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('click',function() {
                 var click = $(`#${id}`).next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
                 click.find("input[type='radio']").prop("checked", true);
                 form.render();
@@ -841,6 +844,7 @@ var dsFormTableUtil = {
                     return false;
                 }
                 parent.chooseListMation = [].concat(selectedData);
+                var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);
                 parent.refreshCode = '0';
             });
@@ -889,7 +893,8 @@ var dsFormTableUtil = {
         var header = [];
         if (column.whetherChoose == 'radio' || column.whetherChoose == 'checkbox') {
             header.push({
-                type: column.whetherChoose
+                type: column.whetherChoose,
+                fixed: 'left'
             });
         }
         if (!isNull(column.serialNumColumn) && column.serialNumColumn) {

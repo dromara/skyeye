@@ -16,19 +16,17 @@
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="messageTableBar">
-            {{# if(d.state == '1' && auth('1649929371715')){ }}
-                <a class="layui-btn layui-btn-xs" lay-event="sub">提交</a>
+            {{# if((d.state == '2' || d.state == '3')) { }}
+                {{# if(auth('1649929381788')) { }}
+                    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="cancellation">作废</a>
+                {{# } }}
+                {{# if(auth('1649929352279')) { }}
+                    <a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+                {{# } }}
             {{# } }}
-            {{# if((d.state == '1' || d.state == '2' || d.state == '3') && auth('1649929381788')){ }}
-                <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="cancellation">作废</a>
-            {{# } }}
-            {{# if(d.state == '1' && auth('1649929364723')){ }}
-                <a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-            {{# } }}
-            {{# if(d.state == '4' && auth('1650189947768')){ }}
+            {{# if(d.state == '4' && auth('1650189947768')) { }}
                 <a class="layui-btn layui-btn-xs" lay-event="inductionResult">入职</a>
             {{# } }}
-            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="details">详情</a>
         </script>
     </div>
 
