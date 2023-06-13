@@ -10,11 +10,10 @@ layui.config({
     var $ = layui.$,
         laydate = layui.laydate,
         form = layui.form;
-    var selTemplate = getFileContent('tpl/template/select-option.tpl');
 
     showGrid({
         id: "showForm",
-        url: flowableBasePath + "queryBossInterviewArrangementById",
+        url: sysMainMation.bossBasePath + "queryArrangementById",
         params: {id: parent.rowId},
         pagination: false,
         method: "GET",
@@ -24,10 +23,10 @@ layui.config({
             json.bean.stateName = bossUtil.showStateName(json.bean.state);
         },
         ajaxSendAfter: function (json) {
-            skyeyeEnclosure.showDetails({'enclosureUpload': json.bean.enclosureInfo});
+            skyeyeEnclosure.showDetails({'enclosureUpload': json.bean.interviewMation.enclosureResume});
 
             // 员工在职状态加载
-            $("#inductionState").html(getDataUseHandlebars(selTemplate, {rows: systemCommonUtil.getSysUserStaffStateList()}));
+            skyeyeClassEnumUtil.showEnumDataListByClassName("userStaffState", 'select', "inductionState", '', form);
             form.on('select(inductionState)', function (data) {
                 if (data.value == '4') {
                     // 试用期
@@ -98,7 +97,7 @@ layui.config({
                         inductionState: inductionState,
                         trialTime: $("#trialTime").val()
                     };
-                    AjaxPostUtil.request({url: flowableBasePath + "setInductionResult", params: params, type: 'json', method: "PUT", callback: function(json) {
+                    AjaxPostUtil.request({url: sysMainMation.bossBasePath + "setInductionResult", params: params, type: 'json', method: "PUT", callback: function(json) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
                     }});

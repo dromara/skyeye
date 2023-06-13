@@ -25,7 +25,8 @@ layui.config({
 			method: "GET",
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendAfter:function (json) {
-		 		if(json.bean.state == systemCommonUtil.sysUserStaffState["quit"]["id"]){
+		 		if (json.bean.state == 2) {
+					// 离职
 		 			$("#leaveTime").show();
 		 			$("#leaveReason").show();
 		 		}

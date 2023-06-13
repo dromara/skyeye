@@ -22,7 +22,7 @@ layui.config({
 		type = GetUrlParam("type");
 
 		// 员工在职状态加载
-		$("#state").html(getDataUseHandlebars(selTemplate, {rows: systemCommonUtil.getSysUserStaffStateList()}));
+		skyeyeClassEnumUtil.showEnumDataListByClassName("userStaffState", 'select', "state", '', form);
 		form.on('select(state)', function (data) {
 			if (data.value == '4') {
 				// 试用期
