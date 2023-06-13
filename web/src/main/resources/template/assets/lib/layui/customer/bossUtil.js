@@ -31,21 +31,6 @@ var bossUtil = {
     },
 
     /**
-     * 入职信息的状态
-     *
-     * @param state
-     * @returns {string}
-     */
-    showInductionResultStateName: function (state){
-        if (state == '6') {
-            return "<span class='state-success'>同意入职</span>";
-        } else if (state == '7') {
-            return "<span class='state-error'>拒绝入职</span>";
-        }
-        return '';
-    },
-
-    /**
      * 面试官列表展示的面试状态
      *
      * @param state

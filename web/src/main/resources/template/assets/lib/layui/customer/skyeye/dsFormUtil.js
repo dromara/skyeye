@@ -404,6 +404,7 @@ var dsFormUtil = {
             $("#" + boxId).append(html + jsCon);
         } else if (showType == -1) {
             // 组件展示类型为【自定义】
+            content.value = dsFormUtil.getContentLinkedDataValue(content, value, data);
             var jsonStr = {bean: content};
             var html = getDataUseHandlebars('{{#bean}}' + component.detailHtmlContent + '{{/bean}}', jsonStr);
             var html_js = getDataUseHandlebars('{{#bean}}' + component.detailJsContent + '{{/bean}}', jsonStr);

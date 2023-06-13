@@ -47,7 +47,7 @@ layui.config({
             matchingLanguage();
             for (var i = 0; i < res.rows.length; i++) {
                 // 招聘结束的设置为不可选中
-                if(res.rows[i].state != 'endRecruitment'){
+                if(res.rows[i].state == 'endRecruitment'){
                     systemCommonUtil.disabledRow(res.rows[i].LAY_TABLE_INDEX, 'radio');
                 }
             }
