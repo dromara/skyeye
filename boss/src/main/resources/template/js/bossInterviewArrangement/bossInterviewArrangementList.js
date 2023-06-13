@@ -117,7 +117,7 @@ layui.config({
     function cancellation(data) {
         layer.confirm('确认作废该申请吗？', { icon: 3, title: '作废操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "nullifyBossInterviewArrangement", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.bossBasePath + "nullifyArrangement", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});

@@ -12,7 +12,7 @@ layui.config({
 
     showGrid({
         id: "showForm",
-        url: flowableBasePath + "queryBossInterviewArrangementById",
+        url: sysMainMation.bossBasePath + "queryArrangementById",
         params: {id: parent.rowId},
         pagination: false,
         method: "GET",
@@ -22,7 +22,7 @@ layui.config({
             json.bean.stateName = bossUtil.showStateName(json.bean.state);
         },
         ajaxSendAfter: function (json) {
-            skyeyeEnclosure.showDetails({'enclosureUpload': json.bean.enclosureInfo});
+            skyeyeEnclosure.showDetails({'enclosureUpload': json.bean.interviewMation.enclosureResume});
 
             matchingLanguage();
             form.render();
@@ -34,7 +34,7 @@ layui.config({
                         state: $("input[name='state']:checked").val(),
                         evaluation: $("#evaluation").val()
                     };
-                    AjaxPostUtil.request({url: flowableBasePath + "setBossInterviewResult", params: params, type: 'json', method: "PUT", callback: function(json) {
+                    AjaxPostUtil.request({url: sysMainMation.bossBasePath + "setBossInterviewResult", params: params, type: 'json', method: "PUT", callback: function(json) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
                     }});
