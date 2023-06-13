@@ -1,4 +1,3 @@
-var rowId = "";
 
 // 获取我录入的人员需求关联的面试者信息列表
 layui.config({
@@ -16,7 +15,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: flowableBasePath + 'queryMyEntryBossPersonRequireAboutArrangementList',
+        url: sysMainMation.bossBasePath + 'queryMyEntryBossPersonRequireAboutArrangementList',
         where: getTableParams(),
         even: true,
         page: true,
@@ -24,20 +23,34 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'interviewName', title: '面试者', width: 100},
-            { field: 'departmentName', title: '面试部门', width: 140},
-            { field: 'jobName', title: '面试岗位', width: 150 },
+            { field: 'oddNumber', title: '单据编号', align: 'left', width: 200, templet: function (d) {
+                return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+            }},
+            { field: 'interviewMation', title: '面试者', width: 100, templet: function (d) {
+                return d.interviewMation.name;
+            }},
+            { field: 'recruitDepartmentMation', title: '面试部门', width: 140, templet: function (d) {
+                return isNull(d.personRequireMation) ? '' : d.personRequireMation.recruitDepartmentMation.name;
+            }},
+            { field: 'recruitJobMation', title: '面试岗位', width: 150, templet: function (d) {
+                return isNull(d.personRequireMation) ? '' : d.personRequireMation.recruitJobMation.name;
+            }},
             { field: 'interviewTime', title: '面试时间', width: 140, align: 'center' },
-            { field: 'interviewer', title: '面试官', width: 140 },
+            { field: 'interviewer', title: '面试官', width: 120, templet: function (d) {
+                return isNull(d.interviewerMation) ? '' : d.interviewerMation.name;
+            }},
+            { field: 'state', title: '面试状态', width: 160, templet: function (d) {
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("bossInterviewArrangementState", 'id', d.state, 'name');
+            }},
             { field: 'state', title: '面试状态', width: 160, templet: function (d) {
                 return bossUtil.showStateName(d.state);
             }},
             { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], align: 'center', width: 150 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#messageTableBar'}
+            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#messageTableBar'}
         ]],
         done: function(json) {
             matchingLanguage();
-            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入面试者", function () {
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单据编号", function () {
                 table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
             });
         }
@@ -55,9 +68,8 @@ layui.config({
 
     // 安排面试官
     function arrangeInterviewer(data) {
-        rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/bossInterviewArrangement/arrangeInterviewer.html",
+            url: systemCommonUtil.getUrl('FP2023061300001&id=' + data.id, null),
             title: '安排面试官',
             pageId: "arrangeInterviewer",
             area: ['90vw', '90vh'],
@@ -70,9 +82,8 @@ layui.config({
 
     // 详情
     function details(data) {
-        rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/bossInterviewArrangement/bossInterviewArrangementDetails.html",
+            url: systemCommonUtil.getUrl('FP2023060400004&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "bossInterviewArrangementDetails",
             area: ['90vw', '90vh'],
