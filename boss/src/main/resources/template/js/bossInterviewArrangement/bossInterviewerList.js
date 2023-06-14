@@ -42,9 +42,6 @@ layui.config({
             { field: 'state', title: '面试状态', width: 160, templet: function (d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("bossInterviewArrangementState", 'id', d.state, 'name');
             }},
-            { field: 'state', title: '面试状态', width: 160, templet: function (d) {
-                return bossUtil.showStateName(d.state);
-            }},
             { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#messageTableBar'}
         ]],

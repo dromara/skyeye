@@ -162,6 +162,16 @@ layui.config({
                                 </select>
                             </div>
                         </div>`,
+        'userSelTypeBox': `<div class="layui-form-item layui-col-xs12">
+                            <label class="layui-form-label">单选/多选配置<i class="red">*</i></label>
+                            <div class="layui-input-block">
+                                <select lay-filter="checkType" lay-search="" id="checkType" name="checkType" win-verify="required">
+                                    <option value="">请选择</option>
+                                    <option value="1">多选</option>
+                                    <option value="2">单选</option>
+                                </select>
+                            </div>
+                        </div>`,
         'tableAttrBox': `<div class="layui-form-item layui-col-xs12">
                         <label class="layui-form-label">表格属性<i class="red">*</i></label>
                         <div class="layui-input-block" data="[]">

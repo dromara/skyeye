@@ -6,24 +6,21 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
     winui.renderColor();
     var $ = layui.$,
         form = layui.form,
-        laydate = layui.laydate,
         table = layui.table;
     var serviceClassName = sysServiceMation["bossInterviewJobTransfer"]["key"];
 
     // 新增
     authBtn('1651308552871');
 
-    laydate.render({elem: '#createTime', range: '~'});
-
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: flowableBasePath + 'queryBossInterviewJobTransferList',
+        url: sysMainMation.bossBasePath + 'queryBossInterviewJobTransferList',
         where: getTableParams(),
         even: true,
         page: true,
@@ -31,17 +28,22 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
-            { field: 'transferStaffName', title: '申请人', rowspan: '2', width: 140},
+            { field: 'oddNumber', title: '单号', width: 200, align: 'center', rowspan: '2', templet: function (d) {
+                return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+            }},
+            { field: 'transferStaffMation', title: '申请人', rowspan: '2', width: 140, templet: function(d) {
+                return isNull(d.transferStaffMation) ? '' : d.transferStaffMation.name;
+            }},
             { title: '原岗位信息', align: 'center', colspan: '4'},
             { title: '申请岗位信息', align: 'center', colspan: '4'},
             { field: 'transferType', title: '调岗类型', rowspan: '2', width: 90, templet: function(d) {
-                return bossUtil.getTransferTypeNameById(d.transferType);
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("bossUserTransferType", 'id', d.transferType, 'name');
             }},
             { field: 'processInstanceId', title: '流程ID', rowspan: '2', width: 100, templet: function (d) {
                 return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
             }},
-            { field: 'stateName', title: '状态', rowspan: '2', width: 90, templet: function(d) {
-                return activitiUtil.showStateName2(d.state, 1);
+            { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function(d) {
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
             }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 140 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
@@ -50,18 +52,37 @@ layui.config({
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', rowspan: '2', align: 'center', width: 257, toolbar: '#messageTableBar'}
         ],
             [
-                { field: 'primaryCompanyName', title: '企业', align: 'left', width: 150 },
-                { field: 'primaryDepartmentName', title: '部门', align: 'left', width: 150 },
-                { field: 'primaryJobName', title: '岗位', align: 'left', width: 150 },
-                { field: 'primaryJobScoreName', title: '岗位定级', align: 'left', width: 150 },
-                { field: 'currentCompanyName', title: '企业', align: 'left', width: 150 },
-                { field: 'currentDepartmentName', title: '部门', align: 'left', width: 150 },
-                { field: 'currentJobName', title: '岗位', align: 'left', width: 150 },
-                { field: 'currentJobScoreName', title: '岗位定级', align: 'left', width: 150}
+                { field: 'primaryCompanyName', title: '企业', align: 'left', width: 150, templet: function(d) {
+                    return d.primaryCompanyMation.name;
+                }},
+                { field: 'primaryDepartmentName', title: '部门', align: 'left', width: 150, templet: function(d) {
+                    return isNull(d.primaryDepartmentMation) ? '' : d.primaryDepartmentMation.name;
+                }},
+                { field: 'primaryJobName', title: '岗位', align: 'left', width: 150, templet: function(d) {
+                    return isNull(d.primaryJobMation) ? '' : d.primaryJobMation.name;
+                }},
+                { field: 'primaryJobScoreName', title: '岗位定级', align: 'left', width: 150, templet: function(d) {
+                    return isNull(d.primaryJobScoreMation) ? '' : d.primaryJobScoreMation.name;
+                }},
+                { field: 'currentCompanyName', title: '企业', align: 'left', width: 150, templet: function(d) {
+                    return d.currentCompanyMation.name;
+                }},
+                { field: 'currentDepartmentName', title: '部门', align: 'left', width: 150, templet: function(d) {
+                    return isNull(d.currentDepartmentMation) ? '' : d.currentDepartmentMation.name;
+                }},
+                { field: 'currentJobName', title: '岗位', align: 'left', width: 150, templet: function(d) {
+                    return isNull(d.currentJobMation) ? '' : d.currentJobMation.name;
+                }},
+                { field: 'currentJobScoreName', title: '岗位定级', align: 'left', width: 150, templet: function(d) {
+                    return isNull(d.currentJobScoreMation) ? '' : d.currentJobScoreMation.name;
+                }}
             ]
         ],
         done: function(json) {
             matchingLanguage();
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单号", function () {
+                table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+            });
         }
     });
 
@@ -100,7 +121,7 @@ layui.config({
     function revoke(data) {
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "revokeBossInterviewJobTransfer", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.bossBasePath + "revokeJobTransfer", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
                 winui.window.msg("提交成功", {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -131,7 +152,7 @@ layui.config({
                     id: data.id,
                     approvalId: approvalId
                 };
-                AjaxPostUtil.request({url: flowableBasePath + "editBossInterviewJobTransferToSubApproval", params: params, type: 'json', method: "POST", callback: function (json) {
+                AjaxPostUtil.request({url: sysMainMation.bossBasePath + "submitJobTransfer", params: params, type: 'json', method: "POST", callback: function (json) {
                     winui.window.msg("提交成功", {icon: 1, time: 2000});
                     loadTable();
                 }});
@@ -143,7 +164,7 @@ layui.config({
     function cancellation(data) {
         layer.confirm('确认作废该申请吗？', { icon: 3, title: '作废操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "updateBossInterviewJobTransferToCancellation", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.bossBasePath + "invalidJobTransfer", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -164,33 +185,15 @@ layui.config({
     }
 
     form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-        }
-        return false;
-    });
-
-    // 刷新
     $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
-
     function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
     function getTableParams() {
-        var startTime = "", endTime = "";
-        if (!isNull($("#createTime").val())) {
-            startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
-            endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
-        }
-        return {
-            state: $("#state").val(),
-            startTime: startTime,
-            endTime: endTime
-        };
+        return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('bossInterviewJobTransferList', {});

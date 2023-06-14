@@ -207,7 +207,7 @@ var systemCommonUtil = {
     },
 
     /**
-     * 员工选择页面(所有员工)
+     * 员工选择页面(所有员工)--组件管理中使用
      *
      * @param callback 回调函数
      */

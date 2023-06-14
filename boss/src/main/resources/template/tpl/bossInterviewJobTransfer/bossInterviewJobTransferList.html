@@ -7,63 +7,32 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-    <div style="margin:0 auto; height: 100%;">
-        <div class="txtcenter" style="margin:0 auto; padding-top: 10px;">
-            <form class="layui-form layui-form-pane" action="" autocomplete="off">
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">状态</label>
-                        <div class="layui-input-inline">
-                            <select id="state">
-                                <option value="">全部</option>
-                                <option value="0">草稿</option>
-                                <option value="1">审核中</option>
-                                <option value="2">审核通过</option>
-                                <option value="3">审核不通过</option>
-                                <option value="4">作废</option>
-                                <option value="5">撤销</option>
-                            </select>
-                        </div>
-                        <label class="layui-form-label">申请时间</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="createTime" name="createTime" placeholder="请选择申请时间" class="layui-input" />
-                        </div>
-                        <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
-                        <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
-                    </div>
-                </div>
-            </form>
+    <div class="winui-toolbar">
+        <div class="winui-tool" style="text-align: left;">
+            <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1651308552871"><i class="fa fa-plus" aria-hidden="true"></i>录入申请</button>
         </div>
-        <div class="winui-toolbar">
-            <div class="winui-tool" style="text-align: left;">
-                <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-                <button id="addBean" class="winui-toolbtn" auth="1651308552871"><i class="fa fa-plus" aria-hidden="true"></i>录入申请</button>
-            </div>
-        </div>
-        <div style="margin:auto 10px;">
-            <table id="messageTable" lay-filter="messageTable"></table>
-            <script type="text/html" id="messageTableBar">
-                {{# if(d.editRow == '1'){ }}
-                    {{# if(auth('1651308562351')){ }}
-                        <a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>
-                    {{# } }}
-                    {{# if(auth('1651308571857')){ }}
-                        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="cancellation">作废</a>
-                    {{# } }}
+    </div>
+    <div style="margin:auto 10px;">
+        <table id="messageTable" lay-filter="messageTable"></table>
+        <script type="text/html" id="messageTableBar">
+            {{# if(d.editRow == '1'){ }}
+                {{# if(auth('1651308562351')){ }}
+                    <a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>
                 {{# } }}
-                {{# if(d.editRow == '1' || d.editRow == '2'){ }}
-                    {{# if(auth('1651308582626')){ }}
-                        <a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-                    {{# } }}
+                {{# if(auth('1651308571857')){ }}
+                    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="cancellation">作废</a>
                 {{# } }}
-                {{# if(d.editRow == '2'){ }}
-                    {{# if(auth('1651308591882')){ }}
-                        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
-                    {{# } }}
+                {{# if(auth('1651308552871')){ }}
+                    <a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
                 {{# } }}
-                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="details">详情</a>
-            </script>
-        </div>
+            {{# } }}
+            {{# if(d.editRow == '2'){ }}
+                {{# if(auth('1651308591882')){ }}
+                    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
+                {{# } }}
+            {{# } }}
+        </script>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>

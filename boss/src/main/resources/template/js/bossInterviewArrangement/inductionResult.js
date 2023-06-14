@@ -20,7 +20,6 @@ layui.config({
         template: $("#beanTemplate").html(),
         ajaxSendLoadBefore: function(hdb, json){
             json.bean.basicResume = stringManipulation.textAreaShow(json.bean.basicResume);
-            json.bean.stateName = bossUtil.showStateName(json.bean.state);
         },
         ajaxSendAfter: function (json) {
             skyeyeEnclosure.showDetails({'enclosureUpload': json.bean.interviewMation.enclosureResume});
