@@ -160,7 +160,8 @@ var dsFormUtil = {
             value = data;
         }
         var showType = dsFormUtil.getShowType(content.attrDefinition);
-        if (showType == 8 && dsFormComponent.numCode == 'userStaffChoose') {
+        if (showType == 8 &&
+            (dsFormComponent.numCode == 'userStaffChoose' || dsFormComponent.numCode == 'staffChoose')) {
             var key = attrDefinition.attrKey;
             // 例如：将key由relationUserId变为relationUserMation
             key = dsFormUtil.getKeyIdToMation(key);
@@ -421,7 +422,7 @@ var dsFormUtil = {
             }
             // 加载html
             var str = '';
-            if (component.numCode == 'userStaffChoose') {
+            if (component.numCode == 'userStaffChoose' || component.numCode == 'staffChoose') {
                 str = getDataUseHandlebars(dsFormUtil.showType['8-1'], {bean: content});
             } else {
                 str = getDataUseHandlebars(dsFormUtil.showType[showType], {bean: content});

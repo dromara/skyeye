@@ -57,24 +57,6 @@ var bossUtil = {
     getLeaveTypeNameById: function (id){
         var list = bossUtil.getLeaveTypeList();
         return getInPoingArr(list, "id", id, "name");
-    },
-
-    // 调岗类型
-    transferTypeList: {
-        "flatTone": {"id": 1, "name": "平调"},
-        "promotion": {"id": 2, "name": "晋升"},
-        "demotion": {"id": 3, "name": "降职"},
-    },
-    getTransferTypeList: function () {
-        var list = [];
-        $.each(bossUtil.transferTypeList, function (key, value) {
-            list.push(value);
-        });
-        return list;
-    },
-    getTransferTypeNameById: function (id){
-        var list = bossUtil.getTransferTypeList();
-        return getInPoingArr(list, "id", id, "name");
     }
-
+    
 };

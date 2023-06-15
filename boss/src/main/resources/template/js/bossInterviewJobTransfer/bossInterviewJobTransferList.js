@@ -1,4 +1,3 @@
-var rowId = "";
 
 // 岗位调动申请申请
 layui.config({
@@ -49,7 +48,7 @@ layui.config({
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '2', align: 'left', width: 140 },
             { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], rowspan: '2', align: 'center', width: 150 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', rowspan: '2', align: 'center', width: 257, toolbar: '#messageTableBar'}
+            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', rowspan: '2', align: 'center', width: 257, toolbar: '#messageTableBar' }
         ],
             [
                 { field: 'primaryCompanyName', title: '企业', align: 'left', width: 150, templet: function(d) {
@@ -107,7 +106,7 @@ layui.config({
     // 添加
     $("body").on("click", "#addBean", function() {
         _openNewWindows({
-            url: "../../tpl/bossInterviewJobTransfer/bossInterviewJobTransferAdd.html",
+            url: systemCommonUtil.getUrl('FP2023061400001', null),
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "bossInterviewJobTransferAdd",
             area: ['90vw', '90vh'],
@@ -130,9 +129,8 @@ layui.config({
 
     // 编辑申请
     function edit(data) {
-        rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/bossInterviewJobTransfer/bossInterviewJobTransferEdit.html",
+            url: systemCommonUtil.getUrl('FP2023061400002&id=' + data.id, null),
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "bossInterviewJobTransferEdit",
             area: ['90vw', '90vh'],
@@ -147,7 +145,7 @@ layui.config({
     function subApproval(data) {
         layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
             layer.close(index);
-            activitiUtil.startProcess(serviceClassName, function (approvalId) {
+            activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
                 var params = {
                     id: data.id,
                     approvalId: approvalId
@@ -173,9 +171,8 @@ layui.config({
 
     // 详情
     function details(data) {
-        rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/bossInterviewJobTransfer/bossInterviewJobTransferDetails.html",
+            url: systemCommonUtil.getUrl('FP2023061400003&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "bossInterviewJobTransferDetails",
             area: ['90vw', '90vh'],
