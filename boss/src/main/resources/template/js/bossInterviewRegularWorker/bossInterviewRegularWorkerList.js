@@ -1,4 +1,3 @@
-var rowId = "";
 
 // 转正申请
 layui.config({
@@ -6,24 +5,21 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
     winui.renderColor();
     var $ = layui.$,
         form = layui.form,
-        laydate = layui.laydate,
         table = layui.table;
     var serviceClassName = sysServiceMation["bossInterviewRegularWorker"]["key"];
 
     // 新增
     authBtn('1650787545029');
 
-    laydate.render({elem: '#createTime', range: '~'});
-
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: flowableBasePath + 'queryBossInterviewRegularWorkerList',
+        url: sysMainMation.bossBasePath + 'queryBossInterviewRegularWorkerList',
         where: getTableParams(),
         even: true,
         page: true,
@@ -31,15 +27,21 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'createName', title: '申请人', width: 120},
-            { field: 'departmentName', title: '转正部门', width: 140},
-            { field: 'jobName', title: '转正岗位', width: 150 },
+            { field: 'oddNumber', title: '单号', width: 200, align: 'center', templet: function (d) {
+                return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+            }},
+            { field: 'departmentMation', title: '转正部门', width: 140, templet: function (d) {
+                return isNull(d.departmentMation) ? "" : d.departmentMation.name;
+            }},
+            { field: 'jobMation', title: '转正岗位', width: 150, templet: function (d) {
+                return isNull(d.jobMation) ? "" : d.jobMation.name;
+            }},
             { field: 'regularTime', title: '转正日期', align: 'center', width: 100 },
             { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
                 return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
             }},
-            { field: 'stateName', title: '状态', width: 90, templet: function(d) {
-                return activitiUtil.showStateName2(d.state, 1);
+            { field: 'state', title: '状态', width: 90, templet: function(d) {
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
             }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
@@ -49,6 +51,9 @@ layui.config({
         ]],
         done: function(json) {
             matchingLanguage();
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单号", function () {
+                table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+            });
         }
     });
 
@@ -73,7 +78,7 @@ layui.config({
     // 添加
     $("body").on("click", "#addBean", function() {
         _openNewWindows({
-            url: "../../tpl/bossInterviewRegularWorker/bossInterviewRegularWorkerAdd.html",
+            url: systemCommonUtil.getUrl('FP2023061500006', null),
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "bossInterviewRegularWorkerAdd",
             area: ['90vw', '90vh'],
@@ -87,7 +92,7 @@ layui.config({
     function revoke(data) {
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "revokeBossInterviewRegularWorker", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.bossBasePath + "revokeRegularWorker", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
                 winui.window.msg("提交成功", {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -96,9 +101,8 @@ layui.config({
 
     // 编辑申请
     function edit(data) {
-        rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/bossInterviewRegularWorker/bossInterviewRegularWorkerEdit.html",
+            url: systemCommonUtil.getUrl('FP2023061500007&id=' + data.id, null),
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "bossInterviewRegularWorkerEdit",
             area: ['90vw', '90vh'],
@@ -118,7 +122,7 @@ layui.config({
                     id: data.id,
                     approvalId: approvalId
                 };
-                AjaxPostUtil.request({url: flowableBasePath + "editBossInterviewRegularWorkerToSubApproval", params: params, type: 'json', method: "POST", callback: function (json) {
+                AjaxPostUtil.request({url: sysMainMation.bossBasePath + "submitRegularWorker", params: params, type: 'json', method: "POST", callback: function (json) {
                     winui.window.msg("提交成功", {icon: 1, time: 2000});
                     loadTable();
                 }});
@@ -130,7 +134,7 @@ layui.config({
     function cancellation(data) {
         layer.confirm('确认作废该申请吗？', { icon: 3, title: '作废操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "updateBossInterviewRegularWorkerToCancellation", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.bossBasePath + "invalidRegularWorker", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -139,9 +143,8 @@ layui.config({
 
     // 详情
     function details(data) {
-        rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/bossInterviewRegularWorker/bossInterviewRegularWorkerDetails.html",
+            url: systemCommonUtil.getUrl('FP2023061500008&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "bossInterviewRegularWorkerDetails",
             area: ['90vw', '90vh'],
@@ -151,33 +154,15 @@ layui.config({
     }
 
     form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-        }
-        return false;
-    });
-
-    // 刷新
     $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
-
     function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
     function getTableParams() {
-        var startTime = "", endTime = "";
-        if (!isNull($("#createTime").val())) {
-            startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
-            endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
-        }
-        return {
-            state: $("#state").val(),
-            startTime: startTime,
-            endTime: endTime
-        };
+        return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('bossInterviewRegularWorkerList', {});
