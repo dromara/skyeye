@@ -39,17 +39,6 @@ var systemCommonUtil = {
     },
 
     /**
-     * 判断当前登录用户是否可以申请离职
-     */
-    judgeCurrentUserQuit: function () {
-        var result = false;
-        AjaxPostUtil.request({url: flowableBasePath + "judgeCurrentUserQuit", params: {}, type: 'json', method: "GET", callback: function(json) {
-            result = json.bean.canApply;
-        }, async: false});
-        return result;
-    },
-
-    /**
      * 获取当前登录用户所属企业的所有部门信息
      *
      * @param callback 回执函数

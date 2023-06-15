@@ -9,6 +9,7 @@
     "dateTimeType": {"name": "日期类型", "className": "skyeye-pro#com.skyeye.dsform.classenum.DateTimeType"},
     "payTypeEnum": {"name": "付款类型", "className": "skyeye-pro#com.skyeye.common.enumeration.PayTypeEnum"},
     "userStaffState": {"name": "员工状态", "className": "skyeye-pro#com.skyeye.common.enumeration.UserStaffState"},
+    "userQuitType": {"name": "员工离职类型", "className": "skyeye-pro#com.skyeye.common.enumeration.UserQuitType"},
 
     "bossInterviewArrangementState": {"name": "面试安排状态", "className": "skyeye-boss#com.skyeye.arrangement.classenum.ArrangementState"},
     "bossInterviewArrangementState1": {
