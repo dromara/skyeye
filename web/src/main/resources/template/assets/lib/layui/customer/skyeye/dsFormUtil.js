@@ -629,8 +629,6 @@ var dsFormUtil = {
         if (!isNull(attr) && !isNull(attr.attrDefinitionCustom)) {
             if (!isNull(attr.attrDefinitionCustom.dsFormComponent)) {
                 return attr.attrDefinitionCustom.dsFormComponent.showType;
-            } else {
-                return attr.attrDefinitionCustom.showType;
             }
         }
         return null;
