@@ -1,4 +1,3 @@
-var rowId = "";
 
 layui.config({
 	base: basePath, 
@@ -19,7 +18,7 @@ layui.config({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-		url: flowableBasePath + 'assetarticles017',
+		url: sysMainMation.admBasePath + 'assetarticles017',
 		where: getTableParams(),
 		even: true,
 		page: true,
@@ -27,15 +26,15 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'title', title: '标题', width: 300, templet: function (d) {
-				return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
+			{ field: 'oddNumber', title: '单号', width: 200, align: 'center', templet: function (d) {
+				return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 			}},
-			{ field: 'oddNumber', title: '单号', width: 200, align: 'center' },
+			{ field: 'title', title: '标题', width: 300 },
 			{ field: 'processInstanceId', title: '流程ID', width: 80, align: 'center', templet: function (d) {
 				return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 			}},
 			{ field: 'state', title: '状态', width: 90, align: 'center', templet: function (d) {
-				return activitiUtil.showStateName2(d.state, 1);
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
 			}},
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
@@ -72,7 +71,7 @@ layui.config({
 	// 添加
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/assetArticlesUse/assetArticlesUseAdd.html", 
+			url: systemCommonUtil.getUrl('FP2023061600009', null),
 			title: "用品领用申请",
 			pageId: "assetArticlesUseAdd",
 			area: ['90vw', '90vh'],
@@ -87,7 +86,7 @@ layui.config({
 		var msg = '确认撤销该用品领用申请吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "assetarticles034", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.admBasePath + "assetarticles034", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -96,9 +95,8 @@ layui.config({
 	
 	// 编辑
 	function edit(data) {
-		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/assetArticlesUse/assetArticlesUseEdit.html", 
+			url: systemCommonUtil.getUrl('FP2023061600010&id=' + data.id, null),
 			title: "编辑用品领用申请",
 			pageId: "assetArticlesUseEdit",
 			area: ['90vw', '90vh'],
@@ -118,7 +116,7 @@ layui.config({
 					id: data.id,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url: flowableBasePath + "assetarticles023", params: params, type: 'json', method: 'POST', callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.admBasePath + "assetarticles023", params: params, type: 'json', method: 'POST', callback: function (json) {
 					winui.window.msg("提交成功", {icon: 1, time: 2000});
 					loadTable();
 				}});
@@ -131,7 +129,7 @@ layui.config({
 		var msg = '确认作废该条领用申请吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "assetarticles030", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.admBasePath + "assetarticles030", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -140,9 +138,8 @@ layui.config({
 	
 	// 用品领用详情
 	function details(data) {
-		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/assetArticlesUse/assetArticlesUseDetails.html", 
+			url: systemCommonUtil.getUrl('FP2023061600011&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "assetArticlesUseDetails",
 			area: ['90vw', '90vh'],
