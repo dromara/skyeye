@@ -7,33 +7,13 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-	<div style="margin:0 auto; height: 100%;">
-		<div class="txtcenter" style="margin:0 auto; padding-top: 10px;">
-		    <form class="layui-form layui-form-pane" action="" autocomplete="off">
-		        <div class="layui-form-item">
-		            <div class="layui-inline">
-		                <label class="layui-form-label">用品名称</label>
-		                <div class="layui-input-inline">
-		                    <input type="text" id="articlesName" name="articlesName" placeholder="请输入用品名称" class="layui-input" />
-		                </div>
-						<label class="layui-form-label">用品编号</label>
-						<div class="layui-input-inline">
-							<input type="text" id="articlesNum" name="articlesNum" placeholder="请输入用品编号" class="layui-input" />
-						</div>
-		                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
-						<button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
-		            </div>
-		        </div>
-		    </form>
+	<div class="winui-toolbar">
+		<div class="winui-tool">
+			<button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
 		</div>
-	    <div class="winui-toolbar">
-	        <div class="winui-tool" style="text-align: left;">
-	            <button id="reloadmessageTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-	        </div>
-	    </div>
-	    <div style="margin:auto 10px;">
-	        <table id="messageTable" lay-filter="messageTable"></table>
-	    </div>
+	</div>
+	<div style="margin:auto 10px;">
+		<table id="messageTable" lay-filter="messageTable"></table>
 	</div>
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
