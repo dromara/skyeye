@@ -61,7 +61,9 @@ layui.config({
 			{ field: 'assetImg', title: '图片', align: 'center', width: 60, templet: function (d) {
 				return '<img src="' + systemCommonUtil.getFilePath(d.assetImg) + '" class="photo-img" lay-event="assetImg">';
 			}},
-			{ field: 'typeName', title: '资产类型', width: 100 },
+			{ field: 'typeId', title: '资产类型', width: 100, templet: function(d) {
+				return sysDictDataUtil.getDictDataNameByCodeAndKey("ADM_ASSET_TYPE", d.typeId);
+			}},
 			{ field: 'numberPrefix', title: '资产编号前缀', width: 140 },
 			{ field: 'readPrice', title: '参考价', width: 80 },
 		]],

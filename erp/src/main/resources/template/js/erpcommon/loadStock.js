@@ -79,7 +79,7 @@ function inTableDataArrayByAssetarId(materialId, unitId, array) {
 }
 
 /**
- * 商品规格加载变化事件
+ * 商品规格加载变化事件--组件使用
  *
  * @param form 表单对象
  * @param allChooseProduct 商品对象
@@ -94,7 +94,6 @@ function mUnitChangeEvent(form, allChooseProduct, unitPriceKey, calcPriceCallbac
         // 当前当前行选中的商品信息
         if (!isNull(thisRowValue)) {
             var product = allChooseProduct["tr" + thisRowKey];
-            console.log(product)
             $.each(product.materialNorms, function (j, bean) {
                 if (thisRowValue == bean.id) {
                     var rkNum = parseInt($("#rkNum" + thisRowKey).val());

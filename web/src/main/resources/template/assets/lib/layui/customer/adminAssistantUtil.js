@@ -16,7 +16,7 @@ var adminAssistantUtil = {
     },
 
     /**
-     * 资产选择页面
+     * 资产选择页面---组件管理使用
      *
      * @param callback 回调函数
      */

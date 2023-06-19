@@ -456,7 +456,7 @@ var dsFormUtil = {
                     var transKey = dsFormUtil.getKeyIdToMation(key);
                     var itemData = itemVal[transKey];
                     if (!isNull(itemData)) {
-                        map[key] = itemData.name;
+                        map[key] = itemData.name || itemData.dictName;
                     } else {
                         map[key] = '';
                     }
