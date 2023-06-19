@@ -797,6 +797,11 @@ var dsFormTableUtil = {
             table.on(`tool(${id})`, function (obj) {
                 var data = obj.data;
                 var layEvent = obj.event;
+                if (layEvent.startsWith('imgSel')) {
+                    var clickAttrKey = layEvent.replace("imgSel::", "");
+                    systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(data[clickAttrKey]));
+                    return false;
+                }
                 var operate = dsFormTableUtil.operateMap[layEvent];
                 if (!isNull(operate)) {
                     dsFormUtil.executeEvent(operate, data);

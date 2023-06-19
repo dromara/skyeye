@@ -57,9 +57,7 @@ layui.config({
 	    cols: [[
 	    	{ type: assetCheckType ? 'checkbox' : 'radio', fixed: 'left'},
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
-			{ field: 'name', title: '资产名称', width: 120, templet: function (d) {
-				return '<a lay-event="assetlistdetails" class="notice-title-click">' + d.name + '</a>';
-			}},
+			{ field: 'name', title: '资产名称', width: 120 },
 			{ field: 'assetImg', title: '图片', align: 'center', width: 60, templet: function (d) {
 				return '<img src="' + systemCommonUtil.getFilePath(d.assetImg) + '" class="photo-img" lay-event="assetImg">';
 			}},
