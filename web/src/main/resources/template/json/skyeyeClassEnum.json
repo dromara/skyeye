@@ -80,5 +80,7 @@
     "leaveType": {"name": "请假类型", "className": "skyeye-checkwork#com.skyeye.leave.classenum.LeaveType"},
     "useYearHolidayType": {"name": "请假是否使用年假/补休的类型", "className": "skyeye-checkwork#com.skyeye.leave.classenum.UseYearHolidayType"},
     "clockInTime": {"name": "上班打卡状态", "className": "skyeye-checkwork#com.skyeye.checkwork.classenum.ClockInTime"},
-    "clockOutTime": {"name": "下班打卡状态", "className": "skyeye-checkwork#com.skyeye.checkwork.classenum.ClockOutTime"}
+    "clockOutTime": {"name": "下班打卡状态", "className": "skyeye-checkwork#com.skyeye.checkwork.classenum.ClockOutTime"},
+
+    "assetReportState": {"name": "资产明细状态", "className": "skyeye-adm#com.skyeye.eve.assets.classenum.AssetReportState"}
 }

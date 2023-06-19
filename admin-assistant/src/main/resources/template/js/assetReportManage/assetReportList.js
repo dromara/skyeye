@@ -1,7 +1,4 @@
 
-
-var rowId = "";
-
 layui.config({
 	base: basePath,
 	version: skyeyeVersion
@@ -13,12 +10,14 @@ layui.config({
 		form = layui.form,
 		table = layui.table;
 
+	var assetId = GetUrlParam("id");
+
 	// 资产明细列表
 	table.render({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-		url: flowableBasePath + 'queryAssetReportList',
+		url: sysMainMation.admBasePath + 'queryAssetReportList',
 		where: getTableParams(),
 		even: true,
 		page: true,
@@ -26,17 +25,23 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'assetNum', title: '资产编号', width: 160, templet: function (d) {
-				return '<a lay-event="details" class="notice-title-click">' + d.assetNum + '</a>';
-			}},
+			{ field: 'assetNum', title: '资产编号', width: 160 },
 			{ field: 'unitPrice', title: '采购单价', width: 100 },
-			{ field: 'fromName', title: '资产来源', width: 120 },
-			{ field: 'barCodeMation', title: '条形码', align: 'center', width: 100, templet: function (d) {
+			{ field: 'fromId', title: '资产来源', width: 120, templet: function(d) {
+				return sysDictDataUtil.getDictDataNameByCodeAndKey("ADM_ASSET_FROM", d.fromId);
+			}},
+			{ field: 'barCodeMation', title: '条形码', align: 'center', width: 150, templet: function (d) {
 				return '<img src="' + systemCommonUtil.getFilePath(d.barCodeMation.imagePath) + '" class="photo-img" lay-event="barCode" style="width: 100px">';
 			}},
-			{ field: 'stateName', title: '状态', align: 'center', width: 100 },
-			{ field: 'assetAdmin', title: '管理员', width: 80 },
-			{ field: 'useUserName', title: '申领人', width: 120 },
+			{ field: 'state', title: '状态', align: 'center', width: 100, templet: function(d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("assetReportState", 'id', d.state, 'name');
+			}},
+			{ field: 'assetAdminMation', title: '管理员', width: 80, templet: function(d) {
+				return isNull(d.assetAdminMation) ? '' : d.assetAdminMation.name;
+			}},
+			{ field: 'useUserMation', title: '申领人', width: 120, templet: function(d) {
+				return isNull(d.useUserMation) ? '' : d.useUserMation.name;
+			}},
 			{ field: 'storageArea', title: '存放区域', width: 140 },
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
@@ -55,25 +60,10 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
 		var data = obj.data;
 		var layEvent = obj.event;
-		if (layEvent === 'details') { // 详情
-			details(data);
-		} else if (layEvent === 'barCode') { // 条形码预览
+		if (layEvent === 'barCode') { // 条形码预览
 			systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(data.barCodeMation.imagePath));
 		}
     });
-
-	// 详情
-	function details(data) {
-		rowId = data.id;
-		// todo 资产明细列表
-		_openNewWindows({
-			url: "",
-			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "assetManageDetails",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-			}});
-	}
 
 	form.render();
     $("body").on("click", "#reloadTable", function() {
@@ -85,7 +75,7 @@ layui.config({
     }
 
     function getTableParams() {
-		return $.extend(true, {assetId: parent.rowId}, initTableSearchUtil.getSearchValue("messageTable"));
+		return $.extend(true, {assetId: assetId}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('assetReportList', {});

@@ -48,7 +48,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: flowableBasePath + 'asset001',
+	    url: sysMainMation.admBasePath + 'asset001',
 	    where: getTableParams(),
 		even: true,
 	    page: true,
