@@ -1,7 +1,3 @@
-var rowId = "";
-
-var taskType = "";//流程详情的主标题
-var processInstanceId = "";//流程id
 
 layui.config({
 	base: basePath, 
@@ -12,7 +8,6 @@ layui.config({
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		laydate = layui.laydate,
 		table = layui.table;
 	var serviceClassName = sysServiceMation["assetManageUse"]["key"];
 	
@@ -100,7 +95,7 @@ layui.config({
 	}
 	
 	// 新增资产领用
-	$("body").on("click", "#addUseBean", function() {
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: systemCommonUtil.getUrl('FP2023062000001', null),
 			title: "资产领用申请",

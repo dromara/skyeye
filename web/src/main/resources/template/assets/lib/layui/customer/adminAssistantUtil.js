@@ -58,7 +58,7 @@ var adminAssistantUtil = {
     },
 
     /**
-     * 我申领中的资产明细选择页面
+     * 我申领中的资产明细选择页面---组件管理使用
      *
      * @param callback 回调函数
      */
