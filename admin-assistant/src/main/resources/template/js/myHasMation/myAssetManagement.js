@@ -15,7 +15,7 @@ layui.config({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-		url: flowableBasePath + 'myhasmation001',
+		url: sysMainMation.admBasePath + 'myhasmation001',
 		where: getTableParams(),
 		even: true,
 		page: true,
@@ -23,14 +23,17 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'assetName', title: '资产名称', align: 'left', width: 120 },
+			{ field: 'name', title: '资产名称', align: 'left', width: 120 },
 			{ field: 'assetImg', title: '图片', align: 'center', width: 60, templet: function (d) {
 				return '<img src="' + systemCommonUtil.getFilePath(d.assetImg) + '" class="photo-img" lay-event="assetImg">';
 			}},
-			{ field: 'typeName', title: '类型', align: 'left', width: 100 },
+			{ field: 'typeId', title: '资产类型', width: 120, templet: function(d) {
+				return sysDictDataUtil.getDictDataNameByCodeAndKey("ADM_ASSET_TYPE", d.typeId);
+			}},
 			{ field: 'assetNum', title: '资产编号', align: 'left', width: 150 },
-			{ field: 'specifications', title: '资产规格', align: 'left', width: 120 },
-			{ field: 'assetAdmin', title: '管理员', align: 'left', width: 120 },
+			{ field: 'assetAdminMation', title: '管理员', width: 120, templet: function(d) {
+				return isNull(d.assetAdminMation) ? '' : d.assetAdminMation.name;
+			}},
 			{ field: 'createTime', title: '申领时间', align: 'center', width: 150 },
 		]],
 		done: function(json) {
@@ -50,7 +53,7 @@ layui.config({
 	});
 
 	form.render();
-	$("body").on("click", "#reloadmessageTable", function() {
+	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
 
