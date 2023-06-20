@@ -430,7 +430,7 @@ var dsFormUtil = {
             $("#" + boxId).append(str);
 
             if (showType == 5) { // 表格展示
-                var result = dsFormUtil.resetTableValue(value, content.attrTransformTableList);
+                var result = dsFormUtil.resetTableValue(value, content);
                 dsFormTableUtil.intStaticTable("messageTable" + content.orderBy, result, content.attrTransformTableList);
             } else  if (showType == 6) { // 凭证展示
                 var boxId = "showVoucher" + content.orderBy;
@@ -442,12 +442,17 @@ var dsFormUtil = {
         return content;
     },
 
-    resetTableValue: function (data, attrTransformTableList) {
-        if (isNull(data)) {
+    resetTableValue: function (value, content) {
+        var attrTransformTableList = content.attrTransformTableList;
+        if (isNull(value)) {
             return [];
         }
+        // 进行表格的列数据转换
+        if (!isNull(content.editEchoScript)) {
+            eval(content.editEchoScript);
+        }
         var result = [];
-        $.each(data, function (i, itemVal) {
+        $.each(value, function (i, itemVal) {
             var map = {};
             $.each(itemVal, function (key, val) {
                 var attrTransformTable = getInPoingArr(attrTransformTableList, 'attrKey', key);

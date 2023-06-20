@@ -36,7 +36,7 @@ layui.config({
 			{ field: 'state', title: '状态', align: 'center', width: 100, templet: function(d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("assetReportState", 'id', d.state, 'name');
 			}},
-			{ field: 'assetAdminMation', title: '管理员', width: 80, templet: function(d) {
+			{ field: 'assetAdminMation', title: '管理员', width: 120, templet: function(d) {
 				return isNull(d.assetAdminMation) ? '' : d.assetAdminMation.name;
 			}},
 			{ field: 'useUserMation', title: '申领人', width: 120, templet: function(d) {

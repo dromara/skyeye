@@ -19,22 +19,15 @@ layui.config({
 	var s = '资产明细选择规则：';
 	if(assetReportCheckType){
 		s += '1.多选；如没有查到要选择的资产信息，请检查资产信息是否满足当前规则。';
-		// 多选保存的资产对象信息
-		var checkAssetReportMation = [].concat(parent.adminAssistantUtil.checkAssetReportMation);
-		// 初始化值
 		var ids = [];
-		$.each(checkAssetReportMation, function(i, item) {
+		$.each(parent.adminAssistantUtil.checkAssetReportMation, function(i, item) {
 			ids.push(item.id);
-		});
-		tableCheckBoxUtil.setIds({
-			gridId: 'messageTable',
-			fieldName: 'id',
-			ids: ids
 		});
 		tableCheckBoxUtil.init({
 			gridId: 'messageTable',
 			filterId: 'messageTable',
-			fieldName: 'id'
+			fieldName: 'id',
+			ids: ids
 		});
 	} else {
 		s += '双击要选择的数据即可选中';
@@ -46,7 +39,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: flowableBasePath + 'queryUnUseAssetReportList',
+	    url: sysMainMation.admBasePath + 'queryUnUseAssetReportList',
 	    where: getTableParams(),
 		even: true,
 	    page: true,
@@ -55,14 +48,19 @@ layui.config({
 	    cols: [[
 	    	{ type: assetReportCheckType ? 'checkbox' : 'radio', rowspan: '3', fixed: 'left' },
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', fixed: 'left', type: 'numbers' },
-			{ field: 'assetName', title: '资产名称', width: 120 },
+			{ field: 'name', title: '资产名称', width: 120 },
+			{ field: 'specifications', title: '资产规格', width: 140 },
 			{ field: 'assetImg', title: '图片', align: 'center', width: 60, templet: function (d) {
 				return '<img src="' + systemCommonUtil.getFilePath(d.assetImg) + '" class="photo-img" lay-event="assetImg">';
 			}},
-			{ field: 'typeName', title: '资产类型', width: 100 },
+			{ field: 'typeId', title: '资产类型', width: 120, templet: function(d) {
+				return sysDictDataUtil.getDictDataNameByCodeAndKey("ADM_ASSET_TYPE", d.typeId);
+			}},
 			{ field: 'assetNum', title: '资产编号', width: 160 },
-			{ field: 'storageArea', title: '存放区域', width: 80 },
-			{ field: 'assetAdmin', title: '负责人', width: 120 }
+			{ field: 'storageArea', title: '存放区域', width: 200 },
+			{ field: 'assetAdminMation', title: '管理员', width: 120, templet: function(d) {
+				return isNull(d.assetAdminMation) ? '' : d.assetAdminMation.name;
+			}},
 		]],
 	    done: function(res) {
 	    	matchingLanguage();
@@ -115,11 +113,9 @@ layui.config({
 			winui.window.msg("请选择资产", {icon: 2, time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "queryAssetReportListByIds", params: {ids: selectedData.toString()}, type: 'json', method: "POST", callback: function (json) {
-			parent.adminAssistantUtil.checkAssetReportMation = [].concat(json.rows);
-			parent.layer.close(index);
-			parent.refreshCode = '0';
-		}});
+		parent.adminAssistantUtil.checkAssetReportMation = [].concat(selectedData);
+		parent.layer.close(index);
+		parent.refreshCode = '0';
 	});
 
 	form.render();

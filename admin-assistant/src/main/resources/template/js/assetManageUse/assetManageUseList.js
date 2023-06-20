@@ -8,7 +8,7 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
@@ -19,15 +19,12 @@ layui.config({
 	// 新增资产领用申请
 	authBtn('1597242249453');
 	
-	// '资产领用'页面的选取时间段表格
-	laydate.render({elem: '#createTime', range: '~'});
-	
 	// 资产领用管理开始
 	table.render({
-		id: 'lingyongTable',
-		elem: '#lingyongTable',
+		id: 'messageTable',
+		elem: '#messageTable',
 		method: 'post',
-		url: flowableBasePath + 'asset010',
+		url: sysMainMation.admBasePath + 'asset010',
 		where: getTableParams(),
 		even: true,
 		page: true,
@@ -35,37 +32,43 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'title', title: '标题', width: 300, templet: function (d) {
-				return '<a lay-event="lingyongDedails" class="notice-title-click">' + d.title + '</a>';
+			{ field: 'oddNumber', title: '单号', width: 200, align: 'center', templet: function (d) {
+				return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 			}},
-			{ field: 'oddNum', title: '单号', width: 200, align: 'center' },
+			{ field: 'title', title: '标题', width: 300 },
 			{ field: 'processInstanceId', title: '流程ID', width: 80, align: 'center', templet: function (d) {
-				return '<a lay-event="lingyongProcessDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+				return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 			}},
-			{ field: 'stateName', title: '状态', width: 90, align: 'center', templet: function (d) {
-				return activitiUtil.showStateName2(d.state, 1);
+			{ field: 'state', title: '状态', width: 90, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
 			}},
-			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150, align: 'center' },
-			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#lingyongTableBar'}
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#messageTableBar'}
 		]],
 		done: function(json) {
 			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单号，标题", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 		}
 	});
 
 	// 资产领用的操作事件
-	table.on('tool(lingyongTable)', function (obj) {
+	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'lingyongDedails') { //领用详情
-        	lingyongDedails(data);
-        } else if (layEvent === 'lingyongEdit') { //编辑领用申请
-        	lingyongEdit(data);
+        if (layEvent === 'details') { //领用详情
+        	details(data);
+        } else if (layEvent === 'edit') { //编辑领用申请
+        	edit(data);
         } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data);
         } else if (layEvent === 'cancellation') {//领用作废
         	cancellation(data);
-        } else if (layEvent === 'lingyongProcessDetails') {//领用流程详情
+        } else if (layEvent === 'processDetails') {//领用流程详情
 			activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') {//撤销领用申请
         	revoke(data);
@@ -73,10 +76,9 @@ layui.config({
     });
 	
 	// 资产领用详情
-	function lingyongDedails(data) {
-		rowId = data.id;
+	function details(data) {
 		_openNewWindows({
-			url: "../../tpl/assetManageUse/assetManageUseDetails.html", 
+			url: systemCommonUtil.getUrl('FP2023062000003&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "assetManageUseDetails",
 			area: ['90vw', '90vh'],
@@ -90,9 +92,9 @@ layui.config({
 		var msg = '确认撤销该资产领用申请吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "asset036", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.admBasePath + "asset036", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
-				loadLingyongTable();
+				loadTable();
     		}});
 		});
 	}
@@ -100,27 +102,26 @@ layui.config({
 	// 新增资产领用
 	$("body").on("click", "#addUseBean", function() {
     	_openNewWindows({
-			url: "../../tpl/assetManageUse/assetManageUseAdd.html", 
+			url: systemCommonUtil.getUrl('FP2023062000001', null),
 			title: "资产领用申请",
 			pageId: "assetManageUseAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadLingyongTable();
+				loadTable();
 			}});
     });
 	
 	// 编辑资产领用申请
-	function lingyongEdit(data) {
-		rowId = data.id;
+	function edit(data) {
 		_openNewWindows({
-			url: "../../tpl/assetManageUse/assetManageUseEdit.html", 
+			url: systemCommonUtil.getUrl('FP2023062000002&id=' + data.id, null),
 			title: "编辑资产领用申请",
 			pageId: "assetManageUseEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadLingyongTable();
+				loadTable();
 			}
 		});
 	}
@@ -130,9 +131,9 @@ layui.config({
 		var msg = '确认作废该条领用申请吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "asset016", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.admBasePath + "asset016", params: {id: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadLingyongTable();
+				loadTable();
     		}});
 		});
 	}
@@ -143,47 +144,28 @@ layui.config({
 			layer.close(index);
 			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				var params = {
-					rowId: data.id,
+					id: data.id,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url: flowableBasePath + "asset017", params: params, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.admBasePath + "asset017", params: params, type: 'json', callback: function (json) {
 					winui.window.msg("提交成功", {icon: 1, time: 2000});
-					loadLingyongTable();
+					loadTable();
 				}});
 			});
 		});
 	}
 
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			table.reloadData("lingyongTable", {page: {curr: 1}, where: getTableParams()});
-		}
-		return false;
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
 	});
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
 
-	// 刷新领用数据
-    $("body").on("click", "#reloadLingyongTable", function() {
-    	loadLingyongTable();
-    });
-    
-	// 刷新领用列表数据
-    function loadLingyongTable(){
-    	table.reloadData("lingyongTable", {where: getTableParams()});
-    }
-	
-    function getTableParams() {
-    	var startTime = "", endTime = "";
-		if (!isNull($("#createTime").val())) {
-    		startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
-    		endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
-    	}
-    	return {
-    		state: $("#lingyongState").val(),
-    		startTime: startTime,
-    		endTime: endTime
-    	};
-    }
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
     
     exports('assetManageUseList', {});
 });

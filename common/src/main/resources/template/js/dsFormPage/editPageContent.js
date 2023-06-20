@@ -234,7 +234,7 @@ layui.config({
                     </div>`,
     };
     // 详情类布局才展示的组件属性
-    var detailsPageAttr = ['attrKeyBox', 'titleBox', 'widthBox', 'tableAttrBox'];
+    var detailsPageAttr = ['attrKeyBox', 'titleBox', 'widthBox', 'tableAttrBox', 'editEchoScriptBox'];
 
     // 加载组件关联的属性
     $.each(html, function (key, value) {
