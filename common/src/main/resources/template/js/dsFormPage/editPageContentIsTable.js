@@ -53,7 +53,7 @@ layui.config({
 			{ type: 'checkbox', align: 'center' },
 			{ field: 'test', title: '', align: 'left', width: 40, templet: function (d) {return '<i class="fa fa-arrows drag-row" />';}},
 			{ field: 'attrKey', title: '属性<i class="red">*</i>', align: 'left', width: 150, templet: function (d) {
-				var _html = `<select lay-filter="tableSelect" lay-search="" id="attrKey${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+				var _html = `<select lay-filter="tableSelect" lay-search="" id="attrKey${d.id}" cus-id="${d.id}" win-verify="required"><option value="">请选择</option>`;
 				$.each(childAttr, function (i, item) {
 					if (item.attrKey == d.attrKey) {
 						_html += `<option value="${item.attrKey}" selected="selected">${item.name}</option>`;
@@ -69,12 +69,16 @@ layui.config({
 					`value="` + (isNull(d.name) ? "" : d.name) + `"/>`;
 			}},
 			{ field: 'align', title: '对齐方式<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
-				var _html = `<select lay-filter="tableSelect" lay-search="" id="align${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+				var _html = `<select lay-filter="tableSelect" lay-search="" id="align${d.id}" cus-id="${d.id}" win-verify="required"><option value="">请选择</option>`;
 				$.each(alignmentData.rows, function (i, item) {
 					if (item.id == d.align) {
 						_html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
 					} else {
-						_html += `<option value="${item.id}">${item.name}</option>`;
+						if (i == 0) {
+							_html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
+						} else {
+							_html += `<option value="${item.id}">${item.name}</option>`;
+						}
 					}
 				});
 				_html += `</select>`;
@@ -85,7 +89,7 @@ layui.config({
 					`value="` + (isNull(d.width) ? "" : d.width) + `"/>`;
 			}},
 			{ field: 'showType', title: '显示方式<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
-				var _html = `<select lay-filter="tableSelect" lay-search="" id="showType${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+				var _html = `<select lay-filter="tableSelect" lay-search="" id="showType${d.id}" cus-id="${d.id}" win-verify="required"><option value="">请选择</option>`;
 				$.each(showType, function (i, item) {
 					if (item.id == d.showType) {
 						_html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
@@ -110,7 +114,7 @@ layui.config({
 			{ type: 'checkbox', align: 'center' },
 			{ field: 'test', title: '', align: 'left', width: 40, templet: function (d) {return '<i class="fa fa-arrows drag-row" />';}},
 			{ field: 'attrKey', title: '属性<i class="red">*</i>', align: 'left', width: 150, templet: function (d) {
-				var _html = `<select lay-filter="tableSelect" lay-search="" id="attrKey${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+				var _html = `<select lay-filter="tableSelect" lay-search="" id="attrKey${d.id}" cus-id="${d.id}" win-verify="required"><option value="">请选择</option>`;
 				$.each(childAttr, function (i, item) {
 					if (item.attrKey == d.attrKey) {
 						_html += `<option value="${item.attrKey}" selected="selected">${item.name}</option>`;
@@ -126,12 +130,16 @@ layui.config({
 					`value="` + (isNull(d.name) ? "" : d.name) + `"/>`;
 			}},
 			{ field: 'align', title: '对齐方式<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
-				var _html = `<select lay-filter="tableSelect" lay-search="" id="align${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+				var _html = `<select lay-filter="tableSelect" lay-search="" id="align${d.id}" cus-id="${d.id}" win-verify="required"><option value="">请选择</option>`;
 				$.each(alignmentData.rows, function (i, item) {
 					if (item.id == d.align) {
 						_html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
 					} else {
-						_html += `<option value="${item.id}">${item.name}</option>`;
+						if (i == 0) {
+							_html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
+						} else {
+							_html += `<option value="${item.id}">${item.name}</option>`;
+						}
 					}
 				});
 				_html += `</select>`;
@@ -146,7 +154,7 @@ layui.config({
 					`value="` + (isNull(d.width) ? "" : d.width) + `"/>`;
 			}},
 			{ field: 'showType', title: '显示方式<i class="red">*</i>', align: 'left', width: 120, templet: function (d) {
-				var _html = `<select lay-filter="tableSelect" lay-search="" id="showType${d.id}" cus-id="${d.id}" win-verify="required"><option value="">全部</option>`;
+				var _html = `<select lay-filter="tableSelect" lay-search="" id="showType${d.id}" cus-id="${d.id}" win-verify="required"><option value="">请选择</option>`;
 				$.each(showType, function (i, item) {
 					if (item.id == d.showType) {
 						_html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
@@ -234,6 +242,7 @@ layui.config({
 				return false;
 			}
 			tableDataList = [].concat(table.cache.messageTable);
+			resetData(tableDataList);
 			$.each(tableDataList, function (i, item) {
 				item.orderBy = i + 1;
 				if (item.showType == showType[2].id) {
@@ -319,6 +328,7 @@ layui.config({
 	// 新增行
 	function addRow() {
 		tableDataList = [].concat(table.cache.messageTable);
+		resetData(tableDataList);
 		tableDataList.push({id: rowNum});
 		table.reloadData("messageTable", {data: tableDataList});
 		rowNum++;
@@ -327,6 +337,7 @@ layui.config({
 	// 删除行
 	function deleteRow() {
 		tableDataList = [].concat(table.cache.messageTable);
+		resetData(tableDataList);
 		var check_box = table.checkStatus('messageTable').data;
 		for (var i = 0;  i < check_box.length; i++){
 			var list = [];
@@ -338,6 +349,12 @@ layui.config({
 			tableDataList = [].concat(list);
 		}
 		table.reloadData("messageTable", {data: tableDataList});
+	}
+
+	function resetData(tableDataList) {
+		$.each(tableDataList, function (i, item) {
+			item.align = $(`#align${item.id}`).val();
+		});
 	}
 
 	$("body").on("click", "#cancle", function() {

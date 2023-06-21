@@ -75,7 +75,11 @@ layui.config({
                     if (item.id == d.align) {
                         _html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
                     } else {
-                        _html += `<option value="${item.id}">${item.name}</option>`;
+                        if (i == 0) {
+                            _html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
+                        } else {
+                            _html += `<option value="${item.id}">${item.name}</option>`;
+                        }
                     }
                 });
                 _html += `</select>`;
@@ -99,7 +103,11 @@ layui.config({
                     if (item.id == d.hide) {
                         _html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
                     } else {
-                        _html += `<option value="${item.id}">${item.name}</option>`;
+                        if (i == 1) {
+                            _html += `<option value="${item.id}" selected="selected">${item.name}</option>`;
+                        } else {
+                            _html += `<option value="${item.id}">${item.name}</option>`;
+                        }
                     }
                 });
                 _html += `</select>`;
@@ -164,6 +172,7 @@ layui.config({
                 return false;
             }
             tableDataList = [].concat(table.cache.messageTable);
+            resetData(tableDataList);
             $.each(tableDataList, function (i, item) {
                 item.orderBy = i + 1;
                 item.templet = jsEditorMap[item.id].getValue();
@@ -193,6 +202,7 @@ layui.config({
     // 新增行
     function addRow() {
         tableDataList = [].concat(table.cache.messageTable);
+        resetData(tableDataList);
         tableDataList.push({id: rowNum});
         table.reloadData("messageTable", {data: tableDataList});
         rowNum++;
@@ -201,6 +211,7 @@ layui.config({
     // 删除行
     function deleteRow() {
         tableDataList = [].concat(table.cache.messageTable);
+        resetData(tableDataList);
         var check_box = table.checkStatus('messageTable').data;
         for (var i = 0;  i < check_box.length; i++){
             var list = [];
@@ -212,6 +223,14 @@ layui.config({
             tableDataList = [].concat(list);
         }
         table.reloadData("messageTable", {data: tableDataList});
+    }
+
+    function resetData(tableDataList) {
+        $.each(tableDataList, function (i, item) {
+            item.templet = jsEditorMap[item.id].getValue();
+            item.align = $(`#align${item.id}`).val();
+            item.hide = $(`#hide${item.id}`).val();
+        });
     }
 
     $("body").on("click", "#cancle", function() {

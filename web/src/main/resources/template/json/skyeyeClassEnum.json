@@ -82,5 +82,7 @@
     "clockInTime": {"name": "上班打卡状态", "className": "skyeye-checkwork#com.skyeye.checkwork.classenum.ClockInTime"},
     "clockOutTime": {"name": "下班打卡状态", "className": "skyeye-checkwork#com.skyeye.checkwork.classenum.ClockOutTime"},
 
-    "assetReportState": {"name": "资产明细状态", "className": "skyeye-adm#com.skyeye.eve.assets.classenum.AssetReportState"}
+    "assetReportState": {"name": "资产明细状态", "className": "skyeye-adm#com.skyeye.eve.assets.classenum.AssetReportState"},
+    "conferenceState": {"name": "会议室状态", "className": "skyeye-adm#com.skyeye.eve.conference.classenum.ConferenceState"}
+
 }
