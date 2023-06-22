@@ -405,7 +405,7 @@ var dsFormUtil = {
             $("#" + boxId).append(html + jsCon);
         } else if (showType == -1) {
             // 组件展示类型为【自定义】
-            content.value = dsFormUtil.getContentLinkedDataValue(content, value, data);
+            content.value = data;
             var jsonStr = {bean: content};
             var html = getDataUseHandlebars('{{#bean}}' + component.detailHtmlContent + '{{/bean}}', jsonStr);
             var html_js = getDataUseHandlebars('{{#bean}}' + component.detailJsContent + '{{/bean}}', jsonStr);
@@ -554,7 +554,7 @@ var dsFormUtil = {
         return '';
     },
 
-    // 获取显示值
+    // 详情页获取显示值
     getContentLinkedDataValue: function (content, value, data) {
         if (isNull(value) && value + '' != '0') {
             return null;
@@ -573,7 +573,7 @@ var dsFormUtil = {
                 if (typeof obj == 'string') {
                     obj = JSON.parse(obj);
                 }
-                return getInPoingArr(json, "id", value, "name");
+                return getInPoingArr(obj, "id", value, "name");
             } else if (dataType == 2) {
                 // 枚举
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey(customAttr.objectId, 'id', value, 'name');
@@ -582,20 +582,13 @@ var dsFormUtil = {
                 return sysDictDataUtil.getDictDataNameByCodeAndKey(customAttr.objectId, value);
             } else if (dataType == 4) {
                 // 自定义接口
-                var businessApi = customAttr.businessApi;
-                var params = {};
-                $.each(businessApi.params, function (key, value) {
-                    var realValue = "";
-                    eval('realValue = ' + value);
-                    params[key] = realValue;
-                });
-                var url = "";
-                var obj = [];
-                eval('url = ' + businessApi.serviceStr + ' + "' + businessApi.api + '"');
-                AjaxPostUtil.request({url: url, params: params, type: 'json', method: businessApi.method, callback: function (json) {
-                    obj = json.rows;
-                }, async: false});
-                return getInPoingArr(obj, "id", value, "name");
+                var key = attrDefinition.attrKey;
+                key = dsFormUtil.getKeyIdToMation(key);
+                var tmp = data[key];
+                if (isNull(tmp)) {
+                    return '';
+                }
+                return tmp.name || tmp.title;
             }
         }
 
