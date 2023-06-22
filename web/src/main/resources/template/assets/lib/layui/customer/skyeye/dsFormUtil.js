@@ -511,11 +511,11 @@ var dsFormUtil = {
         if (isNull(customAttr.objectId) && isNull(customAttr.defaultData) && isNull(customAttr.businessApi) && $.isEmptyObject(customAttr.businessApi)) {
             return content;
         }
-        content.context = dsFormUtil.getHtmlContentByDataFrom(customAttr, content.dsFormComponent.htmlDataFrom);
+        content.context = dsFormUtil.getHtmlContentByDataFrom(customAttr, content.dsFormComponent.htmlDataFrom, content.id);
         return content;
     },
 
-    getHtmlContentByDataFrom: function (obj, htmlDataFrom) {
+    getHtmlContentByDataFrom: function (obj, htmlDataFrom, contentId) {
         var json = {};
         var dataType = obj.dataType;
         if (dataType == 1) {
@@ -549,6 +549,14 @@ var dsFormUtil = {
             }, async: false});
         }
         if (!isNull(htmlDataFrom)) {
+            $.each(json, function (i, item) {
+                item.radioName = 'skyeyeName' + contentId;
+                item.name = item.name || item.title;
+                if (item.isDefault) {
+                    // 默认选中
+                    item.checked = 'checked';
+                }
+            });
             return getDataUseHandlebars(htmlDataFrom, json);
         }
         return '';

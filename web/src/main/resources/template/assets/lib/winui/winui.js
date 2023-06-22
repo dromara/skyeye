@@ -462,9 +462,9 @@
                     var tips = '';
                     var value = othis.val();
                     // 如果是单选，则获取单选的值
-                    if(othis.hasClass("winui-radio")){
+                    if (othis.hasClass("winui-radio")) {
                         value = othis.find("input:checked").val();
-                        if(value === undefined){
+                        if (value === undefined) {
                             value = "";
                         }
                     }

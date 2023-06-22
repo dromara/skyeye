@@ -33,19 +33,19 @@ layui.config({
                     </div>`,
         'placeholderBox': `<div class="layui-form-item layui-col-xs12">
                             <label class="layui-form-label">提示语：</label>
-                            <div class="layui-input-block winui-radio">
+                            <div class="layui-input-block">
                                 <input type="text" id="placeholder" name="placeholder" placeholder="请输入控件提示语" class="layui-input" />
                             </div>
                         </div>`,
         'remarkBox': `<div class="layui-form-item layui-col-xs12">
                             <label class="layui-form-label">备注：</label>
-                            <div class="layui-input-block winui-radio">
+                            <div class="layui-input-block">
                                 <input type="text" id="remark" name="remark" placeholder="请输入备注" class="layui-input" />
                             </div>
                         </div>`,
         'classNameBox': `<div class="layui-form-item layui-col-xs12">
                             <label class="layui-form-label">class属性：</label>
-                            <div class="layui-input-block winui-radio">
+                            <div class="layui-input-block">
                                 <input type="text" id="className" name="className" placeholder="请输入class属性" class="layui-input" />
                             </div>
                         </div>`,
