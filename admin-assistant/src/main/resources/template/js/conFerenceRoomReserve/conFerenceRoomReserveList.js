@@ -1,30 +1,25 @@
 
-var rowId = "";
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		laydate = layui.laydate,
 		table = layui.table;
 	var serviceClassName = sysServiceMation["conFerenceRoomReserve"]["key"];
 	
 	// 新增预定
 	authBtn('1596947245794');
 
-	laydate.render({elem: '#createTime', range: '~'});
-	
 	// 会议室预定列表
 	table.render({
-	    id: 'reserveTable',
-	    elem: '#reserveTable',
+	    id: 'messageTable',
+	    elem: '#messageTable',
 	    method: 'post',
-	    url: flowableBasePath + 'conferenceroomreserve001',
+	    url: sysMainMation.admBasePath + 'conferenceroomreserve001',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -32,38 +27,40 @@ layui.config({
     	limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'title', title: '标题', width: 300, templet: function (d) {
-        		return '<a lay-event="reserveDedails" class="notice-title-click">' + d.title + '</a>';
-	        }},
-	        { field: 'oddNum', title: '单号', width: 200, align: 'center' },
+			{ field: 'oddNumber', title: '单号', width: 200, align: 'center', templet: function (d) {
+				return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+			}},
+			{ field: 'title', title: '标题', width: 300 },
 	        { field: 'processInstanceId', title: '流程ID', width: 80, align: 'center', templet: function (d) {
-	        	if (!isNull(d.processInstanceId)) {
-	        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
-	        	} else {
-	        		return "";
-	        	}
-	        }},
+				return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+			}},
 	        { field: 'state', title: '状态', width: 90, align: 'center', templet: function (d) {
-				return activitiUtil.showStateName2(d.state, 1);
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
 	        }},
-	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150, align: 'center'},
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#reserveTableBar'}
-	    ]],
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#messageTableBar'}
+		]],
 	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单号，标题", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
 	// 会议室预定的操作事件
-	table.on('tool(reserveTable)', function (obj) {
+	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'reserveDedails') { //预定详情
-        	reserveDedails(data);
+        if (layEvent === 'details') { //预定详情
+			details(data);
         } else if (layEvent === 'processDetails') { //流程详情
 			activitiUtil.activitiDetails(data);
-        } else if (layEvent === 'reserveedit') { //编辑预定申请
-        	reserveEdit(data);
+        } else if (layEvent === 'edit') { //编辑预定申请
+			edit(data);
         } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data);
         } else if (layEvent === 'cancellation') {//预定作废
@@ -81,24 +78,23 @@ layui.config({
 			var params = {
 				processInstanceId: data.processInstanceId
 			};
-            AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve010", params: params, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.admBasePath + "conferenceroomreserve010", params: params, type: 'json', method: "PUT", callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
-				loadReserveTable();
+				loadTable();
     		}});
 		});
 	}
 	
 	// 编辑会议室预定申请
-	function reserveEdit(data) {
-		rowId = data.id;
+	function edit(data) {
 		_openNewWindows({
-			url: "../../tpl/conFerenceRoomReserve/conFerenceRoomReserveEdit.html", 
+			url: systemCommonUtil.getUrl('FP2023062100002&id=' + data.id, null),
 			title: "会议室预定申请",
 			pageId: "conFerenceRoomReserveEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadReserveTable();
+				loadTable();
 			}
 		});
 	}
@@ -109,12 +105,12 @@ layui.config({
 			layer.close(index);
 			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				var params = {
-					rowId: data.id,
+					id: data.id,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve006", params: params, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.admBasePath + "conferenceroomreserve006", params: params, type: 'json', callback: function (json) {
 					winui.window.msg("提交成功", {icon: 1, time: 2000});
-					loadReserveTable();
+					loadTable();
 				}});
 			});
 		});
@@ -125,18 +121,17 @@ layui.config({
 		var msg = '确认作废该条预定申请吗？';
 		layer.confirm(msg, { icon: 3, title: '申请作废操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve007", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.admBasePath + "conferenceroomreserve007", params: {id: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadReserveTable();
+				loadTable();
     		}});
 		});
 	}
 	
 	// 会议室预定详情
-	function reserveDedails(data) {
-		rowId = data.id;
+	function details(data) {
 		_openNewWindows({
-			url: "../../tpl/conFerenceRoomReserve/conFerenceRoomReserveDetails.html", 
+			url: systemCommonUtil.getUrl('FP2023062100003&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "conFerenceRoomReserveDetails",
 			area: ['90vw', '90vh'],
@@ -146,49 +141,29 @@ layui.config({
 	}
 
 	// 添加会议室预定
-	$("body").on("click", "#addReserveBean", function() {
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/conFerenceRoomReserve/conFerenceRoomReserveAdd.html", 
+			url: systemCommonUtil.getUrl('FP2023062100001', null),
 			title: "会议室预定申请",
 			pageId: "addreserve",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadReserveTable();
+				loadTable();
 			}});
     });
 
-	// 搜索表单
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			table.reloadData("reserveTable", {page: {curr: 1}, where: getTableParams()});
-		}
-		return false;
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
 	});
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
 
-	// 刷新会议室预定列表
-    $("body").on("click", "#reloadReserveTable", function() {
-    	loadReserveTable();
-    });
-    
-    // 刷新会议室预定列表数据
-    function loadReserveTable(){
-    	table.reloadData("reserveTable", {where: getTableParams()});
-    }
-    
-    function getTableParams() {
-    	var startTime = "", endTime = "";
-		if (!isNull($("#createTime").val())) {
-    		startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
-    		endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
-    	}
-    	return {
-    		approvalState: $("#approvalState").val(),
-    		startTime: startTime,
-    		endTime: endTime
-    	};
-    }
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
     
     exports('conFerenceRoomReserveList', {});
 });
