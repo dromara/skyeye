@@ -1,30 +1,24 @@
 
-var rowId = "";
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		laydate = layui.laydate,
 		table = layui.table;
 	var serviceClassName = sysServiceMation["licenceManageBorrow"]["key"];
 	
-	// 证照借用
 	authBtn('1596969413440');
     
-	laydate.render({elem: '#createTime', range: '~'});
-	
 	// 证照借用列表
 	table.render({
-		id: 'borrowTable',
-		elem: '#borrowTable',
+		id: 'messageTable',
+		elem: '#messageTable',
 		method: 'post',
-		url: flowableBasePath + 'licenceborrow001',
+		url: sysMainMation.admBasePath + 'licenceborrow001',
 		where: getTableParams(),
 		even: true,
 		page: true,
@@ -32,38 +26,40 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'title', title: '标题', width: 300, templet: function (d) {
-				return '<a lay-event="borrowDedails" class="notice-title-click">' + d.title + '</a>';
+			{ field: 'oddNumber', title: '单号', width: 200, align: 'center', templet: function (d) {
+				return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 			}},
-			{ field: 'oddNum', title: '单号', width: 200, align: 'center' },
+			{ field: 'title', title: '标题', width: 300 },
 			{ field: 'processInstanceId', title: '流程ID', width: 80, align: 'center', templet: function (d) {
-				if (!isNull(d.processInstanceId)) {
-					return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
-				} else {
-					return "";
-				}
+				return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 			}},
 			{ field: 'state', title: '状态', width: 90, align: 'center', templet: function (d) {
-				return activitiUtil.showStateName2(d.state, 1);
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
 			}},
-			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150, align: 'center'},
-			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#borrowTableBar'}
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#messageTableBar' }
 		]],
 		done: function(json) {
 			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单号，标题", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 		}
 	});
 
 	// 证照借用的操作事件
-	table.on('tool(borrowTable)', function (obj) {
+	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'borrowDedails') { //借用详情
-        	borrowDedails(data);
+        if (layEvent === 'details') { //借用详情
+			details(data);
         } else if (layEvent === 'processDetails') { //流程详情
 			activitiUtil.activitiDetails(data);
-        } else if (layEvent === 'borrowedit') { //编辑借用申请
-        	borrowEdit(data);
+        } else if (layEvent === 'edit') { //编辑借用申请
+			edit(data);
         } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data);
         } else if (layEvent === 'cancellation') {//借用作废
@@ -78,24 +74,23 @@ layui.config({
 		var msg = '确认撤销该借用申请吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "licenceborrow010", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.admBasePath + "licenceborrow010", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
-				loadBorrowTable();
+				loadTable();
     		}});
 		});
 	}
 	
 	// 编辑证照借用申请
-	function borrowEdit(data) {
-		rowId = data.id;
+	function edit(data) {
 		_openNewWindows({
-			url: "../../tpl/licenceManageBorrow/licenceManageBorrowEdit.html", 
+			url: systemCommonUtil.getUrl('FP2023062500002&id=' + data.id, null),
 			title: "编辑证照借用申请",
 			pageId: "licenceManageBorrowEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadBorrowTable();
+				loadTable();
 			}
 		});
 	}
@@ -106,12 +101,12 @@ layui.config({
 			layer.close(index);
 			activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
 				var params = {
-					rowId: data.id,
+					id: data.id,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url: flowableBasePath + "licenceborrow006", params: params, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.admBasePath + "licenceborrow006", params: params, type: 'json', method: "POST", callback: function (json) {
 					winui.window.msg("提交成功", {icon: 1, time: 2000});
-					loadBorrowTable();
+					loadTable();
 				}});
 			});
 		});
@@ -122,18 +117,17 @@ layui.config({
 		var msg = '确认作废该条借用申请吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "licenceborrow007", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.admBasePath + "licenceborrow007", params: {id: data.id}, type: 'json', method: "POST", callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadBorrowTable();
+				loadTable();
     		}});
 		});
 	}
 	
 	// 证照借用详情
-	function borrowDedails(data) {
-		rowId = data.id;
+	function details(data) {
 		_openNewWindows({
-			url: "../../tpl/licenceManageBorrow/licenceManageBorrowDetails.html", 
+			url: systemCommonUtil.getUrl('FP2023062500003&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "licenceManageBorrowDetails",
 			area: ['90vw', '90vh'],
@@ -143,49 +137,29 @@ layui.config({
 	}
 
 	// 添加证照借用
-	$("body").on("click", "#addBorrowBean", function() {
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/licenceManageBorrow/licenceManageBorrowAdd.html", 
+			url: systemCommonUtil.getUrl('FP2023062500001', null),
 			title: "证照借用申请",
 			pageId: "licenceManageBorrowAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadBorrowTable();
+				loadTable();
 			}});
     });
 
-	// 搜索表单
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			table.reloadData("borrowTable", {page: {curr: 1}, where: getTableParams()});
-		}
-		return false;
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
 	});
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
 
-	// 刷新证照借用列表
-    $("body").on("click", "#reloadBorrowTable", function() {
-    	loadBorrowTable();
-    });
-    
-    // 刷新证照借用列表数据
-    function loadBorrowTable(){
-    	table.reloadData("borrowTable", {where: getTableParams()});
-    }
-    
-    function getTableParams() {
-    	var startTime = "", endTime = "";
-		if (!isNull($("#createTime").val())) {
-    		startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
-    		endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
-    	}
-    	return {
-    		state: $("#state").val(),
-    		startTime: startTime,
-    		endTime: endTime
-    	};
-    }
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
     
     exports('licenceManageBorrowList', {});
 });

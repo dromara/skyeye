@@ -245,17 +245,6 @@ layui.config({
 			resetData(tableDataList);
 			$.each(tableDataList, function (i, item) {
 				item.orderBy = i + 1;
-				if (item.showType == showType[2].id) {
-					// 下拉框时，选择的数据源信息
-					var dataFrom = JSON.parse($(`#dataFrom${item.id}`).attr('data'));
-					if (!isNull(dataFrom.dataType)) {
-						item.dataType = dataFrom.dataType;
-						item.defaultData = dataFrom.defaultData;
-						item.objectId = dataFrom.objectId;
-						item.businessApi = dataFrom.businessApi;
-					}
-				}
-				item.require = dataShowType.getData(`require${item.id}`);
 				delete item["LAY_TABLE_INDEX"];
 				delete item["id"];
 			});
@@ -354,6 +343,17 @@ layui.config({
 	function resetData(tableDataList) {
 		$.each(tableDataList, function (i, item) {
 			item.align = $(`#align${item.id}`).val();
+			item.require = dataShowType.getData(`require${item.id}`);
+			if (item.showType == showType[2].id) {
+				// 下拉框时，选择的数据源信息
+				var dataFrom = JSON.parse($(`#dataFrom${item.id}`).attr('data'));
+				if (!isNull(dataFrom.dataType)) {
+					item.dataType = dataFrom.dataType;
+					item.defaultData = dataFrom.defaultData;
+					item.objectId = dataFrom.objectId;
+					item.businessApi = dataFrom.businessApi;
+				}
+			}
 		});
 	}
 
