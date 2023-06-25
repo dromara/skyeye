@@ -1,6 +1,4 @@
 
-var rowId = "";
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -12,55 +10,41 @@ layui.config({
 		form = layui.form,
 		table = layui.table;
 
-	showList();
 	// 我借用中的证照列表
-	function showList(){
-		table.render({
-		    id: 'messageTable',
-		    elem: '#messageTable',
-		    method: 'post',
-		    url: flowableBasePath + 'myhasmation003',
-		    where: getTableParams(),
-		    even: true,
-		    page: true,
-		    limits: getLimits(),
-	    	limit: getLimit(),
-		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-				{ field: 'licenceName', title: '证照名称', align: 'left', width: 120 },
-				{ field: 'borrowName', title: '领用人', align: 'left', width: 80 },
-				{ field: 'licenceAdmin', title: '管理员', align: 'left', width: 80 },
-		    ]],
-		    done: function(json) {
-		    	matchingLanguage();
-		    }
-		});
-	}
-
-    $("body").on("click", "#reloadmessageTable", function() {
-    	loadTable();
-    });
-	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			refreshTable();
+	table.render({
+		id: 'messageTable',
+		elem: '#messageTable',
+		method: 'post',
+		url: sysMainMation.admBasePath + 'queryMyRevertLicencePageList',
+		where: getTableParams(),
+		even: true,
+		page: true,
+		limits: getLimits(),
+		limit: getLimit(),
+		cols: [[
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+			{ field: 'name', title: '证照名称', align: 'left', width: 140 },
+			{ field: 'licenceNum', title: '证照编号', align: 'left', width: 160 },
+			{ field: 'licenceAdmin', title: '管理员', align: 'left', width: 120, templet: function(d) {
+				return isNull(d.licenceAdminMation) ? '' : d.licenceAdminMation.name;
+			}},
+		]],
+		done: function(json) {
+			matchingLanguage();
 		}
-		return false;
 	});
 
-    function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
-    }
-
-	function refreshTable(){
-		table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+	form.render();
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
+	});
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
 	}
-    
-    function getTableParams() {
-    	return {
-			licenceName: $("#licenceName").val()
-    	};
-    }
+
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
     
     exports('myLicenceManagement', {});
 });
