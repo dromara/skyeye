@@ -28,8 +28,8 @@ layui.config({
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'oddNumber', title: '单号', width: 200, align: 'center', templet: function (d) {
-					return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
-				}},
+				return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+			}},
 			{ field: 'title', title: '标题', width: 300 },
 			{ field: 'processInstanceId', title: '流程ID', width: 80, align: 'center', templet: function (d) {
 				return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
