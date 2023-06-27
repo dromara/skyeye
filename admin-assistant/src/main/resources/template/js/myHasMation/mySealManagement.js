@@ -15,7 +15,7 @@ layui.config({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-		url: flowableBasePath + 'myhasmation002',
+		url: sysMainMation.admBasePath + 'queryMyRevertSealPageList',
 		where: getTableParams(),
 		even: true,
 		page: true,
@@ -23,39 +23,30 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'sealName', title: '印章名称', align: 'left', width: 120 },
-			{ field: 'borrowName', title: '领用人', align: 'left', width: 80 },
-			{ field: 'sealAdmin', title: '管理员', align: 'left', width: 80 },
+			{ field: 'name', title: '印章名称', align: 'left', width: 150 },
+			{ field: 'licenceAdmin', title: '管理员', align: 'left', width: 120, templet: function(d) {
+				return isNull(d.licenceAdminMation) ? '' : d.licenceAdminMation.name;
+			}},
 		]],
 		done: function(json) {
 			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入印章名称", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 		}
 	});
 
-    $("body").on("click", "#reloadmessageTable", function() {
-    	loadTable();
-    });
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			refreshTable();
-		}
-		return false;
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
 	});
-
-    function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
-    }
-
-	function refreshTable(){
-		table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
 	}
-    
-    function getTableParams() {
-    	return {
-			sealName: $("#sealName").val()
-    	};
-    }
+
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
     
     exports('mySealManagement', {});
 });
