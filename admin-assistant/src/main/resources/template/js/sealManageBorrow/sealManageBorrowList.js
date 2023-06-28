@@ -26,7 +26,6 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'oddNumber', title: '单号', width: 200, align: 'center', templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 			}},
