@@ -59,6 +59,7 @@ var dataTypeList = [
 	{id: 29, name: "ERP商品规格图片"},
 	{id: 30, name: "附件"},
 	{id: 31, name: "行政-会议室"},
+	{id: 32, name: "行政-车辆"},
 ];
 
 //系统cookies从哪里获取， true：从用户登陆获取；false：跨域获取
