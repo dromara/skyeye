@@ -1,20 +1,12 @@
 {
-    "vehicleManageUse": {"name": "用车申请", "key": "com.skyeye.eve.vehicle.service.impl.VehicleApplyUseServiceImpl"},
-
-    "sealManageRevert": {"name": "印章归还", "key": "com.skyeye.eve.seal.service.impl.SealApplyRevertServiceImpl"},
-    "sealManageBorrow": {"name": "印章借用", "key": "com.skyeye.eve.seal.service.impl.SealApplyBorrowServiceImpl"},
-
     "putIsSalesReturns": {"name": "销售退货单申请", "key": "com.skyeye.seal.service.impl.SalesReturnsServiceImpl"},
     "outIsSalesOutlet": {"name": "销售出库单申请", "key": "com.skyeye.seal.service.impl.SalesOutLetServiceImpl"},
     "outchaseOrder": {"name": "销售订单申请", "key": "com.skyeye.seal.service.impl.SalesOrderServiceImpl"},
-
     "putIsRetailReturns": {"name": "零售退货单申请", "key": "com.skyeye.retail.service.impl.RetailReturnsServiceImpl"},
     "outIsRetail": {"name": "零售出库单申请", "key": "com.skyeye.retail.service.impl.RetailOutLetServiceImpl"},
-
     "outIsPurchaseReturns": {"name": "采购退货单申请", "key": "com.skyeye.purchase.service.impl.PurchaseReturnsServiceImpl"},
     "putIsPurchase": {"name": "采购入库单申请", "key": "com.skyeye.purchase.service.impl.PurchasePutServiceImpl"},
     "purchaseOrder": {"name": "采购订单申请", "key": "com.skyeye.purchase.service.impl.PurchaseOrderServiceImpl"},
-
     "putIsOthers": {"name": "其他入库单申请", "key": "com.skyeye.other.service.impl.OtherWareHousServiceImpl"},
     "outIsOthers": {"name": "其他出库单申请", "key": "com.skyeye.other.service.impl.OtherOutLetsServiceImpl"},
     "splitListOrder": {"name": "拆分订单", "key": "com.skyeye.other.service.impl.SplitListServiceImpl"},
@@ -35,26 +27,26 @@
     "proFile": {"name": "项目文档审核", "key": "com.skyeye.service.impl.ProFileServiceImpl"},
     "proCostExpense": {"name": "项目费用报销审核", "key": "com.skyeye.service.impl.ProCostExpenseServiceImpl"},
 
-    "licenceManageRevert": {"name": "证照归还", "key": "com.skyeye.eve.licence.service.impl.LicenceApplyRevertServiceImpl"},
-    "licenceManageBorrow": {"name": "证照借用", "key": "com.skyeye.eve.licence.service.impl.LicenceApplyBorrowServiceImpl"},
-
     "crmCustomer": {"name": "客户信息", "key": "com.skyeye.customer.service.impl.CustomerServiceImpl"},
     "crmOpportUnity": {"name": "商机审核一阶段", "key": "com.skyeye.opportunity.service.impl.CrmOpportunityServiceImpl"},
     "myCrmContract": {"name": "合同审批", "key": "com.skyeye.contract.service.impl.CrmContractServiceImpl"},
 
-    "conFerenceRoomReserve": {"name": "会议室预定", "key": "com.skyeye.eve.conference.service.impl.ConferenceRoomReserveServiceImpl"},
-
-    "checkWorkOvertime": {"name": "加班申请", "key": "com.skyeye.eve.service.impl.CheckWorkOvertimeServiceImpl"},
-    "checkWorkLeave": {"name": "请假申请", "key": "com.skyeye.eve.service.impl.CheckWorkLeaveServiceImpl"},
-    "checkWorkCancelLeave": {"name": "销假申请", "key": "com.skyeye.eve.service.impl.CheckWorkCancelLeaveServiceImpl"},
-    "checkWorkBusinessTrip": {"name": "出差申请", "key": "com.skyeye.eve.service.impl.CheckWorkBusinessTripServiceImpl"},
+    "checkWorkOvertime": {"name": "加班申请", "key": "com.skyeye.overtime.service.impl.OvertimeServiceImpl"},
+    "checkWorkLeave": {"name": "请假申请", "key": "com.skyeye.leave.service.impl.LeaveServiceImpl"},
+    "checkWorkCancelLeave": {"name": "销假申请", "key": "com.skyeye.cancleleave.service.impl.CancelLeaveServiceImpl"},
+    "checkWorkBusinessTrip": {"name": "出差申请", "key": "com.skyeye.trip.service.impl.BusinessTripServiceImpl"},
 
     "assetManageUse": {"name": "资产领用", "key": "com.skyeye.eve.assets.service.impl.AssetUseServiceImpl"},
     "assetManageReturn": {"name": "资产归还", "key": "com.skyeye.eve.assets.service.impl.AssetReturnServiceImpl"},
     "assetManagePurchase": {"name": "资产采购", "key": "com.skyeye.eve.assets.service.impl.AssetPurchaseServiceImpl"},
-
     "assetArticlesUse": {"name": "用品领用", "key": "com.skyeye.eve.articles.service.impl.ArticlesUseServiceImpl"},
     "assetArticlesPurchase": {"name": "用品采购", "key": "com.skyeye.eve.articles.service.impl.ArticlesPurchaseServiceImpl"},
+    "licenceManageRevert": {"name": "证照归还", "key": "com.skyeye.eve.licence.service.impl.LicenceApplyRevertServiceImpl"},
+    "licenceManageBorrow": {"name": "证照借用", "key": "com.skyeye.eve.licence.service.impl.LicenceApplyBorrowServiceImpl"},
+    "vehicleManageUse": {"name": "用车申请", "key": "com.skyeye.eve.vehicle.service.impl.VehicleApplyUseServiceImpl"},
+    "sealManageRevert": {"name": "印章归还", "key": "com.skyeye.eve.seal.service.impl.SealApplyRevertServiceImpl"},
+    "sealManageBorrow": {"name": "印章借用", "key": "com.skyeye.eve.seal.service.impl.SealApplyBorrowServiceImpl"},
+    "conFerenceRoomReserve": {"name": "会议室预定", "key": "com.skyeye.eve.conference.service.impl.ConferenceRoomReserveServiceImpl"},
 
     "incomeOrder": {"name": "财务明细账", "key": "com.skyeye.order.service.impl.IncomeOrderServiceImpl"},
 
@@ -64,9 +56,7 @@
     "bossInterviewJobTransfer": {"name": "岗位调动申请", "key": "com.skyeye.jobtransfer.service.impl.JobTransferServiceImpl"},
 
     "userInfo": {"name": "用户信息", "key": "com.skyeye.personnel.service.impl.SysEveUserServiceImpl"},
-
     "dictData": {"name": "数据字典", "key": "com.skyeye.eve.service.impl.SysDictDataServiceImpl"},
-
     "contacts": {"name": "联系人", "key": "com.skyeye.contacts.service.impl.ContactsServiceImpl"},
     "enclosure": {"name": "附件", "key": "com.skyeye.enclosure.service.impl.SysEnclosureServiceImpl"}
 }
