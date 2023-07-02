@@ -84,6 +84,7 @@
 
     "assetReportState": {"name": "资产明细状态", "className": "skyeye-adm#com.skyeye.eve.assets.classenum.AssetReportState"},
     "conferenceState": {"name": "会议室状态", "className": "skyeye-adm#com.skyeye.eve.conference.classenum.ConferenceState"},
-    "vehicleState": {"name": "车辆状态", "className": "skyeye-adm#com.skyeye.eve.vehicle.classenum.VehicleState"}
+    "vehicleState": {"name": "车辆状态", "className": "skyeye-adm#com.skyeye.eve.vehicle.classenum.VehicleState"},
+    "maintenanceType": {"name": "车辆维修类型", "className": "skyeye-adm#com.skyeye.eve.vehicle.classenum.MaintenanceType"}
 
 }

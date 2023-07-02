@@ -3,19 +3,6 @@
 var adminAssistantUtil = {
 
     /**
-     * 车辆管理---查询所有的车牌号用于下拉选择框
-     *
-     * @param callback 回执函数
-     */
-    queryAllVehicleList: function (callback) {
-        AjaxPostUtil.request({url: flowableBasePath + "vehicle010", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(typeof(callback) == "function") {
-                callback(json);
-            }
-        }, async: false});
-    },
-
-    /**
      * 资产选择页面---组件管理使用
      *
      * @param callback 回调函数
