@@ -132,11 +132,9 @@ layui.config({
 			winui.window.msg("请选择资产", {icon: 2, time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "queryAssetListByIds", params: {ids: selectedData.toString()}, type: 'json', method: "POST", callback: function (json) {
-			parent.adminAssistantUtil.checkAssetMation = [].concat(json.rows);
-			parent.layer.close(index);
-			parent.refreshCode = '0';
-		}});
+		parent.adminAssistantUtil.checkAssetMation = [].concat(selectedData);
+		parent.layer.close(index);
+		parent.refreshCode = '0';
 	});
 
 	form.render();
