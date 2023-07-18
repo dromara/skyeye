@@ -7,49 +7,6 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-	<div class="txtcenter" style="margin: 0 auto; padding-top: 10px;">
-	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
-	        <div class="layui-form-item">
-	            <div class="layui-inline">
-	            	<!-- <label class="layui-form-label">班次</label>
-	                <div class="layui-input-inline">
-	                    <select lay-filter="timeId" lay-search="" id="timeId">
-	                    </select>
-	                </div> -->
-					<label class="layui-form-label">时间</label>
-					<div class="layui-input-inline">
-						<input type="text" id="checkTime" name="checkTime" placeholder="请选择时间段" class="layui-input" />
-					</div>
-	                <label class="layui-form-label">公司</label>
-	                <div class="layui-input-inline">
-	                    <select lay-filter="companyList" lay-search="" id="companyList">
-	                    </select>
-	                </div>
-	                <label class="layui-form-label">部门</label>
-	                <div class="layui-input-inline">
-	                    <select lay-filter="departmentList" lay-search="" id="departmentList">
-	                    </select>
-	                </div>
-	                <label class="layui-form-label">职位</label>
-	                <div class="layui-input-inline">
-	                    <select lay-filter="jobList" lay-search="" id="jobList">
-	                    </select>
-	                </div>
-	                <label class="layui-form-label">姓名</label>
-	                <div class="layui-input-inline">
-	                    <input type="text" id="userName" name="userName" placeholder="请输入姓名" class="layui-input" />
-	                </div>
-	                <button class="layui-btn list-form-search" type="button" id="formSearch"><language showName="com.skyeye.search2"></language></button>
-	            </div>
-	        </div>
-	    </form>
-	</div>
-    <div class="winui-toolbar">
-        <div class="winui-tool">
-            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-            <button id="download" class="winui-toolbtn" type="button" auth="1563415739069"><i class="fa fa-download" aria-hidden="true"></i>导出考勤报表</button>
-        </div>
-    </div>
 	<div class="layui-col-xs12" style="padding: 0px 15px; font-size: 12px; color: grey; float: left;">
 		应出勤：选中时间段内除去节假日后的实际应上班天数；<br/>
 		全勤：上班和下班都打了卡；<br/>
@@ -58,7 +15,13 @@
 		迟到：超过上班的打卡时间才打卡；<br/>
 		早退：还没到下班的打卡时间就打卡；<br/>
 		漏签：早卡和晚卡两个当中缺少一个的；
+	</div>
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+        </div>
     </div>
+
     <div style="margin: auto 10px; float: left; width: calc(100% - 20px);">
     	<form class="layui-form" action="">
 			<div class="layui-input-block" style="height: 35px;">
@@ -70,7 +33,7 @@
 		<div id="tableList">
 			<table id="messageTable" lay-filter="messageTable"></table>
 		</div>
-		<div id="echartsPie" style="width: 1000px;height:600px;margin:0 auto;overflow-x:auto"></div>
+		<div id="echartsPie" style="width: 1000px; height: 600px; margin:0 auto; overflow-x: auto"></div>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>

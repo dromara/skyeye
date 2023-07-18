@@ -149,15 +149,6 @@ layui.config({
 	
 	form.render();
 	
-	// 个人考勤情况导出
-    $("body").on("click", "#download", function() {
-        postDownLoadFile({
-            url : flowableBasePath + 'checkwork017',
-            params: getTableParams(),
-            method : 'post'
-        });
-    });
-	
 	// 搜索我的考勤统计
 	$("body").on("click", "#searchForm", function() {
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});

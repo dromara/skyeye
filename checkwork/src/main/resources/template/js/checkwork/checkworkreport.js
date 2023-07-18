@@ -12,11 +12,10 @@ layui.config({
     window: 'js/winui.window',
     echarts: '../echarts/echarts',
     echartsTheme: '../echarts/echartsTheme'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate', 'echarts'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form', 'echarts'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		laydate = layui.laydate,
 		table = layui.table;
 	var selTemplate = getFileContent('tpl/template/select-option.tpl');
 	
@@ -37,139 +36,91 @@ layui.config({
        }
     });
 	
-	//初始化统计时间
-	var day = getTodayDay();
-	endTime = getYesterdayYMDFormatDate();//结束日期为今天的前一天
-	if(day === "1" || day == 1){//如果当前为本月一号，则查询上个月的
-		startTime = getTOneYMDFormatDate();//开始日期为上个月一号
-	} else {
-		startTime = getOneYMDFormatDate();//开始日期为本月一号
-	}
-	
-	//'统计表'页面的选取时间段表格
-	laydate.render({
-		elem: '#checkTime', //指定元素
-		max: getYesterdayYMDFormatDate(),// 设置最大可选的日期
-		range: '~',
-		value: startTime + " ~ " + endTime,//初始化统计日期
-		done: function(value, date, endDate){
-			if(isNull(value)){
-				startTime = "";
-				endTime = "";
-			} else {
-				startTime = value.split("~")[0].trim();
-				endTime = value.split("~")[1].trim();
-			}
+	table.render({
+		id: 'messageTable',
+		elem: '#messageTable',
+		method: 'post',
+		url: sysMainMation.checkworkBasePath + 'checkwork015',
+		where: getTableParams(),
+		even: true,
+		page: true,
+		limits: getLimits(),
+		limit: getLimit(),
+		cols: [[
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+			{ field: 'userId', title: 'ID', width: 50,style:'display:none;'},
+			{ field: 'companyName', title: '公司', align: 'left', width: 200 },
+			{ field: 'departmentName', title: '部门', align: 'left', width: 120 },
+			{ field: 'jobName', title: '职位', align: 'left', width: 120 },
+			{ field: 'userName', title: '姓名', align: 'left', width: 80 },
+			{ field: 'shouldTime', title: '应出勤（次）', align: 'center', width: 100 },
+			{ field: 'fullTime', title: '全勤（次）', align: 'center', width: 100, templet: function (d) {
+				if(d.fullTime != '0'){
+					return "<a class='checkwork-a'><span class='state-up' lay-event='fullTime'>" + d.fullTime + "</span></a>";
+				} else {
+					return d.fullTime;
+				}
+			}},
+			{ field: 'absenteeism', title: '缺勤（次）', align: 'center', width: 100, templet: function (d) {
+				if(d.absenteeism != '0'){
+					return "<a class='checkwork-a'><span class='state-down' lay-event='absenteeism'>" + d.absenteeism + "</span></a>";
+				} else {
+					return d.absenteeism;
+				}
+			}},
+			{ field: 'lackTime', title: '工时不足（次）', align: 'center', width: 100, templet: function (d) {
+				if(d.lackTime != '0'){
+					return "<a class='checkwork-a'><span class='state-down' lay-event='lackTime'>" + d.lackTime + "</span></a>";
+				} else {
+					return d.lackTime;
+				}
+			}},
+			{ field: 'late', title: '迟到（次）', align: 'center', width: 100, templet: function (d) {
+				if(d.late != '0'){
+					return "<a class='checkwork-a'><span class='state-down' lay-event='late'>" + d.late + "</span></a>";
+				} else {
+					return d.late;
+				}
+			}},
+			{ field: 'leaveEarly', title: '早退（次）', align: 'center', width: 100, templet: function (d) {
+				if(d.leaveEarly != '0'){
+					return "<a class='checkwork-a'><span class='state-down' lay-event='leaveEarly'>" + d.leaveEarly + "</span></a>";
+				} else {
+					return d.leaveEarly;
+				}
+			}},
+			{ field: 'missing', title: '漏签（次）', align: 'center', width: 100, templet: function (d) {
+				if(d.missing != '0'){
+					return "<a class='checkwork-a'><span class='state-down' lay-event='missing'>" + d.missing + "</span></a>";
+				} else {
+					return d.missing;
+				}
+			}}
+			]
+		],
+		done: function(json) {
+			matchingLanguage();
+			$('table.layui-table thead tr th:eq(1)').addClass('layui-hide');
 		}
 	});
-	
-	// 加载考勤班次
-	/*showGrid({
-	 	id: "timeId",
-	 	url: sysMainMation.checkworkBasePath + "queryEnableCheckWorkTimeList",
-	 	params: {},
-	 	method: 'GET',
-	 	pagination: false,
-	 	template: selTemplate,
-	 	ajaxSendLoadBefore: function(hdb, json){
-	 		$.each(json.rows, function(i, item) {
-	 			item.name = item.title + ' [' + item.startTime + ' ~ ' + item.endTime + ']';
-	 		});
-	 	},
-	 	ajaxSendAfter:function (json) {
-	 		initCompany();
-	 	}
-    });*/
-	initCompany();
-	
-	function initTable(){
-		$("#title").text(startTime + "至" + endTime + " 考勤情况统计");
-		table.render({
-			id: 'messageTable',
-			elem: '#messageTable',
-			method: 'post',
-			url: flowableBasePath + 'checkwork015',
-			where: getTableParams(),
-			even: true,
-			page: true,
-			limits: [10, 20, 30, 40, 50, 100],
-			limit: 10,
-			cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        {field: 'userId', title: 'ID', width: 50,style:'display:none;'},
-		        { field: 'companyName', title: '公司', align: 'left', width: 200 },
-		        { field: 'departmentName', title: '部门', align: 'left', width: 120 },
-		        { field: 'jobName', title: '职位', align: 'left', width: 120 },
-		        { field: 'userName', title: '姓名', align: 'left', width: 80 },
-		        { field: 'shouldTime', title: '应出勤（次）', align: 'center', width: 100 },
-		        { field: 'fullTime', title: '全勤（次）', align: 'center', width: 100, templet: function (d) {
-		        	if(d.fullTime != '0'){
-		        		return "<a class='checkwork-a'><span class='state-up' lay-event='fullTime'>" + d.fullTime + "</span></a>";
-		        	} else {
-		        		return d.fullTime;
-		        	}
-		        }},
-		        { field: 'absenteeism', title: '缺勤（次）', align: 'center', width: 100, templet: function (d) {
-		        	if(d.absenteeism != '0'){
-		        		return "<a class='checkwork-a'><span class='state-down' lay-event='absenteeism'>" + d.absenteeism + "</span></a>";
-		        	} else {
-		        		return d.absenteeism;
-		        	}
-		        }},
-		        { field: 'lackTime', title: '工时不足（次）', align: 'center', width: 100, templet: function (d) {
-		        	if(d.lackTime != '0'){
-		        		return "<a class='checkwork-a'><span class='state-down' lay-event='lackTime'>" + d.lackTime + "</span></a>";
-		        	} else {
-		        		return d.lackTime;
-		        	}
-		        }},
-		        { field: 'late', title: '迟到（次）', align: 'center', width: 100, templet: function (d) {
-		        	if(d.late != '0'){
-		        		return "<a class='checkwork-a'><span class='state-down' lay-event='late'>" + d.late + "</span></a>";
-		        	} else {
-		        		return d.late;
-		        	}
-		        }},
-		        { field: 'leaveEarly', title: '早退（次）', align: 'center', width: 100, templet: function (d) {
-		        	if(d.leaveEarly != '0'){
-		        		return "<a class='checkwork-a'><span class='state-down' lay-event='leaveEarly'>" + d.leaveEarly + "</span></a>";
-		        	} else {
-		        		return d.leaveEarly;
-		        	}
-		        }},
-		        { field: 'missing', title: '漏签（次）', align: 'center', width: 100, templet: function (d) {
-		        	if(d.missing != '0'){
-		        		return "<a class='checkwork-a'><span class='state-down' lay-event='missing'>" + d.missing + "</span></a>";
-		        	} else {
-		        		return d.missing;
-		        	}
-		        }}
-		        ]
-			],
-	        done: function(json) {
-	        	matchingLanguage();
-	        	$('table.layui-table thead tr th:eq(1)').addClass('layui-hide');
-	        }
-		});
-		table.on('tool(messageTable)', function (obj) {
-			var data = obj.data;
-			var layEvent = obj.event;
-			if (layEvent === 'fullTime') { 
-				detail(data, '1');
-			} else if (layEvent === 'absenteeism'){
-				detail(data, '2');
-			} else if (layEvent === 'lackTime'){
-				detail(data, '3');
-			} else if (layEvent === 'late'){
-				detail(data, '4');
-			} else if (layEvent === 'leaveEarly'){
-				detail(data, '5');
-			} else if (layEvent === 'missing'){
-				detail(data, '6');
-			}
-		});
-	}
-	
+	table.on('tool(messageTable)', function (obj) {
+		var data = obj.data;
+		var layEvent = obj.event;
+		if (layEvent === 'fullTime') {
+			detail(data, '1');
+		} else if (layEvent === 'absenteeism'){
+			detail(data, '2');
+		} else if (layEvent === 'lackTime'){
+			detail(data, '3');
+		} else if (layEvent === 'late'){
+			detail(data, '4');
+		} else if (layEvent === 'leaveEarly'){
+			detail(data, '5');
+		} else if (layEvent === 'missing'){
+			detail(data, '6');
+		}
+	});
+
 	function detail(data, detailType){
 		var userName = data.userName;
 		var title = "";
@@ -273,15 +224,6 @@ layui.config({
 		}
     });
 	
-	//导出
-	$("body").on("click", "#download", function() {
-		postDownLoadFile({
-			url : flowableBasePath + 'checkwork020',
-			params: getTableParams(),
-			method : 'post'
-		});
-    });
-    
     function loadTable() {
     	if(isNull($("#checkTime").val())) {//一定要记得，当createTime为空时
     		winui.window.msg("请选择时间段", {icon: 2, time: 2000});

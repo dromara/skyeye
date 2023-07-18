@@ -35,6 +35,7 @@
     "checkWorkLeave": {"name": "请假申请", "key": "com.skyeye.leave.service.impl.LeaveServiceImpl"},
     "checkWorkCancelLeave": {"name": "销假申请", "key": "com.skyeye.cancleleave.service.impl.CancelLeaveServiceImpl"},
     "checkWorkBusinessTrip": {"name": "出差申请", "key": "com.skyeye.trip.service.impl.BusinessTripServiceImpl"},
+    "checkWorkAppeal": {"name": "考勤申诉", "key": "com.skyeye.appeal.service.impl.AppealServiceImpl"},
 
     "assetManageUse": {"name": "资产领用", "key": "com.skyeye.eve.assets.service.impl.AssetUseServiceImpl"},
     "assetManageReturn": {"name": "资产归还", "key": "com.skyeye.eve.assets.service.impl.AssetReturnServiceImpl"},
