@@ -11,17 +11,21 @@ layui.config({
 
     // 获取当前登陆人的考勤班次
     checkWorkUtil.getCurrentUserCheckWorkTimeList(function (json) {
+        $.each(json.rows, function (i, item) {
+            item.typeName = skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("checkWorkTimeType", 'id', item.type, 'name');
+        });
+
         $("#showBox").html(getDataUseHandlebars($("#showTemplate").html(), json));
         $.each(json.rows, function (i, item) {
             var type = item.type;
             if(type == 1){
-                checkWorkUtil.resetSingleBreak(item.timeId);
+                checkWorkUtil.resetSingleBreak(item.id);
             } else if (type == 2){
-                checkWorkUtil.resetWeekend(item.timeId);
+                checkWorkUtil.resetWeekend(item.id);
             } else if (type == 3){
-                checkWorkUtil.resetSingleAndDoubleBreak(item.timeId);
+                checkWorkUtil.resetSingleAndDoubleBreak(item.id);
             } else if (type == 4){
-                checkWorkUtil.resetCustomizeDay(item.days, item.timeId);
+                checkWorkUtil.resetCustomizeDay(item.checkWorkTimeWeekList, item.id);
             }
         });
     });

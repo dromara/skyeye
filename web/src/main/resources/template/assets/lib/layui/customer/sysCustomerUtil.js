@@ -112,9 +112,9 @@ var checkWorkUtil = {
             return;
         }
         $.each(days, function (i, item) {
-            var _this = $("span[value='" + item.day + "']");
+            var _this = $("span[value='" + item.weekNumber + "']");
             if (!isNull(id)) {
-                _this = $("#" + id).find("span[value='" + item.day + "']");
+                _this = $("#" + id).find("span[value='" + item.weekNumber + "']");
             }
             var clas = getArrIndexOfPointStr(checkWorkUtil.checkWorkTimeColor, _this.attr("class"));
             _this.removeClass(clas);
