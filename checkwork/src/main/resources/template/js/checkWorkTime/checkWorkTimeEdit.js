@@ -23,13 +23,13 @@ layui.config({
 		 	ajaxSendAfter:function (json) {
 		 		type = json.bean.type;
 		 		if(type == 1){
-		    		resetSingleBreak();
+					checkWorkUtil.resetSingleBreak();
 		    	} else if (type == 2){
-		    		resetWeekend();
+					checkWorkUtil.resetWeekend();
 		    	} else if (type == 3){
-		    		resetSingleAndDoubleBreak();
+					checkWorkUtil.resetSingleAndDoubleBreak();
 		    	} else if (type == 4){
-		    		resetCustomizeDay(json.bean.days);
+					checkWorkUtil.resetCustomizeDay(json.bean.days);
 		    	}
 		 		$("input:radio[name=type][value=" + type + "]").attr("checked", true);
 		 		$("input:radio[name=state][value=" + json.bean.state + "]").attr("checked", true);
@@ -118,11 +118,11 @@ layui.config({
 		 		form.on('radio(type)', function (data) {
 		 			type = data.value;
 			    	if(type == 1){
-			    		resetSingleBreak();
+						checkWorkUtil.resetSingleBreak();
 			    	} else if (type == 2){
-			    		resetWeekend();
+						checkWorkUtil.resetWeekend();
 			    	} else if (type == 3){
-			    		resetSingleAndDoubleBreak();
+						checkWorkUtil.resetSingleAndDoubleBreak();
 			    	} else if (type == 4){
 			    		resetCustomize();
 			    	}

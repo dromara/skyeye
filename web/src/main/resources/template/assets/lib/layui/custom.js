@@ -22,10 +22,8 @@ var customerJS = {
 	"publicKeyCode": "../../assets/lib/layui/customer/publicKeyCode.js", // 快捷键
 	"sysSupplierUtil": "../../assets/lib/layui/customer/sysSupplierUtil.js", // 供应商相关工具
 	"sysMemberUtil": "../../assets/lib/layui/customer/sysMemberUtil.js", // 会员相关工具
-	"bossUtil": "../../assets/lib/layui/customer/bossUtil.js", // 招聘模块相关工具
 	"shopUtil": "../../assets/lib/layui/customer/shopUtil.js", // 商城模块相关工具
 	"indexMenu": "../../assets/lib/layui/customer/indexMenu.js", // 菜单按钮模块相关工具
-	"proUtil": "../../assets/lib/layui/customer/proUtil.js", // 项目管理模块相关工具
 	"adminAssistantUtil": "../../assets/lib/layui/customer/adminAssistantUtil.js", // 行政管理模块相关工具
 	"codeDocUtil": "../../assets/lib/layui/customer/codeDocUtil.js", // 代码生成器相关工具类
 	"organizationUtil": "../../assets/lib/layui/customer/organizationUtil.js", // 组织机构相关工具类
@@ -765,6 +763,9 @@ function getStaffStateName(d) {
  * @returns {boolean}
  */
 function judgeInPoingArr(array, key, value) {
+	if (isNull(array)) {
+		return false;
+	}
 	for(var i = 0; i < array.length; i++){
 		if(array[i][key] == value){
 			return true;
@@ -842,101 +843,6 @@ var stringManipulation = {
 		return str.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>');
 	}
 };
-
-////////////////////////////////////////考勤班次开始//////////////////////////////////////////
-var checkWorkTimeColor = ['layui-bg-gray', 'layui-bg-blue', 'layui-bg-orange'];
-// 类型为1初始化单休
-function resetSingleBreak(id){
-	var _box;
-	if(isNull(id)){
-		_box = $(".weekDay");
-	} else {
-		_box = $("#" + id + " .weekDay");
-	}
-	$.each(_box, function(i, item) {
-		var clas = getArrIndexOfPointStr(checkWorkTimeColor, $(item).attr("class"));
-		$(item).removeClass(clas);
-		if(i < 6){
-			$(item).addClass('layui-bg-blue');
-		} else {
-			$(item).addClass('layui-bg-gray');
-		}
-	});
-}
-
-// 类型为2初始化双休
-function resetWeekend(id){
-	var _box;
-	if(isNull(id)){
-		_box = $(".weekDay");
-	} else {
-		_box = $("#" + id + " .weekDay");
-	}
-	$.each(_box, function(i, item) {
-		var clas = getArrIndexOfPointStr(checkWorkTimeColor, $(item).attr("class"));
-		$(item).removeClass(clas);
-		if(i < 5){
-			$(item).addClass('layui-bg-blue');
-		} else {
-			$(item).addClass('layui-bg-gray');
-		}
-	});
-}
-
-// 类型为3初始化单双休
-function resetSingleAndDoubleBreak(id){
-	var _box;
-	if(isNull(id)){
-		_box = $(".weekDay");
-	} else {
-		_box = $("#" + id + " .weekDay");
-	}
-	$.each(_box, function(i, item) {
-		var clas = getArrIndexOfPointStr(checkWorkTimeColor, $(item).attr("class"));
-		$(item).removeClass(clas);
-		if(i < 5){
-			$(item).addClass('layui-bg-blue');
-		} else if (i == 5){
-			$(item).addClass('layui-bg-orange');
-		} else {
-			$(item).addClass('layui-bg-gray');
-		}
-	});
-}
-
-// 类型为4初始化自定休
-function resetCustomizeDay(days, id){
-	resetCustomize(id);
-	$.each(days, function(i, item) {
-		var _this = $("span[value='" + item.day + "']");
-		if (!isNull(id)){
-			_this = $("#" + id).find("span[value='" + item.day + "']");
-		}
-		var clas = getArrIndexOfPointStr(checkWorkTimeColor, _this.attr("class"));
-		_this.removeClass(clas);
-		if(item.type == 1){
-			_this.addClass('layui-bg-blue');
-		} else if (item.type == 2){
-			_this.addClass('layui-bg-orange');
-		}
-	});
-}
-
-// 类型为4初始化自定休
-function resetCustomize(id){
-	var _box;
-	if(isNull(id)){
-		_box = $(".weekDay");
-	} else {
-		_box = $("#" + id + " .weekDay");
-	}
-	$.each(_box, function(i, item) {
-		var clas = getArrIndexOfPointStr(checkWorkTimeColor, $(item).attr("class"));
-		$(item).removeClass(clas);
-		$(item).addClass('layui-bg-gray');
-	});
-}
-////////////////////////////////////////考勤班次结束//////////////////////////////////////////
 
 /**
  * 工作流审批状态显示颜色变更

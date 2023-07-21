@@ -28,7 +28,6 @@ layui.config({
 	authBtn('1597534860411');
 	
 	var checkTimeList = [];
-
 	// 获取当前登陆人的考勤班次
 	checkWorkUtil.getCurrentUserCheckWorkTimeList(function (json) {
 		$("#checkTime").html(getDataUseHandlebars($("#workTimeTemplate").html(), json));
@@ -53,17 +52,17 @@ layui.config({
     
     // 加载工作日
     function loadWorkDays(){
-		var workDayation = getInPoingArr(checkTimeList, "timeId", $("#checkTime").val());
+		var workDayation = getInPoingArr(checkTimeList, "id", $("#checkTime").val());
 		if(workDayation != null){
 			var type = workDayation.type;
 			if(type == 1){
-				resetSingleBreak();
+				checkWorkUtil.resetSingleBreak();
 			} else if (type == 2){
-				resetWeekend();
+				checkWorkUtil.resetWeekend();
 			} else if (type == 3){
-				resetSingleAndDoubleBreak();
+				checkWorkUtil.resetSingleAndDoubleBreak();
 			} else if (type == 4){
-				resetCustomizeDay(workDayation.days);
+				checkWorkUtil.resetCustomizeDay(workDayation.days);
 			}
 		}
     }
@@ -102,10 +101,14 @@ layui.config({
     }
     
     function loadThisMonthHis(callback, start){
-        AjaxPostUtil.request({url: flowableBasePath + "checkwork014", params: {monthMation: start._d.format("yyyy-MM"), timeId: $("#checkTime").val()}, type: 'json', callback: function (json) {
+		var params = {
+			monthMation: start._d.format("yyyy-MM"),
+			timeId: $("#checkTime").val()
+		};
+        AjaxPostUtil.request({url: sysMainMation.checkworkBasePath + "checkwork014", params: params, type: 'json', method: 'GET', callback: function (json) {
 			var event = [];
-			if (!isNull(json.rows)){
-				$.each(json.rows, function(i, item) {
+			if (!isNull(json.rows)) {
+				$.each(json.rows, function (i, item) {
 					event.push({
 						title: ($.inArray(item.type.toString(), topLeftDayType) > -1) ? item.title : item.title + ":" + item.clockIn,
 						start: item.start,
@@ -117,26 +120,30 @@ layui.config({
 						id: item.id,
 						className: item.className
 					});
-			   });
+				});
 			}
 			callback(event);
-			if(!checkWorkDescShow)
+			if (!checkWorkDescShow) {
 				initIsCheck();
+			}
         }});
     }
     
     form.render();
 	
 	// 判断显示打上班卡或者下班卡
-    function initIsCheck(callback) {
+    function initIsCheck(callBack) {
     	checkWorkDescShow = true;
-        AjaxPostUtil.request({url: flowableBasePath + "checkwork013", params: {timeId: $("#checkTime").val()}, type: 'json', callback: function (json) {
+		var params = {
+			timeId: $("#checkTime").val()
+		};
+        AjaxPostUtil.request({url: sysMainMation.checkworkBasePath + "checkwork013", params: params, type: 'json', method: 'GET', callback: function (json) {
 			clockOut = json.bean.clockOut;
 			dayType = json.bean.type;
 			var s = "";
-			if(json.bean.type == 1){
+			if (json.bean.type == 1) {
 				s = getTipStrByTimeId(json);
-			} else if (json.bean.type == 2){
+			} else if (json.bean.type == 2) {
 				s = getTipStrByOverTime(json);
 			}
 
@@ -155,24 +162,24 @@ layui.config({
 	 */
 	function showOrHideBtn(json){
 		// 判断今天是否在该考勤班次里（并且不是加班日），如果不在，则隐藏打卡按钮
-		var checkWorkTimeDays = getInPoingArr(checkTimeList, 'timeId', $("#checkTime").val(), 'days');
-		if(!judgeInPoingArr(checkWorkTimeDays, 'day', getThisWeekDay()) && json.bean.type == 1){
+		var checkWorkTimeDays = getInPoingArr(checkTimeList, 'id', $("#checkTime").val(), 'checkWorkTimeWeekList');
+		if (!judgeInPoingArr(checkWorkTimeDays, 'weekNumber', getThisWeekDay()) && json.bean.type == 1) {
 			$("#clockInBtn").hide();
 			$("#clockOutBtn").hide();
 		} else {
-			if(json.bean.isCheck == "1"){
+			if (json.bean.isCheck == 1) {
 				// 显示早卡按钮
 				$("#clockInBtn").show();
 				$("#clockOutBtn").hide();
-			} else if (json.bean.isCheck == '2'){
+			} else if (json.bean.isCheck == 2) {
 				// 显示晚卡按钮
 				$("#clockInBtn").hide();
 				$("#clockOutBtn").show();
-			} else if (json.bean.isCheck == '3'){
+			} else if (json.bean.isCheck == 3) {
 				// 不显示按钮
 				$("#clockInBtn").hide();
 				$("#clockOutBtn").hide();
-			} else if (json.bean.isCheck == '4'){
+			} else if (json.bean.isCheck == 4) {
 				// 不显示按钮
 				$("#clockInBtn").hide();
 				$("#clockOutBtn").hide();
@@ -236,7 +243,7 @@ layui.config({
 		if(dayType == 2){
 			timeId = "-";
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "checkwork001", params: {timeId: timeId}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.checkworkBasePath + "checkwork001", params: {timeId: timeId}, type: 'json', method: 'POST', callback: function (json) {
 			$("#clockInBtn").hide();
 			calendar.fullCalendar('refetchEvents');
 			winui.window.msg("上班打卡成功", {icon: 1, time: 2000});
@@ -261,7 +268,7 @@ layui.config({
 		if(dayType == 2){
 			timeId = "-";
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "checkwork002", params: {timeId: timeId}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.checkworkBasePath + "checkwork002", params: {timeId: timeId}, type: 'json', method: 'POST', callback: function (json) {
 			$("#clockOutBtn").hide();
 			calendar.fullCalendar('refetchEvents');
 			winui.window.msg("下班打卡成功", {icon: 1, time: 2000});

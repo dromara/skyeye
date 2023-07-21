@@ -49,29 +49,6 @@ var erpOrderUtil = {
     },
 
     /**
-     * 根据单据类型获取单据提交类型
-     *
-     * @param key 订单唯一标识符
-     * @returns {string} 1需要审核；2不需要审核
-     */
-    getSubmitTypeByKey: function (key) {
-        // 1需要审核；2不需要审核
-        var submitType = "";
-        AjaxPostUtil.request({url: flowableBasePath + "erpcommon004", params: {key: key}, method: "GET", type: 'json', callback: function(json) {
-            submitType = json.bean.needExamine;
-        }, async: false});
-
-        if (submitType == 1) {
-            $(".submitTypeIsOne").show();
-            $(".submitTypeIsTwo").hide();
-        } else if (submitType == 2) {
-            $(".submitTypeIsOne").hide();
-            $(".submitTypeIsTwo").show();
-        }
-        return submitType;
-    },
-
-    /**
      * 删除订单信息
      *
      * @param id 订单id

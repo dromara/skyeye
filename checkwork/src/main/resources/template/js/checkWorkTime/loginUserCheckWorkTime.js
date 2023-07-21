@@ -15,13 +15,13 @@ layui.config({
         $.each(json.rows, function (i, item) {
             var type = item.type;
             if(type == 1){
-                resetSingleBreak(item.timeId);
+                checkWorkUtil.resetSingleBreak(item.timeId);
             } else if (type == 2){
-                resetWeekend(item.timeId);
+                checkWorkUtil.resetWeekend(item.timeId);
             } else if (type == 3){
-                resetSingleAndDoubleBreak(item.timeId);
+                checkWorkUtil.resetSingleAndDoubleBreak(item.timeId);
             } else if (type == 4){
-                resetCustomizeDay(item.days, item.timeId);
+                checkWorkUtil.resetCustomizeDay(item.days, item.timeId);
             }
         });
     });
