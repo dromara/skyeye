@@ -11,14 +11,11 @@ var customerJS = {
 	"mailUtil": "../../assets/lib/layui/customer/mailUtil.js", // 通讯录工具函数
 	"systemDateUtil": "../../assets/lib/layui/customer/systemDateUtil.js", // 日期工具函数
 	"calculationUtil": "../../assets/lib/layui/customer/calculationUtil.js", // 加减乘除工具函数
-	"skyeyeEnclosure": "../../assets/lib/layui/customer/skyeyeEnclosure.js", // 附件工具函数
 	"ajaxPostUtil": "../../assets/lib/layui/customer/ajaxPostUtil.js", // ajax工具函数
 	"dsFormUtil": "../../assets/lib/layui/customer/skyeye/dsFormUtil.js", // 动态表单工具函数
 	"systemModelUtil": "../../assets/lib/layui/customer/systemModelUtil.js", // 系统编辑器模板工具函数
 	"ueEditorUtil": "../../assets/lib/layui/customer/ueEditorUtil.js", // ueEditor编辑器工具函数
 	"sysCustomerUtil": "../../assets/lib/layui/customer/sysCustomerUtil.js", // CRM相关的工具函数
-	"sysIfsUtil": "../../assets/lib/layui/customer/sysIfsUtil.js", // 财务相关的工具函数
-	"sysFileUtil": "../../assets/lib/layui/customer/sysFileUtil.js", // 系统文件相关处理工具
 	"publicKeyCode": "../../assets/lib/layui/customer/publicKeyCode.js", // 快捷键
 	"sysSupplierUtil": "../../assets/lib/layui/customer/sysSupplierUtil.js", // 供应商相关工具
 	"sysMemberUtil": "../../assets/lib/layui/customer/sysMemberUtil.js", // 会员相关工具
@@ -30,7 +27,6 @@ var customerJS = {
 	"threeUtil": "../../assets/lib/layui/customer/threeUtil.js", // 3D编辑器相关工具类
 	"reportModelTypeUtil": "../../assets/lib/layui/customer/reportModelTypeUtil.js", // 模型分类工具类
 	"schoolUtil": "../../assets/lib/layui/customer/skyeye/schoolUtil.js", // 学校模块工具类
-	"arrayUtil": "../../assets/lib/layui/customer/arrayUtil.js", // 集合工具类
 	"initTableChooseUtil": "../../assets/lib/layui/customer/tableUtil/initTableChooseUtil.js", // 加载表格选择的表格插件
 	"sysDictDataUtil": "../../assets/lib/layui/customer/skyeye/sysDictDataUtil.js", // 数据字典插件
 	"initTableSearchUtil": "../../assets/lib/layui/customer/tableUtil/initTableSearchUtil.js", // 表格高级查询插件
