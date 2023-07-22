@@ -6,7 +6,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
@@ -17,7 +16,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: flowableBasePath + 'checkwork018',
+	    url: sysMainMation.checkworkBasePath + 'checkwork018',
 	    where: params,
 	    even: true,
 	    page: true,
@@ -25,6 +24,7 @@ layui.config({
 	    limit: 8,
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+			{ field: 'createName', title: '姓名', align: 'center', width: 120 },
 	        { field: 'checkDate', title: '考勤日期', align: 'center', width: 120},
 	        { title: '星期几', align: 'center', width: 100, templet: function (d) {
 	        	return getMyDay(new Date(d.checkDate));
