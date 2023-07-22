@@ -10,8 +10,11 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
 	    	laydate = layui.laydate;
-	    
-	    var type = 1;
+
+		skyeyeClassEnumUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", '', form);
+		skyeyeClassEnumUtil.showEnumDataListByClassName("checkWorkTimeType", 'radio', "checkWorkTimeType", '', form);
+
+		var type = 1;
 	    	
 	    var startTime = laydate.render({
  			elem: '#startTime',
@@ -115,17 +118,17 @@ layui.config({
 			};
 		}
  		
- 		form.on('radio(type)', function (data) {
+ 		form.on('radio(checkWorkTimeTypeFilter)', function (data) {
  			type = data.value;
-	    	if(type == 1){
+			if (type == 1) {
 				checkWorkUtil.resetSingleBreak();
-	    	} else if (type == 2){
+			} else if (type == 2) {
 				checkWorkUtil.resetWeekend();
-	    	} else if (type == 3){
+			} else if (type == 3) {
 				checkWorkUtil.resetSingleAndDoubleBreak();
-	    	} else if (type == 4){
-	    		resetCustomize();
-	    	}
+			} else if (type == 4) {
+				checkWorkUtil.resetCustomize();
+			}
         });
 	    
         matchingLanguage();
@@ -133,21 +136,21 @@ layui.config({
  	    form.on('submit(formAddBean)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
  	        	var weekDay = getWeekDay();
- 	        	if(isNull(weekDay) || weekDay.length == 0){
- 	        		winui.window.msg('请选择工作日', {icon: 2, time: 2000});
- 	        		return false;
- 	        	}
+				if (isNull(weekDay) || weekDay.length == 0) {
+					winui.window.msg('请选择工作日', {icon: 2, time: 2000});
+					return false;
+				}
  	        	var params = {
- 	        		title: $("#title").val(),
+ 	        		name: $("#name").val(),
  	        		startTime: $("#startTime").val(),
  	        		endTime: $("#endTime").val(),
 					restStartTime: $("#restStartTime").val(),
 					restEndTime: $("#restEndTime").val(),
- 	        		type: $("input[name='type']:checked").val(),
- 	        		state: $("input[name='state']:checked").val(),
- 	        		weekDay: JSON.stringify(weekDay)
+ 	        		type: dataShowType.getData('checkWorkTimeType'),
+					enabled: dataShowType.getData('enabled'),
+					checkWorkTimeWeekList: JSON.stringify(weekDay)
  	        	};
- 	        	AjaxPostUtil.request({url: flowableBasePath + "checkworktime002", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: sysMainMation.checkworkBasePath + "writeCheckWorkTime", params: params, type: 'json', method: 'POST', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
  	        	}});
@@ -158,18 +161,18 @@ layui.config({
  	    // 自定义类型可以设置
  	    $("body").on("click", ".weekDay", function() {
  	    	if(type == 4){
-		    	var clas = getArrIndexOfPointStr(checkWorkTimeColor, $(this).attr("class"));
+		    	var clas = getArrIndexOfPointStr(checkWorkUtil.checkWorkTimeColor, $(this).attr("class"));
 		    	$(this).removeClass(clas);
 		    	$(this).addClass(getColor(clas));
  	    	}
 	    });
  	    
  	    function getColor(nowColor){
- 	    	var index = checkWorkTimeColor.indexOf(nowColor);
- 	    	if(index == (checkWorkTimeColor.length - 1)){
- 	    		return checkWorkTimeColor[0];
+ 	    	var index = checkWorkUtil.checkWorkTimeColor.indexOf(nowColor);
+ 	    	if(index == (checkWorkUtil.checkWorkTimeColor.length - 1)){
+ 	    		return checkWorkUtil.checkWorkTimeColor[0];
  	    	} else {
- 	    		return checkWorkTimeColor[index + 1];
+ 	    		return checkWorkUtil.checkWorkTimeColor[index + 1];
  	    	}
  	    }
 
@@ -191,7 +194,7 @@ layui.config({
  	    	var result = new Array();
  	    	for(var i = 0; i < 6; i++){
  	    		result.push({
- 	    			day: (i + 1),
+					weekNumber: (i + 1),
  	    			type: 1
  	    		});
  	    	}
@@ -203,7 +206,7 @@ layui.config({
  	    	var result = new Array();
  	    	for(var i = 0; i < 5; i++){
  	    		result.push({
- 	    			day: (i + 1),
+					weekNumber: (i + 1),
  	    			type: 1
  	    		});
  	    	}
@@ -215,12 +218,12 @@ layui.config({
  	    	var result = new Array();
  	    	for(var i = 0; i < 5; i++){
  	    		result.push({
- 	    			day: (i + 1),
+					weekNumber: (i + 1),
  	    			type: 1
  	    		});
  	    	}
  	    	result.push({
-    			day: 6,
+				weekNumber: 6,
     			type: 2
     		});
  	    	return result;
@@ -230,15 +233,15 @@ layui.config({
  	    function getCustomize(){
  	    	var result = new Array();
  	    	$.each($(".weekDay"), function(i, item) {
- 	    		var clas = getArrIndexOfPointStr(checkWorkTimeColor, $(item).attr("class"));
+ 	    		var clas = getArrIndexOfPointStr(checkWorkUtil.checkWorkTimeColor, $(item).attr("class"));
     			if('layui-bg-blue' == clas){
     				result.push({
-	 	    			day: $(item).attr("value"),
+						weekNumber: $(item).attr("value"),
 	 	    			type: 1
 	 	    		});
     			} else if ('layui-bg-orange' == clas){
     				result.push({
-	 	    			day: $(item).attr("value"),
+						weekNumber: $(item).attr("value"),
 	 	    			type: 2
 	 	    		});
     			}

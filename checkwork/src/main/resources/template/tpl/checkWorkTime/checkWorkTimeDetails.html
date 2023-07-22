@@ -16,46 +16,73 @@
 	<script type="text/html" id="beanTemplate">
 		{{#bean}}
 			<div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">基本信息</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
 		        <label class="layui-form-label">标题：</label>
 		        <div class="layui-input-block ver-center">
-		        	{{title}}
+		        	{{name}}
 		        </div>
 		    </div>
-		    <div class="layui-form-item layui-col-xs6">
-		        <label class="layui-form-label">工作时间段：</label>
-		        <div class="layui-input-block ver-center">
-		        	{{startTime}} ~ {{endTime}}
-		        </div>
-		    </div>
-		    <div class="layui-form-item layui-col-xs6">
-		        <label class="layui-form-label">作息时间段：</label>
-		        <div class="layui-input-block ver-center">
-		        	{{restStartTime}} ~ {{restEndTime}}
-		        </div>
-		    </div>
-		    <div class="layui-form-item layui-col-xs12">
-		        <label class="layui-form-label">类型：</label>
-		        <div class="layui-input-block ver-center">
-		            {{typeName}}
-		        </div>
-		    </div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">类型：</label>
+				<div class="layui-input-block ver-center">
+					{{typeName}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">状态：</label>
+				<div class="layui-input-block ver-center">
+					{{enabled}}
+				</div>
+			</div>
 			<div class="layui-form-item layui-col-xs12">
-		        <label class="layui-form-label">工作日：</label>
-		        <div class="layui-input-block ver-center">
-		            <span class="layui-badge layui-bg-blue weekDay" value="1">一</span>
-		            <span class="layui-badge layui-bg-blue weekDay" value="2">二</span>
-		            <span class="layui-badge layui-bg-blue weekDay" value="3">三</span>
-		            <span class="layui-badge layui-bg-blue weekDay" value="4">四</span>
-		            <span class="layui-badge layui-bg-blue weekDay" value="5">五</span>
-		            <span class="layui-badge layui-bg-blue weekDay" value="6">六</span>
-		            <span class="layui-badge layui-bg-gray weekDay" value="7">日</span><br>
-		            <div class="layui-form-mid layui-word-aux ver-center" style="padding-top: 8px !important">
-		            	<span class="layui-badge layui-bg-blue" style="height: 12px;"> </span>：每周的当天都工作；
-		            	<span class="layui-badge layui-bg-gray" style="height: 12px;"> </span>：每周的当天都休假；
-		            	<span class="layui-badge layui-bg-orange" style="height: 12px;"> </span>：单周上班，双周休假。
-		            </div>
-		        </div>
-		    </div>
+				<label class="layui-form-label">工作日：</label>
+				<div class="layui-input-block ver-center">
+					<span class="layui-badge layui-bg-blue weekDay" value="1">一</span>
+					<span class="layui-badge layui-bg-blue weekDay" value="2">二</span>
+					<span class="layui-badge layui-bg-blue weekDay" value="3">三</span>
+					<span class="layui-badge layui-bg-blue weekDay" value="4">四</span>
+					<span class="layui-badge layui-bg-blue weekDay" value="5">五</span>
+					<span class="layui-badge layui-bg-blue weekDay" value="6">六</span>
+					<span class="layui-badge layui-bg-gray weekDay" value="7">日</span><br>
+					<div class="layui-form-mid layui-word-aux ver-center" style="padding-top: 8px !important">
+						<span class="layui-badge layui-bg-blue" style="height: 12px;"> </span>：每周的当天都工作；
+						<span class="layui-badge layui-bg-gray" style="height: 12px;"> </span>：每周的当天都休假；
+						<span class="layui-badge layui-bg-orange" style="height: 12px;"> </span>：单周上班，双周休假。
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">工作时间</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">开始时间：</label>
+				<div class="layui-input-block ver-center">
+					{{startTime}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">结束时间：</label>
+				<div class="layui-input-block ver-center">
+					{{endTime}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">作息时间</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">开始时间：</label>
+				<div class="layui-input-block ver-center">
+					{{restStartTime}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">结束时间：</label>
+				<div class="layui-input-block ver-center">
+					{{restEndTime}}
+				</div>
+			</div>
 		{{/bean}}
 	</script>
 	

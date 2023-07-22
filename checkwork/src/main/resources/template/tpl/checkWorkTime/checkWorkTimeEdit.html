@@ -21,23 +21,17 @@
 			<div class="layui-form-item layui-col-xs12">
 		        <label class="layui-form-label">标题<i class="red">*</i></label>
 		        <div class="layui-input-block">
-		        	<input type="text" id="title" name="title" win-verify="required" placeholder="请输入标题" class="layui-input" value="{{title}}"/>
+		        	<input type="text" id="name" name="name" win-verify="required" placeholder="请输入标题" class="layui-input" value="{{name}}"/>
 		        </div>
 		    </div>
 			<div class="layui-form-item layui-col-xs6">
 				<label class="layui-form-label">类型<i class="red">*</i></label>
-				<div class="layui-input-block winui-radio">
-					<input type="radio" name="type" value="1" title="单休" lay-filter="type" />
-					<input type="radio" name="type" value="2" title="双休" lay-filter="type" />
-					<input type="radio" name="type" value="3" title="单双休" lay-filter="type" />
-					<input type="radio" name="type" value="4" title="自定义" lay-filter="type" />
+				<div class="layui-input-block winui-radio" id="checkWorkTimeType">
 				</div>
 			</div>
 			<div class="layui-form-item layui-col-xs6">
 				<label class="layui-form-label">状态<i class="red">*</i></label>
-				<div class="layui-input-block winui-radio">
-					<input type="radio" name="state" value="1" title="启用"/>
-					<input type="radio" name="state" value="2" title="禁用" />
+				<div class="layui-input-block winui-radio" id="enabled">
 				</div>
 			</div>
 			<div class="layui-form-item layui-col-xs12">
