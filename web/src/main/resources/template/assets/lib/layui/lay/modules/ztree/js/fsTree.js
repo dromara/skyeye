@@ -253,13 +253,17 @@ layui.define(['layer', "fsCommon"], function(exports) {
 	// 查询菜单树列表
 	FsTree.prototype.queryTree = function() {
 		var _this = this;
+		var domTree = $("#" + _this.config.id);
 		var url = _this.config.url; // 请求url
 		var simpleData = !isNull(_this.config.simpleData) ? JSON.parse(_this.config.simpleData) : [];
+		if (domTree.attr("isLoad") === "0") {
+			// 静态数据加载树
+			simpleData = _this.pushRootNode(domTree, simpleData, _this);
+		}
 		if (isNull(url) && simpleData.length == 0) {
 			fsCommon.warnMsg("静态数据或请求地址为空!");
 			return;
 		}
-		var domTree = $("#" + _this.config.id);
 
 		domTree.empty();
 		var otherParam = {}; // 业务参数
@@ -281,17 +285,8 @@ layui.define(['layer', "fsCommon"], function(exports) {
 		_this.config.otherParam = otherParam;
 
 		if (domTree.attr("isLoad") === "0") {
-			var array = [].concat(simpleData);
-			if (domTree.attr("isRoot") !== "0") {
-				var arr = {};
-				arr["open"] = true;
-				arr["isParent"] = true;
-				arr["drag"] = false;
-				arr[_this.config.treeName] = "全部";
-				arr[_this.config.treeIdKey] = "0";
-				array.push(arr);
-			}
-			_this.showTree(array);
+			// 静态数据加载树
+			_this.showTree(simpleData);
 		} else {
 			var method = domTree.attr("method"); // 请求方式
 			if (!isNull(otherParam)) {
@@ -305,21 +300,27 @@ layui.define(['layer', "fsCommon"], function(exports) {
 					if (!$.isArray(array)) {
 						array = new Array();
 					}
-					if (domTree.attr("isRoot") !== "0") {
-						var arr = {};
-						arr["open"] = true;
-						arr["isParent"] = true;
-						arr["drag"] = false;
-						arr[_this.config.treeName] = "全部";
-						arr[_this.config.treeIdKey] = "0";
-						array.push(arr);
-					}
+					array = _this.pushRootNode(domTree, array, _this);
 					_this.showTree(array);
 				} else {
 					fsCommon.warnMsg(data.returnMessage, {icon : 0});
 				}
 			}, false, method);
 		}
+	}
+
+	// 添加根节点
+	FsTree.prototype.pushRootNode = function (domTree, array, _this) {
+		if (domTree.attr("isRoot") !== "0") {
+			var arr = {};
+			arr["open"] = true;
+			arr["isParent"] = true;
+			arr["drag"] = false;
+			arr[_this.config.treeName] = "全部";
+			arr[_this.config.treeIdKey] = "0";
+			array.push(arr);
+		}
+		return array;
 	}
 
 	/**

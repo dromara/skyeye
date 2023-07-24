@@ -9,12 +9,10 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-	
-	
+
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',

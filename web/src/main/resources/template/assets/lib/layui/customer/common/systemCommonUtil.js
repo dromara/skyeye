@@ -990,8 +990,9 @@ var dataShowType = {
      * @param callback 回调函数
      * @param chooseCallback 如果是提供选择的树插件类型，则具备点击节点的回调事件
      * @param valueKey value展示的key
+     * @param isRoot 如是是树结构，则表示是否展示根节点
      */
-    showData: function (json, showType, showBoxId, defaultId, form, callback, chooseCallback, valueKey) {
+    showData: function (json, showType, showBoxId, defaultId, form, callback, chooseCallback, valueKey, isRoot) {
         var _box = $("#" + showBoxId);
         _box.html('');
         _box.attr('showType', showType);
@@ -1121,7 +1122,7 @@ var dataShowType = {
             });
         } else if (showType == 'radioTree' || showType == 'checkboxTree') {
             // 单选框树/多选框树
-            var _html = sysDictDataUtil.getShowTteeHtml(showBoxId, '0');
+            var _html = sysDictDataUtil.getShowTteeHtml(showBoxId, isNull(isRoot) ? '0' : isRoot);
             var _js = `<script>
                         layui.define(["jquery", 'fsTree'], function(exports) {
                             var jQuery = layui.jquery,

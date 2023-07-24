@@ -9,8 +9,10 @@ var catalogTreeUtil = {
         className: null, // 业务对象的className
         addOrUser: false, // 是否根据当前登录人查询
 
-        choose: null, // 是否可以选择  null：不可以选择  radio：单选  checkBox：多选
+        choose: null, // 是否可以选择  null：不可以选择  radioTree：单选  checkboxTree：多选,
+        defaultId: '', // 默认值
         loadType: true, // 加载的类型  true：一次性加载完  false：异步加载
+        checkAuth: false, // 是否开启权限校验，true：开启；false：不开启
         auth: {}, // 权限信息  数据格式：{"add": true}，代表add操作有权限
         isRoot: 1, // 是否显示根目录，1：是  0：否
         chooseCallback: undefined, // 选中节点后加载的事件
@@ -35,42 +37,8 @@ var catalogTreeUtil = {
         var showBoxId = catalogTreeUtil.config.boxId;
         var isRoot = catalogTreeUtil.config.isRoot;
         var data = catalogTreeUtil.getData();
-        if (showType == 'radio' || showType == 'checkBox') {
-            var _html = catalogTreeUtil.getShowTteeHtml(showBoxId, isRoot);
-            var _js = `<script>
-                        layui.define(["jquery", 'fsTree'], function(exports) {
-                            var jQuery = layui.jquery,
-                                fsTree = layui.fsTree;
-                            (function($) {
-                                var ${showBoxId}Object;
-                                fsTree.render({
-                                    id: "${showBoxId}Tree",
-                                    simpleData: '` + JSON.stringify(data) + `',
-                                    checkEnable: true,
-                                    loadEnable: false,
-                                    chkStyle: "radio",
-                                    showLine: false,
-                                    showIcon: true,
-                                    expandSpeed: 'fast',
-                                    onCheck: function (event, treeId, treeNode) {
-                                        $('#${showBoxId}').attr('chooseId', treeNode.id);
-                                    }
-                                }, function(id) {
-                                    ${showBoxId}Object = $.fn.zTree.getZTreeObj(id);
-                                    fuzzySearch(id, '#${showBoxId}Name', null, true);
-                                });
-                                if (` + !isNull(defaultId) + `) {
-                                    var zTree = ${showBoxId}Object.getCheckedNodes(false);
-                                    for (var i = 0; i < zTree.length; i++) {
-                                        if(zTree[i].id == '` + defaultId + `'){
-                                            ${showBoxId}Object.checkNode(zTree[i], true, true);
-                                            $('#${showBoxId}').attr('chooseId', zTree[i].id);
-                                        }
-                                    }
-                                }
-                            })(jQuery);});
-                       </script>`;
-            $("#" + showBoxId).append(_html + _js);
+        if (showType == 'radioTree' || showType == 'checkboxTree') {
+            dataShowType.showData({treeRows: data}, showType, showBoxId, catalogTreeUtil.config.defaultId, null, null, null, null, '1');
         } else {
             var _html = catalogTreeUtil.getShowTteeHtml(showBoxId, isRoot);
             var _js = `<script>
@@ -86,9 +54,10 @@ var catalogTreeUtil = {
                                     checkEnable: false,
                                     loadEnable: false,
                                     showLine: false,
-                                    showIcon: true,
+                                    showIcon: false,
                                     expandSpeed: 'fast',
                                     clickCallback: onClickTree,
+                                    addDiyDom: ztreeUtil.addDiyDom,
                                     onRename: onRename,
                                     beforeRename: beforeRename,
                                     onRightClick: onRightClick,
@@ -96,6 +65,7 @@ var catalogTreeUtil = {
                                 }, function(id) {
                                     ztree = $.fn.zTree.getZTreeObj(id);
                                     fuzzySearch(id, '#${showBoxId}Name', null, true);
+                                    ztreeUtil.initEventListener(id);
                                 });
                                 function onRightClick(event, treeId, treeNode) {
                                     chooseCagelogId = treeNode.id;
@@ -241,6 +211,7 @@ var catalogTreeUtil = {
 
                             })(jQuery);});
                        </script>`;
+            _html += `<link href="../../assets/lib/winui/css/customer/ztree/common-tree.css" rel="stylesheet" />`;
             $("#" + showBoxId).append(_html + _js);
             $("#" + showBoxId + "Choose").on("change", function() {
                 if (typeof (catalogTreeUtil.config.chooseCallback) == "function") {
@@ -264,15 +235,7 @@ var catalogTreeUtil = {
                         clickCallbackInputs="parentId:$id" treeName="name" style="overflow-y: auto; height: 100%;"></ul>
                     </div>
                     <ul class="layui-dropdown-menu" id="caralogTreeRight">
-                        <li class="is-file createNewFolder">
-                            <a href="javascript:;"><img alt="" src="../../assets/images/create-folder-icon.png" /><span>新建</span></a>
-                        </li>
-                        <li class="is-file reName" >
-                            <a href="javascript:;"><img alt="" src="../../assets/images/rename-icon.png" /><span>重命名</span></a>
-                        </li>
-                        <li class="is-file deleteFolder">
-                            <a href="javascript:;"><img alt="" src="../../assets/images/delete-icon.png" /><span>删除</span></a>
-                        </li>
+                        ` + catalogTreeUtil.getAuthAfterBtn()  + `
                     </ul>
                     <script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery-min.js"></script>
                     <script type="text/javascript" src="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.js"></script>
@@ -280,6 +243,38 @@ var catalogTreeUtil = {
                     <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.exhide.min.js"></script>
                     <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/fuzzysearch.js"></script>`;
         return _html;
+    },
+
+    getAuthAfterBtn: function () {
+        if (!catalogTreeUtil.config.checkAuth) {
+            return `<li class="is-file createNewFolder">
+                        <a href="javascript:;"><img alt="" src="../../assets/images/create-folder-icon.png" /><span>新建</span></a>
+                    </li>
+                    <li class="is-file reName" >
+                        <a href="javascript:;"><img alt="" src="../../assets/images/rename-icon.png" /><span>重命名</span></a>
+                    </li>
+                    <li class="is-file deleteFolder">
+                        <a href="javascript:;"><img alt="" src="../../assets/images/delete-icon.png" /><span>删除</span></a>
+                    </li>`;
+        } else {
+            var str = '';
+            if (catalogTreeUtil.config.auth['addCatalog']) {
+                str += `<li class="is-file createNewFolder">
+                            <a href="javascript:;"><img alt="" src="../../assets/images/create-folder-icon.png" /><span>新建</span></a>
+                        </li>`;
+            }
+            if (catalogTreeUtil.config.auth['renameCatalog']) {
+                str += `<li class="is-file reName" >
+                            <a href="javascript:;"><img alt="" src="../../assets/images/rename-icon.png" /><span>重命名</span></a>
+                        </li>`;
+            }
+            if (catalogTreeUtil.config.auth['deleteCatalog']) {
+                str += `<li class="is-file deleteFolder">
+                            <a href="javascript:;"><img alt="" src="../../assets/images/delete-icon.png" /><span>删除</span></a>
+                        </li>`;
+            }
+            return str;
+        }
     },
 
     /**

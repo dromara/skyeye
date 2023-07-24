@@ -355,6 +355,8 @@ var dsFormUtil = {
             content.dataChange = getDataUseHandlebars('{{#bean}}' + content.dataChange + '{{/bean}}', {bean: content});
         }
 
+        content.objectId = objectId;
+        content.objectKey = objectKey;
         var jsonStr = {bean: content};
         var html = getDataUseHandlebars('{{#bean}}' + component.htmlContent + '{{/bean}}', jsonStr);
         var html_js = getDataUseHandlebars('{{#bean}}' + component.jsContent + '{{/bean}}', jsonStr);
