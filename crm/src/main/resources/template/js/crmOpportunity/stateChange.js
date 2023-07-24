@@ -49,7 +49,7 @@ layui.config({
 		var msg = '确认【' + stateChangeData.title + '】进入初期沟通状态吗？';
 		layer.confirm(msg, { icon: 3, title: '初期沟通' }, function (i) {
 			layer.close(i);
-			AjaxPostUtil.request({url: flowableBasePath + "opportunity019", params: {id: stateChangeData.id}, type: 'json', method: 'POST', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.crmBasePath + "opportunity019", params: {id: stateChangeData.id}, type: 'json', method: 'POST', callback: function (json) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			}});
@@ -61,7 +61,7 @@ layui.config({
 		var msg = '确认【' + stateChangeData.title + '】进入方案与报价状态吗？';
 		layer.confirm(msg, { icon: 3, title: '方案与报价' }, function (i) {
 			layer.close(i);
-			AjaxPostUtil.request({url: flowableBasePath + "opportunity020", params: {id: stateChangeData.id}, type: 'json', method: 'POST', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.crmBasePath + "opportunity020", params: {id: stateChangeData.id}, type: 'json', method: 'POST', callback: function (json) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			}});
@@ -73,7 +73,7 @@ layui.config({
 		var msg = '确认【' + stateChangeData.title + '】进入竞争与投标状态吗？';
 		layer.confirm(msg, { icon: 3, title: '竞争与投标' }, function (i) {
 			layer.close(i);
-			AjaxPostUtil.request({url: flowableBasePath + "opportunity021", params: {id: stateChangeData.id}, type: 'json', method: 'POST', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.crmBasePath + "opportunity021", params: {id: stateChangeData.id}, type: 'json', method: 'POST', callback: function (json) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			}});
@@ -85,7 +85,7 @@ layui.config({
 		var msg = '确认【' + stateChangeData.title + '】进入商务谈判状态吗？';
 		layer.confirm(msg, { icon: 3, title: '商务谈判' }, function (i) {
 			layer.close(i);
-			AjaxPostUtil.request({url: flowableBasePath + "opportunity022", params: {id: stateChangeData.id}, type: 'json', method: 'POST', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.crmBasePath + "opportunity022", params: {id: stateChangeData.id}, type: 'json', method: 'POST', callback: function (json) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			}});
@@ -97,7 +97,7 @@ layui.config({
 		var msg = '确认【' + stateChangeData.title + '】进入成交状态吗？';
 		layer.confirm(msg, { icon: 3, title: '成交' }, function (i) {
 			layer.close(i);
-			AjaxPostUtil.request({url: flowableBasePath + "opportunity023", params: {id: stateChangeData.id}, type: 'json', method: 'POST', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.crmBasePath + "opportunity023", params: {id: stateChangeData.id}, type: 'json', method: 'POST', callback: function (json) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			}});
@@ -109,7 +109,7 @@ layui.config({
 		var msg = '确认【' + stateChangeData.title + '】进入丢单状态吗？';
 		layer.confirm(msg, { icon: 3, title: '丢单' }, function (i) {
 			layer.close(i);
-			AjaxPostUtil.request({url: flowableBasePath + "opportunity024", params: {id: stateChangeData.id}, type: 'json', method: 'POST', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.crmBasePath + "opportunity024", params: {id: stateChangeData.id}, type: 'json', method: 'POST', callback: function (json) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			}});
@@ -121,7 +121,7 @@ layui.config({
 		var msg = '确认【' + stateChangeData.title + '】进入搁置状态吗？';
 		layer.confirm(msg, { icon: 3, title: '搁置' }, function (i) {
 			layer.close(i);
-			AjaxPostUtil.request({url: flowableBasePath + "opportunity025", params: {id: stateChangeData.id}, type: 'json', method: 'POST', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.crmBasePath + "opportunity025", params: {id: stateChangeData.id}, type: 'json', method: 'POST', callback: function (json) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			}});
