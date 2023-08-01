@@ -189,7 +189,7 @@ var bossUtil = {
 var proUtil = {
 
     /**
-     * 获取我参与的项目列表
+     * 获取我参与的项目列表--- todo 待删除
      *
      * @param callback 回执函数
      */
