@@ -10,7 +10,10 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-	
+
+	// 加载列表数据权限
+	loadAuthBtnGroup('messageTable', '1569132969654');
+
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
@@ -58,7 +61,11 @@ layui.config({
 					click.find("input[type='radio']").prop("checked", true);
 					form.render();
 				}
-			})
+			});
+
+			initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入名称", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 

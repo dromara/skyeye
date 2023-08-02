@@ -35,6 +35,8 @@
     "materialInOrderType": {"name": "商品在单据中的类型", "className": "skyeye-erp#com.skyeye.material.classenum.MaterialInOrderType"},
     "depotPutOutType": {"name": "出入库类型", "className": "skyeye-erp#com.skyeye.depot.classenum.DepotPutOutType"},
     "erpOrderStateEnum": {"name": "ERP单据状态", "className": "skyeye-erp#com.skyeye.classenum.ErpOrderStateEnum"},
+    "supplierContractStateEnum": {"name": "供应商合同状态", "className": "skyeye-erp#com.skyeye.contract.classenum.SupplierContractStateEnum"},
+    "supplierContractAuthEnum": {"name": "供应商合同权限", "className": "skyeye-erp#com.skyeye.contract.classenum.SupplierContractAuthEnum", "pageUrl": "../../tpl/supplierContract/supplierContractList.html"},
 
     "skyeyeView": {"name": "视图类型", "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"},
     "widthScale": {"name": "宽度比例", "className": "skyeye-pro#com.skyeye.attr.classenum.WidthScale"},
