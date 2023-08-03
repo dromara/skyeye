@@ -54,6 +54,10 @@
     "flowableStateEnum": {"name": "工作流状态", "className": "skyeye-pro#com.skyeye.common.enumeration.FlowableStateEnum"},
     "correspondentEnterEnum": {"name": "往来单位类型", "className": "skyeye-pro#com.skyeye.common.enumeration.CorrespondentEnterEnum", "remark": "往来单位的组件中使用"},
 
+    "projectStateEnum": {"name": "项目状态", "className": "skyeye-project#com.skyeye.project.classenum.ProjectStateEnum"},
+    "taskStateEnum": {"name": "项目任务状态", "className": "skyeye-project#com.skyeye.task.classenum.TaskStateEnum"},
+    "taskAuthEnum": {"name": "项目任务权限", "className": "skyeye-project#com.skyeye.task.classenum.TaskAuthEnum", "pageUrl": "../../tpl/proTask/proTaskList.html"},
+
     "dsFormPageType": {"name": "表单布局类型", "className": "skyeye-pro#com.skyeye.dsform.classenum.DsFormPageType"},
     "simpleTableWhetherChoose": {"name": "表格类型的布局是否开启选择功能", "className": "skyeye-pro#com.skyeye.dsform.classenum.SimpleTableWhetherChoose"},
     "attrSymbols": {"name": "属性与值的对比符号", "className": "skyeye-pro#com.skyeye.attr.classenum.AttrSymbols"},
