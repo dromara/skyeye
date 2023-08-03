@@ -102,6 +102,7 @@ var serviceMap = [
 	{"id": "sysMainMation.checkworkBasePath", "name": "考勤服务"},
 	{"id": "sysMainMation.bossBasePath", "name": "招聘服务"},
 	{"id": "sysMainMation.admBasePath", "name": "行政服务"},
+	{"id": "sysMainMation.projectBasePath", "name": "PM项目服务"},
 ]
 
 function getRequestHeaders() {
