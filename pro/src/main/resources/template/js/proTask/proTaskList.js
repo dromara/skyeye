@@ -7,7 +7,7 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'form', 'table'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
@@ -20,7 +20,7 @@ layui.config({
 	}
 
 	var authPermission = teamObjectPermissionUtil.checkTeamBusinessAuthPermission(objectId, 'taskAuthEnum');
-	var btnStr = `<div style="" class="type-group" id="temp">`;
+	var btnStr = `<div style="" class="type-group" id="type">`;
 	var firstBtn = true;
 	if (authPermission['list']) {
 		var defaultClassName = firstBtn ? 'plan-select' : '';
@@ -30,7 +30,7 @@ layui.config({
 	if (authPermission['myExecute']) {
 		var defaultClassName = firstBtn ? 'plan-select' : '';
 		firstBtn = false;
-		btnStr += `<button type="button" class="layui-btn layui-btn-primary type-btn ${defaultClassName}" data-type="${myExecute}" table-id="messageTable"><i class="layui-icon"></i>我执行的任务</button>`
+		btnStr += `<button type="button" class="layui-btn layui-btn-primary type-btn ${defaultClassName}" data-type="myExecute" table-id="messageTable"><i class="layui-icon"></i>我执行的任务</button>`
 	}
 	if (authPermission['myCreate']) {
 		var defaultClassName = firstBtn ? 'plan-select' : '';
@@ -43,7 +43,7 @@ layui.config({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-		url: sysMainMation.crmBasePath + 'queryCrmOpportunityList',
+		url: sysMainMation.projectBasePath + 'queryProTaskList',
 		where: getTableParams(),
 		even: true,
 		page: true,
@@ -51,10 +51,10 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'name', title: '任务名称', width: 200, templet: function (d) {
-					return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
-				}},
-			{ field: 'oddNumber', title: '任务编号', align: 'left', width: 120 },
+			{ field: 'oddNumber', title: '任务单号', width: 200, align: 'center', templet: function (d) {
+				return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+			}},
+			{ field: 'name', title: '任务名称', width: 200 },
 			{ field: 'startTime', title: '开始时间', align: 'center', width: 100 },
 			{ field: 'endTime', title: '结束时间', align: 'center', width: 100 },
 			{ field: 'estimatedWorkload', title: '预计工作量', align: 'center', width: 120 },
@@ -91,13 +91,13 @@ layui.config({
 					}
 				}
 				if (d.state == 'pass' && authPermission['executing']) {
-					str += '<a class="layui-btn layui-btn-xs" lay-event="stateChange">执行</a>';
+					str += '<a class="layui-btn layui-btn-xs" lay-event="executionBegin">执行</a>';
 				}
 				if (d.state == 'executing' && authPermission['completed']) {
-					str += '<a class="layui-btn layui-btn-xs" lay-event="stateChange">完成</a>';
+					str += '<a class="layui-btn layui-btn-xs" lay-event="executionOver">完成</a>';
 				}
 				if (d.state == 'completed' && authPermission['close']) {
-					str += '<a class="layui-btn layui-btn-xs" lay-event="stateChange">关闭</a>';
+					str += '<a class="layui-btn layui-btn-xs" lay-event="executionClose">关闭</a>';
 				}
 				return str;
 			}}
@@ -110,7 +110,7 @@ layui.config({
 		}
 	});
 
-	tableTree.getTable().on('tool(messageTable)', function (obj) {
+	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'details'){ //详情
@@ -127,8 +127,6 @@ layui.config({
         	executionBegin(data, obj);
         } else if (layEvent === 'revoke') {//撤销任务审批申请
         	revoke(data);
-        } else if (layEvent === 'taskSplit') {//拆分任务
-        	taskSplit(data);
         } else if (layEvent === 'cancellation') {//作废
         	cancellation(data, obj);
         } else if (layEvent === 'executionOver') {//执行完成
@@ -140,9 +138,8 @@ layui.config({
 
 	// 添加
 	$("body").on("click", "#addBean", function() {
-		isSplitTask = false;
 		_openNewWindows({
-			url: "../../tpl/protask/protaskadd.html",
+			url: systemCommonUtil.getUrl('FP2023080500001&objectId=' + objectId + '&objectKey=' + objectKey, null),
 			title: "新增任务",
 			pageId: "protaskadd",
 			area: ['90vw', '90vh'],
@@ -155,8 +152,8 @@ layui.config({
 	// 执行完成
 	function executionOver(data) {
 		_openNewWindows({
-			url: "../../tpl/protask/protaskexecution.html",
-			title: '执行信息',
+			url: systemCommonUtil.getUrl('FP2023080500005&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
+			title: '完成任务',
 			pageId: "protaskexecution",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
@@ -168,7 +165,7 @@ layui.config({
 	// 详情
 	function details(data) {
 		_openNewWindows({
-			url: "../../tpl/protask/protaskdetails.html",
+			url: systemCommonUtil.getUrl('FP2023080500003&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
 			title: "任务详情",
 			pageId: "protaskdetails",
 			area: ['90vw', '90vh'],
@@ -180,7 +177,7 @@ layui.config({
 	// 编辑
 	function edit(data) {
 		_openNewWindows({
-			url: "../../tpl/protask/protaskedit.html",
+			url: systemCommonUtil.getUrl('FP2023080500002&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
 			title: "编辑任务",
 			pageId: "protaskedit",
 			area: ['90vw', '90vh'],
@@ -193,10 +190,10 @@ layui.config({
 
 	// 开始执行
 	function executionBegin(data, obj){
-		var msg = obj ? '确认开始执行【' + obj.data.taskName + '】吗？' : '确认开始执行该任务吗？';
+		var msg = obj ? '确认开始执行【' + obj.data.name + '】吗？' : '确认开始执行该任务吗？';
 		layer.confirm(msg, { icon: 3, title: '任务开始执行' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.projectBasePath + "protask012", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.projectBasePath + "executionTask", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -205,10 +202,10 @@ layui.config({
 	
 	// 任务关闭
 	function executionClose(data, obj){
-		var msg = obj ? '确认关闭【' + obj.data.taskName + '】吗？' : '确认关闭该任务吗？';
+		var msg = obj ? '确认关闭【' + obj.data.name + '】吗？' : '确认关闭该任务吗？';
 		layer.confirm(msg, { icon: 3, title: '关闭任务' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.projectBasePath + "protask014", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.projectBasePath + "closeTask", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -220,7 +217,7 @@ layui.config({
 		var msg = '确认从工作流中撤销选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销任务审批申请' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.projectBasePath + "protask007", params: {processInstanceId: data.processInstanceId}, type: 'json', method: 'POST', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.projectBasePath + "revokeTask", params: {processInstanceId: data.processInstanceId}, type: 'json', method: 'PUT', callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -236,7 +233,7 @@ layui.config({
 					id: data.id,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url: sysMainMation.projectBasePath + "protask008", params: params, type: 'json', method: 'POST', callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.projectBasePath + "submitToApprovalTask", params: params, type: 'json', method: 'POST', callback: function (json) {
 					winui.window.msg("提交成功", {icon: 1, time: 2000});
 					loadTable();
 				}});
@@ -246,10 +243,10 @@ layui.config({
 	
 	// 作废
 	function cancellation(data, obj){
-		var msg = obj ? '确认作废【' + obj.data.taskName + '】吗？' : '确认作废该任务信息吗？';
+		var msg = obj ? '确认作废【' + obj.data.name + '】吗？' : '确认作废该任务信息吗？';
 		layer.confirm(msg, { icon: 3, title: '任务作废' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.projectBasePath + "protask009", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.projectBasePath + "invalidTask", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -258,10 +255,10 @@ layui.config({
 	
 	// 删除
 	function del(data, obj) {
-		var msg = obj ? '确认删除【' + obj.data.taskName + '】吗？' : '确认删除选中数据吗？';
+		var msg = obj ? '确认删除【' + obj.data.name + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, {icon: 3, title: '删除任务'}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.projectBasePath + "protask006", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.projectBasePath + "deleteProTaskById", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
