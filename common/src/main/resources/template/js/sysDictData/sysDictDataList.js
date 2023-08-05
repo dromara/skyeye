@@ -164,7 +164,7 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return $.extend(true, {dictTypeId: dictTypeId}, initTableSearchUtil.getSearchValue("messageTable"));
+		return $.extend(true, {dictTypeId: dictTypeId, isPage: false}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 
 	exports('sysDictDataList', {});
