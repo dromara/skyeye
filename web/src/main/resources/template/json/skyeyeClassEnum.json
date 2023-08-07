@@ -50,7 +50,7 @@
     "contactsAuthEnum": {"name": "联系人权限", "className": "skyeye-pro#com.skyeye.contacts.classenum.ContactsAuthEnum", "pageUrl": "../../tpl/contacts/contactsList.html"},
     "catalogAuthEnum": {"name": "目录权限", "className": "skyeye-pro#com.skyeye.catalog.classenum.CatalogAuthEnum"},
     "documentAuthEnum": {"name": "文档权限", "className": "skyeye-pro#com.skyeye.document.classenum.DocumentAuthEnum", "pageUrl": "../../tpl/document/documentList.html"},
-    "disCussionAuthEnum": {"name": "讨论帖权限", "className": "skyeye-pro#com.skyeye.discussion.classenum.DisCussionAuthEnum"},
+    "disCussionAuthEnum": {"name": "讨论帖权限", "className": "skyeye-pro#com.skyeye.discussion.classenum.DisCussionAuthEnum", "pageUrl": "../../tpl/discuss/discussList.html"},
     "flowableStateEnum": {"name": "工作流状态", "className": "skyeye-pro#com.skyeye.common.enumeration.FlowableStateEnum"},
     "correspondentEnterEnum": {"name": "往来单位类型", "className": "skyeye-pro#com.skyeye.common.enumeration.CorrespondentEnterEnum", "remark": "往来单位的组件中使用"},
 
