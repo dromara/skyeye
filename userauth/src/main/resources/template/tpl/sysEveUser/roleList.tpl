@@ -5,7 +5,7 @@
 			{{#each rows}}
 			    <dt style="width:100%;height: 20px;">
 			        <input type="checkbox" class="cbxmenu" value="{{id}}" lay-skin="primary" lay-filter="cbxmenu" {{isCheck}} />
-			        <font class="cbxmenu-font">{{nameame}}</font>
+			        <font class="cbxmenu-font">{{name}}</font>
 			        <h5 class="cbxmenu-font">（{{remark}}）</h5>
 			        <span class="functions"></span>
 			    </dt>
