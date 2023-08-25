@@ -4,6 +4,8 @@ var citySelect;
 var districtSelect;
 var marker = null;
 
+var userList = new Array();//选择用户返回的集合或者进行回显的集合
+
 var longitude = "";//经度
 var latitude = "";//纬度
 
@@ -20,53 +22,40 @@ layui.config({
 	var id = GetUrlParam("id");
 
 	if (!isNull(id)) {
-		AjaxPostUtil.request({url: sysMainMation.schoolBasePath + "querySchoolById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
-			$("#name").val(json.bean.name);
-			$("#remark").val(json.bean.remark);
-			skyeyeClassEnumUtil.showEnumDataListByClassName("schoolPower", 'radio', "power", json.bean.power, form);
-
+		AjaxPostUtil.request({url: sysMainMation.sealServiceBasePath + "querySealWorkerById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
 			longitude = json.bean.longitude;
 			latitude = json.bean.latitude;
+			userList.push(json.bean.userMation);
+			$.each(userList, function(i, item) {
+				$("#userName").val(item.name);
+			});
+
 			initMap();
 			$("#longitude").val(longitude);
 			$("#latitude").val(latitude);
 			$("#absoluteAddress").val(json.bean.absoluteAddress);
 		}});
-	} else {
-		skyeyeClassEnumUtil.showEnumDataListByClassName("schoolPower", 'radio', "power", null, form);
 	}
 	matchingLanguage();
 	form.render();
 
 	form.on('submit(formAddBean)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			var pId = '0';
-			if($("input[name='schoolType']:checked").val() == '2'){
-				if(isNull($("#OverAllSchool").val())) {
-					winui.window.msg('请选择父学校', {icon: 2, time: 2000});
-					return false;
-				} else {
-					pId = $("#OverAllSchool").val();
-				}
-			}
 			var lnglatXY = [$("#longitude").val(), $("#latitude").val()];//地图上所标点的坐标
 			geocoder.getAddress(lnglatXY, function(status, result) {
 				if (status === 'complete' && result.info === 'OK') {
 					var params = {
 						id: isNull(id) ? '' : id,
-						name: $("#name").val(),
-						remark: $("#remark").val(),
+						userId: userList[0].id,
+						longitude: $("#longitude").val(),
+						latitude: $("#latitude").val(),
 						provinceId: result.regeocode.addressComponent.province,
 						cityId: result.regeocode.addressComponent.city,
 						areaId: result.regeocode.addressComponent.district,
 						townshipId: '',
-						longitude: $("#longitude").val(),
-						latitude: $("#latitude").val(),
-						power: dataShowType.getData('power'),
 						absoluteAddress: $("#absoluteAddress").val()
 					};
-
-					AjaxPostUtil.request({url: sysMainMation.schoolBasePath + "writeSchool", params: params, type: 'json', method: 'POST', callback: function (json) {
+					AjaxPostUtil.request({url: sysMainMation.sealServiceBasePath + "writeSealWorker", params: params, type: 'json', method: 'POST', callback: function (json) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';
 					}});
@@ -78,7 +67,20 @@ layui.config({
 		return false;
 	});
 
-	//加载地图
+	//人员选择
+	$("body").on("click", "#userIdSelPeople", function (e) {
+		systemCommonUtil.userReturnList = [].concat(userList);
+		systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+		systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+		systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
+		systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+			userList = [].concat(userReturnList);
+			$.each(userList, function(i, item) {
+				$("#userName").val(item.name);
+			});
+		});
+	});
+
 	initMap();
 	function initMap(){
 		if (!isNull(latitude) && !isNull(longitude)){
@@ -97,29 +99,31 @@ layui.config({
 		//加载插件
 		AMap.service('AMap.Geocoder',function(){//回调函数
 			//实例化Geocoder
-			geocoder = new AMap.Geocoder({});
+			geocoder = new AMap.Geocoder({
+			});
 		});
 		//在地图上进行标记
 		marker = new AMap.Marker({
-			map: map,
-			bubble: true
+			map:map,
+			bubble:true
 		});
 		//通过地址获取经纬度
 		var input = document.getElementById('absoluteAddress');
 		map.on('click', function (e) {
 		  geocoder.getAddress(e.lnglat, function(status,result){
-			  if (status == 'complete') {
-				  input.value = result.regeocode.formattedAddress;
-				  var address = input.value;
-				  geocoder.getLocation(address, function (status, result) {
-					  if (status == 'complete' && result.geocodes.length) {
-						  marker.setPosition(result.geocodes[0].location);
-						  map.setCenter(marker.getPosition());
-						  $("#longitude").val(result.geocodes[0].location.lng);
-						  $("#latitude").val(result.geocodes[0].location.lat);
-					  }
-				  })
-			  }
+				if(status=='complete'){
+					input.value = result.regeocode.formattedAddress;
+					var address = input.value;
+					geocoder.getLocation(address, function(status, result){
+						if(status == 'complete' && result.geocodes.length){
+							marker.setPosition(result.geocodes[0].location);
+							map.setCenter(marker.getPosition());
+							$("#longitude").val(result.geocodes[0].location.lng);
+							$("#latitude").val(result.geocodes[0].location.lat);
+						}
+					})
+				} else {
+				}
 		  });
 		});
 		input.onchange = function (e) {
@@ -136,14 +140,14 @@ layui.config({
 
 		citySelect = document.getElementById('city');
 		districtSelect = document.getElementById('district');
-		//行政区划查询
+		 //行政区划查询
 		var opts = {
 			subdistrict: 1,   //返回下一级行政区
-			showbiz: false  //最后一级返回街道信息
+			showbiz:false  //最后一级返回街道信息
 		};
 		district = new AMap.DistrictSearch(opts);//注意：需要使用插件同步下发功能才能这样直接使用
 		district.search('中国', function(status, result) {
-			if (status == 'complete') {
+			if(status=='complete'){
 				getData(result.districtList[0]);
 			}
 		});
@@ -180,6 +184,7 @@ layui.config({
 									$("#latitude").val(result.geocodes[0].location.lat);
 								}
 							})
+						} else {
 						}
 				  });
 				});
@@ -193,7 +198,7 @@ layui.config({
 			var contentSub = new Option('--请选择--');
 			var curlevel = subList[0].level;
 			var curList =  document.querySelector('#' + curlevel);
-			if (!isNull(curList)) {
+			if (!isNull(curList)){
 				curList.add(contentSub);
 			}
 			for (var i = 0, l = subList.length; i < l; i++) {
@@ -237,6 +242,7 @@ layui.config({
 														$("#latitude").val(result.geocodes[0].location.lat);
 													}
 												})
+											} else {
 											}
 										});
 									});
@@ -279,16 +285,14 @@ layui.config({
 		district.setExtensions('all');
 		//行政区查询
 		//按照adcode进行查询可以保证数据返回的唯一性
-		district.search(adcode, function (status, result) {
-			if (status === 'complete') {
+		district.search(adcode, function(status, result) {
+			if(status === 'complete'){
 				getData(result.districtList[0], obj.id);
 			}
 		});
 	}
 
-	// 取消
 	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);
 	});
-
 });
