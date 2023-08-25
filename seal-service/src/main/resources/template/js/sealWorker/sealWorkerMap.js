@@ -7,7 +7,7 @@ layui.config({
 }).define(['window', 'jquery', 'winui'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$;
-	
+	// 人员分布图
 	var userList = new Array();
 	
     AjaxPostUtil.request({url: flowableBasePath + "sealseserviceworker007", params: {}, type: 'json', callback: function (json) {
@@ -46,7 +46,7 @@ layui.config({
 		var rowId = $(this).attr('rowid');
 		$.each(userList, function(i, item) {
 			if(rowId === item.id) {
-				document.getElementById('tips').innerHTML = '员工姓名：' + item.userName + '<br>'
+				document.getElementById('tips').innerHTML = '员工姓名：' + item.name + '<br>'
 															+ '工单数：' + item.orderNumber + '<br>'
 															+ '状态：' + item.stateName + '<br>'
 															+ '详细地址：' + item.addDetail;
@@ -63,5 +63,5 @@ layui.config({
 		        '</div>';
 	}
 	
-    exports('serviceworkermap', {});
+    exports('sealWorkerMap', {});
 });

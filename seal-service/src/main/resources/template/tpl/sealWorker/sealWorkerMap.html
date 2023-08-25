@@ -57,10 +57,16 @@
     
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
+
+	<script type="text/javascript">
+		window._AMapSecurityConfig = {
+			securityJsCode: sysMainMation.skyeyeMapKey
+		}
+	</script>
     <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.6&key=7e3eb4aa298949346daf89edeeb3dec8&plugin=AMap.DistrictSearch"></script>
 	<script type="text/javascript" src="https://webapi.amap.com/demos/js/liteToolbar.js"></script>
     <script type="text/javascript">
-        layui.config({base: '../../js/serviceworker/'}).use('serviceworkermap');
+        layui.config({base: '../../js/sealWorker/'}).use('sealWorkerMap');
     </script>
 </body>
 </html>
