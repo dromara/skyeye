@@ -94,6 +94,9 @@
     "vehicleState": {"name": "车辆状态", "className": "skyeye-adm#com.skyeye.eve.vehicle.classenum.VehicleState"},
     "maintenanceType": {"name": "车辆维修类型", "className": "skyeye-adm#com.skyeye.eve.vehicle.classenum.MaintenanceType"},
 
-    "schoolPower": {"name": "学校数据权限", "className": "skyeye-school#com.skyeye.eve.classenum.SchoolPower"}
+    "schoolPower": {"name": "学校数据权限", "className": "skyeye-school#com.skyeye.eve.classenum.SchoolPower"},
+
+    "productWarrantyType": {"name": "售后工单质保类型", "className": "skyeye-seal-service#com.skyeye.afterseal.classenum.ProductWarrantyType"},
+    "sealOrderType": {"name": "售后工单工单类型", "className": "skyeye-seal-service#com.skyeye.afterseal.classenum.SealOrderType"}
 
 }
