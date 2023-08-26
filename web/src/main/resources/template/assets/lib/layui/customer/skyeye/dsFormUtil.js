@@ -1022,7 +1022,12 @@ var dsFormTableUtil = {
     },
 
     getTableParams: function() {
-        return $.extend(true, {}, initTableSearchUtil.getSearchValue(dsFormTableUtil.tableId));
+        var params = {};
+        if (dsFormUtil.pageMation.isPage != 1) {
+            // 不分页
+            params.isPaging = false;
+        }
+        return $.extend(true, params, initTableSearchUtil.getSearchValue(dsFormTableUtil.tableId));
     },
 
     // 计算操作列的宽度
