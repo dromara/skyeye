@@ -274,8 +274,9 @@ layui.config({
                     attrs.push({
                         id: item.attrKey,
                         name: item.attrDefinitionCustom.name
-                    })
-                } else {
+                    });
+                }
+                if (item.attrKey != data.attrKey) {
                     otherAttrs.push({
                         id: item.attrKey,
                         name: item.attrDefinitionCustom.name

@@ -513,11 +513,11 @@ var dsFormUtil = {
         if (isNull(customAttr.objectId) && isNull(customAttr.defaultData) && isNull(customAttr.businessApi) && $.isEmptyObject(customAttr.businessApi)) {
             return content;
         }
-        content.context = dsFormUtil.getHtmlContentByDataFrom(customAttr, content.dsFormComponent.htmlDataFrom, content.id);
+        content.context = dsFormUtil.getHtmlContentByDataFrom(customAttr, content);
         return content;
     },
 
-    getHtmlContentByDataFrom: function (obj, htmlDataFrom, contentId) {
+    getHtmlContentByDataFrom: function (obj, content) {
         var json = {};
         var dataType = obj.dataType;
         if (dataType == 1) {
@@ -539,10 +539,15 @@ var dsFormUtil = {
             // 自定义接口
             var businessApi = typeof obj.businessApi == 'string' ? JSON.parse(obj.businessApi) : obj.businessApi;
             var params = {};
+            var preAttributeVal = dsFormUtil.getPreAttributeVal(content);
             $.each(businessApi.params, function (key, value) {
-                var realValue = "";
-                eval('realValue = ' + value);
-                params[key] = realValue;
+                if (!isNull(value)) {
+                    var realValue = "";
+                    eval('realValue = ' + value);
+                    params[key] = realValue;
+                } else {
+                    params[key] = preAttributeVal;
+                }
             });
             var url = "";
             eval('url = ' + businessApi.serviceStr + ' + "' + businessApi.api + '"');
@@ -550,6 +555,8 @@ var dsFormUtil = {
                 json = data.rows;
             }, async: false});
         }
+        var htmlDataFrom = content.dsFormComponent.htmlDataFrom;
+        var contentId = content.id;
         if (!isNull(htmlDataFrom)) {
             $.each(json, function (i, item) {
                 item.radioName = 'skyeyeName' + contentId;
@@ -560,6 +567,16 @@ var dsFormUtil = {
                 }
             });
             return getDataUseHandlebars(htmlDataFrom, json);
+        }
+        return '';
+    },
+
+    // 设置前置属性的值
+    getPreAttributeVal: function (content) {
+        // 设置前置属性
+        var preAttribute = content.preAttribute;
+        if (!isNull(preAttribute)) {
+            return $("[attrKey='" + preAttribute + "']").val();
         }
         return '';
     },

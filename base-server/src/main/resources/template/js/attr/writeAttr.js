@@ -209,8 +209,8 @@ layui.config({
 		initTableChooseUtil.initTable({
 			id: id,
 			cols: [
-				{id: 'key', title: '入参Key', formType: 'input', width: '150', verify: 'required'},
-				{id: 'value', title: '值(目前仅支持objectId和objectKey的传值)', formType: 'input', width: '150', verify: 'required'}
+				{id: 'key', title: '入参Key', formType: 'input', width: '150', verify: 'required' },
+				{id: 'value', title: '值(支持objectId和objectKey的传值，可直接填写属性名，如果为空，系统会自动根据布局设置的前置属性去设置入参)', formType: 'input', width: '150' }
 			],
 			deleteRowCallback: function (trcusid) {
 			},
