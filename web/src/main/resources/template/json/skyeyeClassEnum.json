@@ -10,6 +10,10 @@
     "payTypeEnum": {"name": "付款类型", "className": "skyeye-pro#com.skyeye.common.enumeration.PayTypeEnum"},
     "userStaffState": {"name": "员工状态", "className": "skyeye-pro#com.skyeye.common.enumeration.UserStaffState"},
     "userQuitType": {"name": "员工离职类型", "className": "skyeye-pro#com.skyeye.common.enumeration.UserQuitType"},
+    "bloodTypeEnum": {"name": "血型", "className": "skyeye-pro#com.skyeye.common.enumeration.BloodTypeEnum"},
+    "healthStatus": {"name": "健康状态", "className": "skyeye-pro#com.skyeye.common.enumeration.HealthStatus"},
+    "idCardType": {"name": "证件类型", "className": "skyeye-pro#com.skyeye.common.enumeration.IDCardType"},
+    "registrationType": {"name": "户口类型", "className": "skyeye-pro#com.skyeye.common.enumeration.RegistrationType"},
 
     "bossInterviewArrangementState": {"name": "面试安排状态", "className": "skyeye-boss#com.skyeye.arrangement.classenum.ArrangementState"},
     "bossInterviewArrangementState1": {
@@ -95,6 +99,11 @@
     "maintenanceType": {"name": "车辆维修类型", "className": "skyeye-adm#com.skyeye.eve.vehicle.classenum.MaintenanceType"},
 
     "schoolPower": {"name": "学校数据权限", "className": "skyeye-school#com.skyeye.eve.classenum.SchoolPower"},
+    "admissionMethod": {"name": "入学方式", "className": "skyeye-school#com.skyeye.school.student.classenum.AdmissionMethod"},
+    "modeOfStudy": {"name": "就读方式", "className": "skyeye-school#com.skyeye.school.student.classenum.ModeOfStudy"},
+    "vaccinationStatus": {"name": "疫苗接种情况", "className": "skyeye-school#com.skyeye.school.student.classenum.VaccinationStatus"},
+    "studentState": {"name": "学生状态", "className": "skyeye-school#com.skyeye.school.student.classenum.StudentState"},
+    "studentType": {"name": "学生类型", "className": "skyeye-school#com.skyeye.school.student.classenum.StudentType"},
 
     "productWarrantyType": {"name": "售后工单质保类型", "className": "skyeye-seal-service#com.skyeye.afterseal.classenum.ProductWarrantyType"},
     "sealOrderType": {"name": "售后工单工单类型", "className": "skyeye-seal-service#com.skyeye.afterseal.classenum.SealOrderType"}
