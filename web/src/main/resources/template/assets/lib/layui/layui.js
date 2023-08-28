@@ -60,6 +60,7 @@ var dataTypeList = [
 	{id: 30, name: "附件"},
 	{id: 31, name: "行政-会议室"},
 	{id: 32, name: "行政-车辆"},
+	{id: 33, name: "学校-科目"},
 ];
 
 //系统cookies从哪里获取， true：从用户登陆获取；false：跨域获取
