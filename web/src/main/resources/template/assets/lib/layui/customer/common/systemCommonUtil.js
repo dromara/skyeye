@@ -810,7 +810,7 @@ var tabPageUtil = {
 
     setPageUrl: function (mation) {
         var objectType = tabPageUtil.config.objectType;
-        var url = mation.pageUrl + "?objectId=" + tabPageUtil.config.object.objectId + "&objectKey=" + tabPageUtil.config.object.objectKey
+        var url = mation.pageUrl + (mation.pageUrl.indexOf("?") == -1 ? "?" : "&") + "objectId=" + tabPageUtil.config.object.objectId + "&objectKey=" + tabPageUtil.config.object.objectKey
             + "&objectType=" + objectType;
         $("#manageTab").find(".layui-tab-content").find('.layui-show').find('iframe').attr('src', url);
     },

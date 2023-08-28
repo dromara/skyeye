@@ -74,7 +74,6 @@ layui.config({
 
     // 初始化加载
     function init() {
-        console.log(pageMation);
         var html;
         if (pageMation.type == 'create' || pageMation.type == 'edit') {
             html = pageHtml['createOrEdit'];
