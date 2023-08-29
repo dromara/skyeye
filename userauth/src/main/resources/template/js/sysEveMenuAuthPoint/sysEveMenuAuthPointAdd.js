@@ -33,9 +33,9 @@ layui.config({
 	    form.on('submit(formAddBean)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
 	        	var params = {
-        			authMenuName: $("#authMenuName").val(),
+        			name: $("#name").val(),
         			authMenu: $("#authMenu").val(),
-        			menuId: menuId,
+        			objectId: menuId,
 					parentId: parentId
 	        	};
 				if (isNull(parentType)) {
@@ -48,6 +48,7 @@ layui.config({
 					// 如果为2，写需要添加数据权限
 					params.type = 3;
 				}
+				params["orderBy"] = params.type == 3 ? $("#orderBy").val() : null;
 	        	AjaxPostUtil.request({url: reqBasePath + "writeSysEveMenuAuthPointMation", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';

@@ -29,8 +29,9 @@ layui.config({
 	    where: getTableParams(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'authMenuName', title: '权限点名称', width: 120 },
+	        { field: 'name', title: '权限点名称', width: 120 },
 	        { field: 'authMenu', title: '接口url', width: 200 },
+			{ field: 'orderBy', title: '排序', align: 'center', width: 80 },
 	        { field: 'menuNum', title: '权限点编号', align: 'center', width: 120 },
 	        { field: 'useNum', title: '使用数量', align: 'center', width: 80 },
 			{ field: 'typeName', title: '类型', align: 'center', width: 80 },
@@ -40,13 +41,17 @@ layui.config({
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
 	    ]],
+		isPage: false,
 	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称，编号", function () {
+				tableTree.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	}, {
 		keyId: 'id',
 		keyPid: 'parentId',
-		title: 'authMenuName',
+		title: 'name',
 	});
 
 	tableTree.getTable().on('tool(messageTable)', function (obj) {
@@ -65,7 +70,7 @@ layui.config({
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "sysevemenuauthpoint005", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "sysevemenuauthpoint005", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -126,30 +131,17 @@ layui.config({
 	}
 
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			loadTable();
-		}
-		return false;
-	});
-
-	// 刷新数据
 	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
 
-    function loadTable() {
+	function loadTable() {
 		tableTree.reload("messageTable", {where: getTableParams()});
-    }
-
-    function getTableParams() {
-    	return {
-    		authMenuName: $("#authMenuName").val(),
-    		authMenu: $("#authMenu").val(),
-    		menuNum: $("#menuNum").val(),
-    		menuId: menuId
-		};
 	}
-    
+
+	function getTableParams() {
+		return $.extend(true, {objectId: menuId}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
+
     exports('sysEveMenuAuthPointList', {});
 });

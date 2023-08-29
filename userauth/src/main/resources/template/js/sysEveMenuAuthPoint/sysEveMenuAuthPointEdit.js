@@ -10,7 +10,7 @@ layui.config({
 	    var $ = layui.$,
 		    form = layui.form;
 	    
-	    AjaxPostUtil.request({url: reqBasePath + "sysevemenuauthpoint003", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
+	    AjaxPostUtil.request({url: reqBasePath + "sysevemenuauthpoint003", params: {id: parent.rowId}, type: 'json', method: 'GET', callback: function (json) {
 			var type = json.bean.type;
 			if (type == 1) {
 				// 如果为1，则需要编辑权限点
@@ -22,21 +22,22 @@ layui.config({
 				// 如果为3，写需要编辑数据权限
 				$("#showForm").html($("#dataAuthPointTemplate").html());
 			}
-			$("#authMenuName").val(json.bean.authMenuName);
+			$("#name").val(json.bean.name);
 			$("#authMenu").val(json.bean.authMenu);
 			matchingLanguage();
 			form.render();
 			form.on('submit(formEditBean)', function (data) {
 				if (winui.verifyForm(data.elem)) {
 					var params = {
-						authMenuName: $("#authMenuName").val(),
+						name: $("#name").val(),
 						authMenu: $("#authMenu").val(),
-						menuId: parent.menuId,
+						objectId: parent.menuId,
 						parentId: json.bean.parentId,
+						orderBy: type == 3 ? $("#orderBy").val() : null,
 						type: type,
 						id: parent.rowId
 					};
-					AjaxPostUtil.request({url: reqBasePath + "writeSysEveMenuAuthPointMation", params: params, type: 'json', callback: function (json) {
+					AjaxPostUtil.request({url: reqBasePath + "writeSysEveMenuAuthPointMation", params: params, type: 'json', method: 'POST', callback: function (json) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';
 					}});

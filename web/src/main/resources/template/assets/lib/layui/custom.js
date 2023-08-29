@@ -366,6 +366,15 @@ function loadAuthBtnGroup(tableId, urlNum) {
 					// 数据权限不为空
 					if (dataGroup[j].children.length > 0) {
 						var dataAuthPoint = dataGroup[j].children;
+						dataAuthPoint.sort(function(a, b) {
+							if (isNull(a.orderBy)) {
+								a.orderBy = 0;
+							}
+							if (isNull(b.orderBy)) {
+								b.orderBy = 0;
+							}
+							return a.orderBy - b.orderBy; // 升序排序
+						});
 						for (var k = 0; k < dataAuthPoint.length; k++) {
 							var type = dataAuthPoint[k].menuUrl.split('==')[1].trim();
 							var defaultClassName = k == 0 ? 'plan-select' : '';

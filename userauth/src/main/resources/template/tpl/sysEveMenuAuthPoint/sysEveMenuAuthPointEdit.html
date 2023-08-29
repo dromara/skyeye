@@ -18,7 +18,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">权限点名称<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="authMenuName" name="authMenuName" win-verify="required" placeholder="请输入权限点名称" class="layui-input" maxlength="50"/>
+				<input type="text" id="name" name="name" win-verify="required" placeholder="请输入权限点名称" class="layui-input" maxlength="50"/>
 			</div>
 		</div>
 		<div class="layui-form-item">
@@ -40,7 +40,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">名称<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="authMenuName" name="authMenuName" win-verify="required" placeholder="请输入名称" class="layui-input" maxlength="50"/>
+				<input type="text" id="name" name="name" win-verify="required" placeholder="请输入名称" class="layui-input" maxlength="50"/>
 				<div class="layui-form-mid layui-word-aux">分组名称。例如：类型</div>
 			</div>
 		</div>
@@ -64,7 +64,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">名称<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="authMenuName" name="authMenuName" win-verify="required" placeholder="请输入名称" class="layui-input" maxlength="50"/>
+				<input type="text" id="name" name="name" win-verify="required" placeholder="请输入名称" class="layui-input" maxlength="50"/>
 				<div class="layui-form-mid layui-word-aux">数据权限名称。例如：我创建的</div>
 			</div>
 		</div>
@@ -73,6 +73,13 @@
 			<div class="layui-input-block">
 				<input type="text" id="authMenu" name="authMenu" win-verify="required" placeholder="请输入表达式" class="layui-input" maxlength="100"/>
 				<div class="layui-form-mid layui-word-aux">数据权限表达式。例如：type == myCreate</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">排序编号<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="orderBy" name="orderBy" win-verify="required|number" placeholder="排序编号" class="layui-input" />
+				<div class="layui-form-mid layui-word-aux">数字越大越往后</div>
 			</div>
 		</div>
 		<div class="layui-form-item">
