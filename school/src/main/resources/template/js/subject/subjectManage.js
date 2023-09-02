@@ -20,10 +20,10 @@ layui.config({
 		}],
 		suffixData: [{
 			title: '章节',
-			pageUrl: systemCommonUtil.getUrl('../../tpl/chapter/chapterList.html', null)
+			pageUrl: '../../tpl/chapter/chapterList.html'
 		}, {
 			title: '知识点',
-			pageUrl: systemCommonUtil.getUrl('../../tpl/knowledge/knowledgeList.html', null)
+			pageUrl: '../../tpl/knowledge/knowledgeList.html'
 		}],
 		element: layui.element,
 		object: {

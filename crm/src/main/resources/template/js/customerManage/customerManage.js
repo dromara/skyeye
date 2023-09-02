@@ -19,6 +19,9 @@ layui.config({
 			pageUrl: systemCommonUtil.getUrl('FP2023030300001&id=' + objectId, null)
 		}],
 		suffixData: [{
+			title: '已销售产品',
+			pageUrl: '../../tpl/holder/holderNormsList.html'
+		}, {
 			title: '团队',
 			pageUrl: '../../tpl/teamBusiness/teamBusinessDetails.html'
 		}],

@@ -119,7 +119,7 @@ layui.config({
 	// 服务
 	function giveService(data) {
 		_openNewWindows({
-			url: systemCommonUtil.getUrl('../../tpl/project/projectManage.html?objectId=' + data.id + '&objectKey=' + data.serviceClassName, null),
+			url: '../../tpl/project/projectManage.html?objectId=' + data.id + '&objectKey=' + data.serviceClassName,
 			title: "服务",
 			pageId: "projectGiveService",
 			area: ['90vw', '90vh'],
