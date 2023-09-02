@@ -555,7 +555,7 @@ var dsFormUtil = {
                 json = data.rows;
             }, async: false});
         }
-        var htmlDataFrom = content.dsFormComponent.htmlDataFrom;
+        var htmlDataFrom = isNull(content.dsFormComponent) ? null : content.dsFormComponent.htmlDataFrom;
         var contentId = content.id;
         if (!isNull(htmlDataFrom)) {
             $.each(json, function (i, item) {
