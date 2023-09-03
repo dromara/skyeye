@@ -116,6 +116,7 @@ var dsFormUtil = {
             $.each(dsFormUtil.pageMation.dsFormPageContents, function (i, dsFormContent) {
                 var attrDefinition = dsFormContent.attrDefinition;
                 dsFormContent["pageType"] = pageMation.type;
+                dsFormContent["allValue"] = data;
                 if (!isNull(attrDefinition) && !$.isEmptyObject(attrDefinition)) {
                     var dsFormComponent = dsFormContent.dsFormComponent;
                     if (dsFormContent.isEdit == 0) {
@@ -912,7 +913,12 @@ var dsFormTableUtil = {
         }
         var condition = [];
         $.each(item.showConditionList, function (i, bean) {
-            condition.push(`d.${bean.attrKey} ${bean.symbolsMark} ${bean.value}`);
+            if (bean.symbolsMark == 'contain') {
+                var array = bean.value.split(',');
+                condition.push(`$.inArray(d.${bean.attrKey}, ` + JSON.stringify(array) + `) !== -1`);
+            } else {
+                condition.push(`d.${bean.attrKey} ${bean.symbolsMark} ${bean.value}`);
+            }
         });
         var conditionStr = condition.join('&&');
         // 没有设置按钮显示的条件
@@ -1199,7 +1205,7 @@ var dsFormColumnUtil = {
                         _html += `</select>`;
                         return _html;
                     }},
-                    { field: 'value', title: '值<i class="red">*</i>', align: 'left', width: 160, templet: function (d) {
+                    { field: 'value', title: '值<i class="red">*</i>', align: 'left', width: 400, templet: function (d) {
                         return `<div id="valueBox${d.id}">` + dsFormColumnUtil.getDomHtml(d) + `</div>`;
                     }},
                 ]],
@@ -1240,7 +1246,7 @@ var dsFormColumnUtil = {
         // 获取属性对应的组件编码---todo 后续根据编号加载对应的dom
         var numCode = dsFormColumnUtil.getAttrKeyNumCode(attrKey);
         if (isNull(numCode)) {
-            return `<input type="text" id="value${d.id}" placeholder="请输入值" cus-id="${d.id}" class="layui-input tableInput" win-verify="required" ` +
+            return `<input type="text" id="value${d.id}" placeholder="请输入值，如果有多个，请用英文逗号隔开" cus-id="${d.id}" class="layui-input tableInput" win-verify="required" ` +
                 `value="` + (isNull(displayValue) ? "" : displayValue) + `"/>`
         } else {
             if (numCode == 'enumCardSolt' || numCode == 'dictDataCardSolt') {

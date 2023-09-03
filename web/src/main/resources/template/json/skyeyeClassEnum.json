@@ -106,6 +106,8 @@
     "studentType": {"name": "学生类型", "className": "skyeye-school#com.skyeye.school.student.classenum.StudentType"},
 
     "productWarrantyType": {"name": "售后工单质保类型", "className": "skyeye-seal-service#com.skyeye.afterseal.classenum.ProductWarrantyType"},
-    "sealOrderType": {"name": "售后工单工单类型", "className": "skyeye-seal-service#com.skyeye.afterseal.classenum.SealOrderType"}
+    "sealOrderType": {"name": "售后工单工单类型", "className": "skyeye-seal-service#com.skyeye.afterseal.classenum.SealOrderType"},
+    "afterSealState": {"name": "售后工单状态", "className": "skyeye-seal-service#com.skyeye.afterseal.classenum.AfterSealState"}
+
 
 }

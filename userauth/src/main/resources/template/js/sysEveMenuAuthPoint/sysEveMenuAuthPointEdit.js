@@ -21,6 +21,7 @@ layui.config({
 			} else if (type == 3) {
 				// 如果为3，写需要编辑数据权限
 				$("#showForm").html($("#dataAuthPointTemplate").html());
+				$("#orderBy").val(json.bean.orderBy);
 			}
 			$("#name").val(json.bean.name);
 			$("#authMenu").val(json.bean.authMenu);
