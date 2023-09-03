@@ -917,7 +917,7 @@ var dsFormTableUtil = {
                 var array = bean.value.split(',');
                 condition.push(`$.inArray(d.${bean.attrKey}, ` + JSON.stringify(array) + `) !== -1`);
             } else {
-                condition.push(`d.${bean.attrKey} ${bean.symbolsMark} ${bean.value}`);
+                condition.push(`d.${bean.attrKey} ${bean.symbolsMark} '${bean.value}'`);
             }
         });
         var conditionStr = condition.join('&&');
