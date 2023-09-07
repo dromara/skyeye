@@ -41,7 +41,9 @@ layui.config({
 					return "页面";
 				}
 			}},
-			{ field: 'desktopName', title: '所属桌面', align: 'left', width: 120 },
+			{ field: 'desktopId', title: '所属桌面', align: 'left', width: 120, templet: function (d) {
+				return isNull(d.deskTopMation) ? '' : d.deskTopMation.name;
+			}},
 			{ field: 'parentTitle', title: '所属目录', align: 'left', width: 120 },
 			{ field: 'childNum', title: '子页面数量', align: 'left', width: 120 },
 			{ field: 'url', title: '页面路径', align: 'left', width: 300},
