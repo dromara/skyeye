@@ -51,22 +51,19 @@ layui.config({
 	    }
 	});
 	
-	table.on('tool(messageTable)', function (obj) {
-        var data = obj.data;
-        var layEvent = obj.event;
-    });
-
 	// 新增
 	$("body").on("click", "#addBean", function() {
-    	parent._openNewWindows({
-			url: systemCommonUtil.getUrl('FP2023082800013&objectId=' + objectId + '&objectKey=' + objectKey, null),
-			title: '签到',
-			pageId: "sealSignAdd",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+		layer.confirm('签到后不可更改，确认签到？', {icon: 3, title: "签到确认"}, function (index) {
+			layer.close(index);
+			var params = {
+				objectId: objectId,
+				objectKey: objectKey
+			};
+			AjaxPostUtil.request({url: sysMainMation.sealServiceBasePath + "insertSealSign", params: params, type: 'json', method: 'POST', callback: function (json) {
+				winui.window.msg('签到成功', {icon: 1, time: 2000});
 				loadTable();
 			}});
+		});
     });
 	
 	form.render();
