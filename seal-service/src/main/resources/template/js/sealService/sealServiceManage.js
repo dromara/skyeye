@@ -21,6 +21,9 @@ layui.config({
 		suffixData: [{
 			title: '签到记录',
 			pageUrl: '../../tpl/sealSign/sealSignList.html'
+		}, {
+			title: '故障信息',
+			pageUrl: '../../tpl/sealFault/sealFaultList.html'
 		}],
 		element: layui.element,
 		object: {
