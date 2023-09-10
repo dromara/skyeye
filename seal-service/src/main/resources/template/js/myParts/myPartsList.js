@@ -15,7 +15,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: flowableBasePath + 'sealseservice031',
+	    url: sysMainMation.sealServiceBasePath + 'sealseservice031',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -23,11 +23,13 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'materialName', title: '配件名称', align: 'left', width: 200 },
-	        { field: 'unitName', title: '计量单位', align: 'left', width: 80 },
-	        { field: 'materialModel', title: '配件规格', align: 'left', width: 150 },
-	        { field: 'normsFormtRetailPrice', title: '单价', align: 'left', width: 100 },
-	        { field: 'operNumber', title: '剩余数量', align: 'left', width: 100 }
+			{ field: 'materialId', title: '产品', align: 'left', width: 150, templet: function (d) {
+				return isNull(d.materialMation) ? '' : d.materialMation.name;
+			}},
+			{ field: 'normsId', title: '规格', align: 'left', width: 400, templet: function (d) {
+				return isNull(d.normsMation) ? '' : d.normsMation.name;
+			}},
+	        { field: 'stock', title: '剩余数量', align: 'left', width: 100 }
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
@@ -36,11 +38,6 @@ layui.config({
 			});
 	    }
 	});
-	
-	table.on('tool(messageTable)', function (obj) {
-        var data = obj.data;
-        var layEvent = obj.event;
-    });
 	
 	form.render();
 	$("body").on("click", "#reloadTable", function() {
@@ -55,5 +52,5 @@ layui.config({
 		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 
-    exports('mypartslist', {});
+    exports('myPartsList', {});
 });

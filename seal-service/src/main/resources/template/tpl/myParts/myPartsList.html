@@ -14,17 +14,13 @@
     </div>
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
-		<script type="text/html" id="tableBar">
-			{{# if(auth('1582382463563')){ }}
-				<a class="layui-btn layui-btn-xs" lay-event="examine">审核</a>
-			{{# } }}
-		</script>
+		<script type="text/html" id="tableBar"></script>
     </div>
 
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
-        layui.config({base: '../../js/partsclaim/'}).use('allpartsclaimtoexaminelist');
+        layui.config({base: '../../js/myParts/'}).use('myPartsList');
     </script>
 </body>
 </html>
