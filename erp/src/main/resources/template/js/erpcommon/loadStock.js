@@ -59,7 +59,7 @@ function getStockAjaxByDepotAndNormsId(normsIds, depotId, callBack) {
         depotId: depotId,
         normsIds: normsIds
     };
-    AjaxPostUtil.request({url: flowableBasePath + "material011", params: params, type: 'json', method: "POST", callback: function(json) {
+    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "material011", params: params, type: 'json', method: "POST", callback: function(json) {
         if(typeof(callBack) == "function") {
             callBack(json);
         }
