@@ -24,6 +24,9 @@ layui.config({
 		}, {
 			title: '故障信息',
 			pageUrl: '../../tpl/sealFault/sealFaultList.html'
+		}, {
+			title: '服务评价',
+			pageUrl: '../../tpl/sealEvaluate/sealEvaluateList.html'
 		}],
 		element: layui.element,
 		object: {
