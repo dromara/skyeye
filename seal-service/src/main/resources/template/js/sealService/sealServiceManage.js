@@ -27,6 +27,9 @@ layui.config({
 		}, {
 			title: '服务评价',
 			pageUrl: '../../tpl/sealEvaluate/sealEvaluateList.html'
+		}, {
+			title: '信息反馈',
+			pageUrl: '../../tpl/feedBack/feedBackList.html'
 		}],
 		element: layui.element,
 		object: {
