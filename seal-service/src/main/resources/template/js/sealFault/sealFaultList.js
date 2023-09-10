@@ -22,7 +22,7 @@ layui.config({
 	var state;
 	AjaxPostUtil.request({url: sysMainMation.sealServiceBasePath + "querySealServiceOrderById", params: {id: objectId}, type: 'json', method: 'GET', callback: function(json) {
 		state = json.bean.state;
-		if (state == 'beCompleted') {
+		if (state != 'beCompleted') {
 			$("#addBean").hide();
 		}
 		initTable();
@@ -44,9 +44,9 @@ layui.config({
 				{ field: 'oddNumber', title: '单号', width: 200, align: 'center', templet: function (d) {
 					return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 				}},
-				{ field: 'comStarTime', title: '实际开始时间', align: 'center', width: 100 },
-				{ field: 'comEndTime', title: '实际结束时间', align: 'center', width: 100 },
-				{ field: 'comWorkTime', title: '工时', align: 'center', width: 120 },
+				{ field: 'comStartTime', title: '实际开始时间', align: 'center', width: 150 },
+				{ field: 'comEndTime', title: '实际结束时间', align: 'center', width: 150 },
+				{ field: 'comWorkTime', title: '工时', align: 'left', width: 120 },
 				{ field: 'materialCost', title: '材料费', align: 'left', width: 120 },
 				{ field: 'coverCost', title: '服务费', align: 'left', width: 120 },
 				{ field: 'otherCost', title: '其他费用', align: 'left', width: 120 },
@@ -55,7 +55,7 @@ layui.config({
 				{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 				{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
 				{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-				{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, templet: function (d) {
+				{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, templet: function (d) {
 					var str = '';
 					if (state == 'beCompleted') {
 						str += '<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>';
