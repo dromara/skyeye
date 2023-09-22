@@ -1,6 +1,4 @@
 
-var rowId = "";
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -97,7 +95,6 @@ layui.config({
 
     // 编辑
 	function edit(data) {
-		rowId = data.id;
 		_openNewWindows({
             url:  systemCommonUtil.getUrl('FP2023042300002&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
@@ -111,7 +108,6 @@ layui.config({
     
     // 详情
 	function details(data) {
-		rowId = data.id;
 		_openNewWindows({
             url:  systemCommonUtil.getUrl('FP2023042300003&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],

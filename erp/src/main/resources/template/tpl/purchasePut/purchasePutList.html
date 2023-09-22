@@ -16,19 +16,19 @@
 	<div style="margin:auto 10px;">
 	    <table id="messageTable" lay-filter="messageTable"></table>
 		<script type="text/html" id="tableBar">
-			{{# if(d.editRow == 1){ }}
-				{{# if(auth('1591513626237')){ }}
+			{{# if(d.editRow == 1) { }}
+				{{# if(auth('1591513626237')) { }}
 					<a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>
 				{{# } }}
-				{{# if(auth('1571813042536')){ }}
+				{{# if(auth('1571813042536')) { }}
 					<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 				{{# } }}
-				{{# if(auth('1572484250823')){ }}
+				{{# if(auth('1572484250823')) { }}
 					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
 				{{# } }}
 			{{# } }}
-			{{# if(d.editRow == 2){ }}
-				{{# if(auth('1629466454798')){ }}
+			{{# if(d.editRow == 2) { }}
+				{{# if(auth('1629466454798')) { }}
 					<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
 				{{# } }}
 			{{# } }}
