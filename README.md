@@ -12,9 +12,9 @@
 
 ### 沟通交流
 
-| 知识星球 | 作者微信(添加时请备注个人信息：姓名-联系方式)，其余一律不通过 |          QQ群      |   微信小程序（包含企业版价格，文档资料等）  |
+|   知识星球   |   作者微信   |          QQ群      |   微信小程序（包含企业版价格，文档资料等）  |
 |:-----:|:--------------------------------:|:--------------------:|:-------------------------------------:|
-| ![](images/mindMap/知识星球.png) |    ![](images/mindMap/微信.jpg)    | ![](images/mindMap/Skyeye智能制造云办公官方①群群二维码.png) | ![](images/mindMap/Skyeye视频微信小程序.jpg) |
+| ![](images/mindMap/知识星球.png) |    ![](images/mindMap/chatgpt的微信.jpg)    | ![](images/mindMap/Skyeye智能制造云办公官方①群群二维码.png) | ![](images/mindMap/Skyeye视频微信小程序.jpg) |
 
 
 #### 技术选型
