@@ -1,7 +1,6 @@
-var rowId = "";
 
 layui.config({
-	base: basePath, 
+	base: basePath,
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
@@ -12,10 +11,11 @@ layui.config({
 		form = layui.form,
 		table = layui.table,
 		tableCheckBoxUtil = layui.tableCheckBoxUtil;
-	
+	var selTemplate = getFileContent('tpl/template/select-option.tpl');
+	// 组件使用
 	// 选择的多商品列表
 	materialMationList = parent.materialMationList;
-	
+
 	// 设置提示信息
 	var s = "商品选择规则：1.多选；如没有查到要选择的商品，请检查商品信息是否满足当前规则。";
 	$("#showInfo").html(s);
@@ -31,12 +31,12 @@ layui.config({
 	function initTable(){
 		var ids = [];
 		$.each(materialMationList, function(i, item) {
-			ids.push(item.materialId);
+			ids.push(item.id);
 		});
 		tableCheckBoxUtil.init({
 			gridId: 'messageTable',
 			filterId: 'messageTable',
-			fieldName: 'materialId',
+			fieldName: 'id',
 			ids: ids
 		});
 
@@ -66,21 +66,14 @@ layui.config({
 				}},
 				{ field: 'unit', title: '产品规格类型', align: 'center', width: 100, templet: function (d) {
 					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialUnit", 'id', d.unit, 'name');
-				}},
-		        { field: 'procedureMationList', title: '工序', align: 'left', width: 100, templet: function (d) {
-		        	var str = ""
-		        	$.each(d.procedureMationList, function(i, item) {
-		        		str += '<span class="layui-badge layui-bg-gray">' + item.number + '</span>' + item.procedureName + '<br>';
-		        	});
-		        	return str;
-			    }}
+				}}
 		    ]],
 			done: function (json, curr, count) {
 				matchingLanguage();
 				// 设置选中
 				tableCheckBoxUtil.checkedDefault({
 					gridId: 'messageTable',
-					fieldName: 'materialId'
+					fieldName: 'id'
 				});
 
 				initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入商品名称，型号", function () {
@@ -88,17 +81,17 @@ layui.config({
 				});
 			}
 		});
-		
+
 		form.render();
 	}
-	
+
 	var $step = $("#step");
 	$step.step({
 		index: 0,
 		time: 500,
 		title: ["选择商品", "选择规格"]
 	});
-	
+
 	// 下一步
 	$("body").on("click", "#nextTab", function() {
 		var selectedData = tableCheckBoxUtil.getValueList({
@@ -115,89 +108,47 @@ layui.config({
 		$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: materialMationList}));
 		// 设置商品来源选中
 		$.each(materialMationList, function(i, item) {
-			$("#type" + item.materialId).val(item.typeId);
+			$("#type" + item.id).val(item.typeId);
 		});
 		form.render();
 	});
-	
+
 	// 保存
 	$("body").on("click", "#saveChoose", function() {
 		var rows = $("#tBody tr");
 		var proList = new Array();
 		$.each(rows, function(i, item) {
-			var _object = $(item);
-			var materialId = _object.attr("rowid");
+			var materialId = $(item).attr("rowid");
 			proList.push({
 				materialId: materialId,
-				materialName: $("#name" + materialId).html(),
-				materialModel: $("#model" + materialId).html(),
 				bomId: $("#bom" + materialId).val(),
-				normsId: $("#norms" + materialId).val(),
-				unitName: $("#norms" + materialId).find("option:selected").text(),
-				procedureMationList: getProcedureMationList(materialId),
-				pId: '0',
-				needNum: '1',
-				unitPrice: getNormsPrice(materialId, $("#norms" + materialId).val()),
-				wastagePrice: '0.00',
-				type: $("#type" + materialId).val(),
-				remark: '',
-				open: 'true',
-				isParent: 1
+				normsId: $("#norms" + materialId).val()
 			});
 		});
+
 		var params = {
 			proList: JSON.stringify(proList)
 		};
-		AjaxPostUtil.request({url: flowableBasePath + "material015", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: sysMainMation.erpBasePath + "material015", params: params, type: 'json', method: 'POST', callback: function(json) {
 			parent.materialMationList = [].concat(json.rows);
 			parent.layer.close(index);
 			parent.refreshCode = '0';
 		}});
 	});
-	
-	/**
-	 * 获取商品工序
-	 */
-	function getProcedureMationList(materialId) {
-		var proIndex = -1;
-		$.each(materialMationList, function (i, item) {
-			if (materialId == item.materialId) {
-				proIndex = i;
-				return false;
-			}
-		});
-		if (proIndex >= 0) {
-			return materialMationList[proIndex].procedureMationList;
+
+	form.on('select(unitListChoose)', function (data) {
+		var materialId = data.elem.id.replace("norms", "");
+		var value = data.value;
+		if (isNull(value)) {
+			$("#modelId").html("");
 		} else {
-			return new Array();
+			AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryBomListByNormsId", params: {normsId: value}, type: 'json', method: 'GET', callback: function (json) {
+				$("#bom" + materialId).html(getDataUseHandlebars(selTemplate, json));
+				form.render("select");
+			}});
 		}
-	}
-	
-	/**
-	 * 获取指定规格的采购价/成本价
-	 */
-	function getNormsPrice(materialId, normsId){
-		//项目索引
-		var proIndex = -1;
-		//规格索引
-		var normsIndex = -1;
-		$.each(materialMationList, function(i, item) {
-			if(materialId == item.materialId){
-				proIndex = i;
-				$.each(item.unitList, function(j, bean){
-					normsIndex = j;
-					return false;
-				});
-				return false;
-			}
-		});
-		if(proIndex >= 0 && normsIndex >= 0){
-			return materialMationList[proIndex].unitList[normsIndex].estimatePurchasePrice;
-		} else {
-			return new Array();
-		}
-	}
-	
+	});
+
 	// 上一步
 	$("body").on("click", "#prevTab", function() {
 		$step.prevStep();
@@ -209,11 +160,11 @@ layui.config({
 	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
-    
+
     function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
-    
+
     function refreshTable(){
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
@@ -221,6 +172,6 @@ layui.config({
 	function getTableParams() {
 		return $.extend(true, {categoryId: categoryId}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
-	
+
     exports('materialChooseToProduce', {});
 });

@@ -59,9 +59,32 @@ layui.config({
         }
     });
 
+    // 添加
+    $("body").on("click", "#addBean", function() {
+        _openNewWindows({
+            url:  systemCommonUtil.getUrl('FP2023092900001', null),
+            title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+            pageId: "erpBomAdd",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    });
+
+    // 详情
+    function details(data) {
+        _openNewWindows({
+            url: "../../tpl/erpBom/erpBomDetail.html",
+            title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+            pageId: "erpBomDetails",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+            }});
+    }
+
     // 编辑
     function edit(data) {
-        rowId = data.id;
         _openNewWindows({
             url: "../../tpl/erpBom/erpBomEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
@@ -84,31 +107,6 @@ layui.config({
             }});
         });
     }
-
-    // 添加
-    $("body").on("click", "#addBean", function() {
-        _openNewWindows({
-            url: "../../tpl/erpBom/erpBomAdd.html",
-            title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-            pageId: "erpBomAdd",
-            area: ['90vw', '90vh'],
-            callBack: function (refreshCode) {
-                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                loadTable();
-            }});
-    });
-    
-    // 详情
-	function details(data) {
-		rowId = data.id;
-		_openNewWindows({
-			url: "../../tpl/erpBom/erpBomDetail.html", 
-			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "erpBomDetails",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-			}});
-	}
 
     form.render();
     $("body").on("click", "#reloadTable", function() {

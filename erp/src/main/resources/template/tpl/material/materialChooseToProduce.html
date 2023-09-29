@@ -44,16 +44,14 @@
     
     <div id="secondTab" style="display: none;">
     	<form class="layui-form" action="" id="showForm" autocomplete="off">
-	    	<table class="layui-table" style="margin: 0px 10px;">
+	    	<table class="layui-table" style="margin: 0px 10px; width: calc(100% - 20px);">
 	    		<thead>
 	    			<tr>
 	    				<th style="width: 100px">商品名称</th>
 	    				<th>型号</th>
-	    				<th>所属类型</th>
-	    				<th>商品来源</th>
-						<th>规格选择</th>
+	    				<th>商品来源<i class="red">*</i></th>
+						<th>规格选择<i class="red">*</i></th>
 						<th>BOM方案选择</th>
-	    				<th>工序</th>
 	    			</tr>
 	    		</thead>
 	        	<tbody id="tBody">
@@ -71,35 +69,26 @@
     
     <script type="text/html" id="tableBody">
 		{{#each rows}}
-			<tr rowid="{{materialId}}">
-               	<td id="name{{materialId}}">{{materialName}}</td>
-               	<td id="model{{materialId}}">{{materialModel}}</td>
-               	<td>{{categoryName}}</td>
+			<tr rowid="{{id}}">
+               	<td id="name{{id}}">{{name}}</td>
+               	<td id="model{{id}}">{{model}}</td>
                	<td>
-					<select lay-filter="typeId" lay-search="" id="type{{materialId}}" disabled>
+					<select lay-filter="typeId" lay-search="" id="type{{id}}" disabled>
 						<option value="1">自产</option>
 						<option value="2">外购</option>
 					</select>
 				</td>
 				<td>
-					<select lay-filter="unitListChoose" lay-search="" id="norms{{materialId}}">
-						{{#each unitList}}
+					<select lay-filter="unitListChoose" lay-filter="unitListChoose" win-verify="required" lay-search="" id="norms{{id}}">
+						<option value="">请选择</option>
+						{{#each materialNorms}}
 						<option value="{{id}}">{{name}}</option>
 						{{/each}}
 					</select>
 				</td>
                	<td>
-					<select lay-filter="bomListChoose" lay-search="" id="bom{{materialId}}">
-						<option value="">全部</option>
-						{{#each bomList}}
-							<option value="{{id}}">{{name}}</option>
-						{{/each}}
+					<select lay-filter="bomListChoose" lay-search="" id="bom{{id}}">
 					</select>
-				</td>
-				<td>
-					{{#each procedureMationList}}
-						<span class="layui-badge layui-bg-gray">{{number}}</span>{{procedureName}}<br>
-					{{/each}}
 				</td>
             </tr>
 		{{/each}}

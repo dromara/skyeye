@@ -49,7 +49,7 @@ layui.config({
 	    
 	    //加载bom方案列表
 	    function loadBomList(normsId){
-	    	AjaxPostUtil.request({url: flowableBasePath + "erpbom007", params: {normsId: normsId}, type: 'json', callback: function (json) {
+	    	AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryBomListByNormsId", params: {normsId: normsId}, type: 'json', method: 'GET', callback: function (json) {
 				$("#bomList").html(getDataUseHandlebars(selTemplate, json));
 				form.render("select");
 				//加载bom方案下的子件列表
