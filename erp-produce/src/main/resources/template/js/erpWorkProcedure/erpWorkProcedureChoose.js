@@ -11,7 +11,7 @@ layui.config({
 		form = layui.form,
 		table = layui.table,
 		tableCheckBoxUtil = layui.tableCheckBoxUtil;
-		
+	// 组件使用
 	var checkType = '1';//工序选择类型：1.单选；2.多选
 	if (!isNull(parent.procedureCheckType)) {
 		checkType = parent.procedureCheckType;
