@@ -10,7 +10,7 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-	
+	// 组件使用
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',

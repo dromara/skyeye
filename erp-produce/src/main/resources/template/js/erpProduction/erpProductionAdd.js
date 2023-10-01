@@ -86,7 +86,7 @@ layui.config({
 			loadChildProPosal();
 		});
 	    
-	    //加载建议采购数量
+	    // 加载建议采购数量
 	    function loadChildProPosal(){
 	    	//计划生产数量
 	    	var number = parseInt(isNull($("#number").val()) ? '0' : $("#number").val());

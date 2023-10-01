@@ -30,9 +30,9 @@ layui.config({
 		        return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 		    }},
             { field: 'salesOrderNum', width: 200, title: '关联销售单', align: 'center' },
-			{ field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {return d.materialMation.name}},
-			{ field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {return d.materialMation.model}},
-			{ field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {return d.normsMation.name}},
+			{ field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {return isNull(d.materialMation) ? '' : d.materialMation.name}},
+			{ field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {return isNull(d.materialMation) ? '' : d.materialMation.model}},
+			{ field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {return isNull(d.normsMation) ? '' : d.normsMation.name}},
             { field: 'number', width: 100, title: '计划生产数量'},
 			{ field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
 				return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';

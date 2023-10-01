@@ -1,4 +1,3 @@
-var rowId = "";
 
 layui.config({
 	base: basePath, 
@@ -12,6 +11,7 @@ layui.config({
 		form = layui.form,
 		table = layui.table,
 		fsTree = layui.fsTree;
+	// 组件使用
 	/********* tree 处理   start *************/
 	//初始销售单分类类型
     var materialCategoryType;
@@ -74,11 +74,11 @@ layui.config({
 		    cols: [[
 		    	{ type: 'radio'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        { field: 'materialName', title: '商品', align: 'left', width: 150 },
-		        { field: 'materialModel', title: '型号', align: 'left', width: 150 },
-		        { field: 'materialUnitName', title: '单位', align: 'left', width: 70 },
-		        { field: 'operNum', title: '数量', align: 'left', width: 80 },
-		        { field: 'unitPrice', title: '单价', align: 'left', width: 80 },
+				{ field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {return d.materialMation.name}},
+				{ field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {return d.materialMation.model}},
+				{ field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {return d.normsMation.name}},
+				{ field: 'operNumber', title: '数量', align: 'left', width: 80 },
+				{ field: 'unitPrice', title: '单价', align: 'left', width: 120 },
 		        { field: 'allPrice', title: '金额', align: 'left', width: 80 },
 		        { field: 'taxRate', title: '税率(%)', align: 'left', width: 80 },
 		        { field: 'taxMoney', title: '税额', align: 'left', width: 80 },
@@ -94,6 +94,7 @@ layui.config({
 					form.render();
 					var chooseIndex = JSON.stringify(dubClick.data('index'));
 					var obj = res.rows[chooseIndex];
+					obj.orderMation = res.bean;
 					parent.salesOrder = obj;
 					
 					parent.refreshCode = '0';
@@ -111,19 +112,15 @@ layui.config({
 	}
 	
 	$("body").on("click", "#reloadTable", function() {
-    	loadTable();
+		refreshTable();
     });
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
-    }
     
     function refreshTable(){
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
 	function getTableParams() {
-		return {orderId: salesOrderId};
+		return {id: salesOrderId};
 	}
 	
     exports('salesOrderChoose', {});
