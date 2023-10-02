@@ -29,7 +29,7 @@ layui.config({
             { field: 'oddNumber', title: '生产单号', align: 'center', width: 200, templet: function (d) {
 		        return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 		    }},
-            { field: 'salesOrderNum', width: 200, title: '关联销售单', align: 'center' },
+            { field: 'salesOrderNum', width: 200, title: '关联销售单', align: 'center', templet: function (d) {return isNull(d.sealOrderMation) ? '' : d.sealOrderMation.oddNumber}},
 			{ field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {return isNull(d.materialMation) ? '' : d.materialMation.name}},
 			{ field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {return isNull(d.materialMation) ? '' : d.materialMation.model}},
 			{ field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {return isNull(d.normsMation) ? '' : d.normsMation.name}},
@@ -65,8 +65,8 @@ layui.config({
         	edit(data);
         } else if (layEvent === 'details') { //详情
         	details(data);
-        } else if (layEvent === 'subExamine') { //提交审核
-        	subExamine(data);
+        } else if (layEvent === 'subApproval') { //提交审核
+			subApproval(data);
         } else if (layEvent === 'processDetails') { // 工作流流程详情查看
 			activitiUtil.activitiDetails(data);
 		} else if (layEvent === 'revoke') { //撤销
@@ -123,13 +123,20 @@ layui.config({
 	}
 
 	// 提交审批
-	function subExamine(data) {
-        layer.confirm('确认要提交审核吗？', { icon: 3, title: '提交审核操作' }, function (index) {
-            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpproduction007", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
-				winui.window.msg("提交成功。", {icon: 1, time: 2000});
-				loadTable();
-            }});
-        });
+	function subApproval(data) {
+		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
+			layer.close(index);
+			activitiUtil.startProcess(data.serviceClassName, null, function (approvalId) {
+				var params = {
+					id: data.id,
+					approvalId: approvalId
+				};
+				AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpproduction007", params: params, type: 'json', method: 'POST', callback: function (json) {
+					winui.window.msg("提交成功", {icon: 1, time: 2000});
+					loadTable();
+				}});
+			});
+		});
     }
 
 	// 撤销
