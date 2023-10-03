@@ -42,6 +42,7 @@
     "supplierContractStateEnum": {"name": "供应商合同状态", "className": "skyeye-erp#com.skyeye.contract.classenum.SupplierContractStateEnum"},
     "supplierContractAuthEnum": {"name": "供应商合同权限", "className": "skyeye-erp#com.skyeye.contract.classenum.SupplierContractAuthEnum", "pageUrl": "../../tpl/supplierContract/supplierContractList.html"},
     "productionState": {"name": "生产计划单状态", "className": "skyeye-erp#com.skyeye.production.classenum.ProductionStateEnum"},
+    "machinStateEnum": {"name": "加工单状态", "className": "skyeye-erp#com.skyeye.machin.classenum.MachinStateEnum"},
 
     "skyeyeView": {"name": "视图类型", "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"},
     "widthScale": {"name": "宽度比例", "className": "skyeye-pro#com.skyeye.attr.classenum.WidthScale"},

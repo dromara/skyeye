@@ -12,27 +12,11 @@
 	<div id="firstTab">
 		<div class="txtcenter" style="margin:0 auto;padding-top:10px;">
 			<div class="winui-tip alert-info" id="showInfo">
-			
+				生产计划单选择规则：1.单选，单击击指定行数据即可选中；2.已审批通过的未完成的生产计划单。如没有查到要选择的单据，请检查单据信息是否满足当前规则。
 			</div>
 			<form class="layui-form layui-form-pane" action="" autocomplete="off">
 		        <div class="layui-form-item">
 		            <div class="layui-inline">
-		                <label class="layui-form-label">计划单号</label>
-		                <div class="layui-input-inline">
-		                    <input id="defaultNumber" name="defaultNumber" class="layui-input" placeholder="请输入计划单号"/>
-		                </div>
-		                <label class="layui-form-label">销售单号</label>
-		                <div class="layui-input-inline">
-		                    <input id="salesOrderNum" name="salesOrderNum" class="layui-input" placeholder="请输入销售单号"/>
-		                </div>
-		                <label class="layui-form-label">商品名称</label>
-		                <div class="layui-input-inline">
-		                    <input id="materialName" name="materialName" class="layui-input" placeholder="请输入商品名称"/>
-		                </div>
-		                <label class="layui-form-label">商品型号</label>
-		                <div class="layui-input-inline">
-		                    <input id="materialModel" name="materialModel" class="layui-input" placeholder="请输入商品型号"/>
-		                </div>
 		                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
 		                <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
 		            </div>
@@ -81,13 +65,9 @@
 		{{#each procedureList}}
 			<tr>
 				<td>{{{checkBoxHtml}}}</td>
-               	<td>{{number}}</td>
-               	<td>
-					{{#each procedureArray}}
-						{{{procedureName}}}
-					{{/each}}
-				</td>
-				<td>{{departmentName}}</td>
+               	<td>{{procedureMation.number}}</td>
+               	<td>{{procedureMation.name}}</td>
+				<td>{{procedureMation.departmentMation.name}}</td>
 				<td>{{{stateName}}}</td>
             </tr>
 		{{/each}}
@@ -98,7 +78,7 @@
     <script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery-min.js"></script>
     <script type="text/javascript" src="../../assets/lib/layui/lay/modules/jqueryStep/js/jquery.step.min.js"></script>
     <script type="text/javascript">
-        layui.config({base: '../../js/erpProduction/'}).use('erpProductionNoSuccessChooseProcedure');
+        layui.config({base: '../../js/erpProduction/'}).use('erpProductionNoComplateProcedureList');
     </script>
 </body>
 </html>

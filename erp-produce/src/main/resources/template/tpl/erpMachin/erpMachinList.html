@@ -17,19 +17,20 @@
 	    <table id="messageTable" lay-filter="messageTable"></table>
 	
 	    <script type="text/html" id="tableBar">
-        	{{# if(d.state == 1 || d.state == 4){ }}
-				{{# if(auth('1593616376462')){ }}
-       				<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+			{{# if(d.editRow == 1) { }}
+				{{# if(auth('1593700472791')) { }}
+					<a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>
 				{{# } }}
-				{{# if(auth('1593697910273')){ }}
-        			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+				{{# if(auth('1593442212544')) { }}
+					<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 				{{# } }}
-				{{# if(auth('1593700472791')){ }}
-					<a class="layui-btn layui-btn-xs" lay-event="subExamine">提交审核</a>
+				{{# if(auth('1593697910273')) { }}
+					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
 				{{# } }}
-        	{{# } else if(d.state == 2) { }}
-				{{# if(auth('1593702369415')){ }}
-					<a class="layui-btn layui-btn-xs" lay-event="examine">审核</a>
+			{{# } }}
+			{{# if(d.editRow == 2) { }}
+				{{# if(auth('')) { }}
+					<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
 				{{# } }}
 			{{# } }}
     	</script>

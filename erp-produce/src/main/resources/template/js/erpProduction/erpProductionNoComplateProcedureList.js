@@ -11,6 +11,8 @@ layui.config({
 		form = layui.form,
 		table = layui.table;
 		
+	var chooseMation = {};
+	
 	table.render({
 		id: 'messageTable',
 		elem: '#messageTable',
@@ -38,15 +40,13 @@ layui.config({
 			initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入生产单号", function () {
 				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
-			$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
+			$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('click',function(){
 				var dubClick = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
 				dubClick.find("input[type='radio']").prop("checked", true);
 				form.render();
 				var chooseIndex = JSON.stringify(dubClick.data('index'));
 				var obj = res.rows[chooseIndex];
-				parent.productionMation = obj;
-				parent.refreshCode = '0';
-				parent.layer.close(index);
+				chooseMation = obj;
 			});
 
 			$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('click',function(){
@@ -75,6 +75,62 @@ layui.config({
 			callBack: function (refreshCode) {
 			}});
 	}
+	
+	var $step = $("#step");
+	$step.step({
+		index: 0,
+		time: 500,
+		title: ["选择计划单", "选择工序"]
+	});
+	
+	// 下一步
+	$("body").on("click", "#nextTab", function() {
+		if (isNull(chooseMation.id)) {
+			winui.window.msg("请选择生产计划单.", {icon: 2, time: 2000});
+			return false;
+		}
+		AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryProductionById", params: {id: chooseMation.id}, type: 'json', method: 'GET', callback: function(json) {
+			var procedureList = json.bean.productionProcedureList;
+			if (!isNull(procedureList)) {
+				// 加载工序信息
+				$.each(procedureList, function(i, item) {
+					if (item.state == '1') {
+						item.checkBoxHtml = '<input type="radio" name="procedureListName" value="' + item.procedureMation.id + '">';
+						item.stateName = "<span class='state-down'>待下达</span>";
+					} else if (item.state == '2') {
+						item.checkBoxHtml = '<input type="radio" name="procedureListName" value="' + item.procedureMation.id + '" disabled="disabled">';
+						item.stateName = "<span class='state-up'>已下达</span>"
+					}
+				});
+				$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {procedureList: procedureList}));
+				form.render();
+				$step.nextStep();
+				$("#firstTab").hide();
+				$("#secondTab").show();
+			}
+		}});
+	});
+	
+	// 上一步
+	$("body").on("click", "#prevTab", function() {
+		$step.prevStep();
+		$("#firstTab").show();
+		$("#secondTab").hide();
+	});
+	
+	// 保存
+	$("body").on("click", "#saveChoose", function() {
+		var chooseProcedure = $("input[name='procedureListName']:checked").val();
+		if (isNull(chooseProcedure)) {
+			winui.window.msg("请选择工序信息.", {icon: 2, time: 2000});
+			return false;
+		}
+
+		chooseMation.chooseProcedure = chooseProcedure;
+		parent.productionMation = chooseMation;
+		parent.refreshCode = '0';
+		parent.layer.close(index);
+	});
 
 	form.render();
 	$("body").on("click", "#reloadTable", function() {
@@ -88,5 +144,5 @@ layui.config({
 		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
-    exports('erpProductionNoSuccessChoose', {});
+    exports('erpProductionNoComplateProcedureList', {});
 });

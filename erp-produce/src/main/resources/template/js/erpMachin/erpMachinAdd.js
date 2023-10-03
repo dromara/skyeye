@@ -261,7 +261,7 @@ layui.config({
  	    //计划加工单选择
  	    $("body").on("click", "#productionOrderSel", function (e) {
  	    	_openNewWindows({
- 				url: "../../tpl/erpProduction/erpProductionNoSuccessChooseProcedure.html", 
+ 				url: "../../tpl/erpProduction/erpProductionNoComplateList.html",
  				title: "选择生产计划单",
  				pageId: "erpProductionNoSuccessChooseProcedure",
  				area: ['90vw', '90vh'],

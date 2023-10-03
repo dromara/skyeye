@@ -40,8 +40,8 @@ layui.config({
 			{ field: 'state', title: '状态', width: 90, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("productionState", 'id', d.state, 'name');
 			}},
-	        { field: 'planStartDate', width: 140, align: 'center', title: '计划开始时间'},
-	        { field: 'planComplateDate', width: 140, align: 'center', title: '计划结束时间'},
+	        { field: 'planStartDate', width: 150, align: 'center', title: '计划开始时间'},
+	        { field: 'planComplateDate', width: 150, align: 'center', title: '计划结束时间'},
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
