@@ -25,7 +25,7 @@ layui.config({
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
             { field: 'oddNumber', rowspan: '2', title: '单据编号', align: 'center', width: 180, templet: function (d) {
-		        return '<a lay-event="details" class="notice-title-click">' + d.orderNum + '</a>';
+		        return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 		    }},
             { field: 'productionMation', rowspan: '2', title: '生产计划单', align: 'center', width: 200, templet: function (d) {return isNull(d.productionMation) ? '' : d.productionMation.oddNumber}},
             { colspan: '3', title: '加工成品信息', align: 'center' },
@@ -78,7 +78,7 @@ layui.config({
     // 添加
     $("body").on("click", "#addBean", function() {
         _openNewWindows({
-            url:  systemCommonUtil.getUrl('', null),
+            url:  systemCommonUtil.getUrl('FP2023100300001', null),
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "erpMachinAdd",
             area: ['90vw', '90vh'],
@@ -91,7 +91,7 @@ layui.config({
     // 编辑
     function edit(data) {
         _openNewWindows({
-            url:  systemCommonUtil.getUrl('&id=' + data.id, null),
+            url:  systemCommonUtil.getUrl('FP2023100300002&id=' + data.id, null),
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "erpMachinEdit",
             area: ['90vw', '90vh'],
@@ -104,7 +104,7 @@ layui.config({
     // 详情
     function details(data) {
         _openNewWindows({
-            url:  systemCommonUtil.getUrl('&id=' + data.id, null),
+            url:  systemCommonUtil.getUrl('FP2023100300003&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "erpMachinDetails",
             area: ['90vw', '90vh'],
