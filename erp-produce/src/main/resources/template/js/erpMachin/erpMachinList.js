@@ -60,7 +60,7 @@ layui.config({
     table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'del') { // 删除
+        if (layEvent === 'delete') { // 删除
             del(data);
         } else if (layEvent === 'details') { // 详情
         	details(data);
@@ -115,7 +115,7 @@ layui.config({
     // 删除
     function del(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
-            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpmachin005", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "deleteMachinById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -143,7 +143,7 @@ layui.config({
     function revoke(data) {
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "revokeProduction", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "revokeMachin", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
                 winui.window.msg("提交成功", {icon: 1, time: 2000});
                 loadTable();
             }});

@@ -10,7 +10,7 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-		
+	// 组件使用
 	var chooseMation = {};
 	
 	table.render({
@@ -82,7 +82,7 @@ layui.config({
 		time: 500,
 		title: ["选择计划单", "选择工序"]
 	});
-	
+
 	// 下一步
 	$("body").on("click", "#nextTab", function() {
 		if (isNull(chooseMation.id)) {
@@ -90,7 +90,8 @@ layui.config({
 			return false;
 		}
 		AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryProductionById", params: {id: chooseMation.id}, type: 'json', method: 'GET', callback: function(json) {
-			var procedureList = json.bean.productionProcedureList;
+			chooseMation = json.bean;
+			var procedureList = [].concat(json.bean.productionProcedureList);
 			if (!isNull(procedureList)) {
 				// 加载工序信息
 				$.each(procedureList, function(i, item) {
@@ -126,7 +127,7 @@ layui.config({
 			return false;
 		}
 
-		chooseMation.chooseProcedure = chooseProcedure;
+		chooseMation.chooseProcedure = getInPoingArr(chooseMation.productionProcedureList, "procedureId", chooseProcedure, "procedureMation");
 		parent.productionMation = chooseMation;
 		parent.refreshCode = '0';
 		parent.layer.close(index);

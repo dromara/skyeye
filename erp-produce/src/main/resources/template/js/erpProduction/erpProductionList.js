@@ -59,7 +59,7 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'del') { //删除
+        if (layEvent === 'delete') { //删除
         	del(data, obj);
         } else if (layEvent === 'edit') { //编辑
         	edit(data);
