@@ -41,7 +41,7 @@ layui.config({
             { field: 'lastUpdateName', rowspan: '2', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
             { field: 'lastUpdateTime', rowspan: '2', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
-        ],[
+        ], [
 	        { field: 'materialMation', title: '名称', align: 'left', width: 120, templet: function (d) {return isNull(d.materialMation) ? '' : d.materialMation.name}},
 	    	{ field: 'normsMation', title: '规格', align: 'left', width: 80, templet: function (d) {return isNull(d.normsMation) ? '' : d.normsMation.name}},
 	        { field: 'needNum', title: '加工数量', align: 'center', width: 80 },
