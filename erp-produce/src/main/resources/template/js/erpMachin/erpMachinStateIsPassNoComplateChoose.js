@@ -43,7 +43,7 @@ layui.config({
 
 		], [
 			{ field: 'materialMation', title: '名称', align: 'left', width: 120, templet: function (d) {return isNull(d.materialMation) ? '' : d.materialMation.name}},
-			{ field: 'normsMation', title: '规格', align: 'left', width: 80, templet: function (d) {return isNull(d.normsMation) ? '' : d.normsMation.name}},
+			{ field: 'normsMation', title: '规格', align: 'left', width: 200, templet: function (d) {return isNull(d.normsMation) ? '' : d.normsMation.name}},
 			{ field: 'needNum', title: '加工数量', align: 'center', width: 80 },
 			{ field: 'departmentMation', title: '加工部门', align: 'left', width: 100, templet: function (d) {return isNull(d.departmentMation) ? '' : d.departmentMation.name}},
 			{ field: 'startTime', title: '开始时间', align: 'center', width: 150 },
