@@ -78,7 +78,7 @@ layui.config({
     // 添加
     $("body").on("click", "#addBean", function() {
         _openNewWindows({
-            url:  systemCommonUtil.getUrl('FP2023100300001', null),
+            url: systemCommonUtil.getUrl('FP2023100300001', null),
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "erpMachinAdd",
             area: ['90vw', '90vh'],
@@ -91,7 +91,7 @@ layui.config({
     // 编辑
     function edit(data) {
         _openNewWindows({
-            url:  systemCommonUtil.getUrl('FP2023100300002&id=' + data.id, null),
+            url: systemCommonUtil.getUrl('FP2023100300002&id=' + data.id, null),
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "erpMachinEdit",
             area: ['90vw', '90vh'],
@@ -104,7 +104,7 @@ layui.config({
     // 详情
     function details(data) {
         _openNewWindows({
-            url:  systemCommonUtil.getUrl('FP2023100300003&id=' + data.id, null),
+            url: systemCommonUtil.getUrl('FP2023100300003&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "erpMachinDetails",
             area: ['90vw', '90vh'],

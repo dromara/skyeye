@@ -60,6 +60,8 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'details') { // 详情
         	details(data);
+        } else if (layEvent === 'machinAccept') { //工序验收
+            machinAccept(data);
         }
     });
 
@@ -73,6 +75,19 @@ layui.config({
 			callBack: function (refreshCode) {
 			}});
 	}
+
+    // 工序验收
+    function machinAccept(data) {
+        _openNewWindows({
+            url: "../../tpl/erpMachin/machinAccept.html?id=" + data.id,
+            title: '工序验收',
+            pageId: "machinAccept",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
 
     form.render();
     $("body").on("click", "#reloadTable", function() {

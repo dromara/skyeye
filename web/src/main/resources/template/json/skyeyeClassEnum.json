@@ -44,6 +44,7 @@
     "productionState": {"name": "生产计划单状态", "className": "skyeye-erp#com.skyeye.production.classenum.ProductionStateEnum"},
     "machinStateEnum": {"name": "加工单状态", "className": "skyeye-erp#com.skyeye.machin.classenum.MachinStateEnum"},
     "machinPickStateEnum": {"name": "加工单领料状态", "className": "skyeye-erp#com.skyeye.machin.classenum.MachinPickStateEnum"},
+    "machinChildStateEnum": {"name": "工序验收单状态", "className": "skyeye-erp#com.skyeye.machin.classenum.MachinChildStateEnum"},
 
     "skyeyeView": {"name": "视图类型", "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"},
     "widthScale": {"name": "宽度比例", "className": "skyeye-pro#com.skyeye.attr.classenum.WidthScale"},

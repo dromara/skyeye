@@ -18,6 +18,11 @@
 	    <table id="messageTable" lay-filter="messageTable"></table>
 	
 	    <script type="text/html" id="tableBar">
+			{{# if(d.state == 'pass') { }}
+				{{# if(auth('1696385978429')) { }}
+					<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="machinAccept">工序验收</a>
+				{{# } }}
+			{{# } }}
     	</script>
 	</div>
 	<script src="../../assets/lib/layui/layui.js"></script>
