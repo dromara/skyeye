@@ -2,53 +2,6 @@
 var erpOrderUtil = {
 
     /**
-     * erp单据详情获取url地址
-     * @param {} data
-     * @return {}
-     */
-    getErpDetailUrl: function(data) {
-        var url = "";
-        if (data.subType == 1) {//采购入库---入库
-            url = "../../tpl/purchasePut/purchasePutDetails.html";
-        } else if (data.subType == 4) {//其他入库---入库
-            url = "../../tpl/otherWarehous/otherWarehousDetails.html";
-        } else if (data.subType == 2) {//销售退货---入库
-            url = "../../tpl/salesReturns/salesReturnsDetails.html";
-        } else if (data.subType == 6) {//采购退货---出库
-            url = "../../tpl/purchaseReturns/purchaseReturnsDetails.html";
-        } else if (data.subType == 9) {//其他出库---出库
-            url = "../../tpl/otherOutlets/otherOutletsDetails.html";
-        } else if (data.subType == 5) {//销售出库---出库
-            url = "../../tpl/salesOutlet/salesOutletDetails.html";
-        } else if (data.subType == 8) {//零售出库---出库
-            url = "../../tpl/retailOutlet/retailOutletDetails.html";
-        } else if (data.subType == 3) {//零售退货---入库
-            url = "../../tpl/retailReturns/retailReturnsDetails.html";
-        } else if (data.subType == 12) {//拆分单---其他,一进一出
-            url = "../../tpl/splitDoc/splitDocDetails.html";
-        } else if (data.subType == 13) {//组装单---其他,一进一出
-            url = "../../tpl/assemblySheet/assemblySheetDetails.html";
-        } else if (data.subType == 14) {//调拨单---其他,一进一出
-            url = "../../tpl/allocation/allocationDetails.html";
-        } else if (data.subType == 15) {//验收入库单
-            url = "";
-        } else if (data.subType == 16) {//加工单
-            url = "../../tpl/erpMachin/erpMachinDetails.html";
-        } else if (data.subType == 17) {//工序验收单
-            url = "";
-        } else if (data.subType == 18) {//生产计划单
-            url = "../../tpl/erpProduction/erpProductionDetail.html";
-        } else if (data.subType == 19) {//领料单
-            url = "../../tpl/erpPick/erpRequisitionDetails.html";
-        } else if (data.subType == 20) {//补料单
-            url = "../../tpl/erpPick/erpPatchDetails.html";
-        } else if (data.subType == 21) {//退料单
-            url = "../../tpl/erpPick/erpReturnDetails.html";
-        }
-        return url;
-    },
-
-    /**
      * 删除订单信息
      *
      * @param id 订单id

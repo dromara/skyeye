@@ -11,6 +11,7 @@ layui.config({
 		table = layui.table,
 		soulTable = layui.soulTable;
 
+	// 库存预警
 	table.render({
 		id: 'messageTable',
 		elem: '#messageTable',
