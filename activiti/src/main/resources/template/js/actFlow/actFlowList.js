@@ -26,13 +26,6 @@ layui.config({
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: '2' },
 			{ colspan: '5', title: '模型信息', align: 'center'},
 			{ colspan: '2', title: '发布信息', align: 'center'},
-			{ field: 'actModelId', title: '流程配置', align: "center", width: 80, rowspan: '2', templet: function (d) {
-				if (isNull(d.actModelId)) {
-					return "<span class='state-new'>未配置</span>";
-				} else {
-					return "<span class='state-up'>已配置</span>";
-				}
-			}},
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120, rowspan: '2' },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150, rowspan: '2' },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120, rowspan: '2' },
