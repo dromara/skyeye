@@ -424,6 +424,7 @@ var systemCommonUtil = {
     initIconChooseHtml: function (showBoxId, form, colorpicker, uploadType) {
         $("#" + showBoxId).html(systemCommonUtil.iconChooseHtml);
         systemCommonUtil.initIconEvent(form, colorpicker, uploadType, "", "#1c97f5" , "#1c97f5");
+        form.render();
     },
     // 编辑时初始化html,并添加监听事件
     initEditIconChooseHtml: function (showBoxId, form, colorpicker, uploadType, params) {
@@ -460,6 +461,7 @@ var systemCommonUtil = {
             $("#iconShow").parent().css({'background-color': params.iconBg});
         }
         systemCommonUtil.initIconEvent(form, colorpicker, uploadType, params.iconPic, params.iconBg, params.iconColor);
+        form.render();
     },
     initIconEvent: function (form, colorpicker, uploadType, uploadDefaultValue, iconBg, iconColor) {
         // 初始化上传
@@ -531,7 +533,11 @@ var systemCommonUtil = {
         });
     },
     // 获取图标选中数据
-    getIconChoose: function (params) {
+    getIconChoose: function (inputParams) {
+        var params = {};
+        if (!isNull(inputParams)) {
+            params = inputParams;
+        }
         params["iconChooseResult"] = true;
         var iconType = $("input[name='iconType']:checked").val();
         params["iconType"] = iconType;
@@ -560,6 +566,9 @@ var systemCommonUtil = {
     initIconShow: function (bean) {
         var str = '';
         if (bean.iconType == '1') {
+            if (isNull(bean.icon)) {
+                return str;
+            }
             if (isNull(bean.iconBg)) {
                 str += '<div class="winui-icon winui-icon-font" style="text-align: center; overflow: hidden">';
             } else {
