@@ -8,36 +8,41 @@ layui.config({
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form;
-	
-	function showList(typeId){
-        showGrid({
-    	 	id: "appList",
-    	 	url: sysMainMation.lightAppBasePath + "lightapp008",
-    	 	params: {typeId: typeId},
-    	 	pagination: false,
-    	 	template: getFileContent('tpl/lightAppShow/lightAppShowListTemplate.tpl'),
-    	 	ajaxSendLoadBefore: function(hdb) {
-    	 	},
-    	 	ajaxSendAfter:function (json) {
-    	 	}	
-        });
-    }
-	
-	//初始化左侧菜单数据
+
+	// 初始化左侧菜单数据
     showGrid({
 	 	id: "setting",
-	 	url: sysMainMation.lightAppBasePath + "lightapptype010",
+	 	url: sysMainMation.lightAppBasePath + "queryLightAppTypeUpList",
 	 	params: {},
+		method: 'GET',
 	 	pagination: false,
-	 	template: getFileContent('tpl/lightAppShow/lightAppShowItemTemplate.tpl'),
-	 	ajaxSendLoadBefore: function(hdb) {
+	 	template: $("#lightAppShowItemTemplate").html(),
+	 	ajaxSendLoadBefore: function(hdb, json) {
+			$.each(json.rows, function (i, item) {
+				item.iconHtml = systemCommonUtil.initIconShow(item);
+			});
 	 	},
 	 	ajaxSendAfter:function (json) {
-	 		//初始化所有上线列表数据
+	 		// 初始化所有上线列表数据
 	 	    showList("");
 	 	    matchingLanguage();
 	 	}	
     });
+
+	function showList(typeId){
+		showGrid({
+			id: "appList",
+			url: sysMainMation.lightAppBasePath + "queryLightAppUpList",
+			params: {typeId: typeId},
+			pagination: false,
+			method: 'GET',
+			template: $("#lightAppShowListTemplate").html(),
+			ajaxSendLoadBefore: function(hdb) {
+			},
+			ajaxSendAfter:function (json) {
+			}
+		});
+	}
     
 	$("body").on("click", ".setting a", function (e) {
 		$(".setting a").removeClass("selected");
@@ -52,8 +57,7 @@ layui.config({
 	
 	$("body").on("click", ".app-list button", function (e) {
 		var id = $(this).attr("rowid");
-		AjaxPostUtil.request({url: sysMainMation.lightAppBasePath + "lightapp009", params: {id: id}, type: 'json', callback: function (json) {
-			var data = json.bean;
+		AjaxPostUtil.request({url: sysMainMation.lightAppBasePath + "insertLightAppToWin", params: {id: id}, type: 'json', method: 'POST', callback: function (json) {
 			top.winui.window.msg("添加成功，请刷新页面即可看到该应用。", {icon: 1,time: 3000});
 		}});
 	});

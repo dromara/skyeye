@@ -446,7 +446,7 @@ var systemCommonUtil = {
             $("#iconShow").css({'color': params.iconColor});
         }
         // 自定义svg图标时
-        if (params.icon.indexOf('skyeye-') >= 0) {
+        if (!isNull(params.icon) && params.icon.indexOf('skyeye-') >= 0) {
             $("#iconShow").css({
                 'filter': 'drop-shadow(' + params.iconColor + ' 80px 0)',
                 'transform': 'translateX(-80px)',
