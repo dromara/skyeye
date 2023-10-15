@@ -61,6 +61,7 @@ var dataTypeList = [
 	{id: 31, name: "行政-会议室"},
 	{id: 32, name: "行政-车辆"},
 	{id: 33, name: "学校-科目"},
+	{id: 34, name: "知识库-文件上传(正常情况下会被删除掉)"},
 ];
 
 //系统cookies从哪里获取， true：从用户登陆获取；false：跨域获取

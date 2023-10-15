@@ -111,7 +111,9 @@
 
     "productWarrantyType": {"name": "售后工单质保类型", "className": "skyeye-seal-service#com.skyeye.afterseal.classenum.ProductWarrantyType"},
     "sealOrderType": {"name": "售后工单工单类型", "className": "skyeye-seal-service#com.skyeye.afterseal.classenum.SealOrderType"},
-    "afterSealState": {"name": "售后工单状态", "className": "skyeye-seal-service#com.skyeye.afterseal.classenum.AfterSealState"}
+    "afterSealState": {"name": "售后工单状态", "className": "skyeye-seal-service#com.skyeye.afterseal.classenum.AfterSealState"},
+
+    "knowlgContentState": {"name": "知识库状态", "className": "skyeye-knowlg#com.skyeye.eve.classenum.KnowlgContentState"}
 
 
 }
