@@ -601,9 +601,9 @@ function getOutKey(arr) {
 }
 
 // B的子集是否是A的子集
-function subset(A,B){
-	for(var i = 0; i < B.length; i++){
-		if(!isContained(B[i], A)){
+function subset(A, B) {
+	for (var i = 0; i < B.length; i++) {
+		if (!isContained(B[i], A)) {
 			return false;
 		}
 	}
@@ -612,13 +612,13 @@ function subset(A,B){
 
 // b是否被a包含,是返回true,不是返回false
 isContained =(a, b)=>{
-	if(!(a instanceof Array) || !(b instanceof Array))
+	if (!(a instanceof Array) || !(b instanceof Array))
 		return false;
-	if(a.length < b.length)
+	if (a.length < b.length)
 		return false;
 	var aStr = a.toString();
-	for(var i = 0, len = b.length; i < len; i++){
-		if(aStr.indexOf(b[i]) == -1)
+	for (var i = 0, len = b.length; i < len; i++) {
+		if (aStr.indexOf(b[i]) == -1)
 			return false;
 	}
 	return true;
@@ -626,18 +626,18 @@ isContained =(a, b)=>{
 
 /*****************工作计划模块开始**************/
 // 获取计划周期名称
-function getNowCheckTypeName(nowCheckType){
-	if(nowCheckType === 'day')
+function getNowCheckTypeName(nowCheckType) {
+	if (nowCheckType === 'day')
 		return '日计划';
-	else if(nowCheckType === 'week')
+	else if (nowCheckType === 'week')
 		return '周计划';
-	else if(nowCheckType === 'month')
+	else if (nowCheckType === 'month')
 		return '月计划';
-	else if(nowCheckType === 'quarter')
+	else if (nowCheckType === 'quarter')
 		return '季度计划';
-	else if(nowCheckType === 'halfyear')
+	else if (nowCheckType === 'halfyear')
 		return '半年计划';
-	else if(nowCheckType === 'year')
+	else if (nowCheckType === 'year')
 		return '年计划';
 }
 /*****************工作计划模块结束**************/

@@ -110,6 +110,8 @@ layui.config({
 								var tplContentVal = strMatchAllByTwo(dsFormComponent.htmlDataFrom, '{{', '}}');//取出数据模板中用{{}}包裹的词
 								removeByValue(tplContentVal, "#each this");
 								removeByValue(tplContentVal, "/each");
+								// 不管时字符串还是数字想要对数组进行去重（unique），必须先执行排序（sort）否则去重不会有效果。
+								tplContentVal = $.unique(tplContentVal.sort());
 								if (subset(tplContentVal, defaultKey)) {
 									params.defaultData = defaultDataStr;
 								} else {
