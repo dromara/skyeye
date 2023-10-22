@@ -27,7 +27,7 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'numCode', title: '编码', width: 250 },
-	        { field: 'name', title: '名称', width: 120 },
+	        { field: 'name', title: '名称', width: 160 },
 			{ field: 'typeName', title: '分类', width: 100 },
 			{ field: 'valueMergType', title: '值合入方式', width: 120, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("componentValueMergType", 'id', d.valueMergType, 'name');
@@ -40,6 +40,9 @@ layui.config({
 			}},
 			{ field: 'id', title: '图标', align: 'center', width: 60, templet: function (d) {
 				return systemCommonUtil.initIconShow(d);
+			}},
+			{ field: 'attrUseNum', title: '组件使用数量', width: 120, templet: function (d) {
+				return isNull(d.attrUseNum) ? '' : d.attrUseNum + '<img src="' + systemCommonUtil.getFilePath('images/util/assest/common/img/analysis.png') + '" class="photo-img" lay-event="attrUseNum">';
 			}},
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
