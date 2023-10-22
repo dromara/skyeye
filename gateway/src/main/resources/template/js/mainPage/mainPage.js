@@ -21,7 +21,6 @@ layui.config({
 			$("#checkOnWorkNum").html(json.bean.checkOnWorkNum);
 			$("#diskCloudFileNum").html(json.bean.diskCloudFileNum);
 			$("#forumNum").html(json.bean.forumNum);
-			$("#knowledgeNum").html(json.bean.knowledgeNum);
 			initNoticeList();
    		}});
 	}
@@ -48,8 +47,10 @@ layui.config({
 	}
 	
 	function initKnowledgeList(){
-		AjaxPostUtil.request({url: reqBasePath + "mainpage004", params: {}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.knowlgBasePath + "queryEightPassKnowlgList", params: {}, type: 'json', method: 'GET', callback: function (json) {
 			$("#knowledgeList").html(getDataUseHandlebars($("#knowledgeContentTemplate").html(), json));
+			// 我发表的审核通过的知识库数
+			$("#knowledgeNum").html(json.total);
 			matchingLanguage();
 			form.render();
    		}});
@@ -69,11 +70,10 @@ layui.config({
 	
 	// 知识库详情
 	$("body").on("click", ".knowledge", function (e) {
-		rowId = $(this).attr("id");
 		_openNewWindows({
-			url: "../../tpl/knowledgePageShow/details.html", 
+			url:  systemCommonUtil.getUrl('FP2023101500004&id=' + $(this).attr("id"), null),
 			title: "知识库详情",
-			pageId: "knowledgePageShowDetailsPage",
+			pageId: "knowledgeDetailsPage",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}});
