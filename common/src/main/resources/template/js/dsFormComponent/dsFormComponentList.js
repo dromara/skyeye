@@ -42,7 +42,7 @@ layui.config({
 				return systemCommonUtil.initIconShow(d);
 			}},
 			{ field: 'attrUseNum', title: '组件使用数量', width: 120, templet: function (d) {
-				return isNull(d.attrUseNum) ? '' : d.attrUseNum + '<img src="' + systemCommonUtil.getFilePath('images/util/assest/common/img/analysis.png') + '" class="photo-img" lay-event="attrUseNum">';
+				return isNull(d.attrUseNum) ? '0' : d.attrUseNum + '<img src="' + systemCommonUtil.getFilePath('images/util/assest/common/img/analysis.png') + '" class="photo-img" lay-event="attrUseNum">';
 			}},
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
@@ -67,6 +67,8 @@ layui.config({
         	edit(data);
         } else if (layEvent === 'iconPic') { // 图片
 			systemCommonUtil.showPicImg(fileBasePath + data.iconPic);
+		} else if (layEvent === 'attrUseNum') { // 组件使用情况
+			attrUseNum(data);
 		}
     });
 	
@@ -92,6 +94,17 @@ layui.config({
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
+			}});
+	}
+
+	// 组件使用情况
+	function attrUseNum(data) {
+		_openNewWindows({
+			url: "../../tpl/classServer/classServerList.html?componentId=" + data.id,
+			title: '组件使用明细',
+			pageId: "classServerList",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
 			}});
 	}
 

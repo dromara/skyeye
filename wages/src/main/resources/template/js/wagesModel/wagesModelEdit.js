@@ -91,7 +91,7 @@ layui.config({
 			// 加载列表项
 			$.each(json.bean.modelField, function(i, item) {
 				addRow();
-				$("#fieldId" + (rowNum - 1)).val(item.nameCn + '(' + item.fieldKey + ')');
+				$("#fieldId" + (rowNum - 1)).val(item.name + '(' + item.fieldKey + ')');
 				$("#fieldId" + (rowNum - 1)).attr("rowKey", item.fieldKey);
 				$("#fieldType" + (rowNum - 1)).val(item.fieldType);
 				$("#defaultMoney" + (rowNum - 1)).val(item.defaultMoney);
