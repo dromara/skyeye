@@ -566,7 +566,6 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 			var tableId = this.options.specTableElemId + '-id';
             var that = this,
                 table = `<table class="layui-table" id="${tableId}"><thead><tr><th>规格名</th><th>规格值</th></tr></thead><colgroup><col width="140"></colgroup><tbody>`;
-            console.log(this.data.specData)
             $.each(this.data.specData, function (index, item) {
                 table += `<tr data-num="${item.rowNum}" data-id="${item.rowNum}">`;
                 table += `<td data-num="${item.rowNum}">${item.title} <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.data.specDataDelete ? '' : 'layui-hide'}" data-spec-num="${item.rowNum}"></i></td>`;

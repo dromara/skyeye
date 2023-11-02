@@ -614,6 +614,10 @@ var systemCommonUtil = {
                 show('#' + id, data);
             }
         };
+    },
+
+    formatFloat: function (moneyStr) {
+        return parseFloat(moneyStr).toFixed(2);
     }
 
 };
