@@ -37,7 +37,7 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'name', title: '名称', align: 'left', width: 120 },
+	        { field: 'name', title: '名称', align: 'left', width: 160 },
 			{ field: 'numCode', title: '编号', width: 150 },
 			{ field: 'type', title: '类型', align: 'left', width: 120, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("dsFormPageType", 'id', d.type, 'name');

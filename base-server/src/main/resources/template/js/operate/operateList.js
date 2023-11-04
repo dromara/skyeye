@@ -38,13 +38,14 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'name', title: '名称', align: 'left', width: 120 },
-			{ field: 'position', title: '展示位置', align: 'left', width: 120, templet: function (d) {
+			{ field: 'position', title: '展示位置', align: 'center', width: 100, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("operatePosition", 'id', d.position, 'name');
 			}},
-			{ field: 'color', title: '颜色', align: 'left', width: 120, templet: function (d) {
+			{ field: 'color', title: '颜色', align: 'center', width: 80, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("buttonColorType", 'id', d.color, 'name');
 			}},
-			{ field: 'eventType', title: '事件类型', align: 'left', width: 120, templet: function (d) {
+			{ field: 'authPointNum', title: '权限编码', align: 'center', width: 120 },
+			{ field: 'eventType', title: '事件类型', align: 'center', width: 100, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("eventType", 'id', d.eventType, 'name');
 			}},
 			{ field: 'orderBy', title: '序号', align: 'left', width: 80 },

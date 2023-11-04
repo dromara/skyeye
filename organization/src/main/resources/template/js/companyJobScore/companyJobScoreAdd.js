@@ -60,7 +60,7 @@ layui.config({
 		$("body").on("click", ".chooseFieldBtn", function (e) {
 			var trId = $(this).parent().parent().attr("trcusid");
 			_openNewWindows({
-				url: "../../tpl/wagesFieldType/wagesFieldTypeChoose.html",
+				url: systemCommonUtil.getUrl('FP2023110400005', null),
 				title: "选择薪资字段",
 				pageId: "wagesFieldTypeChoose",
 				area: ['90vw', '90vh'],
@@ -68,8 +68,8 @@ layui.config({
 					// 获取表格行号
 					var thisRowNum = trId.replace("tr", "");
 					// 表格名称赋值
-					$("#fieldId" + thisRowNum.toString()).val(fieldMation.name + '(' + fieldMation.key + ')');
-					$("#fieldId" + thisRowNum.toString()).attr("rowKey", fieldMation.key);
+					$("#fieldId" + thisRowNum.toString()).val(chooseItemMation.name + '(' + chooseItemMation.key + ')');
+					$("#fieldId" + thisRowNum.toString()).attr("rowKey", chooseItemMation.key);
 				}});
 		});
  	    

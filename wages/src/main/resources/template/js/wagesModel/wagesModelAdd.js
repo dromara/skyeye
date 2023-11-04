@@ -8,9 +8,6 @@ var departmentList = [];
 // 选择员工，多选
 var checkStaffList = [];
 
-// 当前选中的薪资字段
-var fieldMation = {};
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -207,16 +204,14 @@ layui.config({
 	$("body").on("click", ".chooseFieldBtn", function (e) {
 		var trId = $(this).parent().parent().attr("trcusid");
 		_openNewWindows({
-			url: "../../tpl/wagesFieldType/wagesFieldTypeChoose.html",
+			url: systemCommonUtil.getUrl('FP2023110400005', null),
 			title: "选择薪资字段",
 			pageId: "productlist",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
-				// 获取表格行号
 				var thisRowNum = trId.replace("tr", "");
-				// 表格名称赋值
-				$("#fieldId" + thisRowNum.toString()).val(fieldMation.nameCn + '(' + fieldMation.key + ')');
-				$("#fieldId" + thisRowNum.toString()).attr("rowKey", fieldMation.key);
+				$("#fieldId" + thisRowNum.toString()).val(chooseItemMation.name + '(' + chooseItemMation.key + ')');
+				$("#fieldId" + thisRowNum.toString()).attr("rowKey", chooseItemMation.key);
 			}});
 	});
 
