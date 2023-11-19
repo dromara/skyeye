@@ -11,7 +11,7 @@ layui.config({
 		table = layui.table,
 		tableCheckBoxUtil = layui.tableCheckBoxUtil;
 	
-	// 选择的部门信息
+	// 选择的部门信息--组件使用
 	var departmentList = parent.departmentList;
 	
 	// 设置提示信息

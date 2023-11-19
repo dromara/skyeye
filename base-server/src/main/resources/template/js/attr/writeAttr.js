@@ -85,11 +85,11 @@ layui.config({
 				var params = {
 					className: className,
 					attrKey: attrKey,
-					name: $("#name").val(),
+					name: encodeURIComponent($("#name").val()),
 					componentId: isNull($("#componentId").val()) ? "" : $("#componentId").attr("componentId"),
 					minLength: $("#minLength").val(),
 					maxLength: $("#maxLength").val(),
-					remark: $("#remark").val(),
+					remark: encodeURIComponent($("#remark").val()),
 					dataType: '',
 					id: id
 				};

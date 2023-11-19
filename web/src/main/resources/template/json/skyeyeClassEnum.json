@@ -14,6 +14,7 @@
     "healthStatus": {"name": "健康状态", "className": "skyeye-pro#com.skyeye.common.enumeration.HealthStatus"},
     "idCardType": {"name": "证件类型", "className": "skyeye-pro#com.skyeye.common.enumeration.IDCardType"},
     "registrationType": {"name": "户口类型", "className": "skyeye-pro#com.skyeye.common.enumeration.RegistrationType"},
+    "applicableObjectsType": {"name": "适用对象类型", "className": "skyeye-pro#com.skyeye.common.enumeration.ApplicableObjectsType"},
 
     "bossInterviewArrangementState": {"name": "面试安排状态", "className": "skyeye-boss#com.skyeye.arrangement.classenum.ArrangementState"},
     "bossInterviewArrangementState1": {

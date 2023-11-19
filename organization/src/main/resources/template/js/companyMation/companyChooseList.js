@@ -10,8 +10,7 @@ layui.config({
 		form = layui.form,
 		table = layui.table,
 		tableCheckBoxUtil = layui.tableCheckBoxUtil;
-	
-	// 选择的公司信息
+	// 选择的公司信息--组件使用
 	var companyList = parent.companyList;
 	
 	// 设置提示信息
