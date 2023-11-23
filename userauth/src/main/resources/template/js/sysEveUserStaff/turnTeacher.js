@@ -11,13 +11,12 @@ layui.config({
 		    form = layui.form;
 	    
 	    showGrid({
-    	 	id: "allSchool",
-    	 	url: schoolBasePath + "schoolmation007",
+    	 	id: "schoolId",
+    	 	url: sysMainMation.schoolBasePath + "queryAllSchoolList",
+			method: 'GET',
     	 	params: {},
     	 	pagination: false,
     	 	template: getFileContent('tpl/template/select-option.tpl'),
-    	 	ajaxSendLoadBefore: function(hdb) {
-    	 	},
     	 	ajaxSendAfter:function (json) {
     	 		form.render('select');
     	 	}
@@ -28,10 +27,10 @@ layui.config({
 	    form.on('submit(submit)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
         		var params = {
-        			schoolId: $("#allSchool").val(),
+        			schoolId: $("#schoolId").val(),
     				staffId: parent.rowId
         		};
-    			AjaxPostUtil.request({url: reqBasePath + "staff007", params: params, type: 'json', callback: function (json) {
+    			AjaxPostUtil.request({url: sysMainMation.reqBasePath + "staff007", params: params, type: 'json', method: 'POST', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
     			}});
