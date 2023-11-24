@@ -86,7 +86,6 @@ layui.config({
 				}
 			}},
 	        { field: 'userIdCard', title: '身份证', rowspan: '3', align: 'center', width: 160 },
-			{ field: 'workTimeNum', title: '考勤班次', rowspan: '3', align: 'center', width: 80 },
 	        { field: 'userSex', title: '性别', width: 80, rowspan: '3', align: 'center', templet: function (d) {
 	        	if(d.userSex == '0'){
 	        		return "保密";
@@ -157,9 +156,8 @@ layui.config({
 	
 	// 员工详情
 	function details(data) {
-		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/sysEveUserStaff/sysEveUserStaffDetails.html",
+			url: "../../tpl/sysEveUserStaff/userStaffManage.html?objectId=" + data.id + "&objectKey=" + data.serviceClassName,
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sysEveUserStaffDetails",
 			area: ['90vw', '90vh'],

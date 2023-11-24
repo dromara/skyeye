@@ -15,7 +15,7 @@ layui.config({
 	    var $ = layui.$,
 	    	table = layui.table;
 	    
-	    staffId = parent.rowId;
+	    staffId = GetUrlParam("objectId");
 	    
 	    showGrid({
 		 	id: "showForm",

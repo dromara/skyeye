@@ -762,6 +762,9 @@ var tabPageUtil = {
                         <div class="layui-tab-content"></div>
                     </div>`,
 
+    // 标题放置方向，暂时没有使用。horizontal：水平放置；vertical：垂直放置
+    direction: 'horizontal',
+
     headerTemplate: `{{#rows}}<li class="">{{title}}</li>{{/rows}}`,
 
     contentTemplate: `{{#rows}}
