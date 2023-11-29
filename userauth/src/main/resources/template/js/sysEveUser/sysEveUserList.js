@@ -144,9 +144,8 @@ layui.config({
     
     // 员工详情
 	function details(data) {
-		rowId = data.staffId;
 		_openNewWindows({
-			url: "../../tpl/sysEveUserStaff/sysEveUserStaffDetails.html",
+			url: "../../tpl/sysEveUserStaff/userStaffManage.html?objectId=" + data.staffId + "&objectKey=" + data.staffServiceClassName,
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sysEveUserStaffDetails",
 			area: ['90vw', '90vh'],

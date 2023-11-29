@@ -32,7 +32,7 @@ layui.config({
 			pageUrl: ''
 		}, {
 			title: '语种能力',
-			pageUrl: ''
+			pageUrl: '../../tpl/sysStaffLanguage/sysStaffLanguageList.html'
 		}, {
 			title: '证书信息',
 			pageUrl: ''
