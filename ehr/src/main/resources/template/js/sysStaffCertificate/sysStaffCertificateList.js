@@ -1,129 +1,129 @@
 
-var rowId = "";
+var objectKey = "";
+var objectId = "";
 
 layui.config({
-	base: basePath, 
-	version: skyeyeVersion
+    base: basePath,
+    version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
-	winui.renderColor();
-	var $ = layui.$,
-		form = layui.form,
-		table = layui.table;
-	
-    initTable();
-    function initTable(){
-		table.render({
-		    id: 'messageTable',
-		    elem: '#messageTable',
-		    method: 'post',
-		    url: sysMainMation.ehrBasePath + 'sysstaffcertificate001',
-		    where: getTableParams(),
-		    even: true,
-		    page: true,
-		    limits: getLimits(),
-	    	limit: getLimit(),
-		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        { field: 'certificateNumber', title: '证书编号', align: 'left', width: 160 },
-		        { field: 'certificateName', title: '证书名称', width: 120},
-		        { field: 'certificateTypeName', title: '证书类型', width: 120},
-                { field: 'issueOrgan', title: '签发机构', width: 120},
-                { field: 'jobNumber', title: '员工工号', align: 'left', width: 80 },
-                { field: 'userName', title: '员工姓名', align: 'left', width: 100 },
-                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
-                    if(d.state == '1'){
-                        return "在职";
-                    } else if (d.state == '2'){
-                        return "离职";
-                    } else if (d.state == '3'){
-                        return "见习";
-                    } else if (d.state == '4'){
-                        return "试用";
-                    } else if (d.state == '5'){
-                        return "退休";
-                    }
-                }},
-                { field: 'validityType', title: '有效期类型', align: 'left', width: 100, templet: function (d) {
-                    if(d.validityType == '1'){
-                        return "永久有效";
-                    } else if (d.validityType == '2'){
-                        return "时间段有效";
-                    }
-                }},
-                { field: 'issueTime', title: '签发时间', align: 'center', width: 100 },
-                { field: 'validityTime', title: '截至时间', align: 'center', width: 100 },
-                { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], align: 'center', width: 100},
-		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 100, toolbar: '#tableBar'}
-		    ]],
-		    done: function(json) {
-		    	matchingLanguage();
-		    }
-		});
-		
-		table.on('tool(messageTable)', function (obj) {
-	        var data = obj.data;
-	        var layEvent = obj.event;
-	        if (layEvent === 'edit') { // 编辑
-	        	edit(data);
-	        } else if (layEvent === 'delete') { // 删除
-	        	deleteRow(data);
-	        }
-	    });
+    winui.renderColor();
+    var $ = layui.$,
+        form = layui.form,
+        table = layui.table;
+    objectKey = GetUrlParam("objectKey");
+    objectId = GetUrlParam("objectId");
+    if (isNull(objectKey) || isNull(objectId)) {
+        winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
+        return false;
     }
-	
-	form.render();
-	
-	// 编辑
-    function edit(data) {
-        rowId = data.id;
-        _openNewWindows({
-			url: "../../tpl/sysStaffCertificate/sysStaffCertificateEdit.html",
-			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-			pageId: "sysStaffCertificateEdit",
+
+    table.render({
+        id: 'messageTable',
+        elem: '#messageTable',
+        method: 'post',
+        url: sysMainMation.ehrBasePath + 'queryCertificateList',
+        where: getTableParams(),
+        even: true,
+        page: true,
+        limits: getLimits(),
+        limit: getLimit(),
+        cols: [[
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+            { field: 'certificateNumber', title: '证书编号', align: 'left', width: 160 },
+            { field: 'name', title: '证书名称', width: 150 },
+            { field: 'issueOrgan', title: '签发机构', width: 150 },
+            { field: 'issueTime', title: '签发时间', align: 'center', width: 100 },
+            { field: 'typeId', title: '证书类型', width: 120, templet: function (d) {
+                return sysDictDataUtil.getDictDataNameByCodeAndKey("EMPLOYEE_CERTIFICATE_TYPE", d.typeId);
+            }},
+            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
+            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
+            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 100, toolbar: '#tableBar'}
+        ]],
+        done: function(json) {
+            matchingLanguage();
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入证书编号、名称", function () {
+                table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+            });
+        }
+    });
+
+    table.on('tool(messageTable)', function (obj) {
+        var data = obj.data;
+        var layEvent = obj.event;
+        if (layEvent === 'edit') { //编辑
+            edit(data);
+        } else if (layEvent === 'details') { //详情
+            details(data);
+        } else if (layEvent === 'del') { //删除
+            del(data);
+        }
+    });
+
+    // 新增
+    $("body").on("click", "#addBean", function() {
+        parent._openNewWindows({
+            url: systemCommonUtil.getUrl('FP2023113000001&objectId=' + objectId + '&objectKey=' + objectKey, null),
+            title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+            pageId: "sysStaffArchivesAdd",
             area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
-			}
-		});
-	}
-	
-	// 删除
-    function deleteRow(data) {
+            }});
+    });
+
+    // 编辑
+    function edit(data) {
+        parent._openNewWindows({
+            url: systemCommonUtil.getUrl('FP2023113000002&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
+            title: systemLanguage["com.skyeye.editPageTitle"][languageType],
+            pageId: "sysStaffArchivesEdit",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }
+        });
+    }
+
+    // 详情
+    function details(data) {
+        parent._openNewWindows({
+            url: systemCommonUtil.getUrl('FP2023113000003&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
+            title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+            pageId: "sysStaffArchivesDetails",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+            }});
+    }
+
+    // 删除
+    function del(data, obj) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.ehrBasePath + "sysstaffcertificate005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.ehrBasePath + "deleteCertificateById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
         });
     }
 
-    // 搜索表单
-    $("body").on("click", "#formSearch", function() {
-        table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-    });
-
-	// 刷新数据
+    form.render();
     $("body").on("click", "#reloadTable", function() {
-    	loadTable();
+        loadTable();
     });
-
     function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
     function getTableParams() {
-    	return {
-    		certificateNumber: $("#certificateNumber").val(),
-			certificateName: $("#certificateName").val(),
-			userName: $("#userName").val(),
-			jobNumber: $("#jobNumber").val(),
-			state: $("#state").val()
-    	};
-	}
-    
+        return $.extend(true, {objectKey: objectKey, objectId: objectId}, initTableSearchUtil.getSearchValue("messageTable"));
+    }
+
     exports('sysStaffCertificateList', {});
 });

@@ -35,7 +35,7 @@ layui.config({
 			pageUrl: '../../tpl/sysStaffLanguage/sysStaffLanguageList.html'
 		}, {
 			title: '证书信息',
-			pageUrl: ''
+			pageUrl: '../../tpl/sysStaffCertificate/sysStaffCertificateList.html'
 		}, {
 			title: '奖惩信息',
 			pageUrl: ''
