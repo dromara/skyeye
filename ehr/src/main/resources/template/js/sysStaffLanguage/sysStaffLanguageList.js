@@ -32,7 +32,7 @@ layui.config({
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'levelId', title: '语种等级', width: 120, templet: function (d) {
-				return sysDictDataUtil.getDictDataNameByCodeAndKey("EMPLOYEE_LANGUAGES", d.levelId);
+				return '<a lay-event="details" class="notice-title-click">' + sysDictDataUtil.getDictDataNameByCodeAndKey("EMPLOYEE_LANGUAGES", d.levelId) + '</a>';
 			}},
 			{ field: 'getTime', title: '获取时间', align: 'center', width: 100 },
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },

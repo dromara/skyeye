@@ -31,7 +31,9 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'certificateNumber', title: '证书编号', align: 'left', width: 160 },
+            { field: 'certificateNumber', title: '证书编号', align: 'left', width: 160, templet: function (d) {
+                return '<a lay-event="details" class="notice-title-click">' + d.certificateNumber + '</a>';
+            }},
             { field: 'name', title: '证书名称', width: 150 },
             { field: 'issueOrgan', title: '签发机构', width: 150 },
             { field: 'issueTime', title: '签发时间', align: 'center', width: 100 },

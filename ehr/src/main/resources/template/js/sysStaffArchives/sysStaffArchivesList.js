@@ -31,7 +31,9 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'archivesNumber', title: '档案编号', align: 'left', width: 160 },
+			{ field: 'archivesNumber', title: '档案编号', align: 'left', width: 160, templet: function (d) {
+				return '<a lay-event="details" class="notice-title-click">' + d.archivesNumber + '</a>';
+			}},
 			{ field: 'custodyPlace', title: '档案保管地', width: 150 },
 			{ field: 'archivesCenter', title: '档案室', width: 150 },
 			{ field: 'educationId', title: '档案学历', width: 120, templet: function (d) {
