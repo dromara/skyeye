@@ -23,7 +23,7 @@ layui.config({
 			pageUrl: '../../tpl/sysStaffArchives/sysStaffArchivesList.html'
 		}, {
 			title: '家庭情况',
-			pageUrl: ''
+			pageUrl: '../../tpl/sysStaffFamily/sysStaffFamilyList.html'
 		}, {
 			title: '教育信息',
 			pageUrl: '../../tpl/sysStaffEducation/sysStaffEducationList.html'
