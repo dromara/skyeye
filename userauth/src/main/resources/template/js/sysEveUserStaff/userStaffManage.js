@@ -26,7 +26,7 @@ layui.config({
 			pageUrl: ''
 		}, {
 			title: '教育信息',
-			pageUrl: ''
+			pageUrl: '../../tpl/sysStaffEducation/sysStaffEducationList.html'
 		}, {
 			title: '工作履历',
 			pageUrl: ''
