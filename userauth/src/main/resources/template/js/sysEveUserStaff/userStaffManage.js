@@ -38,7 +38,7 @@ layui.config({
 			pageUrl: '../../tpl/sysStaffCertificate/sysStaffCertificateList.html'
 		}, {
 			title: '奖惩信息',
-			pageUrl: ''
+			pageUrl: '../../tpl/sysStaffRewardPunish/sysStaffRewardPunishList.html'
 		}, {
 			title: '合同信息',
 			pageUrl: ''
