@@ -29,7 +29,7 @@ layui.config({
 			pageUrl: '../../tpl/sysStaffEducation/sysStaffEducationList.html'
 		}, {
 			title: '工作履历',
-			pageUrl: ''
+			pageUrl: '../../tpl/sysStaffJobResume/sysStaffJobResumeList.html'
 		}, {
 			title: '语种能力',
 			pageUrl: '../../tpl/sysStaffLanguage/sysStaffLanguageList.html'

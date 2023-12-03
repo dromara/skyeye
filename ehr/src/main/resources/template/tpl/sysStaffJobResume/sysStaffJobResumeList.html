@@ -1,69 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <title></title>
-    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
-    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+	<meta charset="utf-8" />
+	<title></title>
+	<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+	<link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-	<div class="txtcenter" style="margin:0 auto; padding-top:10px;">
-	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
-	        <div class="layui-form-item">
-	            <div class="layui-inline">
-	            	<label class="layui-form-label">任职单位</label>
-	                <div class="layui-input-inline">
-	                    <input type="text" id="workUnit" name="workUnit" placeholder="请输入任职单位" class="layui-input" />
-	                </div>
-	            	<label class="layui-form-label">任职部门</label>
-	                <div class="layui-input-inline">
-	                    <input type="text" id="department" name="department" placeholder="请输入任职部门" class="layui-input" />
-	                </div>
-	                <label class="layui-form-label">员工姓名</label>
-	                <div class="layui-input-inline">
-	                    <input type="text" id="userName" name="userName" placeholder="请输入员工姓名" class="layui-input" />
-	                </div>
-	                <label class="layui-form-label">员工工号</label>
-	                <div class="layui-input-inline">
-	                    <input type="text" id="jobNumber" name="jobNumber" placeholder="请输入员工工号" class="layui-input" />
-	                </div>
-					<label class="layui-form-label">员工状态</label>
-					<div class="layui-input-inline">
-						<select lay-filter="state" lay-search="" id="state">
-							<option value="">全部</option>
-							<option value="1">在职</option>
-							<option value="2">离职</option>
-							<option value="3">见习</option>
-							<option value="4">试用</option>
-							<option value="5">退休</option>
-						</select>
-					</div>
-	                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
-	                <button class="layui-btn list-form-search" type="button" id="formSearch"><language showName="com.skyeye.search2"></language></button>
-	            </div>
-	        </div>
-	    </form>
+	<div class="winui-toolbar">
+		<div class="winui-tool">
+			<button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+			<button id="addBean" class="winui-toolbtn search-table-btn-right"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
+		</div>
 	</div>
-    <div class="winui-toolbar">
-        <div class="winui-tool">
-            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-        </div>
-    </div>
-    <div style="margin:auto 10px;">
-        <table id="messageTable" lay-filter="messageTable"></table>
-        <script type="text/html" id="tableBar">
-			{{# if(auth('1601612358431')){ }}
-            	<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-			{{# } }}
-			{{# if(auth('1601612366364')){ }}
-            	<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
-			{{# } }}
-        </script>
-    </div>
-    <script src="../../assets/lib/layui/layui.js"></script>
-    <script src="../../assets/lib/layui/custom.js"></script>
-    <script type="text/javascript">
-        layui.config({base: '../../js/sysStaffJobResume/'}).use('sysStaffJobResumeList');
-    </script>
+	<div style="margin:auto 10px;">
+		<table id="messageTable" lay-filter="messageTable"></table>
+		<script type="text/html" id="tableBar">
+			<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+			<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
+		</script>
+	</div>
+	<script src="../../assets/lib/layui/layui.js"></script>
+	<script src="../../assets/lib/layui/custom.js"></script>
+	<script type="text/javascript">
+		layui.config({base: '../../js/sysStaffJobResume/'}).use('sysStaffJobResumeList');
+	</script>
 </body>
 </html>
