@@ -41,7 +41,7 @@ layui.config({
 			pageUrl: '../../tpl/sysStaffRewardPunish/sysStaffRewardPunishList.html'
 		}, {
 			title: '合同信息',
-			pageUrl: ''
+			pageUrl: '../../tpl/sysStaffContract/sysStaffContractList.html'
 		}],
 		element: layui.element,
 		object: {
