@@ -10,7 +10,8 @@
 	<div class="winui-toolbar">
 		<div class="winui-tool">
 			<button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-			<button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1563602200836"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
+			<button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1563602200836"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language>目录</button>
+			<button id="addMenuBean" class="winui-toolbtn search-table-btn-right" auth="1563602200836"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language>菜单</button>
 		</div>
 	</div>
 	<div style="margin:auto 10px;">
@@ -19,14 +20,8 @@
 			{{# if(auth('1563602200836')){ }}
 				<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 			{{# } }}
-			{{# if(auth('1563602242822') && d.childNum == 0){ }}
+			{{# if(auth('1563602242822')){ }}
 				<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
-			{{# } }}
-			{{# if(d.orderBy != 1 && auth('1563602259975')){ }}
-				<a class="layui-btn layui-btn-xs" lay-event="top">上移</a>
-			{{# } }}
-			{{# if(auth('1563602272986')){ }}
-				<a class="layui-btn layui-btn-xs" lay-event="lower">下移</a>
 			{{# } }}
 			{{# if(auth('1563602587596')){ }}
 				<a class="layui-btn layui-btn-xs" lay-event="authpoint">权限点</a>

@@ -29,8 +29,8 @@ layui.config({
 	    where: getTableParams(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'name', title: '权限点名称', width: 120 },
-	        { field: 'authMenu', title: '接口url', width: 200 },
+	        { field: 'name', title: '权限点名称', width: 150 },
+	        { field: 'authMenu', title: '接口url', width: 300 },
 			{ field: 'orderBy', title: '排序', align: 'center', width: 80 },
 	        { field: 'menuNum', title: '权限点编号', align: 'center', width: 120 },
 	        { field: 'useNum', title: '使用数量', align: 'center', width: 80 },

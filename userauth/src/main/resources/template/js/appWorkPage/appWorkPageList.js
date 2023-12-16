@@ -6,15 +6,15 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'form', 'table', 'contextMenu'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'form', 'tableTreeDj'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		table = layui.table;
+		tableTree = layui.tableTreeDj;
 	
 	authBtn('1563602200836');
-	
-	table.render({
+
+	tableTree.render({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
@@ -26,7 +26,7 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'title', title: '名称', align: 'left', width: 120 },
+			{ field: 'name', title: '名称', align: 'left', width: 120 },
 			{ field: 'logo', title: 'LOGO', width: 60, templet: function (d) {
 				var str = '';
 				if (!isNull(d.logo)){
@@ -35,17 +35,11 @@ layui.config({
 				return str;
 			}},
 			{ field: 'type', title: '菜单类型', align: 'left', width: 100, align: 'center', templet: function (d) {
-				if (d.type == '1') {
-					return "目录";
-				} else if (d.type == '2') {
-					return "页面";
-				}
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("menuType", 'id', d.type, 'name');
 			}},
 			{ field: 'desktopId', title: '所属桌面', align: 'left', width: 120, templet: function (d) {
-				return isNull(d.deskTopMation) ? '' : d.deskTopMation.name;
+				return isNull(d.desktopMation) ? '' : d.desktopMation.name;
 			}},
-			{ field: 'parentTitle', title: '所属目录', align: 'left', width: 120 },
-			{ field: 'childNum', title: '子页面数量', align: 'left', width: 120 },
 			{ field: 'url', title: '页面路径', align: 'left', width: 300},
 			{ field: 'orderBy', title: '排序号', align: 'left', width: 80},
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
@@ -56,23 +50,23 @@ layui.config({
 		]],
 		done: function(json) {
 			matchingLanguage();
-			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入页面名称", function () {
-				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			initTableSearchUtil.initAdvancedSearch($("#messageTable")[0], json.searchFilter, form, "请输入名称", function () {
+				tableTree.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 		}
+	}, {
+		keyId: 'id',
+		keyPid: 'parentId',
+		title: 'name',
 	});
 
-	table.on('tool(messageTable)', function (obj) { 
+	tableTree.getTable().on('tool(messageTable)', function (obj) {
         var data = obj.data; 
         var layEvent = obj.event;
 		if (layEvent === 'delete') { //删除
 			del(data, obj);
 		} else if (layEvent === 'edit') { //编辑
 			edit(data);
-		} else if (layEvent === 'top') { //上移
-			topOne(data);
-		} else if (layEvent === 'lower') { //下移
-			lowerOne(data);
 		} else if (layEvent === 'authpoint') { //权限点
 			authpoint(data);
 		} else if (layEvent === 'iconPath') { //logo预览
@@ -80,12 +74,25 @@ layui.config({
 		}
     });
 
-	// 新增菜单
+	// 新增目录
 	$("body").on("click", "#addBean", function() {
 		_openNewWindows({
-			url: "../../tpl/appWorkPage/appWorkPageAdd.html",
-			title: "新增菜单",
-			pageId: "appWorkPageAdd",
+			url: systemCommonUtil.getUrl('FP2023121600001', null),
+			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+			pageId: "appWorkPageAddFolder",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}});
+	});
+
+	// 新增菜单
+	$("body").on("click", "#addMenuBean", function() {
+		_openNewWindows({
+			url: systemCommonUtil.getUrl('FP2023121600004', null),
+			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+			pageId: "appWorkPageAddMenu",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -93,12 +100,19 @@ layui.config({
 			}});
 	});
 	
-	// 编辑菜单
+	// 编辑菜单/目录
 	function edit(data) {
-		rowId = data.id;
+		var url;
+		if (data.type == 1) {
+			// 目录
+			url = systemCommonUtil.getUrl('FP2023121600002&id=' + data.id, null);
+		} else {
+			// 菜单
+			url = systemCommonUtil.getUrl('FP2023121600005&id=' + data.id, null);
+		}
 		_openNewWindows({
-			url: "../../tpl/appWorkPage/appWorkPageEdit.html", 
-			title: "编辑菜单",
+			url: url,
+			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "appWorkPageEdit",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
@@ -111,27 +125,11 @@ layui.config({
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "appworkpage007", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "deleteAppWorkPageById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
 		});
-	}
-	
-	// 上移
-	function topOne(data) {
-		AjaxPostUtil.request({url: reqBasePath + "appworkpage008", params: {rowId: data.id, parentId: data.parentId}, type: 'json', callback: function (json) {
-			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-			loadTable();
-		}});
-	}
-	
-	// 下移
-	function lowerOne(data) {
-		AjaxPostUtil.request({url: reqBasePath + "appworkpage009", params: {rowId: data.id, parentId: data.parentId}, type: 'json', callback: function (json) {
-			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-			loadTable();
-		}});
 	}
 	
 	// 权限点
@@ -147,13 +145,12 @@ layui.config({
 	}
 
 	form.render();
-
 	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
 
 	function loadTable() {
-		table.reloadData("messageTable", {where: getTableParams()});
+		tableTree.reload("messageTable", {where: getTableParams()});
 	}
 
 	function getTableParams() {

@@ -16,6 +16,9 @@
     "registrationType": {"name": "户口类型", "className": "skyeye-pro#com.skyeye.common.enumeration.RegistrationType"},
     "applicableObjectsType": {"name": "适用对象类型", "className": "skyeye-pro#com.skyeye.common.enumeration.ApplicableObjectsType"},
 
+    "menuType": {"name": "APP菜单类型", "className": "skyeye-pro#com.skyeye.menuapp.classenum.MenuType"},
+    "urlType": {"name": "APP菜单URL类型", "className": "skyeye-pro#com.skyeye.menuapp.classenum.UrlType"},
+
     "bossInterviewArrangementState": {"name": "面试安排状态", "className": "skyeye-boss#com.skyeye.arrangement.classenum.ArrangementState"},
     "bossInterviewArrangementState1": {
         "name": "面试安排状态枚举类-获取我录入的人员需求关联的面试者信息列表",
