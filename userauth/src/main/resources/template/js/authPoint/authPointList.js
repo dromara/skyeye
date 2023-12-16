@@ -1,5 +1,6 @@
 
-var menuId = '';
+var objectKey = "";
+var objectId = "";
 
 var rowId = "";
 
@@ -16,20 +17,24 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		tableTree = layui.tableTreeDj;
-	
-	authBtn('1552958039634');
-	
-	menuId = parent.menuId;
 
+	objectKey = GetUrlParam("objectKey");
+	objectId = GetUrlParam("objectId");
+	if (isNull(objectKey) || isNull(objectId)) {
+		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
+		return false;
+	}
+	
 	tableTree.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'sysevemenuauthpoint001',
+	    url: reqBasePath + 'queryAuthPointList',
 	    where: getTableParams(),
+		limit: 10000,
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'name', title: '权限点名称', width: 150 },
+	        { field: 'name', title: '权限点名称', width: 250 },
 	        { field: 'authMenu', title: '接口url', width: 300 },
 			{ field: 'orderBy', title: '排序', align: 'center', width: 80 },
 	        { field: 'menuNum', title: '权限点编号', align: 'center', width: 120 },
@@ -52,6 +57,7 @@ layui.config({
 		keyId: 'id',
 		keyPid: 'parentId',
 		title: 'name',
+		defaultShow: true
 	});
 
 	tableTree.getTable().on('tool(messageTable)', function (obj) {
@@ -70,7 +76,7 @@ layui.config({
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "sysevemenuauthpoint005", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "deleteAuthPointById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -79,19 +85,14 @@ layui.config({
 	
 	// 编辑权限点
 	function edit(data) {
-		rowId = data.id;
-		var title = '';
-		if (data.type == 1) {
-			title = '编辑权限点';
-		} else if (data.type == 2) {
-			title = '编辑分组';
-		} else if (data.type == 3) {
-			title = '编辑数据权限';
+		var url = '../../tpl/authPoint/authPointWrite.html?objectId=' + objectId + '&objectKey=' + objectKey;
+		if (!isNull(data)) {
+			url += '&parentType=' + data.type + '&id=' + data.id
 		}
 		_openNewWindows({
-			url: "../../tpl/sysEveMenuAuthPoint/sysEveMenuAuthPointEdit.html",
-			title: title,
-			pageId: "sysEveMenuAuthPointEdit",
+			url: url,
+			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
+			pageId: "authPointEdit",
 			area: ['500px', '300px'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -105,24 +106,14 @@ layui.config({
     });
 
 	function addPage(data) {
-		var title = '新增权限点';
-		parentId = "0";
-		parentType = "";
+		var url = '../../tpl/authPoint/authPointWrite.html?objectId=' + objectId + '&objectKey=' + objectKey;
 		if (!isNull(data)) {
-			parentId = data.id;
-			parentType = data.type;
-			if (parentType == 1) {
-				// 如果是权限点，则新增分组
-				title = '新增分组';
-			} else if (parentType == 2) {
-				// 如果是分组，则新增数据权限
-				title = '新增数据权限';
-			}
+			url += '&parentType=' + data.type + '&parentId=' + data.id
 		}
 		_openNewWindows({
-			url: "../../tpl/sysEveMenuAuthPoint/sysEveMenuAuthPointAdd.html",
-			title: title,
-			pageId: "sysEveMenuAuthPointAdd",
+			url: url,
+			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+			pageId: "authPointAdd",
 			area: ['500px', '300px'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -140,8 +131,8 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return $.extend(true, {objectId: menuId}, initTableSearchUtil.getSearchValue("messageTable"));
+		return $.extend(true, {objectKey: objectKey, objectId: objectId}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 
-    exports('sysEveMenuAuthPointList', {});
+    exports('authPointList', {});
 });

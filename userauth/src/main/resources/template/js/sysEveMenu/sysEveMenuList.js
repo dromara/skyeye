@@ -1,8 +1,6 @@
 
 var rowId = "";
 
-var menuId = '';
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -176,9 +174,8 @@ layui.config({
     
     // 权限点
     function authpoint(data) {
-		menuId = data.id;
 		_openNewWindows({
-			url: "../../tpl/sysEveMenuAuthPoint/sysEveMenuAuthPointList.html",
+			url: '../../tpl/authPoint/authPointList.html?objectId=' + data.id + '&objectKey=' + data.serviceClassName,
 			title: systemLanguage["com.skyeye.authorityPointPage"][languageType],
 			pageId: "sysEveMenuAuthPointList",
 			area: ['90vw', '90vh'],

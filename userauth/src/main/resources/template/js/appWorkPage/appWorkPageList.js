@@ -1,6 +1,4 @@
 
-var rowId = "";
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -46,7 +44,7 @@ layui.config({
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 320, toolbar: '#tableBar'}
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
 		]],
 		done: function(json) {
 			matchingLanguage();
@@ -134,9 +132,8 @@ layui.config({
 	
 	// 权限点
     function authpoint(data) {
-		menuId = data.id;
 		_openNewWindows({
-			url: "../../tpl/appWorkPageAuthPoint/appWorkPageAuthPointList.html",
+			url: '../../tpl/authPoint/authPointList.html?objectId=' + data.id + '&objectKey=' + data.serviceClassName,
 			title: "权限点",
 			pageId: "appWorkPageAuthPointList",
 			area: ['90vw', '90vh'],
