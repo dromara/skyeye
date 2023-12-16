@@ -95,7 +95,7 @@ layui.config({
  	    	AjaxPostUtil.request({url: reqBasePath + "sys009", params: {parentId: '0'}, type: 'json', method: 'GET', callback: function (json) {
 				var str = '<select id="menuParent" lay-filter="selectParent" win-verify="required" lay-search=""><option value="">请选择</option>';
 				for(var i = 0; i < json.rows.length; i++){
-					str += '<option value="' + json.rows[i].id + '">' + json.rows[i].sysDesktop.name + '---------' + json.rows[i].name + '</option>';
+					str += '<option value="' + json.rows[i].id + '">' + json.rows[i].desktopMation.name + '---------' + json.rows[i].name + '</option>';
 				}
 				str += '</select>';
 				$("#lockParentSel").append(str);

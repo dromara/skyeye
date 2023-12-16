@@ -23,7 +23,6 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 		cols: [[
-			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'name', title: '名称', align: 'left', width: 120 },
 			{ field: 'logo', title: 'LOGO', width: 60, templet: function (d) {
 				var str = '';
