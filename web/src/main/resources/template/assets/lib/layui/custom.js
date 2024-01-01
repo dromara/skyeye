@@ -362,7 +362,7 @@ function loadAuthBtnGroup(tableId, urlNum) {
 				// 数据权限分组不为空
 				var dataGroup = authList[i].children;
 				for (var j = 0; j < dataGroup.length; j++) {
-					str += `<div style="" class="type-group" id="${dataGroup[j].menuUrl}">`;
+					str += `<div style="" class="type-group" id="${dataGroup[j].authMenu}">`;
 					// 数据权限不为空
 					if (dataGroup[j].children.length > 0) {
 						var dataAuthPoint = dataGroup[j].children;
@@ -376,9 +376,9 @@ function loadAuthBtnGroup(tableId, urlNum) {
 							return a.orderBy - b.orderBy; // 升序排序
 						});
 						for (var k = 0; k < dataAuthPoint.length; k++) {
-							var type = dataAuthPoint[k].menuUrl.split('==')[1].trim();
+							var type = dataAuthPoint[k].authMenu.split('==')[1].trim();
 							var defaultClassName = k == 0 ? 'plan-select' : '';
-							str += `<button type="button" class="layui-btn layui-btn-primary type-btn ${defaultClassName}" data-type="${type}" table-id="${tableId}"><i class="layui-icon"></i>${dataAuthPoint[k].authMenuName}</button>`;
+							str += `<button type="button" class="layui-btn layui-btn-primary type-btn ${defaultClassName}" data-type="${type}" table-id="${tableId}"><i class="layui-icon"></i>${dataAuthPoint[k].name}</button>`;
 						}
 					}
 					str += `</div>`;
