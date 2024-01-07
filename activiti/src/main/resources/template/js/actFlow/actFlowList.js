@@ -16,7 +16,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: flowableBasePath + 'queryActFlowList',
+	    url: sysMainMation.flowableBasePath + 'queryActFlowList',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,

@@ -23,114 +23,53 @@ layui.config({
 	authBtn('1595035473610'); // 矩阵评分题权限
 	authBtn('1595035491337'); // 矩阵填空题权限
 
-	// 获取当前登陆用户所属的学校列表
-	schoolUtil.queryMyBelongSchoolList(function (json) {
-		$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
-		form.render("select");
-		// 加载年级
-		initGradeId();
-		initTable();
-	});
-	form.on('select(schoolId)', function(data) {
-		// 加载年级
- 		initGradeId();
-	});
-	
-	// 所属年级
-    function initGradeId(){
-	    showGrid({
-    	 	id: "gradeId",
-    	 	url: schoolBasePath + "grademation006",
-    	 	params: {schoolId: $("#schoolId").val()},
-    	 	pagination: false,
-    	 	template: getFileContent('tpl/template/select-option.tpl'),
-    	 	ajaxSendLoadBefore: function(hdb) {
-    	 	},
-    	 	ajaxSendAfter:function (json) {
-    	 		form.render('select');
-    	 	}
-        });
-    }
-    
-    form.on('select(gradeId)', function(data) {
-		if(isNull(data.value) || data.value === '请选择'){
-			$("#subjectId").html("");
-			form.render('select');
-		} else {
-			// 加载科目
-			initSubject();
+	table.render({
+		id: 'messageTable',
+		elem: '#messageTable',
+		method: 'post',
+		url: sysMainMation.schoolBasePath + 'schoolquestionbank001',
+		where: getTableParams(),
+		even: true,
+		page: true,
+		limits: getLimits(),
+		limit: getLimit(),
+		cols: [[
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+			{ field: 'quTitle', width:250, title: '题目', templet: function (d) {
+				return d.quTitle;
+			}},
+			{ field: 'type', width:80, title: '类型', align: 'center', templet: function (d) {
+				if(d.type == 1){
+					return '<span style="color: blue">' + d.typeName + '</span>';
+				} else {
+					return '<span style="color: goldenrod">' + d.typeName + '</span>';
+				}
+			}},
+			{ field: 'cName', width: 100, title: '题型'},
+			{ field: 'schoolName', width: 150, title: '学校'},
+			{ field: 'gradeName', width: 80, align: 'center', title: '年级'},
+			{ field: 'subjectName', width: 80, align: 'center', title: '科目'},
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 140 },
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
+		]],
+		done: function(json) {
+			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "暂不支持搜索", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 		}
 	});
-	
-	// 初始化科目
-	function initSubject(){
-		showGrid({
-		 	id: "subjectId",
-		 	url: schoolBasePath + "schoolsubjectmation007",
-		 	params: {gradeId: $("#gradeId").val()},
-		 	pagination: false,
-		 	template: getFileContent('tpl/template/select-option.tpl'),
-		 	ajaxSendLoadBefore: function(hdb) {},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-	    });
-	}
-	
-    function initTable(){
-		table.render({
-		    id: 'messageTable',
-		    elem: '#messageTable',
-		    method: 'post',
-		    url: schoolBasePath + 'schoolquestionbank001',
-		    where: getTableParams(),
-		    even: true,
-		    page: true,
-		    limits: getLimits(),
-	    	limit: getLimit(),
-		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        { field: 'quTitle', width:250, title: '题目', templet: function (d) {
-			        return d.quTitle;
-			    }},
-		        { field: 'type', width:80, title: '类型', align: 'center', templet: function (d) {
-		        	if(d.type == 1){
-		        		return '<span style="color: blue">' + d.typeName + '</span>';
-		        	} else {
-		        		return '<span style="color: goldenrod">' + d.typeName + '</span>';
-		        	}
-		        }},
-		        { field: 'cName', width: 100, title: '题型'},
-		        { field: 'schoolName', width: 150, title: '学校'},
-	            { field: 'gradeName', width: 80, align: 'center', title: '年级'},
-	            { field: 'subjectName', width: 80, align: 'center', title: '科目'},
-		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 140 },
-		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
-		    ]],
-		    done: function(json) {
-		    	matchingLanguage();
-		    }
-		});
-		
-		table.on('tool(messageTable)', function (obj) {
-	        var data = obj.data;
-	        var layEvent = obj.event;
-	        if (layEvent === 'del') { //删除
-	        	del(data, obj);
-	        } else if (layEvent === 'edit') { //编辑
-	        	edit(data);
-	        }
-	    });
-		
-		form.render();
-		form.on('submit(formSearch)', function (data) {
-	        if (winui.verifyForm(data.elem)) {
-	        	refreshTable();
-	        }
-	        return false;
-		});
-    }
-	
+
+	table.on('tool(messageTable)', function (obj) {
+		var data = obj.data;
+		var layEvent = obj.event;
+		if (layEvent === 'del') { //删除
+			del(data, obj);
+		} else if (layEvent === 'edit') { //编辑
+			edit(data);
+		}
+	});
+
 	// 删除
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
@@ -180,11 +119,6 @@ layui.config({
 			}});
 	}
 	
-	// 刷新数据
-    $("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
     // 新增单选题
     $("body").on("click", "#addRadio", function() {
     	rowId = "";
@@ -324,25 +258,18 @@ layui.config({
 				loadTable();
 			}});
     });
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
-    }
-    
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-    
-    function getTableParams(){
-    	return {
-    		quTitle: $("#quTitle").val(), 
-    		schoolId: $("#schoolId").val(), 
-    		gradeId: $("#gradeId").val(), 
-    		subjectId: $("#subjectId").val(),
-    		type: $("#type").val(),
-    		quType: $("#quType").val()
-    	};
-    }
+
+	form.render();
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
+	});
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
+
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
     
     exports('schoolQuestionBankList', {});
 });
