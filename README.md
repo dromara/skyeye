@@ -10,6 +10,7 @@
 - 具备**低代码**、**快捷开发**、**可视化设计**、**微服务**等特点
 - Skyeye 云系列功能导图：[地址](https://www.zhixi.com/view/9be57741)
 - [Skyeye云系列资料](https://docs.qq.com/doc/DYUxuT3pSdGhVVXFC)
+- **接前端 / Java后端等课程设计以及毕设制作，有需要的可加下方微信**
 
 ### 沟通交流
 
