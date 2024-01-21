@@ -26,7 +26,6 @@ var customerJS = {
 	"organizationUtil": "../../assets/lib/layui/customer/organizationUtil.js", // 组织机构相关工具类
 	"threeUtil": "../../assets/lib/layui/customer/threeUtil.js", // 3D编辑器相关工具类
 	"reportModelTypeUtil": "../../assets/lib/layui/customer/reportModelTypeUtil.js", // 模型分类工具类
-	"schoolUtil": "../../assets/lib/layui/customer/skyeye/schoolUtil.js", // 学校模块工具类
 	"initTableChooseUtil": "../../assets/lib/layui/customer/tableUtil/initTableChooseUtil.js", // 加载表格选择的表格插件
 	"sysDictDataUtil": "../../assets/lib/layui/customer/skyeye/sysDictDataUtil.js", // 数据字典插件
 	"initTableSearchUtil": "../../assets/lib/layui/customer/tableUtil/initTableSearchUtil.js", // 表格高级查询插件
