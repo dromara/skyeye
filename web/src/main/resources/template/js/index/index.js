@@ -51,12 +51,6 @@ layui.config({
         }
     });
 
-	// 文件管理、日程、笔记、论坛权限
-	authBtn('1645958796795');
-	authBtn('1645959056141');
-	authBtn('1645959177299');
-	authBtn('1645959237037');
-    
     $(function () {
     	var loadIndex = 20;
     	winuiLoad.animate(loadIndex);
