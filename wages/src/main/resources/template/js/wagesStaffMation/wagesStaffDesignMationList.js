@@ -104,23 +104,29 @@ layui.config({
 		systemCommonUtil.getSysCompanyList(function (json) {
 			// 加载企业数据
 			$("#companyList").html(getDataUseHandlebars(selTemplate, json));
+			form.render('select');
 		});
 	}
 
 	// 初始化部门
 	function initDepartment(){
-		showGrid({
-			id: "departmentList",
-			url: reqBasePath + "companydepartment007",
-			params: {companyId: $("#companyList").val()},
-			pagination: false,
-			method: 'POST',
-			template: selTemplate,
-			ajaxSendLoadBefore: function(hdb) {},
-			ajaxSendAfter:function (json) {
-				form.render('select');
-			}
-		});
+		if (isNull($("#companyList").val())) {
+			$("#companyList").val('')
+			form.render('select');
+		} else {
+			showGrid({
+				id: "departmentList",
+				url: reqBasePath + "companydepartment007",
+				params: {companyId: $("#companyList").val()},
+				pagination: false,
+				method: 'POST',
+				template: selTemplate,
+				ajaxSendLoadBefore: function(hdb) {},
+				ajaxSendAfter:function (json) {
+					form.render('select');
+				}
+			});
+		}
 	}
 
 	function initJob(){

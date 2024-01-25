@@ -57,11 +57,17 @@ var systemCommonUtil = {
      * @param callback 回执函数
      */
     queryJobListByDepartmentId: function (departmentId, callback){
-        AjaxPostUtil.request({url: reqBasePath + "companyjob007", params: {departmentId: departmentId}, type: 'json', method: "GET", callback: function(json) {
+        if (isNull(departmentId)) {
             if(typeof(callback) == "function") {
-                callback(json);
+                callback({});
             }
-        }, async: false});
+        } else {
+            AjaxPostUtil.request({url: reqBasePath + "companyjob007", params: {departmentId: departmentId}, type: 'json', method: "GET", callback: function(json) {
+                if(typeof(callback) == "function") {
+                    callback(json);
+                }
+            }, async: false});
+        }
     },
 
     /**

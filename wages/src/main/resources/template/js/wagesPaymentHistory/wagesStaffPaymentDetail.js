@@ -10,10 +10,13 @@ layui.config({
         var index = parent.layer.getFrameIndex(window.name);
         var $ = layui.$;
 
+        const staffId = GetUrlParam("staffId");
+        const payMonth = GetUrlParam("payMonth");
+
         showGrid({
             id: "showForm",
-            url: sysMainMation.wagesBasePath + "wagesstaff005",
-            params: {staffId: parent.rowId, payMonth: parent.payMonth},
+            url: sysMainMation.wagesBasePath + "queryWagesStaffPaymentDetail",
+            params: {staffId: staffId, payMonth: payMonth},
             pagination: false,
             method: "GET",
             template: $("#showBaseTemplate").html(),
@@ -21,7 +24,7 @@ layui.config({
             },
             ajaxSendAfter:function (json) {
                 // 加载员工信息
-                $("#staffMation").html(getUserStaffHtmlMationByStaffId(parent.rowId));
+                $("#staffMation").html(getUserStaffHtmlMationByStaffId(staffId));
 
                 matchingLanguage();
                 form.render();
