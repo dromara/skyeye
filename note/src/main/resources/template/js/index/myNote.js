@@ -450,23 +450,23 @@ layui.config({
 	// 默认展示当前最新的笔记
 	showNewNoteList();
 	
-	//树操作--新建文件夹
+	// 树操作--新建文件夹
 	$("body").on("click", ".treecreateNewFolder", function (e) {
 		noteId = "";
-		if(folderId == "1"){
+		if (folderId == "1") {
 			folderId = "2";
 		}
 		hideRMenu();
-		AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote002", params: {parentId: folderId, catalogName: '新建文件夹'}, type: 'json', callback: function (json) {
-			//刷新节点
+		AjaxPostUtil.request({url: sysMainMation.noteBasePath + "writeFolder", params: {parentId: folderId, name: '新建文件夹'}, type: 'json', method: 'POST', callback: function (json) {
+			// 刷新节点
 			refreshTreePointNode();
 			folderId = json.bean.id;
-			showListById();//获取文件夹和笔记列表
-			//执行延时
-			setTimeout(function(){
+			showListById();
+			// 执行延时
+			setTimeout(function () {
 				var selNode = ztree.getNodeByParam("id", json.bean.id, null);
 				ztree.editName(selNode);
-			},1000);
+			}, 1000);
    		}});
 	});
 	
@@ -587,15 +587,16 @@ layui.config({
 	
 	// 新增笔记
     function addNote(title, type){
-        if(folderId == "1"){
-            thisfolderId = "2";
-        } else {
-            thisfolderId = folderId;
-        }
+		if (folderId == "1") {
+			thisfolderId = "2";
+		} else {
+			thisfolderId = folderId;
+		}
         hideRMenu();
-        AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote007", params: {parentId: thisfolderId, title: title, type: type}, type: 'json', callback: function (json) {
-		   noteId = json.bean.id;
-		   showListById();// 获取文件夹和笔记列表
+        AjaxPostUtil.request({url: sysMainMation.noteBasePath + "writeNote", params: {parentId: thisfolderId, name: title, type: type}, type: 'json', method: 'POST', callback: function (json) {
+			noteId = json.bean.id;
+			// 获取文件夹和笔记列表
+			showListById();
        }});
     }
 	

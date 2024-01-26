@@ -17,10 +17,10 @@ layui.config({
 	var noteId = parent.noteId;
 	
 	// 显示编辑器内容
-	AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote008", params: {rowId: noteId}, type: 'json', callback: function (json) {
+	AjaxPostUtil.request({url: sysMainMation.noteBasePath + "queryNoteById", params: {id: noteId}, type: 'json', method: "GET", callback: function (json) {
 		ue = ueEditorUtil.initEditor('container');
 
-		parent.$("#noteTitle").val(json.bean.title);
+		parent.$("#noteTitle").val(json.bean.name);
 		ue.addListener("ready", function () {
 			ue.setContent(isNull(json.bean.content) ? "" : json.bean.content);
 			var height = $(".manage-console").height() - $(".edui-editor-toolbarbox").height() - $(".edui-editor-bottomContainer").height() - 15;

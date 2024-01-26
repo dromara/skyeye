@@ -36,8 +36,8 @@ layui.config({
         	initPasteDragImg(this);
             // 加载后富文本编辑器成功后的回调
 		    // 显示编辑器内容
-			AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote008", params: {rowId: noteId}, type: 'json', callback: function (json) {
-                parent.$("#noteTitle").val(json.bean.title);
+			AjaxPostUtil.request({url: sysMainMation.noteBasePath + "queryNoteById", params: {id: noteId}, type: 'json', method: "GET", callback: function (json) {
+                parent.$("#noteTitle").val(json.bean.name);
                 layEditor.setMarkdown(json.bean.content);
                 matchingLanguage();
 			}});

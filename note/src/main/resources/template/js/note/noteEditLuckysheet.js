@@ -13,8 +13,8 @@ layui.config({
 	form.render();
 
 	// 显示编辑器内容
-	AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote008", params: {rowId: noteId}, type: 'json', callback: function (json) {
-		parent.$("#noteTitle").val(json.bean.title);
+	AjaxPostUtil.request({url: sysMainMation.noteBasePath + "queryNoteById", params: {id: noteId}, type: 'json', method: "GET", callback: function (json) {
+		parent.$("#noteTitle").val(json.bean.name);
 		var param = {
 			container: 'luckysheet',
 			showtoolbar: true,
