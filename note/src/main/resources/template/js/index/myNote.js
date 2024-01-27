@@ -539,23 +539,23 @@ layui.config({
 
 	// 保存笔记信息
 	function saveNoteMation(){
-		if($("#editMyNote").hasClass('select')){
+		if ($("#editMyNote").hasClass('select')) {
 			$("#editMyNote").removeClass('select');
 		} else {
 			return false;
 		}
 		var tilte = $("#noteTitle").val();
-		if(isNull(tilte)){
+		if (isNull(tilte)) {
 			winui.window.msg('请填写笔记标题.', {icon: 2, time: 2000});
 			return false;
 		}
 		var content = childframe.window.getContent();//调用子页面方法获取编辑器内容
-		var desc = childframe.window.getNoHtmlContent();//调用子页面方法获取编辑器纯文本内容
-		AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote009", params: {rowId: noteId, title: tilte, content: content, desc: encodeURIComponent(desc)}, type: 'json', callback: function (json) {
+		var remark = childframe.window.getNoHtmlContent();//调用子页面方法获取编辑器纯文本内容
+		AjaxPostUtil.request({url: sysMainMation.noteBasePath + "writeNote", params: {id: noteId, name: tilte, content: content, remark: encodeURIComponent(remark)}, type: 'json', method: "POST", callback: function (json) {
 			winui.window.msg("保存成功", {icon: 1, time: 2000});
 			var obj = $("#folderChildList").find(".folder-item[id='" + noteId + "']");
 			obj.find("div[class='folder-item-title-content']").find("span").html(tilte);
-			obj.find("div[class='folder-item-desc']").html(desc);
+			obj.find("div[class='folder-item-desc']").html(remark);
 		}});
 	}
 	
