@@ -20,7 +20,7 @@ layui.config({
 	var ztree = null;
 	fsTree.render({
 		id: "treeDemo",
-		url: sysMainMation.noteBasePath + "mynote012?moveId=" + clickId,
+		url: sysMainMation.noteBasePath + "queryFolderByUserId?moveId=" + clickId,
 		checkEnable: true,
 		chkStyle: "radio",
 		loadEnable: true,//异步加载

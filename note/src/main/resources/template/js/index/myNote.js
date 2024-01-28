@@ -36,7 +36,7 @@ layui.config({
 	var ztree = null;
 	fsTree.render({
 		id: "treeDemo",
-		url: sysMainMation.noteBasePath + "mynote001",
+		url: sysMainMation.noteBasePath + "queryFolderByUserId",
 		checkEnable: false,
 		dragEnable: true,
 		loadEnable: true,//异步加载
@@ -168,7 +168,7 @@ layui.config({
 	
 	//编辑节点名称
 	function onRename(event, treeId, treeNode) {
-		AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote004", params: {catalogName: treeNode.name, fileType : 'folder', rowId : treeNode.id}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.noteBasePath + "editFileFolderById", params: {name: treeNode.name, fileType: 'folder', id: treeNode.id}, type: 'json', method: 'POST', callback: function (json) {
 			winui.window.msg("保存成功", {icon: 1, time: 2000});
 			folderId = treeNode.id;
 			showListById();//获取文件夹和笔记列表
@@ -337,7 +337,7 @@ layui.config({
 					text: "输出为PDF",
 					img: "../../assets/images/decompression-now.png",
 					callback: function() {
-						AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote014", params: {rowId: clickId, type: "2"}, type: 'json', callback: function (json) {
+						AjaxPostUtil.request({url: sysMainMation.noteBasePath + "outputNoteIsZipJob", params: {id: clickId, type: "file"}, type: 'json', method: 'POST', callback: function (json) {
 							layer.alert('笔记输出为PDF任务已创建，请前往 <a href="../../tpl/jobSpace/jobSpace.html" style="color: blue;" target="_blank">我的输出</a> 查看。');
 				   		}});
 					}
@@ -361,14 +361,14 @@ layui.config({
 						obj.find("div[class='folder-item-title-content']").find("input").select();
 						obj.find("div[class='folder-item-title-content']").find("input").blur(function(){
 							var value = obj.find("div[class='folder-item-title-content']").find("input").val();
-							if(value.length > 0){
+							if (value.length > 0) {
 								var nowhtml = "<span>" + value + "</span>";
 								obj.find("div[class='folder-item-title-content']").html(nowhtml);
 								if(html != value){
-									AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote004", params: {catalogName: value, fileType : clickType, rowId : clickId}, type: 'json', callback: function (json) {
+									AjaxPostUtil.request({url: sysMainMation.noteBasePath + "editFileFolderById", params: {name: value, fileType: clickType, id: clickId}, type: 'json', method: 'POST', callback: function (json) {
 										winui.window.msg("保存成功", {icon: 1, time: 2000});
-										if(clickType == "folder"){
-											//刷新节点
+										if (clickType == "folder") {
+											// 刷新节点
 											refreshTreePointNode();
 											// 设置选中节点
 											chooseNodeSelect(folderId);
@@ -393,22 +393,22 @@ layui.config({
 							pageId: "noteFileTree",
 							area: ['300px', '400px'],
 							callBack: function (refreshCode) {
-								if(refreshCode != "" && refreshCode != undefined){
-									if(refreshCode != "-9999"){
+								if (refreshCode != "" && refreshCode != undefined) {
+									if (refreshCode != "-9999") {
 										winui.window.msg("保存成功", {icon: 1, time: 2000});
 										noteId = "";
-										if(clickType == "folder"){
+										if (clickType == "folder") {
 											folderId = refreshCode;
-							   				//刷新节点
-							   				refreshTreePointNode();
-							   				// 设置选中节点
+											//刷新节点
+											refreshTreePointNode();
+											// 设置选中节点
 											chooseNodeSelect(folderId);
-						   					var selNode = ztree.getNodeByParam("id", clickId, null);
-						   					ztree.removeNode(selNode);//移除节点
+											var selNode = ztree.getNodeByParam("id", clickId, null);
+											ztree.removeNode(selNode);//移除节点
 										}
 										// 获取文件夹和笔记列表
 										showListById();
-									}else if (refreshCode == '-9999') {
+									} else if (refreshCode == '-9999') {
 					                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 					                }
 								}
@@ -512,7 +512,7 @@ layui.config({
 	// 树操作--输出压缩包
 	$("body").on("click", ".treereOutPutZIPContent", function (e) {
 		hideRMenu();
-		AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote014", params: {rowId: folderId, type: "1"}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.noteBasePath + "outputNoteIsZipJob", params: {id: folderId, type: "folder"}, type: 'json', method: 'POST', callback: function (json) {
 			layer.alert('笔记输出压缩包任务已创建，请前往 <a href="../../tpl/jobSpace/jobSpace.html" style="color: #0000ff;" target="_blank">我的输出</a> 查看。');
    		}});
 	});
@@ -602,9 +602,9 @@ layui.config({
 	
 	// 删除指定文件夹或笔记
 	function deleteFileOrNote(id){
-        AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote003", params: {rowId: id, fileType: clickType}, type: 'json', callback: function (json) {
+        AjaxPostUtil.request({url: sysMainMation.noteBasePath + "deleteFileFolderById", params: {id: id, fileType: clickType}, type: 'json', method: 'DELETE', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-			if(clickType == "folder"){
+			if (clickType == "folder") {
 				var selNode = ztree.getNodeByParam("id", id, null);
 				ztree.selectNode(selNode.getParentNode());// 设置选中节点
 				// 重置folderid
@@ -624,7 +624,7 @@ layui.config({
 			scrollElem: "#folderChildList",
 			done: function(page, next) { //到达临界点（默认滚动触发），触发下一页
 				var lis = [];
-				AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote005", params: {page: page, limit: 15, search: searchTitle}, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.noteBasePath + "queryNewNoteListByUserId", params: {page: page, limit: 15, keyword: searchTitle}, type: 'json', method: 'POST', callback: function (json) {
 					lis.push(getDataUseHandlebars(folderchildlisetTemplate, json));
 					next(lis.join(''), (page * 15) < json.total);
 					initRightMenu();

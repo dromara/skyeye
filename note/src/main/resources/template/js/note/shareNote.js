@@ -34,7 +34,7 @@ layui.config({
 	}
 	
 	function loadNote(){
-		AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote013", params: {rowId: rowId}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.noteBasePath + "queryNoteById", params: {id: rowId}, type: 'json', method: 'GET', callback: function (json) {
 			$("#noteTile").html(json.bean.title);
 			$("#createName").html(json.bean.createName);
 			$("#createTime").html(json.bean.createTime);

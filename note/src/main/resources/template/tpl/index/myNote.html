@@ -15,7 +15,7 @@
 	    	<div class="file-write-left">
     			<div class="left-content">
 					<ul id="treeDemo" class="ztree fsTree" method="get" isRoot="0"
-    					treeIdKey="id" inputs="parentId" treePIdKey="pId" clickCallbackInputs="parentId:$id" treeName="name"></ul>
+    					treeIdKey="id" inputs="parentId" treePIdKey="parentId" clickCallbackInputs="parentId:$id" treeName="name"></ul>
 				</div>
 	    	</div>
 	    	<div class="file-write-center">
@@ -98,21 +98,21 @@
 	<!-- folderchildlisetTemplate.tpl -->
 	<script type="text/x-handlebars-template" id="folderchildlisetTemplate">
 		{{#each rows}}
-			<div class="folder-item" id="{{id}}" rowname="{{name}}" rowtype="{{fileType}}" title="笔记：{{name}}&#10;简介：{{desc}}">
+			<div class="folder-item" id="{{id}}" rowname="{{name}}" rowtype="{{type}}" title="笔记：{{name}}&#10;简介：{{remark}}">
 				<div class="folder-item-title">
 					<div class="folder-item-title-icon">
-						<img src="{{icon}}"/>
+						<img src="{{iconLogo}}"/>
 					</div>
 					<div class="folder-item-title-content">
 						<span>{{name}}</span>
 					</div>
 				</div>
 				<div class="folder-item-desc">
-					{{desc}}
+					{{remark}}
 				</div>
 				<div class="folder-item-mation">
 					<div class="folder-item-mation-time">
-						{{createTime}}
+						{{lastUpdateTime}}
 					</div>
 				</div>
 			</div>
