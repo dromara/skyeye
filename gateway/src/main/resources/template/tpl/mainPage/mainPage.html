@@ -66,11 +66,21 @@
 		      	<div class="layui-col-xs8">
 		      		<div class="layui-card">
 				      	<div class="layui-tab layui-tab-brief layadmin-latestData" style="background-color: white;">
-							<ul class="layui-tab-title" id="noticeTitle">
-								
+							<ul class="layui-tab-title">
+								<li class="layui-this" title="公告">公告</li>
 							</ul>
-							<div class="layui-tab-content" id="noticeContent">
-								
+							<div class="layui-tab-content">
+								<table class="layui-table" lay-skin="line">
+									<thead>
+									<tr>
+										<th>主题</th>
+										<th style="width: 120px;">类型</th>
+										<th style="width: 140px;">时间</th>
+									</tr>
+									</thead>
+									<tbody class="insurance-table" id="noticeContent">
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
@@ -115,34 +125,13 @@
 		</form>
 	</div>
 	
-	<script type="text/x-handlebars-template" id="noticeTitleTemplate">
-		{{#each rows}}
-			<li class="{{className}}" title="{{name}}">{{name}}</li>
-		{{/each}}
-	</script>
-	
 	<script type="text/x-handlebars-template" id="noticeContentTemplate">
 		{{#each rows}}
-			<div class="layui-tab-item {{contentClassName}}" style="height: 350px;">
-				<table class="layui-table" lay-skin="line">
-					<thead>
-		                <tr>
-		                    <th>主题</th>
-		                    <th style="width: 120px;">发送人</th>
-		                    <th style="width: 140px;">时间</th>
-		                </tr>
-		            </thead>
-		            <tbody class="insurance-table">
-						{{#each content}}
-							<tr style="height: 38px;">
-								<td><a href="javascript:;" style="color: #01AAED;" class="notice" id="{{id}}">{{title}}</a></td>
-								<td>{{createName}}</td>
-								<td>{{linesTime}}</td>
-							</tr>
-						{{/each}}
-		            </tbody>
-				</table>
-			</div>
+			<tr style="height: 38px;">
+				<td><a href="javascript:;" style="color: #01AAED;" class="notice" id="{{id}}">{{name}}</a></td>
+				<td>{{createName}}</td>
+				<td>{{realLinesTime}}</td>
+			</tr>
 		{{/each}}
 	</script>
 	

@@ -119,6 +119,11 @@
 
     "knowlgContentState": {"name": "知识库状态", "className": "skyeye-knowlg#com.skyeye.eve.classenum.KnowlgContentState"},
 
+    "noticeState": {"name": "公告状态", "className": "skyeye-notice#com.skyeye.eve.classenum.NoticeState"},
+    "noticeRealLinesType": {"name": "公告上线类型", "className": "skyeye-notice#com.skyeye.eve.classenum.NoticeRealLinesType"},
+    "noticeTimeSend": {"name": "是否设置定时发送", "className": "skyeye-notice#com.skyeye.eve.classenum.NoticeTimeSend"},
+
+
     "wagesTypeEnum": {"name": "薪资字段类型", "className": "skyeye-wages#com.skyeye.eve.field.classenum.WagesTypeEnum"},
     "wagesModelFieldType": {"name": "模板关联字段的字段类型", "className": "skyeye-wages#com.skyeye.eve.model.classenum.WagesModelFieldType"},
     "staffWagesStateEnum": {"name": "员工薪资设定状态", "className": "skyeye-wages#com.skyeye.eve.field.classenum.StaffWagesStateEnum"},

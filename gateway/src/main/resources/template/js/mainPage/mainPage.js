@@ -26,14 +26,7 @@ layui.config({
 	}
 	
 	function initNoticeList(){
-		AjaxPostUtil.request({url: reqBasePath + "mainpage002", params: {}, type: 'json', callback: function (json) {
-			$.each(json.rows, function(i, item) {
-				if(i == 0){
-					item.className = "layui-this";
-					item.contentClassName = "layui-show";
-				}
-			});
-			$("#noticeTitle").append(getDataUseHandlebars($("#noticeTitleTemplate").html(), json));
+		AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "queryUserReceivedTopNotice", params: {}, type: 'json', method: 'GET', callback: function (json) {
 			$("#noticeContent").append(getDataUseHandlebars($("#noticeContentTemplate").html(), json));
 			initForumList();
    		}});
@@ -58,11 +51,10 @@ layui.config({
 
 	// 公告详情
 	$("body").on("click", ".notice", function (e) {
-		rowId = $(this).attr("id");
 		_openNewWindows({
-			url: "../../tpl/sysnoticefront/sysnoticefrontdetails.html", 
+			url: systemCommonUtil.getUrl('FP2024013100006&id=' + $(this).attr("id"), null),
 			title: "公告详情",
-			pageId: "sysnoticefrontdetails",
+			pageId: "noticeDetailsPage",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}});
@@ -71,7 +63,7 @@ layui.config({
 	// 知识库详情
 	$("body").on("click", ".knowledge", function (e) {
 		_openNewWindows({
-			url:  systemCommonUtil.getUrl('FP2023101500004&id=' + $(this).attr("id"), null),
+			url: systemCommonUtil.getUrl('FP2023101500004&id=' + $(this).attr("id"), null),
 			title: "知识库详情",
 			pageId: "knowledgeDetailsPage",
 			area: ['90vw', '90vh'],
