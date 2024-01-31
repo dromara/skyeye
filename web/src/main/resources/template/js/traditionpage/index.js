@@ -397,6 +397,8 @@ layui.config({
     
     // 消息中心
     $("body").on("click", "#messageCenter", function (e) {
+		var url = systemCommonUtil.getUrl('FP2024013100007', null);
+		$(this).attr('data-url', url);
 		indexMenu.loadTraditionPage($(this));
     });
     

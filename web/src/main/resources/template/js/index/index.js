@@ -794,7 +794,7 @@ layui.config({
     function initNoticeList(){
     	showGrid({
 		 	id: "notice-list",
-		 	url: sysMainMation.noticeBasePath + "syseveusernotice002",
+		 	url: sysMainMation.noticeBasePath + "getTopEightMessageList",
 		 	params: {},
 		 	pagination: false,
 		 	template: getFileContent('tpl/index/noReadNotice.tpl'),
@@ -811,32 +811,26 @@ layui.config({
 		 		//移除全部消息
 		 		$(".notice-remove").on("click", function (e) {
 		 			var noticeList = $("#notice-list").find(".winui-message-item");
-		 			var idsStr = "";
-		 			$.each(noticeList, function(index, item) {
-		 				idsStr = $(item).attr("rowid") + ",";
-		 			});
 		 			$("#showMyNoticeNum").hide();
                     $("#showMyNoticeNum").html("0");
-		 			if (!isNull(idsStr)){
-		 				AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "syseveusernotice006", params: {rowIds: idsStr}, type: 'json', callback: function (json) {
-							$.each(noticeList, function(index, item) {
-								setTimeout(function (e) {
-									$(item).animate({'margin-left': '390px'}, 500, function() {
-										$(item).remove();
-									});
-								}, index * 200);
-							});
-			 	   		}});
-		 			}
+					AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "deleteAllMessage", params: {}, type: 'json', method: 'DELETE', callback: function (json) {
+						$.each(noticeList, function(index, item) {
+							setTimeout(function (e) {
+								$(item).animate({'margin-left': '390px'}, 500, function() {
+									$(item).remove();
+								});
+							}, index * 200);
+						});
+					}});
 		 		});
 		 		
-		 		//查看详细信息
+		 		// 查看详细信息
 		 		$(".winui-message-item").on("click", function (e) {
 		 			var _this = $(this);
 		 			parentRowId = _this.attr("rowid");
-		 			AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "syseveusernotice003", params: {rowId: parentRowId}, type: 'json', callback: function (json) {
+		 			AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "editMessageById", params: {id: parentRowId}, type: 'json', method: 'POST', callback: function (json) {
 						_openNewWindows({
-							url: "../../tpl/index/noticeDetail.html",
+							url: systemCommonUtil.getUrl('FP2024013100008&id=' + parentRowId, null),
 							title: "消息详情",
 							pageId: "noticeDetail" + (new Date()).valueOf(),
 							area: ['600px', '400px'],
@@ -860,7 +854,7 @@ layui.config({
 		 		$(".notice-item-remove").on("click", function (e) {
 		 			var _this = $(this).parent().parent();
 		 			parentRowId = _this.attr("rowid");
-		 			AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "syseveusernotice004", params: {rowId: parentRowId}, type: 'json', callback: function (json) {
+		 			AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "deleteMessageById", params: {id: parentRowId}, type: 'json', method: 'DELETE', callback: function (json) {
 						_this.animate({'margin-left': '390px'}, 500, function() {
 							_this.remove();
 							var noticeShowListLength = $("#notice-list").find(".winui-message-item").length;

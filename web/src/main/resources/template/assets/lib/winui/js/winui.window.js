@@ -640,7 +640,7 @@ layui.define(['layer', 'winui'], function (exports) {
             id: 'winui-sys-notice',
             type: 2,
             title: title,
-            content: '../../tpl/mymessage/myNoticeList.html',
+            content: systemCommonUtil.getUrl('FP2024013100007', null),
             loadBottomMenuIcon: loadBottomMenuIcon,
             iconTitle: iconTitle
         });
