@@ -10,13 +10,17 @@ var ueEditorUtil = {
             autoHeightEnabled: false, // 禁止自动增高，改用滚动条
             enableAutoSave: false, // 自动保存
         });
-        if (ueEditorUtil.ueEditorMap.length == 1) {
+        if (Object.keys(ueEditorUtil.ueEditorMap).length == 1) {
             UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
             UE.Editor.prototype.getActionUrl = function (action) {
                 if (action == 'uploadimage' || action == 'uploadfile' || action == 'uploadvideo' || action == 'uploadimage') {//上传单个图片,上传附件,上传视频,多图上传
                     return reqBasePath + '/upload/editUploadController/uploadContentPic';
                 } else if (action == 'listimage') {
-                    return reqBasePath + '/upload/editUploadController/downloadContentPic';
+                    var currentUserMation = {};
+                    systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
+                        currentUserMation = data.bean;
+                    });
+                    return reqBasePath + '/upload/editUploadController/downloadContentPic?userId=' + currentUserMation.id;
                 } else {
                     return this._bkGetActionUrl.call(this, action);
                 }
