@@ -24,7 +24,7 @@ layui.config({
 				id: "disreplay",
 				url: reqBasePath + "queryDiscussionReplyList",
 				params: {discussionId: id},
-				pagination: false,
+				pagination: true,
 				template: replyTemplate,
 				method: "POST",
 				ajaxSendLoadBefore: function(hdb) {},
