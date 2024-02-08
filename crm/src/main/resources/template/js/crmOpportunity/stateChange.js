@@ -17,33 +17,29 @@ layui.config({
 		$(".typeTender").removeClass("layui-hide");
 		$(".typeNegotiate").removeClass("layui-hide");
 		$(".typeTurnover").removeClass("layui-hide");
-		$(".typeLosingTable").removeClass("layui-hide");
 		$(".typeLayAside").removeClass("layui-hide");
 	} else if (parent.stateChangeData.state == 'schemeAndQuotation'){//方案与报价
 		$(".typeConmunicate").removeClass("layui-hide");
 		$(".typeTender").removeClass("layui-hide");
 		$(".typeNegotiate").removeClass("layui-hide");
 		$(".typeTurnover").removeClass("layui-hide");
-		$(".typeLosingTable").removeClass("layui-hide");
 		$(".typeLayAside").removeClass("layui-hide");
 	} else if (parent.stateChangeData.state == 'competitionAndBidding'){//竞争与投标
 		$(".typeConmunicate").removeClass("layui-hide");
 		$(".typeQuotedPrice").removeClass("layui-hide");
 		$(".typeNegotiate").removeClass("layui-hide");
 		$(".typeTurnover").removeClass("layui-hide");
-		$(".typeLosingTable").removeClass("layui-hide");
 		$(".typeLayAside").removeClass("layui-hide");
 	} else if (parent.stateChangeData.state == 'businessNegotiation'){//商务谈判
 		$(".typeConmunicate").removeClass("layui-hide");
 		$(".typeTender").removeClass("layui-hide");
 		$(".typeQuotedPrice").removeClass("layui-hide");
 		$(".typeTurnover").removeClass("layui-hide");
-		$(".typeLosingTable").removeClass("layui-hide");
 		$(".typeLayAside").removeClass("layui-hide");
 	} else if (parent.stateChangeData.state == 'layAside'){//搁置
 		$(".typeConmunicate").removeClass("layui-hide");
-		$(".typeLosingTable").removeClass("layui-hide");
 	}
+	$(".typeLosingTable").removeClass("layui-hide");
 	//初期沟通
 	$("body").on("click", "#conmunicate", function() {
 		var msg = '确认【' + stateChangeData.title + '】进入初期沟通状态吗？';
