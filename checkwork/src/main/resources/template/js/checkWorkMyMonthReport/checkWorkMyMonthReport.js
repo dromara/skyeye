@@ -53,16 +53,16 @@ layui.config({
     // 加载工作日
     function loadWorkDays(){
 		var workDayation = getInPoingArr(checkTimeList, "id", $("#checkTime").val());
-		if(workDayation != null){
+		if (workDayation != null) {
 			var type = workDayation.type;
-			if(type == 1){
+			if (type == 1) {
 				checkWorkUtil.resetSingleBreak();
-			} else if (type == 2){
+			} else if (type == 2) {
 				checkWorkUtil.resetWeekend();
-			} else if (type == 3){
+			} else if (type == 3) {
 				checkWorkUtil.resetSingleAndDoubleBreak();
-			} else if (type == 4){
-				checkWorkUtil.resetCustomizeDay(workDayation.days);
+			} else if (type == 4) {
+				checkWorkUtil.resetCustomizeDay(workDayation.checkWorkTimeWeekList);
 			}
 		}
     }
