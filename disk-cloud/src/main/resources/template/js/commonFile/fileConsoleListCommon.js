@@ -62,8 +62,12 @@ function createHtmlFile(folderId, callBack){
 
 // 创建文件夹
 function createFolder(folderId, refreshCallBack, initDragCallBack, currentUserId){
-	AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole002", params: {parentId: folderId, catalogName: '新建文件夹'}, type: 'json', callback: function (json) {
-		initNewFolder(json.bean.id, json.bean.catalogName, json.bean.logoPath, true, currentUserId);
+	let params = {
+		parentId: folderId,
+		name: '新建文件夹'
+	};
+	AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "insertFileCatalog", params: params, type: 'json', method: 'POST', callback: function (json) {
+		initNewFolder(json.bean.id, json.bean.name, json.bean.logoPath, true, currentUserId);
 		// 刷新节点
 		if(typeof(refreshCallBack) == "function") {
 			refreshCallBack();

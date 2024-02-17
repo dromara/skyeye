@@ -834,22 +834,23 @@ layui.config({
 		var fileType = fileFolderEdit.parent().attr("filetype");
 		var title = fileFolderEdit.parent().find("div[class='filename']").find("span").html();//获取修改前的名称
 		var newName = fileFolderEdit.find("textarea").val();
-		if(fileType != 'folder'){
+		if (fileType != 'folder') {
 			newName = newName + "." + fileType;
 		}
-		if(newName != title){//修改前的名称和当前名称不一致，则调用后台接口进行修改
+		if (newName != title) {//修改前的名称和当前名称不一致，则调用后台接口进行修改
 			var id = fileFolderEdit.parent().attr("rowid");
-			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole005", params: {rowId: id, catalogName: newName, fileType: fileType}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "editCloudFileFolderById", params: {id: id, name: newName, fileType: fileType}, type: 'json', method: 'POST', callback: function (json) {
 				fileFolderEdit.parent().find("div[class='filename']").show();
 				fileFolderEdit.parent().find("div[class='filename']").find("span").html(newName);
 				fileFolderEdit.parent().attr("title", "名称:" + newName);
 				fileFolderEdit.hide();
-				if(fileType === 'folder'){//如果是文件夹
-					//刷新树节点
+				if (fileType === 'folder') {//如果是文件夹
+					// 刷新树节点
 					refreshTreePointNode();
 				}
 			}});
-		} else {//如果一致
+		} else {
+			// 如果一致
 			fileFolderEdit.parent().find("div[class='filename']").show();
 			fileFolderEdit.hide();
 		}
