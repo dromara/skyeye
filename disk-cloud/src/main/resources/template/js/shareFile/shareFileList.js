@@ -123,11 +123,11 @@ layui.config({
 				if(fileType === 'folder'){//文件夹
 					winui.window.msg('暂不提供文件夹的下载。', {icon: 2, time: 2000});
 				} else {//文件
-					AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: operaterId}, type: 'json', callback: function (json) {
-						if($.inArray(json.bean.fileType, imageType) >= 0){//图片
-							downloadImage(fileBasePath + json.bean.fileAddress, json.bean.fileName);
+					AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "queryFileConsoleById", params: {id: operaterId}, type: 'json', method: 'GET', callback: function (json) {
+						if($.inArray(json.bean.type, imageType) >= 0){//图片
+							downloadImage(fileBasePath + json.bean.address, json.bean.name);
 						} else {
-							download(fileBasePath + json.bean.fileAddress, json.bean.fileName);
+							download(fileBasePath + json.bean.address, json.bean.name);
 						}
 					}});
 				}

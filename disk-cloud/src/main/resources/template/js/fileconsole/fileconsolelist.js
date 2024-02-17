@@ -277,23 +277,22 @@ layui.config({
 			// 加载目录下的文件
 			loadThisFolderChild();
 		} else if ($.inArray(fileType, vedioType) >= 0){//视频
-			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
-				fileUrl = json.bean.fileAddress;
-				fileThumbnail = json.bean.fileThumbnail;
+			getFileMation($(this).attr("rowid"), function (file) {
+				fileUrl = file.address;
+				fileThumbnail = file.thumbnail;
 				_openNewWindows({
 					url: "../../tpl/fileconsole/vedioshow.html",
-					title: json.bean.fileName,
+					title: file.name,
 					pageId: "vedioShow",
 					area: ['80vw', '80vh'],
 					callBack: function (refreshCode) {}});
-    		}});
+			});
 		} else if ($.inArray(fileType, officeType) >= 0){//office文件
-			var thisId = $(this).attr("rowid");
-			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: thisId}, type: 'json', callback: function (json) {
-				fileUrl = json.bean.fileAddress;
-				selFileType = json.bean.fileType;
-				window.open(sysMainMation.homePagePath + "/tpl/fileconsole/officeshow.html?fileUrl=" + fileUrl + "&selFileType=" + selFileType + "&title=" + json.bean.fileName + "&thisId=" + thisId);
-    		}});
+			getFileMation($(this).attr("rowid"), function (file) {
+				fileUrl = file.address;
+				selFileType = file.type;
+				window.open(sysMainMation.homePagePath + "/tpl/fileconsole/officeshow.html?fileUrl=" + fileUrl + "&selFileType=" + selFileType + "&title=" + file.name + "&thisId=" + file.id);
+			});
 		} else if ($.inArray(fileType, aceType) >= 0){//ace文件
 			var thisId = $(this).attr("rowid");
 			_openNewWindows({
@@ -303,30 +302,38 @@ layui.config({
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {}});
 		} else if ($.inArray(fileType, epubType) >= 0){//电子书
-			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
-				fileUrl = json.bean.fileAddress;
-				fileThumbnail = json.bean.fileThumbnail;
+			getFileMation($(this).attr("rowid"), function (file) {
+				fileUrl = file.address;
+				fileThumbnail = file.thumbnail;
 				_openNewWindows({
 					url: "../../tpl/fileconsole/epubShow.html",
-					title: json.bean.fileName,
+					title: file.name,
 					pageId: "epubShow",
 					area: ['90vw', '90vh'],
 					callBack: function (refreshCode) {}});
-    		}});
+			});
 		} else if ($.inArray(fileType, packageType) >= 0){//压缩包
-			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
-				fileUrl = json.bean.fileAddress;
-				fileThumbnail = json.bean.fileThumbnail;
+			getFileMation($(this).attr("rowid"), function (file) {
+				fileUrl = file.address;
+				fileThumbnail = file.thumbnail;
 				_openNewWindows({
 					url: "../../tpl/fileconsole/zipShow.html",
-					title: '<img src="../../assets/images/rar.png" class="fly-img"/>' + json.bean.fileName,
+					title: '<img src="../../assets/images/rar.png" class="fly-img"/>' + file.name,
 					pageId: "epubShow",
 					area: ['630px', '450px'],
 					skin: "zip-show",
 					callBack: function (refreshCode) {}});
-    		}});
+			});
 		}
 	});
+
+	function getFileMation(id, callback) {
+		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "queryFileConsoleById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
+			if (typeof callback == "function") {
+				callback(json.bean)
+			}
+		}});
+	}
 	
 	// 文件夹或者文件重命名
 	$("body").on("click", ".fileReName", function (e) {
@@ -386,7 +393,7 @@ layui.config({
 			$.each(checkItems, function(i, item) {
 				var checkFile = $(item).parent().parent().parent();
 				deleteArray.push({
-					rowId: checkFile.attr("rowid"),
+					id: checkFile.attr("rowid"),
 					fileType: checkFile.attr("filetype")
 				});
 			});
@@ -421,7 +428,7 @@ layui.config({
 			$(".layui-dropdown-menu").hide();
 			$(".select-op-more").hide();
 			var fileType = $("#file-content div[rowid='" + operaterId + "']").attr("filetype");
-            AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole013", params: {rowId: operaterId}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "insertFileCatalogToRecycle", params: {fileId: operaterId}, type: 'json', method: 'POST', callback: function (json) {
 				winui.window.msg("已放入回收站", {icon: 1, time: 2000});
 				$("#file-content div[rowid='" + operaterId + "']").remove();
 				// 如果删除的对象是文件夹
@@ -510,21 +517,20 @@ layui.config({
 	
 	// 通过onlyoffice打开office文件
 	$("body").on("click", ".openByOnlyOffice", function (e) {
-		var thisId = operaterId;
 		$(".layui-dropdown-menu").hide();
-		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: thisId}, type: 'json', callback: function (json) {
-			fileUrl = json.bean.fileAddress;
-			selFileType = json.bean.fileType;
-			window.open(sysMainMation.homePagePath + "/tpl/fileconsole/officeshow.html?fileUrl=" + fileUrl + "&selFileType=" + selFileType + "&title=" + json.bean.fileName + "&thisId=" + thisId);
-		}});
+		getFileMation(operaterId, function (file) {
+			fileUrl = file.address;
+			selFileType = file.type;
+			window.open(sysMainMation.homePagePath + "/tpl/fileconsole/officeshow.html?fileUrl=" + fileUrl + "&selFileType=" + selFileType + "&title=" + file.name + "&thisId=" + file.id);
+		});
 	});
 	
 	// 通过微软office打开office文件
 	$("body").on("click", ".openByMicrosoftOffice", function (e) {
 		$(".layui-dropdown-menu").hide();
-		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: operaterId}, type: 'json', callback: function (json) {
-			window.open('https://view.officeapps.live.com/op/view.aspx?src=http://gzwp.free.idcfengye.com/' + json.bean.fileAddress);
-		}});
+		getFileMation(operaterId, function (file) {
+			window.open('https://view.officeapps.live.com/op/view.aspx?src=http://gzwp.free.idcfengye.com/' + file.address);
+		})
 	});
 	
 	// 文件或者文件夹下载
@@ -571,14 +577,14 @@ layui.config({
 				}
 			}});
 		} else {
-			//不包含文件夹
-			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: operaterId}, type: 'json', callback: function (json) {
-				if($.inArray(json.bean.fileType, imageType) >= 0){//图片
-					downloadImage(fileBasePath + json.bean.fileAddress, json.bean.fileName);
+			// 不包含文件夹
+			getFileMation(operaterId, function (file) {
+				if($.inArray(file.type, imageType) >= 0){//图片
+					downloadImage(fileBasePath + file.address, file.name);
 				} else {
-					download(json.bean.fileAddress, json.bean.fileName);
+					download(file.address, file.name);
 				}
-			}});
+			})
 		}
 	});
 	
@@ -713,7 +719,7 @@ layui.config({
 		layer.confirm("确定将该文件夹及其子文件放入回收站吗?", { icon: 3, title: '回收站' }, function (index) {
 			layer.close(index);
 			var fileType = 'folder';
-            AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole013", params: {rowId: folderId}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "insertFileCatalogToRecycle", params: {fileId: folderId}, type: 'json', method: 'POST', callback: function (json) {
 				winui.window.msg("已放入回收站", {icon: 1, time: 2000});
 				$("#file-content div[rowid='" + folderId + "']").remove();
 				var selNode = ztree.getNodeByParam("id", folderId, null);
@@ -737,7 +743,7 @@ layui.config({
 			layer.close(index);
 			var deleteArray = new Array();
 			deleteArray.push({
-				rowId: folderId,
+				id: folderId,
 				fileType: 'folder'
 			});
 			deleteFolderAndChild(deleteArray, function() {
@@ -1232,7 +1238,7 @@ layui.config({
 	//加载总文件大小
 	function loadFileSizeById(){
 		loadFileSizeCS = true;
-		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole012", params: {}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "queryAllFileSizeByUserId", params: {}, type: 'json', method: 'GET', callback: function (json) {
 			$(".memory-num").html(json.bean.size);
    		}, async: false});
 	}
@@ -1683,7 +1689,7 @@ layui.config({
 					//当前分块大小
 					"chunkSize": block.end - block.start
 				};
-				AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole008", params: params, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "queryUploadFileChunksByChunkMd5", params: params, type: 'json', method: 'POST', callback: function (json) {
 					//分块存在，跳过
 					deferred.reject();
 	    		}, errorCallback: function (json) {
@@ -1697,7 +1703,7 @@ layui.config({
 			//时间点3：所有分块上传成功后调用此函数
 			afterSendFile: function (data) {
 				//如果分块上传成功，则通知后台合并分块
-				AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole007", params: {md5: md5, folderId: folderId, name: data.name, size: data.size}, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "insertUploadFileChunks", params: {md5: md5, folderId: folderId, name: data.name, size: data.size}, type: 'json', method: 'POST', callback: function (json) {
 	    		}});
 			 }
 		});
@@ -1719,7 +1725,7 @@ layui.config({
 		    fileSizeLimit: 2000 * 1024 * 1024,//最大2GB
 	        fileSingleSizeLimit: 2000 * 1024 * 1024,
 	        resize: false,//不压缩
-		    server: sysMainMation.diskCloudBasePath + 'fileconsole006',
+		    server: sysMainMation.diskCloudBasePath + 'insertUploadFile',
 		    fileNumLimit: 300
 		});
 		// 添加“添加文件”的按钮，
