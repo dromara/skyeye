@@ -75,12 +75,12 @@ layui.config({
 		systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 			currentUserMation = data.bean;
 		});
-		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole036", params: {rowId: thisId}, type: 'json', callback: function(j){
-			if (!isNull(j.bean)){
+		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole036", params: {id: thisId}, type: 'json', method: 'GET', callback: function(j){
+			if (!isNull(j.bean)) {
 				window.docEditor = new DocsAPI.DocEditor("placeholder", {
 					"document": {
 						"fileType": selFileType,//定义源查看或编辑文档的文件类型
-						"key": thisId + "-" + j.bean.updateTime + "",//定义服务用于文档识别的唯一文档标识符。 如果发送已知密钥，文档将从缓存中获取。 每次文档被编辑和保存时，都必须重新生成密钥。 文档url可以用作密钥，但不包含特殊字符，长度限制为20个符号。（注意如果秘钥值不更换那么看到的文档还是最先加载的缓存文档）
+						"key": thisId + "-" + j.bean.lastUpdateTime + "",//定义服务用于文档识别的唯一文档标识符。 如果发送已知密钥，文档将从缓存中获取。 每次文档被编辑和保存时，都必须重新生成密钥。 文档url可以用作密钥，但不包含特殊字符，长度限制为20个符号。（注意如果秘钥值不更换那么看到的文档还是最先加载的缓存文档）
 						"title": title,//为查看或编辑的文档定义所需的文件名，当文档被下载时它也将被用作文件名。
 						"url": sysMainMation.fileBasePath + fileUrl,//定义存储源查看或编辑文档的绝对URL
 						"userdata": thisId

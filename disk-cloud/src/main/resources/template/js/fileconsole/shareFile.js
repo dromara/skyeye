@@ -30,13 +30,13 @@ layui.config({
 		//分享
 		$("body").on("click", "#createShareUrl", function() {
 			var params = {
-				rowId: parent.shareId,
+				fileId: parent.shareId,
 				shareType: shareType
 			};
-			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole016", params: params, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "insertFileToShare", params: params, type: 'json', method: 'POST', callback: function (json) {
 				json.bean.shareUrl = reqBasePath + json.bean.shareUrl;
 				var str = "链接：" + json.bean.shareUrl;
-				if(json.bean.shareType === '1'){//无提取码
+				if (json.bean.shareType === '1') {//无提取码
 					json.bean.shareType = "none";
 					json.bean.btnName = "复制链接";
 				} else {//有提取码

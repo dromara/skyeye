@@ -22,19 +22,19 @@ layui.config({
 		$(".sys-logo").html(sysMainMation.mationTitle);
 		var rowId = GetUrlParam("id");
 	    
-		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole019", params: {rowId: rowId}, type: 'json', callback: function (json) {
-			if(isNull(json.bean)){//文件不存在
+		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "queryShareFileMationById", params: {id: rowId}, type: 'json', method: 'GET', callback: function (json) {
+			if (isNull(json.bean)) {//文件不存在
 				location.href = "../../tpl/shareFile/shareFilepwd.html?id=" + rowId;
 			} else {
-				$("#userName").html(json.bean.userName);
-				$("#userPhoto").attr("src", json.bean.userPhoto);
-				$("#userPhoto").attr("alt", json.bean.userName);
-				if(json.bean.shareType == 2){//私密分享
-					if(isNull(getCookie("file" + rowId))){//输入的提取码为空
+				$("#userName").html(json.bean.createMation.name);
+				$("#userPhoto").attr("src", json.bean.createMation.userPhoto);
+				$("#userPhoto").attr("alt", json.bean.createMation.name);
+				if (json.bean.shareType == 2) {//私密分享
+					if (isNull(getCookie("file" + rowId))) {//输入的提取码为空
 						location.href = "../../tpl/shareFile/shareFilepwd.html?id=" + rowId;
 					} else {//输入的提取码不为空
-						AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole020", params: {rowId: rowId, sharePassword: getCookie("file" + rowId)}, type: 'json', callback: function (json) {
-							if(isNull(json.bean)){//分享取消
+						AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole020", params: {id: rowId, sharePassword: getCookie("file" + rowId)}, type: 'json', method: 'POST', callback: function (json) {
+							if (isNull(json.bean)) {//分享取消
 								location.href = "../../tpl/shareFile/shareFilepwd.html?id=" + rowId;
 							} else {//加载列表
 								loadUserMation();
@@ -44,7 +44,7 @@ layui.config({
 							location.href = "../../tpl/shareFile/shareFilepwd.html?id=" + rowId;
 						}});
 					}
-				} else if (json.bean.shareType == 1){//公开分享--加载列表
+				} else if (json.bean.shareType == 1) {//公开分享--加载列表
 					loadUserMation();
 				}
 			}
@@ -70,11 +70,11 @@ layui.config({
 		//加载列表
 		function loadFileMation(){
 			//加载分享基础信息
-			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole021", params: {rowId: rowId}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole021", params: {id: rowId}, type: 'json', method: 'GET', callback: function (json) {
 				var str = "";
-				if(json.bean.fileType == 1){//文件夹
+				if (json.bean.fileType == 1) {//文件夹
 					str = '<img src="../../assets/images/share-folder.png"/>';
-				} else if (json.bean.fileType == 2){//文件
+				} else if (json.bean.fileType == 2) {//文件
 					str = '<img src="../../assets/images/share-file.png"/>';
 				}
 				$("#fileTitle").html(str + json.bean.shareName);
@@ -91,7 +91,7 @@ layui.config({
 			showGrid({
 			 	id: "fileListContent",
 			 	url: sysMainMation.diskCloudBasePath + "fileconsole022",
-			 	params: {folderId: folderId, shareId: shareId},
+			 	params: {folderId: folderId, id: shareId},
 			 	pagination: false,
 			 	template: getFileContent('tpl/shareFile/shareFileItem.tpl'),
 			 	ajaxSendLoadBefore: function(hdb) {},

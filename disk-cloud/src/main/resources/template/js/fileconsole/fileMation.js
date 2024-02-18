@@ -10,12 +10,12 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 		var $ = layui.$;
 		
-		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole031", params: {rowId: parent.shareId}, type: 'json', callback: function (json) {
-			$("#fileName").html(json.bean.fileName);
-			$("#fileType").html(json.bean.fileType);
-			$("#createName").html(json.bean.createUserName);
+		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole031", params: {id: parent.shareId}, type: 'json', method: 'GET', callback: function (json) {
+			$("#fileName").html(json.bean.name);
+			$("#fileType").html(json.bean.type);
+			$("#createName").html(json.bean.createName);
 			$("#createTime").html(json.bean.createTime);
-			$("#fileSize").html(json.bean.fileSize);
+			$("#fileSize").html(json.bean.turnSize);
 			matchingLanguage();
 			form.render();
 		}});

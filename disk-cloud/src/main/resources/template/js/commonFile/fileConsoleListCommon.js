@@ -10,49 +10,9 @@ function getFilePath(treeObj) {
     return filename;
 }
 
-// 创建Word文件
-function createWordFile(folderId, callBack){
-	AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole025", params: {folderId: folderId}, type: 'json', callback: function (json) {
-		winui.window.msg("创建成功", {icon: 1, time: 2000});
-		if(typeof(callBack) == "function") {
-			callBack();
-		}
-	}});
-}
-
-// 创建Excel文件
-function createExcelFile(folderId, callBack){
-	AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole026", params: {folderId: folderId}, type: 'json', callback: function (json) {
-		winui.window.msg("创建成功", {icon: 1, time: 2000});
-		if(typeof(callBack) == "function") {
-			callBack();
-		}
-	}});
-}
-
-// 创建PPT文件
-function createPPTFile(folderId, callBack){
-	AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole027", params: {folderId: folderId}, type: 'json', callback: function (json) {
-		winui.window.msg("创建成功", {icon: 1, time: 2000});
-		if(typeof(callBack) == "function") {
-			callBack();
-		}
-	}});
-}
-
-// 创建TXT文件
-function createTXTFile(folderId, callBack){
-	AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole028", params: {folderId: folderId}, type: 'json', callback: function (json) {
-		winui.window.msg("创建成功", {icon: 1, time: 2000});
-		if(typeof(callBack) == "function") {
-			callBack();
-		}
-	}});
-}
-
-// 创建Html文件
-function createHtmlFile(folderId, callBack){
-	AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole029", params: {folderId: folderId}, type: 'json', callback: function (json) {
+// 创建文件
+function createNumpyFile(type, folderId, callBack){
+	AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "createFileToService", params: {type: type, folderId: folderId}, type: 'json', method: 'POST', callback: function (json) {
 		winui.window.msg("创建成功", {icon: 1, time: 2000});
 		if(typeof(callBack) == "function") {
 			callBack();
