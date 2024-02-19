@@ -61,7 +61,7 @@ layui.config({
 					+ '<font id="exitBtn">退出</font>';
 				$("#operatorBtn").html(str);
 				$("#file-operator").html('<button class="layui-btn layui-btn-primary" id="saveBtn"><language showName="com.skyeye.save"></language></button>');
-			}, function (){
+			}, function () {
 				$("#operatorBtn").html('<font id="loginBtn">登陆</font>');
 			});
 			loadFileMation();
@@ -72,9 +72,9 @@ layui.config({
 			//加载分享基础信息
 			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole021", params: {id: rowId}, type: 'json', method: 'GET', callback: function (json) {
 				var str = "";
-				if (json.bean.fileType == 1) {//文件夹
+				if (json.bean.fileType == 'folder') {//文件夹
 					str = '<img src="../../assets/images/share-folder.png"/>';
-				} else if (json.bean.fileType == 2) {//文件
+				} else if (json.bean.fileType == 'file') {//文件
 					str = '<img src="../../assets/images/share-file.png"/>';
 				}
 				$("#fileTitle").html(str + json.bean.shareName);
@@ -112,7 +112,7 @@ layui.config({
 		
 		//下载按钮
 		$("body").on("click", ".file-list-content .file-item .size .download", function (e) {
-			if(isNull(getCookie('userToken'))){//用户信息为空，提示登陆
+			if (isNull(getCookie('userToken'))) {//用户信息为空，提示登陆
 				layer.confirm("该操作需要登陆后才可继续进行。", { icon: 3, title: '系统提示', btn: ['前往登陆','稍后登陆'] }, function (index) {
 					layer.close(index);
 					location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/shareFile/shareFileList.html?id=" + rowId);
@@ -120,11 +120,11 @@ layui.config({
 			} else {
 				var operaterId = $(this).parent().parent().attr("rowid");
 				var fileType = $(this).parent().parent().attr("filetype");
-				if(fileType === 'folder'){//文件夹
+				if (fileType === 'folder') {//文件夹
 					winui.window.msg('暂不提供文件夹的下载。', {icon: 2, time: 2000});
 				} else {//文件
 					AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "queryFileConsoleById", params: {id: operaterId}, type: 'json', method: 'GET', callback: function (json) {
-						if($.inArray(json.bean.type, imageType) >= 0){//图片
+						if ($.inArray(json.bean.type, imageType) >= 0) {//图片
 							downloadImage(fileBasePath + json.bean.address, json.bean.name);
 						} else {
 							download(fileBasePath + json.bean.address, json.bean.name);
@@ -138,7 +138,7 @@ layui.config({
 		//文件夹点击
 		$("body").on("click", ".file-list-content .file-item", function() {
 			var fileType = $(this).attr("filetype");
-			if(fileType === 'folder'){//文件夹
+			if (fileType === 'folder') {//文件夹
 				folderId = $(this).attr("rowid");
 				reFreshAllFilePath(folderId, $(this).find(".file_name").find("font").html());
 				loadFileList();

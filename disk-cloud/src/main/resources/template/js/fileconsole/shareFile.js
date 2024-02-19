@@ -33,30 +33,32 @@ layui.config({
 				fileId: parent.shareId,
 				shareType: shareType
 			};
-			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "insertFileToShare", params: params, type: 'json', method: 'POST', callback: function (json) {
-				json.bean.shareUrl = reqBasePath + json.bean.shareUrl;
-				var str = "链接：" + json.bean.shareUrl;
-				if (json.bean.shareType === '1') {//无提取码
-					json.bean.shareType = "none";
-					json.bean.btnName = "复制链接";
-				} else {//有提取码
-					json.bean.shareType = "block";
-					json.bean.btnName = "复制链接及提取码";
-					str += "   提取码：" + json.bean.sharePassword;
-				}
-				var html = getDataUseHandlebars(getFileContent('tpl/fileconsole/shareFileTemplate.tpl'), json);
-				$("#shareDiv").html(html);
-				$("#copyBtn").attr("data-clipboard-text", str);
-				form.render();
+			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "insertFileToShare", params: params, type: 'json', method: 'POST', callback: function (result) {
+				AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole021", params: {id: result.bean.id}, type: 'json', method: 'GET', callback: function (json) {
+					json.bean.shareUrl = homePagePath + json.bean.shareUrl;
+					var str = "链接：" + json.bean.shareUrl;
+					if (json.bean.shareType === '1') {//无提取码
+						json.bean.shareType = "none";
+						json.bean.btnName = "复制链接";
+					} else {//有提取码
+						json.bean.shareType = "block";
+						json.bean.btnName = "复制链接及提取码";
+						str += "   提取码：" + json.bean.sharePassword;
+					}
+					var html = getDataUseHandlebars(getFileContent('tpl/fileconsole/shareFileTemplate.tpl'), json);
+					$("#shareDiv").html(html);
+					$("#copyBtn").attr("data-clipboard-text", str);
+					form.render();
 
-				//复制
-				clipboard = new ClipboardJS('#copyBtn');
-				clipboard.on('success', function(e) {
-					winui.window.msg("复制成功", {icon: 1, time: 2000});
-				});
-				clipboard.on('error', function(e) {
-					winui.window.msg("浏览器不支持！", {icon: 2, time: 2000});
-				});
+					//复制
+					clipboard = new ClipboardJS('#copyBtn');
+					clipboard.on('success', function(e) {
+						winui.window.msg("复制成功", {icon: 1, time: 2000});
+					});
+					clipboard.on('error', function(e) {
+						winui.window.msg("浏览器不支持！", {icon: 2, time: 2000});
+					});
+				}});
 	   		}});
 	    });
 		

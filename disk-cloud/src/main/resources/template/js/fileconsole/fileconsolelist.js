@@ -183,7 +183,7 @@ layui.config({
 	});
 	
 	// 加载右侧右键内容
-	function initFileContentRight(_this, e){
+	function initFileContentRight(_this, e) {
 		var par = {
 			id: _this.attr("rowid"),
 			name: _this.find(".title").html(),
@@ -192,7 +192,7 @@ layui.config({
 		$("#fileRightMenu").show();
 		$("#fileRightMenu").html(getDataUseHandlebars($("#fileRightMenuTemplate").html(), {bean: par}));
 		$("#fileRightMenu").css({top: e.clientY + "px", left: e.clientX + "px", visibility: "visible", position: "absolute"});
-		if($.inArray(_this.attr("filetype"), officeType) == -1){
+		if ($.inArray(_this.attr("filetype"), officeType) == -1) {
 			$(".openByOnlyOffice").hide();
 			$(".openByMicrosoftOffice").hide();
 		}
@@ -792,7 +792,9 @@ layui.config({
 		if($(this).attr("data-type") != orderBy){
 			orderBy = $(this).attr("data-type");
 			$(".orderBy").find("img").attr("src", "");
+			$(".orderBy").find("img").hide();
 			$(this).find("img").attr("src", "../../assets/images/icon_choose.png");
+			$(this).find("img").show();
 			loadThisFolderChild();
 		}
 	});

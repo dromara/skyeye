@@ -42,7 +42,7 @@ layui.config({
 					$("#showForm").hide();
 					$("#showFormNone").show();
 				} else {//跳转列表页面
-					$.cookie("file" + rowId, $("#sharePassword").val(), {path: '/' });
+					setCookie("file" + rowId, $("#sharePassword").val());
 					location.href = "../../tpl/shareFile/shareFileList.html?id=" + rowId;
 				}
 	   		}});
