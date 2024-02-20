@@ -415,7 +415,7 @@ layui.config({
 	
 	// 删除文件夹以及该文件夹下的所有子内容
 	function deleteFolderAndChild(deleteArray, callBack){
-		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole004", params: {fileList: JSON.stringify(deleteArray)}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole004", params: {fileList: JSON.stringify(deleteArray)}, type: 'json', method: 'POST', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			callBack();
 		}});
