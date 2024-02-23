@@ -128,6 +128,7 @@
     "wagesModelFieldType": {"name": "模板关联字段的字段类型", "className": "skyeye-wages#com.skyeye.eve.model.classenum.WagesModelFieldType"},
     "staffWagesStateEnum": {"name": "员工薪资设定状态", "className": "skyeye-wages#com.skyeye.eve.field.classenum.StaffWagesStateEnum"},
     "paymentHistoryState": {"name": "薪资发放状态", "className": "skyeye-wages#com.skyeye.eve.payment.classenum.PaymentHistoryState"},
-    "paymentHistoryType": {"name": "薪资核算类型", "className": "skyeye-wages#com.skyeye.eve.payment.classenum.PaymentHistoryType"}
+    "paymentHistoryType": {"name": "薪资核算类型", "className": "skyeye-wages#com.skyeye.eve.payment.classenum.PaymentHistoryType"},
 
+    "mailCategory": {"name": "通讯录类型", "className": "skyeye-mail#com.skyeye.eve.classenum.MailCategory"}
 }

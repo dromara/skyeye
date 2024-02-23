@@ -10,13 +10,13 @@ var mailUtil = {
      */
     openMailChoosePage: function (callback) {
         _openNewWindows({
-            url: "../../tpl/mail/mailListChoose.html",
+            url: systemCommonUtil.getUrl('FP2024022300008', null),
             title: "通讯录选择",
             pageId: "mailListChoose",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
-                if(typeof(callback) == "function") {
-                    callback(mailUtil.mailChooseList);
+                if (typeof(callback) == "function") {
+                    callback(chooseListMation);
                 }
             }});
     }

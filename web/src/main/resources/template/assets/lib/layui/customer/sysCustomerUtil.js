@@ -158,7 +158,7 @@ var bossUtil = {
             pageId: "myChargeBossIntervieweeListChoose",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
-                if(typeof(callback) == "function") {
+                if (typeof(callback) == "function") {
                     callback(chooseItemMation);
                 }
             }});
