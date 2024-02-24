@@ -7,30 +7,16 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-	<div class="txtcenter" style="margin:0 auto;padding-top:10px;">
-		<div class="winui-tip alert-info" id="showInfo">节假日信息只需要录入国家法定节假日信息即可，周天休息日可以忽略。</div>
-	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
-	        <div class="layui-form-item">
-	            <div class="layui-inline">
-	                <label class="layui-form-label">标题</label>
-	                <div class="layui-input-inline">
-	                	<input type="text" id="scheduleTitle" name="scheduleTitle" placeholder="请输入日程标题" class="layui-input" />
-	                </div>
-	                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
-	                <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
-	            </div>
-	        </div>
-	    </form>
-	</div>
-	
+	<div class="winui-tip alert-info" id="showInfo">节假日信息只需要录入国家法定节假日信息即可，周天休息日可以忽略。</div>
+
     <div class="winui-toolbar">
         <div class="winui-tool">
-            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-            <button id="download" class="winui-toolbtn" auth="1552958799527"><i class="fa fa-download" aria-hidden="true"></i>模板下载</button>
+            <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="download" class="winui-toolbtn search-table-btn-right" auth="1552958799527"><i class="fa fa-download" aria-hidden="true"></i>模板下载</button>
             <input type="file" id="upfile" name="upfile" placeholder="" style="display: none;"/>
-            <button id="exploreExcel" class="winui-toolbtn" auth="1552958811619"><i class="fa fa-upload" aria-hidden="true"></i>导入模板(Excel)</button>
-            <button id="deleteThisYear" class="winui-toolbtn" auth="1552958778313"><i class="fa fa-trash-o" aria-hidden="true"></i>清空本年度节假日</button>
-            <button id="addSchedule" class="winui-toolbtn"><i class="fa fa-plus" aria-hidden="true"></i>新增节假日</button>
+            <button id="exploreExcel" class="winui-toolbtn search-table-btn-right" auth="1552958811619"><i class="fa fa-upload" aria-hidden="true"></i>导入模板(Excel)</button>
+            <button id="deleteThisYear" class="winui-toolbtn search-table-btn-right" auth="1552958778313"><i class="fa fa-trash-o" aria-hidden="true"></i>清空本年度节假日</button>
+            <button id="addSchedule" class="winui-toolbtn search-table-btn-right"><i class="fa fa-plus" aria-hidden="true"></i>新增节假日</button>
         </div>
     </div>
     
@@ -43,16 +29,14 @@
    	</div>
    	
    	<script type="text/html" id="tableBar">
-		{{# if(d.remindType == 0 && auth('1556442058080')){ }}
+		{{# if (d.remindType == 0) { }}
 			<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 		{{# } }}
-		{{# if(auth('1552958742833')){ }}
-			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
-		{{# } }}
-		{{# if(d.remindType != 0 && auth('1552958757776')){ }}
+		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
+		{{# if (d.remindType != 0 && auth('1552958757776')) { }}
 			<a class="layui-btn layui-btn-xs" lay-event="cancleRemind">取消提醒</a>
-		{{# } else if(auth('1552958909561')){ }}
-			{{# if(d.before == 1){ }}
+		{{# } else if(auth('1552958909561')) { }}
+			{{# if (d.before == 1) { }}
 				<a class="layui-btn layui-btn-xs" lay-event="addRemind">设置提醒</a>
 			{{# } }}
 		{{# } }}

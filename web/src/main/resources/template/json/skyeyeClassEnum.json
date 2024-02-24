@@ -15,6 +15,7 @@
     "idCardType": {"name": "证件类型", "className": "skyeye-pro#com.skyeye.common.enumeration.IDCardType"},
     "registrationType": {"name": "户口类型", "className": "skyeye-pro#com.skyeye.common.enumeration.RegistrationType"},
     "applicableObjectsType": {"name": "适用对象类型", "className": "skyeye-pro#com.skyeye.common.enumeration.ApplicableObjectsType"},
+    "checkDayType": {"name": "日程插件上的类型(包含日程的)", "className": "skyeye-pro#com.skyeye.common.enumeration.CheckDayType"},
 
     "menuType": {"name": "APP菜单类型", "className": "skyeye-pro#com.skyeye.menu.classenum.MenuType"},
     "urlType": {"name": "APP菜单URL类型", "className": "skyeye-pro#com.skyeye.menu.classenum.UrlType"},
@@ -132,6 +133,9 @@
 
     "mailCategory": {"name": "通讯录类型", "className": "skyeye-mail#com.skyeye.eve.classenum.MailCategory"},
 
-    "jobDiaryType": {"name": "日志类型", "className": "skyeye-jobdiary#com.skyeye.eve.classenum.JobDiaryType"}
+    "jobDiaryType": {"name": "日志类型", "className": "skyeye-jobdiary#com.skyeye.eve.classenum.JobDiaryType"},
+
+    "scheduleRemindType": {"name": "日程提醒时间所属类型", "className": "skyeye-schedule#com.skyeye.eve.classenum.ScheduleRemindType"},
+    "scheduleImported": {"name": "日程重要性", "className": "skyeye-schedule#com.skyeye.eve.classenum.ScheduleImported"}
 
 }

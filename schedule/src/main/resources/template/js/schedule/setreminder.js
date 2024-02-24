@@ -21,11 +21,10 @@ layui.config({
 	    form.on('submit(formAddBean)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
 	        	var params = {
-        			rowId: parent.rowId,
+        			id: parent.rowId,
         			remindType: $("#remindType").val()
  	        	};
- 	        	AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule013", params: params, type: 'json', callback: function (json) {
-					parent.childParams = json.bean;
+ 	        	AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule013", params: params, type: 'json', method: 'POST', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});

@@ -280,14 +280,14 @@ var postDownLoadFile = function(options) {
 	var $iframe = layui.$('<iframe id="down-file-iframe" />');
 	var $form = layui.$('<form target="down-file-iframe" method="' + config.method + '" />');
 	$form.attr('action', config.url);
-	if (!isNull(config.params)){
+	if (!isNull(config.params)) {
 		for (var key in config.params) {
 			$form.append('<input type="hidden" name="' + key + '" value="' + config.params[key] + '" />');
 		}
-		$form.append('<input type="hidden" name="userToken" value="' + getCookie('userToken') + '" />');
 	}
+	$form.append('<input type="hidden" name="userToken" value="' + getCookie('userToken') + '" />');
 	// 图片
-	if (!isNull(config.data)){
+	if (!isNull(config.data)) {
 		$form.append('<input type="hidden" name="base64Info" value="' + config.data + '" />');
 	}
 

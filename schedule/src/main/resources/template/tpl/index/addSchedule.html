@@ -13,25 +13,25 @@
 	        <div class="layui-form-item">
 	            <label class="layui-form-label">日程<i class="red">*</i></label>
 	            <div class="layui-input-block">
-                	<input type="text" id="scheduleTitle" name="scheduleTitle" win-verify="required" placeholder="请输入日程" class="layui-input" maxlength="250"/>
+                	<input type="text" id="name" name="name" win-verify="required" placeholder="请输入日程" class="layui-input" maxlength="250"/>
                 </div>
 	        </div>
 	        <div class="layui-form-item">
 	            <label class="layui-form-label">全天<i class="red">*</i></label>
-	            <div class="layui-input-block">
-                	<input id="allDay" name="allDay" lay-filter="allDay" type="checkbox" lay-skin="switch" lay-text="是|否" value="true" checked="checked"/>
+	            <div class="layui-input-block" id="allDay">
+
                 </div>
 	        </div>
 	        <div class="layui-form-item allDayIsTrue">
 	            <label class="layui-form-label">开始时间<i class="red">*</i></label>
 	            <div class="layui-input-block">
-                	<input type="text" id="scheduleStartTime" name="scheduleStartTime" placeholder="请选择开始时间" class="layui-input"/>
+                	<input type="text" id="startTime" name="startTime" placeholder="请选择开始时间" class="layui-input"/>
                 </div>
 	        </div>
 	        <div class="layui-form-item allDayIsTrue">
 	            <label class="layui-form-label">结束时间<i class="red">*</i></label>
 	            <div class="layui-input-block">
-                	<input type="text" id="scheduleEndTime" name="scheduleEndTime" placeholder="请选择结束时间" class="layui-input"/>
+                	<input type="text" id="endTime" name="endTime" placeholder="请选择结束时间" class="layui-input"/>
                 </div>
 	        </div>
 	        <div class="layui-form-item allDayIsFalse" style="display: none;">
@@ -49,50 +49,26 @@
 	        </div>
 	        <div class="layui-form-item">
 	            <label class="layui-form-label">提醒时间<i class="red">*</i></label>
-	            <div class="layui-input-block">
-	                <select class="remindType" lay-filter="remindType" id="remindType" lay-search="" win-verify="required">
-	                	<option value="">请选择</option>
-	                	<option value="1">日程开始时</option>
-	                	<option value="2">5分钟前</option>
-	                	<option value="3">15分钟前</option>
-	                	<option value="4">30分钟前</option>
-	                	<option value="5">1小时前</option>
-	                	<option value="6">2小时前</option>
-	                	<option value="7">1天前</option>
-	                	<option value="8">2天前</option>
-	                	<option value="9">一周前</option>
-	                </select>
+	            <div class="layui-input-block" id="remindType">
+
 	            </div>
 	        </div>
 	        <div class="layui-form-item">
 	            <label class="layui-form-label">日程类型<i class="red">*</i></label>
-	            <div class="layui-input-block">
-	                <select class="scheduleType" lay-filter="scheduleType" id="scheduleType" lay-search="" win-verify="required">
-	                	<option value="">请选择</option>
-	                	<option value="1">个人</option>
-	                	<option value="2">工作</option>
-	                	<option value="4">生日</option>
-	                	<option value="5">自定义</option>
-	                </select>
+	            <div class="layui-input-block" id="type">
+
 	            </div>
-	        </div>
-	        <div class="layui-form-item" style="display: none;">
-	            <label class="layui-form-label">自定义类型<i class="red">*</i></label>
-	            <div class="layui-input-block">
-                	<input type="text" id="scheduleTypeName" name="scheduleTypeName" placeholder="请输入日程类型" class="layui-input" maxlength="20"/>
-                </div>
 	        </div>
 	        <div class="layui-form-item">
 	            <label class="layui-form-label">重要性<i class="red">*</i></label>
-	            <div class="layui-input-block winui-radio">
-	                <input type="radio" name="scheduleImport" value="1" title="普通" lay-filter="scheduleImport" checked/>
-	                <input type="radio" name="scheduleImport" value="2" title="重要" lay-filter="scheduleImport" />
+	            <div class="layui-input-block" id="imported">
+
 	            </div>
 	        </div>
 	        <div class="layui-form-item">
 	            <label class="layui-form-label">备注</label>
 	            <div class="layui-input-block">
-	            	<textarea id="remarks" name="remarks" placeholder="请输入备注" class="layui-textarea" style="height: 100px;" maxlength="500"></textarea>
+	            	<textarea id="remark" name="remark" placeholder="请输入备注" class="layui-textarea" style="height: 100px;" maxlength="500"></textarea>
                 </div>
 	        </div>
 	        <div class="layui-form-item">

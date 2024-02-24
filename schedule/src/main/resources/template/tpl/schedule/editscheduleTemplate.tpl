@@ -2,7 +2,7 @@
 	<div class="layui-form-item">
         <label class="layui-form-label">标题</label>
         <div class="layui-input-block">
-        	<input type="text" id="title" name="title" placeholder="请输入标题" win-verify="required" class="layui-input" value="{{scheduleTitle}}"/>
+        	<input type="text" id="name" name="name" placeholder="请输入标题" win-verify="required" class="layui-input" value="{{name}}"/>
         </div>
     </div>
     <div class="layui-form-item">

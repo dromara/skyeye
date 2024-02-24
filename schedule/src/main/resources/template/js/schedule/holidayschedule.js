@@ -20,7 +20,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: sysMainMation.scheduleBasePath + 'syseveschedule008',
+	    url: sysMainMation.scheduleBasePath + 'syseveschedule019',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -28,16 +28,20 @@ layui.config({
 	    limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'title', title: '标题', width: 180 },
-	        { field: 'start', title: '开始日期', width: 150, align: 'center' },
-	        { field: 'end', title: '结束日期', width: 150, align: 'center' },
-	        { field: 'scheduleRemindTime', title: '提醒日期', width: 180 },
-	        { field: 'userName', title: '录入人', width: 120 },
-	        { field: 'scheduleCreateTime', title: systemLanguage["com.skyeye.entryTime"][languageType], width: 180 },
+	        { field: 'name', title: '标题', width: 180 },
+	        { field: 'startTime', title: '开始日期', width: 150, align: 'center' },
+	        { field: 'endTime', title: '结束日期', width: 150, align: 'center' },
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 160, toolbar: '#tableBar'}
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入标题", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -59,7 +63,7 @@ layui.config({
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule011", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule007", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -71,7 +75,7 @@ layui.config({
 		var msg = '确认取消该节假日的提醒吗？';
 		layer.confirm(msg, { icon: 3, title: '取消日程提醒' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule014", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule014", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
 				winui.window.msg("取消成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -174,30 +178,15 @@ layui.config({
     });
 
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			refreshTable();
-		}
-		return false;
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
 	});
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
 
-	// 刷新数据
-    $("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
-    }
-    
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-
-    function getTableParams() {
-    	return {
-    		scheduleTitle: $("#scheduleTitle").val()
-    	};
+	function getTableParams() {
+		return $.extend(true, {type: 3}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
     
     exports('holidayschedule', {});

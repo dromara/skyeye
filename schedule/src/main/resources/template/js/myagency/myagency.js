@@ -12,70 +12,66 @@ layui.config({
 		form = layui.form,
 		table = layui.table;
 	
-	form.render();
-	form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-        	loadTable();
-        }
-        return false;
+	table.render({
+		id: 'messageTable',
+		elem: '#messageTable',
+		method: 'post',
+		url: sysMainMation.scheduleBasePath + 'myagency001',
+		where: getTableParams(),
+		even: true,
+		page: true,
+		limits: getLimits(),
+		limit: getLimit(),
+		cols: [[
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+			{ field: 'name', title: '待办名称', width: 120 },
+			{ field: 'startTime', title: '开始时间', align: 'center', width: 150 },
+			{ field: 'endTime', title: '结束时间', align: 'center', width: 150 },
+			{ field: 'type', title: '日程类型', width: 100, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("checkDayType", 'id', d.type, 'name');
+			}},
+			{ field: 'remindTime', title: '提醒时间', align: 'center', width: 180 },
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 100, toolbar: '#tableBar'}
+		]],
+		done: function(json) {
+			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
+		}
 	});
-	
-	initLoadTable();
-	function initloadTable() {
-		table.render({
-		    id: 'messageTable',
-		    elem: '#messageTable',
-		    method: 'post',
-		    url: sysMainMation.scheduleBasePath + 'myagency001',
-		    where: {myagencyType: $("#myagencyType").val(), myagencyName: $("#myagencyName").val()},
-		    even: true,
-		    page: true,
-		    limits: getLimits(),
-	    	limit: getLimit(),
-		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        { field: 'title', title: '待办名称', width: 120 },
-		        { field: 'startTime', title: '开始时间', align: 'center', width: 150 },
-		        { field: 'endTime', title: '结束时间', align: 'center', width: 150 },
-		        { field: 'typeName', title: '待办类型', width: 80 },
-		        { field: 'remindTime', title: '提醒时间', width: 180 },
-		        { field: 'cron', title: 'CRON表达式', width: 180 },
-		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
-		    ]],
-		    done: function(json) {
-		    	matchingLanguage();
-		    }
-		});
-		
-		table.on('tool(messageTable)', function (obj) {
-	        var data = obj.data;
-	        var layEvent = obj.event;
-	        if (layEvent === 'cancleAgency') { // 取消代办
-	        	cancleAgency(data);
-	        }
-	    });
-	}
-	
-	//刷新数据
-    $("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
+
+	table.on('tool(messageTable)', function (obj) {
+		var data = obj.data;
+		var layEvent = obj.event;
+		if (layEvent === 'cancleAgency') { // 取消代办
+			cancleAgency(data);
+		}
+	});
+
 	// 取消代办
 	function cancleAgency(data, obj){
-		var msg = obj ? '确认取消【' + obj.data.title + '】的提醒吗？' : '确认取消提醒吗？';
-		layer.confirm(msg, { icon: 3, title: '取消代办' }, function (index) {
+		var msg = obj ? '确认删除【' + obj.data.name + '】的日程吗？' : '确认删除日程吗？';
+		layer.confirm(msg, { icon: 3, title: '删除日程' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "myagency002", params: {rowId: data.id}, type: 'json', callback: function (json) {
-				winui.window.msg("取消成功", {icon: 1, time: 2000});
+            AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule007", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+				winui.window.msg("删除成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
 		});
 	}
-	
-    function loadTable() {
-    	table.reloadData("messageTable", {where:{myagencyType: $("#myagencyType").val(), myagencyName: $("#myagencyName").val()}});
-    }
+
+	form.render();
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
+	});
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
+
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
     
     exports('myagency', {});
 });

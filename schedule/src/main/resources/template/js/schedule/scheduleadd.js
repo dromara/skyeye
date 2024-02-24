@@ -14,20 +14,20 @@ layui.config({
 	    laydate = layui.laydate;
 	    
  		// 新增节假日选取时间段
-		laydate.render({elem: '#holidayTime', range: '~'});
+		laydate.render({elem: '#holidayTime', type: 'datetime', range: '~'});
 		
 		matchingLanguage();
 		form.render();
  	    form.on('submit(formBean)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
- 	        	theStartTime = $("#holidayTime").val().split('~')[0].trim() + ' 00:00:00';
- 	    		theEndTime = $("#holidayTime").val().split('~')[1].trim() + ' 23:59:59';
+ 	        	theStartTime = $("#holidayTime").val().split('~')[0].trim();
+ 	    		theEndTime = $("#holidayTime").val().split('~')[1].trim();
  	        	var params = {
- 	        		title: $("#title").val(),
+ 	        		name: $("#title").val(),
  	        		startTime: theStartTime,
  	        		endTime: theEndTime
  	        	};
- 	        	AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule017", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule017", params: params, type: 'json', method: 'POST', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});

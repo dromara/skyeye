@@ -143,12 +143,12 @@ layui.config({
 				}
 				$('div[rowid="' + event.id + '"]').parent().remove();
 				var params = {
-					scheduleTitle: event.title,
-					scheduleStartTime: event.start._d.format("yyyy-MM-dd hh:mm:ss"),
-					scheduleEndTime: event.end._d.format("yyyy-MM-dd hh:mm:ss"),
+					name: event.title,
+					startTime: event.start._d.format("yyyy-MM-dd hh:mm:ss"),
+					endTime: event.end._d.format("yyyy-MM-dd hh:mm:ss"),
 					id: event.id
 				};
-				AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule005", params: params, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule005", params: params, type: 'json', method: 'POST', callback: function (json) {
 					joinTodaySchedule(params);
 				}, errorCallback: function () {
 					revertFunc();
@@ -163,7 +163,11 @@ layui.config({
 			eventMouseover: function(event, jsEvent, view){//鼠标移入事件
 			},
 			events: function(start, end, timezone, callback){
-				AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule002", params: {yearMonth: start._d.format("yyyy-MM"), checkWorkId: $("#checkTime").val()}, type: 'json', callback: function (json) {
+				let params = {
+					yearMonth: start._d.format("yyyy-MM"),
+					checkWorkId: $("#checkTime").val()
+				}
+				AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule002", params: params, type: 'json', method: 'POST', callback: function (json) {
 					callback(json.rows);
 				}});
 			}
@@ -218,8 +222,8 @@ layui.config({
 
 	// 加载日程详情
 	function loadScheduleDetails(id){
-		AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule006", params: {rowId: id}, type: 'json', callback: function (json) {
-			json.bean.scheduleRemarks = stringManipulation.textAreaShow(json.bean.scheduleRemarks);
+		AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule006", params: {id: id}, type: 'json', method: "GET", callback: function (json) {
+			json.bean.remark = stringManipulation.textAreaShow(json.bean.remark);
 			showDataUseHandlebars("schedule-detail", getFileContent('tpl/index/scheduleDetail.tpl'), json);
 		}});
 	}
@@ -233,7 +237,7 @@ layui.config({
 			$("#layui-layer-shade" + times).css({'z-index': zIndex});
 		}}, function (index) {
 			layer.close(index);
-			AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule007", params: {rowId: id}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule007", params: {id: id}, type: 'json', method: 'DELETE', callback: function (json) {
 				$('div[rowid="' + id + '"]').parent().remove();
 				calendar.fullCalendar('removeEvents', [id]);
 	   		}});
@@ -242,32 +246,32 @@ layui.config({
 
 	//加入今日日程
 	function joinTodaySchedule(bean){
-		var day = bean.scheduleStartTime.split(' ')[0];
+		var day = bean.startTime.split(' ')[0];
 		var nowDay = getYMDFormatDate();
-		if(day == nowDay){//新增的日程输入今天的日程
-			if($("#schedule-list").find(".noMation").length > 0){//如果今天没有日程，移除‘暂无日程’四个字
+		if (day == nowDay) {//新增的日程输入今天的日程
+			if ($("#schedule-list").find(".noMation").length > 0) {//如果今天没有日程，移除‘暂无日程’四个字
 				$("#schedule-list").find(".noMation").remove();
 			}
 			var li = $(".schedule-list ul").find("li");
 			var liIndex;
-			$.each(li, function(i, item) {
+			$.each(li, function (i, item) {
 				var _thisTime = $(item).find('h3[class="layui-timeline-title"]').html().split('~')[0];
-				if(!compare_hms(bean.scheduleStartTime, day + " " + _thisTime + ':00') && isNull(liIndex)){
+				if (!compare_hms(bean.startTime, day + " " + _thisTime + ':00') && isNull(liIndex)) {
 					liIndex = i - 1;
 					return false;
 				}
 			});
-			if(isNull(liIndex) && li.length > 0 && liIndex != 0)
+			if (isNull(liIndex) && li.length > 0 && liIndex != 0)
 				liIndex = li.length - 1;
 			var itemHtml = '<li class="layui-timeline-item">'
-							+ '<i class="layui-icon layui-timeline-axis">&#xe63f;</i>'
-							+ '<div class="layui-timeline-content layui-text" rowid="' + bean.id + '">'
-								+ '<h3 class="layui-timeline-title">' + hms2hm(bean.scheduleStartTime) + '~' + hms2hm(bean.scheduleEndTime) + '</h3>'
-								+ '<p>' + bean.scheduleTitle + '<i class="fa fa-trash schrdule-del" title="删除日程"></i></p>'
-							+ '</div>'
-						+ '</li>';
+				+ '<i class="layui-icon layui-timeline-axis">&#xe63f;</i>'
+				+ '<div class="layui-timeline-content layui-text" rowid="' + bean.id + '">'
+				+ '<h3 class="layui-timeline-title">' + hms2hm(bean.startTime) + '~' + hms2hm(bean.endTime) + '</h3>'
+				+ '<p>' + bean.name + '<i class="fa fa-trash schrdule-del" title="删除日程"></i></p>'
+				+ '</div>'
+				+ '</li>';
 			if (!isNull(liIndex) || liIndex == 0)
-				if(liIndex < 0)
+				if (liIndex < 0)
 					$(".schedule-list ul").find("li").eq(0).before(itemHtml);
 				else
 					$(".schedule-list ul").find("li").eq(liIndex).after(itemHtml);
