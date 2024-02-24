@@ -130,5 +130,8 @@
     "paymentHistoryState": {"name": "薪资发放状态", "className": "skyeye-wages#com.skyeye.eve.payment.classenum.PaymentHistoryState"},
     "paymentHistoryType": {"name": "薪资核算类型", "className": "skyeye-wages#com.skyeye.eve.payment.classenum.PaymentHistoryType"},
 
-    "mailCategory": {"name": "通讯录类型", "className": "skyeye-mail#com.skyeye.eve.classenum.MailCategory"}
+    "mailCategory": {"name": "通讯录类型", "className": "skyeye-mail#com.skyeye.eve.classenum.MailCategory"},
+
+    "jobDiaryType": {"name": "日志类型", "className": "skyeye-jobdiary#com.skyeye.eve.classenum.JobDiaryType"}
+
 }
