@@ -65,13 +65,6 @@
             <version>1-SNAPSHOT</version>
         </dependency>
 
-        <!-- 工作计划管理模块 -->
-        <dependency>
-            <groupId>com.skyeye.web</groupId>
-            <artifactId>workplan</artifactId>
-            <version>1-SNAPSHOT</version>
-        </dependency>
-
         <!-- 薪资管理模块 -->
         <dependency>
             <groupId>com.skyeye.web</groupId>

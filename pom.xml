@@ -19,7 +19,6 @@
     <modules>
         <module>web</module>
         <module>userauth</module>
-        <module>workplan</module>
         <module>wages</module>
         <module>threed</module>
         <module>survey</module>

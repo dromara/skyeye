@@ -81,7 +81,6 @@ var serviceMap = [
 	{"id": "sysMainMation.reportBasePath", "name": "报表服务"},
 	{"id": "sysMainMation.surveyBasePath", "name": "问卷服务"},
 	{"id": "sysMainMation.noteBasePath", "name": "笔记服务"},
-	{"id": "sysMainMation.workplanBasePath", "name": "工作计划服务"},
 	{"id": "sysMainMation.rmprogramBasePath", "name": "小程序设计服务"},
 	{"id": "sysMainMation.knowlgBasePath", "name": "知识库服务"},
 	{"id": "sysMainMation.mailBasePath", "name": "通讯录服务"},
