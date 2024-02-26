@@ -23,7 +23,7 @@ layui.config({
 
     var bgImages = {};
     // 获取所有背景图片列表信息
-    AjaxPostUtil.request({url: reportBasePath + "reportbgimage004", params: {}, type: 'json', method: "GET", callback: function(json) {
+    AjaxPostUtil.request({url: reportBasePath + "getEnabledBgImageList", params: {}, type: 'json', method: "GET", callback: function(json) {
         bgImages = json.rows;
     }, async: false});
 
