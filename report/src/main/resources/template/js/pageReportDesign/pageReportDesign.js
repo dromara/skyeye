@@ -29,7 +29,7 @@ layui.config({
 
     var wordModel = {};
     // 获取已经发布的文字模型
-    AjaxPostUtil.request({url: reportBasePath + "reportwordmodel007", params: {state: 2}, type: 'json', method: "GET", callback: function(json) {
+    AjaxPostUtil.request({url: reportBasePath + "reportwordmodel007", params: {}, type: 'json', method: "GET", callback: function(json) {
         wordModel = json.rows;
     }, async: false});
 

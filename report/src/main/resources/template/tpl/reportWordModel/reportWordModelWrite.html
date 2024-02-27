@@ -13,10 +13,15 @@
             <div class="layui-form-item layui-col-xs12">
                 <span class="hr-title">基础信息</span><hr>
             </div>
-            <div class="layui-form-item layui-col-xs12">
+            <div class="layui-form-item layui-col-xs6">
                 <label class="layui-form-label">标题<i class="red">*</i></label>
                 <div class="layui-input-block">
-                    <input type="text" id="title" name="title" win-verify="required" placeholder="请输入标题" class="layui-input" maxlength="100"/>
+                    <input type="text" id="name" name="name" win-verify="required" placeholder="请输入标题" class="layui-input" maxlength="100"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">状态<i class="red">*</i></label>
+                <div class="layui-input-block winui-radio" id="enabled">
                 </div>
             </div>
             <div class="layui-form-item layui-col-xs6">
@@ -31,8 +36,10 @@
                     <input type="text" id="defaultHeight" name="defaultHeight" win-verify="required|number" placeholder="请输入默认高度" class="layui-input"/>
                 </div>
             </div>
-            <div class="layui-form-item layui-col-xs12" id="typeBox">
-
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">分类<i class="red">*</i></label>
+                <div class="layui-input-block" id="typeBox">
+                </div>
             </div>
             <div class="layui-form-item layui-col-xs12">
                 <span class="hr-title">文字模型信息</span><hr>
@@ -101,15 +108,11 @@
                 <i class="fa fa-plus-circle input-icon choosePropertyBtn" style="top: 12px;"></i>
             </td>
             <td>
-                <div class="winui-radio">
-                    <input type="radio" name="{{whetherEditor}}" value="1" title="是" lay-filter="{{whetherEditor}}" checked/>
-                    <input type="radio" name="{{whetherEditor}}" value="2" title="否" lay-filter="{{whetherEditor}}" />
+                <div class="winui-radio" id="{{editor}}">
                 </div>
             </td>
             <td>
-                <div class="winui-radio">
-                    <input type="radio" name="{{whetherShow}}" value="1" title="是" lay-filter="{{whetherShow}}" checked/>
-                    <input type="radio" name="{{whetherShow}}" value="2" title="否" lay-filter="{{whetherShow}}" />
+                <div class="winui-radio" id="{{whetherShow}}">
                 </div>
             </td>
         </tr>
@@ -123,7 +126,7 @@
     <script src="../../assets/html2canvas/js/canvas2image.js"></script>
     <script src="../../assets/html2canvas/js/base64.js"></script>
     <script type="text/javascript">
-        layui.config({base: '../../js/reportWordModel/'}).use('reportWordModelAdd');
+        layui.config({base: '../../js/reportWordModel/'}).use('reportWordModelWrite');
     </script>
 </body>
 </html>

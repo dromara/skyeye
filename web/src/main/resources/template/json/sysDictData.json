@@ -54,5 +54,7 @@
 
     "ifsOrderType": {"name": "IFS-财务单据类型", "key": "IFS_ORDER_TYPE"},
 
-    "actModelType": {"name": "工作流-模型分类", "key": "ACT_MODEL_TYPE"}
+    "actModelType": {"name": "工作流-模型分类", "key": "ACT_MODEL_TYPE"},
+
+    "reportModeType": {"name": "报表-模型分类", "key": "REPORT_MODE_TYPE"}
 }

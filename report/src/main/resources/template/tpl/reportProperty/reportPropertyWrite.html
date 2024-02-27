@@ -15,13 +15,13 @@
             <div class="layui-form-item layui-col-xs12">
                 <label class="layui-form-label">标题<i class="red">*</i></label>
                 <div class="layui-input-block">
-                    <input type="text" id="title" name="title" win-verify="required" placeholder="请输入标题" class="layui-input" maxlength="100"/>
+                    <input type="text" id="name" name="name" win-verify="required" placeholder="请输入标题" class="layui-input" maxlength="100"/>
                 </div>
             </div>
             <div class="layui-form-item layui-col-xs6">
                 <label class="layui-form-label">属性<i class="red">*</i></label>
                 <div class="layui-input-block">
-                    <input type="text" id="attrCode" name="attrCode" win-verify="required" placeholder="请输入属性" class="layui-input" maxlength="100"/>
+                    <input type="text" id="code" name="code" win-verify="required" placeholder="请输入属性" class="layui-input" maxlength="100"/>
                 </div>
             </div>
             <div class="layui-form-item layui-col-xs6">
@@ -37,9 +37,8 @@
             </div>
             <div class="layui-form-item layui-col-xs12">
                 <label class="layui-form-label">是否可选<i class="red">*</i></label>
-                <div class="layui-input-block winui-radio">
-                    <input type="radio" name="optional" value="1" title="可选" lay-filter="optional" />
-                    <input type="radio" name="optional" value="2" title="不可选" lay-filter="optional" checked/>
+                <div class="layui-input-block" id="optional">
+
                 </div>
             </div>
             <div class="layui-form-item layui-col-xs12" id="canNotChoose">
@@ -75,7 +74,7 @@
             <div class="layui-form-item layui-col-xs12">
                 <div class="layui-input-block">
                     <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
-                    <button class="winui-btn" lay-submit lay-filter="formAddBean"><language showName="com.skyeye.save"></language></button>
+                    <button class="winui-btn" lay-submit lay-filter="formWriteBean"><language showName="com.skyeye.save"></language></button>
                 </div>
             </div>
         </form>
@@ -85,12 +84,10 @@
     <script type="text/x-handlebars-template" id="usetableTemplate">
         <tr trcusid="{{trId}}">
             <td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
-            <td><input type="text" class="layui-input" id="{{title}}"/></td>
+            <td><input type="text" class="layui-input" id="{{name}}"/></td>
             <td><input type="text" class="layui-input" id="{{value}}" win-verify="required"/></td>
             <td>
-                <div class="winui-radio">
-                    <input type="radio" name="{{defaultChoose}}" value="1" title="是" lay-filter="{{defaultChoose}}" />
-                    <input type="radio" name="{{defaultChoose}}" value="2" title="否" lay-filter="{{defaultChoose}}" checked/>
+                <div class="winui-radio" id="{{defaultChoose}}">
                 </div>
             </td>
         </tr>
@@ -100,7 +97,7 @@
     <script src="../../assets/lib/layui/custom.js"></script>
     <script src="../../assets/report/js/reportCustom.js"></script>
     <script type="text/javascript">
-        layui.config({base: '../../js/reportProperty/'}).use('reportPropertyAdd');
+        layui.config({base: '../../js/reportProperty/'}).use('reportPropertyWrite');
     </script>
 </body>
 </html>
