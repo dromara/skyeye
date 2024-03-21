@@ -136,6 +136,13 @@
     "jobDiaryType": {"name": "日志类型", "className": "skyeye-jobdiary#com.skyeye.eve.classenum.JobDiaryType"},
 
     "scheduleRemindType": {"name": "日程提醒时间所属类型", "className": "skyeye-schedule#com.skyeye.eve.classenum.ScheduleRemindType"},
-    "scheduleImported": {"name": "日程重要性", "className": "skyeye-schedule#com.skyeye.eve.classenum.ScheduleImported"}
+    "scheduleImported": {"name": "日程重要性", "className": "skyeye-schedule#com.skyeye.eve.classenum.ScheduleImported"},
+
+    "autoProductState": {"name": "自动化-产品状态", "className": "skyeye-auto#com.skyeye.product.classenum.AutoProductState"},
+    "autoProjectState": {"name": "自动化-项目状态", "className": "skyeye-auto#com.skyeye.project.classenum.AutoProjectState"},
+    "bugState": {"name": "自动化-bug状态", "className": "skyeye-auto#com.skyeye.bug.classenum.BugState"},
+    "bugAuthEnum": {"name": "自动化-bug单权限控制", "className": "skyeye-auto#com.skyeye.bug.classenum.BugAuthEnum", "pageUrl": ""},
+    "autoDataBaseAuthEnum": {"name": "自动化-项目权限控制", "className": "skyeye-auto#com.skyeye.database.classenum.AutoDataBaseAuthEnum", "pageUrl": ""},
+    "moduleAuthEnum": {"name": "自动化-项目模块权限控制", "className": "skyeye-auto#com.skyeye.module.classenum.ModuleAuthEnum", "pageUrl": ""}
 
 }
