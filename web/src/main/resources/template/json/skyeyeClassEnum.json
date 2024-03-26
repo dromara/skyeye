@@ -141,8 +141,14 @@
     "autoProductState": {"name": "自动化-产品状态", "className": "skyeye-auto#com.skyeye.product.classenum.AutoProductState"},
     "autoProjectState": {"name": "自动化-项目状态", "className": "skyeye-auto#com.skyeye.project.classenum.AutoProjectState"},
     "bugState": {"name": "自动化-bug状态", "className": "skyeye-auto#com.skyeye.bug.classenum.BugState"},
-    "bugAuthEnum": {"name": "自动化-bug单权限控制", "className": "skyeye-auto#com.skyeye.bug.classenum.BugAuthEnum", "pageUrl": ""},
-    "autoDataBaseAuthEnum": {"name": "自动化-项目权限控制", "className": "skyeye-auto#com.skyeye.database.classenum.AutoDataBaseAuthEnum", "pageUrl": ""},
-    "moduleAuthEnum": {"name": "自动化-项目模块权限控制", "className": "skyeye-auto#com.skyeye.module.classenum.ModuleAuthEnum", "pageUrl": ""}
+    "bugAuthEnum": {"name": "bug单", "className": "skyeye-auto#com.skyeye.bug.classenum.BugAuthEnum", "pageUrl": ""},
+    "autoDataBaseAuthEnum": {"name": "数据库", "className": "skyeye-auto#com.skyeye.database.classenum.AutoDataBaseAuthEnum", "pageUrl": ""},
+    "moduleAuthEnum": {"name": "项目模块", "className": "skyeye-auto#com.skyeye.module.classenum.ModuleAuthEnum", "pageUrl": ""},
+    "autoEnvironmentAuthEnum": {"name": "环境", "className": "skyeye-auto#com.skyeye.environment.classenum.AutoEnvironmentAuthEnum", "pageUrl": ""},
+    "autoMicroserviceAuthEnum": {"name": "微服务", "className": "skyeye-auto#ccom.skyeye.microservice.classenum.AutoMicroserviceAuthEnum", "pageUrl": ""},
+    "autoServerAuthEnum": {"name": "服务器", "className": "skyeye-auto#com.skyeye.server.classnum.AutoServerAuthEnum", "pageUrl": ""},
+    "autoApiAuthEnum": {"name": "接口", "className": "skyeye-auto#com.skyeye.api.classenum.AutoApiAuthEnum", "pageUrl": ""},
+    "autoVariableAuthEnum": {"name": "变量", "className": "skyeye-auto#com.skyeye.variable.entity.AutoVariableAuthEnum", "pageUrl": ""},
+    "autoVersionAuthEnum": {"name": "版本", "className": "skyeye-auto#com.skyeye.version.classenum.AutoVersionAuthEnum", "pageUrl": ""}
 
 }
