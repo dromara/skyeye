@@ -148,7 +148,7 @@
     "autoMicroserviceAuthEnum": {"name": "微服务", "className": "skyeye-auto#com.skyeye.microservice.classenum.AutoMicroserviceAuthEnum", "pageUrl": ""},
     "autoServerAuthEnum": {"name": "服务器", "className": "skyeye-auto#com.skyeye.server.classnum.AutoServerAuthEnum", "pageUrl": ""},
     "autoApiAuthEnum": {"name": "接口", "className": "skyeye-auto#com.skyeye.api.classenum.AutoApiAuthEnum", "pageUrl": ""},
-    "autoVariableAuthEnum": {"name": "变量", "className": "skyeye-auto#com.skyeye.variable.entity.AutoVariableAuthEnum", "pageUrl": ""},
+    "autoVariableAuthEnum": {"name": "变量", "className": "skyeye-auto#com.skyeye.variable.classenum.AutoVariableAuthEnum", "pageUrl": ""},
     "autoVersionAuthEnum": {"name": "版本", "className": "skyeye-auto#com.skyeye.version.classenum.AutoVersionAuthEnum", "pageUrl": ""},
     "autoVersionState": {"name": "自动化-版本状态", "className": "skyeye-auto#com.skyeye.version.classenum.AutoVersionState"}
 }
