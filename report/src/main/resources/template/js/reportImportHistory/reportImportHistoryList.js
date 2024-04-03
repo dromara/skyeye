@@ -10,13 +10,15 @@ layui.config({
         form = layui.form,
         table = layui.table;
 
+    var objectId = GetUrlParam("objectId");
+
     authBtn('1624176433377');
     // 数据源列表
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: reportBasePath + 'reportimporthistory001',
+        url: sysMainMation.reportBasePath + 'queryReportImportHistoryList',
         where: getTableParams(),
         even: true,
         page: true,
@@ -24,78 +26,31 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'fileName', title: '文件名称', align: 'left', width: 200},
-            { field: 'fileSize', title: '文件大小', align: 'left', width: 100 },
-            { field: 'createName', title: '上传人', align: 'left', width: 100 },
-            { field: 'createTime', title: '上传时间', align: 'center', width: 140 }
+            { field: 'name', title: '文件名称', align: 'left', width: 200},
+            { field: 'size', title: '文件大小', align: 'left', width: 100 },
+            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 }
         ]],
         done: function(json) {
             matchingLanguage();
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入文件名称", function () {
+                table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+            });
         }
     });
 
     form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            refreshloadTable();
-        }
-        return false;
-    });
-
-    // 导入数据
-    $("body").on("click", "#addBean", function() {
-        $("#upfile").val("");
-        $("#upfile").click();
-    });
-
-    // 上传
-    $("body").on("change", "#upfile", function() {
-        var formData = new FormData();
-        var name = $("#upfile").val();
-        formData.append("file", $("#upfile")[0].files[0]);
-        formData.append("name", name);
-        $.ajax({
-            url : reportBasePath + 'reportimporthistory002',
-            type : 'POST',
-            async : false,
-            data : formData,
-            headers: getRequestHeaders(),
-            // 告诉jQuery不要去处理发送的数据
-            processData : false,
-            // 告诉jQuery不要去设置Content-Type请求头
-            contentType : false,
-            dataType:"json",
-            beforeSend:function(){
-                winui.window.msg("正在进行，请稍候", { shift: 1 });
-            },
-            success : function(json) {
-                if(json.returnCode == "0"){
-                    winui.window.msg("成功导入", { shift: 1 });
-                    loadTable();
-                } else {
-                    winui.window.msg("导入失败", {icon: 2, time: 2000});
-                }
-            }
-        });
-    });
-
-    // 刷新数据
     $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
-
     function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function refreshloadTable() {
-        table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-
     function getTableParams() {
-        return {
-            fileName: $("#fileName").val()
-        };
+        return $.extend(true, {objectId: objectId}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('reportImportHistoryList', {});

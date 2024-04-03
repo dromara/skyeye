@@ -1,6 +1,4 @@
 
-var rowId = "";
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -18,7 +16,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: reportBasePath + 'reportimportmodel001',
+        url: sysMainMation.reportBasePath + 'queryReportImportModelList',
         where: getTableParams(),
         toolbar: true,
         even: true,
@@ -27,18 +25,20 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'fileName', title: 'Echarts名称', align: 'left', width: 250},
-            { field: 'modelId', title: '模型ID', align: 'left', width: 250 },
-            { field: 'firstTypeName', title: '一级分类', align: 'left', width: 120 },
-            { field: 'secondTypeName', title: '二级分类', align: 'left', width: 120 },
+            { field: 'name', title: 'Echarts名称', align: 'left', width: 250},
+            { field: 'modelCode', title: '模型编码', align: 'left', width: 250 },
+            { field: 'typeName', title: '分类', align: 'left', width: 120 },
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
             { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
+            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
         ]],
         done: function(json) {
             matchingLanguage();
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称，模型编码", function () {
+                table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+            });
         }
     });
 
@@ -49,13 +49,17 @@ layui.config({
             edit(data);
         } else if (layEvent === 'delet') { //删除
             delet(data);
+        } else if (layEvent === 'uploadHistory') { //上传历史
+            uploadHistory(data);
+        } else if (layEvent === 'upload') { //上传
+            upload(data);
         }
     });
 
     // 添加
     $("body").on("click", "#addBean", function() {
         _openNewWindows({
-            url: "../../tpl/reportImportModel/reportImportModelAdd.html",
+            url: systemCommonUtil.getUrl('FP2024040300001', null),
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "reportImportModelAdd",
             area: ['90vw', '90vh'],
@@ -69,7 +73,7 @@ layui.config({
     function delet(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: reportBasePath + "reportimportmodel003", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function(json) {
+            AjaxPostUtil.request({url: sysMainMation.reportBasePath + "delReportImportModelById", params: {id: data.id}, type: 'json', method: "DELETE", callback: function(json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -78,9 +82,8 @@ layui.config({
 
     // 编辑
     function edit(data) {
-        rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/reportImportModel/reportImportModelEdit.html",
+            url: systemCommonUtil.getUrl('FP2024040300002&id=' + data.id, null),
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "reportImportModelEdit",
             area: ['90vw', '90vh'],
@@ -91,32 +94,67 @@ layui.config({
         });
     }
 
-    form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            refreshloadTable();
-        }
-        return false;
+    // 上传历史
+    function uploadHistory(data) {
+        _openNewWindows({
+            url: "../../tpl/reportImportHistory/reportImportHistoryList.html?objectId=" + data.modelCode,
+            title: '上传历史',
+            pageId: "reportImportModelHistoryList",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+            }
+        });
+    }
+
+    // 上传
+    function upload(data) {
+        modelId = data.id
+        $("#upfile").val("");
+        $("#upfile").click();
+    }
+
+    var modelId = '';
+    $("body").on("change", "#upfile", function() {
+        var formData = new FormData();
+        var name = $("#upfile").val();
+        formData.append("file", $("#upfile")[0].files[0]);
+        formData.append("name", name);
+        formData.append("modelId", modelId);
+        $.ajax({
+            url: sysMainMation.reportBasePath + 'importReportImportModel',
+            type: 'POST',
+            async: false,
+            data: formData,
+            headers: getRequestHeaders(),
+            // 告诉jQuery不要去处理发送的数据
+            processData: false,
+            // 告诉jQuery不要去设置Content-Type请求头
+            contentType: false,
+            dataType: "json",
+            beforeSend: function(){
+                winui.window.msg("正在进行，请稍候", {shift: 1});
+            },
+            success: function(json) {
+                if (json.returnCode == "0") {
+                    winui.window.msg("成功导入", {shift: 1});
+                    loadTable();
+                } else {
+                    winui.window.msg("导入失败", {icon: 2, time: 2000});
+                }
+            }
+        });
     });
 
-    // 刷新数据
+    form.render();
     $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
-
     function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function refreshloadTable() {
-        table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-
     function getTableParams() {
-        return {
-            fileName: $("#fileName").val(),
-            modelId: $("#modelId").val()
-        };
+        return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('reportImportModelList', {});

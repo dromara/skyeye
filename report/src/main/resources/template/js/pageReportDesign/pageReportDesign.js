@@ -17,7 +17,7 @@ layui.config({
 
     var echartsModel = {};
     // 获取echarts模型配置
-    AjaxPostUtil.request({url: reportBasePath + "reportimporthistory003", params: {}, type: 'json', method: "GET", callback: function(json) {
+    AjaxPostUtil.request({url: reportBasePath + "queryAllMaxVersionReportModel", params: {}, type: 'json', method: "GET", callback: function(json) {
         echartsModel = json.rows;
     }, async: false});
 

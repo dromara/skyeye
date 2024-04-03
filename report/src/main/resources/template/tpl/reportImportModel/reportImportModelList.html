@@ -7,45 +7,25 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="txtcenter" style="margin:0 auto;padding-top:10px;">
-        <form class="layui-form layui-form-pane" action="" autocomplete="off">
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">Echarts名称</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="fileName" name="fileName" placeholder="请输入Echarts名称" class="layui-input" />
-                    </div>
-                    <label class="layui-form-label">模型ID</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="modelId" name="modelId" placeholder="请输入模型ID" class="layui-input" />
-                    </div>
-                    <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
-                    <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
-                </div>
-            </div>
-        </form>
-    </div>
     <div class="winui-toolbar">
         <div class="winui-tool">
-            <button id="reloadTable" class="winui-toolbtn">
-                <i class="fa fa-refresh" aria-hidden="true"></i>
-                <language showName="com.skyeye.refreshDataBtn"></language>
-            </button>
-            <button id="addBean" class="winui-toolbtn" auth="1621139557781">
-                <i class="fa fa-plus" aria-hidden="true"></i>
-                <language showName="com.skyeye.addBtn"></language>
-            </button>
+            <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1621139557781"><i class="fa fa-plus" aria-hidden="true"></i>新增</button>
         </div>
     </div>
-    <div style="margin:auto 10px;">
+
+    <input type="file" id="upfile" name="upfile" placeholder="" style="display: none;"/>
+    <div style="margin: auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
-            {{# if(auth('1621139574586')){ }}
+            {{# if (auth('1621139557781')) { }}
                 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
             {{# } }}
-            {{# if(auth('1621139567392')){ }}
+            {{# if (auth('1621139567392')) { }}
                 <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delet"><language showName="com.skyeye.deleteBtn"></language></a>
             {{# } }}
+            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="uploadHistory">上传历史</a>
+            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="upload">上传</a>
         </script>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>
