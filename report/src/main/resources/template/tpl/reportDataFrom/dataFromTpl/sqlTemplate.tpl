@@ -1,7 +1,7 @@
 <div class="layui-form-item layui-col-xs12">
     <label class="layui-form-label">SQL数据库<i class="red">*</i></label>
     <div class="layui-input-block">
-        <select id="sqlDataBase" name="sqlDataBase" lay-search win-verify="required"></select>
+        <select id="dataBaseId" name="dataBaseId" lay-search win-verify="required"></select>
     </div>
 </div>
 <div class="layui-form-item layui-col-xs12">
@@ -30,7 +30,7 @@
     <tr trcusid="{{trId}}">
         <td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
         <td><input type="text" class="layui-input" id="{{key}}" win-verify="required" /></td>
-        <td><input type="text" class="layui-input" id="{{title}}" /></td>
+        <td><input type="text" class="layui-input" id="{{name}}" /></td>
         <td><input type="text" class="layui-input" id="{{dataType}}" /></td>
         <td><input type="text" class="layui-input" id="{{dataLength}}" /></td>
         <td><input type="text" class="layui-input" id="{{dataPrecision}}" /></td>

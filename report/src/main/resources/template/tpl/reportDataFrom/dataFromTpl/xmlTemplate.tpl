@@ -21,7 +21,7 @@
     <tr trcusid="{{trId}}">
         <td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
         <td><input type="text" class="layui-input" id="{{key}}" win-verify="required" /></td>
-        <td><input type="text" class="layui-input" id="{{title}}" /></td>
+        <td><input type="text" class="layui-input" id="{{name}}" /></td>
         <td><input type="text" class="layui-input" id="{{remark}}" /></td>
     </tr>
 </script>

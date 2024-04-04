@@ -23,7 +23,7 @@ layui.config({
             form.render('select');
         });
     } else {
-        AjaxPostUtil.request({url: reportBasePath + "queryPropertyById", params: {id: id}, type: 'json', method: 'GET', callback:function(data) {
+        AjaxPostUtil.request({url: sysMainMation.reportBasePath + "queryPropertyById", params: {id: id}, type: 'json', method: 'GET', callback:function(data) {
             $("#name").val(data.bean.name);
             $("#code").val(data.bean.attrCode);
             skyeyeClassEnumUtil.showEnumDataListByClassName("whetherEnum", 'radio', 'optional', data.bean.optional, form);
@@ -101,7 +101,7 @@ layui.config({
                 propertyValueList: JSON.stringify(tableData),
                 id: isNull(id) ? '' : id
             };
-            AjaxPostUtil.request({url: reportBasePath + "writeProperty", params: params, type: 'json', method: "POST", callback: function(json) {
+            AjaxPostUtil.request({url: sysMainMation.reportBasePath + "writeProperty", params: params, type: 'json', method: "POST", callback: function(json) {
                 parent.layer.close(index);
                 parent.refreshCode = '0';
             }});

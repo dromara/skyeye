@@ -150,5 +150,8 @@
     "autoApiAuthEnum": {"name": "接口", "className": "skyeye-auto#com.skyeye.api.classenum.AutoApiAuthEnum", "pageUrl": ""},
     "autoVariableAuthEnum": {"name": "变量", "className": "skyeye-auto#com.skyeye.variable.classenum.AutoVariableAuthEnum", "pageUrl": ""},
     "autoVersionAuthEnum": {"name": "版本", "className": "skyeye-auto#com.skyeye.version.classenum.AutoVersionAuthEnum", "pageUrl": ""},
-    "autoVersionState": {"name": "自动化-版本状态", "className": "skyeye-auto#com.skyeye.version.classenum.AutoVersionState"}
+    "autoVersionState": {"name": "自动化-版本状态", "className": "skyeye-auto#com.skyeye.version.classenum.AutoVersionState"},
+
+    "reportDataFromType": {"name": "报表-数据来源类型", "className": "skyeye-report#com.skyeye.datafrom.classenum.ReportDataFromType"}
+
 }
