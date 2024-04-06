@@ -48,11 +48,11 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 
 			// 图表自定义属性
 			var echartsCustomOptions = {
-				"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editor": "99", "editorChooseValue": "", "typeName": "数据源"},
-				"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editor": "98", "editorChooseValue": "", "typeName": "坐标"},
-				"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editor": "98", "editorChooseValue": "", "typeName": "坐标"},
-				"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editor": "3", "editorChooseValue": "", "typeName": "盒子"},
-				"custom.box.border-color": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editor": "3", "editorChooseValue": "", "typeName": "盒子"}
+				"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editorType": "99", "editorChooseValue": "", "typeName": "数据源"},
+				"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+				"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+				"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+				"custom.box.border-color": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"}
 			};
 
 			var f = {
@@ -279,6 +279,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					var wordId = f.getWordBox(boxId, modelId, styleStr, wordStyleMation);
 					// 加入页面属性
 					wordStyleMation.attr = $.extend(true, {}, echartsCustomOptions, wordStyleMation.attr);
+					wordStyleMation.attr[wordStyleMation.customAttr.attrCode] = wordStyleMation.customAttr
 					inPageWordMation[boxId] = $.extend(true, {}, wordStyleMation);
 					return boxId;
 				},
@@ -329,7 +330,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					var wordBox = document.createElement("font");
 					// 为div设置类名
 					wordBox.className = "word-box";
-					wordBox.innerHTML = wordStyleMation["customAttr"].value;
+					wordBox.innerHTML = wordStyleMation["customAttr"].defaultValue;
 					wordBox.style = styleStr;
 					wordBox.id = wordId;
 					var box = f.createBox(boxId, modelId, f.setDesignAttr(wordStyleMation));
@@ -692,7 +693,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 							$.each(attr, function (key, val) {
 								if (val.edit == 1) {
 									// 可以编辑
-									var formItem = editorType[val.editorType || val.editor];
+									var formItem = editorType[val.editorType];
 									if (!f.isNull(formItem)) {
 										// 如果表单类型中支持的编辑器类型存在，则去解析
 										var data = f.getFormItemData(key, val, boxId, indexNumber);
@@ -762,7 +763,11 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				// 将echarts的数据格式转化为form表单的数据格式
 				getEditorChooseValue: function (val, boxId, indexNumber) {
 					if (val.editorType == "9") {
-						val.optionalValue = inPageEcharts[boxId].attr["custom.dataBaseMation"].defaultValue.analysisData;
+						if (isNull(inPageEcharts[boxId].attr["custom.dataBaseMation"].defaultValue)) {
+							val.optionalValue = []
+						} else {
+							val.optionalValue = inPageEcharts[boxId].attr["custom.dataBaseMation"].defaultValue.analysisData;
+						}
 					}
 					var editorChooseValue = []
 					if (isJSON(val.optionalValue)) {
@@ -784,7 +789,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					if (isJSON(val.defaultValue)) {
 						value = JSON.parse(val.defaultValue);
 					}
-					if (val.editor == '2') {
+					if (val.editorType == '2') {
 						// 编辑器类型为数据框：如果是数组，则需要转成json串
 						if (value instanceof Array) {
 							value = JSON.stringify(value);
@@ -878,10 +883,10 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					var wordMationList = params.initData.wordMationList;
 					if (!f.isNull(wordMationList)) {
 						$.each(wordMationList, function (i, item) {
-							var leftNum = multiplication(item.attrMation.attr["custom.move.x"].value, widthScale);
-							var topNum = multiplication(item.attrMation.attr["custom.move.y"].value, heightScale);
-							item.attrMation.attr["custom.move.x"].value = leftNum;
-							item.attrMation.attr["custom.move.y"].value = topNum;
+							var leftNum = multiplication(item.attrMation.attr["custom.move.x"].defaultValue, widthScale);
+							var topNum = multiplication(item.attrMation.attr["custom.move.y"].defaultValue, heightScale);
+							item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
+							item.attrMation.attr["custom.move.y"].defaultValue = topNum;
 							var boxId = f.addNewWordModel(item.modelId, item.attrMation);
 							$("#" + boxId).css({
 								left: leftNum + "px",
@@ -889,8 +894,8 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								width: multiplication(item.width, widthScale),
 								height: multiplication(item.height, heightScale)
 							});
-							setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].value);
-							setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].value);
+							setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
+							setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
 						});
 					}
 				},

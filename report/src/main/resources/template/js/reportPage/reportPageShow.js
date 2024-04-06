@@ -88,6 +88,9 @@ layui.config({
     }
 
     function getDataFromRest(attr) {
+        if (isNull(attr['custom.dataBaseMation'].defaultValue)) {
+            return attr;
+        }
         var fromId = attr['custom.dataBaseMation'].defaultValue.id;
         var needGetData = {};
         $.each(attr, function(key, value) {
@@ -143,7 +146,7 @@ layui.config({
 
     // 加载文字模型
     function addNewWordModel(modelId, wordStyleMation) {
-        var styleStr = getWordStyleStr(wordStyleMation.attr);
+        var styleStr = getWordStyleStr(wordStyleMation.wordModelAttrList);
         // 获取boxId
         var boxId = modelId + getRandomValueToString();
         // 获取文字模型id
@@ -170,7 +173,7 @@ layui.config({
         var wordBox = document.createElement("font");
         // 为div设置类名
         wordBox.className = "word-box";
-        wordBox.innerHTML = wordStyleMation["attr"]["custom.textContent"].value;
+        wordBox.innerHTML = wordStyleMation["attr"]["custom.textContent"].defaultValue;
         wordBox.style = styleStr;
         wordBox.id = wordId;
         var box = createBox(boxId, modelId, setDesignAttr(wordStyleMation));
