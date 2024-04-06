@@ -48,11 +48,11 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 
 			// 图表自定义属性
 			var echartsCustomOptions = {
-				"custom.dataBaseMation": { "value": "", "edit": 1, "desc": "数据来源", "title": "数据来源", "editor": "99", "editorChooseValue": "", "typeName": "数据源"},
-				"custom.move.x": { "value": "0", "edit": 1, "desc": "鼠标拖动距离左侧的像素", "title": "X坐标", "editor": "98", "editorChooseValue": "", "typeName": "坐标"},
-				"custom.move.y": { "value": "0", "edit": 1, "desc": "鼠标拖动距离顶部的像素", "title": "Y坐标", "editor": "98", "editorChooseValue": "", "typeName": "坐标"},
-				"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "desc": "盒子背景", "title": "盒子背景颜色", "editor": "3", "editorChooseValue": "", "typeName": "盒子"},
-				"custom.box.border-color": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "desc": "盒子边框", "title": "盒子边框颜色", "editor": "3", "editorChooseValue": "", "typeName": "盒子"}
+				"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editor": "99", "editorChooseValue": "", "typeName": "数据源"},
+				"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editor": "98", "editorChooseValue": "", "typeName": "坐标"},
+				"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editor": "98", "editorChooseValue": "", "typeName": "坐标"},
+				"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editor": "3", "editorChooseValue": "", "typeName": "盒子"},
+				"custom.box.border-color": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editor": "3", "editorChooseValue": "", "typeName": "盒子"}
 			};
 
 			var f = {
@@ -68,13 +68,13 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					rv.html("");
 					// 创建标尺数值
 					for(var i = 0; i < $(window).width(); i += 1) {
-						if(i % 50 === 0) {
+						if (i % 50 === 0) {
 							$('<span class="n">' + i + '</span>').css("left", i + 2).appendTo(rh);
 						}
 					}
 					// 垂直标尺数值
 					for(var i = 0; i < $(window).height(); i += 1) {
-						if(i % 50 === 0) {
+						if (i % 50 === 0) {
 							$('<span class="n">' + i + '</span>').css("top", i + 2).appendTo(rv);
 						}
 					}
@@ -90,12 +90,12 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 
 				// ie6的支持
 				ie6: function() {
-					if(!window.XMLHttpRequest) {
+					if (!window.XMLHttpRequest) {
 						$(window).scroll(function() {
 							var t = $(document).scrollTop();
 							x.css("top", t);
 						});
-						if(flag) {
+						if (flag) {
 							$(window).trigger("scroll");
 						}
 					}
@@ -103,7 +103,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 
 				// 判断是否为空
 				isNull: function(str){
-					if(str == null || str == ""){
+					if (str == null || str == "") {
 						return true;
 					}
 					return false;
@@ -115,19 +115,19 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					$.each(params.headerMenuJson, function(i, item) {
 						var customClass = f.isNull(item.class) ? "" : item.class;
 						var customId = f.isNull(item.id) ? "" : "id='" + item.id + "'";
-						if(f.isNull(item.children)){
+						if (f.isNull(item.children)) {
 							str += '<a class="def-nav ' + customClass + '" href="javascript:;" ' + customId + '>' +
 								'<i class="icon ' + item.icon + '"></i>' +
 								'<span>' + item.title + '</span>' +
 								'</a>';
 						} else {
-							if(item.id == 'echartsModel'){
+							if (item.id == 'echartsModel') {
 								str = f.getEchartsHtml(item, str);
-							} else if(item.id == 'bgImages'){
+							} else if(item.id == 'bgImages') {
 								str = f.getBgImageHtml(item, str);
-							} else if(item.id == 'wordModel'){
+							} else if(item.id == 'wordModel') {
 								str = f.getWordModelHtml(item, str);
-							} else{
+							} else {
 								str = f.getEchartsHtml(item, str);
 							}
 						}
@@ -172,14 +172,14 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					str = f.getCommonParentHeader(str, item);
 					$.each(item.children, function (j, bean) {
 						if (f.isNull(bean.icon)) {
-							str += '<a class="li disk layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.title + '">' +
-								'<img class="image" src="' + bean.image + '"/>' +
-								'<span class="text">' + bean.title + '</span>' +
+							str += '<a class="li disk layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.name + '">' +
+								'<img class="image" src="' + bean.reportModel.logoPath + '"/>' +
+								'<span class="text">' + bean.name + '</span>' +
 								'</a>';
 						} else {
-							str += '<a class="li disk layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.title + '">' +
+							str += '<a class="li disk layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.name + '">' +
 								'<i class="icon' + bean.icon + '"></i>' +
-								'<span class="text">' + bean.title + '</span>' +
+								'<span class="text">' + bean.name + '</span>' +
 								'</a>';
 						}
 					});
@@ -193,9 +193,9 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				getWordModelHtml: function(item, str) {
 					str = f.getCommonParentHeader(str, item);
 					$.each(item.children, function (j, bean) {
-						str += '<a class="li wordModle layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.title + '">' +
-							'<img class="image" src="' + bean.logo + '"/>' +
-							'<span class="text">' + bean.title + '</span>' +
+						str += '<a class="li wordModle layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.name + '">' +
+							'<img class="image" src="' + bean.imgPath + '"/>' +
+							'<span class="text">' + bean.name + '</span>' +
 							'</a>';
 					});
 					str += '</div>' +
@@ -209,8 +209,8 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					str = f.getCommonParentHeader(str, item);
 					$.each(item.children, function (j, bean) {
 						str += '<a class="li bgImage layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.title + '">' +
-							'<img class="image" src="' + bean.imagePath + '"/>' +
-							'<span class="text">' + bean.title + '</span>' +
+							'<img class="image" src="' + bean.imgPath + '"/>' +
+							'<span class="text">' + bean.name + '</span>' +
 							'</a>';
 					});
 					str += '</div>' +
@@ -249,7 +249,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 
 				// 加载echarts模型
 				addNewModel: function(modelId, echartsMation){
-					if(!f.isNull(echartsMation)){
+					if (!f.isNull(echartsMation)) {
 						var option = getEchartsOptions(echartsMation);
 						// 获取boxId
 						var boxId = modelId + getRandomValueToString();
@@ -271,8 +271,8 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				},
 
 				// 加载文字模型
-				addNewWordModel: function(modelId, wordStyleMation){
-					var styleStr = getWordStyleStr(wordStyleMation.attr);
+				addNewWordModel: function(modelId, wordStyleMation) {
+					var styleStr = getWordStyleStr(wordStyleMation.wordModelAttrList);
 					// 获取boxId
 					var boxId = modelId + getRandomValueToString();
 					// 获取文字模型id
@@ -287,7 +287,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				getEchartsMationById: function(id){
 					var echartsMation;
 					$.each(params.headerMenuJson, function(i, item) {
-						if(!f.isNull(item.children) && item.id == 'echartsModel'){
+						if (!f.isNull(item.children) && item.id == 'echartsModel') {
 							echartsMation = getInPoingArr(item.children, "id", id);
 							return false;
 						}
@@ -299,7 +299,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				getWordStyleMationById: function(id){
 					var wordMation;
 					$.each(params.headerMenuJson, function(i, item) {
-						if(!f.isNull(item.children) && item.id == 'wordModel'){
+						if (!f.isNull(item.children) && item.id == 'wordModel') {
 							wordMation = getInPoingArr(item.children, "id", id);
 							return false;
 						}
@@ -329,7 +329,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					var wordBox = document.createElement("font");
 					// 为div设置类名
 					wordBox.className = "word-box";
-					wordBox.innerHTML = wordStyleMation["attr"]["custom.textContent"].value;
+					wordBox.innerHTML = wordStyleMation["customAttr"].value;
 					wordBox.style = styleStr;
 					wordBox.id = wordId;
 					var box = f.createBox(boxId, modelId, f.setDesignAttr(wordStyleMation));
@@ -362,7 +362,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					div.dataset.modelId = modelId;
 					div.style.top = "0px";
 					div.style.left = "0px";
-					if(!f.isNull(otherStyle)){
+					if (!f.isNull(otherStyle)) {
 						$.each(otherStyle, function (key, value){
 							div.style[key] = value;
 						});
@@ -461,7 +461,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					var maxLeft = skyeyeReportContent.width() - box.width();
 					// 鼠标按下移动时调用mousemove
 					document.onmousemove = e => {
-						if(box.hasClass("active")){
+						if (box.hasClass("active")) {
 							// 元素ele移动的距离left
 							var left = f.getLeft(e, ee.offsetX, maxLeft);
 							// 元素ele移动的距离top
@@ -527,7 +527,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				 * @param maxWidth 允许的最大宽度
 				 * @returns {*}
 				 */
-				getWidth: function (eleWH, e, clientXY, maxWidth){
+				getWidth: function (eleWH, e, clientXY, maxWidth) {
 					var width = eleWH.width - e.clientX + clientXY.x;
 					width = width > maxWidth ? maxWidth : width;
 					return width;
@@ -536,9 +536,9 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				/**
 				 * 删除选中项
 				 */
-				deleteChooseItem: function(){
+				deleteChooseItem: function() {
 					var chooseEcharts = skyeyeReportContent.find(".active").eq(0);
-					if(f.isNull(chooseEcharts)){
+					if (f.isNull(chooseEcharts)) {
 						return;
 					}
 					var boxId = chooseEcharts.data("boxId");
@@ -553,7 +553,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					if (e.ctrlKey && eCode === 90) {
 						// 撤销
 
-					} else if (eCode === 46){
+					} else if (eCode === 46) {
 						// delete键
 						f.deleteChooseItem();
 					}
@@ -564,7 +564,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 
 				},
 
-				initExcelEvent: function(){
+				initExcelEvent: function() {
 					// 不触发‘移除所有图表的编辑信息’的事件的对象的class--颜色选择器
 					var notTriggerRemove = ["layui-colorpicker-main"];
 					// 图表点击事件
@@ -577,7 +577,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					$("body").on('click', skyeyeReportContent, function (e) {
 						var pass = true;
 						$.each(notTriggerRemove, function (i, item) {
-							if($(e.target).parents("." + item).length > 0 || $(e.target).attr('class').indexOf(item) != -1){
+							if ($(e.target).parents("." + item).length > 0 || $(e.target).attr('class').indexOf(item) != -1) {
 								pass = false;
 							}
 						});
@@ -589,7 +589,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					// 面板切换
 					$("body").on('click', '.layui-colla-title', function (e) {
 						$(this).parent().find('.layui-colla-content').toggleClass('layui-show');
-						if($(this).parent().find('.layui-colla-content').hasClass('layui-show')){
+						if ($(this).parent().find('.layui-colla-content').hasClass('layui-show')) {
 							$(this).find('.f-icon').removeClass('arrow-bottom').addClass("arrow-top");
 						} else {
 							$(this).find('.f-icon').removeClass('arrow-top').addClass("arrow-bottom");
@@ -606,14 +606,18 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						var eachartsList = f.getEchartsListToSave();
 						var wordMationList = f.getWordMationListToSave();
 
+						var bgImage = skyeyeReportContent.css("backgroundImage").replace('url(', '').replace(')', '');
+						if (isNull(bgImage) || bgImage == 'none' || bgImage.indexOf('none') > -1) {
+							bgImage = ''
+						}
 						var params = {
 							contentWidth: skyeyeReportContent.width(),
 							contentHeight: skyeyeReportContent.height(),
-							bgImage: skyeyeReportContent.css("backgroundImage").replace('url(','').replace(')', ''),
+							bgImage: bgImage,
 							modelList: eachartsList,
 							wordMationList: wordMationList
 						};
-						AjaxPostUtil.request({url: reportBasePath + "reportpage007", params: {rowId: rowId, content: encodeURIComponent(JSON.stringify(params))}, type: 'json', method: "POST", callback: function(json) {
+						AjaxPostUtil.request({url: sysMainMation.reportBasePath + "editReportPageContentById", params: {id: id, content: encodeURIComponent(JSON.stringify(params))}, type: 'json', method: "POST", callback: function(json) {
 							winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 						}});
 					});
@@ -622,7 +626,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				getEchartsListToSave: function (){
 					var eachartsList = new Array();
 					$.each(skyeyeReportContent.find(".kuang"), function(i, item) {
-						if($(item).find(".echarts-box").length > 0){
+						if ($(item).find(".echarts-box").length > 0) {
 							var boxId = $(item).data("boxId");
 							var echartsMation = inPageEcharts[boxId];
 							eachartsList.push({
@@ -639,7 +643,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				getWordMationListToSave: function (){
 					var wordMationList = new Array();
 					$.each(skyeyeReportContent.find(".kuang"), function(i, item) {
-						if($(item).find(".word-box").length > 0) {
+						if ($(item).find(".word-box").length > 0) {
 							var boxId = $(item).data("boxId");
 							var wordMation = inPageWordMation[boxId];
 							wordMationList.push({
@@ -655,7 +659,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 
 				// 设置选中项
 				setChooseReportItem: function(_this){
-					if(!_this.parent().hasClass("active")){
+					if (!_this.parent().hasClass("active")) {
 						f.removeEchartsEditMation();
 						// 被选中项
 						_this.parent().find(".dian").show();
@@ -677,7 +681,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					var boxId = chooseObject.data("boxId");
 					var objectMation = getDataChooseMation(boxId);
 					f.addNewFormBox();
-					if(!f.isNull(objectMation)) {
+					if (!f.isNull(objectMation)) {
 						$("#showForm").html("");
 						var indexNumber = 1;
 						var newArray = f.restAttrToArrayByTypeName(objectMation.attr);
@@ -688,7 +692,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 							$.each(attr, function (key, val) {
 								if (val.edit == 1) {
 									// 可以编辑
-									var formItem = editorType[val.editor];
+									var formItem = editorType[val.editorType || val.editor];
 									if (!f.isNull(formItem)) {
 										// 如果表单类型中支持的编辑器类型存在，则去解析
 										var data = f.getFormItemData(key, val, boxId, indexNumber);
@@ -743,10 +747,10 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				// 将echarts属性根据类型名称进行分组
 				restAttrToArrayByTypeName: function(attr) {
 					var array = {};
-					$.each(attr, function(key, val){
+					$.each(attr, function(key, val) {
 						var typeName = f.isNull(val.typeName) ? "未分组" : val.typeName;
 						var simpleTypeNameList = array[typeName];
-						if(f.isNull(simpleTypeNameList)){
+						if (f.isNull(simpleTypeNameList)) {
 							simpleTypeNameList = {};
 						}
 						simpleTypeNameList[key] = val;
@@ -756,15 +760,33 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				},
 
 				// 将echarts的数据格式转化为form表单的数据格式
-				getFormItemData: function(key, val, boxId, indexNumber){
-					var editorChooseValue = f.getEditorChooseValue(val, boxId, indexNumber);
-					var value = val.value;
-					if(isJSON(val.value)){
-						value = JSON.parse(val.value);
+				getEditorChooseValue: function (val, boxId, indexNumber) {
+					if (val.editorType == "9") {
+						val.optionalValue = inPageEcharts[boxId].attr["custom.dataBaseMation"].defaultValue.analysisData;
 					}
-					if(val.editor == '2'){
+					var editorChooseValue = []
+					if (isJSON(val.optionalValue)) {
+						editorChooseValue = JSON.parse(val.optionalValue);
+					} else if (typeof val.optionalValue == 'object'
+						&& (JSON.stringify(val.optionalValue).indexOf('{') == 0 || JSON.stringify(val.optionalValue).indexOf('[') == 0)) {
+						editorChooseValue = val.optionalValue;
+					}
+					$.each(editorChooseValue, function (i, item) {
+						item["boxId"] = boxId;
+						item["indexNumber"] = indexNumber;
+					});
+					return editorChooseValue;
+				},
+
+				getFormItemData: function(key, val, boxId, indexNumber) {
+					var editorChooseValue = f.getEditorChooseValue(val, boxId, indexNumber);
+					var value = val.defaultValue;
+					if (isJSON(val.defaultValue)) {
+						value = JSON.parse(val.defaultValue);
+					}
+					if (val.editor == '2') {
 						// 编辑器类型为数据框：如果是数组，则需要转成json串
-						if(value instanceof Array){
+						if (value instanceof Array) {
 							value = JSON.stringify(value);
 						}
 					}
@@ -773,32 +795,14 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 							modelKey: key,
 							boxId: boxId,
 							defaultWidth: "layui-col-xs12",
-							labelContent: val.title,
+							labelContent: val.name,
 							context: value,
 							pointValue: val.pointValue,
-							desc: val.desc,
+							remark: val.remark,
 							editorChooseValue: editorChooseValue,
 							indexNumber: indexNumber // 第几个组件
 						}
 					};
-				},
-
-				getEditorChooseValue: function (val, boxId, indexNumber) {
-					if (val.editor == "9") {
-						val.editorChooseValue = inPageEcharts[boxId].attr["custom.dataBaseMation"].value.analysisData;
-					}
-					var editorChooseValue = []
-					if (isJSON(val.editorChooseValue)) {
-						editorChooseValue = JSON.parse(val.editorChooseValue);
-					} else if (typeof val.editorChooseValue == 'object'
-						&& (JSON.stringify(val.editorChooseValue).indexOf('{') == 0 || JSON.stringify(val.editorChooseValue).indexOf('[') == 0)) {
-						editorChooseValue = val.editorChooseValue;
-					}
-					$.each(editorChooseValue, function (i, item) {
-						item["boxId"] = boxId;
-						item["indexNumber"] = indexNumber;
-					});
-					return editorChooseValue;
 				},
 
 				// 添加一个新的form表单
@@ -853,10 +857,10 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					var modelList = params.initData.modelList;
 					if (!f.isNull(modelList)) {
 						$.each(modelList, function (i, item) {
-							var leftNum = multiplication(item.attrMation.attr["custom.move.x"].value, widthScale);
-							var topNum = multiplication(item.attrMation.attr["custom.move.y"].value, heightScale);
-							item.attrMation.attr["custom.move.x"].value = leftNum;
-							item.attrMation.attr["custom.move.y"].value = topNum;
+							var leftNum = multiplication(item.attrMation.attr["custom.move.x"].defaultValue, widthScale);
+							var topNum = multiplication(item.attrMation.attr["custom.move.y"].defaultValue, heightScale);
+							item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
+							item.attrMation.attr["custom.move.y"].defaultValue = topNum;
 							var boxId = f.addNewModel(item.modelId, item.attrMation);
 							$("#" + boxId).css({
 								left: leftNum + "px",
@@ -864,8 +868,8 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								width: multiplication(item.width, widthScale),
 								height: multiplication(item.height, heightScale)
 							});
-							setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].value);
-							setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].value);
+							setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
+							setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
 						});
 					}
 				},
@@ -905,7 +909,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				}
 			};
 
-			if(flag) {
+			if (flag) {
 				$('<div class="skyeyeScaleBox" id="skyeyeScaleBox" onselectstart="return false;">' +
 					'<div id="skyeyeScaleRulerH" class="skyeyeScaleRuler_h"></div>' +
 					'<div id="skyeyeScaleRulerV" class="skyeyeScaleRuler_v"></div>' +
@@ -947,28 +951,48 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 });
 
 // 编辑器变化事件
-function dataValueChange(value, _this){
+function dataValueChange(value, _this) {
 	var modelKey = _this.parents('.layui-form-item').attr('modelKey');
 	var boxId = _this.parents('.layui-form-item').attr('boxId');
 	// 控件类型
 	var controlType = _this.parents('.layui-form-item').attr('controlType');
 	value = getValueByControlType(controlType, value, _this.parents('.layui-form-item'));
 	var _chooseMation = getDataChooseMation(boxId);
-	layui.$.each(_chooseMation.attr, function(key, val){
-		if(modelKey == key){
-			if(controlType == 'dynamicData'){
+	layui.$.each(_chooseMation.attr, function(key, val) {
+		if (modelKey == key) {
+			if (controlType == 'dynamicData') {
 				// 动态数据
 				val.pointValue = value;
 				val.editorChooseValue = _chooseMation.attr["custom.dataBaseMation"].value.analysisData;
 			} else {
-				val.value = getVal(value);
+				if (controlType == 'dataBaseFrom') {
+					AjaxPostUtil.request({url: sysMainMation.reportBasePath + "queryReportDataFromById", params: {id: value.id}, type: 'json', method: "GET", callback: function(json) {
+						var dataFromType = json.bean.type;
+						var analysisData = [];
+						if (dataFromType == 1) {
+							// XML数据源
+							analysisData = json.bean.xmlEntity.analysisList
+						} else if (dataFromType == 2) {
+							// JSON数据源
+							analysisData = json.bean.jsonEntity.analysisList
+						} else if (dataFromType == 3) {
+							// Rest接口数据源
+							analysisData = json.bean.restEntity.analysisList
+						} else if (dataFromType == 4) {
+							// SQL数据源
+							analysisData = json.bean.sqlEntity.analysisList
+						}
+						value.optionalValue = analysisData
+					}, async: false});
+				}
+				val.defaultValue = getVal(value);
 			}
 		}
 	});
 
-	if(_chooseMation.menuType == 'echartsModel'){
+	if (_chooseMation.menuType == 'echartsModel') {
 		resetChartsModel(boxId);
-	} else if(_chooseMation.menuType == 'wordModel'){
+	} else if(_chooseMation.menuType == 'wordModel') {
 		resetWordModel(boxId);
 	}
 
@@ -986,39 +1010,39 @@ function resetChartsModel(boxId) {
 	newChart.setOption(option);
 }
 
-function resetWordModel(boxId){
+function resetWordModel(boxId) {
 	var wordMation = inPageWordMation[boxId];
-	var styleStr = getWordStyleStr(wordMation.attr);
+	var styleStr = getWordStyleStr(wordMation.wordModelAttrList);
 	$("#" + boxId).find(".word-box").attr("style", styleStr);
 }
 
-function getDataChooseMation(boxId){
+function getDataChooseMation(boxId) {
 	var _object = inPageEcharts[boxId];
-	if (!isNull(_object)){
+	if (!isNull(_object)) {
 		_object.menuType = 'echartsModel';
 	}
-	if(isNull(_object)){
+	if (isNull(_object)) {
 		_object = inPageWordMation[boxId];
-		if (!isNull(_object)){
+		if (!isNull(_object)) {
 			_object.menuType = 'wordModel';
 		}
 	}
 	return _object;
 }
 
-function setBoxAttrMation(modelKey, boxId, value){
-	if(modelKey.indexOf("custom.box") >= 0){
+function setBoxAttrMation(modelKey, boxId, value) {
+	if (modelKey.indexOf("custom.box") >= 0) {
 		// 设置图表盒子属性
 		var attr = modelKey.replace("custom.box.", "");
 		layui.$("#" + boxId).css(attr, value);
 	}
-	if(modelKey == 'custom.textContent'){
+	if (modelKey == 'custom.textContent') {
 		layui.$("#" + boxId).find(".word-box").html(value);
 	}
 }
 
-function getValueByControlType(controlType, value, parentBox){
-	if(controlType == 'inputMoreColor'){
+function getValueByControlType(controlType, value, parentBox) {
+	if (controlType == 'inputMoreColor') {
 		// 多行颜色选择器
 		var array = new Array();
 		layui.$.each(parentBox.find(".customer-attr"), function (i, item) {
@@ -1029,16 +1053,16 @@ function getValueByControlType(controlType, value, parentBox){
 	return value;
 }
 
-function afterRunBack(controlType, value){
-	if(controlType == 'dataBaseFrom'){
+function afterRunBack(controlType, value) {
+	if (controlType == 'dataBaseFrom') {
 		// 动态数据
-		$('[controlType="dynamicData"]').find('select').html(getDataUseHandlebars(editorType["9"].showValueTemplate, {rows: value.analysisData}));
+		$('[controlType="dynamicData"]').find('select').html(getDataUseHandlebars(editorType["9"].showValueTemplate, {rows: value.optionalValue}));
 		form.render('select');
 	}
 }
 
 // 获取echarts的配置信息
-function getEchartsOptions(echartsMation){
+function getEchartsOptions(echartsMation) {
 	var list = new Array();
 	layui.$.each(echartsMation.attr, function(key, val) {
 		val["useKey"] = key;
@@ -1047,12 +1071,12 @@ function getEchartsOptions(echartsMation){
 	list = list.sort(compare("useKey",1));
 	var echartsJson = {};
 	layui.$.each(list, function(i, val) {
-		var value = getVal(val.value);
+		var value = getVal(val.defaultValue);
 		var key = val.useKey;
 		echartsJson = layui.$.extend(true, {}, echartsJson, calcKeyHasPointToJson(echartsJson, key, [], value));
 	});
 	layui.$.each(echartsJson, function(key, val) {
-		if(judgeIsArray(key)){
+		if (judgeIsArray(key)) {
 			var parentKey = getInArrayStrIndex(key)
 			var parentIndex = getInArrayNumIndex(key);
 			echartsJson[parentKey][parentIndex] = val;
@@ -1063,32 +1087,34 @@ function getEchartsOptions(echartsMation){
 }
 
 // 获取文字模型样式信息
-function getWordStyleStr(propertyList){
+function getWordStyleStr(propertyList) {
 	var styleStr = "";
-	$.each(propertyList, function (key, value){
-		if (!isNull(value) && key.indexOf("custom.") < 0){
-			styleStr += value.attrCode + ":" + value.value + ";";
+	$.each(propertyList, function (index, item) {
+		if (!isNull(item.propertyMation)) {
+			if (item.propertyMation.attrCode.indexOf("custom.") < 0) {
+				styleStr += item.propertyMation.attrCode + ":" + item.propertyMation.defaultValue + ";";
+			}
 		}
 	});
 	return styleStr;
 }
 
-function calcKeyHasPointToJson(echartsJson, key, parentKey, value){
+function calcKeyHasPointToJson(echartsJson, key, parentKey, value) {
 	var keyArr = key.split(".");
 	if (isJSON(value)) {
 		value = JSON.parse(value);
 	}
 	var resultValue = value;
-	if(keyArr.length > 1){
+	if (keyArr.length > 1) {
 		parentKey.push(key.substring(0, (key.indexOf("."))));
 		resultValue = calcKeyHasPointToJson(echartsJson, key.substr(key.indexOf(".") + 1), parentKey, value);
 	}
 	var thisKey = keyArr[0];
-	if(judgeIsArray(thisKey)){
+	if (judgeIsArray(thisKey)) {
 		var mation;
 		var funStr = "echartsJson";
 		layui.$.each(parentKey, function(i, val) {
-			if(judgeIsArray(val)){
+			if (judgeIsArray(val)) {
 				var parentKey = getInArrayStrIndex(val)
 				var parentIndex = getInArrayNumIndex(val);
 				mation = echartsJson[parentKey][parentIndex];
@@ -1111,28 +1137,28 @@ function calcKeyHasPointToJson(echartsJson, key, parentKey, value){
 	}
 }
 
-function judgeIsArray(key){
-	if(key.indexOf('[') >= 0 && key.indexOf(']') >= 0){
+function judgeIsArray(key) {
+	if (key.indexOf('[') >= 0 && key.indexOf(']') >= 0) {
 		return true;
 	}
 	return false;
 }
 
-function getInArrayNumIndex(key){
+function getInArrayNumIndex(key) {
 	var startIndex = key.indexOf('[') + 1;
 	var endIndex = key.indexOf(']');
 	return parseInt(key.substring(startIndex, endIndex));
 }
 
-function getInArrayStrIndex(key){
+function getInArrayStrIndex(key) {
 	var endIndex = key.indexOf('[');
 	return key.substring(0, endIndex);
 }
 
-function getVal(value){
-	if("true" == value){
+function getVal(value) {
+	if ("true" == value) {
 		return true;
-	} else if("false" == value){
+	} else if("false" == value) {
 		return false;
 	}
 	return value;
@@ -1145,10 +1171,10 @@ function getVal(value){
  * @param newContentSize 当前打开的宽度/高度
  * @returns {*}
  */
-function getScale(oldSize, newContentSize){
+function getScale(oldSize, newContentSize) {
 	var a1 = parseFloat(isNull(newContentSize) ? 0 : newContentSize);
 	var a2 = parseFloat(isNull(oldSize) ? 0 : oldSize);
-	if(a2 == 0){
+	if (a2 == 0) {
 		return 0;
 	}
 	return (a1 / a2).toFixed(6);
@@ -1158,7 +1184,7 @@ function compare(propertyName, order) {
 	return function (object1, object2) {
 		var value1 = isNull(object1[propertyName]) ? 0 : object1[propertyName].length;
 		var value2 = isNull(object2[propertyName]) ? 0 : object2[propertyName].length;
-		if(order == 0){
+		if (order == 0) {
 			if (value2 < value1) {
 				return -1;
 			} else if (value2 > value1) {
@@ -1166,7 +1192,8 @@ function compare(propertyName, order) {
 			} else {
 				return 0;
 			}
-		}if(order == 1){
+		}
+		if (order == 1) {
 			if (value2 > value1) {
 				return -1;
 			} else if (value2 < value1) {

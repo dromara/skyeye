@@ -35,7 +35,7 @@ layui.config({
         ]],
         done: function(res){
             matchingLanguage();
-            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
+            initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入名称", function () {
                 table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
             });
             $('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){

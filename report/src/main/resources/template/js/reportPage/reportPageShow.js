@@ -1,5 +1,5 @@
 
-var rowId;
+var id;
 
 layui.config({
     base: basePath,
@@ -13,13 +13,13 @@ layui.config({
     var $ = layui.$,
         form = layui.form;
 
-    rowId = GetUrlParam("rowId");
+    id = GetUrlParam("id");
 
     var content = $(document.body);
     var initData = {};
 
     // 获取初始化数据
-    AjaxPostUtil.request({url: reportBasePath + "reportpage006", params: {rowId: rowId}, type: 'json', method: "GET", callback: function(json) {
+    AjaxPostUtil.request({url: sysMainMation.reportBasePath + "queryReportPageById", params: {id: id}, type: 'json', method: "GET", callback: function(json) {
         initData = JSON.parse(getContentStr(json.bean.content));
         var widthScale = getScale(initData.contentWidth, content.width());
         var heightScale = getScale(initData.contentHeight, content.height());
@@ -39,10 +39,10 @@ layui.config({
         var modelList = initData.modelList;
         if (!isNull(modelList)) {
             $.each(modelList, function (i, item) {
-                var leftNum = multiplication(item.attrMation.attr["custom.move.x"].value, widthScale);
-                var topNum = multiplication(item.attrMation.attr["custom.move.y"].value, heightScale);
-                item.attrMation.attr["custom.move.x"].value = leftNum;
-                item.attrMation.attr["custom.move.y"].value = topNum;
+                var leftNum = multiplication(item.attrMation.attr["custom.move.x"].defaultValue, widthScale);
+                var topNum = multiplication(item.attrMation.attr["custom.move.y"].defaultValue, heightScale);
+                item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
+                item.attrMation.attr["custom.move.y"].defaultValue = topNum;
                 item.attrMation.attr = getDataFromRest(item.attrMation.attr);
                 // 加载模型
                 var boxId = addNewModel(item.modelId, item.attrMation);
@@ -52,8 +52,8 @@ layui.config({
                     width: multiplication(item.width, widthScale),
                     height: multiplication(item.height, heightScale)
                 });
-                setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].value);
-                setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].value);
+                setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
+                setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
             });
         }
     }
@@ -62,10 +62,10 @@ layui.config({
         var wordMationList = initData.wordMationList;
         if (!isNull(wordMationList)) {
             $.each(wordMationList, function (i, item) {
-                var leftNum = multiplication(item.attrMation.attr["custom.move.x"].value, widthScale);
-                var topNum = multiplication(item.attrMation.attr["custom.move.y"].value, heightScale);
-                item.attrMation.attr["custom.move.x"].value = leftNum;
-                item.attrMation.attr["custom.move.y"].value = topNum;
+                var leftNum = multiplication(item.attrMation.attr["custom.move.x"].defaultValue, widthScale);
+                var topNum = multiplication(item.attrMation.attr["custom.move.y"].defaultValue, heightScale);
+                item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
+                item.attrMation.attr["custom.move.y"].defaultValue = topNum;
                 var boxId = addNewWordModel(item.modelId, item.attrMation);
                 $("#" + boxId).css({
                     left: leftNum + "px",
@@ -73,45 +73,45 @@ layui.config({
                     width: multiplication(item.width, widthScale),
                     height: multiplication(item.height, heightScale)
                 });
-                setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].value);
-                setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].value);
+                setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
+                setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
             });
         }
     }
 
-    function getContentStr(str){
-        if (!isNull(str)){
+    function getContentStr(str) {
+        if (!isNull(str)) {
             str = str.replace(/%/g, '%25');
             return decodeURIComponent(str);
         }
         return "{}";
     }
 
-    function getDataFromRest(attr){
-        var fromId = attr['custom.dataBaseMation'].value.id;
+    function getDataFromRest(attr) {
+        var fromId = attr['custom.dataBaseMation'].defaultValue.id;
         var needGetData = {};
-        $.each(attr, function(key, value){
-            if(value.editor == 9){
+        $.each(attr, function(key, value) {
+            if (value.editorType == 9) {
                 var pointValue = attr[key].pointValue;
-                if (!isNull(pointValue)){
-                    needGetData[pointValue] = attr[key].value;
+                if (!isNull(pointValue)) {
+                    needGetData[pointValue] = attr[key].defaultValue;
                 }
             }
         });
-        if(isNull(fromId) || needGetData.length == 0){
+        if (isNull(fromId) || needGetData.length == 0) {
             return attr;
         }
         var params = {
-            fromId: fromId,
+            id: fromId,
             needGetDataStr: JSON.stringify(needGetData)
         };
-        AjaxPostUtil.request({url: reportBasePath + "reportdatafrom007", params: params, type: 'json', method: "POST", callback: function(json) {
-            $.each(json.bean, function(key, value){
-                $.each(attr, function(key1, value1){
-                    if(value1.editor == 9){
+        AjaxPostUtil.request({url: sysMainMation.reportBasePath + "queryReportDataFromMationById", params: params, type: 'json', method: "POST", callback: function(json) {
+            $.each(json.bean, function(key, value) {
+                $.each(attr, function(key1, value1) {
+                    if (value1.editorType == 9) {
                         var pointValue = attr[key1].pointValue;
-                        if (!isNull(pointValue) && key == pointValue){
-                            attr[key1].value = value;
+                        if (!isNull(pointValue) && key == pointValue) {
+                            attr[key1].defaultValue = value;
                         }
                     }
                 });
@@ -120,8 +120,8 @@ layui.config({
         return attr;
     }
 
-    function addNewModel(modelId, echartsMation){
-        if (!isNull(echartsMation)){
+    function addNewModel(modelId, echartsMation) {
+        if (!isNull(echartsMation)) {
             var option = getEchartsOptions(echartsMation);
             // 获取boxId
             var boxId = modelId + getRandomValueToString();
@@ -142,7 +142,7 @@ layui.config({
     }
 
     // 加载文字模型
-    function addNewWordModel(modelId, wordStyleMation){
+    function addNewWordModel(modelId, wordStyleMation) {
         var styleStr = getWordStyleStr(wordStyleMation.attr);
         // 获取boxId
         var boxId = modelId + getRandomValueToString();
@@ -154,7 +154,7 @@ layui.config({
         return boxId;
     }
 
-    function getEchartsBox(boxId, modelId){
+    function getEchartsBox(boxId, modelId) {
         var echartsId = "echarts" + boxId;
         var echartsBox = document.createElement("div");
         // 为div设置类名
@@ -165,7 +165,7 @@ layui.config({
         return echartsId;
     }
 
-    function getWordBox(boxId, modelId, styleStr, wordStyleMation){
+    function getWordBox(boxId, modelId, styleStr, wordStyleMation) {
         var wordId = "word" + boxId;
         var wordBox = document.createElement("font");
         // 为div设置类名
@@ -178,7 +178,7 @@ layui.config({
         return wordId;
     }
 
-    function setDesignAttr(wordStyleMation){
+    function setDesignAttr(wordStyleMation) {
         var otherStyle = {
             width: wordStyleMation.defaultWidth + 'px',
             height: wordStyleMation.defaultHeight + 'px'
@@ -186,7 +186,7 @@ layui.config({
         return otherStyle;
     }
 
-    function createBox(id, modelId, otherStyle){
+    function createBox(id, modelId, otherStyle) {
         // 创建一个div
         var div = document.createElement("div");
         // 为div设置类名
@@ -196,8 +196,8 @@ layui.config({
         div.dataset.modelId = modelId;
         div.style.top = "0px";
         div.style.left = "0px";
-        if (!isNull(otherStyle)){
-            $.each(otherStyle, function (key, value){
+        if (!isNull(otherStyle)) {
+            $.each(otherStyle, function (key, value) {
                 div.style[key] = value;
             });
         }

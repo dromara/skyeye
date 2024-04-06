@@ -1,5 +1,5 @@
 
-var rowId;
+var id;
 
 layui.config({
     base: basePath,
@@ -13,29 +13,29 @@ layui.config({
     var $ = layui.$,
         form = layui.form;
 
-    rowId = GetUrlParam("rowId");
+    id = GetUrlParam("id");
 
     var echartsModel = {};
     // 获取echarts模型配置
-    AjaxPostUtil.request({url: reportBasePath + "queryAllMaxVersionReportModel", params: {}, type: 'json', method: "GET", callback: function(json) {
+    AjaxPostUtil.request({url: sysMainMation.reportBasePath + "queryAllMaxVersionReportModel", params: {}, type: 'json', method: "GET", callback: function(json) {
         echartsModel = json.rows;
     }, async: false});
 
     var bgImages = {};
     // 获取所有背景图片列表信息
-    AjaxPostUtil.request({url: reportBasePath + "getEnabledBgImageList", params: {}, type: 'json', method: "GET", callback: function(json) {
+    AjaxPostUtil.request({url: sysMainMation.reportBasePath + "getEnabledBgImageList", params: {}, type: 'json', method: "GET", callback: function(json) {
         bgImages = json.rows;
     }, async: false});
 
     var wordModel = {};
     // 获取已经发布的文字模型
-    AjaxPostUtil.request({url: reportBasePath + "reportwordmodel007", params: {}, type: 'json', method: "GET", callback: function(json) {
+    AjaxPostUtil.request({url: sysMainMation.reportBasePath + "getEnabledWordModelList", params: {}, type: 'json', method: "GET", callback: function(json) {
         wordModel = json.rows;
     }, async: false});
 
     var initData = {};
     // 获取初始化数据
-    AjaxPostUtil.request({url: reportBasePath + "reportpage006", params: {rowId: rowId}, type: 'json', method: "GET", callback: function(json) {
+    AjaxPostUtil.request({url: sysMainMation.reportBasePath + "queryReportPageById", params: {id: id}, type: 'json', method: "GET", callback: function(json) {
         initData = JSON.parse(getContentStr(json.bean.content));
     }, async: false});
 
@@ -65,10 +65,10 @@ layui.config({
             "title": "表格",
             "children": [{
                 "icon": " fa fa-table fa-fw",
-                "title": "简单表格",
+                "name": "简单表格",
             }, {
                 "icon": " fa fa-list-alt fa-fw",
-                "title": "复杂表格",
+                "name": "复杂表格",
             }]
         }, {
             "icon": " fa fa-area-chart fa-fw",

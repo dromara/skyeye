@@ -2,63 +2,63 @@
   "1": {
     "key": "radio",
     "name": "单选框",
-    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='radio' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{desc}}'></i>{{labelContent}}：</label><div class='layui-input-block winui-radio'>{{{showValueTemplate}}}</div></div>",
+    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='radio' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{remark}}'></i>{{labelContent}}：</label><div class='layui-input-block winui-radio'>{{{showValueTemplate}}}</div></div>",
     "js": "$('input:radio[name={{boxId}}{{indexNumber}}][value={{context}}]').attr('checked', true);form.on('radio({{boxId}}{{indexNumber}})', function(data) {var value = data.value; dataValueChange(value, $(this));});",
     "showValueTemplate": "{{#each rows}}<input type='radio' name='{{boxId}}{{indexNumber}}' title='{{name}}' rowId='{{id}}' value='{{id}}' lay-filter='{{boxId}}{{indexNumber}}' />{{/each}}"
   },
   "2": {
     "key": "input",
     "name": "输入框",
-    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='input' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{desc}}'></i>{{labelContent}}：</label><div class='layui-input-block'><input type='text' id='input{{boxId}}{{indexNumber}}' name='input{{boxId}}{{indexNumber}}' class='layui-input' value='{{context}}'/></div></div>",
+    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='input' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{remark}}'></i>{{labelContent}}：</label><div class='layui-input-block'><input type='text' id='input{{boxId}}{{indexNumber}}' name='input{{boxId}}{{indexNumber}}' class='layui-input' value='{{context}}'/></div></div>",
     "js": "$('#input{{boxId}}{{indexNumber}}').on('input',function (e) {var value = e.delegateTarget.value; dataValueChange(value, $(this));});",
     "showValueTemplate": ""
   },
   "3": {
     "key": "inputColor",
     "name": "颜色选择器",
-    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='inputColor' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{desc}}'></i>{{labelContent}}：</label><div class='layui-input-block'><div class='layui-input-inline'><input type='text' value='{{context}}' class='layui-input' id='{{boxId}}{{indexNumber}}-color' /></div><div class='layui-inline'><div id='{{boxId}}{{indexNumber}}-colorBtn'></div></div></div></div>",
+    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='inputColor' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{remark}}'></i>{{labelContent}}：</label><div class='layui-input-block'><div class='layui-input-inline'><input type='text' value='{{context}}' class='layui-input' id='{{boxId}}{{indexNumber}}-color' /></div><div class='layui-inline'><div id='{{boxId}}{{indexNumber}}-colorBtn'></div></div></div></div>",
     "js": "var colorpicker = layui.colorpicker; colorpicker.render({elem: '#{{boxId}}{{indexNumber}}-colorBtn', color: '{{context}}', alpha: true, format: 'rgb', change: function(color){$('#{{boxId}}{{indexNumber}}-color').val(color); dataValueChange(color, $('#{{boxId}}{{indexNumber}}-colorBtn'));}, done: function(color){$('#{{boxId}}{{indexNumber}}-color').val(color); dataValueChange(color, $('#{{boxId}}{{indexNumber}}-colorBtn'));}});",
     "showValueTemplate": ""
   },
   "4": {
     "key": "numberInput",
     "name": "数字输入框",
-    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='numberInput' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{desc}}'></i>{{labelContent}}：</label><div class='layui-input-block'><input type='number' id='numberInput{{boxId}}{{indexNumber}}' name='numberInput{{boxId}}{{indexNumber}}' class='layui-input' value='{{context}}'/></div></div>",
+    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='numberInput' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{remark}}'></i>{{labelContent}}：</label><div class='layui-input-block'><input type='number' id='numberInput{{boxId}}{{indexNumber}}' name='numberInput{{boxId}}{{indexNumber}}' class='layui-input' value='{{context}}'/></div></div>",
     "js": "$('#numberInput{{boxId}}{{indexNumber}}').on('input',function (e) {var value = e.delegateTarget.value; dataValueChange(value, $(this));});",
     "showValueTemplate": ""
   },
   "5": {
     "key": "inputMoreColor",
     "name": "多行颜色选择器",
-    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='inputMoreColor' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{desc}}'></i>{{labelContent}}：</label><div class='layui-input-block'>{{#each context}}<div class='layui-input-inline'><input type='text' value='{{this}}' class='layui-input customer-attr' id='{{boxId}}{{indexNumber}}-color{{@index}}' /></div><div class='layui-inline'><div id='{{boxId}}{{indexNumber}}-colorBtn{{@index}}'></div></div>{{/each}}</div></div>",
+    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='inputMoreColor' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{remark}}'></i>{{labelContent}}：</label><div class='layui-input-block'>{{#each context}}<div class='layui-input-inline'><input type='text' value='{{this}}' class='layui-input customer-attr' id='{{boxId}}{{indexNumber}}-color{{@index}}' /></div><div class='layui-inline'><div id='{{boxId}}{{indexNumber}}-colorBtn{{@index}}'></div></div>{{/each}}</div></div>",
     "js": "var colorpicker = layui.colorpicker; {{#each context}}colorpicker.render({elem: '#{{boxId}}{{indexNumber}}-colorBtn{{@index}}', color: '{{this}}', alpha: true, format: 'rgb', change: function(color){$('#{{boxId}}{{indexNumber}}-color{{@index}}').val(color); dataValueChange(color, $('#{{boxId}}{{indexNumber}}-colorBtn{{@index}}'));}, done: function(color){$('#{{boxId}}{{indexNumber}}-color{{@index}}').val(color); dataValueChange(color, $('#{{boxId}}{{indexNumber}}-colorBtn{{@index}}'));}});{{/each}}",
     "showValueTemplate": ""
   },
   "9": {
     "key": "dynamicData",
     "name": "动态数据",
-    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='dynamicData' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{desc}}'></i>{{labelContent}}：</label><div class='layui-input-block'><select lay-search id='dynamicData{{boxId}}{{indexNumber}}' name='dynamicData{{boxId}}{{indexNumber}}' lay-filter='dynamicData{{boxId}}{{indexNumber}}'>{{{showValueTemplate}}}</select></div></div>",
+    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='dynamicData' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{remark}}'></i>{{labelContent}}：</label><div class='layui-input-block'><select lay-search id='dynamicData{{boxId}}{{indexNumber}}' name='dynamicData{{boxId}}{{indexNumber}}' lay-filter='dynamicData{{boxId}}{{indexNumber}}'>{{{showValueTemplate}}}</select></div></div>",
     "js": "$('#dynamicData{{boxId}}{{indexNumber}}').val('{{pointValue}}');form.on('select(dynamicData{{boxId}}{{indexNumber}})', function(data) { var val = data.value; dataValueChange(val, $(this)); });",
     "showValueTemplate": "<option value=''>请选择</option>{{#each rows}}<option value='{{key}}'>{{key}}--{{name}}</option>{{/each}}"
   },
   "98": {
     "key": "readOnlyinput",
     "name": "只读的输入框",
-    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='readOnlyinput' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{desc}}'></i>{{labelContent}}：</label><div class='layui-input-block'><input type='text' id='input{{boxId}}{{indexNumber}}' name='input{{boxId}}{{indexNumber}}' class='layui-input' value='{{context}}' readonly='readonly'/></div></div>",
+    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='readOnlyinput' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{remark}}'></i>{{labelContent}}：</label><div class='layui-input-block'><input type='text' id='input{{boxId}}{{indexNumber}}' name='input{{boxId}}{{indexNumber}}' class='layui-input' value='{{context}}' readonly='readonly'/></div></div>",
     "js": "$('#input{{boxId}}{{indexNumber}}').on('input',function (e) {var value = e.delegateTarget.value; dataValueChange(value, $(this));});",
     "showValueTemplate": ""
   },
   "99": {
     "key": "dataBaseFrom",
     "name": "数据源选择",
-    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='dataBaseFrom' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{desc}}'></i>{{labelContent}}：</label><div class='layui-input-block'><input type='text' id='input{{boxId}}{{indexNumber}}' name='input{{boxId}}{{indexNumber}}' class='layui-input' value='{{context.name}}' readonly='readonly'/><i class='fa fa-plus-circle input-icon' id='choose{{boxId}}{{indexNumber}}'></i></div></div>",
+    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='dataBaseFrom' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{remark}}'></i>{{labelContent}}：</label><div class='layui-input-block'><input type='text' id='input{{boxId}}{{indexNumber}}' name='input{{boxId}}{{indexNumber}}' class='layui-input' value='{{context.name}}' readonly='readonly'/><i class='fa fa-plus-circle input-icon' id='choose{{boxId}}{{indexNumber}}'></i></div></div>",
     "js": "$('body').on('click', '#choose{{boxId}}{{indexNumber}}', function (e) {_openNewWindows({url:'../../tpl/reportDataFrom/reportDataFromChooseList.html', title:'选择数据源',pageId:'dataBaseFrom',area:['90vw','90vh'],callBack:function (refreshCode){if(refreshCode=='0'){$('#input{{boxId}}{{indexNumber}}').val(dataBaseMation.name); dataValueChange(dataBaseMation, $('#input{{boxId}}{{indexNumber}}')); } else if (refreshCode=='-9999'){winui.window.msg(systemLanguage['com.skyeye.operationFailed'][languageType],{icon:2,time:2000});}}});});",
     "showValueTemplate": ""
   },
   "100": {
     "key": "showDetail",
     "name": "详情展示",
-    "html": "<div class='layui-form-item {{defaultWidth}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{desc}}'></i>{{labelContent}}：</label><div class='layui-input-block ver-center'>{{{context}}}</div></div>",
+    "html": "<div class='layui-form-item {{defaultWidth}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{remark}}'></i>{{labelContent}}：</label><div class='layui-input-block ver-center'>{{{context}}}</div></div>",
     "js": "",
     "showValueTemplate": ""
   }
