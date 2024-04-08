@@ -31,7 +31,7 @@ layui.config({
 				return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 			}},
 			{ field: 'state', title: '状态', width: 90, align: 'center', templet: function (d) {
-				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("projectStateEnum", 'id', d.state, 'name');
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
 			}},
 			{ field: 'applyTime', title: '申领日期', width: 100, align: 'center' },
 			{ field: 'allPrice', title: '总金额', width: 100, align: 'left' },
