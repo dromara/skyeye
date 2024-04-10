@@ -12,7 +12,7 @@ layui.config({
 	// 邮件内容模板
 	var emailContentMobel = $("#emailContentMobel").html();
 	
-	AjaxPostUtil.request({url: sysMainMation.emailBasePath + "useremail005", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
+	AjaxPostUtil.request({url: sysMainMation.emailBasePath + "useremail005", params: {id: parent.rowId}, type: 'json', method: 'GET', callback: function (json) {
 		if (!isNull(json.bean.toPeople)){
 			json.bean.toPeople = json.bean.toPeople.split(',');
 		}

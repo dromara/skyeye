@@ -20,30 +20,21 @@ layui.config({
 		var enclosureList = [];
 		var toPeopleList = [], toCcList = [], toBccList = [];
 
-	    if (!isNull(id)){
+	    if (!isNull(id)) {
 	    	// 草稿箱获取数据
-			AjaxPostUtil.request({url: sysMainMation.emailBasePath + "useremail014", params: {rowId: id}, type: 'json', callback: function (json) {
-				$("#typeName").val(json.bean.title);
+			AjaxPostUtil.request({url: sysMainMation.emailBasePath + "useremail005", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
+				$("#title").val(json.bean.title);
 				$("#content").val(json.bean.content);
 
 				// 初始化收件人对象
-				$.each(json.bean.toPeopleList, function(i, item) {
-					toPeopleList.push(item.email);
-				});
-
+				toPeopleList = json.bean.toPeople.split(",")
 				// 初始化抄送人对象
-				$.each(json.bean.toCcList, function(i, item) {
-					toCcList.push(item.email);
-				});
-
+				toCcList = isNull(json.bean.toCc) ? [] : json.bean.toCc.split(",")
 				// 初始化暗送人对象
-				$.each(json.bean.toBccList, function(i, item) {
-					toBccList.push(item.email);
-				});
-
+				toBccList = isNull(json.bean.toBcc) ? [] : json.bean.toBcc.split(",")
 
 				$.each(json.bean.emailEnclosureList, function(i, item) {
-					if (!isNull(item.sysEnclosureId)){
+					if (!isNull(item.sysEnclosureId)) {
 						enclosureList.push({
 							id: item.sysEnclosureId,
 							name: item.fileName,
@@ -60,31 +51,23 @@ layui.config({
 			}, async: false});
 		}
 
-		if (!isNull(forwardId)){
+		if (!isNull(forwardId)) {
 			// 邮件回复获取数据
 			AjaxPostUtil.request({url: sysMainMation.emailBasePath + "useremail017", params: {rowId: forwardId}, type: 'json', callback: function (json) {
-				$("#typeName").val(json.bean.title);
+				$("#title").val(json.bean.title);
 				var emailContentHeadStr = getContentHead(json.bean.fromPeople, json.bean.sendDate, json.bean.toPeople, json.bean.toCc, json.bean.toBcc, json.bean.title);
 				$("#content").val(emailContentHeadStr + json.bean.content);
 
 				// 初始化收件人对象
-				$.each(json.bean.toPeopleList, function(i, item) {
-					toPeopleList.push(item.email);
-				});
-
+				toPeopleList = json.bean.toPeople.split(",")
 				// 初始化抄送人对象
-				$.each(json.bean.toCcList, function(i, item) {
-					toCcList.push(item.email);
-				});
-
+				toCcList = isNull(json.bean.toCc) ? [] : json.bean.toCc.split(",")
 				// 初始化暗送人对象
-				$.each(json.bean.toBccList, function(i, item) {
-					toBccList.push(item.email);
-				});
+				toBccList = isNull(json.bean.toBcc) ? [] : json.bean.toBcc.split(",")
 
 
 				$.each(json.bean.emailEnclosureList, function(i, item) {
-					if (!isNull(item.sysEnclosureId)){
+					if (!isNull(item.sysEnclosureId)) {
 						enclosureList.push({
 							id: item.sysEnclosureId,
 							name: item.fileName,
@@ -176,14 +159,14 @@ layui.config({
 	    matchingLanguage();
  		form.render();
  	    form.on('submit(formAddBean)', function (data) {
- 	    	if(isNull(id) && isNull(forwardId)){
+			if (isNull(id) && isNull(forwardId)) {
 				save(data, "useremail013");
 			}
- 	    	if (!isNull(id)){
+			if (!isNull(id)) {
 				// 草稿箱保存
 				save(data, "useremail015");
 			}
-			if (!isNull(forwardId)){
+			if (!isNull(forwardId)) {
 				// 转发保存
 				save(data, "useremail015");
 			}
@@ -191,14 +174,14 @@ layui.config({
  	    });
  	    
  		form.on('submit(formSendBean)', function (data) {
-			if(isNull(id) && isNull(forwardId)){
+			if (isNull(id) && isNull(forwardId)) {
 				save(data, "useremail012");
 			}
-			if (!isNull(id)){
+			if (!isNull(id)) {
 				// 草稿箱发送
 				save(data, "useremail016");
 			}
-			if (!isNull(forwardId)){
+			if (!isNull(forwardId)) {
 				// 转发发送
 				save(data, "useremail019");
 			}
@@ -207,32 +190,32 @@ layui.config({
 
  	   	function save(data, url){
 		   	if (winui.verifyForm(data.elem)) {
-			   	if(isNull($('#toPeople').tagEditor('getTags')[0].tags)){
-				   	winui.window.msg('请填写收件人', {icon: 2, time: 2000});
-				   	return false;
-			   	}
-			   	if(isNull(layedit.getContent(layContent))){
-				   	winui.window.msg('请填写邮件内容', {icon: 2, time: 2000});
-				   	return false;
-			   	}
-			   	var typeName = "(无主题)";
-			   	if (!isNull($("#typeName").val())) {
-				   	typeName = $("#typeName").val();
-			   	}
+				if (isNull($('#toPeople').tagEditor('getTags')[0].tags)) {
+					winui.window.msg('请填写收件人', {icon: 2, time: 2000});
+					return false;
+				}
+				if (isNull(layedit.getContent(layContent))) {
+					winui.window.msg('请填写邮件内容', {icon: 2, time: 2000});
+					return false;
+				}
+				var title = "(无主题)";
+				if (!isNull($("#title").val())) {
+					title = $("#title").val();
+				}
 
 			   	var params = {
-				   	typeName: typeName,
+					title: title,
 				   	content: encodeURIComponent(layedit.getContent(layContent)),
 				   	toPeople: $('#toPeople').tagEditor('getTags')[0].tags,
 				   	toCc: $('#toCc').tagEditor('getTags')[0].tags,
 				   	toBcc: $('#toBcc').tagEditor('getTags')[0].tags,
 				   	emailEnclosure: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
-				   	emailId: parent.$("#checkEmail").attr('rowid'),
-					rowId: id,
+					emailUserId: parent.$("#checkEmail").attr('rowid'),
+					id: id,
 					emailEnclosureList: JSON.stringify(emailEnclosureList)
 			   	};
 			   	AjaxPostUtil.request({url: sysMainMation.emailBasePath + url, params: params, type: 'json', callback: function (json) {
-					if(url == "useremail013" || url == "useremail015"){
+					if (url == "useremail013" || url == "useremail015") {
 						winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 					} else {
 						winui.window.msg('发送成功', {icon: 1, time: 2000});
@@ -252,11 +235,11 @@ layui.config({
 			systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
 				// 添加新的tag
 				$.each(userReturnList, function(i, item) {
-					if(clickId == 'toPeopleSelPeople'){
+					if (clickId == 'toPeopleSelPeople') {
 						$('#toPeople').tagEditor('addTag', item.email);
-					} else if (clickId == 'toCcSelPeople'){
+					} else if (clickId == 'toCcSelPeople') {
 						$('#toCc').tagEditor('addTag', item.email);
-					} else if (clickId == 'toBccSelPeople'){
+					} else if (clickId == 'toBccSelPeople') {
 						$('#toBcc').tagEditor('addTag', item.email);
 					}
 				});
@@ -267,11 +250,11 @@ layui.config({
 			var clickId = $(this).attr("id");
 			mailUtil.openMailChoosePage(function (mailChooseList){
 				$.each(mailChooseList, function(i, item) {
-					if(clickId == 'toPeopleSelMail'){
+					if (clickId == 'toPeopleSelMail') {
 						$('#toPeople').tagEditor('addTag', item.email);
-					} else if (clickId == 'toCcSelMail'){
+					} else if (clickId == 'toCcSelMail') {
 						$('#toCc').tagEditor('addTag', item.email);
-					} else if (clickId == 'toBccSelMail'){
+					} else if (clickId == 'toBccSelMail') {
 						$('#toBcc').tagEditor('addTag', item.email);
 					}
 				});
@@ -285,7 +268,7 @@ layui.config({
 				pageId: "emailSendModelListChoose",
 				area: ['90vw', '90vh'],
 				callBack: function (refreshCode) {
-					$("#typeName").val(emailSendModel.title);
+					$("#title").val(emailSendModel.title);
 					$('#toPeople').tagEditor('destroy')
 					$('#toPeople').tagEditor({
 						initialTags: emailSendModel.toPeople.split(','),

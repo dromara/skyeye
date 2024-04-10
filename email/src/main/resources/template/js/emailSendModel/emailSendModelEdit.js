@@ -9,11 +9,12 @@ layui.config({
 	layui.use(['form', 'tagEditor'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
+		var id = GetUrlParam("id");
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: sysMainMation.emailBasePath + "emailsendmodel003",
-		 	params: {id: parent.rowId},
+		 	url: sysMainMation.emailBasePath + "queryEmailSendById",
+		 	params: {id: id},
 		 	pagination: false,
 			method: "GET",
 		 	template: $("#showTemplate").html(),
@@ -40,7 +41,7 @@ layui.config({
 		 		form.render();
 		 	    form.on('submit(formEditBean)', function (data) {
 					if (winui.verifyForm(data.elem)) {
-						if(isNull($('#toPeople').tagEditor('getTags')[0].tags)){
+						if (isNull($('#toPeople').tagEditor('getTags')[0].tags)) {
 							winui.window.msg('请填写收件人', {icon: 2, time: 2000});
 							return false;
 						}
@@ -49,9 +50,9 @@ layui.config({
 							toPeople: $('#toPeople').tagEditor('getTags')[0].tags,
 							toCc: $('#toCc').tagEditor('getTags')[0].tags,
 							toBcc: $('#toBcc').tagEditor('getTags')[0].tags,
-							id: parent.rowId
+							id: id
 						};
-						AjaxPostUtil.request({url: sysMainMation.emailBasePath + "emailsendmodel005", params: params, type: 'json', method: "PUT", callback: function (json) {
+						AjaxPostUtil.request({url: sysMainMation.emailBasePath + "writeEmailSendModel", params: params, type: 'json', method: "POST", callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 						}});
@@ -66,11 +67,11 @@ layui.config({
 					systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
 						// 添加新的tag
 						$.each(userReturnList, function(i, item) {
-							if(clickId == 'toPeopleSelPeople'){
+							if (clickId == 'toPeopleSelPeople') {
 								$('#toPeople').tagEditor('addTag', item.email);
-							} else if (clickId == 'toCcSelPeople'){
+							} else if (clickId == 'toCcSelPeople') {
 								$('#toCc').tagEditor('addTag', item.email);
-							} else if (clickId == 'toBccSelPeople'){
+							} else if (clickId == 'toBccSelPeople') {
 								$('#toBcc').tagEditor('addTag', item.email);
 							}
 						});
@@ -81,11 +82,11 @@ layui.config({
 					var clickId = $(this).attr("id");
 					mailUtil.openMailChoosePage(function (mailChooseList){
 						$.each(mailChooseList, function(i, item) {
-							if(clickId == 'toPeopleSelMail'){
+							if (clickId == 'toPeopleSelMail') {
 								$('#toPeople').tagEditor('addTag', item.email);
-							} else if (clickId == 'toCcSelMail'){
+							} else if (clickId == 'toCcSelMail') {
 								$('#toCc').tagEditor('addTag', item.email);
-							} else if (clickId == 'toBccSelMail'){
+							} else if (clickId == 'toBccSelMail') {
 								$('#toBcc').tagEditor('addTag', item.email);
 							}
 						});
