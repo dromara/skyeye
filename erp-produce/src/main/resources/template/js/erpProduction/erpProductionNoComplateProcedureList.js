@@ -95,12 +95,14 @@ layui.config({
 			if (!isNull(procedureList)) {
 				// 加载工序信息
 				$.each(procedureList, function(i, item) {
-					if (item.state == '1') {
-						item.checkBoxHtml = '<input type="radio" name="procedureListName" value="' + item.procedureMation.id + '">';
-						item.stateName = "<span class='state-down'>待下达</span>";
-					} else if (item.state == '2') {
-						item.checkBoxHtml = '<input type="radio" name="procedureListName" value="' + item.procedureMation.id + '" disabled="disabled">';
-						item.stateName = "<span class='state-up'>已下达</span>"
+					if (!isNull(item.procedureMation)) {
+						if (item.state == '1') {
+							item.checkBoxHtml = '<input type="radio" name="procedureListName" value="' + item.procedureMation.id + '">';
+							item.stateName = "<span class='state-down'>待下达</span>";
+						} else if (item.state == '2') {
+							item.checkBoxHtml = '<input type="radio" name="procedureListName" value="' + item.procedureMation.id + '" disabled="disabled">';
+							item.stateName = "<span class='state-up'>已下达</span>"
+						}
 					}
 				});
 				$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {procedureList: procedureList}));
