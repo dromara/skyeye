@@ -6537,23 +6537,6 @@ body .layer-ext-winconfirm .layui-layer-content {
 	font-size:22px;
 }
 
-.operator-user-group{
-    width: calc(100% - 20px);
-    height: 30px;
-    line-height: 30px;
-    text-align: left;
-    margin: 0 10px;
-    border-bottom: 1px solid gainsboro;
-}
-
-.operator-user-group a{
-    height: 30px;
-    width: 30px;
-    font-size: 15px;
-    margin-right: 6px;
-    cursor: pointer;
-}
-
 .task-launch-item{
     float: left;
     height: 100px;
