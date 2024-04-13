@@ -34,7 +34,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: flowableBasePath + 'actgroup007',
+		    url: sysMainMation.flowableBasePath + 'queryUserInfoOnActGroup',
 		    where: getTableParams(),
 		    even: true,
 		    page: true,
@@ -93,7 +93,7 @@ layui.config({
 			$.each(userReturnList, function (i, item) {
 				userInfo += item.id + ',';
 			})
-			AjaxPostUtil.request({url: flowableBasePath + "actgroup003", params: {rowId: clickId, userId: userInfo}, type: 'json', callback: function(json) {
+			AjaxPostUtil.request({url: sysMainMation.flowableBasePath + "insertActGroupUser", params: {groupId: clickId, userIds: userInfo}, type: 'json', method: 'POST', callback: function(json) {
 				loadTable();
 			}});
 		});
@@ -105,7 +105,7 @@ layui.config({
 			var msg = '确认一键移除该用户组下的所有用户吗？';
 			layer.confirm(msg, { icon: 3, title: '一键移除所有用户' }, function (index) {
 				layer.close(index);
-				AjaxPostUtil.request({url: flowableBasePath + "actgroup008", params: {rowId: clickId}, type: 'json', method: "POST", callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.flowableBasePath + "deleteAllActGroupUserByGroupId", params: {groupId: clickId}, type: 'json', method: "POST", callback: function (json) {
 					winui.window.msg("移除成功", {icon: 1, time: 2000});
 					loadTable();
 				}});
@@ -121,9 +121,9 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '删除用户' }, function (index) {
 			layer.close(index);
 			var params = {
-				rowId:  data.id
+				id: data.id
         	};
-            AjaxPostUtil.request({url: flowableBasePath + "actgroup006", params: params, type: 'json', method: "POST", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.flowableBasePath + "deleteActGroupUserById", params: params, type: 'json', method: "DELETE", callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -132,7 +132,7 @@ layui.config({
 	
 	// 同步人员数据
     $("body").on("click", "#syncData", function() {
-    	AjaxPostUtil.request({url: flowableBasePath + "activitimode015", params: {}, type: 'json', method: "POST", callback: function (json) {
+    	AjaxPostUtil.request({url: sysMainMation.flowableBasePath + "activitimode015", params: {}, type: 'json', method: "POST", callback: function (json) {
 			winui.window.msg("同步成功", {icon: 1, time: 2000});
 		}});
     });
@@ -147,7 +147,7 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return $.extend(true, {groupId: clickId}, initTableSearchUtil.getSearchValue("messageTable"));
+		return $.extend(true, {objectId: clickId}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 
 	exports('actGroupList', {});
