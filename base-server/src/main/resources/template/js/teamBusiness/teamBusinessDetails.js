@@ -34,23 +34,25 @@ layui.config({
 			});
 			loadTreeTable();
 			// 解析成员信息
-			$.each(json.bean.teamRoleList, function (i, item) {
-				treeTableData.push({
-					id: item.roleId,
-					pId: '0',
-					name: item.name
-				});
-				$.each(item.teamRoleUserList, function (j, bean) {
+			if (!isNull(json.bean.teamRoleList)) {
+				$.each(json.bean.teamRoleList, function (i, item) {
 					treeTableData.push({
-						id: bean.userId,
-						pId: item.roleId,
-						name: bean.userMation.name,
-						departmentName: bean.userMation.departmentName,
-						phone: bean.userMation.phone,
-						email: bean.userMation.email
+						id: item.roleId,
+						pId: '0',
+						name: item.name
+					});
+					$.each(item.teamRoleUserList, function (j, bean) {
+						treeTableData.push({
+							id: bean.userId,
+							pId: item.roleId,
+							name: bean.userMation.name,
+							departmentName: bean.userMation.departmentName,
+							phone: bean.userMation.phone,
+							email: bean.userMation.email
+						});
 					});
 				});
-			});
+			}
 
 			// 解析权限信息
 			$.each(json.bean.teamObjectPermissionList, function (i, item) {
