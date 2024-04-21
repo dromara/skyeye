@@ -61,5 +61,12 @@
     "html": "<div class='layui-form-item {{defaultWidth}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{remark}}'></i>{{labelContent}}：</label><div class='layui-input-block ver-center'>{{{context}}}</div></div>",
     "js": "",
     "showValueTemplate": ""
+  },
+  "101": {
+    "key": "tableColumnChoose",
+    "name": "表格配置",
+    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='tableColumnChoose' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{remark}}'></i>{{labelContent}}：</label><div class='layui-input-block'><button id='choose{{boxId}}{{indexNumber}}' type='button' class='winui-toolbtn'>配置</button></div></div>",
+    "js": "var tableDataList = {{{json context 'array'}}}; $('body').on('click', '#choose{{boxId}}{{indexNumber}}', function (e) {localStorage.setItem('{{boxId}}', tableDataList); _openNewWindows({url:'../../tpl/pageReportDesign/simpleTableDesign.html?boxId=' + '{{boxId}}', title:'表格配置',pageId:'tableColumnChoose',area:['90vw','90vh'],callBack:function (refreshCode){if(refreshCode=='0'){dataValueChange(tableColumnList, $('#choose{{boxId}}{{indexNumber}}')); } else if (refreshCode=='-9999'){winui.window.msg(systemLanguage['com.skyeye.operationFailed'][languageType],{icon:2,time:2000});}}});});",
+    "showValueTemplate": ""
   }
 }

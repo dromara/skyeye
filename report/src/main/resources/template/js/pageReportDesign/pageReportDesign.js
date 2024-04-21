@@ -63,12 +63,11 @@ layui.config({
         }, {
             "icon": " fa fa-table fa-fw",
             "title": "表格",
+            "id": "tableModel",
             "children": [{
+                "id": "customSimpleTable",
                 "icon": " fa fa-table fa-fw",
                 "name": "简单表格",
-            }, {
-                "icon": " fa fa-list-alt fa-fw",
-                "name": "复杂表格",
             }]
         }, {
             "icon": " fa fa-area-chart fa-fw",

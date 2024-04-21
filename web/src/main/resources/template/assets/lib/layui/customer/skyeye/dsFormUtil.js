@@ -791,11 +791,13 @@ var dsFormTableUtil = {
             }
 
             var url = "";
-            eval('url = ' + api.serviceStr + ' + "' + api.api + '"');
+            if (!isNull(api)) {
+                eval('url = ' + api.serviceStr + ' + "' + api.api + '"');
+            }
             table.render({
                 id: id,
                 elem: `#${id}`,
-                method: api.method,
+                method: api?.method,
                 url: url,
                 where: dsFormTableUtil.getTableParams(),
                 toolbar: true,

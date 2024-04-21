@@ -159,7 +159,7 @@ layui.config({
         return tableData;
     }
 
-    function getRestRequestHeaderData(){
+    function getRestRequestHeaderData() {
         var tableData = new Array();
         var rowTr = $("#restHeaderTable tr");
         $.each(rowTr, function(i, item) {
@@ -351,10 +351,10 @@ layui.config({
             params = {
                 requestUrl: $("#restUrl").val(),
                 requestMethod: $("#restMethod").val(),
-                requestHeader: getRestRequestHeaderDataToResolution(),
+                requestHeader: getRestRequestHeaderData(),
                 requestBody: restRequestBodyContent.getValue()
             };
-        } else if (dataFromType == 4){
+        } else if (dataFromType == 4) {
             // SQL数据源
             if (isNull($("#dataBaseId").val())) {
                 winui.window.msg('请选择数据库', {icon: 2, time: 2000});
@@ -372,28 +372,17 @@ layui.config({
         return params;
     }
 
-    function getRestRequestHeaderDataToResolution(){
-        var tableData = new Array();
-        var rowTr = $("#restHeaderTable tr");
-        $.each(rowTr, function(i, item) {
-            //获取行编号
-            var rowNum = $(item).attr("trcusid").replace("tr", "");
-            tableData[$("#headerKey" + rowNum).val()] = $("#headerValue" + rowNum).val();
-        });
-        return JSON.stringify(tableData);
-    }
-
     function getDataByDataFromType(dataFromType, json){
-        if (dataFromType == 1){
+        if (dataFromType == 1) {
             // XML数据源
             return json.bean.nodeArray;
-        } else if (dataFromType == 2){
+        } else if (dataFromType == 2) {
             // JSON数据源
             return json.bean.nodeArray;
-        } else if (dataFromType == 3){
+        } else if (dataFromType == 3) {
             // Rest接口数据源
             return json.bean.nodeArray;
-        } else if (dataFromType == 4){
+        } else if (dataFromType == 4) {
             // SQL数据源
             return json.rows;
         }
@@ -410,13 +399,13 @@ layui.config({
         $.each(data, function (i, item) {
             addAnalysisRow();
             $("#key" + (rowNum - 1)).val(item);
-            if (dataFromType == 1){
+            if (dataFromType == 1) {
                 // XML数据源
-            } else if (dataFromType == 2){
+            } else if (dataFromType == 2) {
                 // JSON数据源
-            } else if (dataFromType == 3){
+            } else if (dataFromType == 3) {
                 // Rest接口数据源
-            } else if (dataFromType == 4){
+            } else if (dataFromType == 4) {
                 // SQL数据源
                 $("#key" + (rowNum - 1)).val(item.name);
                 $("#dataType" + (rowNum - 1)).val(item.dataType);

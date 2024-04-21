@@ -35,7 +35,7 @@ var customerJS = {
 
 //系统基础信息
 var sysMainMation = {}; // 系统基础信息json
-if(isNull(localStorage.getItem("sysMainMation"))){
+if (isNull(localStorage.getItem("sysMainMation"))) {
 	jsGetJsonFile("../../configRation.json", function(data) {
 		sysMainMation = data;
 		localStorage.setItem("sysMainMation", JSON.stringify(sysMainMation));

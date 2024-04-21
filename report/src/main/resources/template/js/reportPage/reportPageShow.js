@@ -26,6 +26,7 @@ layui.config({
 
         initEchartsData(widthScale, heightScale);
         initWordMationData(widthScale, heightScale);
+        initTableMationData(widthScale, heightScale);
 
         if (!isNull(initData.bgImage)){
             content.css({
@@ -79,6 +80,26 @@ layui.config({
         }
     }
 
+    function initTableMationData(widthScale, heightScale) {
+        var tableMationList = initData.tableMationList;
+        if (!isNull(tableMationList)) {
+            $.each(tableMationList, function (i, item) {
+                var leftNum = multiplication(item.attrMation.attr["custom.move.x"].defaultValue, widthScale);
+                var topNum = multiplication(item.attrMation.attr["custom.move.y"].defaultValue, heightScale);
+                item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
+                item.attrMation.attr["custom.move.y"].defaultValue = topNum;
+                item.attrMation.attr = getTableDataFromRest(item.attrMation.attr);
+                var boxId = addNewTableModel(item.modelId, item.attrMation);
+                $("#" + boxId).css({
+                    left: leftNum + "px",
+                    top: topNum + "px",
+                    width: multiplication(item.width, widthScale),
+                    height: multiplication(item.height, heightScale)
+                });
+            });
+        }
+    }
+
     function getContentStr(str) {
         if (!isNull(str)) {
             str = str.replace(/%/g, '%25');
@@ -123,6 +144,32 @@ layui.config({
         return attr;
     }
 
+    function getTableDataFromRest(attr) {
+        if (isNull(attr['custom.tableColumn'].defaultValue)) {
+            return attr;
+        }
+        var fromId = attr['custom.dataBaseMation'].defaultValue.id;
+        var needGetData = {};
+        attr['custom.tableColumn'].defaultValue.forEach(item => {
+            needGetData[item.attrKey] = '';
+        });
+        if (isNull(fromId) || needGetData.length == 0) {
+            return attr;
+        }
+        var params = {
+            id: fromId,
+            needGetDataStr: JSON.stringify(needGetData),
+            inputParams: JSON.stringify({
+                page: 1,
+                limit: 15
+            })
+        };
+        AjaxPostUtil.request({url: sysMainMation.reportBasePath + "queryReportDataFromMationById", params: params, type: 'json', method: "POST", callback: function(json) {
+            attr["valueList"] = json.rows
+        }, async: false});
+        return attr;
+    }
+
     function addNewModel(modelId, echartsMation) {
         if (!isNull(echartsMation)) {
             var option = getEchartsOptions(echartsMation);
@@ -142,6 +189,22 @@ layui.config({
             return boxId;
         }
         return "";
+    }
+
+    // 加载表格模型
+    function addNewTableModel(modelId, tableMation) {
+        // 获取boxId
+        var boxId = modelId + getRandomValueToString();
+        // 获取表格图表id
+        var tableId = getTableBox(boxId, modelId);
+        // 加入页面属性
+        tableMation["tableId"] = tableId
+
+        // 加载表格
+        dsFormTableUtil.initDynamicTable(tableId, tableMation);
+
+        inPageTable[boxId] = $.extend(true, {}, tableMation);
+        return boxId;
     }
 
     // 加载文字模型
@@ -166,6 +229,29 @@ layui.config({
         var box = createBox(boxId, modelId, null);
         box.appendChild(echartsBox);
         return echartsId;
+    }
+
+    function getTableBox(boxId, modelId) {
+        var box = createBox(boxId, modelId, null);
+
+        var tableBoxId = "table" + boxId;
+        var tableBox = document.createElement("div");
+        // 为div设置类名
+        tableBox.className = "table-box";
+        tableBox.id = "label-" + tableBoxId;
+        tableBox.onmousedown = ee => {
+            var id = $("#" + tableBoxId).parent().attr("id");
+            f.setMoveEvent(ee, $("#" + id));
+            // 阻止事件冒泡（针对父元素的move）
+            ee.stopPropagation();
+        };
+        box.appendChild(tableBox);
+
+        var table = document.createElement("table");
+        table.id = tableBoxId;
+        box.appendChild(table);
+
+        return tableBoxId;
     }
 
     function getWordBox(boxId, modelId, styleStr, wordStyleMation) {
