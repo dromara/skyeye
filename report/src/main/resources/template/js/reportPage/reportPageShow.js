@@ -89,6 +89,8 @@ layui.config({
                 item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
                 item.attrMation.attr["custom.move.y"].defaultValue = topNum;
                 item.attrMation.businessApi = getTableDataFromRest(item.attrMation.attr);
+
+                item.attrMation.isPage = item.attrMation.attr["custom.isPage"]?.defaultValue
                 var boxId = addNewTableModel(item.modelId, item.attrMation);
                 $("#" + boxId).css({
                     left: leftNum + "px",
@@ -96,6 +98,8 @@ layui.config({
                     width: multiplication(item.width, widthScale),
                     height: multiplication(item.height, heightScale)
                 });
+                setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
+                setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
             });
         }
     }
@@ -146,7 +150,7 @@ layui.config({
 
     function getTableDataFromRest(attr) {
         var businessApi = {};
-        var fromId = attr['custom.dataBaseMation'].defaultValue.id;
+        var fromId = attr['custom.dataBaseMation'].defaultValue?.id;
         if (isNull(fromId)) {
             return businessApi;
         }

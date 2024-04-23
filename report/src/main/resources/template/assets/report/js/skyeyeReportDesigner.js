@@ -21,7 +21,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 			var defaults = {
 				'rulerColor': "RGB(135, 221, 252)", // 标尺颜色
 				'rulerFontColor': "burlywood", // 标尺字体颜色
-				'headerBgColor': 'burlywood', // 菜单栏背景颜色
+				'headerBgColor': 'lightskyblue', // 菜单栏背景颜色
 				'initData': {}, // 初始化数据
 				'headerMenuJson': [], // 菜单栏
 				// excel配置
@@ -282,12 +282,11 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					var tableId = f.getTableBox(boxId, modelId);
 					// 加入页面属性
 					var table = !isNull(tableMation) ? tableMation : {
-						attr: {
-							"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editorType": "99", "editorChooseValue": "", "typeName": "数据源"},
-							"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
-							"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+						attr: $.extend(true, {}, echartsCustomOptions, {
 							"custom.tableColumn": { "defaultValue": [], "edit": 1, "remark": "数据表格的信息", "name": "表格配置", "editorType": "101", "editorChooseValue": "", "typeName": "数据源"},
-						},
+							"custom.isPage": { "defaultValue": "1", "edit": 1, "remark": "分页的标识", "name": "是否分页", "editorType": "1", "editorChooseValue": "", "typeName": "数据源",
+								"optionalValue": [{"id": 1, "name": "是"}, {"id": 0, "name": "否"}]},
+						}),
 						tableColumnList: [],
 						isPage: 1
 					}
@@ -644,7 +643,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 
 				initExcelEvent: function() {
 					// 不触发‘移除所有图表的编辑信息’的事件的对象的class--颜色选择器
-					var notTriggerRemove = ["layui-colorpicker-main"];
+					var notTriggerRemove = ["layui-colorpicker-main", "layui-anim-scaleSpring"];
 					// 图表点击事件
 					$("body").on('click', ".echarts-box, .word-box, .table-box", function (e) {
 						f.setChooseReportItem($(this));
@@ -1012,6 +1011,8 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								width: multiplication(item.width, widthScale),
 								height: multiplication(item.height, heightScale)
 							});
+							setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
+							setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
 						});
 					}
 				},
@@ -1057,7 +1058,6 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					'<div id="skyeyeScaleRulerV" class="skyeyeScaleRuler_v"></div>' +
 					'</div>' +
 					'<div class="hd-main clearfix" id="skyeyeHeader">' +
-					'<font class="logo-title">Skyeye系列-报表设计器</font>' +
 					'<div class="navs"></div>' +
 					'</div>' +
 					f.getEightCape() +

@@ -111,7 +111,7 @@ body {
 }
 
 .hd-main .navs {
-	padding: 0 0 0px 25px;
+	padding: 0px;
 	height: 100%;
 	float: left;
 }
@@ -223,14 +223,6 @@ body {
 	border-bottom: 8px solid white;
 	font-size: 0;
 	line-height: 0;
-}
-
-.logo-title{
-	float: left;
-	line-height: 60px;
-	color: cornflowerblue;
-	font-size: 16px;
-	font-family: cursive;
 }
 
 .kuang {
