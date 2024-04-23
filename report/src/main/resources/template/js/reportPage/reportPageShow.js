@@ -88,7 +88,7 @@ layui.config({
                 var topNum = multiplication(item.attrMation.attr["custom.move.y"].defaultValue, heightScale);
                 item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
                 item.attrMation.attr["custom.move.y"].defaultValue = topNum;
-                item.attrMation.attr = getTableDataFromRest(item.attrMation.attr);
+                item.attrMation.businessApi = getTableDataFromRest(item.attrMation.attr);
                 var boxId = addNewTableModel(item.modelId, item.attrMation);
                 $("#" + boxId).css({
                     left: leftNum + "px",
@@ -145,29 +145,20 @@ layui.config({
     }
 
     function getTableDataFromRest(attr) {
-        if (isNull(attr['custom.tableColumn'].defaultValue)) {
-            return attr;
-        }
+        var businessApi = {};
         var fromId = attr['custom.dataBaseMation'].defaultValue.id;
-        var needGetData = {};
-        attr['custom.tableColumn'].defaultValue.forEach(item => {
-            needGetData[item.attrKey] = '';
-        });
-        if (isNull(fromId) || needGetData.length == 0) {
-            return attr;
+        if (isNull(fromId)) {
+            return businessApi;
         }
         var params = {
-            id: fromId,
-            needGetDataStr: JSON.stringify(needGetData),
-            inputParams: JSON.stringify({
-                page: 1,
-                limit: 15
-            })
+            id: fromId
         };
-        AjaxPostUtil.request({url: sysMainMation.reportBasePath + "queryReportDataFromMationById", params: params, type: 'json', method: "POST", callback: function(json) {
-            attr["valueList"] = json.rows
+        AjaxPostUtil.request({url: sysMainMation.reportBasePath + "queryReportDataFromById", params: params, type: 'json', method: "GET", callback: function(json) {
+            businessApi.serviceStr = json.bean.restEntity?.serviceStr;
+            businessApi.api = json.bean.restEntity?.restUrl;
+            businessApi.method = json.bean.restEntity?.method;
         }, async: false});
-        return attr;
+        return businessApi;
     }
 
     function addNewModel(modelId, echartsMation) {
@@ -235,18 +226,6 @@ layui.config({
         var box = createBox(boxId, modelId, null);
 
         var tableBoxId = "table" + boxId;
-        var tableBox = document.createElement("div");
-        // 为div设置类名
-        tableBox.className = "table-box";
-        tableBox.id = "label-" + tableBoxId;
-        tableBox.onmousedown = ee => {
-            var id = $("#" + tableBoxId).parent().attr("id");
-            f.setMoveEvent(ee, $("#" + id));
-            // 阻止事件冒泡（针对父元素的move）
-            ee.stopPropagation();
-        };
-        box.appendChild(tableBox);
-
         var table = document.createElement("table");
         table.id = tableBoxId;
         box.appendChild(table);

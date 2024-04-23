@@ -19,6 +19,7 @@ layui.config({
     if (isNull(id)) {
         skyeyeClassEnumUtil.showEnumDataListByClassName("reportDataFromType", 'radio', "dataFromTypeBox", '', form);
         initDataFromBoxContent(dataShowType.getData('dataFromTypeBox'), null)
+        $("#serviceStr").html(getDataUseHandlebars(selOption, {rows: serviceMap}));
     } else {
         AjaxPostUtil.request({url: sysMainMation.reportBasePath + "queryReportDataFromById", params: {id: id}, type: 'json', method: 'GET', callback:function(data) {
             $("#name").val(data.bean.name);
@@ -26,6 +27,9 @@ layui.config({
             skyeyeClassEnumUtil.showEnumDataListByClassName("reportDataFromType", 'radio', "dataFromTypeBox", data.bean.type, form);
 
             initDataFromBoxContent(data.bean.type, data.bean)
+
+            $("#serviceStr").html(getDataUseHandlebars(selOption, {rows: serviceMap}));
+            $("#serviceStr").val(data.bean.restEntity?.serviceStr);
 
             var list = []
             if (data.bean.type == 1) {
@@ -67,10 +71,6 @@ layui.config({
                 type: dataShowType.getData('dataFromTypeBox'),
                 id: isNull(id) ? '' : id
             };
-            if (getAnalysisData().length == 0) {
-                winui.window.msg('请进行字段解析操作。', {icon: 2, time: 2000});
-                return false;
-            }
             var otherData = getDataByType();
 
             params = $.extend(true, params, otherData);
@@ -125,7 +125,8 @@ layui.config({
                 method: $("#restMethod").val(),
                 header: getRestRequestHeaderData(),
                 requestBody: restRequestBodyContent.getValue(),
-                analysisList: getAnalysisData()
+                analysisList: getAnalysisData(),
+                serviceStr: $("#serviceStr").val()
             })
         };
     }
@@ -352,7 +353,8 @@ layui.config({
                 requestUrl: $("#restUrl").val(),
                 requestMethod: $("#restMethod").val(),
                 requestHeader: getRestRequestHeaderData(),
-                requestBody: restRequestBodyContent.getValue()
+                requestBody: restRequestBodyContent.getValue(),
+                serviceStr: $("#serviceStr").val()
             };
         } else if (dataFromType == 4) {
             // SQL数据源
