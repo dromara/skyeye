@@ -106,6 +106,7 @@
     "conferenceState": {"name": "会议室状态", "className": "skyeye-adm#com.skyeye.eve.conference.classenum.ConferenceState"},
     "vehicleState": {"name": "车辆状态", "className": "skyeye-adm#com.skyeye.eve.vehicle.classenum.VehicleState"},
     "maintenanceType": {"name": "车辆维修类型", "className": "skyeye-adm#com.skyeye.eve.vehicle.classenum.MaintenanceType"},
+    "sealBgColorType": {"name": "印章背景类型", "className": "skyeye-adm#com.skyeye.eve.seal.classenum.SealBgColorType"},
 
     "schoolPower": {"name": "学校数据权限", "className": "skyeye-school#com.skyeye.eve.classenum.SchoolPower"},
     "admissionMethod": {"name": "入学方式", "className": "skyeye-school#com.skyeye.school.student.classenum.AdmissionMethod"},
