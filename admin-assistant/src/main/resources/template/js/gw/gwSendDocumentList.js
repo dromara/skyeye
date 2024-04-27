@@ -98,7 +98,7 @@ layui.config({
 	// 编辑
 	function edit(data) {
 		_openNewWindows({
-			url: systemCommonUtil.getUrl('FP2023062700002&id=' + data.id, null),
+			url: systemCommonUtil.getUrl('FP2024042700002&id=' + data.id, null),
 			title: "发文申请",
 			pageId: "gwSendDocumentEdit",
 			area: ['90vw', '90vh'],
@@ -141,7 +141,7 @@ layui.config({
 	// 详情
 	function details(data) {
 		_openNewWindows({
-			url: systemCommonUtil.getUrl('FP2023062700003&id=' + data.id, null),
+			url: systemCommonUtil.getUrl('FP2024042700003&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "gwSendDocumentDetails",
 			area: ['90vw', '90vh'],
@@ -153,7 +153,7 @@ layui.config({
 	// 添加
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: systemCommonUtil.getUrl('FP2023062700001', null),
+			url: systemCommonUtil.getUrl('FP2024042700001', null),
 			title: "发文申请",
 			pageId: "gwSendDocumentAdd",
 			area: ['90vw', '90vh'],
