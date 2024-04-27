@@ -107,6 +107,10 @@
     "vehicleState": {"name": "车辆状态", "className": "skyeye-adm#com.skyeye.eve.vehicle.classenum.VehicleState"},
     "maintenanceType": {"name": "车辆维修类型", "className": "skyeye-adm#com.skyeye.eve.vehicle.classenum.MaintenanceType"},
     "sealBgColorType": {"name": "印章背景类型", "className": "skyeye-adm#com.skyeye.eve.seal.classenum.SealBgColorType"},
+    "gwDocumentOpenCategory": {"name": "公文-公开类别", "className": "skyeye-adm#com.skyeye.eve.gw.classenum.GwDocumentOpenCategory"},
+    "gwDocumentPeriod": {"name": "公文-保密期间", "className": "skyeye-adm#com.skyeye.eve.gw.classenum.GwDocumentPeriod"},
+    "gwDocumentSecret": {"name": "公文-公文密级", "className": "skyeye-adm#com.skyeye.eve.gw.classenum.GwDocumentSecret"},
+    "gwDocumentUrgency": {"name": "公文-紧急程度", "className": "skyeye-adm#com.skyeye.eve.gw.classenum.GwDocumentUrgency"},
 
     "schoolPower": {"name": "学校数据权限", "className": "skyeye-school#com.skyeye.eve.classenum.SchoolPower"},
     "admissionMethod": {"name": "入学方式", "className": "skyeye-school#com.skyeye.school.student.classenum.AdmissionMethod"},

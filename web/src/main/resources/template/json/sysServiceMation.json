@@ -48,6 +48,8 @@
     "sealManageRevert": {"name": "印章归还", "key": "com.skyeye.eve.seal.service.impl.SealApplyRevertServiceImpl"},
     "sealManageBorrow": {"name": "印章借用", "key": "com.skyeye.eve.seal.service.impl.SealApplyBorrowServiceImpl"},
     "conFerenceRoomReserve": {"name": "会议室预定", "key": "com.skyeye.eve.conference.service.impl.ConferenceRoomReserveServiceImpl"},
+    "gwSendDocumentService": {"name": "公文发文管理", "key": "com.skyeye.eve.gw.service.impl.GwSendDocumentServiceImpl"},
+    "gwReceiveDocumentService": {"name": "公文收文管理", "key": "com.skyeye.eve.gw.service.impl.GwReceiveDocumentServiceImpl"},
 
     "incomeOrder": {"name": "财务明细账", "key": "com.skyeye.order.service.impl.IncomeOrderServiceImpl"},
 
