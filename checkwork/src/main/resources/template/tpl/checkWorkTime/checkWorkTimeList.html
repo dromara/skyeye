@@ -23,6 +23,9 @@
 			{{# if(auth('1603026192319')) { }}
             	<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delet"><language showName="com.skyeye.deleteBtn"></language></a>
 			{{# } }}
+            {{# if(auth('1714276416911')) { }}
+                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="setOnline">线上打卡信息</a>
+            {{# } }}
         </script>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>

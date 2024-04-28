@@ -44,7 +44,7 @@ layui.config({
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
             { field: 'lastUpdateTime', title: '最后修改时间', align: 'center', width: 150},
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar'}
+	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
@@ -63,7 +63,9 @@ layui.config({
         	delet(data);
         } else if (layEvent === 'details') { //详情
         	details(data);
-        }
+        } else if (layEvent === 'setOnline') { //线上打卡信息
+			setOnline(data);
+		}
     });
 	
 	// 添加
@@ -103,6 +105,19 @@ layui.config({
 				loadTable();
 			}
 		});
+	}
+
+	// 线上打卡信息
+	function setOnline(data) {
+		_openNewWindows({
+			url: systemCommonUtil.getUrl('FP2024042800001&id=' + data.id, null),
+			title: "设置线上打卡信息",
+			pageId: "setOnline",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}});
 	}
 	
 	// 详情

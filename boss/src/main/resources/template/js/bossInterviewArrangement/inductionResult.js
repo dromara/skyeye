@@ -96,7 +96,7 @@ layui.config({
                         inductionState: inductionState,
                         trialTime: $("#trialTime").val()
                     };
-                    AjaxPostUtil.request({url: sysMainMation.bossBasePath + "setInductionResult", params: params, type: 'json', method: "PUT", callback: function(json) {
+                    AjaxPostUtil.request({url: sysMainMation.bossBasePath + "setInductionResult", params: params, type: 'json', method: "POST", callback: function(json) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
                     }});
