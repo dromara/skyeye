@@ -53,18 +53,10 @@ layui.config({
 	        	}
 	        }},
 	        { field: 'userSex', title: '性别', width: 60, rowspan: '3', align: 'center', templet: function (d) {
-	        	if(d.userSex == '0'){
-	        		return "保密";
-	        	} else if (d.userSex == '1'){
-	        		return "男";
-	        	} else if (d.userSex == '2'){
-	        		return "女";
-	        	} else {
-	        		return "参数错误";
-	        	}
-	        }},
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("sexEnum", 'id', d.userSex, 'name');
+			}},
 	        { field: 'state', title: '状态', rowspan: '3', width: 60, align: 'center', templet: function (d) {
-	        	return getStaffStateName(d);
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("userStaffState", 'id', d.state, 'name');
 	        }},
 			{ field: 'actWages', title: '月标准薪资(元)', rowspan: '3', align: 'left', width: 120},
 	        { title: '公司信息', align: 'center', colspan: '3'},

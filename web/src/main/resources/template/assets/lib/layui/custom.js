@@ -741,25 +741,6 @@ function uploadImg(file, Editor) {
 }
 
 /**
- * 获取员工状态
- * @param d 员工参数
- * @returns {string}
- */
-function getStaffStateName(d) {
-	if(d.state == '1'){
-		return "<span class='state-up'>在职</span>";
-	} else if (d.state == '2'){
-		return "<span class='state-down'>离职</span>";
-	} else if (d.state == '3'){
-		return "见习";
-	} else if (d.state == '4'){
-		return "试用";
-	} else if (d.state == '5'){
-		return "退休";
-	}
-}
-
-/**
  * 判断一个值是否在指定的集合中存在
  *
  * @param array 集合
