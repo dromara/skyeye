@@ -12,6 +12,9 @@ layui.config({
 	var serviceClassName = sysServiceMation["gwSendDocumentService"]["key"];
 	
 	authBtn('1714130289379');
+
+	// 加载列表数据权限
+	loadAuthBtnGroup('messageTable', '1714130296761');
     
 	table.render({
 		id: 'messageTable',
@@ -54,7 +57,7 @@ layui.config({
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#messageTableBar' }
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 280, toolbar: '#messageTableBar' }
 		]],
 		done: function(json) {
 			matchingLanguage();
@@ -80,7 +83,11 @@ layui.config({
         	cancellation(data);
         } else if (layEvent === 'revoke') {//撤销
         	revoke(data);
-        }
+        } else if (layEvent === 'preview') {//预览
+			systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(data.picPath));
+		} else if (layEvent === 'download') {//下载
+			download(fileBasePath + data.path, data.title);
+		}
     });
 	
 	// 撤销
@@ -149,7 +156,7 @@ layui.config({
 			}
 		});
 	}
-	
+
 	// 添加
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
