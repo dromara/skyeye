@@ -54,6 +54,59 @@
     background-color: rgba(0, 0, 0, .38);
 }
 
+.ver-center{
+    align-items: Center;
+    padding-top: 8px;
+    min-height: 32px;
+    font-family: initial;
+}
+
+.sec-clsss{
+    background-color: rgba(0,0,0,0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.54);
+}
+
+.sec-clsss .layui-layer-title{
+    background-color: rgba(0, 0, 0, 0);
+    margin-left: 10px;
+    margin-right: 10px;
+    color: #fff;
+    padding-left: 0px;
+}
+
+.sec-clsss .layui-layer-setwin a{
+    background-color: white;
+    border-radius: 10px;
+    padding-right: -8px;
+    background-position-x: 2px;
+    background-position-y: -39px;
+}
+
+.sec-clsss .layui-layer-content{
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.sec-clsss-btn{
+    float: left !important;
+    position: relative !important;
+}
+
+.layui-col-space10>* {
+    padding: 5px;
+}
+
+.left-menu{
+    border-right: 2px solid gainsboro;
+    height: 100%;
+}
+
+.center-content{
+    height: 100%;
+}
+
 /*layer皮肤*/
 body .layer-ext-winconfirm {
     min-width: 360px;
