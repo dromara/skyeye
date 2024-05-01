@@ -59,7 +59,7 @@ layui.config({
 			{ field: 'assetNum', title: '资产编号', width: 160 },
 			{ field: 'storageArea', title: '存放区域', width: 200 },
 			{ field: 'assetAdminMation', title: '管理员', width: 120, templet: function(d) {
-				return isNull(d.assetAdminMation) ? '' : d.assetAdminMation.name;
+				return d.assetAdminMation?.name;
 			}},
 		]],
 	    done: function(res) {

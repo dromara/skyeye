@@ -57,7 +57,7 @@ layui.config({
 		if (clickId == "checkedList") {
 			// 已审核
 			cols.push({ field: 'examineId', title: '审核人', width: 120, templet: function (d) {
-				return isNull(d.examineMation) ? "" : d.examineMation.name;
+				return d.examineMation?.name;
 			}});
 			cols.push({ field: 'examineTime', title: '审核时间', align: 'center', width: 150 });
 			cols.push({ field: 'state', title: '审核结果', align: 'center', width: 100, templet: function (d) {

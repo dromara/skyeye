@@ -37,10 +37,7 @@ layui.config({
 		        	return d.level == 0 ? '父菜单' : '子菜单';
 		        }},
 		        { field: 'desktopName', title: '所属桌面', width: 120, templet: function (d) {
-					if (isNull(d.desktopMation)) {
-						return '';
-					}
-					return d.desktopMation.name;
+					return d.desktopMation?.name;
 				}},
 		        { field: 'isShare', title: '共享', align: 'center', width: 80, templet: function (d) {
 					return d.isShare == 0 ? '否' : '是';

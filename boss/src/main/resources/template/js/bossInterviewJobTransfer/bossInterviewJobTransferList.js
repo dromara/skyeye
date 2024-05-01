@@ -31,7 +31,7 @@ layui.config({
                 return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
             }},
             { field: 'transferStaffMation', title: '申请人', rowspan: '2', width: 140, templet: function(d) {
-                return isNull(d.transferStaffMation) ? '' : d.transferStaffMation.name;
+                return d.transferStaffMation?.name;
             }},
             { title: '原岗位信息', align: 'center', colspan: '4'},
             { title: '申请岗位信息', align: 'center', colspan: '4'},
@@ -52,28 +52,28 @@ layui.config({
         ],
             [
                 { field: 'primaryCompanyName', title: '企业', align: 'left', width: 150, templet: function(d) {
-                    return d.primaryCompanyMation.name;
+                    return d.primaryCompanyMation?.name;
                 }},
                 { field: 'primaryDepartmentName', title: '部门', align: 'left', width: 150, templet: function(d) {
-                    return isNull(d.primaryDepartmentMation) ? '' : d.primaryDepartmentMation.name;
+                    return d.primaryDepartmentMation?.name;
                 }},
                 { field: 'primaryJobName', title: '岗位', align: 'left', width: 150, templet: function(d) {
-                    return isNull(d.primaryJobMation) ? '' : d.primaryJobMation.name;
+                    return d.primaryJobMation?.name;
                 }},
                 { field: 'primaryJobScoreName', title: '岗位定级', align: 'left', width: 150, templet: function(d) {
-                    return isNull(d.primaryJobScoreMation) ? '' : d.primaryJobScoreMation.name;
+                    return d.primaryJobScoreMation?.name;
                 }},
                 { field: 'currentCompanyName', title: '企业', align: 'left', width: 150, templet: function(d) {
-                    return d.currentCompanyMation.name;
+                    return d.currentCompanyMation?.name;
                 }},
                 { field: 'currentDepartmentName', title: '部门', align: 'left', width: 150, templet: function(d) {
-                    return isNull(d.currentDepartmentMation) ? '' : d.currentDepartmentMation.name;
+                    return d.currentDepartmentMation?.name;
                 }},
                 { field: 'currentJobName', title: '岗位', align: 'left', width: 150, templet: function(d) {
-                    return isNull(d.currentJobMation) ? '' : d.currentJobMation.name;
+                    return d.currentJobMation?.name;
                 }},
                 { field: 'currentJobScoreName', title: '岗位定级', align: 'left', width: 150, templet: function(d) {
-                    return isNull(d.currentJobScoreMation) ? '' : d.currentJobScoreMation.name;
+                    return d.currentJobScoreMation?.name;
                 }}
             ]
         ],

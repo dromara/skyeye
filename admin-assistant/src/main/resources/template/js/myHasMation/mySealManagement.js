@@ -25,7 +25,7 @@ layui.config({
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'name', title: '印章名称', align: 'left', width: 150 },
 			{ field: 'licenceAdmin', title: '管理员', align: 'left', width: 120, templet: function(d) {
-				return isNull(d.licenceAdminMation) ? '' : d.licenceAdminMation.name;
+				return d.licenceAdminMation?.name;
 			}},
 		]],
 		done: function(json) {

@@ -33,10 +33,10 @@ layui.config({
                 return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
             }},
             { field: 'recruitDepartmentId', title: '需求部门', align: 'left', width: 140, templet: function (d) {
-                return d.recruitDepartmentMation.name;
+                return d.recruitDepartmentMation?.name;
             }},
             { field: 'recruitJobId', title: '需求岗位', align: 'left', width: 150, templet: function (d) {
-                return d.recruitJobMation.name;
+                return d.recruitJobMation?.name;
             }},
             { field: 'state', title: '状态', align: 'left', width: 80, templet: function (d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("bossPersonRequireState", 'id', d.state, 'name');

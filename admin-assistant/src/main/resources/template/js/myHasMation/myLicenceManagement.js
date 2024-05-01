@@ -26,7 +26,7 @@ layui.config({
 			{ field: 'name', title: '证照名称', align: 'left', width: 140 },
 			{ field: 'licenceNum', title: '证照编号', align: 'left', width: 160 },
 			{ field: 'licenceAdmin', title: '管理员', align: 'left', width: 120, templet: function(d) {
-				return isNull(d.licenceAdminMation) ? '' : d.licenceAdminMation.name;
+				return d.licenceAdminMation?.name;
 			}},
 		]],
 		done: function(json) {

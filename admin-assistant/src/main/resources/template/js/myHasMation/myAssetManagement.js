@@ -32,7 +32,7 @@ layui.config({
 			}},
 			{ field: 'assetNum', title: '资产编号', align: 'left', width: 150 },
 			{ field: 'assetAdminMation', title: '管理员', width: 120, templet: function(d) {
-				return isNull(d.assetAdminMation) ? '' : d.assetAdminMation.name;
+				return d.assetAdminMation?.name;
 			}},
 			{ field: 'createTime', title: '申领时间', align: 'center', width: 150 },
 		]],
