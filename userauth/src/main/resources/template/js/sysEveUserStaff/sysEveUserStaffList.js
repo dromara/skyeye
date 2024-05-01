@@ -62,14 +62,8 @@ layui.config({
 	        }},
 			{ field: 'jobNumber', title: '工号', rowspan: '3', align: 'left', width: 100, fixed: 'left'},
 	        { field: 'staffType', title: '类型', rowspan: '3', align: 'left', width: 90, templet: function (d) {
-				if (d.staffType == 1) {
-					return '普通员工';
-				} else if (d.staffType == 2) {
-					return '教职工';
-				} else {
-					return '参数错误';
-				}
-	        }},
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("userStaffType", 'id', d.staffType, 'name');
+			}},
 	        { field: 'email', title: '邮箱', rowspan: '3', align: 'left', width: 170 },
 	        { field: 'userPhoto', title: '头像', rowspan: '3', align: 'center', width: 60, templet: function (d) {
 				if (isNull(d.userPhoto)) {

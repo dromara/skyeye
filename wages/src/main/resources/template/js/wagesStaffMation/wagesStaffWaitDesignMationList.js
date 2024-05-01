@@ -12,7 +12,6 @@ layui.config({
 		form = layui.form,
 		table = layui.table,
 		soulTable = layui.soulTable;
-	var selTemplate = getFileContent('tpl/template/select-option.tpl')
 
 	// 待设定薪资员工列表
 	table.render({
@@ -36,13 +35,7 @@ layui.config({
 	        	return d.jobNumber + '_' + d.userName;
 	        }},
 	        { field: 'staffType', title: '类型', rowspan: '3', align: 'left', width: 90, templet: function (d) {
-	        	if(d.staffType == 1){
-	        		return '普通员工';
-	        	} else if (d.staffType == 2){
-	        		return '教职工';
-	        	} else {
-	        		return '参数错误';
-	        	}
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("userStaffType", 'id', d.staffType, 'name');
 	        }},
 	        { field: 'email', title: '邮箱', rowspan: '3', align: 'left', width: 170 },
 	        { field: 'userPhoto', title: '头像', rowspan: '3', align: 'center', width: 60, templet: function (d) {
@@ -69,12 +62,13 @@ layui.config({
 	        { field: 'jobName', title: '职位', align: 'left', width: 120}
 	       ]
 	    ],
-	    done: function(json) {
-	    	if(!loadCompany){
-	    		initCompany();
-	    	}
+	    done: function(res) {
 	    	soulTable.render(this);
     		matchingLanguage();
+
+			initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入姓名，工号", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -87,57 +81,6 @@ layui.config({
 			systemCommonUtil.showPicImg(fileBasePath + data.userPhoto);
 		}
     });
-
-	var loadCompany = false;
-	// 初始化公司
-	function initCompany(){
-		loadCompany = true;
-		systemCommonUtil.getSysCompanyList(function (json) {
-			// 加载企业数据
-			$("#companyList").html(getDataUseHandlebars(selTemplate, json));
-			form.render('select');
-		});
-	}
-
-	// 初始化部门
-	function initDepartment(){
-		if (isNull($("#companyList").val())) {
-			$("#companyList").val('')
-			form.render('select');
-		} else {
-			showGrid({
-				id: "departmentList",
-				url: reqBasePath + "companydepartment007",
-				params: {companyId: $("#companyList").val()},
-				pagination: false,
-				method: 'POST',
-				template: selTemplate,
-				ajaxSendLoadBefore: function(hdb) {},
-				ajaxSendAfter:function (json) {
-					form.render('select');
-				}
-			});
-		}
-	}
-
-	function initJob(){
-		// 根据部门id获取岗位集合
-		systemCommonUtil.queryJobListByDepartmentId($("#departmentList").val(), function(data) {
-			$("#jobList").html(getDataUseHandlebars(selTemplate, data));
-			form.render('select');
-		});
-	}
-
-	// 公司监听事件
-	form.on('select(companyList)', function(data) {
-		initDepartment();
-		initJob();
-	});
-
-	// 部门监听事件
-	form.on('select(departmentList)', function(data) {
-		initJob();
-	});
 
 	// 薪资设定
 	function wagesDesign(data) {
@@ -152,37 +95,19 @@ layui.config({
 				loadTable();
 			}});
 	}
-	
+
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-        	refreshTable();
-        }
-        return false;
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
 	});
 
-    $("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
-    function loadTable() {
-    	table.reloadData("messageTable", {where: getTableParams()});
-    }
-    
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-    
-    function getTableParams() {
-    	return {
-			companyId: $("#companyList").val(),
-			departmentId: $("#departmentList").val(),
-			jobId: $("#jobList").val(),
-			userName: $("#userName").val(),
-			jobNumber: $("#jobNumber").val(),
-			userSex: $("#userSex").val()
-		};
-    }
+	function loadTable() {
+		table.reloadData("messageTable", {where: getTableParams()});
+	}
+
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
     
     exports('wagesStaffWaitDesignMationList', {});
 });
