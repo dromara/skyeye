@@ -54,59 +54,6 @@
     background-color: rgba(0, 0, 0, .38);
 }
 
-.ver-center{
-    align-items: Center;
-    padding-top: 8px;
-    min-height: 32px;
-    font-family: initial;
-}
-
-.sec-clsss{
-    background-color: rgba(0,0,0,0.3) !important;
-    border: 1px solid rgba(255, 255, 255, 0.54);
-}
-
-.sec-clsss .layui-layer-title{
-    background-color: rgba(0, 0, 0, 0);
-    margin-left: 10px;
-    margin-right: 10px;
-    color: #fff;
-    padding-left: 0px;
-}
-
-.sec-clsss .layui-layer-setwin a{
-    background-color: white;
-    border-radius: 10px;
-    padding-right: -8px;
-    background-position-x: 2px;
-    background-position-y: -39px;
-}
-
-.sec-clsss .layui-layer-content{
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-.sec-clsss-btn{
-    float: left !important;
-    position: relative !important;
-}
-
-.layui-col-space10>* {
-    padding: 5px;
-}
-
-.left-menu{
-    border-right: 2px solid gainsboro;
-    height: 100%;
-}
-
-.center-content{
-    height: 100%;
-}
-
 /*layer皮肤*/
 body .layer-ext-winconfirm {
     min-width: 360px;
@@ -260,12 +207,12 @@ body .layer-ext-winconfirm .layui-layer-content {
 
 /***非表格分页加载插件start***/
 .row-model{
-	margin-left: 0px;
-	margin-right: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 .pageInput{
-	height: 26px !important;
+    height: 26px !important;
     width: 40px !important;
     border: 1px solid gainsboro;
     border-radius: 3px;
@@ -285,11 +232,11 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .pagination>li>a, .pagination>li>span{
-	padding: 10px 12px;
+    padding: 10px 12px;
 }
 
 .pageBtn{
-	padding: 0px !important;
+    padding: 0px !important;
 }
 /***非表格分页加载插件end***/
 
@@ -448,12 +395,12 @@ body .layer-ext-winconfirm .layui-layer-content {
 /***系统icon样式start***/
 
 .item{
-	padding-top: 10px;
-	height: 140px;
+    padding-top: 10px;
+    height: 140px;
 }
 
 .icon-item{
-	text-align: center;
+    text-align: center;
 }
 
 .icon-item>i{
@@ -463,15 +410,15 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .icon-class{
-	height: 30px;
+    height: 30px;
 }
 
 .icon-item>span{
 }
 
 .icon-item>div{
-	text-align: center;
-	margin-top: 10px;
+    text-align: center;
+    margin-top: 10px;
 }
 
 /***系统icon样式end***/
@@ -495,11 +442,11 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .pic-item:HOVER{
-	border: 1px solid #63acff;
+    border: 1px solid #63acff;
 }
 
 .pic-item-div-top{
-	text-align: center;
+    text-align: center;
     width: 135px;
     height: 77px;
     margin: 2px 2px;
@@ -513,7 +460,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .pic-item-div>div{
-	text-align: center;
+    text-align: center;
 }
 
 /***系统桌面背景图片样式end***/
@@ -521,7 +468,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 
 /***common start***/
 .noMation{
-	text-align: center;
+    text-align: center;
 }
 
 .red{
@@ -530,7 +477,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .yl{
-	margin-top: 8px;
+    margin-top: 8px;
     margin-left: 8px;
 }
 /***common end***/
@@ -538,26 +485,26 @@ body .layer-ext-winconfirm .layui-layer-content {
 /***showmode start***/
 
 .pagination{
-	width: 100%;
+    width: 100%;
 }
 
 .ali{
-	float: left;
+    float: left;
     width: 35px;
     height: 35px;
 }
 
 .ali>.geraltTb_{
-	padding: 0px !important;
-	height: 30px;
+    padding: 0px !important;
+    height: 30px;
     width: 30px;
     line-height: 30px;
     font-weight: 300;
 }
 
 .ali>.pageBtn{
-	padding: 0px !important;
-	height: 30px;
+    padding: 0px !important;
+    height: 30px;
     width: 30px;
     line-height: 30px;
     font-weight: 300;
@@ -566,16 +513,16 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .ali>.geraltTb_pager{
-	padding: 0px !important;
-	height: 30px;
+    padding: 0px !important;
+    height: 30px;
     width: 30px;
     line-height: 30px;
     font-weight: 300;
 }
 
 .ali>.page_btn{
-	padding: 0px !important;
-	height: 30px;
+    padding: 0px !important;
+    height: 30px;
     width: 30px;
     line-height: 30px;
     font-weight: 300;
@@ -583,8 +530,8 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .ali>.page_btn_dis{
-	padding: 0px !important;
-	height: 30px;
+    padding: 0px !important;
+    height: 30px;
     width: 30px;
     line-height: 30px;
     font-weight: 300;
@@ -592,7 +539,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .pageBtn{
-	width: 300px !important;
+    width: 300px !important;
 }
 
 #skippage{
@@ -606,334 +553,334 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 #showFormshowFoot{
-	margin-top: 20px;
+    margin-top: 20px;
 }
 
 .pagec>ul{
-	text-align: center;
-	margin-top: 20px;
+    text-align: center;
+    margin-top: 20px;
 }
 
 /***showmode end***/
 
 /*** 上传 start ***/
 .upload,.upload li {
-	margin: 0;
-	padding: 0;
-	list-style-type: none
+    margin: 0;
+    padding: 0;
+    list-style-type: none
 }
 
 .upload {
-	border: 1px solid #d7d7d7;
-	padding: 2px 2px 2px 2px;
-	zoom: 1;
-	position: relative;
-	width: calc(100% - 6px);
-	background-color: #fff;
+    border: 1px solid #d7d7d7;
+    padding: 2px 2px 2px 2px;
+    zoom: 1;
+    position: relative;
+    width: calc(100% - 6px);
+    background-color: #fff;
     margin-bottom: 5px;
 }
 
 .upload:after {
-	display: block;
-	clear: both;
-	content: "";
-	visibility: hidden;
-	height: 0
+    display: block;
+    clear: both;
+    content: "";
+    visibility: hidden;
+    height: 0
 }
 
 .upload .item {
     width: 60px;
     height: 50px;
-	float: left;
-	margin: 0 5px 0px 0;
-	background: #f8f8f8;
-	position: relative;
-	border-radius: 4px;
-	background-size: contain;
-	background-position: center center;
-	background-repeat: no-repeat;
-	border: 1px solid #d7d7d7;
-	overflow: hidden
+    float: left;
+    margin: 0 5px 0px 0;
+    background: #f8f8f8;
+    position: relative;
+    border-radius: 4px;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    border: 1px solid #d7d7d7;
+    overflow: hidden
 }
 
 .upload .item .filename {
-	font-size: 12px;
-	width: 90%;
-	left: 5%;
-	position: absolute;
-	top: 70%;
-	line-height: 1.3em;
-	height: 2.6em;
-	overflow: hidden;
-	text-align: center
+    font-size: 12px;
+    width: 90%;
+    left: 5%;
+    position: absolute;
+    top: 70%;
+    line-height: 1.3em;
+    height: 2.6em;
+    overflow: hidden;
+    text-align: center
 }
 
 .upload .item.error {
-	border-color: #f20
+    border-color: #f20
 }
 
 .upload .item.error::after {
-	content: "";
-	background: rgba(255,255,255,.8);
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	z-index: 9;
-	display: block;
-	line-height: 100%;
-	text-align: center
+    content: "";
+    background: rgba(255,255,255,.8);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+    display: block;
+    line-height: 100%;
+    text-align: center
 }
 
 .upload .item.error::before {
-	content: attr(data-error);
-	position: absolute;
-	padding: 10px;
-	z-index: 10;
-	display: block;
-	font-size: 12px;
-	color: #f20;
-	top: 0
+    content: attr(data-error);
+    position: absolute;
+    padding: 10px;
+    z-index: 10;
+    display: block;
+    font-size: 12px;
+    color: #f20;
+    top: 0
 }
 
 .upload .item svg.icon {
-	position: absolute;
-	height: 40%;
-	top: 20%;
-	left: 0;
-	width: 100%
+    position: absolute;
+    height: 40%;
+    top: 20%;
+    left: 0;
+    width: 100%
 }
 
 .upload .item svg.progress {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	height: 50%
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50%
 }
 
 .upload .item .progressnum {
-	width: 40px;
-	height: 40px;
-	border-radius: 40px;
-	text-align: center;
-	line-height: 40px;
-	font-size: 12px;
-	color: #fff;
-	position: absolute;
-	left: 50%;
-	margin-left: -20px;
-	top: 50%;
-	margin-top: -20px;
-	background: rgba(17,89,164,.5)
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    text-align: center;
+    line-height: 40px;
+    font-size: 12px;
+    color: #fff;
+    position: absolute;
+    left: 50%;
+    margin-left: -20px;
+    top: 50%;
+    margin-top: -20px;
+    background: rgba(17,89,164,.5)
 }
 
 .upload .item.add svg {
-	top: 30%
+    top: 30%
 }
 
 .upload .item.success::after {
-	position: absolute;
-	background: rgba(0,0,0,.6);
-	content: "";
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	opacity: 0;
-	transition: all .3s
+    position: absolute;
+    background: rgba(0,0,0,.6);
+    content: "";
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0;
+    transition: all .3s
 }
 
 .upload .item.success:hover::after {
-	opacity: 1
+    opacity: 1
 }
 
 .upload .item.success svg.delete,.upload .item.success svg.look {
-	position: absolute;
-	height: 30px;
-	top: 50%;
-	margin-top: -15px;
-	left: 50%;
-	color: #fff;
-	z-index: 10;
-	transition: all .3s;
-	cursor: pointer
+    position: absolute;
+    height: 30px;
+    top: 50%;
+    margin-top: -15px;
+    left: 50%;
+    color: #fff;
+    z-index: 10;
+    transition: all .3s;
+    cursor: pointer
 }
 
 .upload .item.success svg.delete {
-	margin-left: -35px;
-	height: 26px;
-	margin-top: -14px;
-	left: -30px
+    margin-left: -35px;
+    height: 26px;
+    margin-top: -14px;
+    left: -30px
 }
 
 .upload .item.success svg.look {
-	margin-left: 10px;
-	left: 105%
+    margin-left: 10px;
+    left: 105%
 }
 
 .upload .item.success:hover svg.delete {
-	margin-left: -35px;
-	left: 50%;
-	height: 26px;
-	margin-top: -14px;
-	transition: all .3s
+    margin-left: -35px;
+    left: 50%;
+    height: 26px;
+    margin-top: -14px;
+    transition: all .3s
 }
 
 .upload .item.success:hover svg.look {
-	margin-left: 10px;
-	left: 50%;
-	transition: all .3s
+    margin-left: 10px;
+    left: 50%;
+    transition: all .3s
 }
 
 .upload .item.delete {
-	opacity: .2;
-	transition: all .3s
+    opacity: .2;
+    transition: all .3s
 }
 
 .upload input[type=file] {
-	display: none
+    display: none
 }
 
 .upload.multiple.empty {
     height: 60px;
-	width: calc(100% - 6px);
+    width: calc(100% - 6px);
 }
 
 .upload.multiple li{
-	height: 60px !important;
+    height: 60px !important;
 }
 
 .upload.multiple.empty .add {
-	width: 100%;
-	position: absolute;
-	top: 50%;
-	margin-top: -30px;
-	height: 36px;
-	background: 0;
-	border: 0;
-	left: 0;
-	overflow: inherit
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    margin-top: -30px;
+    height: 36px;
+    background: 0;
+    border: 0;
+    left: 0;
+    overflow: inherit
 }
 
 .upload.multiple.empty .add::after {
-	content: "选择";
-	width: 20%;
+    content: "选择";
+    width: 20%;
     top: 10px;
-	position: absolute;
-	height: 36px;
-	background: #0e90d2;
-	left: 40%;
-	/*margin-left: -90px;*/
-	display: block;
-	z-index: 9;
-	visibility: visible;
-	text-align: center;
-	color: #fff;
-	line-height: 36px;
-	font-size: 14px;
-	border: 0;
-	border-radius: 0
+    position: absolute;
+    height: 36px;
+    background: #0e90d2;
+    left: 40%;
+    /*margin-left: -90px;*/
+    display: block;
+    z-index: 9;
+    visibility: visible;
+    text-align: center;
+    color: #fff;
+    line-height: 36px;
+    font-size: 14px;
+    border: 0;
+    border-radius: 0
 }
 
 .upload.multiple.empty .add:hover::after {
-	background-color: #0a70c2
+    background-color: #0a70c2
 }
 
 .upload.multiple.empty .add svg {
-	display: none
+    display: none
 }
 
 .upload.one {
     width: 70px;
     height: 70px;
-	padding: 0
+    padding: 0
 }
 
 .upload.one li {
-	height: 100%;
-	width: 100%;
-	margin: 0;
-	padding: 0
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0
 }
 
 .upload.one li.add svg {
-	opacity: 0;
-	transition: all .3s;
-	margin-top: -30px
+    opacity: 0;
+    transition: all .3s;
+    margin-top: -30px
 }
 
 .upload.one li.add:hover svg {
-	opacity: 1;
-	transition: all .3s
+    opacity: 1;
+    transition: all .3s
 }
 
 .upload.one.empty li.add svg {
-	opacity: 1;
-	transition: all .3s
+    opacity: 1;
+    transition: all .3s
 }
 
 .upload.one .item {
-	border: 0;
-	border-radius: 0
+    border: 0;
+    border-radius: 0
 }
 
 .upload.one .add {
-	position: absolute;
-	top: 10%;
+    position: absolute;
+    top: 10%;
     width: 100%;
-	right: 0;
-	left: 0;
-	background: 0
+    right: 0;
+    left: 0;
+    background: 0
 }
 
 .upload.one .item.success svg.delete,.upload.one .item.success svg.look {
-	top: 0;
-	margin-top: 5px
+    top: 0;
+    margin-top: 5px
 }
 
 .upload.one .item.success svg.look {
-	margin-top: 3px
+    margin-top: 3px
 }
 
 .upload.dragenter {
-	border: 2px dashed #d7d7d7;
-	box-shadow: 0 1px 5px rgba(0,0,0,.7);
-	display: table
+    border: 2px dashed #d7d7d7;
+    box-shadow: 0 1px 5px rgba(0,0,0,.7);
+    display: table
 }
 
 .upload.dragenter::after {
-	content: "";
-	background: rgba(255,255,255,.9);
-	z-index: 998;
-	position: absolute;
-	left: 0;
-	top: 0;
-	height: 100%;
-	width: 100%;
-	vertical-align: middle;
-	display: table-cell;
-	visibility: visible
+    content: "";
+    background: rgba(255,255,255,.9);
+    z-index: 998;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    vertical-align: middle;
+    display: table-cell;
+    visibility: visible
 }
 
 .upload.dragenter::before {
-	content: "将文件拖到这里上传";
-	position: absolute;
-	width: 100%;
-	top: 50%;
-	z-index: 999;
-	width: 100%;
-	text-align: center;
-	margin-top: -12px;
-	color: #999
+    content: "将文件拖到这里上传";
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    z-index: 999;
+    width: 100%;
+    text-align: center;
+    margin-top: -12px;
+    color: #999
 }
 
 .upload.one li.add svg{
-	margin-top: unset;
+    margin-top: unset;
 }
 
 /*** 上传 end ***/
 
 .cursor{
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .icon-drawer {
@@ -948,7 +895,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .icon-drawer-icon{
-	width: 16px;
+    width: 16px;
     height: 16px;
     float: left;
     margin-top: 3px;
@@ -958,12 +905,12 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .icon-drawer-icon img{
-	width: 100%;
-	max-height: 100%;
+    width: 100%;
+    max-height: 100%;
 }
 
 .title-icon{
-	width: 16px;
+    width: 16px;
     height: 16px;
     float: left;
     margin-top: 7px;
@@ -971,456 +918,860 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .win-title-class{
-	margin-left: 5px;
+    margin-left: 5px;
 }
 
 .icon-child{
-	display: none;
+    display: none;
 }
 
 /*** 颜色选择器开始 ***/
 .layui-colorpicker {
-	width: 19px;
-	height: 19px;
-	border: 1px solid #e6e6e6;
-	padding: 4px;
-	border-radius: 2px;
-	line-height: 24px;
-	display: inline-block;
-	cursor: pointer;
-	transition: all .3s;
-	-webkit-transition: all .3s
+    width: 19px;
+    height: 19px;
+    border: 1px solid #e6e6e6;
+    padding: 4px;
+    border-radius: 2px;
+    line-height: 24px;
+    display: inline-block;
+    cursor: pointer;
+    transition: all .3s;
+    -webkit-transition: all .3s
 }
 
 .layui-colorpicker:hover {
-	border-color: #d2d2d2
+    border-color: #d2d2d2
 }
 
 .layui-colorpicker.layui-colorpicker-lg {
-	width: 34px;
-	height: 34px;
-	line-height: 32px
+    width: 34px;
+    height: 34px;
+    line-height: 32px
 }
 
 .layui-colorpicker.layui-colorpicker-sm {
-	width: 24px;
-	height: 24px;
-	line-height: 22px
+    width: 24px;
+    height: 24px;
+    line-height: 22px
 }
 
 .layui-colorpicker.layui-colorpicker-xs {
-	width: 22px;
-	height: 22px;
-	line-height: 20px
+    width: 22px;
+    height: 22px;
+    line-height: 20px
 }
 
 .layui-colorpicker-trigger-bgcolor {
-	display: block;
-	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
-	border-radius: 2px
+    display: block;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+    border-radius: 2px
 }
 
 .layui-colorpicker-trigger-span {
-	display: block;
-	height: 100%;
-	box-sizing: border-box;
-	border: 1px solid rgba(0, 0, 0, .15);
-	border-radius: 2px;
-	text-align: center
+    display: block;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 2px;
+    text-align: center
 }
 
 .layui-colorpicker-trigger-i {
-	display: inline-block;
-	color: #FFF;
-	font-size: 12px
+    display: inline-block;
+    color: #FFF;
+    font-size: 12px
 }
 
 .layui-colorpicker-trigger-i.layui-icon-close {
-	color: #999
+    color: #999
 }
 
 .layui-colorpicker-main {
-	position: absolute;
-	z-index: 66666666;
-	width: 280px;
-	padding: 7px;
-	background: #FFF;
-	border: 1px solid #d2d2d2;
-	border-radius: 2px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, .12)
+    position: absolute;
+    z-index: 66666666;
+    width: 280px;
+    padding: 7px;
+    background: #FFF;
+    border: 1px solid #d2d2d2;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12)
 }
 
 .layui-colorpicker-main-wrapper {
-	height: 180px;
-	position: relative
+    height: 180px;
+    position: relative
 }
 
 .layui-colorpicker-basis {
-	width: 260px;
-	height: 100%;
-	position: relative
+    width: 260px;
+    height: 100%;
+    position: relative
 }
 
 .layui-colorpicker-basis-white {
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	background: linear-gradient(90deg, #FFF, hsla(0, 0%, 100%, 0))
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(90deg, #FFF, hsla(0, 0%, 100%, 0))
 }
 
 .layui-colorpicker-basis-black {
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	background: linear-gradient(0deg, #000, transparent)
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(0deg, #000, transparent)
 }
 
 .layui-colorpicker-basis-cursor {
-	width: 10px;
-	height: 10px;
-	border: 1px solid #FFF;
-	border-radius: 50%;
-	position: absolute;
-	top: -3px;
-	right: -3px;
-	cursor: pointer
+    width: 10px;
+    height: 10px;
+    border: 1px solid #FFF;
+    border-radius: 50%;
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    cursor: pointer
 }
 
 .layui-colorpicker-side {
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 12px;
-	height: 100%;
-	background: linear-gradient(red, #FF0, #0F0, #0FF, #00F, #F0F, red)
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 100%;
+    background: linear-gradient(red, #FF0, #0F0, #0FF, #00F, #F0F, red)
 }
 
 .layui-colorpicker-side-slider {
-	width: 100%;
-	height: 5px;
-	box-shadow: 0 0 1px #888;
-	box-sizing: border-box;
-	background: #FFF;
-	border-radius: 1px;
-	border: 1px solid #f0f0f0;
-	cursor: pointer;
-	position: absolute;
-	left: 0
+    width: 100%;
+    height: 5px;
+    box-shadow: 0 0 1px #888;
+    box-sizing: border-box;
+    background: #FFF;
+    border-radius: 1px;
+    border: 1px solid #f0f0f0;
+    cursor: pointer;
+    position: absolute;
+    left: 0
 }
 
 .layui-colorpicker-main-alpha {
-	display: none;
-	height: 12px;
-	margin-top: 7px;
-	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)
+    display: none;
+    height: 12px;
+    margin-top: 7px;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)
 }
 
 .layui-colorpicker-alpha-bgcolor {
-	height: 100%;
-	position: relative
+    height: 100%;
+    position: relative
 }
 
 .layui-colorpicker-alpha-slider {
-	width: 5px;
-	height: 100%;
-	box-shadow: 0 0 1px #888;
-	box-sizing: border-box;
-	background: #FFF;
-	border-radius: 1px;
-	border: 1px solid #f0f0f0;
-	cursor: pointer;
-	position: absolute;
-	top: 0
+    width: 5px;
+    height: 100%;
+    box-shadow: 0 0 1px #888;
+    box-sizing: border-box;
+    background: #FFF;
+    border-radius: 1px;
+    border: 1px solid #f0f0f0;
+    cursor: pointer;
+    position: absolute;
+    top: 0
 }
 
 .layui-colorpicker-main-pre {
-	padding-top: 7px;
-	font-size: 0
+    padding-top: 7px;
+    font-size: 0
 }
 
 .layui-colorpicker-pre {
-	width: 20px;
-	height: 20px;
-	border-radius: 2px;
-	display: inline-block;
-	margin-left: 6px;
-	margin-bottom: 7px;
-	cursor: pointer
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-left: 6px;
+    margin-bottom: 7px;
+    cursor: pointer
 }
 
 .layui-colorpicker-pre:nth-child(11n+1) {
-	margin-left: 0
+    margin-left: 0
 }
 
 .layui-colorpicker-pre-isalpha {
-	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)
 }
 
 .layui-colorpicker-pre.layui-this {
-	box-shadow: 0 0 3px 2px rgba(0, 0, 0, .15)
+    box-shadow: 0 0 3px 2px rgba(0, 0, 0, .15)
 }
 
 .layui-colorpicker-pre>div {
-	height: 100%;
-	border-radius: 2px
+    height: 100%;
+    border-radius: 2px
 }
 
 .layui-colorpicker-main-input {
-	text-align: right;
-	padding-top: 7px
+    text-align: right;
+    padding-top: 7px
 }
 
 .layui-colorpicker-main-input .layui-btn-container .layui-btn {
-	margin: 0 0 0 10px
+    margin: 0 0 0 10px
 }
 
 .layui-colorpicker-main-input div.layui-inline {
-	float: left;
-	margin-right: 10px;
-	font-size: 14px
+    float: left;
+    margin-right: 10px;
+    font-size: 14px
 }
 
 .layui-colorpicker-main-input input.layui-input {
-	width: 150px;
-	height: 30px;
-	color: #666
+    width: 150px;
+    height: 30px;
+    color: #666
 }
 /*** 颜色选择器结束 ***/
 
 /*** 滑块开始 ***/
 .layui-slider {
-	height: 4px;
-	background: #e2e2e2;
-	border-radius: 3px;
-	position: relative;
-	cursor: pointer
+    height: 4px;
+    background: #e2e2e2;
+    border-radius: 3px;
+    position: relative;
+    cursor: pointer
 }
 
 .layui-slider-bar {
-	border-radius: 3px;
-	position: absolute;
-	height: 100%
+    border-radius: 3px;
+    position: absolute;
+    height: 100%
 }
 
 .layui-slider-step {
-	position: absolute;
-	top: 0;
-	width: 4px;
-	height: 4px;
-	border-radius: 50%;
-	background: #FFF;
-	-webkit-transform: translateX(-50%);
-	transform: translateX(-50%)
+    position: absolute;
+    top: 0;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #FFF;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%)
 }
 
 .layui-slider-wrap {
-	width: 36px;
-	height: 36px;
-	position: absolute;
-	top: -16px;
-	-webkit-transform: translateX(-50%);
-	transform: translateX(-50%);
-	z-index: 10;
-	text-align: center
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    top: -16px;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    z-index: 10;
+    text-align: center
 }
 
 .layui-slider-wrap-btn {
-	width: 12px;
-	height: 12px;
-	border-radius: 50%;
-	background: #FFF;
-	display: inline-block;
-	vertical-align: middle;
-	cursor: pointer;
-	transition: .3s
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #FFF;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: .3s
 }
 
 .layui-slider-wrap:after {
-	content: "";
-	height: 100%;
-	display: inline-block;
-	vertical-align: middle
+    content: "";
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle
 }
 
 .layui-slider-wrap-btn .layui-slider-hover,
 .layui-slider-wrap-btn:hover {
-	transform: scale(1.2)
+    transform: scale(1.2)
 }
 
 .layui-slider-wrap-btn .layui-disabled:hover {
-	transform: scale(1)!important
+    transform: scale(1)!important
 }
 
 .layui-slider-tips {
-	position: absolute;
-	top: -42px;
-	z-index: 66666666;
-	white-space: nowrap;
-	display: none;
-	-webkit-transform: translateX(-50%);
-	transform: translateX(-50%);
-	color: #FFF;
-	background: #000;
-	border-radius: 3px;
-	height: 25px;
-	line-height: 25px;
-	padding: 0 10px
+    position: absolute;
+    top: -42px;
+    z-index: 66666666;
+    white-space: nowrap;
+    display: none;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    color: #FFF;
+    background: #000;
+    border-radius: 3px;
+    height: 25px;
+    line-height: 25px;
+    padding: 0 10px
 }
 
 .layui-slider-tips:after {
-	content: '';
-	position: absolute;
-	bottom: -12px;
-	left: 50%;
-	margin-left: -6px;
-	width: 0;
-	height: 0;
-	border-width: 6px;
-	border-style: solid;
-	border-color: #000 transparent transparent
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    margin-left: -6px;
+    width: 0;
+    height: 0;
+    border-width: 6px;
+    border-style: solid;
+    border-color: #000 transparent transparent
 }
 
 .layui-slider-input {
-	width: 70px;
-	height: 32px;
-	border: 1px solid #e6e6e6;
-	border-radius: 3px;
-	font-size: 16px;
-	line-height: 32px;
-	position: absolute;
-	right: 0;
-	top: -15px
+    width: 70px;
+    height: 32px;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    font-size: 16px;
+    line-height: 32px;
+    position: absolute;
+    right: 0;
+    top: -15px
 }
 
 .layui-slider-input-btn {
-	display: none;
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 20px;
-	height: 100%;
-	border-left: 1px solid #d2d2d2
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 100%;
+    border-left: 1px solid #d2d2d2
 }
 
 .layui-slider-input-btn i {
-	cursor: pointer;
-	position: absolute;
-	right: 0;
-	bottom: 0;
-	width: 20px;
-	height: 50%;
-	font-size: 12px;
-	line-height: 16px;
-	text-align: center;
-	color: #999
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 20px;
+    height: 50%;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    color: #999
 }
 
 .layui-slider-input-btn i:first-child {
-	top: 0;
-	border-bottom: 1px solid #d2d2d2
+    top: 0;
+    border-bottom: 1px solid #d2d2d2
 }
 
 .layui-slider-input-txt {
-	height: 100%;
-	font-size: 14px
+    height: 100%;
+    font-size: 14px
 }
 
 .layui-slider-input-txt input {
-	height: 100%;
-	border: none
+    height: 100%;
+    border: none
 }
 
 .layui-slider-input-btn i:hover {
-	color: #009688
+    color: #009688
 }
 
 .layui-slider-vertical {
-	width: 4px;
-	margin-left: 34px
+    width: 4px;
+    margin-left: 34px
 }
 
 .layui-slider-vertical .layui-slider-bar {
-	width: 4px
+    width: 4px
 }
 
 .layui-slider-vertical .layui-slider-step {
-	top: auto;
-	left: 0;
-	-webkit-transform: translateY(50%);
-	transform: translateY(50%)
+    top: auto;
+    left: 0;
+    -webkit-transform: translateY(50%);
+    transform: translateY(50%)
 }
 
 .layui-slider-vertical .layui-slider-wrap {
-	top: auto;
-	left: -16px;
-	-webkit-transform: translateY(50%);
-	transform: translateY(50%)
+    top: auto;
+    left: -16px;
+    -webkit-transform: translateY(50%);
+    transform: translateY(50%)
 }
 
 .layui-slider-vertical .layui-slider-tips {
-	top: auto;
-	left: 2px
+    top: auto;
+    left: 2px
 }
 
 @media \0screen {
-	.layui-slider-wrap-btn {
-		margin-left: -20px
-	}
-	.layui-slider-vertical .layui-slider-wrap-btn {
-		margin-left: 0;
-		margin-bottom: -20px
-	}
-	.layui-slider-vertical .layui-slider-tips {
-		margin-left: -8px
-	}
-	.layui-slider>span {
-		margin-left: 8px
-	}
+    .layui-slider-wrap-btn {
+        margin-left: -20px
+    }
+    .layui-slider-vertical .layui-slider-wrap-btn {
+        margin-left: 0;
+        margin-bottom: -20px
+    }
+    .layui-slider-vertical .layui-slider-tips {
+        margin-left: -8px
+    }
+    .layui-slider>span {
+        margin-left: 8px
+    }
 }
 
 .layui-auxiliar-moving {
-	position: fixed;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	width: 100%;
-	height: 100%;
-	background: 0 0;
-	z-index: 9999999999
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: 0 0;
+    z-index: 9999999999
 }
 /*** 滑块结束 ***/
 
 .layui-form-item{
-	clear: none;
+    clear: none;
 }
+
+/*** 小程序页面管理start ***/
+.smpro{
+    height: calc(100vh - 45px);
+}
+
+.hei-100-per{
+    height: 100%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.left-menu{
+    border-right: 2px solid gainsboro;
+    height: 100%;
+}
+
+.center-content{
+    height: 100%;
+}
+
+.right-menu{
+    border-left: 2px solid gainsboro;
+    height: 100%;
+}
+
+.blue{
+    color: blue;
+    margin-left: 10px;
+}
+
+.tab__item{
+    background-color: rgb(248,248,248);
+    height: calc(100vh - 105px);
+}
+
+.page__bd li{
+    background-color: white;
+    margin-top: 10px;
+}
+
+.page__bd li.js_show .weui-flex {
+    opacity:.4
+}
+
+.page__bd li.js_show .page__category {
+    height:auto
+}
+
+.page__bd li.js_show .page__category-content {
+    opacity:1;
+    -webkit-transform:translateY(0);
+    transform:translateY(0);
+    padding-left: 20px;
+}
+
+.page__category-content>a{
+    font-size: 15px !important;
+    padding-bottom: 5px;
+}
+
+.page__category-content>a>.weui-cell__bd{
+    height: 30px;
+}
+
+.page__bd li:first-child {
+    margin-top:0
+}
+
+.page__category {
+    height:0;
+    overflow:hidden
+}
+
+.page__category-content {
+    opacity:0;
+    -webkit-transform:translateY(-50%);
+    transform:translateY(-50%);
+    -webkit-transition:.3s;
+    transition:.3s
+}
+
+.weui-flex {
+    padding: 10px 10px;
+    -webkit-box-align:center;
+    -webkit-align-items:center;
+    align-items:center;
+    -webkit-transition:.3s;
+    transition:.3s
+}
+
+.weui-cells {
+    margin-top:0
+}
+
+.weui-cells:after,.page.home .weui-cells:before {
+    display:none
+}
+
+.weui-cell {
+    padding-left:20px;
+    padding-right:20px
+}
+
+.weui-cell:before {
+    left:20px;
+    right:20px
+}
+
+#groupTitle{
+    float: right;
+}
+
+#memberList>div{
+    padding: 10px;
+}
+
+.member-list>div>.layui-card{
+    background-color: white;
+    width: 100%;
+    height: 110px;
+    overflow: hidden;
+}
+
+.layui-col-space10>* {
+    padding: 5px;
+}
+
+.member-list-div{
+    height: calc(100vh - 140px);
+}
+
+.sec-clsss{
+    background-color: rgba(0,0,0,0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.54);
+}
+
+.sec-clsss .layui-layer-title{
+    background-color: rgba(0, 0, 0, 0);
+    margin-left: 10px;
+    margin-right: 10px;
+    color: #fff;
+    padding-left: 0px;
+}
+
+.sec-clsss .layui-layer-setwin a{
+    background-color: white;
+    border-radius: 10px;
+    padding-right: -8px;
+    background-position-x: 2px;
+    background-position-y: -39px;
+}
+
+.sec-clsss .layui-layer-content{
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.sec-clsss-btn{
+    float: left !important;
+    position: relative !important;
+}
+
+.right{
+    text-align: right;
+}
+
+.ver-center{
+    align-items: Center;
+    padding-top: 8px;
+    min-height: 32px;
+    font-family: initial;
+}
+
+.padding-l-r-10{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/* 样式1 */
+.iphone {
+    box-shadow: inset 0 0 3px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px #999, 0 0 30px 0px rgba(0, 0, 0, 0.7);
+    border: 5px solid #d9dbdc;
+    background: #f8f8f8;
+    padding: 15px;
+    border-radius: 50px;
+    width: 50%;
+    margin: 0 auto;
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8);
+    min-width: 400px;
+    height: 100vh;
+    margin-top: -45px;
+}
+.iphone-top {
+    padding: 5px 80px 20px;
+    position: relative;
+}
+.iphone-top .speaker {
+    display: block;
+    width: 70px;
+    height: 6px;
+    margin: 0 auto;
+    border-radius: 6px;
+    background: #292728;
+}
+.iphone-top .camera {
+    display: block;
+    margin: 0 auto;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    margin-bottom: 13px;
+    background: #333;
+}
+.iphone-top .sensor {
+    display: block;
+    width: 15px;
+    height: 15px;
+    float: left;
+    background: #333;
+    margin-top: -5px;
+    border-radius: 50%;
+}
+.iphone .top-bar, .iphone .bottom-bar {
+    display: block;
+    width: 100%;
+    height: 15px;
+    border-left: 5px solid #BBB;
+    border-right: 5px solid #BBB;
+    position: absolute;
+    left: -5px;
+}
+.iphone .top-bar {
+    top: 65px;
+}
+.iphone .bottom-bar {
+    bottom: 65px;
+}
+
+.iphone-screen {
+    background: white;
+    border: 1px solid #fff;
+    overflow: auto;
+    height: calc(95vh - 25px);
+    width: 100%;
+    margin: 0 auto;
+    border: 2px solid gainsboro;
+    border-radius: 20px;
+}
+
+.iphone-screen .check-item:HOVER{
+    border: 1px #357ebd dashed;
+    width: calc(100% - 2px);
+}
+
+.check-item-shoose{
+    border: 1px #d9534f dashed;
+    width: calc(100% - 2px) !important;
+}
+
+.check-item-shoose .weui-flex__item{
+    margin-left: -1px !important;
+}
+
+.check-item-shoose .file-content{
+    margin-left: 9px !important;
+}
+
+.check-item-operation{
+    text-align: right;
+    width: 100%;
+    position: absolute;
+    z-index: 999999;
+}
+
+.check-item-operation button{
+    width: 25px;
+    height: 25px;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    margin-left: 2px;
+}
+
+.iphone-screen img {
+    width: 100%;
+}
+
+.iphone .buttons .on-off, .iphone .buttons .up, .iphone .buttons .down, .iphone .buttons .sleep {
+    display: block;
+    background: #CCC;
+    position: absolute;
+    border-radius: 2px 0px 0px 2px;
+}
+.iphone .buttons .on-off {
+    height: 40px;
+    width: 3px;
+    top: 100px;
+    left: -8px;
+}
+.iphone .buttons .up, .iphone .buttons .down, .iphone .buttons .sleep {
+    height: 60px;
+    width: 5px;
+    left: -10px;
+}
+.iphone .buttons .up {
+    top: 170px;
+}
+.iphone .buttons .down {
+    top: 250px;
+}
+.iphone .buttons .sleep {
+    left: auto;
+    right: -10px;
+    top: 170px;
+    border-radius: 0px 2px 2px 0px;
+}
+
+.gu-mirror {
+    position: fixed !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+}
+
+.gu-hide {
+    display: none !important;
+}
+
+.gu-unselectable {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+.gu-transit {
+    opacity: 0.2;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+    filter: alpha(opacity=20);
+}
+
+.tab-btn-mar-left-3{
+    margin-left: 3px !important;
+}
+
+.page-li{
+    width: 100%;
+    height: 80px;
+    line-height: 25px;
+    background-color: ghostwhite;
+    margin-top: 10px;
+    background: rgba(0.5,0.3,0.2,0.1) none repeat scroll !important;
+}
+
+.file-content{
+    font-size: 10px;
+    color: darkgoldenrod;
+    font-family: monospace;
+    margin-left: 10px;
+}
+
+.file-content-page-path{
+    font-size: 10px;
+    color: darkgoldenrod;
+    font-family: monospace;
+    margin-left: 10px;
+}
+
+.page-li:HOVER{
+    cursor: pointer;
+    border: 1px #357ebd dashed;
+    height: 78px !important;
+    width: calc(100% - 2px) !important;
+}
+
+.page-li:HOVER .weui-flex__item{
+    margin-left: -1px !important;
+}
+
+.page-li:HOVER .file-content{
+    margin-left: 9px !important;
+}
+
+.code-model-li{
+    width: 100%;
+    height: 75px;
+    line-height: 25px;
+    background-color: ghostwhite;
+    margin-top: 10px;
+}
+
+.padd-le-ri{
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 5px;
+}
+
+/*** 小程序页面管理end ***/
 
 /*** 带滚动条的表格end ***/
 .custom-table>tbody{
-	display:block;
+    display:block;
     height:400px;
     overflow-y:scroll;
-    overflow-x: hidden; 
+    overflow-x: hidden;
 }
 
 .custom-table>thead>tr{
-	display:table;
+    display:table;
     width:100%;
     table-layout:fixed;
 }
 
 .custom-table>tbody>tr{
-	display:table;
+    display:table;
     width:100%;
     table-layout:fixed;
 }
 
 .custom-table>thead{
-	width: calc(100% - 0.5em);
+    width: calc(100% - 0.5em);
 }
 /*** 带滚动条的表格end ***/
 
@@ -1485,729 +1836,729 @@ body .layer-ext-winconfirm .layui-layer-content {
 /*** 个人中心样式start ***/
 /** layuiAdmin.std-v1.2.1 LPPL License By http://www.layui.com/admin/ */
 .layadmin-panel-selection {
-	width: 768px;
-	margin: 30px auto
+    width: 768px;
+    margin: 30px auto
 }
 
 .layadmin-panel-selection .layui-panel-window {
-	padding: 30px 50px;
-	border-top-color: #ddd;
-	text-align: center
+    padding: 30px 50px;
+    border-top-color: #ddd;
+    text-align: center
 }
 
 .layadmin-panel-selection .layui-panel-window h2 {
-	padding-bottom: 15px;
-	font-size: 18px
+    padding-bottom: 15px;
+    font-size: 18px
 }
 
 .layadmin-panel-selection .layui-panel-window ul {
-	margin-top: 15px;
-	text-align: left
+    margin-top: 15px;
+    text-align: left
 }
 
 .layadmin-homepage-panel .text-center,.layadmin-maillist-fluid .layadmin-text-center {
-	text-align: center
+    text-align: center
 }
 
 .layadmin-panel-selection .layui-btn-container {
-	margin-top: 30px
+    margin-top: 30px
 }
 
 .layadmin-panel-selection .layui-btn-container .layui-btn {
-	width: 100%
+    width: 100%
 }
 
 .layadmin-maillist-fluid .layadmin-contact-box {
-	padding: 20px;
-	background-color: #fff;
-	border: 1px solid #e7eaec;
-	overflow: hidden
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #e7eaec;
+    overflow: hidden
 }
 
 .layadmin-maillist-fluid .layadmin-text-center img {
-	max-width: 80%;
-	border-radius: 50%;
-	margin-top: 5px
+    max-width: 80%;
+    border-radius: 50%;
+    margin-top: 5px
 }
 
 .layadmin-maillist-fluid .layadmin-font-blod {
-	font-weight: 600
+    font-weight: 600
 }
 
 .layadmin-maillist-fluid .layadmin-maillist-img {
-	margin-top: 5px
+    margin-top: 5px
 }
 
 .layadmin-maillist-fluid .layadmin-title {
-	margin: 5px 0 10px
+    margin: 5px 0 10px
 }
 
 .layadmin-maillist-fluid .layadmin-textimg {
-	line-height: 25px;
-	margin-bottom: 10px
+    line-height: 25px;
+    margin-bottom: 10px
 }
 
 .layadmin-maillist-fluid .layadmin-address {
-	line-height: 1.5;
-	margin-bottom: 20px
+    line-height: 1.5;
+    margin-bottom: 20px
 }
 
 .layadmin-maillist-fluid .layadmin-padding-left20 {
-	padding-left: 20px
+    padding-left: 20px
 }
 
 .layadmin-homepage-shadow {
-	box-shadow: 0 1px 1px rgba(0,0,0,.05);
-	background-color: #fff;
-	border-radius: 0;
-	border: 1px solid #e7ecf3
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    background-color: #fff;
+    border-radius: 0;
+    border: 1px solid #e7ecf3
 }
 
 .layadmin-homepage-panel {
-	margin-bottom: 15px
+    margin-bottom: 15px
 }
 
 .layadmin-homepage-information {
-	padding: 15px;
-	border-bottom: 1px solid #e9e9e9
+    padding: 15px;
+    border-bottom: 1px solid #e9e9e9
 }
 
 .layadmin-homepage-pad-ver {
-	padding-top: 15px;
-	padding-bottom: 15px
+    padding-top: 15px;
+    padding-bottom: 15px
 }
 
 .layadmin-homepage-pad-img {
-	box-shadow: 0 0 0 4px rgba(0,0,0,.1);
-	border-radius: 50%
+    box-shadow: 0 0 0 4px rgba(0,0,0,.1);
+    border-radius: 50%
 }
 
 .layadmin-homepage-font {
-	font-weight: 600;
-	color: #2b425b;
-	font-size: 1.2em
+    font-weight: 600;
+    color: #2b425b;
+    font-size: 1.2em
 }
 
 .layadmin-homepage-min-font {
-	margin: 5px 0 10px;
-	font-size: .9em;
-	color: #afb9c3
+    margin: 5px 0 10px;
+    font-size: .9em;
+    color: #afb9c3
 }
 
 .layadmin-homepage-pad-ver i {
-	line-height: 1.1em;
-	font-size: 1.3em;
-	vertical-align: middle;
-	cursor: pointer;
-	background-color: transparent;
-	color: inherit;
-	padding: 6px 12px
+    line-height: 1.1em;
+    font-size: 1.3em;
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: transparent;
+    color: inherit;
+    padding: 6px 12px
 }
 
 .layadmin-homepage-pad-ver a:hover {
-	background: #5FB878;
-	color: #fff
+    background: #5FB878;
+    color: #fff
 }
 
 .layadmin-homepage-about {
-	padding: 15px;
-	font-weight: 600;
-	color: #2b425b
+    padding: 15px;
+    font-weight: 600;
+    color: #2b425b
 }
 
 .layadmin-homepage-list-group {
-	font-size: .9em;
-	line-height: 1.25;
-	margin-bottom: 5px
+    font-size: .9em;
+    line-height: 1.25;
+    margin-bottom: 5px
 }
 
 .layadmin-homepage-list-group li {
-	padding: 5px 15px;
-	border: 1px solid transparent;
-	margin-bottom: -1px;
-	border-width: 1px 0;
-	border-radius: 0;
-	background-color: transparent;
-	color: inherit
+    padding: 5px 15px;
+    border: 1px solid transparent;
+    margin-bottom: -1px;
+    border-width: 1px 0;
+    border-radius: 0;
+    background-color: transparent;
+    color: inherit
 }
 
 .layadmin-homepage-list-group li i {
-	font-size: 1.333em;
-	line-height: 1.095em;
-	vertical-align: middle;
-	margin-right: 4px
+    font-size: 1.333em;
+    line-height: 1.095em;
+    vertical-align: middle;
+    margin-right: 4px
 }
 
 .layadmin-homepage-list-group li a.color {
-	color: #337ab7
+    color: #337ab7
 }
 
 .layadmin-homepage-pad-hor {
-	padding-left: 15px;
-	padding-right: 15px;
-	border-bottom: 15px;
-	color: #758697;
-	text-indent: 20px
+    padding-left: 15px;
+    padding-right: 15px;
+    border-bottom: 15px;
+    color: #758697;
+    text-indent: 20px
 }
 
 .layadmin-homepage-list-inline {
-	margin-left: 15px;
-	margin-right: 15px;
-	padding-bottom: 20px
+    margin-left: 15px;
+    margin-right: 15px;
+    padding-bottom: 20px
 }
 
 .layadmin-homepage-list-inline a {
-	display: inline-block
+    display: inline-block
 }
 
 .layadmin-homepage-list-inline .layui-btn {
-	font-size: .9em;
-	line-height: 1.42857;
-	vertical-align: middle;
-	height: auto;
-	padding: 4px 7px;
-	margin: 0 10px 10px 0
+    font-size: .9em;
+    line-height: 1.42857;
+    vertical-align: middle;
+    height: auto;
+    padding: 4px 7px;
+    margin: 0 10px 10px 0
 }
 
 .layadmin-homepage-text-center {
-	text-align: center;
-	margin-bottom: 15px
+    text-align: center;
+    margin-bottom: 15px
 }
 
 .layadmin-homepage-padding15 {
-	padding: 15px;
-	margin-bottom: 15px
+    padding: 15px;
+    margin-bottom: 15px
 }
 
 .layadmin-homepage-padding8 {
-	padding: 0 8px
+    padding: 0 8px
 }
 
 .layadmin-homepage-paddingmb {
-	margin: 0 -7.5px
+    margin: 0 -7.5px
 }
 
 .layadmin-homepage-content {
-	margin-left: 15px;
-	padding: 0
+    margin-left: 15px;
+    padding: 0
 }
 
 .layadmin-homepage-content .new-section-xs {
-	margin: 12px 0;
-	color: inherit;
-	border: 0!important;
-	height: 0;
-	box-sizing: content-box
+    margin: 12px 0;
+    color: inherit;
+    border: 0!important;
+    height: 0;
+    box-sizing: content-box
 }
 
 .layadmin-homepage-content .h4 {
-	font-size: 16px;
-	font-weight: 600;
-	color: #2b425b
+    font-size: 16px;
+    font-weight: 600;
+    color: #2b425b
 }
 
 .layadmin-homepage-content small {
-	color: #afb9c3
+    color: #afb9c3
 }
 
 .layadmin-homepage-text-center .layui-icon {
-	color: #FFB800;
-	padding-right: 5px
+    color: #FFB800;
+    padding-right: 5px
 }
 
 .layadmin-homepage-padding15 .layui-col-sm5 a {
-	font-size: 11px;
-	height: auto;
-	line-height: 1.5;
-	padding: 5px 10px;
-	float: right
+    font-size: 11px;
+    height: auto;
+    line-height: 1.5;
+    padding: 5px 10px;
+    float: right
 }
 
 .layadmin-homepage-padding15 .layui-btn-normal {
-	margin: 0 15px
+    margin: 0 15px
 }
 
 .layadmin-homepage-list-imgtxt .layui-col-sm10,.layadmin-homepage-list-imgtxt .layui-col-sm2 {
-	background: 0 0
+    background: 0 0
 }
 
 .layadmin-homepage-list-imgtxt .panel-body {
-	padding: 15px 20px 25px;
-	overflow: hidden;
-	margin-bottom: 15px
+    padding: 15px 20px 25px;
+    overflow: hidden;
+    margin-bottom: 15px
 }
 
 .layadmin-homepage-list-imgtxt .panel-body .media-left {
-	display: block;
-	float: left;
-	vertical-align: top;
-	padding-right: 10px
+    display: block;
+    float: left;
+    vertical-align: top;
+    padding-right: 10px
 }
 
 .layadmin-homepage-list-imgtxt .panel-body .media-left img {
-	border-radius: 50%
+    border-radius: 50%
 }
 
 .layadmin-homepage-list-imgtxt .media-body {
-	width: auto;
-	display: block;
-	overflow: hidden
+    width: auto;
+    display: block;
+    overflow: hidden
 }
 
 .layadmin-homepage-list-imgtxt .media-body .pad-btm {
-	padding-bottom: 15px
+    padding-bottom: 15px
 }
 
 .layadmin-homepage-list-imgtxt .media-body .pad-btm p:first-child {
-	padding-bottom: 5px
+    padding-bottom: 5px
 }
 
 .layadmin-homepage-list-imgtxt .media-body .min-font {
-	margin-bottom: 10px
+    margin-bottom: 10px
 }
 
 .layadmin-homepage-list-imgtxt .media-body .min-font .layui-breadcrumb a {
-	font-size: 11px
+    font-size: 11px
 }
 
 .layui-breadcrumb span[lay-separator] {
-	margin: 0 5px
+    margin: 0 5px
 }
 
 .layadmin-homepage-list-imgtxt .media-body .pad-btm .fontColor a {
-	font-weight: 600;
-	color: #337ab7
+    font-weight: 600;
+    color: #337ab7
 }
 
 .layadmin-homepage-list-imgtxt .media-body .pad-btm .fontColor span {
-	color: #758697;
-	font-weight: 600
+    color: #758697;
+    font-weight: 600
 }
 
 .layadmin-homepage-list-imgtxt .media-body .h-img {
-	display: block;
-	max-width: 100%;
-	height: auto;
-	margin-top: 10px
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px
 }
 
 .layadmin-homepage-list-imgtxt .img-xs {
-	width: 32px;
-	height: 32px;
-	border-radius: 50%
+    width: 32px;
+    height: 32px;
+    border-radius: 50%
 }
 
 .layadmin-homepage-list-imgtxt .media-body .media {
-	margin-top: 15px;
-	overflow: hidden
+    margin-top: 15px;
+    overflow: hidden
 }
 
 .layadmin-homepage-list-imgtxt .media-body .media .media-right {
-	float: right;
-	padding-top: 10px
+    float: right;
+    padding-top: 10px
 }
 
 .layadmin-homepage-list-imgtxt .media-body .media .media-right .list-inline {
-	margin-bottom: 10px
+    margin-bottom: 10px
 }
 
 .layadmin-homepage-list-imgtxt .media-body .media .list-inline li {
-	padding: 0 5px;
-	display: inline-block
+    padding: 0 5px;
+    display: inline-block
 }
 
 .layadmin-homepage-list-imgtxt .media-body .media .media-right .list-inline li span {
-	font-weight: 600
+    font-weight: 600
 }
 
 .layadmin-homepage-list-imgtxt .media-body .media .media-left {
-	display: block;
-	overflow: hidden;
-	width: auto
+    display: block;
+    overflow: hidden;
+    width: auto
 }
 
 .layadmin-homepage-list-imgtxt .media-body .media .media-left .font-blod {
-	font-weight: 700;
-	color: #758697
+    font-weight: 700;
+    color: #758697
 }
 
 .layadmin-homepage-list-imgtxt .media-body .media-list {
-	padding-top: 15px;
-	margin-top: 15px;
-	border-top: 1px solid #e9e9e9
+    padding-top: 15px;
+    margin-top: 15px;
+    border-top: 1px solid #e9e9e9
 }
 
 .layadmin-homepage-list-imgtxt .media-body .media-list .media-item {
-	padding-bottom: 15px;
-	margin-top: 15px
+    padding-bottom: 15px;
+    margin-top: 15px
 }
 
 .layadmin-homepage-list-imgtxt .media-body .media-list .media-item-left {
-	display: inline-block;
-	padding-right: 10px;
-	margin-bottom: 5px
+    display: inline-block;
+    padding-right: 10px;
+    margin-bottom: 5px
 }
 
 .layadmin-homepage-list-imgtxt .media-body .media-list .media-item-left img {
-	display: block;
-	float: left
+    display: block;
+    float: left
 }
 
 .layadmin-homepage-list-imgtxt .media-body .media-list .media-text {
-	overflow: hidden;
-	width: auto;
-	display: inline-block
+    overflow: hidden;
+    width: auto;
+    display: inline-block
 }
 
 .layadmin-homepage-list-imgtxt .media-body .media-list .media-text a {
-	margin-right: 10px;
-	font-weight: 600;
-	display: inline-block
+    margin-right: 10px;
+    font-weight: 600;
+    display: inline-block
 }
 
 .layadmin-homepage-list-imgtxt .media-body .media-list .media-text div:nth-child(2) {
-	margin-top: 5px
+    margin-top: 5px
 }
 
 .layadmin-homepage-list-imgtxt .media-body .media-list .layui-btn {
-	height: 24px;
-	line-height: 24px;
-	font-size: 12px;
-	padding: 0 20px;
-	margin-bottom: 10px
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+    padding: 0 20px;
+    margin-bottom: 10px
 }
 
 .homepage-top .layui-card-body img {
-	width: 100%
+    width: 100%
 }
 
 .homepage-top .layui-card-body .margin-top10 {
-	margin-top: 10px
+    margin-top: 10px
 }
 
 .homepage-top .layui-card-body .layui-btn {
-	width: 100%;
-	display: block
+    width: 100%;
+    display: block
 }
 
 .homepage-top {
-	padding-bottom: 20px
+    padding-bottom: 20px
 }
 
 .layadmin-privateletterlist-item {
-	position: relative;
-	display: block;
-	padding: 10px 15px
+    position: relative;
+    display: block;
+    padding: 10px 15px
 }
 
 .homepage-bottom .layui-card-body {
-	padding: 0
+    padding: 0
 }
 
 .homepage-bottom .layui-card-body img {
-	width: 32px;
-	height: 32px;
-	border-radius: 50%;
-	margin-top: 10px
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 10px
 }
 
 .homepage-bottom .layui-card-body .meida-left {
-	display: table-cell;
-	padding-right: 10px
+    display: table-cell;
+    padding-right: 10px
 }
 
 .homepage-bottom .layui-card-body .meida-right {
-	display: table-cell;
-	vertical-align: top
+    display: table-cell;
+    vertical-align: top
 }
 
 .homepage-bottom .layui-card-body a:hover {
-	background: #F2F2F2
+    background: #F2F2F2
 }
 
 .homepage-bottom .layui-card-body {
-	background: #fff
+    background: #fff
 }
 
 .layui-card-header .panel-title .layui-icon {
-	position: relative;
-	left: 0;
-	right: 0
+    position: relative;
+    left: 0;
+    right: 0
 }
 
 .layadmin-cmdlist-fluid {
-	padding-bottom: 60px
+    padding-bottom: 60px
 }
 
 .cmdlist-container {
-	background: #fff;
-	border: 1px solid transparent
+    background: #fff;
+    border: 1px solid transparent
 }
 
 .cmdlist-container:hover {
-	border: 1px solid #e8e8e8
+    border: 1px solid #e8e8e8
 }
 
 .cmdlist-container img {
-	width: 100%
+    width: 100%
 }
 
 .cmdlist-text {
-	padding: 20px
+    padding: 20px
 }
 
 .cmdlist-text .info {
-	height: 40px;
-	font-size: 14px;
-	line-height: 20px;
-	width: 100%;
-	overflow: hidden;
-	color: #666;
-	margin-bottom: 10px
+    height: 40px;
+    font-size: 14px;
+    line-height: 20px;
+    width: 100%;
+    overflow: hidden;
+    color: #666;
+    margin-bottom: 10px
 }
 
 .cmdlist-text .price {
-	font-size: 14px
+    font-size: 14px
 }
 
 .cmdlist-text .price b {
-	margin-right: 20px
+    margin-right: 20px
 }
 
 .cmdlist-text .price p {
-	display: inline-block
+    display: inline-block
 }
 
 .cmdlist-text .flow {
-	text-align: right;
-	float: right
+    text-align: right;
+    float: right
 }
 
 #demo0 {
-	text-align: center
+    text-align: center
 }
 
 .layadmin-message-fluid .layui-col-md12 {
-	background: #fff;
-	height: auto;
-	padding-bottom: 50px
+    background: #fff;
+    height: auto;
+    padding-bottom: 50px
 }
 
 .layadmin-message-fluid .layui-input-block {
-	margin-left: 0
+    margin-left: 0
 }
 
 .layadmin-message-fluid .layui-form {
-	padding: 45px 40px 0
+    padding: 45px 40px 0
 }
 
 .layadmin-message-fluid .layui-form-label {
-	text-align: left;
-	font-size: 18px;
-	padding-left: 10px
+    text-align: left;
+    font-size: 18px;
+    padding-left: 10px
 }
 
 .layadmin-message-fluid .layui-textarea {
-	min-height: 100px;
-	font-size: 16px
+    min-height: 100px;
+    font-size: 16px
 }
 
 .layadmin-message-fluid .layui-input-right {
-	float: right
+    float: right
 }
 
 .layadmin-messag-icon {
-	overflow: hidden;
-	float: left;
-	margin-top: 4px
+    overflow: hidden;
+    float: left;
+    margin-top: 4px
 }
 
 .layadmin-messag-icon .layui-icon {
-	font-size: 24px;
-	line-height: 30px;
-	margin-right: 15px;
-	color: #C4CBCF
+    font-size: 24px;
+    line-height: 30px;
+    margin-right: 15px;
+    color: #C4CBCF
 }
 
 .message-content {
-	padding: 0 40px
+    padding: 0 40px
 }
 
 .message-content .media-body {
-	margin-bottom: 60px
+    margin-bottom: 60px
 }
 
 .message-content .media-body .pad-btm {
-	padding-bottom: 0
+    padding-bottom: 0
 }
 
 .message-content .media-left {
-	float: left;
-	margin-right: 10px
+    float: left;
+    margin-right: 10px
 }
 
 .message-content .media-left img {
-	border-radius: 50%
+    border-radius: 50%
 }
 
 .message-text {
-	padding-top: 10px
+    padding-top: 10px
 }
 
 .message-content-btn {
-	text-align: center
+    text-align: center
 }
 
 .message-content .layui-btn {
-	height: auto;
-	line-height: 26px;
-	padding: 5px 30px;
-	font-size: 16px
+    height: auto;
+    line-height: 26px;
+    padding: 5px 30px;
+    font-size: 16px
 }
 
 .layadmin-serach-main .layui-card-header {
-	height: auto;
-	line-height: 24px;
-	padding: 15px
+    height: auto;
+    line-height: 24px;
+    padding: 15px
 }
 
 .layadmin-serach-list {
-	margin-bottom: 10px;
-	padding: 10px 0;
-	border-bottom: 1px solid #f6f6f6
+    margin-bottom: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f6f6f6
 }
 
 .layadmin-serach-list h3 {
-	padding: 10px 0
+    padding: 10px 0
 }
 
 .layadmin-serach-list h3 .layui-badge {
-	top: -2px
+    top: -2px
 }
 
 .layadmin-serach-list p {
-	color: #666
+    color: #666
 }
 
 .layadmin-serach-list li {
-	margin-bottom: 20px;
-	padding-bottom: 20px;
-	clear: both
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    clear: both
 }
 
 .layui-serachlist-cover {
-	float: left;
-	margin-right: 15px
+    float: left;
+    margin-right: 15px
 }
 
 .layui-serachlist-cover img {
-	width: 90px;
-	height: 90px
+    width: 90px;
+    height: 90px
 }
 
 .layadmin-caller {
-	background: #fff;
-	padding: 30px
+    background: #fff;
+    padding: 30px
 }
 
 .layadmin-caller em {
-	font-style: normal
+    font-style: normal
 }
 
 .layadmin-caller .caller-fl {
-	float: left
+    float: left
 }
 
 .layadmin-caller .caller-fr {
-	float: right
+    float: right
 }
 
 .layadmin-caller .caller-seach {
-	position: relative;
-	padding-bottom: 40px
+    position: relative;
+    padding-bottom: 40px
 }
 
 .layadmin-caller .caller-seach .caller-icon {
-	font-size: 18px;
-	position: absolute;
-	top: 9px
+    font-size: 18px;
+    position: absolute;
+    top: 9px
 }
 
 .layadmin-caller .caller-seach-icon {
-	left: 6px
+    left: 6px
 }
 
 .layadmin-caller .caller-dump-icon {
-	right: 6px;
-	cursor: pointer
+    right: 6px;
+    cursor: pointer
 }
 
 .layadmin-caller .caller-pl32 {
-	padding: 0 32px
+    padding: 0 32px
 }
 
 .layadmin-caller .caller-tab {
-	margin: 0
+    margin: 0
 }
 
 .layadmin-caller .caller-contar {
-	padding-bottom: 20px
+    padding-bottom: 20px
 }
 
 .layadmin-caller .caller-contar .caller-item {
-	padding: 25px 0;
-	overflow: hidden;
-	border-bottom: 1px solid #e0e0e0
+    padding: 25px 0;
+    overflow: hidden;
+    border-bottom: 1px solid #e0e0e0
 }
 
 .layadmin-caller .caller-contar .caller-item .caller-main {
-	margin-left: 20px
+    margin-left: 20px
 }
 
 .layadmin-caller .caller-contar .caller-item .caller-main p {
-	line-height: 100%;
-	padding: 8px 0
+    line-height: 100%;
+    padding: 8px 0
 }
 
 .layadmin-caller .caller-contar .caller-item .caller-main p:first-child {
-	padding-top: 0
+    padding-top: 0
 }
 
 .layadmin-caller .caller-contar .caller-item .caller-main em {
-	margin-left: 5px
+    margin-left: 5px
 }
 
 .layadmin-caller .caller-contar .caller-item .caller-main .caller-adds i {
-	padding-right: 5px;
-	margin: 0
+    padding-right: 5px;
+    margin: 0
 }
 
 .layadmin-caller .caller-contar .caller-item .caller-main .caller-adds {
-	padding-bottom: 12px
+    padding-bottom: 12px
 }
 
 .layadmin-caller .caller-contar .caller-iconset i {
-	margin: 0 5px
+    margin: 0 5px
 }
 
 .layadmin-caller .caller-contar .caller-iconset i:first-child {
-	margin-left: 0
+    margin-left: 0
 }
 
 .layadmin-caller .caller-contar button {
-	margin-top: 22px
+    margin-top: 22px
 }
 
 .layadmin-caller .caller-contar .caller-img {
-	width: 40px;
-	height: 40px;
-	border-radius: 100%
+    width: 40px;
+    height: 40px;
+    border-radius: 100%
 }
 
 /*** 个人中心样式end ***/
 
 .layui-this li{
-	height: 100px;
+    height: 100px;
     text-align: center;
     background-color: ghostwhite;
     margin-left: 20px;
@@ -2216,56 +2567,56 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .layui-this li a h3{
-	font-size: 21px;
+    font-size: 21px;
     margin-top: 20px;
 }
 
 /*** 流程图样式start ***/
 .lct-toolBar{
-	position: absolute;
-	z-index: 10;
-	height: 35px;
-	border-bottom: 1px solid gainsboro;
+    position: absolute;
+    z-index: 10;
+    height: 35px;
+    border-bottom: 1px solid gainsboro;
 }
 
 .lct-toolBar ul{
-	height: 100%;
-	width: 100%;
-	margin-left: 10px;
+    height: 100%;
+    width: 100%;
+    margin-left: 10px;
 }
 
 .lct-toolBar ul li{
-	height: 100%;
-	line-height: 100%;
-	width: 35px;
+    height: 100%;
+    line-height: 100%;
+    width: 35px;
     float: left;
 }
 
 .lct-toolBar ul li button{
-	height: 100%;
-	line-height: 100%;
-	width: 100%;
-	border: 0px;
+    height: 100%;
+    line-height: 100%;
+    width: 100%;
+    border: 0px;
 }
 
 .coverModel{
-	margin-top: 35px;
+    margin-top: 35px;
 }
 
 @font-face {font-family: "iconfont";
-  src: url('iconfont.eot?t=1542985580470'); /* IE9*/
-  src: url('iconfont.eot?t=1542985580470#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAATAAAsAAAAAByQAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFY8k0iFY21hcAAAAYAAAABcAAABlM3eNVNnbHlmAAAB3AAAANgAAADopAxsYGhlYWQAAAK0AAAAMQAAADYUXLTUaGhlYQAAAugAAAAgAAAAJAjgBIFobXR4AAADCAAAABAAAAAQEQH//WxvY2EAAAMYAAAACgAAAAoAigAmbWF4cAAAAyQAAAAfAAAAIAEPADpuYW1lAAADRAAAAUUAAAJtPlT+fXBvc3QAAASMAAAAMwAAAEi3GinzeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2BkcWCcwMDKwMHUyXSGgYGhH0IzvmYwYuRgYGBiYGVmwAoC0lxTGByeyTwLZm7438AQw9zA0AgUZgTJAQD6YwyTeJztkMENgDAMAy9tQQgxAt0A8WKT/ngxfdYoacIYWLpYdn4GJiAbh1FAHoSh21rxPrN6Xzgtz+ZC0qqtd9A93CT2W9wzyWzm1+b3+lIeewVjW62B9y0gvYUsESZ4nGNgZGD4v5f5MLMzAxsDAyO7OCMQMh+apv7ntQKzqDqzkwaUxQAECLXMQI44ozrzIoU/cxSYnUAkSP7/3//1rCzMDQy6QI4eozofo6gYGzsfo7IakzoQsTEB2exscox2jPaMZkLmcoziYkLiRmbmdoysDIxqkrLKjLJaEjZqzilqug2V6/cbcQlzcYob6YtwSypNyTKNUTLsa7fPUAuWY5SSVGMEalCfZCIhysXI3X2IUZyd/1/ZQTUHYUkDYTFDJZ+JjFH8XD9rj/w7y6mhnXIVADeUMVl4nGNgZGBgAOKQvdpc8fw2Xxm4WRhA4IacRQ6M/v/3fz0rC3MDkMvBwAQSBQANBQo7AAAAeJxjYGRgYG7438AQw8rw/+//P6wsDEARFMACAKC9BmoEAAAABAAAAAQBAAAFAP/9AAAAAAAWACYAdAAAeJxjYGRgYGBh0GMA0QwMTEDMBYQMDP/BfAYADUsBSgB4nGWPTU7DMBCFX/oHpBKqqGCH5AViASj9EatuWFRq911036ZOmyqJI8et1ANwHo7ACTgC3IA78EgnmzaWx9+8eWNPANzgBx6O3y33kT1cMjtyDRe4F65TfxBukF+Em2jjVbhF/U3YxzOmwm10YXmD17hi9oR3YQ8dfAjXcI1P4Tr1L+EG+Vu4iTv8CrfQ8erCPuZeV7iNRy/2x1YvnF6p5UHFockikzm/gple75KFrdLqnGtbxCZTg6BfSVOdaVvdU+zXQ+ciFVmTqgmrOkmMyq3Z6tAFG+fyUa8XiR6EJuVYY/62xgKOcQWFJQ6MMUIYZIjK6Og7VWb0r7FDwl57Vj3N53RbFNT/c4UBAvTPXFO6stJ5Ok+BPV8bUnV0K27LnpQ0kV7NSRKyQl7WtlRC6gE2ZVeOEXpc0Yk/KGdI/wAJWm7IAAAAeJxjYGKAAC4G7ICFkYmRmZGFkZWBLz8vVTcnE0gkFhXll7OAmGyFpRWZiXkMDACdqwnoAA==') format('woff'),
-  url('iconfont.ttf?t=1542985580470') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1542985580470#iconfont') format('svg'); /* iOS 4.1- */
+    src: url('iconfont.eot?t=1542985580470'); /* IE9*/
+    src: url('iconfont.eot?t=1542985580470#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAATAAAsAAAAAByQAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFY8k0iFY21hcAAAAYAAAABcAAABlM3eNVNnbHlmAAAB3AAAANgAAADopAxsYGhlYWQAAAK0AAAAMQAAADYUXLTUaGhlYQAAAugAAAAgAAAAJAjgBIFobXR4AAADCAAAABAAAAAQEQH//WxvY2EAAAMYAAAACgAAAAoAigAmbWF4cAAAAyQAAAAfAAAAIAEPADpuYW1lAAADRAAAAUUAAAJtPlT+fXBvc3QAAASMAAAAMwAAAEi3GinzeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2BkcWCcwMDKwMHUyXSGgYGhH0IzvmYwYuRgYGBiYGVmwAoC0lxTGByeyTwLZm7438AQw9zA0AgUZgTJAQD6YwyTeJztkMENgDAMAy9tQQgxAt0A8WKT/ngxfdYoacIYWLpYdn4GJiAbh1FAHoSh21rxPrN6Xzgtz+ZC0qqtd9A93CT2W9wzyWzm1+b3+lIeewVjW62B9y0gvYUsESZ4nGNgZGD4v5f5MLMzAxsDAyO7OCMQMh+apv7ntQKzqDqzkwaUxQAECLXMQI44ozrzIoU/cxSYnUAkSP7/3//1rCzMDQy6QI4eozofo6gYGzsfo7IakzoQsTEB2exscox2jPaMZkLmcoziYkLiRmbmdoysDIxqkrLKjLJaEjZqzilqug2V6/cbcQlzcYob6YtwSypNyTKNUTLsa7fPUAuWY5SSVGMEalCfZCIhysXI3X2IUZyd/1/ZQTUHYUkDYTFDJZ+JjFH8XD9rj/w7y6mhnXIVADeUMVl4nGNgZGBgAOKQvdpc8fw2Xxm4WRhA4IacRQ6M/v/3fz0rC3MDkMvBwAQSBQANBQo7AAAAeJxjYGRgYG7438AQw8rw/+//P6wsDEARFMACAKC9BmoEAAAABAAAAAQBAAAFAP/9AAAAAAAWACYAdAAAeJxjYGRgYGBh0GMA0QwMTEDMBYQMDP/BfAYADUsBSgB4nGWPTU7DMBCFX/oHpBKqqGCH5AViASj9EatuWFRq911036ZOmyqJI8et1ANwHo7ACTgC3IA78EgnmzaWx9+8eWNPANzgBx6O3y33kT1cMjtyDRe4F65TfxBukF+Em2jjVbhF/U3YxzOmwm10YXmD17hi9oR3YQ8dfAjXcI1P4Tr1L+EG+Vu4iTv8CrfQ8erCPuZeV7iNRy/2x1YvnF6p5UHFockikzm/gple75KFrdLqnGtbxCZTg6BfSVOdaVvdU+zXQ+ciFVmTqgmrOkmMyq3Z6tAFG+fyUa8XiR6EJuVYY/62xgKOcQWFJQ6MMUIYZIjK6Og7VWb0r7FDwl57Vj3N53RbFNT/c4UBAvTPXFO6stJ5Ok+BPV8bUnV0K27LnpQ0kV7NSRKyQl7WtlRC6gE2ZVeOEXpc0Yk/KGdI/wAJWm7IAAAAeJxjYGKAAC4G7ICFkYmRmZGFkZWBLz8vVTcnE0gkFhXll7OAmGyFpRWZiXkMDACdqwnoAA==') format('woff'),
+    url('iconfont.ttf?t=1542985580470') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+    url('iconfont.svg?t=1542985580470#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .iconfont {
-  font-family:"iconfont" !important;
-  font-size:16px;
-  font-style:normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .icon-one-line-arrow:before { content: "\e61c"; }
@@ -2273,49 +2624,49 @@ body .layer-ext-winconfirm .layui-layer-content {
 .icon-quxian:before { content: "\e61d"; }
 
 @font-face {font-family: "iconfont";
-  src: url('iconfont.eot?t=1543110763663'); /* IE9*/
-  src: url('iconfont.eot?t=1543110763663#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAAWAAAsAAAAACCwAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFY8d0gdY21hcAAAAYAAAABeAAABnLN9GtxnbHlmAAAB4AAAAZgAAAHcZqOybmhlYWQAAAN4AAAALAAAADYTXoaeaGhlYQAAA6QAAAAcAAAAJAfeA4VobXR4AAADwAAAAA4AAAAQEAAAAGxvY2EAAAPQAAAACgAAAAoBBAA2bWF4cAAAA9wAAAAfAAAAIAEUAIRuYW1lAAAD/AAAAUUAAAJtPlT+fXBvc3QAAAVEAAAAOgAAAFHQeYYUeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2BkYWCcwMDKwMHUyXSGgYGhH0IzvmYwYuRgYGBiYGVmwAoC0lxTGByeMT7TZm7438AQw9zA0AAUZgTJAQDgawwPeJztkEEOgDAIBAeppjEe+o96ND7Iky/vNypQDz7CJUNgQzgsMANq7EYCuRFcl7kSvrKGnzhtz1YTNGml1d6/U0jiIsc0+WdZ+LVFP95NPbWBZ9zKIHKtA/QB3voSGgAAeJxtjcFOGlEUhs+9E2BBNNUOoomi3AE1Yc7AECKBuXOHGXHTF2gs+AZdVAlxoSZDG6Nv4HJIkO5JE8vKuGnShDcxbtnBpHdm0ZX/ybn5c8537g8UpJQX+gcUSAEU82t5Ilt5WfiKvwgUb/HM6f3ygX6SWMxmqIjZNADSFYIkkU8goRDOSZqkw3n4RlSiLl8JJTQM/06n02epyWQCyfh+RmewCQgefIavcCkz2f6BrFr9qC5IdSMrS00lU6tEYdGrbmRzpBrtavsHhhwaJIIFreZIRK7Sd7ns/4+SqXgYZRQjMBMlHVHaGbkOKxSY03p8GrlCkxLuqPNl6Njttu0Mfw1bvN3mreFpdzxgxaLmj3+PB1qhoA3GndNA8GPPFsEkcLjncSf4md8WTNOYYIeHmn2iMXsnTNR0IZ3QLdPApn3LLUSzYqDFb+0mGib1K1jq+Rc6ViqoX/i9klFeXplnlrgTVtc0u5a4t3lXcmUsfbs5L2FZmvPr2HxQscG/W019a/3jpt7/YTVQ3cvs6X3X5Q3chX/MzG3WeJxjYGRgYADiaxeKlOP5bb4ycLMwgMANBcVsZJqFgek0kOJgYALxAPzFB894nGNgZGBgbvjfwBDDwgACQJKRARWwAABHCgJteJxjYWBgYEHCAACwABEAAAAAAAAAFgA2AO4AAHicY2BkYGBgYahgYGMAASYg5gJCBob/YD4DABT4AZkAeJxlj01OwzAQhV/6B6QSqqhgh+QFYgEo/RGrblhUavdddN+mTpsqiSPHrdQDcB6OwAk4AtyAO/BIJ5s2lsffvHljTwDc4Acejt8t95E9XDI7cg0XuBeuU38QbpBfhJto41W4Rf1N2MczpsJtdGF5g9e4YvaEd2EPHXwI13CNT+E69S/hBvlbuIk7/Aq30PHqwj7mXle4jUcv9sdWL5xeqeVBxaHJIpM5v4KZXu+Sha3S6pxrW8QmU4OgX0lTnWlb3VPs10PnIhVZk6oJqzpJjMqt2erQBRvn8lGvF4kehCblWGP+tsYCjnEFhSUOjDFCGGSIyujoO1Vm9K+xQ8Jee1Y9zed0WxTU/3OFAQL0z1xTurLSeTpPgT1fG1J1dCtuy56UNJFezUkSskJe1rZUQuoBNmVXjhF6XNGJPyhnSP8ACVpuyAAAAHicY2BigAAuBuyAhZGJkZmRhZGVgTc5IzEvPQ2IKzLz0nkzUvPSczIhHF32ktL8ytLEPAYGABuaDdsAAA==') format('woff'),
-  url('iconfont.ttf?t=1543110763663') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1543110763663#iconfont') format('svg'); /* iOS 4.1- */
+    src: url('iconfont.eot?t=1543110763663'); /* IE9*/
+    src: url('iconfont.eot?t=1543110763663#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAAWAAAsAAAAACCwAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFY8d0gdY21hcAAAAYAAAABeAAABnLN9GtxnbHlmAAAB4AAAAZgAAAHcZqOybmhlYWQAAAN4AAAALAAAADYTXoaeaGhlYQAAA6QAAAAcAAAAJAfeA4VobXR4AAADwAAAAA4AAAAQEAAAAGxvY2EAAAPQAAAACgAAAAoBBAA2bWF4cAAAA9wAAAAfAAAAIAEUAIRuYW1lAAAD/AAAAUUAAAJtPlT+fXBvc3QAAAVEAAAAOgAAAFHQeYYUeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2BkYWCcwMDKwMHUyXSGgYGhH0IzvmYwYuRgYGBiYGVmwAoC0lxTGByeMT7TZm7438AQw9zA0AAUZgTJAQDgawwPeJztkEEOgDAIBAeppjEe+o96ND7Iky/vNypQDz7CJUNgQzgsMANq7EYCuRFcl7kSvrKGnzhtz1YTNGml1d6/U0jiIsc0+WdZ+LVFP95NPbWBZ9zKIHKtA/QB3voSGgAAeJxtjcFOGlEUhs+9E2BBNNUOoomi3AE1Yc7AECKBuXOHGXHTF2gs+AZdVAlxoSZDG6Nv4HJIkO5JE8vKuGnShDcxbtnBpHdm0ZX/ybn5c8537g8UpJQX+gcUSAEU82t5Ilt5WfiKvwgUb/HM6f3ygX6SWMxmqIjZNADSFYIkkU8goRDOSZqkw3n4RlSiLl8JJTQM/06n02epyWQCyfh+RmewCQgefIavcCkz2f6BrFr9qC5IdSMrS00lU6tEYdGrbmRzpBrtavsHhhwaJIIFreZIRK7Sd7ns/4+SqXgYZRQjMBMlHVHaGbkOKxSY03p8GrlCkxLuqPNl6Njttu0Mfw1bvN3mreFpdzxgxaLmj3+PB1qhoA3GndNA8GPPFsEkcLjncSf4md8WTNOYYIeHmn2iMXsnTNR0IZ3QLdPApn3LLUSzYqDFb+0mGib1K1jq+Rc6ViqoX/i9klFeXplnlrgTVtc0u5a4t3lXcmUsfbs5L2FZmvPr2HxQscG/W019a/3jpt7/YTVQ3cvs6X3X5Q3chX/MzG3WeJxjYGRgYADiaxeKlOP5bb4ycLMwgMANBcVsZJqFgek0kOJgYALxAPzFB894nGNgZGBgbvjfwBDDwgACQJKRARWwAABHCgJteJxjYWBgYEHCAACwABEAAAAAAAAAFgA2AO4AAHicY2BkYGBgYahgYGMAASYg5gJCBob/YD4DABT4AZkAeJxlj01OwzAQhV/6B6QSqqhgh+QFYgEo/RGrblhUavdddN+mTpsqiSPHrdQDcB6OwAk4AtyAO/BIJ5s2lsffvHljTwDc4Acejt8t95E9XDI7cg0XuBeuU38QbpBfhJto41W4Rf1N2MczpsJtdGF5g9e4YvaEd2EPHXwI13CNT+E69S/hBvlbuIk7/Aq30PHqwj7mXle4jUcv9sdWL5xeqeVBxaHJIpM5v4KZXu+Sha3S6pxrW8QmU4OgX0lTnWlb3VPs10PnIhVZk6oJqzpJjMqt2erQBRvn8lGvF4kehCblWGP+tsYCjnEFhSUOjDFCGGSIyujoO1Vm9K+xQ8Jee1Y9zed0WxTU/3OFAQL0z1xTurLSeTpPgT1fG1J1dCtuy56UNJFezUkSskJe1rZUQuoBNmVXjhF6XNGJPyhnSP8ACVpuyAAAAHicY2BigAAuBuyAhZGJkZmRhZGVgTc5IzEvPQ2IKzLz0nkzUvPSczIhHF32ktL8ytLEPAYGABuaDdsAAA==') format('woff'),
+    url('iconfont.ttf?t=1543110763663') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+    url('iconfont.svg?t=1543110763663#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .icon-changfangxing:before { content: "\e601"; }
 .icon-tuoyuan:before { content: "\e62b"; }
 
 @font-face {font-family: "iconfont";
-  src: url('iconfont.eot?t=1543114806922'); /* IE9*/
-  src: url('iconfont.eot?t=1543114806922#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAAPkAAsAAAAABigAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFY8gUf9Y21hcAAAAYAAAABLAAABcOcztctnbHlmAAABzAAAADAAAAAwwqMQ/2hlYWQAAAH8AAAALQAAADYTXqX+aGhlYQAAAiwAAAAcAAAAJAfeA4NobXR4AAACSAAAAAgAAAAICAAAAGxvY2EAAAJQAAAABgAAAAYAGAAAbWF4cAAAAlgAAAAeAAAAIAEOABRuYW1lAAACeAAAAUUAAAJtPlT+fXBvc3QAAAPAAAAAIQAAADQTJd3aeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2BkYWCcwMDKwMHUyXSGgYGhH0IzvmYwYuRgYGBiYGVmwAoC0lxTGByecT/jZm7438AQw9zA0AAUZgTJAQDe3Qv5eJxjYGBgZWBgYAZiHSBmYWBgDGFgZAABP6AoI1icmYELLM7CoARWwwISf8b9/z+MBPJZwCQDIxvDKOABkzJQHjisIJiBEQBD0AmVAAACAAAAAAMVApUAAwAHAAAlCQIhFzcnAgD+7AEUART+CuLi4mwBFAEU/uzi4uIAAHicY2BkYGAAYufbC1fE89t8ZeBmYQCBGwqGZsg0CwPTVCDFwcAE4gEA+d0HewAAAHicY2BkYGBu+N/AEMPCAAJAkpEBFTABAEcIAmsEAAAABAAAAAAAAAAAGAAAeJxjYGRgYGBi4ABiBjCLgYELCBkY/oP5DAAJdgEjAAB4nGWPTU7DMBCFX/oHpBKqqGCH5AViASj9EatuWFRq911036ZOmyqJI8et1ANwHo7ACTgC3IA78EgnmzaWx9+8eWNPANzgBx6O3y33kT1cMjtyDRe4F65TfxBukF+Em2jjVbhF/U3YxzOmwm10YXmD17hi9oR3YQ8dfAjXcI1P4Tr1L+EG+Vu4iTv8CrfQ8erCPuZeV7iNRy/2x1YvnF6p5UHFockikzm/gple75KFrdLqnGtbxCZTg6BfSVOdaVvdU+zXQ+ciFVmTqgmrOkmMyq3Z6tAFG+fyUa8XiR6EJuVYY/62xgKOcQWFJQ6MMUIYZIjK6Og7VWb0r7FDwl57Vj3N53RbFNT/c4UBAvTPXFO6stJ5Ok+BPV8bUnV0K27LnpQ0kV7NSRKyQl7WtlRC6gE2ZVeOEXpc0Yk/KGdI/wAJWm7IAAAAeJxjYGKAAC4G7ICJkYmRmYErJzMvvQKIdZ0YGAAhjwPvAAAA') format('woff'),
-  url('iconfont.ttf?t=1543114806922') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1543114806922#iconfont') format('svg'); /* iOS 4.1- */
+    src: url('iconfont.eot?t=1543114806922'); /* IE9*/
+    src: url('iconfont.eot?t=1543114806922#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAAPkAAsAAAAABigAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFY8gUf9Y21hcAAAAYAAAABLAAABcOcztctnbHlmAAABzAAAADAAAAAwwqMQ/2hlYWQAAAH8AAAALQAAADYTXqX+aGhlYQAAAiwAAAAcAAAAJAfeA4NobXR4AAACSAAAAAgAAAAICAAAAGxvY2EAAAJQAAAABgAAAAYAGAAAbWF4cAAAAlgAAAAeAAAAIAEOABRuYW1lAAACeAAAAUUAAAJtPlT+fXBvc3QAAAPAAAAAIQAAADQTJd3aeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2BkYWCcwMDKwMHUyXSGgYGhH0IzvmYwYuRgYGBiYGVmwAoC0lxTGByecT/jZm7438AQw9zA0AAUZgTJAQDe3Qv5eJxjYGBgZWBgYAZiHSBmYWBgDGFgZAABP6AoI1icmYELLM7CoARWwwISf8b9/z+MBPJZwCQDIxvDKOABkzJQHjisIJiBEQBD0AmVAAACAAAAAAMVApUAAwAHAAAlCQIhFzcnAgD+7AEUART+CuLi4mwBFAEU/uzi4uIAAHicY2BkYGAAYufbC1fE89t8ZeBmYQCBGwqGZsg0CwPTVCDFwcAE4gEA+d0HewAAAHicY2BkYGBu+N/AEMPCAAJAkpEBFTABAEcIAmsEAAAABAAAAAAAAAAAGAAAeJxjYGRgYGBi4ABiBjCLgYELCBkY/oP5DAAJdgEjAAB4nGWPTU7DMBCFX/oHpBKqqGCH5AViASj9EatuWFRq911036ZOmyqJI8et1ANwHo7ACTgC3IA78EgnmzaWx9+8eWNPANzgBx6O3y33kT1cMjtyDRe4F65TfxBukF+Em2jjVbhF/U3YxzOmwm10YXmD17hi9oR3YQ8dfAjXcI1P4Tr1L+EG+Vu4iTv8CrfQ8erCPuZeV7iNRy/2x1YvnF6p5UHFockikzm/gple75KFrdLqnGtbxCZTg6BfSVOdaVvdU+zXQ+ciFVmTqgmrOkmMyq3Z6tAFG+fyUa8XiR6EJuVYY/62xgKOcQWFJQ6MMUIYZIjK6Og7VWb0r7FDwl57Vj3N53RbFNT/c4UBAvTPXFO6stJ5Ok+BPV8bUnV0K27LnpQ0kV7NSRKyQl7WtlRC6gE2ZVeOEXpc0Yk/KGdI/wAJWm7IAAAAeJxjYGKAAC4G7ICJkYmRmYErJzMvvQKIdZ0YGAAhjwPvAAAA') format('woff'),
+    url('iconfont.ttf?t=1543114806922') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+    url('iconfont.svg?t=1543114806922#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .icon-lingxing-B:before { content: "\e60b"; }
 
 .s-line{
-	width: 5px !important;
+    width: 5px !important;
     font-size: 20px;
     color: gainsboro;
     padding-top: 6px;
 }
 
 @font-face {font-family: "iconfont";
-  src: url('iconfont.eot?t=1543114437517'); /* IE9*/
-  src: url('iconfont.eot?t=1543114437517#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAARcAAsAAAAABqgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFY9VkjSY21hcAAAAYAAAABLAAABcOgIuEpnbHlmAAABzAAAAKsAAACsKBuqg2hlYWQAAAJ4AAAALAAAADYTXqMIaGhlYQAAAqQAAAAcAAAAJAfeA4NobXR4AAACwAAAAAgAAAAICAAAAGxvY2EAAALIAAAABgAAAAYAVgAAbWF4cAAAAtAAAAAeAAAAIAENAEJuYW1lAAAC8AAAAUUAAAJtPlT+fXBvc3QAAAQ4AAAAJAAAADeqY1hQeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2BkYWCcwMDKwMHUyXSGgYGhH0IzvmYwYuRgYGBiYGVmwAoC0lxTGByePXj2gLnhfwNDDHMDQwNQmBEkBwAANA2jeJxjYGBgZWBgYAZiHSBmYWBgDGFgZAABP6AoI1icmYELLM7CoARWwwISf/bg/38YCeSzgEkGRjaGUcADJmWgPHBYQTADIwBMyAzpAHicY2BkAALmPUyNDKYMDIzM7OJ8jOxApKSmrscIQcpq7GxAyMcoamxixyRuJiYuxyguJi5mbGRuZm7HaM68x+hzFYuIgIiaILOUqJACr4i2kKKftoayvLSOnKRYvJCejbKujwSHqrSUtJqGsa6CjIA4OyMLo9Z6Jl4jaQUlRlFFaXcNC08RVTVGIT5ZXW/nSgWx9FJ7RsZwT+kIHU0JRTUZPWlTMQYADoQXYQB4nGNgZGBgAGK3hSU74/ltvjJwszCAwA0F/aPINAsDUyOQ4mBgAvEAA9kILnicY2BkYGBu+N/AEMPCAAJAkpEBFTABAEcIAmsEAAAABAAAAAAAAAAAVgAAeJxjYGRgYGBiMGMA0SAWAwMXEDIw/AfzGQAN3QFQAAB4nGWPTU7DMBCFX/oHpBKqqGCH5AViASj9EatuWFRq911036ZOmyqJI8et1ANwHo7ACTgC3IA78EgnmzaWx9+8eWNPANzgBx6O3y33kT1cMjtyDRe4F65TfxBukF+Em2jjVbhF/U3YxzOmwm10YXmD17hi9oR3YQ8dfAjXcI1P4Tr1L+EG+Vu4iTv8CrfQ8erCPuZeV7iNRy/2x1YvnF6p5UHFockikzm/gple75KFrdLqnGtbxCZTg6BfSVOdaVvdU+zXQ+ciFVmTqgmrOkmMyq3Z6tAFG+fyUa8XiR6EJuVYY/62xgKOcQWFJQ6MMUIYZIjK6Og7VWb0r7FDwl57Vj3N53RbFNT/c4UBAvTPXFO6stJ5Ok+BPV8bUnV0K27LnpQ0kV7NSRKyQl7WtlRC6gE2ZVeOEXpc0Yk/KGdI/wAJWm7IAAAAeJxjYGKAAC4G7ICJkYmRmYG3sLQiMzEvC4hL8ksZGAA2DQWz') format('woff'),
-  url('iconfont.ttf?t=1543114437517') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1543114437517#iconfont') format('svg'); /* iOS 4.1- */
+    src: url('iconfont.eot?t=1543114437517'); /* IE9*/
+    src: url('iconfont.eot?t=1543114437517#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAARcAAsAAAAABqgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFY9VkjSY21hcAAAAYAAAABLAAABcOgIuEpnbHlmAAABzAAAAKsAAACsKBuqg2hlYWQAAAJ4AAAALAAAADYTXqMIaGhlYQAAAqQAAAAcAAAAJAfeA4NobXR4AAACwAAAAAgAAAAICAAAAGxvY2EAAALIAAAABgAAAAYAVgAAbWF4cAAAAtAAAAAeAAAAIAENAEJuYW1lAAAC8AAAAUUAAAJtPlT+fXBvc3QAAAQ4AAAAJAAAADeqY1hQeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2BkYWCcwMDKwMHUyXSGgYGhH0IzvmYwYuRgYGBiYGVmwAoC0lxTGByePXj2gLnhfwNDDHMDQwNQmBEkBwAANA2jeJxjYGBgZWBgYAZiHSBmYWBgDGFgZAABP6AoI1icmYELLM7CoARWwwISf/bg/38YCeSzgEkGRjaGUcADJmWgPHBYQTADIwBMyAzpAHicY2BkAALmPUyNDKYMDIzM7OJ8jOxApKSmrscIQcpq7GxAyMcoamxixyRuJiYuxyguJi5mbGRuZm7HaM68x+hzFYuIgIiaILOUqJACr4i2kKKftoayvLSOnKRYvJCejbKujwSHqrSUtJqGsa6CjIA4OyMLo9Z6Jl4jaQUlRlFFaXcNC08RVTVGIT5ZXW/nSgWx9FJ7RsZwT+kIHU0JRTUZPWlTMQYADoQXYQB4nGNgZGBgAGK3hSU74/ltvjJwszCAwA0F/aPINAsDUyOQ4mBgAvEAA9kILnicY2BkYGBu+N/AEMPCAAJAkpEBFTABAEcIAmsEAAAABAAAAAAAAAAAVgAAeJxjYGRgYGBiMGMA0SAWAwMXEDIw/AfzGQAN3QFQAAB4nGWPTU7DMBCFX/oHpBKqqGCH5AViASj9EatuWFRq911036ZOmyqJI8et1ANwHo7ACTgC3IA78EgnmzaWx9+8eWNPANzgBx6O3y33kT1cMjtyDRe4F65TfxBukF+Em2jjVbhF/U3YxzOmwm10YXmD17hi9oR3YQ8dfAjXcI1P4Tr1L+EG+Vu4iTv8CrfQ8erCPuZeV7iNRy/2x1YvnF6p5UHFockikzm/gple75KFrdLqnGtbxCZTg6BfSVOdaVvdU+zXQ+ciFVmTqgmrOkmMyq3Z6tAFG+fyUa8XiR6EJuVYY/62xgKOcQWFJQ6MMUIYZIjK6Og7VWb0r7FDwl57Vj3N53RbFNT/c4UBAvTPXFO6stJ5Ok+BPV8bUnV0K27LnpQ0kV7NSRKyQl7WtlRC6gE2ZVeOEXpc0Yk/KGdI/wAJWm7IAAAAeJxjYGKAAC4G7ICJkYmRmYG3sLQiMzEvC4hL8ksZGAA2DQWz') format('woff'),
+    url('iconfont.ttf?t=1543114437517') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+    url('iconfont.svg?t=1543114437517#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .icon-quxianjiantou:before { content: "\e6e0"; }
 
 @font-face {font-family: "iconfont";
-  src: url('iconfont.eot?t=1543117035527'); /* IE9*/
-  src: url('iconfont.eot?t=1543117035527#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAARsAAsAAAAABsAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFY8q0llY21hcAAAAYAAAABWAAABhmXc0TdnbHlmAAAB2AAAAJgAAACY8ToyeGhlYWQAAAJwAAAALQAAADYVh7eZaGhlYQAAAqAAAAAeAAAAJAoHBv9obXR4AAACwAAAAAwAAAAMD3sAAGxvY2EAAALMAAAACAAAAAgALgBMbWF4cAAAAtQAAAAfAAAAIAEOACNuYW1lAAAC9AAAAUUAAAJtPlT+fXBvc3QAAAQ8AAAALwAAAEe9YBHeeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2Bk1WScwMDKwMHUyXSGgYGhH0IzvmYwYuRgYGBiYGVmwAoC0lxTGByemT7zYm7438AQw9zA0AAUZgTJAQD0mwyMeJztkMERgCAMBDeAPBwL8eHXJqjAl+XTBl6CduHNbC65wCfAAmRxiAJ2Y7gupRZ5Zo28xJsqN1I/exsDPpdMuypP/s8qv7ao+zslv9Yk+jbBHshfD0IAAAABAAAAAAPAApIAFgAANy4BNjcBPgEfAQE+AR4BBwEOAS8BAQZqERgBDAE5Cx4NpAEXDCAaAQv+zwsgDaf+4gxvARkhDAEkCgEKiwEzDQEXIA3+rwwCCo7+9AsAAAEAAAAABikCxgAKAAABJxcJAhcJAhcGKPtn/r/+4/4vLAGlAR0BbWQCwwNr/r8BHf4wLQGk/uMBbWYAeJxjYGRgYADimjO9j+P5bb4ycLMwgMANBcvXyDSbJtMxIMXBwATiAQAuUgmiAAAAeJxjYGRgYG7438AQw17NAARsmgyMDKiAGQBWjQMVAAAEAAAABAAAAAd7AAAAAAAAAC4ATHicY2BkYGBgZhBnANEMDExAzAWEDAz/wXwGAArxATIAeJxlj01OwzAQhV/6B6QSqqhgh+QFYgEo/RGrblhUavdddN+mTpsqiSPHrdQDcB6OwAk4AtyAO/BIJ5s2lsffvHljTwDc4Acejt8t95E9XDI7cg0XuBeuU38QbpBfhJto41W4Rf1N2MczpsJtdGF5g9e4YvaEd2EPHXwI13CNT+E69S/hBvlbuIk7/Aq30PHqwj7mXle4jUcv9sdWL5xeqeVBxaHJIpM5v4KZXu+Sha3S6pxrW8QmU4OgX0lTnWlb3VPs10PnIhVZk6oJqzpJjMqt2erQBRvn8lGvF4kehCblWGP+tsYCjnEFhSUOjDFCGGSIyujoO1Vm9K+xQ8Jee1Y9zed0WxTU/3OFAQL0z1xTurLSeTpPgT1fG1J1dCtuy56UNJFezUkSskJe1rZUQuoBNmVXjhF6XNGJPyhnSP8ACVpuyAAAAHicY2BigAAuBuyAmZGJkZmRhYG9KiO1IjMxTxhKZwFxSX6pbnJ+QSUDAwCz7QsGAA==') format('woff'),
-  url('iconfont.ttf?t=1543117035527') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1543117035527#iconfont') format('svg'); /* iOS 4.1- */
+    src: url('iconfont.eot?t=1543117035527'); /* IE9*/
+    src: url('iconfont.eot?t=1543117035527#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAARsAAsAAAAABsAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFY8q0llY21hcAAAAYAAAABWAAABhmXc0TdnbHlmAAAB2AAAAJgAAACY8ToyeGhlYWQAAAJwAAAALQAAADYVh7eZaGhlYQAAAqAAAAAeAAAAJAoHBv9obXR4AAACwAAAAAwAAAAMD3sAAGxvY2EAAALMAAAACAAAAAgALgBMbWF4cAAAAtQAAAAfAAAAIAEOACNuYW1lAAAC9AAAAUUAAAJtPlT+fXBvc3QAAAQ8AAAALwAAAEe9YBHeeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2Bk1WScwMDKwMHUyXSGgYGhH0IzvmYwYuRgYGBiYGVmwAoC0lxTGByemT7zYm7438AQw9zA0AAUZgTJAQD0mwyMeJztkMERgCAMBDeAPBwL8eHXJqjAl+XTBl6CduHNbC65wCfAAmRxiAJ2Y7gupRZ5Zo28xJsqN1I/exsDPpdMuypP/s8qv7ao+zslv9Yk+jbBHshfD0IAAAABAAAAAAPAApIAFgAANy4BNjcBPgEfAQE+AR4BBwEOAS8BAQZqERgBDAE5Cx4NpAEXDCAaAQv+zwsgDaf+4gxvARkhDAEkCgEKiwEzDQEXIA3+rwwCCo7+9AsAAAEAAAAABikCxgAKAAABJxcJAhcJAhcGKPtn/r/+4/4vLAGlAR0BbWQCwwNr/r8BHf4wLQGk/uMBbWYAeJxjYGRgYADimjO9j+P5bb4ycLMwgMANBcvXyDSbJtMxIMXBwATiAQAuUgmiAAAAeJxjYGRgYG7438AQw17NAARsmgyMDKiAGQBWjQMVAAAEAAAABAAAAAd7AAAAAAAAAC4ATHicY2BkYGBgZhBnANEMDExAzAWEDAz/wXwGAArxATIAeJxlj01OwzAQhV/6B6QSqqhgh+QFYgEo/RGrblhUavdddN+mTpsqiSPHrdQDcB6OwAk4AtyAO/BIJ5s2lsffvHljTwDc4Acejt8t95E9XDI7cg0XuBeuU38QbpBfhJto41W4Rf1N2MczpsJtdGF5g9e4YvaEd2EPHXwI13CNT+E69S/hBvlbuIk7/Aq30PHqwj7mXle4jUcv9sdWL5xeqeVBxaHJIpM5v4KZXu+Sha3S6pxrW8QmU4OgX0lTnWlb3VPs10PnIhVZk6oJqzpJjMqt2erQBRvn8lGvF4kehCblWGP+tsYCjnEFhSUOjDFCGGSIyujoO1Vm9K+xQ8Jee1Y9zed0WxTU/3OFAQL0z1xTurLSeTpPgT1fG1J1dCtuy56UNJFezUkSskJe1rZUQuoBNmVXjhF6XNGJPyhnSP8ACVpuyAAAAHicY2BigAAuBuyAmZGJkZmRhYG9KiO1IjMxTxhKZwFxSX6pbnJ+QSUDAwCz7QsGAA==') format('woff'),
+    url('iconfont.ttf?t=1543117035527') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+    url('iconfont.svg?t=1543117035527#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .icon-zhexian:before { content: "\e64a"; }
@@ -2325,18 +2676,18 @@ body .layer-ext-winconfirm .layui-layer-content {
 /*** 折叠面板列表样式start ***/
 /*** 折叠面板列表样式end ***/
 .mar-left-5px{
-	margin-left: 4.22222%;
+    margin-left: 4.22222%;
 }
 
 .hr-title{
-	font-size: 15px;
+    font-size: 15px;
     color: #6379bb;
-	margin: 10px 0px 0px 10px;
+    margin: 10px 0px 0px 10px;
 }
 
 .detail-title{
-	font-size: 18px;
-	text-align: center;
+    font-size: 18px;
+    text-align: center;
     width: 100%;
     margin: 0 auto;
     display: block;
@@ -2345,47 +2696,47 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .talk-btn{
-	height: 30px !important;
-	background-color: rgba(0,0,0,0) !important;
+    height: 30px !important;
+    background-color: rgba(0,0,0,0) !important;
     border: 0px !important;
     box-shadow: 1px 1px 50px rgba(0,0,0,0) !important;
     z-index: 99980001 !important;
 }
 
 .talk-mabal{
-	margin-bottom: 40px!important;
-	z-index: 99980001 !important;
+    margin-bottom: 40px!important;
+    z-index: 99980001 !important;
 }
 
 .layui-history-right-menu{
-	z-index: 99980002 !important;
+    z-index: 99980002 !important;
 }
 
 .qq_32{
-	height: 20px !important;
-	width: 20px !important;
+    height: 20px !important;
+    width: 20px !important;
 }
 
 .talk-btn .layui-layer-content{
-	overflow: hidden !important;
+    overflow: hidden !important;
     padding: 0 !important;
     padding-top: 5px !important;
 }
 
 .state-new{
-	color: blue !important;
+    color: blue !important;
 }
 
 .state-up{
-	color: green !important;
+    color: green !important;
 }
 
 .state-down{
-	color: red !important;
+    color: red !important;
 }
 
 .state-error{
-	color: orange !important;
+    color: orange !important;
 }
 
 .state-success {
@@ -2393,7 +2744,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .zzc{
-	width:100%;
+    width:100%;
     height:100%;
     background-color:#000;
     position:absolute;
@@ -2406,36 +2757,36 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .ui-corner-all,.ui-corner-left{
-	 -moz-border-radius: 0px; 
-	 -webkit-border-radius: 0px; 
-	 -khtml-border-radius: 0px; 
-	 border-radius: 0px;
-	 border: none;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -khtml-border-radius: 0px;
+    border-radius: 0px;
+    border: none;
 }
 
 .winui-load-mation-bg{
-	width: 100%;
-	height: 100%;
-	z-index: 1000000000;
-	position: absolute;
-	background-color: white;
-	-webkit-filter: blur(10px);
+    width: 100%;
+    height: 100%;
+    z-index: 1000000000;
+    position: absolute;
+    background-color: white;
+    -webkit-filter: blur(10px);
     -moz-filter: blur(10px);
     -ms-filter: blur(10px);
     filter: blur(10px);
 }
 
 .winui-load-mation{
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
     z-index: 1000000000;
     position: relative;
     opacity: 0.95;
 }
 
 .winui-load-mation-box{
-	margin: auto !important;
-	position: absolute;
+    margin: auto !important;
+    position: absolute;
     top: 25%;
     left: 0;
     right: 0;
@@ -2447,33 +2798,33 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .load-title{
-	width: 100%;
+    width: 100%;
     height: 60px;
     text-align: center;
 }
 
 .load-title font{
-	color: white;
+    color: white;
     font-size: 34px;
     font-family: cursive;
 }
 
 .load-wait{
-	width: 100%;
+    width: 100%;
     height: 40px;
     text-align: center;
 }
 
 .load-wait font{
-	color: white;
+    color: white;
     font-size: 18px;
     font-family: cursive;
 }
 
 .page-load{
-	width: 100%;
-	height: 100%;
-	top: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
     left: 0;
     position: fixed;
     background-color: aqua;
@@ -2486,22 +2837,22 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .page-icon-title{
-	font-size: 66px;
+    font-size: 66px;
 }
 
 .page-icon-load{
-	width: 100%;
+    width: 100%;
     text-align: center;
     margin-top: 25px;
     color: white;
 }
 
 .page-icon-title-load{
-	
+
 }
 
 .page-load font{
-	
+
 }
 
 .browser-optrare{
@@ -2515,14 +2866,14 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .browser-input-serach{
-	width: 80%;
-	float: left;
-	min-height: 36px;
-	padding-top: 5px;
+    width: 80%;
+    float: left;
+    min-height: 36px;
+    padding-top: 5px;
 }
 
 .browser-input-serach-icon{
-	position: absolute;
+    position: absolute;
     top: 9px;
     font-size: 22px;
     right: 16%;
@@ -2531,7 +2882,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .browser-icon{
-	font-size: 17px;
+    font-size: 17px;
     margin-top: 7px;
     color: RGB(90, 99, 104);
     cursor: pointer;
@@ -2547,19 +2898,19 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .browser-content{
-	margin:auto 0px;
+    margin:auto 0px;
     height: calc(100vh - 36px);
 }
 
 .browser-content iframe{
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .win-bg-vague{
-	-webkit-filter: blur(10px); /* Chrome, Opera */
+    -webkit-filter: blur(10px); /* Chrome, Opera */
     -moz-filter: blur(10px);
-    -ms-filter: blur(10px);    
+    -ms-filter: blur(10px);
     filter: blur(10px);
     background-position: center 0;
     background-repeat: no-repeat;
@@ -2571,65 +2922,65 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .win-bg-img{
-	width: 100%;
-	height: 100%;
-	position: absolute;
+    width: 100%;
+    height: 100%;
+    position: absolute;
 }
 
 .slider-custom{
-	width: 200px;
+    width: 200px;
     padding-top: 15px;
 }
 
 .slider-custom .layui-slider-input{
-	margin-top: 15px;
+    margin-top: 15px;
 }
 
 .ul-context-menu {
-	list-style: none;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 9999;
-	padding: 5px 0;
-	min-width: 80px;
-	margin: 0;
-	display: none;
-	font-family: "微软雅黑";
-	font-size: 14px;
-	background-color: #fff;
-	border: 1px solid rgba(0, 0, 0, .15);
-	box-sizing: border-box;
-	border-radius: 4px;
-	-ms-box-shadow: 0 10px 80px rgba(0,0,0,0.4);
-	-o-box-shadow: 0 10px 80px rgba(0,0,0,0.4);
-	-webkit-box-shadow: 0 10px 80px rgba(0,0,0,0.4);
+    list-style: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    padding: 5px 0;
+    min-width: 80px;
+    margin: 0;
+    display: none;
+    font-family: "微软雅黑";
+    font-size: 14px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, .15);
+    box-sizing: border-box;
+    border-radius: 4px;
+    -ms-box-shadow: 0 10px 80px rgba(0,0,0,0.4);
+    -o-box-shadow: 0 10px 80px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 0 10px 80px rgba(0,0,0,0.4);
     -moz-box-shadow: 0 10px 80px rgba(0,0,0,0.4);
     box-shadow: 0 10px 80px rgba(0,0,0,0.4);
 }
 
 /*父列表 第一类样式*/
 .ul-context-menu .ui-context-menu-item {
-	margin: 0;
-	padding: 0;
-	height: 30px;
+    margin: 0;
+    padding: 0;
+    height: 30px;
 }
 
 .ul-context-menu .ui-context-menu-item a {
-	display: block;
-	padding: 0 10px;
-	color: #333;
-	white-space: nowrap;
-	text-decoration: none;
+    display: block;
+    padding: 0 10px;
+    color: #333;
+    white-space: nowrap;
+    text-decoration: none;
 }
 
 .ul-context-menu .ui-context-menu-item a:hover {
-	text-decoration: none;
-	color: #262626;
+    text-decoration: none;
+    color: #262626;
 }
 
 .ul-context-menu .ui-context-menu-item a i{
-	width: 16px;
+    width: 16px;
     height: 16px;
 }
 
@@ -2641,44 +2992,44 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .ul-context-menu .ui-context-menu-item a span{
-	margin-left: 10px;
+    margin-left: 10px;
 }
 
 .ul-context-menu .ui-context-menu-item a img{
-	width: 16px;
+    width: 16px;
     height: 16px;
 }
 
 .ul-context-menu .ui-context-menu-item .icon {
-	width: 16px;
-	height: 16px;
-	margin-right: 8px;
-	vertical-align: sub;
-	border: 0;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    vertical-align: sub;
+    border: 0;
 }
 
 /*父列表 第二类样式*/
 .ul-context-menu .ui-context-mouse-menu-item {
-	margin: 0;
-	padding: 0;
-	height: 30px;
+    margin: 0;
+    padding: 0;
+    height: 30px;
 }
 
 .ul-context-menu .ui-context-mouse-menu-item a {
-	display: block;
-	padding: 0 10px;
-	color: #333;
-	white-space: nowrap;
-	text-decoration: none;
+    display: block;
+    padding: 0 10px;
+    color: #333;
+    white-space: nowrap;
+    text-decoration: none;
 }
 
 .ul-context-menu .ui-context-mouse-menu-item a:hover {
-	text-decoration: none;
-	color: #262626;
+    text-decoration: none;
+    color: #262626;
 }
 
 .ul-context-menu .ui-context-mouse-menu-item a i{
-	width: 16px;
+    width: 16px;
     height: 16px;
 }
 
@@ -2688,65 +3039,65 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .ul-context-menu .ui-context-mouse-menu-item a span{
-	margin-left: 10px;
+    margin-left: 10px;
 }
 
 .ul-context-menu .ui-context-mouse-menu-item a img{
-	width: 16px;
+    width: 16px;
     height: 16px;
 }
 
 .ul-context-menu .ui-context-mouse-menu-item .icon {
-	width: 16px;
-	height: 16px;
-	margin-right: 8px;
-	vertical-align: sub;
-	border: 0;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    vertical-align: sub;
+    border: 0;
 }
 
 /*子列表*/
 .child-context-menu {
-	list-style: none;
-	position: relative;
-	top: -30px;
-	z-index: 9999;
-	padding: 5px 0;
-	min-width: 80px;
-	margin: 0;
-	display: none;
-	font-family: "微软雅黑";
-	font-size: 14px;
-	background-color: #fff;
-	border: 1px solid rgba(0, 0, 0, .15);
-	box-sizing: border-box;
-	border-radius: 4px;
-	-webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-	-moz-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-	-ms-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-	-o-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    position: relative;
+    top: -30px;
+    z-index: 9999;
+    padding: 5px 0;
+    min-width: 80px;
+    margin: 0;
+    display: none;
+    font-family: "微软雅黑";
+    font-size: 14px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, .15);
+    box-sizing: border-box;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    -ms-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    -o-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .child-context-menu .ui-context-menu-item {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .child-context-menu .ui-context-menu-item a {
-	display: block;
-	padding: 0 10px;
-	color: #333;
-	white-space: nowrap;
-	text-decoration: none;
+    display: block;
+    padding: 0 10px;
+    color: #333;
+    white-space: nowrap;
+    text-decoration: none;
 }
 
 .child-context-menu .ui-context-menu-item a:hover {
-	text-decoration: none;
-	color: #262626;
+    text-decoration: none;
+    color: #262626;
 }
 
 .child-context-menu .ui-context-menu-item a i{
-	width: 12px;
+    width: 12px;
     height: 12px;
 }
 
@@ -2758,27 +3109,27 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .child-context-menu .ui-context-menu-item a span{
-	margin-left: 10px;
+    margin-left: 10px;
 }
 
 .child-context-menu .ui-context-menu-item .icon {
-	width: 16px;
-	height: 16px;
-	margin-right: 8px;
-	vertical-align: sub;
-	border: 0;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    vertical-align: sub;
+    border: 0;
 }
 
 .notice-remove{
-	margin-right: 50px;
-	float: right;
-	cursor: pointer;
+    margin-right: 50px;
+    float: right;
+    cursor: pointer;
 }
 
 .notice-item-remove{
-	margin-right: 50px;
-	float: right;
-	cursor: pointer;
+    margin-right: 50px;
+    float: right;
+    cursor: pointer;
 }
 
 .task-item-icon-box{
@@ -2806,34 +3157,34 @@ body .layer-ext-winconfirm .layui-layer-content {
 
 
 .optreat-box{
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
     position: absolute;
 }
 
 .optreat-win{
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
     position: absolute;
 }
 
 .win-sys-wicket{
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
     position: absolute;
     z-index: 99999900;
     display: none;
 }
 
 .optreat-fileconsole-bg, .optreat-filewrite-bg, .optreat-schedule-bg .optreat-forum-bg .optreat-blog-bg{
-	-webkit-filter: blur(10px);
+    -webkit-filter: blur(10px);
     -moz-filter: blur(10px);
     -ms-filter: blur(10px);
     filter: blur(10px);
 }
 
 .win-sys-wicket iframe{
-	width: 100%;
+    width: 100%;
     height: calc(100% - 40px);
     margin-top: 40px;
     border: 0px;
@@ -2841,11 +3192,11 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .schedule-write{
-	width: 100%;
-	margin-left: 0px;
-	height: 100%;
-	margin-top: 0px;
-	overflow: hidden;
+    width: 100%;
+    margin-left: 0px;
+    height: 100%;
+    margin-top: 0px;
+    overflow: hidden;
 }
 
 .win-file-switch{
@@ -2879,27 +3230,27 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .sys-logo{
-	height: 100%;
+    height: 100%;
     width: 200px;
     float: left;
 }
 
 .sys-logo .menu-logo{
-	padding: 0px !important;
-	width: 200px;
+    padding: 0px !important;
+    width: 200px;
 }
 
 .switch-menu{
-	height: 100%;
+    height: 100%;
     width: calc(100% - 480px);
     float: left;
     white-space: nowrap;
-	overflow-x: auto;
-	overflow-y: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .switch-menu::-webkit-scrollbar{
-	display:none;
+    display:none;
 }
 
 .switch-menu .win-10-menu,
@@ -2920,60 +3271,60 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .switch-menu .win-10-menu:HOVER{
-	background: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.3);
 }
 
 .win-10-menu font{
-	text-shadow: 0px 0px 0px #fff, 0px 0px 4px #000;
-	padding: 0px 1.2em;
+    text-shadow: 0px 0px 0px #fff, 0px 0px 4px #000;
+    padding: 0px 1.2em;
 }
 
 .win-10-menu font i{
-	margin-right: 6px;
+    margin-right: 6px;
 }
 
 .switch-menu-scoolor{
-	height: 100%;
-	width: 30px;
-	float: left;
-	margin-left: 5px;
-	visibility: hidden;
+    height: 100%;
+    width: 30px;
+    float: left;
+    margin-left: 5px;
+    visibility: hidden;
 }
 
 .switch-menu-scoolor .scoolor-btn{
-	width: 40%;
-	height: 80%;
-	float: left;
-	margin-top: 10%;
-	border: 1px solid gainsboro;
-	margin-left: calc(10% - 2px);
-	cursor: pointer;
-	text-align: center;
+    width: 40%;
+    height: 80%;
+    float: left;
+    margin-top: 10%;
+    border: 1px solid gainsboro;
+    margin-left: calc(10% - 2px);
+    cursor: pointer;
+    text-align: center;
 }
 
 .switch-menu-scoolor .scoolor-btn:FIRST-CHILD{
-	border-top-left-radius: 10px;
-	border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
 .switch-menu-scoolor .scoolor-btn:last-child{
-	border-top-right-radius: 10px;
-	border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .switch-menu-scoolor .scoolor-btn i{
-	line-height: 34px;
+    line-height: 34px;
 }
 
 .switch-checked{
-	background: rgba(255,255,255,0.3);
-	color: white;
+    background: rgba(255,255,255,0.3);
+    color: white;
 }
 
 .user-main-mation{
-	height: 100%;
-	width: 160px;
-	float: right;
+    height: 100%;
+    width: 160px;
+    float: right;
 }
 
 .user-main-mation .layui-nav{
@@ -2987,18 +3338,18 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .user-main-mation .layui-nav li{
-	line-height: 40px;
-	width: 100%;
+    line-height: 40px;
+    width: 100%;
 }
 
 .user-main-mation .layui-nav li a{
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .user-main-mation .layui-nav li .layui-nav-child{
-	top: 40px;
+    top: 40px;
 }
 
 .user-main-mation .layui-nav li .layui-nav-child dd a{
@@ -3008,38 +3359,38 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .user-main-mation .layui-nav li .layui-nav-child dd a i{
-	padding-right: 10px;
+    padding-right: 10px;
 }
 
 .file-write{
-	width: 100%;
-	margin-left: 0px;
-	height: 100%;
-	margin-top: 0px;
-	overflow: hidden;
+    width: 100%;
+    margin-left: 0px;
+    height: 100%;
+    margin-top: 0px;
+    overflow: hidden;
 }
 
 .file-write-left{
-	width: 280px;
-	height: 100%;
-	float: left;
+    width: 280px;
+    height: 100%;
+    float: left;
     border-right: 1px solid #e0e1e5;
     background-color: RGB(245, 245, 245);
 }
 
 .file-write-left .left-content{
-	width: 100%;
-	height: 100%;
-	float: left;
-	border-bottom-left-radius: 8px;
+    width: 100%;
+    height: 100%;
+    float: left;
+    border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
 }
 
 .file-write-center{
-	width: 280px;
-	float: left;
-	height: 100%;
-	border-right: 1px solid #e0e1e5;
+    width: 280px;
+    float: left;
+    height: 100%;
+    border-right: 1px solid #e0e1e5;
 }
 
 .file-write-center .center-title{
@@ -3057,7 +3408,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .file-write-center .center-title input{
-	width: calc(100% - 10px);
+    width: calc(100% - 10px);
     background: rgba(234,234,234,0);
     border-radius: 20px;
     border: 1px solid gainsboro;
@@ -3068,40 +3419,40 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .file-write-center .center-content{
-	width: 100%;
-	height: calc(100% - 50px);
-	float: left;
-	border-bottom-left-radius: 8px;
+    width: 100%;
+    height: calc(100% - 50px);
+    float: left;
+    border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     overflow-y: auto;
 }
 
 .file-write-center .center-content .folder-item{
-	width: calc(100% - 20px);
+    width: calc(100% - 20px);
     float: left;
     padding: 10px;
-	text-align: left;
+    text-align: left;
     border-bottom: 1px solid #e0e1e5;
     cursor: pointer;
 }
 
 .file-write-center .center-content .folder-item:HOVER{
-	background-color: #eaf0fb;
+    background-color: #eaf0fb;
 }
 
 .file-write-center .center-content .select{
-	background-color: #eaf0fb;
+    background-color: #eaf0fb;
 }
 
 .file-write-center .center-content .folder-item .folder-item-title{
-	width: 100%;
-	float: left;
+    width: 100%;
+    float: left;
 }
 
 .file-write-center .center-content .folder-item .folder-item-title .folder-item-title-icon{
-	width: 25px;
-	float: left;
-	padding-top: 4px;
+    width: 25px;
+    float: left;
+    padding-top: 4px;
     text-align: center;
 }
 
@@ -3111,9 +3462,9 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .file-write-center .center-content .folder-item .folder-item-title .folder-item-title-content{
-	width: calc(100% - 30px);
-	float: left;
-	padding-top: 3px;
+    width: calc(100% - 30px);
+    float: left;
+    padding-top: 3px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -3121,8 +3472,8 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .file-write-center .center-content .folder-item .folder-item-desc{
-	width: calc(100% - 10px);
-	float: left;
+    width: calc(100% - 10px);
+    float: left;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -3135,25 +3486,25 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .file-write-center .center-content .folder-item .folder-item-mation{
-	width: calc(100% - 10px);
-	float: left;
-	margin-top: 10px;
+    width: calc(100% - 10px);
+    float: left;
+    margin-top: 10px;
     margin-left: 10px;
 }
 
 .file-write-center .center-content .folder-item .folder-item-mation .folder-item-mation-time{
-	font-size: 12px;
+    font-size: 12px;
     color: #c2c2c2;
 }
 
 .file-write-right{
-	width: calc(100% - 575px);
-	height: 100%;
-	float: left;
+    width: calc(100% - 575px);
+    height: 100%;
+    float: left;
 }
 
 .file-write-right .right-title{
-	width: 100%;
+    width: 100%;
     height: 50px;
     color: white;
     text-align: left;
@@ -3161,13 +3512,13 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .file-write-right .right-title .note-title{
-	width: calc(100% - 80px);
-	height: 100%;
-	float: left;
+    width: calc(100% - 80px);
+    height: 100%;
+    float: left;
 }
 
 .file-write-right .right-title .note-title input{
-	width: 100%;
+    width: 100%;
     margin-top: 12px;
     background: rgba(234,234,234,0);
     border: 0px;
@@ -3177,8 +3528,8 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .file-write-right .right-title .note-operator{
-	height: 100%;
-	float: right;
+    height: 100%;
+    float: right;
     text-align: center;
 }
 
@@ -3200,15 +3551,15 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .file-write-right .right-content{
-	width: 100%;
-	height: calc(100% - 50px);
-	float: left;
-	border-bottom-left-radius: 8px;
+    width: 100%;
+    height: calc(100% - 50px);
+    float: left;
+    border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
 }
 
 .file-write-right .right-content iframe{
-	width: 100%;
+    width: 100%;
     height: 100%;
     border: 0px;
     background-color: RGBA(246, 247, 249, 1);
@@ -3222,7 +3573,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .scheduleTitle{
-	width: 100%;
+    width: 100%;
     height: 40px;
     float: left;
     border-bottom: 1px solid rgba(153, 209, 255);
@@ -3237,24 +3588,24 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .scheduleContent{
-	float: left;
-	width: 100%;
-	height: calc(100% - 40px);
+    float: left;
+    width: 100%;
+    height: calc(100% - 40px);
 }
 
 .scheduleContent .fc-header-title{
-	color: white;
-	text-shadow: 0px 0px 0px #fff, 0px 0px 4px #000;
+    color: white;
+    text-shadow: 0px 0px 0px #fff, 0px 0px 4px #000;
 }
 
 .scheduleContent .ui-widget-content{
-	background: none !important;
-	border: 1px solid lightgrey;
+    background: none !important;
+    border: 1px solid lightgrey;
     overflow: hidden;
 }
 
 .right-schedule{
-	width: 25%;
+    width: 25%;
     height: 100%;
     float: left;
     border-left: 2px solid rgba(234,234,234,0.15);
@@ -3268,124 +3619,124 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .scheduleIntroduce{
-	float: left;
-	height: 100%;
-	margin-left: 10px;
+    float: left;
+    height: 100%;
+    margin-left: 10px;
 }
 
 .introduce-item{
-	width: auto;
-	float: left;
+    width: auto;
+    float: left;
 }
 
 .introduce-item font{
-	line-height: 40px;
-	padding-left: 6px;
+    line-height: 40px;
+    padding-left: 6px;
 }
 
 .introduce-color1{
-	width: 10px;
-	height: 10px;
-	float: left;
-	background-color: #63B8FF;
+    width: 10px;
+    height: 10px;
+    float: left;
+    background-color: #63B8FF;
     margin-top: 15px;
     margin-left: 15px;
     border-radius: 5px;
 }
 
 .introduce-color2{
-	width: 10px;
-	height: 10px;
-	float: left;
-	background-color: #CD69C9;
+    width: 10px;
+    height: 10px;
+    float: left;
+    background-color: #CD69C9;
     margin-top: 15px;
     margin-left: 15px;
     border-radius: 5px;
 }
 
 .introduce-color3{
-	width: 10px;
-	height: 10px;
-	float: left;
-	background-color: #54FF9F;
+    width: 10px;
+    height: 10px;
+    float: left;
+    background-color: #54FF9F;
     margin-top: 15px;
     margin-left: 15px;
     border-radius: 5px;
 }
 
 .introduce-color4{
-	width: 10px;
-	height: 10px;
-	float: left;
-	background-color: #FF0000;
+    width: 10px;
+    height: 10px;
+    float: left;
+    background-color: #FF0000;
     margin-top: 15px;
     margin-left: 15px;
     border-radius: 5px;
 }
 
 .introduce-color5{
-	width: 10px;
-	height: 10px;
-	float: left;
-	background-color: #ADADAD;
+    width: 10px;
+    height: 10px;
+    float: left;
+    background-color: #ADADAD;
     margin-top: 15px;
     margin-left: 15px;
     border-radius: 5px;
 }
 
 .schedule-search{
-	float: left;
+    float: left;
     width: calc(100% - 10px);
-	margin-top: 10px;
+    margin-top: 10px;
     margin-left: 5px;
     margin-right: 5px;
 }
 
 .schedule-search label{
-	padding: 5px !important;
-	width: 70px !important;
-	background-color: rgba(255, 255, 255, 0) !important;
-	border-width: 0px !important;
+    padding: 5px !important;
+    width: 70px !important;
+    background-color: rgba(255, 255, 255, 0) !important;
+    border-width: 0px !important;
 }
 
 .schedule-search .layui-input-block{
-	margin-left: 70px;
+    margin-left: 70px;
 }
 
 .schedule-search input{
-	height: 30px;
-	padding-left: 5px!important;
-	background: none;
+    height: 30px;
+    padding-left: 5px!important;
+    background: none;
     border: 1px solid rgba(234,234,234,0.23);
     box-shadow: inset 0px 0px 20px rgba(0,0,0,0.15);
 }
 
 .schedule-search .layui-form-select{
-	color: black;
+    color: black;
 }
 
 .schedule-all-list{
-	float: left;
-	width: 100%;
-	height: calc(100% - 175px);
+    float: left;
+    width: 100%;
+    height: calc(100% - 175px);
 }
 
 .schedule-list{
-	float: left;
-	width: 100%;
-	height: calc(40% - 40px);
+    float: left;
+    width: 100%;
+    height: calc(40% - 40px);
 }
 
 .schedule-list .layui-timeline{
-	height: 100%;
+    height: 100%;
     overflow-y: auto;
 }
 
 .schedule-detail{
-	float: left;
-	width: 100%;
-	height: calc(60% - 40px);
-	overflow-y: auto;
+    float: left;
+    width: 100%;
+    height: calc(60% - 40px);
+    overflow-y: auto;
 }
 
 .schedule-all-list .layui-collapse{
@@ -3403,47 +3754,47 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .schedule-all-list .layui-collapse .layui-colla-item .layui-colla-title{
-	text-align: left;
-	color: gray;
+    text-align: left;
+    color: gray;
     background-color: transparent;
 }
 
 .schedule-all-list .layui-collapse .layui-colla-item .layui-colla-content{
-	padding-left: 35px;
+    padding-left: 35px;
     padding-right: 35px;
 }
 
 .layui-timeline .layui-timeline-item .layui-timeline-content{
-	cursor: pointer;
-	text-align: left;
+    cursor: pointer;
+    text-align: left;
 }
 
 .layui-timeline .layui-timeline-item .layui-timeline-content h3{
-	color: darkgray;
+    color: darkgray;
 }
 
 .scheduleTitle button{
-	float: right;
-	margin-top: 5px;
+    float: right;
+    margin-top: 5px;
     margin-right: 10px;
 }
 
 .add-schedule-mation{
-	z-index: 99999901 !important;
+    z-index: 99999901 !important;
 }
 
 .update-password-html{
-	z-index: 99980002 !important;
+    z-index: 99980002 !important;
 }
 
 .msg-skin-message{
-	z-index: 99999901 !important;
+    z-index: 99999901 !important;
 }
 
 .schedule-item-color{
-	width: 10px;
-	height: 10px;
-	float: right;
+    width: 10px;
+    height: 10px;
+    float: right;
     border-radius: 5px;
     margin-top: 5px;
 }
@@ -3454,37 +3805,37 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .schrdule-del{
-	float: right;
-	display: none;
+    float: right;
+    display: none;
 }
 
 .schrdule-del:HOVER{
-	color: red;
+    color: red;
 }
 
 .layui-timeline-content:HOVER .schrdule-del{
-	display: block;
+    display: block;
 }
 
 .alone-title{
-	text-align: center;
+    text-align: center;
 }
 
 .context-menu-line{
-	height: 0px;
+    height: 0px;
     border: 0.5px solid gainsboro;
 }
 
 .win-left-right-menu{
-	border: 1px solid gainsboro;
+    border: 1px solid gainsboro;
 }
 
 .top-message-mation{
-	z-index: 99999901 !important;
+    z-index: 99999901 !important;
 }
 
 .app-store-item{
-	border: 2px solid gainsboro;
+    border: 2px solid gainsboro;
     padding-bottom: 10px;
     width: calc(25% - 24px);
     margin-left: 20px;
@@ -3496,20 +3847,20 @@ body .layer-ext-winconfirm .layui-layer-content {
 .app-store-item-content{
     width: calc(100% - 20px);
     margin-left: 10px;
-	height: 165px;
-	margin-top: 10px;
-	background: -webkit-gradient(linear,left top,right top,from(#D3DFE8),to(#EDF1F4));
-	float: left;
+    height: 165px;
+    margin-top: 10px;
+    background: -webkit-gradient(linear,left top,right top,from(#D3DFE8),to(#EDF1F4));
+    float: left;
 }
 
 .app-store-item-top{
-	height: 100%;
+    height: 100%;
     cursor: pointer;
     overflow: hidden;
 }
 
 .app-store-pic{
-	-webkit-box-shadow: 0 0 10px 0 rgba(0,0,0,.3);
+    -webkit-box-shadow: 0 0 10px 0 rgba(0,0,0,.3);
     box-shadow: 0 0 10px 0 rgba(0,0,0,.3);
     margin: 0 auto;
     display: block;
@@ -3552,13 +3903,13 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .app-store-item-bottom-zz{
-	background: #000;
+    background: #000;
     opacity: 0.5;
     filter: alpha(opacity=50);
 }
 
 .app-store-item-bottom-card{
-	width: calc(100% - 20px);
+    width: calc(100% - 20px);
     margin-left: 10px;
     height: 165px;
     margin-top: -165px;
@@ -3578,7 +3929,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .aysnMenu{
-	margin-top: -50px;
+    margin-top: -50px;
     display: block;
     background-image: -webkit-gradient(linear,left top,right top,from(#17e66c),to(#10c55b));
     background-image: -webkit-linear-gradient(left,#17e66c,#10c55b);
@@ -3588,9 +3939,9 @@ body .layer-ext-winconfirm .layui-layer-content {
     font-size: 1em;
     float: right;
 }
- 
+
 .sysWinType{
-	height: 45px;
+    height: 45px;
     line-height: 45px;
     border: 2px solid gainsboro;
     font-size: 14px;
@@ -3598,7 +3949,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .store-cat-item{
-	line-height: 26px;
+    line-height: 26px;
     padding: 15px 0 0;
     float: left;
     width: 100%;
@@ -3625,45 +3976,45 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .store-cat-item ul li a{
-	color: darkgray;
+    color: darkgray;
 }
 
 #sysFirstType li a:HOVER,
 #sysSecondType li a:HOVER,
 .chooseLiItem li a:HOVER{
-	color: RGB(17, 202, 94);
+    color: RGB(17, 202, 94);
 }
 
 #sysFirstType .active a,
 #sysSecondType .active a,
 .chooseLiItem .active a{
-	color: RGB(17, 202, 94);
+    color: RGB(17, 202, 94);
 }
 
 .middlepage-content{
-	margin:auto 0px;
+    margin:auto 0px;
     height: 100vh;
 }
 
 .middlepage-content iframe{
-	width: 100%;
-	height: 100%;
-	border: 0px;
+    width: 100%;
+    height: 100%;
+    border: 0px;
 }
 
 .showgrid-active{
-	background-color: var(--start-btn-color) !important;
+    background-color: var(--start-btn-color) !important;
     color: white !important;
 }
 
 .childWindow-title-input-box{
-	width: 70%;
+    width: 70%;
     height: 30px;
     display: none;
 }
 
 .childWindow-title-input-box>input{
-	height: 100%;
+    height: 100%;
     margin-top: 5px;
     width: 200px;
     background-color: transparent;
@@ -3672,22 +4023,22 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .childWindow-title-input-box>button{
-	float: left;
-	margin-top: 5px;
+    float: left;
+    margin-top: 5px;
     margin-left: 10px;
 }
 
 .power-box{
-	
+
 }
 
 .power-box>input{
-	width: 200px;
+    width: 200px;
     float: left;
 }
 
 .list-form-search{
-	height: 28px;
+    height: 28px;
     line-height: 28px;
     float: left;
 }
@@ -3705,11 +4056,11 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .product-list .active{
-	background-color: RGB(94, 186, 120);
+    background-color: RGB(94, 186, 120);
 }
 
 .product-list .active a{
-	color: white;
+    color: white;
 }
 
 .product-list dl dd {
@@ -3726,21 +4077,21 @@ body .layer-ext-winconfirm .layui-layer-content {
     display: block;
     line-height: 32px;
     white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	padding-left: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 5px;
     padding-right: 5px;
     font-family: PingFang SC,Hiragino Sans GB,Arial,Microsoft YaHei,Verdana,Roboto,Noto,Helvetica Neue,sans-serif !important;
     font-size: 12px;
 }
 
 .contentDiv{
-	left: 30px;
+    left: 30px;
     top: -40px;
 }
 
 .contentDiv img{
-	max-width: 100% !important;
+    max-width: 100% !important;
 }
 
 .common-footer {
@@ -3755,33 +4106,33 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .manage-console {
-	width: 100%;
-	height: 100%;
-	margin: 0 auto;
-	background-color: #FCFCFC;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    background-color: #FCFCFC;
 }
 
 .manage-console-left {
-	position: relative;
-	float: left;
-	height: 100%;
+    position: relative;
+    float: left;
+    height: 100%;
     border-right: 1px solid rgba(242, 242, 242);
 }
 
 .left-top-is-tree{
-	width: calc(100% - 5px);
-	float: left;
-	height: calc(100% - 85px);
-	position: absolute;
+    width: calc(100% - 5px);
+    float: left;
+    height: calc(100% - 85px);
+    position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
 }
 
 .left-bottom-is-memory{
-	width: calc(100% - 5px);
-	float: left;
-	height: 80px;
+    width: calc(100% - 5px);
+    float: left;
+    height: 80px;
     background: rgba(221,221,221,0.02);
     border-right: none;
     border-top: 1px solid rgba(242, 242, 242);
@@ -3791,36 +4142,36 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .left-bottom-is-memory .memory-top{
-	width: 100%;
-	height: 23px;
-	float: left;
+    width: 100%;
+    height: 23px;
+    float: left;
 }
 
 .left-bottom-is-memory .memory-top .memory-scolor{
-	width: 100%;
-	height: 6px;
-	float: left;
+    width: 100%;
+    height: 6px;
+    float: left;
 }
 
 .left-bottom-is-memory .memory-top .memory-num{
-	width: calc(100% - 20px);
-	height: 17px;
-	float: left;
-	color: gray;
+    width: calc(100% - 20px);
+    height: 17px;
+    float: left;
+    color: gray;
     text-align: left;
     padding-left: 20px;
 }
 
 .left-bottom-is-memory .memory-buttom{
-	width: 100%;
-	height: calc(100% - 30px);
-	float: left;
-	padding-left: 20px;
-	margin-top: 5px;
+    width: 100%;
+    height: calc(100% - 30px);
+    float: left;
+    padding-left: 20px;
+    margin-top: 5px;
 }
 
 .left-bottom-is-memory .memory-buttom .memory-btn{
-	background: rgba(221,221,221,0.02);
+    background: rgba(221,221,221,0.02);
     color: gray;
     border: 1px solid rgba(234,234,234,0.05);
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -3839,17 +4190,17 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .left-bottom-is-memory .memory-buttom .memory-btn:HOVER{
-	background: rgba(204, 232, 255) !important;
+    background: rgba(204, 232, 255) !important;
     border: 1px solid rgba(153, 209, 255) !important;
 }
 
 .left-bottom-is-memory .memory-buttom .memory-btn i{
-	display: block;
+    display: block;
     font-size: 25px;
     padding-bottom: 0px;
     text-shadow: none;
     margin-top: 5px;
-    
+
 }
 
 .left-bottom-is-memory .memory-buttom .memory-btn span{
@@ -3860,27 +4211,27 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .manage-console-right {
-	height: 100%;
-	box-sizing: border-box;
-	overflow: hidden;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .right-top-is-route{
-	width: 100%;
-	height: 50px;
-	float: left;
-	background: rgba(221,221,221,0.02);
+    width: 100%;
+    height: 50px;
+    float: left;
+    background: rgba(221,221,221,0.02);
     border-bottom: 1px solid rgba(234,234,234,0.05);
 }
 
 .right-top-is-route .history-doc{
-	float: left;
+    float: left;
     line-height: 50px;
     margin-left: 10px;
 }
 
 .right-top-is-route .history-doc .btn-custom{
-	color: #fff;
+    color: #fff;
     text-shadow: 0 0 0px #fff, 0 1px 3px #666666;
     background: rgba(234,234,234,0.1);
     border-color: rgba(234,234,234,0.23);
@@ -3890,41 +4241,41 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .right-top-is-route .history-doc .btn-custom:FIRST-CHILD{
-	border-top-left-radius: 5px;
+    border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
 
 .right-top-is-route .history-doc .btn-custom:last-CHILD{
-	border-top-right-radius: 5px;
+    border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
 
 .right-top-is-route .history-doc .btn-custom i{
-	padding: 0 5px;
+    padding: 0 5px;
     font-size: 20px;
 }
 
 .right-top-is-route .history-doc button.disable{
-	box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
+    box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
     opacity: 0.5;
     filter: alpha(opacity=50);
 }
 
 .right-top-is-route .history-doc .btn-custom:HOVER{
-	box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
-	opacity: 0.5;
+    box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
+    opacity: 0.5;
     filter: alpha(opacity=50);
 }
 
 .right-top-is-route .doc-op{
-	float: left;
+    float: left;
     line-height: 50px;
     margin-left: 10px;
     width: calc(100% - 190px);
 }
 
 .right-top-is-route .doc-op .btn-custom{
-	color: #fff;
+    color: #fff;
     text-shadow: 0 0 0px #fff, 0 1px 3px #666666;
     background: rgba(234,234,234,0.1);
     border: 1px solid rgba(234,234,234,1);
@@ -3935,17 +4286,17 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .right-top-is-route .doc-op .btn-custom:HOVER{
-	background: rgba(204, 232, 255) !important;
+    background: rgba(204, 232, 255) !important;
     border: 1px solid rgba(153, 209, 255) !important;
 }
 
 .right-top-is-route .doc-op .btn-custom:FIRST-CHILD{
-	border-top-left-radius: 5px;
+    border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
 
 .right-top-is-route .doc-op .btn-custom:LAST-CHILD{
-	border-top-right-radius: 5px;
+    border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
 
@@ -3973,7 +4324,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .right-top-is-route .doc-op .doc-op-input-div .yarnball .yarnlet{
-	display: inline-block;
+    display: inline-block;
     float: left;
     width: auto;
     height: 200%;
@@ -3982,23 +4333,23 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .right-top-is-route .doc-op .doc-op-input-div .yarnball .first{
-	
+
 }
 
 .right-top-is-route .doc-op .doc-op-input-div .yarnball .yarnlet a{
-	height: 100%;
-	width: auto;
+    height: 100%;
+    width: auto;
     cursor: pointer;
     float: left;
     padding: 0 5px;
 }
 
 .right-top-is-route .doc-op .doc-op-input-div .yarnball .yarnlet a:HOVER{
-	background: rgba(204, 232, 255) !important;
+    background: rgba(204, 232, 255) !important;
 }
 
 .right-top-is-route .doc-op .doc-op-input{
-	border-right-color: transparent;
+    border-right-color: transparent;
     background: none;
     border: 1px solid rgba(234,234,234,0.23);
     box-shadow: inset 0px 0px 20px rgba(0,0,0,0.15);
@@ -4014,7 +4365,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .right-top-is-route .doc-op .btn-custom i{
-	padding: 0 5px;
+    padding: 0 5px;
     font-size: 13px;
 }
 
@@ -4041,7 +4392,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .right-top-is-route .doc-search-op .btn-custom{
-	color: RGBA(128, 128, 128);
+    color: RGBA(128, 128, 128);
     background: rgba(234,234,234,0.1);
     border: 1px solid rgba(234,234,234,1);
     width: 33px;
@@ -4053,42 +4404,42 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .right-top-is-route .doc-search-op .btn-custom:HOVER{
-	background: rgba(204, 232, 255) !important;
+    background: rgba(204, 232, 255) !important;
     border: 1px solid rgba(153, 209, 255) !important;
 }
 
 .right-top-is-route .doc-search-op .btn-custom i{
-	padding: 0 5px;
+    padding: 0 5px;
     font-size: 13px;
 }
 
 .right-top2-is-operation{
-	width: 100%;
-	height: 40px;
-	float: left;
+    width: 100%;
+    height: 40px;
+    float: left;
     border-bottom: 1px solid rgba(242, 242, 242);
     box-shadow: 1px 2px 15px rgba(0, 0, 0, 0.1);
 }
 
 .right-top2-is-operation .create-new {
-	height: 100%;
-	float: left;
-	width: 140px;
-	line-height: 40px;
-	padding-left: 10px;
+    height: 100%;
+    float: left;
+    width: 140px;
+    line-height: 40px;
+    padding-left: 10px;
 }
 
 /******************************小圆点点击右下角弹出开始*************************************/
 .layui-btn-dropdown{
-	height: 24px;
-	float: left;
+    height: 24px;
+    float: left;
     margin-top: 2px;
 }
 
 .layui-btn-dropdown button{
-	width: 100%;
-	height: 100%;
-	color: RGBA(128, 128, 128);
+    width: 100%;
+    height: 100%;
+    color: RGBA(128, 128, 128);
     background: rgba(234,234,234,0.1);
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -4096,18 +4447,18 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .layui-btn-dropdown button:HOVER{
-	background: rgba(204, 232, 255) !important;
+    background: rgba(204, 232, 255) !important;
     border: 1px solid rgba(153, 209, 255) !important;
     box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
 }
 
 .layui-btn-dropdown button i{
-	padding: 0 5px;
+    padding: 0 5px;
     font-size: 13px;
 }
 
 .layui-dropdown-menu{
-	box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
     border-radius: 0;
     background: rgba(255,255,255,0.95);
     min-width: 190px;
@@ -4127,33 +4478,33 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .layui-dropdown-menu li a{
-	width: calc(100% - 20px);
+    width: calc(100% - 20px);
     padding: 0px 10px;
-	background: transparent;
-	height: 25px !important;
-	float: left;
-	line-height: 26px;
+    background: transparent;
+    height: 25px !important;
+    float: left;
+    line-height: 26px;
 }
 
 .layui-dropdown-menu li a:HOVER{
-	background-color: rgba(229, 243, 255) !important;
-	text-decoration: none;
+    background-color: rgba(229, 243, 255) !important;
+    text-decoration: none;
 }
 
 .layui-dropdown-menu li a i,
 .layui-dropdown-menu li a img{
-	width: 16px;
-	height: 16px;
-	margin-right: 10px;
-	float: left;
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    float: left;
 }
 
 .layui-dropdown-menu li a img{
-	margin-top: 5px;
+    margin-top: 5px;
 }
 
 .layui-dropdown-menu .divider{
-	height: 2px;
+    height: 2px;
     line-height: 0;
     border-bottom: 1px solid #eee;
     margin: 2px 0 4px;
@@ -4172,26 +4523,26 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .right-top2-is-operation .create-new .btn-custom:FIRST-CHILD{
-	border-top-left-radius: 5px;
+    border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
 
 .right-top2-is-operation .create-new .btn-custom:HOVER{
-	background: rgba(204, 232, 255) !important;
+    background: rgba(204, 232, 255) !important;
     border: 1px solid rgba(153, 209, 255) !important;
 }
 
 .right-top2-is-operation .create-new .btn-custom i{
-	padding: 0 5px;
+    padding: 0 5px;
     font-size: 13px;
     color: RGB(248, 198, 61);
 }
 
 .right-top2-is-operation .upload-file {
-	height: 100%;
-	float: left;
-	width: 100px;
-	line-height: 40px;
+    height: 100%;
+    float: left;
+    width: 100px;
+    line-height: 40px;
 }
 
 .right-top2-is-operation .upload-file .btn-custom{
@@ -4206,25 +4557,25 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .right-top2-is-operation .upload-file .btn-custom:FIRST-CHILD{
-	border-top-left-radius: 5px;
+    border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
 
 .right-top2-is-operation .upload-file .btn-custom:HOVER{
-	background: rgba(204, 232, 255) !important;
+    background: rgba(204, 232, 255) !important;
     border: 1px solid rgba(153, 209, 255) !important;
 }
 
 .right-top2-is-operation .upload-file .btn-custom i{
-	padding: 0 5px;
+    padding: 0 5px;
     font-size: 13px;
     color: RGB(58, 155, 232);
 }
 
 .right-top2-is-operation .select-op-more {
-	height: 100%;
-	float: left;
-	line-height: 40px;
+    height: 100%;
+    float: left;
+    line-height: 40px;
 }
 
 .right-top2-is-operation .select-op-more .btn-custom{
@@ -4247,40 +4598,40 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .right-top2-is-operation .select-op-more .btn-custom img{
-	width: 16px;
-	height: 16px;
-	float: left;
+    width: 16px;
+    height: 16px;
+    float: left;
 }
 
 .right-top2-is-operation .select-op-more .btn-custom span{
-	float: left;
-	margin-left: 5px;
-	color: RGBA(128, 128, 128);
+    float: left;
+    margin-left: 5px;
+    color: RGBA(128, 128, 128);
 }
 
 .right-top2-is-operation .select-op-more .btn-custom:HOVER{
-	background: rgba(204, 232, 255) !important;
+    background: rgba(204, 232, 255) !important;
     border: 1px solid rgba(153, 209, 255) !important;
 }
 
 .right-top2-is-operation .select-op-more .btn-custom i{
-	padding: 0 5px;
+    padding: 0 5px;
     font-size: 13px;
 }
 
 .right-top2-is-operation .select-optearor {
-	height: 100%;
-	float: right;
-	width: auto;
-	line-height: 40px;
+    height: 100%;
+    float: right;
+    width: auto;
+    line-height: 40px;
 }
 
 .right-top2-is-operation .select-optearor .layui-btn-dropdown{
-	margin-top: 0px;
+    margin-top: 0px;
 }
 
 .right-top2-is-operation .select-optearor .btn-custom{
-	color: RGBA(128, 128, 128);
+    color: RGBA(128, 128, 128);
     background: rgba(234,234,234,0.1);
     border: 1px solid rgba(234,234,234,1);
     width: 33px;
@@ -4290,21 +4641,21 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .right-top2-is-operation .select-optearor .btn-custom:HOVER{
-	background: rgba(204, 232, 255) !important;
+    background: rgba(204, 232, 255) !important;
     border: 1px solid rgba(153, 209, 255) !important;
 }
 
 .right-top2-is-operation .select-optearor .btn-custom i{
-	padding: 0 5px;
+    padding: 0 5px;
     font-size: 13px;
 }
 
 .right-center-is-content{
-	width: calc(100% - 30px);
-	height: calc(100% - 120px);
-	float: left;
-	padding: 10px 20px 0 10px;
-	overflow-y: auto;
+    width: calc(100% - 30px);
+    height: calc(100% - 120px);
+    float: left;
+    padding: 10px 20px 0 10px;
+    overflow-y: auto;
 }
 
 .file{
@@ -4317,42 +4668,42 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .right-center-is-content .active{
-	filter: none;
+    filter: none;
     background: rgba(204, 232, 255) !important;
     border: 1px solid rgba(153, 209, 255) !important;
     padding: 0px;
 }
 
 .right-center-is-content .active .item-menu{
-	display: block !important;
+    display: block !important;
 }
 
 .right-center-is-content .active .item-select{
-	display: block !important;
+    display: block !important;
 }
 
 .right-center-is-content .active .ico .meta-info{
-	right: 14px !important;
+    right: 14px !important;
     top: 32px !important;
 }
 
 .right-center-is-content .file:HOVER{
-	filter: none;
+    filter: none;
     background: rgba(229, 243, 255);
     border: 1px solid rgba(229, 243, 255);
     padding: 0px;
 }
 
 .right-center-is-content .file:HOVER .item-menu{
-	display: block;
+    display: block;
 }
 
 .right-center-is-content .file:HOVER .item-select{
-	display: block;
+    display: block;
 }
 
 .right-center-is-content .file:HOVER .ico .meta-info{
-	right: 14px;
+    right: 14px;
     top: 32px;
 }
 
@@ -4388,7 +4739,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .file .item-menu{
-	display: none;
+    display: none;
     position: absolute;
     right: 4px;
     top: 4px;
@@ -4405,13 +4756,13 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .file .item-menu .layui-btn-dropdown .cert{
-	width: 16px;
+    width: 16px;
     height: 16px;
     margin-top: -2px;
 }
 
 .file .ico{
-	padding-left: 5px;
+    padding-left: 5px;
     height: 61px;
     width: 61px;
     padding-top: 4px;
@@ -4426,7 +4777,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .file .ico .meta-info{
-	position: absolute;
+    position: absolute;
     right: 15px;
     color: #fff;
     top: 33px;
@@ -4439,8 +4790,8 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .file .filename{
-	width: 71px;
-	cursor: default;
+    width: 71px;
+    cursor: default;
     text-align: center;
     word-break: break-all;
     font-size: 0.9em;
@@ -4454,10 +4805,10 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .file .filename span{
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 2;
-	overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
 }
 
 .file .filename .title.db-click-rename{
@@ -4465,8 +4816,8 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .file .filename-edit{
-	width: 71px;
-	cursor: default;
+    width: 71px;
+    cursor: default;
     text-align: center;
     word-break: break-all;
     font-size: .8em;
@@ -4481,23 +4832,23 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .file .filename-edit img{
-	float: right;
-	width: 50%;
-	width: 21px;
-	cursor: pointer;
+    float: right;
+    width: 50%;
+    width: 21px;
+    cursor: pointer;
 }
 
 .right-bottom-is-num{
-	width: 100%;
-	height: 15px;
-	float: left;
-	text-align: left;
+    width: 100%;
+    height: 15px;
+    float: left;
+    text-align: left;
 }
 
 .right-bottom-is-num .item-num{
-	background: rgba(0,0,0,0.2);
-	margin-left: 10px;
-	border-left: 3px solid rgba(200,200,200,0.3);
+    background: rgba(0,0,0,0.2);
+    margin-left: 10px;
+    border-left: 3px solid rgba(200,200,200,0.3);
     border-right: 3px solid rgba(200,200,200,0.3);
     padding-left: 5px;
     padding-right: 5px;
@@ -4758,26 +5109,26 @@ body .layer-ext-winconfirm .layui-layer-content {
 
 @-webkit-keyframes progressmove {
     0% {
-       background-position: 0 0;
+        background-position: 0 0;
     }
     100% {
-       background-position: 17px 0;
+        background-position: 17px 0;
     }
 }
 @-moz-keyframes progressmove {
     0% {
-       background-position: 0 0;
+        background-position: 0 0;
     }
     100% {
-       background-position: 17px 0;
+        background-position: 17px 0;
     }
 }
 @keyframes progressmove {
     0% {
-       background-position: 0 0;
+        background-position: 0 0;
     }
     100% {
-       background-position: 17px 0;
+        background-position: 17px 0;
     }
 }
 
@@ -4972,7 +5323,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .light-app-left .app-title span{
-	text-align: left;
+    text-align: left;
     color: #666;
     font-weight: 400;
     margin: 0;
@@ -4985,7 +5336,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 
 .light-app-left .setting{
     overflow-y: auto;
-    height: 100%; 
+    height: 100%;
 }
 
 .light-app-left .setting a.selected {
@@ -5064,7 +5415,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .light-app-right .h1{
-	border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
     padding-bottom: 10px;
     font-weight: 400;
     color: #666;
@@ -5085,7 +5436,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .light-app-right .app-list .flex-empty{
-	margin: 0 15px 20px 0;
+    margin: 0 15px 20px 0;
     width: 140px;
     height: 1px;
 }
@@ -5112,12 +5463,12 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .light-app-right .app-list .app-li:HOVER{
-	background:#fff;
-	box-shadow:0px 20px 100px rgba(0,0,0,0.1), 0px 20px 30px rgba(0,0,0,0.05);
+    background:#fff;
+    box-shadow:0px 20px 100px rgba(0,0,0,0.1), 0px 20px 30px rgba(0,0,0,0.05);
 }
 
 .light-app-right .app-list .app-li .icon{
-	height: 90px;
+    height: 90px;
     background-color: rgba(0,0,0,0.01);
     background-image: linear-gradient(to bottom,#def 0,#fff 100%);
     border-radius: 4px;
@@ -5125,18 +5476,18 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .light-app-right .app-list .app-li .icon img{
-	max-width: 100%;
+    max-width: 100%;
     max-height: 100%;
     width: 72px;
     border-radius: 10%;
 }
 
 .light-app-right .app-list .app-li .text{
-	height: 50px;
+    height: 50px;
 }
 
 .light-app-right .app-list .app-li .text .name{
-	color: #444;
+    color: #444;
     font-weight: 800;
     margin: 10px 5px 0;
     max-height: 32px;
@@ -5156,7 +5507,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .light-app-right .app-list .app-li .btn-group .btn{
-	float: none;
+    float: none;
     width: 80px;
     height: 22px;
     padding-left: 0;
@@ -5164,7 +5515,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .shareForm{
-	width: 22%;
+    width: 22%;
     height: 220px;
     margin-left: 38%;
     margin-top: 10%;
@@ -5182,14 +5533,14 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .shareForm .top-share-div .layui-form-label{
-	width: auto;
+    width: auto;
     height: 100%;
     line-height: 60px;
     margin-left: 20px;
 }
 
 .shareForm .top-share-div .layui-form-label img{
-	width: 44px;
+    width: 44px;
     height: 44px;
     overflow: hidden;
     border-radius: 22px;
@@ -5202,7 +5553,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .shareForm .top-share-div .layui-input-block strong{
-	color: white;
+    color: white;
 }
 
 .shareForm .bottom-share-div{
@@ -5210,7 +5561,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .shareForm .bottom-share-div .layui-form-label{
-	width: 100%;
+    width: 100%;
     text-align: left;
     margin-left: 20px;
 }
@@ -5243,22 +5594,22 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .showFormNone img{
-	margin-top: 150px;
+    margin-top: 150px;
 }
 
 .showFormNone font{
-	margin-top: 30px;
+    margin-top: 30px;
     float: left;
     text-align: center;
     width: 100%;
 }
 
 .corlor-36{
-	background-color: RGB(244, 244, 244);
+    background-color: RGB(244, 244, 244);
 }
 
 .share-file-title{
-	width: 100%;
+    width: 100%;
     height: 60px;
     border-radius: 4px;
     border-bottom: 1px solid #dee9f5;
@@ -5290,7 +5641,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .share-file-title .sys-login-mation .login-btn font{
-	line-height: 60px;
+    line-height: 60px;
     color: rgb(20, 174, 255);
     cursor: pointer;
     margin: 0 10px;
@@ -5308,7 +5659,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .fileListForm{
-	width: calc(100% - 40px);
+    width: calc(100% - 40px);
     height: calc(100% - 80px);
     border-radius: 4px;
     border: 1px solid #dee9f5;
@@ -5320,17 +5671,17 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .fileListForm .share-file-list{
-	height: 100%;
-	width: calc(100% - 230px);
-	float: left;
-	box-shadow: 0 0 10px rgba(171,198,235,.3);
+    height: 100%;
+    width: calc(100% - 230px);
+    float: left;
+    box-shadow: 0 0 10px rgba(171,198,235,.3);
 }
 
 .fileListForm .share-file-list .share-file-mation{
-	width: calc(100% - 40px);
-	float: left;
-	height: 120px;
-	margin: 0px 20px;
+    width: calc(100% - 40px);
+    float: left;
+    height: 120px;
+    margin: 0px 20px;
     border-bottom: 1px solid #f6f6f6;
 }
 
@@ -5345,13 +5696,13 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .fileListForm .share-file-list .share-file-mation .file-title img{
-	width: 25px;
+    width: 25px;
     height: 25px;
     margin-right: 10px;
 }
 
 .fileListForm .share-file-list .share-file-mation .file-operator{
-	width: 50%;
+    width: 50%;
     float: left;
     height: 90px;
     line-height: 90px;
@@ -5359,12 +5710,12 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .fileListForm .share-file-list .share-file-mation .file-operator button{
-	color: #09AAFF;
-	border-color: #09AAFF;
+    color: #09AAFF;
+    border-color: #09AAFF;
 }
 
 .fileListForm .share-file-list .share-file-mation .share-time-validity{
-	width: 100%;
+    width: 100%;
     float: left;
     height: 20px;
     line-height: 20px;
@@ -5387,42 +5738,42 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .fileListForm .share-file-list .share-file-list-path{
-	float: left;
-	width: calc(100% - 40px);
-	height: 40px;
-	margin: 0px 20px;
+    float: left;
+    width: calc(100% - 40px);
+    height: 40px;
+    margin: 0px 20px;
     line-height: 40px;
     text-align: left;
 }
 
 .fileListForm .share-file-list .share-file-list-path .layui-breadcrumb a{
-	color: #09AAFF !important;
+    color: #09AAFF !important;
 }
 
 .fileListForm .share-file-list .share-file-list-mation{
-	width: calc(100% - 40px);
-	float: left;
-	height: calc(100% - 160px);
-	margin: 0px 20px;
+    width: calc(100% - 40px);
+    float: left;
+    height: calc(100% - 160px);
+    margin: 0px 20px;
 }
 
 .fileListForm .share-file-list .share-file-list-mation .file-list-title{
-	width: 100%;
+    width: 100%;
     height: 40px;
     border-bottom: 1px solid #f6f6f6;
 }
 
 .fileListForm .share-file-list .share-file-list-mation .file-list-title .check_box,
 .fileListForm .share-file-list .share-file-list-mation .file-list-content .file-item .check_box{
-	float: left;
-	height: 100%;
-	width: 50px;
-	line-height: 40px;
+    float: left;
+    height: 100%;
+    width: 50px;
+    line-height: 40px;
 }
 
 .fileListForm .share-file-list .share-file-list-mation .file-list-title .check_box input,
 .fileListForm .share-file-list .share-file-list-mation .file-list-content .file-item .check_box input {
-	display: none;
+    display: none;
 }
 
 .fileListForm .share-file-list .share-file-list-mation .file-list-title .check_box input +label,
@@ -5449,9 +5800,9 @@ body .layer-ext-winconfirm .layui-layer-content {
 
 .fileListForm .share-file-list .share-file-list-mation .file-list-title .file_name,
 .fileListForm .share-file-list .share-file-list-mation .file-list-content .file-item .file_name{
-	float: left;
-	height: 100%;
-	width: calc(60% - 50px);
+    float: left;
+    height: 100%;
+    width: calc(60% - 50px);
     text-align: left;
     line-height: 40px;
     cursor: pointer;
@@ -5466,14 +5817,14 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .fileListForm .share-file-list .share-file-list-mation .file-list-title .file_name:HOVER{
-	background-color: RGB(246, 250, 255);
+    background-color: RGB(246, 250, 255);
 }
 
 .fileListForm .share-file-list .share-file-list-mation .file-list-title .size,
 .fileListForm .share-file-list .share-file-list-mation .file-list-content .file-item .size{
-	float: left;
-	height: 100%;
-	width: 15%;
+    float: left;
+    height: 100%;
+    width: 15%;
     text-align: left;
     line-height: 40px;
     cursor: pointer;
@@ -5483,14 +5834,14 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .fileListForm .share-file-list .share-file-list-mation .file-list-title .size:HOVER{
-	background-color: RGB(246, 250, 255);
+    background-color: RGB(246, 250, 255);
 }
 
 .fileListForm .share-file-list .share-file-list-mation .file-list-title .time,
 .fileListForm .share-file-list .share-file-list-mation .file-list-content .file-item .time{
-	float: left;
-	height: 100%;
-	width: 20%;
+    float: left;
+    height: 100%;
+    width: 20%;
     text-align: left;
     line-height: 40px;
     cursor: pointer;
@@ -5500,26 +5851,26 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .fileListForm .share-file-list .share-file-list-mation .file-list-title .time:HOVER{
-	background-color: RGB(246, 250, 255);
+    background-color: RGB(246, 250, 255);
 }
 
 .fileListForm .share-file-list .share-file-list-mation .file-list-content{
-	width: 100%;
-	float: left;
-	height: auto;
-	min-height: 100px;
+    width: 100%;
+    float: left;
+    height: auto;
+    min-height: 100px;
 }
 
 .fileListForm .share-file-list .share-file-list-mation .file-list-content .file-item{
-	width: 100%;
-	float: left;
-	height: 40px;
-	border-bottom: 1px solid #f2f6fd;
+    width: 100%;
+    float: left;
+    height: 40px;
+    border-bottom: 1px solid #f2f6fd;
 }
 
 .fileListForm .share-file-list .share-file-list-mation .file-list-content .file-item:HOVER{
-	background-color: RGB(244, 251, 255);
-	border-top: 1px solid #cbedff;
+    background-color: RGB(244, 251, 255);
+    border-top: 1px solid #cbedff;
     border-bottom: 1px solid #cbedff;
     margin-top: -1px;
 }
@@ -5533,15 +5884,15 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .fileListForm .share-user-mation{
-	height: 100%;
-	width: 230px;
-	float: left;
-	background-color: rgb(244, 244, 244);
+    height: 100%;
+    width: 230px;
+    float: left;
+    background-color: rgb(244, 244, 244);
 }
 
 .fileListForm .share-user-mation .user-mation{
-	width: 100%;
-	height: 80px;
+    width: 100%;
+    height: 80px;
 }
 
 .fileListForm .share-user-mation .user-mation img{
@@ -5553,12 +5904,12 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .fileListForm .share-user-mation .user-mation font{
-	float: left;
+    float: left;
     line-height: 80px;
 }
 
 .layui-table-init{
-	text-align: center;
+    text-align: center;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -5568,17 +5919,17 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .layui-table-init i{
-	font-size: 45px;
+    font-size: 45px;
     top: calc(50% - 22px);
     position: absolute;
 }
 
 .zip-show{
-	
+
 }
 
 .zip-show .layui-layer-title{
-	height: 90px;
+    height: 90px;
     padding: 0px;
     background-image: url(../../../../assets/images/fly.png);
     background-color: lightskyblue;
@@ -5588,7 +5939,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .zip-show .layui-layer-title .fly-img{
-	width: 60px;
+    width: 60px;
     height: 60px;
     margin-top: 15px;
     margin-left: 15px;
@@ -5596,11 +5947,11 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .zip-show .layui-layer-content iframe{
-	margin-top: -1px;
+    margin-top: -1px;
 }
 
 #jszip_utils{
-	width: 100%;
+    width: 100%;
     height: 100%;
     overflow-x: hidden;
 }
@@ -5617,7 +5968,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 #jszip_utils .title .name{
-	width: calc(100% - 260px);
+    width: calc(100% - 260px);
     float: left;
     padding-left: 10px;
     border-right: 1px solid #CDC9C9;
@@ -5637,9 +5988,9 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .fileconsole-mask{
-	width: 100%;
-	height: 100%;
-	position: absolute;
+    width: 100%;
+    height: 100%;
+    position: absolute;
     z-index: 100;
     background: RGBA(169, 169, 169, 0.3);
 }
@@ -5658,18 +6009,18 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .fileconsole-mask .cent font{
-	color: #808080;
+    color: #808080;
 }
 
 .item-select .item-check{
-	float: left;
-	height: 100%;
-	width: 50px;
-	line-height: 15px;
+    float: left;
+    height: 100%;
+    width: 50px;
+    line-height: 15px;
 }
 
 .item-select .item-check input{
-	display: none;
+    display: none;
 }
 
 .item-select .item-check input +label{
@@ -5694,38 +6045,38 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .sys-mation-module-operator{
-	height: 45px;
-	background-color: rgba(255, 255, 255, 0.1);
+    height: 45px;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .sys-mation-module-operator .sys-mation-module-operator-left{
-	height: 100%;
-	width: calc(60% - 10px);
-	float: left;
-	text-align: left;
-	padding-left: 10px;
-	color: white;
+    height: 100%;
+    width: calc(60% - 10px);
+    float: left;
+    text-align: left;
+    padding-left: 10px;
+    color: white;
     font-size: 13px;
     line-height: 45px;
 }
 
 .sys-mation-module-operator .sys-mation-module-operator-right{
-	height: 100%;
-	width: calc(40% - 10px);
-	float: left;
-	text-align: right;
+    height: 100%;
+    width: calc(40% - 10px);
+    float: left;
+    text-align: right;
     padding-right: 10px;
 }
 
 .sys-mation-module-operator .sys-mation-module-operator-right font{
-	color: white;
+    color: white;
     margin-right: 10px;
     font-family: 宋体;
 }
 
 .sys-mation-module-operator .sys-mation-module-operator-right font .refreshMinute{
-	color: wheat;
-	margin: 0 5px;
+    color: wheat;
+    margin: 0 5px;
 }
 
 .sys-mation-module-operator .sys-mation-module-operator-right button{
@@ -5739,11 +6090,11 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .sys-mation-module-operator button i{
-	color: white;
+    color: white;
 }
 
 .sys-mation-module-list{
-	height: 120px;
+    height: 120px;
 }
 
 .sys-mation-module-list li{
@@ -5751,21 +6102,21 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .sys-mation-module-list li a{
-	color: white;
+    color: white;
 }
 
 .sys-statistics-list{
-	width: 100%;
-	height: calc(100% - 175px);
+    width: 100%;
+    height: calc(100% - 175px);
 }
 
 .sys-statistics-list .sys-statistics{
-	height: 50%;
+    height: 50%;
 }
 
 .sys-statistics-list .sys-statistics .sys-statistics-show{
-	width: calc(100% - 20px);
-	height: calc(100% - 20px);
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
     background-color: rgba(255, 255, 255, 0.1)!important;
     margin: 10px 10px;
 }
@@ -5780,18 +6131,18 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .email-box{
-	width: 100%;
-	height: 100%;
-	position: absolute;
+    width: 100%;
+    height: 100%;
+    position: absolute;
 }
 
 .email-top{
-	width: 100%;
-	float: left;
-	height: 39px;
-	line-height: 39px;
-	text-align: left;
-	box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 100%;
+    float: left;
+    height: 39px;
+    line-height: 39px;
+    text-align: left;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
     border-bottom: 1px solid #ddd;
     border-bottom-color: transparent;
     background-image: radial-gradient(circle at 20% 20%, RGB(215, 234, 250), rgb(181, 204, 229));
@@ -5802,7 +6153,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .email-top button:HOVER{
-	background-color: transparent;
+    background-color: transparent;
 }
 
 .email-left{
@@ -5837,7 +6188,7 @@ body .layer-ext-winconfirm .layui-layer-content {
     -ms-transition: all 0.2s;
     transition: all 0.2s;
     font-size: 15px;
-	text-align: left;
+    text-align: left;
 }
 
 .email-center-right{
@@ -5863,93 +6214,93 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .email-center-right .app-list{
-	height: calc(100% - 45px);
+    height: calc(100% - 45px);
     overflow-x: hidden;
     overflow-y: auto;
 }
 
 .email-center-right .app-list .selected{
-	background-color: RGB(110, 136, 161);
-	color: white;
+    background-color: RGB(110, 136, 161);
+    color: white;
 }
 
 .email-center-right .app-list .email-desc-item{
-	height: 60px;
+    height: 60px;
     width: 100%;
     border-bottom: 1px solid gainsboro;
     float: left;
 }
 
 .email-center-right .app-list .email-desc-item .email-desc-box{
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .email-center-right .app-list .email-desc-item .email-desc-box .desc-left{
-	width: 20px;
-	height: 100%;
-	float: left;
-	padding-left: 5px;
+    width: 20px;
+    height: 100%;
+    float: left;
+    padding-left: 5px;
 }
 
 .email-center-right .app-list .email-desc-item .email-desc-box .desc-left font{
-	width: 100%;
-	height: 50%;
-	float: left;
+    width: 100%;
+    height: 50%;
+    float: left;
     line-height: 30px;
 }
 
 .email-center-right .app-list .email-desc-item .email-desc-box .desc-left font i{
-	color: RGB(224, 232, 239);
+    color: RGB(224, 232, 239);
 }
 
 .email-center-right .app-list .email-desc-item .email-desc-box .desc-left font .active{
-	color: RGB(251, 211, 150);
+    color: RGB(251, 211, 150);
 }
 
 .email-center-right .app-list .email-desc-item .email-desc-box .desc-center{
-	width: calc(100% - 120px);
-	height: 100%;
-	float: left;	
+    width: calc(100% - 120px);
+    height: 100%;
+    float: left;
     text-align: left;
     padding: 0px 5px;
 }
 
 .email-center-right .app-list .email-desc-item .email-desc-box .desc-center font{
-	width: 100%;
-	height: 50%;
-	float: left;
+    width: 100%;
+    height: 50%;
+    float: left;
     line-height: 30px;
-    white-space:nowrap; 
-    overflow:hidden; 
+    white-space:nowrap;
+    overflow:hidden;
     text-overflow:ellipsis;
 }
 
 .email-center-right .app-list .email-desc-item .email-desc-box .desc-center font i{
-	float: left;
+    float: left;
     line-height: 30px;
     margin-right: 5px;
 }
 
 .email-center-right .app-list .email-desc-item .email-desc-box .desc-right{
-	width: 80px;
-	height: 100%;
-	float: left;
-	text-align: right;
+    width: 80px;
+    height: 100%;
+    float: left;
+    text-align: right;
     padding-right: 5px;
     font-size: 12px;
     color: darkgray;
 }
 
 .email-center-right .app-list .email-desc-item .email-desc-box .desc-right font{
-	width: 100%;
-	height: 50%;
-	float: left;
+    width: 100%;
+    height: 50%;
+    float: left;
     line-height: 30px;
 }
 
 .email-right{
-	height: calc(100% - 40px);
+    height: calc(100% - 40px);
     width: calc(100% - 462px);
     float: left;
     padding: 0px;
@@ -5969,9 +6320,9 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .email-list-box{
-	float: right;
-	height: 39px;
-	line-height: 39px;
+    float: right;
+    height: 39px;
+    line-height: 39px;
 }
 
 .email-list-box .layui-nav{
@@ -5985,15 +6336,15 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .email-list-box .layui-nav .layui-nav-item a{
-	color: black;
+    color: black;
 }
 
 .email-list-box .layui-nav .layui-nav-item .layui-nav-child{
-	top: 39px;
+    top: 39px;
 }
 
 .load-box{
-	height: calc(100% - 45px);
+    height: calc(100% - 45px);
     overflow: hidden;
     background: rgba(190, 190, 190, 0.1);
 }
@@ -6004,70 +6355,70 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .load-box .email-load-box i{
-	font-size: 21px;
+    font-size: 21px;
 }
 
 .notice-process-box{
-	height: 100%;
-	width: 85px;
-	float: left;
+    height: 100%;
+    width: 85px;
+    float: left;
 }
 
 .layui-layedit-tool .layui-icon .layui-colorpicker{
-	border: 0px;
+    border: 0px;
 }
 
 .sysenclosure-console{
-	width: 100%;
-	height: calc(100% - 50px);
-	margin: 0 auto;
+    width: 100%;
+    height: calc(100% - 50px);
+    margin: 0 auto;
 }
 
 .sysenclosure-console .sysenclosure-left{
-	width: 270px;
-	float: left;
-	height: 100%;
+    width: 270px;
+    float: left;
+    height: 100%;
     background: rgba(221,221,221,0.02);
     border-right: 1px solid beige;
 }
 
 .sysenclosure-console .sysenclosure-left .sysenclosure-left-title{
-	height: 50px;
-	float: left;
-	width: 100%;
-	color: gray;
+    height: 50px;
+    float: left;
+    width: 100%;
+    color: gray;
     font-size: 12px;
     line-height: 25px;
 }
 
 .sysenclosure-console .sysenclosure-left .sysenclosure-left-content{
-	height: calc(100% - 50px);
-	float: left;
+    height: calc(100% - 50px);
+    float: left;
     width: 100%;
 }
 
 .sysenclosure-console .sysenclosure-right{
-	width: calc(100% - 275px);
-	float: left;
-	height: 100%;
+    width: calc(100% - 275px);
+    float: left;
+    height: 100%;
     margin-left: 2px;
 }
 
 .input-icon{
-	position: absolute;
-	top:8px;
-	right: 8px;
-	cursor: pointer;
-	color: gray;
+    position: absolute;
+    top:8px;
+    right: 8px;
+    cursor: pointer;
+    color: gray;
     height: 16px;
     width: 16px;
 }
 
 .sel-people-list{
-	width: calc(50% - 25px);
-	float: left;
-	height: 100%;
-	padding: 10px;
+    width: calc(50% - 25px);
+    float: left;
+    height: 100%;
+    padding: 10px;
     overflow-y: auto;
     overflow-x: hidden;
     border-left: 1px solid gainsboro;
@@ -6084,7 +6435,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .sel-people-list .sel-people-item .sel-people-item-title{
-	width: 40%;
+    width: 40%;
     height: 20px;
     line-height: 20px;
     float: left;
@@ -6095,11 +6446,11 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .sel-people-list .sel-people-item .sel-people-item-title img{
-	margin-right: 5px;
+    margin-right: 5px;
 }
 
 .sel-people-list .sel-people-item .sel-people-item-email{
-	width: 60%;
+    width: 60%;
     height: 20px;
     line-height: 20px;
     float: left;
@@ -6111,11 +6462,11 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .sel-people-list .sel-people-item:HOVER{
-	background-color: gainsboro;
+    background-color: gainsboro;
 }
 
 .sel-people-list .active{
-	background-color: gainsboro;
+    background-color: gainsboro;
 }
 
 .enclosure-sel-list{
@@ -6127,30 +6478,30 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .check-month{
-	width: 98%;
+    width: 98%;
     height: 100%;
     margin-left: 1%;
 }
 
 .check-month-left{
-	width: 70%;
-	float: left;
-	padding: 10px;
+    width: 70%;
+    float: left;
+    padding: 10px;
     border-radius: 5px;
     background-color: rgb(244, 244, 246);
 }
 
 .check-month-right{
-	width: 25%;
+    width: 25%;
     height: 100%;
     float: left;
     margin: 0 5px;
 }
 
 .check-month-clock{
-	width: 100%;
-	float: left;
-	height: 150px;
+    width: 100%;
+    float: left;
+    height: 150px;
 }
 
 .user-send-success{
@@ -6173,17 +6524,17 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .checkwork-a{
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .checkwork-a:link{
-	text-decoration:none; 
-	font-size:16px;
+    text-decoration:none;
+    font-size:16px;
 }
 
 .checkwork-a:hover{
-	text-decoration:underline;
-	font-size:22px;
+    text-decoration:underline;
+    font-size:22px;
 }
 
 .task-launch-item{
@@ -6199,7 +6550,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .task-launch-item .task-left-top{
-	float: left;
+    float: left;
     width: 20px;
     height: 8px;
 }
@@ -6233,7 +6584,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .task-launch-item .remark{
-	position: absolute;
+    position: absolute;
     line-height: 20px;
     margin: 10px 10px;
     margin-top: 35px;
@@ -6247,31 +6598,31 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .task-launch-item-bk{
-	width: 3px;
-	height: 3px;
-	position: absolute;
-	z-index: 99;
-	border-radius:10px;
+    width: 3px;
+    height: 3px;
+    position: absolute;
+    z-index: 99;
+    border-radius:10px;
 }
 .task-launch-item-bk_1{
-	height: 0px;
-	top: 0px;
-	left: 0px;
+    height: 0px;
+    top: 0px;
+    left: 0px;
 }
 .task-launch-item-bk_2 {
-	width: 0px;
-	bottom: -3px;
-	left: 0px;
+    width: 0px;
+    bottom: -3px;
+    left: 0px;
 }
 .task-launch-item-bk_3{
-	height: 0px;
-	bottom: 0px;
-	right: 0px;
+    height: 0px;
+    bottom: 0px;
+    right: 0px;
 }
 .task-launch-item-bk_4{
-	width: 0px;
-	top: -3px;
-	right: 0px;
+    width: 0px;
+    top: -3px;
+    right: 0px;
 }
 
 .insurance-table td{
@@ -6280,9 +6631,9 @@ body .layer-ext-winconfirm .layui-layer-content {
 
 /******************************论坛开始*********************************/
 .forum-console{
-	width: 100%;
-	height: 100%;
-	float: left;
+    width: 100%;
+    height: 100%;
+    float: left;
 }
 
 .forum-console .layadmin-caller .caller-contar{
@@ -6290,14 +6641,14 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .forum-console .forum-title{
-	height: 40px;
-	width: 100%;
-	float: left;
-	background-color: rgb(78, 81, 93);
+    height: 40px;
+    width: 100%;
+    float: left;
+    background-color: rgb(78, 81, 93);
 }
 
 .forum-console .forum-title .title-item{
-	height: 40px;
+    height: 40px;
     line-height: 40px;
     padding: 0px 20px;
     width: 80px;
@@ -6306,32 +6657,32 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .forum-console .forum-title .title-item a{
-	color: gainsboro;
-	cursor: pointer;
-	font-size: 14px;
+    color: gainsboro;
+    cursor: pointer;
+    font-size: 14px;
 }
 
 .forum-console .forum-title .title-item a:HOVER{
-	color: white;
+    color: white;
 }
 
 .forum-console .forum-search{
-	height: 60px;
-	float: left;
-	margin: 10px 15%;
-	width: calc(70%);
-	text-align: center;
+    height: 60px;
+    float: left;
+    margin: 10px 15%;
+    width: calc(70%);
+    text-align: center;
 }
 
 .forum-console .forum-search .layui-input{
-	width: 50%;
-	display: inline !important;
-	height: 40px;
-	border-radius: 4px 0px 0px 4px;
+    width: 50%;
+    display: inline !important;
+    height: 40px;
+    border-radius: 4px 0px 0px 4px;
 }
 
 .forum-console .forum-search .layui-btn{
-	width: 64px;
+    width: 64px;
     height: 40px;
     cursor: pointer;
     border: none;
@@ -6345,26 +6696,26 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .forum-console .main-content{
-	float: left;
+    float: left;
     margin: 10px 10%;
     width: calc(80%);
 }
 
 .forum-console .main-content .layui-a-tips{
-	position: absolute;
+    position: absolute;
     right: 15px;
     color: #01AAED;
     cursor: pointer;
 }
 
 .forum-console .main-content .hot-user-img{
-	width: 24px;
+    width: 24px;
     height: 24px;
     margin-right: 10px;
 }
 
 .forum-console .main-content .layuiadmin-card-text{
-	background-color: #f8f8f8;
+    background-color: #f8f8f8;
     color: #777;
     padding: 12px;
     height: 140px;
@@ -6378,11 +6729,11 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .forum-console .main-content .layuiadmin-card-text .layui-text-top a:HOVER{
-	color: #01AAED;
+    color: #01AAED;
 }
 
 .forum-console .main-content .layui-text-center{
-	display: -webkit-box;
+    display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
     overflow: hidden;
@@ -6400,7 +6751,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .forum-console .main-content .layui-text-bottom a{
-	color: #777;
+    color: #777;
     font-size: 12px;
     text-overflow: ellipsis;
     word-break: break-all;
@@ -6408,35 +6759,35 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .forum-console .main-content .layui-text-bottom a:HOVER{
-	color: #01AAED;
+    color: #01AAED;
 }
 
 .forum-console .main-content .layui-text-bottom span{
-	color: #CCC;
+    color: #CCC;
     font-size: 12px;
     position: absolute;
     right: 0;
 }
 
 .forum-console .main-content .active-user li{
-	margin-top: 4px;
+    margin-top: 4px;
     margin-bottom: 5px;
     cursor: pointer;
 }
 
 .forum-console .main-content .active-user li .active-user-img{
-	width: 45px;
+    width: 45px;
     margin-left: calc(50% - 22px);
     height: 45px;
-	float: left;
+    float: left;
 }
 
 .forum-console .main-content .active-user li cite{
-	width: 100%;
-	float: left;
-	text-align: center;
-	font-size: 12px;
-	display: -webkit-box;
+    width: 100%;
+    float: left;
+    text-align: center;
+    font-size: 12px;
+    display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
@@ -6448,28 +6799,28 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .forum-console .main-content .layuiadmin-card-status .layui-status-img{
-	width: 20px;
-	height: 20px;
-	float: left;
-	margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    float: left;
+    margin-right: 8px;
 }
 
 .forum-console .main-content .layuiadmin-card-status .layui-status-img img{
-	width: 100%;
-	height: 100%;
-	border-radius: 5px;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
 }
 
 .forum-console .main-content .layuiadmin-card-status dd div p{
-	cursor: pointer;
-	display: -webkit-box;
+    cursor: pointer;
+    display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
 }
 
 .forum-console .main-content .layuiadmin-card-status dd div p:HOVER {
-	color: #01AAED;
+    color: #01AAED;
 }
 
 .forum-console .main-content .layuiadmin-card-link a{
@@ -6484,7 +6835,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .forum-console .main-content .layuiadmin-card-link a:HOVER {
-	color: #01AAED;
+    color: #01AAED;
 }
 
 .forum-console .forum-detail{
@@ -6747,7 +7098,7 @@ body .layer-ext-winconfirm .layui-layer-content {
     cursor: pointer;
 }
 .forum-console .forum-detail .main-content .center-top .show-content-btn .file-type-item button{
-	
+
 }
 
 .suspension-menu{
@@ -6757,16 +7108,16 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .suspension-menu .suspension-menu-icon{
-	width: 35px;
+    width: 35px;
     height: 35px;
     border-radius: 25px;
     cursor: pointer;
 }
 
 .suspension-menu .drop-down-menu{
-	display: block;
-	background-color: white;
-	border-radius: 5px;
+    display: block;
+    background-color: white;
+    border-radius: 5px;
     width: 100px;
     padding-left: 5px;
 }
@@ -6780,34 +7131,34 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .suspension-menu .drop-down-menu .down-menu-item img{
-	width: 16px;
+    width: 16px;
     height: 16px;
     border-radius: 8px;
 }
 
 .suspension-menu .drop-down-menu .down-menu-item a{
-	font-size: 12px;
+    font-size: 12px;
 }
 
 .suspension-menu .drop-down-menu .down-menu-item a:HOVER {
-	color: #01AAED;
+    color: #01AAED;
 }
 
 .rotate1{
-	transform: rotate(45deg);
-	transtion: all .3s linear;
-	-webkit-transform: rotate(45deg);
-	-webkit-transtion: all .3s linear;
+    transform: rotate(45deg);
+    transtion: all .3s linear;
+    -webkit-transform: rotate(45deg);
+    -webkit-transtion: all .3s linear;
 }
 .rotate{
-	transform: rotate(0);
-	transtion: all .3s linear;
-	-webkit-transform: rotate(0);
-	-webkit-transtion: all .3s linear;
+    transform: rotate(0);
+    transtion: all .3s linear;
+    -webkit-transform: rotate(0);
+    -webkit-transtion: all .3s linear;
 }
 
 .layadmin-caller .caller-contar .caller-item .forum-main{
-	width: calc(100% - 50px);
+    width: calc(100% - 50px);
     margin-left: 10px;
 }
 
@@ -6822,15 +7173,15 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .layadmin-caller .caller-contar .caller-item .forum-main .forum-desc:HOVER{
-	color: #01AAED;
+    color: #01AAED;
 }
 
 .layadmin-caller .caller-contar .caller-item .forum-main p em{
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .layadmin-caller .caller-contar .caller-item .forum-main p em:HOVER{
-	color: #01AAED;
+    color: #01AAED;
 }
 
 .layadmin-caller .caller-contar .caller-item .forum-main p strong{
@@ -6842,31 +7193,31 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .layadmin-caller .caller-contar .caller-item .hi-list{
-	margin-top: 8px;
-	margin-left: 50px;
+    margin-top: 8px;
+    margin-left: 50px;
 }
 
 .layadmin-caller .caller-contar .caller-item .hi-list em{
-	padding: 0px 5px;
-	color: gray;
-	cursor: pointer;
+    padding: 0px 5px;
+    color: gray;
+    cursor: pointer;
 }
 
 .layadmin-caller .caller-contar .caller-item .hi-list em i{
-	margin-right: 4px;
+    margin-right: 4px;
 }
 
 .layadmin-caller .caller-contar .caller-item .send-forum-time{
-	margin-top: 8px;
+    margin-top: 8px;
 }
 
 .layadmin-caller .caller-contar .caller-item .my-forum-main{
-	width: calc(100% - 10px);
+    width: calc(100% - 10px);
     margin-left: 10px;
 }
 
 .layadmin-caller .caller-contar .caller-item .my-forum-main .forum-state{
-	margin-left: 20px;
+    margin-left: 20px;
 }
 
 .layadmin-caller .caller-contar .caller-item .my-forum-main .forum-desc {
@@ -6880,7 +7231,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .layadmin-caller .caller-contar .caller-item .my-forum-main .forum-desc:HOVER{
-	color: #01AAED;
+    color: #01AAED;
 }
 
 .layadmin-caller .caller-contar .caller-item .my-forum-main p strong{
@@ -6892,26 +7243,26 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .layadmin-caller .caller-contar .caller-item .my-forum-main p em{
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .layadmin-caller .caller-contar .caller-item .my-forum-main p em:HOVER{
-	color: #01AAED;
+    color: #01AAED;
 }
 
 .layadmin-caller .caller-contar .caller-item .my-hi-list{
-	margin-top: 8px;
-	margin-left: 5px;
+    margin-top: 8px;
+    margin-left: 5px;
 }
 
 .layadmin-caller .caller-contar .caller-item .my-hi-list em{
-	padding: 0px 5px;
-	color: gray;
-	cursor: pointer;
+    padding: 0px 5px;
+    color: gray;
+    cursor: pointer;
 }
 
 .layadmin-caller .caller-contar .caller-item .my-hi-list em i{
-	margin-right: 4px;
+    margin-right: 4px;
 }
 
 .layadmin-caller .caller-contar .caller-item .my-operator-list{
@@ -6921,8 +7272,8 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .layadmin-caller .caller-contar .caller-item .my-operator-list a{
-	cursor: pointer;
-	color: #01AAED;
+    cursor: pointer;
+    color: #01AAED;
 }
 
 /******************************论坛结束*********************************/
@@ -6934,59 +7285,59 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .plan-type-btn:HOVER {
-	color: white;
-	background-color: rgb(3, 154, 223);
-	border-color: rgb(3, 154, 223);
+    color: white;
+    background-color: rgb(3, 154, 223);
+    border-color: rgb(3, 154, 223);
 }
 
 .plan-select{
-	color: white;
-	background-color: rgb(3, 154, 223);
-	border-color: rgb(3, 154, 223);
+    color: white;
+    background-color: rgb(3, 154, 223);
+    border-color: rgb(3, 154, 223);
 }
 
 .plan-data-box{
-	margin: auto 10px; 
-	min-height: calc(100% - 120px);
+    margin: auto 10px;
+    min-height: calc(100% - 120px);
 }
 
 .plan-data-box .plan-data-left-box{
-	width: 180px; 
-	float: left; 
-	border-right: 1px solid #F5F6F7;
+    width: 180px;
+    float: left;
+    border-right: 1px solid #F5F6F7;
     height: calc(100% - 160px);
     position: absolute;
 }
 
 .plan-data-box .plan-data-right-box{
-	width: calc(100% - 190px); 
-	float: right;
+    width: calc(100% - 190px);
+    float: right;
 }
 
 .plan-data-box .plan-choose{
-	height: 100%;
+    height: 100%;
     overflow-y: auto;
     width: calc(100% - 10px);
 }
 
 .plan-data-box .plan-choose li{
-	height: 35px;
+    height: 35px;
     line-height: 35px;
     text-align: center;
     cursor: pointer;
 }
 
 .plan-data-box .plan-choose li span{
-	font-size: 12px;
-	color: darkgrey;
+    font-size: 12px;
+    color: darkgrey;
 }
 
 .plan-data-box .plan-choose li:HOVER {
-	background-color: #dadada;
+    background-color: #dadada;
 }
 
 .plan-data-box .plan-choose .active{
-	background-color: #dadada;
+    background-color: #dadada;
 }
 
 .choosetag .layui-form-checkbox{
@@ -6995,26 +7346,26 @@ body .layer-ext-winconfirm .layui-layer-content {
 
 /*************************传统风格界面样式start*****************************/
 .tradition-left{
-	width: 218px;
-	height: 100%;
-	float: left;
+    width: 218px;
+    height: 100%;
+    float: left;
 }
 
 .tradition-left .tradition-left-top{
-	width: 100%;
-	height: 50px;
-	background-color: #20222A !important;
-	text-align: center;
-	overflow: hidden;
+    width: 100%;
+    height: 50px;
+    background-color: #20222A !important;
+    text-align: center;
+    overflow: hidden;
     font-weight: 300;
     background-repeat: no-repeat;
     background-position: center center;
 }
 
 .tradition-left .tradition-left-top span{
-	line-height: 50px;
-	color: rgba(255, 255, 255, 0.8);
-	font-size: 16px;
+    line-height: 50px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 16px;
 }
 
 .tradition-left .tradition-left-center{
@@ -7024,12 +7375,12 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .tradition-left .tradition-left-center .layui-nav-item a img{
-	width: 18px;
-	height: 18px;
+    width: 18px;
+    height: 18px;
 }
 
 .tradition-left .tradition-left-bottom{
-	width: 100%;
+    width: 100%;
     height: 70px;
     background-color: RGB(56, 66, 86);
 }
@@ -7037,32 +7388,32 @@ body .layer-ext-winconfirm .layui-layer-content {
 .tradition-left .tradition-left-bottom .other-item{
     width: 23%;
     margin: 0px 1%;
-	float: left;
-	height: 100%;
-	text-align: center;
-	cursor: pointer;
+    float: left;
+    height: 100%;
+    text-align: center;
+    cursor: pointer;
 }
 
 .tradition-left .tradition-left-bottom .other-item .other-item-img{
-	width: 45px;
-	height: 45px;
-	margin: 0px calc(50% - 22px);
-	float: left;
+    width: 45px;
+    height: 45px;
+    margin: 0px calc(50% - 22px);
+    float: left;
 }
 
 .tradition-left .tradition-left-bottom .other-item .other-item-img i{
-	margin-top: 15px;
+    margin-top: 15px;
     font-size: 19px;
     color: whitesmoke;
 }
 
 .tradition-left .tradition-left-bottom .other-item .other-item-title{
-	width: 100%;
-	float: left;
-	color: whitesmoke;
-	white-space:nowrap;
-	overflow:hidden;
-	text-overflow:ellipsis;
+    width: 100%;
+    float: left;
+    color: whitesmoke;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
 .tradition-left .tradition-left-bottom .other-item .other-item-title font{
@@ -7070,91 +7421,91 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .tradition-right{
-	width: calc(100% - 220px);
-	height: 100%;
-	float: right;
+    width: calc(100% - 220px);
+    height: 100%;
+    float: right;
 }
 
 .tradition-right .tradition-right-top{
-	border-bottom: 1px solid #f6f6f6;
-	height: 50px;
+    border-bottom: 1px solid #f6f6f6;
+    height: 50px;
 }
 
 .tradition-right .tradition-right-top .layui-nav .layui-nav-item a{
-	color: black;
+    color: black;
 }
 
 .tradition-right .tradition-right-top .layui-nav .layui-nav-item .layui-input-search{
-	height: 50px;
+    height: 50px;
     border: 0px;
 }
 
 .tradition-right .tradition-right-top .layui-nav .layui-nav-item .layui-input-search:HOVER{
-	border-color: white !important;
+    border-color: white !important;
 }
 
 .tradition-right .tradition-right-top .layui-nav .layui-nav-item .layui-input-search:FOCUS {
-	border-color: white !important;
-	outline: 0;
-	box-shadow: 0 0 0 0rem rgba(0, 123, 255, 0) !important;
+    border-color: white !important;
+    outline: 0;
+    box-shadow: 0 0 0 0rem rgba(0, 123, 255, 0) !important;
 }
 
 .tradition-right .tradition-right-top .layui-nav li .layui-nav-child dd a i{
-	margin-right: 7px;
-	width: 15px;
+    margin-right: 7px;
+    width: 15px;
     text-align: center;
 }
 
 .tradition-right .tradition-right-top .desktop-menu-box{
-	color: black;
-	margin-left: 60px;
-	width: calc(100% - 530px);
-	height: 50px;
-	overflow-x: auto;
-	overflow-y: hidden;
+    color: black;
+    margin-left: 60px;
+    width: calc(100% - 530px);
+    height: 50px;
+    overflow-x: auto;
+    overflow-y: hidden;
     padding: 0 5px;
 }
 
 .tradition-right .tradition-right-top .desktop-menu-box ul .select{
-	background-color: rgb(242, 242, 242);
+    background-color: rgb(242, 242, 242);
 }
 
 .tradition-right .tradition-right-top .desktop-menu-box::-webkit-scrollbar{
-	width: 10px;
+    width: 10px;
     height: 2px;
 }
 
 .tradition-right .tradition-right-top .desktop-menu-box ul{
-	height: 100%;
+    height: 100%;
 }
 
 .tradition-right .tradition-right-top .desktop-menu-box ul li{
-	height: 50px;
+    height: 50px;
     line-height: 50px;
-	margin: 0px;
+    margin: 0px;
     float: left;
 }
 
 .tradition-right .tradition-right-top .desktop-menu-box ul li:HOVER{
-	background-color: rgb(242, 242, 242);
-	cursor: pointer;
+    background-color: rgb(242, 242, 242);
+    cursor: pointer;
 }
 
 .tradition-right .tradition-right-top .desktop-menu-box ul li a i{
-	margin-right: 5px;
+    margin-right: 5px;
 }
 
 .tradition-right .tradition-right-center{
-	border-bottom: 1px solid #f6f6f6;
-	height: 40px;
+    border-bottom: 1px solid #f6f6f6;
+    height: 40px;
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs{
-	
+
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .m-icon{
-	height: 40px;
+    height: 40px;
     width: 40px;
     float: left;
     text-align: center;
@@ -7164,26 +7515,26 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .m-icon:HOVER{
-	background-color: RGB(246, 246, 246);
+    background-color: RGB(246, 246, 246);
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .m-icon i{
-	font-size: 20px;
+    font-size: 20px;
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .m-icon .layui-nav{
-	padding: 0px;
+    padding: 0px;
     height: 100%;
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .m-icon .layui-nav .layui-nav-item a{
-	width: 40px;
-	height: 40px;
-	padding: 0px;
+    width: 40px;
+    height: 40px;
+    padding: 0px;
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .m-icon .layui-nav .layui-nav-item a .layui-nav-more{
-	left: 15px;
+    left: 15px;
     top: 40%;
 }
 
@@ -7195,7 +7546,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .m-icon .layui-nav .layui-nav-item .layui-nav-child dd a{
-	width: 100%;
+    width: 100%;
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .layui-tab-title li{
@@ -7205,47 +7556,47 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .layui-tab-title li:HOVER{
-	color: white;
-	background-color: rgb(130, 182, 122);
+    color: white;
+    background-color: rgb(130, 182, 122);
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .layui-tab-title li span{
-	margin-left: 8px;
+    margin-left: 8px;
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .layui-tab-title li .close-i{
-	margin-left: 5px;
+    margin-left: 5px;
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .layui-tab-title .layui-this{
-	color: white;
+    color: white;
     background-color: rgb(130, 182, 122);
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .layui-tab-title li img{
-	width: 18px;
-	height: 18px;
+    width: 18px;
+    height: 18px;
     margin-right: 5px;
 }
 
 .tradition-right .tradition-right-bottom{
-	width: 100%;
-	height: calc(100% - 120px);
+    width: 100%;
+    height: calc(100% - 120px);
 }
 
 .tradition-right .tradition-right-bottom .layui-tab-item{
-	height: 100%;
+    height: 100%;
 }
 
 .tradition-right .tradition-right-bottom .layui-tab-item iframe{
-	height: 100%;
-	width: 100%;
+    height: 100%;
+    width: 100%;
 }
 
 .tradition-right .tradition-right-bottom-copyright{
-	width: 100%;
-	height: 40px;
-	line-height: 25px;
+    width: 100%;
+    height: 40px;
+    line-height: 25px;
     text-align: center;
     color: gray;
 }
@@ -7261,7 +7612,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .rightmenu li{
-	height: 36px;
+    height: 36px;
     line-height: 36px;
     padding: 0px 15px;
     font-size: 14px;
@@ -7269,11 +7620,11 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .rightmenu li:HOVER{
-	background-color: rgb(242, 242, 242);
+    background-color: rgb(242, 242, 242);
 }
 
 .tradition-right .tradition-right-center .layadmin-pagetabs .layui-tab-title li:nth-child(1) .layui-tab-close{
-	display: none;
+    display: none;
 }
 
 .tradition-username{
@@ -7314,9 +7665,9 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 /*************************多选下拉框样式end******************************/
 
 .mask-req-str{
-	width: 100%;
-	height: 100%;
-	position: fixed;
+    width: 100%;
+    height: 100%;
+    position: fixed;
     z-index: 9999999;
     top: 0px;
     background: rgba(255, 255, 255, 0.3);
@@ -7336,7 +7687,7 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .mask-req-str .cent font{
-	color: darkgray;
+    color: darkgray;
 }
 
 .layui-input-block .demo-slider{
@@ -7345,12 +7696,12 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .violation{
-	border: 1px solid burlywood !important;
+    border: 1px solid burlywood !important;
     color: burlywood !important;
 }
 
 .disheader{
-	width: 80%;
+    width: 80%;
     margin-left: 10%;
     float: left;
     font-size: 18px;
@@ -7358,7 +7709,7 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .disdesc{
-	width: 80%;
+    width: 80%;
     margin-left: 10%;
     float: left;
     padding: 5px 5px;
@@ -7366,70 +7717,70 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .discontent{
-	width: 80%;
+    width: 80%;
     margin-left: 10%;
     float: left;
 }
 
 .disreplay{
-	width: 80%;
+    width: 80%;
     margin-left: 10%;
     float: left;
 }
 
 .disreplay .disreplay-left{
-	width: 100%;
-	float: left;
-	margin-top: 10px;
+    width: 100%;
+    float: left;
+    margin-top: 10px;
 }
 
 .disreplay .disreplay-right{
-	width: 100%;
-	float: left;
-	margin-top: 10px;
+    width: 100%;
+    float: left;
+    margin-top: 10px;
 }
 
 .disreplay .user-info{
-	width: 90px;
-	height: 80px;
-	float: left;
+    width: 90px;
+    height: 80px;
+    float: left;
 }
 
 .disreplay .user-info .user-photo{
-	width: 100%;
-	height: 70px;
-	float: left;
-	text-align: center;
+    width: 100%;
+    height: 70px;
+    float: left;
+    text-align: center;
 }
 
 .disreplay .user-info .user-photo img{
-	width: 60px;
-	height: 60px;
-	margin-top: 5px;
+    width: 60px;
+    height: 60px;
+    margin-top: 5px;
 }
 
 .disreplay .user-info .user-name{
-	width: 100%;
-	height: 10px;
-	float: left;
-	text-align: center;
+    width: 100%;
+    height: 10px;
+    float: left;
+    text-align: center;
 }
 
 .disreplay .replay-content{
-	width: calc(100% - 190px);
-	float: left;
-	height: auto;
-	min-height: 80px;
+    width: calc(100% - 190px);
+    float: left;
+    height: auto;
+    min-height: 80px;
     padding: 8px;
-	background: rgb(255, 255, 224);
-	margin-right: 10px;
-	border: 1px solid #f3e5ab;
+    background: rgb(255, 255, 224);
+    margin-right: 10px;
+    border: 1px solid #f3e5ab;
 }
 
 .disreplay .replay-content .replay-time{
-	width: 100%;
-	float: left;
-	border-bottom: 1px solid #f3e5ab;
+    width: 100%;
+    float: left;
+    border-bottom: 1px solid #f3e5ab;
     margin-bottom: 8px;
     color: grey;
     font-size: 12px;
@@ -7437,9 +7788,9 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .disreplay .equal-user-photo{
-	width: 70px;
-	height: 80px;
-	float: left;
+    width: 70px;
+    height: 80px;
+    float: left;
 }
 
 #extendMationBox .extendMation{
@@ -7461,30 +7812,30 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 #extendMationBox .extendMation:HOVER {
-	border: 1px solid lightgray!important;
+    border: 1px solid lightgray!important;
 }
 
 #extendMationBox .extendMation:HOVER .close-btn{
-	display: block;
+    display: block;
 }
 
 #extendMationBox .extendMation .layui-input-block{
-	min-height: 35px;
+    min-height: 35px;
 }
 
 #extendMationBox .extendMation .layui-input-block input{
-	margin-top: 5px;
+    margin-top: 5px;
 }
 
 @-webkit-keyframes hue {
-	from {
-		-webkit-filter: hue-rotate(0deg);
-		-moz-filter: hue-rotate(0deg);
-	}
-	to {
-		-webkit-filter: hue-rotate(-360deg);
-		-moz-filter: hue-rotate(-360deg);
-	}
+    from {
+        -webkit-filter: hue-rotate(0deg);
+        -moz-filter: hue-rotate(0deg);
+    }
+    to {
+        -webkit-filter: hue-rotate(-360deg);
+        -moz-filter: hue-rotate(-360deg);
+    }
 }
 
 .input-group {
@@ -7510,13 +7861,13 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .btn-icon{
-	width: 16px;
-	height: 16px;
-	margin-right: 3px;
+    width: 16px;
+    height: 16px;
+    margin-right: 3px;
 }
 
 .header-right-top {
-	position: absolute;
+    position: absolute;
     right: 15px;
     top: 50%;
     margin-top: -9px;
@@ -7540,7 +7891,7 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .layuiadmin-card-status li h3:HOVER{
-	color: #01AAED
+    color: #01AAED
 }
 
 .layuiadmin-card-status li p {
@@ -7552,7 +7903,7 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .layuiadmin-card-status li p:HOVER{
-	color: #01AAED
+    color: #01AAED
 }
 
 .layuiadmin-card-status li>span {
@@ -7566,152 +7917,152 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .share-file-content{
-	overflow-y:auto; 
-	margin: 0 auto; 
-	width: 800px; 
-	top: 90px; 
-	position: absolute; 
-	margin-left: calc(50% - 400px);
-	padding: 10px;
-	background-color: white;
-	z-index: 1;
-	min-height: calc(100% - 130px);
-	overflow-x: hidden;
+    overflow-y:auto;
+    margin: 0 auto;
+    width: 800px;
+    top: 90px;
+    position: absolute;
+    margin-left: calc(50% - 400px);
+    padding: 10px;
+    background-color: white;
+    z-index: 1;
+    min-height: calc(100% - 130px);
+    overflow-x: hidden;
 }
 
 .share-file-content .content #luckysheet{
-	top: 90px !important;
+    top: 90px !important;
 }
 
 .layui-title-icon{
-	width: 21px;
+    width: 21px;
     margin: 5px;
 }
 
 .db {
-	display: block;
+    display: block;
 }
 
 .weixinAudio {
-	line-height: 1.5;
+    line-height: 1.5;
 }
 
 .audio_area {
-	display: inline-block;
-	width: 100%;
-	vertical-align: top;
-	margin: 0px;
-	font-size: 0;
-	position: relative;
-	font-weight: 400;
-	text-decoration: none;
-	-ms-text-size-adjust: none;
-	-webkit-text-size-adjust: none;
-	text-size-adjust: none;
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+    margin: 0px;
+    font-size: 0;
+    position: relative;
+    font-weight: 400;
+    text-decoration: none;
+    -ms-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
 }
 
 .audio_wrp {
-	border: 1px solid #ebebeb;
-	background-color: #fcfcfc;
-	overflow: hidden;
-	padding: 12px 20px 12px 12px;
+    border: 1px solid #ebebeb;
+    background-color: #fcfcfc;
+    overflow: hidden;
+    padding: 12px 20px 12px 12px;
 }
 
 .audio_play_area {
-	float: left;
-	margin: 9px 22px 10px 5px;
-	font-size: 0;
-	width: 18px;
-	height: 25px;
-	cursor: pointer;
+    float: left;
+    margin: 9px 22px 10px 5px;
+    font-size: 0;
+    width: 18px;
+    height: 25px;
+    cursor: pointer;
 }
 
 .playing .audio_play_area .icon_audio_default {
-	display: block;
+    display: block;
 }
 
 .audio_play_area .icon_audio_default {
-	background: transparent url(../../../../assets/images/iconloop.png) no-repeat 0 0;
-	width: 18px;
-	height: 25px;
-	vertical-align: middle;
-	display: inline-block;
-	-webkit-background-size: 54px 25px;
-	background-size: 54px 25px;
-	background-position: -36px center;
+    background: transparent url(../../../../assets/images/iconloop.png) no-repeat 0 0;
+    width: 18px;
+    height: 25px;
+    vertical-align: middle;
+    display: inline-block;
+    -webkit-background-size: 54px 25px;
+    background-size: 54px 25px;
+    background-position: -36px center;
 }
 
 .audio_play_area .icon_audio_playing {
-	background: transparent url(../../../../assets/images/iconloop.png) no-repeat 0 0;
-	width: 18px;
-	height: 25px;
-	vertical-align: middle;
-	display: inline-block;
-	-webkit-background-size: 54px 25px;
-	background-size: 54px 25px;
-	-webkit-animation: audio_playing 1s infinite;
-	background-position: 0px center;
-	display: none;
+    background: transparent url(../../../../assets/images/iconloop.png) no-repeat 0 0;
+    width: 18px;
+    height: 25px;
+    vertical-align: middle;
+    display: inline-block;
+    -webkit-background-size: 54px 25px;
+    background-size: 54px 25px;
+    -webkit-animation: audio_playing 1s infinite;
+    background-position: 0px center;
+    display: none;
 }
 
 .audio_area .pic_audio_default {
-	display: none;
-	width: 18px;
+    display: none;
+    width: 18px;
 }
 
 .tips_global {
-	color: #8c8c8c;
+    color: #8c8c8c;
 }
 
 .audio_area .audio_length {
-	float: right;
-	font-size: 14px;
-	margin-top: 3px;
-	margin-left: 1em;
+    float: right;
+    font-size: 14px;
+    margin-top: 3px;
+    margin-left: 1em;
 }
 
 .audio_info_area {
-	overflow: hidden;
+    overflow: hidden;
 }
 
 .audio_area .audio_title {
-	font-weight: 400;
-	font-size: 17px;
-	margin-top: -2px;
-	margin-bottom: -3px;
-	width: auto;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	word-wrap: normal;
+    font-weight: 400;
+    font-size: 17px;
+    margin-top: -2px;
+    margin-bottom: -3px;
+    width: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
 }
 
 .audio_area .audio_source {
-	font-size: 14px;
+    font-size: 14px;
 }
 
 .audio_area .progress_bar {
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	background-color: #0cbb08;
-	height: 2px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: #0cbb08;
+    height: 2px;
 }
 
 .playing .audio_play_area .icon_audio_default {
-	display: none;
+    display: none;
 }
 
 .playing .audio_play_area .icon_audio_playing {
-	display: inline-block;
+    display: inline-block;
 }
 
 .layadmin-setTheme-color{
-	
+
 }
 
 .layadmin-setTheme-color .layadmin-setTheme-color-scheme{
-	position: relative;
+    position: relative;
     display: inline-block;
     vertical-align: top;
     width: 80px;
@@ -7724,7 +8075,7 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .layadmin-setTheme-color .layadmin-setTheme-color-scheme .layadmin-setTheme-header{
-	position: relative;
+    position: relative;
     z-index: 10;
     height: 10px;
     border-top: 1px solid #f2f2f2;
@@ -7732,7 +8083,7 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .layadmin-setTheme-color .layadmin-setTheme-color-scheme .layadmin-setTheme-side{
-	position: absolute;
+    position: absolute;
     left: 0;
     top: 0;
     width: 20px;
@@ -7742,7 +8093,7 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .layadmin-setTheme-color .layadmin-setTheme-color-scheme .layadmin-setTheme-side .layadmin-setTheme-logo{
-	position: absolute;
+    position: absolute;
     left: 0;
     top: 0;
     width: 100%;
@@ -7751,81 +8102,81 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .layadmin-setTheme-color li:after{
-	content: '';
-	position: absolute;
-	z-index: 20;
-	top: 50%;
-	left: 50%;
-	width: 1px;
-	height: 0;
-	border: 1px solid #f2f2f2;
-	transition: all .3s;
-	-webkit-transition: all .3s;
-	opacity: 0
+    content: '';
+    position: absolute;
+    z-index: 20;
+    top: 50%;
+    left: 50%;
+    width: 1px;
+    height: 0;
+    border: 1px solid #f2f2f2;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+    opacity: 0
 }
 .layadmin-setTheme-color li.layui-this:after,
 .layadmin-setTheme-color li:hover:after{
-	width: 100%;
-	height: 100%;
-	padding: 4px;
-	top: -5px;
-	left: -5px;
-	border-color: #5FB878;
-	opacity: 1
+    width: 100%;
+    height: 100%;
+    padding: 4px;
+    top: -5px;
+    left: -5px;
+    border-color: #5FB878;
+    opacity: 1
 }
 
 .method-POST{
-	background-color: rgb(236, 246, 235);
-	border: 1px solid rgb(144, 190, 119);
+    background-color: rgb(236, 246, 235);
+    border: 1px solid rgb(144, 190, 119);
 }
 
 .method-GET{
-	background-color: rgb(234, 240, 247);
-	border: 1px solid rgb(120, 150, 107);
+    background-color: rgb(234, 240, 247);
+    border: 1px solid rgb(120, 150, 107);
 }
 
 .method-DELETE{
-	background-color: rgb(241, 232, 232);
-	border: 1px solid rgb(159, 87, 79);
+    background-color: rgb(241, 232, 232);
+    border: 1px solid rgb(159, 87, 79);
 }
 
 .method-PUT{
-	background-color: rgb(225, 218, 206);
-	border: 1px solid rgb(205, 134, 25);
+    background-color: rgb(225, 218, 206);
+    border: 1px solid rgb(205, 134, 25);
 }
 
 .method-color-POST{
-	color: rgb(99, 166, 34);
+    color: rgb(99, 166, 34);
 }
 
 .method-color-GET{
-	color: rgb(63, 105, 183);
+    color: rgb(63, 105, 183);
 }
 
 .method-color-DELETE{
-	color: rgb(138, 33, 28);
+    color: rgb(138, 33, 28);
 }
 
 .method-color-PUT{
-	color: rgb(203, 129, 20);
+    color: rgb(203, 129, 20);
 }
 
 @-webkit-keyframes audio_playing {
-	30% {
-		background-position: 0px center;
-	}
-	31% {
-		background-position: -18px center;
-	}
-	61% {
-		background-position: -18px center;
-	}
-	61.5% {
-		background-position: -36px center;
-	}
-	100% {
-		background-position: -36px center;
-	}
+    30% {
+        background-position: 0px center;
+    }
+    31% {
+        background-position: -18px center;
+    }
+    61% {
+        background-position: -18px center;
+    }
+    61.5% {
+        background-position: -36px center;
+    }
+    100% {
+        background-position: -36px center;
+    }
 }
 
 /*******************************************自定义样式end********************************************/

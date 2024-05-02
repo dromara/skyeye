@@ -88,6 +88,7 @@
     "crmOpportunityStateEnum": {"name": "商机状态", "className": "skyeye-crm#com.skyeye.opportunity.classenum.CrmOpportunityStateEnum"},
     "crmOpportunityAuthEnum": {"name": "商机权限", "className": "skyeye-crm#com.skyeye.opportunity.classenum.CrmOpportunityAuthEnum", "pageUrl": "../../tpl/crmOpportunity/crmOpportunityList.html"},
     "crmDocumentaryAuthEnum": {"name": "跟单权限", "className": "skyeye-crm#com.skyeye.documentary.classenum.CrmDocumentaryAuthEnum", "pageUrl": "../../tpl/documentary/crmDocumentaryList.html"},
+    "crmFollowUpAuthEnum": {"name": "回访权限", "className": "skyeye-crm#com.skyeye.follow.classenum.CrmFollowUpAuthEnum", "pageUrl": "../../tpl/follow/crmFollowList.html"},
 
     "accountSubjectType": {"name": "会计科目类型", "className": "skyeye-ifs#com.skyeye.subject.classenum.AccountSubjectType"},
     "amountDirection": {"name": "余额方向", "className": "skyeye-ifs#com.skyeye.subject.classenum.AmountDirection"},
