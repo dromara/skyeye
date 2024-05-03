@@ -142,6 +142,7 @@
     "mailCategory": {"name": "通讯录类型", "className": "skyeye-mail#com.skyeye.eve.classenum.MailCategory"},
 
     "jobDiaryType": {"name": "日志类型", "className": "skyeye-jobdiary#com.skyeye.eve.classenum.JobDiaryType"},
+    "jobDiaryState": {"name": "日志状态", "className": "skyeye-jobdiary#com.skyeye.eve.classenum.JobDiaryState"},
 
     "scheduleRemindType": {"name": "日程提醒时间所属类型", "className": "skyeye-schedule#com.skyeye.eve.classenum.ScheduleRemindType"},
     "scheduleImported": {"name": "日程重要性", "className": "skyeye-schedule#com.skyeye.eve.classenum.ScheduleImported"},
