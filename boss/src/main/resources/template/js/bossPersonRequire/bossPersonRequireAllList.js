@@ -35,6 +35,7 @@ layui.config({
             }},
             { field: 'wages', title: '薪资范围', width: 120 },
             { field: 'recruitNum', title: '需求人数', width: 100 },
+            { field: 'recruitedNum', title: '已招聘人数', width: 100 },
             { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
                 return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
             }},
