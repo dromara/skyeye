@@ -31,7 +31,7 @@ layui.config({
                 return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
             }},
             { field: 'transferStaffMation', title: '申请人', rowspan: '2', width: 140, templet: function(d) {
-                return d.transferStaffMation?.name;
+                return getNotUndefinedVal(d.transferStaffMation?.name);
             }},
             { title: '原岗位信息', align: 'center', colspan: '4'},
             { title: '申请岗位信息', align: 'center', colspan: '4'},
@@ -52,28 +52,28 @@ layui.config({
         ],
             [
                 { field: 'primaryCompanyName', title: '企业', align: 'left', width: 150, templet: function(d) {
-                    return d.primaryCompanyMation?.name;
+                    return getNotUndefinedVal(d.primaryCompanyMation?.name);
                 }},
                 { field: 'primaryDepartmentName', title: '部门', align: 'left', width: 150, templet: function(d) {
-                    return d.primaryDepartmentMation?.name;
+                    return getNotUndefinedVal(d.primaryDepartmentMation?.name);
                 }},
                 { field: 'primaryJobName', title: '岗位', align: 'left', width: 150, templet: function(d) {
-                    return d.primaryJobMation?.name;
+                    return getNotUndefinedVal(d.primaryJobMation?.name);
                 }},
                 { field: 'primaryJobScoreName', title: '岗位定级', align: 'left', width: 150, templet: function(d) {
-                    return d.primaryJobScoreMation?.name;
+                    return getNotUndefinedVal(d.primaryJobScoreMation?.name);
                 }},
                 { field: 'currentCompanyName', title: '企业', align: 'left', width: 150, templet: function(d) {
-                    return d.currentCompanyMation?.name;
+                    return getNotUndefinedVal(d.currentCompanyMation?.name);
                 }},
                 { field: 'currentDepartmentName', title: '部门', align: 'left', width: 150, templet: function(d) {
-                    return d.currentDepartmentMation?.name;
+                    return getNotUndefinedVal(d.currentDepartmentMation?.name);
                 }},
                 { field: 'currentJobName', title: '岗位', align: 'left', width: 150, templet: function(d) {
-                    return d.currentJobMation?.name;
+                    return getNotUndefinedVal(d.currentJobMation?.name);
                 }},
                 { field: 'currentJobScoreName', title: '岗位定级', align: 'left', width: 150, templet: function(d) {
-                    return d.currentJobScoreMation?.name;
+                    return getNotUndefinedVal(d.currentJobScoreMation?.name);
                 }}
             ]
         ],

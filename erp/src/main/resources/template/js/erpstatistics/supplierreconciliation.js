@@ -31,7 +31,7 @@ layui.config({
 			}},
 			{ field: 'serviceName', title: '单据类型', align: 'left', width: 100 },
 			{ field: 'holderMation', title: '供应商', align: 'left', width: 150, templet: function (d) {
-				return d.holderMation?.name;
+				return getNotUndefinedVal(d.holderMation?.name);
 			}},
 			{ field: 'totalPrice', title: '合计金额', align: 'left', width: 100},
 			{ field: 'operTime', title: '单据日期', align: 'center', width: 150}

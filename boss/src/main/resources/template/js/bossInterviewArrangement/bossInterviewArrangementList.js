@@ -31,17 +31,17 @@ layui.config({
                 return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
             }},
             { field: 'interviewMation', title: '面试者', width: 100, templet: function (d) {
-                return d.interviewMation?.name;
+                return getNotUndefinedVal(d.interviewMation?.name);
             }},
             { field: 'recruitDepartmentMation', title: '面试部门', width: 140, templet: function (d) {
-                return isNull(d.personRequireMation) ? '' : d.personRequireMation.recruitDepartmentMation?.name;
+                return getNotUndefinedVal(d.personRequireMation?.recruitDepartmentMation?.name);
             }},
             { field: 'recruitJobMation', title: '面试岗位', width: 150, templet: function (d) {
-                return isNull(d.personRequireMation) ? '' : d.personRequireMation.recruitJobMation?.name;
+                return getNotUndefinedVal(d.personRequireMation?.recruitJobMation?.name);
             }},
             { field: 'interviewTime', title: '面试时间', width: 140, align: 'center' },
             { field: 'interviewer', title: '面试官', width: 120, templet: function (d) {
-                return d.interviewerMation?.name;
+                return getNotUndefinedVal(d.interviewerMation?.name);
             }},
             { field: 'state', title: '面试状态', width: 160, templet: function (d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("bossInterviewArrangementState", 'id', d.state, 'name');

@@ -27,7 +27,7 @@ layui.config({
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'title', title: '标题', width: 300 },
 			{ field: 'sendDepartmentMation', title: '发文部门', width: 150, templet: function (d) {
-				return d.sendDepartmentMation?.name;
+				return getNotUndefinedVal(d.sendDepartmentMation?.name);
 			}},
 			{ field: 'year', title: '年份', align: 'center', width: 100 },
 			{ field: 'number', title: '第几号文', align: 'center', width: 100 },

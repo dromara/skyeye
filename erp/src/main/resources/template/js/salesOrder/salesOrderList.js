@@ -27,8 +27,8 @@ layui.config({
             { field: 'oddNumber', title: '单据编号', align: 'left', width: 200, templet: function (d) {
 		        return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 		    }},
-            { field: 'holderMation', title: '客户', align: 'left', width: 150, templet: function (d) {
-                return d.holderMation?.name;
+            { field: 'holderMation', title: '客户', align: 'left', width: 200, templet: function (d) {
+                return getNotUndefinedVal(d.holderMation?.name);
             }},
             { field: 'totalPrice', title: '合计金额', align: 'left', width: 120 },
             { field: 'operTime', title: '单据日期', align: 'center', width: 140 },

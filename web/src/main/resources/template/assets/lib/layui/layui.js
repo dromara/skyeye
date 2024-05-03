@@ -232,6 +232,10 @@ function isNull(str) {
 	}
 }
 
+function getNotUndefinedVal(val) {
+	return isNull(val) ? '' : val
+}
+
 /**
  * 存入cookie
  */

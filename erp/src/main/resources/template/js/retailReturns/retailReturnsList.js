@@ -30,7 +30,7 @@ layui.config({
 		        return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 		    }},
             { field: 'holderMation', title: '会员', align: 'left', width: 150, templet: function (d) {
-                return d.holderMation?.name;
+                return getNotUndefinedVal(d.holderMation?.name);
             }},
             { field: 'totalPrice', title: '退款总金额', align: 'left', width: 120 },
             { field: 'operTime', title: '单据日期', align: 'center', width: 140 },

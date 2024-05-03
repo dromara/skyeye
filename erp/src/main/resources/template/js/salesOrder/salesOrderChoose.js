@@ -74,9 +74,15 @@ layui.config({
 		    cols: [[
 		    	{ type: 'radio'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-				{ field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {return d.materialMation?.name}},
-				{ field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {return d.materialMation?.model}},
-				{ field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {return d.normsMation?.name}},
+				{ field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {
+					return getNotUndefinedVal(d.materialMation?.name)
+				}},
+				{ field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {
+					return getNotUndefinedVal(d.materialMation?.model)
+				}},
+				{ field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {
+					return getNotUndefinedVal(d.normsMation?.name)
+				}},
 				{ field: 'operNumber', title: '数量', align: 'left', width: 80 },
 				{ field: 'unitPrice', title: '单价', align: 'left', width: 120 },
 		        { field: 'allPrice', title: '金额', align: 'left', width: 80 },

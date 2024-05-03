@@ -35,7 +35,7 @@ layui.config({
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("menuType", 'id', d.type, 'name');
 			}},
 			{ field: 'desktopId', title: '所属桌面', align: 'left', width: 120, templet: function (d) {
-				return d.desktopMation?.name;
+				return getNotUndefinedVal(d.desktopMation?.name)
 			}},
 			{ field: 'url', title: '页面路径', align: 'left', width: 300},
 			{ field: 'orderBy', title: '排序号', align: 'left', width: 80},

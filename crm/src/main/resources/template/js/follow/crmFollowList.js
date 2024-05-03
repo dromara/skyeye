@@ -37,19 +37,19 @@ layui.config({
                 return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
             }},
             { field: 'contractId', title: '合同', width: 200, templet: function (d) {
-                return d.contractMation?.title;
+                return getNotUndefinedVal(d.contractMation?.title);
             }},
             { field: 'typeId', title: '类型', align: 'center', width: 120, templet: function (d) {
                 return sysDictDataUtil.getDictDataNameByCodeAndKey('FOLLOW_UP_TYPE', d.typeId);
             }},
             { field: 'contacts', title: '联系人', width: 120, templet: function (d) {
-                return d.contactsMation?.name;
+                return getNotUndefinedVal(d.contactsMation?.name);
             }},
             { field: 'satisfaction', title: '客户满意度', align: 'center', width: 120, templet: function (d) {
                 return sysDictDataUtil.getDictDataNameByCodeAndKey('FOLLOW_UP_SATISFACTION', d.satisfaction);
             }},
             { field: 'followUserId', title: '回访人', width: 120, templet: function (d) {
-                return d.followUserMation?.name;
+                return getNotUndefinedVal(d.followUserMation?.name);
             }},
             { field: 'followTime', title: '回访时间', align: 'center', width: 100 },
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },

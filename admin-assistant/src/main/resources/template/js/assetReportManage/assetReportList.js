@@ -37,10 +37,10 @@ layui.config({
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("assetReportState", 'id', d.state, 'name');
 			}},
 			{ field: 'assetAdminMation', title: '管理员', width: 120, templet: function(d) {
-				return d.assetAdminMation?.name;
+				return getNotUndefinedVal(d.assetAdminMation?.name);
 			}},
 			{ field: 'useUserMation', title: '申领人', width: 120, templet: function(d) {
-				return d.useUserMation?.name;
+				return getNotUndefinedVal(d.useUserMation?.name);
 			}},
 			{ field: 'storageArea', title: '存放区域', width: 140 },
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },

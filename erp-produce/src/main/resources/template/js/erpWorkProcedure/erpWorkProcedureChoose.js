@@ -63,7 +63,7 @@ layui.config({
 	            { field: 'number', title: '工序编号', align: 'left',width: 120 },
 	            { field: 'unitPrice', title: '参考单价', align: 'left',width: 100 },
 	            { field: 'departmentMation', title: '执行部门', align: 'left',width: 100, templet: function (d) {
-					return d.departmentMation?.name;
+					return getNotUndefinedVal(d.departmentMation?.name);
 				}},
 	            { field: 'content', title: '工序内容', align: 'left',width: 200 }
 		    ]],
