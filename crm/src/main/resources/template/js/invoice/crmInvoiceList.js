@@ -36,11 +36,14 @@ layui.config({
 			{ field: 'oddNumber', title: '单据编号', align: 'center', width: 150, templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 			}},
-			{ field: 'price', title: '开票金额（元）', width: 120 },
 			{ field: 'invoicTime', title: '开票日期', align: 'center', width: 100 },
 			{ field: 'contractId', title: '合同', width: 200, templet: function (d) {
 				return getNotUndefinedVal(d.contractMation?.title);
 			}},
+			{ field: 'contractId1', title: '合同金额(元)', width: 120, templet: function (d) {
+				return getNotUndefinedVal(d.contractMation?.price);
+			}},
+			{ field: 'price', title: '开票金额（元）', width: 120 },
 			{ field: 'typeId', title: '开票类型', width: 150, templet: function (d) {
 				return sysDictDataUtil.getDictDataNameByCodeAndKey('INVOICE_TYPE', d.typeId);
 			}},

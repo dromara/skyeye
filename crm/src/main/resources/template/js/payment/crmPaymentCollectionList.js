@@ -37,6 +37,7 @@ layui.config({
 				return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 			}},
 			{ field: 'price', title: '回款金额（元）', width: 120 },
+			{ field: 'invoicePrice', title: '已开票金额（元）', align: 'left', width: 140 },
 			{ field: 'collectionTime', title: '回款日期', align: 'center', width: 100 },
 			{ field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function (d) {
 				return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
