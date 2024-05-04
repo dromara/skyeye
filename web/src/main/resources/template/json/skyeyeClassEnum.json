@@ -91,7 +91,7 @@
     "crmFollowUpAuthEnum": {"name": "回访权限", "className": "skyeye-crm#com.skyeye.follow.classenum.CrmFollowUpAuthEnum", "pageUrl": "../../tpl/follow/crmFollowList.html"},
     "crmPaymentCollectionAuthEnum": {"name": "回款权限", "className": "skyeye-crm#com.skyeye.payment.classenum.CrmPaymentCollectionAuthEnum", "pageUrl": "../../tpl/payment/crmPaymentCollectionList.html"},
     "crmInvoiceHeaderAuthEnum": {"name": "发票抬头权限", "className": "skyeye-crm#com.skyeye.invoice.classenum.CrmInvoiceHeaderAuthEnum", "pageUrl": "../../tpl/invoiceHeader/crmInvoiceHeaderList.html"},
-    "crmInvoiceAuthEnum": {"name": "发票权限", "className": "skyeye-crm#com.skyeye.invoice.classenum.CrmInvoiceAuthEnum", "pageUrl": "../../tpl/invoiceHeader/crmInvoiceHeaderList.html"},
+    "crmInvoiceAuthEnum": {"name": "发票权限", "className": "skyeye-crm#com.skyeye.invoice.classenum.CrmInvoiceAuthEnum", "pageUrl": "../../tpl/invoice/crmInvoiceList.html"},
 
     "accountSubjectType": {"name": "会计科目类型", "className": "skyeye-ifs#com.skyeye.subject.classenum.AccountSubjectType"},
     "amountDirection": {"name": "余额方向", "className": "skyeye-ifs#com.skyeye.subject.classenum.AmountDirection"},

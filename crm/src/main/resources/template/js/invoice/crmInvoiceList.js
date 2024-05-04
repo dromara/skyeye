@@ -19,13 +19,13 @@ layui.config({
 		return false;
 	}
 
-	var authPermission = teamObjectPermissionUtil.checkTeamBusinessAuthPermission(objectId, 'crmPaymentCollectionAuthEnum');
+	var authPermission = teamObjectPermissionUtil.checkTeamBusinessAuthPermission(objectId, 'crmInvoiceAuthEnum');
 
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: sysMainMation.crmBasePath + 'queryPaymentCollectionList',
+	    url: sysMainMation.crmBasePath + 'queryInvoiceList',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -36,13 +36,19 @@ layui.config({
 			{ field: 'oddNumber', title: '单据编号', align: 'center', width: 150, templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 			}},
-			{ field: 'price', title: '回款金额（元）', width: 120 },
-			{ field: 'collectionTime', title: '回款日期', align: 'center', width: 100 },
+			{ field: 'price', title: '开票金额（元）', width: 120 },
+			{ field: 'invoicTime', title: '开票日期', align: 'center', width: 100 },
+			{ field: 'contractId', title: '合同', width: 200, templet: function (d) {
+				return getNotUndefinedVal(d.contractMation?.title);
+			}},
+			{ field: 'typeId', title: '开票类型', width: 150, templet: function (d) {
+				return sysDictDataUtil.getDictDataNameByCodeAndKey('INVOICE_TYPE', d.typeId);
+			}},
 			{ field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function (d) {
 				return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
 			}},
-			{ field: 'typeId', title: '回款方式', width: 120, templet: function (d) {
-				return sysDictDataUtil.getDictDataNameByCodeAndKey('PAYMENT_COLLECTION_TYPE', d.typeId);
+			{ field: 'invoiceHeaderId', title: '发票抬头', width: 120, templet: function (d) {
+				return getNotUndefinedVal(d.invoiceHeaderMation?.name);
 			}},
 			{ field: 'state', title: '状态', width: 90, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
@@ -106,7 +112,7 @@ layui.config({
 	// 新增
 	$("body").on("click", "#addBean", function() {
     	parent._openNewWindows({
-			url: systemCommonUtil.getUrl('FP2024050200004&objectId=' + objectId + '&objectKey=' + objectKey, null),
+			url: systemCommonUtil.getUrl('FP2024050300005&objectId=' + objectId + '&objectKey=' + objectKey, null),
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "crmContractAdd",
 			area: ['90vw', '90vh'],
@@ -119,7 +125,7 @@ layui.config({
 	// 编辑
 	function edit(data) {
 		parent._openNewWindows({
-			url: systemCommonUtil.getUrl('FP2024050200005&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
+			url: systemCommonUtil.getUrl('FP2024050300006&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "crmContractEdit",
 			area: ['90vw', '90vh'],
@@ -132,7 +138,7 @@ layui.config({
 	// 详情
 	function details(data) {
 		parent._openNewWindows({
-			url: systemCommonUtil.getUrl('FP2024050200006&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
+			url: systemCommonUtil.getUrl('FP2024050300007&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "crmContractDetails",
 			area: ['90vw', '90vh'],
@@ -149,7 +155,7 @@ layui.config({
 					id: data.id,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url: sysMainMation.crmBasePath + "submitPaymentCollectionToApproval", params: params, type: 'json', method: 'POST', callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.crmBasePath + "submitInvoiceToApproval", params: params, type: 'json', method: 'POST', callback: function (json) {
 					winui.window.msg("提交成功", {icon: 1, time: 2000});
 					loadTable();
 				}});
@@ -161,7 +167,7 @@ layui.config({
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
-			AjaxPostUtil.request({url: sysMainMation.crmBasePath + "deletePaymentCollectionById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.crmBasePath + "deleteInvoiceById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -173,7 +179,7 @@ layui.config({
 		var msg = '确认作废该条数据吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
-			AjaxPostUtil.request({url: sysMainMation.crmBasePath + "invalidPaymentCollection", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.crmBasePath + "invalidInvoice", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -185,7 +191,7 @@ layui.config({
 		var msg = '确认撤销该数据吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销申请提交' }, function (index) {
 			layer.close(index);
-			AjaxPostUtil.request({url: sysMainMation.crmBasePath + "revokePaymentCollection", params: {processInstanceId: data.processInstanceId}, type: 'json', method: 'PUT', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.crmBasePath + "revokeInvoice", params: {processInstanceId: data.processInstanceId}, type: 'json', method: 'PUT', callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -204,5 +210,5 @@ layui.config({
 		return $.extend(true, {objectKey: objectKey, objectId: objectId}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
-    exports('crmPaymentCollectionList', {});
+    exports('crmInvoiceList', {});
 });
