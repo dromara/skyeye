@@ -52,6 +52,7 @@
     "gwReceiveDocumentService": {"name": "公文收文管理", "key": "com.skyeye.eve.gw.service.impl.GwReceiveDocumentServiceImpl"},
 
     "incomeOrder": {"name": "财务明细账", "key": "com.skyeye.order.service.impl.IncomeOrderServiceImpl"},
+    "reimbursement": {"name": "报销订单", "key": "com.skyeye.reimbursement.service.impl.ReimbursementServiceImpl"},
 
     "bossPersonRequire": {"name": "人员需求申请", "key": "com.skyeye.personrequire.service.impl.PersonRequireServiceImpl"},
     "bossInterviewRegularWorker": {"name": "转正申请", "key": "com.skyeye.regularworker.service.impl.RegularWorkerServiceImpl"},

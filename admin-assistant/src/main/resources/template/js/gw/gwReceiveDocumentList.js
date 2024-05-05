@@ -30,7 +30,7 @@ layui.config({
 			}},
 			{ field: 'title', title: '标题', width: 300 },
 			{ field: 'processInstanceId', title: '流程ID', width: 80, align: 'center', templet: function (d) {
-				return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+				return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
 			}},
 			{ field: 'secret', title: '密集级别', width: 90, align: 'center', templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("gwDocumentSecret", 'id', d.secret, 'name');

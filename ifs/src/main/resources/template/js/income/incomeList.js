@@ -21,6 +21,8 @@ layui.config({
     });
 
     function initTable() {
+        // 加载列表数据权限
+        loadAuthBtnGroup('messageTable', '1571638010771');
         table.render({
             id: 'messageTable',
             elem: '#messageTable',
@@ -37,7 +39,7 @@ layui.config({
                     return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
                 }},
                 { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
-                    return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+                    return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
                 }},
                 { field: 'state', title: '状态', align: 'left', width: 80, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
@@ -175,7 +177,7 @@ layui.config({
     }
 
     function getTableParams() {
-        return $.extend(true, {orderType: orderType}, initTableSearchUtil.getSearchValue("messageTable"));
+        return $.extend(true, {typeId: orderType}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('incomeList', {});

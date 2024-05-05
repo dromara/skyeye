@@ -30,7 +30,7 @@ layui.config({
             { field: 'productionMation', rowspan: '2', title: '生产计划单', align: 'center', width: 200, templet: function (d) {return isNull(d.productionMation) ? '' : d.productionMation.oddNumber}},
             { colspan: '3', title: '加工成品信息', align: 'center' },
             { field: 'processInstanceId', rowspan: '2', title: '流程ID', width: 100, templet: function (d) {
-                return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+                return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
             }},
             { field: 'state', rowspan: '2', title: '状态', width: 90, templet: function (d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("machinStateEnum", 'id', d.state, 'name');

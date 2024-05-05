@@ -42,7 +42,7 @@ layui.config({
 			{ field: 'invoicePrice', title: '已开票金额（元）', align: 'left', width: 140 },
 			{ field: 'signingTime', title: '签约日期', align: 'center', width: 100 },
 			{ field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function (d) {
-				return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+				return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
 			}},
 			{ field: 'state', title: '状态', width: 90, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("crmContractStateEnum", 'id', d.state, 'name');

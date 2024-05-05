@@ -29,7 +29,7 @@ layui.config({
             }},
             { field: 'machinMation', rowspan: '2', title: '加工单', align: 'center', width: 200, templet: function (d) {return isNull(d.machinMation) ? '' : d.machinMation.oddNumber}},
             { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
-                return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+                return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
             }},
             { field: 'state', title: '状态', width: 90, templet: function (d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');

@@ -32,7 +32,7 @@ layui.config({
 			{ field: 'numberCode', title: '项目单号', width: 200 },
 			{ field: 'name', title: '项目名称', width: 300 },
 			{ field: 'processInstanceId', title: '流程ID', width: 80, align: 'center', templet: function (d) {
-				return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+				return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
 			}},
 			{ field: 'state', title: '状态', width: 90, align: 'center', templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("projectStateEnum", 'id', d.state, 'name');

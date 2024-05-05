@@ -41,7 +41,7 @@ layui.config({
 			{ field: 'oddNumber', title: '商机编号', align: 'left', width: 120 },
 			{ field: 'estimatePrice', title: '预计成交金额', width: 120 },
 			{ field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function (d) {
-				return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+				return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
 			}},
 			{ field: 'state', title: '状态', width: 90, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("crmOpportunityStateEnum", 'id', d.state, 'name');
