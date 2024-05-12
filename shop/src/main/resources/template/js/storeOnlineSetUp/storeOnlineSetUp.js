@@ -32,8 +32,8 @@ layui.config({
     function loadStoreMation(storeId){
         showGrid({
             id: "formContent",
-            url: shopBasePath + "store008",
-            params: {rowId: storeId},
+            url: shopBasePath + "queryStoreOnlineById",
+            params: {id: storeId},
             pagination: false,
             method: "GET",
             template: beanTemplate,
