@@ -138,7 +138,6 @@ layui.config({
 	});
 
 	form.render();
-
 	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });

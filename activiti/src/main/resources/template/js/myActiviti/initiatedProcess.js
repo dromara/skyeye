@@ -76,48 +76,12 @@ layui.config({
 	table.on('tool(messageMyStartTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'edit') { //编辑
-        	edit(data);
-        } else if (layEvent === 'details') { //详情
+        if (layEvent === 'details') { //详情
 			activitiUtil.activitiDetails(data);
-        } else if (layEvent === 'revoke') { //撤销
-        	revoke(data);
         } else if (layEvent === 'refreshPic') { //刷新流程图
         	refreshPic(data);
         }
     });
-	
-	//编辑
-	function edit(data) {
-		sequenceId = data.sequenceId;
-		taskId = data.id;
-		processInstanceId = data.processInstanceId;
-		rowId = data.dataId;
-		_openNewWindows({
-			url: data.editPageUrl,
-			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-			pageId: "myactivitiedit",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-			}
-		});
-	}
-
-	//撤销
-	function revoke(data) {
-		if(isNull(data.revokeMapping)){//撤销接口为空
-			winui.window.msg('撤销接口调用失败', {icon: 2, time: 2000});
-			return false;
-		}
-		layer.confirm('确定撤销该流程吗？', { icon: 3, title: '撤销操作' }, function (index) {
-			layer.close(index);
-	        AjaxPostUtil.request({url: flowableBasePath + data.revokeMapping, params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
-				winui.window.msg("撤销成功", {icon: 1, time: 2000});
-				reloadMyStartTable();
-			}});
-		});
-	}
 	
 	//刷新流程图
 	function refreshPic(data) {

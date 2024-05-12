@@ -21,6 +21,8 @@ layui.config({
     });
 
     function initTable() {
+        // 加载列表数据权限
+        loadAuthBtnGroup('messageTable', '1571638010771');
         table.render({
             id: 'messageTable',
             elem: '#messageTable',
@@ -37,7 +39,7 @@ layui.config({
                     return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
                 }},
                 { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
-                    return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+                    return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
                 }},
                 { field: 'state', title: '状态', align: 'left', width: 80, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
@@ -49,7 +51,7 @@ layui.config({
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("correspondentEnterEnum", 'id', d.holderKey, 'name');
                 }},
                 { field: 'holderMation', title: '往来单位', align: 'left', width: 150, templet: function (d) {
-                    return d.holderMation.name;
+                    return getNotUndefinedVal(d.holderMation?.name);
                 }},
                 { field: 'handsPersonName', title: '经手人', align: 'left', width: 120 },
                 { field: 'operTime', title: '单据日期', align: 'center', width: 120 },
@@ -175,7 +177,7 @@ layui.config({
     }
 
     function getTableParams() {
-        return $.extend(true, {orderType: orderType}, initTableSearchUtil.getSearchValue("messageTable"));
+        return $.extend(true, {typeId: orderType}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('incomeList', {});

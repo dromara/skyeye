@@ -28,16 +28,17 @@ layui.config({
                 return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
             }},
             { field: 'recruitDepartmentId', title: '需求部门', align: 'left', width: 140, templet: function (d) {
-                return d.recruitDepartmentMation.name;
+                return getNotUndefinedVal(d.recruitDepartmentMation?.name);
             }},
             { field: 'recruitJobId', title: '需求岗位', align: 'left', width: 150, templet: function (d) {
-                return d.recruitJobMation.name;
+                return getNotUndefinedVal(d.recruitJobMation?.name);
             }},
             { field: 'state', title: '状态', align: 'left', width: 80, templet: function (d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("bossPersonRequireState", 'id', d.state, 'name');
             }},
             { field: 'wages', title: '薪资范围', width: 120 },
             { field: 'recruitNum', title: '需求人数', width: 100 },
+            { field: 'recruitedNum', title: '已招聘人数', width: 100 },
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
@@ -47,7 +48,7 @@ layui.config({
             matchingLanguage();
             for (var i = 0; i < res.rows.length; i++) {
                 // 招聘结束的设置为不可选中
-                if(res.rows[i].state == 'endRecruitment'){
+                if (res.rows[i].state == 'endRecruitment') {
                     systemCommonUtil.disabledRow(res.rows[i].LAY_TABLE_INDEX, 'radio');
                 }
             }

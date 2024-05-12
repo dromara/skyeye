@@ -28,7 +28,7 @@ layui.config({
 				return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 			}},
 			{ field: 'processInstanceId', title: '流程ID', width: 80, align: 'center', templet: function (d) {
-				return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+				return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
 			}},
 			{ field: 'state', title: '状态', width: 90, align: 'center', templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');

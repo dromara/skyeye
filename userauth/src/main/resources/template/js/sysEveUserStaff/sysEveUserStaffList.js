@@ -62,14 +62,8 @@ layui.config({
 	        }},
 			{ field: 'jobNumber', title: '工号', rowspan: '3', align: 'left', width: 100, fixed: 'left'},
 	        { field: 'staffType', title: '类型', rowspan: '3', align: 'left', width: 90, templet: function (d) {
-				if (d.staffType == 1) {
-					return '普通员工';
-				} else if (d.staffType == 2) {
-					return '教职工';
-				} else {
-					return '参数错误';
-				}
-	        }},
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("userStaffType", 'id', d.staffType, 'name');
+			}},
 	        { field: 'email', title: '邮箱', rowspan: '3', align: 'left', width: 170 },
 	        { field: 'userPhoto', title: '头像', rowspan: '3', align: 'center', width: 60, templet: function (d) {
 				if (isNull(d.userPhoto)) {
@@ -87,18 +81,10 @@ layui.config({
 			}},
 	        { field: 'userIdCard', title: '身份证', rowspan: '3', align: 'center', width: 160 },
 	        { field: 'userSex', title: '性别', width: 80, rowspan: '3', align: 'center', templet: function (d) {
-	        	if(d.userSex == '0'){
-	        		return "保密";
-	        	} else if (d.userSex == '1'){
-	        		return "男";
-	        	} else if (d.userSex == '2'){
-	        		return "女";
-	        	} else {
-	        		return "参数错误";
-	        	}
-	        }},
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("sexEnum", 'id', d.userSex, 'name');
+			}},
 	        { field: 'state', title: '状态', rowspan: '3', width: 60, align: 'center', templet: function (d) {
-				return getStaffStateName(d);
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("userStaffState", 'id', d.state, 'name');
 	        }},
 	        { title: '公司信息', align: 'center', colspan: '3'},
 	        { field: 'phone', title: '手机号', rowspan: '3', align: 'center', width: 100},

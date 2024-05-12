@@ -1,4 +1,10 @@
-<div class="layui-form-item layui-col-xs12">
+<div class="layui-form-item layui-col-xs6">
+    <label class="layui-form-label">所属服务<i class="red">*</i></label>
+    <div class="layui-input-block">
+        <select id="serviceStr" name="serviceStr" lay-filter="serviceStr" win-verify="required" lay-search=""></select>
+    </div>
+</div>
+<div class="layui-form-item layui-col-xs6">
     <label class="layui-form-label">接口地址<i class="red">*</i></label>
     <div class="layui-input-block">
         <input type="text" id="restUrl" name="restUrl" win-verify="required" placeholder="请输入接口地址" class="layui-input"/>

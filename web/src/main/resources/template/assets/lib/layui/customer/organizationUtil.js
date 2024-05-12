@@ -11,8 +11,11 @@ var organizationUtil = {
     // 岗位定级树
     jobScoreTree: null,
 
+    dtree: null,
+
     // 初始化新增页面的组织机构
     initAddOrganization: function (dtree) {
+        organizationUtil.dtree = dtree;
         // 初始化公司
         organizationUtil.companyTree = dtree.render({
             elem: "#demoTree1",
@@ -74,6 +77,7 @@ var organizationUtil = {
 
     // 初始化编辑页面的组织机构
     initEditOrganization: function (dtree, mation) {
+        organizationUtil.dtree = dtree;
         // 初始化公司
         organizationUtil.companyTree = dtree.render({
             elem: "#demoTree1",
@@ -157,28 +161,36 @@ var organizationUtil = {
      * 获取企业信息
      */
     getCompanyMation: function (dtree) {
-        return organizationUtil.judgeNullRetuenObject(dtree.getNowParam(organizationUtil.companyTree));
+        return organizationUtil.judgeNullRetuenObject(organizationUtil.getTreeObject(dtree).getNowParam(organizationUtil.companyTree));
     },
 
     /**
      * 获取部门信息
      */
     getDepartmentMation: function (dtree) {
-        return organizationUtil.judgeNullRetuenObject(dtree.getNowParam(organizationUtil.departmentTree));
+        return organizationUtil.judgeNullRetuenObject(organizationUtil.getTreeObject(dtree).getNowParam(organizationUtil.departmentTree));
     },
 
     /**
      * 获取岗位信息
      */
     getJobMation: function (dtree) {
-        return organizationUtil.judgeNullRetuenObject(dtree.getNowParam(organizationUtil.jobTree));
+        return organizationUtil.judgeNullRetuenObject(organizationUtil.getTreeObject(dtree).getNowParam(organizationUtil.jobTree));
     },
 
     /**
      * 获取岗位定级信息
      */
     getJobScoreMation: function (dtree) {
-        return organizationUtil.judgeNullRetuenObject(dtree.getNowParam(organizationUtil.jobScoreTree));
+        return organizationUtil.judgeNullRetuenObject(organizationUtil.getTreeObject(dtree).getNowParam(organizationUtil.jobScoreTree));
+    },
+
+    getTreeObject: function (dtree) {
+        if (isNull(dtree)) {
+            return organizationUtil.dtree
+        } else {
+            return dtree
+        }
     },
 
     judgeNullRetuenObject: function (object) {

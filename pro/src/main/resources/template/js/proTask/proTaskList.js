@@ -60,7 +60,7 @@ layui.config({
 			{ field: 'estimatedWorkload', title: '预计工作量', align: 'center', width: 120 },
 			{ field: 'actualWorkload', title: '实际工作量', align: 'center', width: 120 },
 			{ field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function (d) {
-				return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+				return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
 			}},
 			{ field: 'state', title: '状态', width: 90, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("taskStateEnum", 'id', d.state, 'name');

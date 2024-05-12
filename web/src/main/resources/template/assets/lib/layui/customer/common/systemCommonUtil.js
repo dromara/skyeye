@@ -8,7 +8,7 @@ var systemCommonUtil = {
      */
     getSysAccountListByType: function (callback) {
         AjaxPostUtil.request({url: sysMainMation.ifsBasePath + "account009", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(typeof(callback) == "function") {
+            if (typeof(callback) == "function") {
                 callback(json);
             }
         }, async: false});
@@ -21,7 +21,7 @@ var systemCommonUtil = {
      */
     getSysDesttop: function (callback) {
         AjaxPostUtil.request({url: reqBasePath + "desktop011", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(typeof(callback) == "function") {
+            if (typeof(callback) == "function") {
                 callback(json);
             }
         }, async: false});
@@ -45,7 +45,7 @@ var systemCommonUtil = {
      */
     queryDepartmentListByCurrentUserBelong: function (callback) {
         AjaxPostUtil.request({url: reqBasePath + "queryDepartmentListByCurrentUserBelong", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(typeof(callback) == "function") {
+            if (typeof(callback) == "function") {
                 callback(json);
             }
         }, async: false});
@@ -58,12 +58,12 @@ var systemCommonUtil = {
      */
     queryJobListByDepartmentId: function (departmentId, callback){
         if (isNull(departmentId)) {
-            if(typeof(callback) == "function") {
+            if (typeof(callback) == "function") {
                 callback({});
             }
         } else {
             AjaxPostUtil.request({url: reqBasePath + "companyjob007", params: {departmentId: departmentId}, type: 'json', method: "GET", callback: function(json) {
-                if(typeof(callback) == "function") {
+                if (typeof(callback) == "function") {
                     callback(json);
                 }
             }, async: false});
@@ -78,11 +78,11 @@ var systemCommonUtil = {
      */
     getSysCurrentLoginUserMation: function (callback, errorCallback){
         AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', method: "POST", callback: function(json) {
-            if(typeof(callback) == "function") {
+            if (typeof(callback) == "function") {
                 callback(json);
             }
         }, errorCallback: function (json) {
-            if(typeof(errorCallback) == "function") {
+            if (typeof(errorCallback) == "function") {
                 errorCallback();
             } else {
                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
@@ -97,7 +97,7 @@ var systemCommonUtil = {
      */
     getSysCompanyList: function (callback) {
         AjaxPostUtil.request({url: reqBasePath + "companymation008", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(typeof(callback) == "function") {
+            if (typeof(callback) == "function") {
                 callback(json);
             }
         }, async: false});
@@ -111,7 +111,7 @@ var systemCommonUtil = {
      */
     getSysInoutitemListByType: function (type, callback){
         AjaxPostUtil.request({url: flowableBasePath + "inoutitem007", params: {type: type}, type: 'json', method: "GET", callback: function(json) {
-            if(typeof(callback) == "function") {
+            if (typeof(callback) == "function") {
                 callback(json);
             }
         }, async: false});
@@ -157,10 +157,8 @@ var systemCommonUtil = {
                     var h = image.height();
                     var w = image.width();
                     if (delta > 0) {
-                        if (h < (window.innerHeight)) {
-                            h = h * 1.05;
-                            w = w * 1.05;
-                        }
+                        h = h * 1.05;
+                        w = w * 1.05;
                     } else if (delta < 0) {
                         if (h > 100) {
                             h = h * 0.95;
@@ -344,7 +342,7 @@ var systemCommonUtil = {
      */
     getHasVersionUrl: function (url) {
         var versionStr = 'v='+ skyeyeVersion;
-        if(url.indexOf(versionStr) == -1) {
+        if (url.indexOf(versionStr) == -1) {
             // 判断是否有问号
             url += (url.indexOf("?") == -1 ? "?" : "&");
             url = url + versionStr;
@@ -376,7 +374,7 @@ var systemCommonUtil = {
      */
     queryExplainMationByType: function (type, callback) {
         AjaxPostUtil.request({url: reqBasePath + "queryExExplainMationToShow", params: {type: type}, type: 'json', method: "GET", callback: function(json) {
-            if(typeof(callback) == "function") {
+            if (typeof(callback) == "function") {
                 callback(json);
             }
         }, async: false});
@@ -697,7 +695,7 @@ var areaUtil = {
             return false;
         }
         var str = `<select id="${id}" win-verify="${level <= areaUtil.leastRequireLevel ? 'required' : ''}" level="${level}" lay-filter="${id}" lay-search=""><option value="">请选择</option>`;
-        for(var i = 0; i < data.length; i++){
+        for (var i = 0; i < data.length; i++) {
             str += `<option value="${data[i].id}">${data[i].name}</option>`;
         }
         str += `</select>`;

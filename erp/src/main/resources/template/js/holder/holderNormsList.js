@@ -32,10 +32,10 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'materialId', title: '产品名称', align: 'left',width: 150, templet: function (d) {
-				return isNull(d.materialMation) ? '' : d.materialMation.name;
+				return getNotUndefinedVal(d.materialMation?.name);
 			}},
 			{ field: 'normsId', title: '产品规格', align: 'left',width: 400, templet: function (d) {
-				return isNull(d.normsMation) ? '' : d.normsMation.name;
+				return getNotUndefinedVal(d.normsMation?.name);
 			}}
 	    ]],
 	    done: function(json) {

@@ -109,7 +109,7 @@ var activitiUtil = {
         };
         // 优先请求一次获取下个用户节点的信息，如果没有审批节点信息，则不加载审批人选项
         AjaxPostUtil.request({url: flowableBasePath + "activitiProcess001", params: params, type: 'json', callback: function(json) {
-            if (!isNull(json.bean)) {
+            if (!isNull(json.bean) && !$.isEmptyObject(json.bean)) {
                 var approvalPersonChooseDom = '<div class="layui-form-item layui-col-xs12">' +
                     '<label class="layui-form-label">下一个审批人<i class="red">*</i></label>' +
                     '<div class="layui-input-block">' +

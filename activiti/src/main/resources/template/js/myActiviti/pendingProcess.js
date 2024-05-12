@@ -33,7 +33,7 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'processInstanceId', title: '流程ID', width: 280, templet: function (d) {
-				return '<a lay-event="details" class="notice-title-click">' + d.processInstanceId + '</a>';
+				return '<a lay-event="details" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
 			}},
 	        { field: 'taskType', title: '类型', width: 150, templet: function (d) {
 				return d.processMation.title;

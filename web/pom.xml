@@ -107,13 +107,6 @@
             <version>1-SNAPSHOT</version>
         </dependency>
 
-        <!-- 小程序设计模块 -->
-        <dependency>
-            <groupId>com.skyeye.web</groupId>
-            <artifactId>rmprogram</artifactId>
-            <version>1-SNAPSHOT</version>
-        </dependency>
-
         <!-- 定时任务模块 -->
         <dependency>
             <groupId>com.skyeye.web</groupId>

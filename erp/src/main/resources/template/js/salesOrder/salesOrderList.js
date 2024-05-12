@@ -27,13 +27,13 @@ layui.config({
             { field: 'oddNumber', title: '单据编号', align: 'left', width: 200, templet: function (d) {
 		        return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 		    }},
-            { field: 'holderMation', title: '客户', align: 'left', width: 150, templet: function (d) {
-                return d.holderMation.name;
+            { field: 'holderMation', title: '客户', align: 'left', width: 200, templet: function (d) {
+                return getNotUndefinedVal(d.holderMation?.name);
             }},
             { field: 'totalPrice', title: '合计金额', align: 'left', width: 120 },
             { field: 'operTime', title: '单据日期', align: 'center', width: 140 },
             { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
-                return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+                return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
             }},
             { field: 'state', title: '状态', width: 90, templet: function (d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');

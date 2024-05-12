@@ -4,6 +4,9 @@ var form;
 var inPageEcharts = {};
 var inPageEchartsObject = {};
 
+// 已经添加上的echarts图表
+var inPageTable = {};
+
 // 已经添加上的文字模型
 var inPageWordMation = {};
 
@@ -18,7 +21,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 			var defaults = {
 				'rulerColor': "RGB(135, 221, 252)", // 标尺颜色
 				'rulerFontColor': "burlywood", // 标尺字体颜色
-				'headerBgColor': 'burlywood', // 菜单栏背景颜色
+				'headerBgColor': 'lightskyblue', // 菜单栏背景颜色
 				'initData': {}, // 初始化数据
 				'headerMenuJson': [], // 菜单栏
 				// excel配置
@@ -127,6 +130,9 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								str = f.getBgImageHtml(item, str);
 							} else if(item.id == 'wordModel') {
 								str = f.getWordModelHtml(item, str);
+							} else if(item.id == 'tableModel') {
+								// todo 待定
+								str = f.getTableModelHtml(item, str);
 							} else {
 								str = f.getEchartsHtml(item, str);
 							}
@@ -204,6 +210,21 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					return str;
 				},
 
+				// 标题按钮--表格模型获取html
+				getTableModelHtml: function(item, str) {
+					str = f.getCommonParentHeader(str, item);
+					$.each(item.children, function (j, bean) {
+						str += '<a class="li tableModel layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.name + '">' +
+							'<i class="icon' + bean.icon + '"></i>' +
+							'<span class="text">' + bean.name + '</span>' +
+							'</a>';
+					});
+					str += '</div>' +
+						'</div>' +
+						'</div>';
+					return str;
+				},
+
 				// 标题按钮--背景图片模型获取html
 				getBgImageHtml: function(item, str) {
 					str = f.getCommonParentHeader(str, item);
@@ -245,10 +266,65 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						f.addNewWordModel(modelId, wordStyleMation);
 					});
 
+					// 表格模型点击事件
+					skyeyeHeader.find(".tableModel").click(function () {
+						var modelId = $(this).attr("rowId");
+						f.addNewTableModel(modelId, null);
+					});
+
+				},
+
+				// 加载表格模型
+				addNewTableModel: function(modelId, tableMation) {
+					// 获取boxId
+					var boxId = modelId + getRandomValueToString();
+					// 获取表格图表id
+					var tableId = f.getTableBox(boxId, modelId);
+					// 加入页面属性
+					var table = !isNull(tableMation) ? tableMation : {
+						attr: $.extend(true, {}, echartsCustomOptions, {
+							"custom.tableColumn": { "defaultValue": [], "edit": 1, "remark": "数据表格的信息", "name": "表格配置", "editorType": "101", "editorChooseValue": "", "typeName": "数据源"},
+							"custom.isPage": { "defaultValue": "1", "edit": 1, "remark": "分页的标识", "name": "是否分页", "editorType": "1", "editorChooseValue": "", "typeName": "数据源",
+								"optionalValue": [{"id": 1, "name": "是"}, {"id": 0, "name": "否"}]},
+						}),
+						tableColumnList: [],
+						isPage: 1
+					}
+
+					table["tableId"] = tableId
+
+					// 加载表格
+					dsFormTableUtil.initDynamicTable(tableId, table);
+
+					inPageTable[boxId] = $.extend(true, {}, table);
+					return boxId;
+				},
+
+				getTableBox: function (boxId, modelId) {
+					var box = f.createBox(boxId, modelId, null);
+
+					var tableBoxId = "table" + boxId;
+					var tableBox = document.createElement("div");
+					// 为div设置类名
+					tableBox.className = "table-box";
+					tableBox.id = "label-" + tableBoxId;
+					tableBox.onmousedown = ee => {
+						var id = $("#" + tableBoxId).parent().attr("id");
+						f.setMoveEvent(ee, $("#" + id));
+						// 阻止事件冒泡（针对父元素的move）
+						ee.stopPropagation();
+					};
+					box.appendChild(tableBox);
+
+					var table = document.createElement("table");
+					table.id = tableBoxId;
+					box.appendChild(table);
+
+					return tableBoxId;
 				},
 
 				// 加载echarts模型
-				addNewModel: function(modelId, echartsMation){
+				addNewModel: function(modelId, echartsMation) {
 					if (!f.isNull(echartsMation)) {
 						var option = getEchartsOptions(echartsMation);
 						// 获取boxId
@@ -285,7 +361,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				},
 
 				// 根据id获取echarts信息
-				getEchartsMationById: function(id){
+				getEchartsMationById: function(id) {
 					var echartsMation;
 					$.each(params.headerMenuJson, function(i, item) {
 						if (!f.isNull(item.children) && item.id == 'echartsModel') {
@@ -297,7 +373,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				},
 
 				// 根据id获取文字模型的style信息
-				getWordStyleMationById: function(id){
+				getWordStyleMationById: function(id) {
 					var wordMation;
 					$.each(params.headerMenuJson, function(i, item) {
 						if (!f.isNull(item.children) && item.id == 'wordModel') {
@@ -308,7 +384,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					return wordMation;
 				},
 
-				getEchartsBox: function (boxId, modelId){
+				getEchartsBox: function (boxId, modelId) {
 					var echartsId = "echarts" + boxId;
 					var echartsBox = document.createElement("div");
 					// 为div设置类名
@@ -325,7 +401,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					return echartsId;
 				},
 
-				getWordBox: function (boxId, modelId, styleStr, wordStyleMation){
+				getWordBox: function (boxId, modelId, styleStr, wordStyleMation) {
 					var wordId = "word" + boxId;
 					var wordBox = document.createElement("font");
 					// 为div设置类名
@@ -344,7 +420,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					return wordId;
 				},
 
-				setDesignAttr: function(wordStyleMation){
+				setDesignAttr: function(wordStyleMation) {
 					var otherStyle = {
 						width: wordStyleMation.defaultWidth + 'px',
 						height: wordStyleMation.defaultHeight + 'px'
@@ -352,7 +428,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					return otherStyle;
 				},
 
-				createBox: function(id, modelId, otherStyle){
+				createBox: function(id, modelId, otherStyle) {
 					f.removeEchartsEditMation();
 					// 创建一个div
 					var div = document.createElement("div");
@@ -364,7 +440,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					div.style.top = "0px";
 					div.style.left = "0px";
 					if (!f.isNull(otherStyle)) {
-						$.each(otherStyle, function (key, value){
+						$.each(otherStyle, function (key, value) {
 							div.style[key] = value;
 						});
 					}
@@ -456,7 +532,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					return div;
 				},
 
-				setMoveEvent: function (ee, box){
+				setMoveEvent: function (ee, box) {
 					// 获取事件对象
 					var ee = ee || window.event;
 					var maxLeft = skyeyeReportContent.width() - box.width();
@@ -489,7 +565,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				 * @param y 鼠标按下时，鼠标相对于元素的y坐标
 				 * @returns {number|number}
 				 */
-				getTop: function (e, y){
+				getTop: function (e, y) {
 					var top = e.clientY - y - 104;
 					top = top < 0 ? 0 : top;
 					var chooseEcharts = skyeyeReportContent.find(".active").eq(0);
@@ -508,7 +584,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				 * @param maxLeft 允许的最大左边距
 				 * @returns {number|number}
 				 */
-				getLeft: function (e, x, maxLeft){
+				getLeft: function (e, x, maxLeft) {
 					var left = e.clientX - x - 44;
 					left = left < 0 ? 0 : left;
 					left = left > maxLeft ? maxLeft : left;
@@ -567,9 +643,9 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 
 				initExcelEvent: function() {
 					// 不触发‘移除所有图表的编辑信息’的事件的对象的class--颜色选择器
-					var notTriggerRemove = ["layui-colorpicker-main"];
+					var notTriggerRemove = ["layui-colorpicker-main", "layui-anim-scaleSpring"];
 					// 图表点击事件
-					$("body").on('click', ".echarts-box, .word-box", function (e) {
+					$("body").on('click', ".echarts-box, .word-box, .table-box", function (e) {
 						f.setChooseReportItem($(this));
 						e.stopPropagation();
 					});
@@ -578,11 +654,12 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					$("body").on('click', skyeyeReportContent, function (e) {
 						var pass = true;
 						$.each(notTriggerRemove, function (i, item) {
-							if ($(e.target).parents("." + item).length > 0 || $(e.target).attr('class').indexOf(item) != -1) {
+							if ($(e.target).parents("." + item).length > 0
+								|| (!isNull($(e.target).attr('class')) && $(e.target).attr('class').indexOf(item) != -1)) {
 								pass = false;
 							}
 						});
-						if(pass){
+						if (pass) {
 							f.removeEchartsEditMation();
 						}
 					});
@@ -606,6 +683,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					$("body").on('click', "#save", function (e) {
 						var eachartsList = f.getEchartsListToSave();
 						var wordMationList = f.getWordMationListToSave();
+						var tableMationList = f.getTableListToSave();
 
 						var bgImage = skyeyeReportContent.css("backgroundImage").replace('url(', '').replace(')', '');
 						if (isNull(bgImage) || bgImage == 'none' || bgImage.indexOf('none') > -1) {
@@ -616,15 +694,18 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 							contentHeight: skyeyeReportContent.height(),
 							bgImage: bgImage,
 							modelList: eachartsList,
-							wordMationList: wordMationList
+							wordMationList: wordMationList,
+							tableMationList: tableMationList
 						};
 						AjaxPostUtil.request({url: sysMainMation.reportBasePath + "editReportPageContentById", params: {id: id, content: encodeURIComponent(JSON.stringify(params))}, type: 'json', method: "POST", callback: function(json) {
 							winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 						}});
 					});
+
+					f.loadHandlebar();
 				},
 
-				getEchartsListToSave: function (){
+				getEchartsListToSave: function () {
 					var eachartsList = new Array();
 					$.each(skyeyeReportContent.find(".kuang"), function(i, item) {
 						if ($(item).find(".echarts-box").length > 0) {
@@ -641,7 +722,24 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					return eachartsList;
 				},
 
-				getWordMationListToSave: function (){
+				getTableListToSave: function () {
+					var tableList = new Array();
+					$.each(skyeyeReportContent.find(".kuang"), function(i, item) {
+						if ($(item).find(".table-box").length > 0) {
+							var boxId = $(item).data("boxId");
+							var etableMation = inPageTable[boxId];
+							tableList.push({
+								modelId: $(item).data("modelId"),
+								attrMation: etableMation,
+								width: $(item).width(),
+								height: $(item).height()
+							});
+						}
+					});
+					return tableList;
+				},
+
+				getWordMationListToSave: function () {
 					var wordMationList = new Array();
 					$.each(skyeyeReportContent.find(".kuang"), function(i, item) {
 						if ($(item).find(".word-box").length > 0) {
@@ -659,7 +757,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				},
 
 				// 设置选中项
-				setChooseReportItem: function(_this){
+				setChooseReportItem: function(_this) {
 					if (!_this.parent().hasClass("active")) {
 						f.removeEchartsEditMation();
 						// 被选中项
@@ -670,14 +768,14 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				},
 
 				// 移除所有图表的编辑信息
-				removeEchartsEditMation: function(){
+				removeEchartsEditMation: function() {
 					$(".dian").hide();
 					$(".kuang").removeClass("active");
 					$("#showForm").parent().remove();
 				},
 
 				// 加载echarts报表编辑器
-				loadEchartsEditor: function (){
+				loadEchartsEditor: function () {
 					var chooseObject = skyeyeReportContent.find(".active").eq(0);
 					var boxId = chooseObject.data("boxId");
 					var objectMation = getDataChooseMation(boxId);
@@ -737,8 +835,22 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					}
 				},
 
+				loadHandlebar: function () {
+					// 加载json对象
+					Handlebars.registerHelper('json', function(context, type) {
+						if (!isNull(context)) {
+							return JSON.stringify(context);
+						}
+						if (type == 'array') {
+							return JSON.stringify([]);
+						} else {
+							return JSON.stringify({});
+						}
+					});
+				},
+
 				// 加载编辑器‘详情’类型的展示
-				loadEchartsEditorISDetail: function (key, val, boxId, indexNumber, typeName){
+				loadEchartsEditorISDetail: function (key, val, boxId, indexNumber, typeName) {
 					var formItem = editorType["100"];
 					var data = f.getFormItemData(key, val, boxId, indexNumber);
 					var html = getDataUseHandlebars('{{#bean}}' + formItem.html + '{{/bean}}', data);
@@ -795,6 +907,9 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 							value = JSON.stringify(value);
 						}
 					}
+					if (val.editorType == '101') {
+						value = JSON.stringify(value);
+					}
 					return {
 						"bean": {
 							modelKey: key,
@@ -811,7 +926,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				},
 
 				// 添加一个新的form表单
-				addNewFormBox: function(){
+				addNewFormBox: function() {
 					var editForm = '<div class="form-box">' +
 						'<fieldset class="layui-elem-field layui-field-title">' +
 						'  <legend>属性</legend>' +
@@ -822,14 +937,14 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				},
 
 				// 加载编辑器类型
-				initEditorType: function (){
+				initEditorType: function () {
 					$.getJSON("../../assets/report/json/skyeyeEditor.json", function (data) {
 						editorType = data;
 					});
 				},
 
 				// reportContent的八个角
-				getEightCape: function(){
+				getEightCape: function() {
 					var capeResult = '<div class="cape cape_left1"></div>' +
 						'<div class="cape cape_left1_top"></div>' +
 						'<div class="cape cape_right1"></div>' +
@@ -841,11 +956,13 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					return capeResult;
 				},
 
-				initData: function(){
+				initData: function() {
 					var widthScale = getScale(params.initData.contentWidth, skyeyeReportContent.width());
 					var heightScale = getScale(params.initData.contentHeight, skyeyeReportContent.height());
 					// 初始化echarts模型
 					f.initEchartsData(widthScale, heightScale);
+					// 初始化table模型
+					f.initTableData(widthScale, heightScale);
 					// 初始化文字模型
 					f.initWordMationData(widthScale, heightScale);
 					// 初始化背景
@@ -867,6 +984,27 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 							item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
 							item.attrMation.attr["custom.move.y"].defaultValue = topNum;
 							var boxId = f.addNewModel(item.modelId, item.attrMation);
+							$("#" + boxId).css({
+								left: leftNum + "px",
+								top: topNum + "px",
+								width: multiplication(item.width, widthScale),
+								height: multiplication(item.height, heightScale)
+							});
+							setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
+							setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+						});
+					}
+				},
+
+				initTableData: function(widthScale, heightScale) {
+					var tableMationList = params.initData.tableMationList;
+					if (!f.isNull(tableMationList)) {
+						$.each(tableMationList, function (i, item) {
+							var leftNum = multiplication(item.attrMation.attr["custom.move.x"].defaultValue, widthScale);
+							var topNum = multiplication(item.attrMation.attr["custom.move.y"].defaultValue, heightScale);
+							item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
+							item.attrMation.attr["custom.move.y"].defaultValue = topNum;
+							var boxId = f.addNewTableModel(item.modelId, item.attrMation);
 							$("#" + boxId).css({
 								left: leftNum + "px",
 								top: topNum + "px",
@@ -920,7 +1058,6 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					'<div id="skyeyeScaleRulerV" class="skyeyeScaleRuler_v"></div>' +
 					'</div>' +
 					'<div class="hd-main clearfix" id="skyeyeHeader">' +
-					'<font class="logo-title">Skyeye系列-报表设计器</font>' +
 					'<div class="navs"></div>' +
 					'</div>' +
 					f.getEightCape() +
@@ -999,6 +1136,8 @@ function dataValueChange(value, _this) {
 		resetChartsModel(boxId);
 	} else if(_chooseMation.menuType == 'wordModel') {
 		resetWordModel(boxId);
+	} else if(_chooseMation.menuType == 'tableModel') {
+		resetTableModel(boxId);
 	}
 
 	afterRunBack(controlType, value);
@@ -1021,6 +1160,13 @@ function resetWordModel(boxId) {
 	$("#" + boxId).find(".word-box").attr("style", styleStr);
 }
 
+function resetTableModel(boxId) {
+	var tableMation = inPageTable[boxId]
+	tableMation.tableColumnList = tableMation.attr['custom.tableColumn'].defaultValue
+	// 加载表格
+	dsFormTableUtil.initDynamicTable(tableMation.tableId, tableMation);
+}
+
 function getDataChooseMation(boxId) {
 	var _object = inPageEcharts[boxId];
 	if (!isNull(_object)) {
@@ -1030,6 +1176,12 @@ function getDataChooseMation(boxId) {
 		_object = inPageWordMation[boxId];
 		if (!isNull(_object)) {
 			_object.menuType = 'wordModel';
+		}
+	}
+	if (isNull(_object)) {
+		_object = inPageTable[boxId];
+		if (!isNull(_object)) {
+			_object.menuType = 'tableModel';
 		}
 	}
 	return _object;
@@ -1094,6 +1246,9 @@ function getEchartsOptions(echartsMation) {
 // 获取文字模型样式信息
 function getWordStyleStr(propertyList) {
 	var styleStr = "";
+	if (isNull(propertyList)) {
+		return styleStr;
+	}
 	$.each(propertyList, function (index, item) {
 		if (!isNull(item.propertyMation)) {
 			if (item.propertyMation.attrCode.indexOf("custom.") < 0) {

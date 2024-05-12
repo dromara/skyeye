@@ -30,19 +30,20 @@ layui.config({
                 return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
             }},
             { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
-                return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+                return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
             }},
             { field: 'recruitDepartmentId', title: '需求部门', align: 'left', width: 140, templet: function (d) {
-                return d.recruitDepartmentMation.name;
+                return getNotUndefinedVal(d.recruitDepartmentMation?.name);
             }},
             { field: 'recruitJobId', title: '需求岗位', align: 'left', width: 150, templet: function (d) {
-                return d.recruitJobMation.name;
+                return getNotUndefinedVal(d.recruitJobMation?.name);
             }},
             { field: 'state', title: '状态', align: 'left', width: 80, templet: function (d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("bossPersonRequireState", 'id', d.state, 'name');
             }},
             { field: 'wages', title: '薪资范围', width: 120 },
             { field: 'recruitNum', title: '需求人数', width: 100 },
+            { field: 'recruitedNum', title: '已招聘人数', width: 100 },
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },

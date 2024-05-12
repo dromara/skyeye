@@ -31,14 +31,14 @@ layui.config({
                 return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
             }},
             { field: 'departmentMation', title: '转正部门', width: 140, templet: function (d) {
-                return isNull(d.departmentMation) ? "" : d.departmentMation.name;
+                return getNotUndefinedVal(d.departmentMation?.name);
             }},
             { field: 'jobMation', title: '转正岗位', width: 150, templet: function (d) {
-                return isNull(d.jobMation) ? "" : d.jobMation.name;
+                return getNotUndefinedVal(d.jobMation?.name);
             }},
             { field: 'regularTime', title: '转正日期', align: 'center', width: 100 },
             { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
-                return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+                return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
             }},
             { field: 'state', title: '状态', width: 90, templet: function(d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');

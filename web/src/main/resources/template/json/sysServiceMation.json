@@ -48,8 +48,13 @@
     "sealManageRevert": {"name": "印章归还", "key": "com.skyeye.eve.seal.service.impl.SealApplyRevertServiceImpl"},
     "sealManageBorrow": {"name": "印章借用", "key": "com.skyeye.eve.seal.service.impl.SealApplyBorrowServiceImpl"},
     "conFerenceRoomReserve": {"name": "会议室预定", "key": "com.skyeye.eve.conference.service.impl.ConferenceRoomReserveServiceImpl"},
+    "gwSendDocumentService": {"name": "公文发文管理", "key": "com.skyeye.eve.gw.service.impl.GwSendDocumentServiceImpl"},
+    "gwReceiveDocumentService": {"name": "公文收文管理", "key": "com.skyeye.eve.gw.service.impl.GwReceiveDocumentServiceImpl"},
 
     "incomeOrder": {"name": "财务明细账", "key": "com.skyeye.order.service.impl.IncomeOrderServiceImpl"},
+    "reimbursement": {"name": "报销订单", "key": "com.skyeye.reimbursement.service.impl.ReimbursementServiceImpl"},
+    "loanBorrowService": {"name": "借款单", "key": "com.skyeye.loan.service.impl.LoanBorrowServiceImpl"},
+    "loanRepayService": {"name": "还款单", "key": "com.skyeye.loan.service.impl.LoanRepayServiceImpl"},
 
     "bossPersonRequire": {"name": "人员需求申请", "key": "com.skyeye.personrequire.service.impl.PersonRequireServiceImpl"},
     "bossInterviewRegularWorker": {"name": "转正申请", "key": "com.skyeye.regularworker.service.impl.RegularWorkerServiceImpl"},

@@ -26,6 +26,7 @@ layui.config({
 
         initEchartsData(widthScale, heightScale);
         initWordMationData(widthScale, heightScale);
+        initTableMationData(widthScale, heightScale);
 
         if (!isNull(initData.bgImage)){
             content.css({
@@ -67,6 +68,30 @@ layui.config({
                 item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
                 item.attrMation.attr["custom.move.y"].defaultValue = topNum;
                 var boxId = addNewWordModel(item.modelId, item.attrMation);
+                $("#" + boxId).css({
+                    left: leftNum + "px",
+                    top: topNum + "px",
+                    width: multiplication(item.width, widthScale),
+                    height: multiplication(item.height, heightScale)
+                });
+                setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
+                setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+            });
+        }
+    }
+
+    function initTableMationData(widthScale, heightScale) {
+        var tableMationList = initData.tableMationList;
+        if (!isNull(tableMationList)) {
+            $.each(tableMationList, function (i, item) {
+                var leftNum = multiplication(item.attrMation.attr["custom.move.x"].defaultValue, widthScale);
+                var topNum = multiplication(item.attrMation.attr["custom.move.y"].defaultValue, heightScale);
+                item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
+                item.attrMation.attr["custom.move.y"].defaultValue = topNum;
+                item.attrMation.businessApi = getTableDataFromRest(item.attrMation.attr);
+
+                item.attrMation.isPage = item.attrMation.attr["custom.isPage"]?.defaultValue
+                var boxId = addNewTableModel(item.modelId, item.attrMation);
                 $("#" + boxId).css({
                     left: leftNum + "px",
                     top: topNum + "px",
@@ -123,6 +148,23 @@ layui.config({
         return attr;
     }
 
+    function getTableDataFromRest(attr) {
+        var businessApi = {};
+        var fromId = attr['custom.dataBaseMation'].defaultValue?.id;
+        if (isNull(fromId)) {
+            return businessApi;
+        }
+        var params = {
+            id: fromId
+        };
+        AjaxPostUtil.request({url: sysMainMation.reportBasePath + "queryReportDataFromById", params: params, type: 'json', method: "GET", callback: function(json) {
+            businessApi.serviceStr = json.bean.restEntity?.serviceStr;
+            businessApi.api = json.bean.restEntity?.restUrl;
+            businessApi.method = json.bean.restEntity?.method;
+        }, async: false});
+        return businessApi;
+    }
+
     function addNewModel(modelId, echartsMation) {
         if (!isNull(echartsMation)) {
             var option = getEchartsOptions(echartsMation);
@@ -142,6 +184,22 @@ layui.config({
             return boxId;
         }
         return "";
+    }
+
+    // 加载表格模型
+    function addNewTableModel(modelId, tableMation) {
+        // 获取boxId
+        var boxId = modelId + getRandomValueToString();
+        // 获取表格图表id
+        var tableId = getTableBox(boxId, modelId);
+        // 加入页面属性
+        tableMation["tableId"] = tableId
+
+        // 加载表格
+        dsFormTableUtil.initDynamicTable(tableId, tableMation);
+
+        inPageTable[boxId] = $.extend(true, {}, tableMation);
+        return boxId;
     }
 
     // 加载文字模型
@@ -166,6 +224,17 @@ layui.config({
         var box = createBox(boxId, modelId, null);
         box.appendChild(echartsBox);
         return echartsId;
+    }
+
+    function getTableBox(boxId, modelId) {
+        var box = createBox(boxId, modelId, null);
+
+        var tableBoxId = "table" + boxId;
+        var table = document.createElement("table");
+        table.id = tableBoxId;
+        box.appendChild(table);
+
+        return tableBoxId;
     }
 
     function getWordBox(boxId, modelId, styleStr, wordStyleMation) {

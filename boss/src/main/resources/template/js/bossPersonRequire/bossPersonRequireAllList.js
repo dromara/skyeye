@@ -28,15 +28,16 @@ layui.config({
             }},
             { field: 'createName', title: '申请人', width: 120},
             { field: 'recruitDepartmentMation', title: '需求部门', width: 140, templet: function (d) {
-                return d.recruitDepartmentMation.name;
+                return getNotUndefinedVal(d.recruitDepartmentMation?.name);
             }},
             { field: 'recruitJobMation', title: '需求岗位', width: 150, templet: function (d) {
-                return d.recruitJobMation.name;
+                return getNotUndefinedVal(d.recruitJobMation?.name);
             }},
             { field: 'wages', title: '薪资范围', width: 120 },
             { field: 'recruitNum', title: '需求人数', width: 100 },
+            { field: 'recruitedNum', title: '已招聘人数', width: 100 },
             { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
-                return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+                return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
             }},
             { field: 'state', title: '状态', align: 'left', width: 80, templet: function (d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("bossPersonRequireState", 'id', d.state, 'name');

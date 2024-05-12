@@ -25,7 +25,6 @@
         <module>seal-service</module>
         <module>school</module>
         <module>schedule</module>
-        <module>rmprogram</module>
         <module>quartz</module>
         <module>pro</module>
         <module>planpro</module>

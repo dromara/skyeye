@@ -35,7 +35,7 @@ var customerJS = {
 
 //系统基础信息
 var sysMainMation = {}; // 系统基础信息json
-if(isNull(localStorage.getItem("sysMainMation"))){
+if (isNull(localStorage.getItem("sysMainMation"))) {
 	jsGetJsonFile("../../configRation.json", function(data) {
 		sysMainMation = data;
 		localStorage.setItem("sysMainMation", JSON.stringify(sysMainMation));
@@ -242,7 +242,8 @@ function getLimit(){
 		- (isNull(winuiTip) ? 0 : winuiTip)
 		- (isNull(tabTtileHeight) ? 0 : tabTtileHeight);
 	// 计算limit
-	return decimerFiveOrZero(Math.floor(realHeight / 35));
+	var limit = decimerFiveOrZero(Math.floor(realHeight / 35));
+	return limit == 0 ? 5 : limit;
 }
 
 function decimerFiveOrZero(number){
@@ -738,25 +739,6 @@ function uploadImg(file, Editor) {
 			}
 		}
 	});
-}
-
-/**
- * 获取员工状态
- * @param d 员工参数
- * @returns {string}
- */
-function getStaffStateName(d) {
-	if(d.state == '1'){
-		return "<span class='state-up'>在职</span>";
-	} else if (d.state == '2'){
-		return "<span class='state-down'>离职</span>";
-	} else if (d.state == '3'){
-		return "见习";
-	} else if (d.state == '4'){
-		return "试用";
-	} else if (d.state == '5'){
-		return "退休";
-	}
 }
 
 /**

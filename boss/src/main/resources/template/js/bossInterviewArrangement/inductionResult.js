@@ -62,6 +62,7 @@ layui.config({
             form.on('submit(formSubBean)', function(data) {
                 if(winui.verifyForm(data.elem)) {
                     var state = $("input[name='state']:checked").val();
+                    var inductionState = $("#inductionState").val();
                     if (state == 6) {
                         // 同意入职
                         if (isNull($("#entryTime").val())) {
@@ -80,7 +81,6 @@ layui.config({
                             winui.window.msg('请选择入职状态', {icon: 2, time: 2000});
                             return false;
                         }
-                        var inductionState = $("#inductionState").val();
                         if (inductionState == '4' && isNull($("#trialTime").val())) {
                             winui.window.msg('请选择预计试用结束日期', {icon: 2, time: 2000});
                             return false;
@@ -93,10 +93,10 @@ layui.config({
                         entryTime: $("#entryTime").val(),
                         workTime: $("#workTime").val(),
                         userIdCard: $("#userIdCard").val(),
-                        inductionState: inductionState,
+                        inductionState: getNotUndefinedVal(inductionState),
                         trialTime: $("#trialTime").val()
                     };
-                    AjaxPostUtil.request({url: sysMainMation.bossBasePath + "setInductionResult", params: params, type: 'json', method: "PUT", callback: function(json) {
+                    AjaxPostUtil.request({url: sysMainMation.bossBasePath + "setInductionResult", params: params, type: 'json', method: "POST", callback: function(json) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
                     }});

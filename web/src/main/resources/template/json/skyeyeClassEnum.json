@@ -16,6 +16,7 @@
     "registrationType": {"name": "户口类型", "className": "skyeye-pro#com.skyeye.common.enumeration.RegistrationType"},
     "applicableObjectsType": {"name": "适用对象类型", "className": "skyeye-pro#com.skyeye.common.enumeration.ApplicableObjectsType"},
     "checkDayType": {"name": "日程插件上的类型(包含日程的)", "className": "skyeye-pro#com.skyeye.common.enumeration.CheckDayType"},
+    "userStaffType": {"name": "员工类型", "className": "skyeye-pro#com.skyeye.personnel.classenum.UserStaffType"},
 
     "menuType": {"name": "APP菜单类型", "className": "skyeye-pro#com.skyeye.menu.classenum.MenuType"},
     "urlType": {"name": "APP菜单URL类型", "className": "skyeye-pro#com.skyeye.menu.classenum.UrlType"},
@@ -87,6 +88,10 @@
     "crmOpportunityStateEnum": {"name": "商机状态", "className": "skyeye-crm#com.skyeye.opportunity.classenum.CrmOpportunityStateEnum"},
     "crmOpportunityAuthEnum": {"name": "商机权限", "className": "skyeye-crm#com.skyeye.opportunity.classenum.CrmOpportunityAuthEnum", "pageUrl": "../../tpl/crmOpportunity/crmOpportunityList.html"},
     "crmDocumentaryAuthEnum": {"name": "跟单权限", "className": "skyeye-crm#com.skyeye.documentary.classenum.CrmDocumentaryAuthEnum", "pageUrl": "../../tpl/documentary/crmDocumentaryList.html"},
+    "crmFollowUpAuthEnum": {"name": "回访权限", "className": "skyeye-crm#com.skyeye.follow.classenum.CrmFollowUpAuthEnum", "pageUrl": "../../tpl/follow/crmFollowList.html"},
+    "crmPaymentCollectionAuthEnum": {"name": "回款权限", "className": "skyeye-crm#com.skyeye.payment.classenum.CrmPaymentCollectionAuthEnum", "pageUrl": "../../tpl/payment/crmPaymentCollectionList.html"},
+    "crmInvoiceHeaderAuthEnum": {"name": "发票抬头权限", "className": "skyeye-crm#com.skyeye.invoice.classenum.CrmInvoiceHeaderAuthEnum", "pageUrl": "../../tpl/invoiceHeader/crmInvoiceHeaderList.html"},
+    "crmInvoiceAuthEnum": {"name": "发票权限", "className": "skyeye-crm#com.skyeye.invoice.classenum.CrmInvoiceAuthEnum", "pageUrl": "../../tpl/invoice/crmInvoiceList.html"},
 
     "accountSubjectType": {"name": "会计科目类型", "className": "skyeye-ifs#com.skyeye.subject.classenum.AccountSubjectType"},
     "amountDirection": {"name": "余额方向", "className": "skyeye-ifs#com.skyeye.subject.classenum.AmountDirection"},
@@ -106,6 +111,11 @@
     "conferenceState": {"name": "会议室状态", "className": "skyeye-adm#com.skyeye.eve.conference.classenum.ConferenceState"},
     "vehicleState": {"name": "车辆状态", "className": "skyeye-adm#com.skyeye.eve.vehicle.classenum.VehicleState"},
     "maintenanceType": {"name": "车辆维修类型", "className": "skyeye-adm#com.skyeye.eve.vehicle.classenum.MaintenanceType"},
+    "sealBgColorType": {"name": "印章背景类型", "className": "skyeye-adm#com.skyeye.eve.seal.classenum.SealBgColorType"},
+    "gwDocumentOpenCategory": {"name": "公文-公开类别", "className": "skyeye-adm#com.skyeye.eve.gw.classenum.GwDocumentOpenCategory"},
+    "gwDocumentPeriod": {"name": "公文-保密期间", "className": "skyeye-adm#com.skyeye.eve.gw.classenum.GwDocumentPeriod"},
+    "gwDocumentSecret": {"name": "公文-公文密级", "className": "skyeye-adm#com.skyeye.eve.gw.classenum.GwDocumentSecret"},
+    "gwDocumentUrgency": {"name": "公文-紧急程度", "className": "skyeye-adm#com.skyeye.eve.gw.classenum.GwDocumentUrgency"},
 
     "schoolPower": {"name": "学校数据权限", "className": "skyeye-school#com.skyeye.eve.classenum.SchoolPower"},
     "admissionMethod": {"name": "入学方式", "className": "skyeye-school#com.skyeye.school.student.classenum.AdmissionMethod"},
@@ -134,6 +144,8 @@
     "mailCategory": {"name": "通讯录类型", "className": "skyeye-mail#com.skyeye.eve.classenum.MailCategory"},
 
     "jobDiaryType": {"name": "日志类型", "className": "skyeye-jobdiary#com.skyeye.eve.classenum.JobDiaryType"},
+    "jobDiaryState": {"name": "日志状态", "className": "skyeye-jobdiary#com.skyeye.eve.classenum.JobDiaryState"},
+    "readState": {"name": "日志阅读状态", "className": "skyeye-jobdiary#com.skyeye.eve.classenum.ReadState"},
 
     "scheduleRemindType": {"name": "日程提醒时间所属类型", "className": "skyeye-schedule#com.skyeye.eve.classenum.ScheduleRemindType"},
     "scheduleImported": {"name": "日程重要性", "className": "skyeye-schedule#com.skyeye.eve.classenum.ScheduleImported"},

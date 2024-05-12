@@ -31,7 +31,7 @@ layui.config({
                 return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
             }},
             { field: 'transferStaffMation', title: '申请人', rowspan: '2', width: 140, templet: function(d) {
-                return isNull(d.transferStaffMation) ? '' : d.transferStaffMation.name;
+                return getNotUndefinedVal(d.transferStaffMation?.name);
             }},
             { title: '原岗位信息', align: 'center', colspan: '4'},
             { title: '申请岗位信息', align: 'center', colspan: '4'},
@@ -39,7 +39,7 @@ layui.config({
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("bossUserTransferType", 'id', d.transferType, 'name');
             }},
             { field: 'processInstanceId', title: '流程ID', rowspan: '2', width: 100, templet: function (d) {
-                return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
+                return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
             }},
             { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function(d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
@@ -52,28 +52,28 @@ layui.config({
         ],
             [
                 { field: 'primaryCompanyName', title: '企业', align: 'left', width: 150, templet: function(d) {
-                    return d.primaryCompanyMation.name;
+                    return getNotUndefinedVal(d.primaryCompanyMation?.name);
                 }},
                 { field: 'primaryDepartmentName', title: '部门', align: 'left', width: 150, templet: function(d) {
-                    return isNull(d.primaryDepartmentMation) ? '' : d.primaryDepartmentMation.name;
+                    return getNotUndefinedVal(d.primaryDepartmentMation?.name);
                 }},
                 { field: 'primaryJobName', title: '岗位', align: 'left', width: 150, templet: function(d) {
-                    return isNull(d.primaryJobMation) ? '' : d.primaryJobMation.name;
+                    return getNotUndefinedVal(d.primaryJobMation?.name);
                 }},
                 { field: 'primaryJobScoreName', title: '岗位定级', align: 'left', width: 150, templet: function(d) {
-                    return isNull(d.primaryJobScoreMation) ? '' : d.primaryJobScoreMation.name;
+                    return getNotUndefinedVal(d.primaryJobScoreMation?.name);
                 }},
                 { field: 'currentCompanyName', title: '企业', align: 'left', width: 150, templet: function(d) {
-                    return d.currentCompanyMation.name;
+                    return getNotUndefinedVal(d.currentCompanyMation?.name);
                 }},
                 { field: 'currentDepartmentName', title: '部门', align: 'left', width: 150, templet: function(d) {
-                    return isNull(d.currentDepartmentMation) ? '' : d.currentDepartmentMation.name;
+                    return getNotUndefinedVal(d.currentDepartmentMation?.name);
                 }},
                 { field: 'currentJobName', title: '岗位', align: 'left', width: 150, templet: function(d) {
-                    return isNull(d.currentJobMation) ? '' : d.currentJobMation.name;
+                    return getNotUndefinedVal(d.currentJobMation?.name);
                 }},
                 { field: 'currentJobScoreName', title: '岗位定级', align: 'left', width: 150, templet: function(d) {
-                    return isNull(d.currentJobScoreMation) ? '' : d.currentJobScoreMation.name;
+                    return getNotUndefinedVal(d.currentJobScoreMation?.name);
                 }}
             ]
         ],
@@ -162,7 +162,7 @@ layui.config({
     function cancellation(data) {
         layer.confirm('确认作废该申请吗？', { icon: 3, title: '作废操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.bossBasePath + "invalidJobTransfer", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.bossBasePath + "invalidJobTransfer", params: {id: data.id}, type: 'json', method: "POST", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
