@@ -164,6 +164,7 @@
     "autoVersionAuthEnum": {"name": "版本", "className": "skyeye-auto#com.skyeye.version.classenum.AutoVersionAuthEnum", "pageUrl": ""},
     "autoVersionState": {"name": "自动化-版本状态", "className": "skyeye-auto#com.skyeye.version.classenum.AutoVersionState"},
 
-    "reportDataFromType": {"name": "报表-数据来源类型", "className": "skyeye-report#com.skyeye.datafrom.classenum.ReportDataFromType"}
+    "reportDataFromType": {"name": "报表-数据来源类型", "className": "skyeye-report#com.skyeye.datafrom.classenum.ReportDataFromType"},
 
+    "storeOnlineBookType": {"name": "商城-门店线上预约类型", "className": "skyeye-shop#com.skyeye.classenum.StoreOnlineBookType"}
 }
