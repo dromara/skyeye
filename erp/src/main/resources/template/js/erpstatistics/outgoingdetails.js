@@ -24,15 +24,21 @@ layui.config({
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'oddNumber', title: '单据编号', align: 'left', width: 250, templet: function (d) {
 				var str = d.oddNumber;
-				if (!isNull(d.parentOrderId)){
+				if (!isNull(d.parentOrderId)) {
 					str += '<span class="state-new">[转]</span>';
 				}
 				return str;
 			}},
 			{ field: 'serviceName', title: '单据类型', align: 'left', width: 100 },
-			{ field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {return d.materialMation.name}},
-			{ field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {return d.materialMation.model}},
-			{ field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {return d.normsMation.name}},
+			{ field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {
+				return getNotUndefinedVal(d.materialMation?.name);
+			}},
+			{ field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {
+				return getNotUndefinedVal(d.materialMation?.model);
+			}},
+			{ field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {
+				return getNotUndefinedVal(d.normsMation?.name);
+			}},
 			{ field: 'unitPrice', title: '单价', align: 'left', width: 120},
 			{ field: 'operNumber', title: '出库数量', align: 'left', width: 100},
 			{ field: 'allPrice', title: '金额', align: 'left', width: 120 },

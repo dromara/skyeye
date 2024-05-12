@@ -30,13 +30,21 @@ layui.config({
 				return str;
 			}},
 			{ field: 'serviceName', title: '单据类型', align: 'left', width: 100 },
-			{ field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {return d.materialMation.name}},
-			{ field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {return d.materialMation.model}},
-			{ field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {return d.normsMation.name}},
+			{ field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {
+				return getNotUndefinedVal(d.materialMation?.name);
+			}},
+			{ field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {
+				return getNotUndefinedVal(d.materialMation?.model);
+			}},
+			{ field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {
+				return getNotUndefinedVal(d.normsMation?.name);
+			}},
 			{ field: 'unitPrice', title: '单价', align: 'left', width: 120 },
 			{ field: 'operNumber', title: '入库数量', align: 'left', width: 100 },
 			{ field: 'allPrice', title: '金额', align: 'left', width: 120 },
-			{ field: 'depotName', title: '仓库', align: 'left', width: 140, templet: function (d) {return d.depotMation.name}},
+			{ field: 'depotName', title: '仓库', align: 'left', width: 140, templet: function (d) {
+				return getNotUndefinedVal(d.depotMation?.name);
+			}},
 			{ field: 'operTime', title: '入库日期', align: 'center', width: 140 }
 		]],
 		done: function(json) {
