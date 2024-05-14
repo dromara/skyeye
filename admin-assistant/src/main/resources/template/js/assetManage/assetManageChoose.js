@@ -125,7 +125,7 @@ layui.config({
 	
 	// 保存
 	$("body").on("click", "#saveCheckBox", function() {
-		var selectedData = tableCheckBoxUtil.getValue({
+		var selectedData = tableCheckBoxUtil.getValueList({
 			gridId: 'messageTable'
 		});
 		if (selectedData.length == 0) {

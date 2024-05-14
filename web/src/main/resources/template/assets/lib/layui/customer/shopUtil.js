@@ -95,7 +95,7 @@ var shopUtil = {
      * @returns {string}
      */
     getKeepFitOrderStateName: function (data) {
-        if (data.cancleState == 1){
+        if (data.cancleState == 1) {
             if (data.state == 1){
                 return "<span class='state-down'>保养中</span>";
             } else if (data.state == 2){
@@ -114,8 +114,8 @@ var shopUtil = {
      * @param callback 回执函数
      */
     getShopAreaMation: function (callback) {
-        AjaxPostUtil.request({url: shopBasePath + "queryAreaList", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(typeof(callback) == "function") {
+        AjaxPostUtil.request({url: sysMainMation.shopBasePath + "queryAllEnabledAreaList", params: {}, type: 'json', method: "GET", callback: function(json) {
+            if (typeof(callback) == "function") {
                 callback(json);
             }
         }, async: false});
@@ -127,7 +127,7 @@ var shopUtil = {
      * @param callback 回执函数
      */
     queryStaffBelongAreaList: function (callback) {
-        AjaxPostUtil.request({url: shopBasePath + "storeStaff004", params: {}, type: 'json', method: "GET", callback: function(json) {
+        AjaxPostUtil.request({url: sysMainMation.shopBasePath + "storeStaff004", params: {}, type: 'json', method: "GET", callback: function(json) {
             if(typeof(callback) == "function") {
                 callback(json);
             }
@@ -140,7 +140,7 @@ var shopUtil = {
      * @param callback 回执函数
      */
     queryStaffBelongStoreList: function (callback) {
-        AjaxPostUtil.request({url: shopBasePath + "storeStaff005", params: {}, type: 'json', method: "GET", callback: function(json) {
+        AjaxPostUtil.request({url: sysMainMation.shopBasePath + "storeStaff005", params: {}, type: 'json', method: "GET", callback: function(json) {
             if(typeof(callback) == "function") {
                 callback(json);
             }
@@ -157,7 +157,7 @@ var shopUtil = {
         if(isNull(areaId)){
             return [];
         }
-        AjaxPostUtil.request({url: shopBasePath + "queryStoreList", params: {areaId: areaId}, type: 'json', method: "GET", callback: function(json) {
+        AjaxPostUtil.request({url: sysMainMation.shopBasePath + "queryStoreList", params: {areaId: areaId}, type: 'json', method: "GET", callback: function(json) {
             if(typeof(callback) == "function") {
                 callback(json);
             }
@@ -174,7 +174,7 @@ var shopUtil = {
             limit: 1000,
             page: 1
         };
-        AjaxPostUtil.request({url: shopBasePath + "store001", params: params, type: 'json', method: "POST", callback: function(json) {
+        AjaxPostUtil.request({url: sysMainMation.shopBasePath + "store001", params: params, type: 'json', method: "POST", callback: function(json) {
             if(typeof(callback) == "function") {
                 callback(json);
             }
