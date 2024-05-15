@@ -1247,16 +1247,8 @@ var dsFormColumnUtil = {
         var value = d.value;
         // 获取属性对应的组件编码---todo 后续根据编号加载对应的dom
         var numCode = dsFormColumnUtil.getAttrKeyNumCode(attrKey);
-        if (isNull(numCode)) {
-            return `<input type="text" id="value${d.id}" placeholder="请输入值，如果有多个，请用英文逗号隔开" cus-id="${d.id}" class="layui-input tableInput" win-verify="required" ` +
-                `value="` + (isNull(displayValue) ? "" : displayValue) + `"/>`
-        } else {
-            if (numCode == 'enumCardSolt' || numCode == 'dictDataCardSolt') {
-                // 枚举卡槽/数据字典卡槽
-
-            }
-        }
-        return '暂不支持';
+        return `<input type="text" id="value${d.id}" placeholder="请输入值，如果有多个，请用英文逗号隔开" cus-id="${d.id}" class="layui-input tableInput" win-verify="required" ` +
+            `value="` + (isNull(displayValue) ? "" : displayValue) + `"/>`
     },
 
     getAttrKeyNumCode: function (attrKey) {
