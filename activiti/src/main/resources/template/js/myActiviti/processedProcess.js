@@ -1,7 +1,8 @@
 
-var processInstanceId = "";//流程id
-
-var hisTaskId = "";//历史审批任务id
+// 流程id
+var processInstanceId = "";
+// 历史审批任务id
+var hisTaskId = "";
 
 layui.config({
 	base: basePath, 
@@ -14,53 +15,69 @@ layui.config({
 		table = layui.table,
 		form = layui.form;
 	
-	// 我的历史任务
+	// 我的历史审批任务
 	table.render({
 	    id: 'messageMyHistoryTaskTable',
 	    elem: '#messageMyHistoryTaskTable',
 	    method: 'post',
 	    url: flowableBasePath + 'activitimode014',
-	    where:{},
+		where: getTableParams(),
 	    even: true,
 	    page: true,
 		limits: getLimits(),
 		limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'processInstanceId', title: '流程ID', width: 100 },
-			{ field: 'taskType', title: '类型', width: 150, templet: function (d) {
-				return d.processMation.title;
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
+	        { field: 'processInstanceId', title: '流程ID', rowspan: '2', width: 280, templet: function (d) {
+				return '<a lay-event="details" class="notice-title-click">' + getNotUndefinedVal(d.hisTask?.processInstanceId) + '</a>';
 			}},
-			{ field: 'createName', title: '申请人', width: 120, templet: function (d) {
-				return d.processMation.createName;
+			{ field: 'taskType', title: '类型', rowspan: '2', width: 150, templet: function (d) {
+				return getNotUndefinedVal(d.processMation.title);
 			}},
-			{ field: 'createTime', title: '申请时间', align: 'center', width: 150, templet: function (d) {
-				return d.processMation.createTime;
+			{ field: 'createName', title: '申请人', rowspan: '2', width: 120, templet: function (d) {
+				return getNotUndefinedVal(d.processMation?.createName);
 			}},
-	        { field: 'name', title: '我处理的节点', width: 130, templet: function (d) {
-	        	return '[' + d.name + ']';
-	        }},
-	        { field: 'agencyName', title: '受理人', width: 80},
-	        { field: 'endTime', title: '受理时间', align: 'center', width: 140, templet: function (d) {
-	        	if (!isNull(d.endTime)){
-		        	var str = d.endTime.toString();
-		        	str = str.substring(0, str.length - 3);
-		        	return date('Y-m-d H:i', str);
-	        	} else {
-	        		return "";
-	        	}
-	        }},
-	        { field: 'weatherEnd', title: '审批进度', align: 'left', width: 80, templet: function (d) {
-	        	if(d.weatherEnd == 0){
+			{ field: 'createTime', title: '申请时间', rowspan: '2', align: 'center', width: 150, templet: function (d) {
+				return getNotUndefinedVal(d.processMation?.createTime);
+			}},
+			{ field: 'assigneeList', title: '当前审批人', align: 'left', rowspan: '2', width: 150, templet: function (d) {
+				if (!isNull(d.assigneeList)) {
+					var str = "";
+					$.each(d.assigneeList, function(i, item) {
+						str += '<span class="layui-badge layui-bg-blue">' + item.name + '</span><br>';
+					});
+					return str;
+				}
+				return '';
+			}},
+			{ title: '我处理的', colspan: '2', align: 'center' },
+	        { field: 'weatherEnd', title: '审批进度', align: 'left', rowspan: '2', width: 80, templet: function (d) {
+	        	if (d.weatherEnd == 0) {
 	        		return "<span class='state-down'>进行中</span>";
 	        	} else {
 	        		return "<span class='state-up'>已完成</span>";
 	        	}
 	        }},
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#myHistoryTaskTableBar'}
-	    ]],
+	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', rowspan: '2', align: 'center', width: 150, toolbar: '#myHistoryTaskTableBar'}
+	    ], [
+			{ field: 'hisTaskName', title: '节点', width: 130, templet: function (d) {
+				return '[' + getNotUndefinedVal(d.hisTask?.name) + ']';
+			}},
+			{ field: 'lastUpdateTime', title: '处理时间', width: 130, templet: function (d) {
+				if (!isNull(d.hisTask.endTime)) {
+					var str = d.hisTask.endTime.toString();
+					str = str.substring(0, str.length - 3);
+					return date('Y-m-d H:i', str);
+				} else {
+					return "";
+				}
+			}}
+		]],
 	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入流程ID", function () {
+				table.reloadData("messageMyHistoryTaskTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -76,11 +93,9 @@ layui.config({
         }
     });
 
-	//撤回
+	// 撤回
 	function withdraw(data) {
-		//流程id
 		processInstanceId = data.processInstanceId;
-		//历史审批任务id
 		hisTaskId = data.hisTaskId;
 		_openNewWindows({
 			url: "../../tpl/activitiCommon/revokeActiviti.html",
@@ -89,12 +104,12 @@ layui.config({
 			area: ['70vw', '40vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				reloadMyHistoryTaskTable();
+				loadTable();
 			}
 		});
 	}
 	
-	//刷新流程图
+	// 刷新流程图
 	function refreshPic(data) {
 		layer.confirm('确认重新生成流程图吗？', { icon: 3, title: '刷新流程图操作' }, function (i) {
 			layer.close(i);
@@ -104,14 +119,18 @@ layui.config({
 		});
 	}
 	
-    //刷新我的历史任务
+	form.render();
 	$("body").on("click", "#reloadMyHistoryTaskTable", function() {
-		reloadMyHistoryTaskTable();
+		loadTable();
 	});
-	
-    function reloadMyHistoryTaskTable(){
-    	table.reloadData("messageMyHistoryTaskTable", {where:{}});
-    }
+
+	function loadTable() {
+		table.reloadData("messageMyHistoryTaskTable", {where: getTableParams()});
+	}
+
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageMyHistoryTaskTable"));
+	}
     
     exports('processedProcess', {});
 });

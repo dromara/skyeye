@@ -21,6 +21,8 @@ layui.config({
     AjaxPostUtil.request({url: flowableBasePath + "queryProcessInstance", params: {processInstanceId: processInstanceId}, type: 'json', method: 'POST', callback: function(data) {
 		// 加载业务数据
 		activitiUtil.loadBusiness(data.bean.objectId, data.bean.objectKey, data.bean.actFlowId, 'details');
+		// 当前审批人
+		$("#taskCurrentAssignee").html(getNotUndefinedVal(data.bean.task?.taskCurrentAssigneeMation?.name));
 		// 加载流程图片
 		$("#processInstanceIdImg").attr("src", fileBasePath + 'images/upload/activiti/' + processInstanceId + ".png?cdnversion=" + Math.ceil(new Date()/3600000));
 		matchingLanguage();

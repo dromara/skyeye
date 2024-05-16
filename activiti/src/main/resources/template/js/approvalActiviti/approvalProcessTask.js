@@ -25,6 +25,8 @@ layui.config({
 		// 加载业务数据
 		activitiUtil.loadBusiness(data.bean.objectId, data.bean.objectKey, data.bean.actFlowId, 'edit');
 
+		// 当前审批人
+		$("#taskCurrentAssignee").html(getNotUndefinedVal(data.bean.task?.taskCurrentAssigneeMation?.name));
 	}, async: false});
     
     AjaxPostUtil.request({url: flowableBasePath + "activitimode016", params: {taskId: taskId, processInstanceId: processInstanceId}, type: 'json', method: 'GET', callback: function(j){

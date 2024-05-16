@@ -44,6 +44,9 @@ layui.config({
 	        { field: 'createTime', title: '申请时间', align: 'center', width: 150, templet: function (d) {
 				return d.processMation.createTime;
 			}},
+			{ field: 'assignee', title: '当前审批人', width: 120, templet: function (d) {
+				return d.processMation.createName;
+			}},
 	        { field: 'name', title: '当前节点', width: 130, templet: function (d) {
 	        	return '[' + d.name + ']';
 	        }},
