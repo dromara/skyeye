@@ -32,13 +32,13 @@
         <div class="layui-form-item layui-col-xs6">
             <label class="layui-form-label">开始时间<i class="red">*</i></label>
             <div class="layui-input-block">
-                <input type="text" id="businessStartTime" name="businessStartTime" win-verify="required" placeholder="请选择开始时间" class="layui-input" value="{{businessStartTime}}"/>
+                <input type="text" id="businessStartTime" name="businessStartTime" win-verify="required" placeholder="请选择开始时间" class="layui-input" value="{{startTime}}"/>
             </div>
         </div>
         <div class="layui-form-item layui-col-xs6">
             <label class="layui-form-label">结束时间<i class="red">*</i></label>
             <div class="layui-input-block">
-                <input type="text" id="businessEndTime" name="businessEndTime" win-verify="required" placeholder="请选择结束时间" class="layui-input" value="{{businessEndTime}}"/>
+                <input type="text" id="businessEndTime" name="businessEndTime" win-verify="required" placeholder="请选择结束时间" class="layui-input" value="{{endTime}}"/>
             </div>
         </div>
         <div class="layui-form-item layui-col-xs12">
@@ -118,11 +118,11 @@
                         <tbody class="insurance-table">
                             {{#each storeStaffList}}
                             <tr>
-                                <td><div style="width: 100px;">{{jobNumber}}</div></td>
-                                <td><div style="width: 100px;">{{userName}}</div></td>
-                                <td><div style="width: 140px;">{{companyName}}</div></td>
-                                <td><div style="width: 100px;">{{departmentName}}</div></td>
-                                <td><div style="width: 120px;">{{jobName}}</div></td>
+                                <td><div style="width: 100px;">{{staffMation.userCode}}</div></td>
+                                <td><div style="width: 100px;">{{staffMation.userName}}</div></td>
+                                <td><div style="width: 140px;">{{staffMation.companyName}}</div></td>
+                                <td><div style="width: 100px;">{{staffMation.departmentName}}</div></td>
+                                <td><div style="width: 120px;">{{staffMation.jobName}}</div></td>
                             </tr>
                             {{/each}}
                         </tbody>

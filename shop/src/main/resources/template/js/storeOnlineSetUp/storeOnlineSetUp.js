@@ -37,13 +37,7 @@ layui.config({
             pagination: false,
             method: "GET",
             template: beanTemplate,
-            ajaxSendLoadBefore: function(hdb, json){
-                if(isNull(json.bean.onlineBookJson)){
-                    json.bean.onlineBookJson = [];
-                } else {
-                    json.bean.onlineBookJson = JSON.parse(json.bean.onlineBookJson);
-                }
-            },
+            ajaxSendLoadBefore: function(hdb, json) {},
             ajaxSendAfter:function(data) {
 
                 var startTime = laydate.render({
@@ -116,16 +110,19 @@ layui.config({
                         }
 
                         var params = {
-                            rowId: $("#storeId").val(),
-                            businessStartTime: $("#businessStartTime").val(),
-                            businessEndTime: $("#businessEndTime").val(),
+                            id: $("#storeId").val(),
+                            startTime: $("#businessStartTime").val(),
+                            endTime: $("#businessEndTime").val(),
                             onlineBookAppoint: $("input[name='onlineBookAppoint']:checked").val(),
                             onlineBookRadix: $("#onlineBookRadix").val(),
                             onlineBookType: $("input[name='onlineBookType']:checked").val(),
                             onlineBookJson: JSON.stringify(tableData)
                         };
+                        if (isNull(params.onlineBookType)) {
+                            params.onlineBookType = ''
+                        }
 
-                        AjaxPostUtil.request({url: shopBasePath + "store009", params: params, type: 'json', method: "POST", callback: function (json) {
+                        AjaxPostUtil.request({url: shopBasePath + "saveStoreOnlineMation", params: params, type: 'json', method: "POST", callback: function (json) {
                             winui.window.msg('保存成功', {icon: 1, time: 2000});
                         }, async: true});
                     }
