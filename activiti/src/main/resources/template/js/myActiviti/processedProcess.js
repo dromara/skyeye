@@ -32,7 +32,7 @@ layui.config({
 				return '<a lay-event="details" class="notice-title-click">' + getNotUndefinedVal(d.hisTask?.processInstanceId) + '</a>';
 			}},
 			{ field: 'taskType', title: '类型', rowspan: '2', width: 150, templet: function (d) {
-				return getNotUndefinedVal(d.processMation.title);
+				return getNotUndefinedVal(d.processMation?.title);
 			}},
 			{ field: 'createName', title: '申请人', rowspan: '2', width: 120, templet: function (d) {
 				return getNotUndefinedVal(d.processMation?.createName);
