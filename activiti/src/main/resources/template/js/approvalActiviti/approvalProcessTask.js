@@ -26,7 +26,13 @@ layui.config({
 		activitiUtil.loadBusiness(data.bean.objectId, data.bean.objectKey, data.bean.actFlowId, 'edit');
 
 		// 当前审批人
-		$("#taskCurrentAssignee").html(getNotUndefinedVal(data.bean.task?.taskCurrentAssigneeMation?.name));
+		if (!isNull(data.bean.task?.taskCurrentAssigneeMation)) {
+			var str = "";
+			$.each(data.bean.task?.taskCurrentAssigneeMation, function(i, item) {
+				str += '<span class="layui-badge layui-bg-blue">' + item.name + '</span><br>';
+			});
+			$("#taskCurrentAssignee").html(str);
+		}
 	}, async: false});
     
     AjaxPostUtil.request({url: flowableBasePath + "activitimode016", params: {taskId: taskId, processInstanceId: processInstanceId}, type: 'json', method: 'GET', callback: function(j){

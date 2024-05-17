@@ -22,7 +22,13 @@ layui.config({
 		// 加载业务数据
 		activitiUtil.loadBusiness(data.bean.objectId, data.bean.objectKey, data.bean.actFlowId, 'details');
 		// 当前审批人
-		$("#taskCurrentAssignee").html(getNotUndefinedVal(data.bean.task?.taskCurrentAssigneeMation?.name));
+		if (!isNull(data.bean.task?.taskCurrentAssigneeMation)) {
+			var str = "";
+			$.each(data.bean.task?.taskCurrentAssigneeMation, function(i, item) {
+				str += '<span class="layui-badge layui-bg-blue">' + item.name + '</span><br>';
+			});
+			$("#taskCurrentAssignee").html(str);
+		}
 		// 加载流程图片
 		$("#processInstanceIdImg").attr("src", fileBasePath + 'images/upload/activiti/' + processInstanceId + ".png?cdnversion=" + Math.ceil(new Date()/3600000));
 		matchingLanguage();
