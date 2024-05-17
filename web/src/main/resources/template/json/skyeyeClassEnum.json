@@ -167,6 +167,7 @@
     "reportDataFromType": {"name": "报表-数据来源类型", "className": "skyeye-report#com.skyeye.datafrom.classenum.ReportDataFromType"},
 
     "storeOnlineBookType": {"name": "商城-门店线上预约类型", "className": "skyeye-shop#com.skyeye.classenum.StoreOnlineBookType"},
+    "shopMealType": {"name": "商城-套餐类型", "className": "skyeye-shop#com.skyeye.classenum.ShopMealType"},
 
     "studentStateEnum": {"name": "表白墙-学生审核状态", "className": "skyeye-wall#com.skyeye.certification.classenum.StateEnum"},
     "studentStateEnum2": {
