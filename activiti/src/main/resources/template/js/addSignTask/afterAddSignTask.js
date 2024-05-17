@@ -49,6 +49,9 @@ layui.config({
                 winui.window.msg('请最少选择一条审批节点.', {icon: 2, time: 2000});
                 return false;
             }
+            if(!judgeSimple()){
+                return false;
+            }
             var params = {
                 taskId: taskId,
                 chooseUserMation: JSON.stringify(table.cache.messageTable)
@@ -60,6 +63,27 @@ layui.config({
         }
         return false;
     });
+
+    /**
+     * 判断是否存在相同的审批人
+     *
+     * @returns {boolean} true：没有重复元素，false：存在重复元素
+     */
+    function judgeSimple(){
+        var json = table.cache.messageTable;
+        var temList = [];
+        for(var i = 0; i < json.length; i++){
+            var item = json[i];
+            var tem = getInPoingArr(temList, "id", item.id, null);
+            if(tem == null){
+                temList.push(item);
+            } else {
+                winui.window.msg("存在相同的审批人，请确认", {icon: 2, time: 2000});
+                return false;
+            }
+        }
+        return true;
+    }
 
     $("body").on("click", "#addRow", function() {
         addRow();
