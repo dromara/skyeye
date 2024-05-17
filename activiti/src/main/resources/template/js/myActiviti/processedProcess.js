@@ -85,6 +85,7 @@ layui.config({
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'details') { //详情
+			data.processInstanceId = data.hisTask?.processInstanceId;
 			activitiUtil.activitiDetails(data);
         } else if (layEvent === 'withdraw') { //撤回
         	withdraw(data);
@@ -95,8 +96,8 @@ layui.config({
 
 	// 撤回
 	function withdraw(data) {
-		processInstanceId = data.processInstanceId;
-		hisTaskId = data.hisTaskId;
+		processInstanceId = data.hisTask?.processInstanceId;
+		hisTaskId = data.hisTask?.id;
 		_openNewWindows({
 			url: "../../tpl/activitiCommon/revokeActiviti.html",
 			title: "撤回",
@@ -113,7 +114,7 @@ layui.config({
 	function refreshPic(data) {
 		layer.confirm('确认重新生成流程图吗？', { icon: 3, title: '刷新流程图操作' }, function (i) {
 			layer.close(i);
-            AjaxPostUtil.request({url: flowableBasePath + "activitimode027", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "activitimode027", params: {processInstanceId: data.hisTask?.processInstanceId}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
  	   		}});
 		});
