@@ -5,8 +5,6 @@ var taskType = "";//流程类型
 
 var processInstanceId = "";//流程id
 
-var sequenceId = "";//动态表单类型的流程
-
 // 待我审批
 layui.config({
 	base: basePath, 
@@ -36,22 +34,19 @@ layui.config({
 				return '<a lay-event="details" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
 			}},
 	        { field: 'taskType', title: '类型', width: 150, templet: function (d) {
-				return d.processMation.title;
+				return getNotUndefinedVal(d.processMation?.title);
 			}},
 	        { field: 'createName', title: '申请人', width: 120, templet: function (d) {
-				return d.processMation.createName;
+				return getNotUndefinedVal(d.processMation?.createName);
 			}},
 	        { field: 'createTime', title: '申请时间', align: 'center', width: 150, templet: function (d) {
-				return d.processMation.createTime;
+				return getNotUndefinedVal(d.processMation?.createTime);
 			}},
-			{ field: 'assignee', title: '当前审批人', width: 120, templet: function (d) {
-				return d.processMation.createName;
-			}},
-	        { field: 'name', title: '当前节点', width: 130, templet: function (d) {
-	        	return '[' + d.name + ']';
+	        { field: 'taskName', title: '当前节点', width: 130, templet: function (d) {
+	        	return '[' + d.taskName + ']';
 	        }},
-	        { field: 'suspended', title: '状态<i id="stateDesc" class="fa fa-question-circle" style="margin-left: 5px"></i>', align: 'center', width: 130, templet: function (d) {
-	        	if(d.suspended){
+	        { field: 'suspended', title: '状态<i id="stateDesc" class="fa fa-question-circle" style="margin-left: 5px"></i>', align: 'center', width: 100, templet: function (d) {
+	        	if (d.suspended) {
 	        		return "<span class='state-down'>挂起</span>";
 	        	} else {
 	        		return "<span class='state-up'>正常</span>";
@@ -61,6 +56,9 @@ layui.config({
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入流程ID", function () {
+				table.reloadData("messageMyNeedDealtTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -76,7 +74,7 @@ layui.config({
 
 	// 提交任务
 	function subTasks(data, obj){
-		taskId = data.id;
+		taskId = data.taskId;
 		taskType = data.taskType;
 		processInstanceId = data.processInstanceId;
 		_openNewWindows({
@@ -86,39 +84,21 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
-				loadMyNeedDealtTable();
+				loadTable();
 			}});
 	}
-	
-    $("body").on("click", "#stateDesc", function() {
-		layer.tips('该状态分为挂机和正常，被挂机待办无法进行审批操作', $("#stateDesc"), {
-			tips: [1, '#3595CC'],
-			time: 4000
-		});
-	});
 
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			table.reloadData("messageMyNeedDealtTable", {page: {curr: 1}, where: getTableParams()});
-		}
-		return false;
-	});
-
-	// 刷新我的待办
 	$("body").on("click", "#reloadMyNeedDealtTable", function() {
-		loadMyNeedDealtTable();
+		loadTable();
 	});
 
-	function loadMyNeedDealtTable(){
+	function loadTable() {
 		table.reloadData("messageMyNeedDealtTable", {where: getTableParams()});
 	}
 
-    function getTableParams() {
-    	return {
-    		taskName: $("#taskName").val(),
-			processInstanceId: $("#processInstanceId").val()
-    	};
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageMyNeedDealtTable"));
 	}
     
     exports('pendingProcess', {});

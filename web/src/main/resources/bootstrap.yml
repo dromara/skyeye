@@ -10,9 +10,9 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 172.18.92.40:9000 # 配置服务注册nacos地址
+        server-addr: localhost:9000 # 配置服务注册nacos地址
       config:
         # 指定nacos server的地址
-        server-addr: 172.18.92.40:9000
+        server-addr: localhost:9000
         file-extension: yml
         namespace: dev

@@ -7,33 +7,14 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-	<div class="txtcenter" style="margin:0 auto;padding:10px;">
-	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
-	        <div class="layui-form-item">
-	            <div class="layui-inline">
-	            	<label class="layui-form-label">流程ID</label>
-	                <div class="layui-input-inline">
-	                    <input type="text" id="processInstanceId" name="processInstanceId" placeholder="请输入流程ID" class="layui-input" />
-	                </div>
-	                <label class="layui-form-label">申请时间</label>
-	                <div class="layui-input-inline">
-	                    <input type="text" id="createTime" name="createTime" placeholder="请选择申请时间" class="layui-input" />
-	                </div>
-	                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
-	                <button class="layui-btn list-form-search" type="button" id="formSearch"><language showName="com.skyeye.search2"></language></button>
-	            </div>
-	        </div>
-	    </form>
-	</div>
 	<div class="winui-toolbar">
         <div class="winui-tool">
-            <button id="reloadMyStartTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="reloadMyStartTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
         </div>
     </div>
     <div style="margin:auto 10px;">
         <table id="messageMyStartTable" lay-filter="messageMyStartTable"></table>
         <script type="text/html" id="myStartTableBar">
-			<a class="layui-btn layui-btn-xs" lay-event="details">详情</a>
 			<a class="layui-btn layui-btn-xs" lay-event="refreshPic">刷新流程图</a>
         </script>
     </div>
