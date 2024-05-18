@@ -41,7 +41,7 @@ layui.config({
 		isAuto: true,
 		done: function(page, next) {
 			var lis = [];
-			AjaxPostUtil.request({url: flowableBasePath + "activitimode017", params: {processInstanceId: parent.processInstanceId}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: flowableBasePath + "activitimode017", params: {processInstanceId: parent.processInstanceId}, type: 'json', method: 'POST', callback: function (json) {
 				$.each(json.rows, function(index, bean) {
 					bean.showClass = 'date02';
 					lis.push(getDataUseHandlebars(timeTreeApprovalHistory, {bean: bean}));
