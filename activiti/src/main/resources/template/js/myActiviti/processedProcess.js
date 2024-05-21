@@ -78,6 +78,10 @@ layui.config({
 			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入流程ID", function () {
 				table.reloadData("messageMyHistoryTaskTable", {page: {curr: 1}, where: getTableParams()});
 			});
+			// 该方法用于解决,使用fixed固定列后,行高和其他列不一致的问题
+			$(".layui-table-main tr").each(function (index, val) {
+				$($(".layui-table-fixed .layui-table-body tbody tr")[index]).height($(val).height());
+			});
 	    }
 	});
 	

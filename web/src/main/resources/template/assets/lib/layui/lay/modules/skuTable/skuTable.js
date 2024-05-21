@@ -855,7 +855,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                         div += '</select>';
                         break;
                     case "btn":
-                        value = isNull(value) ? [] : JSON.parse(value);
+                        value = isNull(value) ? [] : (typeof value === 'string' ? JSON.parse(value) : value);
                         div += "<button type='button' class='layui-btn layui-btn-primary layui-btn-xs stockMore' stock='" + JSON.stringify(value) + "' id='" + id + "'>库存信息</button>";
                         $.each(value, function(i, item) {
                             if (!isNull(item.depotMation)) {
