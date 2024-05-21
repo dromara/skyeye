@@ -17,8 +17,8 @@ layui.define(["jquery", "dragula", 'winui', 'form', 'element'], function(exports
     }, {
         text: "日期",
         code: "code_manage_date",
-        html: '<select class="layui-input code_manage_date" lay-filter="code_manage_date"><option value="yyyy" data-lang="code_manage_y">年</option><option value="yyyyMM" data-lang="code_manage_y_m">年月</option><option value="yyyyMMdd" data-lang="code_manage_y_m_d">年月日</option><option value="yyyyMMddhh" data-lang="code_manage_y_m_d_h">年月日时</option></select>',
-        helper: '<p data-lang="code_manage_y" class="ellipsis">年</p><p> yyyy</p><p data-lang="code_manage_y_m" class="ellipsis">年月</p><p> yyyyMM</p><p data-lang="code_manage_y_m_d" class="ellipsis">年月日</p><p> yyyyMMdd</p><p data-lang="code_manage_y_m_d_h" class="ellipsis">年月日时</p><p> yyyyMMddhh</p>',
+        html: '<select class="layui-input code_manage_date" lay-filter="code_manage_date"><option value="yyyy" data-lang="code_manage_y">年</option><option value="yyyyMM" data-lang="code_manage_y_m">年月</option><option value="yyyyMMdd" data-lang="code_manage_y_m_d">年月日</option><option value="yyyyMMddHH" data-lang="code_manage_y_m_d_h">年月日时</option></select>',
+        helper: '<p data-lang="code_manage_y" class="ellipsis">年</p><p> yyyy</p><p data-lang="code_manage_y_m" class="ellipsis">年月</p><p> yyyyMM</p><p data-lang="code_manage_y_m_d" class="ellipsis">年月日</p><p> yyyyMMdd</p><p data-lang="code_manage_y_m_d_h" class="ellipsis">年月日时</p><p> yyyyMMddHH</p>',
         bgColor: "#FFBB96",
         eg: function(value) {
             return new Date().format(value);
