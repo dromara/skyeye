@@ -89,7 +89,7 @@ var initTableSearchUtil = {
      * @param keywordPlaceholder 关键字搜索的提示语
      */
     initTableKeyWordSearch: function (tableId, keywordPlaceholder) {
-        if (isNull(keywordPlaceholder)) {
+        if (isNull(keywordPlaceholder) || keywordPlaceholder == "暂不支持搜索") {
             return false;
         }
         var str;
@@ -97,11 +97,13 @@ var initTableSearchUtil = {
             str = '<div class="keyword-box">' +
                 '<input type="text" id="' + tableId + 'KeyWord" placeholder="' + keywordPlaceholder.value + '" class="layui-input search-input-keyword" />' +
                 '<i class="fa fas fa-search input-icon search-btn-keyword" id="' + tableId + 'SearchTable" title="' + systemLanguage["com.skyeye.search2"][languageType] + '"></i>' +
+                '<i class="fa fas fa-times input-icon clear-btn-keyword" style="display: none" id="' + tableId + 'Clear" title="清空"></i>' +
                 '</div>';
         } else {
             str = '<div class="keyword-box">' +
                 '<input type="text" id="' + tableId + 'KeyWord" placeholder="' + keywordPlaceholder + '" class="layui-input search-input-keyword" />' +
                 '<i class="fa fas fa-search input-icon search-btn-keyword" id="' + tableId + 'SearchTable" title="' + systemLanguage["com.skyeye.search2"][languageType] + '"></i>' +
+                '<i class="fa fas fa-times input-icon clear-btn-keyword" style="display: none" id="' + tableId + 'Clear" title="清空"></i>' +
                 '</div>';
         }
         $(".winui-tool").append(str);
@@ -132,6 +134,29 @@ var initTableSearchUtil = {
                 // 回车搜索
                 $("#" + tableId + "SearchTable").click();
             }
+        });
+
+        // 搜索框内容变化事件
+        $("body").on("input", "#" + tableId + "KeyWord", function () {
+            if (isNull($(this).val())) {
+                $(".clear-btn-keyword").hide();
+                $(".search-btn-keyword").css({
+                    right: "8px"
+                })
+                $(this).css({
+                    "padding-right": "35px"
+                })
+            } else {
+                $(".clear-btn-keyword").show();
+                $(".search-btn-keyword").css({
+                    right: "30px"
+                })
+                $(this).css({
+                    "padding-right": "50px"
+                })
+            }
+        });
+        $("body").on("change", "#" + tableId + "KeyWord", function () {
         });
     },
 
@@ -564,6 +589,26 @@ var initTableSearchUtil = {
         // 搜索
         $("body").on("click", ".search-btn-keyword", function() {
             var tableId = $(this).attr("id").replace('SearchTable', '');
+            // 加载回调函数
+            var mation = initTableSearchUtil.tableMap[tableId];
+            if (typeof (mation.callback) == "function") {
+                mation.callback();
+            }
+        });
+
+        // 清空搜索框
+        $("body").on("click", ".clear-btn-keyword", function() {
+            var tableId = $(this).attr("id").replace('Clear', '');
+
+            $("#" + tableId + "KeyWord").val('');
+            $(this).hide();
+            $(".search-btn-keyword").css({
+                right: "8px"
+            })
+            $("#" + tableId + "KeyWord").css({
+                "padding-right": "35px"
+            })
+
             // 加载回调函数
             var mation = initTableSearchUtil.tableMap[tableId];
             if (typeof (mation.callback) == "function") {
