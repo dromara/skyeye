@@ -7,6 +7,7 @@
     "outIsPurchaseReturns": {"name": "采购退货单申请", "key": "com.skyeye.purchase.service.impl.PurchaseReturnsServiceImpl"},
     "putIsPurchase": {"name": "采购入库单申请", "key": "com.skyeye.purchase.service.impl.PurchasePutServiceImpl"},
     "purchaseOrder": {"name": "采购订单申请", "key": "com.skyeye.purchase.service.impl.PurchaseOrderServiceImpl"},
+    "purchaseRequest": {"name": "采购申请", "key": "com.skyeye.request.service.impl.PurchaseRequestServiceImpl"},
     "putIsOthers": {"name": "其他入库单申请", "key": "com.skyeye.other.service.impl.OtherWareHousServiceImpl"},
     "outIsOthers": {"name": "其他出库单申请", "key": "com.skyeye.other.service.impl.OtherOutLetsServiceImpl"},
     "splitListOrder": {"name": "拆分订单", "key": "com.skyeye.other.service.impl.SplitListServiceImpl"},
