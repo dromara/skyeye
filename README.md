@@ -8,7 +8,7 @@
 - 开源版请下载`master`分支
 - 接定制开发，无需求的不接
 - 具备**低代码**、**快捷开发**、**可视化设计**、**微服务**等特点
-- Skyeye 云系列功能导图：[地址](https://www.zhixi.com/view/9be57741)
+- Skyeye 云系列功能导图：[地址](https://www.zhixi.com/tpl/8556d62b08ac5d98468ad26dc418fe91?shared=true)
 - [Skyeye云系列资料](https://docs.qq.com/doc/DYUxuT3pSdGhVVXFC)
 - **接前端 / Java后端等课程设计以及毕设制作，有需要的可加下方微信**
 
