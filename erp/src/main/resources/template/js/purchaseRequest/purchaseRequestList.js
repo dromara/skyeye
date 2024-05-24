@@ -32,15 +32,15 @@ layui.config({
                 }},
             { field: 'title', title: '单据主题', align: 'left', width: 120 },
             { field: 'fromTypeId', title: '单据来源', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("PurchaseRequestFromType", 'id', d.fromTypeId, 'name');
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseRequestFromType", 'id', d.fromTypeId, 'name');
                 }},
             { field: 'totalPrice', title: '合计金额', align: 'left', width: 120 },
             { field: 'operTime', title: '单据日期', align: 'center', width: 140 },
             { field: 'inquiryState', title: '询价状态', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("PurchaseRequestInquiryState", 'id', d.inquiryState, 'name');
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseRequestInquiryState", 'id', d.inquiryState, 'name');
                 }},
             { field: 'state', title: '状态', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("PurchaseRequestStateEnum", 'id', d.state, 'name');
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseRequestStateEnum", 'id', d.state, 'name');
                 }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
