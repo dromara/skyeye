@@ -34,6 +34,9 @@ layui.config({
             { field: 'fromTypeId', title: '单据来源', width: 90, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseRequestFromType", 'id', d.fromTypeId, 'name');
                 }},
+            { field: 'projectMation', title: '项目', align: 'left', width: 150, templet: function (d) {
+                    return getNotUndefinedVal(d.projectMation?.name);
+                }},
             { field: 'totalPrice', title: '合计金额', align: 'left', width: 120 },
             { field: 'operTime', title: '单据日期', align: 'center', width: 140 },
             { field: 'inquiryState', title: '询价状态', width: 90, templet: function (d) {
@@ -71,6 +74,10 @@ layui.config({
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
             revoke(data);
+        }else if (layEvent === 'inquiry') { //询价
+            inquiry(data);
+        }else if (layEvent === 'fixedPrice') { //定价
+            fixedPrice(data);
         }
     });
 
@@ -92,9 +99,9 @@ layui.config({
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.erpBasePath + "deletePurchaseRequest", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                }});
+                winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
         });
     }
 
@@ -110,6 +117,33 @@ layui.config({
                 loadTable();
             }});
     }
+
+    // 询价
+    function inquiry(data) {
+        _openNewWindows({
+            url: systemCommonUtil.getUrl('FP2024052400005&id=' + data.id, null),
+            title: systemLanguage["com.skyeye.inquiryPageTitle"][languageType],
+            pageId: "purchaseRequestInquiry",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+    //定价
+    function fixedPrice(data){
+        _openNewWindows({
+            url: systemCommonUtil.getUrl('FP2024052500001&id=' + data.id, null),
+            title: systemLanguage["com.skyeye.fixedPricePageTitle"][languageType],
+            pageId: "purchaseRequestFixedPrice",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
 
     // 详情
     function details(data) {
@@ -127,9 +161,9 @@ layui.config({
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.erpBasePath + "revokePurchaseRequest", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
-                    winui.window.msg("提交成功", {icon: 1, time: 2000});
-                    loadTable();
-                }});
+                winui.window.msg("提交成功", {icon: 1, time: 2000});
+                loadTable();
+            }});
         });
     }
 

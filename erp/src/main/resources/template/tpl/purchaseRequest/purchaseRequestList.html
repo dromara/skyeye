@@ -33,8 +33,15 @@
             {{# } }}
         {{# } }}
         {{# if(d.state == 'pass') { }}
-            {{# if(auth('1571812784641')){ }}
-                <a class="layui-btn layui-btn-xs" lay-event="turnPurchase">转采购入库</a>
+            {{# if(d.inquiryState == 2 || d.inquiryState == 3) { }}
+                {{# if(auth('1716560596026')){ }}
+                    <a class="layui-btn layui-btn-xs" lay-event="inquiry">询价</a>
+                {{# } }}
+            {{# } }}
+            {{# if(d.inquiryState == 3) { }}
+                {{# if(auth('1716620356873')){ }}
+                <a class="layui-btn layui-btn-xs" lay-event="fixedPrice">定价</a>
+                {{# } }}
             {{# } }}
         {{# } }}
     </script>

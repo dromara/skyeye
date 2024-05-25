@@ -40,6 +40,9 @@
 
   "com.skyeye.editBtn": {"zh": "编辑", "cn": "Edit"},
   "com.skyeye.editPageTitle": {"zh": "编辑", "cn": "Edit"},
+
+  "com.skyeye.inquiryPageTitle": {"zh": "询价", "cn": "Inquiry"},
+  "com.skyeye.fixedPricePageTitle": {"zh": "定价", "cn": "fixedPrice"},
   
   "com.skyeye.enableBtn": {"zh": "启用", "cn": "Enable"},
   "com.skyeye.enableOperation": {"zh": "启用操作", "cn": "Enable Operation"},
