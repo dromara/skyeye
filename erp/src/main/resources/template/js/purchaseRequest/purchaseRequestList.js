@@ -74,10 +74,12 @@ layui.config({
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
             revoke(data);
-        }else if (layEvent === 'inquiry') { //询价
+        } else if (layEvent === 'inquiry') { //询价
             inquiry(data);
-        }else if (layEvent === 'fixedPrice') { //定价
+        } else if (layEvent === 'fixedPrice') { //定价
             fixedPrice(data);
+        } else if (layEvent === 'toContract') { //转采购合同
+            toContract(data);
         }
     });
 
@@ -111,6 +113,19 @@ layui.config({
             url: systemCommonUtil.getUrl('FP2024052400002&id=' + data.id, null),
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "purchaseRequestEdit",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+    // 转采购合同
+    function toContract(data) {
+        _openNewWindows({
+            url: '../../tpl/purchaseRequest/requestToContract.html?id=' + data.id,
+            title: '采购合同',
+            pageId: "requestToContract",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
