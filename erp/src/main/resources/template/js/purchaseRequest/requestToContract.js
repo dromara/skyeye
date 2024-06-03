@@ -177,14 +177,6 @@ layui.config({
                 return false;
             });
 
-            // 不走工作流的提交
-            form.on('submit(formSubTwoBean' + i + ')', function(data) {
-                if(winui.verifyForm(data.elem)) {
-                    saveData("3", "", $(this).attr("tabIndex"));
-                }
-                return false;
-            });
-
             initChooseProductBtnEnent(form, function(trId, chooseProductMation) {
                 // 商品赋值
                 allChooseProduct[trId] = chooseProductMation;
