@@ -8200,3 +8200,13 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
     overflow: hidden;
     white-space: nowrap;
 }
+
+/*设置只读状态的样式*/
+input:-moz-read-only { /* For Firefox */
+    color: #d2d2d2 !important;
+    cursor: not-allowed !important;
+}
+input:read-only {
+    color: #d2d2d2 !important;
+    cursor: not-allowed !important;
+}

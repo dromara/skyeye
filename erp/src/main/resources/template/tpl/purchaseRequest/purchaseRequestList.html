@@ -43,8 +43,19 @@
                 <a class="layui-btn layui-btn-xs" lay-event="fixedPrice">定价</a>
                 {{# } }}
             {{# } }}
+            {{# if(d.inquiryState == 1 || d.inquiryState == 4) { }}
+                {{# if(auth('1717078688711')){ }}
+                <a class="layui-btn layui-btn-xs" lay-event="toContract">转采购合同</a>
+                {{# } }}
+            {{# } }}
         {{# } }}
-        <a class="layui-btn layui-btn-xs" lay-event="toContract">转采购合同</a>
+        {{# if(d.state == 'partialProcurement') { }}
+            {{# if(d.inquiryState == 1 || d.inquiryState == 4) { }}
+                {{# if(auth('1717078688711')){ }}
+                <a class="layui-btn layui-btn-xs" lay-event="toContract">转采购合同</a>
+                {{# } }}
+            {{# } }}
+        {{# } }}
     </script>
 </div>
 <script src="../../assets/lib/layui/layui.js"></script>

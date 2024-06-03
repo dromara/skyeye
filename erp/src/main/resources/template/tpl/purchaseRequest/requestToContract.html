@@ -15,14 +15,110 @@
         </div>
     </div>
 
-    <script type="text/x-handlebars-template" id="fileMationTemplate">
-        {{#bean}}
+    <script type="text/x-handlebars-template" id="beanTemplate">
+        {{#rows}}
+            <div class="layui-tab-item {{contentClass}}">
+                <form class="layui-form" action="" autocomplete="off" id="form{{tabIndex}}">
+                    <div class="layui-form-item layui-col-xs12">
+                        <span class="hr-title">基本信息</span><hr>
+                    </div>
+                    <div class="layui-form-item layui-col-xs6">
+                        <label class="layui-form-label">合同名称<i class="red">*</i></label>
+                        <div class="layui-input-block">
+                            <input type="text" id="title{{tabIndex}}" name="title{{tabIndex}}" win-verify="required" placeholder="请输入合同名称" class="layui-input" maxlength="100"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-col-xs6">
+                        <label class="layui-form-label">合同金额</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="price{{tabIndex}}" name="price{{tabIndex}}" placeholder="请输入合同金额" class="layui-input" maxlength="100"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-col-xs6">
+                        <label class="layui-form-label">所属部门<i class="red">*</i></label>
+                        <div class="layui-input-block">
+                            <select id="departmentId{{tabIndex}}" lay-search win-verify="required"></select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-col-xs6">
+                        <label class="layui-form-label">签约日期<i class="red">*</i></label>
+                        <div class="layui-input-block">
+                            <input type="text" id="signingTime{{tabIndex}}" name="signingTime{{tabIndex}}" placeholder="请选择签约日期" win-verify="required" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-col-xs6">
+                        <label class="layui-form-label">生效日期</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="effectTime{{tabIndex}}" name="effectTime{{tabIndex}}" placeholder="请选择生效日期" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-col-xs6">
+                        <label class="layui-form-label">服务结束日期</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="serviceEndTime{{tabIndex}}" name="serviceEndTime{{tabIndex}}" placeholder="请选择服务结束日期" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-col-xs6">
+                        <label class="layui-form-label">供应商<i class="red">*</i></label>
+                        <div class="layui-input-block">
+                            <input type="text" id="supplierName{{tabIndex}}" name="supplierName{{tabIndex}}" win-verify="required" placeholder="请选择供应商" class="layui-input" readonly="readonly"/>
+                            <i class="fa fa-plus-circle input-icon supplierNameSel" tabIndex="{{tabIndex}}"></i>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-col-xs6">
+                        <label class="layui-form-label">联系人<i class="red">*</i></label>
+                        <div class="layui-input-block">
+                            <select id="contacts{{tabIndex}}" lay-search win-verify="required"></select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-col-xs6">
+                        <label class="layui-form-label">关联人员<i class="red">*</i></label>
+                        <div class="layui-input-block">
+                            <input type="text" id="relationUser{{tabIndex}}" name="relationUser{{tabIndex}}" win-verify="required" placeholder="请选择关联人员" class="layui-input" readonly="readonly"/>
+                            <i class="fa fa-plus-circle input-icon relationUserIdSel" tabIndex="{{tabIndex}}"></i>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label">采购申请明细</label>
+                        <div class="layui-input-block" id="supplierContractChildList{{tabIndex}}">
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label">主要技术条款</label>
+                        <div class="layui-input-block">
+                            <textarea id="technicalTerms{{tabIndex}}" name="technicalTerms{{tabIndex}}" placeholder="请输入主要技术条款" class="layui-textarea" style="height: 100px;" maxlength="200"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label">主要商务条款</label>
+                        <div class="layui-input-block">
+                            <textarea id="businessTerms{{tabIndex}}" name="businessTerms{{tabIndex}}" placeholder="请输入主要商务条款" class="layui-textarea" style="height: 100px;" maxlength="200"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label">附件资料：</label>
+                        <div class="layui-input-block ver-center" id="enclosureUpload{{tabIndex}}">
+                        </div>
+                    </div>
 
-        {{/bean}}
+                    <div class="layui-form-item layui-col-xs12">
+                        <div class="layui-input-block">
+                            <button class="winui-btn" tabIndex="{{tabIndex}}" lay-submit lay-filter="formAddBean{{tabIndex}}">保存为草稿</button>
+                            <button class="winui-btn submitTypeIsOne" tabIndex="{{tabIndex}}" lay-submit lay-filter="formSubOneBean{{tabIndex}}">提交审批</button>
+                            <button class="winui-btn submitTypeIsTwo" tabIndex="{{tabIndex}}" lay-submit lay-filter="formSubTwoBean{{tabIndex}}">提交</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        {{/rows}}
     </script>
+
 
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
+    <script src="../../js/erpcommon/calculatePrice.js"></script>
+    <script src="../../js/erpcommon/loadStock.js"></script>
     <script type="text/javascript">
         layui.config({base : '../../js/purchaseRequest/'}).use('requestToContract');
     </script>

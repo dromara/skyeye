@@ -118,7 +118,7 @@ var initTableChooseUtil = {
                     '<i class="fa fa-plus-circle input-icon ' + item.iconClassName + '" style="top: 12px;"></i></td>';
             } else if (item.formType == 'select') {
                 var modelHtml = isNull(item.modelHtml) ? "" : item.modelHtml;
-                tbodyStr += '<td><select id="' + tdId + '" lay-filter="' + item.layFilter + '" lay-search win-verify="' + verify + '">' + modelHtml + '</select></td>';
+                tbodyStr += '<td><select id="' + tdId + '" lay-filter="' + item.layFilter + '" lay-search win-verify="' + verify + '" class="' + className + '">' + modelHtml + '</select></td>';
             } else if (item.formType == 'detail') {
                 tbodyStr += '<td id="' + tdId + '" class="' + className + '">' + value + '</td>';
             }
