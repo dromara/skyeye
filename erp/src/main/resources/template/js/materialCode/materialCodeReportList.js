@@ -13,7 +13,8 @@ layui.config({
 	var materialId = getNotUndefinedVal(GetUrlParam("materialId"));
 	var normsId = getNotUndefinedVal(GetUrlParam("normsId"));
 	var depotId = getNotUndefinedVal(GetUrlParam("depotId"));
-	var objectId = getNotUndefinedVal(GetUrlParam("objectId"));
+	var fromObjectId = getNotUndefinedVal(GetUrlParam("fromObjectId"));
+	var toObjectId = getNotUndefinedVal(GetUrlParam("toObjectId"));
 
 	// 产品规格明细列表
 	table.render({
@@ -109,7 +110,8 @@ layui.config({
 			materialId: materialId,
 			normsId: normsId,
 			depotId: depotId,
-			objectId: objectId
+			fromObjectId: fromObjectId,
+			toObjectId: toObjectId
 		}
 		return $.extend(true, params, initTableSearchUtil.getSearchValue("messageTable"));
     }

@@ -233,3 +233,11 @@ select option {
 .margin-top-10 {
     margin-top: 10px
 }
+
+.add-icon {
+    height: calc(100% - 16px) !important;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
