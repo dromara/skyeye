@@ -47,7 +47,11 @@ var skyeyeClassEnumUtil = {
         var displayName = '';
         $.each(json.rows, function (i, item) {
             if (item[idKey] == key) {
-                displayName = item[displayNameKey];
+                if (!isNull(item.color)) {
+                    displayName = '<span style="color: ' + item.color + '">' + item[displayNameKey] + '</span>';
+                } else {
+                    displayName = item[displayNameKey];
+                }
             }
         });
         return displayName;
