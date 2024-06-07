@@ -42,6 +42,7 @@ layui.config({
 
 	var showType = [
 		{id: "input", name: "输入框"},
+		{id: "textarea", name: "文本框"},
 		{id: "chooseInput", name: "选择输入框"},
 		{id: "select", name: "下拉框"},
 		{id: "detail", name: "文本"}

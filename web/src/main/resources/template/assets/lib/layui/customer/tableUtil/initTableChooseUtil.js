@@ -113,9 +113,11 @@ var initTableChooseUtil = {
             var verify = isNull(item.verify) ? "" : item.verify;
             if (item.formType == 'input') {
                 tbodyStr += '<td><input type="text" class="layui-input ' + className + '" value="' + value + '" id="' + tdId + '" win-verify="' + verify + '"/></td>';
+            } else if (item.formType == 'textarea') {
+                tbodyStr += '<td><textarea style="height: 100px;" class="layui-textarea ' + className + '" value="' + value + '" id="' + tdId + '" win-verify="' + verify + '"></textarea></td>';
             } else if (item.formType == 'chooseInput') {
                 tbodyStr += '<td><input type="text" class="layui-input ' + className + '" value="' + value + '" id="' + tdId + '" win-verify="' + verify + '" readonly="readonly"/>' +
-                    '<i class="fa fa-plus-circle input-icon ' + item.iconClassName + '" style="top: 12px;"></i></td>';
+                    '<i class="fa fa-plus-circle input-icon add-icon ' + item.iconClassName + '"></i></td>';
             } else if (item.formType == 'select') {
                 var modelHtml = isNull(item.modelHtml) ? "" : item.modelHtml;
                 tbodyStr += '<td><select id="' + tdId + '" lay-filter="' + item.layFilter + '" lay-search win-verify="' + verify + '" class="' + className + '">' + modelHtml + '</select></td>';
@@ -194,6 +196,8 @@ var initTableChooseUtil = {
                 var tdId = bean.id + rowIndexStr;
                 var value = "";
                 if (bean.formType == 'input') {
+                    value = $("#" + tdId).val();
+                } if (bean.formType == 'textarea') {
                     value = $("#" + tdId).val();
                 } else if (bean.formType == 'select') {
                     value = $("#" + tdId).val();
@@ -285,6 +289,8 @@ var initTableChooseUtil = {
             var tdId = bean.id + rowIndexStr;
             var formType = bean.formType;
             if (formType == 'input') {
+                $("#" + tdId).val(value);
+            } else if (formType == 'textarea') {
                 $("#" + tdId).val(value);
             } else if (formType == 'chooseInput') {
                 $("#" + tdId).attr(initTableChooseUtil.chooseInputDataIdKey, value);

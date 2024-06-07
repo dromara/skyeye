@@ -56,6 +56,15 @@
     "orderQualityInspectionType": {"name": "ERP采购质检类型", "className": "skyeye-erp#com.skyeye.purchase.classenum.OrderQualityInspectionType"},
     "orderItemQualityInspectionType": {"name": "ERP采购子单据质检类型", "className": "skyeye-erp#com.skyeye.business.classenum.OrderItemQualityInspectionType"},
 
+    "orderArrivalState": {"name": "采购订单到货状态", "className": "skyeye-erp#com.skyeye.purchase.classenum.OrderArrivalState"},
+
+    "purchaseOrderFromType": {"name": "采购订单来源单据类型", "className": "skyeye-erp#com.skyeye.purchase.classenum.PurchaseOrderFromType"},
+    "purchaseDeliveryFromType": {"name": "到货单来源单据类型", "className": "skyeye-erp#com.skyeye.purchase.classenum.PurchaseDeliveryFromType"},
+    "purchasePutFromType": {"name": "采购入库单来源单据类型", "className": "skyeye-erp#com.skyeye.purchase.classenum.PurchasePutFromType"},
+    "purchaseReturnsFromType": {"name": "采购退货单来源单据类型", "className": "skyeye-erp#com.skyeye.purchase.classenum.PurchaseReturnsFromType"},
+    "purchaseRequestFromType": {"name": "采购申请单来源单据类型", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestFromType"},
+    "supplierContractFromType": {"name": "供应商合同来源单据类型", "className": "skyeye-erp#com.skyeye.contract.classenum.SupplierContractFromType"},
+
     "skyeyeView": {"name": "视图类型", "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"},
     "widthScale": {"name": "宽度比例", "className": "skyeye-pro#com.skyeye.attr.classenum.WidthScale"},
     "dsFormShowType": {"name": "组件展示类型", "className": "skyeye-pro#com.skyeye.attr.classenum.DsFormShowType"},
