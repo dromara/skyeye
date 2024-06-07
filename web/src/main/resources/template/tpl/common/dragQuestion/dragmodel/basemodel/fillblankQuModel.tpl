@@ -1,7 +1,7 @@
 <li id="fillblankQuModel">
 	<!-- 填空题模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_input_icon.png"/>
+		<img src="../../assets/images/question/question_input_icon.png"/>
 		<span>填空题</span>
 	</div>
 	<div class="dwQuTypeModel">

@@ -1,6 +1,6 @@
 <li id="chenFillblankQuModel">
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_matrix_input_icon.png" />
+		<img src="../../assets/images/question/question_matrix_input_icon.png" />
 		<span>矩阵填空题</span>
 	</div>
 	<div class="dwQuTypeModel">
@@ -63,9 +63,9 @@
 					<div class="layui-tab layui-tab-brief" lay-filter="tab{{checkNameIn}}">
 	          			<ul class="layui-tab-title">
 	            			<li id="tab0" class="layui-this">默认</li>
-	            			<li id="tab1" class=""><img src="../../assets/images/icon-vedio.png" class="layui-title-icon"/>插入视频</li>
-							<li id="tab2" class=""><img src="../../assets/images/icon-audio.png" class="layui-title-icon"/>插入音频</li>
-	            			<li id="tab3" class=""><img src="../../assets/images/icon-picture.png" class="layui-title-icon"/>插入图片</li>
+	            			<li id="tab1" class=""><img src="../../assets/images/icon/icon-vedio.png" class="layui-title-icon"/>插入视频</li>
+							<li id="tab2" class=""><img src="../../assets/images/icon/icon-audio.png" class="layui-title-icon"/>插入音频</li>
+	            			<li id="tab3" class=""><img src="../../assets/images/icon/icon-picture.png" class="layui-title-icon"/>插入图片</li>
 	          			</ul>
 	          			<div class="layui-tab-content">
 	            			<div class="layui-tab-item layui-show">不插入任何内容</div>

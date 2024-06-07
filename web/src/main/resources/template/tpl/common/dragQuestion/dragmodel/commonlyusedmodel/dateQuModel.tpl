@@ -1,7 +1,7 @@
 <li id="dateQuModel">
 	<!--日期模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_date_icon.png"/>
+		<img src="../../assets/images/question/question_date_icon.png"/>
 		<span>日期</span>
 	</div>
 	<div class="dwQuTypeModel">

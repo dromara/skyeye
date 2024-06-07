@@ -227,7 +227,7 @@
     float: right;
     text-indent: -9999px;
     overflow: hidden;
-    background: url(../../../../images/icons.png) no-repeat;
+    background: url(../../../../images/icon/icons.png) no-repeat;
     margin: 5px 1px 1px;
     cursor: pointer;
 }

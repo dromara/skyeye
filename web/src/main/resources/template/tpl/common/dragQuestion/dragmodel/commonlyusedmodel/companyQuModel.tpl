@@ -1,7 +1,7 @@
 <li id="companyQuModel">
 	<!--公司模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_company_icon.png"/>
+		<img src="../../assets/images/question/question_company_icon.png"/>
 		<span>公司</span>
 	</div>
 	<div class="dwQuTypeModel">

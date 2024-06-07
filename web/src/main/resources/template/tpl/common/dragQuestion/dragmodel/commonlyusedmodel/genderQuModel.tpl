@@ -1,7 +1,7 @@
 <li id="genderQuModel">
 	<!--性别模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_sex_icon.png"/>
+		<img src="../../assets/images/question/question_sex_icon.png"/>
 		<span>性别</span>
 	</div>
 	<div class="dwQuTypeModel">

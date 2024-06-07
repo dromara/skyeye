@@ -509,7 +509,7 @@ li.dwQuDelete .dwQuIcon{
 }
 
 li.knowledgeQuLogic .dwQuIcon{
-    background-image: url("../../../images/question_education_icon.png");
+    background-image: url('../../../images/question/question_education_icon.png');
     background-size: 100%;
 }
 

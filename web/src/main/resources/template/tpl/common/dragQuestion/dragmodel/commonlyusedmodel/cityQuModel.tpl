@@ -1,7 +1,7 @@
 <li id="cityQuModel">
 	<!--城市模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_city_icon.png"/>
+		<img src="../../assets/images/question/question_city_icon.png"/>
 		<span>城市</span>
 	</div>
 	<div class="dwQuTypeModel">

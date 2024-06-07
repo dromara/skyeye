@@ -1,7 +1,7 @@
 <li id="paragraphQuModel">
 	<!--段落说明 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_paragraph_icon.png"/>
+		<img src="../../assets/images/question/question_paragraph_icon.png"/>
 		<span>分段</span>
 	</div>
 	<div class="dwQuTypeModel">

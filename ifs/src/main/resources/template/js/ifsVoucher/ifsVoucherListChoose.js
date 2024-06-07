@@ -31,7 +31,7 @@ layui.config({
 				if($.inArray(fileExt[0], imageType) >= 0){
 					return '<img src="' + fileBasePath + d.path + '" class="photo-img" lay-event="logo">';
 				}
-				return '<img src="../../assets/images/doc.png" class="photo-img" lay-event="logo">';
+				return '<img src="../../assets/images/cloud/doc.png" class="photo-img" lay-event="logo">';
 			}},
 			{ field: 'state', title: '状态', width: 80, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("voucherState", 'id', d.state, 'name');

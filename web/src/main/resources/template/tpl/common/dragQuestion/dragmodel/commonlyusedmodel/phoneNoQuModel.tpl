@@ -1,7 +1,7 @@
 <li id="phoneNoQuModel">
 	<!-- 手机模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_phone_icon.png"/>
+		<img src="../../assets/images/question/question_phone_icon.png"/>
 		<span>手机</span>
 	</div>
 	<div class="dwQuTypeModel">

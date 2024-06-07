@@ -1,7 +1,7 @@
 <li id="salaryQuModel">
 	<!--收入模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_income_icon.png"/>
+		<img src="../../assets/images/question/question_income_icon.png"/>
 		<span>收入</span>
 	</div>
 	<div class="dwQuTypeModel">

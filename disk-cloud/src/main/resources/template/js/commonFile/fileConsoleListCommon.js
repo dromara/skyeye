@@ -27,7 +27,7 @@ function createFolder(folderId, refreshCallBack, initDragCallBack, currentUserId
 		name: '新建文件夹'
 	};
 	AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "insertFileCatalog", params: params, type: 'json', method: 'POST', callback: function (json) {
-		initNewFolder(json.bean.id, json.bean.name, '../../assets/images/folder-show.png', true, currentUserId);
+		initNewFolder(json.bean.id, json.bean.name, '../../assets/images/icon/folder-show.png', true, currentUserId);
 		// 刷新节点
 		if(typeof(refreshCallBack) == "function") {
 			refreshCallBack();
@@ -88,7 +88,7 @@ layui.define(["jquery"], function(exports) {
 		$("body").on("click", ".showFileType", function (e) {
 			$(".showFileType").find("img").attr("src", "");
 			$(".showFileType").find("img").hide();
-			$(this).find("img").attr("src", "../../assets/images/icon_choose.png");
+			$(this).find("img").attr("src", "../../assets/images/icon/icon_choose.png");
 			$(this).find("img").show();
 			if($(this).attr("data-type") === '1'){
 				$("#showTypeChoose").find("i").attr("class", "fa fa-th-large");

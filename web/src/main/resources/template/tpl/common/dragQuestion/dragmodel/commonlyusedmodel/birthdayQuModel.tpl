@@ -1,7 +1,7 @@
 <li id="birthdayQuModel">
 	<!--生日模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_brithday_icon.png"/>
+		<img src="../../assets/images/question/question_brithday_icon.png"/>
 		<span>生日</span>
 	</div>
 	<div class="dwQuTypeModel">

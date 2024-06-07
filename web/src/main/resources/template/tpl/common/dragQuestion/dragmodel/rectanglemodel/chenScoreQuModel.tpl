@@ -1,6 +1,6 @@
 <li id="chenScoreQuModel">
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_matrix_score_icon.png"/>
+		<img src="../../assets/images/question/question_matrix_score_icon.png"/>
 		<span>矩阵评分题</span>
 	</div>
 	<div class="dwQuTypeModel">

@@ -1,7 +1,7 @@
 <li id="userNameQuModel">
 	<!-- 您的姓名-->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_name_icon.png"/>
+		<img src="../../assets/images/question/question_name_icon.png"/>
 		<span>姓名</span>
 	</div>
 	<div class="dwQuTypeModel">

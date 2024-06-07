@@ -1,7 +1,7 @@
 <li id="addressQuModel">
 	<!-- 地址模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_address_icon.png"/>
+		<img src="../../assets/images/question/question_address_icon.png"/>
 		<span>地址</span>
 	</div>
 	<div class="dwQuTypeModel">

@@ -1,7 +1,7 @@
 <li id="orderQuModel">
 	<!-- 排序题模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_sort_icon.png"/>
+		<img src="../../assets/images/question/question_sort_icon.png"/>
 		<span>排序题</span>
 	</div>
 	<div class="dwQuTypeModel">

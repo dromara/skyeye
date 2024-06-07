@@ -560,7 +560,7 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner {
 }
 
 .ui-progressbar .ui-progressbar-overlay {
-    background: url(../../../../../images/animated-overlay.gif);
+    background: url(../../../../../images/jqueryui/animated-overlay.gif);
     height: 100%;
     filter: alpha(opacity=25);
     opacity: .25
@@ -860,7 +860,7 @@ body .ui-tooltip {
 
 .ui-widget-content {
     border: 1px solid #ddd;
-    background: #f2f5f7 url(../../../../../images/ui-bg_highlight-hard_100_f2f5f7_1x100.png) 50% top repeat-x;
+    background: #f2f5f7 url(../../../../../images/jqueryui/ui-bg_highlight-hard_100_f2f5f7_1x100.png) 50% top repeat-x;
     color: #362b36
 }
 
@@ -870,7 +870,7 @@ body .ui-tooltip {
 
 .ui-widget-header {
     border: 1px solid #aed0ea;
-    background: #deedf7 url(../../../../../images/ui-bg_highlight-soft_100_deedf7_1x100.png) 50% 50% repeat-x;
+    background: #deedf7 url(../../../../../images/jqueryui/ui-bg_highlight-soft_100_deedf7_1x100.png) 50% 50% repeat-x;
     color: #222;
     font-weight: bold
 }
@@ -881,7 +881,7 @@ body .ui-tooltip {
 
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
     border: 1px solid #aed0ea;
-    background: #d7ebf9 url(../../../../../images/ui-bg_glass_80_d7ebf9_1x400.png) 50% 50% repeat-x;
+    background: #d7ebf9 url(../../../../../images/jqueryui/ui-bg_glass_80_d7ebf9_1x400.png) 50% 50% repeat-x;
     font-weight: bold;
     color: #2779aa
 }
@@ -893,7 +893,7 @@ body .ui-tooltip {
 
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
     border: 1px solid #74b2e2;
-    background: #e4f1fb url(../../../../../images/ui-bg_glass_100_e4f1fb_1x400.png) 50% 50% repeat-x;
+    background: #e4f1fb url(../../../../../images/jqueryui/ui-bg_glass_100_e4f1fb_1x400.png) 50% 50% repeat-x;
     font-weight: bold;
     color: #0070a3
 }
@@ -905,7 +905,7 @@ body .ui-tooltip {
 
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
     border: 1px solid #2694e8;
-    background: #3baae3 url(../../../../../images/ui-bg_glass_50_3baae3_1x400.png) 50% 50% repeat-x;
+    background: #3baae3 url(../../../../../images/jqueryui/ui-bg_glass_50_3baae3_1x400.png) 50% 50% repeat-x;
     font-weight: bold;
     color: #fff
 }
@@ -917,7 +917,7 @@ body .ui-tooltip {
 
 .ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
     border: 5px solid #f9dd34;
-    background: #ffef8f url(../../../../../images/ui-bg_highlight-soft_25_ffef8f_1x100.png) 50% top repeat-x;
+    background: #ffef8f url(../../../../../images/jqueryui/ui-bg_highlight-soft_25_ffef8f_1x100.png) 50% top repeat-x;
     color: #363636
 }
 
@@ -927,7 +927,7 @@ body .ui-tooltip {
 
 .ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {
     border: 1px solid #cd0a0a;
-    background: #cd0a0a url(../../../../../images/ui-bg_flat_15_cd0a0a_40x100.png) 50% 50% repeat-x;
+    background: #cd0a0a url(../../../../../images/jqueryui/ui-bg_flat_15_cd0a0a_40x100.png) 50% 50% repeat-x;
     color: #fff
 }
 
@@ -965,31 +965,31 @@ body .ui-tooltip {
 }
 
 .ui-icon, .ui-widget-content .ui-icon {
-    background-image: url(../../../../../images/ui-icons_72a7cf_256x240.png)
+    background-image: url(../../../../../images/jqueryui/ui-icons_72a7cf_256x240.png)
 }
 
 .ui-widget-header .ui-icon {
-    background-image: url(../../../../../images/ui-icons_72a7cf_256x240.png)
+    background-image: url(../../../../../images/jqueryui/ui-icons_72a7cf_256x240.png)
 }
 
 .ui-state-default .ui-icon {
-    background-image: url(../../../../../images/ui-icons_3d80b3_256x240.png)
+    background-image: url(../../../../../images/jqueryui/ui-icons_3d80b3_256x240.png)
 }
 
 .ui-state-hover .ui-icon, .ui-state-focus .ui-icon {
-    background-image: url(../../../../../images/ui-icons_2694e8_256x240.png)
+    background-image: url(../../../../../images/jqueryui/ui-icons_2694e8_256x240.png)
 }
 
 .ui-state-active .ui-icon {
-    background-image: url(../../../../../images/ui-icons_ffffff_256x240.png)
+    background-image: url(../../../../../images/jqueryui/ui-icons_ffffff_256x240.png)
 }
 
 .ui-state-highlight .ui-icon {
-    background-image: url(../../../../../images/ui-icons_2e83ff_256x240.png)
+    background-image: url(../../../../../images/jqueryui/ui-icons_2e83ff_256x240.png)
 }
 
 .ui-state-error .ui-icon, .ui-state-error-text .ui-icon {
-    background-image: url(../../../../../images/ui-icons_ffffff_256x240.png)
+    background-image: url(../../../../../images/jqueryui/ui-icons_ffffff_256x240.png)
 }
 
 .ui-icon-blank {
@@ -1709,7 +1709,7 @@ body .ui-tooltip {
 }
 
 .ui-widget-overlay {
-    background: #eee url(../../../../../images/ui-bg_diagonals-thick_90_eeeeee_40x40.png) 50% 50% repeat;
+    background: #eee url(../../../../../images/jqueryui/ui-bg_diagonals-thick_90_eeeeee_40x40.png) 50% 50% repeat;
     opacity: .8;
     filter: Alpha(Opacity=80)
 }
@@ -1717,7 +1717,7 @@ body .ui-tooltip {
 .ui-widget-shadow {
     margin: -7px 0 0 -7px;
     padding: 7px;
-    background: #000 url(../../../../../images/ui-bg_highlight-hard_70_000000_1x100.png) 50% top repeat-x;
+    background: #000 url(../../../../../images/jqueryui/ui-bg_highlight-hard_70_000000_1x100.png) 50% top repeat-x;
     opacity: .3;
     filter: Alpha(Opacity=30);
     border-radius: 8px

@@ -1,7 +1,7 @@
 <li id="maritalQuModel">
 	<!--婚姻状况模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_marriage_icon.png"/>
+		<img src="../../assets/images/question/question_marriage_icon.png"/>
 		<span>婚姻</span>
 	</div>
 	<div class="dwQuTypeModel">

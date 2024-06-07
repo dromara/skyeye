@@ -343,7 +343,7 @@ layui.config({
 					}
 				},{
 					text: "删除",
-					img: "../../assets/images/delete-icon.png",
+					img: "../../assets/images/icon/delete-icon.png",
 					callback: function() {
 						deleteFileOrNote(clickId);
 						if(clickType != "folder"){
@@ -385,7 +385,7 @@ layui.config({
 					}
 				},{
 					text: "移动到",
-					img: "../../assets/images/create-copy-icon.png",
+					img: "../../assets/images/icon/create-copy-icon.png",
 					callback: function() {
 						_openNewWindows({
 							url: "../../tpl/note/noteFileTree.html", 
@@ -417,7 +417,7 @@ layui.config({
 					}
 				},{
                     text: "分享",
-                    img: "../../assets/images/fx-icon.png",
+                    img: "../../assets/images/icon/fx-icon.png",
                     callback: function() {
                         if(clickType == "folder"){
                             winui.window.msg("目前仅支持分享笔记", {icon: 2, time: 2000});

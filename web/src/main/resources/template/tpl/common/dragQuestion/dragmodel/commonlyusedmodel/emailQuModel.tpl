@@ -1,7 +1,7 @@
 <li id="emailQuModel">
 	<!--Email模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_email_icon.png"/>
+		<img src="../../assets/images/question/question_email_icon.png"/>
 		<span>Email</span>
 	</div>
 	<div class="dwQuTypeModel">

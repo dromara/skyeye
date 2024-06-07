@@ -1,7 +1,7 @@
 <li id="checkboxQuModel">
 	<!-- 多选题模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_checkbox_icon.png"/>
+		<img src="../../assets/images/question/question_checkbox_icon.png"/>
 		<span>多选题</span>
 	</div>
 	<div class="dwQuTypeModel">

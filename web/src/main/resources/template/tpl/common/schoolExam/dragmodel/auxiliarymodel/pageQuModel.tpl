@@ -1,7 +1,7 @@
 <li id="pageQuModel">
 	<!-- 分页题模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_page_icon.png"/>
+		<img src="../../assets/images/question/question_page_icon.png"/>
 		<span>分页</span>
 	</div>
 	<div class="dwQuTypeModel">

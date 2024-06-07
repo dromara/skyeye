@@ -248,19 +248,19 @@ var catalogTreeUtil = {
     getAuthAfterBtn: function () {
         if (!catalogTreeUtil.config.checkAuth) {
             return `<li class="is-file createNewFolder">
-                        <a href="javascript:;"><img alt="" src="../../assets/images/create-folder-icon.png" /><span>新建</span></a>
+                        <a href="javascript:;"><img alt="" src="../../assets/images/icon/create-folder-icon.png" /><span>新建</span></a>
                     </li>
                     <li class="is-file reName" >
                         <a href="javascript:;"><img alt="" src="../../assets/images/rename-icon.png" /><span>重命名</span></a>
                     </li>
                     <li class="is-file deleteFolder">
-                        <a href="javascript:;"><img alt="" src="../../assets/images/delete-icon.png" /><span>删除</span></a>
+                        <a href="javascript:;"><img alt="" src="../../assets/images/icon/delete-icon.png" /><span>删除</span></a>
                     </li>`;
         } else {
             var str = '';
             if (catalogTreeUtil.config.auth['addCatalog']) {
                 str += `<li class="is-file createNewFolder">
-                            <a href="javascript:;"><img alt="" src="../../assets/images/create-folder-icon.png" /><span>新建</span></a>
+                            <a href="javascript:;"><img alt="" src="../../assets/images/icon/create-folder-icon.png" /><span>新建</span></a>
                         </li>`;
             }
             if (catalogTreeUtil.config.auth['renameCatalog']) {
@@ -270,7 +270,7 @@ var catalogTreeUtil = {
             }
             if (catalogTreeUtil.config.auth['deleteCatalog']) {
                 str += `<li class="is-file deleteFolder">
-                            <a href="javascript:;"><img alt="" src="../../assets/images/delete-icon.png" /><span>删除</span></a>
+                            <a href="javascript:;"><img alt="" src="../../assets/images/icon/delete-icon.png" /><span>删除</span></a>
                         </li>`;
             }
             return str;

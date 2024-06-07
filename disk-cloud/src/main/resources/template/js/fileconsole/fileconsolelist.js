@@ -793,7 +793,7 @@ layui.config({
 			orderBy = $(this).attr("data-type");
 			$(".orderBy").find("img").attr("src", "");
 			$(".orderBy").find("img").hide();
-			$(this).find("img").attr("src", "../../assets/images/icon_choose.png");
+			$(this).find("img").attr("src", "../../assets/images/icon/icon_choose.png");
 			$(this).find("img").show();
 			loadThisFolderChild();
 		}
@@ -1397,7 +1397,7 @@ layui.config({
 			},
 			menu: [{
 					text: "新建文件夹",
-					img: "../../assets/images/create-folder-icon.png",
+					img: "../../assets/images/icon/create-folder-icon.png",
 					callback: function() {
 						createFolder(folderId, refreshTreePointNode, initMenuToBox, currentUserId);
 					}
@@ -1412,7 +1412,7 @@ layui.config({
 						}
 					}, {
 						text: "html文件",
-						img: "../../assets/images/html-icon.png",
+						img: "../../assets/images/icon/html-icon.png",
 						callback: function() {
 							createNumpyFile("html", folderId, loadThisFolderChild());
 						}
@@ -1444,7 +1444,7 @@ layui.config({
 					img: "../../assets/images/upload-icon.png",
 					children: [{
 						text: "上传文件",
-						img: "../../assets/images/file-icon.png",
+						img: "../../assets/images/cloud/file-icon.png",
 						callback: function() {
 							_openNewWindows({
 								url: "../../tpl/fileconsole/fileconsoleupload.html", 
@@ -1459,7 +1459,7 @@ layui.config({
 						}
 					}, {
 						text: "上传文件夹",
-						img: "../../assets/images/folder-icon.png",
+						img: "../../assets/images/icon/folder-icon.png",
 						callback: function() {
 							_openNewWindows({
 								url: "../../tpl/fileconsole/filefolderupload.html", 
@@ -1511,7 +1511,7 @@ layui.config({
 					text: "--"
 				}, {
 					text: "已支持文件类型",
-					img: "../../assets/images/file-sketch-icon.png",
+					img: "../../assets/images/icon/file-sketch-icon.png",
 					callback: function() {
 						_openNewWindows({
 							url: "../../tpl/fileconsole/showFileInLine.html", 

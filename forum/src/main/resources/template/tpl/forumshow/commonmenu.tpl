@@ -1,5 +1,5 @@
 <div class="suspension-menu">
-	<img class="suspension-menu-icon rotate1" alt="" src="../../assets/images/forum-menu.png">
+	<img class="suspension-menu-icon rotate1" alt="" src="../../assets/images/icon/forum-menu.png">
 	<div class="drop-down-menu">
 		<div class="down-menu-item">
 			<img alt="" src="../../assets/images/my-forum-post.png">

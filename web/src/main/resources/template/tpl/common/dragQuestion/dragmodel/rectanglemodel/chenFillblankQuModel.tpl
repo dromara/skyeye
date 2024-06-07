@@ -1,6 +1,6 @@
 <li id="chenFillblankQuModel">
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_matrix_input_icon.png"/>
+		<img src="../../assets/images/question/question_matrix_input_icon.png"/>
 		<span>矩阵填空题</span>
 	</div>
 	<div class="dwQuTypeModel">

@@ -5198,7 +5198,7 @@ body .layer-ext-winconfirm .layui-layer-content {
     float: right;
     text-indent: -9999px;
     overflow: hidden;
-    background: url(../../../images/icons.png) no-repeat;
+    background: url(../../../images/icon/icons.png) no-repeat;
     margin: 5px 1px 1px;
     cursor: pointer;
 }
@@ -5931,7 +5931,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 .zip-show .layui-layer-title{
     height: 90px;
     padding: 0px;
-    background-image: url(../../../../assets/images/fly.png);
+    background-image: url(../../../images/icon/fly.png);
     background-color: lightskyblue;
     color: white;
     font-size: 20px;
@@ -7982,7 +7982,7 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .audio_play_area .icon_audio_default {
-    background: transparent url(../../../../assets/images/iconloop.png) no-repeat 0 0;
+    background: transparent url(../../../images/icon/iconloop.png) no-repeat 0 0;
     width: 18px;
     height: 25px;
     vertical-align: middle;
@@ -7993,7 +7993,7 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .audio_play_area .icon_audio_playing {
-    background: transparent url(../../../../assets/images/iconloop.png) no-repeat 0 0;
+    background: transparent url(../../../images/icon/iconloop.png) no-repeat 0 0;
     width: 18px;
     height: 25px;
     vertical-align: middle;
@@ -8204,9 +8204,9 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 /*设置只读状态的样式*/
 input:-moz-read-only { /* For Firefox */
     color: #d2d2d2 !important;
-    cursor: not-allowed !important;
+    cursor: url('../../../images/not-allowed.png'), auto !important;
 }
 input:read-only {
     color: #d2d2d2 !important;
-    cursor: not-allowed !important;
+    cursor: url('../../../images/not-allowed.png'), auto !important;
 }

@@ -1,7 +1,7 @@
 <li id="educationQuModel">
 	<!--学历模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_education_icon.png"/>
+		<img src="../../assets/images/question/question_education_icon.png"/>
 		<span>学历</span>
 	</div>
 	<div class="dwQuTypeModel">

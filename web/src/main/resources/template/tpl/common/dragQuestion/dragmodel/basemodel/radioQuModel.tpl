@@ -1,7 +1,7 @@
 <li id="radioQuModel">
 	<!-- 单选题模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_radio_icon.png"/>
+		<img src="../../assets/images/question/question_radio_icon.png"/>
 		<span>单选题</span>
 	</div>
 	<div class="dwQuTypeModel">

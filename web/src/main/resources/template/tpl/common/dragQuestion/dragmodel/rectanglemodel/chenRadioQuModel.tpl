@@ -1,6 +1,6 @@
 <li id="chenRadioQuModel">
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_matrix_radio_icon.png"/>
+		<img src="../../assets/images/question/question_matrix_radio_icon.png"/>
 		<span>矩阵单选题</span>
 	</div>
 	<div class="dwQuTypeModel">

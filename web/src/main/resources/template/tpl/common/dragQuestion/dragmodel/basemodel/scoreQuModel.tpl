@@ -1,7 +1,7 @@
 <li id="scoreQuModel">
 	<!-- 评分题模板 -->
 	<div class="dwToolbar_icon">
-		<img src="../../assets/images/question_score_icon.png"/>
+		<img src="../../assets/images/question/question_score_icon.png"/>
 		<span>评分题</span>
 	</div>
 	<div class="dwQuTypeModel">
