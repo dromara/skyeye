@@ -63,8 +63,10 @@ layui.config({
  	        	if (!isLogin) {
 					if (isNull($("#userCode").val())) {
 						top.winui.window.msg("请输入用户名", {icon: 2, time: 2000});
+						$("#loginBtn").find("i").attr("class", "fa fa-arrow-right");
 					} else if (isNull($("#password").val())) {
 						top.winui.window.msg("请输入密码", {icon: 2, time: 2000});
+						$("#loginBtn").find("i").attr("class", "fa fa-arrow-right");
 					} else {
 						var params = {
 							userCode: $("#userCode").val(),
@@ -82,9 +84,12 @@ layui.config({
 								if (checkURL(url)) {
 									location.href = url;
 								} else {
-									location.href = "index.html";
+									location.href = "../../tpl/traditionpage/index.html";
 								}
 							}
+						}, errorCallback: function (json) {
+							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+							$("#loginBtn").find("i").attr("class", "fa fa-arrow-right");
 						}});
 					}
  	        	}

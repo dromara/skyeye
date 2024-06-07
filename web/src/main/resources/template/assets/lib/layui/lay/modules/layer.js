@@ -30,7 +30,8 @@
 			end: {},
 			minIndex: 0,
 			minLeft: [],
-			btn: [systemLanguage["com.skyeye.determine"][languageType], systemLanguage["com.skyeye.cancel"][languageType]],
+			btn: [isNull(systemLanguage) ? '确定' : systemLanguage["com.skyeye.determine"][languageType],
+				isNull(systemLanguage) ? '取消' :systemLanguage["com.skyeye.cancel"][languageType]],
 
 			//五种原始层模式
 			type: ['dialog', 'page', 'iframe', 'loading', 'tips'],
