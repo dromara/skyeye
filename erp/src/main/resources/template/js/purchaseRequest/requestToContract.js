@@ -19,6 +19,7 @@ layui.config({
         table = layui.table;
     var selOption = getFileContent('tpl/template/select-option.tpl');
     var serviceClassName = sysServiceMation["purchaseRequest"]["key"];
+    console.log(serviceClassName)
     // 表单模板信息
     let beanTemplate = $("#beanTemplate").html();
     var id = GetUrlParam("id");
@@ -205,11 +206,6 @@ layui.config({
             }
             //商品对象
             var material = allChooseProduct["tr" + thisRowKey];
-            if (inTableDataArrayByAssetarId(material.materialId, item.normsId, tableData)) {
-                winui.window.msg('一张单中不允许出现相同单位的商品信息.', {icon: 2, time: 2000});
-                noError = true;
-                return false;
-            }
             item["materialId"] = material.materialId;
             tableData.push(item);
         });
