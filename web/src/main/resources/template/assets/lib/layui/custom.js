@@ -103,6 +103,7 @@ var serviceMap = [
 	{"id": "sysMainMation.sealServiceBasePath", "name": "售后工单服务"},
 	{"id": "sysMainMation.autoBasePath", "name": "自动化服务"},
 	{"id": "sysMainMation.wallBasePath", "name": "表白墙服务"},
+	{"id": "sysMainMation.tmsBasePath", "name": "物流服务"},
 ]
 
 function getRequestHeaders() {

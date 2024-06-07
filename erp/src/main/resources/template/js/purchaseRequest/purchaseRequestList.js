@@ -25,26 +25,26 @@ layui.config({
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'oddNumber', title: '单号', width: 200, align: 'center', templet: function (d) {
-                    return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
-                }},
+                return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+            }},
             { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
-                    return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
-                }},
+                return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
+            }},
             { field: 'title', title: '单据主题', align: 'left', width: 120 },
             { field: 'fromTypeId', title: '单据来源', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseRequestFromType", 'id', d.fromTypeId, 'name');
-                }},
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseRequestFromType", 'id', d.fromTypeId, 'name');
+            }},
             { field: 'projectMation', title: '项目', align: 'left', width: 150, templet: function (d) {
-                    return getNotUndefinedVal(d.projectMation?.name);
-                }},
+                return getNotUndefinedVal(d.projectMation?.name);
+            }},
             { field: 'totalPrice', title: '合计金额', align: 'left', width: 120 },
             { field: 'operTime', title: '单据日期', align: 'center', width: 140 },
             { field: 'inquiryState', title: '询价状态', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseRequestInquiryState", 'id', d.inquiryState, 'name');
-                }},
-            { field: 'state', title: '状态', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseRequestStateEnum", 'id', d.state, 'name');
-                }},
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseRequestInquiryState", 'id', d.inquiryState, 'name');
+            }},
+            { field: 'state', title: '状态', width: 120, templet: function (d) {
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseRequestStateEnum", 'id', d.state, 'name');
+            }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
