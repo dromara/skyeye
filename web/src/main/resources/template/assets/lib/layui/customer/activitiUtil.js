@@ -112,9 +112,9 @@ var activitiUtil = {
             if (!isNull(json.bean) && !$.isEmptyObject(json.bean)) {
                 var approvalPersonChooseDom = '<div class="layui-form-item layui-col-xs12">' +
                     '<label class="layui-form-label">下一个审批人<i class="red">*</i></label>' +
-                    '<div class="layui-input-block">' +
+                    '<div class="layui-input-block input-add-icon">' +
                     '<input type="text" id="approvalPersonName" name="approvalPersonName" placeholder="请选择下一个审批人" win-verify="required" class="layui-input" readonly="readonly"/>' +
-                    '<i class="fa fa-plus-circle input-icon chooseApprovalPersonBtn" style="top: 12px;"></i>' +
+                    '<i class="fa fa-plus-circle input-icon chooseApprovalPersonBtn"></i>' +
                     '</div>' +
                     '</div>';
                 $("#" + appendDomId).append(approvalPersonChooseDom);
