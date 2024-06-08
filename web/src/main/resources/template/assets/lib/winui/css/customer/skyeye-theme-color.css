@@ -162,6 +162,7 @@
     --tile-color: #0078D7;
     --taskbar-btnhover-color: #195583;
     --start-btn-color: #429CE3;
+    position: relative;
 }
 
 .winui-color32 {

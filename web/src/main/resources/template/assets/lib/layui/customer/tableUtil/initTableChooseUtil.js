@@ -116,7 +116,7 @@ var initTableChooseUtil = {
             } else if (item.formType == 'textarea') {
                 tbodyStr += '<td><textarea style="height: 100px;" class="layui-textarea ' + className + '" value="' + value + '" id="' + tdId + '" win-verify="' + verify + '"></textarea></td>';
             } else if (item.formType == 'chooseInput') {
-                tbodyStr += '<td><input type="text" class="layui-input ' + className + '" value="' + value + '" id="' + tdId + '" win-verify="' + verify + '" readonly="readonly"/>' +
+                tbodyStr += '<td class="input-add-icon"><input type="text" class="layui-input ' + className + '" value="' + value + '" id="' + tdId + '" win-verify="' + verify + '" readonly="readonly"/>' +
                     '<i class="fa fa-plus-circle input-icon add-icon ' + item.iconClassName + '"></i></td>';
             } else if (item.formType == 'select') {
                 var modelHtml = isNull(item.modelHtml) ? "" : item.modelHtml;

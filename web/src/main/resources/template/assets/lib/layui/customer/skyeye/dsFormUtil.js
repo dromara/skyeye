@@ -65,6 +65,15 @@ var dsFormUtil = {
              {{/bean}}`, // Id转Mation取值转换后的展示(用户组件)
     },
 
+    options: {
+        // 保存之前的回调函数
+        savePreParams: function (params) {},
+        // 保存数据的回调函数
+        saveData: null,
+        // 组件加载完成的回调函数
+        loadComponentCallback: function () {}
+    },
+
     pageMation: {},
 
     getBusinessData: function (businessId, serviceClassName, callback) {
@@ -145,11 +154,62 @@ var dsFormUtil = {
                     dsFormUtil.loadComponent(showBoxId, dsFormContent);
                 }
             });
+
+            if (typeof (dsFormUtil.options.loadComponentCallback) == "function") {
+                dsFormUtil.options.loadComponentCallback();
+            }
+
             matchingLanguage();
             form.render();
 
             dsFormUtil.initEvent(form);
         });
+    },
+
+    /**
+     * 加载动态表单(编辑操作---自定义数据)
+     *
+     * @param showBoxId 显示位置
+     * @param pageId 布局id/布局编码
+     * @param data 业务数据
+     * @param newOptions 配置参数
+     */
+    initEditPageForStatic: function (showBoxId, pageId, data, newOptions) {
+        if (!isNull(newOptions)) {
+            for (var pro in newOptions) {
+                dsFormUtil.options[pro] = newOptions[pro];
+            }
+        }
+        dsFormUtil.getPageMation(pageId, function(pageMation) {
+            dsFormUtil.initEditPage(showBoxId, pageMation, data);
+        })
+    },
+
+    getPageMation: function (pageId, callback) {
+        AjaxPostUtil.request({url: reqBasePath + "dsformpage006", params: {id: pageId}, type: 'json', method: 'GET', callback: function (json) {
+            let pageMation = json.bean;
+            if (isNull(pageMation)) {
+                winui.window.msg("该布局信息不存在", {icon: 2, time: 2000});
+                return false;
+            } else {
+                if (pageMation.serviceBeanCustom.serviceBean.teamAuth) {
+                    objectKey = GetUrlParam("objectKey");
+                    objectId = GetUrlParam("objectId");
+                    if (isNull(objectKey) || isNull(objectId)) {
+                        winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
+                        return false;
+                    } else {
+                        if (typeof (callback) == "function") {
+                            callback(pageMation);
+                        }
+                    }
+                } else {
+                    if (typeof (callback) == "function") {
+                        callback(pageMation);
+                    }
+                }
+            }
+        }});
     },
 
     // 获取业务数据中实际的值
@@ -320,17 +380,25 @@ var dsFormUtil = {
             params["approvalId"] = approvalId;
         }
 
-        // 发送请求
-        dsFormUtil.sendRequest({
-            businessApi: dsFormUtil.pageMation.businessApi,
-            params: params,
-            loadTable: false,
-            callback: function () {
-                var index = parent.layer.getFrameIndex(window.name);
-                parent.layer.close(index);
-                parent.refreshCode = '0';
-            }
-        });
+        if (typeof (dsFormUtil.options.savePreParams) == "function") {
+            dsFormUtil.options.savePreParams(params);
+        }
+
+        if (dsFormUtil.options.saveData != null && typeof (dsFormUtil.options.saveData) == "function") {
+            dsFormUtil.options.saveData(params);
+        } else {
+            // 发送请求
+            dsFormUtil.sendRequest({
+                businessApi: dsFormUtil.pageMation.businessApi,
+                params: params,
+                loadTable: false,
+                callback: function () {
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                    parent.refreshCode = '0';
+                }
+            });
+        }
     },
 
     /**

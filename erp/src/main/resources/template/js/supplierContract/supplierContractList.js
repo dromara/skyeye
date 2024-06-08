@@ -88,6 +88,9 @@ layui.config({
 						str += '<a class="layui-btn layui-btn-xs" lay-event="recovery">恢复</a>';
 					}
 				}
+
+				str += '<a class="layui-btn layui-btn-xs" lay-event="contractToOrder">转采购订单</a>';
+
 				return str;
 			}}
 	    ]],
@@ -124,6 +127,8 @@ layui.config({
 			recovery(data);
 		} else if (layEvent === 'revoke') { //撤销
 			revoke(data);
+		} else if (layEvent === 'contractToOrder') { // 转采购订单
+			contractToOrder(data);
 		}
     });
 
@@ -146,6 +151,19 @@ layui.config({
 			url: systemCommonUtil.getUrl('FP2023080200003&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "supplierContractEdit",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}});
+	}
+
+	// 转采购订单
+	function contractToOrder(data) {
+		parent._openNewWindows({
+			url: "../../tpl/supplierContract/contractToOrder.html?id=" + data.id,
+			title: '转采购订单',
+			pageId: "contractToOrder",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});

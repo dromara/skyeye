@@ -1517,7 +1517,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 .ver-center{
     align-items: Center;
     padding-top: 8px;
-    min-height: 32px;
+    min-height: 33px;
     font-family: initial;
 }
 
@@ -6404,9 +6404,33 @@ body .layer-ext-winconfirm .layui-layer-content {
     margin-left: 2px;
 }
 
-.input-icon{
+.input-add-icon>input {
+    width: calc(100% - 30px);
+    border-radius: 0.25rem 0 0 0.25rem;
+}
+
+/* 当鼠标悬停在 input 上时，修改紧跟在其后的兄弟元素 i 的样式 */
+.input-add-icon>input:hover + i {
+    border-color: #80bdff !important;
+}
+
+.input-add-icon>i {
     position: absolute;
-    top:8px;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+    color: gray;
+    height: 16px !important;
+    width: 16px;
+    padding: 6px;
+    border: 1px solid #e6e6e6;
+    border-left: 0px;
+    border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.input-icon {
+    position: absolute;
+    top: 8px;
     right: 8px;
     cursor: pointer;
     color: gray;
