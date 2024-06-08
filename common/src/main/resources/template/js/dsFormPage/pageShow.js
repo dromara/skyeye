@@ -98,12 +98,12 @@ layui.config({
             dsFormUtil.initCreatePage('content', pageMation);
         } else if (pageMation.type == 'edit') {
             // 编辑布局
-            dsFormUtil.getBusinessData(businessId, serviceClassName, function (data) {
+            dsFormUtil.getBusinessData(businessId, serviceClassName, pageMation, function (data) {
                 dsFormUtil.initEditPage('content', pageMation, data);
             });
         }  else if (pageMation.type == 'details') {
             // 详情布局
-            dsFormUtil.getBusinessData(businessId, serviceClassName, function (data) {
+            dsFormUtil.getBusinessData(businessId, serviceClassName, pageMation, function (data) {
                 dsFormUtil.initDetailsPage('content', pageMation, data);
             });
         } else if (pageMation.type == 'simpleTable') {

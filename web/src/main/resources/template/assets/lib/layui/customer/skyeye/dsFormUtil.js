@@ -76,17 +76,20 @@ var dsFormUtil = {
 
     pageMation: {},
 
-    getBusinessData: function (businessId, serviceClassName, callback) {
+    getBusinessData: function (businessId, serviceClassName, pageMation, callback) {
         if (isNull(businessId)) {
             winui.window.msg("业务数据id为空", {icon: 2, time: 2000});
             return false;
         }
         var params = {
             objectId: businessId,
-            objectKey: serviceClassName
+            serviceClassName: serviceClassName
         };
-        AjaxPostUtil.request({url: reqBasePath + "queryBusinessDataByObject", params: params, type: 'json', method: 'POST', callback: function (json) {
-            if(typeof(callback) == "function") {
+        const businessApi = pageMation.businessApi
+        var url = "";
+        eval('url = ' + businessApi.serviceStr);
+        AjaxPostUtil.request({url: url + "getDataByObjectId", params: params, type: 'json', method: 'GET', callback: function (json) {
+            if (typeof(callback) == "function") {
                 callback(json.bean);
             }
         }});

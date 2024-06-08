@@ -70,7 +70,7 @@ var activitiUtil = {
             } else {
                 // 这里为什么要给objectId和objectKey赋值，因为表单组件中有用到该值
                 if (showType == 'details') {
-                    dsFormUtil.getBusinessData(businessId, serviceClassName, function (data) {
+                    dsFormUtil.getBusinessData(businessId, serviceClassName, pageMation, function (data) {
                         if (pageMation.serviceBeanCustom.serviceBean.teamAuth) {
                             objectId = data.objectId;
                             objectKey = data.objectKey;
@@ -78,7 +78,7 @@ var activitiUtil = {
                         dsFormUtil.initDetailsPage('showForm', pageMation, data);
                     });
                 } else if (showType == 'edit') {
-                    dsFormUtil.getBusinessData(businessId, serviceClassName, function (data) {
+                    dsFormUtil.getBusinessData(businessId, serviceClassName, pageMation, function (data) {
                         if (pageMation.serviceBeanCustom.serviceBean.teamAuth) {
                             objectId = data.objectId;
                             objectKey = data.objectKey;
