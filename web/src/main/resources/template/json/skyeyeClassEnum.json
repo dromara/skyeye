@@ -194,5 +194,7 @@
     "purchaseRequestFromType": {"name": "ERP-采购申请单来源单据", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestFromType"},
     "purchaseRequestInquiryState": {"name": "ERP-采购申请单询价状态", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestInquiryState"},
     "purchaseRequestStateEnum": {"name": "ERP-采购申请状态", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestStateEnum"},
-    "supplierContractChildStateEnum": {"name": "ERP-采购合同是否转采购订单状态", "className": "skyeye-erp#com.skyeye.contract.classenum.SupplierContractChildStateEnum"}
+    "supplierContractChildStateEnum": {"name": "ERP-采购合同是否转采购订单状态", "className": "skyeye-erp#com.skyeye.contract.classenum.SupplierContractChildStateEnum"},
+    "orderArrivalState": {"name": "ERP-采购订单到货状态", "className": "skyeye-erp#com.skyeye.purchase.classenum.OrderArrivalState"},
+    "orderQualityInspectionType": {"name": "ERP-采购订单质检状态", "className": "skyeye-erp#com.skyeye.business.classenum.OrderQualityInspectionType"}
 }
