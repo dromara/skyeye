@@ -33,10 +33,10 @@ layui.config({
 	    limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: '2' },
-			{ field: 'title', title: '合同名称', rowspan: '2', align: 'left', width: 300, templet: function (d) {
+			{ field: 'title', title: '合同名称', rowspan: '2', align: 'left', width: 200, templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 			}},
-			{ field: 'oddNumber', title: '合同编号', rowspan: '2', align: 'left', width: 120 },
+			{ field: 'oddNumber', title: '合同编号', rowspan: '2', align: 'left', width: 150 },
 			{ field: 'price', title: '合同金额（元）', rowspan: '2', align: 'left', width: 120 },
 			{ field: 'signingTime', title: '签约日期', rowspan: '2', align: 'center', width: 100 },
 			{ colspan: '2', title: '来源单据信息', align: 'center' },
