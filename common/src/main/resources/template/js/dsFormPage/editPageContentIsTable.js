@@ -102,7 +102,7 @@ layui.config({
 				return _html;
 			}},
 			{ field: 'dataFrom', title: '数据源', align: 'left', width: 200, templet: function (d) {
-				var disabledClass = d.showType == showType[2].id ? '' : 'layui-btn-disabled';
+				var disabledClass = d.showType == showType[3].id ? '' : 'layui-btn-disabled';
 				var btnName = '选择数据源';
 				if (!isNull(d.dataType)) {
 					btnName = '更换数据源';
@@ -170,7 +170,7 @@ layui.config({
 				return `<div id="require${d.id}" cus-id="${d.id}"></div>`;
 			}},
 			{ field: 'dataFrom', title: '数据源', align: 'left', width: 200, templet: function (d) {
-				var disabledClass = d.showType == showType[2].id ? '' : 'layui-btn-disabled';
+				var disabledClass = d.showType == showType[3].id ? '' : 'layui-btn-disabled';
 				var btnName = '选择数据源';
 				if (!isNull(d.dataType)) {
 					btnName = '更换数据源';
@@ -280,7 +280,7 @@ layui.config({
 		if (id.startsWith('showType')) {
 			var showTypeVal = _this.val();
 			var cusId = _this.attr('cus-id');
-			if (showTypeVal == showType[2].id) {
+			if (showTypeVal == showType[3].id) {
 				// 下拉框
 				$(`#dataFrom${cusId}`).removeClass('layui-btn-disabled');
 				$(`#dataFrom${cusId}`).attr('data', '{}');
@@ -345,7 +345,7 @@ layui.config({
 		$.each(tableDataList, function (i, item) {
 			item.align = $(`#align${item.id}`).val();
 			item.require = dataShowType.getData(`require${item.id}`);
-			if (item.showType == showType[2].id) {
+			if (item.showType == showType[3].id) {
 				// 下拉框时，选择的数据源信息
 				var dataFrom = JSON.parse($(`#dataFrom${item.id}`).attr('data'));
 				if (!isNull(dataFrom.dataType)) {
