@@ -19,18 +19,38 @@ layui.config({
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "querySupplierContractTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
         let data = json.bean;
         data.erpOrderItemList = data.supplierContractChildList
+            console.log(data)
         // 采购订单的【编辑布局】
         dsFormUtil.initEditPageForStatic('content', 'FP2023042000002', data, {
             savePreParams: function (params) {
-                params.xxx="123213213213213213213213"
+                params.holderId=data.objectId
+                params.holderKey=data.objectKey
+                params.id=id
             },
             saveData: function (params) {
                 // 保存数据
+                AjaxPostUtil.request({url: sysMainMation.erpBasePath + "supplierContractToOrder", params: params, type: 'json', method: "POST", callback: function(json) {
+                    parent.layer.close(index);
+                    parent.refreshCode = '0';
+                }});
 
             },
             loadComponentCallback: function () {
                 $("div[controlType='supplier']").remove();
                 $("div[controlType='purchaseOrderFromType']").remove();
+            },
+            tableAddRowCallback: function (tableId) {
+                $("#addRow" + tableId).remove();
+                $("div[controlType='simpleTable']").find(".unitPrice").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".amountOfMoney").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".taxRate").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".taxMoney").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".taxUnitPrice").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".taxLastMoney").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
+                $("div[controlType='simpleTable']").find("select").prop('disabled', true);
+
+
 
 
             }

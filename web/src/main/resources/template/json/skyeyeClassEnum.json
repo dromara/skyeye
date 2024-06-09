@@ -193,5 +193,6 @@
     "purchaseRequestChildInquiry": {"name": "ERP-申请单子单据明细是否询价", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestChildInquiry"},
     "purchaseRequestFromType": {"name": "ERP-采购申请单来源单据", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestFromType"},
     "purchaseRequestInquiryState": {"name": "ERP-采购申请单询价状态", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestInquiryState"},
-    "purchaseRequestStateEnum": {"name": "ERP-采购申请状态", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestStateEnum"}
+    "purchaseRequestStateEnum": {"name": "ERP-采购申请状态", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestStateEnum"},
+    "supplierContractChildStateEnum": {"name": "ERP-采购合同是否转采购订单状态", "className": "skyeye-erp#com.skyeye.contract.classenum.SupplierContractChildStateEnum"}
 }
