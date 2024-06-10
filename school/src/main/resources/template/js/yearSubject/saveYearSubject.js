@@ -65,7 +65,7 @@ layui.config({
                 majorId: $("#majorId").val(),
                 year: $("#year").val()
             }
-            // 获取科目列表
+            // 获取科目列表 TODO 待删除
             AjaxPostUtil.request({url: sysMainMation.schoolBasePath + "querySubjectListBySchoolId", params: {schoolId: tempParams.schoolId}, type: 'json', method: 'GET', callback: function (json) {
                 subjectList = json.rows;
             }, async: false});

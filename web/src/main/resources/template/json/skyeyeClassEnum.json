@@ -53,7 +53,7 @@
     "machinPickStateEnum": {"name": "加工单领料状态", "className": "skyeye-erp#com.skyeye.machin.classenum.MachinPickStateEnum"},
     "machinChildStateEnum": {"name": "工序验收单状态", "className": "skyeye-erp#com.skyeye.machin.classenum.MachinChildStateEnum"},
     "materialNormsCodeInDepot": {"name": "商品规格一物一码库存状态", "className": "skyeye-erp#com.skyeye.material.classenum.MaterialNormsCodeInDepot"},
-    "orderQualityInspectionType": {"name": "ERP采购质检类型", "className": "skyeye-erp#com.skyeye.purchase.classenum.OrderQualityInspectionType"},
+    "orderQualityInspectionType": {"name": "ERP采购质检类型", "className": "skyeye-erp#com.skyeye.business.classenum.OrderQualityInspectionType"},
     "orderItemQualityInspectionType": {"name": "ERP采购子单据质检类型", "className": "skyeye-erp#com.skyeye.business.classenum.OrderItemQualityInspectionType"},
 
     "orderArrivalState": {"name": "采购订单到货状态", "className": "skyeye-erp#com.skyeye.purchase.classenum.OrderArrivalState"},
@@ -191,13 +191,13 @@
     },
 
     "purchaseRequestChildInquiry": {"name": "ERP-申请单子单据明细是否询价", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestChildInquiry"},
-    "purchaseRequestFromType": {"name": "ERP-采购申请单来源单据", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestFromType"},
     "purchaseRequestInquiryState": {"name": "ERP-采购申请单询价状态", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestInquiryState"},
     "purchaseRequestStateEnum": {"name": "ERP-采购申请状态", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestStateEnum"},
 
-
     "carAttribute": {"name": "TMS-车辆属性", "className": "skyeye-tms#com.skyeye.tms.car.classenum.CarAttribute"},
-    "carState": {"name": "TMS-车辆当前状态", "className": "skyeye-tms#com.skyeye.tms.car.classenum.CarState"}
+    "carState": {"name": "TMS-车辆当前状态", "className": "skyeye-tms#com.skyeye.tms.car.classenum.CarState"},
 
+    "supplierContractChildStateEnum": {"name": "ERP-采购合同是否转采购订单状态", "className": "skyeye-erp#com.skyeye.contract.classenum.SupplierContractChildStateEnum"},
+    "orderQualityInspectionType": {"name": "ERP-采购订单质检状态", "className": "skyeye-erp#com.skyeye.business.classenum.OrderQualityInspectionType"}
 
 }

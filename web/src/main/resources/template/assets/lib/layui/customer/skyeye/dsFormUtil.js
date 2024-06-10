@@ -71,7 +71,11 @@ var dsFormUtil = {
         // 保存数据的回调函数
         saveData: null,
         // 组件加载完成的回调函数
-        loadComponentCallback: function () {}
+        loadComponentCallback: function () {},
+        // 表格组件新增行之后的回调事件
+        tableAddRowCallback: null,
+        // 表格组件删除行之后的回调事件
+        tableDeleteRowCallback: null
     },
 
     pageMation: {},

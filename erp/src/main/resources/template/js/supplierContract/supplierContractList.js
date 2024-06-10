@@ -46,6 +46,9 @@ layui.config({
 			{ field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("supplierContractStateEnum", 'id', d.state, 'name');
 			}},
+			{ field: 'childState', title: '合同产品状态', rowspan: '2', width: 150, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("supplierContractChildStateEnum", 'id',d.childState, 'name');
+			}},
 	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', align: 'left', width: 120 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
 	        { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '2', align: 'left', width: 120 },
@@ -75,6 +78,9 @@ layui.config({
 					if (authPermission['perform']) {
 						str += '<a class="layui-btn layui-btn-xs" lay-event="perform">执行</a>';
 					}
+					if(d.childState=="pendingOrder" ||d.childState=="partialRelease"){
+						str += '<a class="layui-btn layui-btn-xs" lay-event="contractToOrder">转采购订单</a>';
+					}
 				}
 				if (d.state == 'executing') {
 					if (authPermission['close']) {
@@ -83,6 +89,9 @@ layui.config({
 					if (authPermission['layAside']) {
 						str += '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="shelve">搁置</a>';
 					}
+					if(d.childState=="pendingOrder" ||d.childState=="partialRelease") {
+						str += '<a class="layui-btn layui-btn-xs" lay-event="contractToOrder">转采购订单</a>';
+					}
 				}
 				if (d.state == 'layAside') {
 					if (authPermission['recovery']) {
@@ -90,7 +99,7 @@ layui.config({
 					}
 				}
 
-				str += '<a class="layui-btn layui-btn-xs" lay-event="contractToOrder">转采购订单</a>';
+
 
 				return str;
 			}}
