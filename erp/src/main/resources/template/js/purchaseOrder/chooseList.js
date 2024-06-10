@@ -11,8 +11,8 @@ layui.config({
 		form = layui.form,
 		table = layui.table;
 
-	var objectId = GetUrlParam("objectId");
-	if (isNull(objectId)) {
+	var holderId = GetUrlParam("holderId");
+	if (isNull(holderId)) {
 		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
 		return false;
 	}
@@ -21,34 +21,35 @@ layui.config({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-        url: sysMainMation.erpBasePath + 'querySupplierContractList',
+        url: sysMainMation.erpBasePath + 'purchaseorder001',
 		where: getTableParams(),
 		even: true,
 		page: true,
 		limits: getLimits(),
 		limit: getLimit(),
 		cols: [[
+			{ type: 'radio', fixed: 'left', rowspan: '2' },
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: '2' },
-			{ field: 'title', title: '合同名称', rowspan: '2', align: 'left', width: 200, templet: function (d) {
-				return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
+			{ field: 'oddNumber', title: '单号', rowspan: '2', width: 200, align: 'center', templet: function (d) {
+				return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 			}},
-			{ field: 'oddNumber', title: '合同编号', rowspan: '2', align: 'left', width: 150 },
-			{ field: 'price', title: '合同金额（元）', rowspan: '2', align: 'left', width: 120 },
-			{ field: 'signingTime', title: '签约日期', rowspan: '2', align: 'center', width: 100 },
+			{ field: 'holderMation', title: '供应商', rowspan: '2', align: 'left', width: 150, templet: function (d) {
+				return getNotUndefinedVal(d.holderMation?.name);
+			}},
+			{ field: 'totalPrice', title: '合计金额', rowspan: '2', align: 'left', width: 120 },
+			{ field: 'operTime', title: '单据日期', rowspan: '2', align: 'center', width: 140 },
 			{ colspan: '2', title: '来源单据信息', align: 'center' },
 			{ field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
-				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("supplierContractStateEnum", 'id', d.state, 'name');
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
 			}},
-			{ field: 'childState', title: '合同产品状态', rowspan: '2', width: 150, templet: function (d) {
-				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("supplierContractChildStateEnum", 'id',d.childState, 'name');
-			}},
-			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', align: 'left', width: 120 },
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '2', align: 'left', width: 120 },
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], rowspan: '2', align: 'center', width: 150 },
+			{ title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
 		], [
 			{ field: 'fromTypeId', title: '来源类型', width: 150, templet: function (d) {
-				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("supplierContractFromType", 'id', d.fromTypeId, 'name');
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseOrderFromType", 'id', d.fromTypeId, 'name');
 			}},
 			{ field: 'fromId', title: '单据编号', width: 200, templet: function (d) {
 				return getNotUndefinedVal(d.fromMation?.oddNumber);
@@ -56,13 +57,16 @@ layui.config({
 		]],
 		done: function(json) {
 			matchingLanguage();
-			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入合同名称", function () {
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单号", function () {
 				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 
 			for (var i = 0; i < json.rows.length; i++) {
 				// 只有审批通过、执行中的项目才可以进行选中
-				if (json.rows[i].state != 'executing' && json.rows[i].state != 'pass') {
+				let state = json.rows[i].state;
+				let inquiryState = json.rows[i].inquiryState;
+				if ((state == 'pass' && (inquiryState == 1 || inquiryState == 4)) ||
+					(state == 'partialProcurement' && (inquiryState == 1 || inquiryState == 4))) {
 					systemCommonUtil.disabledRow(json.rows[i].LAY_TABLE_INDEX, 'radio');
 				}
 			}
@@ -73,7 +77,7 @@ layui.config({
 					form.render();
 					var chooseIndex = JSON.stringify(dubClick.data('index'));
 					var obj = json.rows[chooseIndex];
-					parent.supplierContractMation = obj;
+					parent.purchaseOrderMation = obj;
 
 					parent.refreshCode = '0';
 					parent.layer.close(index);
@@ -99,8 +103,8 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return $.extend(true, {objectId: objectId}, initTableSearchUtil.getSearchValue("messageTable"));
+		return $.extend(true, {holderId: holderId}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 
-    exports('supplierContractChooseList', {});
+    exports('purchaseOrderChooseList', {});
 });
