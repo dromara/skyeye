@@ -16,13 +16,14 @@ layui.config({
     var id = GetUrlParam("id");
 
     // 采购合同转采购订单
-    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "querySupplierContractTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
+    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "guerypurchase0rderTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
             let data = json.bean;
-            data.erpOrderItemList = data.supplierContractChildList
+            // data.erpOrderItemList = data.supplierContractChildList
             console.log(data)
             // 采购订单的【编辑布局】
-            dsFormUtil.initEditPageForStatic('content', 'FP2023042300002', data, {
+            dsFormUtil.initEditPageForStatic('content', 'FP2023042000002', data, {
                 savePreParams: function (params) {
+                    console.log(params)
                     // params.holderId=data.objectId
                     // params.holderKey=data.objectKey
                     // params.id=id

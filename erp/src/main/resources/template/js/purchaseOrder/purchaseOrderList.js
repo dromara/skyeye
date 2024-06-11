@@ -143,7 +143,7 @@ layui.config({
                 loadTable();
 			}});
     }
-
+    //转到货单
     function transferToWaybill(data){
         parent._openNewWindows({
             url: "../../tpl/purchaseOrder/purchaseToWaybill.html?id=" + data.id,
