@@ -300,11 +300,13 @@ var initTableChooseUtil = {
                     $("#" + tdId).val(value.name || value.title);
                 }
             } else if (formType == 'select') {
-                if (!isNull(value["html"])) {
-                    $("#" + tdId).html(value["html"]);
-                    value = data[bean.id]['value'];
+                if (!isNull(value)) {
+                    if (!isNull(value["html"])) {
+                        $("#" + tdId).html(value["html"]);
+                        value = data[bean.id]['value'];
+                    }
+                    $("#" + tdId).val(value);
                 }
-                $("#" + tdId).val(value);
             } else if (formType == 'detail') {
                 $("#" + tdId).html(value);
             }

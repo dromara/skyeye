@@ -48,7 +48,7 @@ layui.config({
                 $("div[controlType='simpleTable']").find(".taxUnitPrice").prop('disabled', true);
                 $("div[controlType='simpleTable']").find(".taxLastMoney").prop('disabled', true);
                 $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
-                $("div[controlType='simpleTable']").find("select").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
 
 
 

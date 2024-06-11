@@ -39,6 +39,12 @@ layui.config({
             { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
             }},
+            { field: 'otherState', title: '到货状态', rowspan: '2', width: 90, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("orderArrivalState", 'id', d.otherState, 'name');
+                }},
+            { field: 'qualityInspection', title: '质检状态', rowspan: '2', width: 90, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("orderQualityInspectionType", 'id', d.qualityInspection   , 'name');
+                }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '2', align: 'left', width: 120 },
@@ -77,6 +83,8 @@ layui.config({
             });
         } else if (layEvent === 'turnPurchase') { //转采购入库单
         	turnPurchase(data);
+        } else if (layEvent === 'transferToWaybill') { //转到货单
+            transferToWaybill(data);
         } else if (layEvent === 'processDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
@@ -126,7 +134,7 @@ layui.config({
     // 转采购入库
 	function turnPurchase(data) {
 		_openNewWindows({
-            url: systemCommonUtil.getUrl('FP2023050300001&id=' + data.id + '&serviceClassName=' + sysServiceMation["putIsPurchase"]["key"], null),
+            url: "../../tpl/purchaseOrder/purchaseToWarehouse.html?id=" + data.id,
 			title: "转采购入库",
 			pageId: "purchaseOrderToPut",
 			area: ['90vw', '90vh'],
@@ -134,6 +142,18 @@ layui.config({
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
 			}});
+    }
+
+    function transferToWaybill(data){
+        parent._openNewWindows({
+            url: "../../tpl/purchaseOrder/purchaseToWaybill.html?id=" + data.id,
+            title: '转到货单',
+            pageId: "purchaseToWaybill",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
     }
 
     form.render();
