@@ -56,7 +56,7 @@ layui.config({
 		]],
 		done: function(json) {
 			matchingLanguage();
-			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入资产编号", function () {
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入编号", function () {
 				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 		}
@@ -93,6 +93,17 @@ layui.config({
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
+			}});
+	});
+
+	// 批量复制
+	$("body").on("click", "#batchCopy", function() {
+		_openNewWindows({
+			url: "../../tpl/materialCode/batchCopy.html",
+			title: '批量复制',
+			pageId: "materialCodeBatchCopy",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
 			}});
 	});
 

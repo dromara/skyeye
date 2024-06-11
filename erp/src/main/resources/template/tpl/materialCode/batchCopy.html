@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+    <div style="margin:0 auto;padding:20px;">
+        <form class="layui-form" action="" autocomplete="off">
+            <div class="layui-form-item layui-col-xs12">
+                <span class="hr-title">基本信息</span><hr>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">商品</label>
+                <div class="layui-input-block">
+                    <select id="materialId" name="materialId" lay-filter="materialId" lay-search="">
+
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">规格</label>
+                <div class="layui-input-block">
+                    <select id="normsId" name="normsId" lay-filter="normsId" lay-search="">
+
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">状态<i class="red">*</i></label>
+                <div class="layui-input-block" id="inDepot">
+
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">获取数量<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="number" name="number" win-verify="required|number" placeholder="请输入获取编码的数量" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">条形码</label>
+                <div class="layui-input-block">
+                    <textarea id="barCode" name="barCode" class="layui-textarea" style="height: 200px;"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">获取结果：</label>
+                <div class="layui-input-block ver-center" id="tips">
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-col-xs12">
+                <div class="layui-input-block">
+                    <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+                    <button class="winui-btn" lay-submit lay-filter="getBean">获取</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base : '../../js/materialCode/'}).use('batchCopy');
+    </script>
+</body>
+</html>
