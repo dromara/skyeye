@@ -192,6 +192,11 @@
     "purchaseRequestChildInquiry": {"name": "ERP-申请单子单据明细是否询价", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestChildInquiry"},
     "purchaseRequestInquiryState": {"name": "ERP-采购申请单询价状态", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestInquiryState"},
     "purchaseRequestStateEnum": {"name": "ERP-采购申请状态", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestStateEnum"},
+
+    "carAttribute": {"name": "TMS-车辆属性", "className": "skyeye-tms#com.skyeye.tms.car.classenum.CarAttribute"},
+    "carState": {"name": "TMS-车辆当前状态", "className": "skyeye-tms#com.skyeye.tms.car.classenum.CarState"},
+
     "supplierContractChildStateEnum": {"name": "ERP-采购合同是否转采购订单状态", "className": "skyeye-erp#com.skyeye.contract.classenum.SupplierContractChildStateEnum"},
     "orderQualityInspectionType": {"name": "ERP-采购订单质检状态", "className": "skyeye-erp#com.skyeye.business.classenum.OrderQualityInspectionType"}
+
 }
