@@ -63,6 +63,7 @@
     "purchaseReturnsFromType": {"name": "采购退货单来源单据类型", "className": "skyeye-erp#com.skyeye.purchase.classenum.PurchaseReturnsFromType"},
     "purchaseRequestFromType": {"name": "采购申请单来源单据类型", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestFromType"},
     "supplierContractFromType": {"name": "供应商合同来源单据类型", "className": "skyeye-erp#com.skyeye.contract.classenum.SupplierContractFromType"},
+    "qualityInspectionFromType": {"name": "质检单来源单据类型", "className": "skyeye-erp#com.skyeye.inspection.classenum.QualityInspectionFromType"},
 
     "skyeyeView": {"name": "视图类型", "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"},
     "widthScale": {"name": "宽度比例", "className": "skyeye-pro#com.skyeye.attr.classenum.WidthScale"},
