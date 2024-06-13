@@ -33,7 +33,7 @@
 				{{# } }}
 			{{# } }}
 			{{# if (d.state == 'pass' || d.state == 'partiallyCompleted') { }}
-				{{# if (d.otherState == '1') { }}
+				{{# if (d.otherState == 1) { }}
 					{{# if (auth('1571812784641')) { }}
 						<a class="layui-btn layui-btn-xs" lay-event="turnPurchase">转采购入库</a>
 					{{# } }}

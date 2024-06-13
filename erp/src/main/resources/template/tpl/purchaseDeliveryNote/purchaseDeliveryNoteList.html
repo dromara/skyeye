@@ -17,20 +17,32 @@
   <table id="messageTable" lay-filter="messageTable"></table>
   <script type="text/html" id="tableBar">
     {{# if (d.editRow == 1) { }}
-    {{# if (auth('1718098162759')) { }}
-    <a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>
-    {{# } }}
-    {{# if (auth('1718098062750')) { }}
-    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-    {{# } }}
-    {{# if (auth('1718098105613')) { }}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
-    {{# } }}
+      {{# if (auth('1718098162759')) { }}
+        <a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>
+      {{# } }}
+      {{# if (auth('1718098062750')) { }}
+        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+      {{# } }}
+      {{# if (auth('1718098105613')) { }}
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+      {{# } }}
     {{# } }}
     {{# if (d.editRow == 2) { }}
-    {{# if (auth('1718098131815')) { }}
-    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
+      {{# if (auth('1718098131815')) { }}
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
+      {{# } }}
     {{# } }}
+    {{# if (d.state == 'pass' || d.state == 'partiallyCompleted') { }}
+      {{# if (d.otherState == 2 || d.otherState == 3) { }}
+        {{# if (auth('1718257557032')) { }}
+          <a class="layui-btn layui-btn-xs" lay-event="turnPurchase">转采购入库</a>
+        {{# } }}
+      {{# } }}
+      {{# if (d.qualityInspection == 2 || d.qualityInspection == 3) { }}
+        {{# if (auth('1718257115558')) { }}
+          <a class="layui-btn layui-btn-xs" lay-event="purchaseQualityInspection">转质检单</a>
+        {{# } }}
+      {{# } }}
     {{# } }}
   </script>
 </div>
