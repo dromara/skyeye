@@ -197,6 +197,6 @@
     "carState": {"name": "TMS-车辆当前状态", "className": "skyeye-tms#com.skyeye.tms.car.classenum.CarState"},
 
     "supplierContractChildStateEnum": {"name": "ERP-采购合同是否转采购订单状态", "className": "skyeye-erp#com.skyeye.contract.classenum.SupplierContractChildStateEnum"},
-    "orderQualityInspectionType": {"name": "ERP-采购订单质检状态", "className": "skyeye-erp#com.skyeye.business.classenum.OrderQualityInspectionType"}
-
+    "orderQualityInspectionType": {"name": "ERP-采购订单质检状态", "className": "skyeye-erp#com.skyeye.business.classenum.OrderQualityInspectionType"},
+    "deliveryPutState": {"name": "ERP-采购到货单免检商品入库状态", "className": "skyeye-erp#com.skyeye.purchase.classenum.DeliveryPutState"}
 }

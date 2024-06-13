@@ -46,6 +46,9 @@ layui.config({
             { field: 'qualityInspection', title: '质检状态', rowspan: '2', width: 90, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("orderQualityInspectionType", 'id', d.qualityInspection   , 'name');
                 }},
+            { field: 'otherState', title: '免检商品入库状态', rowspan: '2', width: 150, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("deliveryPutState", 'id', d.otherState, 'name');
+                }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '2', align: 'left', width: 120 },
@@ -82,7 +85,11 @@ layui.config({
             erpOrderUtil.submitOrderMation(data.id, serviceClassName, function() {
                 loadTable();
             });
-        } else if (layEvent === 'processDetails') { // 工作流流程详情查看
+        } else if (layEvent === 'turnPurchase') { //转采购入库单
+            turnPurchase(data);
+        } else if (layEvent === 'purchaseQualityInspection') { //转质检单
+            purchaseQualityInspection(data);
+        }else if (layEvent === 'processDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
             erpOrderUtil.revokeOrderMation(data.processInstanceId, serviceClassName, function() {
@@ -127,6 +134,32 @@ layui.config({
             callBack: function (refreshCode) {
             }});
     }
+
+    // 转采购入库
+    function turnPurchase(data) {
+        _openNewWindows({
+            url: "../../tpl/purchaseDeliveryNote/deliveryToPut.html?id=" + data.id,
+            title: "转采购入库",
+            pageId: "deliveryToPut",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+    //转质检单
+    function purchaseQualityInspection(data){
+        parent._openNewWindows({
+            url: "../../tpl/purchaseDeliveryNote/deliveryToQualityInspection.html?id=" + data.id,
+            title: '转质检单',
+            pageId: "deliveryToQualityInspection",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
 
     form.render();
     $("body").on("click", "#reloadTable", function() {
