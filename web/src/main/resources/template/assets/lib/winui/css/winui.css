@@ -6415,17 +6415,11 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .input-add-icon>i {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    cursor: pointer;
-    color: gray;
-    height: 16px !important;
-    width: 16px;
-    padding: 6px;
-    border: 1px solid #e6e6e6;
-    border-left: 0px;
-    border-radius: 0 0.25rem 0.25rem 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100% - 20px) !important;
+    display: flex !important;
 }
 
 .input-icon {
