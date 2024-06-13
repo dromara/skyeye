@@ -15,21 +15,17 @@ layui.config({
     var $ = layui.$;
     var id = GetUrlParam("id");
 
-    // 采购合同转采购订单
-    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "querySupplierContractTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
+    // 采购订购单转到货单
+    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryPurchaseOrderTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
             let data = json.bean;
-            data.erpOrderItemList = data.supplierContractChildList
             console.log(data)
-            // 采购订单的【编辑布局】
-            dsFormUtil.initEditPageForStatic('content', 'FP2023042000002', data, {
+            // 采购到货的【编辑布局】
+            dsFormUtil.initEditPageForStatic('content', 'FP2024061100002', data, {
                 savePreParams: function (params) {
-                    params.holderId=data.objectId
-                    params.holderKey=data.objectKey
-                    params.id=id
                 },
                 saveData: function (params) {
                     // 保存数据
-                    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "supplierContractToOrder", params: params, type: 'json', method: "POST", callback: function(json) {
+                    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertPurchaseOrderToTurnDelivery", params: params, type: 'json', method: "POST", callback: function(json) {
                             parent.layer.close(index);
                             parent.refreshCode = '0';
                         }});
@@ -49,7 +45,8 @@ layui.config({
                     $("div[controlType='simpleTable']").find(".taxLastMoney").prop('disabled', true);
                     $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
                     $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
-
+                    $("div[controlType='simpleTable']").find(".qualityInspection").prop('disabled', true);
+                    $("div[controlType='simpleTable']").find(".taxLastinspectionRatio").prop('disabled', true);
 
 
 

@@ -245,6 +245,7 @@ layui.config({
         sysSupplierUtil.openSysSupplierChoosePage(function (supplierMation) {
             $("#" + inputId).val(supplierMation.name);
             $("#" + inputId).attr("objectId", supplierMation.id);
+            $("#" + inputId).attr("objectKey", supplierMation.serviceClassName);
 
             // 获取所选供应商的联系人
             AjaxPostUtil.request({url: sysMainMation.reqBasePath + "queryContactsListByObject", params: {objectId:supplierMation.id}, type: 'json', method: "GET", callback: function(json) {
@@ -253,8 +254,6 @@ layui.config({
                 $("#" + contactsId).html(getDataUseHandlebars(selOption, {rows: contactsList}));
                 form.render();
             }});
-
-
         });
     });
 
