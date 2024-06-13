@@ -28,6 +28,7 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 		cols: [[
+			{ type: 'radio', fixed: 'left'},
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: '2' },
 			{ field: 'title', title: '合同名称', rowspan: '2', align: 'left', width: 200, templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
@@ -61,7 +62,7 @@ layui.config({
 			});
 
 			for (var i = 0; i < json.rows.length; i++) {
-				// 只有审批通过、执行中的项目才可以进行选中
+				// 只有【审核通过、执行中】状态的合同才可以进行选中
 				if (json.rows[i].state != 'executing' && json.rows[i].state != 'pass') {
 					systemCommonUtil.disabledRow(json.rows[i].LAY_TABLE_INDEX, 'radio');
 				}

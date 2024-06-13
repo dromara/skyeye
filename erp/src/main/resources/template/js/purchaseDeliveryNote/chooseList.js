@@ -21,7 +21,7 @@ layui.config({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-        url: sysMainMation.erpBasePath + 'purchaseorder001',
+        url: sysMainMation.erpBasePath + 'queryPurchaseDeliveryList',
 		where: getTableParams(),
 		even: true,
 		page: true,
@@ -32,6 +32,10 @@ layui.config({
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: '2' },
 			{ field: 'oddNumber', title: '单号', rowspan: '2', width: 200, align: 'center', templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+				if (!isNull(d.fromId)) {
+					str += '<span class="state-new">[转]</span>';
+				}
+				return str;
 			}},
 			{ field: 'holderMation', title: '供应商', rowspan: '2', align: 'left', width: 150, templet: function (d) {
 				return getNotUndefinedVal(d.holderMation?.name);
@@ -41,6 +45,12 @@ layui.config({
 			{ colspan: '2', title: '来源单据信息', align: 'center' },
 			{ field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
+			}},
+			{ field: 'qualityInspection', title: '质检状态', rowspan: '2', width: 90, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("orderQualityInspectionType", 'id', d.qualityInspection   , 'name');
+			}},
+			{ field: 'otherState', title: '免检商品入库状态', rowspan: '2', width: 150, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("deliveryPutState", 'id', d.otherState, 'name');
 			}},
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
@@ -63,11 +73,11 @@ layui.config({
 
 			systemCommonUtil.disabledAllRow('radio');
 			for (var i = 0; i < json.rows.length; i++) {
-				// 只有【审核通过、部分转采购订单】或者状态为：【审核通过】到货状态为：【待到货、部分到货】的采购订单才可以进行选中
+				// 只有状态为：【审核通过】并且【待质检/部分质检】的到货单才可以进行选中
 				let state = json.rows[i].state;
-				let inquiryState = json.rows[i].inquiryState;
-				if ((state == 'pass' && (inquiryState == 1 || inquiryState == 4)) ||
-					(state == 'partialProcurement' && (inquiryState == 1 || inquiryState == 4))) {
+				let qualityInspection = json.rows[i].qualityInspection;
+				if (state == 'pass' &&
+					(qualityInspection == 2 || qualityInspection == 3)) {
 					systemCommonUtil.enabledRow(json.rows[i].LAY_TABLE_INDEX, 'radio');
 				}
 			}
@@ -78,7 +88,7 @@ layui.config({
 					form.render();
 					var chooseIndex = JSON.stringify(dubClick.data('index'));
 					var obj = json.rows[chooseIndex];
-					parent.purchaseOrderMation = obj;
+					parent.purchaseDeliveryMation = obj;
 
 					parent.refreshCode = '0';
 					parent.layer.close(index);
@@ -107,5 +117,5 @@ layui.config({
 		return $.extend(true, {holderId: holderId}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 
-    exports('purchaseOrderChooseList', {});
+    exports('purchaseDeliveryNoteChooseList', {});
 });

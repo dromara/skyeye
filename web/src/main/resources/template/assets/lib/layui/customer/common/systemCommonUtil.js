@@ -301,6 +301,17 @@ var systemCommonUtil = {
     },
 
     /**
+     * 禁用所有行
+     *
+     * @param type
+     */
+    disabledAllRow: function(type) {
+        $(".layui-table tr input[type='" + type + "']").prop('disabled', true);
+        $(".layui-table tr input[type='" + type + "']").addClass('layui-btn-disabled');
+        $(".layui-table tr input[type='" + type + "']").next().css("cursor", "not-allowed");
+    },
+
+    /**
      * 表格禁止指定行数据选择
      *
      * @param index 行坐标
@@ -312,6 +323,20 @@ var systemCommonUtil = {
         t.prop('disabled', true);
         t.addClass('layui-btn-disabled');
         t.next().css("cursor", "not-allowed");
+    },
+
+    /**
+     * 表格开启指定行数据选择
+     *
+     * @param index 行坐标
+     * @param type 'radio': 单选；'checkbox': 多选
+     */
+    enabledRow: function(index, type) {
+        // 第index行复选框不可选
+        let t = $(".layui-table tr[data-index=" + index + "] input[type='" + type + "']");
+        t.prop('disabled', false);
+        t.removeClass('layui-btn-disabled');
+        t.next().css("cursor", "allowed");
     },
 
     checkUrl: function (url) {

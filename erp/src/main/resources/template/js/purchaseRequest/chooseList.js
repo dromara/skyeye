@@ -57,13 +57,14 @@ layui.config({
 				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 
+			systemCommonUtil.disabledAllRow('radio');
 			for (var i = 0; i < json.rows.length; i++) {
-				// 只有审批通过、执行中的项目才可以进行选中
+				// 只有【审核通过、部分转采购合同】并且【无需询价、定价完成】状态的采购申请单才可以进行选中
 				let state = json.rows[i].state;
 				let inquiryState = json.rows[i].inquiryState;
 				if ((state == 'pass' && (inquiryState == 1 || inquiryState == 4)) ||
 					(state == 'partialProcurement' && (inquiryState == 1 || inquiryState == 4))) {
-					systemCommonUtil.disabledRow(json.rows[i].LAY_TABLE_INDEX, 'radio');
+					systemCommonUtil.enabledRow(json.rows[i].LAY_TABLE_INDEX, 'radio');
 				}
 			}
 			$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
