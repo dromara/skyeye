@@ -67,7 +67,7 @@
     "sealOrderFromType": {"name": "销售订单来源单据类型", "className": "skyeye-erp#com.skyeye.seal.classenum.SealOrderFromType"},
     "sealOutLetFromType": {"name": "销售出库单来源单据类型", "className": "skyeye-erp#com.skyeye.seal.classenum.SealOutLetFromType"},
     "sealReturnFromType": {"name": "销售退货单来源单据类型", "className": "skyeye-erp#com.skyeye.seal.classenum.SealReturnFromType"},
-    "crmContractFromType": {"name": "客户合同来源单据类型", "className": "skyeye-erp#com.skyeye.contract.classenum.CrmContractFromType"},
+    "crmContractFromType": {"name": "客户合同来源单据类型", "className": "skyeye-crm#com.skyeye.contract.classenum.CrmContractFromType"},
 
     "skyeyeView": {"name": "视图类型", "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"},
     "widthScale": {"name": "宽度比例", "className": "skyeye-pro#com.skyeye.attr.classenum.WidthScale"},
