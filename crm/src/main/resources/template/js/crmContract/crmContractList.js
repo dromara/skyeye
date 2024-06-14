@@ -32,26 +32,27 @@ layui.config({
 	    limits: getLimits(),
 	    limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'title', title: '合同名称', align: 'left', width: 300, templet: function (d) {
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
+			{ field: 'title', title: '合同名称', rowspan: '2', align: 'left', width: 300, templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 			}},
-			{ field: 'oddNumber', title: '合同编号', align: 'left', width: 120 },
-			{ field: 'price', title: '合同金额（元）', align: 'left', width: 120 },
-			{ field: 'paymentPrice', title: '已回款金额（元）', align: 'left', width: 140 },
-			{ field: 'invoicePrice', title: '已开票金额（元）', align: 'left', width: 140 },
-			{ field: 'signingTime', title: '签约日期', align: 'center', width: 100 },
-			{ field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function (d) {
+			{ field: 'oddNumber', title: '合同编号', rowspan: '2', align: 'left', width: 120 },
+			{ field: 'price', title: '合同金额（元）', rowspan: '2', align: 'left', width: 120 },
+			{ field: 'paymentPrice', title: '已回款金额（元）', rowspan: '2', align: 'left', width: 140 },
+			{ field: 'invoicePrice', title: '已开票金额（元）', rowspan: '2', align: 'left', width: 140 },
+			{ field: 'signingTime', title: '签约日期', rowspan: '2', align: 'center', width: 100 },
+			{ colspan: '2', title: '来源单据信息', align: 'center' },
+			{ field: 'processInstanceId', title: '流程ID', rowspan: '2', align: 'center', width: 100, templet: function (d) {
 				return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
 			}},
-			{ field: 'state', title: '状态', width: 90, templet: function (d) {
+			{ field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("crmContractStateEnum", 'id', d.state, 'name');
 			}},
-	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
-	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
-	        { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
-			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, templet: function (d) {
+	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', align: 'left', width: 120 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
+	        { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '2', align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], rowspan: '2', align: 'center', width: 150 },
+	        { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 250, templet: function (d) {
 				var str = '';
 				if (d.editRow == 1) {
 					if (authPermission['submitToApproval']) {
@@ -92,7 +93,14 @@ layui.config({
 				}
 				return str;
 			}}
-	    ]],
+	    ], [
+			{ field: 'fromTypeId', title: '来源类型', width: 150, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("crmContractFromType", 'id', d.fromTypeId, 'name');
+			}},
+			{ field: 'fromId', title: '单据编号', width: 200, templet: function (d) {
+				return getNotUndefinedVal(d.fromMation?.oddNumber);
+			}}
+		]],
 	    done: function(json) {
 	    	matchingLanguage();
 			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入合同名称", function () {
