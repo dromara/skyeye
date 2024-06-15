@@ -77,6 +77,9 @@
 
     "tenantEnum": {"name": "租户类型", "className": "skyeye-pro#com.skyeye.common.enumeration.TenantEnum"},
 
+    "milestoneStateEnum": {"name": "里程碑状态", "className": "skyeye-pro#com.skyeye.milestone.classenum.MilestoneStateEnum"},
+    "milestoneImported": {"name": "里程碑重要性", "className": "skyeye-pro#com.skyeye.milestone.classenum.MilestoneImported"},
+
     "teamObjectType": {"name": "团队适用对象", "className": "skyeye-pro#com.skyeye.team.classenum.TeamObjectTypeEnum"},
     "milestoneAuthEnum": {"name": "里程碑权限", "className": "skyeye-pro#com.skyeye.milestone.classenum.MilestoneAuthEnum", "pageUrl": "../../tpl/milestone/milestoneList.html"},
     "contactsAuthEnum": {"name": "联系人权限", "className": "skyeye-pro#com.skyeye.contacts.classenum.ContactsAuthEnum", "pageUrl": "../../tpl/contacts/contactsList.html"},
