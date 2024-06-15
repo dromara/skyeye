@@ -16,9 +16,13 @@ layui.config({
 	function initFourNumList(){
 		AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erppage001", params: {}, type: 'json', callback: function (json) {
 			$("#salesMoney").html(json.bean.salesMoney);
+			$("#salesMoney").attr("title", json.bean.salesMoney);
 			$("#retailMoney").html(json.bean.retailMoney);
+			$("#retailMoney").attr("title", json.bean.retailMoney);
 			$("#purchaseMoney").html(json.bean.purchaseMoney);
+			$("#purchaseMoney").attr("title", json.bean.purchaseMoney);
 			$("#profitMoney").html(json.bean.profitMoney);
+			$("#profitMoney").attr("title", json.bean.profitMoney);
 			initSixMonthPurchase();
    		}});
 	}

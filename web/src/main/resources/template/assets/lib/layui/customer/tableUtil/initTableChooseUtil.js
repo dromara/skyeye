@@ -56,22 +56,37 @@ var initTableChooseUtil = {
             '        </div>' +
             '    </div>' +
             '    <div class="layui-form-mid layui-word-aux" style="width: 100%">' + newOptions.placeholder + '</div>' +
+            '    <div style="width: 100%; overflow-x: auto;">' +
             '    <table class="layui-table" style="width: auto">' +
             '         <thead>' +
             '             <tr id="header' + newOptions.id + '"></tr>' +
             '         </thead>' +
             '         <tbody id="table' + newOptions.id + '" class="insurance-table">' +
             '         </tbody>' +
-            '    </table>';
+            '    </table>' +
+            '    </div>';
         $("#" + newOptions.id).html(table);
         var headerStr = '<th style="width: 30px;"></th>';
+        var fontSize = 14;
         $.each(newOptions.cols, function (i, item) {
             var colHeaderId = isNull(item.colHeaderId) ? "" : ("id = " + item.colHeaderId);
             var bs = '';
             if (!isNull(item.verify) && item.verify.indexOf('required') >= 0) {
                 bs = '<i class="red">*</i>';
             }
-            headerStr += '<th style="width: ' + item.width + 'px; white-space: nowrap;" ' + colHeaderId + '>' + item.title + bs + '</th>';
+            // 计算需要添加几个空格
+            // 1. 获取文字的宽度
+            let titleWidth = fontSize * item.title.length;
+            // 2. 获取空格宽度
+            let spaceWidth = (item.width - titleWidth) / 2;
+            let spaceStr = '';
+            if (spaceWidth > 0) {
+                // 每个空格的宽度默认是2px
+                for (var i = 0 ; i < spaceWidth / 4; i++) {
+                    spaceStr += '&nbsp;';
+                }
+            }
+            headerStr += '<th style="width: ' + item.width + 'px; white-space: nowrap;" ' + colHeaderId + '>' + spaceStr +  item.title + bs + spaceStr + '</th>';
         });
         $("#header" + newOptions.id).html(headerStr);
     },

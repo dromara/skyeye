@@ -64,6 +64,10 @@
     "purchaseRequestFromType": {"name": "采购申请单来源单据类型", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestFromType"},
     "supplierContractFromType": {"name": "供应商合同来源单据类型", "className": "skyeye-erp#com.skyeye.contract.classenum.SupplierContractFromType"},
     "qualityInspectionFromType": {"name": "质检单来源单据类型", "className": "skyeye-erp#com.skyeye.inspection.classenum.QualityInspectionFromType"},
+    "sealOrderFromType": {"name": "销售订单来源单据类型", "className": "skyeye-erp#com.skyeye.seal.classenum.SealOrderFromType"},
+    "sealOutLetFromType": {"name": "销售出库单来源单据类型", "className": "skyeye-erp#com.skyeye.seal.classenum.SealOutLetFromType"},
+    "sealReturnFromType": {"name": "销售退货单来源单据类型", "className": "skyeye-erp#com.skyeye.seal.classenum.SealReturnFromType"},
+    "crmContractFromType": {"name": "客户合同来源单据类型", "className": "skyeye-crm#com.skyeye.contract.classenum.CrmContractFromType"},
 
     "skyeyeView": {"name": "视图类型", "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"},
     "widthScale": {"name": "宽度比例", "className": "skyeye-pro#com.skyeye.attr.classenum.WidthScale"},
@@ -73,7 +77,11 @@
 
     "tenantEnum": {"name": "租户类型", "className": "skyeye-pro#com.skyeye.common.enumeration.TenantEnum"},
 
+    "milestoneStateEnum": {"name": "里程碑状态", "className": "skyeye-pro#com.skyeye.milestone.classenum.MilestoneStateEnum"},
+    "milestoneImported": {"name": "里程碑重要性", "className": "skyeye-pro#com.skyeye.milestone.classenum.MilestoneImported"},
+
     "teamObjectType": {"name": "团队适用对象", "className": "skyeye-pro#com.skyeye.team.classenum.TeamObjectTypeEnum"},
+    "milestoneAuthEnum": {"name": "里程碑权限", "className": "skyeye-pro#com.skyeye.milestone.classenum.MilestoneAuthEnum", "pageUrl": "../../tpl/milestone/milestoneList.html"},
     "contactsAuthEnum": {"name": "联系人权限", "className": "skyeye-pro#com.skyeye.contacts.classenum.ContactsAuthEnum", "pageUrl": "../../tpl/contacts/contactsList.html"},
     "catalogAuthEnum": {"name": "目录权限", "className": "skyeye-pro#com.skyeye.catalog.classenum.CatalogAuthEnum"},
     "documentAuthEnum": {"name": "文档权限", "className": "skyeye-pro#com.skyeye.document.classenum.DocumentAuthEnum", "pageUrl": "../../tpl/document/documentList.html"},
@@ -97,6 +105,7 @@
     "operatePosition": {"name": "操作按钮展示位置", "className": "skyeye-pro#com.skyeye.operate.classenum.OperatePosition"},
 
     "crmContractStateEnum": {"name": "合同状态", "className": "skyeye-crm#com.skyeye.contract.classenum.CrmContractStateEnum"},
+    "crmContractChildStateEnum": {"name": "合同产品状态", "className": "skyeye-crm#com.skyeye.contract.classenum.CrmContractChildStateEnum"},
     "crmContractAuthEnum": {"name": "合同权限", "className": "skyeye-crm#com.skyeye.contract.classenum.CrmContractAuthEnum", "pageUrl": "../../tpl/crmContract/crmContractList.html"},
     "crmOpportunityStateEnum": {"name": "商机状态", "className": "skyeye-crm#com.skyeye.opportunity.classenum.CrmOpportunityStateEnum"},
     "crmOpportunityAuthEnum": {"name": "商机权限", "className": "skyeye-crm#com.skyeye.opportunity.classenum.CrmOpportunityAuthEnum", "pageUrl": "../../tpl/crmOpportunity/crmOpportunityList.html"},
