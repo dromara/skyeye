@@ -9,6 +9,7 @@
     "purchaseOrder": {"name": "采购订单申请", "key": "com.skyeye.purchase.service.impl.PurchaseOrderServiceImpl"},
     "purchaseRequest": {"name": "采购申请", "key": "com.skyeye.request.service.impl.PurchaseRequestServiceImpl"},
     "puchaseDeliveryNoteList": {"name": "采购到货单", "key": "com.skyeye.purchase.service.impl.PurchaseDeliveryServiceImpl"},
+    "purchaseQualityInspection": {"name": "采购质检单", "key": "com.skyeye.inspection.service.impl.QualityInspectionServiceImpl"},
     "putIsOthers": {"name": "其他入库单申请", "key": "com.skyeye.other.service.impl.OtherWareHousServiceImpl"},
     "outIsOthers": {"name": "其他出库单申请", "key": "com.skyeye.other.service.impl.OtherOutLetsServiceImpl"},
     "splitListOrder": {"name": "拆分订单", "key": "com.skyeye.other.service.impl.SplitListServiceImpl"},

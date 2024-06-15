@@ -69,7 +69,7 @@ layui.config({
 	$("#showInfo").html(s);
 
 	//树节点类型赋值
-	if(checkType === "1"){
+	if(checkType == "1"){
 		ztreeCheckType = "checkbox";
 	} else {
 		ztreeCheckType = "radio";
