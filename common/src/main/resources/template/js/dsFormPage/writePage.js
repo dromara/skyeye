@@ -112,8 +112,6 @@ layui.config({
 				$("#actFlowId").html(getDataUseHandlebars(`{{#each rows}}<option value="{{id}}">{{flowName}}</option>{{/each}}`, json));
 				if (!isNull(data.actFlowId)) {
 					$("#actFlowId").val(data.actFlowId);
-					// 禁止更换流程
-					$("#actFlowId").attr("disabled", true);
 				}
 				form.render('select');
 			}, async: false});

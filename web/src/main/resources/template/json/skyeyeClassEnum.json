@@ -56,6 +56,7 @@
     "orderItemQualityInspectionType": {"name": "ERP采购子单据质检类型", "className": "skyeye-erp#com.skyeye.business.classenum.OrderItemQualityInspectionType"},
 
     "orderArrivalState": {"name": "采购订单到货状态", "className": "skyeye-erp#com.skyeye.purchase.classenum.OrderArrivalState"},
+    "holderNormsChildState": {"name": "关联的客户/供应商/会员购买或者出售的商品子信息状态", "className": "skyeye-erp#com.skyeye.holder.classenum.HolderNormsChildState"},
 
     "purchaseOrderFromType": {"name": "采购订单来源单据类型", "className": "skyeye-erp#com.skyeye.purchase.classenum.PurchaseOrderFromType"},
     "purchaseDeliveryFromType": {"name": "到货单来源单据类型", "className": "skyeye-erp#com.skyeye.purchase.classenum.PurchaseDeliveryFromType"},
@@ -77,11 +78,8 @@
 
     "tenantEnum": {"name": "租户类型", "className": "skyeye-pro#com.skyeye.common.enumeration.TenantEnum"},
 
-    "milestoneStateEnum": {"name": "里程碑状态", "className": "skyeye-pro#com.skyeye.milestone.classenum.MilestoneStateEnum"},
-    "milestoneImported": {"name": "里程碑重要性", "className": "skyeye-pro#com.skyeye.milestone.classenum.MilestoneImported"},
-
     "teamObjectType": {"name": "团队适用对象", "className": "skyeye-pro#com.skyeye.team.classenum.TeamObjectTypeEnum"},
-    "milestoneAuthEnum": {"name": "里程碑权限", "className": "skyeye-pro#com.skyeye.milestone.classenum.MilestoneAuthEnum", "pageUrl": "../../tpl/milestone/milestoneList.html"},
+    "milestoneAuthEnum": {"name": "里程碑权限", "className": "skyeye-project#com.skyeye.milestone.classenum.MilestoneAuthEnum", "pageUrl": "../../tpl/milestone/milestoneList.html"},
     "contactsAuthEnum": {"name": "联系人权限", "className": "skyeye-pro#com.skyeye.contacts.classenum.ContactsAuthEnum", "pageUrl": "../../tpl/contacts/contactsList.html"},
     "catalogAuthEnum": {"name": "目录权限", "className": "skyeye-pro#com.skyeye.catalog.classenum.CatalogAuthEnum"},
     "documentAuthEnum": {"name": "文档权限", "className": "skyeye-pro#com.skyeye.document.classenum.DocumentAuthEnum", "pageUrl": "../../tpl/document/documentList.html"},
@@ -92,6 +90,8 @@
     "projectStateEnum": {"name": "项目状态", "className": "skyeye-project#com.skyeye.project.classenum.ProjectStateEnum"},
     "taskStateEnum": {"name": "项目任务状态", "className": "skyeye-project#com.skyeye.task.classenum.TaskStateEnum"},
     "taskAuthEnum": {"name": "项目任务权限", "className": "skyeye-project#com.skyeye.task.classenum.TaskAuthEnum", "pageUrl": "../../tpl/proTask/proTaskList.html"},
+    "milestoneStateEnum": {"name": "里程碑状态", "className": "skyeye-project#com.skyeye.milestone.classenum.MilestoneStateEnum"},
+    "milestoneImported": {"name": "里程碑重要性", "className": "skyeye-project#com.skyeye.milestone.classenum.MilestoneImported"},
 
     "dsFormPageType": {"name": "表单布局类型", "className": "skyeye-pro#com.skyeye.dsform.classenum.DsFormPageType"},
     "simpleTableWhetherChoose": {"name": "表格类型的布局是否开启选择功能", "className": "skyeye-pro#com.skyeye.dsform.classenum.SimpleTableWhetherChoose"},
