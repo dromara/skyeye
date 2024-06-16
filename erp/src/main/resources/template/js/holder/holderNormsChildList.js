@@ -32,8 +32,7 @@ layui.config({
 			}},
 			{ field: 'state', title: '状态', align: 'center', width: 100, templet: function(d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("holderNormsChildState", 'id', d.state, 'name');
-			}},
-			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar' }
+			}}
 		]],
 		done: function(json) {
 			matchingLanguage();
