@@ -16,6 +16,12 @@ layui.config({
         $("#materialId").html(getDataUseHandlebars(selTemplate, json));
         form.render("select");
         skyeyeClassEnumUtil.showEnumDataListByClassName("materialNormsCodeInDepot", 'radio', "inDepot", '', form);
+
+        erpOrderUtil.getDepotList(function (json){
+            // 加载仓库数据
+            $("#depotId").html(getDataUseHandlebars(selTemplate, json));
+            form.render('select');
+        });
     }});
 
     form.on('select(materialId)', function (data) {
@@ -45,6 +51,7 @@ layui.config({
                 inDepot: dataShowType.getData('inDepot'),
                 number: $("#number").val(),
                 limit: $("#number").val(),
+                depotId: $("#depotId").val(),
                 page: 1
             }
             AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryNormsBarCodeList", params: params, type: 'json', method: 'POST', callback: function (json) {
