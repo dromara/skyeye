@@ -19,6 +19,8 @@ layui.config({
 		return false;
 	}
 
+	let depotTitle = objectKey == 'com.skyeye.supplier.service.impl.SupplierServiceImpl' ? '入库仓库' : '出库仓库';
+
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
@@ -36,6 +38,9 @@ layui.config({
 			}},
 			{ field: 'normsId', title: '产品规格', align: 'left', width: 150, templet: function (d) {
 				return getNotUndefinedVal(d.normsMation?.name);
+			}},
+			{ field: 'depotId', title: depotTitle, align: 'left', width: 150, templet: function (d) {
+				return getNotUndefinedVal(d.depotMation?.name);
 			}},
 			{ field: 'operNumber', title: '交易数量', align: 'center', width: 90, templet: function (d) {
 				let itemCode = d.materialMation?.itemCode;
