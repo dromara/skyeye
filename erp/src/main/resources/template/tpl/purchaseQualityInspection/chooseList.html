@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="winui-tip alert-info">
+        注意事项：<br/>
+        1. 双击指定行可选中数据<br/>
+        2. 只有【状态=审核通过】并且【入库状态=待入库/部分入库】的质检单可以选择
+    </div>
+	<div class="winui-toolbar">
+		<div class="winui-tool">
+			<button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+		</div>
+	</div>
+    <div style="margin:auto 10px;">
+        <table id="messageTable" lay-filter="messageTable"></table>
+    </div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/purchaseQualityInspection/'}).use('chooseList');
+    </script>
+</body>
+</html>
