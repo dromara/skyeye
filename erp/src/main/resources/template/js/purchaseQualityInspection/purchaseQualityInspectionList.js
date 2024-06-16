@@ -75,6 +75,10 @@ layui.config({
             details(data);
         } else if (layEvent === 'edit') { //编辑
             edit(data);
+        }else if (layEvent === 'qualityInspectionToPut') { //转采购入库单
+            qualityInspectionToPut(data);
+        } else if (layEvent === 'qualityInspectionToReturns') { //转退货单
+            qualityInspectionToReturns(data);
         } else if (layEvent === 'subApproval') { //提交审核
             subApproval(data);
         } else if (layEvent === 'processDetails') { // 工作流流程详情查看
@@ -158,6 +162,31 @@ layui.config({
                     loadTable();
                 }});
         });
+    }
+
+    // 转采购入库
+    function qualityInspectionToPut(data) {
+        _openNewWindows({
+            url: "../../tpl/purchaseQualityInspection/qualityInspectionToPut.html?id=" + data.id,
+            title: "转采购入库",
+            pageId: "qualityInspectionToPut",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+    //转退货单
+    function qualityInspectionToReturns(data){
+        parent._openNewWindows({
+            url: "../../tpl/purchaseQualityInspection/qualityInspectionToReturns.html?id=" + data.id,
+            title: '转退货单',
+            pageId: "qualityInspectionToReturns",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
     }
 
 

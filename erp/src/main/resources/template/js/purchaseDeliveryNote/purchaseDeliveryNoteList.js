@@ -135,9 +135,6 @@ layui.config({
             }});
     }
 
-
-
-
     // 转采购入库
     function turnPurchase(data) {
         _openNewWindows({

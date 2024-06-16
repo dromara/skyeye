@@ -32,7 +32,18 @@
                 <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
             {{# } }}
         {{# } }}
-
+        {{# if (d.state == 'pass') { }}
+            {{# if (d.putState == 2 || d.putState == 3) { }}
+                {{# if (auth('1718283090913')) { }}
+                    <a class="layui-btn layui-btn-xs" lay-event="qualityInspectionToPut">转采购入库</a>
+                {{# } }}
+            {{# } }}
+            {{# if (d.returnState == 2 || d.returnState == 3) { }}
+                {{# if (auth('1718283139640')) { }}
+                    <a class="layui-btn layui-btn-xs" lay-event="qualityInspectionToReturns">转退货单</a>
+                {{# } }}
+            {{# } }}
+        {{# } }}
     </script>
 </div>
 <script src="../../assets/lib/layui/layui.js"></script>

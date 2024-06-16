@@ -32,7 +32,7 @@
         <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
       {{# } }}
     {{# } }}
-    {{# if (d.state == 'pass' || d.state == 'partiallyCompleted') { }}
+    {{# if (d.state == 'pass') { }}
       {{# if (d.otherState == 2 || d.otherState == 3) { }}
         {{# if (auth('1718257557032')) { }}
           <a class="layui-btn layui-btn-xs" lay-event="turnPurchase">转采购入库</a>
