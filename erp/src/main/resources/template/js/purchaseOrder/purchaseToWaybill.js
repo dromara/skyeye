@@ -33,7 +33,7 @@ layui.config({
                 },
                 loadComponentCallback: function () {
                     $("div[controlType='supplier']").remove();
-                    $("div[controlType='purchaseOrderFromType']").remove();
+                    $("div[controlType='purchaseDeliveryFromType']").remove();
                 },
                 tableAddRowCallback: function (tableId) {
                     $("#addRow" + tableId).remove();

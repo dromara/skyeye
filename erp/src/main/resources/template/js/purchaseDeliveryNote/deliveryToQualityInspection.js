@@ -20,7 +20,7 @@ layui.config({
             let data = json.bean;
             // 采购质检的【编辑布局】
             data.qualityInspectionItemList = data.erpOrderItemList
-
+            console.log(data.qualityInspectionItemList)
             dsFormUtil.initEditPageForStatic('content', 'FP2024061300002', data, {
                 savePreParams: function (params) {
 
@@ -33,8 +33,7 @@ layui.config({
                         }});
                 },
                 loadComponentCallback: function () {
-                    $("div[controlType='supplier']").remove();
-                    $("div[controlType='purchaseOrderFromType']").remove();
+                    $("div[controlType='qualityInspectionFromType']").remove();
                 },
                 tableAddRowCallback: function (tableId) {
                     $("#addRow" + tableId).remove();
@@ -46,6 +45,8 @@ layui.config({
                     $("div[controlType='simpleTable']").find(".taxLastMoney").prop('disabled', true);
                     $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
                     $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
+                    $("div[controlType='simpleTable']").find(".qualityInspectionType").prop('disabled', true);
+                    $("div[controlType='simpleTable']").find(".qualityInspectionRatio").prop('disabled', true);
                 }
             });
         }});

@@ -24,13 +24,13 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: '2' },
-            { field: 'oddNumber', title: '单号', rowspan: '2', width: 200, align: 'center', templet: function (d) {
-                return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
-                if (!isNull(d.fromId)) {
-                    str += '<span class="state-new">[转]</span>';
-                }
-                return str;
-            }},
+            { field: 'oddNumber', title: '单号', rowspan: '2', align: 'left', width: 220, templet: function (d) {
+                    var str = '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+                    if (!isNull(d.fromId)) {
+                        str += '<span class="state-new">[转]</span>';
+                    }
+                    return str;
+                }},
             { field: 'holderMation', title: '供应商', rowspan: '2', align: 'left', width: 150, templet: function (d) {
                 return getNotUndefinedVal(d.holderMation?.name);
             }},
@@ -56,7 +56,7 @@ layui.config({
             { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ], [
             { field: 'fromTypeId', title: '来源类型', width: 150, templet: function (d) {
-                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseOrderFromType", 'id', d.fromTypeId, 'name');
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseDeliveryFromType", 'id', d.fromTypeId, 'name');
             }},
             { field: 'fromId', title: '单据编号', width: 200, templet: function (d) {
                 return getNotUndefinedVal(d.fromMation?.oddNumber);
@@ -134,6 +134,9 @@ layui.config({
             callBack: function (refreshCode) {
             }});
     }
+
+
+
 
     // 转采购入库
     function turnPurchase(data) {
