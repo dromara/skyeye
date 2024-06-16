@@ -24,17 +24,13 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: '2' },
-            { field: 'oddNumber', title: '单号', rowspan: '2', width: 200, align: 'center', templet: function (d) {
-                    return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+            { field: 'oddNumber', title: '单号', rowspan: '2', align: 'left', width: 220, templet: function (d) {
+                    var str = '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
                     if (!isNull(d.fromId)) {
                         str += '<span class="state-new">[转]</span>';
                     }
                     return str;
                 }},
-            { field: 'holderMation', title: '供应商', rowspan: '2', align: 'left', width: 150, templet: function (d) {
-                    return getNotUndefinedVal(d.holderMation?.name);
-                }},
-            { field: 'totalPrice', title: '合计金额', rowspan: '2', align: 'left', width: 120 },
             { field: 'operTime', title: '单据日期', rowspan: '2', align: 'center', width: 140 },
             { colspan: '2', title: '来源单据信息', align: 'center' },
             { field: 'processInstanceId', title: '流程ID', rowspan: '2', width: 100, templet: function (d) {
@@ -56,7 +52,7 @@ layui.config({
             { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ], [
             { field: 'fromTypeId', title: '来源类型', width: 150, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseOrderFromType", 'id', d.fromTypeId, 'name');
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("qualityInspectionFromType", 'id', d.fromTypeId, 'name');
                 }},
             { field: 'fromId', title: '单据编号', width: 200, templet: function (d) {
                     return getNotUndefinedVal(d.fromMation?.oddNumber);
@@ -74,23 +70,17 @@ layui.config({
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'delete') { //删除
-            erpOrderUtil.deleteOrderMation(data.id, serviceClassName, function() {
-                loadTable();
-            });
+            delet(data);
         } else if (layEvent === 'details') { //详情
             details(data);
         } else if (layEvent === 'edit') { //编辑
             edit(data);
         } else if (layEvent === 'subApproval') { //提交审核
-            erpOrderUtil.submitOrderMation(data.id, serviceClassName, function() {
-                loadTable();
-            });
+            subApproval(data);
         } else if (layEvent === 'processDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
-            erpOrderUtil.revokeOrderMation(data.processInstanceId, serviceClassName, function() {
-                loadTable();
-            });
+            revoke(data);
         }
     });
 
@@ -129,6 +119,45 @@ layui.config({
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
             }});
+    }
+
+    // 提交审批
+    function subApproval(data) {
+        layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
+            layer.close(index);
+            activitiUtil.startProcess(data.serviceClassName, null, function (approvalId) {
+                var params = {
+                    id: data.id,
+                    approvalId: approvalId
+                };
+                AjaxPostUtil.request({url: sysMainMation.erpBasePath + "submitQualityInspectionToApproval", params: params, type: 'json', method: 'POST', callback: function (json) {
+                        winui.window.msg("提交成功", {icon: 1, time: 2000});
+                        loadTable();
+                    }});
+            });
+        });
+    }
+
+    // 删除
+    function delet(data) {
+        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
+            layer.close(index);
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "deleteQualityInspection", params: {id: data.id}, type: 'json', method: "POST", callback: function (json) {
+                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                    loadTable();
+                }});
+        });
+    }
+
+    // 撤销
+    function revoke(data) {
+        layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
+            layer.close(index);
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "revokeQualityInspection", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+                    winui.window.msg("提交成功", {icon: 1, time: 2000});
+                    loadTable();
+                }});
+        });
     }
 
 

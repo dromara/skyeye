@@ -19,6 +19,8 @@ layui.config({
 		return false;
 	}
 
+	let depotTitle = objectKey == 'com.skyeye.supplier.service.impl.SupplierServiceImpl' ? '入库仓库' : '出库仓库';
+
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
@@ -31,12 +33,24 @@ layui.config({
 	    limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'materialId', title: '产品名称', align: 'left',width: 150, templet: function (d) {
+			{ field: 'materialId', title: '产品名称', align: 'left', width: 150, templet: function (d) {
 				return getNotUndefinedVal(d.materialMation?.name);
 			}},
-			{ field: 'normsId', title: '产品规格', align: 'left',width: 400, templet: function (d) {
+			{ field: 'normsId', title: '产品规格', align: 'left', width: 150, templet: function (d) {
 				return getNotUndefinedVal(d.normsMation?.name);
-			}}
+			}},
+			{ field: 'depotId', title: depotTitle, align: 'left', width: 150, templet: function (d) {
+				return getNotUndefinedVal(d.depotMation?.name);
+			}},
+			{ field: 'operNumber', title: '交易数量', align: 'center', width: 90, templet: function (d) {
+				let itemCode = d.materialMation?.itemCode;
+				if (itemCode == 1) {
+					// 一物一码
+					return '<a lay-event="details" class="notice-title-click">' + d.operNumber + '</a>';
+				}
+				return getNotUndefinedVal(d.operNumber);
+			}},
+			{ field: 'createTime', title: '交易时间', align: 'center', width: 150 }
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
@@ -49,7 +63,21 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
+		if (layEvent === 'details') { // 详情
+			details(data);
+		}
     });
+
+	// 详情
+	function details(data) {
+		_openNewWindows({
+			url:  '../../tpl/holder/holderNormsChildList.html?id=' + data.id,
+			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+			pageId: "holderNormsChildList",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+			}});
+	}
 
 	form.render();
 	$("body").on("click", "#reloadTable", function() {

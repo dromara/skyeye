@@ -56,6 +56,7 @@
     "orderItemQualityInspectionType": {"name": "ERP采购子单据质检类型", "className": "skyeye-erp#com.skyeye.business.classenum.OrderItemQualityInspectionType"},
 
     "orderArrivalState": {"name": "采购订单到货状态", "className": "skyeye-erp#com.skyeye.purchase.classenum.OrderArrivalState"},
+    "holderNormsChildState": {"name": "关联的客户/供应商/会员购买或者出售的商品子信息状态", "className": "skyeye-erp#com.skyeye.holder.classenum.HolderNormsChildState"},
 
     "purchaseOrderFromType": {"name": "采购订单来源单据类型", "className": "skyeye-erp#com.skyeye.purchase.classenum.PurchaseOrderFromType"},
     "purchaseDeliveryFromType": {"name": "到货单来源单据类型", "className": "skyeye-erp#com.skyeye.purchase.classenum.PurchaseDeliveryFromType"},

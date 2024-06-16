@@ -64,6 +64,7 @@ var initTableChooseUtil = {
             '         <tbody id="table' + newOptions.id + '" class="insurance-table">' +
             '         </tbody>' +
             '    </table>' +
+            '    <div class="place-holder" style="height: 200px"></div>' +
             '    </div>';
         $("#" + newOptions.id).html(table);
         var headerStr = '<th style="width: 30px;"></th>';

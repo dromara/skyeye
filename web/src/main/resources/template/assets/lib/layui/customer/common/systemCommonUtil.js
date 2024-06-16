@@ -845,6 +845,7 @@ var tabPageUtil = {
     },
 
     initEvent: function () {
+        tabPageUtil.config.element.render();
         tabPageUtil.config.element.on('tab(manageTab)', function (obj) {
             var mation = tabPageUtil.config.pageList[obj.index];
             if (!isNull(mation)) {

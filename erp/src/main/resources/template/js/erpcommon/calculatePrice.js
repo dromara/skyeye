@@ -169,7 +169,7 @@ layui.define(["jquery"], function(exports) {
 		// 数量变化,税率变化
 		$("body").on("input", ".rkNum, .unitPrice, .amountOfMoney, .taxRate, .taxMoney, .taxUnitPrice, .taxLastMoney", function () {
 			var clazz = $(this).attr("class").replace("layui-input", "").replace("change-input", "").replace("layui-form-danger", "").replace(/\s+/g, "");
-			tableId = $(this).parents("table").parent().attr("id");
+			tableId = $(this).parents("table").parent().parent().attr("id");
 			if (clazz != showTdByEdit) {
 				showTdByEdit = clazz;
 				$(".change-input").parent().removeAttr("style");
@@ -179,7 +179,7 @@ layui.define(["jquery"], function(exports) {
 		});
 		$("body").on("change", ".rkNum, .unitPrice, .amountOfMoney, .taxRate, .taxMoney, .taxUnitPrice, .taxLastMoney", function () {
 			var clazz = $(this).attr("class").replace("layui-input", "").replace("change-input", "").replace("layui-form-danger", "").replace(/\s+/g, "");
-			tableId = $(this).parents("table").parent().attr("id");
+			tableId = $(this).parents("table").parent().parent().attr("id");
 			if (clazz != showTdByEdit) {
 				showTdByEdit = clazz;
 				$(".change-input").parent().removeAttr("style");
