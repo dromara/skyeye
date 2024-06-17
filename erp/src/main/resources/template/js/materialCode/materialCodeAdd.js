@@ -12,6 +12,10 @@ layui.config({
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$,
         form = layui.form;
+    var selOptionHtml = getFileContent('tpl/template/select-option.tpl');
+
+    let materialId = getNotUndefinedVal(GetUrlParam("materialId"));
+    let materialMap = {};
 
     initTableChooseUtil.initTable({
         id: "materialNormsList",
@@ -24,12 +28,30 @@ layui.config({
             delete allChooseProduct[trcusid];
         },
         addRowCallback: function (trcusid) {
+            if (!isNull(materialId)) {
+                $("#materialId").val(materialId);
+                if (isNull(materialMap[materialId])) {
+                    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryMaterialListById", params: {"id": materialId}, type: 'json', method: 'GET', callback: function (json) {
+                        materialMap[materialId] = json.bean
+                    }, async: false});
+                }
+                let chooseProductMation = materialMap[materialId]
+                // 获取表格行号
+                var thisRowKey = trcusid.replace("tr", "");
+                // 产品名称赋值
+                $("#materialId" + thisRowKey).val(chooseProductMation.name);
+                $("#materialId" + thisRowKey).attr(initTableChooseUtil.chooseInputDataIdKey, chooseProductMation.id);
+                // 规格赋值
+                $("#normsId" + thisRowKey).html(getDataUseHandlebars(selOptionHtml, {rows: chooseProductMation.materialNorms}));
+                form.render('select');
+                // 商品赋值
+                allChooseProduct[trcusid] = chooseProductMation;
+            }
         },
         form: form,
         minData: 1
     });
 
-    var selOptionHtml = getFileContent('tpl/template/select-option.tpl');
     $("body").on("click", ".chooseProductBtn", function (e) {
         var trId = $(this).parent().parent().attr("trcusid");
         erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {

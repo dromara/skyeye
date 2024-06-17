@@ -86,7 +86,7 @@ layui.config({
 	// 新增
 	$("body").on("click", "#addBean", function() {
 		_openNewWindows({
-			url: "../../tpl/materialCode/materialCodeAdd.html",
+			url: "../../tpl/materialCode/materialCodeAdd.html?materialId=" + materialId,
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "materialCodeAdd",
 			area: ['90vw', '90vh'],
@@ -99,7 +99,7 @@ layui.config({
 	// 批量复制
 	$("body").on("click", "#batchCopy", function() {
 		_openNewWindows({
-			url: "../../tpl/materialCode/batchCopy.html",
+			url: "../../tpl/materialCode/batchCopy.html?materialId=" + materialId,
 			title: '批量复制',
 			pageId: "materialCodeBatchCopy",
 			area: ['90vw', '90vh'],

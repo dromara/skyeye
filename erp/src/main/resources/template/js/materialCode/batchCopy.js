@@ -11,9 +11,17 @@ layui.config({
         textool = layui.textool,
         form = layui.form;
     var selTemplate = getFileContent('tpl/template/select-option.tpl');
+    var materialId = getNotUndefinedVal(GetUrlParam("materialId"));
 
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryAllMaterialList", params: {}, type: 'json', method: 'GET', callback: function (json) {
         $("#materialId").html(getDataUseHandlebars(selTemplate, json));
+        if (!isNull(materialId)) {
+            $("#materialId").val(materialId);
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryNormsListByMaterialId", params: {materialId: materialId}, type: 'json', method: 'GET', callback: function (result) {
+                $("#normsId").html(getDataUseHandlebars(selTemplate, result));
+                form.render("select");
+            }, async: false});
+        }
         form.render("select");
         skyeyeClassEnumUtil.showEnumDataListByClassName("materialNormsCodeInDepot", 'radio', "inDepot", '', form);
 
