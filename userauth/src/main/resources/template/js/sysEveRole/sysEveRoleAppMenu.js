@@ -63,7 +63,7 @@ layui.config({
 		AjaxPostUtil.request({url: reqBasePath + "querySysRoleById", params: {id: id}, type: 'json', method: "GET", callback: function (json) {
 			$("#name").text(json.bean.name);
 			$("#remark").text(json.bean.remark);
-			checkeRows = json.bean.appMenuIds;
+			checkeRows = isNull(json.bean.appMenuIds) ? [] : json.bean.appMenuIds;
 
 			tree = fsTree.render({
 				id: "treeDemo",

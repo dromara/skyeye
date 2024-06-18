@@ -56,7 +56,7 @@ layui.config({
             let params = {
                 materialId: $("#materialId").val(),
                 normsId: $("#normsId").val(),
-                inDepot: dataShowType.getData('inDepot'),
+                inDepot: isNull(dataShowType.getData('inDepot')) ? '' : dataShowType.getData('inDepot'),
                 number: $("#number").val(),
                 limit: $("#number").val(),
                 depotId: $("#depotId").val(),
