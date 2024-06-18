@@ -25,7 +25,11 @@ layui.config({
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: '2' },
             { field: 'oddNumber', title: '单号', rowspan: '2', width: 200, align: 'center', templet: function (d) {
-                return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+                var str = '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+                if (!isNull(d.fromId)) {
+                    str += '<span class="state-new">[转]</span>';
+                }
+                return str;
             }},
             { field: 'holderMation', title: '供应商', rowspan: '2', align: 'left', width: 150, templet: function (d) {
                 return getNotUndefinedVal(d.holderMation?.name);
