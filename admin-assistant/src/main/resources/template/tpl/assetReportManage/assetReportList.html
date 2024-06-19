@@ -7,13 +7,23 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
+    <div class="winui-tip alert-info" id="showInfo">
+        只有状态为空的条形码可以删除。
+    </div>
 	<div class="winui-toolbar">
 		<div class="winui-tool">
 			<button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-		</div>
+            <button id="addBean" class="winui-toolbtn search-table-btn-right"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
+            <button id="batchCopy" class="winui-toolbtn search-table-btn-right"><i class="fa fa-copy" aria-hidden="true"></i>批量复制</button>
+        </div>
 	</div>
 	<div style="margin: auto 10px;">
 		<table id="messageTable" lay-filter="messageTable"></table>
+        <script type="text/html" id="tableBar">
+            {{# if (isNull(d.state)) { }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+            {{# } }}
+        </script>
 	</div>
 
     <script src="../../assets/lib/layui/layui.js"></script>

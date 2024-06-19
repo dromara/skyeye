@@ -25,6 +25,9 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+			{ field: 'assetMation', title: '资产名称', width: 120, templet: function(d) {
+				return getNotUndefinedVal(d.assetMation?.name);
+			}},
 			{ field: 'assetNum', title: '资产编号', width: 160 },
 			{ field: 'unitPrice', title: '采购单价', width: 100 },
 			{ field: 'fromId', title: '资产来源', width: 120, templet: function(d) {
@@ -62,20 +65,60 @@ layui.config({
 		var layEvent = obj.event;
 		if (layEvent === 'barCode') { // 条形码预览
 			systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(data.barCodeMation.imagePath));
+		} else if (layEvent === 'delete') { // 删除
+			delet(data);
 		}
     });
 
+	// 删除
+	function delet(data) {
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
+			layer.close(index);
+			AjaxPostUtil.request({url: sysMainMation.admBasePath + "deleteAssetReportById", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}});
+		});
+	}
+
+	// 新增
+	$("body").on("click", "#addBean", function() {
+		_openNewWindows({
+			url: "../../tpl/materialCode/materialCodeAdd.html?assetId=" + assetId,
+			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+			pageId: "materialCodeAdd",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}});
+	});
+
+	// 批量复制
+	$("body").on("click", "#batchCopy", function() {
+		_openNewWindows({
+			url: "../../tpl/materialCode/batchCopy.html?assetId=" + assetId,
+			title: '批量复制',
+			pageId: "materialCodeBatchCopy",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+			}});
+	});
+
 	form.render();
     $("body").on("click", "#reloadTable", function() {
-    	loadassetTable();
+		loadTable();
     });
 
-    function loadassetTable() {
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
 
     function getTableParams() {
-		return $.extend(true, {assetId: assetId}, initTableSearchUtil.getSearchValue("messageTable"));
+		let params = {
+			assetId: assetId
+		}
+		return $.extend(true, params, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('assetReportList', {});

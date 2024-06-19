@@ -39,7 +39,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: sysMainMation.admBasePath + 'queryUnUseAssetReportList',
+	    url: sysMainMation.admBasePath + 'queryAssetReportList',
 	    where: getTableParams(),
 		even: true,
 	    page: true,
@@ -128,7 +128,7 @@ layui.config({
     }
     
 	function getTableParams() {
-		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+		return $.extend(true, {state: "unUse"}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
     exports('assetReportUnUseChoose', {});

@@ -29,7 +29,6 @@ layui.config({
         },
         addRowCallback: function (trcusid) {
             if (!isNull(materialId)) {
-                $("#materialId").val(materialId);
                 if (isNull(materialMap[materialId])) {
                     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryMaterialListById", params: {"id": materialId}, type: 'json', method: 'GET', callback: function (json) {
                         materialMap[materialId] = json.bean

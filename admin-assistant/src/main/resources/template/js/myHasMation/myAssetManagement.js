@@ -15,7 +15,7 @@ layui.config({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-		url: sysMainMation.admBasePath + 'myhasmation001',
+		url: sysMainMation.admBasePath + 'queryAssetReportList',
 		where: getTableParams(),
 		even: true,
 		page: true,
@@ -62,7 +62,7 @@ layui.config({
     }
 
     function getTableParams() {
-		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+		return $.extend(true, {state: "myUse"}, initTableSearchUtil.getSearchValue("messageTable"));
     }
     
     exports('myAssetManagement', {});
