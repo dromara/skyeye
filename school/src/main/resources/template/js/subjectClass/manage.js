@@ -11,6 +11,7 @@ layui.config({
     	form = layui.form;
 	var objectId = GetUrlParam("objectId");
 	var objectKey = GetUrlParam("objectKey");
+	var subjectClassesId = GetUrlParam("subjectClassesId");
 
 	tabPageUtil.init({
 		id: 'tab',
@@ -19,8 +20,11 @@ layui.config({
 			pageUrl: systemCommonUtil.getUrl('FP2023082800004&id=' + objectId, null)
 		}],
 		suffixData: [{
-			title: '班级',
-			pageUrl: '../../tpl/subjectClass/list.html'
+			title: '章节',
+			pageUrl: '../../tpl/chapter/chapterList.html?subjectClassesId=' + subjectClassesId
+		}, {
+			title: '知识点',
+			pageUrl: '../../tpl/knowledge/knowledgeList.html?subjectClassesId=' + subjectClassesId
 		}],
 		element: layui.element,
 		object: {

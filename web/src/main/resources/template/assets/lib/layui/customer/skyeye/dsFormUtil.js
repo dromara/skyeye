@@ -192,6 +192,24 @@ var dsFormUtil = {
         })
     },
 
+    /**
+     * 加载动态表单(新增操作---自定义数据)
+     *
+     * @param showBoxId 显示位置
+     * @param pageId 布局id/布局编码
+     * @param newOptions 配置参数
+     */
+    initAddPageForStatic: function (showBoxId, pageId, newOptions) {
+        if (!isNull(newOptions)) {
+            for (var pro in newOptions) {
+                dsFormUtil.options[pro] = newOptions[pro];
+            }
+        }
+        dsFormUtil.getPageMation(pageId, function(pageMation) {
+            dsFormUtil.initCreatePage(showBoxId, pageMation);
+        })
+    },
+
     getPageMation: function (pageId, callback) {
         AjaxPostUtil.request({url: reqBasePath + "dsformpage006", params: {id: pageId}, type: 'json', method: 'GET', callback: function (json) {
             let pageMation = json.bean;

@@ -1,6 +1,7 @@
 
 var objectKey = "";
 var objectId = "";
+var subjectClassesId = "";
 
 layui.config({
 	base: basePath, 
@@ -14,6 +15,7 @@ layui.config({
 		table = layui.table;
 	objectKey = GetUrlParam("objectKey");
 	objectId = GetUrlParam("objectId");
+	subjectClassesId = GetUrlParam("subjectClassesId");
 	if (isNull(objectKey) || isNull(objectId)) {
 		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
 		return false;
@@ -66,7 +68,7 @@ layui.config({
 	// 新增
 	$("body").on("click", "#addBean", function() {
     	parent._openNewWindows({
-			url: systemCommonUtil.getUrl('FP2023082800010&objectId=' + objectId + '&objectKey=' + objectKey, null),
+			url: '../../tpl/chapter/write.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId,
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "chapterAdd",
 			area: ['90vw', '90vh'],
