@@ -81,7 +81,7 @@ layui.config({
 	// 编辑
 	function edit(data) {
 		parent._openNewWindows({
-			url: systemCommonUtil.getUrl('FP2023082800011&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
+			url: '../../tpl/chapter/write.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId+ '&id=' + data.id,
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "chapterEdit",
 			area: ['90vw', '90vh'],
@@ -122,7 +122,7 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return $.extend(true, {objectKey: objectKey, objectId: objectId}, initTableSearchUtil.getSearchValue("messageTable"));
+		return $.extend(true, {objectId: subjectClassesId}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
     exports('chapterList', {});

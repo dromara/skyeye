@@ -8,7 +8,7 @@ var schoolUtil = {
      * @param callback 回执函数
      */
     queryMyBelongSchoolList: function (callback) {
-        AjaxPostUtil.request({url: schoolBasePath + "schoolmation008", params: {}, type: 'json', method: "POST", callback: function(json) {
+        AjaxPostUtil.request({url: schoolBasePath + "queryAllSchoolList", params: {}, type: 'json', method: "GET", callback: function(json) {
             if (typeof(callback) == "function") {
                 callback(json);
             }

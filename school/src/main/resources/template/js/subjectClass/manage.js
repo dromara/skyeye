@@ -17,7 +17,7 @@ layui.config({
 		id: 'tab',
 		prefixData: [{
 			title: '详情',
-			pageUrl: systemCommonUtil.getUrl('FP2023082800004&id=' + objectId, null)
+			pageUrl: '../../tpl/subjectClass/detail.html?subjectClassesId=' + subjectClassesId
 		}],
 		suffixData: [{
 			title: '章节',

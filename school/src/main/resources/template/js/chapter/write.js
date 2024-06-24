@@ -21,33 +21,27 @@ layui.config({
 
     if (isNull(id)) {
         dsFormUtil.initAddPageForStatic('content', 'FP2023082800010', {
-            saveData: function (params) {
+            savePreParams: function (params) {
                 params.objectId = objectId;
                 params.objectKey = objectKey;
                 params.subjectClassesId = subjectClassesId;
-                console.log(params);
-                // 保存数据
-                // AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertPurchaseOrderToTurnDelivery", params: params, type: 'json', method: "POST", callback: function(json) {
-                //     parent.layer.close(index);
-                //     parent.refreshCode = '0';
-                // }});
             }
         });
     } else {
-        AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryPurchaseOrderTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
-            let data = json.bean;
-            dsFormUtil.initEditPageForStatic('content', 'FP2023082800011', data, {
-                savePreParams: function (params) {
-                },
-                saveData: function (params) {
-                    // 保存数据
-                    // AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertPurchaseOrderToTurnDelivery", params: params, type: 'json', method: "POST", callback: function(json) {
-                    //     parent.layer.close(index);
-                    //     parent.refreshCode = '0';
-                    // }});
-                }
-            });
-        }});
+        AjaxPostUtil.request({
+            url: sysMainMation.schoolBasePath + "queryChapterById",
+            params: {id: id},
+            type: 'json',
+            method: 'GET',
+            callback: function (json) {
+                let data = json.bean;
+                dsFormUtil.initEditPageForStatic('content', 'FP2023082800011', data, {
+                    savePreParams: function (params) {
+                        params.subjectClassesId = subjectClassesId;
+                    }
+                });
+            }
+        });
     }
 
 });
