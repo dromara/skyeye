@@ -425,21 +425,21 @@ layui.config({
                             var shareUrl = homePagePath + "tpl/note/shareNote.html?id=" + clickId;
                             var json = {"bean":{"shareUrl":shareUrl}};
                             var html = getDataUseHandlebars(getFileContent('tpl/note/shareNoteTemplate.tpl'), json);
-                                layer.open({
-                                     title:"笔记链接",
-                                     type: 1, 
-                                     area: ['40vw','30vh'],
-                                     content: html //这里content是一个普通的String
-                               });
-                                $("#copyBtn").attr("data-clipboard-text", shareUrl);
-                               //复制
-                               clipboard = new ClipboardJS('#copyBtn');
-                               clipboard.on('success', function(e) {
-                                   winui.window.msg("复制成功", {icon: 1, time: 2000});
-                               });
-                               clipboard.on('error', function(e) {
-                                   winui.window.msg("浏览器不支持！", {icon: 2, time: 2000});
-                               });
+							layer.open({
+								 title:"笔记链接",
+								 type: 1,
+								 area: ['40vw','30vh'],
+								 content: html //这里content是一个普通的String
+							});
+							$("#copyBtn").attr("data-clipboard-text", shareUrl);
+							//复制
+							clipboard = new ClipboardJS('#copyBtn');
+							clipboard.on('success', function (e) {
+								winui.window.msg("复制成功", {icon: 1, time: 2000});
+							});
+							clipboard.on('error', function (e) {
+								winui.window.msg("浏览器不支持！", {icon: 2, time: 2000});
+							});
                         }
                     }
                 }

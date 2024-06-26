@@ -20,8 +20,10 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'dragula', 'tagEditor', 'table'].concat(dsFormUtil.mastHaveImport), function (exports) {
+}).define(['window', 'jquery', 'winui', 'dragula', 'tagEditor', 'table', 'ClipboardJS'].concat(dsFormUtil.mastHaveImport), function (exports) {
 	winui.renderColor();
+	// 复制对象
+	var clipboard;
 	var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$;
 		layedit = layui.layedit,
@@ -56,6 +58,7 @@ layui.config({
 			item = dsFormUtil.loadComponent('showForm', item);
 		}
 		$("#showForm div[contentId='" + item.id + "']").append(`<div class="btn-base">
+			<button type="button" class="btn btn-primary copyThis" data-clipboard-text="` + encodeURIComponent(JSON.stringify(item)) + `" title="复制"><i class="fa fa-copy"></i></button>
 			<button type="button" class="btn btn-danger removeThis" title="删除"><i class="fa fa-trash"></i></button>
 		</div>`);
 
@@ -87,10 +90,40 @@ layui.config({
 		$("#editPageContent").attr("src", editContentPageUrl);
 	});
 
+	// 粘贴
+	$("body").on("click", "#paste", function (e) {
+		layer.open({
+			type: 1,
+			title: '粘贴脚本',
+			area: ['50vw', '50vh'],
+			content: '<div style="padding: 20px;">'+
+				'<textarea id="shellCode" name="shellCode" placeholder="请输入加密后的脚本" class="layui-textarea" style="height: 300px;"></textarea>'+
+				'</div>',
+			btn: ['确定', '取消'],
+			yes: function(ii, layero){
+				var shellCode = layero.find('#shellCode').val();
+				let itemContent = JSON.parse(decodeURIComponent(shellCode));
+				itemContent.attrKey = '';
+				itemContent.id = getRandomValueToString();
+				itemContent.attrDefinition = null;
+				loadNewControl(itemContent);
+				layer.close(ii); // 关闭页面层
+			}
+		});
+	})
+
 	function loadPageMation(json) {
 		$("#attrBox").html(getDataUseHandlebars($("#leftAttrBoxItem").html(), {rows: attrList}));
 		$.each(json.rows, function (i, item) {
 			loadNewControl(item);
+		});
+
+		clipboard = new ClipboardJS('.copyThis');
+		clipboard.on('success', function (e) {
+			winui.window.msg("复制成功", {icon: 1, time: 2000});
+		});
+		clipboard.on('error', function (e) {
+			winui.window.msg("浏览器不支持！", {icon: 2, time: 2000});
 		});
 		matchingLanguage();
 	}
