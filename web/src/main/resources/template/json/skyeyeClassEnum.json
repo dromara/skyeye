@@ -56,6 +56,7 @@
 
     "orderArrivalState": {"name": "采购订单到货状态", "className": "skyeye-erp#com.skyeye.purchase.classenum.OrderArrivalState"},
     "holderNormsChildState": {"name": "关联的客户/供应商/会员购买或者出售的商品子信息状态", "className": "skyeye-erp#com.skyeye.holder.classenum.HolderNormsChildState"},
+    "depotOutState": {"name": "仓库出库单状态", "className": "skyeye-erp#com.skyeye.depot.classenum.DepotOutState"},
 
     "purchaseOrderFromType": {"name": "采购订单来源单据类型", "className": "skyeye-erp#com.skyeye.purchase.classenum.PurchaseOrderFromType"},
     "purchaseDeliveryFromType": {"name": "到货单来源单据类型", "className": "skyeye-erp#com.skyeye.purchase.classenum.PurchaseDeliveryFromType"},
