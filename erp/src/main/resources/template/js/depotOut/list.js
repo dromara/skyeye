@@ -9,16 +9,14 @@ layui.config({
     var $ = layui.$,
         form = layui.form,
         table = layui.table;
-    var serviceClassName = sysServiceMation["putIsPurchase"]["key"];
+    var serviceClassName = sysServiceMation["depotOutOrder"]["key"];
     authBtn('1719559094857');//新增
 
-    // 加载列表数据权限
-    loadAuthBtnGroup('messageTable', '1719558882479');
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: sysMainMation.erpBasePath + 'queryDepotOutList',
+        url: sysMainMation.erpBasePath + 'queryDepotOutOrderList',
         where: getTableParams(),
         even: true,
         page: true,
