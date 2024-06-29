@@ -26,15 +26,14 @@ layui.config({
 	    method: 'post',
 	    url: reqBasePath + 'queryOperateList',
 	    where: getTableParams(),
-	    even: true,
-	    page: true,
+	    even: false,
+	    page: false,
 		overflow: {
 			type: 'tips',
 			header: true,
 			total: true
 		},
-		limits: getLimits(),
-		limit: getLimit(),
+		limit: 100,
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'name', title: '名称', align: 'left', width: 120 },

@@ -24,7 +24,6 @@ layui.config({
 	winui.renderColor();
 	// 复制对象
 	var clipboard;
-	var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$;
 		layedit = layui.layedit,
 		form = layui.form;
@@ -102,14 +101,80 @@ layui.config({
 			btn: ['确定', '取消'],
 			yes: function(ii, layero){
 				var shellCode = layero.find('#shellCode').val();
+				if (isNull(shellCode)) {
+					winui.window.msg("请输入脚本", {icon: 2, time: 2000});
+					return false;
+				}
 				let itemContent = JSON.parse(decodeURIComponent(shellCode));
 				itemContent.attrKey = '';
 				itemContent.id = getRandomValueToString();
 				itemContent.attrDefinition = null;
 				loadNewControl(itemContent);
-				layer.close(ii); // 关闭页面层
+				layer.close(ii);
 			}
 		});
+	})
+
+	// 同步至其他布局
+	var selOption = getFileContent('tpl/template/select-option.tpl');
+	$("body").on("click", "#syncOtherOage", function (e) {
+		AjaxPostUtil.request({url: reqBasePath + "queryDsFormPageList", params: {className: className}, type: 'json', method: 'POST', callback: function (json) {
+			let syncPage = []
+			$.each(json.rows, function (i, item) {
+				let type = item.type;
+				if (type == 'edit' || type == 'create' || type == 'processAttr') {
+					// 只有新增，编辑，流程属性布局之间可以互相同步
+					if (item.id != pageId) {
+						// 不能往自身布局同步
+						syncPage.push({
+							id: item.id,
+							name: item.name + '[' + item.numCode + ']'
+						});
+					}
+				}
+			});
+			let selHtml = getDataUseHandlebars(selOption, {rows: syncPage});
+			layer.open({
+				type: 1,
+				title: '同步至其他布局',
+				area: ['50vw', '50vh'],
+				content: '<div style="padding: 20px;">'+
+					'<form class="layui-form" action="" id="showOtherPageForm" autocomplete="off" style="height: 100%">' +
+						'<select class="otherPageId" lay-filter="otherPageId" id="otherPageId" lay-search="" win-verify="required">'+
+							selHtml +
+						'</select>' +
+					'</form>' +
+					'</div>',
+				btn: ['确定', '取消'],
+				success: function(i) {
+					form.render('select');
+				},
+				yes: function(ii, layero) {
+					var otherPageId = layero.find('#otherPageId').val();
+					if (isNull(otherPageId)) {
+						winui.window.msg("请选择布局", {icon: 2, time: 2000});
+						return false;
+					}
+					for (var i = 0; i < contentList.length; i++) {
+						var item = contentList[i];
+						if (isNull(item.attrKey) && $.inArray('attrKeyBox', item.dsFormComponent.attrKeys) >= 0) {
+							winui.window.msg("存在无关联属性的组件，请移除.", {icon: 2, time: 2000});
+							initFormItemClick($("#showForm div[contentId='" + item.id + "']"));
+							return false;
+						}
+					}
+					sortDataIn();
+					var params = {
+						pageId: otherPageId,
+						dsFormPageContentList: encodeURIComponent(JSON.stringify(contentList))
+					}
+					AjaxPostUtil.request({url: reqBasePath + "writeDsFormPageContent", params: params, type: 'json', method: 'POST', callback: function (json) {
+						winui.window.msg("同步成功", {icon: 1, time: 2000});
+						layer.close(ii);
+					}});
+				}
+			});
+		}});
 	})
 
 	function loadPageMation(json) {
