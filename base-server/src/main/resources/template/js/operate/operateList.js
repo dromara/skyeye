@@ -78,8 +78,8 @@ layui.config({
 
 	// 删除
 	function delet(data) {
-		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
-			layer.close(index);
+		parent.layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
+			parent.layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "deleteOperateById", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
@@ -94,8 +94,8 @@ layui.config({
 	}
 
 	function openWritePage() {
-		_openNewWindows({
-			url: "../../tpl/operate/writeOperate.html",
+		parent._openNewWindows({
+			url: "../../tpl/operate/writeOperate.html?className=" + objectId + "&id=" + rowId,
 			title: systemLanguage["com.skyeye.recordPageTitle"][languageType],
 			pageId: "writeOperate",
 			area: ['90vw', '90vh'],

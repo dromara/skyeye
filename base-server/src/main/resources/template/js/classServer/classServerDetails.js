@@ -40,7 +40,7 @@ layui.config({
     }
 
     $("body").on("click", "#editBean", function() {
-        _openNewWindows({
+        parent._openNewWindows({
             url: "../../tpl/classServer/classServerEdit.html?objectId=" + objectId,
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "classServerEdit",

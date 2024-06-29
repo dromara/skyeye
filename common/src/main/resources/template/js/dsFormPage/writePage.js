@@ -10,6 +10,9 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form;
 	var selOption = getFileContent('tpl/template/select-option.tpl');
+	var className = GetUrlParam("className");
+	var id = GetUrlParam("id");
+
 	var pageHtml = {
 		'simpleTable': `<div class="layui-form-item layui-col-xs6">
 							<label class="layui-form-label">是否分页<i class="red">*</i></label>
@@ -57,8 +60,8 @@ layui.config({
 
 	$("#serviceStr").html(getDataUseHandlebars(selOption, {rows: serviceMap}));
 
-	if (!isNull(parent.rowId)) {
-		AjaxPostUtil.request({url: reqBasePath + "dsformpage006", params: {id: parent.rowId}, type: 'json', method: 'GET', callback: function (json) {
+	if (!isNull(id)) {
+		AjaxPostUtil.request({url: reqBasePath + "dsformpage006", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
 			$("#name").val(json.bean.name);
 			$("#remark").val(json.bean.remark);
 			skyeyeClassEnumUtil.showEnumDataListByClassName("dsFormPageType", 'select', "type", json.bean.type, form);
@@ -80,7 +83,7 @@ layui.config({
 	}
 
 	function loadOperate(defaultValue) {
-		AjaxPostUtil.request({url: reqBasePath + "queryOperateList", params: {className: parent.objectId}, type: 'json', method: 'POST', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "queryOperateList", params: {className: className}, type: 'json', method: 'POST', callback: function (json) {
 			var value = isNull(defaultValue) ? '' : defaultValue.toString();
 			dataShowType.showData(json, 'verificationSelect', 'operateIdList', value, form);
 		}});
@@ -108,7 +111,7 @@ layui.config({
 			$("#searchTips").val(data.searchTips);
 		} else if (type == 'processAttr') {
 			$('#otherDom').html(pageHtml[type]);
-			AjaxPostUtil.request({url: flowableBasePath + 'queryActFlowListByClassName', params: {className: parent.objectId}, type: 'json', method: "POST", callback: function (json) {
+			AjaxPostUtil.request({url: flowableBasePath + 'queryActFlowListByClassName', params: {className: className}, type: 'json', method: "POST", callback: function (json) {
 				$("#actFlowId").html(getDataUseHandlebars(`{{#each rows}}<option value="{{id}}">{{flowName}}</option>{{/each}}`, json));
 				if (!isNull(data.actFlowId)) {
 					$("#actFlowId").val(data.actFlowId);
@@ -116,7 +119,7 @@ layui.config({
 				form.render('select');
 			}, async: false});
 		} else if (type == 'create' || type == 'edit') {
-			AjaxPostUtil.request({url: reqBasePath + "queryServiceBeanCustom", params: {className: parent.objectId}, type: 'json', method: 'GET', callback: function (json) {
+			AjaxPostUtil.request({url: reqBasePath + "queryServiceBeanCustom", params: {className: className}, type: 'json', method: 'GET', callback: function (json) {
 				// 判断是否开启了工作流，如果开启了工作流，则将【是否开启工作流】这个选项填充
 				if (json.bean.serviceBean.flowable) {
 					$('#otherDom').html(pageHtml['flowabled']);
@@ -141,11 +144,11 @@ layui.config({
 	form.on('submit(formWriteBean)', function (data) {
 		if (winui.verifyForm(data.elem)) {
 			var params = {
-				id: isNull(parent.rowId) ? '' : parent.rowId,
+				id: isNull(id) ? '' : id,
 				name: $("#name").val(),
 				remark: $("#remark").val(),
 				type: $("#type").val(),
-				className: parent.objectId,
+				className: className,
 				operateIdList: isNull($('#operateIdList').attr('value')) ? [] : $('#operateIdList').attr('value'),
 				dataAuthPointNum: ''
 			};

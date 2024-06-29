@@ -10,7 +10,9 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form;
 	var selOption = getFileContent('tpl/template/select-option.tpl');
-	
+	var className = GetUrlParam("className");
+	var id = GetUrlParam("id");
+
 	var _html = {
 		'color': `<div class="layui-form-item layui-col-xs6">
 					<label class="layui-form-label">按钮颜色<i class="red">*</i></label>
@@ -45,12 +47,12 @@ layui.config({
 	};
 
 	var attrHtml = '';
-	AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: {className: parent.objectId}, type: 'json', method: "POST", callback: function (json) {
+	AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: {className: className}, type: 'json', method: "POST", callback: function (json) {
 		attrHtml = getDataUseHandlebars(`<option value="">全部</option>{{#each rows}}<option value="{{attrKey}}">{{name}}</option>{{/each}}`, json);
 	}, async: false});
 
-	if (!isNull(parent.rowId)) {
-		AjaxPostUtil.request({url: reqBasePath + "queryOperateById", params: {id: parent.rowId}, type: 'json', method: 'GET', callback: function (json) {
+	if (!isNull(id)) {
+		AjaxPostUtil.request({url: reqBasePath + "queryOperateById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
 			$("#name").val(json.bean.name);
 			$("#authPointNum").val(json.bean.authPointNum);
 			$("#orderBy").val(json.bean.orderBy);
@@ -108,14 +110,14 @@ layui.config({
 			dsFormColumnUtil.init({
 				id: 'attrSymbolsDesignBox',
 				title: '按钮显示条件',
-				className: parent.objectId
+				className: className
 			}, isNull(json.bean.showConditionList) ? [] : json.bean.showConditionList);
 		}, async: false});
 	} else {
 		dsFormColumnUtil.init({
 			id: 'attrSymbolsDesignBox',
 			title: '按钮显示条件',
-			className: parent.objectId
+			className: className
 		});
 		skyeyeClassEnumUtil.showEnumDataListByClassName("operatePosition", 'select', "position", '', form);
 		skyeyeClassEnumUtil.showEnumDataListByClassName("eventType", 'select', "eventType", '', form);
@@ -179,7 +181,7 @@ layui.config({
 	form.on('submit(formWriteBean)', function (data) {
 		if (winui.verifyForm(data.elem)) {
 			var params = {
-				className: parent.objectId,
+				className: className,
 				name: $("#name").val(),
 				position: $("#position").val(),
 				color: isNull($("#color").val()) ? '' : $("#color").val(),
@@ -187,7 +189,7 @@ layui.config({
 				eventType: $("#eventType").val(),
 				orderBy: $("#orderBy").val(),
 				showConditionList: JSON.stringify(dsFormColumnUtil.tableDataList),
-				id: isNull(parent.rowId) ? '' : parent.rowId
+				id: isNull(id) ? '' : id
 			};
 
 			if (params.eventType == 'ajax') {
