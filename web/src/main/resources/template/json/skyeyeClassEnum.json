@@ -53,6 +53,7 @@
     "machinChildStateEnum": {"name": "工序验收单状态", "className": "skyeye-erp#com.skyeye.machin.classenum.MachinChildStateEnum"},
     "materialNormsCodeInDepot": {"name": "商品规格一物一码库存状态", "className": "skyeye-erp#com.skyeye.material.classenum.MaterialNormsCodeInDepot"},
     "orderItemQualityInspectionType": {"name": "ERP采购子单据质检类型", "className": "skyeye-erp#com.skyeye.business.classenum.OrderItemQualityInspectionType"},
+    "procedureCapacitySubject": {"name": "工序产能主体", "className": "skyeye-erp#com.skyeye.procedure.classenum.ProcedureCapacitySubject"},
 
     "orderArrivalState": {"name": "采购订单到货状态", "className": "skyeye-erp#com.skyeye.purchase.classenum.OrderArrivalState"},
     "holderNormsChildState": {"name": "关联的客户/供应商/会员购买或者出售的商品子信息状态", "className": "skyeye-erp#com.skyeye.holder.classenum.HolderNormsChildState"},
