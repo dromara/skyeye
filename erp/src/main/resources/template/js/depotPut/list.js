@@ -9,14 +9,14 @@ layui.config({
     var $ = layui.$,
         form = layui.form,
         table = layui.table;
-    var serviceClassName = sysServiceMation["depotOutOrder"]["key"];
-    authBtn('1719559094857');//新增
+    var serviceClassName = sysServiceMation["depotPutOrder"]["key"];
+    authBtn('1719626822882');//新增
 
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: sysMainMation.erpBasePath + 'queryDepotOutOrderList',
+        url: sysMainMation.erpBasePath + 'queryDepotPutOrderList',
         where: getTableParams(),
         even: true,
         page: true,
@@ -38,8 +38,8 @@ layui.config({
             { field: 'createTime', title: '申请时间', align: 'center', width: 150 },
             { field: 'totalPrice', title: '合计金额', align: 'left', width: 120 },
             { field: 'operTime', title: '单据日期', align: 'center', width: 140 },
-            { field: 'otherState', title: '出库状态', width: 90, templet: function (d) {
-                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotOutState", 'id', d.otherState, 'name');
+            { field: 'otherState', title: '入库状态', width: 90, templet: function (d) {
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotPutState", 'id', d.otherState, 'name');
             }},
             { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
@@ -124,5 +124,5 @@ layui.config({
         return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
-    exports('depotOutList', {});
+    exports('depotPutList', {});
 });

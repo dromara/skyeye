@@ -11,10 +11,12 @@ layui.config({
         table = layui.table;
 
     // 单据类型枚举类
-    let idKeyMap = {}
+    let idKeyMap = {};
+    let idKeyToIdMap = {};
     let enumResult = skyeyeClassEnumUtil.getEnumDataListByClassName("depotPutFromType");
     $.each(enumResult.rows, function (i, item) {
         idKeyMap[item.idKey] = item.name
+        idKeyToIdMap[item.idKey] = item.id
     });
 
     // 加载列表数据权限
@@ -73,10 +75,31 @@ layui.config({
 
     // 详情
     function details(data) {
+        let pageUrl = '';
+        let type = idKeyToIdMap[data.idKey];
+        if (type == 1) {
+            // 采购入库单
+            pageUrl = 'FP2023042300003';
+        } else if (type == 2) {
+            // 销售退货单
+            pageUrl = 'FP2023042700007';
+        } else if (type == 3) {
+            // 零售退货单
+            pageUrl = 'FP2023042400011';
+        } else if (type == 4) {
+            // 其他入库单
+            pageUrl = 'FP2023042700015';
+        } else if (type == 5) {
+            // 退料入库单
+            pageUrl = 'FP2024062900001';
+        } else if (type == 6) {
+            // 物料退货单
+            pageUrl = 'FP2024062900002';
+        }
         _openNewWindows({
-            url:  systemCommonUtil.getUrl('FP2024062800003&id=' + data.id, null),
-            title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "purchasePutDetails",
+            url:  systemCommonUtil.getUrl(pageUrl + '&id=' + data.id, null),
+            title: idKeyMap[data.idKey] + systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+            pageId: "putOrderDetails",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
             }});
