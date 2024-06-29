@@ -177,6 +177,19 @@ layui.config({
 		}});
 	})
 
+	// 一键禁止编辑
+	$("body").on("click", "#disabledEdit", function (e) {
+		$.each(contentList, function (i, item) {
+			if (isNull(item.dsFormComponent)) {
+				return false;
+			}
+			if (item.dsFormComponent.attrKeys.indexOf("isEditBox") > -1) {
+				item.isEdit = 0
+			}
+		});
+		winui.window.msg("一键禁止编辑成功", {icon: 1, time: 2000});
+	});
+
 	function loadPageMation(json) {
 		$("#attrBox").html(getDataUseHandlebars($("#leftAttrBoxItem").html(), {rows: attrList}));
 		$.each(json.rows, function (i, item) {
