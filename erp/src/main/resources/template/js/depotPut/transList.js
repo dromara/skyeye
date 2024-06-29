@@ -105,6 +105,38 @@ layui.config({
             }});
     }
 
+    // 入库
+    function depotPut(data) {
+        let pageUrl = '';
+        let type = idKeyToIdMap[data.idKey];
+        if (type == 1) {
+            // 采购入库单
+            pageUrl = '';
+        } else if (type == 2) {
+            // 销售退货单
+            pageUrl = '';
+        } else if (type == 3) {
+            // 零售退货单
+            pageUrl = '';
+        } else if (type == 4) {
+            // 其他入库单
+            pageUrl = '';
+        } else if (type == 5) {
+            // 退料入库单
+            pageUrl = '';
+        } else if (type == 6) {
+            // 物料退货单
+            pageUrl = '';
+        }
+        _openNewWindows({
+            url:  pageUrl + '?id=' + data.id,
+            title: '转仓库入库单',
+            pageId: "transPutOrder",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+            }});
+    }
+
     form.render();
     $("body").on("click", "#reloadTable", function() {
         loadTable();

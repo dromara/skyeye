@@ -105,6 +105,38 @@ layui.config({
             }});
     }
 
+    // 出库
+    function depotOut(data) {
+        let pageUrl = '';
+        let type = idKeyToIdMap[data.idKey];
+        if (type == 1) {
+            // 采购退货单
+            pageUrl = '';
+        } else if (type == 2) {
+            // 销售出库单
+            pageUrl = '';
+        } else if (type == 3) {
+            // 零售出库单
+            pageUrl = '';
+        } else if (type == 4) {
+            // 其他出库单
+            pageUrl = '';
+        } else if (type == 5) {
+            // 领料出库单
+            pageUrl = '';
+        } else if (type == 6) {
+            // 补料出库单
+            pageUrl = '';
+        }
+        _openNewWindows({
+            url:  pageUrl + '?id=' + data.id,
+            title: '转仓库出库单',
+            pageId: "transOutOrder",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+            }});
+    }
+
     form.render();
     $("body").on("click", "#reloadTable", function() {
         loadTable();
