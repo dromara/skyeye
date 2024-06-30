@@ -30,6 +30,11 @@ layui.config({
 								</div>
 							</div>
 							<div class="layui-form-item layui-col-xs12">
+								<label class="layui-form-label">打开方式<i class="red">*</i></label>
+								<div class="layui-input-block winui-radio" id="openType">
+								</div>
+							</div>
+							<div class="layui-form-item layui-col-xs12">
 								<label class="layui-form-label">页面类型<i class="red">*</i></label>
 								<div class="layui-input-block winui-radio">
 									<input type="radio" name="type" value="1" title="自定义页面" lay-filter="type" checked/>
@@ -87,6 +92,7 @@ layui.config({
 				$("#openPageName").val(operateOpenPage.name);
 				var type = operateOpenPage.type ? "1" : "2";
 				$("input:radio[name=type][value=" + type + "]").attr("checked", true);
+				skyeyeClassEnumUtil.showEnumDataListByClassName("pageOpenType", 'radio', "openType", operateOpenPage.openType, form);
 				if (type == 1) {
 					$('#typeChangeBox').html(commonHtml['customPageUrl']);
 					$("#pageUrl").val(operateOpenPage.pageUrl);
@@ -148,6 +154,7 @@ layui.config({
 			// 新开页面
 			$('#eventTypeChangeBox').html(_html['operateOpenPage']);
 			$('#typeChangeBox').html(commonHtml['customPageUrl']);
+			skyeyeClassEnumUtil.showEnumDataListByClassName("pageOpenType", 'radio', "openType", '', form);
 			loadParamsTable('pageParams');
 		}
 		form.render();
@@ -216,6 +223,7 @@ layui.config({
 					name: $("#openPageName").val(),
 					type: type == 1 ? true : false,
 					pageUrl: type == 1 ? $("#pageUrl").val() : dsFormUtil.dsFormChooseMation.id,
+					openType: dataShowType.getData('openType'),
 					params: pageParams
 				};
 				params.operateOpenPage = JSON.stringify(operateOpenPage);
