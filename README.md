@@ -12,6 +12,14 @@
 - [Skyeye云系列资料](https://docs.qq.com/doc/DYUxuT3pSdGhVVXFC)
 - **接前端 / Java后端等课程设计以及毕设制作，有需要的可加下方微信**
 
+### 操作文档
+
+> 客官可以点个收藏，后续功能会同步更新发布。
+
+- [CRM](https://www.zhixi.com/tpl/f9f4d2f7d4fb9a8c2d67da36ab8250cf?shared=true)
+- [云售后工单](https://www.zhixi.com/tpl/09cc45d926714da461b51df8a435bc6b?shared=true)
+
+
 ### 沟通交流
 
 |   知识星球   |   作者微信   |          QQ群      |   Java学习 知识星球  |
