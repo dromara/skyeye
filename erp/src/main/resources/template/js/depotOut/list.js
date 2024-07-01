@@ -10,7 +10,7 @@ layui.config({
         form = layui.form,
         table = layui.table;
     var serviceClassName = sysServiceMation["depotOutOrder"]["key"];
-    authBtn('1719559094857');//新增
+    authBtn('1719830958582');//新增
 
     table.render({
         id: 'messageTable',
@@ -78,7 +78,7 @@ layui.config({
     // 添加
     $("body").on("click", "#addBean", function() {
         _openNewWindows({
-            url:  systemCommonUtil.getUrl('FP2024062800001', null),
+            url:  systemCommonUtil.getUrl('FP2024070100005', null),
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "purchasePutAdd",
             area: ['90vw', '90vh'],
@@ -91,7 +91,7 @@ layui.config({
     // 编辑
     function edit(data) {
         _openNewWindows({
-            url:  systemCommonUtil.getUrl('FP2024062800002&id=' + data.id, null),
+            url:  systemCommonUtil.getUrl('FP2024070100006&id=' + data.id, null),
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "purchasePutEdit",
             area: ['90vw', '90vh'],
@@ -104,7 +104,7 @@ layui.config({
     // 详情
     function details(data) {
         _openNewWindows({
-            url:  systemCommonUtil.getUrl('FP2024062800003&id=' + data.id, null),
+            url:  systemCommonUtil.getUrl('FP2024070100007&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "purchasePutDetails",
             area: ['90vw', '90vh'],

@@ -10,25 +10,25 @@
 	<div class="winui-toolbar">
 	    <div class="winui-tool">
 	        <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-	        <button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1719559094857"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
+	        <button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1719830958582"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
 	    </div>
 	</div>
 	<div style="margin:auto 10px;">
 	    <table id="messageTable" lay-filter="messageTable"></table>
 		<script type="text/html" id="tableBar">
 			{{# if(d.editRow == 1) { }}
-				{{# if(auth('1719559208619')) { }}
+				{{# if(auth('1719831054188')) { }}
 					<a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>
 				{{# } }}
-				{{# if(auth('1719559094857')) { }}
+				{{# if(auth('1719830958582')) { }}
 					<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 				{{# } }}
-				{{# if(auth('1719559190111')) { }}
+				{{# if(auth('1719831035249')) { }}
 					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
 				{{# } }}
 			{{# } }}
 			{{# if(d.editRow == 2) { }}
-				{{# if(auth('1719559199134')) { }}
+				{{# if(auth('1719831045084')) { }}
 					<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
 				{{# } }}
 			{{# } }}

@@ -20,7 +20,7 @@ layui.config({
     });
 
     // 加载列表数据权限
-    loadAuthBtnGroup('messageTable', '1719566072891');
+    loadAuthBtnGroup('messageTable', '1719830817013');
     initTable();
     function initTable() {
         table.render({
@@ -91,10 +91,10 @@ layui.config({
             pageUrl = 'FP2023042700011';
         } else if (type == 5) {
             // 领料出库单
-            pageUrl = 'FP2024062900003';
+            pageUrl = 'FP2024070100001';
         } else if (type == 6) {
             // 补料出库单
-            pageUrl = 'FP2024062900004';
+            pageUrl = 'FP2024070100002';
         }
         _openNewWindows({
             url:  systemCommonUtil.getUrl(pageUrl +'&id=' + data.id, null),
