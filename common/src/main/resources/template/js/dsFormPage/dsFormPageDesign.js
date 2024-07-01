@@ -52,6 +52,8 @@ layui.config({
 		if (pageType == 'details') {
 			// 详情布局
 			item = dsFormUtil.loadComponentValueDetails('showForm', item, null);
+			$("#syncOtherOage").remove()
+			$("#disabledEdit").remove()
 		} else {
 			// 新增和编辑布局
 			item = dsFormUtil.loadComponent('showForm', item);
