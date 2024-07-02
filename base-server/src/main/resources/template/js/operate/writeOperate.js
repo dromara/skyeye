@@ -92,7 +92,7 @@ layui.config({
 				$("#openPageName").val(operateOpenPage.name);
 				var type = operateOpenPage.type ? "1" : "2";
 				$("input:radio[name=type][value=" + type + "]").attr("checked", true);
-				skyeyeClassEnumUtil.showEnumDataListByClassName("pageOpenType", 'radio', "openType", operateOpenPage.openType, form);
+				skyeyeClassEnumUtil.showEnumDataListByClassName("pageOpenType", 'radio', "openType", json.bean.openType, form);
 				if (type == 1) {
 					$('#typeChangeBox').html(commonHtml['customPageUrl']);
 					$("#pageUrl").val(operateOpenPage.pageUrl);
@@ -223,10 +223,10 @@ layui.config({
 					name: $("#openPageName").val(),
 					type: type == 1 ? true : false,
 					pageUrl: type == 1 ? $("#pageUrl").val() : dsFormUtil.dsFormChooseMation.id,
-					openType: dataShowType.getData('openType'),
 					params: pageParams
 				};
 				params.operateOpenPage = JSON.stringify(operateOpenPage);
+				params.openType = dataShowType.getData('openType');
 			}
 
 			AjaxPostUtil.request({url: reqBasePath + "writeOperate", params: params, type: 'json', method: 'POST', callback: function (json) {
