@@ -107,6 +107,7 @@
     "taskAuthEnum": {"name": "项目任务权限", "className": "skyeye-project#com.skyeye.task.classenum.TaskAuthEnum", "pageUrl": "../../tpl/proTask/proTaskList.html"},
     "milestoneStateEnum": {"name": "里程碑状态", "className": "skyeye-project#com.skyeye.milestone.classenum.MilestoneStateEnum"},
     "milestoneImported": {"name": "里程碑重要性", "className": "skyeye-project#com.skyeye.milestone.classenum.MilestoneImported"},
+    "taskImported": {"name": "任务重要性", "className": "skyeye-project#com.skyeye.task.classenum.TaskImported"},
 
     "dsFormPageType": {"name": "表单布局类型", "className": "skyeye-pro#com.skyeye.dsform.classenum.DsFormPageType"},
     "simpleTableWhetherChoose": {"name": "表格类型的布局是否开启选择功能", "className": "skyeye-pro#com.skyeye.dsform.classenum.SimpleTableWhetherChoose"},

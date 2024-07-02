@@ -1,17 +1,21 @@
 
 var objectKey = "";
 var objectId = "";
+var holderId = "";
+
+var parentId = "";
 
 layui.config({
 	base: basePath,
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'form', 'table'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'form', 'tableTreeDj', 'fsTree'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		table = layui.table;
+		fsTree = layui.fsTree,
+		tableTree = layui.tableTreeDj;
 	objectKey = GetUrlParam("objectKey");
 	objectId = GetUrlParam("objectId");
 	if (isNull(objectKey) || isNull(objectId)) {
@@ -39,107 +43,145 @@ layui.config({
 	btnStr += `</div>`;
 	$(".winui-toolbar").before(btnStr);
 
-	table.render({
-		id: 'messageTable',
-		elem: '#messageTable',
-		method: 'post',
-		url: sysMainMation.projectBasePath + 'queryProTaskList',
-		where: getTableParams(),
-		even: true,
-		page: true,
-		limits: getLimits(),
-		limit: getLimit(),
-		cols: [[
-			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'oddNumber', title: '任务单号', width: 200, align: 'center', templet: function (d) {
-				return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
-			}},
-			{ field: 'name', title: '任务名称', width: 200 },
-			{ field: 'startTime', title: '开始时间', align: 'center', width: 100 },
-			{ field: 'endTime', title: '结束时间', align: 'center', width: 100 },
-			{ field: 'estimatedWorkload', title: '预计工作量', align: 'center', width: 120 },
-			{ field: 'actualWorkload', title: '实际工作量', align: 'center', width: 120 },
-			{ field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function (d) {
-				return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
-			}},
-			{ field: 'state', title: '状态', width: 90, templet: function (d) {
-				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("taskStateEnum", 'id', d.state, 'name');
-			}},
-			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
-			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
-			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
-			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, templet: function (d) {
-				var str = '';
-				if (d.editRow == 1) {
-					if (authPermission['submitToApproval']) {
-						str += '<a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>';
-					}
-					if (authPermission['edit']) {
-						str += '<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>';
-					}
-					if (authPermission['delete']) {
-						str += '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>';
-					}
-					if (authPermission['invalid']) {
-						str += '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="cancellation">作废</a>';
-					}
-				}
-				if (d.editRow == 2 && d.state == 'inExamine') {
-					if (authPermission['revoke']) {
-						str += '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>';
-					}
-				}
-				if (d.state == 'pass' && authPermission['executing']) {
-					str += '<a class="layui-btn layui-btn-xs" lay-event="executionBegin">执行</a>';
-				}
-				if (d.state == 'executing' && authPermission['completed']) {
-					str += '<a class="layui-btn layui-btn-xs" lay-event="executionOver">完成</a>';
-				}
-				if (d.state == 'completed' && authPermission['close']) {
-					str += '<a class="layui-btn layui-btn-xs" lay-event="executionClose">关闭</a>';
-				}
-				return str;
-			}}
-		]],
-		done: function(json) {
-			matchingLanguage();
-			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入任务名称", function () {
-				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-			});
-		}
+	/********* tree 处理   start *************/
+	fsTree.render({
+		id: "treeDemo",
+		url: sysMainMation.projectBasePath + 'queryAllApprovalMilestoneList?objectId=' + objectId,
+		checkEnable: false,
+		showLine: false,
+		showIcon: true,
+		addDiyDom: ztreeUtil.addDiyDom,
+		clickCallback: onClickTree,
+		onDblClick: onClickTree
+	}, function(id) {
+		fuzzySearch(id, '#name', null, true);
+		initLoadTable();
+		ztreeUtil.initEventListener(id);
 	});
 
-	table.on('tool(messageTable)', function (obj) {
-        var data = obj.data;
-        var layEvent = obj.event;
-        if (layEvent === 'details'){ //详情
-        	details(data);
-        } else if (layEvent === 'edit') { //编辑
-        	edit(data);
-        } else if (layEvent === 'del'){ //删除
-        	del(data, obj);
-        } else if (layEvent === 'subApproval') { //提交审批
-        	subApproval(data, obj);
-        } else if (layEvent === 'processDetails') {//流程详情
-			activitiUtil.activitiDetails(data);
-        } else if (layEvent === 'executionBegin') {//开始执行
-        	executionBegin(data, obj);
-        } else if (layEvent === 'revoke') {//撤销任务审批申请
-        	revoke(data);
-        } else if (layEvent === 'cancellation') {//作废
-        	cancellation(data, obj);
-        } else if (layEvent === 'executionOver') {//执行完成
-        	executionOver(data);
-        } else if (layEvent === 'executionClose') {//任务关闭
-        	executionClose(data, obj);
-        }
-    });
+	//异步加载的方法
+	function onClickTree(event, treeId, treeNode) {
+		if(treeNode == undefined) {
+			holderId = "";
+		} else {
+			holderId = treeNode.id;
+		}
+		loadTable();
+	}
+	function initLoadTable() {
+		tableTree.render({
+			id: 'messageTable',
+			elem: '#messageTable',
+			method: 'post',
+			url: sysMainMation.projectBasePath + 'queryProTaskList',
+			where: getTableParams(),
+			even: true,
+			page: true,
+			limits: getLimits(),
+			limit: getLimit(),
+			cols: [[
+				{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+				{ field: 'oddNumber', title: '任务单号', width: 200, align: 'center', templet: function (d) {
+					return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+				}},
+				{ field: 'name', title: '任务名称', width: 200 },
+				{ field: 'milestoneId', title: '里程碑', align: 'center', width: 100, templet: function (d) {
+					return getNotUndefinedVal(d.milestoneMation?.name);
+				}},
+				{ field: 'startTime', title: '开始时间', align: 'center', width: 100 },
+				{ field: 'endTime', title: '结束时间', align: 'center', width: 100 },
+				{ field: 'estimatedWorkload', title: '预计工作量', align: 'center', width: 120 },
+				{ field: 'actualWorkload', title: '实际工作量', align: 'center', width: 120 },
+				{ field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function (d) {
+					return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
+				}},
+				{ field: 'state', title: '状态', width: 90, templet: function (d) {
+					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("taskStateEnum", 'id', d.state, 'name');
+				}},
+				{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
+				{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+				{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+				{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
+				{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, templet: function (d) {
+					var str = '';
+					str += '<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="add">新增子任务</a>';
+					if (d.editRow == 1) {
+						if (authPermission['submitToApproval']) {
+							str += '<a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>';
+						}
+						if (authPermission['edit']) {
+							str += '<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>';
+						}
+						if (authPermission['delete']) {
+							str += '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>';
+						}
+						if (authPermission['invalid']) {
+							str += '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="cancellation">作废</a>';
+						}
+					}
+					if (d.editRow == 2 && d.state == 'inExamine') {
+						if (authPermission['revoke']) {
+							str += '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>';
+						}
+					}
+					if (d.state == 'pass' && authPermission['executing']) {
+						str += '<a class="layui-btn layui-btn-xs" lay-event="executionBegin">执行</a>';
+					}
+					if (d.state == 'executing' && authPermission['completed']) {
+						str += '<a class="layui-btn layui-btn-xs" lay-event="executionOver">完成</a>';
+					}
+					if (d.state == 'completed' && authPermission['close']) {
+						str += '<a class="layui-btn layui-btn-xs" lay-event="executionClose">关闭</a>';
+					}
+					return str;
+				}}
+			]],
+			done: function(json) {
+				matchingLanguage();
+				initTableSearchUtil.initAdvancedSearch($("#messageTable")[0], json.searchFilter, form, "请输入任务名称", function () {
+					tableTree.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+				});
+			}
+		}, {
+			keyId: 'id',
+			keyPid: 'parentId',
+			title: 'name',
+		});
+
+		tableTree.getTable().on('tool(messageTable)', function (obj) {
+			var data = obj.data;
+			var layEvent = obj.event;
+			if (layEvent === 'details'){ //新增子任务
+				addNew(data);
+			} else if (layEvent === 'details'){ //详情
+				details(data);
+			} else if (layEvent === 'edit') { //编辑
+				edit(data);
+			} else if (layEvent === 'del'){ //删除
+				del(data, obj);
+			} else if (layEvent === 'subApproval') { //提交审批
+				subApproval(data, obj);
+			} else if (layEvent === 'processDetails') {//流程详情
+				activitiUtil.activitiDetails(data);
+			} else if (layEvent === 'executionBegin') {//开始执行
+				executionBegin(data, obj);
+			} else if (layEvent === 'revoke') {//撤销任务审批申请
+				revoke(data);
+			} else if (layEvent === 'cancellation') {//作废
+				cancellation(data, obj);
+			} else if (layEvent === 'executionOver') {//执行完成
+				executionOver(data);
+			} else if (layEvent === 'executionClose') {//任务关闭
+				executionClose(data, obj);
+			}
+		});
+	}
 
 	// 添加
 	$("body").on("click", "#addBean", function() {
+		parentId = "";
 		_openNewWindows({
-			url: systemCommonUtil.getUrl('FP2023080500001&objectId=' + objectId + '&objectKey=' + objectKey, null),
+			url: systemCommonUtil.getUrl('FP2023080500001&objectId=' + objectId + '&objectKey=' + objectKey + "&callbackFun=savePreParams", null),
 			title: "新增任务",
 			pageId: "protaskadd",
 			area: ['90vw', '90vh'],
@@ -148,6 +190,20 @@ layui.config({
 				loadTable();
 			}});
 	});
+
+	// 新增子任务
+	function addNew(data) {
+		parentId = data.id;
+		_openNewWindows({
+			url: systemCommonUtil.getUrl('FP2023080500001&objectId=' + objectId + '&objectKey=' + objectKey + "&callbackFun=savePreParams", null),
+			title: '新增子任务',
+			pageId: "protaskadd",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}});
+	}
 
 	// 执行完成
 	function executionOver(data) {
@@ -177,7 +233,7 @@ layui.config({
 	// 编辑
 	function edit(data) {
 		_openNewWindows({
-			url: systemCommonUtil.getUrl('FP2023080500002&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
+			url: systemCommonUtil.getUrl('FP2023080500002&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id + "&callbackFun=savePreParams", null),
 			title: "编辑任务",
 			pageId: "protaskedit",
 			area: ['90vw', '90vh'],
@@ -270,12 +326,22 @@ layui.config({
 		loadTable();
 	});
 	function loadTable() {
-		table.reloadData("messageTable", {where: getTableParams()});
+		tableTree.reload("messageTable", {where: getTableParams()});
 	}
 
 	function getTableParams() {
-		return $.extend(true, {objectKey: objectKey, objectId: objectId}, initTableSearchUtil.getSearchValue("messageTable"));
+		let params = {
+			objectKey: objectKey,
+			objectId: objectId,
+			holderId: holderId == '0' ? '' : holderId
+		};
+		return $.extend(true, params, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 
     exports('proTaskList', {});
 });
+
+// 写入页面保存之前的回调函数
+function savePreParams(params) {
+	params.parentId = parentId
+}

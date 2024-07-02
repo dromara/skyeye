@@ -13,6 +13,8 @@ layui.config({
     winui.renderColor();
     var $ = layui.$;
     var pageId = GetUrlParam("pageId");
+    var callbackFun = GetUrlParam("callbackFun");
+
     serviceClassName = GetUrlParam("serviceClassName");
     if (isNull(pageId)) {
         winui.window.msg("请传入布局id", {icon: 2, time: 2000});
@@ -95,9 +97,11 @@ layui.config({
         var serviceClassName = pageMation.className;
         if (pageMation.type == 'create') {
             // 创建布局
+            initSavePre();
             dsFormUtil.initCreatePage('content', pageMation);
         } else if (pageMation.type == 'edit') {
             // 编辑布局
+            initSavePre();
             dsFormUtil.getBusinessData(businessId, serviceClassName, pageMation, function (data) {
                 dsFormUtil.initEditPage('content', pageMation, data);
             });
@@ -109,6 +113,15 @@ layui.config({
         } else if (pageMation.type == 'simpleTable') {
             // 基本表格
             dsFormTableUtil.initDynamicTable('messageTable', pageMation);
+        }
+    }
+
+    function initSavePre() {
+        dsFormUtil.options.savePreParams = function (params) {
+            if (!isNull(callbackFun)) {
+                //就相当于parent.updateShowFileName(参数1,参数2。。)
+                parent[callbackFun](params)
+            }
         }
     }
 

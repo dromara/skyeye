@@ -118,11 +118,11 @@ layui.config({
 
 	// 服务
 	function giveService(data) {
-		_openNewWindows({
+		parent._openNewWindows({
 			url: '../../tpl/project/projectManage.html?objectId=' + data.id + '&objectKey=' + data.serviceClassName,
 			title: "服务",
 			pageId: "projectGiveService",
-			area: ['90vw', '90vh'],
+			area: ['100vw', '100vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
