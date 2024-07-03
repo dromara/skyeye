@@ -79,6 +79,13 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				"custom.box.border-color": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"}
 			};
 
+			// 小图片自定义属性
+			var imgCustomOptions = {
+				"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+				"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+				"custom.box.border-color": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"}
+			};
+
 			var f = {
 				box: function() {
 					var width = $(window).width();
@@ -151,6 +158,8 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								str = f.getBgImageHtml(item, str);
 							} else if(item.id == 'wordModel') {
 								str = f.getWordModelHtml(item, str);
+							} else if(item.id == 'imgModel') {
+								str = f.getImgModelHtml(item, str);
 							} else if(item.id == 'tableModel') {
 								// todo 待定
 								str = f.getTableModelHtml(item, str);
@@ -209,6 +218,21 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								'<span class="text">' + bean.name + '</span>' +
 								'</a>';
 						}
+					});
+					str += '</div>' +
+						'</div>' +
+						'</div>';
+					return str;
+				},
+
+				// 标题按钮--小图片模型获取html
+				getImgModelHtml: function(item, str) {
+					str = f.getCommonParentHeader(str, item);
+					$.each(item.children, function (j, bean) {
+						str += '<a class="li imgModle layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.name + '">' +
+							'<img class="image" src="' + bean.imgPath + '"/>' +
+							'<span class="text">' + bean.name + '</span>' +
+							'</a>';
 					});
 					str += '</div>' +
 						'</div>' +
@@ -285,6 +309,13 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						var modelId = $(this).attr("rowId");
 						var wordStyleMation = f.getWordStyleMationById(modelId);
 						f.addNewWordModel(modelId, wordStyleMation);
+					});
+
+					// 小图片模型点击事件
+					skyeyeHeader.find(".imgModle").click(function () {
+						var modelId = $(this).attr("rowId");
+						var imgModelMation = f.getImgStyleMationById(modelId);
+						f.addNewImgModel(modelId, imgModelMation);
 					});
 
 					// 表格模型点击事件
@@ -413,6 +444,18 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					return boxId;
 				},
 
+				// 加载小图片模型
+				addNewImgModel: function(modelId, imgStyleMation) {
+					// 加入页面属性
+					imgStyleMation.attr = $.extend(true, {}, imgCustomOptions, imgStyleMation.attr);
+					// 获取boxId
+					var boxId = modelId + getRandomValueToString();
+					// 获取图片模型id
+					var imgId = f.getImgBox(boxId, modelId, imgStyleMation);
+					inPageWordMation[boxId] = $.extend(true, {}, imgStyleMation);
+					return boxId;
+				},
+
 				// 根据id获取echarts信息
 				getEchartsMationById: function(id) {
 					var echartsMation;
@@ -435,6 +478,18 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						}
 					});
 					return wordMation;
+				},
+
+				// 根据id获取小图片信息
+				getImgStyleMationById: function(id) {
+					var imgMation;
+					$.each(params.headerMenuJson, function(i, item) {
+						if (!f.isNull(item.children) && item.id == 'imgModel') {
+							imgMation = getInPoingArr(item.children, "id", id);
+							return false;
+						}
+					});
+					return imgMation;
 				},
 
 				getEchartsBox: function (boxId, modelId) {
@@ -471,6 +526,30 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						ee.stopPropagation();
 					};
 					return wordId;
+				},
+
+				getImgBox: function (boxId, modelId, imgStyleMation) {
+					var box = f.createBox(boxId, modelId, f.setDesignAttr(imgStyleMation));
+
+					var imgId = "img" + boxId;
+					var imgBox = document.createElement("div");
+					// 为div设置类名
+					imgBox.className = "img-box";
+					imgBox.id = "label-" + imgId;
+					imgBox.onmousedown = ee => {
+						var id = $("#" + imgId).parent().attr("id");
+						f.setMoveEvent(ee, $("#" + id));
+						// 阻止事件冒泡（针对父元素的move）
+						ee.stopPropagation();
+					};
+					box.appendChild(imgBox);
+					var img = document.createElement("img");
+					img.id = imgId;
+					img.src = fileBasePath + imgStyleMation.imgPath;
+					img.style.width = "100%";
+					img.style.height = "100%";
+					box.appendChild(img);
+					return imgId;
 				},
 
 				setDesignAttr: function(wordStyleMation) {
@@ -698,7 +777,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					// 不触发‘移除所有图表的编辑信息’的事件的对象的class--颜色选择器
 					var notTriggerRemove = ["layui-colorpicker-main", "layui-anim-scaleSpring"];
 					// 图表点击事件
-					$("body").on('click', ".echarts-box, .word-box, .table-box", function (e) {
+					$("body").on('click', ".echarts-box, .word-box, .img-box, .table-box", function (e) {
 						f.setChooseReportItem($(this));
 						e.stopPropagation();
 					});
@@ -736,6 +815,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					$("body").on('click', "#save", function (e) {
 						var eachartsList = f.getEchartsListToSave();
 						var wordMationList = f.getWordMationListToSave();
+						var imgMationList = f.getImgMationListToSave();
 						var tableMationList = f.getTableListToSave();
 
 						var bgImage = skyeyeReportContent.css("backgroundImage").replace('url(', '').replace(')', '');
@@ -748,6 +828,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 							bgImage: bgImage,
 							modelList: eachartsList,
 							wordMationList: wordMationList,
+							imgMationList: imgMationList,
 							tableMationList: tableMationList
 						};
 						AjaxPostUtil.request({url: sysMainMation.reportBasePath + "editReportPageContentById", params: {id: id, content: encodeURIComponent(JSON.stringify(params))}, type: 'json', method: "POST", callback: function(json) {
@@ -790,6 +871,23 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						}
 					});
 					return tableList;
+				},
+
+				getImgMationListToSave: function () {
+					var imgMationList = new Array();
+					$.each(skyeyeReportContent.find(".kuang"), function(i, item) {
+						if ($(item).find(".img-box").length > 0) {
+							var boxId = $(item).data("boxId");
+							var imgMation = inPageWordMation[boxId];
+							imgMationList.push({
+								modelId: $(item).data("modelId"),
+								attrMation: imgMation,
+								width: $(item).width(),
+								height: $(item).height()
+							});
+						}
+					});
+					return imgMationList;
 				},
 
 				getWordMationListToSave: function () {
@@ -1018,6 +1116,8 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					f.initTableData(widthScale, heightScale);
 					// 初始化文字模型
 					f.initWordMationData(widthScale, heightScale);
+					// 初始化小图片模型
+					f.initImgMationData(widthScale, heightScale);
 					// 初始化背景
 					if(!f.isNull(params.initData.bgImage)){
 						skyeyeReportContent.css({
@@ -1086,6 +1186,26 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								height: multiplication(item.height, heightScale)
 							});
 							setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
+							setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+						});
+					}
+				},
+
+				initImgMationData: function(widthScale, heightScale) {
+					var imgMationList = params.initData.imgMationList;
+					if (!f.isNull(imgMationList)) {
+						$.each(imgMationList, function (i, item) {
+							var leftNum = multiplication(item.attrMation.attr["custom.move.x"].defaultValue, widthScale);
+							var topNum = multiplication(item.attrMation.attr["custom.move.y"].defaultValue, heightScale);
+							item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
+							item.attrMation.attr["custom.move.y"].defaultValue = topNum;
+							var boxId = f.addNewImgModel(item.modelId, item.attrMation);
+							$("#" + boxId).css({
+								left: leftNum + "px",
+								top: topNum + "px",
+								width: multiplication(item.width, widthScale),
+								height: multiplication(item.height, heightScale)
+							});
 							setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
 						});
 					}
@@ -1189,6 +1309,8 @@ function dataValueChange(value, _this) {
 		resetChartsModel(boxId);
 	} else if(_chooseMation.menuType == 'wordModel') {
 		resetWordModel(boxId);
+	} else if(_chooseMation.menuType == 'imgModel') {
+		resetImgModel(boxId);
 	} else if(_chooseMation.menuType == 'tableModel') {
 		resetTableModel(boxId);
 	}
@@ -1213,6 +1335,10 @@ function resetWordModel(boxId) {
 	$("#" + boxId).find(".word-box").attr("style", styleStr);
 }
 
+function resetImgModel(boxId) {
+	var imgMation = inPageWordMation[boxId];
+}
+
 function resetTableModel(boxId) {
 	var tableMation = inPageTable[boxId]
 	tableMation.tableColumnList = tableMation.attr['custom.tableColumn'].defaultValue
@@ -1229,6 +1355,12 @@ function getDataChooseMation(boxId) {
 		_object = inPageWordMation[boxId];
 		if (!isNull(_object)) {
 			_object.menuType = 'wordModel';
+		}
+	}
+	if (isNull(_object)) {
+		_object = inPageWordMation[boxId];
+		if (!isNull(_object)) {
+			_object.menuType = 'imgModel';
 		}
 	}
 	if (isNull(_object)) {

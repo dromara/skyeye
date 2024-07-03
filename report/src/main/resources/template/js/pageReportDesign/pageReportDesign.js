@@ -33,6 +33,12 @@ layui.config({
         wordModel = json.rows;
     }, async: false});
 
+    var imgModel = {};
+    // 获取所有小图片列表信息
+    AjaxPostUtil.request({url: sysMainMation.reportBasePath + "queryAllEnabledImgModelList", params: {}, type: 'json', method: "GET", callback: function(json) {
+            imgModel = json.rows;
+        }, async: false});
+
     var initData = {};
     // 获取初始化数据
     AjaxPostUtil.request({url: sysMainMation.reportBasePath + "queryReportPageById", params: {id: id}, type: 'json', method: "GET", callback: function(json) {
@@ -55,6 +61,11 @@ layui.config({
             "title": "文字",
             "id": "wordModel",
             "children": wordModel
+        }, {
+            "icon": " fa fa-area-chart fa-fw",
+            "title": "小图片",
+            "id": "imgModel",
+            "children": imgModel
         }, {
             "icon": " fa fa-area-chart fa-fw",
             "title": "图表",
