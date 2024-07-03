@@ -59,6 +59,7 @@ layui.config({
 			keyId: 'id',
 			keyPid: 'parentId',
 			title: 'name',
+			showCache: "sysEveMenuUnfoldStatus"
 		});
 
 		tableTree.getTable().on('tool(messageTable)', function (obj) {

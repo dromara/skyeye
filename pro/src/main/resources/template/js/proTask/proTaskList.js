@@ -81,11 +81,11 @@ layui.config({
 			limit: getLimit(),
 			cols: [[
 				{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+				{ field: 'name', title: '任务名称', width: 200 },
 				{ field: 'oddNumber', title: '任务单号', width: 200, align: 'center', templet: function (d) {
 					return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 				}},
-				{ field: 'name', title: '任务名称', width: 200 },
-				{ field: 'milestoneId', title: '里程碑', align: 'center', width: 100, templet: function (d) {
+				{ field: 'milestoneId', title: '里程碑', width: 100, templet: function (d) {
 					return getNotUndefinedVal(d.milestoneMation?.name);
 				}},
 				{ field: 'startTime', title: '开始时间', align: 'center', width: 100 },
@@ -102,9 +102,11 @@ layui.config({
 				{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 				{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
 				{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-				{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, templet: function (d) {
+				{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 300, templet: function (d) {
 					var str = '';
-					str += '<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="add">新增子任务</a>';
+					if (d.state != 'invalid'){
+						str += '<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="addNew">新增子任务</a>';
+					}
 					if (d.editRow == 1) {
 						if (authPermission['submitToApproval']) {
 							str += '<a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>';
@@ -133,6 +135,9 @@ layui.config({
 					if (d.state == 'completed' && authPermission['close']) {
 						str += '<a class="layui-btn layui-btn-xs" lay-event="executionClose">关闭</a>';
 					}
+					if (d.state == 'invalid' && authPermission['delete']) {
+						str += '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>';
+					}
 					return str;
 				}}
 			]],
@@ -146,12 +151,13 @@ layui.config({
 			keyId: 'id',
 			keyPid: 'parentId',
 			title: 'name',
+			showCache: "proTaskUnfoldStatus"
 		});
 
 		tableTree.getTable().on('tool(messageTable)', function (obj) {
 			var data = obj.data;
 			var layEvent = obj.event;
-			if (layEvent === 'details'){ //新增子任务
+			if (layEvent === 'addNew'){ //新增子任务
 				addNew(data);
 			} else if (layEvent === 'details'){ //详情
 				details(data);
@@ -245,7 +251,7 @@ layui.config({
 	}
 
 	// 开始执行
-	function executionBegin(data, obj){
+	function executionBegin(data, obj) {
 		var msg = obj ? '确认开始执行【' + obj.data.name + '】吗？' : '确认开始执行该任务吗？';
 		layer.confirm(msg, { icon: 3, title: '任务开始执行' }, function (index) {
 			layer.close(index);
@@ -257,7 +263,7 @@ layui.config({
 	}
 	
 	// 任务关闭
-	function executionClose(data, obj){
+	function executionClose(data, obj) {
 		var msg = obj ? '确认关闭【' + obj.data.name + '】吗？' : '确认关闭该任务吗？';
 		layer.confirm(msg, { icon: 3, title: '关闭任务' }, function (index) {
 			layer.close(index);
@@ -281,7 +287,7 @@ layui.config({
 	}
 
 	// 任务提交审批
-	function subApproval(data, obj){
+	function subApproval(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
 			activitiUtil.startProcess(data.serviceClassName, null, function (approvalId) {
@@ -298,7 +304,7 @@ layui.config({
 	}
 	
 	// 作废
-	function cancellation(data, obj){
+	function cancellation(data, obj) {
 		var msg = obj ? '确认作废【' + obj.data.name + '】吗？' : '确认作废该任务信息吗？';
 		layer.confirm(msg, { icon: 3, title: '任务作废' }, function (index) {
 			layer.close(index);
@@ -314,7 +320,7 @@ layui.config({
 		var msg = obj ? '确认删除【' + obj.data.name + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, {icon: 3, title: '删除任务'}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.projectBasePath + "deleteProTaskById", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.projectBasePath + "deleteProTaskById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
