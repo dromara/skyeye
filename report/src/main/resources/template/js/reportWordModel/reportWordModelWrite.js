@@ -64,7 +64,8 @@ layui.config({
                     tableData.push({
                         propertyId: choosePropertyList[trId].id,
                         editor: dataShowType.getData('editor' + rowNum),
-                        showToEditor: dataShowType.getData('whetherShow' + rowNum)
+                        showToEditor: dataShowType.getData('whetherShow' + rowNum),
+                        orderBy: i + 1
                     });
                 });
                 if (tableData.length == 0) {

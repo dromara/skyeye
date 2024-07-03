@@ -405,20 +405,20 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 							// 显示在编辑框
 							let optional = item.propertyMation.optional;
 							let value = optional == 0 ? item.propertyMation.defaultValue : '';
-							let editorChooseValue = "";
+							let optionalValue = "";
 							if (optional == 1) {
 								// 属性值可选
-								editorChooseValue = [];
+								optionalValue = [];
 								item.propertyMation.propertyValueList.forEach(function (bean) {
-									if (value.defaultChoose == 1) {
+									if (bean.defaultChoose == 1) {
 										value = bean.value;
 									}
-									editorChooseValue.push({
+									optionalValue.push({
 										id: bean.value,
 										name: bean.name
 									});
 								});
-								editorChooseValue = JSON.stringify(editorChooseValue);
+								optionalValue = JSON.stringify(optionalValue);
 							}
 							wordStyleMation.attr[item.propertyMation.attrCode] = {
 								"defaultValue": value,
@@ -426,7 +426,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								"remark": item.propertyMation.name,
 								"name": item.propertyMation.name,
 								"editorType": item.propertyMation.editorType,
-								"editorChooseValue": editorChooseValue,
+								"optionalValue": optionalValue,
 								"typeName": "Style属性"
 							}
 						}
