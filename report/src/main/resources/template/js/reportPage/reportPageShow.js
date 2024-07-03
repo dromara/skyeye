@@ -204,7 +204,7 @@ layui.config({
 
     // 加载文字模型
     function addNewWordModel(modelId, wordStyleMation) {
-        var styleStr = getWordStyleStr(wordStyleMation.wordModelAttrList);
+        var styleStr = getWordStyleStr(wordStyleMation.attr);
         // 获取boxId
         var boxId = modelId + getRandomValueToString();
         // 获取文字模型id

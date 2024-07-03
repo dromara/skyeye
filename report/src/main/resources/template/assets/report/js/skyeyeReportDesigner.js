@@ -58,6 +58,27 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				"custom.box.border-color": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"}
 			};
 
+			// 图表自定义属性
+			var tableCustomOptions = {
+				"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editorType": "99", "editorChooseValue": "", "typeName": "数据源"},
+				"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+				"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+				"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+				"custom.box.border-color": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+				"custom.tableColumn": { "defaultValue": [], "edit": 1, "remark": "数据表格的信息", "name": "表格配置", "editorType": "101", "editorChooseValue": "", "typeName": "数据源"},
+				"custom.isPage": { "defaultValue": "1", "edit": 1, "remark": "分页的标识", "name": "是否分页", "editorType": "1", "editorChooseValue": "", "typeName": "数据源",
+					"optionalValue": [{"id": 1, "name": "是"}, {"id": 0, "name": "否"}]}
+			};
+
+			// 文字自定义属性
+			var wordCustomOptions = {
+				"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editorType": "99", "editorChooseValue": "", "typeName": "数据源"},
+				"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+				"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+				"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+				"custom.box.border-color": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"}
+			};
+
 			var f = {
 				box: function() {
 					var width = $(window).width();
@@ -282,11 +303,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					var tableId = f.getTableBox(boxId, modelId);
 					// 加入页面属性
 					var table = !isNull(tableMation) ? tableMation : {
-						attr: $.extend(true, {}, echartsCustomOptions, {
-							"custom.tableColumn": { "defaultValue": [], "edit": 1, "remark": "数据表格的信息", "name": "表格配置", "editorType": "101", "editorChooseValue": "", "typeName": "数据源"},
-							"custom.isPage": { "defaultValue": "1", "edit": 1, "remark": "分页的标识", "name": "是否分页", "editorType": "1", "editorChooseValue": "", "typeName": "数据源",
-								"optionalValue": [{"id": 1, "name": "是"}, {"id": 0, "name": "否"}]},
-						}),
+						attr: $.extend(true, {}, tableCustomOptions, {}),
 						tableColumnList: [],
 						isPage: 1
 					}
@@ -348,14 +365,50 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 
 				// 加载文字模型
 				addNewWordModel: function(modelId, wordStyleMation) {
-					var styleStr = getWordStyleStr(wordStyleMation.wordModelAttrList);
+					// 设置Attr的值
+					if (isNull(wordStyleMation.attr)) {
+						wordStyleMation.attr = {};
+					}
+					wordStyleMation.wordModelAttrList.forEach(function (item) {
+						if (item.showToEditor == 1) {
+							// 显示在编辑框
+							let optional = item.propertyMation.optional;
+							let value = optional == 0 ? item.propertyMation.defaultValue : '';
+							let editorChooseValue = "";
+							if (optional == 1) {
+								// 属性值可选
+								editorChooseValue = [];
+								item.propertyMation.propertyValueList.forEach(function (bean) {
+									if (value.defaultChoose == 1) {
+										value = bean.value;
+									}
+									editorChooseValue.push({
+										id: bean.value,
+										name: bean.name
+									});
+								});
+								editorChooseValue = JSON.stringify(editorChooseValue);
+							}
+							wordStyleMation.attr[item.propertyMation.attrCode] = {
+								"defaultValue": value,
+								"edit": item.editor,
+								"remark": item.propertyMation.name,
+								"name": item.propertyMation.name,
+								"editorType": item.propertyMation.editorType,
+								"editorChooseValue": editorChooseValue,
+								"typeName": "Style属性"
+							}
+						}
+					})
+					// 加入页面属性
+					wordStyleMation.attr = $.extend(true, {}, wordCustomOptions, wordStyleMation.attr);
+					wordStyleMation.attr[wordStyleMation.customAttr.attrCode] = wordStyleMation.customAttr
+
+					var styleStr = getWordStyleStr(wordStyleMation.attr);
 					// 获取boxId
 					var boxId = modelId + getRandomValueToString();
 					// 获取文字模型id
 					var wordId = f.getWordBox(boxId, modelId, styleStr, wordStyleMation);
-					// 加入页面属性
-					wordStyleMation.attr = $.extend(true, {}, echartsCustomOptions, wordStyleMation.attr);
-					wordStyleMation.attr[wordStyleMation.customAttr.attrCode] = wordStyleMation.customAttr
 					inPageWordMation[boxId] = $.extend(true, {}, wordStyleMation);
 					return boxId;
 				},
@@ -763,7 +816,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						// 被选中项
 						_this.parent().find(".dian").show();
 						_this.parent().addClass("active");
-						f.loadEchartsEditor();
+						f.loadReportItemEditor();
 					}
 				},
 
@@ -775,7 +828,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				},
 
 				// 加载echarts报表编辑器
-				loadEchartsEditor: function () {
+				loadReportItemEditor: function () {
 					var chooseObject = skyeyeReportContent.find(".active").eq(0);
 					var boxId = chooseObject.data("boxId");
 					var objectMation = getDataChooseMation(boxId);
@@ -1156,7 +1209,7 @@ function resetChartsModel(boxId) {
 
 function resetWordModel(boxId) {
 	var wordMation = inPageWordMation[boxId];
-	var styleStr = getWordStyleStr(wordMation.wordModelAttrList);
+	var styleStr = getWordStyleStr(wordMation.attr);
 	$("#" + boxId).find(".word-box").attr("style", styleStr);
 }
 
@@ -1244,16 +1297,14 @@ function getEchartsOptions(echartsMation) {
 }
 
 // 获取文字模型样式信息
-function getWordStyleStr(propertyList) {
+function getWordStyleStr(attrMap) {
 	var styleStr = "";
-	if (isNull(propertyList)) {
+	if (isNull(attrMap)) {
 		return styleStr;
 	}
-	$.each(propertyList, function (index, item) {
-		if (!isNull(item.propertyMation)) {
-			if (item.propertyMation.attrCode.indexOf("custom.") < 0) {
-				styleStr += item.propertyMation.attrCode + ":" + item.propertyMation.defaultValue + ";";
-			}
+	$.each(attrMap, function (key, value) {
+		if (key.indexOf("custom.") < 0) {
+			styleStr += key + ":" + value.defaultValue + ";";
 		}
 	});
 	return styleStr;
