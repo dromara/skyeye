@@ -197,6 +197,17 @@ layui.config({
 			}});
 	});
 
+	// 甘特图
+	$("body").on("click", "#ganttPage", function() {
+		_openNewWindows({
+			url: "../../tpl/proTask/taskGantt.html?objectId=" + objectId + '&objectKey=' + objectKey,
+			title: "任务甘特图",
+			pageId: "taskGantt",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+			}});
+	});
+
 	// 新增子任务
 	function addNew(data) {
 		parentId = data.id;
