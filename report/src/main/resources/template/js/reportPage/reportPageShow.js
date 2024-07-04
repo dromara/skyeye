@@ -12,7 +12,6 @@ layui.config({
     winui.renderColor();
     var $ = layui.$,
         form = layui.form;
-
     id = GetUrlParam("id");
 
     var content = $(document.body);
@@ -53,8 +52,8 @@ layui.config({
                     width: multiplication(item.width, widthScale),
                     height: multiplication(item.height, heightScale)
                 });
-                setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
-                setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+                // 设置custom.box开头的属性值
+                setCustomBoxAttr(echartsCustomOptions, boxId, item);
             });
         }
     }
@@ -74,8 +73,8 @@ layui.config({
                     width: multiplication(item.width, widthScale),
                     height: multiplication(item.height, heightScale)
                 });
-                setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
-                setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+                // 设置custom.box开头的属性值
+                setCustomBoxAttr(wordCustomOptions, boxId, item);
             });
         }
     }
@@ -98,8 +97,8 @@ layui.config({
                     width: multiplication(item.width, widthScale),
                     height: multiplication(item.height, heightScale)
                 });
-                setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
-                setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+                // 设置custom.box开头的属性值
+                setCustomBoxAttr(tableCustomOptions, boxId, item);
             });
         }
     }

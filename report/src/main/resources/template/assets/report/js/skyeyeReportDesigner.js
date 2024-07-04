@@ -10,8 +10,61 @@ var inPageTable = {};
 // 已经添加上的文字模型
 var inPageWordMation = {};
 
+// 已经添加上的文字模型
+var inPageImgMation = {};
+
 // 支持的编辑器类型
 var editorType = {};
+
+// 图表自定义属性
+var echartsCustomOptions = {
+	"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editorType": "99", "editorChooseValue": "", "typeName": "数据源"},
+	"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-color": { "value": "", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-width": { "value": "0", "edit": 1, "remark": "盒子边框宽度", "name": "边框宽度", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-style": { "defaultValue": "solid", "edit": 1, "remark": "盒子边框样式", "name": "边框样式", "editorType": "1", "editorChooseValue": "", "typeName": "盒子",
+		"optionalValue": [{"id": "solid", "name": "实线"}, {"id": "dashed", "name": "虚线"}]}
+};
+
+// 图表自定义属性
+var tableCustomOptions = {
+	"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editorType": "99", "editorChooseValue": "", "typeName": "数据源"},
+	"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-color": { "value": "", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-width": { "value": "0", "edit": 1, "remark": "盒子边框宽度", "name": "边框宽度", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-style": { "defaultValue": "solid", "edit": 1, "remark": "盒子边框样式", "name": "边框样式", "editorType": "1", "editorChooseValue": "", "typeName": "盒子",
+		"optionalValue": [{"id": "solid", "name": "实线"}, {"id": "dashed", "name": "虚线"}]},
+	"custom.tableColumn": { "defaultValue": [], "edit": 1, "remark": "数据表格的信息", "name": "表格配置", "editorType": "101", "editorChooseValue": "", "typeName": "数据源"},
+	"custom.isPage": { "defaultValue": "1", "edit": 1, "remark": "分页的标识", "name": "是否分页", "editorType": "1", "editorChooseValue": "", "typeName": "数据源",
+		"optionalValue": [{"id": 1, "name": "是"}, {"id": 0, "name": "否"}]}
+};
+
+// 文字自定义属性
+var wordCustomOptions = {
+	"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editorType": "99", "editorChooseValue": "", "typeName": "数据源"},
+	"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-color": { "value": "", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-width": { "value": "0", "edit": 1, "remark": "盒子边框宽度", "name": "边框宽度", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-style": { "defaultValue": "solid", "edit": 1, "remark": "盒子边框样式", "name": "边框样式", "editorType": "1", "editorChooseValue": "", "typeName": "盒子",
+		"optionalValue": [{"id": "solid", "name": "实线"}, {"id": "dashed", "name": "虚线"}]}
+};
+
+// 小图片自定义属性
+var imgCustomOptions = {
+	"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.box.border-color": { "value": "", "edit": 1, "remark": "盒子边框颜色", "name": "边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-width": { "value": "0", "edit": 1, "remark": "盒子边框宽度", "name": "边框宽度", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-style": { "defaultValue": "solid", "edit": 1, "remark": "盒子边框样式", "name": "边框样式", "editorType": "1", "editorChooseValue": "", "typeName": "盒子",
+		"optionalValue": [{"id": "solid", "name": "实线"}, {"id": "dashed", "name": "虚线"}]}
+};
+
 layui.define(["jquery", 'form', 'element'], function(exports) {
 	var jQuery = layui.jquery;
 	form = layui.form;
@@ -47,43 +100,6 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				right_top: true,
 				left_bottom: true,
 				right_bottom: true,
-			};
-
-			// 图表自定义属性
-			var echartsCustomOptions = {
-				"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editorType": "99", "editorChooseValue": "", "typeName": "数据源"},
-				"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
-				"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
-				"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
-				"custom.box.border-color": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"}
-			};
-
-			// 图表自定义属性
-			var tableCustomOptions = {
-				"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editorType": "99", "editorChooseValue": "", "typeName": "数据源"},
-				"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
-				"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
-				"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
-				"custom.box.border-color": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
-				"custom.tableColumn": { "defaultValue": [], "edit": 1, "remark": "数据表格的信息", "name": "表格配置", "editorType": "101", "editorChooseValue": "", "typeName": "数据源"},
-				"custom.isPage": { "defaultValue": "1", "edit": 1, "remark": "分页的标识", "name": "是否分页", "editorType": "1", "editorChooseValue": "", "typeName": "数据源",
-					"optionalValue": [{"id": 1, "name": "是"}, {"id": 0, "name": "否"}]}
-			};
-
-			// 文字自定义属性
-			var wordCustomOptions = {
-				"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editorType": "99", "editorChooseValue": "", "typeName": "数据源"},
-				"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
-				"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
-				"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
-				"custom.box.border-color": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"}
-			};
-
-			// 小图片自定义属性
-			var imgCustomOptions = {
-				"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
-				"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
-				"custom.box.border-color": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"}
 			};
 
 			var f = {
@@ -452,7 +468,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					var boxId = modelId + getRandomValueToString();
 					// 获取图片模型id
 					var imgId = f.getImgBox(boxId, modelId, imgStyleMation);
-					inPageWordMation[boxId] = $.extend(true, {}, imgStyleMation);
+					inPageImgMation[boxId] = $.extend(true, {}, imgStyleMation);
 					return boxId;
 				},
 
@@ -878,7 +894,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					$.each(skyeyeReportContent.find(".kuang"), function(i, item) {
 						if ($(item).find(".img-box").length > 0) {
 							var boxId = $(item).data("boxId");
-							var imgMation = inPageWordMation[boxId];
+							var imgMation = inPageImgMation[boxId];
 							imgMationList.push({
 								modelId: $(item).data("modelId"),
 								attrMation: imgMation,
@@ -1143,8 +1159,8 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								width: multiplication(item.width, widthScale),
 								height: multiplication(item.height, heightScale)
 							});
-							setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
-							setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+							// 设置custom.box开头的属性值
+							setCustomBoxAttr(echartsCustomOptions, boxId, item);
 						});
 					}
 				},
@@ -1164,8 +1180,8 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								width: multiplication(item.width, widthScale),
 								height: multiplication(item.height, heightScale)
 							});
-							setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
-							setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+							// 设置custom.box开头的属性值
+							setCustomBoxAttr(tableCustomOptions, boxId, item);
 						});
 					}
 				},
@@ -1185,8 +1201,8 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								width: multiplication(item.width, widthScale),
 								height: multiplication(item.height, heightScale)
 							});
-							setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
-							setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+							// 设置custom.box开头的属性值
+							setCustomBoxAttr(wordCustomOptions, boxId, item);
 						});
 					}
 				},
@@ -1206,7 +1222,8 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								width: multiplication(item.width, widthScale),
 								height: multiplication(item.height, heightScale)
 							});
-							setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+							// 设置custom.box开头的属性值
+							setCustomBoxAttr(imgCustomOptions, boxId, item);
 						});
 					}
 				},
@@ -1336,7 +1353,7 @@ function resetWordModel(boxId) {
 }
 
 function resetImgModel(boxId) {
-	var imgMation = inPageWordMation[boxId];
+	var imgMation = inPageImgMation[boxId];
 }
 
 function resetTableModel(boxId) {
@@ -1358,7 +1375,7 @@ function getDataChooseMation(boxId) {
 		}
 	}
 	if (isNull(_object)) {
-		_object = inPageWordMation[boxId];
+		_object = inPageImgMation[boxId];
 		if (!isNull(_object)) {
 			_object.menuType = 'imgModel';
 		}
@@ -1370,6 +1387,18 @@ function getDataChooseMation(boxId) {
 		}
 	}
 	return _object;
+}
+
+function setCustomBoxAttr(customOptions, boxId, item) {
+	$.each(customOptions, function (key, value) {
+		if (key.indexOf("custom.box") >= 0) {
+			if (!isNull(item.attrMation.attr[key])) {
+				setBoxAttrMation(key, boxId, item.attrMation.attr[key].defaultValue);
+			} else {
+				setBoxAttrMation(key, boxId, "");
+			}
+		}
+	});
 }
 
 function setBoxAttrMation(modelKey, boxId, value) {

@@ -3,8 +3,8 @@
     "key": "radio",
     "name": "单选框",
     "html": "<div class='layui-form-item {{defaultWidth}}' controlType='radio' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{remark}}'></i>{{labelContent}}：</label><div class='layui-input-block winui-radio'>{{{showValueTemplate}}}</div></div>",
-    "js": "$('input:radio[name={{boxId}}{{indexNumber}}][value={{context}}]').attr('checked', true);form.on('radio({{boxId}}{{indexNumber}})', function(data) {var value = data.value; dataValueChange(value, $(this));});",
-    "showValueTemplate": "{{#each rows}}<input type='radio' name='{{boxId}}{{indexNumber}}' title='{{name}}' rowId='{{id}}' value='{{id}}' lay-filter='{{boxId}}{{indexNumber}}' />{{/each}}"
+    "js": "$('input:radio[name=ra{{boxId}}{{indexNumber}}][value={{context}}]').attr('checked', true);form.on('radio(ra{{boxId}}{{indexNumber}})', function(data) {var value = data.value; dataValueChange(value, $(this));});",
+    "showValueTemplate": "{{#each rows}}<input type='radio' name='ra{{boxId}}{{indexNumber}}' title='{{name}}' rowId='{{id}}' value='{{id}}' lay-filter='ra{{boxId}}{{indexNumber}}' />{{/each}}"
   },
   "2": {
     "key": "input",
