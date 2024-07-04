@@ -36,8 +36,14 @@ layui.config({
     var imgModel = {};
     // 获取所有小图片列表信息
     AjaxPostUtil.request({url: sysMainMation.reportBasePath + "queryAllEnabledImgModelList", params: {}, type: 'json', method: "GET", callback: function(json) {
-            imgModel = json.rows;
-        }, async: false});
+        imgModel = json.rows;
+    }, async: false});
+
+    var domModel = {};
+    // 获取所有装饰列表信息
+    AjaxPostUtil.request({url: sysMainMation.reportBasePath + "queryAllEnabledDomModelList", params: {}, type: 'json', method: "GET", callback: function(json) {
+        domModel = json.rows;
+    }, async: false});
 
     var initData = {};
     // 获取初始化数据
@@ -66,6 +72,11 @@ layui.config({
             "title": "小图片",
             "id": "imgModel",
             "children": imgModel
+        }, {
+            "icon": " fa fa-photo-video fa-fw",
+            "title": "装饰",
+            "id": "domModel",
+            "children": domModel
         }, {
             "icon": " fa fa-area-chart fa-fw",
             "title": "图表",
