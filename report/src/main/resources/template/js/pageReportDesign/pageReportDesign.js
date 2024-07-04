@@ -57,12 +57,12 @@ layui.config({
         mouseLineColor: "blue",
         initData: initData,
         headerMenuJson: [{
-            "icon": " fa fa-area-chart fa-fw",
+            "icon": " fa fa-wordpress fa-fw",
             "title": "文字",
             "id": "wordModel",
             "children": wordModel
         }, {
-            "icon": " fa fa-area-chart fa-fw",
+            "icon": " fa fa-photo-video fa-fw",
             "title": "小图片",
             "id": "imgModel",
             "children": imgModel

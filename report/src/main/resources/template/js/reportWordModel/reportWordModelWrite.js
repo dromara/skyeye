@@ -10,23 +10,26 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'form', 'fileUpload'], function (exports) {
     winui.renderColor();
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$,
         form = layui.form;
     var usetableTemplate = $("#usetableTemplate").html();
-    var isPic = false; // 是否生成预览图
     let id = GetUrlParam("id");
 
     if (isNull(id)) {
         sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["reportModeType"]["key"], 'radioTree', "typeBox", '', form);
         skyeyeClassEnumUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", '', form);
+        // 初始化上传
+        $("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 19, '', 1));
     } else {
         AjaxPostUtil.request({url: reportBasePath + "queryWordModelById", params: {id: id}, type: 'json', method: 'GET', callback:function(data) {
             $("#name").val(data.bean.name);
             $("#defaultWidth").val(data.bean.defaultWidth);
             $("#defaultHeight").val(data.bean.defaultHeight);
+            // 初始化上传
+            $("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 20, data.bean.imgPath, 1));
             sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["reportModeType"]["key"], 'radioTree', "typeBox", data.bean.typeId, form);
             skyeyeClassEnumUtil.showEnumDataListByClassName("commonEnable", 'radio', "enabled", data.bean.enabled, form);
             // 加载属性值
@@ -49,52 +52,39 @@ layui.config({
     form.render();
     form.on('submit(formAddBean)', function (data) {
         if (winui.verifyForm(data.elem)) {
-            if (!isPic) {
-                winui.window.msg("请先生成预览图", {icon: 2, time: 2000});
+            var rowTr = $("#useTable tr");
+            var tableData = new Array();
+            $.each(rowTr, function(i, item) {
+                var rowNum = $(item).attr("trcusid").replace("tr", "");
+                var trId = $(item).attr("trcusid");
+                tableData.push({
+                    propertyId: choosePropertyList[trId].id,
+                    editor: dataShowType.getData('editor' + rowNum),
+                    showToEditor: dataShowType.getData('whetherShow' + rowNum),
+                    orderBy: i + 1
+                });
+            });
+            if (tableData.length == 0) {
+                winui.window.msg('请最少选择一条属性值', {icon: 2, time: 2000});
                 return false;
             }
-            var oCanvas = document.getElementById("thecanvas");
-            var imgData = oCanvas.toDataURL();
-            AjaxPostUtil.request({url: reqBasePath + "common004", params: {images: imgData, type: 19}, type: 'json', callback:function(json1){
-                var rowTr = $("#useTable tr");
-                var tableData = new Array();
-                $.each(rowTr, function(i, item) {
-                    var rowNum = $(item).attr("trcusid").replace("tr", "");
-                    var trId = $(item).attr("trcusid");
-                    tableData.push({
-                        propertyId: choosePropertyList[trId].id,
-                        editor: dataShowType.getData('editor' + rowNum),
-                        showToEditor: dataShowType.getData('whetherShow' + rowNum),
-                        orderBy: i + 1
-                    });
-                });
-                if (tableData.length == 0) {
-                    winui.window.msg('请最少选择一条属性值', {icon: 2, time: 2000});
-                    return false;
-                }
 
-                var params = {
-                    name: $("#name").val(),
-                    defaultWidth: $("#defaultWidth").val(),
-                    defaultHeight: $("#defaultHeight").val(),
-                    wordModelAttrList: JSON.stringify(tableData),
-                    typeId: dataShowType.getData('typeBox'),
-                    imgPath: json1.bean.picUrl,
-                    enabled: dataShowType.getData('enabled'),
-                    id: isNull(id) ? '' : id
-                };
-                AjaxPostUtil.request({url: reportBasePath + "writeWordModel", params: params, type: 'json', method: "POST", callback: function(json) {
-                    parent.layer.close(index);
-                    parent.refreshCode = '0';
-                }});
+            var params = {
+                name: $("#name").val(),
+                defaultWidth: $("#defaultWidth").val(),
+                defaultHeight: $("#defaultHeight").val(),
+                wordModelAttrList: JSON.stringify(tableData),
+                typeId: dataShowType.getData('typeBox'),
+                imgPath: $("#logo").find("input[type='hidden'][name='upload']").attr("oldurl"),
+                enabled: dataShowType.getData('enabled'),
+                id: isNull(id) ? '' : id
+            };
+            AjaxPostUtil.request({url: reportBasePath + "writeWordModel", params: params, type: 'json', method: "POST", callback: function(json) {
+                parent.layer.close(index);
+                parent.refreshCode = '0';
             }});
         }
         return false;
-    });
-
-    // 生成图片
-    $("body").on("click", "#createPic", function() {
-        loadPic();
     });
 
     function loadPic() {
@@ -104,37 +94,11 @@ layui.config({
                 styleStr += value.attrCode + ":" + value.defaultValue + ";";
             }
         });
-        var showPrit = '<font style="' + styleStr + '">Hello, Skyeye</font>';
-        $("#printPic").html(showPrit);
-        html2canvas($("#printPic"), {
-            onrendered: function(canvas) {
-                // 添加属性
-                canvas.setAttribute('id','thecanvas');
-                // 读取属性值
-                document.getElementById('images').innerHTML = '';
-                document.getElementById('images').appendChild(canvas);
-                $("#download").show();
-                isPic = true;
-            }
-        });
+        var wordBox = document.createElement("font");
+        wordBox.innerHTML = "Hello, Skyeye";
+        wordBox.style = styleStr;
+        $("#printPic")[0].appendChild(wordBox);
     }
-
-    // 下载canvas图片
-    $("body").on("click", "#download", function() {
-        var oCanvas = document.getElementById("thecanvas");
-        var img_data1 = Canvas2Image.saveAsPNG(oCanvas, true).getAttribute('src');
-        saveFile(img_data1, 'richer.png');
-    });
-
-    // 保存文件函数
-    var saveFile = function(data, filename){
-        var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
-        save_link.href = data;
-        save_link.download = filename;
-        var event = document.createEvent('MouseEvents');
-        event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-        save_link.dispatchEvent(event);
-    };
 
     // 新增行
     $("body").on("click", "#addRow", function() {
@@ -172,6 +136,7 @@ layui.config({
                 // 移除界面上的信息
                 $(item).parent().parent().remove();
             });
+            loadPic();
         } else {
             winui.window.msg('请选择要删除的行', {icon: 2, time: 2000});
         }
@@ -189,6 +154,7 @@ layui.config({
                 var thisRowNum = trId.replace("tr", "");
                 choosePropertyList[trId] = chooseItemMation;
                 $("#propertyId" + thisRowNum.toString()).val(choosePropertyList[trId].name);
+                loadPic();
             }});
     });
 
