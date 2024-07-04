@@ -179,7 +179,7 @@ layui.config({
 				// 不显示按钮
 				$("#clockInBtn").hide();
 				$("#clockOutBtn").hide();
-			} else if (json.bean.isCheck == 4) {
+			} else if (json.bean.isCheck == 4 || json.bean.isCheck == 5) {
 				// 不显示按钮
 				$("#clockInBtn").hide();
 				$("#clockOutBtn").hide();
@@ -208,6 +208,9 @@ layui.config({
 		} else if (json.bean.isCheck == '4'){
 			// 不显示按钮
 			s = '您已完成今日的打卡任务</br></br>' + s;
+		} else if (json.bean.isCheck == '5'){
+			// 不显示按钮
+			s = '今天是节假日，无需打卡</br></br>' + s;
 		}
 		return s;
 	}
@@ -233,6 +236,9 @@ layui.config({
 		} else if (json.bean.isCheck == '4'){
 			// 不显示按钮
 			s = '您已完成今日的打卡任务</br></br>' + s;
+		} else if (json.bean.isCheck == '5'){
+			// 不显示按钮
+			s = '今天是节假日，无需打卡</br></br>' + s;
 		}
 		return s;
 	}
