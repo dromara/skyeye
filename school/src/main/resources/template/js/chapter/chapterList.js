@@ -24,8 +24,8 @@ layui.config({
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
-	    method: 'post',
-	    url: sysMainMation.schoolBasePath + 'queryChapterList',
+	    method: 'get',
+	    url: sysMainMation.schoolBasePath + 'queryChapterListBySubjectClassesId',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -47,7 +47,7 @@ layui.config({
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
-			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "暂不支持搜索", function () {
 				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 	    }
@@ -122,7 +122,7 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return $.extend(true, {objectId: subjectClassesId}, initTableSearchUtil.getSearchValue("messageTable"));
+		return $.extend(true, {objectId: subjectClassesId,subjectClassesId: subjectClassesId}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
     exports('chapterList', {});
