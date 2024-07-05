@@ -88,8 +88,8 @@ layui.config({
 
 	// 删除
 	function restore(data) {
-		layer.confirm('还原操作', {icon: 3, title: '确定还原该数据吗？'}, function (index) {
-			layer.close(index);
+		parent.layer.confirm('还原操作', {icon: 3, title: '确定还原该数据吗？'}, function (index) {
+			parent.layer.close(index);
 			var params = {
 				className: objectId,
 				attrKey: data.attrKey
@@ -103,7 +103,7 @@ layui.config({
 
 	// 编辑
 	function edit(data) {
-		_openNewWindows({
+		parent._openNewWindows({
 			url: "../../tpl/attr/writeAttr.html?className=" + objectId + '&attrKey=' + data.attrKey,
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "writeAttr",

@@ -12,7 +12,6 @@ layui.config({
     winui.renderColor();
     var $ = layui.$,
         form = layui.form;
-
     id = GetUrlParam("id");
 
     var content = $(document.body);
@@ -27,6 +26,8 @@ layui.config({
         initEchartsData(widthScale, heightScale);
         initWordMationData(widthScale, heightScale);
         initTableMationData(widthScale, heightScale);
+        initImgMationData(widthScale, heightScale);
+        initDomMationData(widthScale, heightScale);
 
         if (!isNull(initData.bgImage)){
             content.css({
@@ -53,8 +54,8 @@ layui.config({
                     width: multiplication(item.width, widthScale),
                     height: multiplication(item.height, heightScale)
                 });
-                setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
-                setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+                // 设置custom.box开头的属性值
+                setCustomBoxAttr(echartsCustomOptions, boxId, item);
             });
         }
     }
@@ -74,8 +75,8 @@ layui.config({
                     width: multiplication(item.width, widthScale),
                     height: multiplication(item.height, heightScale)
                 });
-                setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
-                setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+                // 设置custom.box开头的属性值
+                setCustomBoxAttr(wordCustomOptions, boxId, item);
             });
         }
     }
@@ -98,8 +99,50 @@ layui.config({
                     width: multiplication(item.width, widthScale),
                     height: multiplication(item.height, heightScale)
                 });
-                setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
-                setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+                // 设置custom.box开头的属性值
+                setCustomBoxAttr(tableCustomOptions, boxId, item);
+            });
+        }
+    }
+
+    function initImgMationData(widthScale, heightScale) {
+        var imgMationList = initData.imgMationList;
+        if (!isNull(imgMationList)) {
+            $.each(imgMationList, function (i, item) {
+                var leftNum = multiplication(item.attrMation.attr["custom.move.x"].defaultValue, widthScale);
+                var topNum = multiplication(item.attrMation.attr["custom.move.y"].defaultValue, heightScale);
+                item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
+                item.attrMation.attr["custom.move.y"].defaultValue = topNum;
+                var boxId = addNewImgModel(item.modelId, item.attrMation);
+                $("#" + boxId).css({
+                    left: leftNum + "px",
+                    top: topNum + "px",
+                    width: multiplication(item.width, widthScale),
+                    height: multiplication(item.height, heightScale)
+                });
+                // 设置custom.box开头的属性值
+                setCustomBoxAttr(wordCustomOptions, boxId, item);
+            });
+        }
+    }
+
+    function initDomMationData(widthScale, heightScale) {
+        var domMationList = initData.domMationList;
+        if (!isNull(domMationList)) {
+            $.each(domMationList, function (i, item) {
+                var leftNum = multiplication(item.attrMation.attr["custom.move.x"].defaultValue, widthScale);
+                var topNum = multiplication(item.attrMation.attr["custom.move.y"].defaultValue, heightScale);
+                item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
+                item.attrMation.attr["custom.move.y"].defaultValue = topNum;
+                var boxId = addNewDomModel(item.modelId, item.attrMation);
+                $("#" + boxId).css({
+                    left: leftNum + "px",
+                    top: topNum + "px",
+                    width: multiplication(item.width, widthScale),
+                    height: multiplication(item.height, heightScale)
+                });
+                // 设置custom.box开头的属性值
+                setCustomBoxAttr(wordCustomOptions, boxId, item);
             });
         }
     }
@@ -204,7 +247,7 @@ layui.config({
 
     // 加载文字模型
     function addNewWordModel(modelId, wordStyleMation) {
-        var styleStr = getWordStyleStr(wordStyleMation.wordModelAttrList);
+        var styleStr = getWordStyleStr(wordStyleMation.attr);
         // 获取boxId
         var boxId = modelId + getRandomValueToString();
         // 获取文字模型id
@@ -212,6 +255,29 @@ layui.config({
         // 加入页面属性
         wordStyleMation.attr = $.extend(true, {}, wordStyleMation.attr);
         inPageWordMation[boxId] = $.extend(true, {}, wordStyleMation);
+        return boxId;
+    }
+
+    function addNewImgModel(modelId, imgStyleMation) {
+        // 加入页面属性
+        imgStyleMation.attr = $.extend(true, {}, imgCustomOptions, imgStyleMation.attr);
+        // 获取boxId
+        var boxId = modelId + getRandomValueToString();
+        // 获取图片模型id
+        var imgId = getImgBox(boxId, modelId, imgStyleMation);
+        inPageImgMation[boxId] = $.extend(true, {}, imgStyleMation);
+        return boxId;
+    }
+
+    // 加载装饰模型
+    function addNewDomModel(modelId, domStyleMation) {
+        // 加入页面属性
+        domStyleMation.attr = $.extend(true, {}, domCustomOptions, domStyleMation.attr);
+        // 获取boxId
+        var boxId = modelId + getRandomValueToString();
+        // 获取图片模型id
+        var domId = getDomBox(boxId, modelId, domStyleMation);
+        inPageDomMation[boxId] = $.extend(true, {}, domStyleMation);
         return boxId;
     }
 
@@ -233,8 +299,33 @@ layui.config({
         var table = document.createElement("table");
         table.id = tableBoxId;
         box.appendChild(table);
-
         return tableBoxId;
+    }
+
+    function getImgBox(boxId, modelId, imgStyleMation) {
+        var box = createBox(boxId, modelId, setDesignAttr(imgStyleMation));
+
+        var imgId = "img" + boxId;
+        var img = document.createElement("img");
+        img.id = imgId;
+        img.src = fileBasePath + imgStyleMation.imgPath;
+        img.style.width = "100%";
+        img.style.height = "100%";
+        box.appendChild(img);
+        return imgId;
+    }
+
+    function getDomBox(boxId, modelId, domStyleMation) {
+        var box = createBox(boxId, modelId, setDesignAttr(domStyleMation));
+
+        var domId = "dom" + boxId;
+        var dom = document.createElement("div");
+        dom.id = domId;
+        dom.innerHTML = domStyleMation.content;
+        dom.style.width = "100%";
+        dom.style.height = "100%";
+        box.appendChild(dom);
+        return domId;
     }
 
     function getWordBox(boxId, modelId, styleStr, wordStyleMation) {

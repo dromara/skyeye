@@ -149,7 +149,7 @@ layui.config({
     }
     //转质检单
     function purchaseQualityInspection(data){
-        parent._openNewWindows({
+        _openNewWindows({
             url: "../../tpl/purchaseDeliveryNote/deliveryToQualityInspection.html?id=" + data.id,
             title: '转质检单',
             pageId: "deliveryToQualityInspection",

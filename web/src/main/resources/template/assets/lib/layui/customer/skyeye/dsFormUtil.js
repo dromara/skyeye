@@ -773,15 +773,32 @@ var dsFormUtil = {
                 url += `&objectId=${objectId}`;
                 url += `&objectKey=${objectKey}`;
             }
-            _openNewWindows({
-                url: url,
-                title: operateOpenPage.name,
-                pageId: 'page' + operate.id,
-                area: ['90vw', '90vh'],
-                callBack: function (refreshCode) {
-                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                    dsFormTableUtil.loadTable();
-                }});
+            if (operate.openType == 1) {
+                // 正常打开
+                _openNewWindows({
+                    url: url,
+                    title: operateOpenPage.name,
+                    pageId: 'page' + operate.id,
+                    area: ['90vw', '90vh'],
+                    callBack: function (refreshCode) {
+                        winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                        dsFormTableUtil.loadTable();
+                    }});
+            } else if (operate.openType == 2) {
+                // 父页面打开
+                parent._openNewWindows({
+                    url: url,
+                    title: operateOpenPage.name,
+                    pageId: 'page' + operate.id,
+                    area: ['90vw', '90vh'],
+                    callBack: function (refreshCode) {
+                        winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                        dsFormTableUtil.loadTable();
+                    }});
+            } else if (operate.openType == 3) {
+                // 新窗口打开
+                window.open(sysMainMation.homePagePath + url, '_blank');
+            }
         } else if (operate.eventType == 'ajax') {
             // 发送请求
             var businessApi = operate.businessApi;

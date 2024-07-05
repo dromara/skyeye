@@ -18,7 +18,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: sysMainMation.erpBasePath + 'erpproduction001',
+        url: sysMainMation.erpBasePath + 'queryProductionList',
         where: getTableParams(),
         even: true,
         page: true,
@@ -38,7 +38,7 @@ layui.config({
 				return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
 			}},
 			{ field: 'state', title: '状态', width: 90, templet: function (d) {
-				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("productionState", 'id', d.state, 'name');
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
 			}},
 	        { field: 'planStartDate', width: 150, align: 'center', title: '计划开始时间'},
 	        { field: 'planComplateDate', width: 150, align: 'center', title: '计划结束时间'},

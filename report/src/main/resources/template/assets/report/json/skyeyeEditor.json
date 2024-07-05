@@ -3,8 +3,8 @@
     "key": "radio",
     "name": "单选框",
     "html": "<div class='layui-form-item {{defaultWidth}}' controlType='radio' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{remark}}'></i>{{labelContent}}：</label><div class='layui-input-block winui-radio'>{{{showValueTemplate}}}</div></div>",
-    "js": "$('input:radio[name={{boxId}}{{indexNumber}}][value={{context}}]').attr('checked', true);form.on('radio({{boxId}}{{indexNumber}})', function(data) {var value = data.value; dataValueChange(value, $(this));});",
-    "showValueTemplate": "{{#each rows}}<input type='radio' name='{{boxId}}{{indexNumber}}' title='{{name}}' rowId='{{id}}' value='{{id}}' lay-filter='{{boxId}}{{indexNumber}}' />{{/each}}"
+    "js": "$('input:radio[name=ra{{boxId}}{{indexNumber}}][value={{context}}]').attr('checked', true);form.on('radio(ra{{boxId}}{{indexNumber}})', function(data) {var value = data.value; dataValueChange(value, $(this));});",
+    "showValueTemplate": "{{#each rows}}<input type='radio' name='ra{{boxId}}{{indexNumber}}' title='{{name}}' rowId='{{id}}' value='{{id}}' lay-filter='ra{{boxId}}{{indexNumber}}' />{{/each}}"
   },
   "2": {
     "key": "input",
@@ -51,7 +51,7 @@
   "99": {
     "key": "dataBaseFrom",
     "name": "数据源选择",
-    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='dataBaseFrom' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{remark}}'></i>{{labelContent}}：</label><div class='layui-input-block'><input type='text' id='input{{boxId}}{{indexNumber}}' name='input{{boxId}}{{indexNumber}}' class='layui-input' value='{{context.name}}' readonly='readonly'/><i class='fa fa-plus-circle input-icon' id='choose{{boxId}}{{indexNumber}}'></i></div></div>",
+    "html": "<div class='layui-form-item {{defaultWidth}}' controlType='dataBaseFrom' modelKey='{{modelKey}}' boxId='{{boxId}}'><label class='layui-form-label'><i class='layui-icon layui-icon-tips' lay-tips='{{remark}}'></i>{{labelContent}}：</label><div class='layui-input-block input-add-icon'><input type='text' id='input{{boxId}}{{indexNumber}}' name='input{{boxId}}{{indexNumber}}' class='layui-input' value='{{context.name}}' readonly='readonly'/><i class='fa fa-plus-circle input-icon' id='choose{{boxId}}{{indexNumber}}'></i></div></div>",
     "js": "$('body').on('click', '#choose{{boxId}}{{indexNumber}}', function (e) {_openNewWindows({url:'../../tpl/reportDataFrom/reportDataFromChooseList.html', title:'选择数据源',pageId:'dataBaseFrom',area:['90vw','90vh'],callBack:function (refreshCode){if(refreshCode=='0'){$('#input{{boxId}}{{indexNumber}}').val(dataBaseMation.name); dataValueChange(dataBaseMation, $('#input{{boxId}}{{indexNumber}}')); } else if (refreshCode=='-9999'){winui.window.msg(systemLanguage['com.skyeye.operationFailed'][languageType],{icon:2,time:2000});}}});});",
     "showValueTemplate": ""
   },

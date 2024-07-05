@@ -10,7 +10,9 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form;
 	var selOption = getFileContent('tpl/template/select-option.tpl');
-	
+	var className = GetUrlParam("className");
+	var id = GetUrlParam("id");
+
 	var _html = {
 		'color': `<div class="layui-form-item layui-col-xs6">
 					<label class="layui-form-label">按钮颜色<i class="red">*</i></label>
@@ -25,6 +27,11 @@ layui.config({
 								<label class="layui-form-label">新开页面名称<i class="red">*</i></label>
 								<div class="layui-input-block">
 									<input type="text" id="openPageName" name="openPageName" win-verify="required" placeholder="请输入新开页面名称" class="layui-input" maxlength="200"/>
+								</div>
+							</div>
+							<div class="layui-form-item layui-col-xs12">
+								<label class="layui-form-label">打开方式<i class="red">*</i></label>
+								<div class="layui-input-block winui-radio" id="openType">
 								</div>
 							</div>
 							<div class="layui-form-item layui-col-xs12">
@@ -45,12 +52,12 @@ layui.config({
 	};
 
 	var attrHtml = '';
-	AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: {className: parent.objectId}, type: 'json', method: "POST", callback: function (json) {
+	AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: {className: className}, type: 'json', method: "POST", callback: function (json) {
 		attrHtml = getDataUseHandlebars(`<option value="">全部</option>{{#each rows}}<option value="{{attrKey}}">{{name}}</option>{{/each}}`, json);
 	}, async: false});
 
-	if (!isNull(parent.rowId)) {
-		AjaxPostUtil.request({url: reqBasePath + "queryOperateById", params: {id: parent.rowId}, type: 'json', method: 'GET', callback: function (json) {
+	if (!isNull(id)) {
+		AjaxPostUtil.request({url: reqBasePath + "queryOperateById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
 			$("#name").val(json.bean.name);
 			$("#authPointNum").val(json.bean.authPointNum);
 			$("#orderBy").val(json.bean.orderBy);
@@ -85,6 +92,7 @@ layui.config({
 				$("#openPageName").val(operateOpenPage.name);
 				var type = operateOpenPage.type ? "1" : "2";
 				$("input:radio[name=type][value=" + type + "]").attr("checked", true);
+				skyeyeClassEnumUtil.showEnumDataListByClassName("pageOpenType", 'radio', "openType", json.bean.openType, form);
 				if (type == 1) {
 					$('#typeChangeBox').html(commonHtml['customPageUrl']);
 					$("#pageUrl").val(operateOpenPage.pageUrl);
@@ -108,14 +116,14 @@ layui.config({
 			dsFormColumnUtil.init({
 				id: 'attrSymbolsDesignBox',
 				title: '按钮显示条件',
-				className: parent.objectId
+				className: className
 			}, isNull(json.bean.showConditionList) ? [] : json.bean.showConditionList);
 		}, async: false});
 	} else {
 		dsFormColumnUtil.init({
 			id: 'attrSymbolsDesignBox',
 			title: '按钮显示条件',
-			className: parent.objectId
+			className: className
 		});
 		skyeyeClassEnumUtil.showEnumDataListByClassName("operatePosition", 'select', "position", '', form);
 		skyeyeClassEnumUtil.showEnumDataListByClassName("eventType", 'select', "eventType", '', form);
@@ -146,6 +154,7 @@ layui.config({
 			// 新开页面
 			$('#eventTypeChangeBox').html(_html['operateOpenPage']);
 			$('#typeChangeBox').html(commonHtml['customPageUrl']);
+			skyeyeClassEnumUtil.showEnumDataListByClassName("pageOpenType", 'radio', "openType", '', form);
 			loadParamsTable('pageParams');
 		}
 		form.render();
@@ -179,7 +188,7 @@ layui.config({
 	form.on('submit(formWriteBean)', function (data) {
 		if (winui.verifyForm(data.elem)) {
 			var params = {
-				className: parent.objectId,
+				className: className,
 				name: $("#name").val(),
 				position: $("#position").val(),
 				color: isNull($("#color").val()) ? '' : $("#color").val(),
@@ -187,7 +196,7 @@ layui.config({
 				eventType: $("#eventType").val(),
 				orderBy: $("#orderBy").val(),
 				showConditionList: JSON.stringify(dsFormColumnUtil.tableDataList),
-				id: isNull(parent.rowId) ? '' : parent.rowId
+				id: isNull(id) ? '' : id
 			};
 
 			if (params.eventType == 'ajax') {
@@ -217,6 +226,7 @@ layui.config({
 					params: pageParams
 				};
 				params.operateOpenPage = JSON.stringify(operateOpenPage);
+				params.openType = dataShowType.getData('openType');
 			}
 
 			AjaxPostUtil.request({url: reqBasePath + "writeOperate", params: params, type: 'json', method: 'POST', callback: function (json) {

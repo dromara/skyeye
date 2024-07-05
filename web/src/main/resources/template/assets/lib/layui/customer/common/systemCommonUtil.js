@@ -1384,7 +1384,7 @@ var commonHtml = {
                     </div>`,
     'dsFormPage': `<div class="layui-form-item layui-col-xs12">
                         <label class="layui-form-label">表单布局<i class="red">*</i></label>
-                        <div class="layui-input-block">
+                        <div class="layui-input-block input-add-icon">
                             <input type="text" id="pageUrl" name="pageUrl" placeholder="请选择表单布局" win-verify="required" class="layui-input" readonly="readonly"/>
                             <i class="fa fa-plus-circle input-icon chooseBtn" style="top: 12px;"></i>
                         </div>

@@ -15,7 +15,7 @@ layui.config({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-		url: sysMainMation.erpBasePath + 'erpproduction009',
+		url: sysMainMation.erpBasePath + 'erpproduction009---已删除',
 		where: getTableParams(),
 		even: true,
 		page: false,

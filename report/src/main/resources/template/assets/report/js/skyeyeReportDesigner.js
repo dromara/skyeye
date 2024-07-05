@@ -10,8 +10,74 @@ var inPageTable = {};
 // 已经添加上的文字模型
 var inPageWordMation = {};
 
+// 已经添加上的文字模型
+var inPageImgMation = {};
+
+// 已经添加上的装饰模型
+var inPageDomMation = {};
+
 // 支持的编辑器类型
 var editorType = {};
+
+// 图表自定义属性
+var echartsCustomOptions = {
+	"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editorType": "99", "editorChooseValue": "", "typeName": "数据源"},
+	"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-color": { "value": "", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-width": { "value": "0", "edit": 1, "remark": "盒子边框宽度", "name": "边框宽度", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-style": { "defaultValue": "solid", "edit": 1, "remark": "盒子边框样式", "name": "边框样式", "editorType": "1", "editorChooseValue": "", "typeName": "盒子",
+		"optionalValue": [{"id": "solid", "name": "实线"}, {"id": "dashed", "name": "虚线"}]}
+};
+
+// 图表自定义属性
+var tableCustomOptions = {
+	"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editorType": "99", "editorChooseValue": "", "typeName": "数据源"},
+	"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-color": { "value": "", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-width": { "value": "0", "edit": 1, "remark": "盒子边框宽度", "name": "边框宽度", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-style": { "defaultValue": "solid", "edit": 1, "remark": "盒子边框样式", "name": "边框样式", "editorType": "1", "editorChooseValue": "", "typeName": "盒子",
+		"optionalValue": [{"id": "solid", "name": "实线"}, {"id": "dashed", "name": "虚线"}]},
+	"custom.tableColumn": { "defaultValue": [], "edit": 1, "remark": "数据表格的信息", "name": "表格配置", "editorType": "101", "editorChooseValue": "", "typeName": "数据源"},
+	"custom.isPage": { "defaultValue": "1", "edit": 1, "remark": "分页的标识", "name": "是否分页", "editorType": "1", "editorChooseValue": "", "typeName": "数据源",
+		"optionalValue": [{"id": 1, "name": "是"}, {"id": 0, "name": "否"}]}
+};
+
+// 文字自定义属性
+var wordCustomOptions = {
+	"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editorType": "99", "editorChooseValue": "", "typeName": "数据源"},
+	"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-color": { "value": "", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-width": { "value": "0", "edit": 1, "remark": "盒子边框宽度", "name": "边框宽度", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-style": { "defaultValue": "solid", "edit": 1, "remark": "盒子边框样式", "name": "边框样式", "editorType": "1", "editorChooseValue": "", "typeName": "盒子",
+		"optionalValue": [{"id": "solid", "name": "实线"}, {"id": "dashed", "name": "虚线"}]}
+};
+
+// 小图片自定义属性
+var imgCustomOptions = {
+	"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.box.border-color": { "value": "", "edit": 1, "remark": "盒子边框颜色", "name": "边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-width": { "value": "0", "edit": 1, "remark": "盒子边框宽度", "name": "边框宽度", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-style": { "defaultValue": "solid", "edit": 1, "remark": "盒子边框样式", "name": "边框样式", "editorType": "1", "editorChooseValue": "", "typeName": "盒子",
+		"optionalValue": [{"id": "solid", "name": "实线"}, {"id": "dashed", "name": "虚线"}]}
+};
+
+// 装饰自定义属性
+var domCustomOptions = {
+	"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.box.border-color": { "value": "", "edit": 1, "remark": "盒子边框颜色", "name": "边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-width": { "value": "0", "edit": 1, "remark": "盒子边框宽度", "name": "边框宽度", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.border-style": { "defaultValue": "solid", "edit": 1, "remark": "盒子边框样式", "name": "边框样式", "editorType": "1", "editorChooseValue": "", "typeName": "盒子",
+		"optionalValue": [{"id": "solid", "name": "实线"}, {"id": "dashed", "name": "虚线"}]}
+};
+
 layui.define(["jquery", 'form', 'element'], function(exports) {
 	var jQuery = layui.jquery;
 	form = layui.form;
@@ -47,15 +113,6 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				right_top: true,
 				left_bottom: true,
 				right_bottom: true,
-			};
-
-			// 图表自定义属性
-			var echartsCustomOptions = {
-				"custom.dataBaseMation": { "value": "", "edit": 1, "remark": "数据来源", "name": "数据来源", "editorType": "99", "editorChooseValue": "", "typeName": "数据源"},
-				"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
-				"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
-				"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
-				"custom.box.border-color": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"}
 			};
 
 			var f = {
@@ -130,8 +187,11 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								str = f.getBgImageHtml(item, str);
 							} else if(item.id == 'wordModel') {
 								str = f.getWordModelHtml(item, str);
+							} else if(item.id == 'imgModel') {
+								str = f.getImgModelHtml(item, str);
+							} else if(item.id == 'domModel') {
+								str = f.getDomModelHtml(item, str);
 							} else if(item.id == 'tableModel') {
-								// todo 待定
 								str = f.getTableModelHtml(item, str);
 							} else {
 								str = f.getEchartsHtml(item, str);
@@ -188,6 +248,36 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								'<span class="text">' + bean.name + '</span>' +
 								'</a>';
 						}
+					});
+					str += '</div>' +
+						'</div>' +
+						'</div>';
+					return str;
+				},
+
+				// 标题按钮--小图片模型获取html
+				getImgModelHtml: function(item, str) {
+					str = f.getCommonParentHeader(str, item);
+					$.each(item.children, function (j, bean) {
+						str += '<a class="li imgModle layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.name + '">' +
+							'<img class="image" src="' + bean.imgPath + '"/>' +
+							'<span class="text">' + bean.name + '</span>' +
+							'</a>';
+					});
+					str += '</div>' +
+						'</div>' +
+						'</div>';
+					return str;
+				},
+
+				// 标题按钮--装饰模型获取html
+				getDomModelHtml: function(item, str) {
+					str = f.getCommonParentHeader(str, item);
+					$.each(item.children, function (j, bean) {
+						str += '<a class="li domModle layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.name + '">' +
+							'<img class="image" src="' + bean.imgPath + '"/>' +
+							'<span class="text">' + bean.name + '</span>' +
+							'</a>';
 					});
 					str += '</div>' +
 						'</div>' +
@@ -266,6 +356,20 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						f.addNewWordModel(modelId, wordStyleMation);
 					});
 
+					// 小图片模型点击事件
+					skyeyeHeader.find(".imgModle").click(function () {
+						var modelId = $(this).attr("rowId");
+						var imgModelMation = f.getImgStyleMationById(modelId);
+						f.addNewImgModel(modelId, imgModelMation);
+					});
+
+					// 装饰模型点击事件
+					skyeyeHeader.find(".domModle").click(function () {
+						var modelId = $(this).attr("rowId");
+						var domModelMation = f.getDomStyleMationById(modelId);
+						f.addNewDomModel(modelId, domModelMation);
+					});
+
 					// 表格模型点击事件
 					skyeyeHeader.find(".tableModel").click(function () {
 						var modelId = $(this).attr("rowId");
@@ -282,11 +386,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					var tableId = f.getTableBox(boxId, modelId);
 					// 加入页面属性
 					var table = !isNull(tableMation) ? tableMation : {
-						attr: $.extend(true, {}, echartsCustomOptions, {
-							"custom.tableColumn": { "defaultValue": [], "edit": 1, "remark": "数据表格的信息", "name": "表格配置", "editorType": "101", "editorChooseValue": "", "typeName": "数据源"},
-							"custom.isPage": { "defaultValue": "1", "edit": 1, "remark": "分页的标识", "name": "是否分页", "editorType": "1", "editorChooseValue": "", "typeName": "数据源",
-								"optionalValue": [{"id": 1, "name": "是"}, {"id": 0, "name": "否"}]},
-						}),
+						attr: $.extend(true, {}, tableCustomOptions, {}),
 						tableColumnList: [],
 						isPage: 1
 					}
@@ -348,15 +448,75 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 
 				// 加载文字模型
 				addNewWordModel: function(modelId, wordStyleMation) {
-					var styleStr = getWordStyleStr(wordStyleMation.wordModelAttrList);
+					// 设置Attr的值
+					if (isNull(wordStyleMation.attr)) {
+						wordStyleMation.attr = {};
+					}
+					wordStyleMation.wordModelAttrList.forEach(function (item) {
+						if (item.showToEditor == 1) {
+							// 显示在编辑框
+							let optional = item.propertyMation.optional;
+							let value = optional == 0 ? item.propertyMation.defaultValue : '';
+							let optionalValue = "";
+							if (optional == 1) {
+								// 属性值可选
+								optionalValue = [];
+								item.propertyMation.propertyValueList.forEach(function (bean) {
+									if (bean.defaultChoose == 1) {
+										value = bean.value;
+									}
+									optionalValue.push({
+										id: bean.value,
+										name: bean.name
+									});
+								});
+								optionalValue = JSON.stringify(optionalValue);
+							}
+							wordStyleMation.attr[item.propertyMation.attrCode] = {
+								"defaultValue": value,
+								"edit": item.editor,
+								"remark": item.propertyMation.name,
+								"name": item.propertyMation.name,
+								"editorType": item.propertyMation.editorType,
+								"optionalValue": optionalValue,
+								"typeName": "Style属性"
+							}
+						}
+					})
+					// 加入页面属性
+					wordStyleMation.attr = $.extend(true, {}, wordCustomOptions, wordStyleMation.attr);
+					wordStyleMation.attr[wordStyleMation.customAttr.attrCode] = wordStyleMation.customAttr
+
+					var styleStr = getWordStyleStr(wordStyleMation.attr);
 					// 获取boxId
 					var boxId = modelId + getRandomValueToString();
 					// 获取文字模型id
 					var wordId = f.getWordBox(boxId, modelId, styleStr, wordStyleMation);
-					// 加入页面属性
-					wordStyleMation.attr = $.extend(true, {}, echartsCustomOptions, wordStyleMation.attr);
-					wordStyleMation.attr[wordStyleMation.customAttr.attrCode] = wordStyleMation.customAttr
 					inPageWordMation[boxId] = $.extend(true, {}, wordStyleMation);
+					return boxId;
+				},
+
+				// 加载小图片模型
+				addNewImgModel: function(modelId, imgStyleMation) {
+					// 加入页面属性
+					imgStyleMation.attr = $.extend(true, {}, imgCustomOptions, imgStyleMation.attr);
+					// 获取boxId
+					var boxId = modelId + getRandomValueToString();
+					// 获取图片模型id
+					var imgId = f.getImgBox(boxId, modelId, imgStyleMation);
+					inPageImgMation[boxId] = $.extend(true, {}, imgStyleMation);
+					return boxId;
+				},
+
+				// 加载装饰模型
+				addNewDomModel: function(modelId, domStyleMation) {
+					// 加入页面属性
+					domStyleMation.attr = $.extend(true, {}, domCustomOptions, domStyleMation.attr);
+					// 获取boxId
+					var boxId = modelId + getRandomValueToString();
+					// 获取图片模型id
+					var domId = f.getDomBox(boxId, modelId, domStyleMation);
+					inPageDomMation[boxId] = $.extend(true, {}, domStyleMation);
 					return boxId;
 				},
 
@@ -382,6 +542,30 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						}
 					});
 					return wordMation;
+				},
+
+				// 根据id获取小图片信息
+				getImgStyleMationById: function(id) {
+					var imgMation;
+					$.each(params.headerMenuJson, function(i, item) {
+						if (!f.isNull(item.children) && item.id == 'imgModel') {
+							imgMation = getInPoingArr(item.children, "id", id);
+							return false;
+						}
+					});
+					return imgMation;
+				},
+
+				// 根据id获取装饰信息
+				getDomStyleMationById: function(id) {
+					var domMation;
+					$.each(params.headerMenuJson, function(i, item) {
+						if (!f.isNull(item.children) && item.id == 'domModel') {
+							domMation = getInPoingArr(item.children, "id", id);
+							return false;
+						}
+					});
+					return domMation;
 				},
 
 				getEchartsBox: function (boxId, modelId) {
@@ -418,6 +602,54 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						ee.stopPropagation();
 					};
 					return wordId;
+				},
+
+				getImgBox: function (boxId, modelId, imgStyleMation) {
+					var box = f.createBox(boxId, modelId, f.setDesignAttr(imgStyleMation));
+
+					var imgId = "img" + boxId;
+					var imgBox = document.createElement("div");
+					// 为div设置类名
+					imgBox.className = "img-box";
+					imgBox.id = "label-" + imgId;
+					imgBox.onmousedown = ee => {
+						var id = $("#" + imgId).parent().attr("id");
+						f.setMoveEvent(ee, $("#" + id));
+						// 阻止事件冒泡（针对父元素的move）
+						ee.stopPropagation();
+					};
+					box.appendChild(imgBox);
+					var img = document.createElement("img");
+					img.id = imgId;
+					img.src = fileBasePath + imgStyleMation.imgPath;
+					img.style.width = "100%";
+					img.style.height = "100%";
+					box.appendChild(img);
+					return imgId;
+				},
+
+				getDomBox: function (boxId, modelId, domStyleMation) {
+					var box = f.createBox(boxId, modelId, f.setDesignAttr(domStyleMation));
+
+					var domId = "dom" + boxId;
+					var domBox = document.createElement("div");
+					// 为div设置类名
+					domBox.className = "dom-box";
+					domBox.id = "label-" + domId;
+					domBox.onmousedown = ee => {
+						var id = $("#" + domId).parent().attr("id");
+						f.setMoveEvent(ee, $("#" + id));
+						// 阻止事件冒泡（针对父元素的move）
+						ee.stopPropagation();
+					};
+					box.appendChild(domBox);
+					var dom = document.createElement("div");
+					dom.id = domId;
+					dom.innerHTML = domStyleMation.content;
+					dom.style.width = "100%";
+					dom.style.height = "100%";
+					box.appendChild(dom);
+					return domId;
 				},
 
 				setDesignAttr: function(wordStyleMation) {
@@ -645,7 +877,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					// 不触发‘移除所有图表的编辑信息’的事件的对象的class--颜色选择器
 					var notTriggerRemove = ["layui-colorpicker-main", "layui-anim-scaleSpring"];
 					// 图表点击事件
-					$("body").on('click', ".echarts-box, .word-box, .table-box", function (e) {
+					$("body").on('click', ".echarts-box, .word-box, .img-box, .dom-box, .table-box", function (e) {
 						f.setChooseReportItem($(this));
 						e.stopPropagation();
 					});
@@ -683,6 +915,8 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					$("body").on('click', "#save", function (e) {
 						var eachartsList = f.getEchartsListToSave();
 						var wordMationList = f.getWordMationListToSave();
+						var imgMationList = f.getImgMationListToSave();
+						var domMationList = f.getDomMationListToSave();
 						var tableMationList = f.getTableListToSave();
 
 						var bgImage = skyeyeReportContent.css("backgroundImage").replace('url(', '').replace(')', '');
@@ -695,6 +929,8 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 							bgImage: bgImage,
 							modelList: eachartsList,
 							wordMationList: wordMationList,
+							imgMationList: imgMationList,
+							domMationList: domMationList,
 							tableMationList: tableMationList
 						};
 						AjaxPostUtil.request({url: sysMainMation.reportBasePath + "editReportPageContentById", params: {id: id, content: encodeURIComponent(JSON.stringify(params))}, type: 'json', method: "POST", callback: function(json) {
@@ -739,6 +975,40 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					return tableList;
 				},
 
+				getImgMationListToSave: function () {
+					var imgMationList = new Array();
+					$.each(skyeyeReportContent.find(".kuang"), function(i, item) {
+						if ($(item).find(".img-box").length > 0) {
+							var boxId = $(item).data("boxId");
+							var imgMation = inPageImgMation[boxId];
+							imgMationList.push({
+								modelId: $(item).data("modelId"),
+								attrMation: imgMation,
+								width: $(item).width(),
+								height: $(item).height()
+							});
+						}
+					});
+					return imgMationList;
+				},
+
+				getDomMationListToSave: function () {
+					var domMationList = new Array();
+					$.each(skyeyeReportContent.find(".kuang"), function(i, item) {
+						if ($(item).find(".dom-box").length > 0) {
+							var boxId = $(item).data("boxId");
+							var domMation = inPageDomMation[boxId];
+							domMationList.push({
+								modelId: $(item).data("modelId"),
+								attrMation: domMation,
+								width: $(item).width(),
+								height: $(item).height()
+							});
+						}
+					});
+					return domMationList;
+				},
+
 				getWordMationListToSave: function () {
 					var wordMationList = new Array();
 					$.each(skyeyeReportContent.find(".kuang"), function(i, item) {
@@ -763,7 +1033,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						// 被选中项
 						_this.parent().find(".dian").show();
 						_this.parent().addClass("active");
-						f.loadEchartsEditor();
+						f.loadReportItemEditor();
 					}
 				},
 
@@ -775,7 +1045,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				},
 
 				// 加载echarts报表编辑器
-				loadEchartsEditor: function () {
+				loadReportItemEditor: function () {
 					var chooseObject = skyeyeReportContent.find(".active").eq(0);
 					var boxId = chooseObject.data("boxId");
 					var objectMation = getDataChooseMation(boxId);
@@ -965,6 +1235,10 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					f.initTableData(widthScale, heightScale);
 					// 初始化文字模型
 					f.initWordMationData(widthScale, heightScale);
+					// 初始化小图片模型
+					f.initImgMationData(widthScale, heightScale);
+					// 初始化装饰模型
+					f.initDomMationData(widthScale, heightScale);
 					// 初始化背景
 					if(!f.isNull(params.initData.bgImage)){
 						skyeyeReportContent.css({
@@ -990,8 +1264,8 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								width: multiplication(item.width, widthScale),
 								height: multiplication(item.height, heightScale)
 							});
-							setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
-							setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+							// 设置custom.box开头的属性值
+							setCustomBoxAttr(echartsCustomOptions, boxId, item);
 						});
 					}
 				},
@@ -1011,8 +1285,8 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								width: multiplication(item.width, widthScale),
 								height: multiplication(item.height, heightScale)
 							});
-							setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
-							setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+							// 设置custom.box开头的属性值
+							setCustomBoxAttr(tableCustomOptions, boxId, item);
 						});
 					}
 				},
@@ -1032,8 +1306,50 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								width: multiplication(item.width, widthScale),
 								height: multiplication(item.height, heightScale)
 							});
-							setBoxAttrMation("custom.box.background", boxId, item.attrMation.attr["custom.box.background"].defaultValue);
-							setBoxAttrMation("custom.box.border-color", boxId, item.attrMation.attr["custom.box.border-color"].defaultValue);
+							// 设置custom.box开头的属性值
+							setCustomBoxAttr(wordCustomOptions, boxId, item);
+						});
+					}
+				},
+
+				initImgMationData: function(widthScale, heightScale) {
+					var imgMationList = params.initData.imgMationList;
+					if (!f.isNull(imgMationList)) {
+						$.each(imgMationList, function (i, item) {
+							var leftNum = multiplication(item.attrMation.attr["custom.move.x"].defaultValue, widthScale);
+							var topNum = multiplication(item.attrMation.attr["custom.move.y"].defaultValue, heightScale);
+							item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
+							item.attrMation.attr["custom.move.y"].defaultValue = topNum;
+							var boxId = f.addNewImgModel(item.modelId, item.attrMation);
+							$("#" + boxId).css({
+								left: leftNum + "px",
+								top: topNum + "px",
+								width: multiplication(item.width, widthScale),
+								height: multiplication(item.height, heightScale)
+							});
+							// 设置custom.box开头的属性值
+							setCustomBoxAttr(imgCustomOptions, boxId, item);
+						});
+					}
+				},
+
+				initDomMationData: function(widthScale, heightScale) {
+					var domMationList = params.initData.domMationList;
+					if (!f.isNull(domMationList)) {
+						$.each(domMationList, function (i, item) {
+							var leftNum = multiplication(item.attrMation.attr["custom.move.x"].defaultValue, widthScale);
+							var topNum = multiplication(item.attrMation.attr["custom.move.y"].defaultValue, heightScale);
+							item.attrMation.attr["custom.move.x"].defaultValue = leftNum;
+							item.attrMation.attr["custom.move.y"].defaultValue = topNum;
+							var boxId = f.addNewDomModel(item.modelId, item.attrMation);
+							$("#" + boxId).css({
+								left: leftNum + "px",
+								top: topNum + "px",
+								width: multiplication(item.width, widthScale),
+								height: multiplication(item.height, heightScale)
+							});
+							// 设置custom.box开头的属性值
+							setCustomBoxAttr(domCustomOptions, boxId, item);
 						});
 					}
 				},
@@ -1136,6 +1452,10 @@ function dataValueChange(value, _this) {
 		resetChartsModel(boxId);
 	} else if(_chooseMation.menuType == 'wordModel') {
 		resetWordModel(boxId);
+	} else if(_chooseMation.menuType == 'imgModel') {
+		resetImgModel(boxId);
+	} else if(_chooseMation.menuType == 'domModel') {
+		resetDomModel(boxId);
 	} else if(_chooseMation.menuType == 'tableModel') {
 		resetTableModel(boxId);
 	}
@@ -1156,8 +1476,16 @@ function resetChartsModel(boxId) {
 
 function resetWordModel(boxId) {
 	var wordMation = inPageWordMation[boxId];
-	var styleStr = getWordStyleStr(wordMation.wordModelAttrList);
+	var styleStr = getWordStyleStr(wordMation.attr);
 	$("#" + boxId).find(".word-box").attr("style", styleStr);
+}
+
+function resetImgModel(boxId) {
+	var imgMation = inPageImgMation[boxId];
+}
+
+function resetDomModel(boxId) {
+	var domMation = inPageDomMation[boxId];
 }
 
 function resetTableModel(boxId) {
@@ -1179,12 +1507,36 @@ function getDataChooseMation(boxId) {
 		}
 	}
 	if (isNull(_object)) {
+		_object = inPageImgMation[boxId];
+		if (!isNull(_object)) {
+			_object.menuType = 'imgModel';
+		}
+	}
+	if (isNull(_object)) {
+		_object = inPageDomMation[boxId];
+		if (!isNull(_object)) {
+			_object.menuType = 'domModel';
+		}
+	}
+	if (isNull(_object)) {
 		_object = inPageTable[boxId];
 		if (!isNull(_object)) {
 			_object.menuType = 'tableModel';
 		}
 	}
 	return _object;
+}
+
+function setCustomBoxAttr(customOptions, boxId, item) {
+	$.each(customOptions, function (key, value) {
+		if (key.indexOf("custom.box") >= 0) {
+			if (!isNull(item.attrMation.attr[key])) {
+				setBoxAttrMation(key, boxId, item.attrMation.attr[key].defaultValue);
+			} else {
+				setBoxAttrMation(key, boxId, "");
+			}
+		}
+	});
 }
 
 function setBoxAttrMation(modelKey, boxId, value) {
@@ -1244,16 +1596,14 @@ function getEchartsOptions(echartsMation) {
 }
 
 // 获取文字模型样式信息
-function getWordStyleStr(propertyList) {
+function getWordStyleStr(attrMap) {
 	var styleStr = "";
-	if (isNull(propertyList)) {
+	if (isNull(attrMap)) {
 		return styleStr;
 	}
-	$.each(propertyList, function (index, item) {
-		if (!isNull(item.propertyMation)) {
-			if (item.propertyMation.attrCode.indexOf("custom.") < 0) {
-				styleStr += item.propertyMation.attrCode + ":" + item.propertyMation.defaultValue + ";";
-			}
+	$.each(attrMap, function (key, value) {
+		if (key.indexOf("custom.") < 0) {
+			styleStr += key + ":" + value.defaultValue + ";";
 		}
 	});
 	return styleStr;

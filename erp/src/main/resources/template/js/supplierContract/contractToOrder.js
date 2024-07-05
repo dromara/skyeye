@@ -23,9 +23,9 @@ layui.config({
         // 采购订单的【编辑布局】
         dsFormUtil.initEditPageForStatic('content', 'FP2023042000002', data, {
             savePreParams: function (params) {
-                params.holderId=data.objectId
-                params.holderKey=data.objectKey
-                params.id=id
+                params.holderId = data.objectId
+                params.holderKey = data.objectKey
+                params.id = id
             },
             saveData: function (params) {
                 // 保存数据
@@ -49,10 +49,6 @@ layui.config({
                 $("div[controlType='simpleTable']").find(".taxLastMoney").prop('disabled', true);
                 $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
                 $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
-
-
-
-
             }
         });
     }});

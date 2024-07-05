@@ -5,20 +5,36 @@
     <title></title>
     <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+	<link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+	<link href="../../assets/lib/winui/css/customer/ztree/common-tree.css" rel="stylesheet" />
 </head>
 <body>
 	<div class="winui-toolbar">
 		<div class="winui-tool">
 			<button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+			<button id="ganttPage" class="winui-toolbtn search-table-btn-right"><i class="fa fa-sliders" aria-hidden="true"></i>甘特图</button>
 			<button id="addBean" class="winui-toolbtn search-table-btn-right" auth="add"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
 		</div>
 	</div>
-	<div style="margin:auto 10px;">
-		<table id="messageTable" lay-filter="messageTable"></table>
+	<div class="layui-row">
+		<div style="width: 240px; float: left; height: 100%; overflow: auto; padding: 5px;">
+			<input type="text" id="name" name="name" placeholder="请输入要搜索的节点" class="layui-input" />
+			<ul id="treeDemo" class="ztree fsTree" method="get" isRoot="1"
+				treeIdKey="id" inputs="parentId" treePIdKey="pId" clickCallbackInputs="parentId:$id" treeName="name"></ul>
+		</div>
+		<div style="width: calc(100% - 250px); float: left;">
+			<div style="margin:auto 10px;">
+				<table id="messageTable" lay-filter="messageTable"></table>
+			</div>
+		</div>
 	</div>
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
-    <script type="text/javascript">
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery-min.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.all.min.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.exhide.min.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/fuzzysearch.js"></script>
+	<script type="text/javascript">
         layui.config({base: '../../js/proTask/'}).use('proTaskList');
     </script>
 </body>

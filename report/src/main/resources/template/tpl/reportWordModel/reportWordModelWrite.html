@@ -5,7 +5,6 @@
     <title></title>
     <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
-    <link href="../../assets/report/css/ruler.css" rel="stylesheet" />
 </head>
 <body>
     <div style="margin:0 auto;padding:20px;">
@@ -22,6 +21,12 @@
             <div class="layui-form-item layui-col-xs6">
                 <label class="layui-form-label">状态<i class="red">*</i></label>
                 <div class="layui-input-block winui-radio" id="enabled">
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">logo<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <div class="upload" id="logo"></div>
                 </div>
             </div>
             <div class="layui-form-item layui-col-xs6">
@@ -68,24 +73,9 @@
                 </div>
             </div>
             <div class="layui-form-item layui-col-xs12">
-                <label class="layui-form-label" style="line-height: 45px">效果图<i class="red">*</i></label>
-                <div class="layui-col-xs8" style="line-height: 60px">
-                    <div class="layui-col-xs10" id="printPic" style="width: 90px; height: 60px; text-align: center; line-height: 60px; background-color: white;">
-                        <font>Hello, Skyeye</font>
-                    </div>
-                    <div class="layui-col-xs2">
-                        <a href="javascript:;" class="layui-btn layui-btn-xs" id="createPic" style="margin-left: 10px;margin-top: 10px;">生成图片</a>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item layui-col-xs12">
-                <label class="layui-form-label" style="line-height: 45px">预览图<i class="red">*</i></label>
-                <div class="layui-col-xs6" style="line-height: 60px">
-                    <div class="layui-col-xs10" id="images">
-
-                    </div>
-                    <div class="layui-col-xs2">
-                        <a href="javascript:;" class="layui-btn layui-btn-xs" id="download" style="margin-left: 10px;margin-top: 10px; display: none">下载</a>
+                <label class="layui-form-label">效果图</label>
+                <div class="layui-input-block ver-center">
+                    <div class="layui-col-xs12" id="printPic">
                     </div>
                 </div>
             </div>
@@ -103,7 +93,7 @@
     <script type="text/x-handlebars-template" id="usetableTemplate">
         <tr trcusid="{{trId}}">
             <td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
-            <td>
+            <td class="input-add-icon">
                 <input type="text" id="{{propertyId}}" name="{{propertyId}}" placeholder="请选择属性" class="layui-input" win-verify="required" readonly="readonly">
                 <i class="fa fa-plus-circle input-icon choosePropertyBtn" style="top: 12px;"></i>
             </td>
@@ -120,11 +110,6 @@
 
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
-    <!-- html2canvas将Dom节点在Canvas里边画出来 -->
-    <script src="../../assets/html2canvas/js/html2canvas.min.js"></script>
-    <!-- 将canvas图片保存成图片 -->
-    <script src="../../assets/html2canvas/js/canvas2image.js"></script>
-    <script src="../../assets/html2canvas/js/base64.js"></script>
     <script type="text/javascript">
         layui.config({base: '../../js/reportWordModel/'}).use('reportWordModelWrite');
     </script>

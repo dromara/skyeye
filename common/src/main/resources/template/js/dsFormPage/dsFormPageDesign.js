@@ -20,9 +20,10 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'dragula', 'tagEditor', 'table'].concat(dsFormUtil.mastHaveImport), function (exports) {
+}).define(['window', 'jquery', 'winui', 'dragula', 'tagEditor', 'table', 'ClipboardJS'].concat(dsFormUtil.mastHaveImport), function (exports) {
 	winui.renderColor();
-	var index = parent.layer.getFrameIndex(window.name);
+	// 复制对象
+	var clipboard;
     var $ = layui.$;
 		layedit = layui.layedit,
 		form = layui.form;
@@ -51,11 +52,14 @@ layui.config({
 		if (pageType == 'details') {
 			// 详情布局
 			item = dsFormUtil.loadComponentValueDetails('showForm', item, null);
+			$("#syncOtherOage").remove()
+			$("#disabledEdit").remove()
 		} else {
 			// 新增和编辑布局
 			item = dsFormUtil.loadComponent('showForm', item);
 		}
 		$("#showForm div[contentId='" + item.id + "']").append(`<div class="btn-base">
+			<button type="button" class="btn btn-primary copyThis" data-clipboard-text="` + encodeURIComponent(JSON.stringify(item)) + `" title="复制"><i class="fa fa-copy"></i></button>
 			<button type="button" class="btn btn-danger removeThis" title="删除"><i class="fa fa-trash"></i></button>
 		</div>`);
 
@@ -87,10 +91,119 @@ layui.config({
 		$("#editPageContent").attr("src", editContentPageUrl);
 	});
 
+	// 粘贴
+	$("body").on("click", "#paste", function (e) {
+		layer.open({
+			type: 1,
+			title: '粘贴脚本',
+			area: ['50vw', '50vh'],
+			content: '<div style="padding: 20px;">'+
+				'<textarea id="shellCode" name="shellCode" placeholder="请输入加密后的脚本" class="layui-textarea" style="height: 300px;"></textarea>'+
+				'</div>',
+			btn: ['确定', '取消'],
+			yes: function(ii, layero){
+				var shellCode = layero.find('#shellCode').val();
+				if (isNull(shellCode)) {
+					winui.window.msg("请输入脚本", {icon: 2, time: 2000});
+					return false;
+				}
+				let itemContent = JSON.parse(decodeURIComponent(shellCode));
+				itemContent.attrKey = '';
+				itemContent.id = getRandomValueToString();
+				itemContent.attrDefinition = null;
+				loadNewControl(itemContent);
+				layer.close(ii);
+			}
+		});
+	})
+
+	// 同步至其他布局
+	var selOption = getFileContent('tpl/template/select-option.tpl');
+	$("body").on("click", "#syncOtherOage", function (e) {
+		AjaxPostUtil.request({url: reqBasePath + "queryDsFormPageList", params: {className: className}, type: 'json', method: 'POST', callback: function (json) {
+			let syncPage = []
+			$.each(json.rows, function (i, item) {
+				let type = item.type;
+				if (type == 'edit' || type == 'create' || type == 'processAttr') {
+					// 只有新增，编辑，流程属性布局之间可以互相同步
+					if (item.id != pageId) {
+						// 不能往自身布局同步
+						syncPage.push({
+							id: item.id,
+							name: item.name + '[' + item.numCode + ']'
+						});
+					}
+				}
+			});
+			let selHtml = getDataUseHandlebars(selOption, {rows: syncPage});
+			layer.open({
+				type: 1,
+				title: '同步至其他布局',
+				area: ['50vw', '50vh'],
+				content: '<div style="padding: 20px;">'+
+					'<form class="layui-form" action="" id="showOtherPageForm" autocomplete="off" style="height: 100%">' +
+						'<select class="otherPageId" lay-filter="otherPageId" id="otherPageId" lay-search="" win-verify="required">'+
+							selHtml +
+						'</select>' +
+					'</form>' +
+					'</div>',
+				btn: ['确定', '取消'],
+				success: function(i) {
+					form.render('select');
+				},
+				yes: function(ii, layero) {
+					var otherPageId = layero.find('#otherPageId').val();
+					if (isNull(otherPageId)) {
+						winui.window.msg("请选择布局", {icon: 2, time: 2000});
+						return false;
+					}
+					for (var i = 0; i < contentList.length; i++) {
+						var item = contentList[i];
+						if (isNull(item.attrKey) && $.inArray('attrKeyBox', item.dsFormComponent.attrKeys) >= 0) {
+							winui.window.msg("存在无关联属性的组件，请移除.", {icon: 2, time: 2000});
+							initFormItemClick($("#showForm div[contentId='" + item.id + "']"));
+							return false;
+						}
+					}
+					sortDataIn();
+					var params = {
+						pageId: otherPageId,
+						dsFormPageContentList: encodeURIComponent(JSON.stringify(contentList))
+					}
+					AjaxPostUtil.request({url: reqBasePath + "writeDsFormPageContent", params: params, type: 'json', method: 'POST', callback: function (json) {
+						winui.window.msg("同步成功", {icon: 1, time: 2000});
+						layer.close(ii);
+					}});
+				}
+			});
+		}});
+	})
+
+	// 一键禁止编辑
+	$("body").on("click", "#disabledEdit", function (e) {
+		$.each(contentList, function (i, item) {
+			if (isNull(item.dsFormComponent)) {
+				return false;
+			}
+			if (item.dsFormComponent.attrKeys.indexOf("isEditBox") > -1) {
+				item.isEdit = 0
+			}
+		});
+		winui.window.msg("一键禁止编辑成功", {icon: 1, time: 2000});
+	});
+
 	function loadPageMation(json) {
 		$("#attrBox").html(getDataUseHandlebars($("#leftAttrBoxItem").html(), {rows: attrList}));
 		$.each(json.rows, function (i, item) {
 			loadNewControl(item);
+		});
+
+		clipboard = new ClipboardJS('.copyThis');
+		clipboard.on('success', function (e) {
+			winui.window.msg("复制成功", {icon: 1, time: 2000});
+		});
+		clipboard.on('error', function (e) {
+			winui.window.msg("浏览器不支持！", {icon: 2, time: 2000});
 		});
 		matchingLanguage();
 	}

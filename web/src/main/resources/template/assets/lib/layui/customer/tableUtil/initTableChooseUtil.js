@@ -56,7 +56,7 @@ var initTableChooseUtil = {
             '        </div>' +
             '    </div>' +
             '    <div class="layui-form-mid layui-word-aux" style="width: 100%">' + newOptions.placeholder + '</div>' +
-            '    <div style="width: 100%; overflow-x: auto;">' +
+            '    <div style="width: 100%; overflow-x: auto; margin-bottom: 10px;">' +
             '    <table class="layui-table" style="width: auto">' +
             '         <thead>' +
             '             <tr id="header' + newOptions.id + '"></tr>' +
