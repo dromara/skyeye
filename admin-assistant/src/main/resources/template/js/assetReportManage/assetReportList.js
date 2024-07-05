@@ -39,6 +39,15 @@ layui.config({
 			{ field: 'state', title: '状态', align: 'center', width: 100, templet: function(d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("assetReportState", 'id', d.state, 'name');
 			}},
+			{ field: 'state1', title: '入库状态', rowspan: '2', width: 90, templet: function (d) {
+				// return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("assetReportState", 'id', d.state, 'name');
+				if (isNull(d.state)) {
+					return '未入库';
+				} else {
+					return '已入库';
+				}
+			}},
+
 			{ field: 'assetAdminMation', title: '管理员', width: 120, templet: function(d) {
 				return getNotUndefinedVal(d.assetAdminMation?.name);
 			}},
@@ -84,9 +93,9 @@ layui.config({
 	// 新增
 	$("body").on("click", "#addBean", function() {
 		_openNewWindows({
-			url: "../../tpl/materialCode/materialCodeAdd.html?assetId=" + assetId,
+			url: "../../tpl/assetReportManage/assetReportAdd.html?assetId=" + assetId,
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-			pageId: "materialCodeAdd",
+			pageId: "assetReportAdd",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -97,9 +106,9 @@ layui.config({
 	// 批量复制
 	$("body").on("click", "#batchCopy", function() {
 		_openNewWindows({
-			url: "../../tpl/materialCode/batchCopy.html?assetId=" + assetId,
+			url: "../../tpl/assetReportManage/batchCopy.html?assetId=" + assetId,
 			title: '批量复制',
-			pageId: "materialCodeBatchCopy",
+			pageId: "assetReportBatchCopy",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}});
