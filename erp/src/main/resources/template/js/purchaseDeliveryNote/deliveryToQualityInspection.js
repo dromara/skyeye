@@ -33,6 +33,7 @@ layui.config({
                 }});
             },
             loadComponentCallback: function () {
+                $("div[controlType='supplier']").remove();
                 $("div[controlType='qualityInspectionFromType']").remove();
             },
             tableAddRowCallback: function (tableId) {
