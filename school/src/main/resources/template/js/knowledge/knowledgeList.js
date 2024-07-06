@@ -14,6 +14,7 @@ layui.config({
 		table = layui.table;
 	objectKey = GetUrlParam("objectKey");
 	objectId = GetUrlParam("objectId");
+	subjectClassesId = GetUrlParam("subjectClassesId");
 	if (isNull(objectKey) || isNull(objectId)) {
 		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
 		return false;
@@ -34,9 +35,7 @@ layui.config({
 			{ field: 'name', title: '名称', align: 'left', width: 300, templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
 			}},
-			{ field: 'chapterId', title: '所属章节', align: 'left', width: 300, templet: function (d) {
-				return isNull(d.chapterMation) ? '' : '第 ' + d.chapterMation.section + '章 ' + d.chapterMation.name;
-			}},
+			{ field: 'content', title: '内容', align: 'left', width: 300},
 	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 	        { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
@@ -65,8 +64,8 @@ layui.config({
 
 	// 新增
 	$("body").on("click", "#addBean", function() {
-    	parent._openNewWindows({
-			url: systemCommonUtil.getUrl('FP2023082800013&objectId=' + objectId + '&objectKey=' + objectKey, null),
+		parent._openNewWindows({
+			url: '../../tpl/knowledge/write.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId,
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "knowledgeAdd",
 			area: ['90vw', '90vh'],
@@ -74,12 +73,12 @@ layui.config({
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
-    });
+	});
 	
 	// 编辑
 	function edit(data) {
 		parent._openNewWindows({
-			url: systemCommonUtil.getUrl('FP2023082800014&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
+			url: '../../tpl/knowledge/write.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId+ '&id=' + data.id,
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "knowledgeEdit",
 			area: ['90vw', '90vh'],
@@ -120,7 +119,7 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return $.extend(true, {objectKey: objectKey, objectId: objectId}, initTableSearchUtil.getSearchValue("messageTable"));
+		return $.extend(true, {objectKey: objectKey, objectId: subjectClassesId}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
     exports('knowledgeList', {});

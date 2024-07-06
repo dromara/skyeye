@@ -1,6 +1,7 @@
 
 // 以下两个参数开启团队权限时有值
 var objectId = '', objectKey = '';
+var objectParams = {};
 // 根据以下两个参数判断：工作流的判断是否要根据serviceClassName的判断
 var serviceClassName;
 
