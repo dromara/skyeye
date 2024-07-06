@@ -52,7 +52,7 @@ layui.config({
 				{ field: 'unit', title: '产品规格类型', align: 'center', width: 100, templet: function (d) {
 					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialUnit", 'id', d.unit, 'name');
 				}},
-		        { field: 'norms', title: '库存', width: 150, templet: function (d) {
+		        { field: 'norms', title: '库存', width: 500, templet: function (d) {
 		        	var str = "";
 		        	$.each(d.materialNorms, function(i, item) {
 						if (!isNull(item.overAllStock)) {
