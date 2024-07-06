@@ -14,6 +14,7 @@ var attrList = [];
 
 // 这两个参数为开启团队权限的对象拥有，这里没有实际用处，用于加载组件时临时有用。
 var objectId = '', objectKey = '';
+var objectParams = {};
 
 layui.config({
 	base: basePath, 
