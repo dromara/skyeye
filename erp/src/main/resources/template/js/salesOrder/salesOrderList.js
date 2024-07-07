@@ -122,12 +122,12 @@ layui.config({
 			callBack: function (refreshCode) {
 			}});
 	}
-	
-    // 转销售出库
+
+    // 销售订单转销售出库
 	function turnSales(data) {
 		_openNewWindows({
-            url: systemCommonUtil.getUrl('FP2023050300002&id=' + data.id + '&serviceClassName=' + sysServiceMation["outIsSalesOutlet"]["key"], null),
-			title: "转销售出库",
+			url:"../../tpl/salesOrder/salesOrderToOutlet.html?id=" + data.id,
+            title: "转销售出库",
 			pageId: "salesOrderToOut",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {

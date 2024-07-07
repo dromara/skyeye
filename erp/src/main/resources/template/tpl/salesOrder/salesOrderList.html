@@ -37,6 +37,11 @@
 					<a class="layui-btn layui-btn-xs" lay-event="turnSales">转销售出库</a>
 				{{# } }}
 			{{# } }}
+			{{# if(d.state == 'partiallyCompleted') { }}
+				{{# if(auth('1571813426889')){ }}
+					<a class="layui-btn layui-btn-xs" lay-event="turnSales">转销售出库</a>
+				{{# } }}
+			{{# } }}
 		</script>
 	</div>
 	<script src="../../assets/lib/layui/layui.js"></script>
