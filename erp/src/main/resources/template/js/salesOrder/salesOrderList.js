@@ -77,6 +77,8 @@ layui.config({
             });
         } else if (layEvent === 'turnSales') { //转销售出库单
         	turnSales(data);
+        } else if (layEvent === 'turnReturns') { //转销售退货单
+            turnReturns(data);
         } else if (layEvent === 'processDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
@@ -134,6 +136,19 @@ layui.config({
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
 			}});
+    }
+
+    // 销售订单转销售退货
+    function turnReturns(data) {
+        _openNewWindows({
+            url:"../../tpl/salesOrder/salesOrderToReturns.html?id=" + data.id,
+            title: "转销售退货",
+            pageId: "salesOrderToReturns",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
     }
 
     form.render();
