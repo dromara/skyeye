@@ -46,6 +46,7 @@
     "assetManageReturn": {"name": "资产归还", "key": "com.skyeye.eve.assets.service.impl.AssetReturnServiceImpl"},
     "assetManagePurchase": {"name": "资产采购", "key": "com.skyeye.eve.assets.service.impl.AssetPurchaseServiceImpl"},
     "assetManagePut": {"name": "资产采购入库", "key": "com.skyeye.eve.assets.service.impl.AssetPurchasePutServiceImpl"},
+    "assetPurchaseReturn": {"name": "资产采购退货", "key": "com.skyeye.eve.assets.service.impl.AssetPurchaseReturnServiceImpl"},
     "assetArticlesUse": {"name": "用品领用", "key": "com.skyeye.eve.articles.service.impl.ArticlesUseServiceImpl"},
     "assetArticlesPurchase": {"name": "用品采购", "key": "com.skyeye.eve.articles.service.impl.ArticlesPurchaseServiceImpl"},
     "licenceManageRevert": {"name": "证照归还", "key": "com.skyeye.eve.licence.service.impl.LicenceApplyRevertServiceImpl"},
