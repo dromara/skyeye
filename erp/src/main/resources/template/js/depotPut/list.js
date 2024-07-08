@@ -32,12 +32,15 @@ layui.config({
                 return str;
             }},
             { field: 'idKey', title: '单据类型', width: 120, templet: function (d) {
-                return idKeyMap[d.idKey];
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotPutFromType", 'id', d.fromTypeId, 'name');
             }},
             { field: 'createName', title: '申请人', width: 120 },
             { field: 'createTime', title: '申请时间', align: 'center', width: 150 },
             { field: 'totalPrice', title: '合计金额', align: 'left', width: 120 },
             { field: 'operTime', title: '单据日期', align: 'center', width: 140 },
+            { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
+                }},
             { field: 'otherState', title: '入库状态', width: 90, templet: function (d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotPutState", 'id', d.otherState, 'name');
             }},

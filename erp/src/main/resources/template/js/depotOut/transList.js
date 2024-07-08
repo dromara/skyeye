@@ -123,10 +123,10 @@ layui.config({
             pageUrl = '../../tpl/otherOutlets/otherOutletsToOut.html';
         } else if (type == 5) {
             // 领料出库单
-            pageUrl = '';
+            pageUrl = '../../tpl/erpPick/erpPickToOut.html';
         } else if (type == 6) {
             // 补料出库单
-            pageUrl = '';
+            pageUrl = '../../tpl/erpPick/erpPatchPickToOut.html';
         }
         _openNewWindows({
             url:  pageUrl + '?id=' + data.id,

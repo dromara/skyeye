@@ -111,7 +111,7 @@ layui.config({
         let type = idKeyToIdMap[data.idKey];
         if (type == 1) {
             // 采购入库单
-            pageUrl = '';
+            pageUrl = '../../tpl/purchasePut/purchasePutToPut.html';
         } else if (type == 2) {
             // 销售退货单
             pageUrl = '';
