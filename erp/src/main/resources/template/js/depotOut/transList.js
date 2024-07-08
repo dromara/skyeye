@@ -110,17 +110,17 @@ layui.config({
         let pageUrl = '';
         let type = idKeyToIdMap[data.idKey];
         if (type == 1) {
-            // 采购退货单
-            pageUrl = '';
+            // 采购退货单purchaseReturnToOut
+            pageUrl = '../../tpl/purchaseReturns/purchaseReturnToOut.html';
         } else if (type == 2) {
             // 销售出库单
-            pageUrl = '';
+            pageUrl = '../../tpl/salesOutlet/salesOutToOut.html';
         } else if (type == 3) {
             // 零售出库单
-            pageUrl = '';
+            pageUrl = '../../tpl/retailOutlet/retailOutToOut.html';
         } else if (type == 4) {
             // 其他出库单
-            pageUrl = '';
+            pageUrl = '../../tpl/otherOutlets/otherOutletsToOut.html';
         } else if (type == 5) {
             // 领料出库单
             pageUrl = '';

@@ -60,13 +60,13 @@ layui.config({
         } else if (layEvent === 'edit') { //编辑
         	edit(data);
         } else if (layEvent === 'subApproval') { //提交审核
-            erpOrderUtil.submitOrderMation(data.id, serviceClassName, function() {
+            erpOrderUtil.submitOrderMation(data.id,serviceClassName, function() {
                 loadTable();
             });
         } else if (layEvent === 'processDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
-            erpOrderUtil.revokeOrderMation(data.processInstanceId, serviceClassName, function() {
+            erpOrderUtil.revokeOrderMation(data.processInstanceId,serviceClassName, function() {
                 loadTable();
             });
         }

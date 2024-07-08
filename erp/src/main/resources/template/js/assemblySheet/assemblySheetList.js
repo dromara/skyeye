@@ -9,6 +9,7 @@ layui.config({
     var $ = layui.$,
         form = layui.form,
         table = layui.table;
+    var serviceClassName = sysServiceMation["assemblySheetOrder"]["key"];
     authBtn('1571811998404');//新增
 
     table.render({

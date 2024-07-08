@@ -65,7 +65,7 @@ layui.config({
         	details(data);
         } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        } else if (layEvent === 'subExamine') { //提交审核
+        } else if (layEvent === 'subApproval') { //提交审核
             erpOrderUtil.submitOrderMation(data.id, serviceClassName, function() {
                 loadTable();
             });
