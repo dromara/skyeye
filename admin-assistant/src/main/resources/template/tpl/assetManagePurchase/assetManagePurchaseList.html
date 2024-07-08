@@ -32,6 +32,15 @@
 					<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
 				{{# } }}
 			{{# } }}
+
+			{{# if (d.state == 'pass' || d.state == 'partiallyCompleted') { }}
+				{{# if (auth('1720362868984')) { }}
+					<a class="layui-btn layui-btn-xs" lay-event="turnAssetInventory">转采购入库</a>
+				{{# } }}
+				{{# if (auth('1720363038492')) { }}
+					<a class="layui-btn layui-btn-xs" lay-event="turnAssetProcurementReturn">转采购退货单</a>
+				{{# } }}
+			{{# } }}
 		</script>
 	</div>
     <script src="../../assets/lib/layui/layui.js"></script>

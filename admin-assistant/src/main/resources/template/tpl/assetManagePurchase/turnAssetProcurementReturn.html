@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+<div style="margin:0 auto;padding:20px;">
+    <form class="layui-form" action="" id="showForm" autocomplete="off">
+        <div id="content"></div>
+        <div class="layui-form-item layui-col-xs12">
+            <div class="layui-input-block">
+                <button class="winui-btn" type="button" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+                <button class="winui-btn" lay-submit lay-filter="formSaveDraft" id="formSaveDraft">保存为草稿</button>`
+                <button class="winui-btn" lay-submit lay-filter="formWriteBean" id="formWriteBean">提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="../../assets/lib/layui/layui.js"></script>
+<script src="../../assets/lib/layui/custom.js"></script>
+<script type="text/javascript">
+    layui.config({base: '../../js/assetManagePurchase/'}).use('turnAssetProcurementReturn');
+</script>
+</body>
+</html>

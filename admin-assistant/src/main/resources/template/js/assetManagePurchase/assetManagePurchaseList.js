@@ -26,7 +26,7 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 		cols: [[
-			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: '2' },
 			{ field: 'oddNumber', title: '单号', width: 200, align: 'center', templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
 			}},
@@ -35,7 +35,7 @@ layui.config({
 				return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
 			}},
 			{ field: 'state', title: '状态', width: 90, templet: function (d) {
-				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseOrderState", 'id', d.state, 'name');
 			}},
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
@@ -67,7 +67,11 @@ layui.config({
 			activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销采购申请
 			revoke(data);
-        }
+        } else if (layEvent === 'turnAssetInventory') { //转资产采购入库单
+			turnAssetInventory(data);
+		} else if (layEvent === 'turnAssetProcurementReturn') { //转资产退货单
+			turnAssetProcurementReturn(data);
+		}
     });
 	
 	// 资产采购详情
@@ -148,6 +152,32 @@ layui.config({
 				}});
 			});
 		});
+	}
+
+
+	// 转资产采购入库
+	function turnAssetInventory(data) {
+		_openNewWindows({
+			url: "../../tpl/assetManagePurchase/turnAssetInventory.html?id=" + data.id,
+			title: "转资产采购入库",
+			pageId: "turnAssetInventory",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}});
+	}
+	//转资产采购退货单
+	function turnAssetProcurementReturn(data){
+		parent._openNewWindows({
+			url: "../../tpl/assetManagePurchase/turnAssetProcurementReturn.html?id=" + data.id,
+			title: '转资产采购退货单',
+			pageId: "turnAssetProcurementReturn",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}});
 	}
 
 	form.render();
