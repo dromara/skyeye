@@ -110,7 +110,7 @@ layui.config({
         let pageUrl = '';
         let type = idKeyToIdMap[data.idKey];
         if (type == 1) {
-            // 采购退货单purchaseReturnToOut
+            // 采购退货单
             pageUrl = '../../tpl/purchaseReturns/purchaseReturnToOut.html';
         } else if (type == 2) {
             // 销售出库单

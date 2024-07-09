@@ -117,7 +117,7 @@ layui.config({
 		$.each(jsonList, function(i, item) {
 			// 获取当前接口所属模块的下标
 			var thisModelIndex = getModelIndex(model, item.modelName);
-			if(model[thisModelIndex].id === modelId){
+			if (model[thisModelIndex].id === modelId) {
 				var groupName = "未分类接口";
 				if (!isNull(item.groupName)) {
 					groupName = item.groupName;

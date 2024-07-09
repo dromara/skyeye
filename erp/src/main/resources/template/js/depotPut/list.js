@@ -31,7 +31,7 @@ layui.config({
                 }
                 return str;
             }},
-            { field: 'idKey', title: '单据类型', width: 120, templet: function (d) {
+            { field: 'idKey', title: '来源单据类型', width: 120, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotPutFromType", 'id', d.fromTypeId, 'name');
             }},
             { field: 'createName', title: '申请人', width: 120 },

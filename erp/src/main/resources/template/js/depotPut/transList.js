@@ -114,16 +114,16 @@ layui.config({
             pageUrl = '../../tpl/purchasePut/purchasePutToPut.html';
         } else if (type == 2) {
             // 销售退货单
-            pageUrl = '';
+            pageUrl = '../../tpl/salesReturns/salesReturnsToPut.html';
         } else if (type == 3) {
             // 零售退货单
-            pageUrl = '';
+            pageUrl = '../../tpl/retailReturns/retailReturnsToPut.html';
         } else if (type == 4) {
             // 其他入库单
-            pageUrl = '';
+            pageUrl = '../../tpl/otherWarehous/otherWarehousToPut.html';
         } else if (type == 5) {
             // 退料入库单
-            pageUrl = '';
+            pageUrl = '../../tpl/erpPick/erpReturnPickToPut.html';
         } else if (type == 6) {
             // 物料退货单
             pageUrl = '';
