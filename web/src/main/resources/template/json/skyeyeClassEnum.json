@@ -229,5 +229,12 @@
     "orderQualityInspectionType": {"name": "ERP-采购订单质检状态", "className": "skyeye-erp#com.skyeye.business.classenum.OrderQualityInspectionType"},
     "deliveryPutState": {"name": "ERP-采购到货单免检商品入库状态", "className": "skyeye-erp#com.skyeye.purchase.classenum.DeliveryPutState"},
     "qualityInspectionPutState": {"name": "ERP-采购质检单商品入库状态", "className": "skyeye-erp#com.skyeye.inspection.classenum.QualityInspectionPutState"},
-    "qualityInspectionReturnState": {"name": "ERP-采购质检单商品退货状态", "className": "skyeye-erp#com.skyeye.inspection.classenum.QualityInspectionReturnState"}
+    "qualityInspectionReturnState": {"name": "ERP-采购质检单商品退货状态", "className": "skyeye-erp#com.skyeye.inspection.classenum.QualityInspectionReturnState"},
+
+    "homeworkApplicationProcessEnum": {"name": "云课堂-作业应用环节", "className": "skyeye-school#com.skyeye.school.assignment.classenum.AssignmentApplicationProcess"},
+    "homeworkCorrectStatusEnum": {"name": "云课堂-作业提交批改状态", "className": "skyeye-school#com.skyeye.school.assignment.classenum.AssignmentCorrectState"},
+    "homeworkSubStatusEnum": {"name": "云课堂-学生作业提交状态", "className": "skyeye-school#com.skyeye.school.assignment.classenum.AssignmentSubState"},
+    "homeworkTimeStatusEnum": {"name": "云课堂-作业的时间状态", "className": "skyeye-school#com.skyeye.school.assignment.classenum.AssignmentTimeState"},
+    "homeworkTypeEnum": {"name": "云课堂-作业类型", "className": "skyeye-school#com.skyeye.school.assignment.classenum.AssignmentType"}
+
 }
