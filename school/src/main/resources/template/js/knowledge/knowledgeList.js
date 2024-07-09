@@ -119,7 +119,7 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return $.extend(true, {objectKey: objectKey, objectId: subjectClassesId}, initTableSearchUtil.getSearchValue("messageTable"));
+		return $.extend(true, {objectKey: objectKey, objectId: subjectClassesId,subjectClassesId: subjectClassesId}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
     exports('knowledgeList', {});

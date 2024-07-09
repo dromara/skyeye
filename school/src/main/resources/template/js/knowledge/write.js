@@ -37,7 +37,9 @@ layui.config({
                 let data = json.bean;
                 dsFormUtil.initEditPageForStatic('content', 'FP2023082800014', data, {
                     savePreParams: function (params) {
-                        params.subjectClassesId = subjectClassesId;
+                        params.objectId = objectId;
+                        params.objectKey = objectKey;
+                        params.subjectClassesId = objectParams.subjectClassesId;
                     }
                 });
             }

@@ -25,6 +25,12 @@ layui.config({
 		}, {
 			title: '知识点',
 			pageUrl: '../../tpl/knowledge/knowledgeList.html?subjectClassesId=' + subjectClassesId
+		}, {
+			title: '互动课件',
+			pageUrl: '../../tpl/courseware/coursewareList.html?subjectClassesId=' + subjectClassesId
+		}, {
+			title: '作业',
+			pageUrl: '../../tpl/homework/homeworkList.html?subjectClassesId=' + subjectClassesId
 		}],
 		element: layui.element,
 		object: {
