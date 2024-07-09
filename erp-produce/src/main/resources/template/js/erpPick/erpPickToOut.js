@@ -16,7 +16,7 @@ layui.config({
     var id = GetUrlParam("id");
 
     // 领料出库单转仓库出库
-    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryRequisitionOutLetList", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
+    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryRequisitionOutLetsTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
             let data = json.bean;
             // 仓库出库的【编辑布局】
             dsFormUtil.initEditPageForStatic('content', 'FP2024070100006', data, {
