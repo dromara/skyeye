@@ -35,7 +35,7 @@ layui.config({
             { field: 'name', title: '名称', align: 'left', width: 300, templet: function (d) {
                     return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
                 }},
-            { field: 'remark', title: '相关描述', align: 'left', width: 300},
+            { field: 'content', title: '内容', align: 'left', width: 300},
             { field: 'endTime', title: '截止时间', align: 'left', width: 120 },
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
