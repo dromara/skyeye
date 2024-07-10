@@ -31,11 +31,6 @@ layui.config({
                         }});
                 },
 
-                // 组件加载完成后的回调函数
-                loadComponentCallback: function () {
-                    $("div[controlType='customer']").remove();
-                },
-
                 // 新增行的回调函数
                 tableAddRowCallback: function (tableId) {
                     $("#addRow" + tableId).remove();
