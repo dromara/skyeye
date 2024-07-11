@@ -101,6 +101,7 @@
     "disCussionAuthEnum": {"name": "讨论帖权限", "className": "skyeye-pro#com.skyeye.discussion.classenum.DisCussionAuthEnum", "pageUrl": "../../tpl/discuss/discussList.html"},
     "flowableStateEnum": {"name": "工作流状态", "className": "skyeye-pro#com.skyeye.common.enumeration.FlowableStateEnum"},
     "correspondentEnterEnum": {"name": "往来单位类型", "className": "skyeye-pro#com.skyeye.common.enumeration.CorrespondentEnterEnum", "remark": "往来单位的组件中使用"},
+    "correspondentAllEnterEnum": {"name": "所有往来单位类型", "className": "skyeye-pro#com.skyeye.common.enumeration.CorrespondentAllEnterEnum", "remark": "往来单位的组件中使用"},
 
     "projectStateEnum": {"name": "项目状态", "className": "skyeye-project#com.skyeye.project.classenum.ProjectStateEnum"},
     "taskStateEnum": {"name": "项目任务状态", "className": "skyeye-project#com.skyeye.task.classenum.TaskStateEnum"},
