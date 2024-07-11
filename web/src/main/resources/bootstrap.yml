@@ -6,13 +6,14 @@ spring:
   application:
     name: skyeye-web-${spring.profiles.active} # 服务名
   profiles:
-    active: dev
+    active: public
   cloud:
     nacos:
       discovery:
         server-addr: 172.18.92.40:9000 # 配置服务注册nacos地址
+        namespace: ${spring.profiles.active} # 配置命名空间
       config:
         # 指定nacos server的地址
         server-addr: 172.18.92.40:9000
         file-extension: yml
-        namespace: dev
+        namespace: ${spring.profiles.active} # 配置命名空间
