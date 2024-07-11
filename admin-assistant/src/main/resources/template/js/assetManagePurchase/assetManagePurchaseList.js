@@ -46,7 +46,7 @@ layui.config({
 		]],
 		done: function(json) {
 			matchingLanguage();
-			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单号，标题", function () {
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单号", function () {
 				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 		}
@@ -170,9 +170,9 @@ layui.config({
 	}
 	//转资产采购退货单
 	function turnAssetProcurementReturn(data){
-		parent._openNewWindows({
+		_openNewWindows({
 			url: "../../tpl/assetManagePurchase/turnAssetProcurementReturn.html?id=" + data.id,
-			title: '转资产采购退货单',
+			title: '转资产采购退货',
 			pageId: "turnAssetProcurementReturn",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {

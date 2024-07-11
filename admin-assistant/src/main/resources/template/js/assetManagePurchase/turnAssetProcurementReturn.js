@@ -16,28 +16,27 @@ layui.config({
 
     // 资产采购订单转资产采购退货单
     AjaxPostUtil.request({url: sysMainMation.admBasePath + "queryAssetPurchaseOrderTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
-            let data = json.bean;
-            // 资产采购退货单的【编辑布局】
-            dsFormUtil.initEditPageForStatic('content', 'FP2024070700002', data, {
-                savePreParams: function (params) {
-                    params.fromId=data.oddNumber
-                },
-
-                saveData: function (params) {
-                    // 保存数据
-                    AjaxPostUtil.request({url: sysMainMation.admBasePath + "insertAssetPurchaseOrderToReturns", params: params, type: 'json', method: "POST", callback: function(json) {
-                        parent.layer.close(index);
-                        parent.refreshCode = '0';
-                    }});
-                },
-                tableAddRowCallback: function (tableId) {
-                    $("#addRow" + tableId).remove();
-                    $("div[controlType='simpleTable']").find(".assetId").prop('disabled', true);
-                    $("div[controlType='simpleTable']").find(".fromId").prop('disabled', true);
-                    $("div[controlType='simpleTable']").find(".unitPrice").prop('disabled', true);
-                    $("div[controlType='simpleTable']").find(".chooseAssetBtn").prop('disabled', true);
-                }
-            });
-        }});
+        let data = json.bean;
+        // 资产采购退货单的【编辑布局】
+        dsFormUtil.initEditPageForStatic('content', 'FP2024070700002', data, {
+            saveData: function (params) {
+                // 保存数据
+                AjaxPostUtil.request({url: sysMainMation.admBasePath + "insertAssetPurchaseOrderToReturns", params: params, type: 'json', method: "POST", callback: function(json) {
+                    parent.layer.close(index);
+                    parent.refreshCode = '0';
+                }});
+            },
+            loadComponentCallback: function () {
+                $("div[controlType='assetPurchaseReturnFromType']").remove();
+            },
+            tableAddRowCallback: function (tableId) {
+                $("#addRow" + tableId).remove();
+                $("div[controlType='simpleTable']").find(".assetId").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".fromId").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".unitPrice").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".chooseAssetBtn").prop('disabled', true);
+            }
+        });
+    }});
 
 });
