@@ -31,11 +31,6 @@ layui.config({
                         }});
                 },
 
-                // 组件加载完成后的回调函数
-                loadComponentCallback: function () {
-                    $("div[controlType='customer']").remove();
-                },
-
                 // 新增行的回调函数
                 tableAddRowCallback: function (tableId) {
                     $("#addRow" + tableId).remove();
@@ -46,7 +41,6 @@ layui.config({
                     $("div[controlType='simpleTable']").find(".taxMoney").prop('disabled', true);
                     $("div[controlType='simpleTable']").find(".taxUnitPrice").prop('disabled', true);
                     $("div[controlType='simpleTable']").find(".taxLastMoney").prop('disabled', true);
-                    $("div[controlType='simpleTable']").find(".specifications").prop('disabled', true);
                 }
             });
         }});
