@@ -16,8 +16,8 @@ layui.config({
 	var assetReportCheckType = isNull(parent.adminAssistantUtil.assetReportCheckType) ? false : parent.adminAssistantUtil.assetReportCheckType;
 
 	// 设置提示信息
-	var s = '资产明细选择规则：';
-	if(assetReportCheckType){
+	var s = '资产明细选择规则：仅加载未领用的资产信息。<br>';
+	if (assetReportCheckType) {
 		s += '1.多选；如没有查到要选择的资产信息，请检查资产信息是否满足当前规则。';
 		var ids = [];
 		$.each(parent.adminAssistantUtil.checkAssetReportMation, function(i, item) {
