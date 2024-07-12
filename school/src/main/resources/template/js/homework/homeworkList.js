@@ -60,12 +60,14 @@ layui.config({
             details(data);
         } else if (layEvent === 'del') { //删除
             del(data);
+        }else if (layEvent === 'submit') { //提交情况
+            submit(data);
         }
     });
 
     // 新增
     $("body").on("click", "#addBean", function() {
-        parent._openNewWindows({
+        parent.parent._openNewWindows({
             url: '../../tpl/homework/write.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId,
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "homeworkAdd",
@@ -78,7 +80,7 @@ layui.config({
 
     // 编辑
     function edit(data) {
-        parent._openNewWindows({
+        parent.parent._openNewWindows({
             url: '../../tpl/homework/write.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId+ '&id=' + data.id,
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "homeworkEdit",
@@ -91,7 +93,7 @@ layui.config({
 
     // 详情
     function details(data) {
-        parent._openNewWindows({
+        parent.parent._openNewWindows({
             url: systemCommonUtil.getUrl('FP2024070900002&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "homeworkDetails",
@@ -111,6 +113,19 @@ layui.config({
         });
     }
 
+    //提交情况
+    function submit(data) {
+        parent.parent._openNewWindows({
+            url: '../../tpl/homework/submit.html?id=' + data.id,
+            title: '作业批改',
+            pageId: "homeworkCorrect",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
     form.render();
     $("body").on("click", "#reloadTable", function() {
         loadTable();
@@ -123,5 +138,5 @@ layui.config({
         return $.extend(true, {objectKey: objectKey, objectId: subjectClassesId,subjectClassesId: subjectClassesId}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
-    exports('coursewareList', {});
+    exports('homeworkList', {});
 });
