@@ -42,11 +42,12 @@ layui.config({
                 assetId: getNotUndefinedVal($("#assetId").attr(initTableChooseUtil.chooseInputDataIdKey)),
                 state: $("#state").val(),
                 limit: $("#number").val(),
+                number:$("#number").val(),
                 page: 1
             }
             AjaxPostUtil.request({url: sysMainMation.admBasePath + "queryAssetReportCodeList", params: params, type: 'json', method: 'POST', callback: function (json) {
                 $("#barCode").val(json.rows.join('\n'));
-                $("#tips").html("共计获取个" + json.total + "条形码");
+                $("#tips").html("共计获取" + json.total + "个条形码");
             }});
         }
         return false;

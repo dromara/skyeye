@@ -15,7 +15,7 @@ layui.config({
     var $ = layui.$;
     var id = GetUrlParam("id");
 
-    // 资产采购订单转资产采购入库
+    // 根据仓库id获取仓库级别信息
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryDepotLevelValById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
             let data = json.bean;
             // 仓库级别的值的【编辑布局】
