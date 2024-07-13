@@ -10,12 +10,13 @@ layui.config({
         form = layui.form,
         table = layui.table;
         
-    authBtn('1593442212544');// 新增
+    authBtn('1720796297124');// 新增
         
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
+        // 获取列表
         url: sysMainMation.erpBasePath + 'erpmachin001',
         where: getTableParams(),
         even: true,

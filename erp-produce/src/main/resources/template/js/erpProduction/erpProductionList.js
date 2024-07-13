@@ -11,7 +11,8 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-	
+
+	// 新增
 	authBtn('1590913527206');
 	
 	table.render({
