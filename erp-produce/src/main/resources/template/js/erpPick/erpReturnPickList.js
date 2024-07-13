@@ -24,24 +24,37 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'oddNumber', title: '单据编号', align: 'center', width: 180, templet: function (d) {
-                return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
-            }},
-            { field: 'machinMation', rowspan: '2', title: '加工单', align: 'center', width: 200, templet: function (d) {return isNull(d.machinMation) ? '' : d.machinMation.oddNumber}},
-            { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
-                return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
-            }},
-            { field: 'state', title: '状态', width: 90, templet: function (d) {
-                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
-            }},
-            { field: 'totalPrice', title: '物料合计', align: 'left', width: 100 },
-            { field: 'operTime', title: '单据日期', align: 'center', width: 150 },
-            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
-            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
-            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
-            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar' }
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: '2' },
+            { field: 'oddNumber', title: '单号', rowspan: '2', width: 200, align: 'center', templet: function (d) {
+                    var str = '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+                    if (!isNull(d.fromId)) {
+                        str += '<span class="state-new">[转]</span>';
+                    }
+                    return str;
+                }},
+            { field: 'operTime', title: '单据日期', rowspan: '2', align: 'center', width: 140 },
+            { colspan: '2', title: '来源单据信息', align: 'center' },
+            { field: 'processInstanceId', title: '流程ID', rowspan: '2', width: 100, templet: function (d) {
+                    return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
+                }},
+            { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
+                }},
+            { field: 'otherState', title: '入库状态', rowspan: '2', width: 90, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("putState", 'id', d.otherState, 'name');
+                }},
+            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 120 },
+            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
+            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '2', align: 'left', width: 120 },
+            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], rowspan: '2', align: 'center', width: 150 },
+            { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
+        ], [
+            { field: 'fromTypeId', title: '来源类型', width: 150, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("pickFromType", 'id', d.fromTypeId, 'name');
+                }},
+            { field: 'fromId', title: '单据编号', width: 200, templet: function (d) {
+                    return getNotUndefinedVal(d.fromMation?.oddNumber);
+                }}
         ]],
         done: function(json) {
         	matchingLanguage();
@@ -64,10 +77,25 @@ layui.config({
             subApproval(data);
         } else if (layEvent === 'processDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
-        } else if (layEvent === 'revoke') { //撤销
+        } else if (layEvent === 'turnReturnMaterialToPut') { //转退料入库
+            turnReturnMaterialToPut(data);
+        }else if (layEvent === 'revoke') { //撤销
             revoke(data);
         }
     });
+
+    // 转退料入库
+    function turnReturnMaterialToPut(data) {
+        _openNewWindows({
+            url: "../../tpl/erpPick/turnReturnMaterialToPut.html?id=" + data.id,
+            title: "转",
+            pageId: "turnReturnMaterialToPut",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
 
     // 添加
     $("body").on("click", "#addBean", function() {

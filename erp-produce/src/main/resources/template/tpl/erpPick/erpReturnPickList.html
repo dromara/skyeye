@@ -34,6 +34,13 @@
 					<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
 				{{# } }}
 			{{# } }}
+			{{# if (d.state == 'pass') { }}
+				{{# if (d.otherState == 1 ||d.otherState == 2) { }}
+					{{# if (auth('1720873016087')) { }}
+						<a class="layui-btn layui-btn-xs" lay-event="turnReturnMaterialToPut">转退料入库</a>
+					{{# } }}
+				{{# } }}
+			{{# } }}
     	</script>
 	</div>
 
