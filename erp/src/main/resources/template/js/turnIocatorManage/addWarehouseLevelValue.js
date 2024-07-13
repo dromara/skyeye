@@ -16,19 +16,19 @@ layui.config({
     var id = GetUrlParam("id");
 
     // 根据仓库id获取仓库级别信息
-    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryDepotLevelByDepotId", params: {depotId: id}, type: 'json', method: 'GET', callback: function (json) {
+    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryDepotLevelValById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
             let data = json.bean;
             // 仓库级别的值的【编辑布局】
-            dsFormUtil.initEditPageForStatic('content', 'FP2024071100006', data, {
+            dsFormUtil.initEditPageForStatic('content', 'FP2024071200008', data, {
 
                 savePreParams: function (params) {
-                    params.parentId = data.parentId
-                    params.depotId = id
+                    params.parentId=data.parentId
+                    params.depotId=data.depotId
                 },
 
                 saveData: function (params) {
                     // 保存数据
-                    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "writeDepotLevel", params: params, type: 'json', method: "POST", callback: function(json) {
+                    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "writeDepotLevelVal", params: params, type: 'json', method: "GET", callback: function(json) {
                             parent.layer.close(index);
                             parent.refreshCode = '0';
                         }});
@@ -38,6 +38,10 @@ layui.config({
                 // },
                 tableAddRowCallback: function (tableId) {
                     $("#addRow" + tableId).remove();
+                    // $("div[controlType='simpleTable']").find(".assetId").prop('disabled', true);
+                    // $("div[controlType='simpleTable']").find(".fromId").prop('disabled', true);
+                    // $("div[controlType='simpleTable']").find(".unitPrice").prop('disabled', true);
+                    // $("div[controlType='simpleTable']").find(".chooseAssetBtn").prop('disabled', true);
                 }
             });
         }});

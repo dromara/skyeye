@@ -10,7 +10,11 @@ layui.config({
         fsTree = layui.fsTree,
         form = layui.form,
         table = layui.table;
+    // tableTree = layui.tableTreeDj;
     var ztree;
+    var id = GetUrlParam("id");
+    var objectKey = GetUrlParam("objectKey")
+    var objectId = GetUrlParam("objectId")
 
     // 下拉按钮
     var dropdown = new Dropdown();
@@ -20,7 +24,7 @@ layui.config({
     /********* tree 处理   start *************/
     fsTree.render({
         id: "treeDemo",
-        url: sysMainMation.erpBasePath + "queryDepotLevelById",
+        url: sysMainMation.erpBasePath + "queryDepotLevelById?id=" + id,
         checkEnable: false,
         showLine: false,
         showIcon: true,
@@ -46,6 +50,16 @@ layui.config({
         loadTable();
     }
 
+
+    //
+    // function loadTable(id) {
+    //     AjaxPostUtil.request({url: admBasePath + "queryDepotLevelById", params: {id: id}, type: 'json', method: "GET", callback: function (json) {
+    //             initLoadTable();
+    //         }});
+    // };
+
+
+
     function initLoadTable() {
         table.render({
             id: 'messageTable',
@@ -59,17 +73,7 @@ layui.config({
             limit: getLimit(),
             cols: [[
                 { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
-                // { field: 'name', title: '名称', rowspan: '2', align: 'left', width: 300, templet: function (d) {
-                //     return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
-                // }},
                 { field: 'number', title: '编号', rowspan: '2', align: 'left', width: 350 },
-                // { field: 'warehousing', title: '仓储费', rowspan: '2', align: 'left', width: 150 },
-                // { field: 'truckage', title: '搬运费', rowspan: '2', align: 'left', width: 150 },
-                // // { field: 'isDefault', title: '是否默认', rowspan: '2', align: 'left', width: 100 },
-                // { field: 'isDefault', title: '是否默认', width: 100, align: "center", templet: function (d) {
-                //     // return shopUtil.getMealOrderWhetherGiveName(d);
-                //     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("commonIsDefault", 'id', d.isDefault, 'name');
-                // }},
                 { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', align: 'left', width: 120 },
                 { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
                 { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '2', align: 'left', width: 120 },
@@ -138,7 +142,7 @@ layui.config({
     function del(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.admBasePath + "deleteDepotLevelValById", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "deleteDepotLevelValById", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -157,7 +161,9 @@ layui.config({
         };
         $("#treeRight").html(getDataUseHandlebars($("#treeRightTemplate").html(), {bean: par}));
         showRMenu('root', event.clientX, event.clientY);
+        // showRMenu(event.clientX, event.clientY);
     }
+
 
     // 展示树节点右键菜单
     function showRMenu(type, x, y) {
@@ -218,7 +224,7 @@ layui.config({
         hideRMenu();
         // 打开一个新建布局
         _openNewWindows({
-            url: "../../tpl/turnIocatorManage/addWarehouseLevel.html?id=" + data.id,
+            url: "../../tpl/turnIocatorManage/addWarehouseLevel.html?id=" + id,
             title: "新增仓库级别",
             pageId: "addWarehouseLevel",
             area: ['90vw', '90vh'],
@@ -228,17 +234,18 @@ layui.config({
             }});
     });
 
+
     form.render();
     $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
 
     function loadTable() {
-        tableTree.reload("messageTable", {where: getTableParams()});
+        table.reload("messageTable", {where: getTableParams()});
     }
 
     function getTableParams() {
-        return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+        return $.extend(true, {objectKey:objectKey,objectId:objectId}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('turnIocatorManage', {});

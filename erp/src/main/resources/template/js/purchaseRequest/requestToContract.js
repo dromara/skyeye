@@ -250,7 +250,6 @@ layui.config({
             // 获取所选供应商的联系人
             AjaxPostUtil.request({url: sysMainMation.reqBasePath + "queryContactsListByObject", params: {objectId:supplierMation.id}, type: 'json', method: "GET", callback: function(json) {
                 let contactsList = json.rows;
-                console.log(contactsId);
                 $("#" + contactsId).html(getDataUseHandlebars(selOption, {rows: contactsList}));
                 form.render();
             }});

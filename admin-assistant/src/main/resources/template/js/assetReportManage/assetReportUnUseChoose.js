@@ -48,13 +48,17 @@ layui.config({
 	    cols: [[
 	    	{ type: assetReportCheckType ? 'checkbox' : 'radio', rowspan: '3', fixed: 'left' },
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', fixed: 'left', type: 'numbers' },
-			{ field: 'name', title: '资产名称', width: 120 },
-			{ field: 'specifications', title: '资产规格', width: 140 },
+			{ field: 'name', title: '资产名称', width: 120, templet: function(d) {
+				return getNotUndefinedVal(d.assetMation?.name);
+			}},
+			{ field: 'specifications', title: '资产规格', width: 120, templet: function(d) {
+				return getNotUndefinedVal(d.assetMation?.specifications);
+			}},
 			{ field: 'assetImg', title: '图片', align: 'center', width: 60, templet: function (d) {
-				return '<img src="' + systemCommonUtil.getFilePath(d.assetImg) + '" class="photo-img" lay-event="assetImg">';
+				return '<img src="' + systemCommonUtil.getFilePath(d.assetMation?.assetImg) + '" class="photo-img" lay-event="assetImg">';
 			}},
 			{ field: 'typeId', title: '资产类型', width: 120, templet: function(d) {
-				return sysDictDataUtil.getDictDataNameByCodeAndKey("ADM_ASSET_TYPE", d.typeId);
+				return sysDictDataUtil.getDictDataNameByCodeAndKey("ADM_ASSET_TYPE", d.assetMation?.typeId);
 			}},
 			{ field: 'assetNum', title: '资产编号', width: 160 },
 			{ field: 'storageArea', title: '存放区域', width: 200 },

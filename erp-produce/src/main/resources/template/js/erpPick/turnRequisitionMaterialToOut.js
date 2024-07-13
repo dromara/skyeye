@@ -15,26 +15,31 @@ layui.config({
     var $ = layui.$;
     var id = GetUrlParam("id");
 
-    // 质检单转采购入库
-    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryQualityInspectionTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
+    // 领料单转领料出库单
+    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryRequisitionMaterialTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
         let data = json.bean;
-        data.erpOrderItemList=data.qualityInspectionItemList
-        // 采购入库的【编辑布局】
-        dsFormUtil.initEditPageForStatic('content', 'FP2023042300002', data, {
+        data.erpOrderItemList=data.pickChildList
+        $.each(data.erpOrderItemList, function(index, item){
+            item.operNumber=item.needNum
+            item.unitPrice=item.normsMation.estimatePurchasePrice
+            item.taxRate=0
+        });
+        console.log(data.erpOrderItemList)
+        // 领料出库的【编辑布局】
+        dsFormUtil.initEditPageForStatic('content', 'FP2024071200005', data, {
             savePreParams: function (params) {
-                params.holderId=data.holderId
-                params.holderKey=data.holderKey
             },
             saveData: function (params) {
                 // 保存数据
-                AjaxPostUtil.request({url: sysMainMation.erpBasePath + "qualityInspectionToPurchasePut", params: params, type: 'json', method: "POST", callback: function(json) {
-                    parent.layer.close(index);
-                    parent.refreshCode = '0';
-                }});
+                AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertRequisitionMaterialToTurnOut", params: params, type: 'json', method: "POST", callback: function(json) {
+                        parent.layer.close(index);
+                        parent.refreshCode = '0';
+                    }});
             },
             loadComponentCallback: function () {
-                $("div[controlType='supplier']").remove();
-                $("div[controlType='purchasePutFromType']").remove();
+                $("select[attrkey='departmentId']").prop('disabled', true);
+                $("select[attrkey='farmId']").prop('disabled', true);
+                $("div[controlType='requisitionOutLetFromType']").remove();
             },
             tableAddRowCallback: function (tableId) {
                 $("#addRow" + tableId).remove();
@@ -46,6 +51,7 @@ layui.config({
                 $("div[controlType='simpleTable']").find(".taxLastMoney").prop('disabled', true);
                 $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
                 $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".warehouse").prop('disabled', true);
             }
         });
     }});
