@@ -50,6 +50,16 @@ layui.config({
         loadTable();
     }
 
+
+    //
+    // function loadTable(id) {
+    //     AjaxPostUtil.request({url: admBasePath + "queryDepotLevelById", params: {id: id}, type: 'json', method: "GET", callback: function (json) {
+    //             initLoadTable();
+    //         }});
+    // };
+
+
+
     function initLoadTable() {
         table.render({
             id: 'messageTable',
@@ -132,7 +142,7 @@ layui.config({
     function del(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.admBasePath + "deleteDepotLevelValById", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "deleteDepotLevelValById", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -151,7 +161,9 @@ layui.config({
         };
         $("#treeRight").html(getDataUseHandlebars($("#treeRightTemplate").html(), {bean: par}));
         showRMenu('root', event.clientX, event.clientY);
+        // showRMenu(event.clientX, event.clientY);
     }
+
 
     // 展示树节点右键菜单
     function showRMenu(type, x, y) {
@@ -212,7 +224,7 @@ layui.config({
         hideRMenu();
         // 打开一个新建布局
         _openNewWindows({
-            url: "../../tpl/turnIocatorManage/addWarehouseLevel.html?id=" + data.id,
+            url: "../../tpl/turnIocatorManage/addWarehouseLevel.html?id=" + id,
             title: "新增仓库级别",
             pageId: "addWarehouseLevel",
             area: ['90vw', '90vh'],
@@ -221,6 +233,7 @@ layui.config({
                 loadTable();
             }});
     });
+
 
     form.render();
     $("body").on("click", "#reloadTable", function() {
