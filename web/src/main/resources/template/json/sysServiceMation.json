@@ -23,8 +23,11 @@
     "machinChild": {"name": "工序验收单", "key": "com.skyeye.machin.service.impl.ErpProcessAcceptanceSheetServiceImpl"},
     "productionHead": {"name": "生产计划单", "key": "com.skyeye.production.service.impl.ErpProductionServiceImpl"},
     "pickPicking": {"name": "领料单", "key": "com.skyeye.pick.service.impl.RequisitionMaterialServiceImpl"},
+    "materialOutList": {"name": "领料出库单", "key": "com.skyeye.pick.service.impl.RequisitionOutLetServiceImpl"},
     "pickReplenishment": {"name": "补料单", "key": "com.skyeye.pick.service.impl.PatchMaterialServiceImpl"},
+    "supplementOutList": {"name": "补料出库单", "key": "com.skyeye.pick.service.impl.PatchOutLetServiceImpl"},
     "pickReturn": {"name": "退料单", "key": "com.skyeye.pick.service.impl.ReturnMaterialServiceImpl"},
+    "returnMaterialPutList": {"name": "退料入库单", "key": "com.skyeye.pick.service.impl.ReturnPutServiceImpl"},
 
     "proworkLoad": {"name": "项目工作量审核", "key": "com.skyeye.service.impl.ProWorkloadServiceImpl"},
     "proTask": {"name": "项目任务审核", "key": "com.skyeye.service.impl.ProTaskServiceImpl"},

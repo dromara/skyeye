@@ -11,7 +11,8 @@ layui.config({
         table = layui.table;
         
     authBtn('1593877820765');//新增
-        
+
+    //退料单
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
