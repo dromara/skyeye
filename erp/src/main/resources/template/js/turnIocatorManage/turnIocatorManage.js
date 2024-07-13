@@ -10,7 +10,11 @@ layui.config({
         fsTree = layui.fsTree,
         form = layui.form,
         table = layui.table;
+    // tableTree = layui.tableTreeDj;
     var ztree;
+    var id = GetUrlParam("id");
+    var objectKey = GetUrlParam("objectKey")
+    var objectId = GetUrlParam("objectId")
 
     // 下拉按钮
     var dropdown = new Dropdown();
@@ -20,7 +24,7 @@ layui.config({
     /********* tree 处理   start *************/
     fsTree.render({
         id: "treeDemo",
-        url: sysMainMation.erpBasePath + "queryDepotLevelById",
+        url: sysMainMation.erpBasePath + "queryDepotLevelById?id=" + id,
         checkEnable: false,
         showLine: false,
         showIcon: true,
@@ -59,17 +63,7 @@ layui.config({
             limit: getLimit(),
             cols: [[
                 { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
-                // { field: 'name', title: '名称', rowspan: '2', align: 'left', width: 300, templet: function (d) {
-                //     return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
-                // }},
                 { field: 'number', title: '编号', rowspan: '2', align: 'left', width: 350 },
-                // { field: 'warehousing', title: '仓储费', rowspan: '2', align: 'left', width: 150 },
-                // { field: 'truckage', title: '搬运费', rowspan: '2', align: 'left', width: 150 },
-                // // { field: 'isDefault', title: '是否默认', rowspan: '2', align: 'left', width: 100 },
-                // { field: 'isDefault', title: '是否默认', width: 100, align: "center", templet: function (d) {
-                //     // return shopUtil.getMealOrderWhetherGiveName(d);
-                //     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("commonIsDefault", 'id', d.isDefault, 'name');
-                // }},
                 { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', align: 'left', width: 120 },
                 { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
                 { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '2', align: 'left', width: 120 },
@@ -234,11 +228,11 @@ layui.config({
     });
 
     function loadTable() {
-        tableTree.reload("messageTable", {where: getTableParams()});
+        table.reload("messageTable", {where: getTableParams()});
     }
 
     function getTableParams() {
-        return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+        return $.extend(true, {objectKey:objectKey,objectId:objectId}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('turnIocatorManage', {});

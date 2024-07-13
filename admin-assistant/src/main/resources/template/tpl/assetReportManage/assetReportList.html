@@ -19,13 +19,12 @@
 	</div>
 	<div style="margin: auto 10px;">
 		<table id="messageTable" lay-filter="messageTable"></table>
-        <script type="text/html" id="tableBar">
+        <script type="text/html" id="messageTableBar">
             {{# if (isNull(d.state)) { }}
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
             {{# } }}
         </script>
 	</div>
-
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
