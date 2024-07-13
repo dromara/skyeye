@@ -156,10 +156,13 @@ var AjaxPostUtil = {
         setRequestHeaders(xmlhttp);
         if("GET" === method.toUpperCase()) {
             xmlhttp.send(null);
-        } else if("POST" === method.toUpperCase() || "PUT" === method.toUpperCase() || "DELETE" === method.toUpperCase()) {
+        } else if("POST" === method.toUpperCase() || "PUT" === method.toUpperCase()) {
             // 如果是POST提交，设置请求头信息
             xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xmlhttp.send(formateParams);
+        } else if("DELETE" === method.toUpperCase()) {
+            xmlhttp.setRequestHeader("Content-Type", "application/json");
+            xmlhttp.send(JSON.stringify(ajaxObj.options.params));
         }
     }
 };

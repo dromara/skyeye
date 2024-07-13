@@ -117,8 +117,8 @@ layui.config({
     function submit(data) {
         parent.parent._openNewWindows({
             url: '../../tpl/homework/submit.html?id=' + data.id,
-            title: '作业批改',
-            pageId: "homeworkCorrect",
+            title: '提交情况',
+            pageId: "homeworkSubmit",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});

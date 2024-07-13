@@ -29,6 +29,9 @@ layui.config({
             { field: 'accountNumber', title: '学号', align: 'left', width: 180, templet: function(d) {
                     return getNotUndefinedVal(d.createMation?.accountNumber);
             }},
+            { field: 'content', title: '内容', align: 'left', width: 180, templet: function (d) {
+                    return '<a lay-event="details" class="notice-title-click">' + d.content + '</a>';
+            }},
             { field: 'state', title: '状态', align: 'left',width: 150, templet: function(d) {
                 var str = '';
                 if (d.state == 'beCorrected') {
@@ -39,12 +42,12 @@ layui.config({
                     return str;
             }},
             { field: 'score', title: '分数', align: 'left',width: 150},
-            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 250 },
+            { field: 'lastUpdateTime', title: '最后提交时间', align: 'center', width: 250 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#tableBar' }
         ]],
         done: function(json) {
             matchingLanguage();
-            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "暂不支持搜索", function () {
                 table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
             });
         }
@@ -55,11 +58,25 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'correct') { //批改
             correct(data);
+        } else if (layEvent === 'details') { //详情
+            details(data);
         }
     });
 
+    // 详情
+    function details(data) {
+        parent.parent._openNewWindows({
+            url: systemCommonUtil.getUrl('FP2024071300001&id=' + data.id, null),
+            title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+            pageId: "homeworkDetails",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+            }});
+    }
+
     //批改
     function correct(data) {
+        console.log(11)
         parent.parent._openNewWindows({
             url: '../../tpl/homework/correct.html?id=' + data.id,
             title: '作业批改',
