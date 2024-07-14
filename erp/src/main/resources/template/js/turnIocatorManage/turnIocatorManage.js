@@ -24,7 +24,7 @@ layui.config({
     /********* tree 处理   start *************/
     fsTree.render({
         id: "treeDemo",
-        url: sysMainMation.erpBasePath + "queryDepotLevelById?id=" + id,
+        url: sysMainMation.erpBasePath + "queryDepotLevelByDepotId?depotId=" + id,
         checkEnable: false,
         showLine: false,
         showIcon: true,
@@ -49,16 +49,6 @@ layui.config({
         }
         loadTable();
     }
-
-
-    //
-    // function loadTable(id) {
-    //     AjaxPostUtil.request({url: admBasePath + "queryDepotLevelById", params: {id: id}, type: 'json', method: "GET", callback: function (json) {
-    //             initLoadTable();
-    //         }});
-    // };
-
-
 
     function initLoadTable() {
         table.render({
@@ -103,14 +93,28 @@ layui.config({
     // 添加
     $("body").on("click", "#addBean", function() {
         _openNewWindows({
-            url: systemCommonUtil.getUrl('FP2024071200007', null),
-            title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+            url: "../../tpl/turnIocatorManage/addWarehouseLevelValue.html?id=" + id,
+            title: "新增仓库级别的值",
             pageId: "warehouseLevelValueAdd",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
+
+
+
+        // _openNewWindows({
+        //     url: "../../tpl/turnIocatorManage/writeWarehouseLevel.html?id=" + id,
+        //     title: "新增仓库级别",
+        //     pageId: "addWarehouseLevel",
+        //     area: ['90vw', '90vh'],
+        //     callBack: function (refreshCode) {
+        //         winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+        //         // 刷新节点
+        //         var nownode = ztree.getNodesByParam("id", "0", null);
+        //         ztree.reAsyncChildNodes(nownode[0], "refresh");
+        //     }});
     });
 
     // 编辑
@@ -160,18 +164,15 @@ layui.config({
             name: treeNode.name
         };
         $("#treeRight").html(getDataUseHandlebars($("#treeRightTemplate").html(), {bean: par}));
-        showRMenu('root', event.clientX, event.clientY);
-        // showRMenu(event.clientX, event.clientY);
+        showRMenu(folderId == 0 ? 'root' : '', event.clientX, event.clientY);
     }
 
 
     // 展示树节点右键菜单
     function showRMenu(type, x, y) {
         $("#treeRight .is-file").show();
-        if(type == 'root'){
-            $("#treeRight .add").hide();
-            $("#treeRight .edit").hide();
-            $("#treeRight .remove").hide();
+        if (type == 'root') {
+            $("#treeRight .treedeleteFolderAndChild").hide();
         }
         $("#treeRight").show();
         $("#treeRight").css({top: y + "px", left: x + "px", visibility: "visible", position: "absolute"});
@@ -222,15 +223,18 @@ layui.config({
     // 树操作--新建
     $("body").on("click", ".treecreateNewFolder", function (e) {
         hideRMenu();
+        var parentId = $(this).attr("folderId");
         // 打开一个新建布局
         _openNewWindows({
-            url: "../../tpl/turnIocatorManage/addWarehouseLevel.html?id=" + id,
+            url: "../../tpl/turnIocatorManage/writeWarehouseLevel.html?depotId=" + id + "&parentId=" + parentId,
             title: "新增仓库级别",
-            pageId: "addWarehouseLevel",
+            pageId: "writeWarehouseLevel",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                loadTable();
+                // 刷新节点
+                var nownode = ztree.getNodesByParam("id", "0", null);
+                ztree.reAsyncChildNodes(nownode[0], "refresh");
             }});
     });
 

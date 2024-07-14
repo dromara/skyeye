@@ -21,7 +21,7 @@
         <div style="width: 240px; float: left; height: 100%; overflow: auto; padding: 5px;">
             <input type="text" id="name" name="name" placeholder="请输入要搜索的节点" class="layui-input" />
             <ul id="treeDemo" class="ztree fsTree" method="get" isRoot="1"
-                treeIdKey="id" inputs="parentId" treePIdKey="pId" clickCallbackInputs="parentId:$id" treeName="name"></ul>
+                treeIdKey="id" inputs="parentId" treePIdKey="parentId" clickCallbackInputs="parentId:$id" treeName="name"></ul>
         </div>
         <div style="width: calc(100% - 250px); float: left;">
             <div style="margin:auto 10px;">
@@ -40,14 +40,14 @@
 
     <script type="text/x-handlebars-template" id="treeRightTemplate">
         {{#bean}}
-        <li class="is-file treedeleteFolderAndChild">
+        <li class="is-file treedeleteFolderAndChild" folderId="{{id}}">
             <a href="javascript:;">
                 <img alt="" src="../../assets/images/icon/delete-icon.png" />
                 <span>删除</span>
             </a>
         </li>
         <li class="divider"></li>
-        <li class="is-file treecreateNewFolder">
+        <li class="is-file treecreateNewFolder" folderId="{{id}}">
             <a href="javascript:;">
                 <img alt="" src="../../assets/images/icon/create-folder-icon.png" />
                 <span>新建</span>
