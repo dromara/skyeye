@@ -28,7 +28,7 @@ layui.config({
 
                 saveData: function (params) {
                     // 保存数据
-                    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "writeDepotLevelVal", params: params, type: 'json', method: "GET", callback: function(json) {
+                    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "writeDepotLevelVal", params: params, type: 'json', method: "POST", callback: function(json) {
                             parent.layer.close(index);
                             parent.refreshCode = '0';
                         }});
