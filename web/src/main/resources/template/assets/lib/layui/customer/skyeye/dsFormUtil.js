@@ -442,6 +442,7 @@ var dsFormUtil = {
             content = dsFormUtil.getContentLinkedData(content);
         }
         content.title = dsFormUtil.getLable(content);
+        content.maxLength = dsFormUtil.getMaxLength(content);
         if (isNull(content.attrDefinition)) {
             content.attrDefinition = {};
         }
@@ -596,6 +597,16 @@ var dsFormUtil = {
             }
         }
         return content.title;
+    },
+
+    getMaxLength: function (content) {
+        var attr = content.attrDefinition;
+        if (!isNull(attr) && !$.isEmptyObject(attr)) {
+            if (!isNull(attr.attrDefinitionCustom)) {
+                return attr.attrDefinitionCustom.maxLength;
+            }
+        }
+        return null;
     },
 
     // 获取属性关联的数据值来源信息
