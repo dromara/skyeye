@@ -24,7 +24,6 @@ layui.config({
             item.unitPrice=item.normsMation.estimatePurchasePrice
             item.taxRate=0
         });
-        console.log(data.erpOrderItemList)
         // 补料出库的【编辑布局】
         dsFormUtil.initEditPageForStatic('content', 'FP2024071200002', data, {
             savePreParams: function (params) {
@@ -32,9 +31,9 @@ layui.config({
             saveData: function (params) {
                 // 保存数据
                 AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertPatchMaterialToTurnOut", params: params, type: 'json', method: "POST", callback: function(json) {
-                        parent.layer.close(index);
-                        parent.refreshCode = '0';
-                    }});
+                    parent.layer.close(index);
+                    parent.refreshCode = '0';
+                }});
             },
             loadComponentCallback: function () {
                 $("select[attrkey='departmentId']").prop('disabled', true);

@@ -26,23 +26,23 @@ layui.config({
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: '2' },
             { field: 'oddNumber', title: '单号', rowspan: '2', width: 200, align: 'center', templet: function (d) {
-                    var str = '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
-                    if (!isNull(d.fromId)) {
-                        str += '<span class="state-new">[转]</span>';
-                    }
-                    return str;
-                }},
+                var str = '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+                if (!isNull(d.fromId)) {
+                    str += '<span class="state-new">[转]</span>';
+                }
+                return str;
+            }},
             { field: 'operTime', title: '单据日期', rowspan: '2', align: 'center', width: 140 },
             { colspan: '2', title: '来源单据信息', align: 'center' },
             { field: 'processInstanceId', title: '流程ID', rowspan: '2', width: 100, templet: function (d) {
-                    return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
-                }},
+                return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
+            }},
             { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
-                }},
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
+            }},
             { field: 'otherState', title: '入库状态', rowspan: '2', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("putState", 'id', d.otherState, 'name');
-                }},
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("putState", 'id', d.otherState, 'name');
+            }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '2', align: 'left', width: 120 },
@@ -50,11 +50,11 @@ layui.config({
             { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ], [
             { field: 'fromTypeId', title: '来源类型', width: 150, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("pickFromType", 'id', d.fromTypeId, 'name');
-                }},
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("pickFromType", 'id', d.fromTypeId, 'name');
+            }},
             { field: 'fromId', title: '单据编号', width: 200, templet: function (d) {
-                    return getNotUndefinedVal(d.fromMation?.oddNumber);
-                }}
+                return getNotUndefinedVal(d.fromMation?.oddNumber);
+            }}
         ]],
         done: function(json) {
         	matchingLanguage();
@@ -88,7 +88,7 @@ layui.config({
     function turnReturnMaterialToPut(data) {
         _openNewWindows({
             url: "../../tpl/erpPick/turnReturnMaterialToPut.html?id=" + data.id,
-            title: "转",
+            title: "转退料入库",
             pageId: "turnReturnMaterialToPut",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {

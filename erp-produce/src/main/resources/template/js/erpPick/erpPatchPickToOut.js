@@ -21,8 +21,6 @@ layui.config({
             // 仓库出库的【编辑布局】
             dsFormUtil.initEditPageForStatic('content', 'FP2024070100006', data, {
                 savePreParams: function (params) {
-                    // params.holderId=data.holderId
-                    // params.holderKey=data.holderKey
                 },
                 saveData: function (params) {
                     // 保存数据
