@@ -40,7 +40,6 @@ layui.config({
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("assetReportState", 'id', d.state, 'name');
 			}},
 			{ field: 'state1', title: '入库状态', rowspan: '2', width: 90, templet: function (d) {
-				// return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("assetReportState", 'id', d.state, 'name');
 				if (isNull(d.state)) {
 					return '未入库';
 				} else {
