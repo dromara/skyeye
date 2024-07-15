@@ -76,7 +76,6 @@ layui.config({
 
     //批改
     function correct(data) {
-        console.log(11)
         parent.parent._openNewWindows({
             url: '../../tpl/homework/correct.html?id=' + data.id,
             title: '作业批改',
