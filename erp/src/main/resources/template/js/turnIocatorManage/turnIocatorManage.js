@@ -10,7 +10,6 @@ layui.config({
         fsTree = layui.fsTree,
         form = layui.form,
         table = layui.table;
-    // tableTree = layui.tableTreeDj;
     var ztree;
     var id = GetUrlParam("id");
     var objectKey = GetUrlParam("objectKey")
@@ -20,7 +19,7 @@ layui.config({
     var dropdown = new Dropdown();
     dropdown.render();
 
-    //获取所有仓库queryAllStoreHouseList       queryDepotLevelValList
+    //获取所有仓库
     /********* tree 处理   start *************/
     fsTree.render({
         id: "treeDemo",
