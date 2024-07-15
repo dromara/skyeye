@@ -28,22 +28,20 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
-            { field: 'oddNumber', title: '生产单号', align: 'center', rowspan: '2', width: 200, templet: function (d) {
+            { field: 'oddNumber', title: '单号', align: 'center', rowspan: '2', width: 200, templet: function (d) {
                     return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
                 }},
-            { field: 'operTime', title: '单据日期', align: 'center', rowspan: '2', width: 140 },
+            { field: 'processInstanceId', title: '流程ID', width: 280, templet: function (d) {
+                    return '<a lay-event="details" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
+                }},
             { colspan: '2', title: '来源单据信息', align: 'center' },
-            { field: 'processInstanceId', title: '流程ID', rowspan: '2', width: 100, templet: function (d) {
-                    return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
-                }},
-            { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
-                }},
-            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2',width: 120 },
-            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', rowspan: '2',width: 150 },
-            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', rowspan: '2',width: 120 },
-            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', rowspan: '2',width: 150 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', rowspan: '2',width: 240, toolbar: '#tableBar'}
+            { field: 'operTime', width: 150, title: '单据日期', rowspan: '2',align: 'center'},
+            { field: 'name', title: '产品名称', align: 'left',rowspan: '2',width: 150, templet: function (d) {return isNull(d.materialMation) ? '' : d.materialMation.name}},
+            { field: '---', width: 150, align: 'center', rowspan: '2',title: '规格'},
+            { field: '---', width: 150, align: 'center', rowspan: '2',title: '交货日期'},
+            { field: '---', width: 150, align: 'center', rowspan: '2',title: '数量'},
+
+            { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar' }
         ],[
             { field: 'fromTypeId', title: '来源类型', rowspan: '2',width: 150, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("sealOutLetFromType", 'id', d.fromTypeId, 'name');
@@ -54,7 +52,7 @@ layui.config({
         ]],
         done: function(json) {
             matchingLanguage();
-            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入生产单号", function () {
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单号", function () {
                 table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
             });
         }
@@ -75,6 +73,8 @@ layui.config({
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
             revoke(data);
+        } else if (layEvent === 'turnProductionPlan') { //转生产计划
+            turnProductionPlan(data);
         }
     });
 
@@ -152,6 +152,19 @@ layui.config({
                     loadTable();
                 }});
         });
+    }
+
+    // 转生产计划
+    function turnProductionPlan(data) {
+        _openNewWindows({
+            url:"../../tpl/erpPreProductionPlan/preProductionTurnToProduction.html?id=" + data.id,
+            title: "转生产计划",
+            pageId: "turnProductionPlan",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
     }
 
     form.render();

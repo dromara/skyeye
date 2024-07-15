@@ -27,26 +27,24 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'oddNumber', title: '生产单号', align: 'center', width: 200, templet: function (d) {
+            { field: 'oddNumber', title: '单号', align: 'center', width: 200, templet: function (d) {
                     return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
                 }},
-            { field: 'salesOrderNum', width: 200, title: '关联销售单', align: 'center', templet: function (d) {return isNull(d.sealOrderMation) ? '' : d.sealOrderMation.oddNumber}},
-            { field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {return isNull(d.materialMation) ? '' : d.materialMation.name}},
-            { field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {return isNull(d.materialMation) ? '' : d.materialMation.model}},
-            { field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {return isNull(d.normsMation) ? '' : d.normsMation.name}},
-            { field: 'number', width: 100, title: '计划生产数量'},
-            { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
-                    return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
-                }},
-            { field: 'state', title: '状态', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
-                }},
-            { field: 'planStartDate', width: 150, align: 'center', title: '计划开始时间'},
-            { field: 'planComplateDate', width: 150, align: 'center', title: '计划结束时间'},
-            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
-            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+            { field: 'accountId', width: 150, title: '账户', align: 'center'},
+            { field: 'operTime', width: 150, title: '单据日期', align: 'center'},
+            { field: 'farmId', width: 150, title: '车间', align: 'center'},
+            { field: 'holderId', width: 150, title: '客户', align: 'center'},
+            { field: 'departmentId', width: 120, title: '部门', align: 'center'},
+            { field: 'salesman', width: 150, title: '业务员', align: 'center'},
+            { field: 'planComplateTime', width: 140, title: '计划完成时间', align: 'center'},
+            { field: 'processInstanceId', width: 200, title: '流程ID', align: 'center'},
+            // { field: 'state', title: '状态', width: 90, templet: function (d) {
+            //         return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseOrderState", 'id', d.state, 'name');
+            //     }},
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
             { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
+            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
         ]],
         done: function(json) {

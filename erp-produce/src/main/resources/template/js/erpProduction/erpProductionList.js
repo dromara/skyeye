@@ -25,30 +25,29 @@ layui.config({
         page: true,
         limits: getLimits(),
         limit: getLimit(),
-        cols: [[
-        	{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'oddNumber', title: '生产单号', align: 'center', width: 200, templet: function (d) {
-		        return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
-		    }},
-            { field: 'salesOrderNum', width: 200, title: '关联销售单', align: 'center', templet: function (d) {return isNull(d.sealOrderMation) ? '' : d.sealOrderMation.oddNumber}},
-			{ field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {return isNull(d.materialMation) ? '' : d.materialMation.name}},
-			{ field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {return isNull(d.materialMation) ? '' : d.materialMation.model}},
-			{ field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {return isNull(d.normsMation) ? '' : d.normsMation.name}},
-            { field: 'number', width: 100, title: '计划生产数量'},
-			{ field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
-				return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
-			}},
-			{ field: 'state', title: '状态', width: 90, templet: function (d) {
-				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
-			}},
-	        { field: 'planStartDate', width: 150, align: 'center', title: '计划开始时间'},
-	        { field: 'planComplateDate', width: 150, align: 'center', title: '计划结束时间'},
-			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
-			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
-			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
-			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
-        ]],
+		cols: [[
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
+			{ field: 'oddNumber', title: '单号', align: 'center', rowspan: '2', width: 200, templet: function (d) {
+					return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+				}},
+			{ field: 'processInstanceId', title: '流程ID', width: 280, templet: function (d) {
+					return '<a lay-event="details" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
+				}},
+			{ colspan: '2', title: '来源单据信息', align: 'center' },
+			{ field: 'operTime', width: 150, title: '单据日期', rowspan: '2',align: 'center'},
+			{ field: 'name', title: '产品名称', align: 'left',rowspan: '2',width: 150, templet: function (d) {return isNull(d.materialMation) ? '' : d.materialMation.name}},
+			{ field: 'salesOrderNum', width: 100, title: '生产类型', rowspan: '2',align: 'center', templet: function (d) {return isNull(d.sealOrderMation) ? '' : d.sealOrderMation.oddNumber}},
+			{ field: 'name', title: 'bom方案', align: 'left',rowspan: '2',width: 150, templet: function (d) {return isNull(d.materialMation) ? '' : d.materialMation.name}},
+			{ field: '---', width: 150, align: 'center', rowspan: '2',title: '交货日期'},
+			{ title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar' }
+		],[
+			{ field: 'fromTypeId', title: '来源类型', rowspan: '2',width: 150, templet: function (d) {
+					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("sealOutLetFromType", 'id', d.fromTypeId, 'name');
+				}},
+			{ field: 'fromId', title: '单据编号', rowspan: '2',width: 200, templet: function (d) {
+					return getNotUndefinedVal(d.fromMation?.oddNumber);
+				}}
+		]],
 	    done: function(json) {
 	    	matchingLanguage();
 			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入生产单号", function () {

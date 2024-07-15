@@ -20,19 +20,31 @@
             {{# if(auth('1720705286166')) { }}
                 <a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>
             {{# } }}
-            {{# if(auth('1590913527206')) { }}
+            {{# if(auth('1720705272841')) { }}
                 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
             {{# } }}
-            {{# if(auth('1590926876459')) { }}
+            {{# if(auth('1720705252808')) { }}
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
             {{# } }}
         {{# } }}
 
         {{# if(d.editRow == 2) { }}
-            {{# if(auth('1696246760629')) { }}
+            {{# if(auth('1720705233677')) { }}
                 <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
             {{# } }}
         {{# } }}
+
+        {{# if(d.state == 'pass') { }}
+            {{# if(auth('1720705318422')) { }}
+                <a class="layui-btn layui-btn-xs " lay-event="turnProductionPlan">转生产计划</a>
+            {{# } }}
+        {{# } }}
+        {{# if(d.state == 'partiallyCompleted') { }}
+            {{# if(auth('1720705318422')) { }}
+                <a class="layui-btn layui-btn-xs " lay-event="turnProductionPlan">转生产计划</a>
+            {{# } }}
+        {{# } }}
+
     </script>
 </div>
 <script src="../../assets/lib/layui/layui.js"></script>
