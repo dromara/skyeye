@@ -85,8 +85,9 @@ function inTableDataArrayByAssetarId(materialId, unitId, array) {
  * @param allChooseProduct 商品对象
  * @param unitPriceKey 单价显示的key，不用的单据类型展示不同的商品价格类型(零售价，最低售价，销售价等)
  * @param calcPriceCallback 计算价格回调的函数
+ * @param callback 变化回调函数
  */
-function mUnitChangeEvent(form, allChooseProduct, unitPriceKey, calcPriceCallback) {
+function mUnitChangeEvent(form, allChooseProduct, unitPriceKey, calcPriceCallback, callback) {
     // 商品规格加载变化事件
     form.on('select(selectUnitProperty)', function(data) {
         var thisRowValue = data.value;
@@ -101,6 +102,9 @@ function mUnitChangeEvent(form, allChooseProduct, unitPriceKey, calcPriceCallbac
                     var unitPrice = parseFloat(bean[unitPriceKey]).toFixed(2);
                     $("#unitPrice" + thisRowKey).val(unitPrice);
                     $("#amountOfMoney" + thisRowKey).val((rkNum * parseFloat(unitPrice)).toFixed(2));
+                    if (typeof callback == "function") {
+                        callback(thisRowKey, bean);
+                    }
                     return false;
                 }
             });
@@ -108,6 +112,9 @@ function mUnitChangeEvent(form, allChooseProduct, unitPriceKey, calcPriceCallbac
             // 重置单价以及金额为空
             $("#unitPrice" + thisRowKey).val("0.00");
             $("#amountOfMoney" + thisRowKey).val("0.00");
+            if (typeof callback == "function") {
+                callback(thisRowKey, null);
+            }
         }
         var depotId = isNull($("#depotId").val()) ? "" : $("#depotId").val();
         // 加载库存
