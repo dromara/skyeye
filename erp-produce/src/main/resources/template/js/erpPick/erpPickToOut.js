@@ -17,38 +17,36 @@ layui.config({
 
     // 领料出库单转仓库出库
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryRequisitionOutLetsTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
-            let data = json.bean;
-            // 仓库出库的【编辑布局】
-            dsFormUtil.initEditPageForStatic('content', 'FP2024070100006', data, {
-                savePreParams: function (params) {
-                    // params.holderId=data.holderId
-                    // params.holderKey=data.holderKey
-                },
-                saveData: function (params) {
-                    // 保存数据
-                    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertRequisitionOutLetsToTurnDepot", params: params, type: 'json', method: "POST", callback: function(json) {
-                            parent.layer.close(index);
-                            parent.refreshCode = '0';
-                        }});
-                },
-                loadComponentCallback: function () {
-                    $("select[attrkey='holderIdType']").prop('disabled', true);
-                    $("select[attrkey='holderIdType']").parent().next().children('i').remove();
-                    $("div[controlType='depotOutFromType']").remove();
-                },
-                tableAddRowCallback: function (tableId) {
-                    $("#addRow" + tableId).remove();
-                    $("div[controlType='simpleTable']").find(".unitPrice").prop('disabled', true);
-                    $("div[controlType='simpleTable']").find(".amountOfMoney").prop('disabled', true);
-                    $("div[controlType='simpleTable']").find(".taxRate").prop('disabled', true);
-                    $("div[controlType='simpleTable']").find(".taxMoney").prop('disabled', true);
-                    $("div[controlType='simpleTable']").find(".taxUnitPrice").prop('disabled', true);
-                    $("div[controlType='simpleTable']").find(".taxLastMoney").prop('disabled', true);
-                    $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
-                    $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
-                    $("div[controlType='simpleTable']").find(".warehouse").prop('disabled', true);
-                }
-            });
-        }});
+        let data = json.bean;
+        // 仓库出库的【编辑布局】
+        dsFormUtil.initEditPageForStatic('content', 'FP2024070100006', data, {
+            savePreParams: function (params) {
+            },
+            saveData: function (params) {
+                // 保存数据
+                AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertRequisitionOutLetsToTurnDepot", params: params, type: 'json', method: "POST", callback: function(json) {
+                    parent.layer.close(index);
+                    parent.refreshCode = '0';
+                }});
+            },
+            loadComponentCallback: function () {
+                $("select[attrkey='holderIdType']").prop('disabled', true);
+                $("select[attrkey='holderIdType']").parent().next().children('i').remove();
+                $("div[controlType='depotOutFromType']").remove();
+            },
+            tableAddRowCallback: function (tableId) {
+                $("#addRow" + tableId).remove();
+                $("div[controlType='simpleTable']").find(".unitPrice").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".amountOfMoney").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".taxRate").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".taxMoney").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".taxUnitPrice").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".taxLastMoney").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".warehouse").prop('disabled', true);
+            }
+        });
+    }});
 
 });
