@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet"/>
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <form class="layui-form layui-form-pane" action="" autocomplete="off" style="width: 50%; float: left;">
+                <select id="workshopId" name="workshopId" lay-filter="workshopId" lay-search="">
+                </select>
+            </form>
+            <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+        </div>
+    </div>
+    <div style="margin:auto 10px;">
+        <table id="messageTable" lay-filter="messageTable"></table>
+        <script type="text/html" id="tableBar">
+            {{# if(d.editRow == 1) { }}
+                {{# if(auth('1720939511614')) { }}
+                    <a class="layui-btn layui-btn-xs" lay-event="receive">接收</a>
+                {{# } }}
+                {{# if(auth('1720939488183')) { }}
+                    <a class="layui-btn layui-btn-xs" lay-event="antiReception">反接收</a>
+                {{# } }}
+            {{# } }}
+        </script>
+    </div>
+
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+    layui.config({base: '../../js/workshopTasks/'}).use('workshopTasksList');
+    </script>
+</body>
+</html>

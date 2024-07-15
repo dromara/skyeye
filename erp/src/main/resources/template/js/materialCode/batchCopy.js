@@ -64,7 +64,7 @@ layui.config({
             }
             AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryNormsBarCodeList", params: params, type: 'json', method: 'POST', callback: function (json) {
                 $("#barCode").val(json.rows.join('\n'));
-                $("#tips").html("共计获取个" + json.total + "条形码");
+                $("#tips").html("共计获取" + json.total + "个条形码");
             }});
         }
         return false;
