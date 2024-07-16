@@ -23,10 +23,7 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'name', title: '姓名', align: 'center', width: 200},
-            { field: 'accountNumber', title: '学号', align: 'left', width: 200 },
-            { field: 'signature', title: '个性签名', align: 'left',width: 250},
-            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 250 }
+            { field: 'name', title: '姓名', align: 'center', width: 200}
         ]],
         done: function(json) {
             matchingLanguage();

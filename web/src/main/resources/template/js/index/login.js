@@ -9,9 +9,10 @@ layui.config({
 	winui.renderColor();
 	layui.use(['form'], function (form) {
 		var $ = layui.$;
+		env = GetUrlParam("env");
 
 		// 系统配置文件
-		jsGetJsonFile("../../configRation.json", function(data) {
+		jsGetJsonFile("../../configRation.json?env=" + env, function(data) {
 			sysMainMation = data;
 			localStorage.setItem("sysMainMation", JSON.stringify(sysMainMation));
 		});

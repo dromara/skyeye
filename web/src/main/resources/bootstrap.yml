@@ -18,3 +18,4 @@ spring:
         server-addr: 172.18.92.40:9000
         file-extension: yml
         namespace: ${spring.profiles.active} # 配置命名空间
+        group: DEFAULT_GROUP # 配置分组

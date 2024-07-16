@@ -6,6 +6,7 @@ package com.skyeye;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -25,8 +26,8 @@ public class ConfigrationController {
     private ConfigProperties configProperties;
 
     @GetMapping(value = "/getConfigRation")
-    public Map<String, String> getConfigRation() {
-        return configProperties.getConfig();
+    public Map<String, String> getConfigRation(@RequestParam("env") String env) {
+        return configProperties.getConfig(env);
     }
 
 }

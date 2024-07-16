@@ -110,44 +110,44 @@ layui.config({
             }});
     }
 
-    // // 删除
-    // function del(data, obj) {
-    //     layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
-    //         layer.close(index);
-    //         AjaxPostUtil.request({url: sysMainMation.erpBasePath + "deleteProductionById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
-    //                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-    //                 loadTable();
-    //             }});
-    //     });
-    // }
+    // 删除
+    function del(data, obj) {
+        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
+            layer.close(index);
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon005", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                    loadTable();
+                }});
+        });
+    }
 
-    // // 提交审批
-    // function subApproval(data) {
-    //     layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
-    //         layer.close(index);
-    //         activitiUtil.startProcess(data.serviceClassName, null, function (approvalId) {
-    //             var params = {
-    //                 id: data.id,
-    //                 approvalId: approvalId
-    //             };
-    //             AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpproduction007", params: params, type: 'json', method: 'POST', callback: function (json) {
-    //                     winui.window.msg("提交成功", {icon: 1, time: 2000});
-    //                     loadTable();
-    //                 }});
-    //         });
-    //     });
-    // }
+    // 提交审批
+    function subApproval(data) {
+        layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
+            layer.close(index);
+            activitiUtil.startProcess(data.serviceClassName, null, function (approvalId) {
+                var params = {
+                    id: data.id,
+                    approvalId: approvalId
+                };
+                AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon006", params: params, type: 'json', method: 'POST', callback: function (json) {
+                        winui.window.msg("提交成功", {icon: 1, time: 2000});
+                        loadTable();
+                    }});
+            });
+        });
+    }
 
-    // // 撤销
-    // function revoke(data) {
-    //     layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
-    //         layer.close(index);
-    //         AjaxPostUtil.request({url: sysMainMation.erpBasePath + "revokeProduction", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
-    //                 winui.window.msg("提交成功", {icon: 1, time: 2000});
-    //                 loadTable();
-    //             }});
-    //     });
-    // }
+    // 撤销
+    function revoke(data) {
+        layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
+            layer.close(index);
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon003", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+                    winui.window.msg("提交成功", {icon: 1, time: 2000});
+                    loadTable();
+                }});
+        });
+    }
 
     form.render();
     $("body").on("click", "#reloadTable", function() {
