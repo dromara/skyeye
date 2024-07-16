@@ -9,6 +9,7 @@ layui.config({
     var $ = layui.$,
         form = layui.form,
         table = layui.table;
+    var serviceClassName = sysServiceMation["materialReturnOrder"]["key"];
 
     //物料退货单
     table.render({
@@ -71,6 +72,64 @@ layui.config({
             });
         }
     });
+
+    table.on('tool(messageTable)', function (obj) {
+        var data = obj.data;
+        var layEvent = obj.event;
+        if (layEvent === 'delete') { //删除
+            erpOrderUtil.deleteOrderMation(data.id, serviceClassName, function() {
+                loadTable();
+            });
+        } else if (layEvent === 'details') { //详情
+            details(data);
+        } else if (layEvent === 'edit') { //编辑
+            edit(data);
+        } else if (layEvent === 'subApproval') { //提交审核
+            erpOrderUtil.submitOrderMation(data.id, serviceClassName, function() {
+                loadTable();
+            });
+        } else if (layEvent === 'processDetails') { // 工作流流程详情查看
+            activitiUtil.activitiDetails(data);
+        } else if (layEvent === 'revoke') { //撤销
+            erpOrderUtil.revokeOrderMation(data.processInstanceId, serviceClassName, function() {
+                loadTable();
+            });
+        }
+    });
+
+    // 编辑
+    function edit(data) {
+        _openNewWindows({
+            url:  systemCommonUtil.getUrl('FP2024071500005&id=' + data.id, null),
+            title: systemLanguage["com.skyeye.editPageTitle"][languageType],
+            pageId: "materialReturnOrderEdit",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+    // 详情
+    function details(data) {
+        _openNewWindows({
+            url:  systemCommonUtil.getUrl('FP2024070100004&id=' + data.id, null),
+            title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+            pageId: "materialReturnOrderDetails",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+            }});
+    }
+
+    // 删除
+    function del(data) {
+        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon005", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                    loadTable();
+                }});
+        });
+    }
 
     function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
