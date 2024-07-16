@@ -8,13 +8,64 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'tableSelect'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'tableSelect', 'laydate'], function (exports) {
 	winui.renderColor();
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
-	    	tableSelect = layui.tableSelect;
-	    
+	    	tableSelect = layui.tableSelect,
+			laydate = layui.laydate;
+
+		var startTime = laydate.render({
+			elem: '#startTime', //指定元素
+			format: 'yyyy-MM-dd',
+			min: minDate(),
+			theme: 'grid',
+			done:function(value, date){
+				endTime.config.min = {
+					year: date.year,
+					month: date.month - 1,//关键
+					date: date.date,
+					hours: date.hours,
+					minutes: date.minutes,
+					seconds: date.seconds
+				};
+			}
+		});
+
+		var endTime = laydate.render({
+			elem: '#endTime', //指定元素
+			format: 'yyyy-MM-dd',
+			min: minDate(),
+			theme: 'grid',
+			done:function(value, date){
+				startTime.config.max = {
+					year: date.year,
+					month: date.month - 1,//关键
+					date: date.date,
+					hours: date.hours,
+					minutes: date.minutes,
+					seconds: date.seconds
+				}
+			}
+		});
+		// 设置最小可选的日期
+		function minDate(){
+			var now = new Date();
+			return now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+		}
+		skyeyeClassEnumUtil.showEnumDataListByClassName("userIsTermOfValidity", 'radio', "isTermOfValidity", '', form);
+
+		$(".effectiveDate").hide();
+		form.on('radio(isTermOfValidityFilter)', function (data) {
+			let val = data.value;
+			if (val == 1) {
+				$(".effectiveDate").hide();
+			} else if (val == 2) {
+				$(".effectiveDate").show();
+			}
+		});
+
  		form.verify({
  			password : function(value, item) {
 	            if(value.length < 6){
@@ -46,17 +97,9 @@ layui.config({
 						return '<a rowId="' + d.id + '" class="notice-title-click">' + d.jobNumber + '</a>';
 					}},
  					{ field: 'userName', title: '员工姓名', width: 100 },
- 					{ field: 'userSex', title: '性别', width: 60, templet: function (d) {
- 			        	if(d.userSex == '0'){
- 			        		return "保密";
- 			        	} else if (d.userSex == '1'){
- 			        		return "男";
- 			        	} else if (d.userSex == '2'){
- 			        		return "女";
- 			        	} else {
- 			        		return "参数错误";
- 			        	}
- 			        }}
+					{ field: 'userSex', title: '性别', width: 60, rowspan: '2', templet: function (d) {
+						return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("sexEnum", 'id', d.userSex, 'name');
+					}},
  				]]
  	    	},
  	    	done: function (elem, data) {
@@ -88,7 +131,7 @@ layui.config({
 					staffId: staffId,
 					userCode: $("#userCode").val(),
 					password: $("#password").val(),
-					isTermOfValidity: $("#isTermOfValidity").val()
+					isTermOfValidity: dataShowType.getData('isTermOfValidity')
 				}
 				AjaxPostUtil.request({url: reqBasePath + "sysAdd005", params: params, type: 'json', method: "POST", callback: function (json) {
 					parent.layer.close(index);

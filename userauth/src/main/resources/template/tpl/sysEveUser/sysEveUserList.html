@@ -21,12 +21,15 @@
 		</script>
         
         <script type="text/html" id="tableBar">
-			{{# if(auth('1552960326068')){ }}
+			{{# if (auth('1552960326068')) { }}
             	<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">重置密码</a>
 			{{# } }}
-			{{# if(auth('1552960399251')){ }}
+			{{# if (auth('1552960399251')) { }}
 				<a class="layui-btn layui-btn-xs" lay-event="bindRole">绑定角色</a>
 			{{# } }}
+            {{# if (auth('1721130435799')) { }}
+                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="resetUserEffectiveDate">重置有效期</a>
+            {{# } }}
         </script>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>
