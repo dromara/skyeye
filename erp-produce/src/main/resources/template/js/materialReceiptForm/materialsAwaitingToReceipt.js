@@ -15,26 +15,26 @@ layui.config({
     var $ = layui.$;
     var id = GetUrlParam("id");
 
-    // 补料出库单转仓库出库
-    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryPatchOutLetTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
+    // 待确认物料转物料接收
+    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryDepotOutTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
             let data = json.bean;
-            // 仓库出库的【编辑布局】
-            dsFormUtil.initEditPageForStatic('content', 'FP2024070100006', data, {
+            // 物料接收的【编辑布局】
+            dsFormUtil.initEditPageForStatic('content', 'FP2024071500004', data, {
                 savePreParams: function (params) {
-                    params.farmId=data.farmId
-                    params.departmentId=data.departmentId
-                    params.salesman=data.salesman
                 },
                 saveData: function (params) {
                     // 保存数据
-                    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertPatchOutLetToTurnDepot", params: params, type: 'json', method: "POST", callback: function(json) {
+                    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertDepotOutToTurnPut", params: params, type: 'json', method: "POST", callback: function(json) {
                             parent.layer.close(index);
                             parent.refreshCode = '0';
                         }});
                 },
                 loadComponentCallback: function () {
-                    $("div[controlType='correspondentAllEnter']").remove();
-                    $("div[controlType='depotOutFromType']").remove();
+                    $("select[attrkey='departmentId']").prop('disabled', true);
+                    $("select[attrkey='farmId']").prop('disabled', true);
+                    $("div[controlType='userStaffChoose']").children().children('i').remove();
+                    $("div[controlType='userStaffChoose']").children().children().children().children().children('i').remove();
+                    $("div[controlType='confirmFromType']").remove();
                 },
                 tableAddRowCallback: function (tableId) {
                     $("#addRow" + tableId).remove();

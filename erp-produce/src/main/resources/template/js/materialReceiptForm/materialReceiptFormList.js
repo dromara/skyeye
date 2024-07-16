@@ -32,14 +32,24 @@ layui.config({
                 }},
             { field: 'operTime', title: '单据日期', rowspan: '2', align: 'center', width: 140 },
             { colspan: '2', title: '来源单据信息', align: 'center' },
+            { field: 'departmentMation', title: '部门', rowspan: '2', align: 'left', width: 200, templet: function (d) {
+                    return getNotUndefinedVal(d.departmentMation?.name);
+                }},
+            { field: 'farmMation', title: '车间', rowspan: '2', align: 'left', width: 200, templet: function (d) {
+                    return getNotUndefinedVal(d.farmMation?.name);
+                }},
+            { field: 'salesmanMation', title: '业务员', rowspan: '2', align: 'left', width: 200, templet: function (d) {
+                    return getNotUndefinedVal(d.salesmanMation?.name);
+                }},
+            { field: 'totalPrice', title: '总金额', rowspan: '2', align: 'center', width: 140 },
             { field: 'processInstanceId', title: '流程ID', rowspan: '2', width: 100, templet: function (d) {
                     return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
                 }},
             { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
                 }},
-            { field: 'otherState', title: '出库状态', rowspan: '2', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("outLetState", 'id', d.otherState, 'name');
+            { field: 'otherState', title: '确认状态', rowspan: '2', width: 90, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotOutOtherState", 'id', d.otherState, 'name');
                 }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
@@ -48,7 +58,7 @@ layui.config({
             { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ], [
             { field: 'fromTypeId', title: '来源类型', width: 150, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("pickFromType", 'id', d.fromTypeId, 'name');
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("confirmFromType", 'id', d.fromTypeId, 'name');
                 }},
             { field: 'fromId', title: '单据编号', width: 200, templet: function (d) {
                     return getNotUndefinedVal(d.fromMation?.oddNumber);

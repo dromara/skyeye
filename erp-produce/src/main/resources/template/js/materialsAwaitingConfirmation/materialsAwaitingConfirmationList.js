@@ -10,12 +10,14 @@ layui.config({
         form = layui.form,
         table = layui.table;
 
-    //物料退货单
+    // 加载列表数据权限
+    loadAuthBtnGroup('messageTable', '1721045686446');
+
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: sysMainMation.erpBasePath + 'queryConfirmReturnList',
+        url: sysMainMation.erpBasePath + 'queryNeedConfirmDepotOutList',
         where: getTableParams(),
         even: true,
         page: true,
@@ -58,7 +60,7 @@ layui.config({
             { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ], [
             { field: 'fromTypeId', title: '来源类型', width: 150, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("confirmFromType", 'id', d.fromTypeId, 'name');
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotOutFromType", 'id', d.fromTypeId, 'name');
                 }},
             { field: 'fromId', title: '单据编号', width: 200, templet: function (d) {
                     return getNotUndefinedVal(d.fromMation?.oddNumber);
@@ -66,19 +68,61 @@ layui.config({
         ]],
         done: function(json) {
             matchingLanguage();
-            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单据编号", function () {
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入单号，项目名称", function () {
                 table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
             });
         }
     });
 
+    table.on('tool(messageTable)', function (obj) {
+        var data = obj.data;
+        var layEvent = obj.event;
+        if (layEvent === 'materialReceipt') { // 物料接收
+            materialReceipt(data);
+        } else if (layEvent === 'materialReturn'){ // 物料退货
+            materialReturn(data);
+        }
+    });
+
+    // 物料接收
+    function materialReceipt(data) {
+        _openNewWindows({
+            url: "../../tpl/materialReceiptForm/materialsAwaitingToReceipt.html?id=" + data.id,
+            title: "转物料接收",
+            pageId: "materialsAwaitingToReceipt",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+
+    // 物料退货
+    function materialReturn(data) {
+        _openNewWindows({
+            url: "../../tpl/materialReturnOrder/materialsAwaitingToReturn.html?id=" + data.id,
+            title: "转物料退货",
+            pageId: "materialsAwaitingToReturn",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+
+    form.render();
+    $("body").on("click", "#reloadTable", function() {
+        loadTable();
+    });
     function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
-    exports('materialReturnOrderList', {});
+    exports('materialsAwaitingConfirmationList', {});
 });

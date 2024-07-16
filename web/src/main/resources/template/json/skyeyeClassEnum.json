@@ -52,6 +52,7 @@
     "machinStateEnum": {"name": "加工单状态", "className": "skyeye-erp#com.skyeye.machin.classenum.MachinStateEnum"},
     "machinPickStateEnum": {"name": "加工单领料状态", "className": "skyeye-erp#com.skyeye.machin.classenum.MachinPickStateEnum"},
     "outLetState": {"name": "领料/补料单出库状态", "className": "skyeye-erp#com.skyeye.pick.classenum.OutLetState"},
+    "depotOutOtherState": {"name": "待确认物料单确认状态", "className": "skyeye-erp#com.skyeye.depot.classenum.DepotOutOtherState"},
     "putState": {"name": "退料单入库状态", "className": "skyeye-erp#com.skyeye.pick.classenum.PutState"},
     "machinChildStateEnum": {"name": "工序验收单状态", "className": "skyeye-erp#com.skyeye.machin.classenum.MachinChildStateEnum"},
     "machinProcedureAcceptChildType": {"name": "工序验收单耗材类型枚举", "className": "skyeye-erp#com.skyeye.machinprocedure.classenum.MachinProcedureAcceptChildType"},
