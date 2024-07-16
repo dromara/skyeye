@@ -18,11 +18,10 @@ layui.config({
     // 预生产计划 转 生产计划
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryProductionPlanTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
             let data = json.bean;
-            console.log(5555,data)
+            // 因为要调生产计划的编辑布局，所以把预生产计划里的productionPlanChildList给到生产计划里的productionChildList
+            data.productionChildList = data.productionPlanChildList
             // 生产计划的【编辑布局】
             dsFormUtil.initEditPageForStatic('content', 'FP2023092200002', data, {
-                savePreParams: function (params) {
-                },
                 saveData: function (params) {
                     // 保存数据
                     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertProductionPlanToProduction", params: params, type: 'json', method: "POST", callback: function(json) {
@@ -31,18 +30,18 @@ layui.config({
                         }});
                 },
 
+                // 移除来源单据
+                loadComponentCallback: function () {
+                    $("div[controlType='productionFromType']").remove();
+                },
+
                 // 新增行的回调函数
-                // tableAddRowCallback: function (tableId) {
-                //     $("#addRow" + tableId).remove();
-                //     $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
-                //     $("div[controlType='simpleTable']").find(".unitPrice").prop('disabled', true);
-                //     $("div[controlType='simpleTable']").find(".amountOfMoney").prop('disabled', true);
-                //     $("div[controlType='simpleTable']").find(".taxRate").prop('disabled', true);
-                //     $("div[controlType='simpleTable']").find(".taxMoney").prop('disabled', true);
-                //     $("div[controlType='simpleTable']").find(".taxUnitPrice").prop('disabled', true);
-                //     $("div[controlType='simpleTable']").find(".taxLastMoney").prop('disabled', true);
-                //     $("div[controlType='simpleTable']").find(".specifications").prop('disabled', true);
-                // }
+                tableAddRowCallback: function (tableId) {
+                    $("#addRow" + tableId).remove();
+                    $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
+                    $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
+
+                }
             });
         }});
 });
