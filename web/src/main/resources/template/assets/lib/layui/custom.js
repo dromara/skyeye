@@ -34,10 +34,13 @@ var customerJS = {
 	"schoolUtil": "../../assets/lib/layui/customer/skyeye/schoolUtil.js", // 学校模块工具类
 };
 
+// 登录界面赋值
+var env = '';
+
 //系统基础信息
 var sysMainMation = {}; // 系统基础信息json
 if (isNull(localStorage.getItem("sysMainMation"))) {
-	jsGetJsonFile("../../configRation.json", function(data) {
+	jsGetJsonFile("../../configRation.json?env=" + env, function(data) {
 		sysMainMation = data;
 		localStorage.setItem("sysMainMation", JSON.stringify(sysMainMation));
 		initBaseParams();
