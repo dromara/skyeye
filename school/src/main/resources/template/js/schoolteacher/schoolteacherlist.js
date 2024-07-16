@@ -45,17 +45,9 @@ layui.config({
 		        	}
 		        }},
 		        { field: 'userIdCard', title: '身份证', align: 'center', width: 160 },
-		        { field: 'userSex', title: '性别', width: 60, align: 'center', templet: function (d) {
-		        	if(d.userSex == '0'){
-		        		return "保密";
-		        	} else if (d.userSex == '1'){
-		        		return "男";
-		        	} else if (d.userSex == '2'){
-		        		return "女";
-		        	} else {
-		        		return "参数错误";
-		        	}
-		        }},
+				{ field: 'userSex', title: '性别', width: 60, rowspan: '2', templet: function (d) {
+					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("sexEnum", 'id', d.userSex, 'name');
+				}},
 		        { field: 'state', title: '状态', width: 60, align: 'center', templet: function (d) {
 		        	if(d.state == '1'){
 		        		return "<span class='state-up'>在职</span>";
