@@ -1,15 +1,22 @@
 
+
+var rowId = "";
+
+var parentNode = null;
+
+
 layui.config({
     base: basePath,
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'dropdown', 'fsCommon', 'fsTree', 'table', 'form'], function (exports) {
+}).define(['window', 'tableTreeDj','jquery', 'winui', 'dropdown', 'fsCommon', 'fsTree', 'table', 'form'], function (exports) {
     winui.renderColor();
     var $ = layui.$,
         fsTree = layui.fsTree,
         form = layui.form,
-        table = layui.table;
+        // table = layui.table;
+        tableTree = layui.tableTreeDj;
     var ztree;
     var id = GetUrlParam("id");
     var objectKey = GetUrlParam("objectKey")
@@ -50,7 +57,7 @@ layui.config({
     }
 
     function initLoadTable() {
-        table.render({
+        tableTree.render({
             id: 'messageTable',
             elem: '#messageTable',
             method: 'post',
@@ -71,12 +78,18 @@ layui.config({
             done: function(json) {
                 matchingLanguage();
                 initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入编号", function () {
-                    table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+                    tableTree.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
                 });
             }
-        });
+        }
+        // , {
+        //     keyId: 'id',
+        //     keyPid: 'parentId',
+        //     title: 'dictName',
+        // }
+        );
 
-        table.on('tool(messageTable)', function (obj) {
+        tableTree.getTable().on('tool(messageTable)', function (obj) {
             var data = obj.data;
             var layEvent = obj.event;
             if (layEvent === 'edit') { //编辑
