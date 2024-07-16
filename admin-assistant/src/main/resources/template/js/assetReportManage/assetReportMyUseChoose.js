@@ -52,6 +52,7 @@ layui.config({
 			{ field: 'name', title: '资产名称', width: 120, templet: function(d) {
 					return getNotUndefinedVal(d.assetMation?.name);
 				}},
+			{ field: 'assetNum', title: '资产编号', align: 'left', width: 150 },
 			{ field: 'specifications', title: '资产规格', width: 120, templet: function(d) {
 					return getNotUndefinedVal(d.assetMation?.specifications);
 				}},
@@ -62,7 +63,7 @@ layui.config({
 			{ field: 'typeId', title: '资产类型', width: 120, templet: function(d) {
 				return sysDictDataUtil.getDictDataNameByCodeAndKey("ADM_ASSET_TYPE", d.typeId);
 			}},
-			{ field: 'assetNum', title: '资产编号', align: 'left', width: 150 },
+
 			// { field: 'specifications', title: '资产规格', align: 'left', width: 120 },
 			{ field: 'assetAdminMation', title: '管理员', width: 120, templet: function(d) {
 				return getNotUndefinedVal(d.assetAdminMation?.name);
@@ -72,7 +73,7 @@ layui.config({
 	    done: function(res) {
 	    	matchingLanguage();
 
-			initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入资产名称，资产编号", function () {
+			initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入资产编号", function () {
 				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 			if (myUseAssetReportCheckType) {

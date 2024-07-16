@@ -26,20 +26,22 @@ layui.config({
         method: 'get',
         url: sysMainMation.schoolBasePath + 'queryAssignmentListBySubjectClassesId',
         where: getTableParams(),
-        even: true,
-        page: true,
-        limits: getLimits(),
-        limit: getLimit(),
+        even: false,
+        page: false,
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'name', title: '名称', align: 'left', width: 300, templet: function (d) {
-                    return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
-                }},
+                return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
+            }},
             { field: 'content', title: '内容', align: 'left', width: 300},
             { field: 'endTime', title: '截止时间', align: 'left', width: 120 },
-            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
+            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 , templet: function(d) {
+                return getNotUndefinedVal(d.createMation?.name);
+            }},
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
-            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 , templet: function(d) {
+                return getNotUndefinedVal(d.lastUpdateMation?.name);
+            }},
             { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#tableBar' }
         ]],
