@@ -28,20 +28,29 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
-            { field: 'oddNumber', title: '加工单号', align: 'center', rowspan: '2', width: 200, templet: function (d) {
-                    return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+            { field: 'oddNumber', title: '单号', rowspan: '2', align: 'left', width: 220, templet: function (d) {
+                    var str = '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+                    if (!isNull(d.fromId)) {
+                        str += '<span class="state-new">[转]</span>';
+                    }
+                    return str;
                 }},
-            { field: 'operTime', title: '单据日期', align: 'center', rowspan: '2', width: 140 },
             { colspan: '2', title: '来源单据信息', align: 'center' },
-            { field: 'processInstanceId', title: '流程ID', rowspan: '2', width: 100, templet: function (d) {
+            { field: 'departmentMation', title: '部门', rowspan: '2', align: 'left', width: 200, templet: function (d) {
+                    return getNotUndefinedVal(d.departmentMation?.name);
+                }},
+            { field: 'processInstanceId', title: '流程ID', rowspan: '2', width: 280, templet: function (d) {
                     return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
                 }},
             { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
                 }},
-            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2',width: 120 },
+            { field: 'pickState', rowspan: '2', title: '领料状态', align: 'left', width: 80, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("machinPickStateEnum", 'id', d.pickState, 'name');
+                }},
+            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2',width: 180 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', rowspan: '2',width: 150 },
-            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', rowspan: '2',width: 120 },
+            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', rowspan: '2',width: 180 },
             { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', rowspan: '2',width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', rowspan: '2',width: 240, toolbar: '#tableBar'}
         ],[
