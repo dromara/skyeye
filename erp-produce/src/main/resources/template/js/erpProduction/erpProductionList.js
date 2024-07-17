@@ -78,7 +78,11 @@ layui.config({
         	edit(data);
         } else if (layEvent === 'details') { //详情
         	details(data);
-        } else if (layEvent === 'subApproval') { //提交审核
+        } else if (layEvent === 'turnEntireOrderToOutsourcing') { //转整单委外
+			turnEntireOrderToOutsourcing(data);
+		} else if (layEvent === 'turnConversionProcessingOrder') { //转加工单
+			turnConversionProcessingOrder(data);
+		} else if (layEvent === 'subApproval') { //提交审核
 			subApproval(data);
         } else if (layEvent === 'processDetails') { // 工作流流程详情查看
 			activitiUtil.activitiDetails(data);
@@ -86,6 +90,32 @@ layui.config({
 			revoke(data);
 		}
 	});
+
+	// 转整单委外
+	function turnEntireOrderToOutsourcing(data) {
+		_openNewWindows({
+			url: "../../tpl/wholeOut/productionPlanToOutsourcing.html?id=" + data.id,
+			title: "转整单委外",
+			pageId: "productionPlanToOutsourcing",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}});
+	}
+
+	// 转加工单
+	function turnConversionProcessingOrder(data) {
+		_openNewWindows({
+			url: "../../tpl/wholeOut/productionPlanToOutsourcing.html?id=" + data.id,
+			title: "转加工单",
+			pageId: "turnConversionProcessingOrder",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}});
+	}
 
 	// 新增
 	$("body").on("click", "#addBean", function() {
