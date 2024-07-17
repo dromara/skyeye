@@ -42,6 +42,12 @@ layui.config({
 			{ field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
 					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
 				}},
+			{ field: 'machinOrderState', title: '加工状态', rowspan: '2', width: 90, templet: function (d) {
+					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("productionMachinOrderState", 'id', d.machinOrderState, 'name');
+				}},
+			{ field: 'outState', title: '委外状态', rowspan: '2', width: 90, templet: function (d) {
+					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("productionOutState", 'id', d.outState, 'name');
+				}},
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', rowspan: '2',width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', rowspan: '2',width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', rowspan: '2',width: 120 },

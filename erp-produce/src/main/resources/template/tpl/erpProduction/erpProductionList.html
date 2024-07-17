@@ -34,12 +34,12 @@
 			{{# } }}
 
             {{# if (d.state == 'pass' || d.state == 'partiallyCompleted') { }}
-                {{# if (d.productionType == 1) { }}
+                {{# if (d.machinOrderState == 2 ||d.machinOrderState == 3) { }}
                     {{# if (auth('1720796297124')) { }}
                         <a class="layui-btn layui-btn-xs" lay-event="turnPurchase">转加工单</a>
                     {{# } }}
                 {{# } }}
-                {{# if (d.productionType == 2 ) { }}
+                {{# if (d.outState == 2 ||d.outState == 3) { }}
                     {{# if (auth('1720835673573')) { }}
                         <a class="layui-btn layui-btn-xs" lay-event="transferToWaybill">转整单委外单</a>
                     {{# } }}
