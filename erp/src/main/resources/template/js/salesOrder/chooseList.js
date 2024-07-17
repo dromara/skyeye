@@ -36,6 +36,7 @@ layui.config({
 			{ field: 'holderMation', title: '客户', rowspan: '2', align: 'left', width: 150, templet: function (d) {
 				return getNotUndefinedVal(d.holderMation?.name);
 			}},
+
 			{ field: 'totalPrice', title: '合计金额', rowspan: '2', align: 'left', width: 120 },
 			{ field: 'operTime', title: '单据日期', rowspan: '2', align: 'center', width: 140 },
 			{ colspan: '2', title: '来源单据信息', align: 'center' },

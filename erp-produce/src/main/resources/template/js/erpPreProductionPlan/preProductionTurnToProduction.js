@@ -38,9 +38,8 @@ layui.config({
                 // 新增行的回调函数
                 tableAddRowCallback: function (tableId) {
                     $("#addRow" + tableId).remove();
-                    $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
-                    $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
-
+                    // $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
+                    // $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
                 }
             });
         }});

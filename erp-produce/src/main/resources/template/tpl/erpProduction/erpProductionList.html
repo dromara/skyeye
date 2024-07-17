@@ -32,6 +32,19 @@
 					<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
 				{{# } }}
 			{{# } }}
+
+            {{# if (d.state == 'pass' || d.state == 'partiallyCompleted') { }}
+                {{# if (d.productionType == 1) { }}
+                    {{# if (auth('1720796297124')) { }}
+                        <a class="layui-btn layui-btn-xs" lay-event="turnPurchase">转加工单</a>
+                    {{# } }}
+                {{# } }}
+                {{# if (d.productionType == 2 ) { }}
+                    {{# if (auth('1720835673573')) { }}
+                        <a class="layui-btn layui-btn-xs" lay-event="transferToWaybill">转整单委外单</a>
+                    {{# } }}
+                {{# } }}
+            {{# } }}
         </script>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>

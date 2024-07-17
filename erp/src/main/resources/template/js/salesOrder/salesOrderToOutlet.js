@@ -18,7 +18,6 @@ layui.config({
     // 销售订单转销售出库
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "querySealsOrderTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
             let data = json.bean;
-            console.log(5555,data)
             // 销售出库的【编辑布局】
             dsFormUtil.initEditPageForStatic('content', 'FP2023042700002', data, {
                 savePreParams: function (params) {
