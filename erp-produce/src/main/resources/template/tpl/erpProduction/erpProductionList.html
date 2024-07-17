@@ -34,14 +34,14 @@
 			{{# } }}
 
             {{# if (d.state == 'pass' || d.state == 'partiallyCompleted') { }}
-                {{# if (d.productionType == 1) { }}
-                    {{# if (auth('1720796297124')) { }}
-                        <a class="layui-btn layui-btn-xs" lay-event="turnPurchase">转加工单</a>
+                {{# if (d.machinOrderState == 2 ||d.machinOrderState == 3) { }}
+                    {{# if (auth('1720795842911')) { }}
+                        <a class="layui-btn layui-btn-xs" lay-event="turnConversionProcessingOrder">转加工单</a>
                     {{# } }}
                 {{# } }}
-                {{# if (d.productionType == 2 ) { }}
-                    {{# if (auth('1720835673573')) { }}
-                        <a class="layui-btn layui-btn-xs" lay-event="transferToWaybill">转整单委外单</a>
+                {{# if (d.outState == 2 ||d.outState == 3) { }}
+                    {{# if (auth('1721215714124')) { }}
+                        <a class="layui-btn layui-btn-xs" lay-event="turnEntireOrderToOutsourcing">转整单委外</a>
                     {{# } }}
                 {{# } }}
             {{# } }}

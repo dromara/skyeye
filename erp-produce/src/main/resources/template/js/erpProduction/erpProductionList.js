@@ -42,6 +42,12 @@ layui.config({
 			{ field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
 					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
 				}},
+			{ field: 'machinOrderState', title: '加工状态', rowspan: '2', width: 90, templet: function (d) {
+					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("productionMachinOrderState", 'id', d.machinOrderState, 'name');
+				}},
+			{ field: 'outState', title: '委外状态', rowspan: '2', width: 90, templet: function (d) {
+					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("productionOutState", 'id', d.outState, 'name');
+				}},
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', rowspan: '2',width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', rowspan: '2',width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', rowspan: '2',width: 120 },
@@ -72,7 +78,11 @@ layui.config({
         	edit(data);
         } else if (layEvent === 'details') { //详情
         	details(data);
-        } else if (layEvent === 'subApproval') { //提交审核
+        } else if (layEvent === 'turnEntireOrderToOutsourcing') { //转整单委外
+			turnEntireOrderToOutsourcing(data);
+		} else if (layEvent === 'turnConversionProcessingOrder') { //转加工单
+			turnConversionProcessingOrder(data);
+		} else if (layEvent === 'subApproval') { //提交审核
 			subApproval(data);
         } else if (layEvent === 'processDetails') { // 工作流流程详情查看
 			activitiUtil.activitiDetails(data);
@@ -80,6 +90,32 @@ layui.config({
 			revoke(data);
 		}
 	});
+
+	// 转整单委外
+	function turnEntireOrderToOutsourcing(data) {
+		_openNewWindows({
+			url: "../../tpl/wholeOut/productionPlanToOutsourcing.html?id=" + data.id,
+			title: "转整单委外",
+			pageId: "productionPlanToOutsourcing",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}});
+	}
+
+	// 转加工单
+	function turnConversionProcessingOrder(data) {
+		_openNewWindows({
+			url: "../../tpl/wholeOut/productionPlanToOutsourcing.html?id=" + data.id,
+			title: "转加工单",
+			pageId: "turnConversionProcessingOrder",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}});
+	}
 
 	// 新增
 	$("body").on("click", "#addBean", function() {

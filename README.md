@@ -11,6 +11,7 @@
 - Skyeye 云系列功能导图：[地址](https://www.zhixi.com/tpl/8556d62b08ac5d98468ad26dc418fe91?shared=true)
 - [Skyeye云系列资料](https://docs.qq.com/doc/DYUxuT3pSdGhVVXFC)
 - **接前端 / Java后端等课程设计以及毕设制作，有需要的可加下方微信**
+- **体验地址联系作者获取**
 
 ### 操作文档
 
