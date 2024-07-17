@@ -28,6 +28,8 @@
     "supplementOutList": {"name": "补料出库单", "key": "com.skyeye.pick.service.impl.PatchOutLetServiceImpl"},
     "pickReturn": {"name": "退料单", "key": "com.skyeye.pick.service.impl.ReturnMaterialServiceImpl"},
     "returnMaterialPutList": {"name": "退料入库单", "key": "com.skyeye.pick.service.impl.ReturnPutServiceImpl"},
+    "materialReceiptForm": {"name": "物料接收单", "key": "com.skyeye.pickconfirm.service.impl.ConfirmPutServiceImpl"},
+    "materialReturnOrder": {"name": "物料退货单", "key": "com.skyeye.pickconfirm.service.impl.ConfirmReturnServiceImpl"},
 
     "proworkLoad": {"name": "项目工作量审核", "key": "com.skyeye.service.impl.ProWorkloadServiceImpl"},
     "proTask": {"name": "项目任务审核", "key": "com.skyeye.service.impl.ProTaskServiceImpl"},

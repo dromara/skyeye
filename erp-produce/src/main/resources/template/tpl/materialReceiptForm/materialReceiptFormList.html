@@ -17,6 +17,22 @@
     <table id="messageTable" lay-filter="messageTable"></table>
 
     <script type="text/html" id="tableBar">
+        {{# if(d.editRow == 1) { }}
+            {{# if(auth('1721114400445')) { }}
+                <a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>
+            {{# } }}
+            {{# if(auth('1721028158455')) { }}
+                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+            {{# } }}
+            {{# if(auth('1721114323209')) { }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+            {{# } }}
+        {{# } }}
+        {{# if(d.editRow == 2) { }}
+            {{# if(auth('1721114309851')) { }}
+                <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
+            {{# } }}
+        {{# } }}
     </script>
 </div>
 

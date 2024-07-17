@@ -21,10 +21,21 @@
 		    </div>
 		    <div class="layui-form-item layui-col-xs12">
 		        <label class="layui-form-label">有效期<i class="red">*</i></label>
-		        <div class="layui-input-block winui-radio">
-		            <input type="radio" id="isTermOfValidity" name="isTermOfValidity" value="1" title="长期有效" checked="checked"/>
+		        <div class="layui-input-block winui-radio" id="isTermOfValidity">
 		        </div>
 		    </div>
+			<div class="layui-form-item layui-col-xs6 effectiveDate">
+				<label class="layui-form-label">有效开始时间<i class="red">*</i></label>
+				<div class="layui-input-block">
+					<input type="text" id="startTime" name="startTime" placeholder="请选择开始时间" class="layui-input"/>
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6 effectiveDate">
+				<label class="layui-form-label">有效结束时间<i class="red">*</i></label>
+				<div class="layui-input-block">
+					<input type="text" id="endTime" name="endTime" placeholder="请选择结束时间" class="layui-input"/>
+				</div>
+			</div>
 		    <div class="layui-form-item layui-col-xs6">
 		        <label class="layui-form-label">密码<i class="red">*</i></label>
 		        <div class="layui-input-block">

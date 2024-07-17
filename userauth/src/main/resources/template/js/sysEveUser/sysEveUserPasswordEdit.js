@@ -28,7 +28,7 @@ layui.config({
 		form.on('submit(formEditPwdBean)', function (data) {
 			if (winui.verifyForm(data.elem)) {
 				var params = {
-					rowId: parent.rowId,
+					id: parent.rowId,
 					password: $("#password").val(),
 				};
 

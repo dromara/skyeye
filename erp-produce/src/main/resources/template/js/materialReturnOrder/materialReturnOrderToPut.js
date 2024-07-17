@@ -15,31 +15,29 @@ layui.config({
     var $ = layui.$;
     var id = GetUrlParam("id");
 
-    // 退料单转退料入库单
-    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryReturnMaterialTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
+    // 物料退货转仓库入库
+    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryConfirmReturnTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
             let data = json.bean;
-            data.erpOrderItemList=data.pickChildList
-            $.each(data.erpOrderItemList, function(index, item){
-                item.operNumber=item.needNum
-                item.unitPrice=item.normsMation.estimatePurchasePrice
-                item.taxRate=0
-            });
-            console.log(data.erpOrderItemList)
-            // 退料入库的【编辑布局】
-            dsFormUtil.initEditPageForStatic('content', 'FP2024071200012', data, {
+            console.log(data)
+            // 仓库入库的【编辑布局】
+            dsFormUtil.initEditPageForStatic('content', 'FP2024070100009', data, {
                 savePreParams: function (params) {
+                    params.holderId=data.holderId
+                    params.holderKey=data.holderKey
                 },
                 saveData: function (params) {
                     // 保存数据
-                    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertReturnMaterialToTurnOut", params: params, type: 'json', method: "POST", callback: function(json) {
+                    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertConfirmReturnToTurnDepot", params: params, type: 'json', method: "POST", callback: function(json) {
                             parent.layer.close(index);
                             parent.refreshCode = '0';
                         }});
                 },
                 loadComponentCallback: function () {
-                    $("select[attrkey='departmentId']").prop('disabled', true);
-                    $("select[attrkey='farmId']").prop('disabled', true);
-                    $("div[controlType='returnPutFromType']").remove();
+                    $("select[attrkey='holderIdType']").prop('disabled', true);
+                    $("select[attrkey='holderIdType']").parent().next().children('i').remove();
+
+                    $("div[controlType='correspondentEnter']").remove();
+                    $("div[controlType='depotPutFromType']").remove();
                 },
                 tableAddRowCallback: function (tableId) {
                     $("#addRow" + tableId).remove();
