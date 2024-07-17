@@ -14,6 +14,7 @@ layui.config({
 		// 系统配置文件
 		jsGetJsonFile("../../configRation.json?env=" + env, function(data) {
 			sysMainMation = data;
+			$(".lock-body").css({'background-image': 'url("' + sysMainMation.fileBasePath + '/images/upload/winbgpic/default.jpg")'});
 			localStorage.setItem("sysMainMation", JSON.stringify(sysMainMation));
 		});
 
@@ -51,8 +52,6 @@ layui.config({
 		$(document).attr("title", sysMainMation.mationTitle);
 		// 修改版权
 		$(".copyright-content").html(sysMainMation.copyright);
-		
-		$(".lock-body").css({'background-image': 'url("/images/upload/winbgpic/default.jpg")'});
 		
 		localStorage.setItem('userToken', "");
 
