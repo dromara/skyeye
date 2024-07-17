@@ -131,7 +131,9 @@ layui.config({
 					staffId: staffId,
 					userCode: $("#userCode").val(),
 					password: $("#password").val(),
-					isTermOfValidity: dataShowType.getData('isTermOfValidity')
+					isTermOfValidity: dataShowType.getData('isTermOfValidity'),
+					startTime: $("#startTime").val(),
+					endTime: $("#endTime").val()
 				}
 				AjaxPostUtil.request({url: reqBasePath + "sysAdd005", params: params, type: 'json', method: "POST", callback: function (json) {
 					parent.layer.close(index);
