@@ -30,9 +30,6 @@ layui.config({
                     }});
             },
             loadComponentCallback: function () {
-                $("select[attrkey='departmentId']").prop('disabled', true);
-                $("select[attrkey='farmId']").prop('disabled', true);
-                $("div[controlType='userStaffChoose']").children().children('i').remove();
                 $("div[controlType='confirmFromType']").remove();
             },
             tableAddRowCallback: function (tableId) {

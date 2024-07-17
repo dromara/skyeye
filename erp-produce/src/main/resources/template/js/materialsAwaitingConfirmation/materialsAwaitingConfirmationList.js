@@ -81,6 +81,8 @@ layui.config({
             materialReceipt(data);
         } else if (layEvent === 'materialReturn'){ // 物料退货
             materialReturn(data);
+        }else if (layEvent === 'details') { //详情
+            details(data);
         }
     });
 
@@ -108,6 +110,17 @@ layui.config({
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
+            }});
+    }
+
+    // 详情
+    function details(data) {
+        _openNewWindows({
+            url:  systemCommonUtil.getUrl('FP2024070100007&id=' + data.id, null),
+            title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+            pageId: "materialsAwaitingConfirmationDetails",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
             }});
     }
 

@@ -33,8 +33,7 @@ layui.config({
                         }});
                 },
                 loadComponentCallback: function () {
-                    $("select[attrkey='holderIdType']").prop('disabled', true);
-                    $("select[attrkey='holderIdType']").parent().next().children('i').remove();
+                    $("div[controlType='correspondentEnter']").remove();
                     $("div[controlType='depotPutFromType']").remove();
                 },
                 tableAddRowCallback: function (tableId) {

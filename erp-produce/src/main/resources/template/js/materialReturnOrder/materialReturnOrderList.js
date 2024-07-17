@@ -49,8 +49,8 @@ layui.config({
             { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
                 }},
-            { field: 'otherState', title: '确认状态', rowspan: '2', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotOutOtherState", 'id', d.otherState, 'name');
+            { field: 'otherState', title: '入库状态', rowspan: '2', width: 90, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotPutState", 'id', d.otherState, 'name');
                 }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
@@ -130,6 +130,11 @@ layui.config({
                 }});
         });
     }
+
+    form.render();
+    $("body").on("click", "#reloadTable", function() {
+        loadTable();
+    });
 
     function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});

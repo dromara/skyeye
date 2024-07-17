@@ -94,7 +94,7 @@ layui.config({
             pageUrl = 'FP2024070100003';
         } else if (type == 6) {
             // 物料退货单
-            pageUrl = 'FP2024070100004';
+            pageUrl = 'FP2024071500005';
         }
         _openNewWindows({
             url:  systemCommonUtil.getUrl(pageUrl + '&id=' + data.id, null),
@@ -126,7 +126,7 @@ layui.config({
             pageUrl = '../../tpl/erpPick/erpReturnPickToPut.html';
         } else if (type == 6) {
             // 物料退货单
-            pageUrl = '';
+            pageUrl = '../../tpl/materialReturnOrder/materialReturnOrderToPut.html';
         }
         _openNewWindows({
             url:  pageUrl + '?id=' + data.id,
