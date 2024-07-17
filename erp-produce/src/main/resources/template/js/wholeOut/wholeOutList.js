@@ -34,12 +34,7 @@ layui.config({
                     }
                     return str;
                 }},
-            // { field: 'departmentId', width: 150, title: '部门', align: 'center',templet: function (d) {
-            //         if (!isNull(d.departmentMation)) {
-            //             return d.departmentMation.name;
-            //         }
-            //         return '';
-            //     }},
+            // { field: 'department', width: 150, title: '部门', align: 'center'},
             // // { field: 'farmId', width: 150, title: '车间', align: 'center'},
             //
             // { field: 'farmId', title: '车间', align: 'left', width: 150, templet: function (d) {
@@ -51,7 +46,6 @@ layui.config({
             //
             { field: 'operTime', width: 150, title: '单据日期', align: 'center'},
             { field: 'totalPrice', title: '合计金额', rowspan: '2', align: 'center', width: 120 },
-            // { field: 'farmId', width: 150, title: '车间', align: 'center'},
             { field: 'holderMation', title: '客户', rowspan: '2', align: 'center', width: 150, templet: function (d) {
                     return getNotUndefinedVal(d.holderMation?.name);
                 }},
