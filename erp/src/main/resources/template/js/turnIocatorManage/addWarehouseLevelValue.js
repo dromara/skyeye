@@ -12,20 +12,16 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery'], function (exports) {
     winui.renderColor();
-    var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$;
     var id = GetUrlParam("id");
     var depotId = GetUrlParam("depotId");
     var parentId = GetUrlParam("parentId");
-    // var depotLevelId = GetUrlParam("depotLevelId");
 
     if (isNull(id)) {
         dsFormUtil.initAddPageForStatic('content', 'FP2024071200007', {
             savePreParams: function (params) {
                 params.depotId = depotId;
-                // params.depotLevelId = depotLevelId;
                 params.parentId = parentId;
-                // params.depotLevelId = depotLevelId;
             }
         });
     }else{
@@ -44,7 +40,6 @@ layui.config({
                 });
             }
         });
-
     }
 
 });

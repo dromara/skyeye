@@ -1,9 +1,7 @@
 
-
 var rowId = "";
 
 var parentNode = null;
-
 
 layui.config({
     base: basePath,
@@ -15,16 +13,12 @@ layui.config({
     var $ = layui.$,
         fsTree = layui.fsTree,
         form = layui.form,
-        // table = layui.table;
         tableTree = layui.tableTreeDj;
     var ztree;
     var id = GetUrlParam("id");
-    var objectKey = GetUrlParam("objectKey");
-    var objectId = GetUrlParam("objectId");
     var parentId = GetUrlParam("parentId");
     var depotId = GetUrlParam("id");
     var depotLevelId = GetUrlParam("depotLevelId");
-
 
     // 下拉按钮
     var dropdown = new Dropdown();
@@ -72,7 +66,6 @@ layui.config({
             limits: getLimits(),
             limit: getLimit(),
             cols: [[
-                {title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers'},
                 {field: 'number', title: '编号', rowspan: '2', align: 'left', width: 200},
                 { field: 'name', title: '级别', width: 200, templet: function (d) {
                     return getNotUndefinedVal(d.depotLevelMation?.name);
@@ -168,14 +161,14 @@ layui.config({
 
     //批量新增子节点
     function batchAddChildNodes(data){
-
-        console.log('ds',data)
         _openNewWindows({
             url: "../../tpl/turnIocatorManage/batchAdd.html?depotId=" + data.depotId + "&parentId=" + data.id,
             title: '批量新增',
             pageId: "warehouseLevelValueBatchAdd",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
             }});
     }
 
@@ -189,6 +182,8 @@ layui.config({
             pageId: "warehouseLevelValueBatchAdd",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
             }});
     });
 
@@ -256,7 +251,6 @@ layui.config({
                 // 重置folderid
                 folderId = selNode.getParentNode().id;
                 ztree.removeNode(selNode);// 移除节点
-            // showListById();// 获取文件夹和笔记列表
         }});
     }
 
@@ -278,7 +272,6 @@ layui.config({
             }});
     });
 
-
     form.render();
     $("body").on("click", "#reloadTable", function() {
         loadTable();
@@ -291,7 +284,7 @@ layui.config({
     function getTableParams() {
         var params = {
             objectId: depotId,
-            holderId: depotLevelId
+            holderId: isNull(depotLevelId) || depotLevelId == 0 ? "" : depotLevelId
         };
         return $.extend(true, params, initTableSearchUtil.getSearchValue("messageTable"));
     }

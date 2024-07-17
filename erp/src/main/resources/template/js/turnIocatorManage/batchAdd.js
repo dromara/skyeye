@@ -13,8 +13,7 @@ layui.config({
     var parentId = getNotUndefinedVal(GetUrlParam("parentId"));
     var depotId = getNotUndefinedVal(GetUrlParam("depotId"));
 
-    skyeyeClassEnumUtil.showEnumDataListByClassName("generateDepotLevelValType", 'select', "type", '', form);
-    form.render("select");
+    skyeyeClassEnumUtil.showEnumDataListByClassName("generateDepotLevelValType", 'radio', "type", '', form);
 
     textool.init({
         eleId: 'barCode',
@@ -28,11 +27,13 @@ layui.config({
             let params = {
                 parentId: parentId,
                 depotId: depotId,
-                type: $("#type").val(),
+                // type: $("#type").val(),
+                type: $("#type input:radio:checked").val(),
                 number:$("#number").val(),
             }
             AjaxPostUtil.request({url: sysMainMation.erpBasePath + "batchGenerateDepotLevelVal", params: params, type: 'json', method: 'POST', callback: function (json) {
                 parent.layer.close(index);
+                parent.refreshCode = '0';
             }});
         }
         return false;

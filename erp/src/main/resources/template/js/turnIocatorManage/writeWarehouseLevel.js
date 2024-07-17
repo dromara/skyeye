@@ -43,9 +43,6 @@ layui.config({
                             parent.refreshCode = '0';
                         }});
                 },
-                // loadComponentCallback: function () {
-                //     // $("div[controlType='assetPurchasePutFromType']").remove();
-                // },
                 tableAddRowCallback: function (tableId) {
                     $("#addRow" + tableId).remove();
                 }
