@@ -1,9 +1,7 @@
 
-
 var rowId = "";
 
 var parentNode = null;
-
 
 layui.config({
     base: basePath,
@@ -15,12 +13,12 @@ layui.config({
     var $ = layui.$,
         fsTree = layui.fsTree,
         form = layui.form,
-        // table = layui.table;
         tableTree = layui.tableTreeDj;
     var ztree;
     var id = GetUrlParam("id");
-    var objectKey = GetUrlParam("objectKey")
-    var objectId = GetUrlParam("objectId")
+    var parentId = GetUrlParam("parentId");
+    var depotId = GetUrlParam("id");
+    var depotLevelId = GetUrlParam("depotLevelId");
 
     // 下拉按钮
     var dropdown = new Dropdown();
@@ -49,9 +47,9 @@ layui.config({
     //异步加载的方法
     function onClickTree(event, treeId, treeNode) {
         if(treeNode == undefined) {
-            dictTypeId = "";
+            depotLevelId = "";
         } else {
-            dictTypeId = treeNode.id;
+            depotLevelId = treeNode.id;
         }
         loadTable();
     }
@@ -68,44 +66,51 @@ layui.config({
             limits: getLimits(),
             limit: getLimit(),
             cols: [[
-                { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
-                { field: 'number', title: '编号', rowspan: '2', align: 'left', width: 350 },
-                { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', align: 'left', width: 120 },
-                { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
-                { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '2', align: 'left', width: 120 },
-                { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], rowspan: '2', align: 'center', width: 150 },
+                {field: 'number', title: '编号', rowspan: '2', align: 'left', width: 200},
+                { field: 'name', title: '级别', width: 200, templet: function (d) {
+                    return getNotUndefinedVal(d.depotLevelMation?.name);
+                }},
+                {field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType],rowspan: '2', align: 'left', width: 120},
+                {field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150},
+                {field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '2', align: 'left', width: 120},
+                {field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], rowspan: '2', align: 'center', width: 150},
+                { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 350, toolbar: '#tableBar' }
             ]],
-            done: function(json) {
+            done: function (json) {
                 matchingLanguage();
                 initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入编号", function () {
                     tableTree.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
                 });
             }
-        }
-        // , {
-        //     keyId: 'id',
-        //     keyPid: 'parentId',
-        //     title: 'dictName',
-        // }
-        );
-
-        tableTree.getTable().on('tool(messageTable)', function (obj) {
-            var data = obj.data;
-            var layEvent = obj.event;
-            if (layEvent === 'edit') { //编辑
-                edit(data);
-            } else if (layEvent === 'details'){ //详情
-                details(data);
-            } else if (layEvent === 'del') { //删除
-                del(data);
-            }
+        }, {
+            keyId: 'id',
+            keyPid: 'parentId',
+            title: 'number',
+            showCache: "turnIocatorManageStatus"
         });
     }
 
+    tableTree.getTable().on('tool(messageTable)', function (obj) {
+        var data = obj.data;
+        var layEvent = obj.event;
+        if (layEvent === 'edit') { //编辑
+            edit(data);
+        } else if (layEvent === 'batchAddChildNodes') { //批量新增子节点
+            batchAddChildNodes(data);
+        } else if (layEvent === 'del') { //删除
+            del(data);
+        } else if(layEvent ==='add') { //新增子节点
+            parentId = data.id;
+            addChildNodes(data)
+        }
+    });
+
     // 添加
     $("body").on("click", "#addBean", function() {
+        parentId = 0;
         _openNewWindows({
-            url: "../../tpl/turnIocatorManage/addWarehouseLevelValue.html?id=" + id,
+            url: "../../tpl/turnIocatorManage/addWarehouseLevelValue.html?depotId=" + id
+                + "&parentId=" + parentId,
             title: "新增仓库级别的值",
             pageId: "warehouseLevelValueAdd",
             area: ['90vw', '90vh'],
@@ -113,27 +118,15 @@ layui.config({
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
-
-
-
-        // _openNewWindows({
-        //     url: "../../tpl/turnIocatorManage/writeWarehouseLevel.html?id=" + id,
-        //     title: "新增仓库级别",
-        //     pageId: "addWarehouseLevel",
-        //     area: ['90vw', '90vh'],
-        //     callBack: function (refreshCode) {
-        //         winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-        //         // 刷新节点
-        //         var nownode = ztree.getNodesByParam("id", "0", null);
-        //         ztree.reAsyncChildNodes(nownode[0], "refresh");
-        //     }});
     });
 
     // 编辑
     function edit(data) {
+        console.log('11',data)
         _openNewWindows({
-            url: systemCommonUtil.getUrl('FP2024071200008&id=' + data.id, null),
-            title: systemLanguage["com.skyeye.editPageTitle"][languageType],
+            url: "../../tpl/turnIocatorManage/addWarehouseLevelValue.html?id=" + data.id
+                + "&parentId=" + data.parentId +"&depotId=" + data.depotId,
+            title: "编辑仓库级别的值",
             pageId: "warehouseLevelValueEdit",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
@@ -141,18 +134,6 @@ layui.config({
                 loadTable();
             }});
     }
-
-    // 详情
-    function details(data) {
-        _openNewWindows({
-            url: systemCommonUtil.getUrl('FP2024071200009&id=' + data.id, null),
-            title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "warehouseLevelValueDetails",
-            area: ['90vw', '90vh'],
-            callBack: function (refreshCode) {
-            }});
-    }
-
 
     // 删除
     function del(data) {
@@ -164,6 +145,47 @@ layui.config({
             }});
         });
     }
+
+    function addChildNodes(data){
+        _openNewWindows({
+            url: "../../tpl/turnIocatorManage/addWarehouseLevelValue.html?depotId=" + data.depotId
+                + "&parentId=" + data.id,
+            title: "新增子节点仓库级别的值",
+            pageId: "warehouseLevelValueAdd",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+    //批量新增子节点
+    function batchAddChildNodes(data){
+        _openNewWindows({
+            url: "../../tpl/turnIocatorManage/batchAdd.html?depotId=" + data.depotId + "&parentId=" + data.id,
+            title: '批量新增',
+            pageId: "warehouseLevelValueBatchAdd",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+
+    // 批量新增
+    $("body").on("click", "#batchAdd", function() {
+        parentId = 0
+        _openNewWindows({
+            url: "../../tpl/turnIocatorManage/batchAdd.html?depotId=" + depotId + "&parentId=" + parentId,
+            title: '批量新增',
+            pageId: "warehouseLevelValueBatchAdd",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    });
 
 
     // 树节点右键
@@ -207,6 +229,7 @@ layui.config({
     function chooseNodeSelect(nodeId){
         var selNode = ztree.getNodeByParam("id", nodeId, null);
         ztree.selectNode(selNode);
+        depotLevelId = nodeId;
     }
 
     // 树操作--文件夹或者文件删除
@@ -228,7 +251,6 @@ layui.config({
                 // 重置folderid
                 folderId = selNode.getParentNode().id;
                 ztree.removeNode(selNode);// 移除节点
-            // showListById();// 获取文件夹和笔记列表
         }});
     }
 
@@ -250,18 +272,21 @@ layui.config({
             }});
     });
 
-
     form.render();
     $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
 
     function loadTable() {
-        table.reload("messageTable", {where: getTableParams()});
+        tableTree.reload("messageTable", {where: getTableParams()});
     }
 
     function getTableParams() {
-        return $.extend(true, {objectKey:objectKey,objectId:objectId}, initTableSearchUtil.getSearchValue("messageTable"));
+        var params = {
+            objectId: depotId,
+            holderId: isNull(depotLevelId) || depotLevelId == 0 ? "" : depotLevelId
+        };
+        return $.extend(true, params, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('turnIocatorManage', {});

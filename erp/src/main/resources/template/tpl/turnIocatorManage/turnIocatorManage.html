@@ -14,6 +14,7 @@
         <div class="winui-tool">
             <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
             <button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1720752315835"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn">新增仓库级别的值</language></button>
+            <button id="batchAdd" class="winui-toolbtn search-table-btn-right" auth="1721184331706"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn">批量新增</language></button>
         </div>
     </div>
 
@@ -31,6 +32,8 @@
     </div>
     <script type="text/html" id="tableBar">
         {{# if(auth('1720752315835')){ }}
+            <a class="layui-btn layui-btn-xs" lay-event="add">新增子节点</a>
+            <a class="layui-btn layui-btn-xs" lay-event="batchAddChildNodes">批量新增子节点</a>
             <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
         {{# } }}
         {{# if(auth('1720752347259')){ }}
@@ -57,7 +60,6 @@
     </script>
 
     <ul class="layui-dropdown-menu" id="treeRight">
-
     </ul>
 
     <script src="../../assets/lib/layui/layui.js"></script>
