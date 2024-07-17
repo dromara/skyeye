@@ -122,7 +122,6 @@ layui.config({
 
     // 编辑
     function edit(data) {
-        console.log('11',data)
         _openNewWindows({
             url: "../../tpl/turnIocatorManage/addWarehouseLevelValue.html?id=" + data.id
                 + "&parentId=" + data.parentId +"&depotId=" + data.depotId,
