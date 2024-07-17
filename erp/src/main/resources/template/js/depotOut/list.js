@@ -41,8 +41,8 @@ layui.config({
             { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
                 }},
-            { field: 'otherState', title: '出库状态', width: 90, templet: function (d) {
-                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotOutState", 'id', d.otherState, 'name');
+            { field: 'otherState', title: '确认状态', width: 90, templet: function (d) {
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotOutOtherState", 'id', d.otherState, 'name');
             }},
             { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
