@@ -86,6 +86,7 @@
     "depotOutState": {"name": "仓库出库单出库状态", "className": "skyeye-erp#com.skyeye.depot.classenum.DepotOutState"},
     "depotPutFromType": {"name": "仓库入库单来源单据类型", "className": "skyeye-erp#com.skyeye.depot.classenum.DepotPutFromType"},
     "depotPutState": {"name": "仓库入库单入库状态", "className": "skyeye-erp#com.skyeye.depot.classenum.DepotPutState"},
+    "generateDepotLevelValType": {"name": "ERP-批量生成仓库级别的值的类型", "className": "skyeye-erp#com.skyeye.depot.classenum.GenerateDepotLevelValType"},
     "productionChildFromType": {"name": "生产计划单子单据生产类型", "className": "skyeye-erp#com.skyeye.production.classenum.ProductionChildType"},
 
     "skyeyeView": {"name": "视图类型", "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"},
