@@ -54,6 +54,9 @@ layui.config({
 				}},
 		        { field: 'norms', title: '库存', width: 500, templet: function (d) {
 		        	var str = "";
+					if (isNull(d.materialNorms)) {
+						return "";
+					}
 		        	$.each(d.materialNorms, function(i, item) {
 						if (!isNull(item.overAllStock)) {
 							str += '<span class="layui-badge layui-bg-blue">' + item.name + '【' + item.overAllStock.allStock + '】</span><br>';
