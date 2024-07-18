@@ -27,28 +27,44 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'oddNumber', title: '单号', rowspan: '2', align: 'left', width: 220, templet: function (d) {
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: '2' },
+            { field: 'oddNumber', title: '单号', rowspan: '2', width: 200, align: 'center', templet: function (d) {
                     var str = '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
                     if (!isNull(d.fromId)) {
                         str += '<span class="state-new">[转]</span>';
                     }
                     return str;
                 }},
-            { field: 'operTime', width: 150, title: '单据日期', align: 'center'},
-            { field: 'totalPrice', title: '合计金额', rowspan: '2', align: 'center', width: 120 },
+            { field: 'operTime', title: '单据日期', rowspan: '2', align: 'center', width: 140 },
+            { colspan: '2', title: '来源单据信息', align: 'center' },
             { field: 'holderMation', title: '客户', rowspan: '2', align: 'center', width: 150, templet: function (d) {
                     return getNotUndefinedVal(d.holderMation?.name);
                 }},
-            { field: 'processInstanceId', width: 200, title: '流程ID', align: 'center'},
-            { field: 'state', title: '状态', width: 90, templet: function (d) {
+            { field: 'totalPrice', title: '总金额', rowspan: '2', align: 'center', width: 140 },
+            { field: 'processInstanceId', title: '流程ID', rowspan: '2', width: 100, templet: function (d) {
+                    return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
+                }},
+            { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
                 }},
-            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
-            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
-            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
+            { field: 'otherState', title: '到货状态', rowspan: '2', width: 150, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("orderArrivalState", 'id', d.otherState, 'name');
+                }},
+            { field: 'qualityInspection', title: '质检状态', rowspan: '2', width: 150, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("orderQualityInspectionType", 'id', d.qualityInspection, 'name');
+                }},
+            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 120 },
+            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
+            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '2', align: 'left', width: 120 },
+            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], rowspan: '2', align: 'center', width: 150 },
+            { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
+        ], [
+            { field: 'fromTypeId', title: '来源类型', width: 150, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("wholeOrderOutFromType", 'id', d.fromTypeId, 'name');
+                }},
+            { field: 'fromId', title: '单据编号', width: 200, templet: function (d) {
+                    return getNotUndefinedVal(d.fromMation?.oddNumber);
+                }}
         ]],
         done: function(json) {
             matchingLanguage();
@@ -79,8 +95,52 @@ layui.config({
             erpOrderUtil.revokeOrderMation(data.processInstanceId, serviceClassName, function() {
                 loadTable();
             });
+        }else if (layEvent === 'wholeOutToPut') { //转采购入库单
+            wholeOutToPut(data);
+        } else if (layEvent === 'wholeOutToArrival') { //转到货单
+            wholeOutToArrival(data);
+        }else if (layEvent === 'wholeOutToReturn') { //转采购退货单
+            wholeOutToReturn(data);
         }
     });
+
+    // 转采购入库
+    function wholeOutToPut(data) {
+        _openNewWindows({
+            url: "../../tpl/wholeOut/wholeOutToPut.html?id=" + data.id,
+            title: "转采购入库",
+            pageId: "wholeOutToPut",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+    //转到货单
+    function wholeOutToArrival(data){
+        parent._openNewWindows({
+            url: "../../tpl/wholeOut/wholeOutToArrival.html?id=" + data.id,
+            title: '转到货单',
+            pageId: "wholeOutToArrival",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+    //转采购退货
+    function wholeOutToReturn(data){
+        parent._openNewWindows({
+            url: "../../tpl/wholeOut/wholeOutToReturn.html?id=" + data.id,
+            title: '转采购退货',
+            pageId: "wholeOutToReturn",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
 
     // 新增
     $("body").on("click", "#addBean", function() {

@@ -33,6 +33,23 @@
                 <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
             {{# } }}
         {{# } }}
+        {{# if (d.state == 'pass' || d.state == 'partiallyCompleted') { }}
+            {{# if (d.otherState == 1) { }}
+                {{# if (auth('1720836111714')) { }}
+                    <a class="layui-btn layui-btn-xs" lay-event="wholeOutToPut">转采购入库</a>
+                {{# } }}
+            {{# } }}
+            {{# if (d.otherState == 1) { }}
+                {{# if (auth('1720836053850')) { }}
+                    <a class="layui-btn layui-btn-xs" lay-event="wholeOutToReturn">转采购退货</a>
+                {{# } }}
+            {{# } }}
+            {{# if (d.otherState == 2 || d.otherState == 3) { }}
+                {{# if (auth('1720836096049')) { }}
+                    <a class="layui-btn layui-btn-xs" lay-event="wholeOutToArrival">转到货单</a>
+                {{# } }}
+            {{# } }}
+        {{# } }}
     </script>
 </div>
 <script src="../../assets/lib/layui/layui.js"></script>
