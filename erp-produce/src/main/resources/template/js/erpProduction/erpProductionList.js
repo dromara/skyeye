@@ -108,7 +108,7 @@ layui.config({
 	// 转加工单
 	function turnConversionProcessingOrder(data) {
 		_openNewWindows({
-			url: "../../tpl/wholeOut/productionPlanToOutsourcing.html?id=" + data.id,
+			url: "../../tpl/departmentMachining/productionPlanToDepartmentMachining.html?id=" + data.id,
 			title: "转加工单",
 			pageId: "turnConversionProcessingOrder",
 			area: ['90vw', '90vh'],
