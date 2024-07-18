@@ -89,7 +89,7 @@ layui.config({
         _openNewWindows({
             url:  systemCommonUtil.getUrl('FP2024071100001', null),
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-            pageId: "erpProductionAdd",
+            pageId: "erpPreProductionAdd",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -102,7 +102,7 @@ layui.config({
         _openNewWindows({
             url:  systemCommonUtil.getUrl('FP2024071100002&id=' + data.id, null),
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-            pageId: "erpProductionEdit",
+            pageId: "erpPreProductionEdit",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -115,7 +115,7 @@ layui.config({
         _openNewWindows({
             url:  systemCommonUtil.getUrl('FP2024071100003&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "erpProductionDetail",
+            pageId: "erpPreProductionDetail",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
             }});
