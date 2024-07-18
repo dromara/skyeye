@@ -11,6 +11,7 @@ layui.config({
     var $ = layui.$,
         form = layui.form,
         table = layui.table;
+    var serviceClassName = sysServiceMation["wholeOut"]["key"];
 
     // 新增
     authBtn('1720835673573');
@@ -34,16 +35,6 @@ layui.config({
                     }
                     return str;
                 }},
-            // { field: 'department', width: 150, title: '部门', align: 'center'},
-            // // { field: 'farmId', width: 150, title: '车间', align: 'center'},
-            //
-            // { field: 'farmId', title: '车间', align: 'left', width: 150, templet: function (d) {
-            //         if (!isNull(d.farmMation)) {
-            //             return d.farmMation.name;
-            //         }
-            //         return '';
-            //     }},
-            //
             { field: 'operTime', width: 150, title: '单据日期', align: 'center'},
             { field: 'totalPrice', title: '合计金额', rowspan: '2', align: 'center', width: 120 },
             { field: 'holderMation', title: '客户', rowspan: '2', align: 'center', width: 150, templet: function (d) {
@@ -71,17 +62,23 @@ layui.config({
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'delete') { //删除
-            del(data, obj);
-        } else if (layEvent === 'edit') { //编辑
-            edit(data);
+            erpOrderUtil.deleteOrderMation(data.id, serviceClassName, function() {
+                loadTable();
+            });
         } else if (layEvent === 'details') { //详情
             details(data);
+        } else if (layEvent === 'edit') { //编辑
+            edit(data);
         } else if (layEvent === 'subApproval') { //提交审核
-            subApproval(data);
+            erpOrderUtil.submitOrderMation(data.id, serviceClassName, function() {
+                loadTable();
+            });
         } else if (layEvent === 'processDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
-            revoke(data);
+            erpOrderUtil.revokeOrderMation(data.processInstanceId, serviceClassName, function() {
+                loadTable();
+            });
         }
     });
 
@@ -90,7 +87,7 @@ layui.config({
         _openNewWindows({
             url:  systemCommonUtil.getUrl('FP2024071300002', null),
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-            pageId: "erpProductionAdd",
+            pageId: "wholeOutAdd",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -103,7 +100,7 @@ layui.config({
         _openNewWindows({
             url:  systemCommonUtil.getUrl('FP2024071300003&id=' + data.id, null),
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-            pageId: "erpProductionEdit",
+            pageId: "wholeOutEdit",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -116,7 +113,7 @@ layui.config({
         _openNewWindows({
             url:  systemCommonUtil.getUrl('FP2024071300004&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "erpProductionDetail",
+            pageId: "wholeOutDetail",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
             }});
@@ -128,34 +125,6 @@ layui.config({
             layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon005", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                }});
-        });
-    }
-
-    // 提交审批
-    function subApproval(data) {
-        layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
-            layer.close(index);
-            activitiUtil.startProcess(data.serviceClassName, null, function (approvalId) {
-                var params = {
-                    id: data.id,
-                    approvalId: approvalId
-                };
-                AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon006", params: params, type: 'json', method: 'POST', callback: function (json) {
-                        winui.window.msg("提交成功", {icon: 1, time: 2000});
-                        loadTable();
-                    }});
-            });
-        });
-    }
-
-    // 撤销
-    function revoke(data) {
-        layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
-            layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon003", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
-                    winui.window.msg("提交成功", {icon: 1, time: 2000});
                     loadTable();
                 }});
         });
