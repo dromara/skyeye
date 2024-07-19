@@ -43,7 +43,7 @@ layui.config({
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '2', align: 'left', width: 120 },
             { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], rowspan: '2', align: 'center', width: 150 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar' }
+            { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar' }
         ], [
             { field: 'fromTypeId', title: '来源类型', width: 150, templet: function (d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("purchaseOrderFromType", 'id', d.fromTypeId, 'name');
@@ -79,6 +79,8 @@ layui.config({
         	turnSales(data);
         } else if (layEvent === 'turnReturns') { //转销售退货单
             turnReturns(data);
+        }else if (layEvent === 'turnToPreProductionPlan') { //转预生产计划单
+            turnToPreProductionPlan(data);
         } else if (layEvent === 'processDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
@@ -143,6 +145,19 @@ layui.config({
         _openNewWindows({
             url:"../../tpl/salesOrder/salesOrderToReturns.html?id=" + data.id,
             title: "转销售退货",
+            pageId: "salesOrderToReturns",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+    // 销售订单转预生产计划
+    function turnToPreProductionPlan(data) {
+        _openNewWindows({
+            url:"../../tpl/salesOrder/salesOrderToPreProductionPlan.html?id=" + data.id,
+            title: "转预生产计划",
             pageId: "salesOrderToReturns",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
