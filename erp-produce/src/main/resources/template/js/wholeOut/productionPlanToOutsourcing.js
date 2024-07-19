@@ -14,7 +14,6 @@ layui.config({
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$;
     var id = GetUrlParam("id");
-    var serviceClassName = sysServiceMation["materialReceiptForm"]["key"];
 
     // 生产计划转整单委外
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryProductionTransWholeById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
