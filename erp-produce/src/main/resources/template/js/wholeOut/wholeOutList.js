@@ -37,7 +37,7 @@ layui.config({
                 }},
             { field: 'operTime', width: 150, title: '单据日期', align: 'center'},
             { field: 'totalPrice', title: '合计金额', rowspan: '2', align: 'center', width: 120 },
-            { field: 'holderMation', title: '客户', rowspan: '2', align: 'center', width: 150, templet: function (d) {
+            { field: 'holderMation', title: '供应商', rowspan: '2', align: 'center', width: 150, templet: function (d) {
                     return getNotUndefinedVal(d.holderMation?.name);
                 }},
             { field: 'processInstanceId', width: 200, title: '流程ID', align: 'center'},

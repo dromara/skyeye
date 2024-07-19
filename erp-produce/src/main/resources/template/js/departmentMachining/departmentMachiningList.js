@@ -43,7 +43,7 @@ layui.config({
                     return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
                 }},
             { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
                 }},
             { field: 'pickState', rowspan: '2', title: '领料状态', align: 'left', width: 80, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("machinPickStateEnum", 'id', d.pickState, 'name');
@@ -55,7 +55,7 @@ layui.config({
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', rowspan: '2',width: 240, toolbar: '#tableBar'}
         ],[
             { field: 'fromTypeId', title: '来源类型', rowspan: '2',width: 150, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("sealOutLetFromType", 'id', d.fromTypeId, 'name');
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("machinFromType", 'id', d.fromTypeId, 'name');
                 }},
             { field: 'fromId', title: '单据编号', rowspan: '2',width: 200, templet: function (d) {
                     return getNotUndefinedVal(d.fromMation?.oddNumber);
@@ -84,8 +84,11 @@ layui.config({
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
             revoke(data);
+        } else if (layEvent === 'gantt') { //甘特图
+            gantt(data);
         }
     });
+
 
     // 新增
     $("body").on("click", "#addBean", function() {
@@ -99,6 +102,19 @@ layui.config({
                 loadTable();
             }});
     });
+
+    // 甘特图
+    function gantt(data) {
+        _openNewWindows({
+            url: "../../tpl/departmentMachining/machiningGantt.html?objectId=" + data.id + '&objectKey=' + data.serviceClassName,
+            title: "车间任务安排甘特图",
+            pageId: "machiningGantt",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
 
     // 编辑
     function edit(data) {
