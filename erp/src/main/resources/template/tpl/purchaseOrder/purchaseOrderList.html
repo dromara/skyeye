@@ -38,6 +38,11 @@
 						<a class="layui-btn layui-btn-xs" lay-event="turnPurchase">转采购入库</a>
 					{{# } }}
 				{{# } }}
+				{{# if (d.otherState == 1) { }}
+					{{# if (auth('1721305185714')) { }}
+						<a class="layui-btn layui-btn-xs" lay-event="purchaseOrderToReturn">转采购退货</a>
+					{{# } }}
+				{{# } }}
 				{{# if (d.otherState == 2 || d.otherState == 3) { }}
 					{{# if (auth('1717984916030')) { }}
 						<a class="layui-btn layui-btn-xs" lay-event="transferToWaybill">转到货单</a>

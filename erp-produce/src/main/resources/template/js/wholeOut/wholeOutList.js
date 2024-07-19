@@ -37,7 +37,7 @@ layui.config({
                 }},
             { field: 'operTime', title: '单据日期', rowspan: '2', align: 'center', width: 140 },
             { colspan: '2', title: '来源单据信息', align: 'center' },
-            { field: 'holderMation', title: '客户', rowspan: '2', align: 'center', width: 150, templet: function (d) {
+            { field: 'holderMation', title: '供应商', rowspan: '2', align: 'center', width: 150, templet: function (d) {
                     return getNotUndefinedVal(d.holderMation?.name);
                 }},
             { field: 'totalPrice', title: '总金额', rowspan: '2', align: 'center', width: 140 },
@@ -118,7 +118,7 @@ layui.config({
     }
     //转到货单
     function wholeOutToArrival(data){
-        parent._openNewWindows({
+        _openNewWindows({
             url: "../../tpl/wholeOut/wholeOutToArrival.html?id=" + data.id,
             title: '转到货单',
             pageId: "wholeOutToArrival",
@@ -131,7 +131,7 @@ layui.config({
 
     //转采购退货
     function wholeOutToReturn(data){
-        parent._openNewWindows({
+        _openNewWindows({
             url: "../../tpl/wholeOut/wholeOutToReturn.html?id=" + data.id,
             title: '转采购退货',
             pageId: "wholeOutToReturn",
