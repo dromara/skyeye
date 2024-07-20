@@ -15,30 +15,25 @@ layui.config({
     var $ = layui.$;
     var id = GetUrlParam("id");
 
-    // 加工单转领料单
-    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryMachinTransRequestById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
+    // 加工单转退料单
+    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryMachinTransReturnById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
         let data = json.bean;
-        // data.pickChildList =data.machinChildList
-        // 领料单的【编辑布局】
-        dsFormUtil.initEditPageForStatic('content', 'FP2023100500002', data, {
+        // 退料单的【编辑布局】
+        dsFormUtil.initEditPageForStatic('content', 'FP2023100600006', data, {
             savePreParams: function (params) {
             },
             saveData: function (params) {
                 // 保存数据
-                AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertMachinToPickRequest", params: params, type: 'json', method: "POST", callback: function(json) {
+                AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertMachinToPickReturn", params: params, type: 'json', method: "POST", callback: function(json) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
                     }});
 
             },
             loadComponentCallback: function () {
-                // $("select[attrkey='departmentId']").prop('disabled', true);
                 $("div[controlType='pickFromType']").remove();
             },
             tableAddRowCallback: function (tableId) {
-                // $("#addRow" + tableId).remove();
-                // $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
-                // $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
 
             }
         });
