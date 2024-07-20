@@ -98,7 +98,6 @@ layui.config({
         // e 参数是点击事件的事件对象
         let item = getInPoingArr(noteList, "id", id, null);
         if (item.types != "project") {
-            console.log(item)
             alert("Task with ID " + id + " was clicked");
         }
         // 返回true以允许默认行为继续，返回false可以阻止默认行为

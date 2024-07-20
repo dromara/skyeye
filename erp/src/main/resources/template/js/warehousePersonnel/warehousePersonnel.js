@@ -15,7 +15,6 @@ layui.config({
     loadWareshop();
 
     form.render();
-    var chooseWorkshopId = "";
     function loadWareshop() {
         table.render({
             id: 'warehouseTable',
@@ -113,11 +112,9 @@ layui.config({
         systemCommonUtil.checkStaffMation = []; // 选择时返回的对象
         systemCommonUtil.openSysAllUserStaffChoosePage(function (checkStaffMation) {
             var list = new Array();
-            console.log(checkStaffMation)
             $.each(checkStaffMation, function (i, item) {
                 list.push(item.id);
             });
-            console.log(list)
             var params = {
                 depotId: depotId,
                 staffId: JSON.stringify(list)

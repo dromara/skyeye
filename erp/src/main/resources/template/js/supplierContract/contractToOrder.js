@@ -19,7 +19,6 @@ layui.config({
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "querySupplierContractTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
         let data = json.bean;
         data.erpOrderItemList = data.supplierContractChildList
-            console.log(data)
         // 采购订单的【编辑布局】
         dsFormUtil.initEditPageForStatic('content', 'FP2023042000002', data, {
             savePreParams: function (params) {
