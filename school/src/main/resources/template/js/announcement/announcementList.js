@@ -24,19 +24,16 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'get',
-        url: sysMainMation.schoolBasePath + 'queryCoursewareListBySubjectClassesId',
+        url: sysMainMation.schoolBasePath + 'queryAnnouncementAllList',
         where: getTableParams(),
         even: false,
         page: false,
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'section', title: '章节', align: 'center', width: 100, templet: function (d) {
-                return '第 ' + d.chapterMation?.section + ' 章';
+            { field: 'title', title: '标题', align: 'left', width: 300, templet: function (d) {
+                return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
             }},
-            { field: 'name', title: '名称', align: 'left', width: 300, templet: function (d) {
-                return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
-            }},
-            { field: 'remark', title: '相关描述', align: 'left', width: 300},
+            { field: 'content', title: '内容', align: 'left', width: 300},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 , templet: function(d) {
                 return getNotUndefinedVal(d.createMation?.name);
             }},
@@ -70,9 +67,9 @@ layui.config({
     // 新增
     $("body").on("click", "#addBean", function() {
         parent._openNewWindows({
-            url: '../../tpl/courseware/write.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId,
+            url: '../../tpl/announcement/write.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId,
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-            pageId: "coursewareAdd",
+            pageId: "announcementAdd",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -83,9 +80,9 @@ layui.config({
     // 编辑
     function edit(data) {
         parent._openNewWindows({
-            url: '../../tpl/courseware/write.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId+ '&id=' + data.id,
+            url: '../../tpl/announcement/write.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId+ '&id=' + data.id,
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-            pageId: "coursewareEdit",
+            pageId: "announcementEdit",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -96,9 +93,9 @@ layui.config({
     // 详情
     function details(data) {
         parent._openNewWindows({
-            url: systemCommonUtil.getUrl('FP2024070900001&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
+            url: systemCommonUtil.getUrl('FP2024072000006&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "coursewareDetails",
+            pageId: "announcementDetails",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
             }});
@@ -108,7 +105,7 @@ layui.config({
     function del(data, obj) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.schoolBasePath + "deleteCoursewareById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.schoolBasePath + "deleteAnnouncementById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
                 }});
@@ -127,5 +124,5 @@ layui.config({
         return $.extend(true, {objectKey: objectKey, objectId: subjectClassesId,subjectClassesId: subjectClassesId}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
-    exports('coursewareList', {});
+    exports('announcementList', {});
 });

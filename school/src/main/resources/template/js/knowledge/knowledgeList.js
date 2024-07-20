@@ -32,6 +32,9 @@ layui.config({
 	    limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+			{ field: 'section', title: '章节', align: 'center', width: 100, templet: function (d) {
+				return '第 ' + d.chapterMation?.section + ' 章';
+			}},
 			{ field: 'name', title: '名称', align: 'left', width: 300, templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
 			}},
