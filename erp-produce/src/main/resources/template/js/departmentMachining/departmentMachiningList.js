@@ -112,7 +112,7 @@ layui.config({
     // 甘特图
     function gantt(data) {
         _openNewWindows({
-            url: "../../tpl/departmentMachining/machiningGantt.html?objectId=" + data.id + '&objectKey=' + data.serviceClassName,
+            url: "../../tpl/departmentMachining/machiningGantt.html?id=" + data.id,
             title: "车间任务安排甘特图",
             pageId: "machiningGantt",
             area: ['90vw', '90vh'],

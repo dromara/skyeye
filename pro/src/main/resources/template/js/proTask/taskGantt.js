@@ -24,8 +24,6 @@ layui.config({
     AjaxPostUtil.request({url: sysMainMation.projectBasePath + "queryAllApprovalMilestoneList", params: {objectId: objectId}, type: 'json', method: 'GET', callback: function (json) {
         $("#milestoneId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
         milestoneList = json.rows;
-        console.log(123,json.rows)
-        console.log(456,milestoneList)
 
         var authPermission = teamObjectPermissionUtil.checkTeamBusinessAuthPermission(objectId, 'taskAuthEnum');
         var btnStr = `<div style="" class="type-group" id="type">`;

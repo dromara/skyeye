@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+<div class="winui-toolbar">
+    <div class="winui-tool">
+        <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+        <button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1596958747047"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
+    </div>
+</div>
+<div style="margin:auto 10px;">
+    <table id="messageTable" lay-filter="messageTable"></table>
+    <script type="text/html" id="tableBar">
+        {{# if (d.editRow == 1) { }}
+        {{# if (auth('1721375531678')) { }}
+            <a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>
+        {{# } }}
+        {{# if (auth('1721375469094')) { }}
+            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+        {{# } }}
+        {{# if (auth('1721375509306')) { }}
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+        {{# } }}
+        {{# } }}
+        {{# if (d.editRow == 2) { }}
+        {{# if (auth('1721375550109')) { }}
+            <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
+        {{# } }}
+        {{# } }}
+    </script>
+</div>
+<script src="../../assets/lib/layui/layui.js"></script>
+<script src="../../assets/lib/layui/custom.js"></script>
+<script type="text/javascript">
+    layui.config({base: '../../js/inventoryTaskList/'}).use('inventoryTaskList');
+</script>
+</body>
+</html>
