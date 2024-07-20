@@ -33,6 +33,17 @@
 					<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
 				{{# } }}
 			{{# } }}
+			{{# if (d.state == 'pass') { }}
+				{{# if (auth('1721379823318')) { }}
+					<a class="layui-btn layui-btn-xs" lay-event="processingToMaterialRequisition">转领料单</a>
+				{{# } }}
+				{{# if (auth('1721379731773')) { }}
+					<a class="layui-btn layui-btn-xs" lay-event="processingToSupplementMaterials">转补料单</a>
+				{{# } }}
+				{{# if (auth('1721379845821')) { }}
+					<a class="layui-btn layui-btn-xs" lay-event="processingToReturnMaterials">转退料单</a>
+				{{# } }}
+			{{# } }}
     	</script>
 	</div>
 	<script src="../../assets/lib/layui/layui.js"></script>
