@@ -110,11 +110,11 @@ layui.config({
 
     // 甘特图
     function gantt(data) {
-        _openNewWindows({
+        parent._openNewWindows({
             url: "../../tpl/departmentMachining/machiningGantt.html?id=" + data.id,
             title: "车间任务安排甘特图",
             pageId: "machiningGantt",
-            area: ['90vw', '90vh'],
+            area: ['100vw', '100vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
