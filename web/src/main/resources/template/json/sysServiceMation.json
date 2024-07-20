@@ -17,6 +17,7 @@
     "allocationFormOrder": {"name": "调拨订单", "key": "com.skyeye.other.service.impl.AllocationServiceImpl"},
     "depotOutOrder": {"name": "仓库出库单", "key": "com.skyeye.depot.service.impl.DepotOutServiceImpl"},
     "depotPutOrder": {"name": "仓库入库单", "key": "com.skyeye.depot.service.impl.DepotPutServiceImpl"},
+    "inventoryOrder": {"name": "盘点任务单", "key": "com.skyeye.inventory.service.impl.InventoryServiceImpl"},
 
     "putAcceptanceWarehousing": {"name": "验收入库单", "key": "com.skyeye.machin.service.impl.ErpAcceptanceReceiptServiceImpl"},
     "machinHeader": {"name": "加工单", "key": "com.skyeye.machin.service.impl.ErpMachinServiceImpl"},

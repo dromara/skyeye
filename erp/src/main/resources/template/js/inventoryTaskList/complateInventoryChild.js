@@ -10,10 +10,7 @@ layui.config({
     var $ = layui.$,
         textool = layui.textool,
         form = layui.form;
-    var parentId = getNotUndefinedVal(GetUrlParam("parentId"));
-    var depotId = getNotUndefinedVal(GetUrlParam("depotId"));
-
-    skyeyeClassEnumUtil.showEnumDataListByClassName("generateDepotLevelValType", 'radio', "type", '', form);
+    var id = getNotUndefinedVal(GetUrlParam("id"));
 
     textool.init({
         eleId: 'barCode',
@@ -25,15 +22,15 @@ layui.config({
     form.on('submit(getBean)', function (data) {
         if (winui.verifyForm(data.elem)) {
             let params = {
-                parentId: parentId,
-                depotId: depotId,
-                type: dataShowType.getData('type'),
-                number: $("#number").val(),
+                id: id,
+                realNumber:  $("#realNumber").val(),
+                profitNum: $("#profitNum").val(),
+                lossNum: $("#lossNum").val(),
             }
-            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "batchGenerateDepotLevelVal", params: params, type: 'json', method: 'POST', callback: function (json) {
-                parent.layer.close(index);
-                parent.refreshCode = '0';
-            }});
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "complateInventoryChild", params: params, type: 'json', method: 'POST', callback: function (json) {
+                    parent.layer.close(index);
+                    parent.refreshCode = '0';
+                }});
         }
         return false;
     });
