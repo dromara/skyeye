@@ -10,51 +10,50 @@ layui.config({
     var $ = layui.$,
         form = layui.form,
         table = layui.table;
-    authBtn('1720880910884');
+    authBtn('1721305232197');
 
-    loadWorkshop();
+    loadWareshop();
 
     form.render();
-    var chooseWorkshopId = "";
-    function loadWorkshop() {
+    function loadWareshop() {
         table.render({
-            id: 'workshopTable',
-            elem: '#workshopTable',
+            id: 'warehouseTable',
+            elem: '#warehouseTable',
             method: 'get',
-            url: sysMainMation.erpBasePath + 'queryMyChargeFarmList',
+            url: sysMainMation.erpBasePath + 'queryStaffBelongDepotList',
             even: false,
             page: false,
             limits: getLimits(),
             limit: getLimit(),
             cols: [[
                 { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
-                { field: 'name', title: '车间', align: 'left', width: 150, templet: function (d) {
+                { field: 'name', title: '仓库', align: 'left', width: 150, templet: function (d) {
                         return '<a lay-event="select" class="notice-title-click">' + d.name + '</a>';
                     }}
             ]],
             done: function(json) {
                 matchingLanguage();
-                chooseWorkshopId = "";
+                depotId = "";
                 loadStaff("");
             }
         });
-        table.on('tool(workshopTable)', function (obj) {
+        table.on('tool(warehouseTable)', function (obj) {
             var data = obj.data;
             var layEvent = obj.event;
             if (layEvent == 'select') {
-                chooseWorkshopId = data.id;
+                depotId = data.id;
                 loadStaff(data.id);
             }
         });
     }
 
-    function loadStaff(workshopId) {
+    function loadStaff(depotId) {
         table.render({
             id: 'messageTable',
             elem: '#messageTable',
             method: 'post',
-            url: sysMainMation.erpBasePath + 'queryFarmStaffList',
-            where: {objectId: workshopId},
+            url: sysMainMation.erpBasePath + 'queryDepotStaffList',
+            where: {objectId: depotId},
             even: true,
             page: true,
             limits: getLimits(),
@@ -96,17 +95,17 @@ layui.config({
     function delet(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "deleteFarmStaffById", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "deleteDepotStaffById", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                    table.reloadData("messageTable", {page: {curr: 1}, where: {objectId: chooseWorkshopId}})
+                    table.reloadData("messageTable", {page: {curr: 1}, where: {objectId: depotId}})
                 }});
         });
     }
 
     // 添加
     $("body").on("click", "#addBean", function() {
-        if (isNull(chooseWorkshopId)) {
-            winui.window.msg('请先选择车间信息.', {icon: 2, time: 2000});
+        if (isNull(depotId)) {
+            winui.window.msg('请先选择仓库信息.', {icon: 2, time: 2000});
             return false;
         }
         systemCommonUtil.userStaffCheckType = true; // // 人员选择类型，1.多选；其他。单选
@@ -117,15 +116,15 @@ layui.config({
                 list.push(item.id);
             });
             var params = {
-                farmId: chooseWorkshopId,
+                depotId: depotId,
                 staffId: JSON.stringify(list)
             };
-            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertFarmStaff", params: params, type: 'json', method: "POST", callback: function (json) {
-                    loadStaff(chooseWorkshopId);
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertDepotStaff", params: params, type: 'json', method: "POST", callback: function (json) {
+                    loadStaff(depotId);
                 }});
         });
 
     });
 
-    exports('workshopPersonnelAllocation', {});
+    exports('warehousePersonnel', {});
 });

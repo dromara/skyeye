@@ -89,7 +89,9 @@ layui.config({
         	turnPurchase(data);
         } else if (layEvent === 'transferToWaybill') { //转到货单
             transferToWaybill(data);
-        } else if (layEvent === 'processDetails') { // 工作流流程详情查看
+        } else if (layEvent === 'purchaseOrderToReturn') { //转采购退货单
+            purchaseOrderToReturn(data);
+        }else if (layEvent === 'processDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
             erpOrderUtil.revokeOrderMation(data.processInstanceId, serviceClassName, function() {
@@ -149,10 +151,23 @@ layui.config({
     }
     //转到货单
     function transferToWaybill(data){
-        parent._openNewWindows({
+        _openNewWindows({
             url: "../../tpl/purchaseOrder/purchaseToWaybill.html?id=" + data.id,
             title: '转到货单',
             pageId: "purchaseToWaybill",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+    //转采购退货
+    function purchaseOrderToReturn(data){
+        _openNewWindows({
+            url: "../../tpl/purchaseOrder/purchaseOrderToReturn.html?id=" + data.id,
+            title: '转采购退货',
+            pageId: "purchaseOrderToReturn",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});

@@ -1,4 +1,3 @@
-
 var rowId = "";
 
 layui.config({
@@ -36,26 +35,26 @@ layui.config({
                     return str;
                 }},
             { colspan: '2', title: '来源单据信息', align: 'center' },
-            { field: 'departmentMation', title: '部门', rowspan: '2', align: 'left', width: 200, templet: function (d) {
-                    return getNotUndefinedVal(d.departmentMation?.name);
-                }},
             { field: 'processInstanceId', title: '流程ID', rowspan: '2', width: 280, templet: function (d) {
                     return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
                 }},
             { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
                 }},
             { field: 'pickState', rowspan: '2', title: '领料状态', align: 'left', width: 80, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("machinPickStateEnum", 'id', d.pickState, 'name');
+                }},
+            { field: 'departmentMation', title: '加工部门', rowspan: '2', align: 'left', width: 200, templet: function (d) {
+                    return getNotUndefinedVal(d.departmentMation?.name);
                 }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2',width: 180 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', rowspan: '2',width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', rowspan: '2',width: 180 },
             { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', rowspan: '2',width: 150 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', rowspan: '2',width: 240, toolbar: '#tableBar'}
+            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', rowspan: '2',width: 300, toolbar: '#tableBar'}
         ],[
             { field: 'fromTypeId', title: '来源类型', rowspan: '2',width: 150, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("sealOutLetFromType", 'id', d.fromTypeId, 'name');
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("machinFromType", 'id', d.fromTypeId, 'name');
                 }},
             { field: 'fromId', title: '单据编号', rowspan: '2',width: 200, templet: function (d) {
                     return getNotUndefinedVal(d.fromMation?.oddNumber);
@@ -84,8 +83,17 @@ layui.config({
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
             revoke(data);
+        } else if (layEvent === 'gantt') { //甘特图
+            gantt(data);
+        }else if (layEvent === 'processingToMaterialRequisition') { //转领料单
+            processingToMaterialRequisition(data);
+        } else if (layEvent === 'processingToSupplementMaterials') { //转补料单
+            processingToSupplementMaterials(data);
+        } else if (layEvent === 'processingToReturnMaterials') { //转退料单
+            processingToReturnMaterials(data);
         }
     });
+
 
     // 新增
     $("body").on("click", "#addBean", function() {
@@ -99,6 +107,58 @@ layui.config({
                 loadTable();
             }});
     });
+
+    // 甘特图
+    function gantt(data) {
+        parent._openNewWindows({
+            url: "../../tpl/departmentMachining/machiningGantt.html?id=" + data.id,
+            title: "车间任务安排甘特图",
+            pageId: "machiningGantt",
+            area: ['100vw', '100vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+    // 转领料单
+    function processingToMaterialRequisition(data) {
+        _openNewWindows({
+            url: "../../tpl/departmentMachining/processingToMaterialRequisition.html?id=" + data.id,
+            title: "转领料单",
+            pageId: "processingToMaterialRequisition",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+    //转补料单
+    function processingToSupplementMaterials(data){
+        _openNewWindows({
+            url: "../../tpl/departmentMachining/processingToSupplementMaterials.html?id=" + data.id,
+            title: '转补料单',
+            pageId: "processingToSupplementMaterials",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+    //转退料单
+    function processingToReturnMaterials(data){
+        _openNewWindows({
+            url: "../../tpl/departmentMachining/processingToReturnMaterials.html?id=" + data.id,
+            title: '转退料单',
+            pageId: "processingToReturnMaterials",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
 
     // 编辑
     function edit(data) {

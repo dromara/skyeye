@@ -47,6 +47,9 @@ layui.config({
 			{ field: 'barCodeMation', title: '条形码', align: 'center', width: 150, templet: function (d) {
 				return '<img src="' + systemCommonUtil.getFilePath(d.barCodeMation.imagePath) + '" class="photo-img" lay-event="barCode" style="width: 100px">';
 			}},
+			{ field: 'type', title: '类型', align: 'center', width: 100, templet: function(d) {
+					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialNormsCodeType", 'id', d.type, 'name');
+				}},
 			{ field: 'inDepot', title: '状态', align: 'center', width: 100, templet: function(d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialNormsCodeInDepot", 'id', d.inDepot, 'name');
 			}},

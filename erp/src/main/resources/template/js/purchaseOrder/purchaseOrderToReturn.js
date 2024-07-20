@@ -15,30 +15,25 @@ layui.config({
     var $ = layui.$;
     var id = GetUrlParam("id");
 
-    // 退料单转退料入库单
-    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryReturnMaterialTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
+    // 采购订单转采购退货单
+    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryPurchaseOrderTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
             let data = json.bean;
-            data.erpOrderItemList=data.pickChildList
-            $.each(data.erpOrderItemList, function(index, item){
-                item.operNumber=item.needNum
-                item.unitPrice=item.normsMation.estimatePurchasePrice
-                item.taxRate=0
-            });
-            // 退料入库的【编辑布局】
-            dsFormUtil.initEditPageForStatic('content', 'FP2024071200012', data, {
+            // 采购退货的【编辑布局】
+            dsFormUtil.initEditPageForStatic('content', 'FP2023042400002', data, {
                 savePreParams: function (params) {
+                    params.holderId=data.holderId
+                    params.holderKey=data.holderKey
                 },
                 saveData: function (params) {
                     // 保存数据
-                    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertReturnMaterialToTurnOut", params: params, type: 'json', method: "POST", callback: function(json) {
+                    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertPurchaseOrderToReturns", params: params, type: 'json', method: "POST", callback: function(json) {
                             parent.layer.close(index);
                             parent.refreshCode = '0';
                         }});
                 },
                 loadComponentCallback: function () {
-                    $("select[attrkey='departmentId']").prop('disabled', true);
-                    $("select[attrkey='farmId']").prop('disabled', true);
-                    $("div[controlType='returnPutFromType']").remove();
+                    $("div[controlType='supplier']").remove();
+                    $("div[controlType='purchaseReturnsFromType']").remove();
                 },
                 tableAddRowCallback: function (tableId) {
                     $("#addRow" + tableId).remove();
@@ -50,7 +45,6 @@ layui.config({
                     $("div[controlType='simpleTable']").find(".taxLastMoney").prop('disabled', true);
                     $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
                     $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
-                    $("div[controlType='simpleTable']").find(".warehouse").prop('disabled', true);
                 }
             });
         }});

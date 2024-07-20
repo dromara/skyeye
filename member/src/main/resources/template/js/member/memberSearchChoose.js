@@ -70,7 +70,7 @@ layui.config({
 				}
 			})
 
-			initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入名称", function () {
+			initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入联系电话", function () {
 				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 		}

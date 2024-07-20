@@ -42,6 +42,7 @@
 
     "materialFromType": {"name": "商品来源类型", "className": "skyeye-erp#com.skyeye.material.classenum.MaterialFromType"},
     "materialItemCode": {"name": "商品条形码开启类型", "className": "skyeye-erp#com.skyeye.material.classenum.MaterialItemCode"},
+    "materialNormsCodeType": {"name": "条形码商品规格类型", "className": "skyeye-erp#com.skyeye.material.classenum.MaterialNormsCodeType"},
     "materialType": {"name": "商品类型", "className": "skyeye-erp#com.skyeye.material.classenum.MaterialType"},
     "materialUnit": {"name": "规格类型", "className": "skyeye-erp#com.skyeye.material.classenum.MaterialUnit"},
     "materialNormsStockType": {"name": "商品规格库存类型", "className": "skyeye-erp#com.skyeye.material.classenum.MaterialNormsStockType"},
