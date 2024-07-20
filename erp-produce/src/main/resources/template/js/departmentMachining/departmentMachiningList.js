@@ -1,4 +1,3 @@
-
 var rowId = "";
 
 layui.config({
@@ -134,6 +133,7 @@ layui.config({
                 loadTable();
             }});
     }
+
     //转补料单
     function processingToSupplementMaterials(data){
         _openNewWindows({

@@ -12,32 +12,17 @@ layui.config({
 
     // 根据id查询加工单信息
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryMachinForGanttById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
-            console.log(json)
-            matchingLanguage();
-            form.render();
-            renderPanel();
-            // render();
+        matchingLanguage();
+        form.render();
+        renderPanel();
 
-            gantt.clearAll();  //清空缓存
-            let nodeList = json.bean.node;
-            if (isNull(nodeList) || nodeList.length == 0) {
-                return;
-            }
-            $.each(nodeList, function (i, item) {
-                item.start_date = new Date(item.start_date);
-                item.end_date = new Date(item.end_date);
-            });
-            let linkList = json.bean.link;
-            if (isNull(linkList) || linkList.length == 0) {
-                linkList = [];
-            }
-            // 解析
-            gantt.parse({
-                data: nodeList,
-                links: linkList
-            });
-
-        }});
+        gantt.clearAll();  //清空缓存
+        // 解析
+        gantt.parse({
+            data: json.bean.node,
+            links: json.bean.link
+        });
+    }});
 
     function renderPanel() {
         document.getElementById('device_load').style.cssText = 'height:' + ($(window).height() - 140) + 'px';
@@ -124,45 +109,7 @@ layui.config({
     };
 
     gantt.init("device_load");
-
     gantt.i18n.setLocale("cn");  //使用中文
-    // function render() {
-    //     let milestoneId = $("#milestoneId").val();
-    //     if (isNull(milestoneId)) {
-    //         winui.window.msg("请选择产品", {icon: 2, time: 2000});
-    //         return false;
-    //     }
-    //     let params = {
-    //         id: objectId,
-    //         // objectKey: objectKey,
-    //         // holderId: milestoneId,
-    //         // type: $("#type .plan-select").attr("data-type")
-    //     };
-    //     var tem = getInPoingArr(milestoneList, "id", milestoneId, null);
-    //     gantt.config.start_date = new Date(tem.startTime);
-    //     gantt.config.end_date = new Date(tem.endTime);
-    //     console.log(999)
-    //     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryMachinForGanttById", params: params, type: 'json', method: 'GET', callback: function (json) {
-    //             gantt.clearAll();  //清空缓存
-    //             let nodeList = json.bean.node;
-    //             if (isNull(nodeList) || nodeList.length == 0) {
-    //                 return;
-    //             }
-    //             $.each(nodeList, function (i, item) {
-    //                 item.start_date = new Date(item.start_date);
-    //                 item.end_date = new Date(item.end_date);
-    //             });
-    //             let linkList = json.bean.link;
-    //             if (isNull(linkList) || linkList.length == 0) {
-    //                 linkList = [];
-    //             }
-    //             // 解析
-    //             gantt.parse({
-    //                 data: nodeList,
-    //                 links: linkList
-    //             });
-    //         }});
-    // }
 
     $("body").on("click", ".type-btn", function (e) {
         $(this).parent().find('.type-btn').removeClass("plan-select");
