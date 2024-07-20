@@ -10,7 +10,6 @@ layui.config({
         form = layui.form;
     var id = GetUrlParam("id");
 
-
     // 根据id查询加工单信息
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryMachinForGanttById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
             console.log(json)

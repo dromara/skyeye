@@ -33,7 +33,7 @@ layui.config({
                 },
                 // 转的时候隐藏来源单据
                 loadComponentCallback: function () {
-                    $("div[controlType='productionFromType']").remove();
+                    $("div[controlType='machinFromType']").remove();
                 },
                 tableAddRowCallback: function (tableId) {
                     $("#addRow" + tableId).remove();
