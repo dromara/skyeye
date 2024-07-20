@@ -35,6 +35,17 @@
                     <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
                 {{# } }}
             {{# } }}
+            {{# if (d.state == 'pass') { }}
+                {{# if (auth('1721442458082')) { }}
+                    <a class="layui-btn layui-btn-xs" lay-event="processingToMaterialRequisition">转领料单</a>
+                {{# } }}
+                {{# if (auth('1721442482395')) { }}
+                    <a class="layui-btn layui-btn-xs" lay-event="processingToSupplementMaterials">转补料单</a>
+                {{# } }}
+                {{# if (auth('1721442499305')) { }}
+                    <a class="layui-btn layui-btn-xs" lay-event="processingToReturnMaterials">转退料单</a>
+                {{# } }}
+            {{# } }}
 
             <a class="layui-btn layui-btn-xs" lay-event="gantt">甘特图</a>
         </script>
