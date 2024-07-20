@@ -209,7 +209,7 @@ layui.config({
 					approvalId: approvalId
 				};
 				AjaxPostUtil.request({url: sysMainMation.erpBasePath + "mysuppliercontract009", params: params, type: 'json', method: 'POST', callback: function (json) {
-					winui.window.msg("提交成功", {icon: 1, time: 2000});
+					winui.window.msg("提交成功。", {icon: 1, time: 2000});
 					loadTable();
 				}});
 			});
@@ -293,7 +293,7 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '撤销申请提交' }, function (index) {
 			layer.close(index);
 			AjaxPostUtil.request({url: sysMainMation.erpBasePath + "mysuppliercontract016", params: {processInstanceId: data.processInstanceId}, type: 'json', method: 'PUT', callback: function (json) {
-				winui.window.msg("提交成功", {icon: 1, time: 2000});
+				winui.window.msg("撤销成功。", {icon: 1, time: 2000});
 				loadTable();
 			}});
 		});

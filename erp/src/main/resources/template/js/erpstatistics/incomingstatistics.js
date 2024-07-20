@@ -22,9 +22,9 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-			{ field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {return d.materialMation.name}},
-			{ field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {return d.materialMation.model}},
-			{ field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {return d.normsMation.name}},
+			{ field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {return getNotUndefinedVal(d.materialMation?.name)}},
+			{ field: 'model', title: '产品型号', align: 'left',width: 150, templet: function (d) {return getNotUndefinedVal(d.materialMation?.model)}},
+			{ field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {return getNotUndefinedVal(d.normsMation?.name)}},
 			{ field: 'currentTock', title: '进货数量', align: 'left', width: 100 },
 			{ field: 'currentTockMoney', title: '进货金额', align: 'left', width: 120 },
 			{ field: 'returnCurrentTock', title: '退货数量', align: 'left', width: 100 },
