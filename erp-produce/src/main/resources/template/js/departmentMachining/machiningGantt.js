@@ -99,7 +99,13 @@ layui.config({
         let item = getInPoingArr(noteList, "id", id, null);
         if (item.types != "project") {
             console.log(item)
-            alert("Task with ID " + id + " was clicked");
+            _openNewWindows({
+                url:  systemCommonUtil.getUrl('FP2023100300003&id=' + '7b0d17eb2e334bc0b0b51e33425cb29d', null),
+                title: "车间任务安排",
+                pageId: "workshopTaskArrangement",
+                area: ['90vw', '90vh'],
+                callBack: function (refreshCode) {
+                }});
         }
         // 返回true以允许默认行为继续，返回false可以阻止默认行为
         return true;
