@@ -23,8 +23,8 @@ layui.config({
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
-        method: 'get',
-        url: sysMainMation.schoolBasePath + 'queryCoursewareListBySubjectClassesId',
+        method: 'post',
+        url: sysMainMation.schoolBasePath + 'queryDatumList',
         where: getTableParams(),
         even: false,
         page: false,
@@ -36,15 +36,19 @@ layui.config({
             { field: 'name', title: '名称', align: 'left', width: 300, templet: function (d) {
                 return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
             }},
-            { field: 'remark', title: '相关描述', align: 'left', width: 300},
+            { field: 'name', title: '内容', align: 'left', width: 300, templet: function (d) {
+                return  d.uploadDatum ;
+            }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 , templet: function(d) {
                 return getNotUndefinedVal(d.createMation?.name);
             }},
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 , templet: function(d) {
-                return getNotUndefinedVal(d.lastUpdateMation?.name);
+                return getNotUndefinedVal(d.lastUpdateName);
             }},
-            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
+            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 , templet: function(d) {
+                return getNotUndefinedVal(d.lastUpdateTime);
+            }},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#tableBar' }
         ]],
         done: function(json) {
@@ -70,9 +74,9 @@ layui.config({
     // 新增
     $("body").on("click", "#addBean", function() {
         parent._openNewWindows({
-            url: '../../tpl/courseware/write.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId,
+            url: '../../tpl/material/write.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId,
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-            pageId: "coursewareAdd",
+            pageId: "materialAdd",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -83,9 +87,9 @@ layui.config({
     // 编辑
     function edit(data) {
         parent._openNewWindows({
-            url: '../../tpl/courseware/write.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId+ '&id=' + data.id,
+            url: '../../tpl/material/write.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId + '&id=' + data.id,
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-            pageId: "coursewareEdit",
+            pageId: "materialEdit",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -96,9 +100,9 @@ layui.config({
     // 详情
     function details(data) {
         parent._openNewWindows({
-            url: systemCommonUtil.getUrl('FP2024070900001&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
+            url: systemCommonUtil.getUrl('FP2024072000003&objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "coursewareDetails",
+            pageId: "materialDetails",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
             }});
@@ -108,7 +112,7 @@ layui.config({
     function del(data, obj) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.schoolBasePath + "deleteCoursewareById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.schoolBasePath + "deleteDatumById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
                 }});
@@ -124,8 +128,8 @@ layui.config({
     }
 
     function getTableParams() {
-        return $.extend(true, {objectKey: objectKey, objectId: subjectClassesId,subjectClassesId: subjectClassesId}, initTableSearchUtil.getSearchValue("messageTable"));
+        return $.extend(true, {objectKey: objectKey, objectId: subjectClassesId,holderId: subjectClassesId,}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
-    exports('coursewareList', {});
+    exports('materialList', {});
 });

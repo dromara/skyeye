@@ -15,6 +15,11 @@
     
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
+        <script type="text/html" id="tableBar">
+            {{# if(d.whetherDelete) { }}
+                <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+            {{# } }}
+        </script>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>

@@ -10,38 +10,26 @@ layui.config({
         form = layui.form;
     var id = GetUrlParam("id");
 
-
+    let noteList = [];
     // 根据id查询加工单信息
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryMachinForGanttById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
-            console.log(json)
-            matchingLanguage();
-            form.render();
-            renderPanel();
-            // render();
+        matchingLanguage();
+        form.render();
+        renderPanel();
 
-            gantt.clearAll();  //清空缓存
-            let nodeList = json.bean.node;
-            if (isNull(nodeList) || nodeList.length == 0) {
-                return;
-            }
-            $.each(nodeList, function (i, item) {
-                item.start_date = new Date(item.start_date);
-                item.end_date = new Date(item.end_date);
-            });
-            let linkList = json.bean.link;
-            if (isNull(linkList) || linkList.length == 0) {
-                linkList = [];
-            }
-            // 解析
-            gantt.parse({
-                data: nodeList,
-                links: linkList
-            });
-
-        }});
+        gantt.config.start_date = new Date(json.bean.mathinTime.start_time);
+        gantt.config.end_date = new Date(json.bean.mathinTime.end_time);
+        gantt.clearAll();  //清空缓存
+        // 解析
+        noteList = json.bean.node;
+        gantt.parse({
+            data: json.bean.node,
+            links: json.bean.link
+        });
+    }});
 
     function renderPanel() {
-        document.getElementById('device_load').style.cssText = 'height:' + ($(window).height() - 140) + 'px';
+        document.getElementById('device_load').style.cssText = 'height:' + $(window).height() + 'px';
     }
     $(window).resize(function () {
         renderPanel();
@@ -54,16 +42,36 @@ layui.config({
         {unit: "day", step: 1, date: "%m-%d"}
     ];
     gantt.config.reorder_grid_columns = true;
-    gantt.config.columns = [{
+    gantt.config.columns = [
+    {name: "wbs", label: "序号", width: 50, template: gantt.getWBSCode},
+    {
         name: "text",
         label: "产品",
         width: 200,
-        align: "center",
+        align: "left",
         tree: true,
         resize: true
     }, {
+        name: "types",
+        label: "类型",
+        width: 60,
+        align: "center",
+        resize: true,
+        template: function (item) {
+            if (item.types == "project") {
+                return "<span style='color: #009688; font-weight: bold;'>产品</span>";
+            }
+            return "<span style='color: #FFB800;'>工序</span>";
+        }
+    }, {
         name: "start_date",
         label: "开始日期",
+        width: 100,
+        align: "center",
+        resize: true
+    }, {
+        name: "end_date",
+        label: "结束日期",
         width: 100,
         align: "center",
         resize: true
@@ -74,6 +82,7 @@ layui.config({
         align: "center",
         resize: true
     }];
+    // 是否可以编辑
     gantt.config.readonly = true;
     gantt.config.row_height = 40;
     gantt.config.scale_height = 50;
@@ -85,6 +94,24 @@ layui.config({
     gantt.attachEvent("onTaskDblClick", function (id, e) {
         return false;
     });
+    gantt.attachEvent("onTaskClick", function(id, e){
+        // 这里的代码会在节点被点击时执行
+        // id 参数是被点击的任务的ID
+        // e 参数是点击事件的事件对象
+        let item = getInPoingArr(noteList, "id", id, null);
+        if (item.types != "project") {
+            console.log(item)
+            _openNewWindows({
+                url:  systemCommonUtil.getUrl('FP2023100300003&id=' + '7b0d17eb2e334bc0b0b51e33425cb29d', null),
+                title: "车间任务安排",
+                pageId: "workshopTaskArrangement",
+                area: ['90vw', '90vh'],
+                callBack: function (refreshCode) {
+                }});
+        }
+        // 返回true以允许默认行为继续，返回false可以阻止默认行为
+        return true;
+    });
     gantt.config.show_tasks_outside_timescale = true;
     gantt.plugins({
         auto_scheduling: true,  //自动排程
@@ -94,8 +121,7 @@ layui.config({
     gantt.config.layout = {
         css: "gantt_container",
         cols: [{
-            width: 400,
-            min_width: 300,
+            width: 500,
             rows: [
                 {
                     view: "grid",
@@ -125,58 +151,7 @@ layui.config({
     };
 
     gantt.init("device_load");
-
     gantt.i18n.setLocale("cn");  //使用中文
-    // function render() {
-    //     let milestoneId = $("#milestoneId").val();
-    //     if (isNull(milestoneId)) {
-    //         winui.window.msg("请选择产品", {icon: 2, time: 2000});
-    //         return false;
-    //     }
-    //     let params = {
-    //         id: objectId,
-    //         // objectKey: objectKey,
-    //         // holderId: milestoneId,
-    //         // type: $("#type .plan-select").attr("data-type")
-    //     };
-    //     var tem = getInPoingArr(milestoneList, "id", milestoneId, null);
-    //     gantt.config.start_date = new Date(tem.startTime);
-    //     gantt.config.end_date = new Date(tem.endTime);
-    //     console.log(999)
-    //     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryMachinForGanttById", params: params, type: 'json', method: 'GET', callback: function (json) {
-    //             gantt.clearAll();  //清空缓存
-    //             let nodeList = json.bean.node;
-    //             if (isNull(nodeList) || nodeList.length == 0) {
-    //                 return;
-    //             }
-    //             $.each(nodeList, function (i, item) {
-    //                 item.start_date = new Date(item.start_date);
-    //                 item.end_date = new Date(item.end_date);
-    //             });
-    //             let linkList = json.bean.link;
-    //             if (isNull(linkList) || linkList.length == 0) {
-    //                 linkList = [];
-    //             }
-    //             // 解析
-    //             gantt.parse({
-    //                 data: nodeList,
-    //                 links: linkList
-    //             });
-    //         }});
-    // }
-
-    $("body").on("click", ".type-btn", function (e) {
-        $(this).parent().find('.type-btn').removeClass("plan-select");
-        $(this).addClass("plan-select");
-        render();
-    });
-
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            render();
-        }
-        return false;
-    });
 
     exports('machiningGantt', {});
 });

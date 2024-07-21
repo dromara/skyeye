@@ -101,6 +101,7 @@ layui.config({
 		 	        	var params = {
 							name: $("#name").val(),
 							sysWinId: $("#sysWinId").val(),
+							orderNum: $("#orderNum").val(),
 							desktopId: $("#desktop").val(),
 							pageType: pageType == 1 ? true : false,
 							pageUrl: pageType == 1 ? $("#pageUrl").val() : dsFormUtil.dsFormChooseMation.id,

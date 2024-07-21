@@ -31,6 +31,15 @@ layui.config({
 		}, {
 			title: '作业',
 			pageUrl: '../../tpl/homework/homeworkList.html?subjectClassesId=' + subjectClassesId
+		}, {
+			title: '资料',
+			pageUrl: '../../tpl/material/materialList.html?subjectClassesId=' + subjectClassesId
+		}, {
+			title: '公告',
+			pageUrl: '../../tpl/announcement/announcementList.html?subjectClassesId=' + subjectClassesId
+		}, {
+			title: '话题',
+			pageUrl: '../../tpl/topic/topicList.html?subjectClassesId=' + subjectClassesId
 		}],
 		element: layui.element,
 		object: {

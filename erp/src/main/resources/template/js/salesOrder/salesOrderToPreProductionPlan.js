@@ -17,29 +17,29 @@ layui.config({
 
     // 销售订单转预生产计划
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "querySealsOrderTransProductionPlanById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
-            let data = json.bean;
-            data.productionPlanChildList=data.erpOrderItemList
-            // 预生产计划的【编辑布局】
-            dsFormUtil.initEditPageForStatic('content', 'FP2024071100002', data, {
-                savePreParams: function (params) {
-                },
-                saveData: function (params) {
-                    // 保存数据
-                    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertSealsOrderToProductionPlan", params: params, type: 'json', method: "POST", callback: function(json) {
-                            parent.layer.close(index);
-                            parent.refreshCode = '0';
-                        }});
-                },
-                loadComponentCallback: function () {
-                    $("div[controlType='sealOutLetFromType']").remove();
-                },
+        let data = json.bean;
+        data.productionPlanChildList=data.erpOrderItemList
+        // 预生产计划的【编辑布局】
+        dsFormUtil.initEditPageForStatic('content', 'FP2024071100002', data, {
+            savePreParams: function (params) {
+            },
+            saveData: function (params) {
+                // 保存数据
+                AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertSealsOrderToProductionPlan", params: params, type: 'json', method: "POST", callback: function(json) {
+                    parent.layer.close(index);
+                    parent.refreshCode = '0';
+                }});
+            },
+            loadComponentCallback: function () {
+                $("div[controlType='sealOutLetFromType']").remove();
+            },
 
-                // 新增行的回调函数
-                tableAddRowCallback: function (tableId) {
-                    $("#addRow" + tableId).remove();
-                    $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
-                    $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
-                }
-            });
-        }});
+            // 新增行的回调函数
+            tableAddRowCallback: function (tableId) {
+                $("#addRow" + tableId).remove();
+                $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
+            }
+        });
+    }});
 });

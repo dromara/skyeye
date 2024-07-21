@@ -18,7 +18,6 @@ layui.config({
     // 物料退货转仓库入库
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryConfirmReturnTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
             let data = json.bean;
-            console.log(data)
             // 仓库入库的【编辑布局】
             dsFormUtil.initEditPageForStatic('content', 'FP2024070100009', data, {
                 savePreParams: function (params) {

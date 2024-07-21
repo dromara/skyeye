@@ -28,16 +28,10 @@
     	</div>
    	</div>
    	<script type="text/html" id="tableBar">
-		{{# if(auth('1552958167410')){ }}
+		{{# if (auth('1552958167410')) { }}
 			<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 		{{# } }}
-		{{# if(d.orderNum != 0 && auth('1552957498101')){ }}
-			<a class="layui-btn layui-btn-xs" lay-event="top">上移</a>
-		{{# } }}
-		{{# if(auth('1552957538820')){ }}
-			<a class="layui-btn layui-btn-xs" lay-event="lower">下移</a>
-		{{# } }}
-		{{# if(auth('1552957567975')){ }}
+		{{# if (auth('1552957567975')) { }}
 			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
 		{{# } }}
 		<a class="layui-btn layui-btn-xs" lay-event="authpoint">权限点</a>

@@ -42,7 +42,7 @@ layui.config({
 					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
 				}},
 
-			{ field: 'machinOrderState', title: '加工单下达状态', rowspan: '2', width: 90, templet: function (d) {
+			{ field: 'machinOrderState', title: '加工单下达状态', rowspan: '2', width: 150, templet: function (d) {
 					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("productionMachinOrderState", 'id', d.machinOrderState, 'name');
 				}},
 			{ field: 'outState', title: '委外状态', rowspan: '2', width: 90, templet: function (d) {

@@ -18,7 +18,6 @@ layui.config({
     // 整单委外单转到货单
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryWholeOrderOutTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
             let data = json.bean;
-            console.log(data)
             // 采购到货的【编辑布局】
             dsFormUtil.initEditPageForStatic('content', 'FP2024061100002', data, {
                 savePreParams: function (params) {
