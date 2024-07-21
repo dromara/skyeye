@@ -32,7 +32,7 @@ layui.config({
             url: sysMainMation.schoolBasePath + "queryDatumById",
             params: {id: id},
             type: 'json',
-            method: 'GET',
+            method: 'POST',
             callback: function (json) {
                 let data = json.bean;
                 dsFormUtil.initEditPageForStatic('content', 'FP2024072000002', data, {
