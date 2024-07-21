@@ -24,7 +24,6 @@ layui.config({
             item.unitPrice=item.normsMation.estimatePurchasePrice
             item.taxRate=0
         });
-        console.log(data.erpOrderItemList)
         // 领料出库的【编辑布局】
         dsFormUtil.initEditPageForStatic('content', 'FP2024071200005', data, {
             savePreParams: function (params) {

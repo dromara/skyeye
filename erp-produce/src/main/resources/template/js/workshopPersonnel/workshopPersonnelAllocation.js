@@ -113,11 +113,9 @@ layui.config({
         systemCommonUtil.checkStaffMation = []; // 选择时返回的对象
         systemCommonUtil.openSysAllUserStaffChoosePage(function (checkStaffMation) {
             var list = new Array();
-            console.log(checkStaffMation)
             $.each(checkStaffMation, function (i, item) {
                 list.push(item.id);
             });
-            console.log(list)
             var params = {
                 farmId: chooseWorkshopId,
                 staffId: JSON.stringify(list)
