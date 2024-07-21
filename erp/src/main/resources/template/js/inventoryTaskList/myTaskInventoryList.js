@@ -13,7 +13,7 @@ layui.config({
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
-        method: 'post',
+        method: 'POST',
         url: sysMainMation.erpBasePath + 'queryInventoryChildList',
         where: getTableParams(),
         even: true,
@@ -23,22 +23,17 @@ layui.config({
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: '2' },
             { field: 'oddNumber', title: '单号', width: 200, align: 'center', templet: function (d) {
-                    return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
-                }},
-            // { field: 'operatorId', title: '产品', rowspan: '2', align: 'center', width: 140 },
-            //     { field: 'normsId', title: '规格', rowspan: '2', align: 'center', width: 140 },
-            // { field: 'depotId', title: '仓库', rowspan: '2', align: 'center', width: 140 },
-
+                return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+            }},
             { field: 'materialId', title: '产品名称', align: 'left', width: 150, templet: function (d) {
-                    return getNotUndefinedVal(d.materialMation?.name);
-                }},
+                return getNotUndefinedVal(d.materialMation?.name);
+            }},
             { field: 'normsId', title: '产品规格', align: 'left', width: 150, templet: function (d) {
-                    return getNotUndefinedVal(d.normsMation?.name);
-                }},
+                return getNotUndefinedVal(d.normsMation?.name);
+            }},
             { field: 'depotId', title: "仓库", align: 'left', width: 150, templet: function (d) {
-                    return getNotUndefinedVal(d.depotMation?.name);
-                }},
-
+                return getNotUndefinedVal(d.depotMation?.name);
+            }},
             { field: 'planStartTime', title: '计划开始时间', rowspan: '2', align: 'center', width: 140 },
             { field: 'planEndTime', title: '计划结束时间', rowspan: '2', align: 'center', width: 140 },
             { field: 'lossNum', title: '盘亏数量', rowspan: '2', align: 'center', width: 140 },
@@ -46,11 +41,11 @@ layui.config({
             { field: 'profitNum', title: '盘盈数量', rowspan: '2', align: 'center', width: 140 },
             { field: 'planNumber', title: '盘点总数量', rowspan: '2', align: 'center', width: 140 },
             { field: 'state', title: '状态', width: 90, align: 'center', templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
-                }},
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("inventoryChildState", 'id', d.state, 'name');
+            }},
             { field: 'type', title: '类型', width: 90, align: 'center', templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialNormsCodeType", 'id', d.type, 'name');
-                }},
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialNormsCodeType", 'id', d.type, 'name');
+            }},
             { field: 'unitPrice', title: '单价', rowspan: '2', align: 'center', width: 140 },
             { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
@@ -83,7 +78,6 @@ layui.config({
             }});
     }
 
-
     form.render();
     $("body").on("click", "#reloadTable", function() {
         loadTable();
@@ -96,5 +90,5 @@ layui.config({
         return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
-    exports('inventoryTaskList', {});
+    exports('myTaskInventoryList', {});
 });

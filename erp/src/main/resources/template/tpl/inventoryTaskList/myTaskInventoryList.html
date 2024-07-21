@@ -15,8 +15,10 @@
 <div style="margin:auto 10px;">
     <table id="messageTable" lay-filter="messageTable"></table>
     <script type="text/html" id="tableBar">
-        {{# if (auth('1721394900190')) { }}
-            <a class="layui-btn layui-btn-xs" lay-event="complete">完成</a>
+        {{# if (d.state == '3') { }}
+            {{# if (auth('1721394900190')) { }}
+                <a class="layui-btn layui-btn-xs" lay-event="complete">完成</a>
+            {{# } }}
         {{# } }}
     </script>
 </div>

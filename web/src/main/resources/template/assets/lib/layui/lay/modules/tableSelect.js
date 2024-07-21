@@ -56,7 +56,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                 setChecked(res, curr, count);
                 tableDone(res, curr, count);
             };
-            opt.table.where = {};
+            opt.table.where = isNull(opt.where) ? {} : opt.where;
             opt.table.where[opt.searchKey] = '';
             var tableSelect_table = table.render(opt.table);
 
