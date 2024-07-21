@@ -10,16 +10,29 @@ layui.config({
 		form = layui.form,
 		table = layui.table,
 		soulTable = layui.soulTable;
+	var selTemplate = getFileContent('tpl/template/select-option.tpl');
 
 	var categoryId = "";
 	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["erpMaterialCategory"]["key"], 'selectTree', "materialCategoryType", '', form, function () {
-		initTable();
+		// 加载当前用户所属仓库
+		let depotHtml = '';
+		AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryStaffBelongDepotList", params: {}, type: 'json', method: "GET", callback: function(json) {
+			depotHtml = getDataUseHandlebars(selTemplate, json);
+		}, async: false});
+		initTable(depotHtml);
 	}, function (chooseId) {
 		categoryId = chooseId;
 		refreshTable();
 	});
 
-	function initTable(){
+	var depotId = "";
+	form.on('select(depotId)', function(data) {
+		var thisRowValue = data.value;
+		depotId = isNull(thisRowValue) ? "" : thisRowValue;
+		loadTable();
+	});
+
+	function initTable(depotHtml){
 		table.render({
 		    id: 'messageTable',
 	        elem: '#messageTable',
@@ -58,9 +71,22 @@ layui.config({
 						return "";
 					}
 		        	$.each(d.materialNorms, function(i, item) {
-						if (!isNull(item.overAllStock)) {
-							str += '<span class="layui-badge layui-bg-blue">' + item.name + '【' + item.overAllStock.allStock + '】</span><br>';
+						str += '<span class="layui-badge layui-bg-blue">' + item.name + '【';
+						// 如果仓库ID为空，则显示所有仓库的库存，否则显示当前仓库的库存
+						if (isNull(depotId)) {
+							if (!isNull(item.overAllStock)) {
+								str += item.overAllStock.allStock
+							} else {
+								str += 0;
+							}
+						} else {
+							if (!isNull(item.depotTock)) {
+								str += item.depotTock.allStock;
+							} else {
+								str += 0
+							}
 						}
+						str +=  '】</span><br>';
 		        	});
 		        	return str;
 		        }},
@@ -74,7 +100,10 @@ layui.config({
 
 				initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入商品名称，型号", function () {
 					table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-				});
+				}, `<label class="layui-form-label">仓库</label><div class="layui-input-inline">
+						<select id="depotId" name="depotId" lay-filter="depotId" lay-search="">
+						${depotHtml}
+					</select></div>`);
 		    }
 		});
 	}
@@ -93,7 +122,11 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return $.extend(true, {categoryId: categoryId}, initTableSearchUtil.getSearchValue("messageTable"));
+		let params = {
+			depotId: depotId,
+			categoryId: categoryId
+		};
+		return $.extend(true, params, initTableSearchUtil.getSearchValue("messageTable"));
 	}
     
     exports('materialReserveList', {});
