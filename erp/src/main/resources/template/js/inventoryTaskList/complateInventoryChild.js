@@ -40,8 +40,8 @@ layui.config({
             limit: 8,
             cols: [[
                 { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-                { field: 'jobNumber', title: '员工工号', width: 100, templet: function (d) {
-                        return '<a rowId="' + d.id + '" class="notice-title-click">' + d.jobNumber + '</a>';
+                { field: 'codeNum', title: '条形码', width: 250, templet: function (d) {
+                        return '<a rowId="' + d.id + '" class="notice-title-click">' + d.codeNum + '</a>';
                     }},
                 // { field: 'userName', title: '员工姓名', width: 100 },
                 // { field: 'userSex', title: '性别', width: 60, rowspan: '2', templet: function (d) {
