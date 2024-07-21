@@ -1,32 +1,68 @@
-
-// 以下两个参数开启团队权限时有值
-var objectId = '', objectKey = '';
-// 根据以下两个参数判断：工作流的判断是否要根据serviceClassName的判断
-var serviceClassName;
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'tagEditor', 'laydate'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'form'], function (exports) {
     winui.renderColor();
     var index = parent.layer.getFrameIndex(window.name);
-    var $ = layui.$;
+    var $ = layui.$,
+        textool = layui.textool,
+        form = layui.form;
     var id = GetUrlParam("id");
+    var assignmentId = GetUrlParam("assignmentId");
+    var fullMarks
 
-    AjaxPostUtil.request({
-        url: sysMainMation.schoolBasePath + "queryAssignmentSubById",
-        params: {id: id},
-        type: 'json',
+    showGrid({
+        id: "showForm",
+        url: sysMainMation.schoolBasePath + "queryAssignmentById",
+        params: {id: assignmentId},
         method: 'GET',
-        callback: function (json) {
-            let data = json.bean;
-            dsFormUtil.initEditPageForStatic('content', 'FP2024071300013', data, {
-                savePreParams: function (params) {
-                }
-            });
+        pagination: false,
+        template: $("#beanTemplate").html(),
+        ajaxSendAfter: function (json) {
+            fullMarks = json.bean.fullMarks;
+            matchingLanguage();
+            form.render();
         }
     });
 
+    if (!isNull(id)) {
+        AjaxPostUtil.request({url: sysMainMation.schoolBasePath + "queryAssignmentSubById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
+                $("#score").val(json.bean.score);
+                $("#comment").val(json.bean.comment);
+                matchingLanguage();
+                form.render();
+            }});
+    }
+
+    form.on('submit(formAddBean)', function (data) {
+        if($("#score").val()>fullMarks ){
+            winui.window.msg('请输入正确评分', {icon: 2, time: 2000});
+            console.log(fullMarks)
+            console.log($("#score").val())
+            return false;
+        }
+        if (winui.verifyForm(data.elem)) {
+            let params = {
+                id: id,
+                score:  $("#score").val(),
+                comment: $("#comment").val(),
+            }
+            AjaxPostUtil.request({
+                url: sysMainMation.schoolBasePath + "readOverAssignmentSubById",
+                params: params,
+                type: 'json',
+                method: 'POST',
+                callback: function (json) {
+                parent.layer.close(index);
+                parent.refreshCode = '0';
+            }});
+        }
+        return false;
+    });
+
+    $("body").on("click", "#cancle", function() {
+        parent.layer.close(index);
+    });
 });

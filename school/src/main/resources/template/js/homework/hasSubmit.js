@@ -24,13 +24,13 @@ layui.config({
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'name', title: '姓名', align: 'left', width: 150, templet: function(d) {
-                    return getNotUndefinedVal(d.createMation?.name);
+                return getNotUndefinedVal(d.createMation?.name);
             }},
             { field: 'accountNumber', title: '学号', align: 'left', width: 180, templet: function(d) {
-                    return getNotUndefinedVal(d.createMation?.accountNumber);
+                return getNotUndefinedVal(d.createMation?.accountNumber);
             }},
             { field: 'content', title: '内容', align: 'left', width: 180, templet: function (d) {
-                    return '<a lay-event="details" class="notice-title-click">' + d.content + '</a>';
+                return '<a lay-event="details" class="notice-title-click">' + d.content + '</a>';
             }},
             { field: 'state', title: '状态', align: 'left',width: 150, templet: function(d) {
                 var str = '';
@@ -77,7 +77,7 @@ layui.config({
     //批改
     function correct(data) {
         parent.parent._openNewWindows({
-            url: '../../tpl/homework/correct.html?id=' + data.id,
+            url: '../../tpl/homework/correct.html?id=' + data.id+ '&assignmentId=' + assignmentId,
             title: '作业批改',
             pageId: "homeworkCorrect",
             area: ['90vw', '90vh'],
