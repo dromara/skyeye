@@ -42,11 +42,13 @@ layui.config({
         {unit: "day", step: 1, date: "%m-%d"}
     ];
     gantt.config.reorder_grid_columns = true;
-    gantt.config.columns = [{
+    gantt.config.columns = [
+    {name: "wbs", label: "序号", width: 50, template: gantt.getWBSCode},
+    {
         name: "text",
         label: "产品",
         width: 200,
-        align: "center",
+        align: "left",
         tree: true,
         resize: true
     }, {
