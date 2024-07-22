@@ -14,58 +14,119 @@ layui.config({
     var $ = layui.$,
         form = layui.form,
         table = layui.table;
-    var selTemplate = getFileContent('tpl/template/select-option.tpl');
+    // var selTemplate = getFileContent('tpl/template/select-option.tpl');
     let farmId = getNotUndefinedVal(GetUrlParam("id"));
     // 改
-    let assetMap = {};
+    // let assetMap = {};
 
     initTableChooseUtil.initTable({
         id: "arrangeList",
         cols: [
-            {id: 'workshopId', title: '安排车间', formType: 'input', width: '150', verify: 'required'},
-            {id: 'operNumber', title: '安排任务数量', formType: 'input', width: '140', verify: 'required|number'}
+            {id: 'workshopId', title: '安排车间', formType: 'select', width: '150', verify: 'required',templet: function(d) {
+                    var options = queryWorkshopList();
+                    return '<select name="workshop" class="workshop-select">' + options + '</select>';
+                }
+            },
+            {id: 'taskNumber', title: '安排任务数量', formType: 'input', width: '140', verify: 'required|number'}
         ],
         deleteRowCallback: function (trcusid) {
             delete allChooseFarm[trcusid];
         },
         addRowCallback: function (trcusid) {
-            if (!isNull(farmId)) {
-                if (isNull(assetMap[farmId])) {
-                    AjaxPostUtil.request({url: sysMainMation.admBasePath + "queryAssetById", params: {"id": farmId}, type: 'json', method: 'GET', callback: function (json) {
-                            assetMap[farmId] = json.bean
-                        }, async: false});
-                }
-                let chooseAssetMation = assetMap[farmId]
-                // 获取表格行号
-                var thisRowKey = trcusid.replace("tr", "");
-                // 资产名称赋值
-                $("#farmId" + thisRowKey).val(chooseAssetMation.name);
-                $("#farmId" + thisRowKey).attr(initTableChooseUtil.chooseInputDataIdKey, chooseAssetMation.id);
-                // 资产赋值
-                // 车间赋值
-                allChooseFarm[trcusid] = chooseAssetMation;
-            }
+            // if (!isNull(farmId)) {
+            //     if (isNull(assetMap[farmId])) {
+            //         AjaxPostUtil.request({url: sysMainMation.admBasePath + "queryAssetById", params: {"id": farmId}, type: 'json', method: 'GET', callback: function (json) {
+            //                 assetMap[farmId] = json.bean
+            //             }, async: false});
+            //     }
+            //     let chooseAssetMation = assetMap[farmId]
+            //     // 获取表格行号
+            //     var thisRowKey = trcusid.replace("tr", "");
+            //     // 资产名称赋值
+            //     $("#farmId" + thisRowKey).val(chooseAssetMation.name);
+            //     $("#farmId" + thisRowKey).attr(initTableChooseUtil.chooseInputDataIdKey, chooseAssetMation.id);
+            //     // 资产赋值
+            //     allChooseFarm[trcusid] = chooseAssetMation;
+            // }
         },
         form: form,
         minData: 1
     });
+    //
+    // var workshopId = "";
+    // form.on('select(workshopId)', function(data) {
+    //     console.log(555,data)
+    //     // var thisRowValue = data.value;
+    //     // workshopId = isNull(thisRowValue) ? "" : thisRowValue;
+    //     aaa();
+    // });
+    // 渲染表格
+//     function aaa(){
+//     table.render({
+//         id: 'arrangeList',//表格
+//         elem: '#workshopId', //表格里的元素
+//         method: 'post',
+//         url: sysMainMation.erpBasePath + 'erpfarm001',
+//         where: getTableParams(),
+//         even: true,
+//         page: true,
+//         limits: getLimits(),
+//         limit: getLimit(),
+//         done: function(json){
+//             // 表格渲染完成后的回调
+//             // 在这里添加事件监听
+//             $('select[name="workshop"]').on('change', function(){
+//                 console.log('Workshop selected', $(this).val());
+//                 // 如果需要，可以在这里打印'123'或进行其他操作
+//             });
+//
+//             $('input[name="taskNumber"]').on('click', function(){
+//                 console.log('taskNumber input clicked');
+//                 // 打印'123'或其他操作
+//             });
+//         }
+//         // done: function(json){
+//         //     console.log(json)
+//         //     // matchingLanguage();
+//         //     // $('select[name="workshop"]').each(function(){
+//         //     //     $(this).empty();
+//         //     //     workshopData.forEach(function(item){
+//         //     //         $(this).append('<option value="' + item.id + '">' + item.name + '</option>');
+//         //     //     }, $(this));
+//         //     // });
+//         // }
+//     });
+// }
 
-    $("body").on("click", "farmId", function (e) {
-        // 查询车间列表
-        AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpfarm001", params: {page:1,limit:30}, type: 'json', method: "POST", callback: function(json) {
-            console.log(666,json)
-                // $("#workshopId").html(getDataUseHandlebars(selTemplate, json));
-                // form.render('select');
-                // initTable();
-            }, async: false});
-    });
+    function queryWorkshopList() {
+        // 假设您有一个函数可以处理Ajax请求
+        AjaxPostUtil.request({
+            url: sysMainMation.erpBasePath + "erpfarm001",
+            params: {page: 1, limit: 30},
+            type: 'json',
+            method: "POST",
+            callback: function(json) {
+                console.log(666, json);
+            }
+        });
+    }
 
-    var workshopId = "";
-    form.on('select(workshopId)', function(data) {
-        var thisRowValue = data.value;
-        workshopId = isNull(thisRowValue) ? "" : thisRowValue;
-        loadTable();
-    });
+// $("body").on("click", "workshopId", function (e) {
+//         // 查询车间列表
+//         AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpfarm001", params: {page:1,limit:30}, type: 'json', method: "POST", callback: function(json) {
+//             console.log(666,json)
+//                 // $("#workshopId").html(getDataUseHandlebars(selTemplate, json));
+//                 // form.render('select');
+//                 // initTable();
+//             }, async: false});
+//     });
+
+    // var workshopId = "";
+    // form.on('select(workshopId)', function(data) {
+    //     var thisRowValue = data.value;
+    //     workshopId = isNull(thisRowValue) ? "" : thisRowValue;
+    //     loadTable();
+    // });
 
     // AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpfarm001",  params: {page: page, limit: 15}, type: 'json', method: 'POST', callback: function (json) {
     //         parent.layer.close(index);
@@ -85,9 +146,9 @@ layui.config({
             $.each(result.dataList, function(i, item) {
                 // 获取行编号
                 var thisRowKey = item["trcusid"].replace("tr", "");
-                if (parseInt(item.operNumber) == 0) {
-                    $("#operNumber" + thisRowKey).addClass("layui-form-danger");
-                    $("#operNumber" + thisRowKey).focus();
+                if (parseInt(item.taskNumber) == 0) {
+                    $("#taskNumber" + thisRowKey).addClass("layui-form-danger");
+                    $("#taskNumber" + thisRowKey).focus();
                     winui.window.msg('数量不能为0', {icon: 2, time: 2000});
                     noError = true;
                     return false;
@@ -138,7 +199,7 @@ layui.config({
     });
 
     function loadTable() {
-        table.reloadData("messageTable", {where: getTableParams()});
+        table.reloadData("arrangeList", {where: getTableParams()});
     }
 
     function getTableParams() {
