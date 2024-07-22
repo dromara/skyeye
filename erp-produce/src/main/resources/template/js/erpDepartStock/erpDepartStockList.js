@@ -69,7 +69,10 @@ layui.config({
     }
 
     function getTableParams() {
-    	return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+		var params = {
+			type: 'department',
+		}
+    	return $.extend(true, params, initTableSearchUtil.getSearchValue("messageTable"));
     }
     
     exports('erpDepartStockList', {});

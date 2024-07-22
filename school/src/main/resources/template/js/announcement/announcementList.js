@@ -23,7 +23,7 @@ layui.config({
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
-        method: 'get',
+        method: 'post',
         url: sysMainMation.schoolBasePath + 'queryAnnouncementAllList',
         where: getTableParams(),
         even: false,
@@ -46,7 +46,7 @@ layui.config({
         ]],
         done: function(json) {
             matchingLanguage();
-            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "暂不支持搜索", function () {
                 table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
             });
         }

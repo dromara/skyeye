@@ -47,7 +47,7 @@ layui.config({
 				{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 				{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
 				{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 320, toolbar: '#tableBar' }
+		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar' }
 		    ]],
 		    done: function(json) {
 		    	matchingLanguage();
@@ -69,10 +69,6 @@ layui.config({
 				del(data, obj);
 			} else if (layEvent === 'edit') { // 编辑
 				edit(data);
-			} else if (layEvent === 'top') { // 上移
-				topOne(data);
-			} else if (layEvent === 'lower') { // 下移
-				lowerOne(data);
 			} else if (layEvent === 'authpoint') { // 权限点
 				authpoint(data);
 			} else if (layEvent === 'iconPic') { // 图片
@@ -141,22 +137,6 @@ layui.config({
 			}});
 	}
 	
-	// 上移
-	function topOne(data) {
-		AjaxPostUtil.request({url: reqBasePath + "sys022", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
-			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-			loadTable();
-		}});
-	}
-	
-	// 下移
-	function lowerOne(data) {
-		AjaxPostUtil.request({url: reqBasePath + "sys023", params: {id: data.id}, type: 'json', method: 'POST', callback: function (json) {
-			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-			loadTable();
-		}});
-	}
-    
     // 新增菜单
     $("body").on("click", "#addBean", function() {
     	_openNewWindows({

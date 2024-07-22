@@ -19,15 +19,17 @@ var initTableSearchUtil = {
      * @param form form表单对象
      * @param keywordPlaceholder 关键字搜索的提示语
      * @param callback 搜索条件点击确定时的回调，用来刷新表格
+     * @param otherDom 其他dom对象，用来展示其他的元素
      */
-    initAdvancedSearch: function ($table, searchParams, form, keywordPlaceholder, callback) {
+    initAdvancedSearch: function ($table, searchParams, form, keywordPlaceholder, callback, otherDom) {
         var tableId = $table.id;
         // 同一个表格只加载一次
-        if(isNull(initTableSearchUtil.tableMap[tableId])){
+        if (isNull(initTableSearchUtil.tableMap[tableId])) {
             initTableSearchUtil.tableMap[tableId] = {
                 table: $table,
                 searchParams: searchParams,
                 keywordPlaceholder: keywordPlaceholder,
+                otherDom: isNull(otherDom) ? '' : otherDom,
                 callback: callback
             };
             // 加载筛选条件展示框
@@ -35,7 +37,7 @@ var initTableSearchUtil = {
             // 初始化监听事件
             initTableSearchUtil.initEvent(form);
             // 加载表格对应的关键字搜索信息
-            initTableSearchUtil.initTableKeyWordSearch(tableId, keywordPlaceholder);
+            initTableSearchUtil.initTableKeyWordSearch(tableId, keywordPlaceholder, form, otherDom);
         }
         if (isNull(searchParams)) {
             return;
@@ -87,12 +89,15 @@ var initTableSearchUtil = {
      *
      * @param tableId 表格id
      * @param keywordPlaceholder 关键字搜索的提示语
+     * @param form form表单对象
+     * @param otherDom 其他dom对象，用来展示其他的元素
      */
-    initTableKeyWordSearch: function (tableId, keywordPlaceholder) {
+    initTableKeyWordSearch: function (tableId, keywordPlaceholder, form, otherDom) {
         if (isNull(keywordPlaceholder) || keywordPlaceholder == "暂不支持搜索") {
             return false;
         }
         var str;
+        let searchFormDom = '';
         if (typeof keywordPlaceholder === 'object') {
             str = '<div class="keyword-box">' +
                 '<input type="text" id="' + tableId + 'KeyWord" placeholder="' + keywordPlaceholder.value + '" class="layui-input search-input-keyword" />' +
@@ -107,6 +112,14 @@ var initTableSearchUtil = {
                 '</div>';
         }
         $(".winui-tool").append(str);
+
+        searchFormDom += isNull(otherDom) ? '' : '<div style="margin: 0 auto; padding: 10px 0px 0px 10px;">' +
+            '<form class="layui-form layui-form-pane" action="" autocomplete="off">' +
+            '<div class="layui-form-item"><div class="layui-inline">' + otherDom;
+        searchFormDom += isNull(otherDom) ? '' : '</div></div></form></div>';
+        $(".winui-tool").parent().before(searchFormDom);
+
+        form.render();
         // 当对输入框有要求时
         if (typeof keywordPlaceholder === 'object') {
             // 是否有默认值

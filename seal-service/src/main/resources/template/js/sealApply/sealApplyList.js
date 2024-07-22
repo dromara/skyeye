@@ -33,6 +33,9 @@ layui.config({
 			{ field: 'state', title: '状态', width: 90, align: 'center', templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
 			}},
+			{ field: 'otherState', title: '出库状态', rowspan: '2', width: 90, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotOutState", 'id', d.otherState, 'name');
+			}},
 			{ field: 'applyTime', title: '申领日期', width: 100, align: 'center' },
 			{ field: 'allPrice', title: '总金额', width: 100, align: 'left' },
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
@@ -122,7 +125,7 @@ layui.config({
 		layer.confirm("确定撤销申请吗？", {icon: 3, title: '撤销操作'}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.sealServiceBasePath + "revokeSealApply", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
-				winui.window.msg("撤销成功", {icon: 1, time: 2000});
+				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
 		});

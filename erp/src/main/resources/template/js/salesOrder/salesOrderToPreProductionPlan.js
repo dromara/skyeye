@@ -31,7 +31,7 @@ layui.config({
                 }});
             },
             loadComponentCallback: function () {
-                $("div[controlType='sealOutLetFromType']").remove();
+                $("div[controlType='productionPlanFromType']").remove();
             },
 
             // 新增行的回调函数

@@ -227,6 +227,7 @@
         "filterValue": "3,4"
     },
 
+    "inventoryChildState": {"name": "ERP-我的任务盘点状态", "className": "skyeye-erp#com.skyeye.inventory.classenum.InventoryChildState"},
     "purchaseRequestChildInquiry": {"name": "ERP-申请单子单据明细是否询价", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestChildInquiry"},
     "purchaseRequestInquiryState": {"name": "ERP-采购申请单询价状态", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestInquiryState"},
     "purchaseRequestStateEnum": {"name": "ERP-采购申请状态", "className": "skyeye-erp#com.skyeye.request.classenum.PurchaseRequestStateEnum"},

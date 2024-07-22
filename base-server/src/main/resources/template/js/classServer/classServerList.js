@@ -34,7 +34,8 @@ layui.config({
 				return isNull(d.serviceBean) ? '' : d.serviceBean.name;
 			}},
 			{ field: 'attrKey', title: '属性', width: 150 },
-			{ field: 'name', title: '属性名称', width: 100 }
+			{ field: 'name', title: '属性名称', width: 100 },
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 100, toolbar: '#tableBar' }
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
@@ -43,6 +44,25 @@ layui.config({
 			});
 	    }
 	});
+
+	table.on('tool(messageTable)', function (obj) {
+		var data = obj.data;
+		var layEvent = obj.event;
+		if (layEvent === 'del') { // 删除
+			del(data);
+		}
+	});
+
+	// 删除
+	function del(data, obj) {
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
+			layer.close(index);
+			AjaxPostUtil.request({url: reqBasePath + "deleteAttrDefinitionCustomById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}});
+		});
+	}
 	
 	form.render();
 	$("body").on("click", "#reloadTable", function() {
