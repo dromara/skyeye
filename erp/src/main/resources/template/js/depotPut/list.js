@@ -23,28 +23,33 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'oddNumber', title: '单据单号', align: 'left', width: 220, templet: function (d) {
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers',rowspan: '2' },
+            { field: 'oddNumber', title: '单据单号', align: 'left', width: 220,rowspan: '2', templet: function (d) {
                 var str = '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
                 if (!isNull(d.fromId)) {
                     str += '<span class="state-new">[转]</span>';
                 }
                 return str;
             }},
-            { field: 'idKey', title: '来源单据类型', width: 120, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotPutFromType", 'id', d.fromTypeId, 'name');
-            }},
-            { field: 'createName', title: '申请人', width: 120 },
-            { field: 'createTime', title: '申请时间', align: 'center', width: 150 },
-            { field: 'totalPrice', title: '合计金额', align: 'left', width: 120 },
-            { field: 'operTime', title: '单据日期', align: 'center', width: 140 },
-            { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
+            { colspan: '2', title: '来源单据信息', align: 'center' },
+            { field: 'createName', title: '申请人', width: 120 ,rowspan: '2'},
+            { field: 'createTime', title: '申请时间', align: 'center', width: 150 ,rowspan: '2'},
+            { field: 'totalPrice', title: '合计金额', align: 'left', width: 120,rowspan: '2' },
+            { field: 'operTime', title: '单据日期', align: 'center', width: 140,rowspan: '2' },
+            { field: 'state', title: '状态', rowspan: '2', width: 90,rowspan: '2', templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
                 }},
-            { field: 'otherState', title: '入库状态', width: 90, templet: function (d) {
+            { field: 'otherState', title: '入库状态', width: 90,rowspan: '2', templet: function (d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotPutState", 'id', d.otherState, 'name');
             }},
-            { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
+            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar',rowspan: '2'}
+        ], [
+            { field: 'fromTypeId', title: '来源类型', width: 150, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotPutFromType", 'id', d.fromTypeId, 'name');
+                }},
+            { field: 'fromId', title: '单据编号', width: 200, templet: function (d) {
+                    return getNotUndefinedVal(d.fromMation?.oddNumber);
+                }}
         ]],
         done: function(json) {
             matchingLanguage();
