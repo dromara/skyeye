@@ -12,7 +12,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery'], function (exports) {
     winui.renderColor();
-    var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$;
     var id = GetUrlParam("id");
     var objectId = GetUrlParam("objectId");
