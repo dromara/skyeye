@@ -100,11 +100,13 @@ layui.config({
         if (item.types != "project") {
             console.log(item)
             _openNewWindows({
-                url:  systemCommonUtil.getUrl('FP2023100300003&id=' + '7b0d17eb2e334bc0b0b51e33425cb29d', null),
+                url: "../../tpl/departmentMachining/arrange.html?id=" + id,
                 title: "车间任务安排",
                 pageId: "workshopTaskArrangement",
                 area: ['90vw', '90vh'],
                 callBack: function (refreshCode) {
+                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                    loadTable();
                 }});
         }
         // 返回true以允许默认行为继续，返回false可以阻止默认行为
