@@ -158,7 +158,7 @@ layui.config({
 		layer.confirm("确定撤销申请吗？", {icon: 3, title: '撤销操作'}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.projectBasePath + "proproject010", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
-				winui.window.msg("撤销成功", {icon: 1, time: 2000});
+				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
 		});
