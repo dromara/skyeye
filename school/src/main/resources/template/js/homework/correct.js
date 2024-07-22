@@ -7,7 +7,6 @@ layui.config({
     winui.renderColor();
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$,
-        textool = layui.textool,
         form = layui.form;
     var id = GetUrlParam("id");
     var assignmentId = GetUrlParam("assignmentId");
@@ -36,11 +35,9 @@ layui.config({
             }});
     }
 
-    form.on('submit(formAddBean)', function (data) {
-        if($("#score").val()>fullMarks ){
+    form.on('submit(formAddBean)', function (data) {0
+        if (parseInt($("#score").val()) > parseInt(fullMarks) || parseInt($("#score").val()) < 0) {
             winui.window.msg('请输入正确评分', {icon: 2, time: 2000});
-            console.log(fullMarks)
-            console.log($("#score").val())
             return false;
         }
         if (winui.verifyForm(data.elem)) {

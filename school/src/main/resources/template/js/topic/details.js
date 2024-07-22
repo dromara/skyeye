@@ -30,7 +30,6 @@ layui.config({
         page: false,
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            // { field: 'title', title: '标题', align: 'left', width: 300},
             { field: 'content', title: '内容', align: 'left', width: 300},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 , templet: function(d) {
                     return getNotUndefinedVal(d.createMation?.name);
