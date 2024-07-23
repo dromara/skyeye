@@ -14,13 +14,14 @@ layui.config({
 
     loadWareshop();
 
+    //获取当前登录用户管理的仓库列表
     form.render();
     function loadWareshop() {
         table.render({
             id: 'warehouseTable',
             elem: '#warehouseTable',
             method: 'get',
-            url: sysMainMation.erpBasePath + 'queryStaffBelongDepotList',
+            url: sysMainMation.erpBasePath + 'storehouse009',
             even: false,
             page: false,
             limits: getLimits(),

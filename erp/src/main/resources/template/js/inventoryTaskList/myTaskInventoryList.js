@@ -40,7 +40,7 @@ layui.config({
             { field: 'realNumber', title: '实际盘点数量', rowspan: '2', align: 'center', width: 140 },
             { field: 'profitNum', title: '盘盈数量', rowspan: '2', align: 'center', width: 140 },
             { field: 'planNumber', title: '盘点总数量', rowspan: '2', align: 'center', width: 140 },
-            { field: 'state', title: '状态', width: 90, align: 'center', templet: function (d) {
+            { field: 'state', title: '状态', width: 150, align: 'center', templet: function (d) {
                 return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("inventoryChildState", 'id', d.state, 'name');
             }},
             { field: 'type', title: '类型', width: 90, align: 'center', templet: function (d) {

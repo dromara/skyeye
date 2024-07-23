@@ -25,7 +25,7 @@ layui.config({
         }
     });
 
-
+    //获取的条形码是入库状态的
     tableSelect.render({
         elem: '#code',	//定义输入框input对象
         checkedKey: 'id', //表格的唯一键值，非常重要，影响到选中状态 必填
@@ -43,10 +43,6 @@ layui.config({
                 { field: 'codeNum', title: '条形码', width: 250, templet: function (d) {
                         return '<a rowId="' + d.id + '" class="notice-title-click">' + d.codeNum + '</a>';
                     }},
-                // { field: 'userName', title: '员工姓名', width: 100 },
-                // { field: 'userSex', title: '性别', width: 60, rowspan: '2', templet: function (d) {
-                //         return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("sexEnum", 'id', d.userSex, 'name');
-                //     }},
             ]]
         },
         done: function (elem, data) {
