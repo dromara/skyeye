@@ -4099,10 +4099,10 @@ body .layer-ext-winconfirm .layui-layer-content {
     position: absolute;
     bottom: 0px;
     text-align: center;
-    width: calc(100% - 20px);
+    width: 100%;
     background: #444;
     background: rgba(0,0,0,0.2);
-    padding: 10px;
+    padding: 5px 10px;
 }
 
 .manage-console {

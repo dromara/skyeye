@@ -44,7 +44,7 @@ layui.config({
         fontSize: 15,
         percentage: true,
         end: function(val){
-        	if(val == '100'){
+        	if (val == '100') {
         		$(".winui-load-mation-bg").fadeOut(1000);
         		$(".winui-load-mation").fadeOut(1000);
         	}
@@ -55,7 +55,7 @@ layui.config({
     	var loadIndex = 20;
     	winuiLoad.animate(loadIndex);
     	var loadInterval = setInterval(function(){ 
-    		if(loadIndex < 90){
+    		if (loadIndex < 90) {
     			loadIndex = loadIndex + 3;
     			winuiLoad.animate(loadIndex);
     		} else {
@@ -71,12 +71,12 @@ layui.config({
 		$("#userName").html(currentUserMation.userCode + '(' + currentUserMation.userName + ')');
 		userId = currentUserMation.id;
 		loadBottomMenuIcon = currentUserMation.loadBottomMenuIcon;
-		if(isNull(currentUserMation.winBgPicUrl)) {
+		if (isNull(currentUserMation.winBgPicUrl)) {
 			currentUserMation.winBgPicUrl = fileBasePath + '/images/upload/winbgpic/default.jpg';
 		} else {
 			currentUserMation.winBgPicUrl = fileBasePath + currentUserMation.winBgPicUrl;
 		}
-		if(isNull(currentUserMation.winLockBgPicUrl)) {
+		if (isNull(currentUserMation.winLockBgPicUrl)) {
 			currentUserMation.winLockBgPicUrl = fileBasePath + '/images/upload/winbgpic/default.jpg';
 		} else {
 			currentUserMation.winLockBgPicUrl = fileBasePath + currentUserMation.winLockBgPicUrl;
@@ -124,7 +124,7 @@ layui.config({
 				icon: 'fa-pencil-square-o',
 				click: function(e) {
 					var tagsCount = $('.winui-helper-content').children('.tags-content').length;
-					if(tagsCount >= 5) {
+					if (tagsCount >= 5) {
 						layer.msg('最多只能存五条便签', {
 							zIndex: layer.zIndex
 						});
@@ -137,8 +137,8 @@ layui.config({
 						var _this = this;
 						var content = $(_this).val();
 						var id = $(_this).attr("rowid");
-						if($.trim(content) === '') {
-							if(isNull(id)){
+						if ($.trim(content) === '') {
+							if (isNull(id)) {
 								$(_this).parent().prev().remove();
 								$(_this).remove();
 							} else {
@@ -148,7 +148,7 @@ layui.config({
 								}});
 							}
 						} else {
-							if(isNull(id)){
+							if (isNull(id)) {
 								AjaxPostUtil.request({url: reqBasePath + "stickynotes001", params: {content: content}, type: 'json', callback: function (json) {
 									$(_this).attr("rowid", json.bean.id);
 								}});
@@ -177,7 +177,7 @@ layui.config({
 						var content = $(_this).val();
 						var id = $(_this).attr("rowid");
 						if($.trim(content) === '') {
-							if(isNull(id)){
+							if (isNull(id)) {
 								$(_this).parent().prev().remove();
 								$(_this).remove();
 							} else {
@@ -187,7 +187,7 @@ layui.config({
 								}});
 							}
 						} else {
-							if(isNull(id)){
+							if (isNull(id)) {
 								AjaxPostUtil.request({url: reqBasePath + "stickynotes001", params: {content: content}, type: 'json', callback: function (json) {
 									$(_this).attr("rowid", json.bean.id);
 								}});
@@ -290,7 +290,7 @@ layui.config({
 									initMenuToBox();
 									winui.util.reloadOnClick(function (id, elem) {
 										var item = $(elem);
-										if(item.find(".icon-drawer").length > 0){
+										if (item.find(".icon-drawer").length > 0) {
 											showBigWin(elem);
 										} else {
 											OpenWindow(elem);
@@ -313,11 +313,11 @@ layui.config({
 									var str = '';
 									var iconTypeI = '';
 									var menuIcon = '';
-									if(childParams.menuIconType === '1' || childParams.menuIconType == 1){
+									if (childParams.menuIconType === '1' || childParams.menuIconType == 1) {
 										str = '<i class="fa ' + childParams.menuIcon + ' fa-fw" win-i-id="' + childParams.id + '"></i>';
 										iconTypeI = 'winui-icon-font';
 										menuIcon = childParams.menuIcon;
-									} else if (childParams.menuIconType === '2' || childParams.menuIconType == 2){
+									} else if (childParams.menuIconType === '2' || childParams.menuIconType == 2) {
 										str = '<img src="' + fileBasePath + childParams.menuIconPic + '"/>';
 										iconTypeI = 'winui-icon-img';
 										menuIcon = childParams.menuIconPic;
@@ -334,7 +334,7 @@ layui.config({
 									initMenuToBox();
 									winui.util.reloadOnClick(function (id, elem) {
 										var item = $(elem);
-										if(item.find(".icon-drawer").length > 0){
+										if (item.find(".icon-drawer").length > 0) {
 											showBigWin(elem);
 										} else {
 											OpenWindow(elem);
@@ -367,7 +367,7 @@ layui.config({
 					icon: "fa fa-fw fa-power-off",
 					callback: function() {
 						winui.lockScreen(function (password) {
-	   		            	if (!isNull(password)){
+	   		            	if (!isNull(password)) {
 		   		         		var pJudge = false;
 		   		         		AjaxPostUtil.request({url: reqBasePath + "login008", params: {password: password}, type: 'json', method: "POST", callback: function (json) {
 									pJudge = true;
