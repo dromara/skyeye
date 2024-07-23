@@ -9,6 +9,7 @@ layui.config({
     var $ = layui.$,
         form = layui.form;
     var id = GetUrlParam("id");
+    var state = GetUrlParam("state");
 
     let noteList = [];
     loadDate();
@@ -103,17 +104,20 @@ layui.config({
         // e 参数是点击事件的事件对象
         let item = getInPoingArr(noteList, "id", id, null);
         if (item.types != "project") {
-            _openNewWindows({
-                url: "../../tpl/departmentMachining/arrange.html?id=" + item.data.id,
-                title: "车间任务安排",
-                pageId: "workshopTaskArrangement",
-                area: ['90vw', '90vh'],
-                callBack: function (refreshCode) {
-                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                    loadDate();
-                }});
+            if (state == 'pass') {
+                _openNewWindows({
+                    url: "../../tpl/departmentMachining/arrange.html?id=" + item.data.id,
+                    title: "车间任务安排",
+                    pageId: "workshopTaskArrangement",
+                    area: ['90vw', '90vh'],
+                    callBack: function (refreshCode) {
+                        winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                        loadDate();
+                    }});
+            } else {
+                winui.window.msg("单据未通过审核，暂不支持车间任务安排工作", {icon: 0, time: 2000});
+            }
         }
-        // 返回true以允许默认行为继续，返回false可以阻止默认行为
         return true;
     });
     gantt.config.show_tasks_outside_timescale = true;
