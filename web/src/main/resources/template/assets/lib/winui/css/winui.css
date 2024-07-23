@@ -7372,7 +7372,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 .tradition-left .tradition-left-top{
     width: 100%;
     height: 50px;
-    background-color: #20222A !important;
+    background-color: #20222A;
     text-align: center;
     overflow: hidden;
     font-weight: 300;
@@ -7439,7 +7439,7 @@ body .layer-ext-winconfirm .layui-layer-content {
 }
 
 .tradition-right{
-    width: calc(100% - 220px);
+    width: calc(100% - 218px);
     height: 100%;
     float: right;
 }
@@ -8085,7 +8085,7 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
     vertical-align: top;
     width: 80px;
     height: 50px;
-    margin: 0 15px 15px 0;
+    margin: 0 10px 15px 0;
     background-color: #f2f2f2;
     cursor: pointer;
     font-size: 12px;
