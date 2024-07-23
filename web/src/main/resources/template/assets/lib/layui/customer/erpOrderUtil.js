@@ -36,7 +36,7 @@ var erpOrderUtil = {
                     approvalId: approvalId
                 };
                 AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon006", params: params, method: "PUT", type: 'json', callback: function(json) {
-                    winui.window.msg("提交成功。", {icon: 1, time: 2000});
+                    winui.window.msg("提交成功", {icon: 1, time: 2000});
                     if (typeof (callback) == "function") {
                         callback();
                     }
@@ -58,7 +58,7 @@ var erpOrderUtil = {
                 serviceClassName: serviceClassName
             };
             AjaxPostUtil.request({url: sysMainMation.erpBasePath + "erpcommon003", params: params, type: 'json', method: "PUT", callback: function(json) {
-                winui.window.msg("撤销成功。", {icon: 1, time: 2000});
+                winui.window.msg("提交成功", {icon: 1, time: 2000});
                 if (typeof(callback) == "function") {
                     callback();
                 }

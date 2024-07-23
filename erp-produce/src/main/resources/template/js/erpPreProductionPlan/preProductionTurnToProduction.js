@@ -18,7 +18,6 @@ layui.config({
     // 预生产计划 转 生产计划
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryProductionPlanTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
             let data = json.bean;
-            // 因为要调生产计划的编辑布局，所以把预生产计划里的productionPlanChildList给到生产计划里的productionChildList
             data.productionChildList = data.productionPlanChildList
             // 生产计划的【编辑布局】
             dsFormUtil.initEditPageForStatic('content', 'FP2023092200002', data, {

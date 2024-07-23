@@ -30,7 +30,6 @@ layui.config({
             let tabIndex = 1;
             let supplierIds = [];
             $.each(json.bean, function (key, value) {
-                console.log(value)
                 if (!isNull(key)) {
                     supplierIds.push(key)
                 }

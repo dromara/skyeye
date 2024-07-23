@@ -172,18 +172,6 @@ layui.config({
 		return false;
 	});
 
-	// 设置最小可选的日期
-	function minDate(){
-		var now = new Date();
-		return now.getFullYear()+"-" + (now.getMonth()+1) + "-" + now.getDate();
-	}
-
-	// 设置最小可选的小时日期
-	function minHourDate(){
-		var now = new Date();
-		return now.getHours() + ':' + now.getMinutes() + ':00';
-	}
-
 	// 取消
 	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);

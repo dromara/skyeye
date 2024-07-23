@@ -11,22 +11,25 @@ layui.config({
     var id = GetUrlParam("id");
 
     let noteList = [];
-    // 根据id查询加工单信息
-    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryMachinForGanttById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
-        matchingLanguage();
-        form.render();
-        renderPanel();
+    loadDate();
+    function loadDate() {
+        // 根据id查询加工单信息
+        AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryMachinForGanttById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
+            matchingLanguage();
+            form.render();
+            renderPanel();
 
-        gantt.config.start_date = new Date(json.bean.mathinTime.start_time);
-        gantt.config.end_date = new Date(json.bean.mathinTime.end_time);
-        gantt.clearAll();  //清空缓存
-        // 解析
-        noteList = json.bean.node;
-        gantt.parse({
-            data: json.bean.node,
-            links: json.bean.link
-        });
-    }});
+            gantt.config.start_date = new Date(json.bean.mathinTime.start_date);
+            gantt.config.end_date = new Date(json.bean.mathinTime.end_date);
+            gantt.clearAll();  //清空缓存
+            // 解析
+            noteList = json.bean.node;
+            gantt.parse({
+                data: json.bean.node,
+                links: json.bean.link
+            });
+        }});
+    }
 
     function renderPanel() {
         document.getElementById('device_load').style.cssText = 'height:' + $(window).height() + 'px';
@@ -100,13 +103,14 @@ layui.config({
         // e 参数是点击事件的事件对象
         let item = getInPoingArr(noteList, "id", id, null);
         if (item.types != "project") {
-            console.log(item)
             _openNewWindows({
-                url:  systemCommonUtil.getUrl('FP2023100300003&id=' + '7b0d17eb2e334bc0b0b51e33425cb29d', null),
+                url: "../../tpl/departmentMachining/arrange.html?id=" + item.data.id,
                 title: "车间任务安排",
                 pageId: "workshopTaskArrangement",
                 area: ['90vw', '90vh'],
                 callBack: function (refreshCode) {
+                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                    loadDate();
                 }});
         }
         // 返回true以允许默认行为继续，返回false可以阻止默认行为
