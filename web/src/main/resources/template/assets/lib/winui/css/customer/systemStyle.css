@@ -592,3 +592,122 @@
 }
 
 /*********第十套样式结束**********/
+
+/*********第一套样式开始**********/
+.white-57E4ED .tradition-left-center ul,
+.white-57E4ED .tradition-left-bottom,
+.white-57E4ED .tradition-right-top .layui-layout-right .adropdown caption,
+.white-57E4ED .tradition-right-top .layui-layout-right .adropdown tbody {
+    background-color: white !important;
+}
+
+.white-57E4ED .tradition-left-center ul .layui-nav-child dd {
+    background: #F2F2F2 !important;
+}
+
+.white-57E4ED .tradition-left-center ul i,
+.white-57E4ED .tradition-left-center ul cite,
+.white-57E4ED .tradition-left-bottom i,
+.white-57E4ED .tradition-left-bottom font {
+    color: #555555 !important;
+}
+
+.white-57E4ED .tradition-left-top,
+.white-57E4ED .tradition-right-top,
+.white-57E4ED .tradition-right-top .layui-layout-left,
+.white-57E4ED .tradition-right-top .layui-layout-right,
+.white-57E4ED .tradition-right-top .layui-layout-right .adropdown,
+.white-57E4ED .tradition-right-top .layui-layout-right .layui-input-search,
+.white-57E4ED .tradition-right-top .desktop-menu-box li {
+    background-color: #57E4ED !important;
+}
+
+.white-57E4ED .tradition-right-top .layui-layout-right .layui-input-search,
+.white-57E4ED .tradition-right-top .layui-layout-right .layui-input-search::-webkit-input-placeholder {
+    color: white !important;
+}
+
+.white-57E4ED .tradition-right-top .desktop-menu-box .select {
+    background-color: #31d3dc !important;
+}
+
+.white-57E4ED .tradition-left-top span,
+.white-57E4ED .tradition-right-top span,
+.white-57E4ED .tradition-right-top .layui-layout-left i,
+.white-57E4ED .tradition-right-top .layui-layout-right .layui-nav-item > a > i,
+.white-57E4ED .tradition-right-top .layui-layout-right font {
+    color: white !important;
+}
+
+.white-57E4ED .tradition-right-top .layui-layout-right .layui-nav-more {
+    border-top-color: white !important;
+}
+
+.white-57E4ED .tradition-right-top .layui-layout-right .layui-nav-mored {
+    border-bottom-color: white !important;
+    border-top-color: #57E4ED !important;
+}
+
+.white-57E4ED .tradition-left-center .layui-nav-item > .menu-box-none:HOVER,
+.white-57E4ED .tradition-left-center .layui-nav-item .page-item-click:HOVER {
+    background-color: #F5F5F5 !important;
+}
+
+.white-57E4ED .tradition-left-center ul .layui-nav-itemed .layui-nav-more {
+    border-bottom-color: #555555 !important;
+    border-top-color: white;
+}
+
+.white-57E4ED .tradition-left-center ul .layui-nav-more {
+    border-top-color: #555555;
+}
+
+/*********第十一套样式结束**********/
+
+/*********第十二套样式开始**********/
+.white-57E4ED-bl .tradition-left-top,
+.white-57E4ED-bl .tradition-right-top,
+.white-57E4ED-bl .tradition-right-top .layui-layout-left,
+.white-57E4ED-bl .tradition-right-top .layui-layout-right,
+.white-57E4ED-bl .tradition-right-top .layui-layout-right .adropdown,
+.white-57E4ED-bl .tradition-right-top .layui-layout-right .layui-input-search,
+.white-57E4ED-bl .tradition-right-top .desktop-menu-box li {
+    background-color: #57E4ED !important;
+}
+
+.white-57E4ED-bl .tradition-right-top .layui-layout-right .layui-input-search,
+.white-57E4ED-bl .tradition-right-top .layui-layout-right .layui-input-search::-webkit-input-placeholder {
+    color: white !important;
+}
+
+.white-57E4ED-bl .tradition-right-top .desktop-menu-box .select {
+    background-color: #31d3dc !important;
+}
+
+.white-57E4ED-bl .tradition-left-top span,
+.white-57E4ED-bl .tradition-right-top span,
+.white-57E4ED-bl .tradition-right-top .layui-layout-left i,
+.white-57E4ED-bl .tradition-right-top .layui-layout-right .layui-nav-item > a > i,
+.white-57E4ED-bl .tradition-right-top .layui-layout-right font {
+    color: white !important;
+}
+
+.white-57E4ED-bl .tradition-right-top .layui-layout-right .layui-nav-more {
+    border-top-color: white !important;
+}
+
+.white-57E4ED-bl .tradition-right-top .layui-layout-right .layui-nav-mored {
+    border-bottom-color: white !important;
+    border-top-color: #57E4ED !important;
+}
+
+.white-57E4ED-bl .tradition-left-center ul .layui-nav-itemed .layui-nav-more {
+    border-bottom-color: #555555 !important;
+    border-top-color: white;
+}
+
+.white-57E4ED-bl .tradition-left-center ul .layui-nav-more {
+    border-top-color: #555555;
+}
+
+/*********第十二套样式结束**********/
