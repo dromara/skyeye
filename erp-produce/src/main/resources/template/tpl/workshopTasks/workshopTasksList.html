@@ -19,7 +19,7 @@
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
-            {{# if(d.editRow == 1) { }}
+            {{# if(d.state == 'waitReceive') { }}
                 {{# if(auth('1720939511614')) { }}
                     <a class="layui-btn layui-btn-xs" lay-event="receive">接收</a>
                 {{# } }}
