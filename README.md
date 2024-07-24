@@ -17,7 +17,9 @@
 
 > 客官可以点个收藏，后续功能会同步更新发布。
 
+- [OA](https://www.zhixi.com/tpl/2a4dcfd466e8dc0cc9ea38a682fc2da0?shared=true)
 - [CRM](https://www.zhixi.com/tpl/f9f4d2f7d4fb9a8c2d67da36ab8250cf?shared=true)
+- [ERP](https://www.zhixi.com/tpl/7e7427378acb3e9a77112c8a66437fee?shared=true)
 - [云售后工单](https://www.zhixi.com/tpl/09cc45d926714da461b51df8a435bc6b?shared=true)
 
 
