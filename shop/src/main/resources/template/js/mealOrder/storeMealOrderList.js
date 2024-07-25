@@ -85,7 +85,7 @@ layui.config({
         } else if (layEvent == 'select'){ // 详情
             select(data)
         } else if (layEvent == 'complatePay'){ // 完成支付
-            layEvent(data)
+            complatePay(data)
         } else if (layEvent == 'cancleOrder'){ // 取消订单
             cancleOrder(data)
         } else if (layEvent == 'refundMealOrder'){ // 退款
@@ -108,6 +108,7 @@ layui.config({
 
     // 取消订单
     function cancleOrder(data) {
+        // TODO 删除该功能
         layer.confirm('确认取消该订单吗？', {icon: 3, title: '取消确认'}, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "cancleMealOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
