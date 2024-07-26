@@ -31,6 +31,7 @@ layui.config({
 
             },
             loadComponentCallback: function () {
+                $("#addRow" + tableId).click();
                 $("div[controlType='pickFromType']").remove();
             },
             tableAddRowCallback: function (tableId) {
