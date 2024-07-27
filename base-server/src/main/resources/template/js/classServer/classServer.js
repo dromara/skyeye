@@ -33,24 +33,25 @@ layui.config({
             return false;
         }
         chooseTreeNode = treeNode;
+        let appId = chooseTreeNode.classMation.appId;
         var defaultList = [{
             title: '详情',
-            pageUrl: '../../tpl/classServer/classServerDetails.html'
+            pageUrl: '../../tpl/classServer/classServerDetails.html?appId=' + appId
         }, {
             title: '属性信息',
-            pageUrl: '../../tpl/attr/attrList.html'
+            pageUrl: '../../tpl/attr/attrList.html?appId=' + appId
         }, {
             title: '表单布局',
-            pageUrl: '../../tpl/dsFormPage/pageList.html'
+            pageUrl: '../../tpl/dsFormPage/pageList.html?appId=' + appId
         }, {
             title: '操作按钮',
-            pageUrl: '../../tpl/operate/operateList.html'
+            pageUrl: '../../tpl/operate/operateList.html?appId=' + appId
         }];
 
         if (chooseTreeNode.classMation.flowable) {
             defaultList.push({
                 title: '流程信息',
-                pageUrl: '../../tpl/classServer/classServerProcessList.html'
+                pageUrl: '../../tpl/classServer/classServerProcessList.html?appId=' + appId
             });
         }
 

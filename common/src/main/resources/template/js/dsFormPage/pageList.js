@@ -1,6 +1,7 @@
 
 var rowId = "";
 var objectId = "";
+var appId = "";
 
 layui.config({
 	base: basePath, 
@@ -15,6 +16,7 @@ layui.config({
 		soulTable = layui.soulTable;
 
 	objectId = GetUrlParam("objectId");
+	appId = GetUrlParam("appId");
 	if (isNull(objectId)) {
 		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
 		return false;
@@ -79,7 +81,7 @@ layui.config({
 		if (data.type == 'simpleTable') {
 			url = '../../tpl/dsFormPage/simpleTableDesign.html';
 		}
-		url += '?className=' + objectId + '&pageId=' + data.id + '&pageType=' + data.type;
+		url += '?className=' + objectId + '&pageId=' + data.id + '&pageType=' + data.type + '&appId=' + appId;
 		parent.parent._openNewWindows({
 			url: url,
 			title: "布局设计",
@@ -102,7 +104,7 @@ layui.config({
 
 	function openWritePage() {
 		parent._openNewWindows({
-			url: "../../tpl/dsFormPage/writePage.html?className=" + objectId + "&id=" + rowId,
+			url: "../../tpl/dsFormPage/writePage.html?className=" + objectId + "&id=" + rowId + "&appId=" + appId,
 			title: systemLanguage["com.skyeye.recordPageTitle"][languageType],
 			pageId: "writePage",
 			area: ['90vw', '90vh'],
@@ -122,7 +124,7 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return {className: objectId};
+		return {className: objectId, appId: appId};
 	}
 
     exports('pageList', {});

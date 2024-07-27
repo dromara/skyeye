@@ -1,6 +1,7 @@
 
 var rowId = "";
 var objectId = "";
+var appId = "";
 
 layui.config({
 	base: basePath, 
@@ -15,6 +16,7 @@ layui.config({
 		soulTable = layui.soulTable;
 
 	objectId = GetUrlParam("objectId");
+	appId = GetUrlParam("appId");
 	if (isNull(objectId)) {
 		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
 		return false;
@@ -95,7 +97,7 @@ layui.config({
 
 	function openWritePage() {
 		parent._openNewWindows({
-			url: "../../tpl/operate/writeOperate.html?className=" + objectId + "&id=" + rowId,
+			url: "../../tpl/operate/writeOperate.html?className=" + objectId + "&id=" + rowId + "&appId=" + appId,
 			title: systemLanguage["com.skyeye.recordPageTitle"][languageType],
 			pageId: "writeOperate",
 			area: ['90vw', '90vh'],

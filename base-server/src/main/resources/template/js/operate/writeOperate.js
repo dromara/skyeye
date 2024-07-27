@@ -11,6 +11,7 @@ layui.config({
 		form = layui.form;
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 	var className = GetUrlParam("className");
+	var appId = GetUrlParam("appId");
 	var id = GetUrlParam("id");
 
 	var _html = {
@@ -52,7 +53,7 @@ layui.config({
 	};
 
 	var attrHtml = '';
-	AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: {className: className}, type: 'json', method: "POST", callback: function (json) {
+	AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: {className: className, appId: appId}, type: 'json', method: "POST", callback: function (json) {
 		attrHtml = getDataUseHandlebars(`<option value="">全部</option>{{#each rows}}<option value="{{attrKey}}">{{name}}</option>{{/each}}`, json);
 	}, async: false});
 
@@ -116,6 +117,7 @@ layui.config({
 			dsFormColumnUtil.init({
 				id: 'attrSymbolsDesignBox',
 				title: '按钮显示条件',
+				appId: appId,
 				className: className
 			}, isNull(json.bean.showConditionList) ? [] : json.bean.showConditionList);
 		}, async: false});
@@ -123,6 +125,7 @@ layui.config({
 		dsFormColumnUtil.init({
 			id: 'attrSymbolsDesignBox',
 			title: '按钮显示条件',
+			appId: appId,
 			className: className
 		});
 		skyeyeClassEnumUtil.showEnumDataListByClassName("operatePosition", 'select', "position", '', form);

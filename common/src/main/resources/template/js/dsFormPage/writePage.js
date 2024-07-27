@@ -12,6 +12,7 @@ layui.config({
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 	var className = GetUrlParam("className");
 	var id = GetUrlParam("id");
+	var appId = GetUrlParam("appId");
 
 	var pageHtml = {
 		'simpleTable': `<div class="layui-form-item layui-col-xs6">
@@ -119,7 +120,7 @@ layui.config({
 				form.render('select');
 			}, async: false});
 		} else if (type == 'create' || type == 'edit') {
-			AjaxPostUtil.request({url: reqBasePath + "queryServiceBeanCustom", params: {className: className}, type: 'json', method: 'GET', callback: function (json) {
+			AjaxPostUtil.request({url: reqBasePath + "queryServiceBeanCustom", params: {className: className, appId: appId}, type: 'json', method: 'GET', callback: function (json) {
 				// 判断是否开启了工作流，如果开启了工作流，则将【是否开启工作流】这个选项填充
 				if (json.bean.serviceBean.flowable) {
 					$('#otherDom').html(pageHtml['flowabled']);
@@ -149,6 +150,7 @@ layui.config({
 				remark: $("#remark").val(),
 				type: $("#type").val(),
 				className: className,
+				appId: appId,
 				operateIdList: isNull($('#operateIdList').attr('value')) ? [] : $('#operateIdList').attr('value'),
 				dataAuthPointNum: ''
 			};

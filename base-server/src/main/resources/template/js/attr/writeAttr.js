@@ -40,8 +40,9 @@ layui.config({
 
 	var className = GetUrlParam('className');
 	var attrKey = GetUrlParam('attrKey');
+	var appId = GetUrlParam('appId');
 
-	AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionCustom", params: {className: className, attrKey: attrKey}, type: 'json', method: "GET", callback: function (json) {
+	AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionCustom", params: {className: className, attrKey: attrKey, appId: appId}, type: 'json', method: "GET", callback: function (json) {
 		$("#showForm").html(getDataUseHandlebars($("#beanTemplate").html(), json));
 		textool.init({eleId: 'remark', maxlength: 200});
 
@@ -83,6 +84,7 @@ layui.config({
 		form.on('submit(formEditBean)', function (data) {
 			if (winui.verifyForm(data.elem)) {
 				var params = {
+					appId: appId,
 					className: className,
 					attrKey: attrKey,
 					name: encodeURIComponent($("#name").val()),
