@@ -14,6 +14,7 @@ layui.config({
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$;
     var id = GetUrlParam("id");
+    let initFirst = false
 
     // 加工单转领料单
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryMachinTransRequestById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
@@ -25,15 +26,18 @@ layui.config({
             saveData: function (params) {
                 // 保存数据
                 AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertMachinToPickRequest", params: params, type: 'json', method: "POST", callback: function(json) {
-                        parent.layer.close(index);
-                        parent.refreshCode = '0';
-                    }});
-
+                    parent.layer.close(index);
+                    parent.refreshCode = '0';
+                }});
             },
             loadComponentCallback: function () {
                 $("div[controlType='pickFromType']").remove();
             },
-            tableAddRowCallback: function (tableId) {
+            tableDeleteRowCallback: function (tableId) {
+                if (!initFirst) {
+                    initFirst = true;
+                    $("#addRow" + tableId).click();
+                }
             }
         });
     }});

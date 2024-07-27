@@ -14,6 +14,7 @@ layui.config({
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$;
     var id = GetUrlParam("id");
+    let initFirst = false
 
     // 加工单转补料单
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryMachinTransRequestById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
@@ -33,8 +34,11 @@ layui.config({
             loadComponentCallback: function () {
                 $("div[controlType='pickFromType']").remove();
             },
-            tableAddRowCallback: function (tableId) {
-
+            tableDeleteRowCallback: function (tableId) {
+                if (!initFirst) {
+                    initFirst = true;
+                    $("#addRow" + tableId).click();
+                }
             }
         });
     }});
