@@ -14,37 +14,74 @@
 
 - Skyeye云所有功能模块`源代码`已在知识星球发布(202305版)
 
+## 🐶 企业版内置功能
+
+- 工作计划
+- CRM
+- ERP
+- 生产
+- EHR
+- 云盘
+- 学校模块
+- 基础模块
+- 云售后
+- ADM行政
+- 多班次考勤
+- 公告
+- 日程
+- 动态表单
+- HCM薪资
+- 报表设计器
+- HR招聘
+- 条形码
+- 财务
+- 商城
+- 工作流
+- PM项目
+- 个人中心
+- 企业论坛
+- 笔记
+- 知识库
+- 工作日志
+
+
 ## 🐶 沟通交流
 
 |   知识星球   |   作者微信   |          QQ群      |
 |:---------------------:|:--------------------------------:|:--------------------:|
 | ![](images/mindMap/知识星球.png) |    ![](images/mindMap/chatgpt的微信.jpg)    | ![](images/mindMap/Skyeye智能制造云办公官方①群群二维码.png) |
 
+
+##  :tw-1f31e:  架构介绍
+
+![输入图片说明](images/mindMap/image11.png)
+
 ####  :jack_o_lantern:  技术选型
 
 ##### 后端技术:
 
-|技术|名称| 官网                                                       |
-|---|---|----------------------------------------------------------|
-|SpringBoot|核心框架| http://spring.io/projects/spring-boot                    |
-|MyBatis|ORM框架| http://www.mybatis.org/mybatis-3/zh/index.html           |
-|Druid|数据库连接池| https://github.com/alibaba/druid                         |
-|Maven|项目构建管理| http://maven.apache.org/                                 |
-|redis|key-value存储系统| https://redis.io/                                        |
-|webSocket|浏览器与服务器全双工(full-duplex)通信| http://www.runoob.com/html/html5-websocket.html          |
-|Flowable|工作流引擎| https://www.flowable.com/open-source/                    |
-|xxl-job|定时任务| https://gitee.com/xuxueli0323/xxl-job?_from=gitee_search/ |
-|RocketMQ|消息队列| https://rocketmq.apache.org/dowloading/releases/         |
-|solr|企业级搜索应用服务器| https://lucene.apache.org/solr/                          |
-|Spring Cloud|微服务框架(目前用户APP端接口)| https://springcloud.cc/                                  |
+|技术|名称|
+|---|---|
+|SpringBoot|核心框架|
+|MyBatis|ORM框架|
+|Druid|数据库连接池| 
+|Maven|项目构建管理| 
+|redis|key-value存储系统|
+|webSocket|浏览器与服务器全双工(full-duplex)通信|
+|Flowable|工作流引擎|
+|xxl-job|定时任务|
+|RocketMQ|消息队列|
+|solr|企业级搜索应用服务器|
+|Spring Cloud|微服务框架(目前用户APP端接口)|
+|Nacos|服务配置中心、服务注册中心|
 
 ##### 前端技术：
 
-|技术|名称| 官网                                       |
-|---|---|------------------------------------------|
-|layui|模块化前端UI| https://www.layui.com/                   |
-|winui|win10风格UI| https://gitee.com/doc_wei01_admin/skyeye |
-|uni-app|Skyeye云移动端| https://uniapp.dcloud.net.cn/ |
+|技术|名称|
+|---|---|
+|layui|模块化前端UI|
+|winui|win10风格UI|
+|uni-app|Skyeye云移动端|
 
 ####  :tw-1f30f:  PC端效果图
 
