@@ -38,15 +38,9 @@ layui.config({
             limits: getLimits(),
             limit: getLimit(),
             cols: [[
-                // {field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
-                //         return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
-                //     }},
                 { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-                { field: 'machinProcedureId', title: '车间ID',width: 280, templet: function (d) {
-                        return '<a lay-event="details" class="notice-title-click">' + getNotUndefinedVal(d.machinProcedureId) + '</a>';
-                    }},
-                { field: 'processInstanceId', title: '流程ID', width: 280, templet: function (d) {
-                        return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.id) + '</a>';
+                { field: 'id', title: '车间任务ID',width: 280, templet: function (d) {
+                        return '<a lay-event="details" class="notice-title-click">' + getNotUndefinedVal(d.id) + '</a>';
                     }},
                 { field: 'state', title: '状态',  width: 90, templet: function (d) {
                         return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("machinProcedureFarmState", 'id', d.state, 'name');
@@ -64,20 +58,10 @@ layui.config({
                 { field: 'actualEndTime', title: '实际结束时间', align: 'center', width: 140, templet: function (d) {
                         return getNotUndefinedVal(d.machinProcedureMation?.actualEndTime);
                     }},
-                // {field: 'operTime', title: '单据日期', align: 'center', width: 140, templet: function (d) {
-                //         return getNotUndefinedVal(d.departmentMation?.createTime);
-                //     }},
                 { field: 'createTime', title: '创建时间', align: 'center', width: 140, templet: function (d) {
                         return getNotUndefinedVal(d.machinMation?.createTime);
                     }},
 
-                // {field: 'otherState', title: '出库状态', rowspan: '2', width: 90, templet: function (d) {
-                //     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("outLetState", 'id', d.otherState, 'name');
-                // }},
-                // {field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
-                // {field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
-                // {field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
-                // {field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
                 {title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar' }
             ]],
             done: function (json) {
@@ -96,13 +80,16 @@ layui.config({
             receive(data);
         } else if (layEvent === 'antiReception') { //反接收
             antiReception(data);
+        }else if (layEvent === 'details') { //详情
+            details(data);
+        }else if (layEvent === 'processCheck') { //转工序验收
+            processCheck(data);
         }
     });
 
     // 接收
     function receive(data) {
         layer.confirm('确认要接收该车间任务吗？', { icon: 3, title: '接收任务操作' }, function (index) {
-            activitiUtil.startProcess(data.serviceClassName, null, function (approvalId) {
                 var params = {
                     id: data.id,
                 };
@@ -110,13 +97,11 @@ layui.config({
                     winui.window.msg("接收成功", {icon: 1, time: 2000});
                     loadTable();
                 }});
-            });
         });
     }
 
     function antiReception(data) {
         layer.confirm('确认要反接收该车间任务吗？', { icon: 3, title: '反接收任务操作' }, function (index) {
-            activitiUtil.startProcess(data.serviceClassName, null, function (approvalId) {
                 var params = {
                     id: data.id,
                 };
@@ -124,10 +109,32 @@ layui.config({
                     winui.window.msg("反接收成功", {icon: 1, time: 2000});
                     loadTable();
                 }});
-            });
         });
     }
 
+    // 详情
+    function details(data) {
+        _openNewWindows({
+            url:  systemCommonUtil.getUrl('FP2024072600001&id=' + data.id, null),
+            title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+            pageId: "workTaskDetail",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+            }});
+    }
+
+    //工序验收
+    function processCheck(data){
+        _openNewWindows({
+            url: "../../tpl/processAcceptance/machiningProcessCheck.html?id=" + data.id,
+            title: '工序验收',
+            pageId: "machiningProcessCheck",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
 
     form.render();
     $("body").on("click", "#reloadTable", function() {
