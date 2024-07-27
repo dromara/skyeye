@@ -81,7 +81,7 @@ layui.config({
 		if (data.type == 'simpleTable') {
 			url = '../../tpl/dsFormPage/simpleTableDesign.html';
 		}
-		url += '?className=' + objectId + '&pageId=' + data.id + '&pageType=' + data.type;
+		url += '?className=' + objectId + '&pageId=' + data.id + '&pageType=' + data.type + '&appId=' + appId;
 		parent.parent._openNewWindows({
 			url: url,
 			title: "布局设计",
@@ -124,7 +124,7 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return {className: objectId};
+		return {className: objectId, appId: appId};
 	}
 
     exports('pageList', {});

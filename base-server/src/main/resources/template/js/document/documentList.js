@@ -25,7 +25,7 @@ layui.config({
 	catalogTreeUtil.init({
 		boxId: 'catalogBox',
 		className: objectKey,
-		appId:
+		appId: getSysServiceMationAppIdByClassName(objectKey),
 		objectId: objectId,
 		addOrUser: false,
 		checkAuth: true,

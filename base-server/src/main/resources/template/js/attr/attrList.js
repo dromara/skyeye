@@ -1,5 +1,6 @@
 
 var objectId = "";
+var appId = "";
 
 layui.config({
 	base: basePath, 
@@ -14,6 +15,7 @@ layui.config({
 		soulTable = layui.soulTable;
 
 	objectId = GetUrlParam("objectId");
+	appId = GetUrlParam("appId");
 	if (isNull(objectId)) {
 		winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
 		return false;
@@ -92,7 +94,8 @@ layui.config({
 			parent.layer.close(index);
 			var params = {
 				className: objectId,
-				attrKey: data.attrKey
+				attrKey: data.attrKey,
+				appId: appId
 			};
 			AjaxPostUtil.request({url: reqBasePath + "deleteAttrDefinitionCustom", params: params, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg('还原成功', {icon: 1, time: 2000});
@@ -104,7 +107,7 @@ layui.config({
 	// 编辑
 	function edit(data) {
 		parent._openNewWindows({
-			url: "../../tpl/attr/writeAttr.html?className=" + objectId + '&attrKey=' + data.attrKey,
+			url: "../../tpl/attr/writeAttr.html?className=" + objectId + '&attrKey=' + data.attrKey + '&appId=' + appId,
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "writeAttr",
 			area: ['90vw', '90vh'],
@@ -125,7 +128,7 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return {className: objectId};
+		return {className: objectId, appId: appId};
 	}
 	
     exports('attrList', {});

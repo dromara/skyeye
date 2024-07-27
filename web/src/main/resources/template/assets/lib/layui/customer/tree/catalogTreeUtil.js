@@ -288,6 +288,7 @@ var catalogTreeUtil = {
         var params = {
             objectId: catalogTreeUtil.config.objectId,
             objectKey: catalogTreeUtil.config.className,
+            objectAppId: catalogTreeUtil.config.appId,
             addOrUser: catalogTreeUtil.config.addOrUser
         };
         AjaxPostUtil.request({url: reqBasePath + "queryCatalogForTree", params: params, type: 'json', method: "POST", callback: function(json) {

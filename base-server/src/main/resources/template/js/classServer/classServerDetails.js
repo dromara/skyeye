@@ -1,5 +1,6 @@
 
 var objectId = "";
+var appId = "";
 
 layui.config({
     base: basePath,
@@ -13,6 +14,7 @@ layui.config({
         form = layui.form;
 
     objectId = GetUrlParam("objectId");
+    appId = GetUrlParam("appId");
     if (isNull(objectId)) {
         winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
         return false;
@@ -23,7 +25,7 @@ layui.config({
         showGrid({
             id: "showForm",
             url: reqBasePath + "queryServiceBeanCustom",
-            params: {className: objectId},
+            params: {className: objectId, appId: appId},
             pagination: false,
             method: 'GET',
             template: $("#beanTemplate").html(),

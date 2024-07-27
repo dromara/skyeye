@@ -356,7 +356,11 @@ var dsFormUtil = {
             return false;
         }
         if (isNull(dsFormUtil.temPage) || $.isEmptyObject(dsFormUtil.temPage)) {
-            AjaxPostUtil.request({url: reqBasePath + "queryServiceBeanCustom", params: {className: serviceClassName}, type: 'json', method: 'GET', callback: function (json) {
+            var params = {
+                className: serviceClassName,
+                appId: pageMation.appId
+            };
+            AjaxPostUtil.request({url: reqBasePath + "queryServiceBeanCustom", params: params, type: 'json', method: 'GET', callback: function (json) {
                 dsFormUtil.temPage = json.bean;
             }, async: false});
         }
@@ -1202,6 +1206,7 @@ var dsFormColumnUtil = {
     config: {
         id: 'skyeye', // 组件展示位置id
         title: '', // 表格的作用标题
+        appId: '', // 应用id
         className: 'xxx.skyeye', // 业务对象的服务类
         attrList: [], // 业务对象的服务类对应的属性
         attrSymbols: [], // 属性与值的对比符号
@@ -1234,7 +1239,11 @@ var dsFormColumnUtil = {
 
     getDataList: function () {
         // 获取属性列表
-        AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: {className: dsFormColumnUtil.config.className}, type: 'json', method: "POST", callback: function (data) {
+        var params = {
+            className: dsFormColumnUtil.config.className,
+            appId: dsFormColumnUtil.config.appId
+        };
+        AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: params, type: 'json', method: "POST", callback: function (data) {
             var attrList = [].concat(data.rows);
             $.each(attrList, function (i, item) {
                 if (!isNull(item.attrDefinitionCustom)) {

@@ -120,7 +120,7 @@ layui.config({
 				form.render('select');
 			}, async: false});
 		} else if (type == 'create' || type == 'edit') {
-			AjaxPostUtil.request({url: reqBasePath + "queryServiceBeanCustom", params: {className: className}, type: 'json', method: 'GET', callback: function (json) {
+			AjaxPostUtil.request({url: reqBasePath + "queryServiceBeanCustom", params: {className: className, appId: appId}, type: 'json', method: 'GET', callback: function (json) {
 				// 判断是否开启了工作流，如果开启了工作流，则将【是否开启工作流】这个选项填充
 				if (json.bean.serviceBean.flowable) {
 					$('#otherDom').html(pageHtml['flowabled']);
