@@ -12,6 +12,7 @@ layui.config({
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 	var className = GetUrlParam("className");
 	var id = GetUrlParam("id");
+	var appId = GetUrlParam("appId");
 
 	var pageHtml = {
 		'simpleTable': `<div class="layui-form-item layui-col-xs6">
@@ -149,6 +150,7 @@ layui.config({
 				remark: $("#remark").val(),
 				type: $("#type").val(),
 				className: className,
+				appId: appId,
 				operateIdList: isNull($('#operateIdList').attr('value')) ? [] : $('#operateIdList').attr('value'),
 				dataAuthPointNum: ''
 			};

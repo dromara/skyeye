@@ -147,6 +147,12 @@ var sysDictData = getAndWriteLocal('sysDictData');
 // 枚举类关联json文件
 var skyeyeClassEnum = getAndWriteLocal('skyeyeClassEnum');
 
+function getSysServiceMationAppIdByClassName(className) {
+	$.each(sysServiceMation, function(key, value) {
+
+	});
+}
+
 function getAndWriteLocal(key) {
 	if (isNull(localStorage.getItem(key))) {
 		var url = lacolMap[key];
