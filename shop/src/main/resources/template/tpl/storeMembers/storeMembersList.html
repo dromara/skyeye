@@ -1,37 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <title></title>
-  <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
-  <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
-  <style>
-    .layui-table-cell {
-      height: auto;
-      text-overflow: inherit;
-      overflow: visible;
-      white-space: normal;
-      word-wrap: break-word;
-    }
-  </style>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet"/>
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet"/>
+    <style>
+        .layui-table-cell {
+            height: auto;
+            text-overflow: inherit;
+            overflow: visible;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+    </style>
 </head>
 <body>
 <div class="winui-toolbar">
-  <div class="winui-tool">
-    <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-  </div>
+    <div class="winui-tool">
+        <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh"
+                                                                                 aria-hidden="true"></i>
+            <language showName="com.skyeye.refreshDataBtn"></language>
+        </button>
+        <button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1722130800533"><i class="fa fa-plus"
+                                                                                                  aria-hidden="true"></i>
+            <language showName="com.skyeye.addBtn"></language>
+        </button>
+    </div>
 </div>
 <div style="margin: auto 10px; height: calc(100% - 50px);">
-  <div style="width: calc(100% - 10px); float: left;">
-    <div style="margin:auto 10px;">
-      <table id="messageTable" lay-filter="messageTable"></table>
+    <div style="width: calc(100% - 10px); float: left;">
+        <div style="margin:auto 10px;">
+            <table id="messageTable" lay-filter="messageTable"></table>
+            <script type="text/html" id="tableBar">
+                {{# if(auth('1722130800533')){ }}
+                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">
+                    <language showName="com.skyeye.editBtn"></language>
+                </a>
+                {{# } }}
+                {{# if(auth('1722130830483')){ }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">
+                    <language showName="com.skyeye.deleteBtn"></language>
+                </a>
+                {{# } }}
+            </script>
+        </div>
     </div>
-  </div>
 </div>
 <script src="../../assets/lib/layui/layui.js"></script>
 <script src="../../assets/lib/layui/custom.js"></script>
 <script type="text/javascript">
-  layui.config({base: '../../js/storeMembers/'}).use('storeMembersList');
+    layui.config({base: '../../js/storeMembers/'}).use('storeMembersList');
 </script>
 </body>
 </html>

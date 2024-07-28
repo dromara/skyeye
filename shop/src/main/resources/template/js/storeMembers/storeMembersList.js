@@ -13,10 +13,10 @@ layui.config({
     var selTemplate = getFileContent('tpl/template/select-option.tpl');
     //门店会员
     // 加载当前用户所属门店
+    let storeHtml = '';
     AjaxPostUtil.request({url: sysMainMation.shopBasePath + "storeStaff005", params: {}, type: 'json', method: "GET", callback: function(json) {
-            $("#storeId").html(getDataUseHandlebars(selTemplate, json));
-            form.render('select');
-            initTable();
+            storeHtml = getDataUseHandlebars(selTemplate, json);
+            initTable(storeHtml);
         }, async: false});
 
 
@@ -39,29 +39,72 @@ layui.config({
             page: true,
             limits: getLimits(),
             limit: getLimit(),
-            overflow: {
-                type: 'tips',
-                hoverTime: 300, // 悬停时间，单位ms, 悬停 hoverTime 后才会显示，默认为 0
-                minWidth: 150, // 最小宽度
-                maxWidth: 500 // 最大宽度
-            },
             cols: [[
                 { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-                { field: 'name', title: '会员姓名', align: 'left', width: 250 },
-                { field: 'phone', title: '联系电话', align: 'left', width: 250 },
-                { field: 'email', title: '邮箱', align: 'left', width: 250 },
-                { field: 'remark', title: '备注', align: 'left', width: 450 },
+                { field: 'name', title: '会员姓名', align: 'left', width: 200 },
+                { field: 'phone', title: '联系电话', align: 'left', width: 200 },
+                { field: 'email', title: '邮箱', align: 'left', width: 200 },
+                { field: 'remark', title: '备注', align: 'left', width: 400 },
+                { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
             ]],
             done: function(json) {
                 matchingLanguage();
                 soulTable.render(this);
 
-                initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入会员姓名", function () {
+                initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入会员姓名、联系电话", function () {
                     table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
                 }, `<label class="layui-form-label">门店</label><div class="layui-input-inline">
 						<select id="storeId" name="storeId" lay-filter="storeId" lay-search="">
+						${storeHtml}
 					</select></div>`);
             }
+        });
+    }
+
+    table.on('tool(messageTable)', function (obj) {
+        var data = obj.data;
+        var layEvent = obj.event;
+        if (layEvent === 'delete') { //删除
+            del(data);
+        }else if (layEvent === 'edit') { //编辑
+            edit(data);
+        }
+    });
+
+    // 添加
+    $("body").on("click", "#addBean", function() {
+        _openNewWindows({
+            url:  systemCommonUtil.getUrl('FP2023042400005', null),
+            title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+            pageId: "storeMembersAdd",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    });
+
+    // 编辑
+    function edit(data) {
+        _openNewWindows({
+            url:  systemCommonUtil.getUrl('FP2023042400006&id=' + data.id, null),
+            title: systemLanguage["com.skyeye.editPageTitle"][languageType],
+            pageId: "storeMembersEdit",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+
+    // 删除
+    function del(data) {
+        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
+            AjaxPostUtil.request({url: sysMainMation.shopBasePath + "member004", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                    loadTable();
+                }});
         });
     }
 
