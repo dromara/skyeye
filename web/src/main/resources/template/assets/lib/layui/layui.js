@@ -150,7 +150,7 @@ var skyeyeClassEnum = getAndWriteLocal('skyeyeClassEnum');
 function getSysServiceMationAppIdByClassName(className) {
 	let appId = "";
 	$.each(sysServiceMation, function(key, value) {
-		if (value.className == className) {
+		if (value.key == className) {
 			appId = value.appId;
 		}
 	});
