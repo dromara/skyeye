@@ -1,7 +1,7 @@
 var rowId = "";
 
 var memberId = "";
-
+var serviceClassName = "";
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -15,12 +15,18 @@ layui.config({
     authBtn('1644234244354');
 
     memberId = GetUrlParam("id");
+    serviceClassName = GetUrlParam("serviceClassName");
+
+
+    console.log(55,memberId)
+    console.log(66,serviceClassName)
 
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: shopBasePath + 'memberCar001',
+        url: sysMainMation.erpBasePath + 'queryHolderNormsChildList',
+        params:{id:memberId,serviceClassName:serviceClassName},
         where: getTableParams(),
         even: true,
         page: false,
@@ -28,31 +34,38 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
-            { field: 'plate', title: '车牌号', align: 'left', width: 100, fixed: 'left', templet: function (d) {
-                return '<a lay-event="select" class="notice-title-click">' + d.plate + '</a>';
-            }},
-            { field: 'vinCode', title: 'VIN码', align: 'center', width: 180},
-            { field: 'modelType', title: '车型', align: 'left', width: 120},
-            { field: 'insure', title: '是否购买保险', align: 'center', width: 140, templet: function (d) {
-                if(d.insure == '1'){
-                    return "已购买";
-                } else if (d.insure == '2'){
-                    return "未购买";
-                } else {
-                    return "<span class='state-error'>参数错误</span>";
-                }
-            }},
-            { field: 'enabled', title: '状态', align: 'center', width: 80, templet: function (d) {
-                return shopUtil.getMemberCarEnableStateName(d.enabled);
-            }},
-            { field: 'createName', title: '录入人', align: 'left', width: 120 },
-            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 140 },
+            { field: 'name', title: '产品名称', align: 'left',width: 150, templet: function (d) {return isNull(d.materialMation) ? '' : d.materialMation.name}},
+            { field: 'norms', title: '产品规格', align: 'left',width: 150, templet: function (d) {return isNull(d.normsMation) ? '' : d.normsMation.name}},
+            { field: 'createTime', title: '交易时间', align: 'center', width: 150 },
+
+
+            // { field: 'plate', title: '车牌号', align: 'left', width: 100, fixed: 'left', templet: function (d) {
+            //     return '<a lay-event="select" class="notice-title-click">' + d.plate + '</a>';
+            // }},
+            // { field: 'vinCode', title: 'VIN码', align: 'center', width: 180},
+            // { field: 'modelType', title: '车型', align: 'left', width: 120},
+            // { field: 'insure', title: '是否购买保险', align: 'center', width: 140, templet: function (d) {
+            //     if(d.insure == '1'){
+            //         return "已购买";
+            //     } else if (d.insure == '2'){
+            //         return "未购买";
+            //     } else {
+            //         return "<span class='state-error'>参数错误</span>";
+            //     }
+            // }},
+            // { field: 'enabled', title: '状态', align: 'center', width: 80, templet: function (d) {
+            //     return shopUtil.getMemberCarEnableStateName(d.enabled);
+            // }},
+            // { field: 'createName', title: '录入人', align: 'left', width: 120 },
+            // { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 140 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
 	    done: function(json) {
 	    	matchingLanguage();
 	    }
     });
+    console.log(78999,serviceClassName)
+
 
     table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
@@ -87,35 +100,35 @@ layui.config({
     }
 
     // 删除
-    function deletemember(data) {
-        layer.confirm("删除后关联套餐以及其他信息无法使用，确认删除吗？", {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
-            layer.close(index);
-            AjaxPostUtil.request({url: shopBasePath + "memberCar004", params: {rowId: data.id}, type: 'json', method: "POST", callback: function (json) {
-                winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                loadTable();
-            }});
-        });
-    }
+    // function deletemember(data) {
+    //     layer.confirm("删除后关联套餐以及其他信息无法使用，确认删除吗？", {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
+    //         layer.close(index);
+    //         AjaxPostUtil.request({url: shopBasePath + "memberCar004", params: {rowId: data.id}, type: 'json', method: "POST", callback: function (json) {
+    //             winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+    //             loadTable();
+    //         }});
+    //     });
+    // }
 
     // 设置启用状态
-    function editEnabled(data) {
-        layer.confirm('确认要更改为启用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
-            AjaxPostUtil.request({url: shopBasePath + "editMemberCarEnabledState", params: {rowId: data.id, enabled: shopUtil.enableState["enable"]["type"]}, type: 'json', method: "PUT", callback: function (json) {
-                winui.window.msg("设置成功。", {icon: 1, time: 2000});
-                loadTable();
-            }});
-        });
-    }
+    // function editEnabled(data) {
+    //     layer.confirm('确认要更改为启用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
+    //         AjaxPostUtil.request({url: shopBasePath + "editMemberCarEnabledState", params: {rowId: data.id, enabled: shopUtil.enableState["enable"]["type"]}, type: 'json', method: "PUT", callback: function (json) {
+    //             winui.window.msg("设置成功。", {icon: 1, time: 2000});
+    //             loadTable();
+    //         }});
+    //     });
+    // }
 
     // 设置禁用状态
-    function editNotEnabled(data) {
-        layer.confirm('确认要更改为禁用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
-            AjaxPostUtil.request({url: shopBasePath + "editMemberCarEnabledState", params: {rowId: data.id, enabled: shopUtil.enableState["disable"]["type"]}, type: 'json', method: "PUT", callback: function (json) {
-                winui.window.msg("设置成功。", {icon: 1, time: 2000});
-                loadTable();
-            }});
-        });
-    }
+    // function editNotEnabled(data) {
+    //     layer.confirm('确认要更改为禁用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
+    //         AjaxPostUtil.request({url: shopBasePath + "editMemberCarEnabledState", params: {rowId: data.id, enabled: shopUtil.enableState["disable"]["type"]}, type: 'json', method: "PUT", callback: function (json) {
+    //             winui.window.msg("设置成功。", {icon: 1, time: 2000});
+    //             loadTable();
+    //         }});
+    //     });
+    // }
 
     // 详情
     function selectMember(data) {
