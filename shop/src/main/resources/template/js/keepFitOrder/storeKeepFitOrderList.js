@@ -34,7 +34,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: shopBasePath + 'keepFitOrder001',
+        url: shopBasePath + 'queryKeepFitOrderList',
         where: getTableParams(),
         even: true,
         page: true,
@@ -91,6 +91,8 @@ layui.config({
         }
     });
 
+    console.log(123)
+
     table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
@@ -105,27 +107,53 @@ layui.config({
         }
     });
 
-    // 核销
-    function verification(data) {
-        layer.confirm("确认对该单据进行核销吗？", {icon: 3, title: "核销操作"}, function (index) {
-            layer.close(index);
-            AjaxPostUtil.request({url: shopBasePath + "verificationKeepFitOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
-                winui.window.msg('核销成功', {icon: 1, time: 2000});
+    // 新增
+    $("body").on("click", "#addBean", function() {
+        _openNewWindows({
+            url:  systemCommonUtil.getUrl('FP2024072800004', null),
+            title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+            pageId: "keepFitAdd",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
-        });
-    }
+    });
 
-    // 取消订单
-    function cancleOrder(data) {
-        layer.confirm('确认取消该订单吗？', {icon: 3, title: '取消确认'}, function (index) {
-            layer.close(index);
-            AjaxPostUtil.request({url: shopBasePath + "cancleKeepFitOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
-                winui.window.msg('取消成功.', {icon: 1, time: 2000});
-                loadTable();
-            }});
-        });
-    }
+    // // 新增
+    // $("body").on("click", "#addBean", function() {
+    //     _openNewWindows({
+    //         url: "../../tpl/actFlow/actFlowAdd.html",
+    //         title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+    //         pageId: "actFlowAdd",
+    //         area: ['90vw', '90vh'],
+    //         callBack: function (refreshCode) {
+    //             winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+    //             loadTable();
+    //         }});
+    // });
+
+    // // 核销
+    // function verification(data) {
+    //     layer.confirm("确认对该单据进行核销吗？", {icon: 3, title: "核销操作"}, function (index) {
+    //         layer.close(index);
+    //         AjaxPostUtil.request({url: shopBasePath + "verificationKeepFitOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
+    //             winui.window.msg('核销成功', {icon: 1, time: 2000});
+    //             loadTable();
+    //         }});
+    //     });
+    // }
+    //
+    // // 取消订单
+    // function cancleOrder(data) {
+    //     layer.confirm('确认取消该订单吗？', {icon: 3, title: '取消确认'}, function (index) {
+    //         layer.close(index);
+    //         AjaxPostUtil.request({url: shopBasePath + "cancleKeepFitOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
+    //             winui.window.msg('取消成功.', {icon: 1, time: 2000});
+    //             loadTable();
+    //         }});
+    //     });
+    // }
 
     // 详情
     function select(data) {

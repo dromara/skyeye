@@ -45,6 +45,16 @@ layui.config({
                 { field: 'state', title: '状态',  width: 90, templet: function (d) {
                         return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("machinProcedureFarmState", 'id', d.state, 'name');
                     }},
+                { field: 'name', title: '部门', align: 'center', width: 90, templet: function (d) {
+                        return getNotUndefinedVal(d.farmMation?.departmentMation?.name);
+                    }},
+                { field: 'oddNumber', title: '加工单单号', rowspan: '2', align: 'left', width: 200, templet: function (d) {
+                        var str = '<a lay-event="details2" class="notice-title-click">' + d.machinMation?.oddNumber + '</a>';
+                        if (!isNull(d.fromId)) {
+                            str += '<span class="state-new">[转]</span>';
+                        }
+                        return str;
+                    }},
                 { field: 'targetNum', title: '任务安排数量', align: 'center', width: 140 },
                 { field: 'planStartTime', title: '计划开始时间', align: 'center', width: 140, templet: function (d) {
                         return getNotUndefinedVal(d.machinProcedureMation?.planStartTime);
@@ -118,6 +128,17 @@ layui.config({
             url:  systemCommonUtil.getUrl('FP2024072600001&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "workTaskDetail",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+            }});
+    }
+
+    // 详情2
+    function details2(data) {
+        _openNewWindows({
+            url:  systemCommonUtil.getUrl('FP2023100300003&id=' + data.id, null),
+            title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+            pageId: "machiningDetail",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
             }});
