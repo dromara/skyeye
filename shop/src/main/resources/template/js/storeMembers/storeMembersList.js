@@ -19,8 +19,6 @@ layui.config({
             initTable(storeHtml);
         }, async: false});
 
-
-
     var storeId = "";
     form.on('select(storeId)', function(data) {
         var thisRowValue = data.value;
