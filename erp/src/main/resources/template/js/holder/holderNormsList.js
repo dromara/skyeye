@@ -65,7 +65,7 @@ layui.config({
 	// 详情
 	function details(data) {
 		_openNewWindows({
-			url:  '../../tpl/holder/holderNormsChildList.html?id=' + data.id,
+			url:  '../../tpl/holder/holderNormsChildList.html?normsId=' + data.normsId + '&holderId=' + data.holderId + '&holderKey=' + data.holderKey,
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "holderNormsChildList",
 			area: ['90vw', '90vh'],
