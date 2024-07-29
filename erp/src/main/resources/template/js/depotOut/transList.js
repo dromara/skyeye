@@ -96,7 +96,7 @@ layui.config({
             // 补料出库单
             pageUrl = 'FP2024070100002';
         } else if (type == 7) {
-            // 补料出库单
+            // 配件申领出库单
             pageUrl = 'FP2023091000003';
         }
         _openNewWindows({
