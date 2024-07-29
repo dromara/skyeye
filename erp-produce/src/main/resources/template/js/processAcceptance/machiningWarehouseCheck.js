@@ -1,5 +1,5 @@
 
-// 以下两个参数开启团队权限时有值   只是复制过来了
+// 以下两个参数开启团队权限时有值
 var objectId = '', objectKey = '';
 // 根据以下两个参数判断：工作流的判断是否要根据serviceClassName的判断
 var serviceClassName;
@@ -15,8 +15,6 @@ layui.config({
     var $ = layui.$;
     var id = GetUrlParam("id");
     let initFirst = false
-
-
 
     // 工序验收的【编辑布局】
     dsFormUtil.initEditPageForStatic('content', 'FP2024071500001', {}, {
@@ -46,7 +44,6 @@ layui.config({
         //     $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
         //     $("div[controlType='simpleTable']").find(".qualityInspection").prop('disabled', true);
         //     $("div[controlType='simpleTable']").find(".taxLastinspectionRatio").prop('disabled', true);
-        //
         // }
 
         tableDeleteRowCallback: function (tableId) {
@@ -59,5 +56,4 @@ layui.config({
             }
         }
     });
-
 });
