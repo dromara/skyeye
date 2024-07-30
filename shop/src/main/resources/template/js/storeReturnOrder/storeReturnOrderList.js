@@ -10,10 +10,10 @@ layui.config({
         form = layui.form,
         table = layui.table;
     soulTable = layui.soulTable;
-    var serviceClassName = sysServiceMation["shopOutLetsServiceImpl"]["key"];
+    var serviceClassName = sysServiceMation["ShopReturnsService"]["key"];
     var selTemplate = getFileContent('tpl/template/select-option.tpl');
 
-    authBtn('1722221954123');//新增
+    authBtn('1722322761543');//新增
 
     // 加载当前用户所属门店
     let storeHtml = '';
@@ -29,13 +29,13 @@ layui.config({
         loadTable();
     });
 
-    //门店申领单
+    //门店退货单
     function initTable() {
         table.render({
             id: 'messageTable',
             elem: '#messageTable',
             method: 'post',
-            url: sysMainMation.erpBasePath + 'queryShopOutLetsList',
+            url: sysMainMation.erpBasePath + 'queryShopReturnsList',
             where: getTableParams(),
             even: true,
             page: true,
@@ -67,8 +67,8 @@ layui.config({
                     }
                 },
                 {
-                    field: 'otherState', title: '出库状态', rowspan: '2', width: 90, templet: function (d) {
-                        return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotOutState", 'id', d.otherState, 'name');
+                    field: 'otherState', title: '入库状态', rowspan: '2', width: 90, templet: function (d) {
+                        return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("depotPutState", 'id', d.otherState, 'name');
                     }
                 },
                 {
@@ -147,9 +147,9 @@ layui.config({
     // 添加
     $("body").on("click", "#addBean", function() {
         _openNewWindows({
-            url:  systemCommonUtil.getUrl('FP2024072900002', null),
+            url:  systemCommonUtil.getUrl('FP2024073000005', null),
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-            pageId: "storeApplicationOrderAdd",
+            pageId: "storeReturnOrderAdd",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -160,9 +160,9 @@ layui.config({
     // 编辑
     function edit(data) {
         _openNewWindows({
-            url:  systemCommonUtil.getUrl('FP2024072900003&id=' + data.id, null),
+            url:  systemCommonUtil.getUrl('FP2024073000006&id=' + data.id, null),
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-            pageId: "storeApplicationOrderEdit",
+            pageId: "storeReturnOrderEdit",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -173,9 +173,9 @@ layui.config({
     // 详情
     function details(data) {
         _openNewWindows({
-            url:  systemCommonUtil.getUrl('FP2024072900004&id=' + data.id, null),
+            url:  systemCommonUtil.getUrl('FP2024073000007&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "storeApplicationOrderDetails",
+            pageId: "storeReturnOrderDetails",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
             }});
@@ -197,5 +197,5 @@ layui.config({
         return $.extend(true, params, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
-    exports('storeApplicationOrderList', {});
+    exports('storeReturnOrderList', {});
 });

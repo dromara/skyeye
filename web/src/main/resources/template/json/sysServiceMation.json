@@ -71,5 +71,10 @@
     "enclosure": {"name": "附件", "key": "com.skyeye.enclosure.service.impl.SysEnclosureServiceImpl", "appId": "com.wzq.skyeye.oa"},
     "supplierServiceImpl": {"name": "供应商", "key": "com.skyeye.supplier.service.impl.SupplierServiceImpl", "appId": "com.wzq.skyeye.erp"},
     "proProjectServiceImpl": {"name": "项目", "key": "com.skyeye.project.service.impl.ProProjectServiceImpl", "appId": "com.wzq.skyeye.project"},
-    "autoProjectServiceImpl": {"name": "自动化项目", "key": "com.skyeye.project.service.impl.AutoProjectServiceImpl", "appId": "com.wzq.skyeye.auto"}
+    "autoProjectServiceImpl": {"name": "自动化项目", "key": "com.skyeye.project.service.impl.AutoProjectServiceImpl", "appId": "com.wzq.skyeye.auto"},
+
+    "shopOutLetsServiceImpl": {"name": "门店申领单", "key": "com.skyeye.shop.service.impl.ShopOutLetsServiceImpl", "appId": "com.wzq.skyeye.erp"},
+    "ShopReturnsService": {"name": "门店退货单", "key": "com.skyeye.shop.service.impl.ShopReturnsServiceImpl", "appId": "com.wzq.skyeye.erp"},
+    "shopConfirmPutService": {"name": "门店物料接收单", "key": "com.skyeye.shop.service.impl.ShopConfirmPutServiceImpl", "appId": "com.wzq.skyeye.erp"},
+    "shopConfirmReturn": {"name": "门店物料退货单", "key": "com.skyeye.shop.service.impl.ShopConfirmReturnServiceImpl", "appId": "com.wzq.skyeye.erp"}
 }
