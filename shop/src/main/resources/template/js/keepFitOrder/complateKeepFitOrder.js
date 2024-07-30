@@ -24,20 +24,20 @@ layui.config({
                     nextServiceTime: $("#nextServiceTime").val()
                 };
 
-                // AjaxPostUtil.request({url: shopBasePath + "complateKeepFitOrder", params: params, type: 'json', method: "POST", callback: function (json) {
-                //     parent.layer.close(index);
-                //     parent.refreshCode = '0';
-                // }, async: true});
+                AjaxPostUtil.request({url: shopBasePath + "complateKeepFitOrder", params: params, type: 'json', method: "POST", callback: function (json) {
+                    parent.layer.close(index);
+                    parent.refreshCode = '0';
+                }, async: true});
             }
             return false;
         });
 
-        // 维修技师选择
-        $("body").on("click", ".chooseServiceTechnicianBtn", function (e) {
-            shopUtil.openStoreStaffChoosePage(function (staffMation){
-                $("#serviceTechnician").val(staffMation.userName);
-            });
-        });
+        // // 维修技师选择
+        // $("body").on("click", ".chooseServiceTechnicianBtn", function (e) {
+        //     shopUtil.openStoreStaffChoosePage(function (staffMation){
+        //         $("#serviceTechnician").val(staffMation.userName);
+        //     });
+        // });
 
         $("body").on("click", "#cancle", function() {
             parent.layer.close(index);

@@ -43,47 +43,38 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
-            { field: 'orderNum', title: '订单号', align: 'left', width: 180, fixed: 'left', templet: function (d) {
-                return '<a lay-event="select" class="notice-title-click">' + d.orderNum + '</a>';
+            { field: 'oddNumber', title: '订单编号', align: 'left', width: 180, fixed: 'left', templet: function (d) {
+                    return '<a lay-event="detail" class="notice-title-click">' + d.oddNumber + '</a>';
+                }},
+            { field: 'name', title: '门店', width: 200, templet: function (d) {
+                    return getNotUndefinedVal(d.storeMation?.name);
             }},
-            { field: 'userType', title: '客户类型', width: 80, align: "center", templet: function (d) {
-                if(d.userType == 1){
-                    return "匿名客户";
-                } else {
-                    return "会员";
-                }
+            { field: 'userType', title: '用户类型', width: 100, templet: function (d) {
+                    if(d.type == 1){
+                        return "匿名用户";
+                    } else {
+                        return "会员";
+                    }
             }},
-            { field: 'contacts', title: '会员名称', width: 100 },
-            { field: 'phone', title: '会员手机号', width: 100, align: "center"},
-            { field: 'modelType', title: '车型', width: 100, align: "left"},
-            { field: 'memberCarPlate', title: '车牌号', width: 100, align: "left"},
-            { field: 'vinCode', title: 'VIN码', width: 120, align: "left"},
-            { field: 'mealName', title: '套餐名称', align: 'left', width: 150 },
-            { field: 'mealPrice', title: '应缴金额', align: 'left', width: 100 },
-            { field: 'payPrice', title: '实缴金额', align: 'left', width: 100 },
-            { field: 'mealSinglePrice', title: '套餐内消耗', align: 'left', width: 120 },
-            { field: 'mealBuyStoreName', title: '缴费门店', align: 'left', width: 150 },
-            { field: 'storeName', title: '保养门店', align: 'left', width: 150 },
-            { field: 'createName', title: '服务顾问', width: 120 },
-            { field: 'serviceTechnicianName', title: '维修技师', align: 'left', width: 120 },
-            /*{ field: 'payablePrice', title: '应付金额', width: 100, align: "left"},
-            { field: 'servicePrice', title: '服务费', width: 100, align: "left"},*/
-            /*{ field: 'payPrice', title: '实付金额', width: 100, align: "left"},
-            { field: 'payTime', title: '实付日期', align: 'center', width: 150 },*/
-            { field: 'type', title: '订单来源', width: 80, align: "center", templet: function (d) {
-                if(d.type == 1){
-                    return "线上下单";
-                } else {
-                    return "线下下单";
-                }
+            { field: 'type', title: '订单来源', width: 120, align: "center", templet: function (d) {
+                    if(d.type == 1){
+                        return "用户下单";
+                    } else {
+                        return "工作人员下单";
+                    }
             }},
-            { field: 'state', title: '订单状态', width: 100, align: "center", templet: function (d) {
-                return shopUtil.getKeepFitOrderStateName(d);
-            }},
-            { field: 'whetherGive', title: '是否赠送', width: 100, align: "center", templet: function (d) {
-                return shopUtil.getMealOrderWhetherGiveName(d);
-            }},
-            { field: 'createTime', title: '操作时间', align: 'center', width: 150 },
+
+            { field: 'contacts', title: '会员', width: 100 },
+            { field: 'contacts', title: '商品', width: 100 },
+            { field: 'contacts', title: '规格', width: 100 },
+            { field: 'contacts', title: '规格物品编码', width: 100 },
+            // { field: 'name', title: '预约日期', width: 100, templet: function (d) {
+            //         return getNotUndefinedVal(d.storeMation?.name);
+            //     }},
+            // { field: 'name', title: '预约时间', width: 100, templet: function (d) {
+            //         return getNotUndefinedVal(d.storeMation?.endTime);
+            //     }},startTime，endTime
+            { field: 'createTime', title: '创建时间', align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
         done: function(json) {
@@ -96,8 +87,8 @@ layui.config({
     table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if(layEvent == 'select'){ // 详情
-            select(data)
+        if(layEvent == 'details'){ // 详情
+            details(data)
         } else if (layEvent == 'complateKeepFit'){ // 完成保养
             complateKeepFit(data)
         } else if (layEvent == 'verification'){ // 核销
@@ -112,7 +103,7 @@ layui.config({
         _openNewWindows({
             url:  systemCommonUtil.getUrl('FP2024072800004', null),
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-            pageId: "keepFitAdd",
+            pageId: "storeKeepFitAdd",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -120,51 +111,36 @@ layui.config({
             }});
     });
 
-    // // 新增
-    // $("body").on("click", "#addBean", function() {
-    //     _openNewWindows({
-    //         url: "../../tpl/actFlow/actFlowAdd.html",
-    //         title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-    //         pageId: "actFlowAdd",
-    //         area: ['90vw', '90vh'],
-    //         callBack: function (refreshCode) {
-    //             winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-    //             loadTable();
-    //         }});
-    // });
-
-    // // 核销
-    // function verification(data) {
-    //     layer.confirm("确认对该单据进行核销吗？", {icon: 3, title: "核销操作"}, function (index) {
-    //         layer.close(index);
-    //         AjaxPostUtil.request({url: shopBasePath + "verificationKeepFitOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
-    //             winui.window.msg('核销成功', {icon: 1, time: 2000});
-    //             loadTable();
-    //         }});
-    //     });
-    // }
-    //
-    // // 取消订单
-    // function cancleOrder(data) {
-    //     layer.confirm('确认取消该订单吗？', {icon: 3, title: '取消确认'}, function (index) {
-    //         layer.close(index);
-    //         AjaxPostUtil.request({url: shopBasePath + "cancleKeepFitOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
-    //             winui.window.msg('取消成功.', {icon: 1, time: 2000});
-    //             loadTable();
-    //         }});
-    //     });
-    // }
+    // 删除
+    function del(data, obj) {
+        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
+            layer.close(index);
+            AjaxPostUtil.request({url: shopBasePath + "deleteKeepFitOrderById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                    loadTable();
+                }});
+        });
+    }
 
     // 详情
-    function select(data) {
-        rowId = data.id;
+    function details(data) {
         _openNewWindows({
-            url: "../../tpl/keepFitOrder/keepFitOrderDetails.html",
+            url:  systemCommonUtil.getUrl('FP2024072800005&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "keepFitOrderDetails",
+            pageId: "storeKeepFitDetails",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
-            }
+            }});
+    }
+
+    // 核销
+    function verification(data) {
+        layer.confirm("确认对该单据进行核销吗？", {icon: 3, title: "核销操作"}, function (index) {
+            layer.close(index);
+            AjaxPostUtil.request({url: shopBasePath + "verificationKeepFitOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
+                winui.window.msg('核销成功', {icon: 1, time: 2000});
+                loadTable();
+            }});
         });
     }
 
