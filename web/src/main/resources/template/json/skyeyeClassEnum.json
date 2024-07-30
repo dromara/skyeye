@@ -219,6 +219,8 @@
 
     "storeOnlineBookType": {"name": "商城-门店线上预约类型", "className": "skyeye-shop#com.skyeye.store.classenum.StoreOnlineBookType"},
     "shopMealType": {"name": "商城-套餐类型", "className": "skyeye-shop#com.skyeye.meal.classenum.ShopMealType"},
+    "KeepFitOrderUserType": {"name": "保养订单的用户类型", "className": "skyeye-shop#com.skyeye.keepfit.classenum.KeepFitOrderUserType"},
+
 
     "studentStateEnum": {"name": "表白墙-学生审核状态", "className": "skyeye-wall#com.skyeye.certification.classenum.StateEnum"},
     "studentStateEnum2": {

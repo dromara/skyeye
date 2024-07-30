@@ -12,7 +12,7 @@ layui.config({
 		table = layui.table,
 		fsTree = layui.fsTree;
 	var objectId = 'temp';
-	let appId = '';
+	let appId = '-';
 
 	fsTree.render({
 		id: "treeDemo",
@@ -34,7 +34,7 @@ layui.config({
 			return false;
 		}
 		objectId = treeNode.id;
-		appId = chooseTreeNode.classMation.appId;
+		appId = treeNode.classMation.appId;
 		loadTable();
 	}
 
