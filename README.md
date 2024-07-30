@@ -130,3 +130,28 @@
 | ![](images/show/tradition/show008.png) | ![](images/show/win10/show008.png) |
 | ![](images/show/tradition/show009.png) | ![](images/show/win10/show009.png) |
 | ![](images/show/tradition/show010.png) | ![](images/show/win10/show010.png) |
+
+##  :tw-1f30f:  手机端效果图
+
+### 基础模块
+| 效果图  | 效果图  | 效果图  | 效果图  |
+|--------|-------|-------|-------|
+|![输入图片说明](images/show/phone/20240730image.png)|![输入图片说明](images/show/phone/2024073002image.png)|![输入图片说明](images/show/phone/2024073003image.png)|![输入图片说明](images/show/phone/2024073004image.png)|
+
+### ERP
+
+| 效果图  | 效果图  | 效果图  | 效果图  |
+|--------|-------|-------|-------|
+|![输入图片说明](images/show/phone/2024073005image.png)|![输入图片说明](images/show/phone/2024073006image.png)|![输入图片说明](images/show/phone/2024073007image.png)|![输入图片说明](images/show/phone/2024073008image.png)|
+
+### CRM
+
+| 效果图  | 效果图  | 效果图  | 效果图  |
+|--------|-------|-------|-------|
+|![输入图片说明](images/show/phone/2024073012image.png)|![输入图片说明](images/show/phone/2024073009image.png)|![输入图片说明](images/show/phone/2024073010image.png)|![输入图片说明](images/show/phone/2024073011image.png)|
+
+### OA
+
+| 效果图  | 效果图  | 效果图  | 效果图  |
+|--------|-------|-------|-------|
+|![输入图片说明](images/show/phone/2024073013image.png)|![输入图片说明](images/show/phone/2024073014image.png)|![输入图片说明](images/show/phone/2024073015image.png)|![输入图片说明](images/show/phone/2024073016image.png)|
