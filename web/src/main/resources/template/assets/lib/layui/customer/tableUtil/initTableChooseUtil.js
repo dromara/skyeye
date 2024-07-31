@@ -327,6 +327,26 @@ var initTableChooseUtil = {
                 $("#" + tdId).html(value);
             }
         });
+    },
+
+    editColAttr(tableDivId, colsParams) {
+        if (isNull(colsParams)) {
+            return;
+        }
+        var options = initTableChooseUtil.setting[tableDivId];
+        $.each(colsParams, function(key, value) {
+            $.each(options.cols, function(i, col) {
+                if (col.id == key) {
+                    $.each(value, function(kk, vv) {
+                        col[kk] = vv;
+                    });
+                }
+            });
+        });
+        let tableDataList = initTableChooseUtil.getDataList(tableDivId).dataList;
+        initTableChooseUtil.initTable(options);
+        initTableChooseUtil.resetDataList(tableDivId, tableDataList);
+        options.form.render();
     }
 
 }
