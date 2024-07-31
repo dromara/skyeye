@@ -100,7 +100,7 @@ layui.config({
             pageUrl = 'FP2024071500005';
         }else if (type == 8) {
             // 门店退货单
-            pageUrl = 'FP2024071500005';
+            pageUrl = 'FP2024073000007';
         }else if (type == 9) {
             // 门店物料退货单
             pageUrl = 'FP2024073000003';
@@ -141,7 +141,7 @@ layui.config({
             pageUrl = '../../tpl/materialReturnOrder/materialReturnOrderToPut.html';
         }else if (type == 8) {
             // 门店退货单
-            pageUrl = '../../tpl/materialReturnOrder/materialReturnOrderToPut.html';
+            pageUrl = '../../tpl/storeReturnOrder/storeReturnOrderToPut.html';
         }else if (type == 9) {
             // 门店物料退货单
             pageUrl = '../../tpl/storeMaterialsReturn/storeMaterialsReturnToPut.html';
