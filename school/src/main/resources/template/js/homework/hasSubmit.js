@@ -24,7 +24,7 @@ layui.config({
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'name', title: '姓名', align: 'left', width: 150, templet: function(d) {
-                return getNotUndefinedVal(d.createMation?.name);
+                return getNotUndefinedVal(d.createMation?.realName);
             }},
             { field: 'accountNumber', title: '学号', align: 'left', width: 180, templet: function(d) {
                 return getNotUndefinedVal(d.createMation?.accountNumber);

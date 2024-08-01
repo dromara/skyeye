@@ -9,13 +9,13 @@ layui.config({
         form = layui.form,
         table = layui.table;
 
-    var assignmentId = GetUrlParam("id");
+    var announcementId = GetUrlParam("id");
 
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
-        method: 'get',
-        url: sysMainMation.schoolBasePath + 'queryAssignmentNotSubListByAssignmentId',
+        method: 'post',
+        url: sysMainMation.schoolBasePath + 'queryRecordByAnnouncementId',
         where: getTableParams(),
         even: true,
         page: true,
@@ -23,7 +23,7 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'realName', title: '姓名', align: 'center', width: 200}
+            { field: 'name', title: '姓名', align: 'center', width: 200}
         ]],
         done: function(json) {
             matchingLanguage();
@@ -44,10 +44,10 @@ layui.config({
 
     function getTableParams() {
         let params = {
-            assignmentId: assignmentId
+            announcementId: announcementId
         }
         return $.extend(true, params, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
-    exports('noSubmit', {});
+    exports('hasConfirm', {});
 });
