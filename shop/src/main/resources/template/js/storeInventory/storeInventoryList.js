@@ -92,7 +92,8 @@ layui.config({
 
     function getTableParams() {
         let params = {
-            objectId: storeId,
+            type:'store',
+            holderId: storeId,
         };
         return $.extend(true, params, initTableSearchUtil.getSearchValue("messageTable"));
     }

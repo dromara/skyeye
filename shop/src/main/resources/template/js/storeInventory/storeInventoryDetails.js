@@ -19,7 +19,7 @@ layui.config({
             id: 'messageTable',
             elem: '#messageTable',
             method: 'post',
-            url: sysMainMation.erpBasePath + 'queryNormsStockDetailList',
+            url: sysMainMation.erpBasePath + 'queryStoreNormsStockDetailList',
             where: getTableParams(),
             even: true,
             page: true,
@@ -39,8 +39,8 @@ layui.config({
                 },
                 {field: 'codeNum', title: '条形码', align: 'center', width: 250},
                 {
-                    field: 'departmentMation', title: '来源部门', align: 'left', width: 200, templet: function (d) {
-                        return isNull(d.departmentMation) ? '' : d.departmentMation.name
+                    field: 'storeMation', title: '所属门店', align: 'left', width: 200, templet: function (d) {
+                        return isNull(d.storeMation) ? '' : d.storeMation.name
                     }
                 },
                 {

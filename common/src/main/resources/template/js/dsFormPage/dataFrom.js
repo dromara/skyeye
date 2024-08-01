@@ -68,7 +68,7 @@ layui.config({
 					if (isJSON(defaultDataStr)) {
 						var defaultKey = getOutKey(defaultDataStr);//取出json串的键
 						// 获取数据展示模板
-						var tplContentVal = strMatchAllByTwo(dsFormComponent.htmlDataFrom, '{{', '}}');//取出数据模板中用{{}}包裹的词
+						var tplContentVal = strMatchAllByTwo(selOption, '{{', '}}');//取出数据模板中用{{}}包裹的词
 						removeByValue(tplContentVal, "#each this");
 						removeByValue(tplContentVal, "/each");
 						if (subset(tplContentVal, defaultKey)) {
