@@ -9,11 +9,11 @@ layui.config({
     layui.use(['form'], function (form) {
         var index = parent.layer.getFrameIndex(window.name);
         var $ = layui.$;
-        var orderNum = "";
+        var oddNumber = "";
 
-        AjaxPostUtil.request({url: shopBasePath + "mealOrder002", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
-            orderNum = json.bean.orderNum;
-            $("#payPrice").val(json.bean.unformatPayablePrice);
+        AjaxPostUtil.request({url: shopBasePath + "queryMealOrderById", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
+                oddNumber = json.bean.oddNumber;
+            $("#payPrice").val(json.bean.payablePrice);
         }, async: false});
 
 
@@ -23,7 +23,7 @@ layui.config({
         form.on('submit(formAddBean)', function (data) {
             if (winui.verifyForm(data.elem)) {
                 var params = {
-                    out_trade_no: orderNum,
+                    out_trade_no: oddNumber,
                     total_fee: parseFloat($("#payPrice").val()).toFixed(2) * 100,
                 };
 

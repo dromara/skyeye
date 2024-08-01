@@ -5,31 +5,37 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate', 'soulTable'], function (exports) {
     winui.renderColor();
     var $ = layui.$,
         form = layui.form,
-        laydate = layui.laydate,
         table = layui.table;
+    soulTable = layui.soulTable;
+    var selTemplate = getFileContent('tpl/template/select-option.tpl');
 
-    // 加载我所在的门店
-    shopUtil.queryStaffBelongStoreList(function (json){
-        $("#storeId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
-    });
+    // 加载列表数据权限
+    loadAuthBtnGroup('messageTable', '1647062082493');
+
+    // 加载当前用户所属门店
+    let storeHtml = '';
+    AjaxPostUtil.request({url: sysMainMation.shopBasePath + "storeStaff005", params: {}, type: 'json', method: "GET", callback: function(json) {
+        storeHtml = getDataUseHandlebars(selTemplate, json);
+        initTable(storeHtml);
+    }, async: false});
+
+    var storeId = "";
     form.on('select(storeId)', function(data) {
-        table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
+        var thisRowValue = data.value;
+        storeId = isNull(thisRowValue) ? "" : thisRowValue;
+        loadTable();
     });
 
-    // 套餐订单性质
-    sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["shopMealOrderNature"]["key"], 'select', "natureId", '', form);
-
-    laydate.render({elem: '#refundTime', range: '~'});
-
-    table.render({
+    function initTable() {
+        table.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: shopBasePath + 'queryRefundMealOrderList',
+        url: sysMainMation.shopBasePath + 'queryRefundMealOrderList',
         where: getTableParams(),
         even: true,
         page: true,
@@ -84,65 +90,84 @@ layui.config({
         ]],
         done: function(json) {
             matchingLanguage();
+            soulTable.render(this);
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入订单编号", function () {
+                table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+            }, `<label class="layui-form-label">门店</label><div class="layui-input-inline">
+						<select id="storeId" name="storeId" lay-filter="storeId" lay-search="">
+						${storeHtml}
+					</select></div>`);
         }
-    });
+        });
+    }
+
 
     table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'rejection') { // 驳回
-            rejection(data);
-        } else if (layEvent == 'select'){ // 详情
-            select(data)
-        } else if (layEvent == 'pass'){ // 退款
-            pass(data)
+        if (layEvent === 'delete') { //删除
+            delet(data);
+        } else if (layEvent === 'details') { //详情
+            details(data);
+        } else if (layEvent === 'edit') { //编辑
+            edit(data);
+        } else if (layEvent === 'subApproval') { //提交审核
+            subApproval(data);
+        }  else if (layEvent === 'processDetails') { // 工作流流程详情查看
+            activitiUtil.activitiDetails(data);
+        } else if (layEvent === 'revoke') { //撤销
+            revoke(data);
         }
     });
 
-    // 驳回
-    function rejection(data) {
-        var msg = '确定驳回退款金额为：' + data.refundPrice + '元的退款申请吗';
-        layer.confirm(msg, {icon: 3, title: '驳回'}, function (index) {
+    // 删除
+    function delet(data) {
+        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: shopBasePath + "approvelRefundMealOrder", params: {id: data.id, state: 2}, type: 'json', method: "POST", callback: function (json) {
-                winui.window.msg('驳回成功', {icon: 1, time: 2000});
-                loadTable();
-            }, async: true});
+            AjaxPostUtil.request({url: sysMainMation.shopBasePath + "deleteMealRefundOrderById", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                    loadTable();
+                }});
         });
     }
-
-    // 退款
-    function pass(data) {
-        var msg = '此次退款金额为：' + data.refundPrice + '元 ';
-        layer.confirm(msg, {icon: 3, title: '退款'}, function (index) {
-            layer.close(index);
-            AjaxPostUtil.request({url: shopBasePath + "approvelRefundMealOrder", params: {id: data.id, state: 3}, type: 'json', method: "POST", callback: function (json) {
-                winui.window.msg('退款成功.', {icon: 1, time: 2000});
-                loadTable();
-            }, async: true});
-        });
-    }
-
     // 详情
-    function select(data) {
-        rowId = data.mealOrderId;
+    function details(data) {
         _openNewWindows({
-            url: "../../tpl/mealOrder/storeMealOrderDetails.html",
+            url: systemCommonUtil.getUrl('FP2024052400003&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "storeMealOrderDetails",
+            pageId: "refundMealOrderDetails",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
-            }
+            }});
+    }
+
+    // 撤销
+    function revoke(data) {
+        layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
+            layer.close(index);
+            AjaxPostUtil.request({url: sysMainMation.shopBasePath + "revokeMealRefundOrder", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+                    winui.window.msg("提交成功", {icon: 1, time: 2000});
+                    loadTable();
+                }});
         });
     }
 
-    form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
-        }
-        return false;
-    });
+    // 提交审批
+    function subApproval(data) {
+        layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
+            layer.close(index);
+            activitiUtil.startProcess(serviceClassName, null, function (approvalId) {
+                var params = {
+                    id: data.id,
+                    approvalId: approvalId
+                };
+                AjaxPostUtil.request({url: sysMainMation.shopBasePath + "submitMealRefundOrderToApproval", params: params, type: 'json', method: "POST", callback: function (json) {
+                        winui.window.msg("提交成功", {icon: 1, time: 2000});
+                        loadTable();
+                    }});
+            });
+        });
+    }
 
     $("body").on("click", "#reloadTable", function() {
         loadTable();
@@ -154,28 +179,10 @@ layui.config({
     }
 
     function getTableParams() {
-        var storeId = $("#storeId").val();
-        if(isNull(storeId)){
-            storeId = "-";
-        }
-        var startTime = "", endTime = "";
-        if (!isNull($("#refundTime").val())) {
-            startTime = $("#refundTime").val().split('~')[0].trim() + ' 00:00:00';
-            endTime = $("#refundTime").val().split('~')[1].trim() + ' 23:59:59';
-        }
-        return {
-            memberName: $("#memberName").val(),
-            memberPhone: $("#memberPhone").val(),
-            plate: $("#plate").val(),
-            vinCode: $("#vinCode").val(),
-            state: $("#state").val(),
-            type: $("#type").val(),
-            whetherGive: $("#whetherGive").val(),
-            natureId: $("#natureId").val(),
-            storeId: storeId,
-            startTime: startTime,
-            endTime: endTime
+        let params = {
+            holderId: storeId,
         };
+        return $.extend(true, params, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('refundMealOrderList', {});

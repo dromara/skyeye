@@ -251,6 +251,7 @@
     "homeworkTypeEnum": {"name": "云课堂-作业类型", "className": "skyeye-school#com.skyeye.school.assignment.classenum.AssignmentType"},
 
     "shopMealOrderType": {"name": "智慧门店-订单来源", "className": "skyeye-shop#com.skyeye.meal.classenum.ShopMealOrderType"},
+    "shopMealOrderState": {"name": "智慧门店-套餐订单状态", "className": "skyeye-shop#com.skyeye.meal.classenum.ShopMealOrderState"},
     "shopConfirmFromType": {"name": "智慧门店-门店物料接收/退货来源单据类型", "className": "skyeye-erp#com.skyeye.shop.classenum.ShopConfirmFromType"}
 
 }

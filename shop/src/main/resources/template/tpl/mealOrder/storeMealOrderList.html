@@ -16,8 +16,13 @@
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
-            {{# if(d.cancleState == 1 && d.state == 1 && auth('1644239605004')){ }}
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+            {{# if (d.state == 1) { }}
+                {{# if (auth('1644239605004')) { }}
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+                {{# } }}
+                {{# if (auth('1644250434164')) { }}
+                    <a class="layui-btn layui-btn-xs" lay-event="completePayment">完成支付</a>
+                {{# } }}
             {{# } }}
         </script>
     </div>

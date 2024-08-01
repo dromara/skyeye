@@ -7,88 +7,26 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="txtcenter" style="margin:0 auto;padding-top:10px;">
-        <form class="layui-form layui-form-pane layui-col-xs12" action="" autocomplete="off">
-            <div class="winui-toolbar layui-col-xs12">
-                <div class="winui-tool layui-col-xs3">
-                    <select id="storeId" name="storeId" lay-filter="storeId" lay-search="">
-
-                    </select>
-                </div>
-            </div>
-            <div class="layui-form-item layui-col-xs12" style="margin-top: 10px;">
-                <div class="layui-inline">
-                    <label class="layui-form-label">会员名称</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="memberName" name="memberName" placeholder="请输入会员名称" class="layui-input" />
-                    </div>
-                    <label class="layui-form-label">会员手机号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="memberPhone" name="memberPhone" placeholder="请输入会员手机号" class="layui-input" />
-                    </div>
-                    <label class="layui-form-label">车牌号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="plate" name="plate" placeholder="请输入车牌号" class="layui-input" />
-                    </div>
-                    <label class="layui-form-label">VIN码</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="vinCode" name="vinCode" placeholder="请输入VIN码" class="layui-input" />
-                    </div>
-                    <label class="layui-form-label">审核状态</label>
-                    <div class="layui-input-inline">
-                        <select id="state" name="state" lay-filter="state" lay-search="">
-                            <option value="">全部</option>
-                            <option value="1">待审核</option>
-                            <option value="2">退款驳回</option>
-                            <option value="3">已退款</option>
-                            <option value="4">取消退款</option>
-                        </select>
-                    </div>
-                    <label class="layui-form-label">订单来源</label>
-                    <div class="layui-input-inline">
-                        <select id="type" name="type" lay-filter="type" lay-search="">
-                            <option value="">全部</option>
-                            <option value="1">线上订单</option>
-                            <option value="2">线下订单</option>
-                        </select>
-                    </div>
-                    <label class="layui-form-label">是否赠送</label>
-                    <div class="layui-input-inline">
-                        <select id="whetherGive" name="whetherGive" lay-filter="whetherGive" lay-search="">
-                            <option value="">全部</option>
-                            <option value="1">是</option>
-                            <option value="2">否</option>
-                        </select>
-                    </div>
-                    <label class="layui-form-label">订单性质</label>
-                    <div class="layui-input-inline">
-                        <select id="natureId" name="natureId" lay-filter="natureId" lay-search="">
-                        </select>
-                    </div>
-                    <label class="layui-form-label">退款时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="refundTime" name="refundTime" placeholder="请选择退款时间范围" class="layui-input" />
-                    </div>
-                    <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
-                    <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
-                </div>
-            </div>
-        </form>
-    </div>
     <div class="winui-toolbar layui-col-xs12">
         <div class="winui-tool">
-            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
         </div>
     </div>
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
-
         <script type="text/html" id="tableBar">
-            {{# if(d.state == 1 && auth('1647062128499')){ }}
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="rejection">驳回</a>
+            {{# if (d.editRow == 1) { }}
+                {{# if (auth('1722481147120')) { }}
+                    <a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>
+                {{# } }
+                {{# if (auth('1722481160860')) { }}
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+                {{# } }}
             {{# } }}
-            {{# if(d.state == 1 && auth('1647062128499')){ }}
-                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="pass">退款</a>
+            {{# if (d.editRow == 2) { }}
+                {{# if (auth('1722481085519')) { }}
+                    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
+                {{# } }}
             {{# } }}
         </script>
     </div>
