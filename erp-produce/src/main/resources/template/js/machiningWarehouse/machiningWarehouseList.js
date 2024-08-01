@@ -41,12 +41,13 @@ layui.config({
             { field: 'state', title: '状态', width: 90, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
                 }},
-            { field: 'otherState', title: '到货状态',  width: 100, templet: function (d) {
+            { field: 'otherState', title: '到货状态',  width: 90, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("orderArrivalState", 'id', d.otherState, 'name');
                 }},
             { field: 'name', title: '部门', align: 'center', width: 100, templet: function (d) {
                     return getNotUndefinedVal(d.departmentMation?.name);}},
-            { field: 'salesman', title: '业务员', align: 'center', width: 80 },
+            { field: 'name', title: '业务员', align: 'center', width: 100 ,templet: function (d) {
+                    return getNotUndefinedVal(d.salesmanMation?.name);}},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
