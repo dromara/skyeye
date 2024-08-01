@@ -48,13 +48,13 @@ layui.config({
                 { field: 'name', title: '部门', align: 'center', width: 90, templet: function (d) {
                         return getNotUndefinedVal(d.farmMation?.departmentMation?.name);
                     }},
-                { field: 'oddNumber', title: '加工单单号', rowspan: '2', align: 'left', width: 200, templet: function (d) {
-                        var str = '<a lay-event="details2" class="notice-title-click">' + d.machinMation?.oddNumber + '</a>';
-                        if (!isNull(d.fromId)) {
-                            str += '<span class="state-new">[转]</span>';
-                        }
-                        return str;
-                    }},
+                // { field: 'oddNumber', title: '加工单单号', rowspan: '2', align: 'left', width: 200, templet: function (d) {
+                //         var str = '<a lay-event="details" class="notice-title-click">' + d.machinMation?.oddNumber + '</a>';
+                //         if (!isNull(d.fromId)) {
+                //             str += '<span class="state-new">[转]</span>';
+                //         }
+                //         return str;
+                //     }},
                 { field: 'targetNum', title: '任务安排数量', align: 'center', width: 140 },
                 { field: 'planStartTime', title: '计划开始时间', align: 'center', width: 140, templet: function (d) {
                         return getNotUndefinedVal(d.machinProcedureMation?.planStartTime);
@@ -94,8 +94,23 @@ layui.config({
             details(data);
         }else if (layEvent === 'processCheck') { //转工序验收
             processCheck(data);
+        }else if (layEvent === 'transferDepotPut') { //转加工入库单
+            transferDepotPut(data);
         }
     });
+
+    // 转加工入库
+    function transferDepotPut(data) {
+        _openNewWindows({
+            url: "../../tpl/machiningWarehouse/transferDepotPut.html?id=" + data.id,
+            title: "转加工入库",
+            pageId: "transferDepotPut",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
 
     // 接收
     function receive(data) {
@@ -122,7 +137,7 @@ layui.config({
         });
     }
 
-    // 详情
+    // 车间任务 详情
     function details(data) {
         _openNewWindows({
             url:  systemCommonUtil.getUrl('FP2024072600001&id=' + data.id, null),
@@ -133,16 +148,16 @@ layui.config({
             }});
     }
 
-    // 详情2
-    function details2(data) {
-        _openNewWindows({
-            url:  systemCommonUtil.getUrl('FP2023100300003&id=' + data.id, null),
-            title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "machiningDetail",
-            area: ['90vw', '90vh'],
-            callBack: function (refreshCode) {
-            }});
-    }
+    // //加工单管理 详情
+    // function details(data) {
+    //     _openNewWindows({
+    //         url:  systemCommonUtil.getUrl('FP2023100300003&id=' + data.id, null),
+    //         title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+    //         pageId: "machiningDetail",
+    //         area: ['90vw', '90vh'],
+    //         callBack: function (refreshCode) {
+    //         }});
+    // }
 
     //工序验收
     function processCheck(data){

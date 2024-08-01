@@ -28,6 +28,7 @@
     "materialReceiptForm": {"name": "物料接收单", "key": "com.skyeye.pickconfirm.service.impl.ConfirmPutServiceImpl", "appId": "com.wzq.skyeye.erp"},
     "materialReturnOrder": {"name": "物料退货单", "key": "com.skyeye.pickconfirm.service.impl.ConfirmReturnServiceImpl", "appId": "com.wzq.skyeye.erp"},
     "wholeOut": {"name": "整单委外单", "key": "com.skyeye.whole.service.impl.WholeOrderOutServiceImpl", "appId": "com.wzq.skyeye.erp"},
+    "machiningWarehouse": {"name": "加工入库单", "key": "com.skyeye.machin.service.impl.MachinPutServiceImpl", "appId": "com.wzq.skyeye.erp"},
 
     "crmCustomer": {"name": "客户信息", "key": "com.skyeye.customer.service.impl.CustomerServiceImpl", "appId": "com.wzq.skyeye.crm"},
     "crmOpportUnity": {"name": "商机审核一阶段", "key": "com.skyeye.opportunity.service.impl.CrmOpportunityServiceImpl", "appId": "com.wzq.skyeye.crm"},
