@@ -56,6 +56,8 @@ layui.config({
             del(data);
         } else if (layEvent === 'manager') { // 管理
             manager(data);
+        }else if (layEvent === 'attendance') { // 考勤
+            attendance(data);
         }
     });
 
@@ -73,11 +75,24 @@ layui.config({
         });
     });
 
+    // 考勤
+    function attendance(data) {
+        parent._openNewWindows({
+            url: '../../tpl/subjectClass/attendance.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + data.id,
+            title: "科目班级管理",
+            pageId: "subjectClassAttendance",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
     // 管理
     function manager(data) {
         parent._openNewWindows({
             url: '../../tpl/subjectClass/manage.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + data.id,
-            title: "科目班级管理",
+            title: "考勤",
             pageId: "subjectClassManager",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {

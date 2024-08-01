@@ -16,8 +16,8 @@ layui.config({
     var id = GetUrlParam("id");
     let initFirst = false
 
-    // 工序验收的【编辑布局】
-    dsFormUtil.initEditPageForStatic('content', 'FP2024071500001', {}, {
+    // 加工入库的【编辑布局】
+    dsFormUtil.initEditPageForStatic('content', 'FP2024072600003', {}, {
         savePreParams: function (params) {
             params.machinProcedureFarmId = id
             params.id = null
@@ -25,10 +25,10 @@ layui.config({
 
         saveData: function (params) {
             // 保存数据
-            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "writeMachinProcedureAccept", params: params, type: 'json', method: "POST", callback: function(json) {
-                parent.layer.close(index);
-                parent.refreshCode = '0';
-            }});
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "writeMachinPut", params: params, type: 'json', method: "POST", callback: function(json) {
+                    parent.layer.close(index);
+                    parent.refreshCode = '0';
+                }});
         },
 
         tableDeleteRowCallback: function (tableId) {

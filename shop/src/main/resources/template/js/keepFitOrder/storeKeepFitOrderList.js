@@ -63,11 +63,13 @@ layui.config({
                         return "工作人员下单";
                     }
             }},
-
             { field: 'contacts', title: '会员', width: 100 },
             { field: 'contacts', title: '商品', width: 100 },
             { field: 'contacts', title: '规格', width: 100 },
             { field: 'contacts', title: '规格物品编码', width: 100 },
+            { field: 'state', title: '状态', width: 90, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("KeepFitOrderState", 'id', d.state, 'name');
+            }},
             // { field: 'name', title: '预约日期', width: 100, templet: function (d) {
             //         return getNotUndefinedVal(d.storeMation?.name);
             //     }},

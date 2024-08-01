@@ -27,9 +27,18 @@
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
             {{# } }}
         {{# } }}
+
         {{# if(d.editRow == 2) { }}
             {{# if(auth('1721013070527')) { }}
                 <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
+            {{# } }}
+        {{# } }}
+
+        {{# if (d.state == 'pass' || d.state == 'partiallyCompleted') { }}
+            {{# if (d.machinOrderState == 2 ||d.machinOrderState == 3) { }}
+                {{# if (auth('FP2024070100009')) { }}
+                    <a class="layui-btn layui-btn-xs" lay-event="transferDepotPut">转加工入库</a>
+                {{# } }}
             {{# } }}
         {{# } }}
     </script>

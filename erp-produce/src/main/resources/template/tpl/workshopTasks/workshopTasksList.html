@@ -27,9 +27,14 @@
                         <a class="layui-btn layui-btn-xs" lay-event="antiReception">反接收</a>
                     {{# } }}
                 {{# } }}
-                {{# if(d.state == 'waitExecuted') { }}
+                {{# if(d.state == 'waitExecuted' || d.state == 'partialCompletion') { }}
                     {{# if(auth('1721013026647')) { }}
                         <a class="layui-btn layui-btn-xs" lay-event="processCheck">工序验收</a>
+                    {{# } }}
+                {{# } }}
+                {{# if(d.state == 'allCompleted') { }}
+                    {{# if(auth('1722236598520')) { }}
+                        <a class="layui-btn layui-btn-xs" lay-event="transferDepotPut">加工入库</a>
                     {{# } }}
                 {{# } }}
             </script>

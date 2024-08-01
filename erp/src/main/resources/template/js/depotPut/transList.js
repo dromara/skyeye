@@ -97,7 +97,7 @@ layui.config({
             pageUrl = 'FP2024071500005';
         }else if (type == 7) {
             // 加工入库单
-            pageUrl = 'FP2024071500005';
+            pageUrl = 'FP2024072600003';
         }else if (type == 8) {
             // 门店退货单
             pageUrl = 'FP2024073000007';
@@ -138,7 +138,7 @@ layui.config({
             pageUrl = '../../tpl/materialReturnOrder/materialReturnOrderToPut.html';
         }else if (type == 7) {
             // 加工入库单
-            pageUrl = '../../tpl/materialReturnOrder/materialReturnOrderToPut.html';
+            pageUrl = '../../tpl/machiningWarehouse/machiningReturnOrderToPut.html';
         }else if (type == 8) {
             // 门店退货单
             pageUrl = '../../tpl/storeReturnOrder/storeReturnOrderToPut.html';

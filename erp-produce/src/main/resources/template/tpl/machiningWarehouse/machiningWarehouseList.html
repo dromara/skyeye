@@ -9,27 +9,31 @@
 <body>
     <div class="winui-toolbar">
         <div class="winui-tool">
-            <form class="layui-form layui-form-pane" action="" autocomplete="off" style="width: 50%; float: left;">
-            <select id="workshopId" name="workshopId" lay-filter="workshopId" lay-search="">
-            </select>
-        </form>
         <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
       </div>
     </div>
 <div style="margin:auto 10px;">
     <table id="messageTable" lay-filter="messageTable"></table>
     <script type="text/html" id="tableBar">
-        {{# if(d.state == 'waitReceive') { }}
-            {{# if(auth('1720939511614')) { }}
-               <a class="layui-btn layui-btn-xs" lay-event="receive">接收</a>
+        {{# if(d.editRow == 1) { }}
+            {{# if(auth('1722236830172')) { }}
+                <a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>
             {{# } }}
-            {{# if(auth('1720939488183')) { }}
-                <a class="layui-btn layui-btn-xs" lay-event="antiReception">反接收</a>
+            {{# if(auth('1722236598520')) { }}
+                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">
+                    <language showName="com.skyeye.editBtn"></language>
+                </a>
             {{# } }}
+            {{# if(auth('1722236807894')) { }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">
+                    <language showName="com.skyeye.deleteBtn"></language>
+                </a>
             {{# } }}
-                {{# if(d.state == 'waitExecuted') { }}
-            {{# if(auth('1721013026647')) { }}
-                <a class="layui-btn layui-btn-xs" lay-event="processCheckReturn">转工序验收</a>
+        {{# } }}
+
+        {{# if(d.editRow == 2) { }}
+            {{# if(auth('1722236791976')) { }}
+                <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
             {{# } }}
         {{# } }}
     </script>
@@ -38,7 +42,7 @@
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
-    layui.config({base: '../../js/workshopTasks/'}).use('workshopTasksList');
+    layui.config({base: '../../js/machiningWarehouse/'}).use('machiningWarehouseList');
     </script>
 </body>
 </html>

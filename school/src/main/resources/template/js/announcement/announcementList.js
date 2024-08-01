@@ -24,7 +24,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: sysMainMation.schoolBasePath + 'queryAnnouncementAllList',
+        url: sysMainMation.schoolBasePath + 'queryAnnouncementListBySubjectClassesId',
         where: getTableParams(),
         even: false,
         page: false,
@@ -61,6 +61,8 @@ layui.config({
             details(data);
         } else if (layEvent === 'del') { //删除
             del(data);
+        }else if (layEvent === 'submit') { //提交情况
+            submit(data);
         }
     });
 
@@ -112,6 +114,19 @@ layui.config({
         });
     }
 
+    //确认情况
+    function submit(data) {
+        parent.parent._openNewWindows({
+            url: '../../tpl/announcement/confirm.html?id=' + data.id,
+            title: '提交情况',
+            pageId: "announcementConfirm",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
     form.render();
     $("body").on("click", "#reloadTable", function() {
         loadTable();
@@ -121,7 +136,7 @@ layui.config({
     }
 
     function getTableParams() {
-        return $.extend(true, {objectKey: objectKey, objectId: subjectClassesId, holderId: subjectClassesId}, initTableSearchUtil.getSearchValue("messageTable"));
+        return $.extend(true, {objectKey: objectKey, objectId: subjectClassesId, subjectClassesId: subjectClassesId}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('announcementList', {});

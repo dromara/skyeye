@@ -249,9 +249,12 @@
     "homeworkSubStatusEnum": {"name": "云课堂-学生作业提交状态", "className": "skyeye-school#com.skyeye.school.assignment.classenum.AssignmentSubState"},
     "homeworkTimeStatusEnum": {"name": "云课堂-作业的时间状态", "className": "skyeye-school#com.skyeye.school.assignment.classenum.AssignmentTimeState"},
     "homeworkTypeEnum": {"name": "云课堂-作业类型", "className": "skyeye-school#com.skyeye.school.assignment.classenum.AssignmentType"},
+    "checkworkTypeEnum": {"name": "云课堂-考勤类型", "className": "skyeye-school#com.skyeye.school.checkwork.classenum.CheckworkType"},
+    "checkworkStateEnum": {"name": "云课堂-考勤状态", "className": "skyeye-school#com.skyeye.school.checkwork.classenum.CheckworkSignState"},
 
     "shopMealOrderType": {"name": "智慧门店-订单来源", "className": "skyeye-shop#com.skyeye.meal.classenum.ShopMealOrderType"},
     "shopMealOrderState": {"name": "智慧门店-套餐订单状态", "className": "skyeye-shop#com.skyeye.meal.classenum.ShopMealOrderState"},
-    "shopConfirmFromType": {"name": "智慧门店-门店物料接收/退货来源单据类型", "className": "skyeye-erp#com.skyeye.shop.classenum.ShopConfirmFromType"}
+    "shopConfirmFromType": {"name": "智慧门店-门店物料接收/退货来源单据类型", "className": "skyeye-erp#com.skyeye.shop.classenum.ShopConfirmFromType"},
+    "KeepFitOrderState": {"name": "智慧门店-保养订单状态", "className": "skyeye-shop#com.skyeye.keepfit.classenum.KeepFitOrderState"}
 
 }

@@ -24,22 +24,27 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: sysMainMation.schoolBasePath + 'queryTopicList',
+        url: sysMainMation.schoolBasePath + 'queryCheckworkList',
         where: getTableParams(),
-        even: false,
-        page: false,
+        even: true,
+        page: true,
+        limits: getLimits(),
+        limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'title', title: '标题', align: 'left', width: 300},
-            { field: 'content', title: '内容', align: 'left', width: 300},
-            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 , templet: function(d) {
-                return getNotUndefinedVal(d.createMation?.name);
-            }},
-            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
-            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 , templet: function(d) {
-                return getNotUndefinedVal(d.lastUpdateName);
-            }},
-            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
+            { field: 'lastUpdateTime', title: '发布时间', align: 'left', width: 200},
+            { field: 'maintainTime', title: '持续时间', align: 'left', width: 150},
+            { field: 'type', title: '签到类型', align: 'left',width: 150, templet: function(d) {
+                    // var str = '';
+                    // if (d.type == 'beCorrected') {
+                    //     str +='未批改';
+                    // }else{
+                    //     str +='已批改';
+                    // }
+                    // return str;
+                }},
+            { field: 'codeNumber', title: '数字码', align: 'left', width: 150},
+            { field: 'codeNumber', title: '签到码', align: 'left', width: 150},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#tableBar' }
         ]],
         done: function(json) {

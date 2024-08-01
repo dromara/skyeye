@@ -117,6 +117,7 @@ layui.config({
 	$("body").on("click", "#saveChoose", function() {
 		var rows = $("#tBody tr");
 		var proList = new Array();
+		let checkTable = false;
 		$.each(rows, function(i, item) {
 			var materialId = $(item).attr("rowid");
 			proList.push({
@@ -124,16 +125,23 @@ layui.config({
 				bomId: $("#bom" + materialId).val(),
 				normsId: $("#norms" + materialId).val()
 			});
+			if (isNull($("#norms" + materialId).val())) {
+				checkTable = true;
+				winui.window.msg("请选择商品规格", {icon: 2, time: 2000});
+				return false;
+			}
 		});
 
-		var params = {
-			proList: JSON.stringify(proList)
-		};
-		AjaxPostUtil.request({url: sysMainMation.erpBasePath + "material015", params: params, type: 'json', method: 'POST', callback: function(json) {
-			parent.materialMationList = [].concat(json.rows);
-			parent.layer.close(index);
-			parent.refreshCode = '0';
-		}});
+		if (!checkTable) {
+			var params = {
+				proList: JSON.stringify(proList)
+			};
+			AjaxPostUtil.request({url: sysMainMation.erpBasePath + "material015", params: params, type: 'json', method: 'POST', callback: function(json) {
+				parent.materialMationList = [].concat(json.rows);
+				parent.layer.close(index);
+				parent.refreshCode = '0';
+			}});
+		}
 	});
 
 	form.on('select(unitListChoose)', function (data) {
