@@ -95,6 +95,15 @@ layui.config({
         } else if (type == 6) {
             // 物料退货单
             pageUrl = 'FP2024071500005';
+        }else if (type == 7) {
+            // 加工入库单
+            pageUrl = 'FP2024071500005';
+        }else if (type == 8) {
+            // 门店退货单
+            pageUrl = 'FP2024073000007';
+        }else if (type == 9) {
+            // 门店物料退货单
+            pageUrl = 'FP2024073000003';
         }
         _openNewWindows({
             url:  systemCommonUtil.getUrl(pageUrl + '&id=' + data.id, null),
@@ -127,6 +136,15 @@ layui.config({
         } else if (type == 6) {
             // 物料退货单
             pageUrl = '../../tpl/materialReturnOrder/materialReturnOrderToPut.html';
+        }else if (type == 7) {
+            // 加工入库单
+            pageUrl = '../../tpl/materialReturnOrder/materialReturnOrderToPut.html';
+        }else if (type == 8) {
+            // 门店退货单
+            pageUrl = '../../tpl/storeReturnOrder/storeReturnOrderToPut.html';
+        }else if (type == 9) {
+            // 门店物料退货单
+            pageUrl = '../../tpl/storeMaterialsReturn/storeMaterialsReturnToPut.html';
         }
         _openNewWindows({
             url:  pageUrl + '?id=' + data.id,

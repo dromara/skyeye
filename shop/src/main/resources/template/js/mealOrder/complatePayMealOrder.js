@@ -16,6 +16,8 @@ layui.config({
             $("#payPrice").val(json.bean.unformatPayablePrice);
         }, async: false});
 
+
+        //完成支付页面
         matchingLanguage();
         form.render();
         form.on('submit(formAddBean)', function (data) {

@@ -37,7 +37,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: shopBasePath + 'keepFitOrder001',
+        url: shopBasePath + 'queryKeepFitOrderList',
         where: getTableParams(),
         even: true,
         page: true,
