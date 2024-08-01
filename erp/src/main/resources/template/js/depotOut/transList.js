@@ -95,6 +95,12 @@ layui.config({
         } else if (type == 6) {
             // 补料出库单
             pageUrl = 'FP2024070100002';
+        } else if (type == 7) {
+            // 配件申领出库单
+            pageUrl = 'FP2023091000003';
+        }else if (type == 8) {
+            // 门店申领出库单
+            pageUrl = 'FP2024072900004';
         }
         _openNewWindows({
             url:  systemCommonUtil.getUrl(pageUrl +'&id=' + data.id, null),
@@ -127,6 +133,12 @@ layui.config({
         } else if (type == 6) {
             // 补料出库单
             pageUrl = '../../tpl/erpPick/erpPatchPickToOut.html';
+        } else if (type == 7) {
+            // 配件申领出库单
+            pageUrl = '../../tpl/sealApply/sealApplyToOut.html';
+        }else if (type == 8) {
+            // 门店申领出库单
+            pageUrl = '../../tpl/storeApplicationOrder/storeApplicationOrderToOut.html';
         }
         _openNewWindows({
             url:  pageUrl + '?id=' + data.id,

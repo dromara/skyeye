@@ -1,6 +1,7 @@
 
 var pageId = GetUrlParam("pageId");
 var className = GetUrlParam("className");
+var appId = GetUrlParam("appId");
 var layedit, form;
 
 // 选中的表单布局组件信息
@@ -121,7 +122,7 @@ layui.config({
 	// 同步至其他布局
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 	$("body").on("click", "#syncOtherOage", function (e) {
-		AjaxPostUtil.request({url: reqBasePath + "queryDsFormPageList", params: {className: className}, type: 'json', method: 'POST', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "queryDsFormPageList", params: {className: className, appId: appId}, type: 'json', method: 'POST', callback: function (json) {
 			let syncPage = []
 			$.each(json.rows, function (i, item) {
 				let type = item.type;
@@ -238,7 +239,7 @@ layui.config({
 		showGrid({
 			id: "attrBox",
 			url: reqBasePath + "queryAttrDefinitionList",
-			params: {className: className},
+			params: {className: className, appId: appId},
 			pagination: false,
 			method: 'POST',
 			template: $("#leftAttrBoxItem").html(),

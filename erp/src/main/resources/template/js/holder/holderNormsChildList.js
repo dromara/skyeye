@@ -9,8 +9,10 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-	// 关联的客户/供应商/会员购买或者出售的商品link的id
-	var id = getNotUndefinedVal(GetUrlParam("id"));
+
+	var normsId = getNotUndefinedVal(GetUrlParam("normsId"));
+	var holderId = getNotUndefinedVal(GetUrlParam("holderId"));
+	var holderKey = getNotUndefinedVal(GetUrlParam("holderKey"));
 
 	table.render({
 		id: 'messageTable',
@@ -61,7 +63,9 @@ layui.config({
 
     function getTableParams() {
 		let params = {
-			holderId: id
+			holderId: holderId,
+			holderKey: holderKey,
+			objectId: normsId
 		}
 		return $.extend(true, params, initTableSearchUtil.getSearchValue("messageTable"));
     }

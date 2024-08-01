@@ -301,7 +301,7 @@ layui.config({
 			shadeClose: true,
 			closeBtn: 0,
 			shade: 0.3,
-			area: ['380px', '95%'],
+			area: ['400px', '95%'],
 			offset: 'rb',
 			content: '../../tpl/colorScheme/colorScheme.html'
 		}); 
@@ -344,10 +344,10 @@ layui.config({
     		$(".tradition-right").animate({width: "100%"});
     	} else {// 收缩状态
     		notOrContraction = false;
-    		$(".tradition-left").animate({width: "220px"});
+    		$(".tradition-left").animate({width: "218px"});
     		var _width = $("body").width();
     		$(".tradition-right").animate({width: (_width - 220) + "px"}, function () {
-    			$(this).css({width:"calc(100% - 220px)"})
+    			$(this).css({width:"calc(100% - 218px)"})
     		});
     	}
     });

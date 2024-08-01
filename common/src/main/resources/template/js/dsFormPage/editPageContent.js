@@ -349,7 +349,7 @@ layui.config({
     $("body").on("click", "#attrTransformTableListConfig", function() {
         parent.temData = $("#attrTransformTableListConfig").parent().attr('data');
         parent._openNewWindows({
-            url: "../../tpl/dsFormPage/editPageContentIsTable.html?attrKey=" + $("#attrKey").val() + '&className=' + parent.className + '&pageType=' + pageType,
+            url: "../../tpl/dsFormPage/editPageContentIsTable.html?attrKey=" + $("#attrKey").val() + '&className=' + parent.className + '&pageType=' + pageType + '&appId=' + parent.appId,
             title: '表格属性配置',
             pageId: "editPageContentIsTable",
             area: ['90vw', '90vh'],

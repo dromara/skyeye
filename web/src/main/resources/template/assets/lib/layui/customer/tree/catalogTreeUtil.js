@@ -7,6 +7,7 @@ var catalogTreeUtil = {
 
         objectId: '', //业务对象数据的id
         className: null, // 业务对象的className
+        appId: '', // 应用id
         addOrUser: false, // 是否根据当前登录人查询
 
         choose: null, // 是否可以选择  null：不可以选择  radioTree：单选  checkboxTree：多选,
@@ -137,6 +138,7 @@ var catalogTreeUtil = {
                                         icon: '',
                                         parentId: treeNode.parentId,
                                         objectId: '${catalogTreeUtil.config.objectId}',
+                                        objectAppId: '${catalogTreeUtil.config.appId}',
                                         objectKey: '${catalogTreeUtil.config.className}',
                                         type: 2,
                                         id : treeNode.id
@@ -172,6 +174,7 @@ var catalogTreeUtil = {
                                         icon: '',
                                         parentId: chooseCagelogId,
                                         objectId: '${catalogTreeUtil.config.objectId}',
+                                        objectAppId: '${catalogTreeUtil.config.appId}',
                                         objectKey: '${catalogTreeUtil.config.className}',
                                         type: 2
                                     };
@@ -285,6 +288,7 @@ var catalogTreeUtil = {
         var params = {
             objectId: catalogTreeUtil.config.objectId,
             objectKey: catalogTreeUtil.config.className,
+            objectAppId: catalogTreeUtil.config.appId,
             addOrUser: catalogTreeUtil.config.addOrUser
         };
         AjaxPostUtil.request({url: reqBasePath + "queryCatalogForTree", params: params, type: 'json', method: "POST", callback: function(json) {

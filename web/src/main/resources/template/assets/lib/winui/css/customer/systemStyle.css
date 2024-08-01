@@ -1,23 +1,19 @@
 /*********第一套样式开始**********/
-.white-1995dc .tradition-left{
-    border-right: 2px solid #F2F2F2 !important;
-}
-
 .white-1995dc .tradition-left-center ul,
 .white-1995dc .tradition-left-bottom,
 .white-1995dc .tradition-right-top .layui-layout-right .adropdown caption,
-.white-1995dc .tradition-right-top .layui-layout-right .adropdown tbody{
+.white-1995dc .tradition-right-top .layui-layout-right .adropdown tbody {
     background-color: white !important;
 }
 
-.white-1995dc .tradition-left-center ul .layui-nav-child dd{
+.white-1995dc .tradition-left-center ul .layui-nav-child dd {
     background: #F2F2F2 !important;
 }
 
 .white-1995dc .tradition-left-center ul i,
 .white-1995dc .tradition-left-center ul cite,
 .white-1995dc .tradition-left-bottom i,
-.white-1995dc .tradition-left-bottom font{
+.white-1995dc .tradition-left-bottom font {
     color: #555555 !important;
 }
 
@@ -27,48 +23,691 @@
 .white-1995dc .tradition-right-top .layui-layout-right,
 .white-1995dc .tradition-right-top .layui-layout-right .adropdown,
 .white-1995dc .tradition-right-top .layui-layout-right .layui-input-search,
-.white-1995dc .tradition-right-top .desktop-menu-box li{
+.white-1995dc .tradition-right-top .desktop-menu-box li {
     background-color: #1995dc !important;
 }
 
 .white-1995dc .tradition-right-top .layui-layout-right .layui-input-search,
-.white-1995dc .tradition-right-top .layui-layout-right .layui-input-search::-webkit-input-placeholder{
+.white-1995dc .tradition-right-top .layui-layout-right .layui-input-search::-webkit-input-placeholder {
     color: white !important;
 }
 
-.white-1995dc .tradition-right-top .desktop-menu-box .select{
+.white-1995dc .tradition-right-top .desktop-menu-box .select {
     background-color: #178acc !important;
 }
 
 .white-1995dc .tradition-left-top span,
 .white-1995dc .tradition-right-top span,
 .white-1995dc .tradition-right-top .layui-layout-left i,
-.white-1995dc .tradition-right-top .layui-layout-right .layui-nav-item>a>i,
-.white-1995dc .tradition-right-top .layui-layout-right font{
+.white-1995dc .tradition-right-top .layui-layout-right .layui-nav-item > a > i,
+.white-1995dc .tradition-right-top .layui-layout-right font {
     color: white !important;
 }
 
-.white-1995dc .tradition-right-top .layui-layout-right .layui-nav-more{
+.white-1995dc .tradition-right-top .layui-layout-right .layui-nav-more {
     border-top-color: white !important;
 }
 
-.white-1995dc .tradition-right-top .layui-layout-right .layui-nav-mored{
+.white-1995dc .tradition-right-top .layui-layout-right .layui-nav-mored {
     border-bottom-color: white !important;
     border-top-color: #178acc !important;
 }
 
-.white-1995dc .tradition-left-center .layui-nav-item>.menu-box-none:HOVER,
-.white-1995dc .tradition-left-center .layui-nav-item .page-item-click:HOVER{
+.white-1995dc .tradition-left-center .layui-nav-item > .menu-box-none:HOVER,
+.white-1995dc .tradition-left-center .layui-nav-item .page-item-click:HOVER {
     background-color: #F5F5F5 !important;
 }
 
-.white-1995dc .tradition-left-center ul .layui-nav-itemed .layui-nav-more{
+.white-1995dc .tradition-left-center ul .layui-nav-itemed .layui-nav-more {
     border-bottom-color: #555555 !important;
     border-top-color: white;
 }
 
-.white-1995dc .tradition-left-center ul .layui-nav-more{
+.white-1995dc .tradition-left-center ul .layui-nav-more {
     border-top-color: #555555;
 }
 
 /*********第一套样式结束**********/
+
+/*********第二套样式开始**********/
+.white-3c8dbc .tradition-left-center ul,
+.white-3c8dbc .tradition-left-bottom,
+.white-3c8dbc .tradition-right-top .layui-layout-right .adropdown caption,
+.white-3c8dbc .tradition-right-top .layui-layout-right .adropdown tbody {
+    background-color: white !important;
+}
+
+.white-3c8dbc .tradition-left-center ul .layui-nav-child dd {
+    background: #F2F2F2 !important;
+}
+
+.white-3c8dbc .tradition-left-center ul i,
+.white-3c8dbc .tradition-left-center ul cite,
+.white-3c8dbc .tradition-left-bottom i,
+.white-3c8dbc .tradition-left-bottom font {
+    color: #555555 !important;
+}
+
+.white-3c8dbc .tradition-left-top,
+.white-3c8dbc .tradition-right-top,
+.white-3c8dbc .tradition-right-top .layui-layout-left,
+.white-3c8dbc .tradition-right-top .layui-layout-right,
+.white-3c8dbc .tradition-right-top .layui-layout-right .adropdown,
+.white-3c8dbc .tradition-right-top .layui-layout-right .layui-input-search,
+.white-3c8dbc .tradition-right-top .desktop-menu-box li {
+    background-color: #3c8dbc !important;
+}
+
+.white-3c8dbc .tradition-right-top .layui-layout-right .layui-input-search,
+.white-3c8dbc .tradition-right-top .layui-layout-right .layui-input-search::-webkit-input-placeholder {
+    color: white !important;
+}
+
+.white-3c8dbc .tradition-right-top .desktop-menu-box .select {
+    background-color: #367faa !important;
+}
+
+.white-3c8dbc .tradition-left-top span,
+.white-3c8dbc .tradition-right-top span,
+.white-3c8dbc .tradition-right-top .layui-layout-left i,
+.white-3c8dbc .tradition-right-top .layui-layout-right .layui-nav-item > a > i,
+.white-3c8dbc .tradition-right-top .layui-layout-right font {
+    color: white !important;
+}
+
+.white-3c8dbc .tradition-right-top .layui-layout-right .layui-nav-more {
+    border-top-color: white !important;
+}
+
+.white-3c8dbc .tradition-right-top .layui-layout-right .layui-nav-mored {
+    border-bottom-color: white !important;
+    border-top-color: #3c8dbc !important;
+}
+
+.white-3c8dbc .tradition-left-center .layui-nav-item > .menu-box-none:HOVER,
+.white-3c8dbc .tradition-left-center .layui-nav-item .page-item-click:HOVER {
+    background-color: #F5F5F5 !important;
+}
+
+.white-3c8dbc .tradition-left-center ul .layui-nav-itemed .layui-nav-more {
+    border-bottom-color: #555555 !important;
+    border-top-color: white;
+}
+
+.white-3c8dbc .tradition-left-center ul .layui-nav-more {
+    border-top-color: #555555;
+}
+
+/*********第二套样式结束**********/
+
+/*********第三套样式开始**********/
+.white-605ca8 .tradition-left-center ul,
+.white-605ca8 .tradition-left-bottom,
+.white-605ca8 .tradition-right-top .layui-layout-right .adropdown caption,
+.white-605ca8 .tradition-right-top .layui-layout-right .adropdown tbody {
+    background-color: white !important;
+}
+
+.white-605ca8 .tradition-left-center ul .layui-nav-child dd {
+    background: #F2F2F2 !important;
+}
+
+.white-605ca8 .tradition-left-center ul i,
+.white-605ca8 .tradition-left-center ul cite,
+.white-605ca8 .tradition-left-bottom i,
+.white-605ca8 .tradition-left-bottom font {
+    color: #555555 !important;
+}
+
+.white-605ca8 .tradition-left-top,
+.white-605ca8 .tradition-right-top,
+.white-605ca8 .tradition-right-top .layui-layout-left,
+.white-605ca8 .tradition-right-top .layui-layout-right,
+.white-605ca8 .tradition-right-top .layui-layout-right .adropdown,
+.white-605ca8 .tradition-right-top .layui-layout-right .layui-input-search,
+.white-605ca8 .tradition-right-top .desktop-menu-box li {
+    background-color: #605ca8 !important;
+}
+
+.white-605ca8 .tradition-right-top .layui-layout-right .layui-input-search,
+.white-605ca8 .tradition-right-top .layui-layout-right .layui-input-search::-webkit-input-placeholder {
+    color: white !important;
+}
+
+.white-605ca8 .tradition-right-top .desktop-menu-box .select {
+    background-color: #524e93 !important;
+}
+
+.white-605ca8 .tradition-left-top span,
+.white-605ca8 .tradition-right-top span,
+.white-605ca8 .tradition-right-top .layui-layout-left i,
+.white-605ca8 .tradition-right-top .layui-layout-right .layui-nav-item > a > i,
+.white-605ca8 .tradition-right-top .layui-layout-right font {
+    color: white !important;
+}
+
+.white-605ca8 .tradition-right-top .layui-layout-right .layui-nav-more {
+    border-top-color: white !important;
+}
+
+.white-605ca8 .tradition-right-top .layui-layout-right .layui-nav-mored {
+    border-bottom-color: white !important;
+    border-top-color: #605ca8 !important;
+}
+
+.white-605ca8 .tradition-left-center .layui-nav-item > .menu-box-none:HOVER,
+.white-605ca8 .tradition-left-center .layui-nav-item .page-item-click:HOVER {
+    background-color: #F5F5F5 !important;
+}
+
+.white-605ca8 .tradition-left-center ul .layui-nav-itemed .layui-nav-more {
+    border-bottom-color: #555555 !important;
+    border-top-color: white;
+}
+
+.white-605ca8 .tradition-left-center ul .layui-nav-more {
+    border-top-color: #555555;
+}
+
+/*********第三套样式结束**********/
+
+/*********第四套样式开始**********/
+.white-EEA9B8 .tradition-left-center ul,
+.white-EEA9B8 .tradition-left-bottom,
+.white-EEA9B8 .tradition-right-top .layui-layout-right .adropdown caption,
+.white-EEA9B8 .tradition-right-top .layui-layout-right .adropdown tbody {
+    background-color: white !important;
+}
+
+.white-EEA9B8 .tradition-left-center ul .layui-nav-child dd {
+    background: #F2F2F2 !important;
+}
+
+.white-EEA9B8 .tradition-left-center ul i,
+.white-EEA9B8 .tradition-left-center ul cite,
+.white-EEA9B8 .tradition-left-bottom i,
+.white-EEA9B8 .tradition-left-bottom font {
+    color: #555555 !important;
+}
+
+.white-EEA9B8 .tradition-left-top,
+.white-EEA9B8 .tradition-right-top,
+.white-EEA9B8 .tradition-right-top .layui-layout-left,
+.white-EEA9B8 .tradition-right-top .layui-layout-right,
+.white-EEA9B8 .tradition-right-top .layui-layout-right .adropdown,
+.white-EEA9B8 .tradition-right-top .layui-layout-right .layui-input-search,
+.white-EEA9B8 .tradition-right-top .desktop-menu-box li {
+    background-color: #EEA9B8 !important;
+}
+
+.white-EEA9B8 .tradition-right-top .layui-layout-right .layui-input-search,
+.white-EEA9B8 .tradition-right-top .layui-layout-right .layui-input-search::-webkit-input-placeholder {
+    color: white !important;
+}
+
+.white-EEA9B8 .tradition-right-top .desktop-menu-box .select {
+    background-color: #e197a7 !important;
+}
+
+.white-EEA9B8 .tradition-left-top span,
+.white-EEA9B8 .tradition-right-top span,
+.white-EEA9B8 .tradition-right-top .layui-layout-left i,
+.white-EEA9B8 .tradition-right-top .layui-layout-right .layui-nav-item > a > i,
+.white-EEA9B8 .tradition-right-top .layui-layout-right font {
+    color: white !important;
+}
+
+.white-EEA9B8 .tradition-right-top .layui-layout-right .layui-nav-more {
+    border-top-color: white !important;
+}
+
+.white-EEA9B8 .tradition-right-top .layui-layout-right .layui-nav-mored {
+    border-bottom-color: white !important;
+    border-top-color: #EEA9B8 !important;
+}
+
+.white-EEA9B8 .tradition-left-center .layui-nav-item > .menu-box-none:HOVER,
+.white-EEA9B8 .tradition-left-center .layui-nav-item .page-item-click:HOVER {
+    background-color: #F5F5F5 !important;
+}
+
+.white-EEA9B8 .tradition-left-center ul .layui-nav-itemed .layui-nav-more {
+    border-bottom-color: #555555 !important;
+    border-top-color: white;
+}
+
+.white-EEA9B8 .tradition-left-center ul .layui-nav-more {
+    border-top-color: #555555;
+}
+
+/*********第四套样式结束**********/
+
+/*********第五套样式开始**********/
+.white-1995dc-bl .tradition-left-top,
+.white-1995dc-bl .tradition-right-top,
+.white-1995dc-bl .tradition-right-top .layui-layout-left,
+.white-1995dc-bl .tradition-right-top .layui-layout-right,
+.white-1995dc-bl .tradition-right-top .layui-layout-right .adropdown,
+.white-1995dc-bl .tradition-right-top .layui-layout-right .layui-input-search,
+.white-1995dc-bl .tradition-right-top .desktop-menu-box li {
+    background-color: #1995dc !important;
+}
+
+.white-1995dc-bl .tradition-right-top .layui-layout-right .layui-input-search,
+.white-1995dc-bl .tradition-right-top .layui-layout-right .layui-input-search::-webkit-input-placeholder {
+    color: white !important;
+}
+
+.white-1995dc-bl .tradition-right-top .desktop-menu-box .select {
+    background-color: #0b7fc0 !important;
+}
+
+.white-1995dc-bl .tradition-left-top span,
+.white-1995dc-bl .tradition-right-top span,
+.white-1995dc-bl .tradition-right-top .layui-layout-left i,
+.white-1995dc-bl .tradition-right-top .layui-layout-right .layui-nav-item > a > i,
+.white-1995dc-bl .tradition-right-top .layui-layout-right font {
+    color: white !important;
+}
+
+.white-1995dc-bl .tradition-right-top .layui-layout-right .layui-nav-more {
+    border-top-color: white !important;
+}
+
+.white-1995dc-bl .tradition-right-top .layui-layout-right .layui-nav-mored {
+    border-bottom-color: white !important;
+    border-top-color: #1995dc !important;
+}
+
+.white-1995dc-bl .tradition-left-center ul .layui-nav-itemed .layui-nav-more {
+    border-bottom-color: #555555 !important;
+    border-top-color: white;
+}
+
+.white-1995dc-bl .tradition-left-center ul .layui-nav-more {
+    border-top-color: #555555;
+}
+
+/*********第五套样式结束**********/
+
+/*********第六套样式开始**********/
+.white-605ca8-bl .tradition-left-top,
+.white-605ca8-bl .tradition-right-top,
+.white-605ca8-bl .tradition-right-top .layui-layout-left,
+.white-605ca8-bl .tradition-right-top .layui-layout-right,
+.white-605ca8-bl .tradition-right-top .layui-layout-right .adropdown,
+.white-605ca8-bl .tradition-right-top .layui-layout-right .layui-input-search,
+.white-605ca8-bl .tradition-right-top .desktop-menu-box li {
+    background-color: #605ca8 !important;
+}
+
+.white-605ca8-bl .tradition-right-top .layui-layout-right .layui-input-search,
+.white-605ca8-bl .tradition-right-top .layui-layout-right .layui-input-search::-webkit-input-placeholder {
+    color: white !important;
+}
+
+.white-605ca8-bl .tradition-right-top .desktop-menu-box .select {
+    background-color: #55529f !important;
+}
+
+.white-605ca8-bl .tradition-left-top span,
+.white-605ca8-bl .tradition-right-top span,
+.white-605ca8-bl .tradition-right-top .layui-layout-left i,
+.white-605ca8-bl .tradition-right-top .layui-layout-right .layui-nav-item > a > i,
+.white-605ca8-bl .tradition-right-top .layui-layout-right font {
+    color: white !important;
+}
+
+.white-605ca8-bl .tradition-right-top .layui-layout-right .layui-nav-more {
+    border-top-color: white !important;
+}
+
+.white-605ca8-bl .tradition-right-top .layui-layout-right .layui-nav-mored {
+    border-bottom-color: white !important;
+    border-top-color: #605ca8 !important;
+}
+
+.white-605ca8-bl .tradition-left-center ul .layui-nav-itemed .layui-nav-more {
+    border-bottom-color: #555555 !important;
+    border-top-color: white;
+}
+
+.white-605ca8-bl .tradition-left-center ul .layui-nav-more {
+    border-top-color: #555555;
+}
+
+/*********第六套样式结束**********/
+
+/*********第七套样式开始**********/
+.white-00a65a-bl .tradition-left-top,
+.white-00a65a-bl .tradition-right-top,
+.white-00a65a-bl .tradition-right-top .layui-layout-left,
+.white-00a65a-bl .tradition-right-top .layui-layout-right,
+.white-00a65a-bl .tradition-right-top .layui-layout-right .adropdown,
+.white-00a65a-bl .tradition-right-top .layui-layout-right .layui-input-search,
+.white-00a65a-bl .tradition-right-top .desktop-menu-box li {
+    background-color: #00a65a !important;
+}
+
+.white-00a65a-bl .tradition-right-top .layui-layout-right .layui-input-search,
+.white-00a65a-bl .tradition-right-top .layui-layout-right .layui-input-search::-webkit-input-placeholder {
+    color: white !important;
+}
+
+.white-00a65a-bl .tradition-right-top .desktop-menu-box .select {
+    background-color: #008047 !important;
+}
+
+.white-00a65a-bl .tradition-left-top span,
+.white-00a65a-bl .tradition-right-top span,
+.white-00a65a-bl .tradition-right-top .layui-layout-left i,
+.white-00a65a-bl .tradition-right-top .layui-layout-right .layui-nav-item > a > i,
+.white-00a65a-bl .tradition-right-top .layui-layout-right font {
+    color: white !important;
+}
+
+.white-00a65a-bl .tradition-right-top .layui-layout-right .layui-nav-more {
+    border-top-color: white !important;
+}
+
+.white-00a65a-bl .tradition-right-top .layui-layout-right .layui-nav-mored {
+    border-bottom-color: white !important;
+    border-top-color: #00a65a !important;
+}
+
+.white-00a65a-bl .tradition-left-center ul .layui-nav-itemed .layui-nav-more {
+    border-bottom-color: #555555 !important;
+    border-top-color: white;
+}
+
+.white-00a65a-bl .tradition-left-center ul .layui-nav-more {
+    border-top-color: #555555;
+}
+
+/*********第七套样式结束**********/
+
+/*********第八套样式开始**********/
+.white-e08e0b-bl .tradition-left-top,
+.white-e08e0b-bl .tradition-right-top,
+.white-e08e0b-bl .tradition-right-top .layui-layout-left,
+.white-e08e0b-bl .tradition-right-top .layui-layout-right,
+.white-e08e0b-bl .tradition-right-top .layui-layout-right .adropdown,
+.white-e08e0b-bl .tradition-right-top .layui-layout-right .layui-input-search,
+.white-e08e0b-bl .tradition-right-top .desktop-menu-box li {
+    background-color: #e08e0b !important;
+}
+
+.white-e08e0b-bl .tradition-right-top .layui-layout-right .layui-input-search,
+.white-e08e0b-bl .tradition-right-top .layui-layout-right .layui-input-search::-webkit-input-placeholder {
+    color: white !important;
+}
+
+.white-e08e0b-bl .tradition-right-top .desktop-menu-box .select {
+    background-color: #c47904 !important;
+}
+
+.white-e08e0b-bl .tradition-left-top span,
+.white-e08e0b-bl .tradition-right-top span,
+.white-e08e0b-bl .tradition-right-top .layui-layout-left i,
+.white-e08e0b-bl .tradition-right-top .layui-layout-right .layui-nav-item > a > i,
+.white-e08e0b-bl .tradition-right-top .layui-layout-right font {
+    color: white !important;
+}
+
+.white-e08e0b-bl .tradition-right-top .layui-layout-right .layui-nav-more {
+    border-top-color: white !important;
+}
+
+.white-e08e0b-bl .tradition-right-top .layui-layout-right .layui-nav-mored {
+    border-bottom-color: white !important;
+    border-top-color: #e08e0b !important;
+}
+
+.white-e08e0b-bl .tradition-left-center ul .layui-nav-itemed .layui-nav-more {
+    border-bottom-color: #555555 !important;
+    border-top-color: white;
+}
+
+.white-e08e0b-bl .tradition-left-center ul .layui-nav-more {
+    border-top-color: #555555;
+}
+
+/*********第八套样式结束**********/
+
+/*********第九套样式开始**********/
+.white-d73925-bl .tradition-left-top,
+.white-d73925-bl .tradition-right-top,
+.white-d73925-bl .tradition-right-top .layui-layout-left,
+.white-d73925-bl .tradition-right-top .layui-layout-right,
+.white-d73925-bl .tradition-right-top .layui-layout-right .adropdown,
+.white-d73925-bl .tradition-right-top .layui-layout-right .layui-input-search,
+.white-d73925-bl .tradition-right-top .desktop-menu-box li {
+    background-color: #d73925 !important;
+}
+
+.white-d73925-bl .tradition-right-top .layui-layout-right .layui-input-search,
+.white-d73925-bl .tradition-right-top .layui-layout-right .layui-input-search::-webkit-input-placeholder {
+    color: white !important;
+}
+
+.white-d73925-bl .tradition-right-top .desktop-menu-box .select {
+    background-color: #b72713 !important;
+}
+
+.white-d73925-bl .tradition-left-top span,
+.white-d73925-bl .tradition-right-top span,
+.white-d73925-bl .tradition-right-top .layui-layout-left i,
+.white-d73925-bl .tradition-right-top .layui-layout-right .layui-nav-item > a > i,
+.white-d73925-bl .tradition-right-top .layui-layout-right font {
+    color: white !important;
+}
+
+.white-d73925-bl .tradition-right-top .layui-layout-right .layui-nav-more {
+    border-top-color: white !important;
+}
+
+.white-d73925-bl .tradition-right-top .layui-layout-right .layui-nav-mored {
+    border-bottom-color: white !important;
+    border-top-color: #d73925 !important;
+}
+
+.white-d73925-bl .tradition-left-center ul .layui-nav-itemed .layui-nav-more {
+    border-bottom-color: #555555 !important;
+    border-top-color: white;
+}
+
+.white-d73925-bl .tradition-left-center ul .layui-nav-more {
+    border-top-color: #555555;
+}
+
+/*********第九套样式结束**********/
+
+/*********第十套样式开始**********/
+.white-d73925 .tradition-left-center ul,
+.white-d73925 .tradition-left-bottom,
+.white-d73925 .tradition-right-top .layui-layout-right .adropdown caption,
+.white-d73925 .tradition-right-top .layui-layout-right .adropdown tbody {
+    background-color: white !important;
+}
+
+.white-d73925 .tradition-left-center ul .layui-nav-child dd {
+    background: #F2F2F2 !important;
+}
+
+.white-d73925 .tradition-left-center ul i,
+.white-d73925 .tradition-left-center ul cite,
+.white-d73925 .tradition-left-bottom i,
+.white-d73925 .tradition-left-bottom font {
+    color: #555555 !important;
+}
+
+.white-d73925 .tradition-left-top,
+.white-d73925 .tradition-right-top,
+.white-d73925 .tradition-right-top .layui-layout-left,
+.white-d73925 .tradition-right-top .layui-layout-right,
+.white-d73925 .tradition-right-top .layui-layout-right .adropdown,
+.white-d73925 .tradition-right-top .layui-layout-right .layui-input-search,
+.white-d73925 .tradition-right-top .desktop-menu-box li {
+    background-color: #d73925 !important;
+}
+
+.white-d73925 .tradition-right-top .layui-layout-right .layui-input-search,
+.white-d73925 .tradition-right-top .layui-layout-right .layui-input-search::-webkit-input-placeholder {
+    color: white !important;
+}
+
+.white-d73925 .tradition-right-top .desktop-menu-box .select {
+    background-color: #b02916 !important;
+}
+
+.white-d73925 .tradition-left-top span,
+.white-d73925 .tradition-right-top span,
+.white-d73925 .tradition-right-top .layui-layout-left i,
+.white-d73925 .tradition-right-top .layui-layout-right .layui-nav-item > a > i,
+.white-d73925 .tradition-right-top .layui-layout-right font {
+    color: white !important;
+}
+
+.white-d73925 .tradition-right-top .layui-layout-right .layui-nav-more {
+    border-top-color: white !important;
+}
+
+.white-d73925 .tradition-right-top .layui-layout-right .layui-nav-mored {
+    border-bottom-color: white !important;
+    border-top-color: #d73925 !important;
+}
+
+.white-d73925 .tradition-left-center .layui-nav-item > .menu-box-none:HOVER,
+.white-d73925 .tradition-left-center .layui-nav-item .page-item-click:HOVER {
+    background-color: #F5F5F5 !important;
+}
+
+.white-d73925 .tradition-left-center ul .layui-nav-itemed .layui-nav-more {
+    border-bottom-color: #555555 !important;
+    border-top-color: white;
+}
+
+.white-d73925 .tradition-left-center ul .layui-nav-more {
+    border-top-color: #555555;
+}
+
+/*********第十套样式结束**********/
+
+/*********第一套样式开始**********/
+.white-57E4ED .tradition-left-center ul,
+.white-57E4ED .tradition-left-bottom,
+.white-57E4ED .tradition-right-top .layui-layout-right .adropdown caption,
+.white-57E4ED .tradition-right-top .layui-layout-right .adropdown tbody {
+    background-color: white !important;
+}
+
+.white-57E4ED .tradition-left-center ul .layui-nav-child dd {
+    background: #F2F2F2 !important;
+}
+
+.white-57E4ED .tradition-left-center ul i,
+.white-57E4ED .tradition-left-center ul cite,
+.white-57E4ED .tradition-left-bottom i,
+.white-57E4ED .tradition-left-bottom font {
+    color: #555555 !important;
+}
+
+.white-57E4ED .tradition-left-top,
+.white-57E4ED .tradition-right-top,
+.white-57E4ED .tradition-right-top .layui-layout-left,
+.white-57E4ED .tradition-right-top .layui-layout-right,
+.white-57E4ED .tradition-right-top .layui-layout-right .adropdown,
+.white-57E4ED .tradition-right-top .layui-layout-right .layui-input-search,
+.white-57E4ED .tradition-right-top .desktop-menu-box li {
+    background-color: #57E4ED !important;
+}
+
+.white-57E4ED .tradition-right-top .layui-layout-right .layui-input-search,
+.white-57E4ED .tradition-right-top .layui-layout-right .layui-input-search::-webkit-input-placeholder {
+    color: white !important;
+}
+
+.white-57E4ED .tradition-right-top .desktop-menu-box .select {
+    background-color: #31d3dc !important;
+}
+
+.white-57E4ED .tradition-left-top span,
+.white-57E4ED .tradition-right-top span,
+.white-57E4ED .tradition-right-top .layui-layout-left i,
+.white-57E4ED .tradition-right-top .layui-layout-right .layui-nav-item > a > i,
+.white-57E4ED .tradition-right-top .layui-layout-right font {
+    color: white !important;
+}
+
+.white-57E4ED .tradition-right-top .layui-layout-right .layui-nav-more {
+    border-top-color: white !important;
+}
+
+.white-57E4ED .tradition-right-top .layui-layout-right .layui-nav-mored {
+    border-bottom-color: white !important;
+    border-top-color: #57E4ED !important;
+}
+
+.white-57E4ED .tradition-left-center .layui-nav-item > .menu-box-none:HOVER,
+.white-57E4ED .tradition-left-center .layui-nav-item .page-item-click:HOVER {
+    background-color: #F5F5F5 !important;
+}
+
+.white-57E4ED .tradition-left-center ul .layui-nav-itemed .layui-nav-more {
+    border-bottom-color: #555555 !important;
+    border-top-color: white;
+}
+
+.white-57E4ED .tradition-left-center ul .layui-nav-more {
+    border-top-color: #555555;
+}
+
+/*********第十一套样式结束**********/
+
+/*********第十二套样式开始**********/
+.white-57E4ED-bl .tradition-left-top,
+.white-57E4ED-bl .tradition-right-top,
+.white-57E4ED-bl .tradition-right-top .layui-layout-left,
+.white-57E4ED-bl .tradition-right-top .layui-layout-right,
+.white-57E4ED-bl .tradition-right-top .layui-layout-right .adropdown,
+.white-57E4ED-bl .tradition-right-top .layui-layout-right .layui-input-search,
+.white-57E4ED-bl .tradition-right-top .desktop-menu-box li {
+    background-color: #57E4ED !important;
+}
+
+.white-57E4ED-bl .tradition-right-top .layui-layout-right .layui-input-search,
+.white-57E4ED-bl .tradition-right-top .layui-layout-right .layui-input-search::-webkit-input-placeholder {
+    color: white !important;
+}
+
+.white-57E4ED-bl .tradition-right-top .desktop-menu-box .select {
+    background-color: #31d3dc !important;
+}
+
+.white-57E4ED-bl .tradition-left-top span,
+.white-57E4ED-bl .tradition-right-top span,
+.white-57E4ED-bl .tradition-right-top .layui-layout-left i,
+.white-57E4ED-bl .tradition-right-top .layui-layout-right .layui-nav-item > a > i,
+.white-57E4ED-bl .tradition-right-top .layui-layout-right font {
+    color: white !important;
+}
+
+.white-57E4ED-bl .tradition-right-top .layui-layout-right .layui-nav-more {
+    border-top-color: white !important;
+}
+
+.white-57E4ED-bl .tradition-right-top .layui-layout-right .layui-nav-mored {
+    border-bottom-color: white !important;
+    border-top-color: #57E4ED !important;
+}
+
+.white-57E4ED-bl .tradition-left-center ul .layui-nav-itemed .layui-nav-more {
+    border-bottom-color: #555555 !important;
+    border-top-color: white;
+}
+
+.white-57E4ED-bl .tradition-left-center ul .layui-nav-more {
+    border-top-color: #555555;
+}
+
+/*********第十二套样式结束**********/

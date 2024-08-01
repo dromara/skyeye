@@ -12,6 +12,7 @@ layui.config({
 		table = layui.table,
 		fsTree = layui.fsTree;
 	var objectId = 'temp';
+	let appId = '-';
 
 	fsTree.render({
 		id: "treeDemo",
@@ -33,6 +34,7 @@ layui.config({
 			return false;
 		}
 		objectId = treeNode.id;
+		appId = treeNode.classMation.appId;
 		loadTable();
 	}
 
@@ -88,7 +90,7 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return {className: objectId};
+		return {className: objectId, appId: appId};
 	}
 	
     exports('dsFormPageListChoose', {});

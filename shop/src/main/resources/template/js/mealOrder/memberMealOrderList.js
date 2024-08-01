@@ -15,12 +15,15 @@ layui.config({
     authBtn('1644239500255');
 
     memberId = GetUrlParam("id");
+    console.log(12345,memberId)
+
 
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
-        method: 'post',
-        url: shopBasePath + 'mealOrder001',
+        method: 'get',
+        params: {objectId:memberId},
+        url: shopBasePath + 'queryMealMationByObjectId',
         where: getTableParams(),
         even: true,
         page: true,
@@ -111,8 +114,8 @@ layui.config({
 
     function getTableParams() {
         return {
-            orderNum: $("#orderNum").val(),
-            memberId: memberId
+            // orderNum: $("#orderNum").val(),
+            objectId: memberId
         };
     }
 

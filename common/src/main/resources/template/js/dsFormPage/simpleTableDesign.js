@@ -16,6 +16,7 @@ layui.config({
 
     var pageId = GetUrlParam("pageId");
     var className = GetUrlParam("className");
+    var appId = GetUrlParam("appId");
     if (isNull(className)) {
         winui.window.msg("请传入适用对象信息", {icon: 2, time: 2000});
         return false;
@@ -23,7 +24,7 @@ layui.config({
 
     // 获取属性
     var attrList = [];
-    AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: {className: className}, type: 'json', method: "POST", callback: function (data) {
+    AjaxPostUtil.request({url: reqBasePath + "queryAttrDefinitionList", params: {className: className, appId: appId}, type: 'json', method: "POST", callback: function (data) {
         attrList = [].concat(data.rows);
         $.each(attrList, function (i, item) {
             if (!isNull(item.attrDefinitionCustom)) {

@@ -32,12 +32,12 @@ layui.config({
             return false;
         });
 
-        // 维修技师选择
-        $("body").on("click", ".chooseServiceTechnicianBtn", function (e) {
-            shopUtil.openStoreStaffChoosePage(function (staffMation){
-                $("#serviceTechnician").val(staffMation.userName);
-            });
-        });
+        // // 维修技师选择
+        // $("body").on("click", ".chooseServiceTechnicianBtn", function (e) {
+        //     shopUtil.openStoreStaffChoosePage(function (staffMation){
+        //         $("#serviceTechnician").val(staffMation.userName);
+        //     });
+        // });
 
         $("body").on("click", "#cancle", function() {
             parent.layer.close(index);

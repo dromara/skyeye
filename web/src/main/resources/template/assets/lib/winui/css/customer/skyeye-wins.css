@@ -390,14 +390,6 @@
 }
 
 .winui-start.winui-start-size-sm {
-    width: 640px;
-}
-
-.winui-start.winui-start-size-sm .winui-start-right {
-    width: 320px;
-}
-
-.winui-start.winui-start-size-sm .winui-start-right .winui-nav-tile {
     width: 320px;
 }
 
@@ -405,9 +397,6 @@
     width: 308px;
 }
 
-.winui-start.winui-start-size-xs .winui-start-right {
-    width: 0;
-}
 /*开始菜单滚动条样式*/
 
 .winui-start .layui-side-scroll {
@@ -635,164 +624,6 @@
 }
 /*开始菜单中间部分*/
 /***********************************************************************************************/
-/*开始菜单右边部分*/
-.winui-start-right {
-    width: 652px;
-    height: 100%;
-    position: relative;
-}
-
-.winui-start-right .layui-side-scroll {
-    width: 100%;
-}
-
-.winui-nav-tile {
-    width: 640px;
-    overflow-y: auto;
-}
-
-/*瓷贴盒子*/
-.winui-tilebox {
-    width: 308px;
-    height: 450px;
-    margin: 5px;
-    overflow: hidden;
-}
-
-.winui-tilebox:nth-child(2n+1) {
-    float: left;
-}
-
-.winui-tilebox:nth-child(2n) {
-    float: right;
-}
-
-/*瓷贴盒子body*/
-.winui-tilebox-body {
-    margin: -2px;
-    overflow-y: auto;
-}
-
-.winui-tilebox-head {
-    height: 34px;
-    margin-bottom: 2px;
-    line-height: 34px;
-    color: white;
-}
-
-/*控制中心*/
-.winui-console {
-    width: 398px;
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 40px;
-    z-index: 201704011157;
-}
-
-.winui-console h1:first-child {
-    line-height: 50px;
-    font-size: 15px;
-    font-weight: 600;
-    padding-left: 12px;
-    color: #fff;
-    cursor: default;
-}
-
-.winui-console .winui-message {
-    position: absolute;
-    top: 50px;
-    bottom: 192px;
-    padding-left: 12px;
-    padding-right: 14px;
-    width: 372px;
-}
-
-.winui-console .winui-message .layui-side-scroll {
-    width: 100%;
-}
-
-.winui-console .winui-message .winui-message-item {
-    color: #fff;
-    padding: 10px 15px;
-    background-color: rgba(255, 255, 255, 0.10);
-    margin-bottom: 10px;
-    width: 322px;
-}
-
-.winui-console .winui-message .winui-message-item:active {
-    -moz-transform: scale(.98,.98);
-    -webkit-transform: scale(.98,.98);
-    -o-transform: scale(.98,.98);
-}
-
-.winui-console .winui-message .winui-message-item:last-child {
-    margin-bottom: 0;
-}
-
-.winui-console .winui-message .winui-message-item h2 {
-    font-size: 15px;
-    font-weight: 600;
-}
-
-.winui-console .winui-message .winui-message-item .content {
-    font-size: 14px;
-    color: #ddd
-}
-
-.winui-console .winui-shortcut {
-    position: absolute;
-    bottom: 12px;
-    padding-left: 12px;
-    padding-right: 14px;
-    overflow-y: hidden;
-    height: 162px;
-    -moz-transition: height .5s;
-    -o-transition: height .5s;
-    -webkit-transition: height .5s;
-    transition: height .5s;
-}
-
-.winui-console .winui-shortcut.extend {
-    height: 300px;
-}
-
-.winui-console .winui-shortcut > h2 > .extend-switch {
-    font-size: 12px;
-    cursor: default;
-    color: #ddd;
-}
-
-.winui-console .winui-shortcut > h2 > .extend-switch:hover {
-    color: #fff;
-}
-
-.winui-console .winui-shortcut .winui-shortcut-item {
-    color: #fff;
-    height: 65px;
-    width: 90px;
-    display: inline-block;
-    margin-top: 4px;
-    padding: 4px;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    position: relative;
-    font-size: 20px;
-    border: 2px solid rgba(0, 0, 0, 0.00);
-}
-
-.winui-console .winui-shortcut .winui-shortcut-item:hover {
-    border: 2px solid rgba(255, 255, 255, 0.4);
-}
-
-.winui-console .winui-shortcut .winui-shortcut-item span {
-    position: absolute;
-    left: 4px;
-    bottom: 4px;
-    font-size: 12px;
-}
-/********************************************************************************/
 /*window窗口样式*/
 .winui-window {
     overflow: hidden;

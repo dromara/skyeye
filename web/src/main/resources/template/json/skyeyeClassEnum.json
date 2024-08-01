@@ -217,8 +217,10 @@
 
     "reportDataFromType": {"name": "报表-数据来源类型", "className": "skyeye-report#com.skyeye.datafrom.classenum.ReportDataFromType"},
 
-    "storeOnlineBookType": {"name": "商城-门店线上预约类型", "className": "skyeye-shop#com.skyeye.classenum.StoreOnlineBookType"},
-    "shopMealType": {"name": "商城-套餐类型", "className": "skyeye-shop#com.skyeye.classenum.ShopMealType"},
+    "storeOnlineBookType": {"name": "商城-门店线上预约类型", "className": "skyeye-shop#com.skyeye.store.classenum.StoreOnlineBookType"},
+    "shopMealType": {"name": "商城-套餐类型", "className": "skyeye-shop#com.skyeye.meal.classenum.ShopMealType"},
+    "KeepFitOrderUserType": {"name": "保养订单的用户类型", "className": "skyeye-shop#com.skyeye.keepfit.classenum.KeepFitOrderUserType"},
+
 
     "studentStateEnum": {"name": "表白墙-学生审核状态", "className": "skyeye-wall#com.skyeye.certification.classenum.StateEnum"},
     "studentStateEnum2": {
@@ -248,5 +250,10 @@
     "homeworkTimeStatusEnum": {"name": "云课堂-作业的时间状态", "className": "skyeye-school#com.skyeye.school.assignment.classenum.AssignmentTimeState"},
     "homeworkTypeEnum": {"name": "云课堂-作业类型", "className": "skyeye-school#com.skyeye.school.assignment.classenum.AssignmentType"},
     "checkworkTypeEnum": {"name": "云课堂-考勤类型", "className": "skyeye-school#com.skyeye.school.checkwork.classenum.CheckworkType"},
-    "checkworkStateEnum": {"name": "云课堂-考勤状态", "className": "skyeye-school#com.skyeye.school.checkwork.classenum.CheckworkSignState"}
+    "checkworkStateEnum": {"name": "云课堂-考勤状态", "className": "skyeye-school#com.skyeye.school.checkwork.classenum.CheckworkSignState"},
+
+    "shopMealOrderType": {"name": "智慧门店-订单来源", "className": "skyeye-shop#com.skyeye.meal.classenum.ShopMealOrderType"},
+    "shopConfirmFromType": {"name": "智慧门店-门店物料接收/退货来源单据类型", "className": "skyeye-erp#com.skyeye.shop.classenum.ShopConfirmFromType"},
+    "KeepFitOrderState": {"name": "智慧门店-保养订单状态", "className": "skyeye-shop#com.skyeye.keepfit.classenum.KeepFitOrderState"}
+
 }

@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="renderer" content="webkit">
 	<link rel="icon" type="image/x-icon" href="../../assets/images/eye.png"/>
     <title></title>
@@ -9,26 +10,40 @@
     <link href="../../assets/lib/animate/animate.min.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/lockscreen.css" rel="stylesheet" />
+	<link href="../../assets/lib/winui/css/tailwind.min.css" rel="stylesheet">
     <script>
         /^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
     </script>
 </head>
-<body>
-	<div class="lock-body">
-	    <div id="login_div" class="animated fadeIn">
-	        <img src="../../assets/images/os_windows.png" />
-	        <form class="layui-form" style="margin-top: 60px;">
-	            <div class="winui-from-group" style="width: 254px">
-	            	<input type="text" id="userCode" value="" placeholder="用户名" height="36" length="18"/>
-	                <input type="password" id="password" value="" placeholder="密码" height="36" length="18" style="border-top: 1px solid rgba(255, 255, 255, 0.70);"/>
-	            </div>
-	            <div class="winui-from-group" style="width: 70px;position: relative;top: -33px">
-	            	<button lay-submit lay-filter="login" style="width: 70px;height: 71px;float: none" id="loginBtn"><i class="fa fa-arrow-right"></i></button>
-	            </div>
-	        </form>
-	    </div>
-	    <div id="date_time" class="animated fadeIn"></div>
+<body  class="bg-gray-100 flex justify-center dlbox">
+	<div class="max-w-screen-xl m-0 sm:m-20 bg-white shadow sm:rounded-lg flex justify-center flex-1">
+		<div class="flex-1 bg-indigo-100 text-center hidden lg:flex">
+			<div class="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat" style="background-image: url('../../assets/images/common/left_logo.png');"></div>
+		</div>
+		<div class="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
+			<div class="mt-12 flex flex-col items-center">
+				<h1 class="text-2xl xl:text-3xl font-extrabold">Skyeye云智能制造平台</h1>
+				<div class="w-full flex-1 mt-8">
+					<div class="my-12 border-b text-center">
+						<div class="leading-none px-2 inline-block text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">登录</div>
+					</div>
+
+					<div class="mx-auto max-w-xs">
+						<form class="layui-form" style="margin-top: 60px;">
+							<input class="w-full px-8 py-4 rounded-lg font-medium border placeholder-gray-500" id="userCode" type="text" placeholder="用户名">
+							<input class="w-full px-8 py-4 rounded-lg font-medium border placeholder-gray-500 mt-5" id="password" type="password" placeholder="密码">
+							<button lay-submit lay-filter="login" id="loginBtn"
+									class="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg ease-in-out flex items-center justify-center">
+								登 录
+							</button>
+							<p class="mt-6 text-xs text-gray-600 text-center">我同意并遵守服务协议</p>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
+
 	<div class="common-footer aero">
 		<span class="copyright-content">
 			

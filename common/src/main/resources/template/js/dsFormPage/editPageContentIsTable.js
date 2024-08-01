@@ -24,9 +24,11 @@ layui.config({
 	var parentAttrKey = GetUrlParam("attrKey");
 	var parentClassName = GetUrlParam("className");
 	var pageType = GetUrlParam("pageType");
+	var appId = GetUrlParam("appId");
 	var params = {
 		className: parentClassName,
-		attrKey: parentAttrKey
+		attrKey: parentAttrKey,
+		appId: appId
 	};
 	var childAttr = [];
 	AjaxPostUtil.request({url: reqBasePath + "queryChildAttrDefinitionList", params: params, type: 'json', method: "POST", callback: function (json) {

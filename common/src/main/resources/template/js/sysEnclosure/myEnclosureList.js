@@ -18,6 +18,7 @@ layui.config({
 	catalogTreeUtil.init({
 		boxId: 'catalogBox',
 		className: serviceClassName,
+		appId: sysServiceMation["enclosure"]["appId"],
 		addOrUser: true,
 		isRoot: 1,
 		chooseCallback: function (chooseId) {
