@@ -16,20 +16,6 @@
 <div style="margin:auto 10px;">
     <table id="messageTable" lay-filter="messageTable"></table>
     <script type="text/html" id="tableBar">
-<!--        {{# if(auth('1722394132268')){ }}-->
-<!--            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>-->
-<!--        {{# } }}-->
-<!--        {{# if(auth('1722394164448')){ }}-->
-<!--            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>-->
-<!--        {{# } }}-->
-<!--        {{# if(auth('1722394184630')){ }}-->
-<!--            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="revoke">撤销</a>-->
-<!--        {{# } }}-->
-<!--        {{# if(auth('1722394149384')){ }}-->
-<!--            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="subApproval">提交审批</language></a>-->
-<!--        {{# } }}-->
-
-
         {{# if(d.editRow == 1){ }}
         {{# if(auth('1722394149384')){ }}
             <a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>
