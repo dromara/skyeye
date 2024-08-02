@@ -170,6 +170,11 @@
 ### 行政办公
 |功能| 效果图 | 效果图 | 效果图 |
 |----|-------|-----|------|
+|会议室模块|![输入图片说明](images/show/oa/1image.png)|![输入图片说明](images/show/oa/2image.png)||
+|用品模块|![输入图片说明](images/show/oa/3image.png)|![输入图片说明](images/show/oa/4image.png)|![输入图片说明](images/show/oa/5image.png)|
+|资产模块|![输入图片说明](images/show/oa/6image.png)|![输入图片说明](images/show/oa/7image.png)|![输入图片说明](images/show/oa/8image.png)|
+|公文模块|![输入图片说明](images/show/oa/9image.png)|![输入图片说明](images/show/oa/10image.png)|![输入图片说明](images/show/oa/11image.png)|
+|印章，证照，车辆|![输入图片说明](images/show/oa/12image.png)|![输入图片说明](images/show/oa/13image.png)|![输入图片说明](images/show/oa/14image.png)|
 
 ##  :tw-1f30f:  移动端效果图
 
