@@ -176,6 +176,13 @@
 |公文模块|![输入图片说明](images/show/oa/9image.png)|![输入图片说明](images/show/oa/10image.png)|![输入图片说明](images/show/oa/11image.png)|
 |印章，证照，车辆|![输入图片说明](images/show/oa/12image.png)|![输入图片说明](images/show/oa/13image.png)|![输入图片说明](images/show/oa/14image.png)|
 
+### 售后管理模块
+|功能| 效果图 | 效果图 | 效果图 |
+|----|-------|-----|------|
+|工单管理|![输入图片说明](images/show/sealService/1image.png)|![输入图片说明](images/show/sealService/2image.png)||
+|配件管理|![输入图片说明](images/show/sealService/3image.png)|![输入图片说明](images/show/sealService/4image.png)||
+|工人管理|![输入图片说明](images/show/sealService/5image.png)|![输入图片说明](images/show/sealService/6image.png)|![输入图片说明](images/show/sealService/7image.png)|
+
 ##  :tw-1f30f:  移动端效果图
 
 > 移动端和PC端功能类似，这里不截那么多图拉。
