@@ -34,6 +34,17 @@ layui.config({
                 return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
             }},
             { field: 'content', title: '内容', align: 'left', width: 300},
+            { field: 'isConfirm', title: '状态', align: 'left',width: 150, templet: function(d) {
+                var str = '';
+                if (d.isConfirm == 1) {
+                    str +='需要确认';
+                }else{
+                    str +='无需确认';
+                }
+                return str;
+            }},
+            { field: 'confirmNum', title: '已确认人数', align: 'left', width: 300},
+            { field: 'unConfirmNum', title: '未确认人数', align: 'left', width: 300},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 , templet: function(d) {
                 return getNotUndefinedVal(d.createMation?.name);
             }},
@@ -118,7 +129,7 @@ layui.config({
     function submit(data) {
         parent.parent._openNewWindows({
             url: '../../tpl/announcement/confirm.html?id=' + data.id,
-            title: '提交情况',
+            title: '确认情况',
             pageId: "announcementConfirm",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {

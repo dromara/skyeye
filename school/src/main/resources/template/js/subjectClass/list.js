@@ -79,7 +79,7 @@ layui.config({
     function attendance(data) {
         parent._openNewWindows({
             url: '../../tpl/subjectClass/attendance.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + data.id,
-            title: "科目班级管理",
+            title: "考勤",
             pageId: "subjectClassAttendance",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
@@ -92,7 +92,7 @@ layui.config({
     function manager(data) {
         parent._openNewWindows({
             url: '../../tpl/subjectClass/manage.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + data.id,
-            title: "考勤",
+            title: "科目班级管理",
             pageId: "subjectClassManager",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {

@@ -23,7 +23,7 @@ layui.config({
             savePreParams: function (params) {
                 params.objectId = objectId;
                 params.objectKey = objectKey;
-                params.subjectClassesId = objectParams.subjectClassesId;
+                params.subClassLinkId = objectParams.subjectClassesId;
             }
         });
     }else{
@@ -34,11 +34,11 @@ layui.config({
             method: 'GET',
             callback: function (json) {
                 let data = json.bean;
-                dsFormUtil.initEditPageForStatic('content', 'FP2024070900006', data, {
+                dsFormUtil.initEditPageForStatic('content', 'FP2024080100005', data, {
                     savePreParams: function (params) {
                         params.objectId = objectId;
                         params.objectKey = objectKey;
-                        params.subjectClassesId = objectParams.subjectClassesId;
+                        params.subClassLinkId = objectParams.subjectClassesId;
                     }
                 });
             }

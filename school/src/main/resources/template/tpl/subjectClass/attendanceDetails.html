@@ -10,21 +10,15 @@
 <div class="winui-toolbar">
     <div class="winui-tool">
         <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-        <button id="addBean" class="winui-toolbtn search-table-btn-right" auth="add"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
     </div>
 </div>
 <div style="margin:auto 10px;">
     <table id="messageTable" lay-filter="messageTable"></table>
-    <script type="text/html" id="tableBar">
-        <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="details">考勤情况</language></a>
-        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
-    </script>
 </div>
 <script src="../../assets/lib/layui/layui.js"></script>
 <script src="../../assets/lib/layui/custom.js"></script>
 <script type="text/javascript">
-    layui.config({base: '../../js/subjectClass/'}).use('attendance');
+    layui.config({base: '../../js/subjectClass/'}).use('attendanceDetails');
 </script>
 </body>
 </html>

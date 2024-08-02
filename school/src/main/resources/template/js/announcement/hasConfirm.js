@@ -17,13 +17,12 @@ layui.config({
         method: 'post',
         url: sysMainMation.schoolBasePath + 'queryRecordByAnnouncementId',
         where: getTableParams(),
-        even: true,
-        page: true,
-        limits: getLimits(),
-        limit: getLimit(),
+        even: false,
+        page: false,
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'name', title: '姓名', align: 'center', width: 200}
+            { field: 'realName', title: '姓名', align: 'center', width: 200},
+            { field: 'studentNumber', title: '学号', align: 'center', width: 200}
         ]],
         done: function(json) {
             matchingLanguage();

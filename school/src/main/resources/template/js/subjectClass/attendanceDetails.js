@@ -9,20 +9,40 @@ layui.config({
         form = layui.form,
         table = layui.table;
 
-    var announcementId = GetUrlParam("id");
+    var id = GetUrlParam("id");
+    var checkList = new Array();
+
+    var params = {
+        id: id,
+    };
+    AjaxPostUtil.request({url: sysMainMation.schoolBasePath + "queryCheckworkById", params: params, type: 'json', method: 'GET', callback: function (json) {
+        checkList=json.bean.checkworkSignList
+        console.log(checkList)
+    }, async: false});
 
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
-        method: 'post',
-        url: sysMainMation.schoolBasePath + 'queryUnConfirmRecordByAnnouncementId',
+        method: 'get',
+        data: checkList,
         where: getTableParams(),
         even: false,
         page: false,
+        rowDrag: {
+            trigger: 'row',
+            done: function(obj) {}
+        },
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-            { field: 'realName', title: '姓名', align: 'center', width: 200},
-            { field: 'studentNumber', title: '学号', align: 'center', width: 200}
+            { field: 'name', title: '姓名', align: 'center', width: 200, templet: function (d) {
+                return getNotUndefinedVal(d.userMation?.realName);
+            }},
+            { field: 'name', title: '学号', align: 'center', width: 200, templet: function (d) {
+                return getNotUndefinedVal(d.userMation?.studentNumber);
+            }},
+            { field: 'state', title: '签到状态', align: 'left',width: 150, templet: function(d) {
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("checkworkStateEnum", 'id', d.state, 'name');
+            }},
         ]],
         done: function(json) {
             matchingLanguage();
@@ -43,10 +63,10 @@ layui.config({
 
     function getTableParams() {
         let params = {
-            announcementId: announcementId
+            id: id
         }
         return $.extend(true, params, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
-    exports('noConfirm', {});
+    exports('attendanceDetails', {});
 });

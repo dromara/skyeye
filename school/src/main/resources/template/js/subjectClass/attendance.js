@@ -33,18 +33,14 @@ layui.config({
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'lastUpdateTime', title: '发布时间', align: 'left', width: 200},
-            { field: 'maintainTime', title: '持续时间', align: 'left', width: 150},
             { field: 'type', title: '签到类型', align: 'left',width: 150, templet: function(d) {
-                    // var str = '';
-                    // if (d.type == 'beCorrected') {
-                    //     str +='未批改';
-                    // }else{
-                    //     str +='已批改';
-                    // }
-                    // return str;
-                }},
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("checkworkTypeEnum", 'id', d.type, 'name');
+            }},
+            { field: 'maintainTime', title: '持续时间', align: 'left', width: 150},
+            { field: 'qrCodeUrl', title: '签到码', align: 'left', width: 150, templet: function (d) {
+                return '<img src="' + systemCommonUtil.getFilePath(d.qrCodeUrl) + '" class="photo-img" lay-event="qrCode" style="width: 100px">';
+            }},
             { field: 'codeNumber', title: '数字码', align: 'left', width: 150},
-            { field: 'codeNumber', title: '签到码', align: 'left', width: 150},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#tableBar' }
         ]],
         done: function(json) {
@@ -58,19 +54,23 @@ layui.config({
     table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'details') { //详情
+        if (layEvent === 'details') { //考勤情况
             details(data);
         } else if (layEvent === 'del') { //删除
             del(data);
+        } else if (layEvent === 'qrCode') { //图片预览
+            systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(data.qrCodeUrl))
+        }else if (layEvent === 'edit') { //编辑
+            edit(data);
         }
     });
 
     // 新增
     $("body").on("click", "#addBean", function() {
         parent._openNewWindows({
-            url: '../../tpl/topic/write.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId,
+            url: '../../tpl/subjectClass/attendanceWrite.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId,
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-            pageId: "topicAdd",
+            pageId: "attendanceAdd",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -81,9 +81,22 @@ layui.config({
     // 详情
     function details(data) {
         parent._openNewWindows({
-            url: '../../tpl/topic/details.html?objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id,
+            url: '../../tpl/subjectClass/attendanceDetails.html?objectId=' + objectId + '&objectKey=' + objectKey + '&id=' + data.id,
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "topicDetails",
+            pageId: "attendanceDetails",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+    // 编辑
+    function edit(data) {
+        parent._openNewWindows({
+            url: '../../tpl/subjectClass/attendanceWrite.html?objectId=' + objectId + '&objectKey=' + objectKey + '&subjectClassesId=' + subjectClassesId + '&id=' + data.id,
+            title: systemLanguage["com.skyeye.editPageTitle"][languageType],
+            pageId: "attendanceEdit",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -95,7 +108,7 @@ layui.config({
     function del(data, obj) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.schoolBasePath + "deleteTopicById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.schoolBasePath + "deleteCheckworkById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
                 }});
@@ -114,5 +127,5 @@ layui.config({
         return $.extend(true, {objectKey: objectKey, objectId: subjectClassesId,holderId:subjectClassesId}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
-    exports('topicList', {});
+    exports('attendance', {});
 });
