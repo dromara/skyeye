@@ -164,7 +164,12 @@
 |生产管理|![输入图片说明](images/show/mes/1image.png)|![输入图片说明](images/show/mes/2image.png)|![输入图片说明](images/show/mes/3image.png)|
 |设置中心|![输入图片说明](images/show/mes/4image.png)|![输入图片说明](images/show/mes/5image.png)|![输入图片说明](images/show/mes/6image.png)|
 |物料管理|![输入图片说明](images/show/mes/7image.png)|![输入图片说明](images/show/mes/8image.png)|![输入图片说明](images/show/mes/9image.png)|
-|生产执行||||
+|生产执行|![输入图片说明](images/show/mes/10image.png)|![输入图片说明](images/show/mes/11image.png)|![输入图片说明](images/show/mes/12image.png)|
+|物料确认|![输入图片说明](images/show/mes/13image.png)|![输入图片说明](images/show/mes/14image.png)|![输入图片说明](images/show/mes/15image.png)|
+
+### 行政办公
+|功能| 效果图 | 效果图 | 效果图 |
+|----|-------|-----|------|
 
 ##  :tw-1f30f:  移动端效果图
 
