@@ -126,24 +126,21 @@
 
 ##  :tw-1f30f:  PC端效果图
 
+### 基础内容
 |功能| 效果图 | 效果图 | 效果图 |
 |----|-------|-----|------|
 |组件管理|![输入图片说明](images/show/base/20240802001image.png)|![输入图片说明](images/show/base/2024080202image.png)||
 |布局/操作/属性管理|![输入图片说明](images/show/base/2024080203image.png)|![输入图片说明](images/show/base/2024080204image.png)|![输入图片说明](images/show/base/20240802005image.png)|
 |菜单/角色/编码管理|![输入图片说明](images/show/base/20240802010image.png)|![输入图片说明](images/show/base/20240802011image.png)|![输入图片说明](images/show/base/20240802012image.png)|
 
-| 效果图                                    | 效果图                                |
-|----------------------------------------|------------------------------------|
-| ![](images/show/tradition/show001.png) | ![](images/show/win10/show001.png) |
-| ![](images/show/tradition/show002.png) | ![](images/show/win10/show002.png) |
-| ![](images/show/tradition/show003.png) | ![](images/show/win10/show003.png) |
-| ![](images/show/tradition/show004.png) | ![](images/show/win10/show004.png) |
-| ![](images/show/tradition/show005.png) | ![](images/show/win10/show005.png) |
-| ![](images/show/tradition/show006.png) | ![](images/show/win10/show006.png) |
-| ![](images/show/tradition/show007.png) | ![](images/show/win10/show007.png) |
-| ![](images/show/tradition/show008.png) | ![](images/show/win10/show008.png) |
-| ![](images/show/tradition/show009.png) | ![](images/show/win10/show009.png) |
-| ![](images/show/tradition/show010.png) | ![](images/show/win10/show010.png) |
+### ERP
+|功能| 效果图 | 效果图 | 效果图 |
+|----|-------|-----|------|
+|商品管理 **(支持一物一码)** |![输入图片说明](images/show/erp/08image.png)|![输入图片说明](images/show/erp/07image.png)|![输入图片说明](images/show/erp/09image.png)|
+|采购模块|![输入图片说明](images/show/erp/01image.png)|![输入图片说明](images/show/erp/02image.png)|![输入图片说明](images/show/erp/03image.png)|
+|采购模块|![输入图片说明](images/show/erp/04image.png)|![输入图片说明](images/show/erp/05image.png)|![输入图片说明](images/show/erp/06image.png)|
+|销售模块|![输入图片说明](images/show/erp/10image.png)|![输入图片说明](images/show/erp/11image.png)|![输入图片说明](images/show/erp/12image.png)|
+|报表模块|![输入图片说明](images/show/erp/13image.png)|![输入图片说明](images/show/erp/14image.png)|![输入图片说明](images/show/erp/15image.png)|
 
 ##  :tw-1f30f:  手机端效果图
 
