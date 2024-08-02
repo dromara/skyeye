@@ -133,6 +133,13 @@
 |布局/操作/属性管理|![输入图片说明](images/show/base/2024080203image.png)|![输入图片说明](images/show/base/2024080204image.png)|![输入图片说明](images/show/base/20240802005image.png)|
 |菜单/角色/编码管理|![输入图片说明](images/show/base/20240802010image.png)|![输入图片说明](images/show/base/20240802011image.png)|![输入图片说明](images/show/base/20240802012image.png)|
 
+### CRM
+|功能| 效果图 | 效果图 | 效果图 |
+|----|-------|-----|------|
+|客户管理(包括合同、跟单、文档等)|![输入图片说明](images/show/crm/image.png)|![输入图片说明](images/show/crm/1image.png)|![输入图片说明](images/show/crm/2image.png)|
+|客户管理(包括合同、跟单、文档等)|![输入图片说明](images/show/crm/3image.png)|![输入图片说明](images/show/crm/4image.png)|![输入图片说明](images/show/crm/5image.png)|
+|报表分析|![输入图片说明](images/show/crm/6image.png)|![输入图片说明](images/show/crm/7image.png)|![输入图片说明](images/show/crm/8image.png)|
+
 ### ERP
 |功能| 效果图 | 效果图 | 效果图 |
 |----|-------|-----|------|
@@ -142,7 +149,14 @@
 |销售模块|![输入图片说明](images/show/erp/10image.png)|![输入图片说明](images/show/erp/11image.png)|![输入图片说明](images/show/erp/12image.png)|
 |报表模块|![输入图片说明](images/show/erp/13image.png)|![输入图片说明](images/show/erp/14image.png)|![输入图片说明](images/show/erp/15image.png)|
 
-##  :tw-1f30f:  手机端效果图
+### ERP仓库
+|功能| 效果图 | 效果图 | 效果图 |
+|----|-------|-----|------|
+|其他单据管理||||
+
+##  :tw-1f30f:  移动端效果图
+
+> 移动端和PC端功能类似，这里不截那么多图拉。
 
 ### 基础模块
 | 效果图  | 效果图  | 效果图  | 效果图  |
