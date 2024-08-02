@@ -1,4 +1,3 @@
-var rowId = "";
 
 layui.config({
     base: basePath,
@@ -44,7 +43,7 @@ layui.config({
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
             { field: 'oddNumber', title: '订单编号', align: 'left', width: 180, fixed: 'left', templet: function (d) {
-                    return '<a lay-event="detail" class="notice-title-click">' + d.oddNumber + '</a>';
+                    return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
                 }},
             { field: 'name', title: '门店', width: 200, templet: function (d) {
                     return getNotUndefinedVal(d.storeMation?.name);
@@ -63,19 +62,13 @@ layui.config({
                         return "工作人员下单";
                     }
             }},
-            { field: 'contacts', title: '会员', width: 100 },
-            { field: 'contacts', title: '商品', width: 100 },
-            { field: 'contacts', title: '规格', width: 100 },
-            { field: 'contacts', title: '规格物品编码', width: 100 },
             { field: 'state', title: '状态', width: 90, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("KeepFitOrderState", 'id', d.state, 'name');
-            }},
-            // { field: 'name', title: '预约日期', width: 100, templet: function (d) {
-            //         return getNotUndefinedVal(d.storeMation?.name);
-            //     }},
-            // { field: 'name', title: '预约时间', width: 100, templet: function (d) {
-            //         return getNotUndefinedVal(d.storeMation?.endTime);
-            //     }},startTime，endTime
+                }},
+            { field: 'codeNum', title: '规格物品编码', width: 200 },
+            { field: 'onlineDay', title: '预约日期', width: 100 },
+            { field: 'onlineTime', title: '预约时间', width: 100 },
+            { field: 'createName', title: '创建人', align: 'left', width: 120 },
             { field: 'createTime', title: '创建时间', align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
@@ -84,8 +77,6 @@ layui.config({
         }
     });
 
-    console.log(123)
-
     table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
@@ -93,10 +84,12 @@ layui.config({
             details(data)
         } else if (layEvent == 'complateKeepFit'){ // 完成保养
             complateKeepFit(data)
+        } else if (layEvent == 'pay'){ // 完成支付
+            pay(data)
         } else if (layEvent == 'verification'){ // 核销
             verification(data)
-        } else if (layEvent == 'cancleOrder'){ // 取消订单
-            cancleOrder(data)
+        } else if (layEvent == 'del'){ // 取消订单
+            del(data)
         }
     });
 
@@ -146,12 +139,24 @@ layui.config({
         });
     }
 
-    // 保养完成
-    function complateKeepFit(data) {
-        rowId = data.id;
+    // 支付
+    function pay(data) {
         _openNewWindows({
-            url: "../../tpl/keepFitOrder/complateKeepFitOrder.html",
-            title: '保养完成',
+            url: "../../tpl/keepFitOrder/complatePayKeepFitOrder.html",
+            title: '支付',
+            pageId: "complatePayKeepFitOrder",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+    // 保养
+    function complateKeepFit(data) {
+        _openNewWindows({
+            url: "../../tpl/keepFitOrder/complateKeepFitOrder.html?storeId=" + data.storeId,
+            title: '保养',
             pageId: "complateKeepFitOrder",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {

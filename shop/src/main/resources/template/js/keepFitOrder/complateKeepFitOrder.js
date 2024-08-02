@@ -10,6 +10,7 @@ layui.config({
         var index = parent.layer.getFrameIndex(window.name);
         var $ = layui.$,
             laydate = layui.laydate;
+        var storeId = GetUrlParam("storeId");
 
         laydate.render({elem: '#nextServiceTime', range: false});
 
@@ -32,12 +33,12 @@ layui.config({
             return false;
         });
 
-        // // 维修技师选择
-        // $("body").on("click", ".chooseServiceTechnicianBtn", function (e) {
-        //     shopUtil.openStoreStaffChoosePage(function (staffMation){
-        //         $("#serviceTechnician").val(staffMation.userName);
-        //     });
-        // });
+        // 维修技师选择
+        $("body").on("click", ".chooseServiceTechnicianBtn", function (e) {
+            shopUtil.openStoreStaffChoosePage(function (staffMation) {
+                $("#serviceTechnician").val(staffMation.userName);
+            }, storeId);
+        });
 
         $("body").on("click", "#cancle", function() {
             parent.layer.close(index);

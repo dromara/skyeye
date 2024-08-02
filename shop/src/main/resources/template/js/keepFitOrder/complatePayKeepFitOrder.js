@@ -11,10 +11,10 @@ layui.config({
         var $ = layui.$;
         var orderNum = "";
 
-        // AjaxPostUtil.request({url: shopBasePath + "keepFitOrder002", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
-        //     orderNum = json.bean.orderNum;
-        //     $("#payPrice").val(json.bean.unformatPayablePrice);
-        // }, async: false});
+        AjaxPostUtil.request({url: shopBasePath + "queryKeepFitOrderById", params: {id: parent.rowId}, type: 'json', method: "get", callback: function (json) {
+            orderNum = json.bean.oddNumber;
+            $("#payPrice").val(json.bean.unformatPayablePrice);
+        }, async: false});
 
         matchingLanguage();
         form.render();
@@ -25,10 +25,10 @@ layui.config({
                     total_fee: parseFloat($("#payPrice").val()).toFixed(2) * 100,
                 };
 
-                // AjaxPostUtil.request({url: shopBasePath + "keepFitOrderNotify", params: params, type: 'json', method: "POST", callback: function (json) {
-                //     parent.layer.close(index);
-                //     parent.refreshCode = '0';
-                // }, async: true});
+                AjaxPostUtil.request({url: shopBasePath + "keepFitOrderNotify", params: params, type: 'json', method: "POST", callback: function (json) {
+                    parent.layer.close(index);
+                    parent.refreshCode = '0';
+                }, async: true});
             }
             return false;
         });

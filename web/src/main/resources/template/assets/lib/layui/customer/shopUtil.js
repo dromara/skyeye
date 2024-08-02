@@ -187,9 +187,9 @@ var shopUtil = {
      * @param callback 回调函数
      */
     staffMation: {},
-    openStoreStaffChoosePage: function (callback) {
+    openStoreStaffChoosePage: function (callback, storeId) {
         _openNewWindows({
-            url: "../../tpl/storeStaff/storeStaffChoose.html",
+            url: "../../tpl/storeStaff/storeStaffChoose.html?storeId=" + storeId,
             title: "选择店员",
             pageId: "storeStaffChoose",
             area: ['90vw', '90vh'],
