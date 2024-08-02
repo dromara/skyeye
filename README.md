@@ -126,6 +126,12 @@
 
 ##  :tw-1f30f:  PC端效果图
 
+|功能| 效果图 | 效果图 | 效果图 |
+|----|-------|-----|------|
+|组件管理|![输入图片说明](images/show/base/20240802001image.png)|![输入图片说明](images/show/base/2024080202image.png)||
+|布局/操作/属性管理|![输入图片说明](images/show/base/2024080203image.png)|![输入图片说明](images/show/base/2024080204image.png)|![输入图片说明](images/show/base/20240802005image.png)|
+|菜单/角色/编码管理|![输入图片说明](images/show/base/20240802010image.png)|![输入图片说明](images/show/base/20240802011image.png)|![输入图片说明](images/show/base/20240802012image.png)|
+
 | 效果图                                    | 效果图                                |
 |----------------------------------------|------------------------------------|
 | ![](images/show/tradition/show001.png) | ![](images/show/win10/show001.png) |
