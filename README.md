@@ -152,7 +152,19 @@
 ### ERP仓库
 |功能| 效果图 | 效果图 | 效果图 |
 |----|-------|-----|------|
-|其他单据管理||||
+|其他单据管理|![输入图片说明](images/show/erpDepot/image.png)|![输入图片说明](images/show/erpDepot/1image.png)|![输入图片说明](images/show/erpDepot/2image.png)|
+|仓库管理|![输入图片说明](images/show/erpDepot/3image.png)|![输入图片说明](images/show/erpDepot/4image.png)||
+|盘点管理|![输入图片说明](images/show/erpDepot/5image.png)|![输入图片说明](images/show/erpDepot/6image.png)||
+|出入库管理|![输入图片说明](images/show/erpDepot/7image.png)|![输入图片说明](images/show/erpDepot/8image.png)||
+|商品条形码|![输入图片说明](images/show/erpDepot/9image.png)|![输入图片说明](images/show/erpDepot/10image.png)||
+
+### MES生产
+|功能| 效果图 | 效果图 | 效果图 |
+|----|-------|-----|------|
+|生产管理|![输入图片说明](images/show/mes/1image.png)|![输入图片说明](images/show/mes/2image.png)|![输入图片说明](images/show/mes/3image.png)|
+|设置中心|![输入图片说明](images/show/mes/4image.png)|![输入图片说明](images/show/mes/5image.png)|![输入图片说明](images/show/mes/6image.png)|
+|物料管理|![输入图片说明](images/show/mes/7image.png)|![输入图片说明](images/show/mes/8image.png)|![输入图片说明](images/show/mes/9image.png)|
+|生产执行||||
 
 ##  :tw-1f30f:  移动端效果图
 
