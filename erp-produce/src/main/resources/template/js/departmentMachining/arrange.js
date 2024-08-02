@@ -43,14 +43,26 @@ layui.config({
             item.stateName = skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("machinProcedureFarmState", 'id', item.state, 'name');
             var trcusid = initTableChooseUtil.resetData('arrangeList', item);
             var thisRowKey = trcusid.replace("tr", "");
+            // 只有【待接收】的任务可以删除
             if (item.state != 'waitReceive') {
-                // 只有【待接收】的任务可以删除
                 let itemBox = $('input[type="checkbox"][rowId="row' + thisRowKey + '"]');
-                itemBox.prop('disabled', true);
-                itemBox.addClass('layui-btn-disabled');
-                itemBox.next().css("cursor", "not-allowed");
+                disableElementAndSiblings(itemBox)
+            }
+
+            // 【待执行】的任务不可编辑
+            if (item.state == 'waitExecuted') {
+                let itemNum = $('input[type="text"][id="targetNum' + thisRowKey + '"]');
+                let itemChoose = $('[id="farmId' + thisRowKey + '"]');
+                disableElementAndSiblings(itemNum)
+                disableElementAndSiblings(itemChoose)
             }
         });
+
+        function disableElementAndSiblings(element) {
+            element.prop('disabled', true);
+            element.addClass('layui-btn-disabled');
+            element.next().css("cursor", "not-allowed");
+        }
 
         var planStartTime = laydate.render({
             elem: '#planStartTime', //指定元素
