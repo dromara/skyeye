@@ -67,7 +67,6 @@ layui.config({
                 { field: 'state', title: '订单状态', rowspan: '2', width: 90, templet: function (d) {
                         return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("shopMealOrderState", 'id', d.state, 'name');
                     }},
-
                 { field: 'natureName', title: '订单性质', width: 80, align: "center"},
                 { field: 'createName', title: '专属顾问', width: 120 },
                 { field: 'payTime', title: '支付时间', align: 'center', width: 150 },
