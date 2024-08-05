@@ -9,18 +9,23 @@ layui.config({
     layui.use(['form'], function (form) {
         var index = parent.layer.getFrameIndex(window.name);
         var $ = layui.$;
+        var price = GetUrlParam("price");
+        var storeId = GetUrlParam("storeId");
 
         // 套餐订单退款原因
         sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["shopMealRefundOrderReason"]["key"], 'select', "mealRefundReasonId", '', form);
+        // 回显退款金额
+        $("#refundPrice").val(price);
 
-        if(parent.dataMation.mealNum == parent.dataMation.remainMealNum){
-            // 套餐未使用
-            $("#refundPrice").val(parent.dataMation.unformatPayPrice);
-        } else {
-            var mealSinglePrice = division(parent.dataMation.unformatPayPrice, parent.dataMation.mealNum);
-            var refundPrice = multiplication(mealSinglePrice, parent.dataMation.remainMealNum);
-            $("#refundPrice").val(refundPrice);
-        }
+        // if(parent.dataMation.mealNum == parent.dataMation.remainMealNum){
+        //     // 套餐未使用
+        //     $("#refundPrice").val(parent.dataMation.unformatPayPrice);
+        // } else {
+        //     var mealSinglePrice = division(parent.dataMation.unformatPayPrice, parent.dataMation.mealNum);
+        //     var refundPrice = multiplication(mealSinglePrice, parent.dataMation.remainMealNum);
+        //     $("#refundPrice").val(refundPrice);
+        // }
+
 
         matchingLanguage();
         form.render();
@@ -29,6 +34,7 @@ layui.config({
                 var params = {
                     mealOrderChildId: parent.dataMation.mealOrderChildId,
                     mealRefundReasonId: $("#mealRefundReasonId").val(),
+                    storeId:storeId,
                     refundPrice: $("#refundPrice").val(),
                 };
 

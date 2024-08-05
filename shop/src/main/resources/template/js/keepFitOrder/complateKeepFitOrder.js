@@ -11,6 +11,8 @@ layui.config({
         var $ = layui.$,
             laydate = layui.laydate;
         var storeId = GetUrlParam("storeId");
+        var id = GetUrlParam("id");
+        console.log(id)
 
         laydate.render({elem: '#nextServiceTime', range: false});
 
@@ -19,7 +21,7 @@ layui.config({
         form.on('submit(formAddBean)', function (data) {
             if (winui.verifyForm(data.elem)) {
                 var params = {
-                    id: parent.rowId,
+                    id: id,
                     serviceTechnicianId: shopUtil.staffMation.staffId,
                     nextServiceMileage: $("#nextServiceMileage").val(),
                     nextServiceTime: $("#nextServiceTime").val()
@@ -36,7 +38,7 @@ layui.config({
         // 维修技师选择
         $("body").on("click", ".chooseServiceTechnicianBtn", function (e) {
             shopUtil.openStoreStaffChoosePage(function (staffMation) {
-                $("#serviceTechnician").val(staffMation.userName);
+                $("#serviceTechnician").val(staffMation.staffMation?.name);
             }, storeId);
         });
 

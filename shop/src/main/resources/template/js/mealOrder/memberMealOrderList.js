@@ -1,5 +1,4 @@
 var rowId = "";
-
 var memberId = {};
 
 layui.config({
@@ -30,31 +29,24 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
-            { field: 'orderNum', title: '订单号', align: 'left', width: 180, fixed: 'left', templet: function (d) {
-                return '<a lay-event="select" class="notice-title-click">' + d.orderNum + '</a>';
-            }},
-            { field: 'contacts', title: '会员名称', width: 100 },
-            { field: 'phone', title: '会员手机号', width: 100, align: "center"},
-            { field: 'payablePrice', title: '应付金额', width: 100, align: "left"},
-            { field: 'payPrice', title: '实付金额', width: 100, align: "left"},
-            { field: 'state', title: '订单状态', width: 80, align: "center", templet: function (d) {
-                return shopUtil.getMealOrderStateName(d);
-            }},
-            { field: 'natureName', title: '订单性质', width: 80, align: "center"},
-            { field: 'payTime', title: '支付时间', align: 'center', width: 150 },
-            { field: 'type', title: '订单来源', width: 80, align: "center", templet: function (d) {
-                if(d.type == 1){
-                    return "线上下单";
-                } else {
-                    return "线下下单";
-                }
-            }},
-            { field: 'whetherGive', title: '是否赠送', width: 100, align: "center", templet: function (d) {
-                return shopUtil.getMealOrderWhetherGiveName(d);
-            }},
-            { field: 'createName', title: '专属顾问', width: 120 },
-            { field: 'createTime', title: '创建时间', align: 'center', width: 150 },
+            { field: 'name', title: '套餐名称', width: 120, align: "left", templet: function (d) {
+                    return d.mealMation.name
+                }},
+            { field: 'name', title: '商品名称', width: 150, align: "left", templet: function (d) {
+                    return d.materialMation.name
+                }},
+            { field: 'name', title: '商品规格', width: 180, align: "left", templet: function (d) {
+                    return d.normsMation.name
+                }},
+            { field: 'mealPrice', title: '套餐价格', width: 100, align: "left"},
+            { field: 'codeNum', title: '商品规格编码', width: 180, align: "left"},
+            { field: 'startTime', title: '开始时间', width: 100, align: "left"},
+            { field: 'endTime', title: '结束时间', width: 100, align: "left"},
+            { field: 'state', title: '是否可用', width: 90, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("whetherEnum", 'id', d.state, 'name');
+                }},
+            { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
+
         ]],
         done: function(json) {
             matchingLanguage();
@@ -66,6 +58,8 @@ layui.config({
         var layEvent = obj.event;
         if(layEvent == 'select'){ // 详情
             select(data)
+        } else if (layEvent === 'returnOrder') { //编辑
+            returnOrder(data);
         }
     });
 
@@ -81,6 +75,37 @@ layui.config({
             }
         });
     }
+
+    // 退款
+    function returnOrder(data) {
+        rowId = data.id;
+        console.log(888,data)
+        _openNewWindows({
+            url: "../../tpl/refundMealOrder/refundMealOrder.html?objectId=" + data.objectId + '&price=' + data.mealMation.price + '&normsId=' + data.normsId + '&codeNum=' + data.codeNum ,
+            title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+            pageId: "returnOrder",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+            }
+        });
+    }
+
+    // function returnOrder(data) {
+    //     layer.confirm("确认对该单据进行退款吗？", {icon: 3, title: "退款操作"}, function (index) {
+    //         layer.close(index);
+    //         var params = {
+    //             mealOrderChildId: ,
+    //             mealRefundReasonId: data.attrKey,
+    //             storeId: appId
+    //             refundPrice:
+    //         };
+    //         AjaxPostUtil.request({url: shopBasePath + "refundMealOrder", params: params, type: 'json', method: "PUT", callback: function (json) {
+    //                 winui.window.msg('退款成功', {icon: 1, time: 2000});
+    //                 loadTable();
+    //             }});
+    //     });
+    // }
+
 
     // 添加
     $("body").on("click", "#addBean", function() {
