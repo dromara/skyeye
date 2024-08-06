@@ -14,7 +14,6 @@ layui.config({
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$;
     var id = GetUrlParam("id");
-    let initFirst = false
 
     // 工序验收的【编辑布局】
     dsFormUtil.initEditPageForStatic('content', 'FP2024071500001', {}, {
@@ -30,12 +29,5 @@ layui.config({
                 parent.refreshCode = '0';
             }});
         },
-
-        tableDeleteRowCallback: function (tableId) {
-            if (!initFirst) {
-                initFirst = true;
-                $("#addRow" + tableId).click();
-            }
-        }
     });
 });

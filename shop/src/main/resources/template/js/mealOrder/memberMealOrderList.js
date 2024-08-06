@@ -14,8 +14,6 @@ layui.config({
     authBtn('1644239500255');
 
     memberId = GetUrlParam("id");
-    console.log(12345,memberId)
-
 
     table.render({
         id: 'messageTable',
@@ -79,7 +77,6 @@ layui.config({
     // 退款
     function returnOrder(data) {
         rowId = data.id;
-        console.log(888,data)
         _openNewWindows({
             url: "../../tpl/refundMealOrder/refundMealOrder.html?objectId=" + data.objectId + '&price=' + data.mealMation.price + '&normsId=' + data.normsId + '&codeNum=' + data.codeNum ,
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
