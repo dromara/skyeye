@@ -31,6 +31,7 @@ layui.config({
 		    limits: [8, 16, 24, 32, 40, 48, 56],
 		    limit: 8,
 			cols: [[
+				{ type: 'radio', fixed: 'left' },
 				{ title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
 				{ field: 'jobNumber', title: '工号', align: 'left', width: 140, templet: function (d) {
 						return getNotUndefinedVal(d.staffMation?.jobNumber);
