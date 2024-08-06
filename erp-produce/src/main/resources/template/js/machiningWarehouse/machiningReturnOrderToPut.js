@@ -13,16 +13,16 @@ layui.config({
     winui.renderColor();
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$;
-    var id = GetUrlParam("id");
+    // var id = GetUrlParam("id");
 
     //加工入库单转仓库入库
     // 仓库入库的【编辑布局】
-    dsFormUtil.initEditPageForStatic('content', 'FP2024070100009', data, {
+    dsFormUtil.initEditPageForStatic('content', 'FP2024070100009',{},{
         savePreParams: function (params) {
         },
         saveData: function (params) {
             // 保存数据
-            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertReturnPutToTurnDepot", params: params, type: 'json', method: "POST", callback: function(json) {
+            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "writeDepotPut", params: params, type: 'json', method: "POST", callback: function(json) {
                     parent.layer.close(index);
                     parent.refreshCode = '0';
                 }});
