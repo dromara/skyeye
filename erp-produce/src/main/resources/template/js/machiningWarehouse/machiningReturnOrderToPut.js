@@ -13,13 +13,15 @@ layui.config({
     winui.renderColor();
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$;
+    let initFirst = false
     // var id = GetUrlParam("id");
 
-    //加工入库单转仓库入库
     // 仓库入库的【编辑布局】
-    dsFormUtil.initEditPageForStatic('content', 'FP2024070100009',{},{
+    dsFormUtil.initEditPageForStatic('content', 'FP2024070100009', {},{
         savePreParams: function (params) {
+
         },
+
         saveData: function (params) {
             // 保存数据
             AjaxPostUtil.request({url: sysMainMation.erpBasePath + "writeDepotPut", params: params, type: 'json', method: "POST", callback: function(json) {
@@ -27,21 +29,17 @@ layui.config({
                     parent.refreshCode = '0';
                 }});
         },
+
         loadComponentCallback: function () {
             $("div[controlType='correspondentEnter']").remove();
             $("div[controlType='depotPutFromType']").remove();
         },
-        tableAddRowCallback: function (tableId) {
-            $("#addRow" + tableId).remove();
-            $("div[controlType='simpleTable']").find(".unitPrice").prop('disabled', true);
-            $("div[controlType='simpleTable']").find(".amountOfMoney").prop('disabled', true);
-            $("div[controlType='simpleTable']").find(".taxRate").prop('disabled', true);
-            $("div[controlType='simpleTable']").find(".taxMoney").prop('disabled', true);
-            $("div[controlType='simpleTable']").find(".taxUnitPrice").prop('disabled', true);
-            $("div[controlType='simpleTable']").find(".taxLastMoney").prop('disabled', true);
-            $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
-            $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
-            $("div[controlType='simpleTable']").find(".warehouse").prop('disabled', true);
+
+        tableDeleteRowCallback: function (tableId) {
+            if (!initFirst) {
+                initFirst = true;
+                $("#addRow" + tableId).click();
+            }
         }
     });
 });
