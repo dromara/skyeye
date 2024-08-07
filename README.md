@@ -26,7 +26,7 @@
 
 > [企业版开发文档](https://articles.zsxq.com/id_xi3xhacte72g.html)
 
->  **体验地址** ：关注下方微信公众号，回复`skyeye`获取
+>  **体验地址** ：右上角`Star`后，关注下方微信公众号，回复`skyeye`获取
 
 
 ## 🐶 沟通交流
