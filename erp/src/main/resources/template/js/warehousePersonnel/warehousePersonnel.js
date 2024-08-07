@@ -10,6 +10,7 @@ layui.config({
     var $ = layui.$,
         form = layui.form,
         table = layui.table;
+
     authBtn('1721305232197');
 
     loadWareshop();

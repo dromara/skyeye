@@ -10,7 +10,7 @@ layui.config({
         form = layui.form,
         table = layui.table;
     var serviceClassName = sysServiceMation["inventoryOrder"]["key"];
-    authBtn('1718282987406');//新增
+    authBtn('1721375469094');//新增
 
     table.render({
         id: 'messageTable',

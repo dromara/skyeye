@@ -33,30 +33,14 @@
     <script type="text/html" id="tableBar">
         {{# if(auth('1720752315835')){ }}
             <a class="layui-btn layui-btn-xs" lay-event="add">新增子节点</a>
-            <a class="layui-btn layui-btn-xs" lay-event="batchAddChildNodes">批量新增子节点</a>
             <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+        {{# } }}
+        {{# if(auth('1721184331706')){ }}
+            <a class="layui-btn layui-btn-xs" lay-event="batchAddChildNodes">批量新增子节点</a>
         {{# } }}
         {{# if(auth('1720752347259')){ }}
             <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
         {{# } }}
-    </script>
-
-    <script type="text/x-handlebars-template" id="treeRightTemplate">
-        {{#bean}}
-        <li class="is-file treedeleteFolderAndChild" folderId="{{id}}">
-            <a href="javascript:;">
-                <img alt="" src="../../assets/images/icon/delete-icon.png" />
-                <span>删除</span>
-            </a>
-        </li>
-        <li class="divider"></li>
-        <li class="is-file treecreateNewFolder" folderId="{{id}}">
-            <a href="javascript:;">
-                <img alt="" src="../../assets/images/icon/create-folder-icon.png" />
-                <span>新建</span>
-            </a>
-        </li>
-        {{/bean}}
     </script>
 
     <ul class="layui-dropdown-menu" id="treeRight">

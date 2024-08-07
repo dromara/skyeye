@@ -15,6 +15,10 @@ layui.config({
     var depotId = GetUrlParam("id");
     var depotLevelId = GetUrlParam("depotLevelId");
 
+    authBtn('1720752315835');
+
+    authBtn('1721184331706');
+
     // 下拉按钮
     var dropdown = new Dropdown();
     dropdown.render();
@@ -191,7 +195,25 @@ layui.config({
             id: folderId,
             name: treeNode.name
         };
-        $("#treeRight").html(getDataUseHandlebars($("#treeRightTemplate").html(), {bean: par}));
+        let treeRightTemplate = '{{#bean}}';
+        if (auth('1720752601287')){
+            treeRightTemplate += '<li class="is-file treedeleteFolderAndChild" folderId="{{id}}">\n' +
+                '            <a href=" ">\n' +
+                '                <img alt="" src="../../assets/images/icon/delete-icon.png" />\n' +
+                '                <span>删除</span>\n' +
+                '            </a>\n' +
+                '        </li>'
+        }
+        if (auth('1720752622263')){
+            treeRightTemplate += '<li class="is-file treedeleteFolderAndChild" folderId="{{id}}">\n' +
+                '            <a href=" ">\n' +
+                '                <img alt="" src="../../assets/images/icon/create-folder-icon.png" />\n' +
+                '                <span>新建</span>\n' +
+                '            </a>\n' +
+                '        </li>'
+        }
+        treeRightTemplate += '{{/bean}}';
+        $("#treeRight").html(getDataUseHandlebars(treeRightTemplate, {bean: par}));
         showRMenu(folderId == 0 ? 'root' : '', event.clientX, event.clientY);
     }
 
@@ -265,6 +287,7 @@ layui.config({
                 ztree.reAsyncChildNodes(nownode[0], "refresh");
             }});
     });
+
 
     form.render();
     $("body").on("click", "#reloadTable", function() {
