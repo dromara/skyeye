@@ -10,7 +10,6 @@ layui.config({
         form = layui.form,
         table = layui.table;
     var serviceClassName = sysServiceMation["depotOutOrder"]["key"];
-    authBtn('1719830958582');//新增
 
     table.render({
         id: 'messageTable',
@@ -81,19 +80,6 @@ layui.config({
                 loadTable();
             });
         }
-    });
-
-    // 添加
-    $("body").on("click", "#addBean", function() {
-        _openNewWindows({
-            url:  systemCommonUtil.getUrl('FP2024070100005', null),
-            title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-            pageId: "purchasePutAdd",
-            area: ['90vw', '90vh'],
-            callBack: function (refreshCode) {
-                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                loadTable();
-            }});
     });
 
     // 编辑
