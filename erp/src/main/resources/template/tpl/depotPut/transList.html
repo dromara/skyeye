@@ -16,7 +16,9 @@
 	    <table id="messageTable" lay-filter="messageTable"></table>
 		<script type="text/html" id="tableBar">
 			{{# if(d.otherState == 2 || d.otherState == 3) { }}
-				<a class="layui-btn layui-btn-xs" lay-event="depotPut">入库</a>
+				{{# if (auth('1723034154134')) { }}
+					<a class="layui-btn layui-btn-xs" lay-event="depotPut">入库</a>
+				{{# } }}
 			{{# } }}
 		</script>
 	</div>

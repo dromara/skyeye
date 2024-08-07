@@ -22,7 +22,7 @@ var initTableChooseUtil = {
                             // modelHtml: '当formType=select时，可以设定select的内容',
                             // colHeaderId: '可以指定所在列的header的id'
                             // layFilter: '可以方便指定监听事件'}
-        deleteRowCallback: function () {trcusid}, // 删除行之后的回调函数
+        deleteRowCallback: function (trcusid) {}, // 删除行之后的回调函数
         addRowCallback: function (trcusid) {}, // 新增行之后的回调函数
         form: null, // form表单对象
         minData: 0, // 允许的最小数据数

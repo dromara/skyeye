@@ -31,6 +31,11 @@ layui.config({
                 }});
         },
 
+        // 移除来源单据
+        loadComponentCallback: function () {
+            $("div[controlType='machinFromType']").remove();
+        },
+
         tableDeleteRowCallback: function (tableId) {
             if (!initFirst) {
                 initFirst = true;

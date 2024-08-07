@@ -21,7 +21,9 @@
 		<table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
             {{# if (d.inDepot == 1) { }}
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+                {{# if(auth('1722847129089')){ }}
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+                {{# } }}
             {{# } }}
         </script>
 	</div>

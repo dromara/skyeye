@@ -10,10 +10,11 @@ layui.config({
         var index = parent.layer.getFrameIndex(window.name);
         var $ = layui.$;
         var orderNum = "";
+        var id = GetUrlParam("id");
 
-        AjaxPostUtil.request({url: shopBasePath + "queryKeepFitOrderById", params: {id: parent.rowId}, type: 'json', method: "get", callback: function (json) {
+        AjaxPostUtil.request({url: shopBasePath + "queryKeepFitOrderById", params: {id: id}, type: 'json', method: "get", callback: function (json) {
             orderNum = json.bean.oddNumber;
-            $("#payPrice").val(json.bean.unformatPayablePrice);
+            $("#payPrice").val(json.bean.payablePrice);
         }, async: false});
 
         matchingLanguage();

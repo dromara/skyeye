@@ -4,44 +4,44 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'form'], function (exports) {
     winui.renderColor();
-    layui.use(['form'], function (form) {
-        var index = parent.layer.getFrameIndex(window.name);
-        var $ = layui.$;
+    var index = parent.layer.getFrameIndex(window.name);
+    var $ = layui.$,
+        form = layui.form;
+    var selTemplate = getFileContent('tpl/template/select-option.tpl');
+    var price = GetUrlParam("price");
+    var id = GetUrlParam("id");
 
+    // 加载当前用户所属门店
+    AjaxPostUtil.request({url: sysMainMation.shopBasePath + "storeStaff005", params: {}, type: 'json', method: "GET", callback: function(json) {
+        $("#storeId").html(getDataUseHandlebars(selTemplate, json));
         // 套餐订单退款原因
         sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["shopMealRefundOrderReason"]["key"], 'select', "mealRefundReasonId", '', form);
+        // 回显退款金额
+        $("#refundPrice").val(price);
+    }});
 
-        if(parent.dataMation.mealNum == parent.dataMation.remainMealNum){
-            // 套餐未使用
-            $("#refundPrice").val(parent.dataMation.unformatPayPrice);
-        } else {
-            var mealSinglePrice = division(parent.dataMation.unformatPayPrice, parent.dataMation.mealNum);
-            var refundPrice = multiplication(mealSinglePrice, parent.dataMation.remainMealNum);
-            $("#refundPrice").val(refundPrice);
+    matchingLanguage();
+    form.render();
+    form.on('submit(formAddBean)', function (data) {
+        if (winui.verifyForm(data.elem)) {
+            var params = {
+                mealOrderChildId: id,
+                mealRefundReasonId: $("#mealRefundReasonId").val(),
+                storeId: $("#storeId").val(),
+                refundPrice: $("#refundPrice").val(),
+            };
+
+            AjaxPostUtil.request({url: shopBasePath + "refundMealOrder", params: params, type: 'json', method: "POST", callback: function (json) {
+                parent.layer.close(index);
+                parent.refreshCode = '0';
+            }, async: true});
         }
+        return false;
+    });
 
-        matchingLanguage();
-        form.render();
-        form.on('submit(formAddBean)', function (data) {
-            if (winui.verifyForm(data.elem)) {
-                var params = {
-                    mealOrderChildId: parent.dataMation.mealOrderChildId,
-                    mealRefundReasonId: $("#mealRefundReasonId").val(),
-                    refundPrice: $("#refundPrice").val(),
-                };
-
-                AjaxPostUtil.request({url: shopBasePath + "refundMealOrder", params: params, type: 'json', method: "POST", callback: function (json) {
-                    parent.layer.close(index);
-                    parent.refreshCode = '0';
-                }, async: true});
-            }
-            return false;
-        });
-
-        $("body").on("click", "#cancle", function() {
-            parent.layer.close(index);
-        });
+    $("body").on("click", "#cancle", function() {
+        parent.layer.close(index);
     });
 });

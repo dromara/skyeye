@@ -48,6 +48,9 @@ layui.config({
             { field: 'name', title: '门店', width: 200, templet: function (d) {
                     return getNotUndefinedVal(d.storeMation?.name);
             }},
+            { field: 'name', title: '会员名称', rowspan: '2', align: 'left', width: 150, templet: function (d) {
+                    return getNotUndefinedVal(d.objectMation?.name);
+                }},
             { field: 'userType', title: '用户类型', width: 100, templet: function (d) {
                     if(d.type == 1){
                         return "匿名用户";
@@ -62,10 +65,12 @@ layui.config({
                         return "工作人员下单";
                     }
             }},
+            { field: 'payablePrice', title: '应付金额', width: 100, align: "left"},
+            { field: 'payPrice', title: '实付金额', width: 100, align: "left"},
+            { field: 'payTime', title: '支付时间', width: 100, align: "left"},
             { field: 'state', title: '状态', width: 90, templet: function (d) {
                     return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("KeepFitOrderState", 'id', d.state, 'name');
                 }},
-            { field: 'codeNum', title: '规格物品编码', width: 200 },
             { field: 'onlineDay', title: '预约日期', width: 100 },
             { field: 'onlineTime', title: '预约时间', width: 100 },
             { field: 'createName', title: '创建人', align: 'left', width: 120 },
@@ -141,8 +146,9 @@ layui.config({
 
     // 支付
     function pay(data) {
+        console.log(data)
         _openNewWindows({
-            url: "../../tpl/keepFitOrder/complatePayKeepFitOrder.html",
+            url: "../../tpl/keepFitOrder/complatePayKeepFitOrder.html?id=" + data.id,
             title: '支付',
             pageId: "complatePayKeepFitOrder",
             area: ['90vw', '90vh'],
@@ -155,7 +161,7 @@ layui.config({
     // 保养
     function complateKeepFit(data) {
         _openNewWindows({
-            url: "../../tpl/keepFitOrder/complateKeepFitOrder.html?storeId=" + data.storeId,
+            url: "../../tpl/keepFitOrder/complateKeepFitOrder.html?storeId=" + data.storeId + '&id=' + data.id ,
             title: '保养',
             pageId: "complateKeepFitOrder",
             area: ['90vw', '90vh'],

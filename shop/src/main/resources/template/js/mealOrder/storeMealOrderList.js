@@ -15,6 +15,7 @@ layui.config({
         soulTable = layui.soulTable;
     var selTemplate = getFileContent('tpl/template/select-option.tpl');
     //套餐订单
+    authBtn('1722169759679');//新增
 
     // 加载列表数据权限
     loadAuthBtnGroup('messageTable', '1644237833988');
@@ -67,7 +68,6 @@ layui.config({
                 { field: 'state', title: '订单状态', rowspan: '2', width: 90, templet: function (d) {
                         return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("shopMealOrderState", 'id', d.state, 'name');
                     }},
-
                 { field: 'natureName', title: '订单性质', width: 80, align: "center"},
                 { field: 'createName', title: '专属顾问', width: 120 },
                 { field: 'payTime', title: '支付时间', align: 'center', width: 150 },

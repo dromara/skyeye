@@ -34,7 +34,7 @@ layui.config({
 			{ field: 'materialId', title: '产品名称', align: 'left', width: 150, templet: function (d) {
 				return getNotUndefinedVal(d.materialMation?.name);
 			}},
-			{ field: 'normsId', title: '产品规格', align: 'left', width: 150, templet: function (d) {
+			{ field: 'normsId', title: '产品规格', align: 'left', width: 450, templet: function (d) {
 				return getNotUndefinedVal(d.normsMation?.name);
 			}},
 			{ field: 'allOperNumber', title: '交易数量', align: 'center', width: 90, templet: function (d) {

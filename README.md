@@ -26,12 +26,14 @@
 
 > [企业版开发文档](https://articles.zsxq.com/id_xi3xhacte72g.html)
 
+>  **体验地址** ：右上角`Star`后，关注下方微信公众号，回复`skyeye`获取
+
 
 ## 🐶 沟通交流
 
-| |   知识星球   |   作者微信   |
-|:---------------------:|:---------------------:|:--------------------------------:|
-| 微信扫码 | ![](images/mindMap/知识星球.png) |    ![](images/mindMap/chatgpt的微信.jpg)    |
+| |   知识星球   |   作者微信   |  微信公众号(Skyeye智能制造云办公) |
+|:---------------------:|:---------------------:|:--------------------------------:|:--------------------------------:|
+| 微信扫码 | ![](images/mindMap/知识星球.png) |    ![](images/mindMap/chatgpt的微信.jpg)    | ![](images/mindMap/微信公众号.jpg) |
 
 ## 项目框架介绍
 
@@ -126,20 +128,66 @@
 
 ##  :tw-1f30f:  PC端效果图
 
-| 效果图                                    | 效果图                                |
-|----------------------------------------|------------------------------------|
-| ![](images/show/tradition/show001.png) | ![](images/show/win10/show001.png) |
-| ![](images/show/tradition/show002.png) | ![](images/show/win10/show002.png) |
-| ![](images/show/tradition/show003.png) | ![](images/show/win10/show003.png) |
-| ![](images/show/tradition/show004.png) | ![](images/show/win10/show004.png) |
-| ![](images/show/tradition/show005.png) | ![](images/show/win10/show005.png) |
-| ![](images/show/tradition/show006.png) | ![](images/show/win10/show006.png) |
-| ![](images/show/tradition/show007.png) | ![](images/show/win10/show007.png) |
-| ![](images/show/tradition/show008.png) | ![](images/show/win10/show008.png) |
-| ![](images/show/tradition/show009.png) | ![](images/show/win10/show009.png) |
-| ![](images/show/tradition/show010.png) | ![](images/show/win10/show010.png) |
+### 基础内容
+|功能| 效果图 | 效果图 | 效果图 |
+|----|-------|-----|------|
+|组件管理|![输入图片说明](images/show/base/20240802001image.png)|![输入图片说明](images/show/base/2024080202image.png)||
+|布局/操作/属性管理|![输入图片说明](images/show/base/2024080203image.png)|![输入图片说明](images/show/base/2024080204image.png)|![输入图片说明](images/show/base/20240802005image.png)|
+|菜单/角色/编码管理|![输入图片说明](images/show/base/20240802010image.png)|![输入图片说明](images/show/base/20240802011image.png)|![输入图片说明](images/show/base/20240802012image.png)|
 
-##  :tw-1f30f:  手机端效果图
+### CRM
+|功能| 效果图 | 效果图 | 效果图 |
+|----|-------|-----|------|
+|客户管理(包括合同、跟单、文档等)|![输入图片说明](images/show/crm/image.png)|![输入图片说明](images/show/crm/1image.png)|![输入图片说明](images/show/crm/2image.png)|
+|客户管理(包括合同、跟单、文档等)|![输入图片说明](images/show/crm/3image.png)|![输入图片说明](images/show/crm/4image.png)|![输入图片说明](images/show/crm/5image.png)|
+|报表分析|![输入图片说明](images/show/crm/6image.png)|![输入图片说明](images/show/crm/7image.png)|![输入图片说明](images/show/crm/8image.png)|
+
+### ERP
+|功能| 效果图 | 效果图 | 效果图 |
+|----|-------|-----|------|
+|商品管理 **(支持一物一码)** |![输入图片说明](images/show/erp/08image.png)|![输入图片说明](images/show/erp/07image.png)|![输入图片说明](images/show/erp/09image.png)|
+|采购模块|![输入图片说明](images/show/erp/01image.png)|![输入图片说明](images/show/erp/02image.png)|![输入图片说明](images/show/erp/03image.png)|
+|采购模块|![输入图片说明](images/show/erp/04image.png)|![输入图片说明](images/show/erp/05image.png)|![输入图片说明](images/show/erp/06image.png)|
+|销售模块|![输入图片说明](images/show/erp/10image.png)|![输入图片说明](images/show/erp/11image.png)|![输入图片说明](images/show/erp/12image.png)|
+|报表模块|![输入图片说明](images/show/erp/13image.png)|![输入图片说明](images/show/erp/14image.png)|![输入图片说明](images/show/erp/15image.png)|
+
+### ERP仓库
+|功能| 效果图 | 效果图 | 效果图 |
+|----|-------|-----|------|
+|其他单据管理|![输入图片说明](images/show/erpDepot/image.png)|![输入图片说明](images/show/erpDepot/1image.png)|![输入图片说明](images/show/erpDepot/2image.png)|
+|仓库管理|![输入图片说明](images/show/erpDepot/3image.png)|![输入图片说明](images/show/erpDepot/4image.png)||
+|盘点管理|![输入图片说明](images/show/erpDepot/5image.png)|![输入图片说明](images/show/erpDepot/6image.png)||
+|出入库管理|![输入图片说明](images/show/erpDepot/7image.png)|![输入图片说明](images/show/erpDepot/8image.png)||
+|商品条形码|![输入图片说明](images/show/erpDepot/9image.png)|![输入图片说明](images/show/erpDepot/10image.png)||
+
+### MES生产
+|功能| 效果图 | 效果图 | 效果图 |
+|----|-------|-----|------|
+|生产管理|![输入图片说明](images/show/mes/1image.png)|![输入图片说明](images/show/mes/2image.png)|![输入图片说明](images/show/mes/3image.png)|
+|设置中心|![输入图片说明](images/show/mes/4image.png)|![输入图片说明](images/show/mes/5image.png)|![输入图片说明](images/show/mes/6image.png)|
+|物料管理|![输入图片说明](images/show/mes/7image.png)|![输入图片说明](images/show/mes/8image.png)|![输入图片说明](images/show/mes/9image.png)|
+|生产执行|![输入图片说明](images/show/mes/10image.png)|![输入图片说明](images/show/mes/11image.png)|![输入图片说明](images/show/mes/12image.png)|
+|物料确认|![输入图片说明](images/show/mes/13image.png)|![输入图片说明](images/show/mes/14image.png)|![输入图片说明](images/show/mes/15image.png)|
+
+### 行政办公
+|功能| 效果图 | 效果图 | 效果图 |
+|----|-------|-----|------|
+|会议室模块|![输入图片说明](images/show/oa/1image.png)|![输入图片说明](images/show/oa/2image.png)||
+|用品模块|![输入图片说明](images/show/oa/3image.png)|![输入图片说明](images/show/oa/4image.png)|![输入图片说明](images/show/oa/5image.png)|
+|资产模块|![输入图片说明](images/show/oa/6image.png)|![输入图片说明](images/show/oa/7image.png)|![输入图片说明](images/show/oa/8image.png)|
+|公文模块|![输入图片说明](images/show/oa/9image.png)|![输入图片说明](images/show/oa/10image.png)|![输入图片说明](images/show/oa/11image.png)|
+|印章，证照，车辆|![输入图片说明](images/show/oa/12image.png)|![输入图片说明](images/show/oa/13image.png)|![输入图片说明](images/show/oa/14image.png)|
+
+### 售后管理模块
+|功能| 效果图 | 效果图 | 效果图 |
+|----|-------|-----|------|
+|工单管理|![输入图片说明](images/show/sealService/1image.png)|![输入图片说明](images/show/sealService/2image.png)||
+|配件管理|![输入图片说明](images/show/sealService/3image.png)|![输入图片说明](images/show/sealService/4image.png)||
+|工人管理|![输入图片说明](images/show/sealService/5image.png)|![输入图片说明](images/show/sealService/6image.png)|![输入图片说明](images/show/sealService/7image.png)|
+
+##  :tw-1f30f:  移动端效果图
+
+> 移动端和PC端功能类似，这里不截那么多图拉。
 
 ### 基础模块
 | 效果图  | 效果图  | 效果图  | 效果图  |
