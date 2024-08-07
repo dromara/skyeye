@@ -32,14 +32,14 @@ layui.config({
                 {id: 'targetNum', title: '安排任务数量', formType: 'input', width: '140', verify: 'required|number' },
                 {id: 'stateName', title: '状态', formType: 'detail', width: '140' }
             ],
-            deleteRowCallback: function (trcusid) {},
-            addRowCallback: function (trcusid) {},
             form: form,
-            minData: 1
         });
 
-        initTableChooseUtil.deleteAllRow('arrangeList');
+        if (!isNull(json.bean.machinProcedureFarmList) && json.bean.machinProcedureFarmList.length > 0) {
+            initTableChooseUtil.deleteAllRow('arrangeList');
+        }
         $.each(json.bean.machinProcedureFarmList, function(i, item) {
+            initFirst = true;
             item.stateName = skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("machinProcedureFarmState", 'id', item.state, 'name');
             var trcusid = initTableChooseUtil.resetData('arrangeList', item);
             var thisRowKey = trcusid.replace("tr", "");
