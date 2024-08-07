@@ -15,6 +15,7 @@ layui.config({
         soulTable = layui.soulTable;
     var selTemplate = getFileContent('tpl/template/select-option.tpl');
     //套餐订单
+    authBtn('1722169759679');//新增
 
     // 加载列表数据权限
     loadAuthBtnGroup('messageTable', '1644237833988');
