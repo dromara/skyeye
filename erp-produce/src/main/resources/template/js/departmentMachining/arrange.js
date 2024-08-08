@@ -50,7 +50,7 @@ layui.config({
             }
 
             // 【待执行】的任务不可编辑
-            if (item.state == 'waitExecuted') {
+            if (item.state == 'waitExecuted'  || item.state == 'partialCompletion' || item.state == 'allCompleted' || item.state == 'excessCompleted') {
                 let itemNum = $('input[type="text"][id="targetNum' + thisRowKey + '"]');
                 let itemChoose = $('[id="farmId' + thisRowKey + '"]');
                 disableElementAndSiblings(itemNum)

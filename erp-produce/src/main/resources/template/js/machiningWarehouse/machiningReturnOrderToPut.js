@@ -34,7 +34,7 @@ layui.config({
 
             loadComponentCallback: function () {
                 $("div[controlType='correspondentEnter']").remove();
-                $("div[controlType='depotPutFromType']").remove();
+                // $("div[controlType='depotPutFromType']").remove();
             },
         });
     }});
