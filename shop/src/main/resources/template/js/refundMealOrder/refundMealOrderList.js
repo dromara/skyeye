@@ -12,6 +12,7 @@ layui.config({
         table = layui.table;
     soulTable = layui.soulTable;
     var selTemplate = getFileContent('tpl/template/select-option.tpl');
+    var serviceClassName = sysServiceMation["refundMealOrder"]["key"];
 
     // 加载列表数据权限
     loadAuthBtnGroup('messageTable', '1647062082493');
@@ -44,48 +45,33 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
-            { field: 'orderNum', title: '订单号', align: 'left', width: 180, fixed: 'left', templet: function (d) {
-                return '<a lay-event="select" class="notice-title-click">' + d.orderNum + '</a>';
+            { field: 'oddNumber', title: '订单号', align: 'left', width: 180, templet: function (d) {
+                return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
             }},
-            { field: 'contacts', title: '会员名称', width: 100 },
-            { field: 'phone', title: '会员手机号', width: 100, align: "center"},
-            { field: 'refundCreateName', title: '服务顾问', width: 130, align: "left"},
-            { field: 'createName', title: '专属顾问', width: 130, align: "left"},
-            { field: 'natureName', title: '订单性质', width: 100, align: "left"},
-            { field: 'modelType', title: '车型', width: 100, align: "left"},
-            { field: 'plate', title: '车牌', width: 100, align: "left"},
-            { field: 'vinCode', title: 'VIN码', width: 150, align: "left"},
-            { field: 'state', title: '审核状态', width: 80, align: "center", templet: function (d) {
-                if(d.state == 1){
-                    return "待审核";
-                } else if (d.state == 2){
-                    return "退款驳回";
-                } else if (d.state == 3){
-                    return "已退款";
-                }else {
-                    return "取消退款";
-                }
-            }},
-            { field: 'storeName', title: '缴费门店', width: 150, align: "left"},
-            { field: 'mealTitle', title: '套餐名称', width: 150, align: "left"},
-            { field: 'mealPrice', title: '应缴金额', width: 120, align: "left"},
-            { field: 'payPrice', title: '实缴金额', width: 120, align: "left"},
-            { field: 'mealNum', title: '总保养次数', width: 120, align: "left"},
-            { field: 'remainMealNum', title: '剩余保养次数', width: 120, align: "left"},
-            { field: 'mealSinglePrice', title: '单次保养金额', width: 120, align: "left"},
-            { field: 'refundPrice', title: '退款金额', width: 120, align: "left"},
-            { field: 'type', title: '订单来源', width: 80, align: "center", templet: function (d) {
-                if(d.type == 1){
-                    return "线上下单";
-                } else {
-                    return "线下下单";
-                }
-            }},
-            { field: 'whetherGive', title: '是否赠送', width: 100, align: "center", templet: function (d) {
-                return shopUtil.getMealOrderWhetherGiveName(d);
-            }},
-            { field: 'refundTime', title: '申请退款时间', align: 'center', width: 150 },
+            { field: 'name', title: '会员名称', rowspan: '2', align: 'left', width: 150, templet: function (d) {
+                    return getNotUndefinedVal(d.objectMation?.name);
+                }},
+            { field: 'phone', title: '会员手机号', rowspan: '2', align: 'left', width: 150, templet: function (d) {
+                    return getNotUndefinedVal(d.objectMation?.phone);
+                }},
+            { field: 'absoluteAddress', title: '会员地址', rowspan: '2', align: 'left', width: 150, templet: function (d) {
+                    return getNotUndefinedVal(d.objectMation?.absoluteAddress);
+                }},
+            { field: 'storeName', title: '门店', rowspan: '2', align: 'left', width: 150, templet: function (d) {
+                    return getNotUndefinedVal(d.storeMation?.name);
+                }},
+            { field: 'mealSinglePrice', title: '套餐消耗金额', width: 100 },
+            { field: 'refundPrice', title: '退款金额', width: 100 },
             { field: 'refundReasonName', title: '退款原因', width: 120, align: "left"},
+            {
+                field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
+                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');
+                }
+            },
+            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 120 },
+            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
+            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '2', align: 'left', width: 120 },
+            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], rowspan: '2', align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
         done: function(json) {
@@ -109,8 +95,6 @@ layui.config({
             delet(data);
         } else if (layEvent === 'details') { //详情
             details(data);
-        } else if (layEvent === 'edit') { //编辑
-            edit(data);
         } else if (layEvent === 'subApproval') { //提交审核
             subApproval(data);
         }  else if (layEvent === 'processDetails') { // 工作流流程详情查看
@@ -133,7 +117,7 @@ layui.config({
     // 详情
     function details(data) {
         _openNewWindows({
-            url: systemCommonUtil.getUrl('FP2024052400003&id=' + data.id, null),
+            url: systemCommonUtil.getUrl('FP2024080100002&id=' + data.id, null),
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "refundMealOrderDetails",
             area: ['90vw', '90vh'],

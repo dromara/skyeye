@@ -77,5 +77,6 @@
     "shopOutLetsServiceImpl": {"name": "门店申领单", "key": "com.skyeye.shop.service.impl.ShopOutLetsServiceImpl", "appId": "com.wzq.skyeye.erp"},
     "ShopReturnsService": {"name": "门店退货单", "key": "com.skyeye.shop.service.impl.ShopReturnsServiceImpl", "appId": "com.wzq.skyeye.erp"},
     "shopConfirmPutService": {"name": "门店物料接收单", "key": "com.skyeye.shop.service.impl.ShopConfirmPutServiceImpl", "appId": "com.wzq.skyeye.erp"},
-    "shopConfirmReturn": {"name": "门店物料退货单", "key": "com.skyeye.shop.service.impl.ShopConfirmReturnServiceImpl", "appId": "com.wzq.skyeye.erp"}
+    "shopConfirmReturn": {"name": "门店物料退货单", "key": "com.skyeye.shop.service.impl.ShopConfirmReturnServiceImpl", "appId": "com.wzq.skyeye.erp"},
+    "refundMealOrder": {"name": "退款订单", "key": "com.skyeye.meal.service.impl.MealRefundOrderServiceImpl", "appId": "com.wzq.skyeye.shop"}
 }
