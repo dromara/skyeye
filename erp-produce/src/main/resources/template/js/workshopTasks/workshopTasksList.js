@@ -148,17 +148,6 @@ layui.config({
             }});
     }
 
-    // //加工单管理 详情
-    // function details(data) {
-    //     _openNewWindows({
-    //         url:  systemCommonUtil.getUrl('FP2023100300003&id=' + data.id, null),
-    //         title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-    //         pageId: "machiningDetail",
-    //         area: ['90vw', '90vh'],
-    //         callBack: function (refreshCode) {
-    //         }});
-    // }
-
     //工序验收
     function processCheck(data){
         _openNewWindows({

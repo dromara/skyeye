@@ -62,6 +62,8 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'complete') { //删除
             complete(data);
+        } else if (layEvent === 'details') { //详情
+            details(data);
         }
     });
 
@@ -71,6 +73,19 @@ layui.config({
             url: "../../tpl/inventoryTaskList/complateInventoryChild.html?id=" + data.id,
             title: "盘点完成",
             pageId: "complateInventoryChild",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
+    }
+
+    // 详情
+    function details(data) {
+        _openNewWindows({
+            url: "../../tpl/inventoryTaskList/myTaskInventoryDedails.html?id=" + data.id,
+            title: "详情",
+            pageId: "myTaskInventoryDedails",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});

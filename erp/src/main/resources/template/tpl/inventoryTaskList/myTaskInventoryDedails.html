@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+	<link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+<div style="margin:0 auto;padding:20px;">
+	<form class="layui-form" action="" autocomplete="off" id="showForm">
+
+	</form>
+</div>
+
+<script type="text/x-handlebars-template" id="beanTemplate">
+	{{#bean}}
+	<div class="layui-form-item layui-col-xs12">
+		<span class="hr-title">基本信息</span><hr>
+	</div>
+	<div class="layui-form-item layui-col-xs6">
+		<label class="layui-form-label">产品：</label>
+		<div class="layui-input-block ver-center">
+			{{materialMation.name}}
+		</div>
+	</div>
+	<div class="layui-form-item layui-col-xs6">
+		<label class="layui-form-label">规格：</label>
+		<div class="layui-input-block ver-center">
+			{{normsMation.name}}
+		</div>
+	</div>
+	<div class="layui-form-item layui-col-xs6">
+		<label class="layui-form-label">仓库：</label>
+		<div class="layui-input-block ver-center">
+			{{depotMation.name}}
+		</div>
+	</div>
+	<div class="layui-form-item layui-col-xs6">
+		<label class="layui-form-label">计划开始时间：</label>
+		<div class="layui-input-block ver-center">
+			{{planStartTime}}
+		</div>
+	</div>
+	<div class="layui-form-item layui-col-xs6">
+		<label class="layui-form-label">计划结束时间：</label>
+		<div class="layui-input-block ver-center">
+			{{planEndTime}}
+		</div>
+	</div>
+	<div class="layui-form-item layui-col-xs6">
+		<label class="layui-form-label">类型：</label>
+		<div class="layui-input-block ver-center">
+			{{type}}
+		</div>
+	</div>
+	<div class="layui-form-item layui-col-xs6">
+		<label class="layui-form-label">单价：</label>
+		<div class="layui-input-block ver-center">
+			{{unitPrice}}
+		</div>
+	</div>
+	<div class="layui-form-item layui-col-xs6">
+		<label class="layui-form-label">计划数量：</label>
+		<div class="layui-input-block ver-center">
+			{{planNumber}}
+		</div>
+	</div>
+	<div class="layui-form-item layui-col-xs12">
+		<span class="hr-title">盘点信息</span><hr>
+	</div>
+	<div class="layui-form-item layui-col-xs6">
+		<label class="layui-form-label">实际盘点数量：</label>
+		<div class="layui-input-block ver-center">
+			{{realNumber}}
+		</div>
+	</div>
+	<div class="layui-form-item layui-col-xs6">
+		<label class="layui-form-label">盘盈数量：</label>
+		<div class="layui-input-block ver-center">
+			{{profitNum}}
+		</div>
+	</div>
+	<div class="layui-form-item layui-col-xs6">
+		<label class="layui-form-label">盘亏数量：</label>
+		<div class="layui-input-block ver-center">
+			{{lossNum}}
+		</div>
+	</div>
+	<div class="layui-form-item layui-col-xs12">
+		<label class="layui-form-label">盘盈条形码：</label>
+		<div class="layui-input-block ver-center">
+			{{profitNormsCode}}
+		</div>
+	</div>
+	<div class="layui-form-item layui-col-xs12">
+		<label class="layui-form-label">盘亏条形码：</label>
+		<div class="layui-input-block ver-center">
+			{{lossNormsCode}}
+		</div>
+	</div>
+
+	<div class="layui-form-item layui-col-xs12">
+		<div class="layui-input-block">
+			<button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+			<button class="winui-btn" lay-submit lay-filter="getBean">完成</button>
+		</div>
+	</div>
+	{{/bean}}
+</script>
+
+<script src="../../assets/lib/layui/layui.js"></script>
+<script src="../../assets/lib/layui/custom.js"></script>
+<script type="text/javascript">
+    layui.config({base : '../../js/inventoryTaskList/'}).use('complateInventoryChild');
+</script>
+</body>
+</html>

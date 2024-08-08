@@ -16,6 +16,7 @@ layui.config({
     var id = GetUrlParam("id");
     let initFirst = false
 
+    // 车间任务转加工入库
     // 加工入库的【编辑布局】
     dsFormUtil.initEditPageForStatic('content', 'FP2024072600003', {}, {
         savePreParams: function (params) {
