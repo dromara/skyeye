@@ -48,12 +48,7 @@ layui.config({
 			{ title: '库存', colspan: '2', align: 'center', width: 100 }
 		],[
 			{ field: 'safetyTock', title: '安全存量', align: 'center', width: 80 },
-			{ field: 'allStock', title: '当前库存', align: 'center', width: 120, templet: function (d) {
-				if (!isNull(d.overAllStock)) {
-					return d.overAllStock.allStock;
-				}
-				return "0";
-			}}
+			{ field: 'allStock', title: '当前库存', align: 'center', width: 120 }
 		]],
 		done: function(json) {
 			matchingLanguage();
