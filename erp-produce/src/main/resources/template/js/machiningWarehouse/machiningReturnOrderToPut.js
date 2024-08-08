@@ -13,33 +13,29 @@ layui.config({
     winui.renderColor();
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$;
-    let initFirst = false
-    // var id = GetUrlParam("id");
+    var id = GetUrlParam("id");
 
+    // 加工入库转仓库入库
     // 仓库入库的【编辑布局】
-    dsFormUtil.initEditPageForStatic('content', 'FP2024070100009', {},{
-        savePreParams: function (params) {
+    AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryMachinPutTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
+        let data = json.bean;
+        dsFormUtil.initEditPageForStatic('content', 'FP2024070100009', data,{
+            savePreParams: function (params) {
 
-        },
+            },
 
-        saveData: function (params) {
-            // 保存数据
-            AjaxPostUtil.request({url: sysMainMation.erpBasePath + "writeDepotPut", params: params, type: 'json', method: "POST", callback: function(json) {
-                    parent.layer.close(index);
-                    parent.refreshCode = '0';
-                }});
-        },
+            saveData: function (params) {
+                // 保存数据
+                AjaxPostUtil.request({url: sysMainMation.erpBasePath + "writeDepotPut", params: params, type: 'json', method: "POST", callback: function(json) {
+                        parent.layer.close(index);
+                        parent.refreshCode = '0';
+                    }});
+            },
 
-        loadComponentCallback: function () {
-            $("div[controlType='correspondentEnter']").remove();
-            $("div[controlType='depotPutFromType']").remove();
-        },
-
-        tableDeleteRowCallback: function (tableId) {
-            if (!initFirst) {
-                initFirst = true;
-                $("#addRow" + tableId).click();
-            }
-        }
-    });
+            loadComponentCallback: function () {
+                $("div[controlType='correspondentEnter']").remove();
+                $("div[controlType='depotPutFromType']").remove();
+            },
+        });
+    }});
 });
