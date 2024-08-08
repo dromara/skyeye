@@ -198,15 +198,15 @@ layui.config({
         let treeRightTemplate = '{{#bean}}';
         if (auth('1720752601287')){
             treeRightTemplate += '<li class="is-file treedeleteFolderAndChild" folderId="{{id}}">\n' +
-                '            <a href=" ">\n' +
+                '            <a href="javascript:;">\n' +
                 '                <img alt="" src="../../assets/images/icon/delete-icon.png" />\n' +
                 '                <span>删除</span>\n' +
                 '            </a>\n' +
                 '        </li>'
         }
         if (auth('1720752622263')){
-            treeRightTemplate += '<li class="is-file treedeleteFolderAndChild" folderId="{{id}}">\n' +
-                '            <a href=" ">\n' +
+            treeRightTemplate += '<li class="is-file treecreateNewFolder" folderId="{{id}}">\n' +
+                '            <a href="javascript:;">\n' +
                 '                <img alt="" src="../../assets/images/icon/create-folder-icon.png" />\n' +
                 '                <span>新建</span>\n' +
                 '            </a>\n' +
