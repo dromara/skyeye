@@ -94,7 +94,7 @@ layui.config({
             pageUrl = 'FP2024070100003';
         } else if (type == 6) {
             // 物料退货单
-            pageUrl = 'FP2024071500005';
+            pageUrl = 'FP2024070100004';
         }else if (type == 7) {
             // 加工入库单
             pageUrl = 'FP2024072600004';
