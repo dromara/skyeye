@@ -21,12 +21,12 @@ layui.config({
         let data = json.bean;
         dsFormUtil.initEditPageForStatic('content', 'FP2024070100009', data,{
             savePreParams: function (params) {
-
+                // params.id = null
             },
 
             saveData: function (params) {
                 // 保存数据
-                AjaxPostUtil.request({url: sysMainMation.erpBasePath + "writeDepotPut", params: params, type: 'json', method: "POST", callback: function(json) {
+                AjaxPostUtil.request({url: sysMainMation.erpBasePath + "insertMachinPutToTurnDepot", params: params, type: 'json', method: "POST", callback: function(json) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
                     }});
@@ -34,7 +34,21 @@ layui.config({
 
             loadComponentCallback: function () {
                 $("div[controlType='correspondentEnter']").remove();
+                $("div[controlType='depotPutFromType']").remove();
             },
+
+            tableAddRowCallback: function (tableId) {
+                $("#addRow" + tableId).remove();
+                $("div[controlType='simpleTable']").find(".unitPrice").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".amountOfMoney").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".taxRate").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".taxMoney").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".taxUnitPrice").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".taxLastMoney").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".chooseProductBtn").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".normsId").prop('disabled', true);
+                $("div[controlType='simpleTable']").find(".warehouse").prop('disabled', true);
+            }
         });
     }});
 });
