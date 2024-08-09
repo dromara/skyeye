@@ -36,7 +36,7 @@ layui.config({
 				}},
 			{ colspan: '2', title: '来源单据信息', align: 'center' },
 			{ field: 'processInstanceId', title: '流程ID', rowspan: '2',width: 280, templet: function (d) {
-					return '<a lay-event="details" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
+					return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
 				}},
 			{ field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
 					return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("flowableStateEnum", 'id', d.state, 'name');

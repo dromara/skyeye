@@ -87,7 +87,7 @@ layui.config({
     function turnRequisitionMaterialToOut(data) {
         _openNewWindows({
             url: "../../tpl/erpPick/turnRequisitionMaterialToOut.html?id=" + data.id,
-            title: "转补料出库",
+            title: "转领料出库",
             pageId: "turnRequisitionMaterialToOut",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
