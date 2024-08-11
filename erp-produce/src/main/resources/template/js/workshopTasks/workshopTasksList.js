@@ -48,13 +48,6 @@ layui.config({
                 { field: 'name', title: '部门', align: 'center', width: 90, templet: function (d) {
                         return getNotUndefinedVal(d.farmMation?.departmentMation?.name);
                     }},
-                // { field: 'oddNumber', title: '加工单单号', rowspan: '2', align: 'left', width: 200, templet: function (d) {
-                //         var str = '<a lay-event="details" class="notice-title-click">' + d.machinMation?.oddNumber + '</a>';
-                //         if (!isNull(d.fromId)) {
-                //             str += '<span class="state-new">[转]</span>';
-                //         }
-                //         return str;
-                //     }},
                 { field: 'targetNum', title: '任务安排数量', align: 'center', width: 140 },
                 { field: 'planStartTime', title: '计划开始时间', align: 'center', width: 140, templet: function (d) {
                         return getNotUndefinedVal(d.machinProcedureMation?.planStartTime);
