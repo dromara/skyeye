@@ -33,7 +33,9 @@ layui.config({
             },
 
             loadComponentCallback: function () {
-                $("div[controlType='correspondentEnter']").remove();
+                //隐藏往来单位
+                $("div[controlType='correspondentAllEnter']").remove();
+                //隐藏来源单据
                 $("div[controlType='depotPutFromType']").remove();
             },
 

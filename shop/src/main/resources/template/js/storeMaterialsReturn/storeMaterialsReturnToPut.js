@@ -30,7 +30,7 @@ layui.config({
                         }});
                 },
                 loadComponentCallback: function () {
-                    $("div[controlType='correspondentEnter']").remove();
+                    $("div[controlType='correspondentAllEnter']").remove();
                     $("div[controlType='depotPutFromType']").remove();
                 },
                 tableAddRowCallback: function (tableId) {
