@@ -152,6 +152,7 @@ layui.config({
             pageId: "transPutOrder",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
             }});
     }
 

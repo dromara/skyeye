@@ -9,7 +9,7 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui'], function (exports) {
     winui.renderColor();
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$;
@@ -30,7 +30,7 @@ layui.config({
                         }});
                 },
                 loadComponentCallback: function () {
-                    $("div[controlType='correspondentEnter']").remove();
+                    $("div[controlType='correspondentAllEnter']").remove();
                     $("div[controlType='depotPutFromType']").remove();
                 },
                 tableAddRowCallback: function (tableId) {
