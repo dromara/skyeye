@@ -11,6 +11,8 @@ layui.config({
         table = layui.table,
         soulTable = layui.soulTable;
     var selTemplate = getFileContent('tpl/template/select-option.tpl');
+    authBtn('1722130800533');//新增
+
     //门店会员
     // 加载当前用户所属门店
     let storeHtml = '';

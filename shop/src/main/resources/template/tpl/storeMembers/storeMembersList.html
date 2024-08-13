@@ -34,14 +34,14 @@
             <table id="messageTable" lay-filter="messageTable"></table>
             <script type="text/html" id="tableBar">
                 {{# if(auth('1722130800533')){ }}
-                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">
-                    <language showName="com.skyeye.editBtn"></language>
-                </a>
+                    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">
+                        <language showName="com.skyeye.editBtn"></language>
+                    </a>
                 {{# } }}
                 {{# if(auth('1722130830483')){ }}
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">
-                    <language showName="com.skyeye.deleteBtn"></language>
-                </a>
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">
+                        <language showName="com.skyeye.deleteBtn"></language>
+                    </a>
                 {{# } }}
             </script>
         </div>
