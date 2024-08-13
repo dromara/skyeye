@@ -527,6 +527,10 @@ function turnTime(time, mm){
     if((minute + mm) >= 60){
         minute = minute + mm - 60;
         hour = hour + 1;
+        while(minute >= 60){
+            minute = minute- 60;
+            hour = hour + 1;
+        }
     } else {
         minute = minute + mm;
     }
