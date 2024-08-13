@@ -11,6 +11,7 @@ layui.config({
         laydate = layui.laydate,
         table = layui.table;
     var selOption = getFileContent('tpl/template/select-option.tpl');
+    authBtn('1722173155602');//新增
 
     // 加载我所在的门店
     shopUtil.queryStaffBelongStoreList(function (json){
