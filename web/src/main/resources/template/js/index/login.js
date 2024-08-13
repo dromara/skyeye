@@ -11,6 +11,59 @@ layui.config({
 		var $ = layui.$;
 		env = GetUrlParam("env");
 
+		if (!isNull(env)) {
+			winui.window.open({
+				id: '公告',
+				type: 1,
+				title: '演示公告',
+				content: '<form class="layui-form" action="" id="showForm" autocomplete="off">' +
+					'    <div class="layui-form-item layui-col-xs12">' +
+					'        <span class="hr-title">基本信息</span><hr>' +
+					'    </div>' +
+					'	 <div class="layui-form-item layui-col-xs6">' +
+					'        <label class="layui-form-label">链接：</label>' +
+					'        <div class="layui-input-block ver-center">' +
+					'        	<a href="https://gitee.com/doc_wei01/skyeye/blob/company_server/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98.md" style="color: blue" target="_blank">常见问题</a>' +
+					'        	<a href="https://articles.zsxq.com/id_xi3xhacte72g.html" style="color: blue" target="_blank">开发文档</a>' +
+					'        </div>' +
+					'    </div>' +
+					'	 <div class="layui-form-item layui-col-xs6">' +
+					'        <label class="layui-form-label">项目地址：</label>' +
+					'        <div class="layui-input-block ver-center">' +
+					'        	<a href="https://gitee.com/doc_wei01/skyeye" style="color: blue" target="_blank">项目地址1</a>' +
+					'			<a href="https://gitee.com/doc_wei01/erp-pro" style="color: blue" target="_blank">项目地址2</a>' +
+					'        </div>' +
+					'    </div>' +
+					'	 <div class="layui-form-item layui-col-xs12">' +
+					'        <label class="layui-form-label">作者：</label>' +
+					'        <div class="layui-input-block ver-center" style="font-weight: 800">' +
+					'        	卫志强' +
+					'        </div>' +
+					'    </div>' +
+					'	 <div class="layui-form-item layui-col-xs6">' +
+					'        <label class="layui-form-label">作者微信：</label>' +
+					'        <div class="layui-input-block ver-center">' +
+					'        	<img src="../../assets/author/chatgpt的微信.jpg" style="width: 200px;">' +
+					'        </div>' +
+					'    </div>' +
+					'	 <div class="layui-form-item layui-col-xs6">' +
+					'        <label class="layui-form-label">知识星球：</label>' +
+					'        <div class="layui-input-block ver-center">' +
+					'        	<img src="../../assets/author/知识星球.png" style="width: 200px;">' +
+					'        </div>' +
+					'    </div>' +
+					'	 <div class="layui-form-item layui-col-xs12">' +
+					'        <label class="layui-form-label">体验地址：</label>' +
+					'        <div class="layui-input-block ver-center" style="font-weight: 800">' +
+					'        	`Star`后，关注下方微信公众号，回复`skyeye`获取' +
+					'        	<img src="../../assets/author/微信公众号.jpg" style="width: 200px;">' +
+					'        </div>' +
+					'    </div>' +
+					'</form>',
+				area: ['80vw', '70vh']
+			});
+		}
+
 		// 系统配置文件
 		jsGetJsonFile("../../configRation.json?env=" + env, function(data) {
 			sysMainMation = data;
