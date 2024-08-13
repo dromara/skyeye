@@ -11,7 +11,9 @@
 
 **3. [开发文档](https://articles.zsxq.com/id_xi3xhacte72g.html)**
 
-**4. **体验地址** ：右上角`Star`后，关注下方微信公众号，回复`skyeye`获取**
+**4. [常见问题](https://gitee.com/doc_wei01/skyeye/blob/company_server/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98.md)，优先看这个。**
+
+**5. **体验地址** ：右上角`Star`后，关注下方微信公众号，回复`skyeye`获取**
 
 **为什么推荐使用本项目？**
 
