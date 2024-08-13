@@ -51,6 +51,9 @@ layui.config({
             { field: 'name', title: '会员名称', rowspan: '2', align: 'left', width: 150, templet: function (d) {
                     return getNotUndefinedVal(d.objectMation?.name);
                 }},
+            { field: 'processInstanceId', title: '流程ID', rowspan: '2', width: 100, templet: function (d) {
+                    return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
+                }},
             { field: 'phone', title: '会员手机号', rowspan: '2', align: 'left', width: 150, templet: function (d) {
                     return getNotUndefinedVal(d.objectMation?.phone);
                 }},
@@ -101,6 +104,8 @@ layui.config({
             activitiUtil.activitiDetails(data);
         } else if (layEvent === 'revoke') { //撤销
             revoke(data);
+        } else if (layEvent === 'processDetails') { // 工作流流程详情查看
+            activitiUtil.activitiDetails(data);
         }
     });
 

@@ -100,6 +100,8 @@ layui.config({
             materialReturn(data);
         }else if (layEvent === 'details') { //详情
             details(data);
+        } else if (layEvent === 'processDetails') { // 工作流流程详情查看
+            activitiUtil.activitiDetails(data);
         }
     });
 
