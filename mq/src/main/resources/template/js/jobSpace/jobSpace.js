@@ -78,7 +78,7 @@ layui.config({
 		        	}
 		        }},
 		        { field: 'test', title: '备注', align: 'left', width: 200, templet: function (d) {
-		        	if(d.status == '4'){
+		        	if(d.status == '4' && !isNull(d.responseBody)){
 		        		var js = JSON.parse(d.responseBody);
 		        		var point = js.filePath.lastIndexOf(".");
      					var type = js.filePath.substr(point);
