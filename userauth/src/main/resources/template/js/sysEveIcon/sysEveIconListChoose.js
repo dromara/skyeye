@@ -11,7 +11,7 @@ layui.config({
 	
     showGrid({
 	 	id: "showForm",
-	 	url: reqBasePath + "icon006",
+	 	url: reqBasePath + "querySysIconList",
 	 	params: {},
 	 	pagination: true,
 	 	pagesize: 18,
