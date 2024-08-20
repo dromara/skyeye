@@ -21,6 +21,8 @@
 
 ② 代码全部开放，让你可以了解整个项目的架构设计。
 
+本项目的GitCode地址: https://gitcode.com/doc_wei/skyeye-oa
+
 ## 🐶 沟通交流
 
 | |   知识星球   | 微信公众号(Skyeye智能制造云办公) |
