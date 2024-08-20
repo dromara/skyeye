@@ -1,5 +1,4 @@
 
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -15,7 +14,7 @@ layui.config({
 	
     showGrid({
 	 	id: "showForm",
-	 	url: reqBasePath + "sysevewinlockbgpic001",
+	 	url: reqBasePath + "querySysEveWinLockBgPicList",
 	 	params: {},
 	 	pagination: true,
 	 	pagesize: 18,
@@ -28,7 +27,7 @@ layui.config({
 	 	options: {'click .del':function(index, row){
 				layer.confirm('确认删除选中数据吗？', { icon: 3, title: '删除win系统锁屏桌面图片' }, function (index) {
 					layer.close(index);
-		            AjaxPostUtil.request({url: reqBasePath + "sysevewinlockbgpic003", params: {rowId: row.id}, type: 'json', callback: function (json) {
+		            AjaxPostUtil.request({url: reqBasePath + "deleteSysEveWinLockBgPicById", params: {id: row.id}, type: 'json', method: 'DELETE', callback: function (json) {
 						winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 						loadTable();
 		    		}});
@@ -54,7 +53,11 @@ layui.config({
 		done: function(json) {
 			// 上传完毕回调
 			if (json.returnCode == 0) {
-				AjaxPostUtil.request({url: reqBasePath + "sysevewinlockbgpic002", params: {picUrl: json.bean.picUrl}, type: 'json', callback: function (json) {
+				var params = {
+					picUrl: json.bean.picUrl,
+					picType: 1
+				};
+				AjaxPostUtil.request({url: reqBasePath + "insertSysEveWinLockBgPic", params: params, type: 'json', mthod: 'POST', callback: function (json) {
 					winui.window.msg("上传成功", {icon: 1, time: 2000});
 					loadTable();
 	    		}});

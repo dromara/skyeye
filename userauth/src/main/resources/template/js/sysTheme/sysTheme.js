@@ -35,7 +35,7 @@ layui.config({
 				//桌面背景选择
 				$('.bgPicItem').on('click', function () {
 					var bgSrc = $(this).attr('picUrl');
-					AjaxPostUtil.request({url: reqBasePath + "sys025", params: {winBgPicUrl: bgSrc}, type: 'json', method: "PUT", callback: function (json) {
+					AjaxPostUtil.request({url: reqBasePath + "sys025", params: {winBgPicUrl: bgSrc}, type: 'json', method: "POST", callback: function (json) {
 						$('.background-preview').css('background-image', 'url(' + bgSrc + ')');
 						winui.resetBg(bgSrc);
 					}});
@@ -43,7 +43,7 @@ layui.config({
 				// 桌面锁屏背景选择
 				$('.lockBgPicItem').on('click', function () {
 					var bgSrc = $(this).attr('picUrl');
-					AjaxPostUtil.request({url: reqBasePath + "sys026", params: {winLockBgPicUrl: bgSrc}, type: 'json', method: "PUT", callback: function (json) {
+					AjaxPostUtil.request({url: reqBasePath + "sys026", params: {winLockBgPicUrl: bgSrc}, type: 'json', method: "POST", callback: function (json) {
 						$('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
 						winui.resetLockBg(bgSrc);
 					}});
@@ -114,7 +114,7 @@ layui.config({
 					});
 				}, 'click .bgPicItem1':function(index, row){
 					var bgSrc = row.picUrl;
-					AjaxPostUtil.request({url: reqBasePath + "sys025", params: {winBgPicUrl: bgSrc}, type: 'json', method: "PUT", callback: function (json) {
+					AjaxPostUtil.request({url: reqBasePath + "sys025", params: {winBgPicUrl: bgSrc}, type: 'json', method: "POST", callback: function (json) {
 						$('.background-preview').css('background-image', 'url(' + bgSrc + ')');
 						winui.resetBg(bgSrc);
 					}});
@@ -155,7 +155,7 @@ layui.config({
 	function initCustomLockBackGroundPic() {
 		showGrid({
 			id: "cus-lockscreen-choose",
-			url: reqBasePath + "sysevewinlockbgpic006",
+			url: reqBasePath + "querySysEveWinLockBgPicCustomList",
 			params: {},
 			pagination: false,
 			template: getFileContent('tpl/sysTheme/custom-lockbgpic-item.tpl'),
@@ -167,14 +167,14 @@ layui.config({
 			options: {'click .lockDel':function(index, row){
 					winui.window.confirm('确认删除选中数据吗？', { icon: 3, title: '删除win系统桌面图片' }, function (index) {
 						winui.window.close(index);
-						AjaxPostUtil.request({url: reqBasePath + "sysevewinlockbgpic007", params: {rowId: row.id}, type: 'json', callback: function (json) {
+						AjaxPostUtil.request({url: reqBasePath + "deleteSysEveWinLockBgPicById", params: {id: row.id}, type: 'json', method: "DELETE", callback: function (json) {
 							winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 							refreshGrid("cus-lockscreen-choose", {params:{}});
 						}});
 					});
 				}, 'click .lockBgPicItem1':function(index, row){
 					var bgSrc = row.picUrl;
-					AjaxPostUtil.request({url: reqBasePath + "sys026", params: {winLockBgPicUrl: bgSrc}, type: 'json', callback: function (json) {
+					AjaxPostUtil.request({url: reqBasePath + "sys026", params: {winLockBgPicUrl: bgSrc}, type: 'json', method: "POST", callback: function (json) {
 						$('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
 						winui.resetLockBg(bgSrc);
 					}});
@@ -189,7 +189,11 @@ layui.config({
 					done: function(json) {
 						// 上传完毕回调
 						if (json.returnCode == 0) {
-							AjaxPostUtil.request({url: reqBasePath + "sysevewinlockbgpic005", params: {picUrl: json.bean.picUrl}, type: 'json', callback: function (json) {
+							var params = {
+								picUrl: json.bean.picUrl,
+								picType: 2
+							};
+							AjaxPostUtil.request({url: reqBasePath + "insertSysEveWinLockBgPic", params: params, type: 'json', method: "POST", callback: function (json) {
 								winui.window.msg("上传成功", {icon: 1, time: 2000});
 								refreshGrid("cus-lockscreen-choose", {params:{}});
 							}});

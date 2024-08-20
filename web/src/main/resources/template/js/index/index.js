@@ -166,7 +166,7 @@ layui.config({
 			}]);
 
 			// 读取本地便签
-			AjaxPostUtil.request({url: reqBasePath + "stickynotes002", params: {}, type: 'json', method: "GET", callback: function (json) {
+			AjaxPostUtil.request({url: reqBasePath + "queryStickyNotesList", params: {}, type: 'json', method: "GET", callback: function (json) {
 				var tags = json.rows;
 				$.each(tags, function(index, item) {
 					if(index >= 5)
