@@ -1,8 +1,6 @@
 
 var rowId = "";
 
-var staffId = "";
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -17,31 +15,11 @@ layui.config({
 
 	authBtn('1555562812681');
 	
-	var bodyList = new Array();
-	if(auth('1600612678928')){
-		bodyList.push({name: '录入证书', icon: 'fa fa-certificate', click: function(obj) { addCertificate(obj.row); }});
-	}
-	if(auth('1601106597111')){
-		bodyList.push({name: '录入教育背景', icon: 'fa fa-stack-overflow', click: function(obj) { addEducation(obj.row); }});
-	}
-	if(auth('1601542957698')){
-		bodyList.push({name: '录入家庭成员', icon: 'fa fa-home', click: function(obj) { addFamily(obj.row); }});
-	}
-	if(auth('1601612400686')){
-		bodyList.push({name: '录入工作履历', icon: 'fa fa-list-alt', click: function(obj) { addJobResume(obj.row); }});
-	}
-	if(auth('1601628157655')){
-		bodyList.push({name: '录入语言能力', icon: 'fa fa-language', click: function(obj) { addLanguage(obj.row); }});
-	}
-	if(auth('1601634348149')){
-		bodyList.push({name: '录入合同信息', icon: 'fa fa-file-contract', click: function(obj) { addContract(obj.row); }});
-	}
-	
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'staff001',
+	    url: reqBasePath + 'querySysUserStaffList',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -52,17 +30,14 @@ layui.config({
             header: true,
             total: true
         },
-        contextmenu: {
-        	body: bodyList
-        },
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', fixed: 'left', type: 'numbers' },
 	        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 100, fixed: 'left', templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.userName + '</a>';
 	        }},
 			{ field: 'jobNumber', title: '工号', rowspan: '3', align: 'left', width: 100, fixed: 'left'},
-	        { field: 'staffType', title: '类型', rowspan: '3', align: 'left', width: 90, templet: function (d) {
-				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("userStaffType", 'id', d.staffType, 'name');
+	        { field: 'type', title: '类型', rowspan: '3', align: 'left', width: 90, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("userStaffType", 'id', d.type, 'name');
 			}},
 	        { field: 'email', title: '邮箱', rowspan: '3', align: 'left', width: 170 },
 	        { field: 'userPhoto', title: '头像', rowspan: '3', align: 'center', width: 60, templet: function (d) {
@@ -90,6 +65,10 @@ layui.config({
 	        { field: 'phone', title: '手机号', rowspan: '3', align: 'center', width: 100},
 	        { field: 'homePhone', title: '家庭电话', rowspan: '3', align: 'center', width: 100},
 	        { field: 'qq', title: 'QQ', rowspan: '3', align: 'left', width: 100},
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '3', width: 120 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '3', align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '3', align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], rowspan: '3', align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '3', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
 	    ],[
 	    	{ field: 'companyName', title: '公司', align: 'left', width: 120},
@@ -151,7 +130,7 @@ layui.config({
 			}});
 	}
 	
-	//离职
+	// 离职
 	function leave(data) {
 		rowId = data.id;
 		_openNewWindows({
@@ -179,90 +158,6 @@ layui.config({
 			}});
 	}
 	
-	// 录入证书
-	function addCertificate(data) {
-    	staffId = data.id;
-    	_openNewWindows({
-			url: "../../tpl/sysStaffCertificate/sysStaffCertificateAdd.html",
-			title: "录入证书",
-			pageId: "sysStaffCertificateAdd",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadTable();
-			}});
-    }
-    
-    // 录入教育背景
-	function addEducation(data) {
-    	staffId = data.id;
-    	_openNewWindows({
-			url: "../../tpl/sysStaffEducation/sysStaffEducationAdd.html",
-			title: "录入教育背景",
-			pageId: "sysStaffEducationAdd",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadTable();
-			}});
-    }
-    
-    // 录入家庭成员
-	function addFamily(data) {
-    	staffId = data.id;
-    	_openNewWindows({
-			url: "../../tpl/sysStaffFamily/sysStaffFamilyAdd.html",
-			title: "录入家庭成员",
-			pageId: "sysStaffFamilyAdd",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadTable();
-			}});
-    }
-    
-    // 录入工作履历
-	function addJobResume(data) {
-    	staffId = data.id;
-    	_openNewWindows({
-			url: "../../tpl/sysStaffJobResume/sysStaffJobResumeAdd.html",
-			title: "录入工作履历",
-			pageId: "sysStaffJobResumeAdd",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadTable();
-			}});
-    }
-    
-    // 录入语言能力
-	function addLanguage(data) {
-    	staffId = data.id;
-    	_openNewWindows({
-			url: "../../tpl/sysStaffLanguage/sysStaffLanguageAdd.html",
-			title: "录入语言能力",
-			pageId: "sysStaffLanguageAdd",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadTable();
-			}});
-    }
-    
-    // 录入合同信息
-	function addContract(data) {
-    	staffId = data.id;
-    	_openNewWindows({
-			url: "../../tpl/sysStaffContract/sysStaffContractAdd.html",
-			title: "录入合同信息",
-			pageId: "sysStaffContractAdd",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				loadTable();
-			}});
-    }
-
 	// 新增员工
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({

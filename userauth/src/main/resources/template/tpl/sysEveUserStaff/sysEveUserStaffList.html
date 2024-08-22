@@ -17,18 +17,18 @@
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
-			{{# if(d.state != 2){ }}
-				{{# if(auth('1555563042447')){ }}
+			{{# if (d.state != 2) { }}
+				{{# if (auth('1555562812681')) { }}
             		<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 				{{# } }}
 			{{# } }}
-			{{# if(d.staffType == 1){ }}
-				{{# if(auth('1585987419850')){ }}
+			{{# if (d.type == 1) { }}
+				{{# if (auth('1585987419850')) { }}
 					<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="turnTeacher">转教职工</a>
 				{{# } }}
 			{{# } }}
-			{{# if(d.state != 2){ }}
-				{{# if(auth('1557906699018')){ }}
+			{{# if (d.state != 2) { }}
+				{{# if (auth('1557906699018')) { }}
 					<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="leave">离职</a>
 				{{# } }}
 			{{# } }}

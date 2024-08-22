@@ -18,8 +18,8 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "staff005",
-		 	params: {rowId: staffId},
+		 	url: reqBasePath + "querySysUserStaffById",
+		 	params: {id: staffId},
 		 	pagination: false,
 			method: "GET",
 		 	template: $("#beanTemplate").html(),

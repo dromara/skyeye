@@ -128,7 +128,7 @@
 			<div class="layui-form-item layui-col-xs12">
 				<label class="layui-form-label">考勤段：</label>
 				<div class="layui-input-block ver-center">
-					{{#each checkTimeStr}}
+					{{#each timeList}}
 						<span class="layui-badge-rim workDay" rowid="{{timeId}}">{{title}}[{{startTime}} ~ {{endTime}}]{{typeName}}</span>
 					{{/each}}
 				</div>

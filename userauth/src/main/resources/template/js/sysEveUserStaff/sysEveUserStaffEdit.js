@@ -19,14 +19,14 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "staff003",
-		 	params: {rowId: parent.rowId},
+		 	url: reqBasePath + "querySysUserStaffById",
+		 	params: {id: parent.rowId},
 		 	pagination: false,
 			method: "GET",
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb) {
-		 		hdb.registerHelper("compare1", function(v1, options){
-					if(isNull(v1)){
+		 		hdb.registerHelper("compare1", function(v1, options) {
+					if (isNull(v1)) {
 						return path + "assets/img/uploadPic.png";
 					} else {
 						return basePath + v1;
@@ -49,18 +49,18 @@ layui.config({
 		 			url: reqBasePath + 'queryCompanyMationListTree', // 异步接口
 		 			dataStyle: 'layuiStyle',
 		 			done: function(data) {
-		 				if($("#demoTree1 li").length > 0){
-		 					for(var i = 0; i < $("#demoTree1 li").length; i++){
-	 							if($("#demoTree1 li").eq(i).attr("data-id") == json.bean.companyId){
-	 								$("#demoTree1 li").eq(i).children('div').click();
-	 								return;
-	 							}
-	 						}
-		 				}
+						if ($("#demoTree1 li").length > 0) {
+							for (var i = 0; i < $("#demoTree1 li").length; i++) {
+								if ($("#demoTree1 li").eq(i).attr("data-id") == json.bean.companyId) {
+									$("#demoTree1 li").eq(i).children('div').click();
+									return;
+								}
+							}
+						}
 		 			}
 		 		});
 		 		
-		 		dtree.on("node('demoTree1')" ,function(param){
+		 		dtree.on("node('demoTree1')" ,function(param) {
 		 			companyId = param.nodeId;
 		 			// 初始化部门
 		 			dtree.render({
@@ -69,9 +69,9 @@ layui.config({
 		 				dataStyle: 'layuiStyle',
 		 				done: function(data) {
 		 					departmentId = "";
-		 					if($("#demoTree2 li").length > 0){
-		 						for(var i = 0; i < $("#demoTree2 li").length; i++){
-		 							if($("#demoTree2 li").eq(i).attr("data-id") == json.bean.departmentId){
+		 					if ($("#demoTree2 li").length > 0) {
+		 						for (var i = 0; i < $("#demoTree2 li").length; i++) {
+		 							if ($("#demoTree2 li").eq(i).attr("data-id") == json.bean.departmentId) {
 		 								$("#demoTree2 li").eq(i).children('div').click();
 		 								return;
 		 							}
@@ -91,7 +91,7 @@ layui.config({
 		 			});
 		 		});
 		 		
-		 		dtree.on("node('demoTree2')" ,function(param){
+		 		dtree.on("node('demoTree2')" ,function(param) {
 		 			departmentId = param.nodeId;
 		 			//初始化职位
 		 			dtree.render({
@@ -100,14 +100,14 @@ layui.config({
 		 				dataStyle: 'layuiStyle',
 		 				done: function(data) {
 		 					jobId = "";
-		 					if($("#demoTree3 li").length > 0){
-		 						for(var i = 0; i < $("#demoTree3 li").length; i++){
-		 							if($("#demoTree3 li").eq(i).attr("data-id") == json.bean.jobId){
-		 								$("#demoTree3 li").eq(i).children('div').click();
-		 								return;
-		 							}
-		 						}
-		 					}
+							if ($("#demoTree3 li").length > 0) {
+								for (var i = 0; i < $("#demoTree3 li").length; i++) {
+									if ($("#demoTree3 li").eq(i).attr("data-id") == json.bean.jobId) {
+										$("#demoTree3 li").eq(i).children('div').click();
+										return;
+									}
+								}
+							}
 		 				}
 		 			});
 		 		});
@@ -122,9 +122,9 @@ layui.config({
 						method: 'GET',
 						done: function(data) {
 							jobScoreId = "";
-							if($("#demoTree4 li").length > 0){
-								for(var i = 0; i < $("#demoTree4 li").length; i++){
-									if($("#demoTree4 li").eq(i).attr("data-id") == json.bean.jobScoreId){
+							if ($("#demoTree4 li").length > 0) {
+								for (var i = 0; i < $("#demoTree4 li").length; i++) {
+									if ($("#demoTree4 li").eq(i).attr("data-id") == json.bean.jobScoreId) {
 										$("#demoTree4 li").eq(i).children('div').click();
 										return;
 									}
@@ -149,8 +149,8 @@ layui.config({
 			     	ajaxSendLoadBefore: function(hdb) {
 			     	},
 			     	ajaxSendAfter:function(data) {
-			     		for(var i in json.bean.checkTimeStr){
-							$('input:checkbox[rowId="' + json.bean.checkTimeStr[i].timeId + '"]').attr("checked", true);
+			     		for(var i in json.bean.timeList){
+							$('input:checkbox[rowId="' + json.bean.timeList[i].timeId + '"]').attr("checked", true);
 						}
 			     		form.render('checkbox');
 			     	}
@@ -172,18 +172,18 @@ layui.config({
 		 	        		winui.window.msg('请选择职位信息', {icon: 2, time: 2000});
 		 	        		return false;
 		 	        	}
-		 	        	
-		 	        	var timeIds = "";
-			        	$.each($('input:checkbox:checked'),function(){
-			        		timeIds = timeIds + $(this).attr("rowId") + ",";
-			            });
-			            if(isNull(timeIds)){
+
+						var timeIds = [];
+						$.each($('input:checkbox:checked'),function(){
+							timeIds.push($(this).attr("rowId"));
+						});
+						if (timeIds.length == 0) {
 		 	        		winui.window.msg('请选择考勤段', {icon: 2, time: 2000});
 		 	        		return false;
 		 	        	}
 		 	        	
 		 	        	var params = {
-		 	        		rowId: parent.rowId,
+		 	        		id: parent.rowId,
 		 	        		userIdCard: $("#userIdCard").val(),
 							userName: $("#userName").html(),
 		 	        		userSex: $("input[name='userSex']:checked").val(),
@@ -198,7 +198,7 @@ layui.config({
 		 	        		departmentId: departmentId,
 		 	        		jobId: jobId,
 							jobScoreId: jobScoreId,
-		 	        		checkTimeStr: timeIds,
+							timeIdList: JSON.stringify(timeIds),
 							state: $("#state").attr("state"),
 							trialTime: $("#trialTime").html()
 		 	        	};
@@ -208,7 +208,7 @@ layui.config({
 		 	        		return false;
 		 	        	}
 
-		 	        	AjaxPostUtil.request({url: reqBasePath + "staff004", params: params, type: 'json', callback: function (json) {
+		 	        	AjaxPostUtil.request({url: reqBasePath + "writeSysUserStaff", params: params, type: 'json', method: 'POST', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 			 	   		}});

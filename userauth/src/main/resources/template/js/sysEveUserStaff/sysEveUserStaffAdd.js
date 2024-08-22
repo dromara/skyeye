@@ -150,11 +150,11 @@ layui.config({
  	        		return false;
  	        	}
  	        	
- 	        	var timeIds = "";
+ 	        	var timeIds = [];
 	        	$.each($('input:checkbox:checked'),function(){
-	        		timeIds = timeIds + $(this).attr("rowId") + ",";
+					timeIds.push($(this).attr("rowId"));
 	            });
-	            if(isNull(timeIds)){
+	            if (timeIds.length == 0) {
  	        		winui.window.msg('请选择考勤段', {icon: 2, time: 2000});
  	        		return false;
  	        	}
@@ -178,7 +178,7 @@ layui.config({
  	        		departmentId: departmentId,
  	        		jobId: jobId,
 					jobScoreId: jobScoreId,
- 	        		checkTimeStr: timeIds,
+					timeIdList: JSON.stringify(timeIds),
 					type: type,
 					state: state,
 					trialTime: $("#trialTime").val(),
@@ -189,7 +189,7 @@ layui.config({
  	        		return false;
  	        	}
  	        	
- 	        	AjaxPostUtil.request({url: reqBasePath + "staff002", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: reqBasePath + "writeSysUserStaff", params: params, type: 'json', method: 'POST', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});

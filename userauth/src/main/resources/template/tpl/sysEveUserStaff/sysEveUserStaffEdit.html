@@ -25,12 +25,6 @@
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs6">
-			<label class="layui-form-label">入职时间<i class="red">*</i></label>
-			<div class="layui-input-block ver-center" id="entryTime">
-				{{entryTime}}
-			</div>
-		</div>
-		<div class="layui-form-item layui-col-xs6">
 			<label class="layui-form-label">身份证件<i class="red">*</i></label>
 			<div class="layui-input-block">
 				<input type="text" id="userIdCard" name="userIdCard" placeholder="请输入身份证件" class="layui-input" maxlength="18" win-verify="required|identity" value="{{userIdCard}}"/>
@@ -42,6 +36,12 @@
 				<input type="radio" name="userSex" value="0" title="保密"/>
 				<input type="radio" name="userSex" value="1" title="男" />
 				<input type="radio" name="userSex" value="2" title="女" />
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">入职时间<i class="red">*</i></label>
+			<div class="layui-input-block ver-center" id="entryTime">
+				{{entryTime}}
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs6">
