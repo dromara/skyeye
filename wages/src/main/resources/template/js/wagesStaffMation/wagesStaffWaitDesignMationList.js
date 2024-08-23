@@ -18,7 +18,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: sysMainMation.wagesBasePath + 'wagesstaff001',
+	    url: sysMainMation.reqBasePath + 'querySysUserStaffList',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -34,8 +34,8 @@ layui.config({
 	        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 150, fixed: 'left', templet: function (d) {
 	        	return d.jobNumber + '_' + d.userName;
 	        }},
-	        { field: 'staffType', title: '类型', rowspan: '3', align: 'left', width: 90, templet: function (d) {
-				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("userStaffType", 'id', d.staffType, 'name');
+	        { field: 'type', title: '类型', rowspan: '3', align: 'left', width: 90, templet: function (d) {
+				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("userStaffType", 'id', d.type, 'name');
 	        }},
 	        { field: 'email', title: '邮箱', rowspan: '3', align: 'left', width: 170 },
 	        { field: 'userPhoto', title: '头像', rowspan: '3', align: 'center', width: 60, templet: function (d) {
@@ -106,7 +106,7 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+		return $.extend(true, {designWages: 1}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
     
     exports('wagesStaffWaitDesignMationList', {});
