@@ -57,7 +57,6 @@
 |skyeye-school |8084 |学校模块 |school-web.jar |
 |skyeye-survey |8086 |问卷模块 |survey-web.jar |
 |skyeye-note |8087 |笔记模块 |note-web.jar |
-|skyeye-rmprogram |8089 |小程序设计器模块 |rmprogram-web.jar |
 |skyeye-knowlg |8090 |知识库模块 |knowlg-web.jar |
 |skyeye-disk-cloud |8092 |云盘模块 |disk-cloud-web.jar |
 |skyeye-business-flow |8094 |业务流程模块 |business-flow-web.jar |
