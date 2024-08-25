@@ -22,7 +22,7 @@ layui.config({
         		var params = {
         			quitTime: $("#quitTime").val(),
         			quitReason: $("#quitReason").val(),
-    				rowId:parent.rowId,
+    				id: parent.rowId,
         		};
     			AjaxPostUtil.request({url: reqBasePath + "staff006", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
