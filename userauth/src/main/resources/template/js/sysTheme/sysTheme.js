@@ -51,7 +51,7 @@ layui.config({
 				// 颜色选择
 				$('.color-choose>div').on('click', function () {
 					var color = Number($(this)[0].classList[0].replace('theme-color-', ''));
-					AjaxPostUtil.request({url: reqBasePath + "sys024", params: {themeColor: color}, type: 'json', method: "PUT", callback: function (json) {
+					AjaxPostUtil.request({url: reqBasePath + "sys024", params: {winThemeColor: color}, type: 'json', method: "POST", callback: function (json) {
 						winui.resetColor(color);
 					}});
 				});
@@ -64,8 +64,8 @@ layui.config({
 				var taskbarMode = winui.getSetting('taskbarMode');
 				$('.taskbar-position input[value=' + taskbarMode + ']').prop('checked', true);
 				//设置当前菜单栏显示样式
-				var loadBottomMenuIcon = parent.loadBottomMenuIcon;
-				$('.bottomMenuIcon-position input[value=' + loadBottomMenuIcon + ']').prop('checked', true);
+				var winBottomMenuIcon = parent.winBottomMenuIcon;
+				$('.bottomMenuIcon-position input[value=' + winBottomMenuIcon + ']').prop('checked', true);
 				//设置主题预览中开始菜单尺寸
 				var startSize = winui.getSetting('startSize');
 				$('.start-size input[value=' + startSize + ']').prop('checked', true);
@@ -213,23 +213,23 @@ layui.config({
 
 	//任务栏位置
 	form.on('radio(taskPosition)', function (data) {
-		AjaxPostUtil.request({url: reqBasePath + "sys028", params: {winTaskPosition: data.value}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "sys028", params: {winTaskPosition: data.value}, type: 'json', method: "POST", callback: function (json) {
 			winui.resetTaskbar(data.value);
 		}});
 	});
 	//开始菜单尺寸
 	form.on('radio(startSize)', function (data) {
-		AjaxPostUtil.request({url: reqBasePath + "sys027", params: {winStartMenuSize: data.value}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "sys027", params: {winStartMenuSize: data.value}, type: 'json', method: 'POST', callback: function (json) {
 			winui.resetStartSize(data.value);
 		}});
 	});
 	//窗口栏显示
-	form.on('radio(loadBottomMenuIcon)', function (data) {
+	form.on('radio(winBottomMenuIcon)', function (data) {
 		var parent$ = window.parent.layui.jquery;
 		winuiTaskbarTask = parent$(".winui-taskbar-task");
-		AjaxPostUtil.request({url: reqBasePath + "sys030", params: {loadBottomMenuIcon: data.value}, type: 'json', callback: function (json) {
-			parent.loadBottomMenuIcon = data.value;
-			if (data.value === '1'){//只显示图标
+		AjaxPostUtil.request({url: reqBasePath + "sys030", params: {winBottomMenuIcon: data.value}, type: 'json', method: 'POST', callback: function (json) {
+			parent.winBottomMenuIcon = data.value;
+			if (data.value === '1') {//只显示图标
 				winuiTaskbarTask.each(function () {
 					$(this).find("li").addClass("task-item-icon-box");
 					$(this).find(".title-icon-big").show();

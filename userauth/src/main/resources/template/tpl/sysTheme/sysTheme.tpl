@@ -105,8 +105,8 @@
         <h1><i class="fa fa-tasks fa-fw"></i>菜单显示</h1>
         <hr class="layui-bg-blue">
         <div class="layui-form winui-radio bottomMenuIcon-position">
-            <input type="radio" name="bottomMenuIcon" value="1" title="图标" lay-filter="loadBottomMenuIcon">
-            <input type="radio" name="bottomMenuIcon" value="0" title="图标+文字" lay-filter="loadBottomMenuIcon">
+            <input type="radio" name="bottomMenuIcon" value="1" title="图标" lay-filter="winBottomMenuIcon">
+            <input type="radio" name="bottomMenuIcon" value="0" title="图标+文字" lay-filter="winBottomMenuIcon">
         </div>
     </div>
 {{/bean}}

@@ -1,5 +1,5 @@
 ﻿
-var loadBottomMenuIcon;//是否只展示图标，1是  0否
+var winBottomMenuIcon;//是否只展示图标，1是  0否
 
 var friendList = null;//好友列表
 var friendChooseList = "";//已选中群组成员
@@ -70,7 +70,7 @@ layui.config({
 		$("#userPhoto").attr("src", fileBasePath + currentUserMation.userPhoto);
 		$("#userName").html(currentUserMation.userCode + '(' + currentUserMation.userName + ')');
 		userId = currentUserMation.id;
-		loadBottomMenuIcon = currentUserMation.loadBottomMenuIcon;
+		winBottomMenuIcon = currentUserMation.winBottomMenuIcon;
 		if (isNull(currentUserMation.winBgPicUrl)) {
 			currentUserMation.winBgPicUrl = fileBasePath + '/images/upload/winbgpic/default.jpg';
 		} else {
@@ -118,7 +118,7 @@ layui.config({
 			winui.helper.addTool([{
 				tips: '主题设置',
 				icon: 'fa-paw',
-				click: function (e) {winui.window.openTheme(loadBottomMenuIcon);}
+				click: function (e) {winui.window.openTheme(winBottomMenuIcon);}
 			}, {
 				tips: '添加便签',
 				icon: 'fa-pencil-square-o',
@@ -162,7 +162,7 @@ layui.config({
 			}, {
 				tips: '消息中心',
 				icon: 'fa-list-ul',
-				click: function(e) {winui.window.openSysNotice(loadBottomMenuIcon);}
+				click: function(e) {winui.window.openSysNotice(winBottomMenuIcon);}
 			}]);
 
 			// 读取本地便签
@@ -450,7 +450,7 @@ layui.config({
 				            loadIconColor: '#ecf3f8',
 				            area: ['400px', '400px'],
 				            maxOpen: '-1',
-				            loadBottomMenuIcon: loadBottomMenuIcon,
+							winBottomMenuIcon: winBottomMenuIcon,
 				            iconTitle: '<i class="fa fa-fw title-icon-big fa-info-circle" style="background-color: #0491fe;color: #ecf3f8;"></i>',
 				            refresh:true
 				        });
@@ -946,7 +946,7 @@ layui.config({
 		}
 		// 自定义页面
 		if (url == 'theme') {
-			winui.window.openTheme(loadBottomMenuIcon);
+			winui.window.openTheme(winBottomMenuIcon);
 			return;
 		}
 
@@ -971,7 +971,7 @@ layui.config({
 				loadIconColor: menuIconColor,
 				area: ['90vw','90vh'],
 				maxOpen: maxOpen,
-				loadBottomMenuIcon: loadBottomMenuIcon,
+				winBottomMenuIcon: winBottomMenuIcon,
 				iconTitle: iconTitle,
 				refresh: true,
 				success: function(){

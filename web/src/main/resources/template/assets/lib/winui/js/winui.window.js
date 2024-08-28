@@ -90,7 +90,7 @@ layui.define(['layer', 'winui'], function (exports) {
             shadeClose: options.shadeClose, 	//点击空白处关闭
             scrollbar: false,
             closeBtn: options.closeBtn,
-            loadBottomMenuIcon: options.loadBottomMenuIcon || '0',//是否只展示图标，1是  0否
+            winBottomMenuIcon: options.winBottomMenuIcon || '0',//是否只展示图标，1是  0否
             //销毁回调
             end: options.end || function () {
             	if(typeof(options.cancel) == "function") {
@@ -232,7 +232,7 @@ layui.define(['layer', 'winui'], function (exports) {
                 $(windowDom).find('.layui-layer-max').remove();
             if(options.addToButtomMenu){
             	//增加任务项
-            	var taskItem = common.addTaskItem(options.id, options.title, options.iconTitle, options.loadBottomMenuIcon);
+            	var taskItem = common.addTaskItem(options.id, options.title, options.iconTitle, options.winBottomMenuIcon);
             	//选中任务项
             	common.selectDom(taskItem);
             	//绑定任务项mouseup事件
@@ -349,9 +349,9 @@ layui.define(['layer', 'winui'], function (exports) {
             $(selector).addClass(THIS).siblings().removeClass(THIS);
         },
         //添加任务项（返回添加的任务项dom）
-        addTaskItem: function (id, title, iconTitle, loadBottomMenuIcon) {
+        addTaskItem: function (id, title, iconTitle, winBottomMenuIcon) {
         	var taskItem;
-        	if(loadBottomMenuIcon === '1'){//只展示图标
+        	if (winBottomMenuIcon === '1') {//只展示图标
         		var menuTitle = $(title);
         		$(menuTitle[0]).css({'display': 'none'});
         		$(menuTitle[1]).css({'display': 'none'});
@@ -615,7 +615,7 @@ layui.define(['layer', 'winui'], function (exports) {
     };
 
     // 打开主题设置窗口
-    winLayer.openTheme = function (loadBottomMenuIcon) {
+    winLayer.openTheme = function (winBottomMenuIcon) {
         var that = this;
         $.get(winui.path + '../../../tpl/sysTheme/sysTheme.html', {}, function (content) {
         	var title = '<i class="fa title-icon fa-fw fa-cog" style="background-color: #0491fe;color: #ecf3f8;"></i>' + '<font class="win-title-class">主题设置</font>';
@@ -625,14 +625,14 @@ layui.define(['layer', 'winui'], function (exports) {
                 type: 1,
                 title: title,
                 content: content,
-                loadBottomMenuIcon: loadBottomMenuIcon,
+                winBottomMenuIcon: winBottomMenuIcon,
                 iconTitle: iconTitle
             });
         });
     }
     
     // 打开我的消息通知
-    winLayer.openSysNotice = function (loadBottomMenuIcon) {
+    winLayer.openSysNotice = function (winBottomMenuIcon) {
         var that = this;
     	var title = '<i class="fa title-icon fa-fw fa-list-ul" style="background-color: #0491fe;color: #ecf3f8;"></i>' + '<font class="win-title-class">消息中心</font>';
     	var iconTitle = '<i class="fa title-icon-big fa-fw fa-list-ul" style="background-color: #0491fe;color: #ecf3f8;"></i>';
@@ -641,7 +641,7 @@ layui.define(['layer', 'winui'], function (exports) {
             type: 2,
             title: title,
             content: systemCommonUtil.getUrl('FP2024013100007', null),
-            loadBottomMenuIcon: loadBottomMenuIcon,
+            winBottomMenuIcon: winBottomMenuIcon,
             iconTitle: iconTitle
         });
     }
