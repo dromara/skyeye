@@ -6,7 +6,7 @@ spring:
   application:
     name: skyeye-web-${spring.profiles.active} # 服务名
   profiles:
-    active: public
+    active: dev
   cloud:
     nacos:
       discovery:
