@@ -192,6 +192,7 @@ layui.config({
 		if (winui.verifyForm(data.elem)) {
 			var params = {
 				className: className,
+				appId: appId,
 				name: $("#name").val(),
 				position: $("#position").val(),
 				color: isNull($("#color").val()) ? '' : $("#color").val(),

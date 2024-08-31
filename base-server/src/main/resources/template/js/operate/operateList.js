@@ -117,7 +117,7 @@ layui.config({
 	}
 
 	function getTableParams() {
-		return {className: objectId};
+		return {className: objectId, appId: appId};
 	}
 
     exports('operateList', {});

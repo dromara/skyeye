@@ -84,7 +84,7 @@ layui.config({
 	}
 
 	function loadOperate(defaultValue) {
-		AjaxPostUtil.request({url: reqBasePath + "queryOperateList", params: {className: className}, type: 'json', method: 'POST', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "queryOperateList", params: {className: className, appId: appId}, type: 'json', method: 'POST', callback: function (json) {
 			var value = isNull(defaultValue) ? '' : defaultValue.toString();
 			dataShowType.showData(json, 'verificationSelect', 'operateIdList', value, form);
 		}});
