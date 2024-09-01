@@ -55,7 +55,6 @@
 |skyeye-report |8085 |报表设计器 |report-web.jar |
 |xxl-job-2.3.0 |8200 |定时任务 |xxl-job-admin-2.3.0.jar |
 |skyeye-school |8084 |学校模块 |school-web.jar |
-|skyeye-survey |8086 |问卷模块 |survey-web.jar |
 |skyeye-notice |8096 |公告模块 |notice-web.jar |
 |skyeye-forum |8097 |论坛模块 |forum-web.jar |
 |skyeye-jobdiary |8098 |工作日报模块 |jobdiary-web.jar |
