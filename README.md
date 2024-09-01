@@ -66,7 +66,6 @@
 |skyeye-ehr |8100 |EHR模块 |ehr-web.jar |
 |skyeye-wages |8101 |薪资模块 |wages-web.jar |
 |skyeye-deploy |8010 |部署模块 |deploy-web.war |
-|skyeye-email |8093 |邮件模块 |email-web.jar |
 |skyeye-schedule |8095 |日程模块 |schedule-web.jar |
 |skyeye-adm |8103 |行政模块 |adm-web.jar |
 |skyeye-boss |8104 |招聘模块 |boss-web.jar |
