@@ -60,7 +60,6 @@
 |skyeye-notice |8096 |公告模块 |notice-web.jar |
 |skyeye-forum |8097 |论坛模块 |forum-web.jar |
 |skyeye-jobdiary |8098 |工作日报模块 |jobdiary-web.jar |
-|skyeye-light-app |8099 |轻应用模块 |light-app-web.jar |
 |skyeye-ehr |8100 |EHR模块 |ehr-web.jar |
 |skyeye-wages |8101 |薪资模块 |wages-web.jar |
 |skyeye-deploy |8010 |部署模块 |deploy-web.war |
