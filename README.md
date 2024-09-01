@@ -59,7 +59,6 @@
 |skyeye-note |8087 |笔记模块 |note-web.jar |
 |skyeye-knowlg |8090 |知识库模块 |knowlg-web.jar |
 |skyeye-disk-cloud |8092 |云盘模块 |disk-cloud-web.jar |
-|skyeye-business-flow |8094 |业务流程模块 |business-flow-web.jar |
 |skyeye-notice |8096 |公告模块 |notice-web.jar |
 |skyeye-forum |8097 |论坛模块 |forum-web.jar |
 |skyeye-jobdiary |8098 |工作日报模块 |jobdiary-web.jar |
