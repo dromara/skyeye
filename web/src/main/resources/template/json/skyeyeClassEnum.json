@@ -167,6 +167,7 @@
     "gwDocumentUrgency": {"name": "公文-紧急程度", "className": "skyeye-adm#com.skyeye.eve.gw.classenum.GwDocumentUrgency"},
     "assetPurchasePutFromType": {"name": "采购入库单来源单据类型", "className": "skyeye-adm#com.skyeye.eve.assets.classenum.PurchasePutFromType"},
     "assetPurchaseReturnFromType": {"name": "采购退货单来源单据类型", "className": "skyeye-adm#com.skyeye.eve.assets.classenum.PurchaseReturnFromType"},
+    "mailCategory": {"name": "通讯录类型", "className": "skyeye-adm#com.skyeye.eve.classenum.MailCategory"},
 
     "schoolPower": {"name": "学校数据权限", "className": "skyeye-school#com.skyeye.eve.classenum.SchoolPower"},
     "admissionMethod": {"name": "入学方式", "className": "skyeye-school#com.skyeye.school.student.classenum.AdmissionMethod"},
@@ -191,8 +192,6 @@
     "staffWagesStateEnum": {"name": "员工薪资设定状态", "className": "skyeye-pro#com.skyeye.personnel.classenum.StaffWagesStateEnum"},
     "paymentHistoryState": {"name": "薪资发放状态", "className": "skyeye-wages#com.skyeye.eve.payment.classenum.PaymentHistoryState"},
     "paymentHistoryType": {"name": "薪资核算类型", "className": "skyeye-wages#com.skyeye.eve.payment.classenum.PaymentHistoryType"},
-
-    "mailCategory": {"name": "通讯录类型", "className": "skyeye-mail#com.skyeye.eve.classenum.MailCategory"},
 
     "jobDiaryType": {"name": "日志类型", "className": "skyeye-jobdiary#com.skyeye.eve.classenum.JobDiaryType"},
     "jobDiaryState": {"name": "日志状态", "className": "skyeye-jobdiary#com.skyeye.eve.classenum.JobDiaryState"},
