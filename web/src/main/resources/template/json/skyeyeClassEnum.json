@@ -172,6 +172,9 @@
     "jobDiaryType": {"name": "日志类型", "className": "skyeye-adm#com.skyeye.eve.classenum.JobDiaryType"},
     "jobDiaryState": {"name": "日志状态", "className": "skyeye-adm#com.skyeye.eve.classenum.JobDiaryState"},
     "readState": {"name": "日志阅读状态", "className": "skyeye-adm#com.skyeye.eve.classenum.ReadState"},
+    "noticeState": {"name": "公告状态", "className": "skyeye-adm#com.skyeye.eve.classenum.NoticeState"},
+    "noticeRealLinesType": {"name": "公告上线类型", "className": "skyeye-adm#com.skyeye.eve.classenum.NoticeRealLinesType"},
+    "noticeTimeSend": {"name": "是否设置定时发送", "className": "skyeye-adm#com.skyeye.eve.classenum.NoticeTimeSend"},
 
     "schoolPower": {"name": "学校数据权限", "className": "skyeye-school#com.skyeye.eve.classenum.SchoolPower"},
     "admissionMethod": {"name": "入学方式", "className": "skyeye-school#com.skyeye.school.student.classenum.AdmissionMethod"},
@@ -183,11 +186,6 @@
     "productWarrantyType": {"name": "售后工单质保类型", "className": "skyeye-seal-service#com.skyeye.afterseal.classenum.ProductWarrantyType"},
     "sealOrderType": {"name": "售后工单工单类型", "className": "skyeye-seal-service#com.skyeye.afterseal.classenum.SealOrderType"},
     "afterSealState": {"name": "售后工单状态", "className": "skyeye-seal-service#com.skyeye.afterseal.classenum.AfterSealState"},
-
-    "noticeState": {"name": "公告状态", "className": "skyeye-notice#com.skyeye.eve.classenum.NoticeState"},
-    "noticeRealLinesType": {"name": "公告上线类型", "className": "skyeye-notice#com.skyeye.eve.classenum.NoticeRealLinesType"},
-    "noticeTimeSend": {"name": "是否设置定时发送", "className": "skyeye-notice#com.skyeye.eve.classenum.NoticeTimeSend"},
-
 
     "wagesTypeEnum": {"name": "薪资字段类型", "className": "skyeye-wages#com.skyeye.eve.field.classenum.WagesTypeEnum"},
     "wagesModelFieldType": {"name": "模板关联字段的字段类型", "className": "skyeye-wages#com.skyeye.eve.model.classenum.WagesModelFieldType"},
@@ -218,7 +216,6 @@
     "storeOnlineBookType": {"name": "商城-门店线上预约类型", "className": "skyeye-shop#com.skyeye.store.classenum.StoreOnlineBookType"},
     "shopMealType": {"name": "商城-套餐类型", "className": "skyeye-shop#com.skyeye.meal.classenum.ShopMealType"},
     "KeepFitOrderUserType": {"name": "保养订单的用户类型", "className": "skyeye-shop#com.skyeye.keepfit.classenum.KeepFitOrderUserType"},
-
 
     "studentStateEnum": {"name": "表白墙-学生审核状态", "className": "skyeye-wall#com.skyeye.certification.classenum.StateEnum"},
     "studentStateEnum2": {
