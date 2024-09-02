@@ -57,7 +57,6 @@
 |skyeye-school |8084 |学校模块 |school-web.jar |
 |skyeye-wages |8101 |薪资模块 |wages-web.jar |
 |skyeye-deploy |8010 |部署模块 |deploy-web.war |
-|skyeye-schedule |8095 |日程模块 |schedule-web.jar |
 |skyeye-adm |8103 |行政模块 |adm-web.jar |
 |skyeye-boss |8104 |招聘模块 |boss-web.jar |
 |skyeye-checkwork |8105 |考勤模块 |checkwork-web.jar |

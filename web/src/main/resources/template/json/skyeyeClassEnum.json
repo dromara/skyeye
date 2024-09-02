@@ -175,6 +175,8 @@
     "noticeState": {"name": "公告状态", "className": "skyeye-adm#com.skyeye.eve.classenum.NoticeState"},
     "noticeRealLinesType": {"name": "公告上线类型", "className": "skyeye-adm#com.skyeye.eve.classenum.NoticeRealLinesType"},
     "noticeTimeSend": {"name": "是否设置定时发送", "className": "skyeye-adm#com.skyeye.eve.classenum.NoticeTimeSend"},
+    "scheduleRemindType": {"name": "日程提醒时间所属类型", "className": "skyeye-adm#com.skyeye.eve.classenum.ScheduleRemindType"},
+    "scheduleImported": {"name": "日程重要性", "className": "skyeye-adm#com.skyeye.eve.classenum.ScheduleImported"},
 
     "schoolPower": {"name": "学校数据权限", "className": "skyeye-school#com.skyeye.eve.classenum.SchoolPower"},
     "admissionMethod": {"name": "入学方式", "className": "skyeye-school#com.skyeye.school.student.classenum.AdmissionMethod"},
@@ -192,9 +194,6 @@
     "staffWagesStateEnum": {"name": "员工薪资设定状态", "className": "skyeye-pro#com.skyeye.personnel.classenum.StaffWagesStateEnum"},
     "paymentHistoryState": {"name": "薪资发放状态", "className": "skyeye-wages#com.skyeye.eve.payment.classenum.PaymentHistoryState"},
     "paymentHistoryType": {"name": "薪资核算类型", "className": "skyeye-wages#com.skyeye.eve.payment.classenum.PaymentHistoryType"},
-
-    "scheduleRemindType": {"name": "日程提醒时间所属类型", "className": "skyeye-schedule#com.skyeye.eve.classenum.ScheduleRemindType"},
-    "scheduleImported": {"name": "日程重要性", "className": "skyeye-schedule#com.skyeye.eve.classenum.ScheduleImported"},
 
     "autoProductState": {"name": "自动化-产品状态", "className": "skyeye-auto#com.skyeye.product.classenum.AutoProductState"},
     "autoProjectState": {"name": "自动化-项目状态", "className": "skyeye-auto#com.skyeye.project.classenum.AutoProjectState"},
