@@ -1152,6 +1152,10 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                             }
                         });
                         break;
+                    case "imageMulitple":
+                        let list = isNull(value) ? [] : JSON.parse(value);
+                        tr += getDataUseHandlebars('{{#each photo}}<img src="{{this}}" class="photo-img">{{/each}}', {photo: list});
+                        break;
                     case "btn":
                         value = isNull(value) ? [] : JSON.parse(value);
                         $.each(value, function(i, item) {
@@ -1213,6 +1217,10 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                             }
                         });
                         break;
+                    case "imageMulitple":
+                        let list = isNull(value) ? [] : JSON.parse(value);
+                        div += getDataUseHandlebars('{{#each photo}}<img src="{{this}}" class="photo-img">{{/each}}', {photo: list});
+                        break;
                     case "btn":
                         value = isNull(value) ? [] : JSON.parse(value);
                         $.each(value, function(i, item) {
@@ -1248,10 +1256,13 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                             params[type] = $(`#${type}`).val();
                             break;
                         case "radio":
-                            params[type] = $(`input[type='radio'][name='${type}']:checked`).val()
+                            params[type] = $(`input[type='radio'][name='${type}']:checked`).val();
                             break;
                         case "radioSingle":
-                            params[type] = $(`input[type='radio'][name='${type}']:checked`).val()
+                            params[type] = $(`input[type='radio'][name='${type}']:checked`).val();
+                            break;
+                        case "imageMulitple":
+                            params[type] = $(`#${type}`).find("input[name='upload']").attr("oldurl");
                             break;
                         case "btn":
                             params[type] = $(`#${type}`).attr("stock");
@@ -1284,6 +1295,9 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                                 break;
                             case "radioSingle":
                                 params[type] = $(`input[type='radio'][name='${tdId}']:checked`).val();
+                                break;
+                            case "imageMulitple":
+                                params[type] = $(`#${tdId}`).find("input[name='upload']").attr("oldurl");
                                 break;
                             case "btn":
                                 params[type] = $(`#${tdId}`).attr("stock");
