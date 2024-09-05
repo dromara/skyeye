@@ -857,24 +857,25 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                         tr += '</td>';
                         break;
                     case "imageMulitple":
+                        value = isNull(value) ? '' : value;
+                        var dataType = [];
+                        var uploadDataType = isNull(c.uploadDataType) ? ["imageType"] : c.uploadDataType;
+                        if (!isNull(uploadDataType)) {
+                            $.each(uploadDataType, function(i, item) {
+                                var value = getInPoingArr(fileTypeList, 'id', item, "value");
+                                $.each(value, function(j, type) {
+                                    dataType.push(type);
+                                });
+                            });
+                        }
+                        let dataTypeStr = dataType.toString();
                         tr += `<td><div class="upload" id="${id}"></div></td>
                             <script>
                             layui.define(["jquery", 'fileUpload'], function(exports) {
-                                var dataType = [];
-                                var uploadDataType = isNull(${c.uploadDataType}) ? ["imageType"] : ${c.uploadDataType};
-                                if (!isNull(uploadDataType)) {
-                                    $.each(uploadDataType, function(i, item) {
-                                       var value = getInPoingArr(fileTypeList, 'id', item, "value");
-                                       $.each(value, function(j, type) {
-                                           dataType.push(type);
-                                       });
-                                   });
-                                }
-                                
                                 $("#${id}").upload({
                                     "action": reqBasePath + "common003",
                                     "data-num": 6,
-                                    "data-type": dataType.toString(),
+                                    "data-type": "${dataTypeStr}",
                                     "uploadType": 29,
                                     "data-value": "${value}",
                                     "function": function (_this, data) {
@@ -926,7 +927,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                 var id = item.field;
                 var title = that.options.multipleSkuTableConfig.thead[index].title;
                 div += `<div class="layui-form-item layui-col-xs6">` +
-                    `<label class="layui-form-label">${title}<i class="red">*</i></label>` +
+                    `<label class="layui-form-label">${title}</label>` +
                     `<div class="layui-input-block">`;
 
                 switch (item.type) {
@@ -963,24 +964,25 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                         div += getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${item.singleName}" lay-filter="${type}Filter" value="{{id}}" title="{{name}}" {{checked}} />{{/each}}`, {rows: item.option});
                         break;
                     case "imageMulitple":
+                        value = isNull(value) ? '' : value;
+                        var dataType = [];
+                        var uploadDataType = isNull(item.uploadDataType) ? ["imageType"] : item.uploadDataType;
+                        if (!isNull(uploadDataType)) {
+                            $.each(uploadDataType, function(i, item) {
+                                var value = getInPoingArr(fileTypeList, 'id', item, "value");
+                                $.each(value, function(j, type) {
+                                    dataType.push(type);
+                                });
+                            });
+                        }
+                        let dataTypeStr = dataType.toString();
                         div += `<td><div class="upload" id="${id}"></div></td>
                             <script>
                             layui.define(["jquery", 'fileUpload'], function(exports) {
-                                var dataType = [];
-                                var uploadDataType = isNull(${item.uploadDataType}) ? ["imageType"] : ${item.uploadDataType};
-                                if (!isNull(uploadDataType)) {
-                                    $.each(uploadDataType, function(i, item) {
-                                       var value = getInPoingArr(fileTypeList, 'id', item, "value");
-                                       $.each(value, function(j, type) {
-                                           dataType.push(type);
-                                       });
-                                   });
-                                }
-                                
                                 $("#${id}").upload({
                                     "action": reqBasePath + "common003",
                                     "data-num": 6,
-                                    "data-type": dataType.toString(),
+                                    "data-type": '${dataTypeStr}',
                                     "uploadType": 29,
                                     "data-value": "${value}",
                                     "function": function (_this, data) {
