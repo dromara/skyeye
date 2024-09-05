@@ -89,6 +89,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             specTableElemId: 'fairy-spec-table',
             skuTableElemId: 'fairy-sku-table',
             skuNameType: 0,
+            type: 0,
             skuNameDelimiter: '-',
             multipleSkuTableConfig: {
                 thead: [
@@ -125,6 +126,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 		// 构造函数
         constructor(options) {
             this.options = $.extend(this.options, options);
+            this.data.type = isNull(this.options.type) ? 0 : this.options.type;
 			this.data.specData = isNull(this.options.specData) ? [] : this.options.specData;
 			this.data.skuData = isNull(this.options.skuData) ? {} : this.options.skuData;
             this.data.otherMationData = isNull(this.options.otherMationData) ? {} : this.options.otherMationData;
@@ -185,14 +187,19 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
         render() {
 			this.initHtml();
             this.resetRender();
-
             if ($.isEmptyObject(this.data.otherMationData) || this.data.otherMationData.unit == 1) {
                 // 单规格
                 $(`#${this.options.specTableElemId}`).html(this.loadSimpleSkuConfig());
                 this.loadUploadPicLogo();
             } else {
                 // 多规格
-                this.renderOtherMation();
+                if (this.data.type == 1) {
+                    // 商品上架商城
+                    this.renderSpecTable();
+                    this.renderMultipleSkuTable();
+                } else {
+                    this.renderOtherMation();
+                }
                 if ($.isEmptyObject(this.data.otherMationData)) {
                     this.renderSpecTable();
                     this.renderMultipleSkuTable();
@@ -246,7 +253,20 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 		
 		// 初始化html界面
 		initHtml() {
-			var _html = `<div id="${this.options.otherElemId}">` +
+            var _html = ``;
+            if (this.data.type == 1) {
+                // 商品上架商城
+                let unitTypeName = skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("materialUnit", 'id', this.data.otherMationData.unit, 'name');
+                _html += `<div id="${this.options.otherElemId}">` +
+                    `<div class="layui-form-item layui-col-xs12">
+                        <label class="layui-form-label">规格类型：</label>
+                        <div class="layui-input-block ver-center">
+                            ${unitTypeName}
+                        </div>
+                    </div>` +
+                    `</div>`;
+            } else {
+                _html += `<div id="${this.options.otherElemId}">` +
                     `<div class="layui-form-item layui-col-xs12">
                         <label class="layui-form-label">规格类型<i class="red">*</i></label>
                         <div class="layui-input-block winui-radio">
@@ -254,8 +274,9 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                             <input type="radio" name="unit" value="2" title="多规格" lay-filter="wzq-unit"/>
                         </div>
                     </div>` +
-                `</div>` +
-                `<div id="${this.options.otherMationElemId}"></div>` +
+                    `</div>`;
+            }
+            _html += `<div id="${this.options.otherMationElemId}"></div>` +
                 `<div id="${this.options.specTableElemId}"></div>` +
 				`<div id="${this.options.skuTableElemId}"></div>`;
 			$(`#${this.options.boxId}`).html(_html);
@@ -307,7 +328,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             /**
              * 监听批量赋值
              */
-            $(document).on('click', `#${this.options.skuTableElemId} thead tr th i`, function () {
+            $("body").on('click', `#${this.options.skuTableElemId} thead tr th i`, function () {
                 var thisI = this;
                 Util.msg.prompt({title: $(thisI).parent().text().trim() + '批量赋值'}, function (value, index, elem) {
                     $.each($(`#${that.options.skuTableElemId} tbody tr`), function () {
@@ -324,7 +345,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
              * 监听添加规格
              */
 			var normsNameIndex = that.data.specData.length > 0 ? Math.max.apply(Math, that.data.specData.map(function(i) {return i.rowNum})) + 1 : 1;
-            $(document).on('click', `#${this.options.specTableElemId} .fairy-spec-create`, function () {
+            $("body").on('click', `#${this.options.specTableElemId} .fairy-spec-create`, function () {
                 layer.prompt({title: '规格'}, function (value, index, elem) {
                     var check = getInPoingArr(that.data.specData, "title", value);
                     if (isNull(check)) {
@@ -345,7 +366,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 			var _options = [];
 			that.data.specData.map(function(i) {_options = _options.concat(i.options)});
 			var normsValueIndex = _options.length > 0 ? Math.max.apply(Math, _options.map(function(i) {return i.rowNum})) + 1 : 1;
-            $(document).on('click', `#${this.options.specTableElemId} .fairy-spec-value-create`, function () {
+            $("body").on('click', `#${this.options.specTableElemId} .fairy-spec-value-create`, function () {
                 var rowNum = $(this).parent('td').prev().data('num');
                 layer.prompt({title: '规格值'}, function (value, index, elem) {
 					that.data.specData.forEach(function (v, i) {
@@ -369,7 +390,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             /**
              * 监听删除规格/规格值
              */
-            $(document).on('click', `#${this.options.specTableElemId} i.layui-icon-delete`, function () {
+            $("body").on('click', `#${this.options.specTableElemId} i.layui-icon-delete`, function () {
                 if (typeof $(this).attr('data-spec-num') !== "undefined") {
                     var specNum = $(this).attr('data-spec-num');
 					that.deleteSpec(specNum);
@@ -382,7 +403,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             /**
              * 初始库存变化事件
              */
-            $(document).on('click', '.stockMore', function () {
+            $("body").on('click', '.stockMore', function () {
                 var _this = $(this);
                 // 获取行号
                 var _data = _this.attr("stock");
@@ -571,40 +592,57 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                 table += `<td data-num="${item.rowNum}">${item.title} <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.data.specDataDelete ? '' : 'layui-hide'}" data-spec-num="${item.rowNum}"></i></td>`;
                 table += '<td>';
                 $.each(item.options, function (key, value) {
-                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.rowNum}" ${item.value.includes(value.rowNum) ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.data.specDataDelete ? '' : 'layui-hide'}" data-spec-value-num="${value.rowNum}"></i> `;
+                    if (that.data.type == 1) {
+                        // 商品上架商城
+                        table += `<input type="checkbox" title="${value.title}" disabled lay-filter="fairy-spec-filter" value="${value.rowNum}" ${item.value.includes(value.rowNum) ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.data.specDataDelete ? '' : 'layui-hide'}" data-spec-value-num="${value.rowNum}"></i> `;
+                    } else {
+                        table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.rowNum}" ${item.value.includes(value.rowNum) ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.data.specDataDelete ? '' : 'layui-hide'}" data-spec-value-num="${value.rowNum}"></i> `;
+                    }
                 });
-                table += '<div class="fairy-spec-value-create"><i class="fa fa-plus"></i>规格值</div>';
+                if (that.data.type == 1) {
+                    // 商品上架商城
+                } else {
+                    table += '<div class="fairy-spec-value-create"><i class="fa fa-plus"></i>规格值</div>';
+                }
                 table += '</td>';
                 table += '</tr>';
             });
             table += '</tbody>';
 
-            table += '<tfoot><tr><td colspan="2" style="line-height: 14px;">';
-            table += `<input type="checkbox" title="开启删除" lay-skin="primary" lay-filter="fairy-spec-delete-filter" ${that.data.specDataDelete ? 'checked' : ''}/>`;
-			table += `<div class="fairy-spec-create"><i class="fa fa-plus"></i>规格</div>`;
-            table += '</td></tr></tfoot>';
+            if (that.data.type == 1) {
+                // 商品上架商城
+            } else {
+                table += '<tfoot><tr><td colspan="2" style="line-height: 14px;">';
+                table += `<input type="checkbox" title="开启删除" lay-skin="primary" lay-filter="fairy-spec-delete-filter" ${that.data.specDataDelete ? 'checked' : ''}/>`;
+                table += `<div class="fairy-spec-create"><i class="fa fa-plus"></i>规格</div>`;
+                table += '</td></tr></tfoot>';
+            }
 
             table += '</table>';
 
             this.renderFormItem('商品规格', table, this.options.specTableElemId);
 
-            /**
-             * 拖拽
-             */
-            var sortableObj = sortable.create($(`#${tableId} tbody`)[0], {
-                animation: 1000,
-                onEnd: (evt) => {
-                    //获取拖动后的排序
-                    var sortArr = sortableObj.toArray(),
-                        sortSpecData = [];
-                    this.data.specData.forEach((item) => {
-                        sortSpecData[sortArr.indexOf(String(item.rowNum))] = item;
-                    });
-                    this.data.specData = sortSpecData;
-                    this.resetRender([this.options.skuTableElemId]);
-                    this.renderMultipleSkuTable();
-                },
-            });
+            if (this.data.type == 1) {
+                // 商品上架商城
+            } else {
+                /**
+                 * 拖拽
+                 */
+                var sortableObj = sortable.create($(`#${tableId} tbody`)[0], {
+                    animation: 1000,
+                    onEnd: (evt) => {
+                        //获取拖动后的排序
+                        var sortArr = sortableObj.toArray(),
+                            sortSpecData = [];
+                        this.data.specData.forEach((item) => {
+                            sortSpecData[sortArr.indexOf(String(item.rowNum))] = item;
+                        });
+                        this.data.specData = sortSpecData;
+                        this.resetRender([this.options.skuTableElemId]);
+                        this.renderMultipleSkuTable();
+                    },
+                });
+            }
         }
 
         /**
@@ -742,7 +780,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 
             table += '</table>';
 
-            this.renderFormItem('商品库存', table, this.options.skuTableElemId);
+            this.renderFormItem('规格信息', table, this.options.skuTableElemId);
             this.loadUploadPicLogo();
             form.render();
         }
@@ -768,7 +806,8 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                 }
             });
         }
-		
+
+        // 多规格sku表
 		loadMultipleSkuTableConfig(item, index) {
 			var that = this;
 			var tr = '';
@@ -797,6 +836,54 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 						});
 						tr += '</select></td>';
 						break;
+                    case "radio":
+                        c.option.forEach(function (o) {
+                            if (!isNull(value) && o.id == value) {
+                                o.checked = "checked";
+                            }
+                        });
+                        tr += `<td>`;
+                        tr += getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${type}" lay-filter="${type}Filter" value="{{id}}" title="{{name}}" {{checked}} />{{/each}}`, {rows: c.option});
+                        tr += '</td>';
+                        break;
+                    case "radioSingle":
+                        c.option.forEach(function (o) {
+                            if (!isNull(value) && o.id == value) {
+                                o.checked = "checked";
+                            }
+                        });
+                        tr += `<td>`;
+                        tr += getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${c.singleName}" lay-filter="${type}Filter" value="{{id}}" title="{{name}}" checked />{{/each}}`, {rows: c.option});
+                        tr += '</td>';
+                        break;
+                    case "imageMulitple":
+                        tr += `<td><div class="upload" id="${id}"></div></td>
+                            <script>
+                            layui.define(["jquery", 'fileUpload'], function(exports) {
+                                var dataType = [];
+                                var uploadDataType = isNull(${c.uploadDataType}) ? ["imageType"] : ${c.uploadDataType};
+                                if (!isNull(uploadDataType)) {
+                                    $.each(uploadDataType, function(i, item) {
+                                       var value = getInPoingArr(fileTypeList, 'id', item, "value");
+                                       $.each(value, function(j, type) {
+                                           dataType.push(type);
+                                       });
+                                   });
+                                }
+                                
+                                $("#${id}").upload({
+                                    "action": reqBasePath + "common003",
+                                    "data-num": 6,
+                                    "data-type": dataType.toString(),
+                                    "uploadType": 29,
+                                    "data-value": "${value}",
+                                    "function": function (_this, data) {
+                                        show('#${id}', data);
+                                    }
+                                });
+                            });
+                            </script>`;
+                        break;
                     case "btn":
                         value = isNull(value) ? [] : ($.isArray(value) ? value : JSON.parse(value));
                         tr += "<td><button type='button' class='layui-btn layui-btn-primary layui-btn-xs stockMore' stock='" + JSON.stringify(value) + "' id='" + id + "'>库存信息</button>";
@@ -822,12 +909,17 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             if (!$.isEmptyObject(that.data.otherMationData)) {
                 unitNameValue = that.data.otherMationData.unitName;
             }
-            var div = `<div class="layui-form-item layui-col-xs6">
+            var div = ``;
+            if (that.data.type == 1) {
+                // 商品上架商城
+            } else {
+                div = `<div class="layui-form-item layui-col-xs6">
                         <label class="layui-form-label">计量单位<i class="red">*</i></label>
                         <div class="layui-input-block">
                             <input type="text" id="unitName" name="unitName" win-verify="required" placeholder="请输入计量单位" class="layui-input" maxlength="50" value="${unitNameValue}"/>
                         </div>
                     </div>`;
+            }
             that.options.multipleSkuTableConfig.tbody.forEach(function (item, index) {
                 var type = item.field;
                 var value = (!isNull(that.data.skuData["simpleNorms"])) ? that.data.skuData["simpleNorms"][type] : item.value;
@@ -853,6 +945,50 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                             }
                         });
                         div += '</select>';
+                        break;
+                    case "radio":
+                        item.option.forEach(function (o) {
+                            if (!isNull(value) && o.id == value) {
+                                o.checked = "checked";
+                            }
+                        });
+                        div += getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${type}" lay-filter="${type}Filter" value="{{id}}" title="{{name}}" {{checked}} />{{/each}}`, {rows: item.option});
+                        break;
+                    case "radioSingle":
+                        item.option.forEach(function (o) {
+                            if (!isNull(value) && o.id == value) {
+                                o.checked = "checked";
+                            }
+                        });
+                        div += getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${item.singleName}" lay-filter="${type}Filter" value="{{id}}" title="{{name}}" {{checked}} />{{/each}}`, {rows: item.option});
+                        break;
+                    case "imageMulitple":
+                        div += `<td><div class="upload" id="${id}"></div></td>
+                            <script>
+                            layui.define(["jquery", 'fileUpload'], function(exports) {
+                                var dataType = [];
+                                var uploadDataType = isNull(${item.uploadDataType}) ? ["imageType"] : ${item.uploadDataType};
+                                if (!isNull(uploadDataType)) {
+                                    $.each(uploadDataType, function(i, item) {
+                                       var value = getInPoingArr(fileTypeList, 'id', item, "value");
+                                       $.each(value, function(j, type) {
+                                           dataType.push(type);
+                                       });
+                                   });
+                                }
+                                
+                                $("#${id}").upload({
+                                    "action": reqBasePath + "common003",
+                                    "data-num": 6,
+                                    "data-type": dataType.toString(),
+                                    "uploadType": 29,
+                                    "data-value": "${value}",
+                                    "function": function (_this, data) {
+                                        show('#${id}', data);
+                                    }
+                                });
+                            });
+                            </script>`;
                         break;
                     case "btn":
                         value = isNull(value) ? [] : (typeof value === 'string' ? JSON.parse(value) : value);
@@ -978,7 +1114,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             }
             table += '</tbody>';
             table += '</table>';
-            this.renderFormItem('商品库存', table, this.options.skuTableElemId);
+            this.renderFormItem('规格信息', table, this.options.skuTableElemId);
             form.render();
         }
 
@@ -996,6 +1132,20 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                         tr += '<img class="fairy-sku-img skyeye-img" src="' + value + '">';
                         break;
                     case "select":
+                        c.option.forEach(function (o) {
+                            if (!isNull(value) && o.id == value) {
+                                tr += o.name;
+                            }
+                        });
+                        break;
+                    case "radio":
+                        c.option.forEach(function (o) {
+                            if (!isNull(value) && o.id == value) {
+                                tr += o.name;
+                            }
+                        });
+                        break;
+                    case "radioSingle":
                         c.option.forEach(function (o) {
                             if (!isNull(value) && o.id == value) {
                                 tr += o.name;
@@ -1049,6 +1199,20 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                             }
                         });
                         break;
+                    case "radio":
+                        item.option.forEach(function (o) {
+                            if (!isNull(value) && o.id == value) {
+                                div += o.name;
+                            }
+                        });
+                        break;
+                    case "radioSingle":
+                        item.option.forEach(function (o) {
+                            if (!isNull(value) && o.id == value) {
+                                div += o.name;
+                            }
+                        });
+                        break;
                     case "btn":
                         value = isNull(value) ? [] : JSON.parse(value);
                         $.each(value, function(i, item) {
@@ -1083,6 +1247,12 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                         case "select":
                             params[type] = $(`#${type}`).val();
                             break;
+                        case "radio":
+                            params[type] = $(`input[type='radio'][name='${type}']:checked`).val()
+                            break;
+                        case "radioSingle":
+                            params[type] = $(`input[type='radio'][name='${type}']:checked`).val()
+                            break;
                         case "btn":
                             params[type] = $(`#${type}`).attr("stock");
                             break;
@@ -1108,6 +1278,12 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                                 break;
                             case "select":
                                 params[type] = $(`#${tdId}`).val();
+                                break;
+                            case "radio":
+                                params[type] = $(`input[type='radio'][name='${tdId}']:checked`).val();
+                                break;
+                            case "radioSingle":
+                                params[type] = $(`input[type='radio'][name='${tdId}']:checked`).val();
                                 break;
                             case "btn":
                                 params[type] = $(`#${tdId}`).attr("stock");

@@ -93,6 +93,11 @@
     "generateDepotLevelValType": {"name": "ERP-批量生成仓库级别的值的类型", "className": "skyeye-erp#com.skyeye.depot.classenum.GenerateDepotLevelValType"},
     "productionChildFromType": {"name": "生产计划单子单据生产类型", "className": "skyeye-erp#com.skyeye.production.classenum.ProductionChildType"},
     "machinProcedureFarmState": {"name": "车间任务状态", "className": "skyeye-erp#com.skyeye.machinprocedure.classenum.MachinProcedureFarmState"},
+    "materialShelvesState": {"name": "商品上下架状态", "className": "skyeye-erp#com.skyeye.material.classenum.MaterialShelvesState"},
+    "materialNormsShelvesState": {"name": "商品规格上下架状态", "className": "skyeye-erp#com.skyeye.material.classenum.MaterialNormsShelvesState"},
+    "shopMaterialDistributionType": {"name": "商品分销方式", "className": "skyeye-erp#com.skyeye.shopmaterial.enums.ShopMaterialDistributionType"},
+    "shopMaterialDeliveryMethod": {"name": "配送方式", "className": "skyeye-erp#com.skyeye.shopmaterial.enums.ShopMaterialDeliveryMethod"},
+    "shopMaterialNormsLogoType": {"name": "商城商品规格logo类型", "className": "skyeye-erp#com.skyeye.shopmaterial.enums.ShopMaterialNormsLogoType"},
 
     "skyeyeView": {"name": "视图类型", "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"},
     "widthScale": {"name": "宽度比例", "className": "skyeye-pro#com.skyeye.attr.classenum.WidthScale"},

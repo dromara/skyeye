@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/css/file-tree.css" rel="stylesheet" />
+</head>
+<body style="background-color: white;">
+    <div class="manage-console">
+        <div class="file-write">
+            <div class="file-write-center">
+                <div class="center-title">
+                    <i class="input-fa fa fa-search fa-fw" style="left: 15px"></i>
+                    <input type="text" name="title" id="searchTitle" placeholder="搜索..." class="layui-input">
+                </div>
+                <div class="center-content" id="materialList">
+                </div>
+            </div>
+            <div class="file-write-right" style="width: calc(100% - 285px)">
+                <div class="right-title">
+                    <div class="note-title" style="color: black; padding: 0px 5px; font-size: 32px;">
+                        请选择商品
+                    </div>
+                </div>
+                <div class="right-content" style="overflow-y: auto;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/x-handlebars-template" id="materialListTemplate">
+        {{#each rows}}
+        <div class="folder-item" id="{{id}}" rowname="{{name}}" rowtype="{{type}}" title="商品：{{name}}&#10;规格：{{model}}">
+            <div class="folder-item-title">
+                <span>{{name}}</span>
+            </div>
+            <div class="folder-item-desc" style="margin-left: 0px">
+                {{model}}
+            </div>
+            <div class="folder-item-mation" style="margin-left: 0px">
+                {{{shelvesStateName}}}
+            </div>
+        </div>
+        {{/each}}
+    </script>
+
+    <script type="text/x-handlebars-template" id="materialTemplate">
+        {{#bean}}
+        <form class="layui-form" action="" id="showForm" autocomplete="off">
+            <div class="layui-form-item layui-col-xs12">
+                <span class="hr-title">基本信息</span><hr>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">商品LOGO<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <div class="upload" id="materialLogo"></div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">轮播图<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <div class="upload" id="materialCarouselImg"></div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">分销类型<i class="red">*</i></label>
+                <div class="layui-input-block winui-radio" id="distributionType">
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">配送方式<i class="red">*</i></label>
+                <div class="layui-input-block" id="deliveryMethod">
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">商品详情<i class="red">*</i></label>
+                <div class="layui-input-block" id="contentBox">
+
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">商品简介<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <textarea id="remark" name="remark" placeholder="请输入备注" class="layui-textarea" style="height: 100px;" maxlength="200"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <span class="hr-title">规格信息</span><hr/>
+            </div>
+            <div class="layui-form-item layui-col-xs12" id="skyNorms">
+
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <span class="hr-title">其他设置</span><hr/>
+            </div>
+            <div class="layui-form-item layui-col-xs4">
+                <label class="layui-form-label">商品排序<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="orderBy" name="orderBy" win-verify="required|number" placeholder="请输入商品排序" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs4">
+                <label class="layui-form-label">赠送积分<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="giftPoint" name="giftPoint" win-verify="required|number" placeholder="请输入赠送积分" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs4">
+                <label class="layui-form-label">虚拟销量<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="virtualSales" name="virtualSales" win-verify="required|number" placeholder="请输入虚拟销量" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <div class="layui-input-block">
+                    <button class="winui-btn" lay-submit lay-filter="saveBean"><language showName="com.skyeye.save"></language></button>
+                </div>
+            </div>
+        </form>
+        {{/bean}}
+    </script>
+
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ueditor/ueditor.all.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/shopMaterial/'}).use('groundShop');
+    </script>
+</body>
+</html>
