@@ -822,11 +822,11 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 				switch (c.type) {
 					case "image":
                         value = isNull(value) ? '' : value;
-						tr += '<td><input type="hidden" id="' + id + '" name="' + type + '" value="' + value + '" win-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '">' +
+						tr += '<td style="min-width: 120px"><input type="hidden" id="' + id + '" name="' + type + '" value="' + value + '" win-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '">' +
 							'<img class="fairy-sku-img" src="' + value + '"></td>';
 						break;
 					case "select":
-						tr += '<td><select id="' + id + '" name="' + type + '" win-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '">';
+						tr += '<td style="min-width: 120px"><select id="' + id + '" name="' + type + '" win-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '">';
 						c.option.forEach(function (o) {
                             if (!isNull(value) && o.id == value) {
                                 tr += '<option value="' + o.id + '" selected="selected">' + o.name + '</option>';
@@ -842,7 +842,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                                 o.checked = "checked";
                             }
                         });
-                        tr += `<td>`;
+                        tr += `<td style="min-width: 120px">`;
                         tr += getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${type}" lay-filter="${type}Filter" value="{{id}}" title="{{name}}" {{checked}} />{{/each}}`, {rows: c.option});
                         tr += '</td>';
                         break;
@@ -852,7 +852,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                                 o.checked = "checked";
                             }
                         });
-                        tr += `<td>`;
+                        tr += `<td style="min-width: 120px">`;
                         tr += getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${c.singleName}" lay-filter="${type}Filter" value="{{id}}" title="{{name}}" checked />{{/each}}`, {rows: c.option});
                         tr += '</td>';
                         break;
