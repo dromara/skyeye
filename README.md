@@ -5,11 +5,11 @@
 
 **郑重声明：** 
 
-**1. Skyeye云之后不做商业版内容，全部【源代码】针对 {星球用户} 开源。拿到源码后可进行学习、毕设、企业等使用。**
+**1. Skyeye云之后不做商业版内容，【源代码】针对 {星球用户} 开源。拿到源码后可进行学习、毕设、企业等使用。**
 
 **2. [开发文档](https://articles.zsxq.com/id_xi3xhacte72g.html)**
 
-**3. [常见问题](https://gitee.com/doc_wei01/skyeye/blob/company_server/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98.md)，优先看这个。**
+**3. [常见问题](https://gitee.com/doc_wei01/skyeye/blob/company_server/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98.md)，优先看这个。《《《《《《《《《《《《《《这个文件必看，有`移动端`的详细说明。**
 
 **4. **体验地址** ：右上角`Star`后，关注下方微信公众号，回复`skyeye`获取**
 
