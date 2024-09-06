@@ -61,7 +61,7 @@ layui.config({
             suffixData: defaultList,
             element: layui.element,
             object: {
-                objectId: treeNode.id
+                objectId: treeNode.id.replace(appId, ''),
             }
         });
     }
