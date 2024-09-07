@@ -282,6 +282,10 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 			$(`#${this.options.boxId}`).html(_html);
             if (!$.isEmptyObject(this.data.otherMationData)) {
                 $("input:radio[name=unit][value=" + this.data.otherMationData.unit + "]").attr("checked", true);
+                if (this.data.otherMationData.isUsed == 1) {
+                    // 已使用的禁止编辑
+                    $("input:radio[name=unit]").attr("disabled", true);
+                }
             }
             form.render();
 		}
@@ -565,6 +569,9 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 
             if (!$.isEmptyObject(that.data.otherMationData)) {
                 $("#unitGroupId").val(that.data.otherMationData.unitGroupId);
+                if (that.data.otherMationData.isUsed == 1) {
+                    $("#unitGroupId").attr("disabled", true);
+                }
                 $.each(that.unitGroupList, function (i, item) {
                     if (item.id == that.data.otherMationData.unitGroupId) {
                         var str = getDataUseHandlebars(that.selTemplate, {rows: item.unitList});
@@ -603,7 +610,9 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                 if (that.data.type == 1) {
                     // 商品上架商城
                 } else {
-                    table += '<div class="fairy-spec-value-create"><i class="fa fa-plus"></i>规格值</div>';
+                    if (that.data.otherMationData.isUsed != 1) {
+                        table += '<div class="fairy-spec-value-create"><i class="fa fa-plus"></i>规格值</div>';
+                    }
                 }
                 table += '</td>';
                 table += '</tr>';
@@ -613,10 +622,12 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             if (that.data.type == 1) {
                 // 商品上架商城
             } else {
-                table += '<tfoot><tr><td colspan="2" style="line-height: 14px;">';
-                table += `<input type="checkbox" title="开启删除" lay-skin="primary" lay-filter="fairy-spec-delete-filter" ${that.data.specDataDelete ? 'checked' : ''}/>`;
-                table += `<div class="fairy-spec-create"><i class="fa fa-plus"></i>规格</div>`;
-                table += '</td></tr></tfoot>';
+                if (that.data.otherMationData.isUsed != 1) {
+                    table += '<tfoot><tr><td colspan="2" style="line-height: 14px;">';
+                    table += `<input type="checkbox" title="开启删除" lay-skin="primary" lay-filter="fairy-spec-delete-filter" ${that.data.specDataDelete ? 'checked' : ''}/>`;
+                    table += `<div class="fairy-spec-create"><i class="fa fa-plus"></i>规格</div>`;
+                    table += '</td></tr></tfoot>';
+                }
             }
 
             table += '</table>';
