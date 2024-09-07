@@ -24,7 +24,7 @@
                         请选择商品
                     </div>
                 </div>
-                <div class="right-content" style="overflow-y: auto;">
+                <div class="right-content" style="overflow-y: auto; overflow-x: hidden">
 
                 </div>
             </div>
@@ -60,7 +60,7 @@
                 </div>
             </div>
             <div class="layui-form-item layui-col-xs12">
-                <label class="layui-form-label">轮播图<i class="red">*</i></label>
+                <label class="layui-form-label">轮播图</label>
                 <div class="layui-input-block">
                     <div class="upload" id="materialCarouselImg"></div>
                 </div>
@@ -84,11 +84,15 @@
             <div class="layui-form-item layui-col-xs12">
                 <label class="layui-form-label">商品简介<i class="red">*</i></label>
                 <div class="layui-input-block">
-                    <textarea id="remark" name="remark" placeholder="请输入备注" class="layui-textarea" style="height: 100px;" maxlength="200"></textarea>
+                    <textarea id="remark" name="remark" placeholder="请输入备注" class="layui-textarea" win-verify="required" style="height: 100px;" maxlength="200"></textarea>
                 </div>
             </div>
             <div class="layui-form-item layui-col-xs12">
                 <span class="hr-title">规格信息</span><hr/>
+            </div>
+            <div class="winui-tip alert-info layui-col-xs12">
+                1. 如果规格选择了上架并且Logo类型选择了【单独设置】，那么这个规格Logo将会单独设置并且为必填，否则将会使用商品的Logo。<br>
+                2. 未上架的商品规格选择【默认】时，将不生效。
             </div>
             <div class="layui-form-item layui-col-xs12" id="skyNorms">
 

@@ -328,6 +328,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             /**
              * 监听批量赋值
              */
+            $("body").off("click", `#${this.options.skuTableElemId} thead tr th i`);
             $("body").on('click', `#${this.options.skuTableElemId} thead tr th i`, function () {
                 var thisI = this;
                 Util.msg.prompt({title: $(thisI).parent().text().trim() + '批量赋值'}, function (value, index, elem) {
@@ -525,7 +526,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             var html = '';
 			html += '<div class="layui-form-item  layui-col-xs12">';
 			html += `<label class="layui-form-label">${label ? label + ':' : ''}</label>`;
-			html += '<div class="layui-input-block">';
+			html += '<div class="layui-input-block" style="overflow-x: auto">';
 			html += content;
 			html += '</div>';
 			html += '</div>';
@@ -653,23 +654,44 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             var that = this, table = `<table class="layui-table" id="${tableId}">`;
 			var prependThead = [], prependTbody = [];
 
-            // 加载计量单位作为其中的一个规格
-            var unitGroupId = $("#unitGroupId").val();
-            if (!isNull(unitGroupId)) {
-                var prependTbodyItem = [];
-                $.each(that.unitGroupList, function (i, item) {
-                    if (item.id == unitGroupId) {
-                        $.each(item.unitList, function (j, bean) {
-                            prependTbodyItem.push({
-                                rowNum: bean.id,
-                                title: bean.name
+            if (this.data.type == 1) {
+                // 商品上架商城
+                let unitGroupId = this.data.otherMationData.unitGroupId;
+                AjaxPostUtil.request({url: sysMainMation.erpBasePath + "materialunit006", params: {}, type: 'json', method: "GET", callback: function(json) {
+                    var prependTbodyItem = [];
+                    $.each(json.rows, function (i, item) {
+                        if (item.id == unitGroupId) {
+                            $.each(item.unitList, function (j, bean) {
+                                prependTbodyItem.push({
+                                    rowNum: bean.id,
+                                    title: bean.name
+                                });
                             });
-                        });
-                        return false;
-                    }
-                });
-                prependThead.push('计量单位');
-                prependTbody.push(prependTbodyItem);
+                            return false;
+                        }
+                    });
+                    prependThead.push('计量单位');
+                    prependTbody.push(prependTbodyItem);
+                }, async: false});
+            } else {
+                // 加载计量单位作为其中的一个规格
+                var unitGroupId = $("#unitGroupId").val();
+                if (!isNull(unitGroupId)) {
+                    var prependTbodyItem = [];
+                    $.each(that.unitGroupList, function (i, item) {
+                        if (item.id == unitGroupId) {
+                            $.each(item.unitList, function (j, bean) {
+                                prependTbodyItem.push({
+                                    rowNum: bean.id,
+                                    title: bean.name
+                                });
+                            });
+                            return false;
+                        }
+                    });
+                    prependThead.push('计量单位');
+                    prependTbody.push(prependTbodyItem);
+                }
             }
 
 			$.each(that.data.specData, function (index, item) {
@@ -694,12 +716,12 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 				var theadTr = '<tr>';
 
 				theadTr += prependThead.map(function (t, i, a) {
-					return '<th class="fairy-spec-name">' + t + '</th>';
+					return '<th style="min-width: 120px" class="fairy-spec-name">' + t + '</th>';
 				}).join('');
 
 				this.options.multipleSkuTableConfig.thead.forEach(function (item) {
                     if (isNull(item.width)) {
-                        theadTr += '<th>' + item.title + (item.icon ? ' <i class="layui-icon ' + item.icon + '"></i>' : '') + '</th>';
+                        theadTr += '<th style="min-width: 120px">' + item.title + (item.icon ? ' <i class="layui-icon ' + item.icon + '"></i>' : '') + '</th>';
                     } else {
                         theadTr += '<th style="width: ' + item.width + '">' + item.title + (item.icon ? ' <i class="layui-icon ' + item.icon + '"></i>' : '') + '</th>';
                     }
@@ -710,7 +732,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 				var theadTr = '<tr>';
 				this.options.multipleSkuTableConfig.thead.forEach(function (item) {
                     if (isNull(item.width)) {
-                        theadTr += '<th>' + item.title + (item.icon ? ' <i class="layui-icon ' + item.icon + '"></i>' : '') + '</th>';
+                        theadTr += '<th style="min-width: 120px">' + item.title + (item.icon ? ' <i class="layui-icon ' + item.icon + '"></i>' : '') + '</th>';
                     } else {
                         theadTr += '<th style="width: ' + item.width + '">' + item.title + (item.icon ? ' <i class="layui-icon ' + item.icon + '"></i>' : '') + '</th>';
                     }
@@ -838,22 +860,25 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 						break;
                     case "radio":
                         c.option.forEach(function (o) {
+                            o.checked = '';
                             if (!isNull(value) && o.id == value) {
                                 o.checked = "checked";
                             }
                         });
                         tr += `<td style="min-width: 120px">`;
-                        tr += getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${type}" lay-filter="${type}Filter" value="{{id}}" title="{{name}}" {{checked}} />{{/each}}`, {rows: c.option});
+                        tr += getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${id}" lay-filter="${type}Filter" value="{{id}}" title="{{name}}" {{checked}} />{{/each}}`, {rows: c.option});
                         tr += '</td>';
                         break;
                     case "radioSingle":
                         c.option.forEach(function (o) {
+                            o.checked = '';
                             if (!isNull(value) && o.id == value) {
                                 o.checked = "checked";
                             }
                         });
                         tr += `<td style="min-width: 120px">`;
-                        tr += getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${c.singleName}" lay-filter="${type}Filter" value="{{id}}" title="{{name}}" checked />{{/each}}`, {rows: c.option});
+                        tr += getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${c.singleName}" rowId="${key}" lay-filter="${type}Filter" value="{{id}}" title="{{name}}" {{checked}} />{{/each}}`,
+                            {rows: c.option});
                         tr += '</td>';
                         break;
                     case "imageMulitple":
@@ -887,7 +912,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                         break;
                     case "btn":
                         value = isNull(value) ? [] : ($.isArray(value) ? value : JSON.parse(value));
-                        tr += "<td><button type='button' class='layui-btn layui-btn-primary layui-btn-xs stockMore' stock='" + JSON.stringify(value) + "' id='" + id + "'>库存信息</button>";
+                        tr += "<td style='min-width: 120px'><button type='button' class='layui-btn layui-btn-primary layui-btn-xs stockMore' stock='" + JSON.stringify(value) + "' id='" + id + "'>库存信息</button>";
                         $.each(value, function(i, item) {
                             if (!isNull(item.depotMation)) {
                                 tr += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotMation.name + '【' + item.stock + '】</span>';
@@ -897,7 +922,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                         break;
 					case "input":
 					default:
-						tr += '<td><input type="text" id="' + id + '" name="' + type + '" value="' + value + '" class="layui-input" win-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"></td>';
+						tr += '<td style="min-width: 120px"><input type="text" id="' + id + '" name="' + type + '" value="' + value + '" class="layui-input" win-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"></td>';
 						break;
 				}
 			});
@@ -949,6 +974,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                         break;
                     case "radio":
                         item.option.forEach(function (o) {
+                            o.checked = '';
                             if (!isNull(value) && o.id == value) {
                                 o.checked = "checked";
                             }
@@ -957,11 +983,12 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                         break;
                     case "radioSingle":
                         item.option.forEach(function (o) {
+                            o.checked = '';
                             if (!isNull(value) && o.id == value) {
                                 o.checked = "checked";
                             }
                         });
-                        div += getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${item.singleName}" lay-filter="${type}Filter" value="{{id}}" title="{{name}}" {{checked}} />{{/each}}`, {rows: item.option});
+                        div += getDataUseHandlebars(`{{#each rows}}<input type="radio" name="${item.singleName}" rowId="simpleNorms" lay-filter="${type}Filter" value="{{id}}" title="{{name}}" {{checked}} />{{/each}}`, {rows: item.option});
                         break;
                     case "imageMulitple":
                         value = isNull(value) ? '' : value;
@@ -1057,7 +1084,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             table += '<thead>';
             var theadTr = '<tr>';
             theadTr += prependThead.map(function (t, i, a) {
-                return '<th class="fairy-spec-name">' + t + '</th>';
+                return '<th style="min-width: 120px" class="fairy-spec-name">' + t + '</th>';
             }).join('');
             this.options.multipleSkuTableConfig.thead.forEach(function (item) {
                 if (isNull(item.width)) {
@@ -1245,35 +1272,16 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             var skuData = {};
 			var that = this;
 			var tableId = this.options.skuTableElemId + '-id';
-            if ($("input:radio[name='unit']:checked").val() == 1) {
+            let unit = $("input:radio[name='unit']:checked").val();
+            if (that.data.type == 1) {
+                // 商品上架商城
+                unit = that.data.otherMationData.unit;
+            }
+            if (unit == 1) {
                 // 单规格
                 var params = {orderBy: 1};
                 that.options.multipleSkuTableConfig.tbody.forEach(function (c) {
-                    var type = c.field;
-                    switch (c.type) {
-                        case "image":
-                            params[type] = $(`#${type}`).val();
-                            break;
-                        case "select":
-                            params[type] = $(`#${type}`).val();
-                            break;
-                        case "radio":
-                            params[type] = $(`input[type='radio'][name='${type}']:checked`).val();
-                            break;
-                        case "radioSingle":
-                            params[type] = $(`input[type='radio'][name='${type}']:checked`).val();
-                            break;
-                        case "imageMulitple":
-                            params[type] = $(`#${type}`).find("input[name='upload']").attr("oldurl");
-                            break;
-                        case "btn":
-                            params[type] = $(`#${type}`).attr("stock");
-                            break;
-                        case "input":
-                        default:
-                            params[type] = $(`#${type}`).val();
-                            break;
-                    }
+                    params = that.getValueByKey(params, c.type, c.field, c.field, c);
                 });
                 skuData["simpleNorms"] = params;
             } else {
@@ -1283,37 +1291,43 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     var rowNum = tr.attr("row");
                     var params = {orderBy: index + 1};
                     that.options.multipleSkuTableConfig.tbody.forEach(function (c) {
-                        var type = c.field;
-                        var tdId = type + rowNum;
-                        switch (c.type) {
-                            case "image":
-                                params[type] = $(`#${tdId}`).val();
-                                break;
-                            case "select":
-                                params[type] = $(`#${tdId}`).val();
-                                break;
-                            case "radio":
-                                params[type] = $(`input[type='radio'][name='${tdId}']:checked`).val();
-                                break;
-                            case "radioSingle":
-                                params[type] = $(`input[type='radio'][name='${tdId}']:checked`).val();
-                                break;
-                            case "imageMulitple":
-                                params[type] = $(`#${tdId}`).find("input[name='upload']").attr("oldurl");
-                                break;
-                            case "btn":
-                                params[type] = $(`#${tdId}`).attr("stock");
-                                break;
-                            case "input":
-                            default:
-                                params[type] = $(`#${tdId}`).val();
-                                break;
-                        }
+                        params = that.getValueByKey(params, c.type, c.field, c.field + rowNum, c);
                     });
                     skuData[id] = params;
                 });
             }
             return skuData;
+        }
+
+        getValueByKey(params, type, filed, key, c) {
+            switch (type) {
+                case "image":
+                    params[filed] = $(`#${key}`).val();
+                    break;
+                case "select":
+                    params[filed] = $(`#${key}`).val();
+                    break;
+                case "radio":
+                    params[filed] = $(`input[type='radio'][name='${key}']:checked`).val();
+                    break;
+                case "radioSingle":
+                    params[filed] = {
+                        value: $(`input[type='radio'][name='${c.singleName}']:checked`).val(),
+                        rowId: $(`input[type='radio'][name='${c.singleName}']:checked`).attr("rowId")
+                    };
+                    break;
+                case "imageMulitple":
+                    params[filed] = $(`#${key}`).find("input[name='upload']").attr("oldurl");
+                    break;
+                case "btn":
+                    params[filed] = $(`#${key}`).attr("stock");
+                    break;
+                case "input":
+                default:
+                    params[filed] = $(`#${key}`).val();
+                    break;
+            }
+            return params;
         }
 
         getFormSkuDataList() {

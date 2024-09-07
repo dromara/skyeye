@@ -1069,9 +1069,8 @@ var dataShowType = {
             // 多选框
             _box.html(getDataUseHandlebars(getFileContent('tpl/template/checkbox-property.tpl'), json));
             if (!isNull(defaultId)) {
-                var arr = defaultId.split(",");
-                for (var i = 0; i < arr.length; i++) {
-                    $('input:checkbox[rowId="' + arr[i] + '"]').attr("checked", true);
+                for (var i = 0; i < defaultId.length; i++) {
+                    $('input:checkbox[rowId="' + defaultId[i] + '"]').attr("checked", true);
                 }
             } else {
                 $.each(json.rows, function (i, item) {
@@ -1285,7 +1284,7 @@ var dataShowType = {
             var checkRow = $(`#${showBoxId} input[type='checkbox']:checked`);
             var checkTrueList = [];
             $.each(checkRow, function (i, item) {
-                checkTrueList.push($(item).attr('id'));
+                checkTrueList.push($(item).attr('rowId'));
             });
             value = checkTrueList;
         } else if (showType == 'radio') {
