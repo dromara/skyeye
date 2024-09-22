@@ -62,8 +62,8 @@
 | Java | 1.8 | 无 |
 | rocket MQ | 4.9.2 | 9876 |
 | Redis | 5.0 / 6.0 | 6379 |
-| nacos | 1.4.3 | 9000 |
-| MySQL | 5.6(如果需要5.7或更高版本，[点我配置](https://blog.csdn.net/qq_42175986/article/details/82384160)) | 3308 |
+| nacos | 2.3.0 | 8848|
+| MySQL | 5.7或更高版本，[点我配置](https://blog.csdn.net/qq_42175986/article/details/82384160) | 3308 |
 
 ### 微服务项目
 
