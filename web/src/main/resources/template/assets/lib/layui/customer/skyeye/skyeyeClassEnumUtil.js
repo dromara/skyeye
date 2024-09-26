@@ -25,7 +25,6 @@ var skyeyeClassEnumUtil = {
         var result = getInPoingArr(json.rows, key, value, getKey);
         return isNull(result) ? '' : result;
     },
-
     getEnumDataListByClassName: function (code) {
         if (isNull(skyeyeClassEnumUtil.classEnumMap[code])) {
             var params = {

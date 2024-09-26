@@ -66,8 +66,10 @@ layui.config({
 				} else {
 					$('#typeChangeBox').html(commonHtml['dsFormPage']);
 					dsFormUtil.dsFormChooseMation = json.bean.dsFormPage;
-					var serviceName = json.bean.dsFormPage.serviceBeanCustom.serviceBean.name;
-					$("#pageUrl").val(serviceName + '【' + json.bean.dsFormPage.name + '】');
+					if (!isNull(json.bean.dsFormPage.serviceBeanCustom.serviceBean)) {
+						var serviceName = json.bean.dsFormPage.serviceBeanCustom.serviceBean.name;
+						$("#pageUrl").val(serviceName + '【' + json.bean.dsFormPage.name + '】');
+					}
 				}
 
 		 		matchingLanguage();
