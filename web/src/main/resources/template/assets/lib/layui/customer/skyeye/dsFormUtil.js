@@ -862,17 +862,28 @@ var dsFormTableUtil = {
 
     // 初始化静态数据的表格
     intStaticTable: function (id, data, tableColumnList) {
-        var table = layui.table;
-        table.render({
-            id: id,
-            elem: `#${id}`,
-            data: data,
-            even: false,
-            page: false,
-            limit: 1000,
-            cols: dsFormTableUtil.getTableHead({
-                serialNumColumn: true
-            }, tableColumnList)
+        layui.define(['table', 'soulTable'], function(exports) {
+            var table = layui.table,
+                soulTable = layui.soulTable;
+            table.render({
+                id: id,
+                elem: `#${id}`,
+                data: data,
+                even: true,
+                overflow: {
+                    type: 'tips',
+                    header: true,
+                    total: true
+                },
+                page: false,
+                limit: 1000,
+                cols: dsFormTableUtil.getTableHead({
+                    serialNumColumn: true
+                }, tableColumnList),
+                done: function (json) {
+                    soulTable.render(this);
+                }
+            });
         });
     },
 
