@@ -33,8 +33,8 @@ layui.config({
 		if (treeNode.level != 3) {
 			return false;
 		}
-		objectId = treeNode.id;
 		appId = treeNode.classMation.appId;
+		objectId = treeNode.id.replace(appId, '');
 		loadTable();
 	}
 

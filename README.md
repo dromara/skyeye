@@ -29,6 +29,30 @@
 |:---------------------:|:-------------------:|:-------------------:|:------------:|
 | 微信扫码 | ![](images/mindMap/知识星球.png) |   ![](images/mindMap/微信公众号.jpg) | ![](images/mindMap/Dromara-Skyeye云交流群群聊二维码.png) |
 
+* **操作视频**
+
+  * 综合
+
+    * [Skyeye 操作视频（个人中心-行政-ERP-CRM） 2024-02-25](https://www.bilibili.com/video/BV1rz421X7eM/?vd_source=714dd9434dc2ba981f2f47b7aa44be38)
+    * [行政+ERP手机端 2024-01-28](https://www.bilibili.com/video/BV1ke411E7d6/?vd_source=714dd9434dc2ba981f2f47b7aa44be38)
+  * 基础模块
+
+    * [Skyeye系列 团队模板,编码管理,业务对象管理 2023-03-26](https://www.bilibili.com/video/BV17h411V7gn/?vd_source=714dd9434dc2ba981f2f47b7aa44be38)
+    * [Skyeye系列-菜单角色赋权 2023-03-21](https://www.bilibili.com/video/BV1mm4y1r7Qn/?vd_source=714dd9434dc2ba981f2f47b7aa44be38)
+    * [我的日程 2019-03-10](https://www.bilibili.com/video/BV1vb411i75M/)
+    * [Skyeye项目-聊天功能 2019-02-15](https://www.bilibili.com/video/BV11b41127FV/?vd_source=714dd9434dc2ba981f2f47b7aa44be38)
+    * [Skyeye项目-多桌面任务 2019-02-15](https://www.bilibili.com/video/BV1yb41127oB/?vd_source=714dd9434dc2ba981f2f47b7aa44be38)
+  * 工作流
+
+    * [Skyeye系列-工作流 2023-04-08](https://www.bilibili.com/video/BV17k4y1v7vR/?vd_source=714dd9434dc2ba981f2f47b7aa44be38)
+  * CRM
+
+    * [Skyeye系列-CRM 2023-03-28](https://www.bilibili.com/video/BV1Sk4y1471x/?vd_source=714dd9434dc2ba981f2f47b7aa44be38)
+  * ERP
+
+    * [Skyeye系列-erp+生产模块 2020-07-13](https://www.bilibili.com/video/BV1yA411e7mm/)
+
+
 ## 项目框架介绍
 
 ### 环境依赖
@@ -38,8 +62,8 @@
 | Java | 1.8 | 无 |
 | rocket MQ | 4.9.2 | 9876 |
 | Redis | 5.0 / 6.0 | 6379 |
-| nacos | 1.4.3 | 9000 |
-| MySQL | 5.6(如果需要5.7或更高版本，[点我配置](https://blog.csdn.net/qq_42175986/article/details/82384160)) | 3308 |
+| nacos | 2.3.0 | 8848|
+| MySQL | 5.7或更高版本，[点我配置](https://blog.csdn.net/qq_42175986/article/details/82384160) | 3308 |
 
 ### 微服务项目
 
