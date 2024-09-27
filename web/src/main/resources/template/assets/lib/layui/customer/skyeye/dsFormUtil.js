@@ -507,6 +507,12 @@ var dsFormUtil = {
         } else if (showType == -1) {
             // 组件展示类型为【自定义】
             content.value = data;
+            if (isNull(component.detailHtmlContent)) {
+                // 当没有设置自定义展示内容时，默认展示组件的html内容
+                let str = getDataUseHandlebars(dsFormUtil.showType["1"], {bean: content});
+                $("#" + boxId).append(str);
+                return content;
+            }
             var jsonStr = {bean: content};
             var html = getDataUseHandlebars('{{#bean}}' + component.detailHtmlContent + '{{/bean}}', jsonStr);
             var html_js = getDataUseHandlebars('{{#bean}}' + component.detailJsContent + '{{/bean}}', jsonStr);
