@@ -20,7 +20,6 @@
 
 <div style="margin:auto 10px;">
     <table id="messageTable" lay-filter="messageTable"></table>
-
     <script type="text/html" id="tableBar">
         {{# if(auth('1726921159686')) { }}
         <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">
@@ -28,7 +27,7 @@
         </a>
         {{# } }}
         {{# if(auth('1726921325488')) { }}
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">
             <language showName="com.skyeye.deleteBtn"></language>
         </a>
         {{# } }}

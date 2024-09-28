@@ -924,10 +924,13 @@ var ztreeUtil = {
 
         // 操作数据
         var aObj = $("#" + treeNode.tId + "_a");
-        if ($("#diyBtn_" + treeNode.id).length > 0) return;
+        let id = treeNode.id;
+        // 转义斜杠
+        id = id.replace(/\//g, "\\/");
+        if ($("#diyBtn_" + id).length > 0) return;
         aObj.after("");
         aObj.addClass("tree_a");
-        aObj.attr("ztreerowid", treeNode.id);
+        aObj.attr("ztreerowid", id);
     },
 
     initEventListener: function (treeId) {

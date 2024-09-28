@@ -54,9 +54,9 @@ layui.config({
                 {
                     field: 'logo', title: 'logo', width: 100,templet: function (d) {
                         if (isNull(d.logo)) {
-                            return '<img src="../../assets/images/os_windows.png" class="logo-img">';
+                            return '<img src="../../assets/images/os_windows.png" class="photo-img">';
                         } else {
-                            return '<img src="' + fileBasePath + d.logo + '" class="logo-img" lay-event="logo">';
+                            return '<img src="' + fileBasePath + d.logo + '" class="photo-img" lay-event="logo">';
                         }
                     }
                 },
@@ -108,7 +108,6 @@ layui.config({
             }
         });
     }
-
     table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
@@ -122,18 +121,20 @@ layui.config({
     // 新增
     $("body").on("click", "#addBean", function () {
         _openNewWindows({
-            url: systemCommonUtil.getUrl('FP2024092100004', null), title: systemLanguage["com.skyeye.addPageTitle"][languageType], pageId: "storeTypeServiceAdd",
+            url: "../../tpl/storeTypeService/storeTypeServiceWrite.html?storeId=" + storeId,
+            title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+            pageId: "storeTypeServiceAdd",
             area: ['90vw', '90vh'],//宽度和高度
-            callBack: function (refreshCode) {winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+            callBack: function (refreshCode) {
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
         });
     });
-
     // 编辑
     function edit(data) {
         _openNewWindows({
-            url: systemCommonUtil.getUrl('FP2024092100005&id=' + data.id, null),
+            url: "../../tpl/storeTypeService/storeTypeServiceWrite.html?id=" + data.id,
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "storeTypeServiceEdit",
             area: ['90vw', '90vh'],
@@ -143,28 +144,23 @@ layui.config({
             }
         });
     }
-
     // 删除
     function del(data, obj) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.schoolBasePath + "deleteStoreTypeByIds", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.shopBasePath + "deleteStoreTypeByIds", params: {ids: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
                 }});
         });
     }
-
     form.render();
     $("body").on("click", "#reloadTable", function () {
         loadTable();
     });
-
-
     function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
-
     function getTableParams() {
         let params = {
             objectId: storeId,
