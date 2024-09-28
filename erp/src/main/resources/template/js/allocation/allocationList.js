@@ -21,7 +21,7 @@ layui.config({
         even: true,
         page: true,
         limits: getLimits(),
-	    limit: getLimit(),
+        limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'oddNumber', title: '单据编号', align: 'left', width: 200, templet: function (d) {
