@@ -55,8 +55,10 @@ layui.config({
 		form.on('radio(pageType)', function (data) {
 			if (data.value == 1) {
 				$('#typeChangeBox').html(commonHtml['customPageUrl']);
-			} else {
+			} else if (data.value == 2) {
 				$('#typeChangeBox').html(commonHtml['dsFormPage']);
+			} else if (data.value == 3) {
+				$('#typeChangeBox').html(commonHtml['dsFormReportPage']);
 			}
 		});
  		
@@ -69,8 +71,8 @@ layui.config({
 					sysWinId: $("#sysWinId").val(),
 					orderNum: $("#orderNum").val(),
 					desktopId: $("#desktop").val(),
-					pageType: pageType == 1 ? true : false,
-					pageUrl: pageType == 1 ? $("#pageUrl").val() : dsFormUtil.dsFormChooseMation.id,
+					pageType: pageType,
+					pageUrl: getPageTypeForUrl(pageType),
 					type: $("input[name='type']:checked").val(),
 					level: level,
 					parentId: level == 0 ? "0" : $("#menuParent").val(),
@@ -104,11 +106,34 @@ layui.config({
  	    }
 
 		$("body").on("click", ".chooseBtn", function() {
-			dsFormUtil.openDsFormPageChoosePage(function (dsFormChoose) {
-				var serviceName = dsFormChoose.serviceBeanCustom.serviceBean.name;
-				$("#pageUrl").val(serviceName + '【' + dsFormChoose.name + '】');
-			});
+			var pageType = $("input[name='pageType']:checked").val();
+			if (pageType == 2) {
+				dsFormUtil.openDsFormPageChoosePage(function (dsFormChoose) {
+					var serviceName = dsFormChoose.serviceBeanCustom.serviceBean.name;
+					$("#pageUrl").val(serviceName + '【' + dsFormChoose.name + '】');
+				});
+			} else if (pageType == 3) {
+				_openNewWindows({
+					url: systemCommonUtil.getUrl('FP2024092900001', null),
+					title: "报表视图选择",
+					pageId: "dsFormReportPageListChoose",
+					area: ['90vw', '90vh'],
+					callBack: function (refreshCode) {
+						$("#pageUrl").val(chooseItemMation.name);
+					}});
+			}
 		});
+
+		function getPageTypeForUrl(pageType) {
+			if (pageType == 1) {
+				return $("#pageUrl").val();
+			} else if (pageType == 2) {
+				return dsFormUtil.dsFormChooseMation.id;
+			} else if (pageType == 3) {
+				return chooseItemMation.id;
+			}
+			return '';
+		}
  	    
  	    // 取消
 	    $("body").on("click", "#cancle", function() {

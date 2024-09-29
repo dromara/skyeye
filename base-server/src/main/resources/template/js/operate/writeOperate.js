@@ -40,6 +40,7 @@ layui.config({
 								<div class="layui-input-block winui-radio">
 									<input type="radio" name="type" value="1" title="自定义页面" lay-filter="type" checked/>
 									<input type="radio" name="type" value="2" title="表单布局" lay-filter="type" />
+									<input type="radio" name="type" value="3" title="报表视图" lay-filter="type" />
 								</div>
 							</div>
 							<div id="typeChangeBox">
@@ -91,17 +92,20 @@ layui.config({
 				$('#eventTypeChangeBox').html(_html['operateOpenPage']);
 				$('#typeChangeBox').html(commonHtml['customPageUrl']);
 				$("#openPageName").val(operateOpenPage.name);
-				var type = operateOpenPage.type ? "1" : "2";
+				var type = operateOpenPage.type;
 				$("input:radio[name=type][value=" + type + "]").attr("checked", true);
 				skyeyeClassEnumUtil.showEnumDataListByClassName("pageOpenType", 'radio', "openType", json.bean.openType, form);
 				if (type == 1) {
 					$('#typeChangeBox').html(commonHtml['customPageUrl']);
 					$("#pageUrl").val(operateOpenPage.pageUrl);
-				} else {
+				} else if (type == 2) {
 					$('#typeChangeBox').html(commonHtml['dsFormPage']);
 					dsFormUtil.dsFormChooseMation = operateOpenPage.dsFormPage;
 					var serviceName = operateOpenPage.dsFormPage.serviceBeanCustom.serviceBean.name;
 					$("#pageUrl").val(serviceName + '【' + operateOpenPage.dsFormPage.name + '】');
+				} else if (type == 3) {
+					chooseItemMation = json.bean.reportPage;
+					$("#pageUrl").val(getNotUndefinedVal(chooseItemMation?.name));
 				}
 
 				loadParamsTable('pageParams');
@@ -166,8 +170,10 @@ layui.config({
 	form.on('radio(type)', function (data) {
 		if (data.value == 1) {
 			$('#typeChangeBox').html(commonHtml['customPageUrl']);
-		} else {
+		} else if (data.value == 2) {
 			$('#typeChangeBox').html(commonHtml['dsFormPage']);
+		} else if (data.value == 3) {
+			$('#typeChangeBox').html(commonHtml['dsFormReportPage']);
 		}
 	});
 
@@ -225,8 +231,8 @@ layui.config({
 				var type = $("input[name='type']:checked").val();
 				var operateOpenPage = {
 					name: $("#openPageName").val(),
-					type: type == 1 ? true : false,
-					pageUrl: type == 1 ? $("#pageUrl").val() : dsFormUtil.dsFormChooseMation.id,
+					type: type,
+					pageUrl: getPageTypeForUrl(type),
 					params: pageParams
 				};
 				params.operateOpenPage = JSON.stringify(operateOpenPage);
@@ -242,11 +248,34 @@ layui.config({
 	});
 
 	$("body").on("click", ".chooseBtn", function() {
-		dsFormUtil.openDsFormPageChoosePage(function (dsFormChoose) {
-			var serviceName = dsFormChoose.serviceBeanCustom.serviceBean.name;
-			$("#pageUrl").val(serviceName + '【' + dsFormChoose.name + '】');
-		});
+		var pageType = $("input[name='type']:checked").val();
+		if (pageType == 2) {
+			dsFormUtil.openDsFormPageChoosePage(function (dsFormChoose) {
+				var serviceName = dsFormChoose.serviceBeanCustom.serviceBean.name;
+				$("#pageUrl").val(serviceName + '【' + dsFormChoose.name + '】');
+			});
+		} else if (pageType == 3) {
+			_openNewWindows({
+				url: systemCommonUtil.getUrl('FP2024092900001', null),
+				title: "报表视图选择",
+				pageId: "dsFormReportPageListChoose",
+				area: ['90vw', '90vh'],
+				callBack: function (refreshCode) {
+					$("#pageUrl").val(chooseItemMation.name);
+				}});
+		}
 	});
+
+	function getPageTypeForUrl(pageType) {
+		if (pageType == 1) {
+			return $("#pageUrl").val();
+		} else if (pageType == 2) {
+			return dsFormUtil.dsFormChooseMation.id;
+		} else if (pageType == 3) {
+			return chooseItemMation.id;
+		}
+		return '';
+	}
 
 	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);
