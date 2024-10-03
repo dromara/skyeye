@@ -27,7 +27,34 @@ layui.config({
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'name', title: 'Echarts名称', align: 'left', width: 250},
             { field: 'modelCode', title: '模型编码', align: 'left', width: 250 },
-            { field: 'typeName', title: '分类', align: 'left', width: 120 },
+            { field: 'typeName', title: '分类', align: 'left', width: 150 },
+            { field: 'placeholder1', title: '版本', align: 'left', width: 80, templet: function (d) {
+                let version = getNotUndefinedVal(d.reportModel?.softwareVersion);
+                return isNull(version)? '' : 'V ' + version;
+            }},
+            { field: 'placeholder2', title: 'LOGO', align: 'left', width: 80, templet: function (d) {
+                let logo = getNotUndefinedVal(d.reportModel?.logoPath);
+                if (isNull(logo)) {
+                    return '';
+                } else {
+                    return '<img src="' + systemCommonUtil.getFilePath(logo) + '" class="photo-img" lay-event="logo">';
+                }
+            }},
+            { field: 'placeholder3', title: '默认宽度', align: 'left', width: 80, templet: function (d) {
+                return getNotUndefinedVal(d.reportModel?.defaultWidth);
+            }},
+            { field: 'placeholder4', title: '最小宽度', align: 'left', width: 80, templet: function (d) {
+                return getNotUndefinedVal(d.reportModel?.minWidth);
+            }},
+            { field: 'placeholder5', title: '默认高度', align: 'left', width: 80, templet: function (d) {
+                return getNotUndefinedVal(d.reportModel?.defaultHeight);
+            }},
+            { field: 'placeholder6', title: '最小高度', align: 'left', width: 80, templet: function (d) {
+                return getNotUndefinedVal(d.reportModel?.minHeight);
+            }},
+            { field: 'placeholder7', title: '默认背景色', align: 'left', width: 100, templet: function (d) {
+                return getNotUndefinedVal(d.reportModel?.defaultBgColor);
+            }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
@@ -47,6 +74,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
             edit(data);
+        } else if (layEvent === 'logo') { //头像预览
+            let logo = getNotUndefinedVal(data.reportModel?.logoPath);
+            systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(logo));
         } else if (layEvent === 'delet') { //删除
             delet(data);
         } else if (layEvent === 'uploadHistory') { //上传历史
