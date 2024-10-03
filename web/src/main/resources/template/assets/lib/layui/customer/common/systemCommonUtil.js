@@ -348,14 +348,19 @@ var systemCommonUtil = {
      *
      * @param url 系统自定义路径
      * @param menuSysWinUrl 分布式系统域名
+     * @param pageType 页面类型 1.自定义页面 2.表单布局 3.报表视图
      * @returns {string|*}
      */
-    getUrl: function (url, menuSysWinUrl) {
+    getUrl: function (url, menuSysWinUrl, pageType) {
         if (systemCommonUtil.checkUrl(url)) {
             // 自定义页面
             url = indexMenu.getUrlPath(url, menuSysWinUrl);
         } else {
-            url = dsFormPageUrl + url;
+            if (isNull(pageType) || pageType == 2) {
+                url = dsFormPageUrl + url;
+            } else if (pageType == 3) {
+                url = reportPageShowUrl + url;
+            }
         }
         return url
     },

@@ -82,13 +82,25 @@ layui.config({
 						} else {
 							$("ul[menurowid='" + row.deskTopId + "']").append(menuStr);
 						}
-						data.push({id: row.id, name: row.name, pageURL: row.pageURL, winName: isNull(row.deskTopId) ? defaultName : $(".desktop-menu-box").find("li[rowid='" + row.deskTopId + "']").find('span').html()});
+						data.push({
+							id: row.id,
+							name: row.name,
+							pageType: row.pageType,
+							pageURL: row.pageURL,
+							winName: isNull(row.deskTopId) ? defaultName : $(".desktop-menu-box").find("li[rowid='" + row.deskTopId + "']").find('span').html()
+						});
 					} else {
 						//二级菜单
 						if (!isNull(row.childs)){
 							$.each(row.childs, function(j, child){
 								child.icon = desktopMenuUtil.getTraditionPageMenuIcon(child);
-								data.push({id: child.id, name: child.name, pageURL: child.pageURL, winName: isNull(row.deskTopId) ? defaultName : $(".desktop-menu-box").find("li[rowid='" + row.deskTopId + "']").find('span').html()});
+								data.push({
+									id: child.id,
+									name: child.name,
+									pageType: row.pageType,
+									pageURL: child.pageURL,
+									winName: isNull(row.deskTopId) ? defaultName : $(".desktop-menu-box").find("li[rowid='" + row.deskTopId + "']").find('span').html()
+								});
 							});
 						}
 						menuStr = getDataUseHandlebars(menuMoreTemplate, {bean: row});
@@ -140,8 +152,8 @@ layui.config({
 	//触发事件
     active = {
     	//在这里给active绑定几项事件，后面可通过active调用这些事件
-    	tabAdd: function(url, id, name) {
-			url = systemCommonUtil.getUrl(url, null);
+    	tabAdd: function(url, id, name, pageType) {
+			url = systemCommonUtil.getUrl(url, null, pageType);
 
     		//新增一个Tab项 传入三个参数，分别对应其标题，tab页面的地址，还有一个规定的id，是标签中data-id的属性值
     		//关于tabAdd的方法所传入的参数可看layui的开发文档中基础方法部分

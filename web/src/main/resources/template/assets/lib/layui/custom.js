@@ -51,6 +51,7 @@ if (isNull(localStorage.getItem("sysMainMation"))) {
 }
 
 var dsFormPageUrl = "../../tpl/dsFormPage/pageShow.html?pageId=";
+var reportPageShowUrl = "../../tpl/reportPage/reportPageShow.html?id=";
 
 var skyeyeVersion;
 // 文件路径

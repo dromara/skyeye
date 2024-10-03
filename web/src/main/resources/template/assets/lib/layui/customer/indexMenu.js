@@ -37,12 +37,13 @@ var indexMenu = {
         var id = dataMenu.attr("data-id");
         var title = dataMenu.attr("data-title");
         var sysWinUrl = dataMenu.attr("data-sysWinUrl");
+        var pageType = dataMenu.attr("data-pageType");
         var url = dataMenu.attr("data-url");
         url = indexMenu.getUrlPath(url, sysWinUrl);
         // 这时会判断右侧#LAY_app_tabsheader属性下的有lay-id属性的li的数目，即已经打开的tab项数目
         if($("#LAY_app_tabsheader li[lay-id]").length <= 0) {
             // 如果比零小，则直接打开新的tab项
-            active.tabAdd(url, id, icon + title);
+            active.tabAdd(url, id, icon + title, pageType);
         } else {
             // 否则判断该tab项是否以及存在
             var isData = false; // 初始化一个标志，为false说明未打开该tab项 为true则说明已有
@@ -54,7 +55,7 @@ var indexMenu = {
             })
             if(isData == false) {
                 // 标志为false 新增一个tab项
-                active.tabAdd(url, id, icon + title);
+                active.tabAdd(url, id, icon + title, pageType);
             }
         }
         // 最后不管是否新增tab，最后都转到要打开的选项页面上

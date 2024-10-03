@@ -22,6 +22,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
         var html = '';
         $(this.data).each(function (index, item) {
             var id = 'win-id="' + item.id + '"',
+                pageType = 'win-pageType="' + item.pageType + '"',
                 url = 'win-url="' + item.pageURL + '"',
                 title = 'win-title="' + item.name + '"',
                 opentype = 'win-opentype="' + item.openType + '"',
@@ -38,7 +39,8 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
             } else {
                 extend = '';
             }
-            html += `<li class="layui-nav-item ${isParent} ${extend}" ${id} ${url} ${title} ${opentype} ${maxopen} ${iconParams.winIcon} ${menuIconBg} ${menuIconColor} ${menuSysWinUrl} ${menuDeskTopId}>`;
+            html += `<li class="layui-nav-item ${isParent} ${extend}" ${id} ${pageType} ${url} ${title} ${opentype} ${maxopen} ${iconParams.winIcon} 
+                        ${menuIconBg} ${menuIconColor} ${menuSysWinUrl} ${menuDeskTopId}>`;
             if (!isNull(item.menuIconBg)){
             	html += '<a><div class="winui-menu-icon" style="background-color: ' + item.menuIconBg + '!important;">';
             } else {
@@ -51,6 +53,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
                 html += '<dl class="layui-nav-child">';
                 $(item.childs).each(function (cIndex, cItem) {
                     var cId = 'win-id="' + cItem.id + '"',
+                        cPageType = 'win-pageType="' + cItem.pageType + '"',
                         cUrl = 'win-url="' + cItem.pageURL + '"',
                         cTitle = 'win-title="' + cItem.name + '"',
                         cOpentype = 'win-opentype="' + cItem.openType + '"',
@@ -60,7 +63,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
                         cmenuSysWinUrl = isNull(cItem.sysWinUrl) ? '' : 'win-sysWinUrl="' + cItem.sysWinUrl + '"',
 						menuDeskTopId = 'win-menuDeskTopId="' + cItem.deskTopId + '"';;
                     var cIconParams = desktopMenuUtil.getMenuIcon(cItem);
-                    html += `<dd ${cId} ${cUrl} ${cTitle} ${cOpentype} ${cMaxopen} ${cIconParams.winIcon} ${cmenuIconBg} ${cmenuIconColor} ${cmenuSysWinUrl} ${ menuDeskTopId}>`;
+                    html += `<dd ${cId} ${cPageType} ${cUrl} ${cTitle} ${cOpentype} ${cMaxopen} ${cIconParams.winIcon} ${cmenuIconBg} ${cmenuIconColor} ${cmenuSysWinUrl} ${ menuDeskTopId}>`;
                     if (!isNull(cItem.menuIconBg)){
                     	html += '<a><div class="winui-menu-icon" style="background-color: ' + cItem.menuIconBg + '!important;">';
                     } else {

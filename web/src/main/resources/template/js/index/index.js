@@ -906,7 +906,8 @@ layui.config({
     // 打开窗口的方法（可自己根据需求来写）
     function OpenWindow(menuItem) {
 		var $this = $(menuItem);
-        var url = $this.attr('win-url');
+		var pageType = $this.attr('win-pageType');
+		var url = $this.attr('win-url');
         var menuIconBg = $this.attr("win-menuiconbg");
         var menuIconColor = $this.attr("win-menuiconcolor");
         var menuIcon = isNull($this.attr("win-icon")) ? '' : $this.attr("win-icon");
@@ -950,7 +951,7 @@ layui.config({
 			return;
 		}
 
-		url = systemCommonUtil.getUrl(url, menuSysWinUrl);
+		url = systemCommonUtil.getUrl(url, menuSysWinUrl, pageType);
 
         if (type === 1) {
         	// 新窗口打开

@@ -21,7 +21,8 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         var html = '';
         $(this.data).each(function (index, item) {
         	var id = 'win-id="' + item.id + '"',
-        		url = 'win-url="' + item.pageURL + '"',
+                pageType = 'win-pageType="' + item.pageType + '"',
+                url = 'win-url="' + item.pageURL + '"',
         		title = 'win-title="' + item.name + '"',
         		opentype = 'win-opentype="' + item.openType + '"',
         		maxOpen = 'win-maxOpen="' + item.maxOpen + '"',
@@ -35,7 +36,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         	var iconParams = desktopMenuUtil.getDecktopMenuIcon(item);
         	if (isNull(item.childs) || item.childs.length == 0) {//没有子菜单
         		if(item.pageURL == '--' && item.menuLevel == '0'){
-        			html += `<div class="winui-desktop-item win-menu-group" id="${item.id}" ${id} ${url} ${title} ${opentype} ${maxOpen} ${iconBg} ${iconColor}>
+        			html += `<div class="winui-desktop-item win-menu-group" id="${item.id}" ${id} ${pageType} ${url} ${title} ${opentype} ${maxOpen} ${iconBg} ${iconColor}>
 								<div class="winui-icon ${iconParams.isFaIcon}">
 									<div class="icon-drawer"></div>
 									<div class="icon-child"></div>
@@ -43,7 +44,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
 								<p>${item.name}</p>
 							</div>`;
         		} else {
-        			html += `<div class="winui-desktop-item sec-btn" ${id} ${url} ${title} ${opentype} ${maxOpen} ${iconBg} ${iconColor} ${iconParams.menuIcon} ${sysWinUrl}>`;
+        			html += `<div class="winui-desktop-item sec-btn" ${id} ${pageType} ${url} ${title} ${opentype} ${maxOpen} ${iconBg} ${iconColor} ${iconParams.menuIcon} ${sysWinUrl}>`;
         			if (!isNull(item.iconBg)){
         				html += '<div class="winui-icon ' + iconParams.isFaIcon + '" style="background-color: ' + item.iconBg + '">';
         			} else {
@@ -55,14 +56,15 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         			html += '</div>';
         		}
         	} else {//有子菜单
-        		html += `<div class="winui-desktop-item win-menu-group" id="${item.id}" ${id} ${url} ${title} ${opentype} ${maxOpen} ${iconBg} ${iconColor} ${sysWinUrl}>`;
+        		html += `<div class="winui-desktop-item win-menu-group" id="${item.id}" ${id} ${pageType} ${url} ${title} ${opentype} ${maxOpen} ${iconBg} ${iconColor} ${sysWinUrl}>`;
         		html += '<div class="winui-icon ' + iconParams.isFaIcon + '">';
         		html += '<div class="icon-drawer">';
         		var childsIconContent = '';
         		var childsHtml = '';
         		$(item.childs).each(function (index, bean) {
         			var cId = 'win-id="' + bean.id + '"',
-        				cPageUrl = 'win-url="' + bean.pageURL + '"',
+                        cPageType = 'win-pageType="' + bean.pageType + '"',
+                        cPageUrl = 'win-url="' + bean.pageURL + '"',
         				cTitle = 'win-title="' + bean.name + '"',
         				cOpenType = 'win-opentype="' + bean.openType + '"',
         				cMaxOpen = 'win-maxOpen="' + bean.maxOpen + '"',
@@ -74,7 +76,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         			// 如果子菜单的所属桌面和父菜单的一样
                     if(bean.deskTopId === item.deskTopId){
         				childsIconContent += childIconParams.smallIcon;
-        				childsHtml += `<div class="winui-desktop-item sec-clsss-btn sec-btn" ${cId} ${cPageUrl} ${cTitle} ${cOpenType} ${cMaxOpen} ${cIconBg} ${cIconColor} + ${childIconParams.menuIcon} ${cSysWinUrl}>`;
+        				childsHtml += `<div class="winui-desktop-item sec-clsss-btn sec-btn" ${cId} ${cPageType} ${cPageUrl} ${cTitle} ${cOpenType} ${cMaxOpen} ${cIconBg} ${cIconColor} + ${childIconParams.menuIcon} ${cSysWinUrl}>`;
         				if (!isNull(bean.iconBg)){
         					childsHtml += '<div class="winui-icon ' + childIconParams.isFaIcon + '" style="background-color: ' + bean.iconBg + '">';
         				} else {
@@ -86,7 +88,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         				childsHtml += '</div>';
         			} else {//如果子菜单的所属桌面和父菜单的不一样
         				var childDeskHtml = "";
-        				childDeskHtml += `<div class="winui-desktop-item sec-btn" ${cId} ${cPageUrl} ${cTitle} ${cOpenType} ${cMaxOpen} ${cIconBg} ${cIconColor} ${childIconParams.childsmenuIcon} ${cSysWinUrl}>`;
+        				childDeskHtml += `<div class="winui-desktop-item sec-btn" ${cId} ${cPageType} ${cPageUrl} ${cTitle} ${cOpenType} ${cMaxOpen} ${cIconBg} ${cIconColor} ${childIconParams.childsmenuIcon} ${cSysWinUrl}>`;
             			if (!isNull(bean.iconBg)){
             				childDeskHtml += '<div class="winui-icon ' + childIconParams.isFaIcon + '" style="background-color: ' + bean.iconBg + '">';
             			} else {
