@@ -1124,6 +1124,18 @@ function getSortFun(order, sortBy) {
 	return sortFun;
 }
 
+function groupByField(items, field) {
+	var grouped = {};
+	$.each(items, function() {
+		if (grouped.hasOwnProperty(this[field])) {
+			grouped[this[field]].push(this);
+		} else {
+			grouped[this[field]] = [this];
+		}
+	});
+	return grouped;
+}
+
 /**
  * 判断字符串是否是json字符串
  * @param str

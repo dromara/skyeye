@@ -90,6 +90,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				'headerBgColor': 'lightskyblue', // 菜单栏背景颜色
 				'initData': {}, // 初始化数据
 				'headerMenuJson': [], // 菜单栏
+				'leftBoxWidth': 350, // 左侧盒子宽度
 				// excel配置
 				excelConfig: {
 					def:{
@@ -119,8 +120,9 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				box: function() {
 					var width = $(window).width();
 					var height = $(window).height();
-					// 整个box的宽高
-					x.height(height).width(width);
+					// 整个box的宽高，宽度减去的350为右侧属性面板的宽度
+					x.height(height).width(width - params.leftBoxWidth - 350);
+					contentTop.width(width - params.leftBoxWidth - 350 - 30);
 				},
 
 				ui: function() {
@@ -175,173 +177,159 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					$.each(params.headerMenuJson, function(i, item) {
 						var customClass = f.isNull(item.class) ? "" : item.class;
 						var customId = f.isNull(item.id) ? "" : "id='" + item.id + "'";
-						if (f.isNull(item.children)) {
-							str += '<a class="def-nav ' + customClass + '" href="javascript:;" ' + customId + '>' +
-								'<i class="icon ' + item.icon + '"></i>' +
-								'<span>' + item.title + '</span>' +
-								'</a>';
-						} else {
-							if (item.id == 'echartsModel') {
-								str = f.getEchartsHtml(item, str);
-							} else if(item.id == 'bgImages') {
-								str = f.getBgImageHtml(item, str);
-							} else if(item.id == 'wordModel') {
-								str = f.getWordModelHtml(item, str);
-							} else if(item.id == 'imgModel') {
-								str = f.getImgModelHtml(item, str);
-							} else if(item.id == 'domModel') {
-								str = f.getDomModelHtml(item, str);
-							} else if(item.id == 'tableModel') {
-								str = f.getTableModelHtml(item, str);
-							} else {
-								str = f.getEchartsHtml(item, str);
-							}
-						}
-						str += '<span class="separate"></span>';
+						str += `<div class="def-nav has-pulldown-special ${customClass}" ${customId}>
+									<i class="icon ${item.icon}"></i>
+									<span>${item.title}</span>
+								</div>`;
 					});
-					skyeyeHeader.find(".navs").html(str);
-					skyeyeHeader.css({
+					typeFirstNav.html(str);
+					typeFirstNav.css({
 						"background-color": params.headerBgColor
-					});
-					skyeyeHeader.find(".separate").css({
-						"background-color": params.headerBgColor
-					});
-					$(".def-nav").hover(function (e) {
-						$(this).find(".pulldown-nav").addClass("hover");
-						$(this).find(".pulldown-nav").find(".f-icon").removeClass("arrow-bottom");
-						$(this).find(".pulldown-nav").find(".f-icon").addClass("arrow-top");
-						$(this).find(".pulldown").show();
-					}, function (e) {
-						$(this).find(".pulldown").hide();
-						$(this).find(".pulldown-nav").removeClass("hover");
-						$(this).find(".pulldown-nav").find(".f-icon").addClass("arrow-bottom");
-						$(this).find(".pulldown-nav").find(".f-icon").removeClass("arrow-top");
 					});
 					f.setHeaderMenuClickEvent();
 				},
 
-				// 标题按钮--有子按钮时，父按钮公共部分
-				getCommonParentHeader: function (str, item) {
-					str += '<div class="def-nav has-pulldown-special">' +
-						'<a class="pulldown-nav" href="javascript:void(0);">' +
-						'<em class="f-icon arrow-bottom"></em>' +
-						'<i class="icon' + item.icon + '"></i>' +
-						'<span>' + item.title + '</span>' +
-						'</a>' +
-						'<div class="pulldown app-url">' +
-						'<div class="child-menu">';
-					return str;
-				},
-
 				// 标题按钮--echarts模型获取html
-				getEchartsHtml: function(item, str) {
-					str = f.getCommonParentHeader(str, item);
-					$.each(item.children, function (j, bean) {
-						if (f.isNull(bean.icon)) {
-							str += '<a class="li disk layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.name + '">' +
-								'<img class="image" src="' + bean.reportModel.logoPath + '"/>' +
-								'<span class="text">' + bean.name + '</span>' +
-								'</a>';
-						} else {
-							str += '<a class="li disk layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.name + '">' +
-								'<i class="icon' + bean.icon + '"></i>' +
-								'<span class="text">' + bean.name + '</span>' +
-								'</a>';
-						}
+				getEchartsHtml: function(item) {
+					let str = '';
+					let groupedItems = groupByField(item.children, 'typeName');
+					$.each(groupedItems, function (key, value) {
+						str += `<fieldset class="layui-elem-field layui-field-title"><legend>${key}</legend></fieldset>`;
+						$.each(value, function (j, bean) {
+							if (f.isNull(bean.icon)) {
+								str += `<a class="li disk layui-col-xs3" href="javascript:void(0);" rowId="${bean.id}" title="${bean.name}">
+										<img class="image" src="${bean.reportModel.logoPath}"/>
+										<span class="text">${bean.name}</span>
+									</a>`;
+							} else {
+								str += `<a class="li disk layui-col-xs3" href="javascript:void(0);" rowId="${bean.id}" title="${bean.name}">
+										<i class="icon${bean.icon}"></i>
+										<span class="text">${bean.name}</span>
+									</a>`;
+							}
+						});
 					});
-					str += '</div>' +
-						'</div>' +
-						'</div>';
 					return str;
 				},
 
 				// 标题按钮--小图片模型获取html
-				getImgModelHtml: function(item, str) {
-					str = f.getCommonParentHeader(str, item);
-					$.each(item.children, function (j, bean) {
-						str += '<a class="li imgModle layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.name + '">' +
-							'<img class="image" src="' + bean.imgPath + '"/>' +
-							'<span class="text">' + bean.name + '</span>' +
-							'</a>';
+				getImgModelHtml: function(item) {
+					let str = '';
+					let groupedItems = groupByField(item.children, 'typeName');
+					$.each(groupedItems, function (key, value) {
+						str += `<fieldset class="layui-elem-field layui-field-title"><legend>${key}</legend></fieldset>`;
+						$.each(item.children, function (j, bean) {
+							str += `<a class="li imgModle layui-col-xs3" href="javascript:void(0);" rowId="${bean.id}" title="${bean.name}">
+										<img class="image" src="${bean.imgPath}"/>
+										<span class="text">${bean.name}</span>
+									</a>`;
+						});
 					});
-					str += '</div>' +
-						'</div>' +
-						'</div>';
 					return str;
 				},
 
 				// 标题按钮--装饰模型获取html
-				getDomModelHtml: function(item, str) {
-					str = f.getCommonParentHeader(str, item);
-					$.each(item.children, function (j, bean) {
-						str += '<a class="li domModle layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.name + '">' +
-							'<img class="image" src="' + bean.imgPath + '"/>' +
-							'<span class="text">' + bean.name + '</span>' +
-							'</a>';
+				getDomModelHtml: function(item) {
+					let str = '';
+					let groupedItems = groupByField(item.children, 'typeName');
+					$.each(groupedItems, function (key, value) {
+						str += `<fieldset class="layui-elem-field layui-field-title"><legend>${key}</legend></fieldset>`;
+						$.each(item.children, function (j, bean) {
+							str += `<a class="li domModle layui-col-xs3" href="javascript:void(0);" rowId="${bean.id}" title="${bean.name}">
+										<img class="image" src="${bean.imgPath}"/>
+										<span class="text">${bean.name}</span>
+									</a>`;
+						});
 					});
-					str += '</div>' +
-						'</div>' +
-						'</div>';
 					return str;
 				},
 
 				// 标题按钮--文字模型获取html
-				getWordModelHtml: function(item, str) {
-					str = f.getCommonParentHeader(str, item);
-					$.each(item.children, function (j, bean) {
-						str += '<a class="li wordModle layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.name + '">' +
-							'<img class="image" src="' + bean.imgPath + '"/>' +
-							'<span class="text">' + bean.name + '</span>' +
-							'</a>';
+				getWordModelHtml: function(item) {
+					let str = '';
+					let groupedItems = groupByField(item.children, 'typeName');
+					$.each(groupedItems, function (key, value) {
+						str += `<fieldset class="layui-elem-field layui-field-title"><legend>${key}</legend></fieldset>`;
+						$.each(item.children, function (j, bean) {
+							str += `<a class="li wordModle layui-col-xs3" href="javascript:void(0);" rowId="${bean.id}" title="${bean.name}">
+										<img class="image" src="${bean.imgPath}"/>
+										<span class="text">${bean.name}</span>
+									</a>`;
+						});
 					});
-					str += '</div>' +
-						'</div>' +
-						'</div>';
 					return str;
 				},
 
 				// 标题按钮--表格模型获取html
-				getTableModelHtml: function(item, str) {
-					str = f.getCommonParentHeader(str, item);
+				getTableModelHtml: function(item) {
+					let str = '';
 					$.each(item.children, function (j, bean) {
-						str += '<a class="li tableModel layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.name + '">' +
-							'<i class="icon' + bean.icon + '"></i>' +
-							'<span class="text">' + bean.name + '</span>' +
-							'</a>';
+						str += `<a class="li tableModel layui-col-xs3" href="javascript:void(0);" rowId="${bean.id}" title="${bean.name}">
+									<i class="icon${bean.icon}"></i>
+									<span class="text">${bean.name}</span>
+								</a>`;
 					});
-					str += '</div>' +
-						'</div>' +
-						'</div>';
 					return str;
 				},
 
 				// 标题按钮--背景图片模型获取html
-				getBgImageHtml: function(item, str) {
-					str = f.getCommonParentHeader(str, item);
-					$.each(item.children, function (j, bean) {
-						str += '<a class="li bgImage layui-col-xs3" href="javascript:void(0);" rowId="' + bean.id + '" title="' + bean.title + '">' +
-							'<img class="image" src="' + bean.imgPath + '"/>' +
-							'<span class="text">' + bean.name + '</span>' +
-							'</a>';
+				getBgImageHtml: function(item) {
+					let str = '';
+					let groupedItems = groupByField(item.children, 'typeName');
+					$.each(groupedItems, function (key, value) {
+						str += `<fieldset class="layui-elem-field layui-field-title"><legend>${key}</legend></fieldset>`;
+						$.each(item.children, function (j, bean) {
+							str += `<a class="li bgImage layui-col-xs3" href="javascript:void(0);" rowId="${bean.id}" title="${bean.name}">
+										<img class="image" src="${bean.imgPath}"/>
+										<span class="text">${bean.name}</span>
+									</a>`;
+						});
 					});
-					str += '</div>' +
-						'</div>' +
-						'</div>';
 					return str;
 				},
 
 				// 报表点击事件
 				setHeaderMenuClickEvent: function (){
 
+					// 左侧菜单栏点击事件
+					typeFirstNav.find(".def-nav").click(function () {
+						typeFirstNav.find(".def-nav").removeClass("hover");
+						$(this).addClass("hover");
+						var id = $(this).attr("id");
+						let str = '';
+						let item = getInPoingArr(params.headerMenuJson, "id", id);
+						if (id == 'echartsModel') {
+							str = f.getEchartsHtml(item);
+						} else if(id == 'bgImages') {
+							str = f.getBgImageHtml(item);
+						} else if(id == 'wordModel') {
+							str = f.getWordModelHtml(item);
+						} else if(id == 'imgModel') {
+							str = f.getImgModelHtml(item);
+						} else if(id == 'domModel') {
+							str = f.getDomModelHtml(item);
+						} else if(id == 'tableModel') {
+							str = f.getTableModelHtml(item);
+						} else {
+							str = f.getEchartsHtml(item);
+						}
+						typeSecondNav.html(str);
+						f.loadModelClickEvent();
+					});
+					$('div[id="echartsModel"]').click();
+
+				},
+
+				loadModelClickEvent: function() {
 					// echarts模型点击事件
-					skyeyeHeader.find(".disk").click(function () {
+					typeSecondNav.find(".disk").click(function () {
 						var modelId = $(this).attr("rowId");
 						var echartsMation = f.getEchartsMationById(modelId);
 						f.addNewModel(modelId, echartsMation);
 					});
 
 					// 背景图片点击事件
-					skyeyeHeader.find(".bgImage").click(function () {
+					typeSecondNav.find(".bgImage").click(function () {
 						var bgImageSrc = $(this).find("img").attr("src");
 						skyeyeReportContent.css({
 							"background-image": "url(" + bgImageSrc + ")",
@@ -350,32 +338,31 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					});
 
 					// 文字模型点击事件
-					skyeyeHeader.find(".wordModle").click(function () {
+					typeSecondNav.find(".wordModle").click(function () {
 						var modelId = $(this).attr("rowId");
 						var wordStyleMation = f.getWordStyleMationById(modelId);
 						f.addNewWordModel(modelId, wordStyleMation);
 					});
 
 					// 小图片模型点击事件
-					skyeyeHeader.find(".imgModle").click(function () {
+					typeSecondNav.find(".imgModle").click(function () {
 						var modelId = $(this).attr("rowId");
 						var imgModelMation = f.getImgStyleMationById(modelId);
 						f.addNewImgModel(modelId, imgModelMation);
 					});
 
 					// 装饰模型点击事件
-					skyeyeHeader.find(".domModle").click(function () {
+					typeSecondNav.find(".domModle").click(function () {
 						var modelId = $(this).attr("rowId");
 						var domModelMation = f.getDomStyleMationById(modelId);
 						f.addNewDomModel(modelId, domModelMation);
 					});
 
 					// 表格模型点击事件
-					skyeyeHeader.find(".tableModel").click(function () {
+					typeSecondNav.find(".tableModel").click(function () {
 						var modelId = $(this).attr("rowId");
 						f.addNewTableModel(modelId, null);
 					});
-
 				},
 
 				// 加载表格模型
@@ -798,7 +785,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				 * @returns {number|number}
 				 */
 				getTop: function (e, y) {
-					var top = e.clientY - y - 104;
+					var top = e.clientY - y - 104 - 45;
 					top = top < 0 ? 0 : top;
 					var chooseEcharts = skyeyeReportContent.find(".active").eq(0);
 					var boxId = chooseEcharts.data("boxId");
@@ -817,7 +804,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 				 * @returns {number|number}
 				 */
 				getLeft: function (e, x, maxLeft) {
-					var left = e.clientX - x - 44;
+					var left = e.clientX - x - 44 - params.leftBoxWidth;
 					left = left < 0 ? 0 : left;
 					left = left > maxLeft ? maxLeft : left;
 					var chooseEcharts = skyeyeReportContent.find(".active").eq(0);
@@ -896,16 +883,6 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						}
 					});
 
-					// 面板切换
-					$("body").on('click', '.layui-colla-title', function (e) {
-						$(this).parent().find('.layui-colla-content').toggleClass('layui-show');
-						if ($(this).parent().find('.layui-colla-content').hasClass('layui-show')) {
-							$(this).find('.f-icon').removeClass('arrow-bottom').addClass("arrow-top");
-						} else {
-							$(this).find('.f-icon').removeClass('arrow-top').addClass("arrow-bottom");
-						}
-					});
-
 					// 编辑器点击防止触发父内容事件
 					$("body").on('click', ".form-box", function (e) {
 						e.stopPropagation();
@@ -913,32 +890,70 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 
 					// 保存
 					$("body").on('click', "#save", function (e) {
-						var eachartsList = f.getEchartsListToSave();
-						var wordMationList = f.getWordMationListToSave();
-						var imgMationList = f.getImgMationListToSave();
-						var domMationList = f.getDomMationListToSave();
-						var tableMationList = f.getTableListToSave();
+						f.saveData(false);
+					});
 
-						var bgImage = skyeyeReportContent.css("backgroundImage").replace('url(', '').replace(')', '');
-						if (isNull(bgImage) || bgImage == 'none' || bgImage.indexOf('none') > -1) {
-							bgImage = ''
-						}
-						var params = {
-							contentWidth: skyeyeReportContent.width(),
-							contentHeight: skyeyeReportContent.height(),
-							bgImage: bgImage,
-							modelList: eachartsList,
-							wordMationList: wordMationList,
-							imgMationList: imgMationList,
-							domMationList: domMationList,
-							tableMationList: tableMationList
-						};
-						AjaxPostUtil.request({url: sysMainMation.reportBasePath + "editReportPageContentById", params: {id: id, content: encodeURIComponent(JSON.stringify(params))}, type: 'json', method: "POST", callback: function(json) {
-							winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-						}});
+					// 保存并预览
+					$("body").on('click', "#preview", function (e) {
+						f.saveData(true);
+					});
+
+					// 删除选中项
+					$("body").on('click', "#removeItem", function (e) {
+						f.deleteChooseItem();
+					});
+
+					// 退出
+					$("body").on("click", "#exitBtn", function() {
+						winui.window.confirm('确认注销吗?', {id: 'exit-confim', icon: 3, title: '提示', skin: 'msg-skin-message', success: function(layero, index){
+							var times = $("#exit-confim").parent().attr("times");
+							var zIndex = $("#exit-confim").parent().css("z-index");
+							$("#layui-layer-shade" + times).css({'z-index': zIndex});
+						}}, function (index) {
+							layer.close(index);
+							AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function (json) {
+								localStorage.setItem('userToken', "");
+								location.href = "../../tpl/index/login.html";
+							}});
+						});
+					});
+
+					// 控制台
+					$("body").on("click", "#consoleDesk", function() {
+						location.href = "../../tpl/traditionpage/index.html";
 					});
 
 					f.loadHandlebar();
+				},
+
+				saveData: function(whetherJump) {
+					var eachartsList = f.getEchartsListToSave();
+					var wordMationList = f.getWordMationListToSave();
+					var imgMationList = f.getImgMationListToSave();
+					var domMationList = f.getDomMationListToSave();
+					var tableMationList = f.getTableListToSave();
+
+					var bgImage = skyeyeReportContent.css("backgroundImage").replace('url(', '').replace(')', '');
+					if (isNull(bgImage) || bgImage == 'none' || bgImage.indexOf('none') > -1) {
+						bgImage = ''
+					}
+					var params = {
+						contentWidth: skyeyeReportContent.width(),
+						contentHeight: skyeyeReportContent.height(),
+						bgImage: bgImage,
+						modelList: eachartsList,
+						wordMationList: wordMationList,
+						imgMationList: imgMationList,
+						domMationList: domMationList,
+						tableMationList: tableMationList
+					};
+					AjaxPostUtil.request({url: sysMainMation.reportBasePath + "editReportPageContentById", params: {id: id, content: encodeURIComponent(JSON.stringify(params))}, type: 'json', method: "POST", callback: function(json) {
+						if (whetherJump) {
+							window.open(sysMainMation.homePagePath + reportPageShowUrl + id);
+						} else {
+							winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+						}
+					}});
 				},
 
 				getEchartsListToSave: function () {
@@ -1056,7 +1071,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						var newArray = f.restAttrToArrayByTypeName(objectMation.attr);
 						$('<div class="layui-collapse" id="showFormPanel"></div>').appendTo($("#showForm").get(0));
 						$.each(newArray, function(typeName, attr) {
-							var panelHTML = '<div class="layui-colla-item"><h2 class="layui-colla-title"><em class="f-icon arrow-bottom"></em><span>' + typeName + '</span></h2><div class="layui-colla-content layui-show" id="' + typeName + '"></div>';
+							var panelHTML = '<div class="layui-colla-item"><h2 class="layui-colla-title"><span>' + typeName + '</span></h2><div class="layui-colla-content layui-show" id="' + typeName + '"></div>';
 							$(panelHTML).appendTo($("#showFormPanel").get(0));
 							$.each(attr, function (key, val) {
 								if (val.edit == 1) {
@@ -1203,7 +1218,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						'</fieldset>' +
 						'<form class="layui-form layui-col-xs12" action="" id="showForm" autocomplete="off" style="height: calc(100% - 50px); position: absolute; overflow-y: auto"></form>' +
 						'</div>';
-					skyeyeReportContent.append(editForm);
+					rightBox.append(editForm);
 				},
 
 				// 加载编辑器类型
@@ -1211,19 +1226,6 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					$.getJSON("../../assets/report/json/skyeyeEditor.json", function (data) {
 						editorType = data;
 					});
-				},
-
-				// reportContent的八个角
-				getEightCape: function() {
-					var capeResult = '<div class="cape cape_left1"></div>' +
-						'<div class="cape cape_left1_top"></div>' +
-						'<div class="cape cape_right1"></div>' +
-						'<div class="cape cape_right1_top"></div>' +
-						'<div class="cape cape_left2"></div>' +
-						'<div class="cape cape_left2_bottom"></div>' +
-						'<div class="cape cape_right2"></div>' +
-						'<div class="cape cape_right2_bottom"></div>';
-					return capeResult;
 				},
 
 				initData: function() {
@@ -1369,16 +1371,53 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 			};
 
 			if (flag) {
-				$('<div class="skyeyeScaleBox" id="skyeyeScaleBox" onselectstart="return false;">' +
-					'<div id="skyeyeScaleRulerH" class="skyeyeScaleRuler_h"></div>' +
-					'<div id="skyeyeScaleRulerV" class="skyeyeScaleRuler_v"></div>' +
-					'</div>' +
-					'<div class="hd-main clearfix" id="skyeyeHeader">' +
-					'<div class="navs"></div>' +
-					'</div>' +
-					f.getEightCape() +
-					'<div class="report-content" id="reportContent">' +
-					'</div>').appendTo($("body"));
+				$(document).attr("title", sysMainMation.mationTitle);
+				let userMation = {};
+				systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
+					userMation = data.bean;
+				});
+				$(`<div class="hd-main clearfix">
+					<div class="share-file-title">
+							<div class="sys-logo">${sysMainMation.mationTitle}</div>
+							<div class="sys-login-mation">
+								<div class="login-btn" id="operatorBtn">
+									<img alt="${userMation.jobNumber + '_' + userMation.userName}" src="${fileBasePath + userMation.userPhoto}"/>
+									<font>${userMation.jobNumber + '_' + userMation.userName}</font>
+									<font id="consoleDesk">控制台</font>
+									<font id="exitBtn">退出</font>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="left-box" style="width: ${params.leftBoxWidth + 'px'};">
+						<div class="type-first navs" id="typeFirstNav">
+						</div>
+						<div class="type-second" id="typeSecondNav">
+							
+						</div>
+					</div>
+					<div class="content-top" id="contentTop">
+						<div class="layui-btn-group">
+							<button id="removeItem" class="layui-btn layui-btn-primary layui-btn-sm">
+								<i class="fa fa-fw fa-trash"></i>删除
+							</button>
+						</div>
+						<div class="layui-btn-group" style="float: right;">
+							<button id="save" class="layui-btn layui-btn-primary layui-btn-sm">
+								<i class="fa fa-fw fa-save"></i>保存
+							</button>
+							<button id="preview" class="layui-btn layui-btn-primary layui-btn-sm">
+								<i class="layui-icon"></i>保存并预览
+							</button>
+						</div>
+					</div>
+					<div class="skyeyeScaleBox" id="skyeyeScaleBox" style="left: ${params.leftBoxWidth + 'px'};" onselectstart="return false;">
+						<div id="skyeyeScaleRulerH" class="skyeyeScaleRuler_h"></div>
+						<div id="skyeyeScaleRulerV" class="skyeyeScaleRuler_v"></div>
+					</div>
+					<div class="report-content" style="left: ${params.leftBoxWidth + 40 + 'px'};" id="reportContent">
+					</div>
+					<div class="right-box" id="rightBox"></div>`).appendTo($("body"));
 			} else {
 				$("#skyeyeScaleBox").show();
 			}
@@ -1386,17 +1425,14 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 			var x = $("#skyeyeScaleBox"),
 				rh = $("#skyeyeScaleRulerH"),
 				rv = $("#skyeyeScaleRulerV"),
-				skyeyeHeader = $("#skyeyeHeader"), // 头部菜单栏
-				skyeyeReportContent = $("#reportContent"); // 编辑器内容
+				typeFirstNav = $("#typeFirstNav"), // 左侧导航
+				typeSecondNav = $("#typeSecondNav"), // 左侧模型导航
+				contentTop = $("#contentTop"), // 顶部工具栏
+				skyeyeReportContent = $("#reportContent"), // 编辑器内容
+				rightBox = $("#rightBox"); // 右侧属性面板
 
 			// 初始化
 			f.init();
-
-			/*浏览器拉伸时，标尺自适应*/
-			$(window).resize(function() {
-				f.box();
-				f.ui();
-			});
 
 			$(document).keydown(function (e) {
 				f.tableKeyDown(e);

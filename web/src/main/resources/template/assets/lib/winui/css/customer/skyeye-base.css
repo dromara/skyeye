@@ -241,3 +241,11 @@ select option {
     justify-content: center;
     align-items: center;
 }
+
+.vertical-center {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

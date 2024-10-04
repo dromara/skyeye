@@ -96,11 +96,6 @@ layui.config({
             "title": "背景图",
             "id": "bgImages",
             "children": bgImages
-        }, {
-            "icon": " fa fa-fw fa-save",
-            "title": "保存",
-            "class": "save-btn",
-            "id": "save"
         }]
     });
 
