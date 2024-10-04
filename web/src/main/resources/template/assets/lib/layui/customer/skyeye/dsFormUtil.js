@@ -779,7 +779,7 @@ var dsFormUtil = {
         if (operate.eventType == 'openPage') {
             // 打开新页面
             var operateOpenPage = operate.operateOpenPage;
-            var url = operateOpenPage.type ? operateOpenPage.pageUrl : dsFormPageUrl + operateOpenPage.pageUrl;
+            var url = systemCommonUtil.getUrl(operateOpenPage.pageUrl, null, operateOpenPage.type);
             url = systemCommonUtil.getHasVersionUrl(url);
             // 构建参数
             if (!isNull(data)) {
