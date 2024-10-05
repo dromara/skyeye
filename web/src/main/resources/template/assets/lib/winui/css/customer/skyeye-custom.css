@@ -117,3 +117,10 @@
 }
 
 /***************************竖向选项卡结束********************************/
+
+.fixed-buttom-right {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    cursor: pointer;
+}

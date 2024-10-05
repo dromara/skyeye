@@ -318,6 +318,23 @@ layui.config({
 			content: '../../tpl/colorScheme/colorScheme.html'
 		}); 
     });
+
+	// AI
+	$("body").on("click", "#aiBtn", function (e) {
+		layer.open({
+			type: 2,
+			title: '配色方案',
+			shadeClose: false,
+			closeBtn: 1,
+			maxmin: true,
+			shade: 0,
+			anim: 2,
+			resize: true,
+			area: ['400px', '100%'],
+			offset: 'rb',
+			content: '../../tpl/colorScheme/colorScheme.html'
+		});
+	});
     
     // 切换风格
     $("body").on("click", ".winui-switching-style", function (e) {
