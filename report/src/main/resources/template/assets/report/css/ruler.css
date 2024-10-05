@@ -121,6 +121,10 @@ body {
     white-space: nowrap;
 }
 
+.type-second .layui-field-title {
+    width: 100%;
+}
+
 .content-top {
     height: 45px;
     float: left;
