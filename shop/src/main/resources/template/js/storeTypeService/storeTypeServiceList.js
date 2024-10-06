@@ -8,21 +8,19 @@ layui.config({
     var $ = layui.$,
         form = layui.form,
         table = layui.table;
-    var selTemplate = getFileContent('tpl/template/select-option.tpl');
+    var selTemplate = getFileContent('tpl/template/select-option-must.tpl');
 
     authBtn('1726921159686');//新增
 
+    var storeId = "";
     // 加载
     let storeHtml = '';
-    AjaxPostUtil.request({
-        url: sysMainMation.shopBasePath + "storeStaff005", params: {}, type: 'json', method: "Get", callback: function (json) {
-            storeHtml = getDataUseHandlebars(selTemplate, json);
-            initTable(storeHtml);
-        },
-        async: false
-    });
+    AjaxPostUtil.request({url: sysMainMation.shopBasePath + "storeStaff005", params: {}, type: 'json', method: "Get", callback: function (json) {
+        storeId = json.rows.length > 0 ? json.rows[0].id : '-';
+        storeHtml = getDataUseHandlebars(selTemplate, json);
+        initTable();
+    }});
 
-    var storeId = "";
     form.on('select(storeId)', function (data) {
         var thisRowValue = data.value;
         storeId = isNull(thisRowValue) ? "" : thisRowValue;
@@ -34,7 +32,7 @@ layui.config({
             id: 'messageTable',
             elem: '#messageTable',
             method: 'post',
-            url: sysMainMation.shopBasePath + 'queryStoreTypeList',
+            url: sysMainMation.shopBasePath + 'queryStoreTypePageList',
             where: getTableParams(),
             page: true,
             limits: getLimits(),
@@ -43,30 +41,32 @@ layui.config({
                 {title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
                 {
                     field: 'name', title: '名称', width: 100, align: 'center', templet: function (d) {
-                        return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
+                        return  d.name ;
                     }
                 },
                 {
-                    field: 'enabled', title: '状态', width: 100, templet: function (d) {
+                    field: 'enabled', title: '状态', width: 100, align: 'center',templet: function (d) {
                         return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("commonEnable", 'id', d.enabled, 'name');
                     }
                 },
                 {
-                    field: 'logo', title: 'logo', width: 100,templet: function (d) {
+                    field: 'logo', title: 'logo', width: 100,align: 'center',templet: function (d) {
                         if (isNull(d.logo)) {
                             return '<img src="../../assets/images/os_windows.png" class="photo-img">';
                         } else {
-                            return '<img src="' + fileBasePath + d.logo + '" class="photo-img" lay-event="logo">';
+                            return '<img src="' + systemCommonUtil.getFilePath(d.logo) + '" class="photo-img" lay-event="logo">';
                         }
                     }
                 },
                 {
                     field: 'orderBy',
+                    align: 'center',
                     title: '排序',
                     width: 120
                 },
                 {
                     field: 'createName',
+                    align: 'left',
                     title: systemLanguage["com.skyeye.createName"][languageType],
                     width: 120
                 },
@@ -99,7 +99,7 @@ layui.config({
             ]],
             done: function (json) {
                 matchingLanguage();
-                initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入门店ID", function () {
+                initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
                     table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
                 }, `<label class="layui-form-label">门店</label><div class="layui-input-inline">
 						<select id="storeId" name="storeId" lay-filter="storeId" lay-search="">
@@ -115,6 +115,8 @@ layui.config({
             del(data);
         } else if (layEvent === 'edit') {
             edit(data);
+        } else if (layEvent === 'logo') {
+            systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(data.logo));
         }
     });
 
@@ -144,6 +146,7 @@ layui.config({
             }
         });
     }
+
     // 删除
     function del(data, obj) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
@@ -167,5 +170,4 @@ layui.config({
         };
         return $.extend(true, params, initTableSearchUtil.getSearchValue("messageTable"));
     }
-
 });

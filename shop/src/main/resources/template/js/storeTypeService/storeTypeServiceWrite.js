@@ -1,3 +1,4 @@
+
 // 以下两个参数开启团队权限时有值
 var objectId = '', objectKey = '';
 var objectParams = {};
