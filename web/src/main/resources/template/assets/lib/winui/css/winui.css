@@ -8228,3 +8228,8 @@ input:read-only {
     color: #d2d2d2 !important;
     cursor: url('../../../images/not-allowed.png'), auto !important;
 }
+
+.navbar {
+    overflow-x: auto;
+    white-space: nowrap;
+}

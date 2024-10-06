@@ -323,7 +323,7 @@ layui.config({
 	$("body").on("click", "#aiBtn", function (e) {
 		layer.open({
 			type: 2,
-			title: '配色方案',
+			title: '智能AI',
 			shadeClose: false,
 			closeBtn: 1,
 			maxmin: true,
@@ -332,7 +332,7 @@ layui.config({
 			resize: true,
 			area: ['400px', '100%'],
 			offset: 'rb',
-			content: '../../tpl/colorScheme/colorScheme.html'
+			content: '../../tpl/aiChat/aiChat.html'
 		});
 	});
     
