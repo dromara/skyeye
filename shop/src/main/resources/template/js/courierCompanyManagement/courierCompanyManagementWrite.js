@@ -1,4 +1,3 @@
-
 // 以下两个参数开启团队权限时有值
 var objectId = '', objectKey = '';
 var objectParams = {};
@@ -21,21 +20,21 @@ layui.config({
             winui.window.msg('请选择门店', {icon: 2, time: 2000});
             return false;
         }
-        dsFormUtil.initAddPageForStatic('content', 'FP2024092100004', {
+        dsFormUtil.initAddPageForStatic('content', 'FP2024100400002', {
             savePreParams: function (params) {
                 params.storeId = storeId;
             }
         });
     } else {
         AjaxPostUtil.request({
-            url: sysMainMation.shopBasePath + "selectStoreTypeById",
+            url: sysMainMation.shopBasePath + "getDelivery",
             params: {id: id},
             type: 'json',
-            method: 'POST',
+            method: 'GET',
             callback: function (json) {
                 let data = json.bean;
                 storeId = json.bean.storeId;
-                dsFormUtil.initEditPageForStatic('content', 'FP2024092100005', data, {
+                dsFormUtil.initEditPageForStatic('content', 'FP2024100400006', data, {
                     savePreParams: function (params) {
                         params.storeId = storeId;
                     }

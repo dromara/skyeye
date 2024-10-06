@@ -16,10 +16,10 @@ layui.config({
     // 加载
     let storeHtml = '';
     AjaxPostUtil.request({url: sysMainMation.shopBasePath + "storeStaff005", params: {}, type: 'json', method: "Get", callback: function (json) {
-        storeId = json.rows.length > 0 ? json.rows[0].id : '-';
-        storeHtml = getDataUseHandlebars(selTemplate, json);
-        initTable();
-    }});
+            storeId = json.rows.length > 0 ? json.rows[0].id : '-';
+            storeHtml = getDataUseHandlebars(selTemplate, json);
+            initTable();
+        }});
 
     form.on('select(storeId)', function (data) {
         var thisRowValue = data.value;
@@ -32,7 +32,7 @@ layui.config({
             id: 'messageTable',
             elem: '#messageTable',
             method: 'post',
-            url: sysMainMation.shopBasePath + 'queryStoreTypePageList',
+            url: sysMainMation.shopBasePath + 'queryShopDeliveryTemplate',
             where: getTableParams(),
             page: true,
             limits: getLimits(),
@@ -45,24 +45,15 @@ layui.config({
                     }
                 },
                 {
-                    field: 'enabled', title: '状态', width: 100, align: 'center',templet: function (d) {
-                        return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("commonEnable", 'id', d.enabled, 'name');
-                    }
-                },
-                {
-                    field: 'logo', title: 'logo', width: 100,align: 'center',templet: function (d) {
-                        if (isNull(d.logo)) {
-                            return '<img src="../../assets/images/os_windows.png" class="photo-img">';
-                        } else {
-                            return '<img src="' + systemCommonUtil.getFilePath(d.logo) + '" class="photo-img" lay-event="logo">';
-                        }
-                    }
-                },
-                {
                     field: 'orderBy',
                     align: 'center',
                     title: '排序',
                     width: 120
+                },
+                {
+                    field: 'type', title: '计费方式', align: 'center', width: 120, templet: function (d) {
+                        return d.type;
+                    }
                 },
                 {
                     field: 'createName',
@@ -99,7 +90,7 @@ layui.config({
             ]],
             done: function (json) {
                 matchingLanguage();
-                initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入名称", function () {
+                initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入模版名称", function () {
                     table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
                 }, `<label class="layui-form-label">门店</label><div class="layui-input-inline">
 						<select id="storeId" name="storeId" lay-filter="storeId" lay-search="">
@@ -115,17 +106,15 @@ layui.config({
             del(data);
         } else if (layEvent === 'edit') {
             edit(data);
-        } else if (layEvent === 'logo') {
-            systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(data.logo));
         }
     });
 
     // 新增
     $("body").on("click", "#addBean", function () {
         _openNewWindows({
-            url: "../../tpl/storeTypeService/storeTypeServiceWrite.html?storeId=" + storeId,
+            url: "../../tpl/shopDeliveryTemplate/shopDeliveryTemplateWrite.html?storeId=" + storeId,
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-            pageId: "storeTypeServiceAdd",
+            pageId: "shopDeliveryTemplateAdd",
             area: ['90vw', '90vh'],//宽度和高度
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -136,9 +125,9 @@ layui.config({
     // 编辑
     function edit(data) {
         _openNewWindows({
-            url: "../../tpl/storeTypeService/storeTypeServiceWrite.html?id=" + data.id,
+            url: "../../tpl/shopDeliveryTemplate/shopDeliveryTemplateWrite.html?id=" + data.id,
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-            pageId: "storeTypeServiceEdit",
+            pageId: "shopDeliveryTemplateEdit",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -151,7 +140,7 @@ layui.config({
     function del(data, obj) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.shopBasePath + "deleteStoreTypeByIds", params: {ids: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.shopBasePath + "deleteShopDeliveryTemplateByIds", params: {ids: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
                 }});

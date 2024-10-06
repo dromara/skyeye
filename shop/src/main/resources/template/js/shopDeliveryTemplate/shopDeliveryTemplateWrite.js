@@ -21,21 +21,21 @@ layui.config({
             winui.window.msg('请选择门店', {icon: 2, time: 2000});
             return false;
         }
-        dsFormUtil.initAddPageForStatic('content', 'FP2024092100004', {
+        dsFormUtil.initAddPageForStatic('content', 'FP2024100500001', {
             savePreParams: function (params) {
                 params.storeId = storeId;
             }
         });
     } else {
         AjaxPostUtil.request({
-            url: sysMainMation.shopBasePath + "selectStoreTypeById",
+            url: sysMainMation.shopBasePath + "selectShopDeliveryTemplateById",
             params: {id: id},
             type: 'json',
             method: 'POST',
             callback: function (json) {
                 let data = json.bean;
                 storeId = json.bean.storeId;
-                dsFormUtil.initEditPageForStatic('content', 'FP2024092100005', data, {
+                dsFormUtil.initEditPageForStatic('content', 'FP2024100500002', data, {
                     savePreParams: function (params) {
                         params.storeId = storeId;
                     }
