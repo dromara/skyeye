@@ -1124,13 +1124,21 @@ function getSortFun(order, sortBy) {
 	return sortFun;
 }
 
+/**
+ * 根据某个字段分组
+ *
+ * @param items
+ * @param field
+ * @returns {{}}
+ */
 function groupByField(items, field) {
 	var grouped = {};
 	$.each(items, function() {
-		if (grouped.hasOwnProperty(this[field])) {
-			grouped[this[field]].push(this);
+		let value = this[field];
+		if (grouped.hasOwnProperty(value)) {
+			grouped[value].push(this);
 		} else {
-			grouped[this[field]] = [this];
+			grouped[value] = [this];
 		}
 	});
 	return grouped;

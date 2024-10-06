@@ -218,7 +218,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					let groupedItems = groupByField(item.children, 'typeName');
 					$.each(groupedItems, function (key, value) {
 						str += `<fieldset class="layui-elem-field layui-field-title"><legend>${key}</legend></fieldset>`;
-						$.each(item.children, function (j, bean) {
+						$.each(value, function (j, bean) {
 							str += `<a class="li imgModle layui-col-xs3" href="javascript:void(0);" rowId="${bean.id}" title="${bean.name}">
 										<img class="image" src="${bean.imgPath}"/>
 										<span class="text">${bean.name}</span>
@@ -234,7 +234,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					let groupedItems = groupByField(item.children, 'typeName');
 					$.each(groupedItems, function (key, value) {
 						str += `<fieldset class="layui-elem-field layui-field-title"><legend>${key}</legend></fieldset>`;
-						$.each(item.children, function (j, bean) {
+						$.each(value, function (j, bean) {
 							str += `<a class="li domModle layui-col-xs3" href="javascript:void(0);" rowId="${bean.id}" title="${bean.name}">
 										<img class="image" src="${bean.imgPath}"/>
 										<span class="text">${bean.name}</span>
@@ -250,7 +250,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					let groupedItems = groupByField(item.children, 'typeName');
 					$.each(groupedItems, function (key, value) {
 						str += `<fieldset class="layui-elem-field layui-field-title"><legend>${key}</legend></fieldset>`;
-						$.each(item.children, function (j, bean) {
+						$.each(value, function (j, bean) {
 							str += `<a class="li wordModle layui-col-xs3" href="javascript:void(0);" rowId="${bean.id}" title="${bean.name}">
 										<img class="image" src="${bean.imgPath}"/>
 										<span class="text">${bean.name}</span>
@@ -278,7 +278,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					let groupedItems = groupByField(item.children, 'typeName');
 					$.each(groupedItems, function (key, value) {
 						str += `<fieldset class="layui-elem-field layui-field-title"><legend>${key}</legend></fieldset>`;
-						$.each(item.children, function (j, bean) {
+						$.each(value, function (j, bean) {
 							str += `<a class="li bgImage layui-col-xs3" href="javascript:void(0);" rowId="${bean.id}" title="${bean.name}">
 										<img class="image" src="${bean.imgPath}"/>
 										<span class="text">${bean.name}</span>
