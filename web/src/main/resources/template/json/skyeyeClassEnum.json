@@ -19,7 +19,7 @@
     "userStaffType": {"name": "员工类型", "className": "skyeye-pro#com.skyeye.personnel.classenum.UserStaffType"},
     "pageOpenType": {"name": "页面布局打开方式", "className": "skyeye-pro#com.skyeye.operate.classenum.PageOpenType"},
     "userIsTermOfValidity": {"name": "用户是否长期有效", "className": "skyeye-pro#com.skyeye.personnel.classenum.UserIsTermOfValidity"},
-    "PayType": {"name": "支付渠道编码", "className": "skyeye-pro#com.skyeye.pay.enums.PayType"},
+    "payType": {"name": "支付渠道编码", "className": "skyeye-pro#com.skyeye.pay.enums.PayType"},
 
     "menuType": {"name": "APP菜单类型", "className": "skyeye-pro#com.skyeye.menu.classenum.MenuType"},
     "urlType": {"name": "APP菜单URL类型", "className": "skyeye-pro#com.skyeye.menu.classenum.UrlType"},
