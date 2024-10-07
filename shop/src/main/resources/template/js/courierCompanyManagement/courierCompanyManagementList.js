@@ -8,21 +8,19 @@ layui.config({
     var $ = layui.$,
         form = layui.form,
         table = layui.table;
-    var selTemplate = getFileContent('tpl/template/select-option.tpl');
+    var selTemplate = getFileContent('tpl/template/select-option-must.tpl');
 
     authBtn('1728025733469');//新增
 
+    var storeId = "";
     // 加载
     let storeHtml = '';
-    AjaxPostUtil.request({
-        url: sysMainMation.shopBasePath + "storeStaff005", params: {}, type: 'json', method: "Get", callback: function (json) {
+    AjaxPostUtil.request({url: sysMainMation.shopBasePath + "storeStaff005", params: {}, type: 'json', method: "Get", callback: function (json) {
+            storeId = json.rows.length > 0 ? json.rows[0].id : '-';
             storeHtml = getDataUseHandlebars(selTemplate, json);
-            initTable(storeHtml);
-        },
-        async: false
-    });
+            initTable();
+        }});
 
-    var storeId = "";
     form.on('select(storeId)', function (data) {
         var thisRowValue = data.value;
         storeId = isNull(thisRowValue) ? "" : thisRowValue;
@@ -103,7 +101,7 @@ layui.config({
             ]],
             done: function (json) {
                 matchingLanguage();
-                initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入门店id", function () {
+                initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入快递公司名称", function () {
                     table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
                 }, `<label class="layui-form-label">门店</label><div class="layui-input-inline">
 						<select id="storeId" name="storeId" lay-filter="storeId" lay-search="">
