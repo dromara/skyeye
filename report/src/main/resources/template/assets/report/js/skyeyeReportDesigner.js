@@ -27,6 +27,7 @@ var echartsCustomOptions = {
 	"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
 	"custom.box.border-color": { "value": "", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
 	"custom.box.border-width": { "value": "0", "edit": 1, "remark": "盒子边框宽度", "name": "边框宽度", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.z-index": { "value": "1", "edit": 1, "remark": "数字越大，层级越高", "name": "层级", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
 	"custom.box.border-style": { "defaultValue": "solid", "edit": 1, "remark": "盒子边框样式", "name": "边框样式", "editorType": "1", "editorChooseValue": "", "typeName": "盒子",
 		"optionalValue": [{"id": "solid", "name": "实线"}, {"id": "dashed", "name": "虚线"}]}
 };
@@ -39,6 +40,7 @@ var tableCustomOptions = {
 	"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
 	"custom.box.border-color": { "value": "", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
 	"custom.box.border-width": { "value": "0", "edit": 1, "remark": "盒子边框宽度", "name": "边框宽度", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.z-index": { "value": "1", "edit": 1, "remark": "数字越大，层级越高", "name": "层级", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
 	"custom.box.border-style": { "defaultValue": "solid", "edit": 1, "remark": "盒子边框样式", "name": "边框样式", "editorType": "1", "editorChooseValue": "", "typeName": "盒子",
 		"optionalValue": [{"id": "solid", "name": "实线"}, {"id": "dashed", "name": "虚线"}]},
 	"custom.tableColumn": { "defaultValue": [], "edit": 1, "remark": "数据表格的信息", "name": "表格配置", "editorType": "101", "editorChooseValue": "", "typeName": "数据源"},
@@ -54,6 +56,7 @@ var wordCustomOptions = {
 	"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
 	"custom.box.border-color": { "value": "", "edit": 1, "remark": "盒子边框", "name": "盒子边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
 	"custom.box.border-width": { "value": "0", "edit": 1, "remark": "盒子边框宽度", "name": "边框宽度", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.z-index": { "value": "1", "edit": 1, "remark": "数字越大，层级越高", "name": "层级", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
 	"custom.box.border-style": { "defaultValue": "solid", "edit": 1, "remark": "盒子边框样式", "name": "边框样式", "editorType": "1", "editorChooseValue": "", "typeName": "盒子",
 		"optionalValue": [{"id": "solid", "name": "实线"}, {"id": "dashed", "name": "虚线"}]}
 };
@@ -62,8 +65,10 @@ var wordCustomOptions = {
 var imgCustomOptions = {
 	"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
 	"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
 	"custom.box.border-color": { "value": "", "edit": 1, "remark": "盒子边框颜色", "name": "边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
 	"custom.box.border-width": { "value": "0", "edit": 1, "remark": "盒子边框宽度", "name": "边框宽度", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.z-index": { "value": "1", "edit": 1, "remark": "数字越大，层级越高", "name": "层级", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
 	"custom.box.border-style": { "defaultValue": "solid", "edit": 1, "remark": "盒子边框样式", "name": "边框样式", "editorType": "1", "editorChooseValue": "", "typeName": "盒子",
 		"optionalValue": [{"id": "solid", "name": "实线"}, {"id": "dashed", "name": "虚线"}]}
 };
@@ -72,8 +77,10 @@ var imgCustomOptions = {
 var domCustomOptions = {
 	"custom.move.x": { "value": "0", "edit": 1, "remark": "鼠标拖动距离左侧的像素", "name": "X坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
 	"custom.move.y": { "value": "0", "edit": 1, "remark": "鼠标拖动距离顶部的像素", "name": "Y坐标", "editorType": "98", "editorChooseValue": "", "typeName": "坐标"},
+	"custom.box.background": { "value": "rgba(255, 255, 255, 1)", "edit": 1, "remark": "盒子背景", "name": "盒子背景颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
 	"custom.box.border-color": { "value": "", "edit": 1, "remark": "盒子边框颜色", "name": "边框颜色", "editorType": "3", "editorChooseValue": "", "typeName": "盒子"},
 	"custom.box.border-width": { "value": "0", "edit": 1, "remark": "盒子边框宽度", "name": "边框宽度", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
+	"custom.box.z-index": { "value": "1", "edit": 1, "remark": "数字越大，层级越高", "name": "层级", "editorType": "4", "editorChooseValue": "", "typeName": "盒子"},
 	"custom.box.border-style": { "defaultValue": "solid", "edit": 1, "remark": "盒子边框样式", "name": "边框样式", "editorType": "1", "editorChooseValue": "", "typeName": "盒子",
 		"optionalValue": [{"id": "solid", "name": "实线"}, {"id": "dashed", "name": "虚线"}]}
 };
