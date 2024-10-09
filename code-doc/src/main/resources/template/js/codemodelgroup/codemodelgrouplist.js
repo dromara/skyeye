@@ -104,10 +104,10 @@ layui.config({
 	//模板管理
 	function modelConcle(data) {
 		rowId = data.id;
-		_openNewWindows({
+		parent._openNewWindows({
 			url: "../../tpl/codemodel/codemodellist.html", 
 			title: "模板管理",
-			area: ['100vw', '100vh'],
+			area: ['90vw', '90vh'],
 			pageId: "codemodelgroupmodelconcle"
 		});
 	}
@@ -115,10 +115,10 @@ layui.config({
 	//生成历史
 	function createHistory(data) {
 		rowId = data.id;
-		_openNewWindows({
+		parent._openNewWindows({
 			url: "../../tpl/codemodelhistory/codemodelhistorylist.html", 
 			title: "生成历史",
-			area: ['100vw', '100vh'],
+			area: ['90vw', '90vh'],
 			pageId: "codemodelhistorylist"
 		});
 	}
@@ -126,10 +126,10 @@ layui.config({
 	//使用模板
 	function useModelGroup(data) {
 		rowId = data.id;
-		_openNewWindows({
+		parent._openNewWindows({
 			url: "../../tpl/codemodelgroup/usemodelgroup.html", 
 			title: "代码生成",
-			area: ['100vw', '100vh'],
+			area: ['90vw', '90vh'],
 			pageId: "usemodelgroup"
 		});
 	}
