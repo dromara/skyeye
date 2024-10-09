@@ -76,7 +76,7 @@ layui.config({
         return false;
 	});
 	
-	//删除
+	// 删除
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
 			layer.close(index);
@@ -87,7 +87,7 @@ layui.config({
 		});
 	}
 	
-	//编辑
+	// 编辑
 	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
@@ -101,33 +101,30 @@ layui.config({
 			}});
 	}
 	
-	//模板管理
+	// 模板管理
 	function modelConcle(data) {
-		rowId = data.id;
 		parent._openNewWindows({
-			url: "../../tpl/codemodel/codemodellist.html", 
+			url: "../../tpl/codemodel/codemodellist.html?id=" + data.id,
 			title: "模板管理",
 			area: ['90vw', '90vh'],
 			pageId: "codemodelgroupmodelconcle"
 		});
 	}
 	
-	//生成历史
+	// 生成历史
 	function createHistory(data) {
-		rowId = data.id;
 		parent._openNewWindows({
-			url: "../../tpl/codemodelhistory/codemodelhistorylist.html", 
+			url: "../../tpl/codemodelhistory/codemodelhistorylist.html?id=" + data.id,
 			title: "生成历史",
 			area: ['90vw', '90vh'],
 			pageId: "codemodelhistorylist"
 		});
 	}
 	
-	//使用模板
+	// 使用模板
 	function useModelGroup(data) {
-		rowId = data.id;
 		parent._openNewWindows({
-			url: "../../tpl/codemodelgroup/usemodelgroup.html", 
+			url: "../../tpl/codemodelgroup/usemodelgroup.html?id=" + data.id,
 			title: "代码生成",
 			area: ['90vw', '90vh'],
 			pageId: "usemodelgroup"

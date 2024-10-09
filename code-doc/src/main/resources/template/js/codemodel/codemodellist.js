@@ -9,7 +9,7 @@ layui.config({
    'solr', 'sql', 'vue'], function (exports) {
 	winui.renderColor();
 	//模板分组ID
-	groupId = parent.rowId;
+	groupId = GetUrlParam("id");
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
@@ -20,7 +20,7 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: reqBasePath + 'codemodel006',
-	    where:{groupId:groupId},
+	    where: {groupId: groupId},
 	    even: true,
 	    page: true,
 		limits: getLimits(),
