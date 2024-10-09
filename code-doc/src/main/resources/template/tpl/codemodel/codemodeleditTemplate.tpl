@@ -33,6 +33,7 @@
         		<optgroup label="XML">
                     <option value="xml">xml</option>
                     <option value="html">html</option>
+                    <option value="jsp">jsp</option>
         		</optgroup>
         		<optgroup label="CSS">
                     <option value="css">css</option>

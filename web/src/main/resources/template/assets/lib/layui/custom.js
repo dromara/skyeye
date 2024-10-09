@@ -872,6 +872,7 @@ function returnModel(lang){
 		'Ceylon': 'text/x-ceylon',
 		'xml': 'xml',
 		'html': 'xml',
+		'jsp': 'xml',
 		'css': 'text/css',
 		'htmlmixed': 'htmlmixed',
 		'htmlhh': 'htmlmixed',
