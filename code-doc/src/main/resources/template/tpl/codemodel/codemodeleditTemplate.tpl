@@ -1,5 +1,5 @@
 {{#bean}}
-	<div class="layui-collapse">
+	<div class="layui-collapse" id="explainMation">
         <div class="layui-colla-item">
             <h2 class="layui-colla-title"></h2>
             <div class="layui-colla-content">

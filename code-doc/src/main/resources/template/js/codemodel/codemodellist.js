@@ -37,7 +37,7 @@ layui.config({
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
+	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 140, toolbar: '#tableBar'}
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
@@ -64,7 +64,7 @@ layui.config({
         	del(data, obj);
         } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        } else if (layEvent === 'modelContent') { //查看代码内容
+		} else if (layEvent === 'modelContent') { //查看代码内容
         	var mode = returnModel(data.modelType);
         	if (!isNull(mode.length)) {
 				editor.setOption('mode', mode)
@@ -103,9 +103,8 @@ layui.config({
 	
 	//编辑
 	function edit(data) {
-		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/codemodel/codemodeledit.html", 
+			url: "../../tpl/codemodel/codemodeledit.html?id=" + data.id + "&groupId=" + groupId,
 			title: "编辑模板",
 			pageId: "codemodeledit",
 			callBack: function (refreshCode) {
@@ -113,6 +112,19 @@ layui.config({
 				loadTable();
 			}});
 	}
+
+	// 模版对比
+	$("body").on("click", "#compareModel", function() {
+		parent._openNewWindows({
+			url: "../../tpl/codemodel/allCodeModelEdit.html?groupId=" + groupId,
+			title: "模版对比",
+			pageId: "allCodeModelEdit",
+			area: ['100vw', '100vh'],
+			callBack: function (refreshCode) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
+			}});
+	});
 	
 	//刷新数据
     $("body").on("click", "#reloadTable", function() {

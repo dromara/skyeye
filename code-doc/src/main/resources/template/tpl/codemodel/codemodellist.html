@@ -12,6 +12,7 @@
         <div class="winui-tool">
             <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
             <button id="addBean" auth="1560217136068" class="winui-toolbtn"><i class="fa fa-plus" aria-hidden="true"></i>新增模板</button>
+            <button id="compareModel" auth="1560217136068" class="winui-toolbtn">模版对比</button>
         </div>
     </div>
     
@@ -24,7 +25,7 @@
         <script type="text/html" id="tableBar">
 			{{# if(auth('1560217185364')){ }}
             	<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-			{{# } }}
+            {{# } }}
 			{{# if(d.useNum == 0){ }}
 				{{# if(auth('1560217165260')){ }}
 					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
