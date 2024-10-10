@@ -1,5 +1,5 @@
 {{#bean}}
-	<div class="layui-collapse">
+	<div class="layui-collapse" id="explainMation">
         <div class="layui-colla-item">
             <h2 class="layui-colla-title"></h2>
             <div class="layui-colla-content">
@@ -33,6 +33,7 @@
         		<optgroup label="XML">
                     <option value="xml">xml</option>
                     <option value="html">html</option>
+                    <option value="jsp">jsp</option>
         		</optgroup>
         		<optgroup label="CSS">
                     <option value="css">css</option>

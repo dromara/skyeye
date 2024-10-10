@@ -9,7 +9,7 @@ layui.config({
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
 	// 模板分组ID
-	groupId = parent.rowId;
+	groupId = GetUrlParam("id");
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;

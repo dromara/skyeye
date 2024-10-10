@@ -34,6 +34,8 @@ var customerJS = {
 	"schoolUtil": "../../assets/lib/layui/customer/skyeye/schoolUtil.js", // 学校模块工具类
 };
 
+let titleColor = ["layui-bg-blue", "layui-bg-red", "layui-bg-orange", "layui-bg-black", "layui-bg-gray", "layui-bg-green", "layui-bg-cyan"];
+
 // 登录界面赋值
 var env = '';
 
@@ -872,6 +874,7 @@ function returnModel(lang){
 		'Ceylon': 'text/x-ceylon',
 		'xml': 'xml',
 		'html': 'xml',
+		'jsp': 'xml',
 		'css': 'text/css',
 		'htmlmixed': 'htmlmixed',
 		'htmlhh': 'htmlmixed',

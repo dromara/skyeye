@@ -11,6 +11,7 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
+	let groupId = GetUrlParam("id");
 	
 	var jsCreateClick = false;//是否检索生成
 	
@@ -83,7 +84,7 @@ layui.config({
 	showGrid({
 	 	id: "modelList",
 	 	url: reqBasePath + "codemodel013",
-	 	params: {groupId: parent.rowId},
+	 	params: {groupId: groupId},
 	 	pagination: false,
 	 	template: getFileContent('tpl/codemodelgroup/codeModelListItem.tpl'),
 	 	ajaxSendLoadBefore: function(hdb, json){
@@ -125,7 +126,7 @@ layui.config({
 			list = [].concat(json.rows);
 			$.each(list, function (i, item) {
 				item.modelId = item.id;
-				item.groupId = parent.rowId;
+				item.groupId = groupId;
 			});
 	 	}
 	});
