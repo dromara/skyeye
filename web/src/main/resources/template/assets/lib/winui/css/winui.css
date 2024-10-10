@@ -8230,6 +8230,10 @@ input:read-only {
 }
 
 .navbar {
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    /*左右滑动*/
     overflow-x: auto;
     white-space: nowrap;
 }

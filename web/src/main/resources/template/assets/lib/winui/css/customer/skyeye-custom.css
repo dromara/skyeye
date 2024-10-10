@@ -123,4 +123,12 @@
     bottom: 100px;
     right: 30px;
     cursor: pointer;
+    weight:40px;
+    height: 40px;
+    background-color: #FFFFFF;
+}
+
+.send-img {
+    width: 25px;
+    height: 25px;
 }

@@ -5,101 +5,94 @@
 	<title></title>
 	<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet"/>
 	<link href="../../assets/lib/winui/css/winui.css" rel="stylesheet"/>
+	<style>
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 620px;
+            margin-top: 5px;
+            padding: 10px;
+        }
+
+        .chat-box {
+            width: 100%;
+            flex-grow: 1;
+            margin: auto;
+            background-color: #f9f9f9;
+            padding: 10px 0 0 0;
+            border-radius: 3% 3% 0 0;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 0 0 10px 0;
+        }
+
+        .chat-input textarea {
+            flex-grow: 1;
+        }
+
+        .chat-input-button {
+            position: absolute;
+            display: block;
+            right: 5px;
+            top: 65px;
+            justify-content: center;
+            border: snow;
+            padding: 0px 10px;
+        }
+
+        textarea {
+            height: 120px;
+        }
+
+        .text {
+            color: #888888;
+        }
+
+        .message-style {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px; /* 消息之间的间距 */
+        }
+
+        .message-style .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 10%;
+            margin: 0 10px 0 5px; /* 头像与文本之间的间距 */
+        }
+
+        .message-style .text {
+            flex-grow: 1; /* 让文本元素占据剩余空间 */
+            margin-left: 10px; /* 可选：给文本一些左边距以与头像分隔 */
+            word-wrap: break-word; /* 确保文本会换行 */
+            hyphens: auto; /* 自动连字符，改善长单词的换行 */
+        }
+	</style>
 </head>
 <body>
-<div style="padding: 10px;">
-	<ul class="layui-nav layui-bg-green navbar" lay-filter="">
-		<li class="layui-nav-item"><a href="https://yiyan.baidu.com">文心一言</a></li>
-		<li class="layui-nav-item layui-this"><a href="https://kimi.moonshot.cn/">KiMi</a></li>
+<div style="padding: 10px;  width: 100%; ">
+	<ul class="layui-nav layui-bg-green navbar layui-col-md6 layui-col-md-offset3 " lay-filter=""
+		style="border-radius:20px;">
+		<li class="layui-nav-item layui-this"><a href="https://yiyan.baidu.com">文心一言</a></li>
+		<li class="layui-nav-item"><a href="https://kimi.moonshot.cn/">KiMi</a></li>
 		<li class="layui-nav-item"><a href="">大数据</a></li>
-		<li class="layui-nav-item"><a href="javascript:;">解决方案</a></li>
-		<li class="layui-nav-item"><a href="javascript:;">解决方案</a></li>
-		<li class="layui-nav-item"><a href="javascript:;">解决方案</a></li>
-		<li class="layui-nav-item"><a href="javascript:;">解决方案</a></li>
-
-
-		<!--	<ul class="layadmin-setTheme-color">-->
-		<!--		<li class="layadmin-setTheme-color-scheme" className="black-white">-->
-		<!--			<div class="layadmin-setTheme-header" style="background-color: white;"></div>-->
-		<!--			<div class="layadmin-setTheme-side" style="background-color: #20222A;">-->
-		<!--				<div class="layadmin-setTheme-logo"></div>-->
-		<!--			</div>-->
-		<!--		</li>-->
-		<!--		<li class="layadmin-setTheme-color-scheme" className="white-1995dc-bl">-->
-		<!--			<div class="layadmin-setTheme-header" style="background-color: #1995dc;"></div>-->
-		<!--			<div class="layadmin-setTheme-side" style="background-color: #20222A;">-->
-		<!--				<div class="layadmin-setTheme-logo" style="background-color: #1995dc;"></div>-->
-		<!--			</div>-->
-		<!--		</li>-->
-		<!--		<li class="layadmin-setTheme-color-scheme" className="white-605ca8-bl">-->
-		<!--			<div class="layadmin-setTheme-header" style="background-color: #605ca8;"></div>-->
-		<!--			<div class="layadmin-setTheme-side" style="background-color: #20222A;">-->
-		<!--				<div class="layadmin-setTheme-logo" style="background-color: #605ca8;"></div>-->
-		<!--			</div>-->
-		<!--		</li>-->
-		<!--		<li class="layadmin-setTheme-color-scheme" className="white-00a65a-bl">-->
-		<!--			<div class="layadmin-setTheme-header" style="background-color: #00a65a;"></div>-->
-		<!--			<div class="layadmin-setTheme-side" style="background-color: #20222A;">-->
-		<!--				<div class="layadmin-setTheme-logo" style="background-color: #00a65a;"></div>-->
-		<!--			</div>-->
-		<!--		</li>-->
-		<!--		<li class="layadmin-setTheme-color-scheme" className="white-e08e0b-bl">-->
-		<!--			<div class="layadmin-setTheme-header" style="background-color: #e08e0b;"></div>-->
-		<!--			<div class="layadmin-setTheme-side" style="background-color: #20222A;">-->
-		<!--				<div class="layadmin-setTheme-logo" style="background-color: #e08e0b;"></div>-->
-		<!--			</div>-->
-		<!--		</li>-->
-		<!--		<li class="layadmin-setTheme-color-scheme" className="white-d73925-bl">-->
-		<!--			<div class="layadmin-setTheme-header" style="background-color: #d73925;"></div>-->
-		<!--			<div class="layadmin-setTheme-side" style="background-color: #20222A;">-->
-		<!--				<div class="layadmin-setTheme-logo" style="background-color: #d73925;"></div>-->
-		<!--			</div>-->
-		<!--		</li>-->
-		<!--		<li class="layadmin-setTheme-color-scheme" className="white-57E4ED-bl">-->
-		<!--			<div class="layadmin-setTheme-header" style="background-color: #57E4ED;"></div>-->
-		<!--			<div class="layadmin-setTheme-side" style="background-color: #20222A;">-->
-		<!--				<div class="layadmin-setTheme-logo" style="background-color: #57E4ED;"></div>-->
-		<!--			</div>-->
-		<!--		</li>-->
-		<!--		<br/>-->
-
-		<!--		<li class="layadmin-setTheme-color-scheme" className="white-1995dc">-->
-		<!--			<div class="layadmin-setTheme-header" style="background-color: #1995dc;"></div>-->
-		<!--			<div class="layadmin-setTheme-side">-->
-		<!--				<div class="layadmin-setTheme-logo" style="background-color: #1995dc;"></div>-->
-		<!--			</div>-->
-		<!--		</li>-->
-		<!--		<li class="layadmin-setTheme-color-scheme" className="white-3c8dbc">-->
-		<!--			<div class="layadmin-setTheme-header" style="background-color: #3c8dbc;"></div>-->
-		<!--			<div class="layadmin-setTheme-side">-->
-		<!--				<div class="layadmin-setTheme-logo" style="background-color: #3c8dbc;"></div>-->
-		<!--			</div>-->
-		<!--		</li>-->
-		<!--		<li class="layadmin-setTheme-color-scheme" className="white-605ca8">-->
-		<!--			<div class="layadmin-setTheme-header" style="background-color: #605ca8;"></div>-->
-		<!--			<div class="layadmin-setTheme-side">-->
-		<!--				<div class="layadmin-setTheme-logo" style="background-color: #605ca8;"></div>-->
-		<!--			</div>-->
-		<!--		</li>-->
-		<!--		<li class="layadmin-setTheme-color-scheme" className="white-EEA9B8">-->
-		<!--			<div class="layadmin-setTheme-header" style="background-color: #EEA9B8;"></div>-->
-		<!--			<div class="layadmin-setTheme-side">-->
-		<!--				<div class="layadmin-setTheme-logo" style="background-color: #EEA9B8;"></div>-->
-		<!--			</div>-->
-		<!--		</li>-->
-		<!--		<li class="layadmin-setTheme-color-scheme" className="white-d73925">-->
-		<!--			<div class="layadmin-setTheme-header" style="background-color: #d73925;"></div>-->
-		<!--			<div class="layadmin-setTheme-side">-->
-		<!--				<div class="layadmin-setTheme-logo" style="background-color: #d73925;"></div>-->
-		<!--			</div>-->
-		<!--		</li>-->
-		<!--		<li class="layadmin-setTheme-color-scheme" className="white-57E4ED">-->
-		<!--			<div class="layadmin-setTheme-header" style="background-color: #57E4ED;"></div>-->
-		<!--			<div class="layadmin-setTheme-side">-->
-		<!--				<div class="layadmin-setTheme-logo" style="background-color: #57E4ED;"></div>-->
-		<!--			</div>-->
-		<!--		</li>-->
 	</ul>
+
+	<div class="chat-container layui-col-md6 layui-col-md-offset3">
+		<div class="chat-box ">
+		</div>
+		<div class="chat-input" style="position: relative;">
+			<textarea id="messageInput" class="layui-textarea" placeholder="有什么问题尽管问我"></textarea>
+			<button class="layui-btn-radius layui-btn-sm chat-input-button" onclick="sendMessage()">
+				<img class="send-img" src="../../assets/images/aichat/send.png">
+			</button>
+		</div>
+		<div class="text">
+			内容由AI生成，无法确保真实准确，仅供参考，请遵守《skyeye智能制造用户协议》、《skyeye智能制造个人信息保护规则》，版本：V0.0.1
+		</div>
+	</div>
 </div>
 
 <script src="../../assets/lib/layui/layui.js"></script>

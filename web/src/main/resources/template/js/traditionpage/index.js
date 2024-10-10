@@ -327,10 +327,11 @@ layui.config({
 			shadeClose: false,
 			closeBtn: 1,
 			maxmin: true,
+			// color:#f9f9f9,怎么设置背景颜色
 			shade: 0,
 			anim: 2,
 			resize: true,
-			area: ['400px', '100%'],
+			area: ['500px', '100%'],
 			offset: 'rb',
 			content: '../../tpl/aiChat/aiChat.html'
 		});
