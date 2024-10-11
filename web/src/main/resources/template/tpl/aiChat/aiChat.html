@@ -18,9 +18,11 @@
             width: 100%;
             flex-grow: 1;
             margin: auto;
-            background-color: #f9f9f9;
+            background-color: #FFFFFF;
             padding: 10px 0 0 0;
             border-radius: 3% 3% 0 0;
+            overflow-y: auto; /* 允许垂直滚动 */
+            max-height: 500px; /* 设置一个最大高度，内容超出时显示滚动条 */
         }
 
         .chat-input {
@@ -68,6 +70,17 @@
             margin-left: 10px; /* 可选：给文本一些左边距以与头像分隔 */
             word-wrap: break-word; /* 确保文本会换行 */
             hyphens: auto; /* 自动连字符，改善长单词的换行 */
+        }
+		/*气泡样式*/
+        .message-bubble {
+            position: relative;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            padding: 5px 10px;
+            margin-left: 10px;
+            max-width: 90%;
+            word-wrap: break-word;
+            hyphens: auto;
         }
 	</style>
 </head>
