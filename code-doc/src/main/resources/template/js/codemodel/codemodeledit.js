@@ -13,23 +13,29 @@ layui.config({
 			element = layui.element,
 	    	form = layui.form;
 	    var editor;
-	    
+
+		let id = GetUrlParam("id");
+		let groupId = GetUrlParam("groupId");
+		let type = GetUrlParam("type");
 	    showGrid({
 		 	id: "showForm",
 		 	url: reqBasePath + "codemodel009",
-		 	params: {rowId: parent.rowId},
+		 	params: {rowId: id},
 		 	pagination: false,
 		 	template: getFileContent('tpl/codemodel/codemodeleditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb) {
-		 	},
 		 	ajaxSendAfter:function (json) {
 				// 根据类型获取部分功能的使用说明
-				systemCommonUtil.queryExplainMationByType(1, function (json) {
-					$(".layui-colla-title").html(json.bean.title);
-					$(".layui-colla-content").html(json.bean.content);
-				});
-				element.init();
-		 		
+				if (isNull(type)) {
+					systemCommonUtil.queryExplainMationByType(1, function (json) {
+						$(".layui-colla-title").html(json.bean.title);
+						$(".layui-colla-content").html(json.bean.content);
+					});
+					element.init();
+				} else {
+					$("#explainMation").hide();
+					$("#cancle").hide();
+				}
+
 		 		editor = CodeMirror.fromTextArea(document.getElementById("modelContent"), {
 		 			mode : returnModel(json.bean.modelType),  // 模式
 		            theme : "eclipse",  // CSS样式选择
@@ -56,7 +62,7 @@ layui.config({
 		 		
 		 		form.on('submit(formEditBean)', function (data) {
 			        if (winui.verifyForm(data.elem)) {
-			        	if(isNull(editor.getValue())){
+			        	if (isNull(editor.getValue())) {
 			        		winui.window.msg('请输入模板内容', {icon: 2, time: 2000});
 			        	} else {
 				        	var params = {
@@ -64,13 +70,17 @@ layui.config({
 			        			modelContent: encodeURIComponent(editor.getValue()),
 			        			modelText: encodeURIComponent(editor.getValue()),
 			        			modelType: $("#modelType").val(),
-			        			groupId: parent.groupId,
-			        			rowId: parent.rowId
+			        			groupId: groupId,
+			        			rowId: id
 				        	};
 				        	
 				        	AjaxPostUtil.request({url: reqBasePath + "codemodel010", params: params, type: 'json', callback: function (json) {
-								parent.layer.close(index);
-								parent.refreshCode = '0';
+								if (isNull(type)) {
+									parent.layer.close(index);
+									parent.refreshCode = '0';
+								} else {
+									winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+								}
 				 	   		}});
 			        	}
 			        }

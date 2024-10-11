@@ -34,6 +34,8 @@ var customerJS = {
 	"schoolUtil": "../../assets/lib/layui/customer/skyeye/schoolUtil.js", // 学校模块工具类
 };
 
+let titleColor = ["layui-bg-blue", "layui-bg-red", "layui-bg-orange", "layui-bg-black", "layui-bg-gray", "layui-bg-green", "layui-bg-cyan"];
+
 // 登录界面赋值
 var env = '';
 
@@ -1184,3 +1186,10 @@ function strMatchAllByTwo(str, startCode, endCode){
 	}
 }
 
+function firstLetterUpper(str) {
+	if (str.length > 0) {
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	} else {
+		return "";
+	}
+}
