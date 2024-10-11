@@ -49,5 +49,44 @@ layui.config({
         }
     });
 
+    // 长按移动
+    document.addEventListener('DOMContentLoaded', function () {
+        var btn = document.getElementById('aiBtn');
+        var isDragging = false;
+        var startX, startY, startMouseX, startMouseY;
+
+        btn.addEventListener('mousedown', function (e) {
+            // 记录鼠标按下时的初始位置
+            startX = e.clientX - btn.getBoundingClientRect().left;
+            startY = e.clientY - btn.getBoundingClientRect().top;
+            startMouseX = e.clientX;
+            startMouseY = e.clientY;
+            isDragging = true;
+
+            // 监听鼠标移动和松开事件
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        });
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                // 更新按钮的位置
+                var newX = e.clientX - startMouseX + startX;
+                var newY = e.clientY - startMouseY + startY;
+                btn.style.right = 'auto';
+                btn.style.bottom = 'auto';
+                btn.style.left = newX + 'px';
+                btn.style.top = newY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            // 移除鼠标移动和松开事件监听器
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+    });
+
     // exports('blogitem', {});
 });

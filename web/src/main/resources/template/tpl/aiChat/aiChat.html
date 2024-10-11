@@ -27,6 +27,7 @@
 
         .chat-input {
             display: flex;
+            position: relative;
             padding: 0 0 10px 0;
         }
 
@@ -94,9 +95,9 @@
 	</ul>
 
 	<div class="chat-container layui-col-md6 layui-col-md-offset3">
-		<div class="chat-box ">
+		<div class="chat-box">
 		</div>
-		<div class="chat-input" style="position: relative;">
+		<div class="chat-input">
 			<textarea id="messageInput" class="layui-textarea" placeholder="有什么问题尽管问我"></textarea>
 			<button class="layui-btn-radius layui-btn-sm chat-input-button" onclick="sendMessage()">
 				<img class="send-img" src="../../assets/images/aichat/send.png">
