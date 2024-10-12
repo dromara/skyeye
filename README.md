@@ -89,7 +89,7 @@
 |skyeye-crm |8102 |客户管理模块 |crm-web.jar |
 |skyeye-ifs |8107 |财务模块 |ifs-web.jar |
 |skyeye-project |8109 |PM项目管理模块 |project-web.jar |
-|skyeye-erp |8106 |ERP+生产模块 |erp-web.jar |
+|skyeye-erp |8106 |ERP+生产模块+仓库 |erp-web.jar |
 |skyeye-seal-service |8108 |售后服务模块 |seal-service-web.jar |
 
 ## 系统功能结构图
