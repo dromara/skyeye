@@ -6,6 +6,7 @@
     "verificationParams": {"name": "字段校验", "className": "skyeye-pro#com.skyeye.common.enumeration.VerificationParamsEnum"},
     "isUsed": {"name": "是否使用", "className": "skyeye-pro#com.skyeye.common.enumeration.IsUsedEnum"},
     "smsChannelEnum": {"name": "短信渠道编码", "className": "skyeye-pro#com.skyeye.sms.classenum.SmsChannelEnum"},
+    "smsTemplateTypeEnum": {"name": "短信类型", "className": "skyeye-pro#com.skyeye.sms.classenum.SmsTemplateTypeEnum"},
     "whetherEnum": {"name": "是否", "className": "skyeye-pro#com.skyeye.common.enumeration.WhetherEnum"},
     "dateTimeType": {"name": "日期类型", "className": "skyeye-pro#com.skyeye.dsform.classenum.DateTimeType"},
     "payTypeEnum": {"name": "付款类型", "className": "skyeye-pro#com.skyeye.common.enumeration.PayTypeEnum"},
