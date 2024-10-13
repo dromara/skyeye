@@ -5,11 +5,14 @@
 	<title></title>
 	<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet"/>
 	<link href="../../assets/lib/winui/css/winui.css" rel="stylesheet"/>
+	<link href="../../assets/lib/editormd/css/editormd.css" rel="stylesheet" />
+	<!-- 页面解析markdown为HTML显示需要的css -->
+	<link href="../../assets/lib/editormd/css/editormd.preview.min.css"rel="stylesheet" />
 	<style>
         .chat-container {
             display: flex;
             flex-direction: column;
-            height: 620px;
+            height: 610px;
             margin-top: 5px;
             padding: 10px;
         }
@@ -18,8 +21,8 @@
             width: 100%;
             flex-grow: 1;
             margin: auto;
-            background-color: #FFFFFF;
-            padding: 10px 0 0 0;
+            background-color: #f0f2f2;
+            padding: 5px 0 0 0;
             border-radius: 3% 3% 0 0;
             overflow-y: auto; /* 允许垂直滚动 */
             max-height: 500px; /* 设置一个最大高度，内容超出时显示滚动条 */
@@ -72,7 +75,8 @@
             word-wrap: break-word; /* 确保文本会换行 */
             hyphens: auto; /* 自动连字符，改善长单词的换行 */
         }
-		/*气泡样式*/
+
+        /*气泡样式*/
         .message-bubble {
             position: relative;
             background-color: #f0f0f0;
@@ -86,33 +90,62 @@
 	</style>
 </head>
 <body>
-<div style="padding: 10px;  width: 100%; ">
-	<ul class="layui-nav layui-bg-green navbar layui-col-md6 layui-col-md-offset3 " lay-filter=""
-		style="border-radius:20px;">
-		<li class="layui-nav-item layui-this"><a href="https://yiyan.baidu.com">文心一言</a></li>
-		<li class="layui-nav-item"><a href="https://kimi.moonshot.cn/">KiMi</a></li>
-		<li class="layui-nav-item"><a href="">大数据</a></li>
-	</ul>
+	<div style="padding: 10px;  width: 96%; overflow: hidden;flex-direction: column;">
+		<ul class="layui-nav layui-bg-green navbar layui-col-md6 layui-col-md-offset3 " lay-filter=""
+			style="border-radius:20px;">
+			<li class="layui-nav-item layui-this"><a href="javascript:;">讯飞星火</a></li>
+			<li class="layui-nav-item"><a href="javascript:;">文心一言</a></li>
+			<li class="layui-nav-item"><a href="javascript:;">KiMi</a></li>
+		</ul>
+		<div class="chat-container layui-col-md6 layui-col-md-offset3" >
 
-	<div class="chat-container layui-col-md6 layui-col-md-offset3">
-		<div class="chat-box">
+		<div class="chat-box" id="chat-box">
+
 		</div>
-		<div class="chat-input">
-			<textarea id="messageInput" class="layui-textarea" placeholder="有什么问题尽管问我"></textarea>
-			<button class="layui-btn-radius layui-btn-sm chat-input-button" onclick="sendMessage()">
-				<img class="send-img" src="../../assets/images/aichat/send.png">
-			</button>
-		</div>
-		<div class="text">
-			内容由AI生成，无法确保真实准确，仅供参考，请遵守《skyeye智能制造用户协议》、《skyeye智能制造个人信息保护规则》，版本：V0.0.1
+
+			<div class="chat-input">
+				<textarea id="messageInput" class="layui-textarea" placeholder="有什么问题尽管问我"></textarea>
+				<button class="layui-btn-radius layui-btn-sm chat-input-button" id="sendMessage">
+					<img class="send-img" src="../../assets/images/aichat/send.png">
+				</button>
+			</div>
+			<div class="text">
+				内容由AI生成，无法确保真实准确，仅供参考，请遵守《skyeye智能制造用户协议》、《skyeye智能制造个人信息保护规则》，版本：V0.0.1
+			</div>
 		</div>
 	</div>
-</div>
 
-<script src="../../assets/lib/layui/layui.js"></script>
-<script src="../../assets/lib/layui/custom.js"></script>
-<script type="text/javascript">
-    layui.config({base: '../../js/aiChat/'}).use('aiChat');
-</script>
+	<script type="text/x-handlebars-template" id="beanMessageTemplate">
+		{{#this}}
+			<div class="message-style">
+				<img class="avatar" src="{{avatar}}">
+				<div class="message-bubble" id="{{aiId}}">{{message}}</div>
+			</div>
+		{{/this}}
+	</script>
+
+	<script type="text/x-handlebars-template" id="listMessageTemplate">
+		{{#this}}
+		<div class="message-style">
+			<img class="avatar" src="{{avatar}}">
+			<div class="message-bubble" id="{{aiId}}">{{message}}</div>
+		</div>
+		{{/this}}
+	</script>
+
+	<script src="../../assets/lib/layui/layui.js"></script>
+	<script src="../../assets/lib/layui/custom.js"></script>
+	<script src="../../assets/lib/editormd/js/editormd.js"></script>
+	<!-- 页面markdown解析成HTML需要的js -->
+	<script src="../../assets/lib/editormd/lib/marked.min.js"></script>
+	<script src="../../assets/lib/editormd/lib/prettify.min.js"></script>
+	<script src="../../assets/lib/editormd/lib/raphael.min.js"></script>
+	<script src="../../assets/lib/editormd/lib/underscore.min.js"></script>
+	<script src="../../assets/lib/editormd/lib/sequence-diagram.min.js"></script>
+	<script src="../../assets/lib/editormd/lib/flowchart.min.js"></script>
+	<script src="../../assets/lib/editormd/lib/jquery.flowchart.min.js"></script>
+	<script type="text/javascript">
+		layui.config({base: '../../js/aiChat/'}).use('aiChat');
+	</script>
 </body>
 </html>

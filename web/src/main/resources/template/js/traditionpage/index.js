@@ -331,7 +331,7 @@ layui.config({
 			shade: 0,
 			anim: 2,
 			resize: true,
-			area: ['500px', '100%'],
+			area: ['46%', '100%'],
 			offset: 'rb',
 			content: '../../tpl/aiChat/aiChat.html'
 		});
