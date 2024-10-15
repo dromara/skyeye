@@ -21,7 +21,7 @@
             width: 100%;
             flex-grow: 1;
             margin: auto;
-            background-color: #f0f2f2;
+            background-color: #fffffc;
             padding: 5px 0 0 0;
             border-radius: 3% 3% 0 0;
             overflow-y: auto; /* 允许垂直滚动 */
@@ -87,6 +87,12 @@
             word-wrap: break-word;
             hyphens: auto;
         }
+
+		.more{
+        display:flex;
+		align-items:center;
+		flex-direction:column;
+		}
 	</style>
 </head>
 <body>
@@ -95,14 +101,11 @@
 			style="border-radius:20px;">
 			<li class="layui-nav-item layui-this"><a href="javascript:;">讯飞星火</a></li>
 			<li class="layui-nav-item"><a href="javascript:;">文心一言</a></li>
-			<li class="layui-nav-item"><a href="javascript:;">KiMi</a></li>
+			<li class="layui-nav-item"><a href="javascript:;">通义问千</a></li>
 		</ul>
 		<div class="chat-container layui-col-md6 layui-col-md-offset3" >
-
-		<div class="chat-box" id="chat-box">
-
-		</div>
-
+			<div class="chat-box" id="chat-box">
+			</div>
 			<div class="chat-input">
 				<textarea id="messageInput" class="layui-textarea" placeholder="有什么问题尽管问我"></textarea>
 				<button class="layui-btn-radius layui-btn-sm chat-input-button" id="sendMessage">
