@@ -14,9 +14,43 @@ layui.config({
     let loadData = true;
     let apiKeyId = '555438cb1e3b4e328759680fdfa8d92';//默认接口
 
+    let onMsgStr = '';
     systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
         userMation = data.bean;
         loadChatHistory();
+
+        // 消息
+        webSocketUtil.init({
+            // url: sysMainMation.aiSocketPath,
+            url: 'ws://127.0.0.1:8120/',
+            path: 'aiMessageWebSocket',
+            userId: data.bean.id,
+            onMessage: function (data) {
+                let json = JSON.parse(data);
+                console.log(json)
+                if (!json.end) {
+                    onMsgStr += json.message;
+                    if (json.orderBy == 0) {
+                        // 添加回答
+                        let bean = {
+                            aiId: "aiContentId" + listIndex,
+                            avatar: fileBasePath + userMation.userPhoto,
+                        }
+                        let str = getDataUseHandlebars(beanMessageTemplate, bean);
+                        $('.chat-box').append(str);
+                        editormd.markdownToHTML(bean.aiId, {markdown: onMsgStr});
+                    } else {
+                        $("#aiContentId" + listIndex).html(onMsgStr);
+                    }
+                } else {
+                    $("#aiContentId" + listIndex).html('');
+                    editormd.markdownToHTML("aiContentId" + listIndex, {markdown: onMsgStr});
+                    onMsgStr = '';
+                }
+                // 滚动到底部
+                $('.chat-box').scrollTop($('.chat-box').prop('scrollHeight'));
+            }
+        });
     });
 
     // 历史记录
@@ -101,7 +135,7 @@ layui.config({
         var messageInput = $("#messageInput").val().trim();
         if (!isNull(messageInput)) {
             let params = {
-                message: messageInput,
+                content: messageInput,
                 avatar: fileBasePath + userMation.userPhoto,
                 apiKeyId: apiKeyId,
             }
@@ -113,21 +147,12 @@ layui.config({
             $('.chat-box').scrollTop($('.chat-box').prop('scrollHeight'));
             // 发送请求
             AjaxPostUtil.request({
-                url: "http://192.168.3.8:8120/" + "sendChatMessage",
+                url: "http://127.0.0.1:8120/" + "sendMessageStream",
                 params: params,
                 type: 'json',
                 method: 'POST',
                 callback: function (json) {
                     listIndex++;
-                    // 添加回答
-                    let bean = {
-                        aiId: "aiContentId" + listIndex,
-                        content: json.bean.content,
-                        avatar: fileBasePath + userMation.userPhoto,
-                    }
-                    message = getDataUseHandlebars(beanMessageTemplate, bean);
-                    $('.chat-box').append(message);
-                    editormd.markdownToHTML(bean.aiId, {markdown: bean.content});
                     // 清空输入框
                     $('textarea').val('');
                     // 滚动到底部

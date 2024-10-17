@@ -1432,3 +1432,83 @@ var commonHtml = {
                     </div>`
 
 };
+
+var webSocketUtil = {
+    config: {
+        url: '',
+        path: '',
+        userId: '',
+        // 消息接收的回调函数
+        onMessage: null,
+    },
+
+    etiger: {},
+
+    init: function (_config) {
+        webSocketUtil.config = $.extend(true, webSocketUtil.config, _config);
+        if (isNull(webSocketUtil.config.url)) {
+            webSocketUtil.config.url = sysMainMation.webSocketPath
+        }
+        if (isNull(webSocketUtil.config.userId)) {
+            return;
+        }
+        webSocketUtil.initWebSocket();
+        webSocketUtil.etiger.socket.init();
+    },
+
+    initWebSocket: function () {
+        webSocketUtil.etiger.socket = {
+            webSocket : "",
+            init : function() {
+                if (!window.WebSocket) {
+                    alert("你的浏览器不支持websocket，请升级到IE10以上浏览器，或者使用谷歌、火狐、360浏览器。");
+                    return;
+                }
+                webSocket = new WebSocket(webSocketUtil.config.url + webSocketUtil.config.path + "/" + webSocketUtil.config.userId);
+                webSocket.onerror = function(event) {
+                    alert("websockt连接发生错误，请刷新页面重试!")
+                };
+                webSocket.onopen = function(event) {
+                    console.log("%c open socket success", "color: blue");
+                };
+                webSocket.onmessage = function(event) {
+                    var received_msg = event.data;
+                    try {
+                        if (typeof(webSocketUtil.config.onMessage) == "function") {
+                            webSocketUtil.config.onMessage(received_msg);
+                        }
+                    } catch(e) {
+                        console.log(e);
+                    }
+                }
+            },
+            send : function(data) {
+                this.waitForConnection(function() {// 连接建立才能发送消息
+                    webSocket.send(data);
+                }, 500);
+            },
+            sendData : function(data) {
+                this.waitForConnection(function() {
+                    webSocket.send(data);
+                }, 500);
+            },
+            waitForConnection : function(callback, interval) {// 判断连接是否建立
+                if (webSocket.readyState === 1) {
+                    callback();
+                } else {
+                    var that = this;
+                    setTimeout(function() {
+                        that.waitForConnection(callback, interval);
+                    }, interval);
+                }
+            },
+            close: function(){
+                webSocket.close();
+            }
+        };
+    },
+
+    send: function(data) {
+        webSocketUtil.etiger.socket.send(data);
+    }
+}
