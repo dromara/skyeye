@@ -24,7 +24,7 @@ layui.config({
         let params = {
             page: page,
             limit: 15,
-            holderId: 'cf32034645ca4d7c9ef01e7bba81e3e6'
+            holderId: apiKeyId,
         }
         AjaxPostUtil.request({
             url: sysMainMation.aiBasePath + "queryPageMessageList",
@@ -105,6 +105,7 @@ layui.config({
                 avatar: fileBasePath + userMation.userPhoto,
                 apiKeyId: apiKeyId,
             }
+            console.log('apiKeyId', apiKeyId);
             var message = getDataUseHandlebars(beanMessageTemplate, params);
             $('.chat-box').append(message);
             // 清空输入框
@@ -149,17 +150,27 @@ layui.config({
             //通义
             apiKeyId = '2227ff7247ee47edaa2f5a3910b907bf';
         }
-        console.log(index,apiKeyId);
-
-        // loadApiKey(apiKeyId);
+        $('#chat-box').empty();
+        loadChatHistory();
     });
-    // $(function() {
-    //     console.log(apiKeyId);
-    // });
-    // (function loop() {
-    //     console.log(apiKeyId);
-    //     setTimeout(loop, 2000);
-    // })();
+
+    // 一键清空
+    $("body").on("click", "#clear", function (e) {
+        console.log(111)
+        let params = {
+            apiKeyId: apiKeyId,
+        }
+        AjaxPostUtil.request({
+            url: sysMainMation.aiBasePath + "deleteAllByApiKeyId",
+            params: params,
+            type: 'json',
+            method: 'POST',
+            callback:function (json) {
+                loadChatHistory();
+            }
+        })
+    });
+
 
 // 监听回车键发送消息
 // document.getElementById('messageInput').addEventListener('keypress', function (e) {
