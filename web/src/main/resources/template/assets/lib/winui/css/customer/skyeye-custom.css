@@ -120,7 +120,7 @@
 
 .fixed-buttom-right {
     position: fixed;
-    bottom: 80px;
+    bottom: 65px;
     right: 30px;
     cursor: pointer;
     width: 55px;
@@ -135,6 +135,6 @@
 }
 
 .send-img {
-    width: 25px;
-    height: 25px;
+    width: 23px;
+    height: 23px;
 }
