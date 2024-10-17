@@ -12,20 +12,18 @@
         .chat-container {
             display: flex;
             flex-direction: column;
-            height: 610px;
+			height: 100%;
             margin-top: 5px;
             padding: 10px;
         }
 
         .chat-box {
             width: 100%;
-            flex-grow: 1;
-            margin: auto;
             background-color: #fffffc;
-            padding: 5px 0 0 0;
+            padding: 10px 0px;
             border-radius: 3% 3% 0 0;
+			height: calc(100% - 220px);
             overflow-y: auto; /* 允许垂直滚动 */
-            max-height: 500px; /* 设置一个最大高度，内容超出时显示滚动条 */
         }
 
         .chat-input {
@@ -96,7 +94,7 @@
 	</style>
 </head>
 <body>
-<div style="padding: 10px;  width: 96%; overflow: hidden;flex-direction: column;">
+<div style="padding: 10px; width: calc(100% - 20px); height: calc(100% - 20px); overflow: hidden; flex-direction: column;">
 	<ul class="layui-nav layui-bg-green navbar layui-col-md6 layui-col-md-offset3 " lay-filter=""
 		style="border-radius:20px;">
 		<li class="layui-nav-item layui-this"><a href="javascript:;">讯飞星火</a></li>

@@ -37,6 +37,7 @@ layui.config({
                         }
                         let str = getDataUseHandlebars(beanMessageTemplate, bean);
                         $('.chat-box').append(str);
+                        $('.chat-box').append(`<img id="loadding" src="../../js/aiChat/loaing.gif" style="width: 60px; margin-left: 60px;" />`);
                         editormd.markdownToHTML(bean.aiId, {markdown: onMsgStr});
                     } else {
                         $("#aiContentId" + listIndex).html(onMsgStr);
@@ -45,6 +46,7 @@ layui.config({
                     $("#aiContentId" + listIndex).html('');
                     editormd.markdownToHTML("aiContentId" + listIndex, {markdown: onMsgStr});
                     onMsgStr = '';
+                    $('#loadding').remove();
                 }
                 // 滚动到底部
                 $('.chat-box').scrollTop($('.chat-box').prop('scrollHeight'));
