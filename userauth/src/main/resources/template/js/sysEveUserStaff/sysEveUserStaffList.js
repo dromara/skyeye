@@ -23,6 +23,7 @@ layui.config({
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
+		toolbar: true,
 	    limits: getLimits(),
 	    limit: getLimit(),
 	    overflow: {
@@ -58,24 +59,39 @@ layui.config({
 	        { field: 'userSex', title: '性别', width: 80, rowspan: '3', align: 'center', templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("sexEnum", 'id', d.userSex, 'name');
 			}},
-	        { field: 'state', title: '状态', rowspan: '3', width: 60, align: 'center', templet: function (d) {
+	        { field: 'state', title: '状态', rowspan: '3', width: 180, align: 'center', templet: function (d) {
 				return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("userStaffState", 'id', d.state, 'name');
 	        }},
 	        { title: '公司信息', align: 'center', colspan: '3'},
+			{ title: '入职信息', align: 'center', colspan: '2'},
 	        { field: 'phone', title: '手机号', rowspan: '3', align: 'center', width: 100},
 	        { field: 'homePhone', title: '家庭电话', rowspan: '3', align: 'center', width: 100},
 	        { field: 'qq', title: 'QQ', rowspan: '3', align: 'left', width: 100},
-			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '3', width: 120 },
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '3', width: 140 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '3', align: 'center', width: 150 },
-			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '3', align: 'left', width: 120 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], rowspan: '3', align: 'left', width: 140 },
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], rowspan: '3', align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '3', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
-	    ],[
-	    	{ field: 'companyName', title: '公司', align: 'left', width: 120},
-	        { field: 'departmentName', title: '部门', align: 'left', width: 120},
-	        { field: 'jobName', title: '职位', align: 'left', width: 120}
-	       ]
-	    ],
+	    ], [
+	    	{ field: 'companyName', title: '公司', align: 'left', width: 120 },
+	        { field: 'departmentName', title: '部门', align: 'left', width: 120 },
+	        { field: 'jobName', title: '职位', align: 'left', width: 120 },
+
+			{ field: 'entryTime', title: '入职时间', align: 'center', width: 150 },
+			{ field: 'quitTime', title: '司龄', align: 'left', width: 80, templet: function (d) {
+				if (!isNull(d.entryTime)) {
+					// 计算司龄，结合入职时间和离职时间
+					var entryTime = new Date(d.entryTime);
+					var nowTime = isNull(d.quitTime) ? new Date() : new Date(d.quitTime);
+					var diffTime = nowTime.getTime() - entryTime.getTime();
+					var years = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 365));
+					years = years < 0 ? 0 : years;
+					return years + "年";
+				} else {
+					return "";
+				}
+			}}
+		]],
 	    done: function(json) {
 	    	soulTable.render(this);
     		matchingLanguage();
