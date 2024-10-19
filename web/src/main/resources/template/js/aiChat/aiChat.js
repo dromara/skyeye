@@ -12,7 +12,7 @@ layui.config({
     let listIndex = 0;
     let page = 1;
     let loadData = true;
-    let apiKeyId = '555438cb1e3b4e328759680fdfa8d92';//默认接口
+    let apiKeyId = '555438cb1e3b4e328759680fdfa8d92f';//默认接口，讯飞星火
 
     let onMsgStr = '';
     systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
@@ -22,7 +22,7 @@ layui.config({
         // 消息
         webSocketUtil.init({
             // url: sysMainMation.aiSocketPath,
-            url: 'ws://127.0.0.1:8120/',
+            url: 'ws://192.168.3.8:8120/',
             path: 'aiMessageWebSocket',
             userId: data.bean.id,
             onMessage: function (data) {
@@ -149,7 +149,7 @@ layui.config({
             $('.chat-box').scrollTop($('.chat-box').prop('scrollHeight'));
             // 发送请求
             AjaxPostUtil.request({
-                url: "http://127.0.0.1:8120/" + "sendMessageStream",
+                url: "http://192.168.3.8:8120/" + "sendMessageStream",
                 params: params,
                 type: 'json',
                 method: 'POST',
@@ -168,7 +168,7 @@ layui.config({
         var index = $(".layui-nav-item").index(this);
         if (index == 0) {
             //讯飞
-            apiKeyId = '555438cb1e3b4e328759680fdfa8d92';
+            apiKeyId = '555438cb1e3b4e328759680fdfa8d92f';
         } else if (index == 1) {
             //文心
             apiKeyId = '6a13b4ac47bb487c95609c8770c5955b';
