@@ -19,7 +19,7 @@ layui.config({
         userMation = data.bean;
         loadChatHistory();
 
-        // 消息
+        // 返回的消息
         webSocketUtil.init({
             // url: sysMainMation.aiSocketPath,
             url: 'ws://192.168.3.8:8120/',
@@ -27,6 +27,7 @@ layui.config({
             userId: data.bean.id,
             onMessage: function (data) {
                 let json = JSON.parse(data);
+                console.log(json)
                 if (!json.end) {
                     onMsgStr += json.message;
                     if (json.orderBy == 0) {
@@ -140,7 +141,6 @@ layui.config({
                 avatar: fileBasePath + userMation.userPhoto,
                 apiKeyId: apiKeyId,
             }
-            console.log('apiKeyId', apiKeyId);
             var message = getDataUseHandlebars(beanMessageTemplate, params);
             $('.chat-box').append(message);
             // 清空输入框
@@ -149,7 +149,7 @@ layui.config({
             $('.chat-box').scrollTop($('.chat-box').prop('scrollHeight'));
             // 发送请求
             AjaxPostUtil.request({
-                url: "http://192.168.3.8:8120/" + "sendMessageStream",
+                url: "http://192.168.3.8:8120/" + "sendChatMessage",
                 params: params,
                 type: 'json',
                 method: 'POST',
@@ -192,6 +192,7 @@ layui.config({
             type: 'json',
             method: 'POST',
             callback:function (json) {
+                $('#chat-box').empty();
                 loadChatHistory();
             }
         })
