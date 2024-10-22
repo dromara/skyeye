@@ -182,7 +182,6 @@ layui.config({
 
     // 一键清空
     $("body").on("click", "#clear", function (e) {
-        console.log(111)
         let params = {
             apiKeyId: apiKeyId,
         }
