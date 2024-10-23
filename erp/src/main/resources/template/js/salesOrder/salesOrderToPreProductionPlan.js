@@ -15,11 +15,11 @@ layui.config({
     var $ = layui.$;
     var id = GetUrlParam("id");
 
-    // 销售订单转预生产计划
+    // 销售订单转出货计划
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "querySealsOrderTransProductionPlanById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
         let data = json.bean;
         data.productionPlanChildList=data.erpOrderItemList
-        // 预生产计划的【编辑布局】
+        // 出货计划的【编辑布局】
         dsFormUtil.initEditPageForStatic('content', 'FP2024071100002', data, {
             savePreParams: function (params) {
             },

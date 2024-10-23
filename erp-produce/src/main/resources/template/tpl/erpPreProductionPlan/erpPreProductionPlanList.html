@@ -34,14 +34,14 @@
             {{# } }}
         {{# } }}
 
-        {{# if(d.state == 'pass') { }}
+        {{# if(d.state == 'pass' && (d.produceState == 2 || d.produceState == 3)) { }}
             {{# if(auth('1720705318422')) { }}
                 <a class="layui-btn layui-btn-xs " lay-event="turnProductionPlan">转生产计划</a>
             {{# } }}
         {{# } }}
-        {{# if(d.state == 'partiallyCompleted') { }}
-            {{# if(auth('1720705318422')) { }}
-                <a class="layui-btn layui-btn-xs " lay-event="turnProductionPlan">转生产计划</a>
+        {{# if(d.state == 'pass' && (d.purchaseState == 2 || d.purchaseState == 3)) { }}
+            {{# if(auth('1729643581348')) { }}
+                <a class="layui-btn layui-btn-xs " lay-event="turnProductionPlan">转采购订单</a>
             {{# } }}
         {{# } }}
 

@@ -1,6 +1,4 @@
 
-var rowId = "";
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -15,11 +13,11 @@ layui.config({
     // 新增
     authBtn('1720705272841');
 
+    // 获取出货计划单列表
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        // 获取预生产计划单列表
         url: sysMainMation.erpBasePath + 'queryProductionPlanList',
         where: getTableParams(),
         even: true,
@@ -29,32 +27,38 @@ layui.config({
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
             { field: 'oddNumber', title: '单号', rowspan: '2', align: 'left', width: 220, templet: function (d) {
-                    var str = '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
-                    if (!isNull(d.fromId)) {
-                        str += '<span class="state-new">[转]</span>';
-                    }
-                    return str;
-                }},
+                var str = '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+                if (!isNull(d.fromId)) {
+                    str += '<span class="state-new">[转]</span>';
+                }
+                return str;
+            }},
             { colspan: '2', title: '来源单据信息', align: 'center' },
             { field: 'operTime', width: 150, title: '单据日期', rowspan: '2',align: 'center'},
             { field: 'processInstanceId', title: '流程ID', rowspan: '2',width: 280, templet: function (d) {
-                    return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
-                }},
+                return '<a lay-event="processDetails" class="notice-title-click">' + getNotUndefinedVal(d.processInstanceId) + '</a>';
+            }},
             { field: 'state', title: '状态', rowspan: '2', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
-                }},
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("erpOrderStateEnum", 'id', d.state, 'name');
+            }},
+            { field: 'purchaseState', title: '采购状态', rowspan: '2', width: 90, templet: function (d) {
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("productionPlanPurchaseState", 'id', d.purchaseState, 'name');
+            }},
+            { field: 'produceState', title: '生产状态', rowspan: '2', width: 90, templet: function (d) {
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("productionPlanProduceState", 'id', d.produceState   , 'name');
+            }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', rowspan: '2',width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', rowspan: '2',width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', rowspan: '2',width: 120 },
             { field: 'lastUpdateTime', title: '最后修改时间', align: 'center', rowspan: '2',width: 150},
             { title: systemLanguage["com.skyeye.operation"][languageType], rowspan: '2', fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar' }
-        ],[
+        ], [
             { field: 'fromTypeId', title: '来源类型', rowspan: '2',width: 150, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("productionPlanFromType", 'id', d.fromTypeId, 'name');
-                }},
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("productionPlanFromType", 'id', d.fromTypeId, 'name');
+            }},
             { field: 'fromId', title: '单据编号', rowspan: '2',width: 200, templet: function (d) {
-                    return getNotUndefinedVal(d.fromMation?.oddNumber);
-                }}
+                return getNotUndefinedVal(d.fromMation?.oddNumber);
+            }}
         ]],
         done: function(json) {
             matchingLanguage();
@@ -126,9 +130,9 @@ layui.config({
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.erpBasePath + "deleteProductionPlan", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                }});
+                winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                loadTable();
+            }});
         });
     }
 
@@ -142,9 +146,9 @@ layui.config({
                     approvalId: approvalId
                 };
                 AjaxPostUtil.request({url: sysMainMation.erpBasePath + "submitProductionPlanToApproval", params: params, type: 'json', method: 'POST', callback: function (json) {
-                        winui.window.msg("提交成功", {icon: 1, time: 2000});
-                        loadTable();
-                    }});
+                    winui.window.msg("提交成功", {icon: 1, time: 2000});
+                    loadTable();
+                }});
             });
         });
     }
@@ -154,9 +158,9 @@ layui.config({
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.erpBasePath + "revokeProductionPlan", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
-                    winui.window.msg("提交成功", {icon: 1, time: 2000});
-                    loadTable();
-                }});
+                winui.window.msg("提交成功", {icon: 1, time: 2000});
+                loadTable();
+            }});
         });
     }
 

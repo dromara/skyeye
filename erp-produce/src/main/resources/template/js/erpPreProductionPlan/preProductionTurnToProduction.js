@@ -15,7 +15,7 @@ layui.config({
     var $ = layui.$;
     var id = GetUrlParam("id");
 
-    // 预生产计划 转 生产计划
+    // 出货计划 转 生产计划
     AjaxPostUtil.request({url: sysMainMation.erpBasePath + "queryProductionPlanTransById", params: {id: id}, type: 'json', method: 'GET', callback: function (json) {
             let data = json.bean;
             data.productionChildList = data.productionPlanChildList
