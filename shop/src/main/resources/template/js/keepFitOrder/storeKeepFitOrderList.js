@@ -44,34 +44,26 @@ layui.config({
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
             { field: 'oddNumber', title: '订单编号', align: 'left', width: 180, fixed: 'left', templet: function (d) {
-                    return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
-                }},
+                return '<a lay-event="details" class="notice-title-click">' + d.oddNumber + '</a>';
+            }},
             { field: 'name', title: '门店', width: 200, templet: function (d) {
-                    return getNotUndefinedVal(d.storeMation?.name);
+                return getNotUndefinedVal(d.storeMation?.name);
             }},
             { field: 'name', title: '会员名称', rowspan: '2', align: 'left', width: 150, templet: function (d) {
-                    return getNotUndefinedVal(d.objectMation?.name);
-                }},
+                return getNotUndefinedVal(d.objectMation?.name);
+            }},
             { field: 'userType', title: '用户类型', width: 100, templet: function (d) {
-                    if(d.type == 1){
-                        return "匿名用户";
-                    } else {
-                        return "会员";
-                    }
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("keepFitOrderUserType", 'id', d.type, 'name');
             }},
             { field: 'type', title: '订单来源', width: 120, align: "center", templet: function (d) {
-                    if(d.type == 1){
-                        return "用户下单";
-                    } else {
-                        return "工作人员下单";
-                    }
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("shopMealOrderType", 'id', d.type, 'name');
             }},
             { field: 'payablePrice', title: '应付金额', width: 100, align: "left"},
             { field: 'payPrice', title: '实付金额', width: 100, align: "left"},
             { field: 'payTime', title: '支付时间', width: 100, align: "left"},
             { field: 'state', title: '状态', width: 90, templet: function (d) {
-                    return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("KeepFitOrderState", 'id', d.state, 'name');
-                }},
+                return skyeyeClassEnumUtil.getEnumDataNameByCodeAndKey("keepFitOrderState", 'id', d.state, 'name');
+            }},
             { field: 'onlineDay', title: '预约日期', width: 100 },
             { field: 'onlineTime', title: '预约时间', width: 100 },
             { field: 'createName', title: '创建人', align: 'left', width: 120 },
