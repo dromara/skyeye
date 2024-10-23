@@ -86,7 +86,7 @@
     "returnPutFromType": {"name": "退料入库单来源单据类型", "className": "skyeye-erp#com.skyeye.pick.classenum.ReturnPutFromType"},
     "confirmFromType": {"name": "物料接收单/物料退货单来源单据类型", "className": "skyeye-erp#com.skyeye.pickconfirm.classenum.ConfirmFromType"},
     "productionFromType": {"name": "生产计划单来源单据类型", "className": "skyeye-erp#com.skyeye.production.classenum.ProductionFromType"},
-    "productionPlanFromType": {"name": "预生产计划单来源单据类型", "className": "skyeye-erp#com.skyeye.production.classenum.ProductionPlanFromType"},
+    "productionPlanFromType": {"name": "出货计划单来源单据类型", "className": "skyeye-erp#com.skyeye.production.classenum.ProductionPlanFromType"},
     "machinFromType": {"name": "加工单来源单据类型", "className": "skyeye-erp#com.skyeye.machin.classenum.MachinFromType"},
     "wholeOrderOutFromType": {"name": "整单委外单来源单据类型", "className": "skyeye-erp#com.skyeye.whole.classenum.WholeOrderOutFromType"},
     "depotOutFromType": {"name": "仓库出库单来源单据类型", "className": "skyeye-erp#com.skyeye.depot.classenum.DepotOutFromType"},
@@ -100,6 +100,8 @@
     "shopMaterialDistributionType": {"name": "商品分销方式", "className": "skyeye-erp#com.skyeye.shopmaterial.enums.ShopMaterialDistributionType"},
     "shopMaterialDeliveryMethod": {"name": "配送方式", "className": "skyeye-erp#com.skyeye.shopmaterial.enums.ShopMaterialDeliveryMethod"},
     "shopMaterialNormsLogoType": {"name": "商城商品规格logo类型", "className": "skyeye-erp#com.skyeye.shopmaterial.enums.ShopMaterialNormsLogoType"},
+    "productionPlanPurchaseState": {"name": "出货计划单采购状态", "className": "skyeye-erp#com.skyeye.production.classenum.ProductionPlanPurchaseState"},
+    "productionPlanProduceState": {"name": "出货计划单生产状态", "className": "skyeye-erp#com.skyeye.production.classenum.ProductionPlanProduceState"},
 
     "skyeyeView": {"name": "视图类型", "className": "skyeye-pro#com.skyeye.common.SkyeyeViewEnum"},
     "widthScale": {"name": "宽度比例", "className": "skyeye-pro#com.skyeye.attr.classenum.WidthScale"},

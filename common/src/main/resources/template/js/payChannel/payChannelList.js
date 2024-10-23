@@ -23,7 +23,6 @@ layui.config({
         initTable();
     }});
 
-
     form.on('select(appId)', function (data) {
         var thisRowValue = data.value;
         appId = isNull(thisRowValue) ? "" : thisRowValue;

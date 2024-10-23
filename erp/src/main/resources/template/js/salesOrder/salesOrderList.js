@@ -79,7 +79,7 @@ layui.config({
         	turnSales(data);
         } else if (layEvent === 'turnReturns') { //转销售退货单
             turnReturns(data);
-        }else if (layEvent === 'turnToPreProductionPlan') { //转预生产计划单
+        }else if (layEvent === 'turnToPreProductionPlan') { //转出货计划单
             turnToPreProductionPlan(data);
         } else if (layEvent === 'processDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
@@ -153,11 +153,11 @@ layui.config({
             }});
     }
 
-    // 销售订单转预生产计划
+    // 销售订单转出货计划
     function turnToPreProductionPlan(data) {
         _openNewWindows({
             url:"../../tpl/salesOrder/salesOrderToPreProductionPlan.html?id=" + data.id,
-            title: "转预生产计划",
+            title: "转出货计划",
             pageId: "salesOrderToReturns",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
