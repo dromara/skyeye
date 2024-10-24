@@ -4,10 +4,11 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'textool'], function (exports) {
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
+		textool = layui.textool,
 		form = layui.form;
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 	var className = GetUrlParam("className");
@@ -63,6 +64,8 @@ layui.config({
 			$("#name").val(json.bean.name);
 			$("#authPointNum").val(json.bean.authPointNum);
 			$("#orderBy").val(json.bean.orderBy);
+			$("#remark").val(json.bean.remark);
+			textool.init({eleId: 'remark', maxlength: 200});
 			skyeyeClassEnumUtil.showEnumDataListByClassName("operatePosition", 'select', "position", json.bean.position, form);
 			skyeyeClassEnumUtil.showEnumDataListByClassName("eventType", 'select', "eventType", json.bean.eventType, form);
 			if (json.bean.position == 'actionBar') {
@@ -132,6 +135,7 @@ layui.config({
 			appId: appId,
 			className: className
 		});
+		textool.init({eleId: 'remark', maxlength: 200});
 		skyeyeClassEnumUtil.showEnumDataListByClassName("operatePosition", 'select', "position", '', form);
 		skyeyeClassEnumUtil.showEnumDataListByClassName("eventType", 'select', "eventType", '', form);
 	}
