@@ -87,7 +87,7 @@ layui.config({
 		AjaxPostUtil.request({url: reqBasePath + "queryOperateList", params: {className: className, appId: appId}, type: 'json', method: 'POST', callback: function (json) {
 			var value = isNull(defaultValue) ? '' : defaultValue.toString();
 			json.rows.forEach(function (item) {
-				item.name = item.name + '(' + item.remark + ')';
+				item.name = item.name + (isNull(item.remark) ? '' : ('(' + item.remark + ')'));
 			});
 			dataShowType.showData(json, 'verificationSelect', 'operateIdList', value, form);
 		}});

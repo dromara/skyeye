@@ -204,6 +204,7 @@ layui.config({
 				className: className,
 				appId: appId,
 				name: $("#name").val(),
+				remark: $("#remark").val(),
 				position: $("#position").val(),
 				color: isNull($("#color").val()) ? '' : $("#color").val(),
 				authPointNum: $("#authPointNum").val(),
