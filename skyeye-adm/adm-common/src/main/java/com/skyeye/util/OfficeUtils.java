@@ -185,16 +185,17 @@ public class OfficeUtils {
         //word转图片格式
         try {
             File file = new File("G:\\test\\test22.docx");
-            InputStream inStream = new FileInputStream(file);
-            List<BufferedImage> wordToImg = wordToImg(inStream);
-            //for(int i=0; i<wordToImg.size(); i++){ //可以保存图片（每页保存为一张）
-            //    ImageIO.write(wordToImg.get(i), "jpg", new File("G:\\test\\"+ i +".png")); //将其保存在C:/imageSort/targetPIC/下
-            //}
-            BufferedImage mergeImage = mergeImage(false, wordToImg);
-            //保存图片（长图）
-            ImageIO.write(mergeImage, "jpg", new File("G:\\test\\test.png"));
-        } catch (Exception e) {
-            e.printStackTrace();
+            try (InputStream inStream = new FileInputStream(file)) {
+                            List<BufferedImage> wordToImg = wordToImg(inStream);
+                            //for(int i=0; i<wordToImg.size(); i++){ //可以保存图片（每页保存为一张）
+                            //    ImageIO.write(wordToImg.get(i), "jpg", new File("G:\\test\\"+ i +".png")); //将其保存在C:/imageSort/targetPIC/下
+                            //}
+                            BufferedImage mergeImage = mergeImage(false, wordToImg);
+                            //保存图片（长图）
+                            ImageIO.write(mergeImage, "jpg", new File("G:\\test\\test.png"));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+            }
         }
     }
 
