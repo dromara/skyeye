@@ -59,10 +59,6 @@ public class Farm extends BaseGeneralInfo {
     @ApiModelProperty(value = "每日可用工时(分钟)，APS排产用", required = "required")
     private Integer dailyWorkMinutes;
 
-    @TableField(value = "use_farm")
-    @ApiModelProperty(value = "使用车间", fuzzyLike = true)
-    private String useFarm;
-
     @TableField(exist = false)
     @Property(value = "车间负责人")
     private Map<String, Object> chargePersonMation;
