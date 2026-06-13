@@ -17,7 +17,6 @@ import com.skyeye.portal.entity.PortalPageVisitStatDaily;
 import com.skyeye.portal.service.PortalPageVisitStatDailyService;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,11 +61,10 @@ public class PortalPageVisitStatDailyServiceImpl extends SkyeyeBusinessServiceIm
         String statDateColumn = MybatisPlusUtil.toColumns(PortalPageVisitStatDaily::getStatDate);
         String pvCountColumn = MybatisPlusUtil.toColumns(PortalPageVisitStatDaily::getPvCount);
         QueryWrapper<PortalPageVisitStatDaily> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("sum(" + pvCountColumn + ") as totalCount")
+        queryWrapper.select("ifnull(sum(" + pvCountColumn + "), 0) as totalCount")
             .ge(statDateColumn, fromDate)
             .le(statDateColumn, toDate);
-        Map<String, Object> row = baseMapper.selectMaps(queryWrapper).stream().findFirst().orElse(new LinkedHashMap<>());
-        return NumberParseUtil.parseLong(row.get("totalCount"));
+        return parseAggregateLong(queryWrapper, "totalCount");
     }
 
     @Override
@@ -74,10 +72,33 @@ public class PortalPageVisitStatDailyServiceImpl extends SkyeyeBusinessServiceIm
         String statDateColumn = MybatisPlusUtil.toColumns(PortalPageVisitStatDaily::getStatDate);
         String pvCountColumn = MybatisPlusUtil.toColumns(PortalPageVisitStatDaily::getPvCount);
         QueryWrapper<PortalPageVisitStatDaily> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("sum(" + pvCountColumn + ") as todayCount")
+        queryWrapper.select("ifnull(sum(" + pvCountColumn + "), 0) as todayCount")
             .eq(statDateColumn, statDate);
-        Map<String, Object> row = baseMapper.selectMaps(queryWrapper).stream().findFirst().orElse(new LinkedHashMap<>());
-        return NumberParseUtil.parseLong(row.get("todayCount"));
+        return parseAggregateLong(queryWrapper, "todayCount");
+    }
+
+    /**
+     * 安全解析聚合查询结果，避免 selectMaps 空结果时 stream().findFirst() 触发 NPE
+     */
+    private long parseAggregateLong(QueryWrapper<PortalPageVisitStatDaily> queryWrapper, String alias) {
+        List<Map<String, Object>> rows = baseMapper.selectMaps(queryWrapper);
+        if (rows == null || rows.isEmpty()) {
+            return 0L;
+        }
+        Map<String, Object> row = rows.get(0);
+        if (row == null || row.isEmpty()) {
+            return 0L;
+        }
+        Object val = row.get(alias);
+        if (val == null) {
+            for (Map.Entry<String, Object> entry : row.entrySet()) {
+                if (entry.getKey() != null && entry.getKey().equalsIgnoreCase(alias)) {
+                    val = entry.getValue();
+                    break;
+                }
+            }
+        }
+        return NumberParseUtil.parseLong(val);
     }
 
     @Override

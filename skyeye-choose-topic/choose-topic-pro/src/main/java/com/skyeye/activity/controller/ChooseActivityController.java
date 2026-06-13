@@ -11,6 +11,7 @@ import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +61,16 @@ public class ChooseActivityController {
     @RequestMapping("/post/ActivityController/queryActivityList")
     public void queryActivityList(InputObject inputObject, OutputObject outputObject) {
         chooseActivityService.queryActivityList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "updateActivityFeatureEnable", value = "更新活动选题/导师功能开关", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "活动id", required = "required"),
+        @ApiImplicitParam(id = "topicEnable", name = "topicEnable", value = "是否开启选题", enumClass = WhetherEnum.class),
+        @ApiImplicitParam(id = "teacherEnable", name = "teacherEnable", value = "是否开启导师选择", enumClass = WhetherEnum.class)
+    })
+    @RequestMapping("/post/ActivityController/updateActivityFeatureEnable")
+    public void updateActivityFeatureEnable(InputObject inputObject, OutputObject outputObject) {
+        chooseActivityService.updateActivityFeatureEnable(inputObject, outputObject);
     }
 }

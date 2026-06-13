@@ -44,4 +44,10 @@ public interface ChooseTopicService extends SkyeyeBusinessService<ChooseTopic> {
     Map<String, Integer> getChooseTopicCountByActivityId(String activityId, List<String> userIds);
 
     void queryTeacherTopicNum(InputObject inputObject, OutputObject outputObject);
+
+    void chooseActivityTeacher(InputObject inputObject, OutputObject outputObject);
+
+    void cancelActivityTeacher(InputObject inputObject, OutputObject outputObject);
+
+    void queryStudentChooseByActivity(InputObject inputObject, OutputObject outputObject);
 }

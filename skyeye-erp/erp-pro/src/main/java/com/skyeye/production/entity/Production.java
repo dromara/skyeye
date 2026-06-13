@@ -14,6 +14,8 @@ import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.constans.CacheConstants;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeFlowable;
+import com.skyeye.production.classenum.ProductionMachinOrderState;
+import com.skyeye.production.classenum.ProductionOutState;
 import lombok.Data;
 
 import java.util.List;
@@ -59,11 +61,11 @@ public class Production extends SkyeyeFlowable {
     private String remark;
 
     @TableField("out_state")
-    @Property(value = "委外状态，参考#ProductionOutState")
+    @Property(value = "委外状态", enumClass = ProductionOutState.class)
     private Integer outState;
 
     @TableField("machin_order_state")
-    @Property(value = "加工单的下达状态，参考#ProductionMachinOrderState")
+    @Property(value = "加工单的下达状态", enumClass = ProductionMachinOrderState.class)
     private Integer machinOrderState;
 
     @TableField(exist = false)

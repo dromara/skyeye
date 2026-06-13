@@ -6,13 +6,13 @@ package com.skyeye.activity.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.skyeye.activity.classenum.ActivityType;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.chtopic.entity.ChooseTopic;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
+import com.skyeye.common.enumeration.WhetherEnum;
 import lombok.Data;
 
 import java.util.List;
@@ -39,7 +39,19 @@ public class ChooseActivity extends BaseGeneralInfo {
     @ApiModelProperty(value = "结束时间", required = "required")
     private String endTime;
 
+    @TableField("topic_enable")
+    @ApiModelProperty(value = "是否开启选题", enumClass = WhetherEnum.class)
+    private Integer topicEnable;
+
+    @TableField("teacher_enable")
+    @ApiModelProperty(value = "是否开启导师选择", enumClass = WhetherEnum.class)
+    private Integer teacherEnable;
+
     @TableField(exist = false)
     @ApiModelProperty(value = "课题列表")
     private List<ChooseTopic> chooseTopicList;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "当前用户是否为活动参选人员")
+    private Boolean inActivity;
 }

@@ -22,5 +22,20 @@ public interface ChooseActivityService extends SkyeyeBusinessService<ChooseActiv
     boolean checkActivityIsRun(ChooseActivity activity);
 
     boolean checkActivityIsStart(ChooseActivity activity);
+
+    boolean isTopicSelectionEnabled(ChooseActivity activity);
+
+    boolean isTeacherSelectionEnabled(ChooseActivity activity);
+
+    void checkTopicSelectionEnabled(ChooseActivity activity);
+
+    void checkTeacherSelectionEnabled(ChooseActivity activity);
+
     void queryActivityList(InputObject inputObject, OutputObject outputObject);
+
+    void updateActivityFeatureEnable(InputObject inputObject, OutputObject outputObject);
+
+    boolean isActivityParticipant(String activityId, String userId);
+
+    void checkActivityParticipant(String activityId, String userId);
 }

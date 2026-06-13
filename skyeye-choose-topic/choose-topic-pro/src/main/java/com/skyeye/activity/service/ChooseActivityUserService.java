@@ -27,4 +27,6 @@ public interface ChooseActivityUserService extends SkyeyeBusinessService<ChooseA
     void queryTeacherActivityUserList(InputObject inputObject, OutputObject outputObject);
 
     void deleteActivityUserByUserId(InputObject inputObject, OutputObject outputObject);
+
+    boolean isActivityParticipant(String activityId, String userId);
 }

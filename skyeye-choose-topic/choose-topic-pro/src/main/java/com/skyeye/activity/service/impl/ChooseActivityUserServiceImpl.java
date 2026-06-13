@@ -10,17 +10,21 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.yulichang.toolkit.JoinWrappers;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.skyeye.activity.dao.ChooseActivityUserDao;
 import com.skyeye.activity.entity.BatchChooseActivityUserBox;
 import com.skyeye.activity.entity.ChooseActivityUser;
 import com.skyeye.activity.service.ChooseActivityUserService;
 import com.skyeye.annotation.service.SkyeyeService;
+import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.chtopic.service.ChooseTopicService;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.user.dao.ChooseUserDao;
@@ -105,24 +109,31 @@ public class ChooseActivityUserServiceImpl extends SkyeyeBusinessServiceImpl<Cho
     }
 
     @Override
+    @IgnoreTenant
     public void queryActivityUserList(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
         Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
 
-        MPJLambdaWrapper<ChooseUser> mpjLambdaWrapper = new MPJLambdaWrapper<>();
-        mpjLambdaWrapper.innerJoin(ChooseActivityUser.class, ChooseActivityUser::getUserId, ChooseUser::getId);
-        mpjLambdaWrapper.eq(ChooseActivityUser::getActivityId, commonPageInfo.getObjectId());
-        mpjLambdaWrapper.eq(ChooseUser::getType, commonPageInfo.getType());
+        MPJLambdaWrapper<ChooseUser> mpjLambdaWrapper = JoinWrappers.lambda("b", ChooseUser.class);
+        mpjLambdaWrapper.innerJoin(ChooseActivityUser.class, "a", ChooseActivityUser::getUserId, ChooseUser::getId);
+        mpjLambdaWrapper.eq("a." + MybatisPlusUtil.toColumns(ChooseActivityUser::getActivityId), commonPageInfo.getObjectId());
+        mpjLambdaWrapper.eq("b." + MybatisPlusUtil.toColumns(ChooseUser::getType), commonPageInfo.getType());
 
         if (StrUtil.isNotEmpty(commonPageInfo.getKeyword())) {
             mpjLambdaWrapper.and(wra -> {
-                wra.or().like(MybatisPlusUtil.toColumns(ChooseUser::getStuNo), commonPageInfo.getKeyword());
-                wra.or().like(MybatisPlusUtil.toColumns(ChooseUser::getName), commonPageInfo.getKeyword());
+                wra.or().like("b." + MybatisPlusUtil.toColumns(ChooseUser::getStuNo), commonPageInfo.getKeyword());
+                wra.or().like("b." + MybatisPlusUtil.toColumns(ChooseUser::getName), commonPageInfo.getKeyword());
             });
         }
 
         if (StrUtil.isNotEmpty(commonPageInfo.getState())) {
-            mpjLambdaWrapper.eq(ChooseUser::getActivityType, commonPageInfo.getState());
+            mpjLambdaWrapper.eq("b." + MybatisPlusUtil.toColumns(ChooseUser::getActivityType), commonPageInfo.getState());
+        }
+
+        if (tenantEnable) {
+            String tenantId = TenantContext.getTenantId();
+            mpjLambdaWrapper.eq("a." + CommonConstants.TENANT_ID_FIELD, tenantId);
+            mpjLambdaWrapper.eq("b." + CommonConstants.TENANT_ID_FIELD, tenantId);
         }
 
         List<ChooseUser> chooseUserList = chooseUserDao.selectJoinList(ChooseUser.class, mpjLambdaWrapper);
@@ -139,13 +150,21 @@ public class ChooseActivityUserServiceImpl extends SkyeyeBusinessServiceImpl<Cho
     }
 
     @Override
+    @IgnoreTenant
     public void queryTeacherActivityUserList(InputObject inputObject, OutputObject outputObject) {
         String activityId = inputObject.getParams().get("activityId").toString();
 
-        MPJLambdaWrapper<ChooseUser> mpjLambdaWrapper = new MPJLambdaWrapper<>();
-        mpjLambdaWrapper.innerJoin(ChooseActivityUser.class, ChooseActivityUser::getUserId, ChooseUser::getId);
-        mpjLambdaWrapper.eq(ChooseActivityUser::getActivityId, activityId);
-        mpjLambdaWrapper.eq(ChooseUser::getType, ChooseUserType.TEACHER.getKey());
+        MPJLambdaWrapper<ChooseUser> mpjLambdaWrapper = JoinWrappers.lambda("b", ChooseUser.class);
+        mpjLambdaWrapper.innerJoin(ChooseActivityUser.class, "a", ChooseActivityUser::getUserId, ChooseUser::getId);
+        mpjLambdaWrapper.eq("a." + MybatisPlusUtil.toColumns(ChooseActivityUser::getActivityId), activityId);
+        mpjLambdaWrapper.eq("b." + MybatisPlusUtil.toColumns(ChooseUser::getType), ChooseUserType.TEACHER.getKey());
+
+        if (tenantEnable) {
+            String tenantId = TenantContext.getTenantId();
+            mpjLambdaWrapper.eq("a." + CommonConstants.TENANT_ID_FIELD, tenantId);
+            mpjLambdaWrapper.eq("b." + CommonConstants.TENANT_ID_FIELD, tenantId);
+        }
+
         List<ChooseUser> chooseUserList = chooseUserDao.selectJoinList(ChooseUser.class, mpjLambdaWrapper);
         outputObject.setBeans(chooseUserList);
         outputObject.settotal(chooseUserList.size());
@@ -163,5 +182,21 @@ public class ChooseActivityUserServiceImpl extends SkyeyeBusinessServiceImpl<Cho
             return;
         }
         deleteById(chooseActivityUser.getId());
+    }
+
+    @Override
+    @IgnoreTenant
+    public boolean isActivityParticipant(String activityId, String userId) {
+        if (StrUtil.isEmpty(activityId) || StrUtil.isEmpty(userId)) {
+            return false;
+        }
+        QueryWrapper<ChooseActivityUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ChooseActivityUser::getActivityId), activityId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ChooseActivityUser::getUserId), userId);
+        if (tenantEnable) {
+            String tenantId = TenantContext.getTenantId();
+            queryWrapper.eq(CommonConstants.TENANT_ID_FIELD, tenantId);
+        }
+        return count(queryWrapper) > 0;
     }
 }

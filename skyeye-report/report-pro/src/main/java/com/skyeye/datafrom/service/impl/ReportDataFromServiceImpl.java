@@ -29,6 +29,7 @@ import com.skyeye.eve.entity.ReportMetaDataRow;
 import com.skyeye.exception.CustomException;
 import com.skyeye.sql.query.factory.QueryerFactory;
 import com.skyeye.util.XmlExercise;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,6 +54,7 @@ import java.util.stream.Collectors;
  * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye-report Inc. All rights reserved.
  * 注意：本内容具体规则请参照readme执行，地址：https://gitee.com/doc_wei01/skyeye-report/blob/master/README.md
  */
+@Slf4j
 @Service
 @SkyeyeService(name = "数据来源", groupName = "数据来源")
 public class ReportDataFromServiceImpl extends SkyeyeBusinessServiceImpl<ReportDataFromDao, ReportDataFrom> implements ReportDataFromService {
@@ -229,7 +231,14 @@ public class ReportDataFromServiceImpl extends SkyeyeBusinessServiceImpl<ReportD
                 // 解析请求地址：相对路径时从配置中心获取 baseUrl 并拼接
                 String fullUrl = resolveRestUrl(restEntity);
 
+                log.info("报表REST数据源请求 - fromId: {}, name: {}, serviceStr: {}, restUrl: {}, fullUrl: {}, method: {}, headers: {}, requestBody: {}",
+                    fromId, reportDataFrom.getName(), restEntity.getServiceStr(), restEntity.getRestUrl(), fullUrl,
+                    restEntity.getMethod(), requestHeaderKey2Value, mergedRequestBody);
+
                 String responseData = HttpRequestUtil.getDataByRequest(fullUrl, restEntity.getMethod(), requestHeaderKey2Value, mergedRequestBody);
+
+                log.info("报表REST数据源响应 - fromId: {}, fullUrl: {}, response: {}", fromId, fullUrl, responseData);
+
                 // 如果返回的是标准接口格式，则优先校验 returnCode
                 Map<String, Object> responseMap = JSONUtil.toBean(responseData, Map.class);
                 if (responseMap != null && responseMap.containsKey("returnCode")) {
@@ -242,6 +251,10 @@ public class ReportDataFromServiceImpl extends SkyeyeBusinessServiceImpl<ReportD
                     }
                     if (returnCode != 0) {
                         String message = String.valueOf(responseMap.getOrDefault("returnMessage", "外部服务调用异常"));
+                        log.error("报表REST数据源调用失败 - fromId: {}, name: {}, serviceStr: {}, restUrl: {}, fullUrl: {}, method: {}, headers: {}, requestBody: {}, returnCode: {}, returnMessage: {}, response: {}",
+                            fromId, reportDataFrom.getName(), restEntity.getServiceStr(), restEntity.getRestUrl(), fullUrl,
+                            restEntity.getMethod(), requestHeaderKey2Value, mergedRequestBody,
+                            returnCode, message, responseData);
                         throw new CustomException("外部服务调用异常：" + message);
                     }
                 }

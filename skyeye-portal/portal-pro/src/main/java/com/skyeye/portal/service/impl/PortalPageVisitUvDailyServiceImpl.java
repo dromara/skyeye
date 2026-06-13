@@ -16,7 +16,6 @@ import com.skyeye.portal.entity.PortalPageVisitUvDaily;
 import com.skyeye.portal.service.PortalPageVisitUvDailyService;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,9 +48,25 @@ public class PortalPageVisitUvDailyServiceImpl extends SkyeyeBusinessServiceImpl
     public long countUvByStatDate(String statDate) {
         String statDateColumn = MybatisPlusUtil.toColumns(PortalPageVisitUvDaily::getStatDate);
         QueryWrapper<PortalPageVisitUvDaily> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("count(1) as todayUv").eq(statDateColumn, statDate);
-        Map<String, Object> row = baseMapper.selectMaps(queryWrapper).stream().findFirst().orElse(new LinkedHashMap<>());
-        return NumberParseUtil.parseLong(row.get("todayUv"));
+        queryWrapper.select("ifnull(count(1), 0) as todayUv").eq(statDateColumn, statDate);
+        List<Map<String, Object>> rows = baseMapper.selectMaps(queryWrapper);
+        if (rows == null || rows.isEmpty()) {
+            return 0L;
+        }
+        Map<String, Object> row = rows.get(0);
+        if (row == null || row.isEmpty()) {
+            return 0L;
+        }
+        Object val = row.get("todayUv");
+        if (val == null) {
+            for (Map.Entry<String, Object> entry : row.entrySet()) {
+                if (entry.getKey() != null && entry.getKey().equalsIgnoreCase("todayUv")) {
+                    val = entry.getValue();
+                    break;
+                }
+            }
+        }
+        return NumberParseUtil.parseLong(val);
     }
 
     @Override
