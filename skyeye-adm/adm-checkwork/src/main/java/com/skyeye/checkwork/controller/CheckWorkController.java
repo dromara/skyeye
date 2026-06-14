@@ -8,6 +8,7 @@ import com.skyeye.annotation.api.Api;
 import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
+import com.skyeye.checkwork.classenum.ClockSource;
 import com.skyeye.checkwork.service.CheckWorkService;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.CheckWorkShiftType;
@@ -40,7 +41,8 @@ public class CheckWorkController {
         @ApiImplicitParam(id = "longitude", name = "longitude", value = "经度"),
         @ApiImplicitParam(id = "latitude", name = "latitude", value = "纬度"),
         @ApiImplicitParam(id = "address", name = "address", value = "打卡的地址"),
-        @ApiImplicitParam(id = "shiftType", name = "shiftType", value = "班次类型", enumClass = CheckWorkShiftType.class, defaultValue = "fixed")})
+        @ApiImplicitParam(id = "shiftType", name = "shiftType", value = "班次类型", enumClass = CheckWorkShiftType.class, defaultValue = "fixed"),
+        @ApiImplicitParam(id = "clockSource", name = "clockSource", value = "打卡来源", required = "required", enumClass = ClockSource.class)})
     @RequestMapping("/post/CheckWorkController/insertCheckWorkStartWork")
     public void insertCheckWorkStartWork(InputObject inputObject, OutputObject outputObject) {
         checkWorkService.insertCheckWorkStartWork(inputObject, outputObject);
@@ -52,7 +54,8 @@ public class CheckWorkController {
         @ApiImplicitParam(id = "longitude", name = "longitude", value = "经度"),
         @ApiImplicitParam(id = "latitude", name = "latitude", value = "纬度"),
         @ApiImplicitParam(id = "address", name = "address", value = "打卡的地址"),
-        @ApiImplicitParam(id = "shiftType", name = "shiftType", value = "班次类型", enumClass = CheckWorkShiftType.class, defaultValue = "fixed")})
+        @ApiImplicitParam(id = "shiftType", name = "shiftType", value = "班次类型", enumClass = CheckWorkShiftType.class, defaultValue = "fixed"),
+        @ApiImplicitParam(id = "clockSource", name = "clockSource", value = "打卡来源", required = "required", enumClass = ClockSource.class)})
     @RequestMapping("/post/CheckWorkController/editCheckWorkEndWork")
     public void editCheckWorkEndWork(InputObject inputObject, OutputObject outputObject) {
         checkWorkService.editCheckWorkEndWork(inputObject, outputObject);

@@ -13,6 +13,7 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.checkwork.classenum.ClockInTime;
 import com.skyeye.checkwork.classenum.ClockOutTime;
+import com.skyeye.checkwork.classenum.ClockSource;
 import com.skyeye.checkwork.classenum.ClockState;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.CommonInfo;
@@ -105,6 +106,10 @@ public class CheckWork extends CommonInfo {
     @ApiModelProperty(value = "上班打卡的地址")
     private String clockInAddress;
 
+    @TableField(value = "clock_in_source")
+    @ApiModelProperty(value = "上班打卡来源", enumClass = ClockSource.class)
+    private String clockInSource;
+
     @TableField(value = "clock_out_longitude")
     @ApiModelProperty(value = "下班打卡的经度")
     private String clockOutLongitude;
@@ -116,5 +121,9 @@ public class CheckWork extends CommonInfo {
     @TableField(value = "clock_out_address")
     @ApiModelProperty(value = "下班打卡的地址")
     private String clockOutAddress;
+
+    @TableField(value = "clock_out_source")
+    @ApiModelProperty(value = "下班打卡来源", enumClass = ClockSource.class)
+    private String clockOutSource;
 
 }

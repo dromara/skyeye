@@ -15,10 +15,7 @@ import com.google.common.base.Joiner;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
-import com.skyeye.checkwork.classenum.CheckTypeFrom;
-import com.skyeye.checkwork.classenum.ClockInTime;
-import com.skyeye.checkwork.classenum.ClockOutTime;
-import com.skyeye.checkwork.classenum.ClockState;
+import com.skyeye.checkwork.classenum.*;
 import com.skyeye.checkwork.dao.CheckWorkDao;
 import com.skyeye.checkwork.entity.CheckWork;
 import com.skyeye.checkwork.service.CheckWorkService;
@@ -130,6 +127,7 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         String todayYMD = DateUtil.getYmdTimeAndToString();
         // 1.获取当前用户的考勤班次信息
         Map<String, Object> workTime = getWorkTime(userId, todayYMD, timeId, staffId, shiftType);
+        validateClockPermission(workTime, map, shiftType);
         // 2.获取今天的打卡记录
         String checkInTime = DateUtil.getHmsTimeAndToString();
         String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
@@ -154,9 +152,12 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
             String longitude = map.get("longitude").toString();
             String latitude = map.get("latitude").toString();
             String address = map.get("address").toString();
+            String clockSource = map.get("clockSource").toString();
+
             checkWork.setClockInLongitude(longitude);
             checkWork.setClockInLatitude(latitude);
             checkWork.setClockInAddress(address);
+            checkWork.setClockInSource(clockSource);
 
             createEntity(checkWork, userId);
         } else if (ObjectUtil.isNotEmpty(todayCheckWork) && ToolUtil.isBlank(todayCheckWork.getClockOut())) {
@@ -191,6 +192,8 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
             bean.put("clockIn", checkWorkTime.getStartTime() + ":00");
             bean.put("clockOut", checkWorkTime.getEndTime() + ":00");
             bean.put("checkWorkTimeWeekList", checkWorkTime.getCheckWorkTimeWeekList());
+            bean.put("onlineClockEnabled", ObjectUtil.defaultIfNull(checkWorkTime.getOnlineClockEnabled(), EnableEnum.ENABLE_USING.getKey()));
+            bean.put("webClockEnabled", ObjectUtil.defaultIfNull(checkWorkTime.getWebClockEnabled(), EnableEnum.ENABLE_USING.getKey()));
             return bean;
         } else {
             SchedulingTime schedulingTime = schedulingTimeService.selectById(timeId);
@@ -205,6 +208,34 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
             // 是否是排班班次
             bean.put("isSchedulingWorkDay", true);
             return bean;
+        }
+    }
+
+    /**
+     * 校验打卡端权限（固定班次）
+     *
+     * @param workTime  班次信息
+     * @param map       入参
+     * @param shiftType 班次类型
+     */
+    private void validateClockPermission(Map<String, Object> workTime, Map<String, Object> map, String shiftType) {
+        if (!StrUtil.equals(shiftType, CheckWorkShiftType.FIXED.getKey())) {
+            return;
+        }
+        if (!workTime.containsKey("onlineClockEnabled") || !workTime.containsKey("webClockEnabled")) {
+            return;
+        }
+        ClockSource clockSource = ClockSource.getByKey(map.get("clockSource").toString());
+        if (ClockSource.ONLINE_SOURCE.equals(clockSource)) {
+            Integer onlineClockEnabled = Integer.parseInt(workTime.get("onlineClockEnabled").toString());
+            if (!EnableEnum.ENABLE_USING.getKey().equals(onlineClockEnabled)) {
+                throw new CustomException("该班次未开启线上打卡。");
+            }
+        } else {
+            Integer webClockEnabled = Integer.parseInt(workTime.get("webClockEnabled").toString());
+            if (!EnableEnum.ENABLE_USING.getKey().equals(webClockEnabled)) {
+                throw new CustomException("该班次未开启网站端打卡。");
+            }
         }
     }
 
@@ -226,6 +257,7 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         String todayYMD = DateUtil.getYmdTimeAndToString();
         // 1.获取当前用户的考勤班次信息
         Map<String, Object> workTime = getWorkTime(userId, todayYMD, timeId, staffId, shiftType);
+        validateClockPermission(workTime, map, shiftType);
         // 2.获取今天的打卡记录
         String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
         CheckWork todayCheckWork = checkWorkDao.queryisAlreadyCheck(DateUtil.getYmdTimeAndToString(), userId, timeId, tenantId);
@@ -237,6 +269,7 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         String longitude = map.get("longitude").toString();
         String latitude = map.get("latitude").toString();
         String address = map.get("address").toString();
+        String clockSource = map.get("clockSource").toString();
 
         if (ObjectUtil.isEmpty(todayCheckWork)) {
             // 早卡晚卡都没有打，可以打晚卡【缺早卡】【上班打卡状态-未打卡】
@@ -257,6 +290,7 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
             checkWork.setClockInLongitude(longitude);
             checkWork.setClockInLatitude(latitude);
             checkWork.setClockInAddress(address);
+            checkWork.setClockOutSource(clockSource);
             createEntity(checkWork, userId);
         } else if (!ToolUtil.isBlank(todayCheckWork.getClockIn())) {
             // 打过早卡，没有打晚卡
@@ -286,6 +320,7 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
             checkWork.setClockOutLongitude(longitude);
             checkWork.setClockOutLatitude(latitude);
             checkWork.setClockOutAddress(address);
+            checkWork.setClockOutSource(clockSource);
             updateEntity(checkWork, userId);
         } else {
             // 已经打过晚卡
@@ -421,6 +456,8 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         if (ObjectUtil.isNotEmpty(todayCheckWork)) {
             result.put("realClockIn", todayCheckWork.getClockIn());
             result.put("realClockOut", todayCheckWork.getClockOut());
+            result.put("clockInSource", todayCheckWork.getClockInSource());
+            result.put("clockOutSource", todayCheckWork.getClockOutSource());
         }
         return result;
     }

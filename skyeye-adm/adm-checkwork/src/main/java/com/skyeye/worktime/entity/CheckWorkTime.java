@@ -79,6 +79,14 @@ public class CheckWorkTime extends AreaInfo implements EnclosureFace {
     @ApiModelProperty(value = "启用状态", enumClass = EnableEnum.class, required = "required,num")
     private Integer enabled;
 
+    @TableField(value = "online_clock_enabled")
+    @ApiModelProperty(value = "是否开启线上打卡", enumClass = EnableEnum.class, required = "required,num")
+    private Integer onlineClockEnabled;
+
+    @TableField(value = "web_clock_enabled")
+    @ApiModelProperty(value = "是否开启网站端打卡", enumClass = EnableEnum.class, required = "required,num")
+    private Integer webClockEnabled;
+
     @TableField(exist = false)
     @ApiModelProperty(value = "考勤班次关联的时间段", required = "required,json")
     private List<CheckWorkTimeWeek> checkWorkTimeWeekList;

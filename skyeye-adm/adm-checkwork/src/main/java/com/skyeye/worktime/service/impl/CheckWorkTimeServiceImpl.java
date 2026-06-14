@@ -12,7 +12,6 @@ import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.client.ExecuteFeignClient;
 import com.skyeye.common.constans.CommonConstants;
-import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.DeleteFlagEnum;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.enumeration.WeekTypeEnum;
@@ -58,14 +57,6 @@ public class CheckWorkTimeServiceImpl extends SkyeyeBusinessServiceImpl<CheckWor
 
     @Autowired
     private ISysEveUserStaffTimeRest iSysEveUserStaffTimeRest;
-
-    @Override
-    public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
-        CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
-        pageInfo.setDeleteFlag(DeleteFlagEnum.NOT_DELETE.getKey());
-        List<Map<String, Object>> beans = skyeyeBaseMapper.queryCheckWorkTimeList(pageInfo);
-        return beans;
-    }
 
     @Override
     protected void writePostpose(CheckWorkTime entity, String userId) {

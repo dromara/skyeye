@@ -86,7 +86,9 @@
 		SELECT
 			a.id,
 			IFNULL(a.clock_in, '') clockIn,
-			IFNULL(a.clock_out, '') clockOut
+			IFNULL(a.clock_out, '') clockOut,
+            a.clock_in_source clockInSource,
+            a.clock_out_source clockOutSource
 		FROM
 			check_work a
 		WHERE 
@@ -124,9 +126,11 @@
 			a.clock_in_longitude clockInLongitude,
 			a.clock_in_latitude clockInLatitude,
 			a.clock_in_address clockInAddress,
+            a.clock_in_source clockInSource,
 			a.clock_out_longitude clockOutLongitude,
 			a.clock_out_latitude clockOutLatitude,
 			a.clock_out_address clockOutAddress,
+            a.clock_out_source clockOutSource,
 			a.clock_out_state clockOutState,
 			a.clock_in_state clockInState,
 			a.work_hours workHours,
@@ -357,6 +361,8 @@
             a.clock_out_state clockOutState,
             a.clock_in_state clockInState,
             a.work_hours workHours,
+            a.clock_in_source clockInSource,
+            a.clock_out_source clockOutSource,
             IFNULL(c.state, '') appealState,
 			a.create_id createId
         FROM
