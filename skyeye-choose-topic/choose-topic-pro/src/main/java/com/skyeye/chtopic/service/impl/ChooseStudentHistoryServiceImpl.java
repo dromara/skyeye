@@ -40,6 +40,12 @@ public class ChooseStudentHistoryServiceImpl extends SkyeyeBusinessServiceImpl<C
     @Override
     public void saveStudentHistory(String activityId, String studentId, StudentChooseActionType actionType,
                                    ChooseTopic chooseTopic, String teacherId, String remark, String operatorId) {
+        saveStudentHistory(activityId, studentId, actionType, chooseTopic, teacherId, null, remark, operatorId);
+    }
+
+    @Override
+    public void saveStudentHistory(String activityId, String studentId, StudentChooseActionType actionType,
+                                   ChooseTopic chooseTopic, String teacherId, String teacherName, String remark, String operatorId) {
         if (StrUtil.isEmpty(activityId) || StrUtil.isEmpty(studentId) || actionType == null) {
             return;
         }
@@ -53,9 +59,13 @@ public class ChooseStudentHistoryServiceImpl extends SkyeyeBusinessServiceImpl<C
         }
         if (StrUtil.isNotEmpty(teacherId)) {
             history.setTeacherId(teacherId);
-            ChooseUser teacher = chooseUserService.selectById(teacherId);
-            if (ObjectUtil.isNotEmpty(teacher)) {
-                history.setTeacherName(teacher.getName());
+            if (StrUtil.isNotEmpty(teacherName)) {
+                history.setTeacherName(teacherName);
+            } else {
+                ChooseUser teacher = chooseUserService.selectById(teacherId);
+                if (ObjectUtil.isNotEmpty(teacher)) {
+                    history.setTeacherName(teacher.getName());
+                }
             }
         }
         history.setRemark(remark);

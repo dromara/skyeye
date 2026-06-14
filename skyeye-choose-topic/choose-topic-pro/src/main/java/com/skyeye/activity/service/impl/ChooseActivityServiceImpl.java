@@ -8,6 +8,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.yulichang.toolkit.JoinWrappers;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.skyeye.activity.dao.ChooseActivityDao;
 import com.skyeye.activity.entity.ChooseActivity;
@@ -15,12 +16,15 @@ import com.skyeye.activity.entity.ChooseActivityUser;
 import com.skyeye.activity.service.ChooseActivityService;
 import com.skyeye.activity.service.ChooseActivityUserService;
 import com.skyeye.annotation.service.SkyeyeService;
+import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.chtopic.service.ChooseTopicService;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
@@ -116,6 +120,7 @@ public class ChooseActivityServiceImpl extends SkyeyeBusinessServiceImpl<ChooseA
     }
 
     @Override
+    @IgnoreTenant
     public void queryActivityList(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
         Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
@@ -123,16 +128,23 @@ public class ChooseActivityServiceImpl extends SkyeyeBusinessServiceImpl<ChooseA
         String currentUserId = user.get("id").toString();
         Integer type = Integer.valueOf(user.get("type").toString());
 
-        MPJLambdaWrapper<ChooseActivity> mpjLambdaWrapper = new MPJLambdaWrapper<>();
+        MPJLambdaWrapper<ChooseActivity> mpjLambdaWrapper = JoinWrappers.lambda("a", ChooseActivity.class);
         if (type == ChooseUserType.STUDENT.getKey() || type == ChooseUserType.TEACHER.getKey()) {
             // 学生和教师只能查看自己参加的活动
-            mpjLambdaWrapper.innerJoin(ChooseActivityUser.class, ChooseActivityUser::getActivityId, ChooseActivity::getId);
-            mpjLambdaWrapper.eq(ChooseActivityUser::getUserId, currentUserId);
+            mpjLambdaWrapper.innerJoin(ChooseActivityUser.class, "b", ChooseActivityUser::getActivityId, ChooseActivity::getId);
+            mpjLambdaWrapper.eq("b." + MybatisPlusUtil.toColumns(ChooseActivityUser::getUserId), currentUserId);
         }
         if (StrUtil.isNotEmpty(commonPageInfo.getKeyword())) {
-            mpjLambdaWrapper.like(MybatisPlusUtil.toColumns(ChooseActivity::getName), commonPageInfo.getKeyword());
+            mpjLambdaWrapper.like("a." + MybatisPlusUtil.toColumns(ChooseActivity::getName), commonPageInfo.getKeyword());
         }
-        mpjLambdaWrapper.orderByDesc(MybatisPlusUtil.toColumns(ChooseActivity::getCreateTime));
+        if (tenantEnable) {
+            String tenantId = TenantContext.getTenantId();
+            mpjLambdaWrapper.eq("a." + CommonConstants.TENANT_ID_FIELD, tenantId);
+            if (type == ChooseUserType.STUDENT.getKey() || type == ChooseUserType.TEACHER.getKey()) {
+                mpjLambdaWrapper.eq("b." + CommonConstants.TENANT_ID_FIELD, tenantId);
+            }
+        }
+        mpjLambdaWrapper.orderByDesc("a." + MybatisPlusUtil.toColumns(ChooseActivity::getCreateTime));
         List<ChooseActivity> chooseActivityList = skyeyeBaseMapper.selectJoinList(ChooseActivity.class, mpjLambdaWrapper);
         outputObject.setBeans(chooseActivityList);
         outputObject.settotal(pages.getTotal());

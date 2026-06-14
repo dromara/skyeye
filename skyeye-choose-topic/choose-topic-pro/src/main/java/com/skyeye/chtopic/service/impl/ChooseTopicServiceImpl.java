@@ -33,6 +33,7 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.object.PutObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
+import com.skyeye.jedis.util.RedisLock;
 import com.skyeye.user.entity.ChooseUser;
 import com.skyeye.user.enumclass.ChooseUserType;
 import com.skyeye.user.service.ChooseUserService;
@@ -73,7 +74,12 @@ public class ChooseTopicServiceImpl extends SkyeyeBusinessServiceImpl<ChooseTopi
 
     private void logStudentHistory(String activityId, String studentId, StudentChooseActionType actionType,
                                    ChooseTopic topic, String teacherId, String remark, String operatorId) {
-        chooseStudentHistoryService.saveStudentHistory(activityId, studentId, actionType, topic, teacherId, remark, operatorId);
+        logStudentHistory(activityId, studentId, actionType, topic, teacherId, null, remark, operatorId);
+    }
+
+    private void logStudentHistory(String activityId, String studentId, StudentChooseActionType actionType,
+                                   ChooseTopic topic, String teacherId, String teacherName, String remark, String operatorId) {
+        chooseStudentHistoryService.saveStudentHistory(activityId, studentId, actionType, topic, teacherId, teacherName, remark, operatorId);
     }
 
     private void checkActivityParticipant(String activityId, String userId) {
@@ -183,26 +189,42 @@ public class ChooseTopicServiceImpl extends SkyeyeBusinessServiceImpl<ChooseTopi
     public void chooseTopicById(InputObject inputObject, OutputObject outputObject) {
         String userId = inputObject.getLogParams().get("id").toString();
         String id = inputObject.getParams().get("id").toString();
-        String teacherId = inputObject.getParams().get("teacherId").toString();
+        Object teacherIdParam = inputObject.getParams().get("teacherId");
+        String teacherId = teacherIdParam == null ? StrUtil.EMPTY : teacherIdParam.toString();
+
+        ChooseTopic preliminary = selectById(id);
+        if (ObjectUtil.isEmpty(preliminary)) {
+            throw new CustomException("该数据不存在");
+        }
+        if (StrUtil.isEmpty(preliminary.getActivityId())) {
+            throw new CustomException("该课题未关联活动,课题未发布");
+        }
+        String activityId = preliminary.getActivityId();
+        Runnable action = () -> chooseTopicByIdInternal(userId, id, teacherId, outputObject);
+        if (StrUtil.isNotEmpty(teacherId)) {
+            executeWithTopicLock(id, () -> executeWithStudentChooseLock(activityId, userId,
+                () -> executeWithTeacherChooseLock(activityId, teacherId, action)));
+        } else {
+            executeWithTopicLock(id, () -> executeWithStudentChooseLock(activityId, userId, action));
+        }
+    }
+
+    private void chooseTopicByIdInternal(String userId, String id, String teacherId, OutputObject outputObject) {
         ChooseTopic chooseTopic = selectById(id);
         if (ObjectUtil.isEmpty(chooseTopic)) {
             throw new CustomException("该数据不存在");
-        }
-        if (StrUtil.isEmpty(chooseTopic.getActivityId())) {
-            throw new CustomException("该课题未关联活动,课题未发布");
         }
         checkActivityParticipant(chooseTopic.getActivityId(), userId);
         String oldTeacherId = chooseTopic.getTeacherId();
         boolean chooseTopicAction = false;
         boolean chooseTeacherAction = false;
-        // 准备修改数据
+        ChooseUser chooseUserTeacher = null;
         UpdateWrapper<ChooseTopic> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, id);
         ChooseActivity chooseActivity = chooseActivityService.selectById(chooseTopic.getActivityId());
         boolean activityIsRun = chooseActivityService.checkActivityIsRun(chooseActivity);
         if (activityIsRun) {
             chooseActivityService.checkTopicSelectionEnabled(chooseActivity);
-            // 选题活动正在进行中，一定会进行选题操作
             if (chooseTopic.getChoose() == CommonNumConstants.NUM_TWO && !StrUtil.equals(chooseTopic.getChooseUserId(), userId)) {
                 throw new CustomException("该课题已被选择");
             }
@@ -214,38 +236,38 @@ public class ChooseTopicServiceImpl extends SkyeyeBusinessServiceImpl<ChooseTopi
             if (ObjectUtil.isNotEmpty(one)) {
                 throw new CustomException("您已选题，请勿重复选题");
             }
-            // 设置选题标志
-            updateWrapper.set(MybatisPlusUtil.toColumns(ChooseTopic::getChoose), CommonNumConstants.NUM_TWO);
-            updateWrapper.set(MybatisPlusUtil.toColumns(ChooseTopic::getChooseUserId), userId);
             chooseTopicAction = chooseTopic.getChoose() != CommonNumConstants.NUM_TWO
                 || !StrUtil.equals(chooseTopic.getChooseUserId(), userId);
+            if (chooseTopicAction) {
+                updateWrapper.set(MybatisPlusUtil.toColumns(ChooseTopic::getChoose), CommonNumConstants.NUM_TWO);
+                updateWrapper.set(MybatisPlusUtil.toColumns(ChooseTopic::getChooseUserId), userId);
+            }
         } else if (StrUtil.isEmpty(teacherId)) {
-            // 选题活动已结束/未开始,并且不是修改导师
             throw new CustomException("该活动未开始或已结束");
         }
         if (StrUtil.isNotEmpty(teacherId) && chooseActivityService.checkActivityIsStart(chooseActivity)) {
             chooseActivityService.checkTeacherSelectionEnabled(chooseActivity);
-            ChooseUser chooseUserTeacher = chooseUserService.selectById(teacherId);
-            // 选题活动只要开始了(活动结束也可以)，都可以修改导师
-            if (!checkTeacherId(teacherId)) {
-                throw new CustomException("导师不存在或该角色不是教师");
-            }
+            chooseUserTeacher = getTeacherUser(teacherId);
             if (Objects.equals(chooseUserTeacher.getActivityType(), ActivityType.UN_SINGLE.getKey())
                 && StrUtil.equals(chooseTopic.getTeacherId(), teacherId)
                 && chooseTopic.getTeacherResult() == TeacherResultState.AGREE.getKey()) {
                 throw new CustomException("双选类型选题活动，导师同意后不可选择导师");
             }
-            if (checkTeacherOverLimit(teacherId, chooseTopic.getActivityId())) {
-                throw new CustomException("已超过该导师的最大选择次数，请选择其他导师");
+            Integer teacherResult = resolveTeacherResult(chooseUserTeacher);
+            if (!(StrUtil.equals(chooseTopic.getTeacherId(), teacherId)
+                && Objects.equals(chooseTopic.getTeacherResult(), teacherResult))) {
+                if (checkTeacherOverLimit(teacherId, chooseTopic.getActivityId(), chooseUserTeacher)) {
+                    throw new CustomException("已超过该导师的最大选择次数，请选择其他导师");
+                }
+                updateWrapper.set(MybatisPlusUtil.toColumns(ChooseTopic::getTeacherId), teacherId);
+                updateWrapper.set(MybatisPlusUtil.toColumns(ChooseTopic::getTeacherResult), teacherResult);
+                chooseTeacherAction = true;
             }
-            updateWrapper.set(MybatisPlusUtil.toColumns(ChooseTopic::getTeacherId), teacherId);
-            // 设置导师审核状态，如果活动为单选类型，则导师直接同意，否则待导师审核
-            updateWrapper.set(MybatisPlusUtil.toColumns(ChooseTopic::getTeacherResult),
-                Objects.equals(chooseUserTeacher.getActivityType(), ActivityType.SINGLE.getKey()) ? TeacherResultState.AGREE.getKey() : TeacherResultState.WAITE.getKey());
-            chooseTeacherAction = true;
         }
-        update(updateWrapper);
-        refreshCache(id);
+        if (chooseTopicAction || chooseTeacherAction) {
+            update(updateWrapper);
+            refreshCache(id);
+        }
         if (chooseTopicAction) {
             logStudentHistory(chooseTopic.getActivityId(), userId, StudentChooseActionType.CHOOSE_TOPIC,
                 chooseTopic, null, null, userId);
@@ -254,8 +276,10 @@ public class ChooseTopicServiceImpl extends SkyeyeBusinessServiceImpl<ChooseTopi
             StudentChooseActionType actionType = StrUtil.isNotEmpty(oldTeacherId)
                 && !StrUtil.equals(oldTeacherId, teacherId) ? StudentChooseActionType.CHANGE_TEACHER
                 : StudentChooseActionType.CHOOSE_TEACHER;
-            logStudentHistory(chooseTopic.getActivityId(), userId, actionType, chooseTopic, teacherId, null, userId);
+            logStudentHistory(chooseTopic.getActivityId(), userId, actionType, chooseTopic, teacherId,
+                chooseUserTeacher.getName(), null, userId);
         }
+        outputObject.setBean(selectById(id));
     }
 
     /**
@@ -266,14 +290,19 @@ public class ChooseTopicServiceImpl extends SkyeyeBusinessServiceImpl<ChooseTopi
      * @return ture:大于等于8次  false:小于8次
      */
     private boolean checkTeacherOverLimit(String teacherId, String activityId) {
+        ChooseUser chooseUser = chooseUserService.selectById(teacherId);
+        return checkTeacherOverLimit(teacherId, activityId, chooseUser);
+    }
+
+    private boolean checkTeacherOverLimit(String teacherId, String activityId, ChooseUser chooseUser) {
         QueryWrapper<ChooseTopic> queryWrapper = new QueryWrapper<>();
         queryWrapper.select(CommonConstants.ID)
             .eq(MybatisPlusUtil.toColumns(ChooseTopic::getTeacherId), teacherId)
             .eq(MybatisPlusUtil.toColumns(ChooseTopic::getActivityId), activityId)
             .eq(MybatisPlusUtil.toColumns(ChooseTopic::getTeacherResult), TeacherResultState.AGREE.getKey());
         long count = count(queryWrapper);
-        ChooseUser chooseUser = chooseUserService.selectById(teacherId);
-        int maxCount = chooseUser.getGuideCapacity() == null ? CommonNumConstants.NUM_EIGHT : chooseUser.getGuideCapacity();
+        int maxCount = chooseUser == null || chooseUser.getGuideCapacity() == null
+            ? CommonNumConstants.NUM_EIGHT : chooseUser.getGuideCapacity();
         return count >= maxCount;
     }
 
@@ -477,29 +506,46 @@ public class ChooseTopicServiceImpl extends SkyeyeBusinessServiceImpl<ChooseTopi
     @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
     public void cancelTeacherResult(InputObject inputObject, OutputObject outputObject) {
         String currentUserId = inputObject.getLogParams().get("id").toString();
-        ChooseTopic chooseTopic = selectById(inputObject.getParams().get("id").toString());
-        if (ObjectUtil.isEmpty(chooseTopic)) {
+        String topicId = inputObject.getParams().get("id").toString();
+        ChooseTopic preliminary = selectById(topicId);
+        if (ObjectUtil.isEmpty(preliminary)) {
             throw new CustomException("该课题不存在");
         }
-        ChooseActivity chooseActivity = chooseActivityService.selectById(chooseTopic.getActivityId());
-        chooseActivityService.checkTeacherSelectionEnabled(chooseActivity);
-        checkActivityParticipant(chooseTopic.getActivityId(), currentUserId);
-        if (StrUtil.isEmpty(chooseTopic.getChooseUserId())) {
-            throw new CustomException("该课题未关联学生，不可取消");
+        if (StrUtil.isEmpty(preliminary.getActivityId())) {
+            throw new CustomException("该课题未关联活动，不可取消");
         }
-        if (!StrUtil.equals(currentUserId, chooseTopic.getChooseUserId())) {
-            throw new CustomException("该课题信息你不是选择的学生，不可取消");
-        }
-        ChooseUser chooseUserTeacher = chooseUserService.selectById(chooseTopic.getTeacherId());
-        if (chooseUserTeacher.getActivityType() == ActivityType.UN_SINGLE.getKey() && chooseTopic.getTeacherResult() == TeacherResultState.AGREE.getKey()) {
-            throw new CustomException("双选类型选题活动，导师同意后不可取消选择导师");
-        }
-        String oldTeacherId = chooseTopic.getTeacherId();
-        chooseTopic.setTeacherId(StrUtil.EMPTY);
-        chooseTopic.setTeacherResult(null);
-        super.updateEntity(chooseTopic, currentUserId);
-        logStudentHistory(chooseTopic.getActivityId(), currentUserId, StudentChooseActionType.CANCEL_TEACHER,
-            chooseTopic, oldTeacherId, null, currentUserId);
+
+        executeWithStudentChooseLock(preliminary.getActivityId(), currentUserId, () -> {
+            ChooseTopic chooseTopic = selectById(topicId);
+            if (ObjectUtil.isEmpty(chooseTopic)) {
+                throw new CustomException("该课题不存在");
+            }
+            ChooseActivity chooseActivity = chooseActivityService.selectById(chooseTopic.getActivityId());
+            chooseActivityService.checkTeacherSelectionEnabled(chooseActivity);
+            checkActivityParticipant(chooseTopic.getActivityId(), currentUserId);
+            if (StrUtil.isEmpty(chooseTopic.getChooseUserId())) {
+                throw new CustomException("该课题未关联学生，不可取消");
+            }
+            if (!StrUtil.equals(currentUserId, chooseTopic.getChooseUserId())) {
+                throw new CustomException("该课题信息你不是选择的学生，不可取消");
+            }
+            if (StrUtil.isEmpty(chooseTopic.getTeacherId())) {
+                outputObject.setBean(chooseTopic);
+                return;
+            }
+
+            ChooseUser chooseUserTeacher = chooseUserService.selectById(chooseTopic.getTeacherId());
+            assertCanCancelTeacher(chooseTopic, chooseUserTeacher);
+            String oldTeacherId = chooseTopic.getTeacherId();
+            String teacherName = ObjectUtil.isNotEmpty(chooseUserTeacher) ? chooseUserTeacher.getName() : null;
+            chooseTopic.setTeacherId(StrUtil.EMPTY);
+            chooseTopic.setTeacherResult(null);
+            super.updateEntity(chooseTopic, currentUserId);
+            refreshCache(chooseTopic.getId());
+            logStudentHistory(chooseTopic.getActivityId(), currentUserId, StudentChooseActionType.CANCEL_TEACHER,
+                chooseTopic, oldTeacherId, teacherName, null, currentUserId);
+            outputObject.setBean(selectById(topicId));
+        });
     }
 
     @Override
@@ -507,44 +553,168 @@ public class ChooseTopicServiceImpl extends SkyeyeBusinessServiceImpl<ChooseTopi
     public void chooseTeacher(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String currentUserId = inputObject.getLogParams().get("id").toString();
-        ChooseTopic chooseTopic = selectById(params.get("id").toString());
+        String topicId = params.get("id").toString();
         String teacherId = params.get("teacherId").toString();
-        if (ObjectUtil.isEmpty(chooseTopic)) {
+
+        ChooseTopic preliminary = selectById(topicId);
+        if (ObjectUtil.isEmpty(preliminary)) {
             throw new CustomException("该课题不存在");
         }
-        if (StrUtil.isEmpty(chooseTopic.getActivityId())) {
+        if (StrUtil.isEmpty(preliminary.getActivityId())) {
             throw new CustomException("该课题未关联活动，不可选择导师");
         }
-        checkActivityParticipant(chooseTopic.getActivityId(), currentUserId);
-        ChooseActivity chooseActivity = chooseActivityService.selectById(chooseTopic.getActivityId());
-        chooseActivityService.checkTeacherSelectionEnabled(chooseActivity);
-        if (!chooseActivityService.checkActivityIsStart(chooseActivity)) {
-            throw new CustomException("该活动未开始，不可选择导师");
-        }
-        if (StrUtil.isEmpty(chooseTopic.getChooseUserId())) {
-            throw new CustomException("该课题未关联学生，不可选择导师");
-        }
-        if (!StrUtil.equals(currentUserId, chooseTopic.getChooseUserId())) {
-            throw new CustomException("你未选择该课题，不可选择导师");
-        }
-        ChooseUser chooseUserTeacher = chooseUserService.selectById(teacherId);
-        if (Objects.equals(chooseUserTeacher.getActivityType(), ActivityType.UN_SINGLE.getKey()) && chooseTopic.getTeacherResult() == TeacherResultState.AGREE.getKey()) {
-            throw new CustomException("双选类型选题活动，导师同意后不可选择导师");
-        }
-        if (!checkTeacherId(params.get("teacherId").toString())) {
+
+        executeWithTopicLock(topicId, () -> executeWithStudentChooseLock(preliminary.getActivityId(), currentUserId,
+            () -> executeWithTeacherChooseLock(preliminary.getActivityId(), teacherId, () -> {
+                ChooseTopic chooseTopic = selectById(topicId);
+                if (ObjectUtil.isEmpty(chooseTopic)) {
+                    throw new CustomException("该课题不存在");
+                }
+                checkActivityParticipant(chooseTopic.getActivityId(), currentUserId);
+                ChooseActivity chooseActivity = chooseActivityService.selectById(chooseTopic.getActivityId());
+                chooseActivityService.checkTeacherSelectionEnabled(chooseActivity);
+                if (!chooseActivityService.checkActivityIsStart(chooseActivity)) {
+                    throw new CustomException("该活动未开始，不可选择导师");
+                }
+                if (StrUtil.isEmpty(chooseTopic.getChooseUserId())) {
+                    throw new CustomException("该课题未关联学生，不可选择导师");
+                }
+                if (!StrUtil.equals(currentUserId, chooseTopic.getChooseUserId())) {
+                    throw new CustomException("你未选择该课题，不可选择导师");
+                }
+
+                ChooseUser chooseUserTeacher = getTeacherUser(teacherId);
+                if (Objects.equals(chooseUserTeacher.getActivityType(), ActivityType.UN_SINGLE.getKey())
+                    && StrUtil.equals(chooseTopic.getTeacherId(), teacherId)
+                    && chooseTopic.getTeacherResult() == TeacherResultState.AGREE.getKey()) {
+                    throw new CustomException("双选类型选题活动，导师同意后不可选择导师");
+                }
+                Integer teacherResult = resolveTeacherResult(chooseUserTeacher);
+                if (StrUtil.equals(chooseTopic.getTeacherId(), teacherId)
+                    && Objects.equals(chooseTopic.getTeacherResult(), teacherResult)) {
+                    outputObject.setBean(chooseTopic);
+                    return;
+                }
+                if (checkTeacherOverLimit(teacherId, chooseActivity.getId(), chooseUserTeacher)) {
+                    throw new CustomException("超出导师选择数量限制，请选择其他导师");
+                }
+
+                String oldTeacherId = chooseTopic.getTeacherId();
+                chooseTopic.setTeacherId(teacherId);
+                chooseTopic.setTeacherResult(teacherResult);
+                super.updateEntity(chooseTopic, currentUserId);
+                refreshCache(chooseTopic.getId());
+                StudentChooseActionType actionType = StrUtil.isNotEmpty(oldTeacherId)
+                    && !StrUtil.equals(oldTeacherId, teacherId) ? StudentChooseActionType.CHANGE_TEACHER
+                    : StudentChooseActionType.CHOOSE_TEACHER;
+                logStudentHistory(chooseTopic.getActivityId(), currentUserId, actionType, chooseTopic, teacherId,
+                    chooseUserTeacher.getName(), null, currentUserId);
+                outputObject.setBean(selectById(topicId));
+            })));
+    }
+
+    private ChooseUser getTeacherUser(String teacherId) {
+        if (StrUtil.isEmpty(teacherId)) {
             throw new CustomException("导师不存在或该角色不是教师");
         }
-        if (checkTeacherOverLimit(teacherId, chooseActivity.getId())) {
-            throw new CustomException("超出导师选择数量限制，请选择其他导师");
+        ChooseUser chooseUser = chooseUserService.selectById(teacherId);
+        if (ObjectUtil.isEmpty(chooseUser) || !Objects.equals(chooseUser.getType(), ChooseUserType.TEACHER.getKey())) {
+            throw new CustomException("导师不存在或该角色不是教师");
         }
-        String oldTeacherId = chooseTopic.getTeacherId();
-        chooseTopic.setTeacherId(params.get("teacherId").toString());
-        chooseTopic.setTeacherResult(chooseUserTeacher.getActivityType() == ActivityType.SINGLE.getKey() ? TeacherResultState.AGREE.getKey() : TeacherResultState.WAITE.getKey());
-        super.updateEntity(chooseTopic, currentUserId);
-        StudentChooseActionType actionType = StrUtil.isNotEmpty(oldTeacherId)
-            && !StrUtil.equals(oldTeacherId, teacherId) ? StudentChooseActionType.CHANGE_TEACHER
-            : StudentChooseActionType.CHOOSE_TEACHER;
-        logStudentHistory(chooseTopic.getActivityId(), currentUserId, actionType, chooseTopic, teacherId, null, currentUserId);
+        return chooseUser;
+    }
+
+    private ChooseTopic getStudentChooseRecord(String activityId, String userId) {
+        QueryWrapper<ChooseTopic> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ChooseTopic::getActivityId), activityId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ChooseTopic::getChooseUserId), userId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ChooseTopic::getChoose), CommonNumConstants.NUM_TWO);
+        return getOne(queryWrapper, false);
+    }
+
+    private ChooseTopic getStudentTopicRecord(String activityId, String userId) {
+        QueryWrapper<ChooseTopic> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ChooseTopic::getActivityId), activityId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ChooseTopic::getChooseUserId), userId);
+        return getOne(queryWrapper, false);
+    }
+
+    private Integer resolveTeacherResult(ChooseUser teacher) {
+        return Objects.equals(teacher.getActivityType(), ActivityType.SINGLE.getKey())
+            ? TeacherResultState.AGREE.getKey() : TeacherResultState.WAITE.getKey();
+    }
+
+    private void validateTeacherSelectionActivity(ChooseActivity chooseActivity) {
+        if (ObjectUtil.isEmpty(chooseActivity)) {
+            throw new CustomException("活动不存在");
+        }
+        chooseActivityService.checkTeacherSelectionEnabled(chooseActivity);
+        if (!chooseActivityService.checkActivityIsRun(chooseActivity)) {
+            throw new CustomException("该活动未开始或已结束,不可选择导师");
+        }
+    }
+
+    private void assertCanCancelTeacher(ChooseTopic chooseTopic, ChooseUser teacher) {
+        if (ObjectUtil.isEmpty(teacher)) {
+            return;
+        }
+        if (Objects.equals(teacher.getActivityType(), ActivityType.UN_SINGLE.getKey())
+            && chooseTopic.getTeacherResult() == TeacherResultState.AGREE.getKey()) {
+            throw new CustomException("双选类型选题活动，导师同意后不可取消选择导师");
+        }
+    }
+
+    private void removeChooseTopicRecord(ChooseTopic chooseTopic) {
+        clearCache(chooseTopic.getId());
+        removeById(chooseTopic.getId());
+    }
+
+    private void executeWithTopicLock(String topicId, Runnable action) {
+        String lockKey = String.format("choose:topic:%s", topicId);
+        RedisLock lock = new RedisLock(lockKey, 3000, 10000);
+        try {
+            if (!lock.lock()) {
+                throw new CustomException("当前选择人数较多，请稍后重试");
+            }
+            action.run();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new CustomException("操作失败，请稍后重试");
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void executeWithStudentChooseLock(String activityId, String userId, Runnable action) {
+        String lockKey = String.format("choose:activity:%s:student:%s", activityId, userId);
+        RedisLock lock = new RedisLock(lockKey, 3000, 10000);
+        try {
+            if (!lock.lock()) {
+                throw new CustomException("操作过于频繁，请稍后重试");
+            }
+            action.run();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new CustomException("操作失败，请稍后重试");
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void executeWithTeacherChooseLock(String activityId, String teacherId, Runnable action) {
+        String lockKey = String.format("choose:activity:%s:teacher:%s", activityId, teacherId);
+        RedisLock lock = new RedisLock(lockKey, 3000, 10000);
+        try {
+            if (!lock.lock()) {
+                throw new CustomException("当前选择人数较多，请稍后重试");
+            }
+            action.run();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new CustomException("操作失败，请稍后重试");
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -637,66 +807,63 @@ public class ChooseTopicServiceImpl extends SkyeyeBusinessServiceImpl<ChooseTopi
         String teacherId = params.get("teacherId").toString();
         String userId = inputObject.getLogParams().get("id").toString();
 
-        ChooseActivity chooseActivity = chooseActivityService.selectById(activityId);
-        if (ObjectUtil.isEmpty(chooseActivity)) {
-            throw new CustomException("活动不存在");
-        }
-        chooseActivityService.checkTeacherSelectionEnabled(chooseActivity);
-        if (!chooseActivityService.checkActivityIsRun(chooseActivity)) {
-            throw new CustomException("该活动未开始或已结束,不可选择导师");
-        }
-        checkActivityParticipant(activityId, userId);
-        if (!checkTeacherId(teacherId)) {
-            throw new CustomException("导师不存在或该角色不是教师");
-        }
+        executeWithStudentChooseLock(activityId, userId, () -> executeWithTeacherChooseLock(activityId, teacherId, () -> {
+            ChooseActivity chooseActivity = chooseActivityService.selectById(activityId);
+            validateTeacherSelectionActivity(chooseActivity);
+            checkActivityParticipant(activityId, userId);
+            ChooseUser chooseUserTeacher = getTeacherUser(teacherId);
+            Integer teacherResult = resolveTeacherResult(chooseUserTeacher);
 
-        ChooseUser chooseUserTeacher = chooseUserService.selectById(teacherId);
-        QueryWrapper<ChooseTopic> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(ChooseTopic::getActivityId), activityId);
-        queryWrapper.eq(MybatisPlusUtil.toColumns(ChooseTopic::getChooseUserId), userId);
-        ChooseTopic chooseTopic = getOne(queryWrapper, false);
-
-        if (ObjectUtil.isNotEmpty(chooseTopic)) {
-            if (Objects.equals(chooseUserTeacher.getActivityType(), ActivityType.UN_SINGLE.getKey())
-                && StrUtil.equals(chooseTopic.getTeacherId(), teacherId)
-                && chooseTopic.getTeacherResult() == TeacherResultState.AGREE.getKey()) {
-                throw new CustomException("双选类型选题活动，导师同意后不可选择导师");
+            ChooseTopic chooseTopic = getStudentTopicRecord(activityId, userId);
+            if (ObjectUtil.isNotEmpty(chooseTopic)) {
+                if (StrUtil.equals(chooseTopic.getTeacherId(), teacherId)
+                    && Objects.equals(chooseTopic.getTeacherResult(), teacherResult)) {
+                    outputObject.setBean(chooseTopic);
+                    return;
+                }
+                if (Objects.equals(chooseUserTeacher.getActivityType(), ActivityType.UN_SINGLE.getKey())
+                    && StrUtil.equals(chooseTopic.getTeacherId(), teacherId)
+                    && chooseTopic.getTeacherResult() == TeacherResultState.AGREE.getKey()) {
+                    throw new CustomException("双选类型选题活动，导师同意后不可选择导师");
+                }
+                if (checkTeacherOverLimit(teacherId, activityId, chooseUserTeacher)) {
+                    throw new CustomException("已超过该导师的最大选择次数，请选择其他导师");
+                }
+                String oldTeacherId = chooseTopic.getTeacherId();
+                chooseTopic.setTeacherId(teacherId);
+                chooseTopic.setTeacherResult(teacherResult);
+                super.updateEntity(chooseTopic, userId);
+                refreshCache(chooseTopic.getId());
+                StudentChooseActionType actionType = StrUtil.isNotEmpty(oldTeacherId)
+                    && !StrUtil.equals(oldTeacherId, teacherId) ? StudentChooseActionType.CHANGE_TEACHER
+                    : StudentChooseActionType.CHOOSE_TEACHER;
+                logStudentHistory(activityId, userId, actionType, chooseTopic, teacherId,
+                    chooseUserTeacher.getName(), null, userId);
+                outputObject.setBean(chooseTopic);
+                return;
             }
-            if (checkTeacherOverLimit(teacherId, activityId)) {
+
+            if (chooseActivityService.isTopicSelectionEnabled(chooseActivity)) {
+                throw new CustomException("请先选择课题后再选择导师");
+            }
+            if (checkTeacherOverLimit(teacherId, activityId, chooseUserTeacher)) {
                 throw new CustomException("已超过该导师的最大选择次数，请选择其他导师");
             }
-            String oldTeacherId = chooseTopic.getTeacherId();
-            chooseTopic.setTeacherId(teacherId);
-            chooseTopic.setTeacherResult(Objects.equals(chooseUserTeacher.getActivityType(), ActivityType.SINGLE.getKey())
-                ? TeacherResultState.AGREE.getKey() : TeacherResultState.WAITE.getKey());
-            super.updateEntity(chooseTopic, userId);
-            refreshCache(chooseTopic.getId());
-            StudentChooseActionType actionType = StrUtil.isNotEmpty(oldTeacherId)
-                && !StrUtil.equals(oldTeacherId, teacherId) ? StudentChooseActionType.CHANGE_TEACHER
-                : StudentChooseActionType.CHOOSE_TEACHER;
-            logStudentHistory(activityId, userId, actionType, chooseTopic, teacherId, null, userId);
-            return;
-        }
 
-        if (chooseActivityService.isTopicSelectionEnabled(chooseActivity)) {
-            throw new CustomException("请先选择课题后再选择导师");
-        }
-        if (checkTeacherOverLimit(teacherId, activityId)) {
-            throw new CustomException("已超过该导师的最大选择次数，请选择其他导师");
-        }
-
-        ChooseTopic insertTopic = new ChooseTopic();
-        insertTopic.setActivityId(activityId);
-        insertTopic.setChooseUserId(userId);
-        insertTopic.setChoose(CommonNumConstants.NUM_TWO);
-        insertTopic.setTitle("仅选导师-" + userId);
-        insertTopic.setTeacherId(teacherId);
-        insertTopic.setTeacherResult(Objects.equals(chooseUserTeacher.getActivityType(), ActivityType.SINGLE.getKey())
-            ? TeacherResultState.AGREE.getKey() : TeacherResultState.WAITE.getKey());
-        Map<String, Object> business = BeanUtil.beanToMap(insertTopic);
-        insertTopic.setOddNumber(iCodeRuleService.getNextCodeByClassName(getServiceClassName(), business));
-        createEntity(insertTopic, userId);
-        logStudentHistory(activityId, userId, StudentChooseActionType.CHOOSE_TEACHER, insertTopic, teacherId, null, userId);
+            ChooseTopic insertTopic = new ChooseTopic();
+            insertTopic.setActivityId(activityId);
+            insertTopic.setChooseUserId(userId);
+            insertTopic.setChoose(CommonNumConstants.NUM_TWO);
+            insertTopic.setTitle("仅选导师-" + userId);
+            insertTopic.setTeacherId(teacherId);
+            insertTopic.setTeacherResult(teacherResult);
+            Map<String, Object> business = BeanUtil.beanToMap(insertTopic);
+            insertTopic.setOddNumber(iCodeRuleService.getNextCodeByClassName(getServiceClassName(), business));
+            createEntity(insertTopic, userId);
+            logStudentHistory(activityId, userId, StudentChooseActionType.CHOOSE_TEACHER, insertTopic, teacherId,
+                chooseUserTeacher.getName(), null, userId);
+            outputObject.setBean(insertTopic);
+        }));
     }
 
     @Override
@@ -705,42 +872,42 @@ public class ChooseTopicServiceImpl extends SkyeyeBusinessServiceImpl<ChooseTopi
         String activityId = inputObject.getParams().get("activityId").toString();
         String userId = inputObject.getLogParams().get("id").toString();
 
-        QueryWrapper<ChooseTopic> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(ChooseTopic::getActivityId), activityId);
-        queryWrapper.eq(MybatisPlusUtil.toColumns(ChooseTopic::getChooseUserId), userId);
-        queryWrapper.eq(MybatisPlusUtil.toColumns(ChooseTopic::getChoose), CommonNumConstants.NUM_TWO);
-        ChooseTopic chooseTopic = getOne(queryWrapper, false);
-        if (ObjectUtil.isEmpty(chooseTopic)) {
-            throw new CustomException("您尚未选择导师");
-        }
-
-        ChooseActivity chooseActivity = chooseActivityService.selectById(activityId);
-        chooseActivityService.checkTeacherSelectionEnabled(chooseActivity);
-        checkActivityParticipant(activityId, userId);
-
-        if (StrUtil.isNotEmpty(chooseTopic.getTeacherId())) {
-            ChooseUser chooseUserTeacher = chooseUserService.selectById(chooseTopic.getTeacherId());
-            if (ObjectUtil.isNotEmpty(chooseUserTeacher)
-                && chooseUserTeacher.getActivityType() == ActivityType.UN_SINGLE.getKey()
-                && chooseTopic.getTeacherResult() == TeacherResultState.AGREE.getKey()) {
-                throw new CustomException("双选类型选题活动，导师同意后不可取消选择导师");
+        executeWithStudentChooseLock(activityId, userId, () -> {
+            ChooseActivity chooseActivity = chooseActivityService.selectById(activityId);
+            if (ObjectUtil.isEmpty(chooseActivity)) {
+                throw new CustomException("活动不存在");
             }
-        }
-        String oldTeacherId = chooseTopic.getTeacherId();
+            chooseActivityService.checkTeacherSelectionEnabled(chooseActivity);
+            checkActivityParticipant(activityId, userId);
 
-        if (chooseActivityService.isTopicSelectionEnabled(chooseActivity) && StrUtil.isNotEmpty(chooseTopic.getTitle())
-            && !StrUtil.startWith(chooseTopic.getTitle(), "仅选导师")) {
-            chooseTopic.setTeacherId(StrUtil.EMPTY);
-            chooseTopic.setTeacherResult(null);
-            super.updateEntity(chooseTopic, userId);
-            refreshCache(chooseTopic.getId());
+            ChooseTopic chooseTopic = getStudentChooseRecord(activityId, userId);
+            if (ObjectUtil.isEmpty(chooseTopic) || StrUtil.isEmpty(chooseTopic.getTeacherId())) {
+                outputObject.setBean(null);
+                return;
+            }
+
+            ChooseUser chooseUserTeacher = StrUtil.isNotEmpty(chooseTopic.getTeacherId())
+                ? chooseUserService.selectById(chooseTopic.getTeacherId()) : null;
+            assertCanCancelTeacher(chooseTopic, chooseUserTeacher);
+            String oldTeacherId = chooseTopic.getTeacherId();
+            String teacherName = ObjectUtil.isNotEmpty(chooseUserTeacher) ? chooseUserTeacher.getName() : null;
+
+            if (chooseActivityService.isTopicSelectionEnabled(chooseActivity) && StrUtil.isNotEmpty(chooseTopic.getTitle())
+                && !StrUtil.startWith(chooseTopic.getTitle(), "仅选导师")) {
+                chooseTopic.setTeacherId(StrUtil.EMPTY);
+                chooseTopic.setTeacherResult(null);
+                super.updateEntity(chooseTopic, userId);
+                refreshCache(chooseTopic.getId());
+                logStudentHistory(activityId, userId, StudentChooseActionType.CANCEL_TEACHER,
+                    chooseTopic, oldTeacherId, teacherName, null, userId);
+                outputObject.setBean(chooseTopic);
+                return;
+            }
+
             logStudentHistory(activityId, userId, StudentChooseActionType.CANCEL_TEACHER,
-                chooseTopic, oldTeacherId, null, userId);
-            return;
-        }
-
-        logStudentHistory(activityId, userId, StudentChooseActionType.CANCEL_TEACHER,
-            chooseTopic, oldTeacherId, null, userId);
-        deleteById(chooseTopic.getId());
+                chooseTopic, oldTeacherId, teacherName, null, userId);
+            removeChooseTopicRecord(chooseTopic);
+            outputObject.setBean(null);
+        });
     }
 }

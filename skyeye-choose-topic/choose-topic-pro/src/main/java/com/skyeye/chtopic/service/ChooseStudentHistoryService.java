@@ -16,6 +16,9 @@ public interface ChooseStudentHistoryService extends SkyeyeBusinessService<Choos
     void saveStudentHistory(String activityId, String studentId, StudentChooseActionType actionType,
                             ChooseTopic chooseTopic, String teacherId, String remark, String operatorId);
 
+    void saveStudentHistory(String activityId, String studentId, StudentChooseActionType actionType,
+                            ChooseTopic chooseTopic, String teacherId, String teacherName, String remark, String operatorId);
+
     void queryStudentChooseHistoryByActivity(InputObject inputObject, OutputObject outputObject);
 
     void queryTeacherReviewHistoryByActivity(InputObject inputObject, OutputObject outputObject);
