@@ -35,14 +35,14 @@ public class EquipmentInspectionPlanController {
         equipmentInspectionPlanService.queryPageList(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "writeEquipmentInspectionPlan", value = "新增/编辑设备巡检方案", method = "POST", allUse = "2")
+    @ApiOperation(id = "writeEquipmentInspectionPlan", value = "新增/编辑设备巡检方案", method = "POST", allUse = "1")
     @ApiImplicitParams(classBean = EquipmentInspectionPlan.class)
     @RequestMapping("/post/EquipmentInspectionPlanController/writeEquipmentInspectionPlan")
     public void writeEquipmentInspectionPlan(InputObject inputObject, OutputObject outputObject) {
         equipmentInspectionPlanService.saveOrUpdateEntity(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "deleteEquipmentInspectionPlanById", value = "根据ID删除设备巡检方案", method = "DELETE", allUse = "2")
+    @ApiOperation(id = "deleteEquipmentInspectionPlanById", value = "根据ID删除设备巡检方案", method = "DELETE", allUse = "1")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
     @RequestMapping("/post/EquipmentInspectionPlanController/deleteEquipmentInspectionPlanById")

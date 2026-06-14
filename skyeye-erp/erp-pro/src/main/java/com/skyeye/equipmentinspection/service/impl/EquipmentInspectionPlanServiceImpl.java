@@ -5,6 +5,7 @@
 package com.skyeye.equipmentinspection.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
@@ -43,10 +44,24 @@ public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImp
     }
 
     @Override
+    public void validatorEntity(EquipmentInspectionPlan entity) {
+        normalizePlanFields(entity);
+        if (StrUtil.isBlank(entity.getId())) {
+            entity.setPlanCode(null);
+            assignPlanCode(entity);
+        }
+        super.validatorEntity(entity);
+        if (CollectionUtil.isEmpty(entity.getEquipmentInspectionPlanItemList())) {
+            throw new CustomException("请至少配置一条巡检方案检查项.");
+        }
+    }
+
+    @Override
     public void createPrepose(EquipmentInspectionPlan entity) {
         normalizePlanFields(entity);
-        Map<String, Object> business = BeanUtil.beanToMap(entity);
-        entity.setPlanCode(iCodeRuleService.getNextCodeByClassName(this.getClass().getName(), business));
+        if (StrUtil.isBlank(entity.getPlanCode())) {
+            assignPlanCode(entity);
+        }
         if (StrUtil.isBlank(entity.getName())) {
             entity.setName(entity.getPlanCode());
         }
@@ -102,6 +117,11 @@ public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImp
         }
         entity.setFrequencyType(EquipmentInspectionFrequencyType.parseKey(entity.getFrequencyType()));
         return entity;
+    }
+
+    private void assignPlanCode(EquipmentInspectionPlan entity) {
+        Map<String, Object> business = BeanUtil.beanToMap(entity);
+        entity.setPlanCode(iCodeRuleService.getNextCodeByClassName(getServiceClassName(), business));
     }
 
     @Override

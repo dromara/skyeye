@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * @Description: 设备巡检单服务实现类
  */
 @Service
-@SkyeyeService(name = "设备巡检单", groupName = "设备巡检单", allowDynamicAttrKey = false)
+@SkyeyeService(name = "设备巡检单", groupName = "设备巡检", flowable = true, allowDynamicAttrKey = false)
 public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceImpl<EquipmentInspectionOrderDao, EquipmentInspectionOrder>
     implements EquipmentInspectionOrderService {
 
@@ -84,6 +84,9 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
     @Override
     public EquipmentInspectionOrder getDataFromDb(String id) {
         EquipmentInspectionOrder entity = super.getDataFromDb(id);
+        if (entity == null) {
+            return null;
+        }
         entity.setEquipmentInspectionOrderItemList(equipmentInspectionOrderItemService.selectByPId(entity.getId()));
         return entity;
     }
@@ -109,7 +112,9 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
             && InputObject.getLogParamsStatic().get("id") != null) {
             entity.setInspectorUserId(InputObject.getLogParamsStatic().get("id").toString());
         }
-        entity.setOddNumber(iCodeRuleService.getNextCodeByClassName(this.getClass().getName(), BeanUtil.beanToMap(entity)));
+        if (StrUtil.isBlank(entity.getOddNumber())) {
+            assignOddNumber(entity);
+        }
         super.createPrepose(entity);
     }
 
@@ -119,7 +124,7 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         if (StrUtil.isBlank(entity.getId())) {
             return;
         }
-        EquipmentInspectionOrder oldOrder = super.selectById(entity.getId());
+        EquipmentInspectionOrder oldOrder = getDataFromDb(entity.getId());
         if (oldOrder == null) {
             throw new CustomException("巡检单不存在.");
         }
@@ -133,6 +138,11 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
 
     @Override
     public void validatorEntity(EquipmentInspectionOrder entity) {
+        normalizeCreateIdentity(entity);
+        if (StrUtil.isBlank(entity.getId())) {
+            entity.setOddNumber(null);
+            assignOddNumber(entity);
+        }
         if (StrUtil.isBlank(entity.getId()) && entity.getSeqInDay() == null) {
             String today = LocalDate.now().toString();
             QueryWrapper<EquipmentInspectionOrder> queryWrapper = new QueryWrapper<>();
@@ -220,6 +230,23 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
             return null;
         }
         return equipmentInspectionPlanService.getDataFromDb(planId);
+    }
+
+    /**
+     * 预填接口返回的 id 是设备档案 id，若误传到写单 body 会被当成编辑巡检单。
+     */
+    private void normalizeCreateIdentity(EquipmentInspectionOrder entity) {
+        if (StrUtil.isBlank(entity.getId())) {
+            return;
+        }
+        EquipmentInspectionOrder existing = super.getDataFromDb(entity.getId());
+        if (existing == null) {
+            entity.setId(null);
+        }
+    }
+
+    private void assignOddNumber(EquipmentInspectionOrder entity) {
+        entity.setOddNumber(iCodeRuleService.getNextCodeByClassName(getServiceClassName(), BeanUtil.beanToMap(entity)));
     }
 
 }

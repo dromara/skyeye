@@ -6,7 +6,6 @@ package com.skyeye.equipmentinspection.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
@@ -14,7 +13,7 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.common.constans.RedisConstants;
-import com.skyeye.common.entity.features.OperatorUserInfo;
+import com.skyeye.common.entity.features.SkyeyeFlowable;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionResultType;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionRunStatus;
 import lombok.Data;
@@ -31,13 +30,9 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @UniqueField(value = {"oddNumber"})
 @RedisCacheField(name = "erp:equipmentInspectionOrder:zcdemo", cacheTime = RedisConstants.TOW_MONTH_SECONDS)
-@TableName(value = "erp_equipment_inspection_order_zcdemo")
+@TableName(value = "erp_equipment_inspection_order_zcdemo", autoResultMap = true)
 @ApiModel("设备巡检单实体类")
-public class EquipmentInspectionOrder extends OperatorUserInfo {
-
-    @TableId("id")
-    @ApiModelProperty(value = "主键id。为空时新增，不为空时编辑")
-    private String id;
+public class EquipmentInspectionOrder extends SkyeyeFlowable {
 
     @TableField(value = "odd_number", updateStrategy = FieldStrategy.NEVER)
     @Property(value = "设备巡检单编号", fuzzyLike = true)

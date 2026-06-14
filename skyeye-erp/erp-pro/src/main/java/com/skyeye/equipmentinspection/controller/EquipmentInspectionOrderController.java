@@ -8,6 +8,7 @@ import com.skyeye.annotation.api.Api;
 import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
+import com.skyeye.common.entity.features.SubmitSkyeyeFlowable;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description: 设备巡检单控制层
  */
 @RestController
-@Api(value = "设备巡检单", tags = "设备巡检单", modelName = "设备巡检单")
+@Api(value = "设备巡检单", tags = "设备巡检单", modelName = "设备巡检")
 public class EquipmentInspectionOrderController {
 
     @Autowired
@@ -35,14 +36,29 @@ public class EquipmentInspectionOrderController {
         equipmentInspectionOrderService.queryPageList(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "writeEquipmentInspectionOrder", value = "新增/编辑设备巡检单", method = "POST", allUse = "2")
+    @ApiOperation(id = "writeEquipmentInspectionOrder", value = "新增/编辑设备巡检单", method = "POST", allUse = "1")
     @ApiImplicitParams(classBean = EquipmentInspectionOrder.class)
     @RequestMapping("/post/EquipmentInspectionOrderController/writeEquipmentInspectionOrder")
     public void writeEquipmentInspectionOrder(InputObject inputObject, OutputObject outputObject) {
         equipmentInspectionOrderService.saveOrUpdateEntity(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "deleteEquipmentInspectionOrderById", value = "根据ID删除设备巡检单", method = "DELETE", allUse = "2")
+    @ApiOperation(id = "submitEquipmentInspectionOrderToApproval", value = "设备巡检单提交审批", method = "POST", allUse = "1")
+    @ApiImplicitParams(classBean = SubmitSkyeyeFlowable.class)
+    @RequestMapping("/post/EquipmentInspectionOrderController/submitToApproval")
+    public void submitToApproval(InputObject inputObject, OutputObject outputObject) {
+        equipmentInspectionOrderService.submitToApproval(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "revokeEquipmentInspectionOrder", value = "撤销设备巡检单审批申请", method = "PUT", allUse = "1")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "processInstanceId", name = "processInstanceId", value = "流程实例id", required = "required")})
+    @RequestMapping("/post/EquipmentInspectionOrderController/revoke")
+    public void revoke(InputObject inputObject, OutputObject outputObject) {
+        equipmentInspectionOrderService.revoke(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "deleteEquipmentInspectionOrderById", value = "根据ID删除设备巡检单", method = "DELETE", allUse = "1")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
     @RequestMapping("/post/EquipmentInspectionOrderController/deleteEquipmentInspectionOrderById")

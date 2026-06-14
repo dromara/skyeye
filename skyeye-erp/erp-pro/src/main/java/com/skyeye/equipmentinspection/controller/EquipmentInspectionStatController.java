@@ -8,10 +8,9 @@ import com.skyeye.annotation.api.Api;
 import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
-import com.skyeye.common.entity.search.TableSelectInfo;
+import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.equipmentinspection.entity.EquipmentInspectionStatPageInfo;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionStatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,28 +32,28 @@ public class EquipmentInspectionStatController {
     private EquipmentInspectionStatService equipmentInspectionStatService;
 
     @ApiOperation(id = "queryInspectionRecordStatList", value = "巡检记录明细分页", method = "POST", allUse = "2")
-    @ApiImplicitParams(classBean = EquipmentInspectionStatPageInfo.class)
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/EquipmentInspectionStatController/queryInspectionRecordStatList")
     public void queryInspectionRecordStatList(InputObject inputObject, OutputObject outputObject) {
         equipmentInspectionOrderService.queryPageList(inputObject, outputObject);
     }
 
     @ApiOperation(id = "queryEquipmentInspectionSummaryList", value = "本月巡检设备明细分页", method = "POST", allUse = "2")
-    @ApiImplicitParams(classBean = EquipmentInspectionStatPageInfo.class)
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/EquipmentInspectionStatController/queryEquipmentInspectionSummaryList")
     public void queryEquipmentInspectionSummaryList(InputObject inputObject, OutputObject outputObject) {
         equipmentInspectionStatService.queryEquipmentInspectionSummaryList(inputObject, outputObject);
     }
 
     @ApiOperation(id = "queryEquipmentInspectionMissedList", value = "本月漏检设备明细分页", method = "POST", allUse = "2")
-    @ApiImplicitParams(classBean = EquipmentInspectionStatPageInfo.class)
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/EquipmentInspectionStatController/queryEquipmentInspectionMissedList")
     public void queryEquipmentInspectionMissedList(InputObject inputObject, OutputObject outputObject) {
         equipmentInspectionStatService.queryEquipmentInspectionMissedList(inputObject, outputObject);
     }
 
     @ApiOperation(id = "queryEquipmentInspectionDistributionPanel", value = "本月未检/已检分布", method = "POST", allUse = "2")
-    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/EquipmentInspectionStatController/queryEquipmentInspectionDistributionPanel")
     public void queryEquipmentInspectionDistributionPanel(InputObject inputObject, OutputObject outputObject) {
         equipmentInspectionStatService.queryEquipmentInspectionDistributionPanel(inputObject, outputObject);

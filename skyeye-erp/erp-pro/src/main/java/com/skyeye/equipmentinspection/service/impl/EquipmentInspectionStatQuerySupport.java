@@ -11,13 +11,11 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.common.entity.search.CommonPageInfo;
-import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipmentarchive.entity.EquipmentArchive;
 import com.skyeye.equipmentarchive.service.EquipmentArchiveService;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
-import com.skyeye.equipmentinspection.entity.EquipmentInspectionStatPageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +39,7 @@ public class EquipmentInspectionStatQuerySupport {
     @Autowired
     private EquipmentArchiveService equipmentArchiveService;
 
-    public EquipmentInspectionStatPageInfo buildPageInfo(InputObject inputObject) {
+    public CommonPageInfo buildPageInfo(InputObject inputObject) {
         Map<String, Object> params = inputObject.getParams();
         if (!params.containsKey("page") || StrUtil.isBlank(MapUtil.getStr(params, "page"))) {
             params.put("page", 1);
@@ -49,19 +47,12 @@ public class EquipmentInspectionStatQuerySupport {
         if (!params.containsKey("limit") || StrUtil.isBlank(MapUtil.getStr(params, "limit"))) {
             params.put("limit", 20);
         }
-        EquipmentInspectionStatPageInfo pageInfo = inputObject.getParams(EquipmentInspectionStatPageInfo.class);
+        CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
         fillDefaultTimeRange(pageInfo);
         return pageInfo;
     }
 
-    public EquipmentInspectionStatPageInfo buildQueryInfo(InputObject inputObject) {
-        TableSelectInfo query = inputObject.getParams(TableSelectInfo.class);
-        EquipmentInspectionStatPageInfo pageInfo = BeanUtil.toBean(query, EquipmentInspectionStatPageInfo.class);
-        fillDefaultTimeRange(pageInfo);
-        return pageInfo;
-    }
-
-    public void fillDefaultTimeRange(EquipmentInspectionStatPageInfo pageInfo) {
+    public void fillDefaultTimeRange(CommonPageInfo pageInfo) {
         Date now = new Date();
         if (StrUtil.isBlank(pageInfo.getStartTime())) {
             pageInfo.setStartTime(DateUtil.format(DateUtil.beginOfMonth(now), "yyyy-MM-dd HH:mm:ss"));
@@ -71,20 +62,18 @@ public class EquipmentInspectionStatQuerySupport {
         }
     }
 
-    public boolean prepareEquipmentScope(EquipmentInspectionStatPageInfo pageInfo) {
+    public EquipmentScope resolveEquipmentScope(CommonPageInfo pageInfo) {
         Set<String> scopedIds = resolveEquipmentIdScope(pageInfo);
         if (scopedIds == null) {
-            pageInfo.setEquipmentIdList(null);
-            return false;
+            return EquipmentScope.noFilter();
         }
         if (scopedIds.isEmpty()) {
-            return true;
+            return EquipmentScope.empty();
         }
-        pageInfo.setEquipmentIdList(new ArrayList<>(scopedIds));
-        return false;
+        return EquipmentScope.of(new ArrayList<>(scopedIds));
     }
 
-    public Set<String> resolveEquipmentIdScope(EquipmentInspectionStatPageInfo pageInfo) {
+    public Set<String> resolveEquipmentIdScope(CommonPageInfo pageInfo) {
         List<String> objectIdList = splitObjectIds(pageInfo.getObjectId());
         boolean hasObjectFilter = CollectionUtil.isNotEmpty(objectIdList);
         boolean hasKeyword = StrUtil.isNotBlank(pageInfo.getKeyword());
@@ -124,30 +113,33 @@ public class EquipmentInspectionStatQuerySupport {
     }
 
     public boolean isStatPageQuery(InputObject inputObject) {
-        return inputObject.getParams(CommonPageInfo.class) instanceof EquipmentInspectionStatPageInfo;
+        Map<String, Object> params = inputObject.getParams();
+        return StrUtil.isNotBlank(MapUtil.getStr(params, "startTime"))
+            || StrUtil.isNotBlank(MapUtil.getStr(params, "endTime"));
     }
 
     public void applyOrderQueryWrapper(QueryWrapper<EquipmentInspectionOrder> queryWrapper, CommonPageInfo commonPageInfo) {
-        if (commonPageInfo instanceof EquipmentInspectionStatPageInfo) {
-            EquipmentInspectionStatPageInfo pageInfo = (EquipmentInspectionStatPageInfo) commonPageInfo;
-            fillDefaultTimeRange(pageInfo);
-            if (prepareEquipmentScope(pageInfo)) {
-                queryWrapper.apply("1 = 0");
-            } else {
-                if (StrUtil.isNotEmpty(pageInfo.getStartTime())) {
-                    queryWrapper.ge(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), pageInfo.getStartTime());
-                }
-                if (StrUtil.isNotEmpty(pageInfo.getEndTime())) {
-                    queryWrapper.le(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), pageInfo.getEndTime());
-                }
-                if (pageInfo.getOverallResult() != null) {
-                    queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getOverallResult), pageInfo.getOverallResult());
-                }
-                if (CollectionUtil.isNotEmpty(pageInfo.getEquipmentIdList())) {
-                    queryWrapper.in(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId), pageInfo.getEquipmentIdList());
-                }
+        boolean statTimeQuery = StrUtil.isNotBlank(commonPageInfo.getStartTime())
+            || StrUtil.isNotBlank(commonPageInfo.getEndTime());
+        if (statTimeQuery) {
+            fillDefaultTimeRange(commonPageInfo);
+            if (StrUtil.isNotEmpty(commonPageInfo.getStartTime())) {
+                queryWrapper.ge(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), commonPageInfo.getStartTime());
             }
-        } else {
+            if (StrUtil.isNotEmpty(commonPageInfo.getEndTime())) {
+                queryWrapper.le(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), commonPageInfo.getEndTime());
+            }
+            Integer overallResult = resolveOverallResult();
+            if (overallResult != null) {
+                queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getOverallResult), overallResult);
+            }
+        }
+        EquipmentScope scope = resolveEquipmentScope(commonPageInfo);
+        if (scope.isEmptyResult()) {
+            queryWrapper.apply("1 = 0");
+        } else if (scope.hasFilter()) {
+            queryWrapper.in(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId), scope.getEquipmentIdList());
+        } else if (!statTimeQuery) {
             if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
                 queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId), commonPageInfo.getObjectId());
             }
@@ -157,6 +149,18 @@ public class EquipmentInspectionStatQuerySupport {
         }
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime));
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCreateTime));
+    }
+
+    private Integer resolveOverallResult() {
+        Map<String, Object> params = InputObject.getLogParamsStatic();
+        if (MapUtil.isEmpty(params)) {
+            return null;
+        }
+        String text = MapUtil.getStr(params, "overallResult");
+        if (StrUtil.isBlank(text) || !StrUtil.isNumeric(text)) {
+            return null;
+        }
+        return Integer.parseInt(text);
     }
 
     private void applyHolderEquipmentFilter(QueryWrapper<EquipmentInspectionOrder> queryWrapper, String holderId) {
@@ -193,6 +197,41 @@ public class EquipmentInspectionStatQuerySupport {
                     bean.put("farmName", equipmentMation.get("useFarm"));
                 }
             }
+        }
+    }
+
+    static final class EquipmentScope {
+
+        private final boolean emptyResult;
+        private final List<String> equipmentIdList;
+
+        private EquipmentScope(boolean emptyResult, List<String> equipmentIdList) {
+            this.emptyResult = emptyResult;
+            this.equipmentIdList = equipmentIdList;
+        }
+
+        static EquipmentScope noFilter() {
+            return new EquipmentScope(false, null);
+        }
+
+        static EquipmentScope empty() {
+            return new EquipmentScope(true, Collections.emptyList());
+        }
+
+        static EquipmentScope of(List<String> equipmentIdList) {
+            return new EquipmentScope(false, equipmentIdList);
+        }
+
+        boolean isEmptyResult() {
+            return emptyResult;
+        }
+
+        boolean hasFilter() {
+            return equipmentIdList != null;
+        }
+
+        List<String> getEquipmentIdList() {
+            return equipmentIdList;
         }
     }
 }
