@@ -43,7 +43,7 @@ public class EquipmentInspectionPlan extends BaseGeneralInfo {
     private String frequencyTypeName;
 
     @TableField("inspections_per_day")
-    @ApiModelProperty(value = "当天规定巡检次数", required = "required,num", defaultValue = "1")
+    @ApiModelProperty(value = "每日巡检次数", required = "required,num", defaultValue = "1")
     private Integer inspectionsPerDay;
 
     @TableField(exist = false)

@@ -8,7 +8,8 @@ import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
 import com.skyeye.eve.dao.SkyeyeBaseMapper;
 
 /**
- * 设备巡检单数据访问层
+ * @ClassName: EquipmentInspectionOrderDao
+ * @Description: 设备巡检单数据层
  */
 public interface EquipmentInspectionOrderDao extends SkyeyeBaseMapper<EquipmentInspectionOrder> {
 

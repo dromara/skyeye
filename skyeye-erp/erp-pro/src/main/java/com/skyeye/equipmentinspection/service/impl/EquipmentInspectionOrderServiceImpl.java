@@ -232,9 +232,6 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         return equipmentInspectionPlanService.getDataFromDb(planId);
     }
 
-    /**
-     * 预填接口返回的 id 是设备档案 id，若误传到写单 body 会被当成编辑巡检单。
-     */
     private void normalizeCreateIdentity(EquipmentInspectionOrder entity) {
         if (StrUtil.isBlank(entity.getId())) {
             return;

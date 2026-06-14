@@ -8,7 +8,8 @@ import com.skyeye.base.business.service.SkyeyeLinkDataService;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrderItem;
 
 /**
- * 设备巡检单子表服务接口
+ * @ClassName: EquipmentInspectionOrderItemService
+ * @Description: 设备巡检单子表服务接口层
  */
 public interface EquipmentInspectionOrderItemService extends SkyeyeLinkDataService<EquipmentInspectionOrderItem> {
 

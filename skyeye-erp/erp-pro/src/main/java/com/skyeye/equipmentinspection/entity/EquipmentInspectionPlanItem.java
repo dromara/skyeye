@@ -59,7 +59,7 @@ public class EquipmentInspectionPlanItem extends SkyeyeLinkData {
     private String abnormalRule;
 
     @TableField("remark")
-    @ApiModelProperty(value = "行备注")
+    @ApiModelProperty(value = "备注")
     private String remark;
 
 }

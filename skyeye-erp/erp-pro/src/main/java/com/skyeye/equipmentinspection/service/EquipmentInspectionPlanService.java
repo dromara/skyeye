@@ -8,7 +8,8 @@ import com.skyeye.base.business.service.SkyeyeBusinessService;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
 
 /**
- * 设备巡检方案服务接口
+ * @ClassName: EquipmentInspectionPlanService
+ * @Description: 设备巡检方案服务接口层
  */
 public interface EquipmentInspectionPlanService extends SkyeyeBusinessService<EquipmentInspectionPlan> {
 

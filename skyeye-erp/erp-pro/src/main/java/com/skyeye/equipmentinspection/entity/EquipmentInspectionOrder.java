@@ -79,15 +79,15 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     private String headerLocationText;
 
     @TableField("header_longitude")
-    @ApiModelProperty(value = "整单定位经度")
+    @ApiModelProperty(value = "定位经度")
     private String headerLongitude;
 
     @TableField("header_latitude")
-    @ApiModelProperty(value = "整单定位纬度")
+    @ApiModelProperty(value = "定位纬度")
     private String headerLatitude;
 
     @TableField("header_address")
-    @ApiModelProperty(value = "整单定位地址")
+    @ApiModelProperty(value = "定位地址")
     private String headerAddress;
 
     @TableField("header_photo_urls")

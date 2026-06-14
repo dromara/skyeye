@@ -8,7 +8,8 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 
 /**
- * 设备巡检统计服务
+ * @ClassName: EquipmentInspectionStatService
+ * @Description: 设备巡检统计服务接口层
  */
 public interface EquipmentInspectionStatService {
 
