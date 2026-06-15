@@ -38,7 +38,7 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     @Property(value = "设备巡检单编号", fuzzyLike = true)
     private String oddNumber;
 
-    @TableField("equipment_id")
+    @TableField(value = "equipment_id", updateStrategy = FieldStrategy.NEVER)
     @ApiModelProperty(value = "设备档案id", required = "required")
     private String equipmentId;
 
@@ -46,7 +46,7 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     @ApiModelProperty(value = "巡检时间", required = "required")
     private String inspectionTime;
 
-    @TableField("inspector_user_id")
+    @TableField(value = "inspector_user_id", updateStrategy = FieldStrategy.NEVER)
     @ApiModelProperty(value = "巡检员用户id")
     private String inspectorUserId;
 
@@ -94,7 +94,7 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     @ApiModelProperty(value = "拍照URL，逗号分隔")
     private String headerPhotoUrls;
 
-    @TableField("seq_in_day")
+    @TableField(value = "seq_in_day", updateStrategy = FieldStrategy.NEVER)
     @ApiModelProperty(value = "当日第几次巡检", required = "required,num")
     private Integer seqInDay;
 

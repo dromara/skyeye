@@ -22,10 +22,6 @@ import java.math.BigDecimal;
 @ApiModel("设备巡检方案子表明细实体类")
 public class EquipmentInspectionPlanItem extends SkyeyeLinkData {
 
-    @TableField("line_no")
-    @ApiModelProperty(value = "行号", required = "required,num")
-    private Integer lineNo;
-
     @TableField("item_name")
     @ApiModelProperty(value = "检查项名称", required = "required")
     private String itemName;

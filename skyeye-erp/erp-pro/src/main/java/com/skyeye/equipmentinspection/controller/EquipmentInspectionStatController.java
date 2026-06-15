@@ -9,7 +9,6 @@ import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
-import com.skyeye.equipmentinspection.entity.EquipmentInspectionStatPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
@@ -33,7 +32,7 @@ public class EquipmentInspectionStatController {
     private EquipmentInspectionStatService equipmentInspectionStatService;
 
     @ApiOperation(id = "queryInspectionRecordStatList", value = "巡检记录明细分页", method = "POST", allUse = "1")
-    @ApiImplicitParams(classBean = EquipmentInspectionStatPageInfo.class)
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/EquipmentInspectionStatController/queryInspectionRecordStatList")
     public void queryInspectionRecordStatList(InputObject inputObject, OutputObject outputObject) {
         equipmentInspectionOrderService.queryPageList(inputObject, outputObject);

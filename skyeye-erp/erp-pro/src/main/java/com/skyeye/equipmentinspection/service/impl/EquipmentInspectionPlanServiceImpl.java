@@ -55,13 +55,6 @@ public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImp
     }
 
     @Override
-    public void updatePrepose(EquipmentInspectionPlan entity) {
-        super.updatePrepose(entity);
-        EquipmentInspectionPlan oldPlan = getDataFromDb(entity.getId());
-        entity.setPlanCode(oldPlan.getPlanCode());
-    }
-
-    @Override
     @Transactional(rollbackFor = Exception.class)
     public void writePostpose(EquipmentInspectionPlan entity, String userId) {
         equipmentInspectionPlanItemService.saveLinkList(entity.getId(), entity.getEquipmentInspectionPlanItemList());

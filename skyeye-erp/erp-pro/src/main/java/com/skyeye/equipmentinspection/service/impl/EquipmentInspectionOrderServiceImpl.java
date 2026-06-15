@@ -21,7 +21,6 @@ import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrderItem;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlanItem;
-import com.skyeye.equipmentinspection.entity.EquipmentInspectionStatPageInfo;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderItemService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
@@ -35,14 +34,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * @ClassName: EquipmentInspectionOrderServiceImpl
@@ -66,26 +59,18 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
     @Override
     protected QueryWrapper<EquipmentInspectionOrder> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<EquipmentInspectionOrder> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId), commonPageInfo.getObjectId());
+        }
+        if (StrUtil.isNotEmpty(commonPageInfo.getStartTime())) {
+            queryWrapper.ge(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), commonPageInfo.getStartTime());
+        }
+        if (StrUtil.isNotEmpty(commonPageInfo.getEndTime())) {
+            queryWrapper.le(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), commonPageInfo.getEndTime());
+        }
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime));
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCreateTime));
         return queryWrapper;
-    }
-
-    @Override
-    public void getQueryWrapper(InputObject inputObject, QueryWrapper<EquipmentInspectionOrder> wrapper) {
-        EquipmentInspectionStatPageInfo pageInfo = inputObject.getParams(EquipmentInspectionStatPageInfo.class);
-        if (StrUtil.isNotEmpty(pageInfo.getStartTime())) {
-            wrapper.ge(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), pageInfo.getStartTime());
-        }
-        if (StrUtil.isNotEmpty(pageInfo.getEndTime())) {
-            wrapper.le(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), pageInfo.getEndTime());
-        }
-        if (pageInfo.getOverallResult() != null) {
-            wrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getOverallResult), pageInfo.getOverallResult());
-        }
-        applyEquipmentFilter(wrapper, pageInfo);
-        wrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime));
-        wrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCreateTime));
     }
 
     @Override
@@ -98,7 +83,7 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         equipmentArchiveService.appendPatrolRecordForMationMap(beans, "equipmentId", "equipmentMation");
         iAuthUserService.setMationForMap(beans, "inspectorUserId", "inspectorUserMation");
         beans.forEach(this::appendEnumMationForMap);
-        EquipmentInspectionStatPageInfo pageInfo = inputObject.getParams(EquipmentInspectionStatPageInfo.class);
+        CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
         if (StrUtil.isNotBlank(pageInfo.getStartTime()) || StrUtil.isNotBlank(pageInfo.getEndTime())) {
             appendStatRecordDisplayFields(beans);
         }
@@ -122,16 +107,6 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         appendEnumMation(order);
         iAuthUserService.setDataMation(order, EquipmentInspectionOrder::getInspectorUserId);
         return order;
-    }
-
-    @Override
-    public void updatePrepose(EquipmentInspectionOrder entity) {
-        super.updatePrepose(entity);
-        EquipmentInspectionOrder oldOrder = getDataFromDb(entity.getId());
-        entity.setOddNumber(oldOrder.getOddNumber());
-        entity.setEquipmentId(oldOrder.getEquipmentId());
-        entity.setSeqInDay(oldOrder.getSeqInDay());
-        entity.setInspectorUserId(oldOrder.getInspectorUserId());
     }
 
     @Override
@@ -172,57 +147,6 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         equipmentInspectionOrderItemService.deleteByPId(id);
     }
 
-    private void applyEquipmentFilter(QueryWrapper<EquipmentInspectionOrder> wrapper, EquipmentInspectionStatPageInfo pageInfo) {
-        Set<String> equipmentIds = resolveEquipmentIds(pageInfo);
-        if (equipmentIds == null) {
-            return;
-        }
-        if (equipmentIds.isEmpty()) {
-            wrapper.apply("1 = 0");
-            return;
-        }
-        wrapper.in(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId), equipmentIds);
-    }
-
-    private Set<String> resolveEquipmentIds(EquipmentInspectionStatPageInfo pageInfo) {
-        List<String> objectIdList = splitObjectIds(pageInfo.getObjectId());
-        boolean hasObjectFilter = CollectionUtil.isNotEmpty(objectIdList);
-        boolean hasKeyword = StrUtil.isNotBlank(pageInfo.getKeyword());
-        boolean hasHolder = StrUtil.isNotBlank(pageInfo.getHolderId());
-        if (!hasObjectFilter && !hasKeyword && !hasHolder) {
-            return null;
-        }
-        Set<String> ids = new LinkedHashSet<>();
-        if (hasObjectFilter) {
-            ids.addAll(objectIdList);
-        }
-        if (hasKeyword || hasHolder) {
-            QueryWrapper<EquipmentArchive> archiveWrapper = new QueryWrapper<>();
-            if (hasKeyword) {
-                archiveWrapper.and(w -> w.like(MybatisPlusUtil.toColumns(EquipmentArchive::getName), pageInfo.getKeyword())
-                    .or().like(MybatisPlusUtil.toColumns(EquipmentArchive::getOddNumber), pageInfo.getKeyword()));
-            }
-            if (hasHolder) {
-                archiveWrapper.eq(MybatisPlusUtil.toColumns(EquipmentArchive::getUseFarm), pageInfo.getHolderId());
-            }
-            equipmentArchiveService.list(archiveWrapper).forEach(item -> ids.add(item.getId()));
-        }
-        if (hasObjectFilter) {
-            ids.retainAll(new LinkedHashSet<>(objectIdList));
-        }
-        return ids;
-    }
-
-    private List<String> splitObjectIds(String objectId) {
-        if (StrUtil.isBlank(objectId)) {
-            return Collections.emptyList();
-        }
-        return Arrays.stream(objectId.split(","))
-            .map(String::trim)
-            .filter(StrUtil::isNotBlank)
-            .collect(Collectors.toList());
-    }
-
     private void appendStatRecordDisplayFields(List<Map<String, Object>> beans) {
         for (Map<String, Object> bean : beans) {
             String photoUrls = MapUtil.getStr(bean, "headerPhotoUrls");
@@ -248,13 +172,11 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         if (StrUtil.isBlank(plan.getId()) || CollectionUtil.isEmpty(plan.getEquipmentInspectionPlanItemList())) {
             return;
         }
-        Map<Integer, EquipmentInspectionPlanItem> planItemByLine = plan.getEquipmentInspectionPlanItemList().stream()
-            .filter(item -> item.getLineNo() != null)
-            .collect(Collectors.toMap(EquipmentInspectionPlanItem::getLineNo, Function.identity(), (a, b) -> a));
+        List<EquipmentInspectionPlanItem> planItems = plan.getEquipmentInspectionPlanItemList();
         for (EquipmentInspectionOrderItem orderItem : order.getEquipmentInspectionOrderItemList()) {
-            EquipmentInspectionPlanItem planItem = planItemByLine.get(orderItem.getLineNo());
-            if (planItem != null) {
-                orderItem.setPlanItemMation(planItem);
+            Integer lineNo = orderItem.getLineNo();
+            if (lineNo != null && lineNo > 0 && lineNo <= planItems.size()) {
+                orderItem.setPlanItemMation(planItems.get(lineNo - 1));
             }
         }
     }
@@ -289,9 +211,7 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
             throw new CustomException("巡检明细条数与方案检查项不一致.");
         }
         for (int i = 0; i < orderItems.size(); i++) {
-            EquipmentInspectionPlanItem planItem = planItems.get(i);
-            Integer lineNo = planItem.getLineNo() == null ? i + 1 : planItem.getLineNo();
-            orderItems.get(i).setLineNo(lineNo);
+            orderItems.get(i).setLineNo(i + 1);
         }
     }
 
