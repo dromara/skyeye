@@ -18,6 +18,7 @@ import com.skyeye.equipmentinspection.classenum.EquipmentInspectionFrequencyType
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: EquipmentInspectionPlan
@@ -39,8 +40,8 @@ public class EquipmentInspectionPlan extends BaseGeneralInfo {
     private Integer frequencyType;
 
     @TableField(exist = false)
-    @Property(value = "巡检频率名称")
-    private String frequencyTypeName;
+    @Property(value = "巡检频率信息")
+    private Map<String, Object> frequencyTypeMation;
 
     @TableField("inspections_per_day")
     @ApiModelProperty(value = "每日巡检次数", required = "required,num", defaultValue = "1")

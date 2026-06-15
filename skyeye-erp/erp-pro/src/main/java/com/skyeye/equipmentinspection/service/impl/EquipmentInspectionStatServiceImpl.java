@@ -5,10 +5,13 @@
 package com.skyeye.equipmentinspection.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
@@ -25,19 +28,21 @@ import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionStatService;
-import com.skyeye.equipmentinspection.service.impl.EquipmentInspectionStatQuerySupport.EquipmentScope;
 import com.skyeye.farm.entity.Farm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -52,9 +57,6 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
 
     @Autowired
     private EquipmentInspectionOrderService equipmentInspectionOrderService;
-
-    @Autowired
-    private EquipmentInspectionStatQuerySupport equipmentInspectionStatQuerySupport;
 
     @Autowired
     private EquipmentArchiveBizRecordService equipmentArchiveBizRecordService;
@@ -77,70 +79,74 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
 
     @Override
     public void queryEquipmentInspectionDistributionPanel(InputObject inputObject, OutputObject outputObject) {
-        CommonPageInfo pageInfo = equipmentInspectionStatQuerySupport.buildPageInfo(inputObject);
-        EquipmentScope scope = equipmentInspectionStatQuerySupport.resolveEquipmentScope(pageInfo);
-        if (scope.isEmptyResult()) {
-            Map<String, Object> panel = new HashMap<>(4);
-            panel.put("uninspected", emptyDistribution());
-            panel.put("inspected", emptyDistribution());
-            outputObject.setBean(panel);
-            outputObject.settotal(CommonNumConstants.NUM_ONE);
-            return;
-        }
+        CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
+        fillDefaultMonthRange(pageInfo);
+        List<SummaryEquipmentContext> contexts = loadSummaryEquipmentContexts(pageInfo, null);
         Map<String, Object> panel = new HashMap<>(4);
-        panel.put("uninspected", buildDistribution(pageInfo, scope.getEquipmentIdList(), DISTRIBUTION_UNINSPECTED));
-        panel.put("inspected", buildDistribution(pageInfo, scope.getEquipmentIdList(), DISTRIBUTION_INSPECTED));
+        panel.put("uninspected", buildDistribution(pageInfo, contexts, DISTRIBUTION_UNINSPECTED));
+        panel.put("inspected", buildDistribution(pageInfo, contexts, DISTRIBUTION_INSPECTED));
         outputObject.setBean(panel);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
     private void querySummaryPage(InputObject inputObject, OutputObject outputObject, boolean onlyMissed) {
-        CommonPageInfo pageInfo = equipmentInspectionStatQuerySupport.buildPageInfo(inputObject);
-        EquipmentScope scope = equipmentInspectionStatQuerySupport.resolveEquipmentScope(pageInfo);
-        if (scope.isEmptyResult()) {
+        CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
+        fillDefaultMonthRange(pageInfo);
+        List<SummaryEquipmentContext> allContexts = loadSummaryEquipmentContexts(pageInfo, null);
+        if (CollectionUtil.isEmpty(allContexts)) {
             outputObject.setBeans(Collections.emptyList());
             outputObject.settotal(0);
             return;
         }
-        List<Map<String, Object>> allRows = queryEquipmentInspectionSummary(pageInfo, scope.getEquipmentIdList(), onlyMissed);
-        List<Map<String, Object>> beans = paginateList(allRows, pageInfo.getPage(), pageInfo.getLimit());
-        appendSummaryFarmMation(beans);
-        outputObject.setBeans(beans);
-        outputObject.settotal(allRows.size());
-    }
-
-    private List<Map<String, Object>> queryEquipmentInspectionSummary(CommonPageInfo pageInfo, List<String> equipmentIdList,
-                                                                    boolean onlyMissed) {
-        List<SummaryEquipmentContext> contexts = loadSummaryEquipmentContexts(equipmentIdList);
-        if (CollectionUtil.isEmpty(contexts)) {
-            return Collections.emptyList();
-        }
-        Map<String, Integer> inspectedCountMap = countInspectedByEquipment(pageInfo, contexts);
-        List<Map<String, Object>> rows = new ArrayList<>();
-        for (SummaryEquipmentContext ctx : contexts) {
+        Map<String, Integer> inspectedCountMap = countInspectedByEquipment(pageInfo, allContexts);
+        List<String> targetArchiveIds = new ArrayList<>();
+        for (SummaryEquipmentContext ctx : allContexts) {
             int requiredCount = equipmentInspectionPlanService.calcRequiredInspectionCount(ctx.plan, pageInfo.getStartTime(), pageInfo.getEndTime());
             int inspectedCount = inspectedCountMap.getOrDefault(ctx.equipmentId, 0);
             int missedCount = Math.max(0, requiredCount - inspectedCount);
             if (onlyMissed && missedCount <= 0) {
                 continue;
             }
+            targetArchiveIds.add(ctx.equipmentId);
+        }
+        if (CollectionUtil.isEmpty(targetArchiveIds)) {
+            outputObject.setBeans(Collections.emptyList());
+            outputObject.settotal(0);
+            return;
+        }
+        Page<Object> page = PageHelper.startPage(pageInfo.getPage(), pageInfo.getLimit());
+        QueryWrapper<EquipmentArchive> archiveWrapper = new QueryWrapper<>();
+        archiveWrapper.in(MybatisPlusUtil.toColumns(EquipmentArchive::getId), targetArchiveIds);
+        archiveWrapper.orderByAsc(MybatisPlusUtil.toColumns(EquipmentArchive::getName));
+        List<EquipmentArchive> archives = equipmentArchiveService.list(archiveWrapper);
+        Map<String, SummaryEquipmentContext> contextMap = allContexts.stream()
+            .collect(Collectors.toMap(ctx -> ctx.equipmentId, ctx -> ctx, (a, b) -> a));
+        List<Map<String, Object>> rows = new ArrayList<>();
+        for (EquipmentArchive archive : archives) {
+            SummaryEquipmentContext ctx = contextMap.get(archive.getId());
+            if (ctx == null) {
+                continue;
+            }
+            int requiredCount = equipmentInspectionPlanService.calcRequiredInspectionCount(ctx.plan, pageInfo.getStartTime(), pageInfo.getEndTime());
+            int inspectedCount = inspectedCountMap.getOrDefault(ctx.equipmentId, 0);
+            int missedCount = Math.max(0, requiredCount - inspectedCount);
             rows.add(buildSummaryRow(ctx, requiredCount, inspectedCount, missedCount));
         }
-        rows.sort(Comparator.comparing(row -> MapUtil.getStr(row, "equipmentName"), Comparator.nullsLast(String::compareTo)));
-        return rows;
+        appendSummaryFarmMation(rows);
+        outputObject.setBeans(rows);
+        outputObject.settotal(page.getTotal());
     }
 
-    private Map<String, Object> buildDistribution(CommonPageInfo pageInfo, List<String> equipmentIdList, String distributionType) {
-        List<Map<String, Object>> rows = queryEquipmentTypeDistribution(pageInfo, equipmentIdList, distributionType);
+    private Map<String, Object> buildDistribution(CommonPageInfo pageInfo, List<SummaryEquipmentContext> contexts, String distributionType) {
+        List<Map<String, Object>> rows = queryEquipmentTypeDistribution(pageInfo, contexts, distributionType);
         Map<String, Object> result = new HashMap<>(2);
         result.put("rows", rows);
         result.put("total", rows.stream().mapToInt(row -> MapUtil.getInt(row, "equipmentCount", 0)).sum());
         return result;
     }
 
-    private List<Map<String, Object>> queryEquipmentTypeDistribution(CommonPageInfo pageInfo, List<String> equipmentIdList,
+    private List<Map<String, Object>> queryEquipmentTypeDistribution(CommonPageInfo pageInfo, List<SummaryEquipmentContext> contexts,
                                                                      String distributionType) {
-        List<SummaryEquipmentContext> contexts = loadSummaryEquipmentContexts(equipmentIdList);
         if (CollectionUtil.isEmpty(contexts)) {
             return Collections.emptyList();
         }
@@ -169,34 +175,40 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
             .collect(Collectors.toList());
     }
 
-    private List<SummaryEquipmentContext> loadSummaryEquipmentContexts(List<String> equipmentIdList) {
+    private List<SummaryEquipmentContext> loadSummaryEquipmentContexts(CommonPageInfo pageInfo, List<String> equipmentIdList) {
         Map<String, EquipmentArchiveBizRecord> patrolRecordMap = equipmentArchiveBizRecordService
             .selectLatestMapByBizType(EquipmentArchiveBizType.PATROL.getKey());
         if (CollectionUtil.isEmpty(patrolRecordMap)) {
             return Collections.emptyList();
         }
-        List<String> archiveIds = new ArrayList<>(patrolRecordMap.keySet());
-        Map<String, EquipmentArchive> archiveMap = equipmentArchiveService.selectByIds(archiveIds.toArray(new String[0])).stream()
-            .filter(Objects::nonNull)
+        Set<String> scopedArchiveIds = resolveArchiveIds(pageInfo, patrolRecordMap.keySet());
+        if (CollectionUtil.isNotEmpty(equipmentIdList)) {
+            scopedArchiveIds.retainAll(new LinkedHashSet<>(equipmentIdList));
+        }
+        if (CollectionUtil.isEmpty(scopedArchiveIds)) {
+            return Collections.emptyList();
+        }
+        Map<String, EquipmentArchive> archiveMap = equipmentArchiveService.selectByIds(scopedArchiveIds.toArray(new String[0])).stream()
+            .filter(archive -> StrUtil.isNotBlank(archive.getId()))
             .collect(Collectors.toMap(EquipmentArchive::getId, item -> item, (a, b) -> a));
-        List<String> planIds = patrolRecordMap.values().stream()
-            .map(this::parsePlanId)
+        List<String> planIds = scopedArchiveIds.stream()
+            .map(archiveId -> parsePlanId(patrolRecordMap.get(archiveId)))
             .filter(StrUtil::isNotBlank)
             .distinct()
             .collect(Collectors.toList());
         Map<String, EquipmentInspectionPlan> planMap = CollectionUtil.isEmpty(planIds)
             ? Collections.emptyMap()
             : equipmentInspectionPlanService.selectByIds(planIds.toArray(new String[0])).stream()
-                .filter(Objects::nonNull)
+                .filter(plan -> StrUtil.isNotBlank(plan.getId()))
                 .collect(Collectors.toMap(EquipmentInspectionPlan::getId, item -> item, (a, b) -> a));
 
         List<SummaryEquipmentContext> contexts = new ArrayList<>();
-        for (Map.Entry<String, EquipmentArchiveBizRecord> entry : patrolRecordMap.entrySet()) {
-            EquipmentArchive archive = archiveMap.get(entry.getKey());
+        for (String archiveId : scopedArchiveIds) {
+            EquipmentArchive archive = archiveMap.get(archiveId);
             if (archive == null) {
                 continue;
             }
-            String planId = parsePlanId(entry.getValue());
+            String planId = parsePlanId(patrolRecordMap.get(archiveId));
             EquipmentInspectionPlan plan = planMap.get(planId);
             if (StrUtil.isBlank(planId) || plan == null) {
                 continue;
@@ -213,23 +225,59 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
             ctx.plan = plan;
             contexts.add(ctx);
         }
-        if (CollectionUtil.isNotEmpty(equipmentIdList)) {
-            return contexts.stream()
-                .filter(ctx -> equipmentIdList.contains(ctx.equipmentId))
-                .collect(Collectors.toList());
-        }
+        contexts.sort(Comparator.comparing(ctx -> ctx.equipmentName, Comparator.nullsLast(String::compareTo)));
         return contexts;
     }
 
-    private Map<String, Object> emptyDistribution() {
-        Map<String, Object> result = new HashMap<>(2);
-        result.put("rows", Collections.emptyList());
-        result.put("total", 0);
-        return result;
+    private Set<String> resolveArchiveIds(CommonPageInfo pageInfo, Set<String> patrolArchiveIds) {
+        Set<String> ids = new LinkedHashSet<>(patrolArchiveIds);
+        List<String> objectIdList = splitObjectIds(pageInfo.getObjectId());
+        if (CollectionUtil.isNotEmpty(objectIdList)) {
+            ids.retainAll(objectIdList);
+        }
+        if (StrUtil.isNotBlank(pageInfo.getHolderId()) || StrUtil.isNotBlank(pageInfo.getKeyword())) {
+            QueryWrapper<EquipmentArchive> archiveWrapper = new QueryWrapper<>();
+            archiveWrapper.in(MybatisPlusUtil.toColumns(EquipmentArchive::getId), ids);
+            if (StrUtil.isNotBlank(pageInfo.getHolderId())) {
+                archiveWrapper.eq(MybatisPlusUtil.toColumns(EquipmentArchive::getUseFarm), pageInfo.getHolderId());
+            }
+            if (StrUtil.isNotBlank(pageInfo.getKeyword())) {
+                archiveWrapper.and(w -> w.like(MybatisPlusUtil.toColumns(EquipmentArchive::getName), pageInfo.getKeyword())
+                    .or().like(MybatisPlusUtil.toColumns(EquipmentArchive::getOddNumber), pageInfo.getKeyword()));
+            }
+            ids = equipmentArchiveService.list(archiveWrapper).stream()
+                .map(EquipmentArchive::getId)
+                .filter(StrUtil::isNotBlank)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+        }
+        return ids;
+    }
+
+    private List<String> splitObjectIds(String objectId) {
+        if (StrUtil.isBlank(objectId)) {
+            return Collections.emptyList();
+        }
+        return Arrays.stream(objectId.split(","))
+            .map(String::trim)
+            .filter(StrUtil::isNotBlank)
+            .collect(Collectors.toList());
+    }
+
+    private void fillDefaultMonthRange(CommonPageInfo pageInfo) {
+        Date now = new Date();
+        if (StrUtil.isBlank(pageInfo.getStartTime())) {
+            pageInfo.setStartTime(DateUtil.format(DateUtil.beginOfMonth(now), "yyyy-MM-dd HH:mm:ss"));
+        }
+        if (StrUtil.isBlank(pageInfo.getEndTime())) {
+            pageInfo.setEndTime(DateUtil.format(DateUtil.endOfMonth(now), "yyyy-MM-dd HH:mm:ss"));
+        }
     }
 
     private Map<String, Integer> countInspectedByEquipment(CommonPageInfo pageInfo, List<SummaryEquipmentContext> contexts) {
         List<String> equipmentIds = contexts.stream().map(ctx -> ctx.equipmentId).collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(equipmentIds)) {
+            return Collections.emptyMap();
+        }
         QueryWrapper<EquipmentInspectionOrder> wrapper = new QueryWrapper<>();
         wrapper.in(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId), equipmentIds);
         wrapper.ge(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), pageInfo.getStartTime());
@@ -267,7 +315,7 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
     }
 
     private String resolveArchiveTypeName(EquipmentArchive archive) {
-        if (archive == null) {
+        if (StrUtil.isBlank(archive.getId())) {
             return "其他设备";
         }
         String typeName = EquipmentArchiveType.getNameByKey(archive.getEquipmentTypeId());
@@ -288,18 +336,6 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
                 bean.put("farmMation", farm);
             }
         }
-    }
-
-    private List<Map<String, Object>> paginateList(List<Map<String, Object>> rows, int page, int limit) {
-        if (CollectionUtil.isEmpty(rows)) {
-            return Collections.emptyList();
-        }
-        int fromIndex = Math.max(0, (page - 1) * limit);
-        if (fromIndex >= rows.size()) {
-            return Collections.emptyList();
-        }
-        int toIndex = Math.min(fromIndex + limit, rows.size());
-        return rows.subList(fromIndex, toIndex);
     }
 
     private static class SummaryEquipmentContext {

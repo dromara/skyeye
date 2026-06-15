@@ -28,7 +28,7 @@ public class EquipmentInspectionPlanController {
     @Autowired
     private EquipmentInspectionPlanService equipmentInspectionPlanService;
 
-    @ApiOperation(id = "queryEquipmentInspectionPlanList", value = "分页获取设备巡检方案列表", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryEquipmentInspectionPlanList", value = "分页获取设备巡检方案列表", method = "POST", allUse = "1")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/EquipmentInspectionPlanController/queryEquipmentInspectionPlanList")
     public void queryEquipmentInspectionPlanList(InputObject inputObject, OutputObject outputObject) {

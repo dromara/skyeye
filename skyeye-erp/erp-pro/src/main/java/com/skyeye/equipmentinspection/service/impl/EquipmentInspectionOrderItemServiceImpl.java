@@ -4,16 +4,12 @@
 
 package com.skyeye.equipmentinspection.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeLinkDataServiceImpl;
-import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipmentinspection.dao.EquipmentInspectionOrderItemDao;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrderItem;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderItemService;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @ClassName: EquipmentInspectionOrderItemServiceImpl
@@ -23,20 +19,5 @@ import java.util.List;
 @SkyeyeService(name = "设备巡检单子表", groupName = "设备巡检单", manageShow = false)
 public class EquipmentInspectionOrderItemServiceImpl extends SkyeyeLinkDataServiceImpl<EquipmentInspectionOrderItemDao, EquipmentInspectionOrderItem>
     implements EquipmentInspectionOrderItemService {
-
-    @Override
-    public void deleteByPId(String pId) {
-        QueryWrapper<EquipmentInspectionOrderItem> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrderItem::getParentId), pId);
-        remove(queryWrapper);
-    }
-
-    @Override
-    public List<EquipmentInspectionOrderItem> selectByPId(String pId) {
-        QueryWrapper<EquipmentInspectionOrderItem> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrderItem::getParentId), pId);
-        queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(EquipmentInspectionOrderItem::getLineNo));
-        return list(queryWrapper);
-    }
 
 }

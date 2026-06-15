@@ -10,10 +10,12 @@ import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.features.SkyeyeLinkData;
+import com.skyeye.equipmentinspection.classenum.EquipmentInspectionAbnormalFlag;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionResultType;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * @ClassName: EquipmentInspectionOrderItem
@@ -29,7 +31,7 @@ public class EquipmentInspectionOrderItem extends SkyeyeLinkData {
     private String parentId;
 
     @TableField("line_no")
-    @ApiModelProperty(value = "行号", required = "required,num")
+    @Property(value = "行号")
     private Integer lineNo;
 
     @TableField("item_result")
@@ -37,35 +39,39 @@ public class EquipmentInspectionOrderItem extends SkyeyeLinkData {
     private Integer itemResult;
 
     @TableField(exist = false)
-    @Property(value = "检查结果名称")
-    private String itemResultName;
+    @Property(value = "检查结果信息")
+    private Map<String, Object> itemResultMation;
 
     @TableField("result_value")
     @ApiModelProperty(value = "数值型结果")
     private BigDecimal resultValue;
 
     @TableField("item_photo_urls")
-    @ApiModelProperty(value = "行级拍照URL，逗号分隔")
+    @ApiModelProperty(value = "拍照URL，逗号分隔")
     private String itemPhotoUrls;
 
     @TableField("item_longitude")
-    @ApiModelProperty(value = "行级定位经度")
+    @ApiModelProperty(value = "定位经度")
     private String itemLongitude;
 
     @TableField("item_latitude")
-    @ApiModelProperty(value = "行级定位纬度")
+    @ApiModelProperty(value = "定位纬度")
     private String itemLatitude;
 
     @TableField("item_address")
-    @ApiModelProperty(value = "行级定位地址")
+    @ApiModelProperty(value = "定位地址")
     private String itemAddress;
 
     @TableField("abnormal_flag")
-    @ApiModelProperty(value = "是否异常 0否 1是", required = "required,num", defaultValue = "0")
+    @ApiModelProperty(value = "是否异常", enumClass = EquipmentInspectionAbnormalFlag.class, required = "required,num", defaultValue = "0")
     private Integer abnormalFlag;
 
+    @TableField(exist = false)
+    @Property(value = "是否异常信息")
+    private Map<String, Object> abnormalFlagMation;
+
     @TableField("remark")
-    @ApiModelProperty(value = "行备注")
+    @ApiModelProperty(value = "备注")
     private String remark;
 
     @TableField(exist = false)

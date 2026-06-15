@@ -59,23 +59,23 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     private Integer overallResult;
 
     @TableField(exist = false)
-    @Property(value = "巡检结果名称")
-    private String overallResultName;
+    @Property(value = "巡检结果信息")
+    private Map<String, Object> overallResultMation;
 
     @TableField("equipment_run_status")
-    @ApiModelProperty(value = "本次巡检设备运行状态", enumClass = EquipmentInspectionRunStatus.class, required = "num")
+    @ApiModelProperty(value = "设备运行状态", enumClass = EquipmentInspectionRunStatus.class, required = "num")
     private Integer equipmentRunStatus;
 
     @TableField(exist = false)
-    @Property(value = "设备运行状态名称")
-    private String equipmentRunStatusName;
+    @Property(value = "设备运行状态信息")
+    private Map<String, Object> equipmentRunStatusMation;
 
     @TableField("summary_richtext")
-    @ApiModelProperty(value = "本次巡检总结")
+    @ApiModelProperty(value = "巡检总结")
     private String summaryRichtext;
 
     @TableField("header_location_text")
-    @ApiModelProperty(value = "整单定位")
+    @ApiModelProperty(value = "定位文本")
     private String headerLocationText;
 
     @TableField("header_longitude")
@@ -91,7 +91,7 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     private String headerAddress;
 
     @TableField("header_photo_urls")
-    @ApiModelProperty(value = "整单拍照URL，逗号分隔")
+    @ApiModelProperty(value = "拍照URL，逗号分隔")
     private String headerPhotoUrls;
 
     @TableField("seq_in_day")

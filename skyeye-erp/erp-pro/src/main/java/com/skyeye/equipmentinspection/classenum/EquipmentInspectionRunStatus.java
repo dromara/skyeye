@@ -4,10 +4,14 @@
 
 package com.skyeye.equipmentinspection.classenum;
 
+import cn.hutool.core.map.MapUtil;
 import com.skyeye.common.base.classenum.SkyeyeEnumClass;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @ClassName: EquipmentInspectionRunStatus
@@ -32,5 +36,17 @@ public enum EquipmentInspectionRunStatus implements SkyeyeEnumClass {
     private Boolean show;
 
     private Boolean isDefault;
+
+    public static Map<String, Object> getMation(Integer type) {
+        for (EquipmentInspectionRunStatus bean : EquipmentInspectionRunStatus.values()) {
+            if (type != null && type.equals(bean.getKey())) {
+                Map<String, Object> result = new HashMap<>();
+                result.put("id", bean.getKey());
+                result.put("name", bean.getValue());
+                return result;
+            }
+        }
+        return MapUtil.newHashMap();
+    }
 
 }

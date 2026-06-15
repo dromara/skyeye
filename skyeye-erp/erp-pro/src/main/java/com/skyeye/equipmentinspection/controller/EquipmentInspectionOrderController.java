@@ -29,7 +29,7 @@ public class EquipmentInspectionOrderController {
     @Autowired
     private EquipmentInspectionOrderService equipmentInspectionOrderService;
 
-    @ApiOperation(id = "queryEquipmentInspectionOrderList", value = "获取设备巡检单列表", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryEquipmentInspectionOrderList", value = "获取设备巡检单列表", method = "POST", allUse = "1")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/EquipmentInspectionOrderController/queryEquipmentInspectionOrderList")
     public void queryEquipmentInspectionOrderList(InputObject inputObject, OutputObject outputObject) {

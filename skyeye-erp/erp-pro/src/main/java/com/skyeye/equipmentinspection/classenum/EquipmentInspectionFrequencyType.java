@@ -4,11 +4,14 @@
 
 package com.skyeye.equipmentinspection.classenum;
 
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.map.MapUtil;
 import com.skyeye.common.base.classenum.SkyeyeEnumClass;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @ClassName: EquipmentInspectionFrequencyType
@@ -33,33 +36,16 @@ public enum EquipmentInspectionFrequencyType implements SkyeyeEnumClass {
 
     private Boolean isDefault;
 
-    public static Integer parseKey(Object raw) {
-        if (raw == null) {
-            return DAY.getKey();
+    public static Map<String, Object> getMation(Integer type) {
+        for (EquipmentInspectionFrequencyType bean : EquipmentInspectionFrequencyType.values()) {
+            if (type != null && type.equals(bean.getKey())) {
+                Map<String, Object> result = new HashMap<>();
+                result.put("id", bean.getKey());
+                result.put("name", bean.getValue());
+                return result;
+            }
         }
-        if (raw instanceof Number) {
-            return ((Number) raw).intValue();
-        }
-        String text = StrUtil.trim(raw.toString());
-        if (StrUtil.isBlank(text)) {
-            return DAY.getKey();
-        }
-        if (StrUtil.isNumeric(text)) {
-            return Integer.parseInt(text);
-        }
-        switch (text.toLowerCase()) {
-            case "week":
-                return WEEK.getKey();
-            case "month":
-                return MONTH.getKey();
-            case "quarter":
-                return QUARTER.getKey();
-            case "year":
-                return YEAR.getKey();
-            case "day":
-            default:
-                return DAY.getKey();
-        }
+        return MapUtil.newHashMap();
     }
 
 }
