@@ -245,7 +245,7 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
             return;
         }
         EquipmentInspectionPlan plan = loadPlanFromPatrolRecord(archive.getPatrolRecord());
-        if (CollectionUtil.isEmpty(plan.getEquipmentInspectionPlanItemList())) {
+        if (StrUtil.isBlank(plan.getId()) || CollectionUtil.isEmpty(plan.getEquipmentInspectionPlanItemList())) {
             return;
         }
         Map<Integer, EquipmentInspectionPlanItem> planItemByLine = plan.getEquipmentInspectionPlanItemList().stream()
@@ -281,7 +281,7 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
 
     private void alignOrderItemsWithPlan(List<EquipmentInspectionOrderItem> orderItems, Map<String, Object> patrolRecord) {
         EquipmentInspectionPlan plan = loadPlanFromPatrolRecord(patrolRecord);
-        if (CollectionUtil.isEmpty(plan.getEquipmentInspectionPlanItemList())) {
+        if (StrUtil.isBlank(plan.getId()) || CollectionUtil.isEmpty(plan.getEquipmentInspectionPlanItemList())) {
             throw new CustomException("设备关联的巡检方案不存在或未配置检查项.");
         }
         List<EquipmentInspectionPlanItem> planItems = plan.getEquipmentInspectionPlanItemList();

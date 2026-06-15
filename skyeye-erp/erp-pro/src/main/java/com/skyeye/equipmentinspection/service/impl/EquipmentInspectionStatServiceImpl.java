@@ -52,9 +52,6 @@ import java.util.stream.Collectors;
 @Service
 public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionStatService {
 
-    private static final String DISTRIBUTION_UNINSPECTED = "uninspected";
-    private static final String DISTRIBUTION_INSPECTED = "inspected";
-
     @Autowired
     private EquipmentInspectionOrderService equipmentInspectionOrderService;
 
@@ -81,10 +78,10 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
     public void queryEquipmentInspectionDistributionPanel(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
         fillDefaultMonthRange(pageInfo);
-        List<SummaryEquipmentContext> contexts = loadSummaryEquipmentContexts(pageInfo, null);
-        Map<String, Object> panel = new HashMap<>(4);
-        panel.put("uninspected", buildDistribution(pageInfo, contexts, DISTRIBUTION_UNINSPECTED));
-        panel.put("inspected", buildDistribution(pageInfo, contexts, DISTRIBUTION_INSPECTED));
+        PatrolStatBundle bundle = loadPatrolStatBundle(pageInfo);
+        Map<String, Object> panel = new HashMap<>(2);
+        panel.put("uninspected", buildTypeDistribution(bundle, false));
+        panel.put("inspected", buildTypeDistribution(bundle, true));
         outputObject.setBean(panel);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
@@ -92,148 +89,115 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
     private void querySummaryPage(InputObject inputObject, OutputObject outputObject, boolean onlyMissed) {
         CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
         fillDefaultMonthRange(pageInfo);
-        List<SummaryEquipmentContext> allContexts = loadSummaryEquipmentContexts(pageInfo, null);
-        if (CollectionUtil.isEmpty(allContexts)) {
+        PatrolStatBundle bundle = loadPatrolStatBundle(pageInfo);
+        if (bundle.statMap.isEmpty()) {
             outputObject.setBeans(Collections.emptyList());
             outputObject.settotal(0);
             return;
         }
-        Map<String, Integer> inspectedCountMap = countInspectedByEquipment(pageInfo, allContexts);
-        List<String> targetArchiveIds = new ArrayList<>();
-        for (SummaryEquipmentContext ctx : allContexts) {
-            int requiredCount = equipmentInspectionPlanService.calcRequiredInspectionCount(ctx.plan, pageInfo.getStartTime(), pageInfo.getEndTime());
-            int inspectedCount = inspectedCountMap.getOrDefault(ctx.equipmentId, 0);
-            int missedCount = Math.max(0, requiredCount - inspectedCount);
-            if (onlyMissed && missedCount <= 0) {
-                continue;
-            }
-            targetArchiveIds.add(ctx.equipmentId);
-        }
-        if (CollectionUtil.isEmpty(targetArchiveIds)) {
+        List<String> targetIds = bundle.statMap.entrySet().stream()
+            .filter(entry -> !onlyMissed || entry.getValue()[2] > 0)
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(targetIds)) {
             outputObject.setBeans(Collections.emptyList());
             outputObject.settotal(0);
             return;
         }
         Page<Object> page = PageHelper.startPage(pageInfo.getPage(), pageInfo.getLimit());
         QueryWrapper<EquipmentArchive> archiveWrapper = new QueryWrapper<>();
-        archiveWrapper.in(MybatisPlusUtil.toColumns(EquipmentArchive::getId), targetArchiveIds);
+        archiveWrapper.in(MybatisPlusUtil.toColumns(EquipmentArchive::getId), targetIds);
         archiveWrapper.orderByAsc(MybatisPlusUtil.toColumns(EquipmentArchive::getName));
-        List<EquipmentArchive> archives = equipmentArchiveService.list(archiveWrapper);
-        Map<String, SummaryEquipmentContext> contextMap = allContexts.stream()
-            .collect(Collectors.toMap(ctx -> ctx.equipmentId, ctx -> ctx, (a, b) -> a));
         List<Map<String, Object>> rows = new ArrayList<>();
-        for (EquipmentArchive archive : archives) {
-            SummaryEquipmentContext ctx = contextMap.get(archive.getId());
-            if (ctx == null) {
-                continue;
-            }
-            int requiredCount = equipmentInspectionPlanService.calcRequiredInspectionCount(ctx.plan, pageInfo.getStartTime(), pageInfo.getEndTime());
-            int inspectedCount = inspectedCountMap.getOrDefault(ctx.equipmentId, 0);
-            int missedCount = Math.max(0, requiredCount - inspectedCount);
-            rows.add(buildSummaryRow(ctx, requiredCount, inspectedCount, missedCount));
+        for (EquipmentArchive archive : equipmentArchiveService.list(archiveWrapper)) {
+            int[] stat = bundle.statMap.get(archive.getId());
+            rows.add(buildSummaryRow(archive, bundle.planIdMap.get(archive.getId()), stat));
         }
         appendSummaryFarmMation(rows);
         outputObject.setBeans(rows);
         outputObject.settotal(page.getTotal());
     }
 
-    private Map<String, Object> buildDistribution(CommonPageInfo pageInfo, List<SummaryEquipmentContext> contexts, String distributionType) {
-        List<Map<String, Object>> rows = queryEquipmentTypeDistribution(pageInfo, contexts, distributionType);
-        Map<String, Object> result = new HashMap<>(2);
-        result.put("rows", rows);
-        result.put("total", rows.stream().mapToInt(row -> MapUtil.getInt(row, "equipmentCount", 0)).sum());
-        return result;
-    }
-
-    private List<Map<String, Object>> queryEquipmentTypeDistribution(CommonPageInfo pageInfo, List<SummaryEquipmentContext> contexts,
-                                                                     String distributionType) {
-        if (CollectionUtil.isEmpty(contexts)) {
-            return Collections.emptyList();
-        }
-        Map<String, Integer> inspectedCountMap = countInspectedByEquipment(pageInfo, contexts);
-        Map<String, Long> grouped = new LinkedHashMap<>();
-        for (SummaryEquipmentContext ctx : contexts) {
-            int requiredCount = equipmentInspectionPlanService.calcRequiredInspectionCount(ctx.plan, pageInfo.getStartTime(), pageInfo.getEndTime());
-            int inspectedCount = inspectedCountMap.getOrDefault(ctx.equipmentId, 0);
-            boolean match = StrUtil.equals(DISTRIBUTION_UNINSPECTED, distributionType)
-                ? inspectedCount < requiredCount
-                : inspectedCount >= requiredCount;
-            if (!match) {
+    private PatrolStatBundle loadPatrolStatBundle(CommonPageInfo pageInfo) {
+        Map<String, EquipmentArchiveBizRecord> patrolRecordMap = equipmentArchiveBizRecordService
+            .selectLatestMapByBizType(EquipmentArchiveBizType.PATROL.getKey());
+        Map<String, EquipmentArchive> archiveMap = loadPatrolArchiveMap(pageInfo, patrolRecordMap);
+        Map<String, String> planIdMap = new HashMap<>();
+        Map<String, Integer> inspectedMap = countInspected(pageInfo, archiveMap.keySet());
+        Map<String, int[]> statMap = new LinkedHashMap<>();
+        for (EquipmentArchive archive : archiveMap.values()) {
+            String planId = parsePlanId(patrolRecordMap.get(archive.getId()));
+            if (StrUtil.isBlank(planId)) {
                 continue;
             }
-            String typeName = StrUtil.blankToDefault(ctx.equipmentTypeName, "其他设备");
-            grouped.put(typeName, grouped.getOrDefault(typeName, 0L) + 1);
+            EquipmentInspectionPlan plan = equipmentInspectionPlanService.getDataFromDb(planId);
+            if (StrUtil.isBlank(plan.getId())) {
+                continue;
+            }
+            planIdMap.put(archive.getId(), planId);
+            int required = equipmentInspectionPlanService.calcRequiredInspectionCount(plan, pageInfo.getStartTime(), pageInfo.getEndTime());
+            int inspected = inspectedMap.getOrDefault(archive.getId(), 0);
+            statMap.put(archive.getId(), new int[]{required, inspected, Math.max(0, required - inspected)});
         }
-        return grouped.entrySet().stream()
+        PatrolStatBundle bundle = new PatrolStatBundle();
+        bundle.archiveMap = archiveMap;
+        bundle.planIdMap = planIdMap;
+        bundle.statMap = statMap;
+        return bundle;
+    }
+
+    private Map<String, Object> buildTypeDistribution(PatrolStatBundle bundle, boolean inspected) {
+        Map<String, Long> grouped = new LinkedHashMap<>();
+        for (Map.Entry<String, int[]> entry : bundle.statMap.entrySet()) {
+            int[] stat = entry.getValue();
+            if (inspected ? stat[1] < stat[0] : stat[1] >= stat[0]) {
+                continue;
+            }
+            EquipmentArchive archive = bundle.archiveMap.get(entry.getKey());
+            String typeName = resolveArchiveTypeName(archive);
+            grouped.merge(typeName, 1L, Long::sum);
+        }
+        List<Map<String, Object>> rows = grouped.entrySet().stream()
+            .sorted(Comparator.comparingLong(entry -> -entry.getValue()))
             .map(entry -> {
                 Map<String, Object> row = new HashMap<>(2);
                 row.put("equipmentTypeName", entry.getKey());
                 row.put("equipmentCount", entry.getValue());
                 return row;
             })
-            .sorted(Comparator.comparing(row -> -MapUtil.getLong(row, "equipmentCount", 0L)))
             .collect(Collectors.toList());
+        Map<String, Object> result = new HashMap<>(2);
+        result.put("rows", rows);
+        result.put("total", rows.stream().mapToInt(row -> MapUtil.getInt(row, "equipmentCount", 0)).sum());
+        return result;
     }
 
-    private List<SummaryEquipmentContext> loadSummaryEquipmentContexts(CommonPageInfo pageInfo, List<String> equipmentIdList) {
-        Map<String, EquipmentArchiveBizRecord> patrolRecordMap = equipmentArchiveBizRecordService
-            .selectLatestMapByBizType(EquipmentArchiveBizType.PATROL.getKey());
+    private Map<String, EquipmentArchive> loadPatrolArchiveMap(CommonPageInfo pageInfo,
+                                                               Map<String, EquipmentArchiveBizRecord> patrolRecordMap) {
         if (CollectionUtil.isEmpty(patrolRecordMap)) {
-            return Collections.emptyList();
+            return Collections.emptyMap();
         }
         Set<String> scopedArchiveIds = resolveArchiveIds(pageInfo, patrolRecordMap.keySet());
-        if (CollectionUtil.isNotEmpty(equipmentIdList)) {
-            scopedArchiveIds.retainAll(new LinkedHashSet<>(equipmentIdList));
-        }
         if (CollectionUtil.isEmpty(scopedArchiveIds)) {
-            return Collections.emptyList();
+            return Collections.emptyMap();
         }
-        Map<String, EquipmentArchive> archiveMap = equipmentArchiveService.selectByIds(scopedArchiveIds.toArray(new String[0])).stream()
+        return equipmentArchiveService.selectByIds(scopedArchiveIds.toArray(new String[0])).stream()
             .filter(archive -> StrUtil.isNotBlank(archive.getId()))
-            .collect(Collectors.toMap(EquipmentArchive::getId, item -> item, (a, b) -> a));
-        List<String> planIds = scopedArchiveIds.stream()
-            .map(archiveId -> parsePlanId(patrolRecordMap.get(archiveId)))
-            .filter(StrUtil::isNotBlank)
-            .distinct()
-            .collect(Collectors.toList());
-        Map<String, EquipmentInspectionPlan> planMap = CollectionUtil.isEmpty(planIds)
-            ? Collections.emptyMap()
-            : equipmentInspectionPlanService.selectByIds(planIds.toArray(new String[0])).stream()
-                .filter(plan -> StrUtil.isNotBlank(plan.getId()))
-                .collect(Collectors.toMap(EquipmentInspectionPlan::getId, item -> item, (a, b) -> a));
+            .collect(Collectors.toMap(EquipmentArchive::getId, item -> item, (a, b) -> a, LinkedHashMap::new));
+    }
 
-        List<SummaryEquipmentContext> contexts = new ArrayList<>();
-        for (String archiveId : scopedArchiveIds) {
-            EquipmentArchive archive = archiveMap.get(archiveId);
-            if (archive == null) {
-                continue;
-            }
-            String planId = parsePlanId(patrolRecordMap.get(archiveId));
-            EquipmentInspectionPlan plan = planMap.get(planId);
-            if (StrUtil.isBlank(planId) || plan == null) {
-                continue;
-            }
-            SummaryEquipmentContext ctx = new SummaryEquipmentContext();
-            ctx.equipmentId = archive.getId();
-            ctx.equipmentName = archive.getName();
-            ctx.equipmentCode = archive.getOddNumber();
-            ctx.equipmentTypeId = archive.getEquipmentTypeId();
-            ctx.equipmentTypeName = resolveArchiveTypeName(archive);
-            ctx.useFarm = archive.getUseFarm();
-            ctx.installAddress = archive.getInstallAddress();
-            ctx.planId = planId;
-            ctx.plan = plan;
-            contexts.add(ctx);
+    private String parsePlanId(EquipmentArchiveBizRecord record) {
+        if (StrUtil.isBlank(record.getExtJson())) {
+            return StrUtil.EMPTY;
         }
-        contexts.sort(Comparator.comparing(ctx -> ctx.equipmentName, Comparator.nullsLast(String::compareTo)));
-        return contexts;
+        return MapUtil.getStr(JSONUtil.toBean(record.getExtJson(), Map.class), "planId");
     }
 
     private Set<String> resolveArchiveIds(CommonPageInfo pageInfo, Set<String> patrolArchiveIds) {
         Set<String> ids = new LinkedHashSet<>(patrolArchiveIds);
-        List<String> objectIdList = splitObjectIds(pageInfo.getObjectId());
-        if (CollectionUtil.isNotEmpty(objectIdList)) {
-            ids.retainAll(objectIdList);
+        if (StrUtil.isNotBlank(pageInfo.getObjectId())) {
+            ids.retainAll(Arrays.stream(pageInfo.getObjectId().split(","))
+                .map(String::trim).filter(StrUtil::isNotBlank).collect(Collectors.toSet()));
         }
         if (StrUtil.isNotBlank(pageInfo.getHolderId()) || StrUtil.isNotBlank(pageInfo.getKeyword())) {
             QueryWrapper<EquipmentArchive> archiveWrapper = new QueryWrapper<>();
@@ -253,16 +217,6 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
         return ids;
     }
 
-    private List<String> splitObjectIds(String objectId) {
-        if (StrUtil.isBlank(objectId)) {
-            return Collections.emptyList();
-        }
-        return Arrays.stream(objectId.split(","))
-            .map(String::trim)
-            .filter(StrUtil::isNotBlank)
-            .collect(Collectors.toList());
-    }
-
     private void fillDefaultMonthRange(CommonPageInfo pageInfo) {
         Date now = new Date();
         if (StrUtil.isBlank(pageInfo.getStartTime())) {
@@ -273,8 +227,7 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
         }
     }
 
-    private Map<String, Integer> countInspectedByEquipment(CommonPageInfo pageInfo, List<SummaryEquipmentContext> contexts) {
-        List<String> equipmentIds = contexts.stream().map(ctx -> ctx.equipmentId).collect(Collectors.toList());
+    private Map<String, Integer> countInspected(CommonPageInfo pageInfo, Set<String> equipmentIds) {
         if (CollectionUtil.isEmpty(equipmentIds)) {
             return Collections.emptyMap();
         }
@@ -283,70 +236,50 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
         wrapper.ge(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), pageInfo.getStartTime());
         wrapper.le(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), pageInfo.getEndTime());
         wrapper.select(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId));
-        List<EquipmentInspectionOrder> orders = equipmentInspectionOrderService.list(wrapper);
         Map<String, Integer> countMap = new HashMap<>();
-        for (EquipmentInspectionOrder order : orders) {
-            countMap.merge(order.getEquipmentId(), 1, Integer::sum);
-        }
+        equipmentInspectionOrderService.list(wrapper).forEach(order -> countMap.merge(order.getEquipmentId(), 1, Integer::sum));
         return countMap;
     }
 
-    private Map<String, Object> buildSummaryRow(SummaryEquipmentContext ctx, int requiredCount, int inspectedCount, int missedCount) {
-        Map<String, Object> row = new HashMap<>(16);
-        row.put("equipmentId", ctx.equipmentId);
-        row.put("equipmentName", ctx.equipmentName);
-        row.put("equipmentCode", ctx.equipmentCode);
-        row.put("equipmentTypeId", ctx.equipmentTypeId);
-        row.put("equipmentTypeName", ctx.equipmentTypeName);
-        row.put("useFarm", ctx.useFarm);
-        row.put("installAddress", ctx.installAddress);
-        row.put("planId", ctx.planId);
-        row.put("requiredCount", requiredCount);
-        row.put("inspectedCount", inspectedCount);
-        row.put("missedCount", missedCount);
+    private Map<String, Object> buildSummaryRow(EquipmentArchive archive, String planId, int[] stat) {
+        Map<String, Object> row = new HashMap<>(12);
+        row.put("equipmentId", archive.getId());
+        row.put("equipmentName", archive.getName());
+        row.put("equipmentCode", archive.getOddNumber());
+        row.put("equipmentTypeId", archive.getEquipmentTypeId());
+        row.put("equipmentTypeName", resolveArchiveTypeName(archive));
+        row.put("useFarm", archive.getUseFarm());
+        row.put("installAddress", archive.getInstallAddress());
+        row.put("planId", planId);
+        row.put("requiredCount", stat[0]);
+        row.put("inspectedCount", stat[1]);
+        row.put("missedCount", stat[2]);
         return row;
-    }
-
-    private String parsePlanId(EquipmentArchiveBizRecord record) {
-        if (record == null || StrUtil.isBlank(record.getExtJson())) {
-            return StrUtil.EMPTY;
-        }
-        return MapUtil.getStr(JSONUtil.toBean(record.getExtJson(), Map.class), "planId");
     }
 
     private String resolveArchiveTypeName(EquipmentArchive archive) {
         if (StrUtil.isBlank(archive.getId())) {
             return "其他设备";
         }
-        String typeName = EquipmentArchiveType.getNameByKey(archive.getEquipmentTypeId());
-        if (StrUtil.isNotBlank(typeName)) {
-            return typeName;
-        }
-        return StrUtil.blankToDefault(archive.getEquipmentTypeName(), StrUtil.blankToDefault(archive.getName(), "其他设备"));
+        return StrUtil.blankToDefault(EquipmentArchiveType.getNameByKey(archive.getEquipmentTypeId()),
+            StrUtil.blankToDefault(archive.getEquipmentTypeName(), "其他设备"));
     }
 
     private void appendSummaryFarmMation(List<Map<String, Object>> beans) {
-        if (CollectionUtil.isEmpty(beans)) {
-            return;
-        }
-        for (Map<String, Object> bean : beans) {
-            if (StrUtil.isNotBlank(MapUtil.getStr(bean, "useFarm"))) {
+        beans.forEach(bean -> {
+            String useFarm = MapUtil.getStr(bean, "useFarm");
+            if (StrUtil.isNotBlank(useFarm)) {
                 Farm farm = new Farm();
-                farm.setName(MapUtil.getStr(bean, "useFarm"));
+                farm.setName(useFarm);
                 bean.put("farmMation", farm);
             }
-        }
+        });
     }
 
-    private static class SummaryEquipmentContext {
-        private String equipmentId;
-        private String equipmentName;
-        private String equipmentCode;
-        private String equipmentTypeId;
-        private String equipmentTypeName;
-        private String useFarm;
-        private String installAddress;
-        private String planId;
-        private EquipmentInspectionPlan plan;
+    private static class PatrolStatBundle {
+        private Map<String, EquipmentArchive> archiveMap = Collections.emptyMap();
+        private Map<String, String> planIdMap = Collections.emptyMap();
+        private Map<String, int[]> statMap = Collections.emptyMap();
     }
+
 }
