@@ -248,13 +248,22 @@ public class ChooseTopicServiceImpl extends SkyeyeBusinessServiceImpl<ChooseTopi
         if (StrUtil.isNotEmpty(teacherId) && chooseActivityService.checkActivityIsStart(chooseActivity)) {
             chooseActivityService.checkTeacherSelectionEnabled(chooseActivity);
             chooseUserTeacher = getTeacherUser(teacherId);
-            if (Objects.equals(chooseUserTeacher.getActivityType(), ActivityType.UN_SINGLE.getKey())
-                && StrUtil.equals(chooseTopic.getTeacherId(), teacherId)
-                && chooseTopic.getTeacherResult() == TeacherResultState.AGREE.getKey()) {
-                throw new CustomException("双选类型选题活动，导师同意后不可选择导师");
-            }
             Integer teacherResult = resolveTeacherResult(chooseUserTeacher);
-            if (!(StrUtil.equals(chooseTopic.getTeacherId(), teacherId)
+            if (StrUtil.isNotEmpty(chooseTopic.getTeacherId())) {
+                if (StrUtil.equals(chooseTopic.getTeacherId(), teacherId)
+                    && Objects.equals(chooseTopic.getTeacherResult(), teacherResult)) {
+                    // 幂等：导师与状态均未变化
+                } else {
+                    ChooseUser currentTeacher = chooseUserService.selectById(chooseTopic.getTeacherId());
+                    assertCanModifyTeacher(chooseTopic, currentTeacher);
+                    if (checkTeacherOverLimit(teacherId, chooseTopic.getActivityId(), chooseUserTeacher)) {
+                        throw new CustomException("已超过该导师的最大选择次数，请选择其他导师");
+                    }
+                    updateWrapper.set(MybatisPlusUtil.toColumns(ChooseTopic::getTeacherId), teacherId);
+                    updateWrapper.set(MybatisPlusUtil.toColumns(ChooseTopic::getTeacherResult), teacherResult);
+                    chooseTeacherAction = true;
+                }
+            } else if (!(StrUtil.equals(chooseTopic.getTeacherId(), teacherId)
                 && Objects.equals(chooseTopic.getTeacherResult(), teacherResult))) {
                 if (checkTeacherOverLimit(teacherId, chooseTopic.getActivityId(), chooseUserTeacher)) {
                     throw new CustomException("已超过该导师的最大选择次数，请选择其他导师");
@@ -535,7 +544,7 @@ public class ChooseTopicServiceImpl extends SkyeyeBusinessServiceImpl<ChooseTopi
             }
 
             ChooseUser chooseUserTeacher = chooseUserService.selectById(chooseTopic.getTeacherId());
-            assertCanCancelTeacher(chooseTopic, chooseUserTeacher);
+            assertCanModifyTeacher(chooseTopic, chooseUserTeacher);
             String oldTeacherId = chooseTopic.getTeacherId();
             String teacherName = ObjectUtil.isNotEmpty(chooseUserTeacher) ? chooseUserTeacher.getName() : null;
             chooseTopic.setTeacherId(StrUtil.EMPTY);
@@ -584,16 +593,15 @@ public class ChooseTopicServiceImpl extends SkyeyeBusinessServiceImpl<ChooseTopi
                 }
 
                 ChooseUser chooseUserTeacher = getTeacherUser(teacherId);
-                if (Objects.equals(chooseUserTeacher.getActivityType(), ActivityType.UN_SINGLE.getKey())
-                    && StrUtil.equals(chooseTopic.getTeacherId(), teacherId)
-                    && chooseTopic.getTeacherResult() == TeacherResultState.AGREE.getKey()) {
-                    throw new CustomException("双选类型选题活动，导师同意后不可选择导师");
-                }
                 Integer teacherResult = resolveTeacherResult(chooseUserTeacher);
                 if (StrUtil.equals(chooseTopic.getTeacherId(), teacherId)
                     && Objects.equals(chooseTopic.getTeacherResult(), teacherResult)) {
                     outputObject.setBean(chooseTopic);
                     return;
+                }
+                if (StrUtil.isNotEmpty(chooseTopic.getTeacherId())) {
+                    ChooseUser currentTeacher = chooseUserService.selectById(chooseTopic.getTeacherId());
+                    assertCanModifyTeacher(chooseTopic, currentTeacher);
                 }
                 if (checkTeacherOverLimit(teacherId, chooseActivity.getId(), chooseUserTeacher)) {
                     throw new CustomException("超出导师选择数量限制，请选择其他导师");
@@ -654,13 +662,15 @@ public class ChooseTopicServiceImpl extends SkyeyeBusinessServiceImpl<ChooseTopi
         }
     }
 
-    private void assertCanCancelTeacher(ChooseTopic chooseTopic, ChooseUser teacher) {
-        if (ObjectUtil.isEmpty(teacher)) {
+    private void assertCanModifyTeacher(ChooseTopic chooseTopic, ChooseUser currentTeacher) {
+        if (StrUtil.isEmpty(chooseTopic.getTeacherId()) || ObjectUtil.isEmpty(currentTeacher)) {
             return;
         }
-        if (Objects.equals(teacher.getActivityType(), ActivityType.UN_SINGLE.getKey())
-            && chooseTopic.getTeacherResult() == TeacherResultState.AGREE.getKey()) {
-            throw new CustomException("双选类型选题活动，导师同意后不可取消选择导师");
+        if (Objects.equals(currentTeacher.getActivityType(), ActivityType.SINGLE.getKey())) {
+            throw new CustomException("单选类型导师，选择后不可退选或更换");
+        }
+        if (chooseTopic.getTeacherResult() == TeacherResultState.AGREE.getKey()) {
+            throw new CustomException("导师已同意，不可退选或更换");
         }
     }
 
@@ -821,10 +831,9 @@ public class ChooseTopicServiceImpl extends SkyeyeBusinessServiceImpl<ChooseTopi
                     outputObject.setBean(chooseTopic);
                     return;
                 }
-                if (Objects.equals(chooseUserTeacher.getActivityType(), ActivityType.UN_SINGLE.getKey())
-                    && StrUtil.equals(chooseTopic.getTeacherId(), teacherId)
-                    && chooseTopic.getTeacherResult() == TeacherResultState.AGREE.getKey()) {
-                    throw new CustomException("双选类型选题活动，导师同意后不可选择导师");
+                if (StrUtil.isNotEmpty(chooseTopic.getTeacherId())) {
+                    ChooseUser currentTeacher = chooseUserService.selectById(chooseTopic.getTeacherId());
+                    assertCanModifyTeacher(chooseTopic, currentTeacher);
                 }
                 if (checkTeacherOverLimit(teacherId, activityId, chooseUserTeacher)) {
                     throw new CustomException("已超过该导师的最大选择次数，请选择其他导师");
@@ -888,7 +897,7 @@ public class ChooseTopicServiceImpl extends SkyeyeBusinessServiceImpl<ChooseTopi
 
             ChooseUser chooseUserTeacher = StrUtil.isNotEmpty(chooseTopic.getTeacherId())
                 ? chooseUserService.selectById(chooseTopic.getTeacherId()) : null;
-            assertCanCancelTeacher(chooseTopic, chooseUserTeacher);
+            assertCanModifyTeacher(chooseTopic, chooseUserTeacher);
             String oldTeacherId = chooseTopic.getTeacherId();
             String teacherName = ObjectUtil.isNotEmpty(chooseUserTeacher) ? chooseUserTeacher.getName() : null;
 
