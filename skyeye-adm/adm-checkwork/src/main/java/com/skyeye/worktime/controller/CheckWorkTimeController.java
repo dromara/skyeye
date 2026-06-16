@@ -49,13 +49,7 @@ public class CheckWorkTimeController {
     @ApiOperation(id = "setOnlineCheckWorkTime", value = "设置线上打卡的信息", method = "POST", allUse = "1")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),
-        @ApiImplicitParam(id = "longitude", name = "longitude", value = "经度", required = "required"),
-        @ApiImplicitParam(id = "latitude", name = "latitude", value = "纬度", required = "required"),
-        @ApiImplicitParam(id = "provinceId", name = "provinceId", value = "省", required = "required"),
-        @ApiImplicitParam(id = "cityId", name = "cityId", value = "市", required = "required"),
-        @ApiImplicitParam(id = "areaId", name = "areaId", value = "区县", required = "required"),
-        @ApiImplicitParam(id = "townshipId", name = "townshipId", value = "乡镇"),
-        @ApiImplicitParam(id = "absoluteAddress", name = "absoluteAddress", value = "具体地址", required = "required")})
+        @ApiImplicitParam(id = "checkWorkTimePointList", name = "checkWorkTimePointList", value = "打卡点位列表", required = "json")})
     @RequestMapping("/post/CheckWorkTimeController/setOnlineCheckWorkTime")
     public void setOnlineCheckWorkTime(InputObject inputObject, OutputObject outputObject) {
         checkWorkTimeService.setOnlineCheckWorkTime(inputObject, outputObject);

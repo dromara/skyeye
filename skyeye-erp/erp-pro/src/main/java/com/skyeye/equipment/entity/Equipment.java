@@ -12,7 +12,9 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
+import com.skyeye.equipment.classenum.EquipmentState;
 import com.skyeye.farm.entity.Farm;
+import com.skyeye.supplier.entity.Supplier;
 import lombok.Data;
 
 import java.util.Map;
@@ -32,6 +34,30 @@ import java.util.Map;
 @ApiModel("设备管理实体类")
 public class Equipment extends BaseGeneralInfo {
 
+    @TableField(value = "odd_number")
+    @ApiModelProperty(value = "设备编码", required = "required")
+    private String oddNumber;
+
+    @TableField(value = "equipment_type_id")
+    @ApiModelProperty(value = "设备类型id")
+    private String equipmentTypeId;
+
+    @TableField(value = "equipment_type_name")
+    @ApiModelProperty(value = "设备类型名称")
+    private String equipmentTypeName;
+
+    @TableField(value = "equipment_state")
+    @ApiModelProperty(value = "设备状态", enumClass = EquipmentState.class, required = "required,num")
+    private Integer equipmentState;
+
+    @TableField(value = "equipment_img")
+    @ApiModelProperty(value = "设备图片")
+    private String equipmentImg;
+
+    @TableField(value = "technical_manual")
+    @ApiModelProperty(value = "设备技术手册")
+    private String technicalManual;
+
     @TableField(value = "model")
     @ApiModelProperty(value = "规格", required = "required", fuzzyLike = true)
     private String model;
@@ -47,6 +73,10 @@ public class Equipment extends BaseGeneralInfo {
     @TableField(value = "buy_time")
     @ApiModelProperty(value = "购买日期", required = "required")
     private String buyTime;
+
+    @TableField(value = "enable_time")
+    @ApiModelProperty(value = "启用日期")
+    private String enableTime;
 
     @TableField(value = "operating_hours")
     @ApiModelProperty(value = "每日运转时长")
@@ -64,6 +94,10 @@ public class Equipment extends BaseGeneralInfo {
     @ApiModelProperty(value = "车间id", required = "required")
     private String farmId;
 
+    @TableField(value = "responsible_id")
+    @ApiModelProperty(value = "设备负责人id")
+    private String responsibleId;
+
     @TableField(value = "unit_price")
     @ApiModelProperty(value = "单价",required = "required")
     private String unitPrice;
@@ -72,6 +106,10 @@ public class Equipment extends BaseGeneralInfo {
     @ApiModelProperty(value = "项目id")
     private String projectId;
 
+    @TableField(value = "supplier_id")
+    @ApiModelProperty(value = "供应商id")
+    private String supplierId;
+
     @TableField(exist = false)
     @Property(value = "项目信息")
     private Map<String,Object> projectMation;
@@ -79,5 +117,13 @@ public class Equipment extends BaseGeneralInfo {
     @TableField(exist = false)
     @Property(value = "车间信息")
     private Farm farmMation;
+
+    @TableField(exist = false)
+    @Property(value = "设备负责人信息")
+    private Map<String, Object> responsibleMation;
+
+    @TableField(exist = false)
+    @Property(value = "供应商信息")
+    private Supplier supplierMation;
 
 }

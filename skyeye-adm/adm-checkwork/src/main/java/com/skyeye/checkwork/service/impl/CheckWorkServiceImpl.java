@@ -47,6 +47,7 @@ import com.skyeye.scheduling.service.SchedulingTimeService;
 import com.skyeye.trip.service.BusinessTripService;
 import com.skyeye.worktime.classenum.CheckWorkTimeWeekType;
 import com.skyeye.worktime.entity.CheckWorkTime;
+import com.skyeye.worktime.entity.CheckWorkTimePoint;
 import com.skyeye.worktime.entity.CheckWorkTimeWeek;
 import com.skyeye.worktime.service.CheckWorkTimeService;
 import org.slf4j.Logger;
@@ -128,6 +129,7 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         // 1.获取当前用户的考勤班次信息
         Map<String, Object> workTime = getWorkTime(userId, todayYMD, timeId, staffId, shiftType);
         validateClockPermission(workTime, map, shiftType);
+        validateOnlineClockLocation(workTime, map);
         // 2.获取今天的打卡记录
         String checkInTime = DateUtil.getHmsTimeAndToString();
         String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
@@ -194,6 +196,7 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
             bean.put("checkWorkTimeWeekList", checkWorkTime.getCheckWorkTimeWeekList());
             bean.put("onlineClockEnabled", ObjectUtil.defaultIfNull(checkWorkTime.getOnlineClockEnabled(), EnableEnum.ENABLE_USING.getKey()));
             bean.put("webClockEnabled", ObjectUtil.defaultIfNull(checkWorkTime.getWebClockEnabled(), EnableEnum.ENABLE_USING.getKey()));
+            bean.put("checkWorkTimePointList", checkWorkTime.getCheckWorkTimePointList());
             return bean;
         } else {
             SchedulingTime schedulingTime = schedulingTimeService.selectById(timeId);
@@ -240,6 +243,44 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
     }
 
     /**
+     * 校验线上打卡定位是否在任一点位范围内
+     */
+    private void validateOnlineClockLocation(Map<String, Object> workTime, Map<String, Object> map) {
+        ClockSource clockSource = ClockSource.getByKey(map.containsKey("clockSource") && map.get("clockSource") != null
+            ? map.get("clockSource").toString() : null);
+        if (!ClockSource.ONLINE_SOURCE.equals(clockSource)) {
+            return;
+        }
+        Object pointObj = workTime.get("checkWorkTimePointList");
+        if (ObjectUtil.isEmpty(pointObj)) {
+            return;
+        }
+        List<CheckWorkTimePoint> pointList = JSONUtil.toList(JSONUtil.toJsonStr(pointObj), CheckWorkTimePoint.class);
+        if (CollectionUtil.isEmpty(pointList)) {
+            return;
+        }
+        String longitude = map.containsKey("longitude") && map.get("longitude") != null ? map.get("longitude").toString() : StrUtil.EMPTY;
+        String latitude = map.containsKey("latitude") && map.get("latitude") != null ? map.get("latitude").toString() : StrUtil.EMPTY;
+        if (StrUtil.isBlank(longitude) || StrUtil.isBlank(latitude)) {
+            throw new CustomException("请先获取定位信息后再打卡。");
+        }
+        double currentLat = Double.parseDouble(latitude);
+        double currentLng = Double.parseDouble(longitude);
+        for (CheckWorkTimePoint point : pointList) {
+            if (StrUtil.isBlank(point.getLongitude()) || StrUtil.isBlank(point.getLatitude())) {
+                continue;
+            }
+            int radius = point.getRadius() == null ? 500 : point.getRadius();
+            double distance = ToolUtil.calculateDistance(currentLat, currentLng,
+                Double.parseDouble(point.getLatitude()), Double.parseDouble(point.getLongitude()));
+            if (distance <= radius) {
+                return;
+            }
+        }
+        throw new CustomException("你不在打卡范围内，请前往打卡范围内再进行打卡。");
+    }
+
+    /**
      * 下班打卡
      *
      * @param inputObject  入参以及用户信息等获取对象
@@ -258,6 +299,7 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         // 1.获取当前用户的考勤班次信息
         Map<String, Object> workTime = getWorkTime(userId, todayYMD, timeId, staffId, shiftType);
         validateClockPermission(workTime, map, shiftType);
+        validateOnlineClockLocation(workTime, map);
         // 2.获取今天的打卡记录
         String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
         CheckWork todayCheckWork = checkWorkDao.queryisAlreadyCheck(DateUtil.getYmdTimeAndToString(), userId, timeId, tenantId);

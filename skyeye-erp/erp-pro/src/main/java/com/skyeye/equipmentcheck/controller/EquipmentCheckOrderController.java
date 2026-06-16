@@ -26,7 +26,7 @@ public class EquipmentCheckOrderController {
     @Autowired
     private EquipmentCheckOrderService equipmentCheckOrderService;
 
-    @ApiOperation(id = "queryEquipmentCheckOrderList", value = "获取设备点检单列表", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryEquipmentCheckOrderList", value = "获取设备点检单列表", method = "POST", allUse = "1")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/EquipmentCheckOrderController/queryEquipmentCheckOrderList")
     public void queryEquipmentCheckOrderList(InputObject inputObject, OutputObject outputObject) {
@@ -38,6 +38,14 @@ public class EquipmentCheckOrderController {
     @RequestMapping("/post/EquipmentCheckOrderController/writeEquipmentCheckOrder")
     public void writeEquipmentCheckOrder(InputObject inputObject, OutputObject outputObject) {
         equipmentCheckOrderService.saveOrUpdateEntity(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryEquipmentCheckOrderById", value = "根据id查询设备点检单详情", method = "GET", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
+    @RequestMapping("/post/EquipmentCheckOrderController/queryEquipmentCheckOrderById")
+    public void queryEquipmentCheckOrderById(InputObject inputObject, OutputObject outputObject) {
+        equipmentCheckOrderService.selectById(inputObject, outputObject);
     }
 
     @ApiOperation(id = "submitEquipmentCheckOrderToApproval", value = "设备点检单提交审批", method = "POST", allUse = "1")
@@ -63,7 +71,7 @@ public class EquipmentCheckOrderController {
         equipmentCheckOrderService.deleteByIds(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryEquipmentCheckStatistics", value = "设备点检统计", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryEquipmentCheckStatistics", value = "设备点检统计", method = "POST", allUse = "1")
     @RequestMapping("/post/EquipmentCheckOrderController/queryStatistics")
     public void queryStatistics(InputObject inputObject, OutputObject outputObject) {
         equipmentCheckOrderService.queryStatistics(inputObject, outputObject);

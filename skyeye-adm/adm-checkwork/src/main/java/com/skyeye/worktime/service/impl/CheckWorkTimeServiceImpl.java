@@ -6,12 +6,11 @@ package com.skyeye.worktime.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.client.ExecuteFeignClient;
-import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.enumeration.DeleteFlagEnum;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.enumeration.WeekTypeEnum;
@@ -26,7 +25,9 @@ import com.skyeye.worktime.classenum.CheckWorkTimeType;
 import com.skyeye.worktime.classenum.CheckWorkTimeWeekType;
 import com.skyeye.worktime.dao.CheckWorkTimeDao;
 import com.skyeye.worktime.entity.CheckWorkTime;
+import com.skyeye.worktime.entity.CheckWorkTimePoint;
 import com.skyeye.worktime.entity.CheckWorkTimeWeek;
+import com.skyeye.worktime.service.CheckWorkTimePointService;
 import com.skyeye.worktime.service.CheckWorkTimeService;
 import com.skyeye.worktime.service.CheckWorkTimeWeekService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,9 @@ public class CheckWorkTimeServiceImpl extends SkyeyeBusinessServiceImpl<CheckWor
     private CheckWorkTimeWeekService checkWorkTimeWeekService;
 
     @Autowired
+    private CheckWorkTimePointService checkWorkTimePointService;
+
+    @Autowired
     private SysEveUserService sysEveUserService;
 
     @Autowired
@@ -73,12 +77,14 @@ public class CheckWorkTimeServiceImpl extends SkyeyeBusinessServiceImpl<CheckWor
         if (CollectionUtil.isNotEmpty(beans)) {
             throw new CustomException("该考勤班次已被员工使用，无法删除。");
         }
+        checkWorkTimePointService.deleteByTimeId(id);
     }
 
     @Override
     public CheckWorkTime getDataFromDb(String id) {
         CheckWorkTime checkWorkTime = super.getDataFromDb(id);
         checkWorkTime.setCheckWorkTimeWeekList(checkWorkTimeWeekService.selectByTimeId(checkWorkTime.getId()));
+        checkWorkTime.setCheckWorkTimePointList(checkWorkTimePointService.selectByTimeId(checkWorkTime.getId()));
         return checkWorkTime;
     }
 
@@ -93,8 +99,11 @@ public class CheckWorkTimeServiceImpl extends SkyeyeBusinessServiceImpl<CheckWor
     protected List<CheckWorkTime> getDataFromDb(List<String> idList) {
         List<CheckWorkTime> checkWorkTimeList = super.getDataFromDb(idList);
         Map<String, List<CheckWorkTimeWeek>> weekMap = checkWorkTimeWeekService.selectByTimeId(idList);
+        Map<String, List<CheckWorkTimePoint>> pointMap = checkWorkTimePointService.selectByTimeId(idList);
         checkWorkTimeList.forEach(checkWorkTime -> {
             checkWorkTime.setCheckWorkTimeWeekList(weekMap.get(checkWorkTime.getId()));
+            List<CheckWorkTimePoint> pointList = pointMap.get(checkWorkTime.getId());
+            checkWorkTime.setCheckWorkTimePointList(CollectionUtil.isNotEmpty(pointList) ? pointList : new ArrayList<>());
         });
         return checkWorkTimeList;
     }
@@ -177,19 +186,12 @@ public class CheckWorkTimeServiceImpl extends SkyeyeBusinessServiceImpl<CheckWor
 
     @Override
     public void setOnlineCheckWorkTime(InputObject inputObject, OutputObject outputObject) {
-        CheckWorkTime checkWorkTime = inputObject.getParams(CheckWorkTime.class);
-        UpdateWrapper<CheckWorkTime> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq(CommonConstants.ID, checkWorkTime.getId());
-        updateWrapper.set(MybatisPlusUtil.toColumns(CheckWorkTime::getLongitude), checkWorkTime.getLongitude());
-        updateWrapper.set(MybatisPlusUtil.toColumns(CheckWorkTime::getLatitude), checkWorkTime.getLatitude());
-        updateWrapper.set(MybatisPlusUtil.toColumns(CheckWorkTime::getProvinceId), checkWorkTime.getProvinceId());
-        updateWrapper.set(MybatisPlusUtil.toColumns(CheckWorkTime::getCityId), checkWorkTime.getCityId());
-        updateWrapper.set(MybatisPlusUtil.toColumns(CheckWorkTime::getAreaId), checkWorkTime.getAreaId());
-        updateWrapper.set(MybatisPlusUtil.toColumns(CheckWorkTime::getTownshipId), checkWorkTime.getTownshipId());
-        updateWrapper.set(MybatisPlusUtil.toColumns(CheckWorkTime::getAbsoluteAddress), checkWorkTime.getAbsoluteAddress());
-        update(updateWrapper);
-
-        refreshCache(checkWorkTime.getId());
+        Map<String, Object> params = inputObject.getParams();
+        String timeId = params.get("id").toString();
+        String userId = inputObject.getLogParams().get("id").toString();
+        List<CheckWorkTimePoint> pointList = JSONUtil.toList(params.get("checkWorkTimePointList").toString(), CheckWorkTimePoint.class);
+        checkWorkTimePointService.saveCheckWorkTimePointList(timeId, pointList, userId);
+        refreshCache(timeId);
     }
 
 }

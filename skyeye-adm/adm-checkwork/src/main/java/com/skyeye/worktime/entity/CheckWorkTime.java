@@ -14,7 +14,7 @@ import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.base.handler.enclosure.bean.Enclosure;
 import com.skyeye.common.base.handler.enclosure.bean.EnclosureFace;
 import com.skyeye.common.constans.CacheConstants;
-import com.skyeye.common.entity.features.AreaInfo;
+import com.skyeye.common.entity.features.OperatorUserInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.worktime.classenum.CheckWorkTimeType;
 import lombok.Data;
@@ -33,7 +33,7 @@ import java.util.List;
 @RedisCacheField(name = CacheConstants.CHECK_WORK_TIME_CACHE_KEY)
 @TableName(value = "check_work_time", autoResultMap = true)
 @ApiModel("考勤班次实体类")
-public class CheckWorkTime extends AreaInfo implements EnclosureFace {
+public class CheckWorkTime extends OperatorUserInfo implements EnclosureFace {
 
     @TableId("id")
     @ApiModelProperty(value = "主键id。为空时新增，不为空时编辑")
@@ -92,18 +92,14 @@ public class CheckWorkTime extends AreaInfo implements EnclosureFace {
     private List<CheckWorkTimeWeek> checkWorkTimeWeekList;
 
     @TableField(exist = false)
+    @ApiModelProperty(value = "线上打卡点位列表", required = "json")
+    private List<CheckWorkTimePoint> checkWorkTimePointList;
+
+    @TableField(exist = false)
     @Property(value = "每个月工作的日期")
     private List<String> workDays;
 
     @TableField(value = "delete_flag")
     private Integer deleteFlag;
-
-    @TableField(value = "longitude")
-    @ApiModelProperty(value = "经度")
-    private String longitude;
-
-    @TableField(value = "latitude")
-    @ApiModelProperty(value = "纬度")
-    private String latitude;
 
 }

@@ -26,7 +26,7 @@ public class EquipmentCheckStandardController {
     @Autowired
     private EquipmentCheckStandardService equipmentCheckStandardService;
 
-    @ApiOperation(id = "queryEquipmentCheckStandardList", value = "获取设备点检标准列表", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryEquipmentCheckStandardList", value = "获取设备点检标准列表", method = "POST", allUse = "1")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/EquipmentCheckStandardController/queryEquipmentCheckStandardList")
     public void queryEquipmentCheckStandardList(InputObject inputObject, OutputObject outputObject) {
