@@ -26,7 +26,7 @@ public class EquipmentCheckOrderController {
     @Autowired
     private EquipmentCheckOrderService equipmentCheckOrderService;
 
-    @ApiOperation(id = "queryEquipmentCheckOrderList", value = "获取设备点检单列表", method = "POST", allUse = "1")
+    @ApiOperation(id = "queryEquipmentCheckOrderList", value = "获取设备点检单列表", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/EquipmentCheckOrderController/queryEquipmentCheckOrderList")
     public void queryEquipmentCheckOrderList(InputObject inputObject, OutputObject outputObject) {

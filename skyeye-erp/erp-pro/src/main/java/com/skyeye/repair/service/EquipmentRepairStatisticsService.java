@@ -4,19 +4,15 @@
 
 package com.skyeye.repair.service;
 
-import com.skyeye.base.business.service.SkyeyeBusinessService;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.repair.entity.EquipmentRepairOrder;
 
 /**
- * 报修维修统计服务接口层（结构与 seal 模块  对齐：多接口、各接口独立 {@code setBean}）
+ * 报修维修统计服务接口层
  *
  * @author skyeye云系列--卫志强
  */
-public interface EquipmentRepairStatisticsService extends SkyeyeBusinessService<EquipmentRepairOrder> {
-
-
+public interface EquipmentRepairStatisticsService {
 
     /**
      * 按派工时间的月度趋势（xAxisData + seriesData + total）
@@ -24,7 +20,12 @@ public interface EquipmentRepairStatisticsService extends SkyeyeBusinessService<
     void queryRepairMonthlyTrendStats(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 按设备名称统计维修单数（全量，不按起止时间筛选；xAxisData + seriesData + total）
+     * 按设备 id 统计维修单数
      */
     void queryRepairStatsByEquipmentName(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 按设备分页查询维修单
+     */
+    void queryPageList(InputObject inputObject, OutputObject outputObject);
 }

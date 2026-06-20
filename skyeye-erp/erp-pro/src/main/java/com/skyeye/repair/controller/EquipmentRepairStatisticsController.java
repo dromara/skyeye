@@ -24,14 +24,14 @@ public class EquipmentRepairStatisticsController {
     @Autowired
     private EquipmentRepairStatisticsService equipmentRepairStatisticsService;
 
-    @ApiOperation(id = "queryRepairMonthlyTrendStats", value = "报修维修统计-按报修时间月度趋势", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryRepairMonthlyTrendStats", value = "报修维修统计-按派工时间月度趋势", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = TableSelectInfo.class)
     @RequestMapping("/post/EquipmentRepairStatisticsController/queryRepairMonthlyTrendStats")
     public void queryRepairMonthlyTrendStats(InputObject inputObject, OutputObject outputObject) {
         equipmentRepairStatisticsService.queryRepairMonthlyTrendStats(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryRepairStatsByEquipmentName", value = "报修维修统计-按设备名称统计（全量，不按派工时间筛选）", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryRepairStatsByEquipmentName", value = "报修维修统计-按设备id统计工单数（全量）", method = "POST", allUse = "2")
     @RequestMapping("/post/EquipmentRepairStatisticsController/queryRepairStatsByEquipmentName")
     public void queryRepairStatsByEquipmentName(InputObject inputObject, OutputObject outputObject) {
         equipmentRepairStatisticsService.queryRepairStatsByEquipmentName(inputObject, outputObject);

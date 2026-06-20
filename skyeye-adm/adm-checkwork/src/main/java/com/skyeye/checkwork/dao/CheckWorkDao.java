@@ -98,7 +98,7 @@ public interface CheckWorkDao extends SkyeyeBaseMapper<CheckWork> {
     List<Map<String, Object>> queryCheckWorkReport(Map<String, Object> map);
 
     @IgnoreTenant
-    Map<String, Object> queryCheckWorkEcharts(Map<String, Object> beans);
+    List<Map<String, Object>> queryCheckWorkEchartsBatch(Map<String, Object> map);
 
     @IgnoreTenant
     List<Map<String, Object>> queryReportDetail(Map<String, Object> map);

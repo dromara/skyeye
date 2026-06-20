@@ -21,8 +21,11 @@ import com.skyeye.repair.service.EquipmentScrapOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 /**
@@ -48,6 +51,11 @@ public class EquipmentScrapOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
         }
         equipmentService.setDataMation(entity, EquipmentScrapOrder::getEquipmentId);
         iAuthUserService.setDataMation(entity, EquipmentScrapOrder::getUserId);
+        if (StrUtil.isNotEmpty(entity.getStaffId())) {
+            Map<String, Map<String, Object>> staffMap = iAuthUserService.queryUserMationListByStaffIds(
+                Collections.singletonList(entity.getStaffId()));
+            entity.setStaffMation(staffMap.get(entity.getStaffId()));
+        }
         return entity;
     }
 
@@ -75,6 +83,22 @@ public class EquipmentScrapOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
         }
         equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
         iAuthUserService.setMationForMap(beans, "userId", "userMation");
+        List<String> staffIds = beans.stream()
+            .map(bean -> bean.get("staffId"))
+            .filter(Objects::nonNull)
+            .map(Object::toString)
+            .filter(StrUtil::isNotEmpty)
+            .distinct()
+            .collect(Collectors.toList());
+        if (CollectionUtil.isNotEmpty(staffIds)) {
+            Map<String, Map<String, Object>> staffMap = iAuthUserService.queryUserMationListByStaffIds(staffIds);
+            beans.forEach(bean -> {
+                Object staffId = bean.get("staffId");
+                if (staffId != null && StrUtil.isNotEmpty(staffId.toString())) {
+                    bean.put("staffMation", staffMap.get(staffId.toString()));
+                }
+            });
+        }
         return beans;
     }
 

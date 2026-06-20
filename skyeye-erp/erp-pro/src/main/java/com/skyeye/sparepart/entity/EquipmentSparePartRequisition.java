@@ -2,7 +2,7 @@
  * Copyright 卫志强 QQ：598748873@qq.com Inc. All rights reserved. 开源地址：https://gitee.com/doc_wei01/skyeye
  ******************************************************************************/
 
-package com.skyeye.repair.entity;
+package com.skyeye.sparepart.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -12,7 +12,7 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeLinkData;
-import com.skyeye.repair.classenum.EquipmentSparePartRequisitionPurpose;
+import com.skyeye.sparepart.classenum.EquipmentSparePartRequisitionPurpose;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -20,25 +20,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 备件领用单主表（关联 erp 仓库、设备维修单、sys 用户/部门、明细一对多 erp_material）
+ * 备件领用单主表（可从我的库存发起，也可关联设备维修单）
  */
 @Data
-@RedisCacheField(name = "seal:repair:spareRequisition", cacheTime = RedisConstants.THIRTY_DAY_SECONDS)
-@TableName(value = "equipment_spare_part_requisition")
+@RedisCacheField(name = "erp:sparepart:requisition", cacheTime = RedisConstants.THIRTY_DAY_SECONDS)
+@TableName(value = "erp_equipment_spare_part_requisition")
 @ApiModel("备件领用单实体类")
 public class EquipmentSparePartRequisition extends SkyeyeLinkData {
 
     @TableField(value = "repair_order_id")
-    @ApiModelProperty(value = "设备维修单ID，关联 equipment_repair_order.id")
+    @ApiModelProperty(value = "来源单据ID（设备维修单/设备保养单）")
     private String repairOrderId;
 
     @TableField(exist = false)
-    @Property(value = "设备维修单信息")
-    private EquipmentRepairOrder repairOrderMation;
+    @Property(value = "来源单据信息")
+    private Map<String, Object> sourceOrderMation;
 
     @TableField(value = "odd_number")
     @Property(value = "单据编号", fuzzyLike = true)
-    @ApiModelProperty(value = "单据编号")
     private String oddNumber;
 
     @TableField(value = "depot_id")

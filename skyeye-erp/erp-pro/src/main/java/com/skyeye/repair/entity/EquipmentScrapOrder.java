@@ -23,14 +23,9 @@ import java.util.Map;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Data
-@TableName(value = "equipment_scrap_order", autoResultMap = true)
+@TableName(value = "erp_equipment_scrap_order", autoResultMap = true)
 @ApiModel("设备报废单实体类")
 public class EquipmentScrapOrder extends SkyeyeFlowable {
-
-    @TableField(value = "odd_number")
-    @Property(value = "设备报废单编号", fuzzyLike = true)
-    @ApiModelProperty(value = "设备报废单编号")
-    private String oddNumber;
 
     @TableField(value = "application_date")
     @ApiModelProperty(value = "申请日期")
@@ -56,14 +51,16 @@ public class EquipmentScrapOrder extends SkyeyeFlowable {
     @ApiModelProperty(value = "设备状态", enumClass = EquipmentRepairEquipmentStatus.class)
     private Integer equipmentStatus;
 
-    @TableField(value = "equipment_principal")
-    @Property(value = "设备负责人", fuzzyLike = true)
-    @ApiModelProperty(value = "设备负责人")
-    private String equipmentPrincipal;
+    @TableField(value = "staff_id")
+    @ApiModelProperty(value = "设备负责人员工ID")
+    private String staffId;
+
+    @TableField(exist = false)
+    @Property(value = "设备负责人信息")
+    private Map<String, Object> staffMation;
 
     @TableField(value = "scrap_reason")
-    @Property(value = "报废原因", fuzzyLike = true)
-    @ApiModelProperty(value = "报废原因")
+    @ApiModelProperty(value = "报废原因", fuzzyLike = true)
     private String scrapReason;
 
 

@@ -18,6 +18,7 @@ import com.skyeye.repair.classenum.EquipmentRepairEquipmentStatus;
 import com.skyeye.repair.classenum.EquipmentRepairFaultReason;
 import com.skyeye.repair.classenum.EquipmentRepairTeam;
 import com.skyeye.repair.classenum.EquipmentRepairUrgency;
+import com.skyeye.sparepart.entity.EquipmentSparePartRequisition;
 import com.skyeye.supplier.entity.Supplier;
 import lombok.Data;
 
@@ -33,14 +34,9 @@ import java.util.Map;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Data
-@TableName(value = "equipment_repair_order", autoResultMap = true)
+@TableName(value = "erp_equipment_repair_order", autoResultMap = true)
 @ApiModel("设备维修主表实体类")
 public class EquipmentRepairOrder extends SkyeyeFlowable {
-
-    @TableField(value = "odd_number")
-    @Property(value = "维修单编号", fuzzyLike = true)
-    @ApiModelProperty(value = "单据编号")
-    private String oddNumber;
 
     @TableField(value = "urgency_level")
     @ApiModelProperty(value = "紧急程度", enumClass = EquipmentRepairUrgency.class, required = "required,num")
@@ -55,8 +51,7 @@ public class EquipmentRepairOrder extends SkyeyeFlowable {
     private Map<String, Object> equipmentMation;
 
     @TableField(value = "fault_desc")
-    @Property(value = "故障描述", fuzzyLike = true)
-    @ApiModelProperty(value = "故障描述")
+    @ApiModelProperty(value = "故障描述", fuzzyLike = true)
     private String faultBrief;
 
     @TableField(value = "fault_photo")
@@ -169,5 +164,6 @@ public class EquipmentRepairOrder extends SkyeyeFlowable {
 
     @TableField(exist = false)
     @Property(value = "备件信息")
-    List<EquipmentSparePartRequisition> sparePartRequisitionList;
+    @ApiModelProperty(value = "备件领用单列表", required = "json")
+    private List<EquipmentSparePartRequisition> sparePartRequisitionList;
 }

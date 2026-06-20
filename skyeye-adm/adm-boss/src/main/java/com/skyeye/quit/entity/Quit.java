@@ -8,10 +8,13 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
+import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeFlowable;
 import lombok.Data;
+
+import java.util.Map;
 
 /**
  * @ClassName: Quit
@@ -38,5 +41,13 @@ public class Quit extends SkyeyeFlowable {
     @TableField(value = "remark")
     @ApiModelProperty(value = "离职原因", required = "required")
     private String remark;
+
+    @TableField(value = "manager_transfer_staff_id")
+    @ApiModelProperty(value = "经理转让交接人(用户id)")
+    private String managerTransferUserId;
+
+    @TableField(exist = false)
+    @Property(value = "经理转让交接人信息")
+    private Map<String, Object> managerTransferUserMation;
 
 }

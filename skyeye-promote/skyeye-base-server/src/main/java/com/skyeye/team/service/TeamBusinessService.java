@@ -29,4 +29,6 @@ public interface TeamBusinessService extends AbstractTeamService<TeamBusiness> {
     void getMyTeamIds(InputObject inputObject, OutputObject outputObject);
 
     void queryMyBusinessTeamList(InputObject inputObject, OutputObject outputObject);
+
+    void transferAllChargeUser(InputObject inputObject, OutputObject outputObject);
 }

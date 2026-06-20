@@ -2,7 +2,7 @@
  * Copyright 卫志强 QQ：598748873@qq.com Inc. All rights reserved. 开源地址：https://gitee.com/doc_wei01/skyeye
  ******************************************************************************/
 
-package com.skyeye.accessory.service.impl;
+package com.skyeye.sparepart.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.map.MapUtil;
@@ -10,10 +10,6 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.skyeye.accessory.classenum.UserStockPutOutType;
-import com.skyeye.accessory.dao.ServiceUserStockDao;
-import com.skyeye.accessory.entity.ServiceUserStock;
-import com.skyeye.accessory.service.ServiceUserStockService;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonNumConstants;
@@ -22,10 +18,14 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
-import com.skyeye.erp.service.IMaterialNormsService;
-import com.skyeye.erp.service.IMaterialService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.jedis.util.RedisLock;
+import com.skyeye.material.service.MaterialNormsService;
+import com.skyeye.material.service.MaterialService;
+import com.skyeye.sparepart.classenum.EquipmentUserStockPutOutType;
+import com.skyeye.sparepart.dao.EquipmentUserStockDao;
+import com.skyeye.sparepart.entity.EquipmentUserStock;
+import com.skyeye.sparepart.service.EquipmentUserStockService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,53 +37,49 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * @ClassName: ServiceUserStockServiceImpl
- * @Description: 用户配件申领单审核通过后的库存信息服务层--强隔离
- * @author: skyeye云系列--卫志强
- * @date: 2022/1/13 22:25
- * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
- * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
+ * 设备维修-我的备件库存
  */
 @Service
-@SkyeyeService(name = "用户配件申领单审核通过后的库存信息", groupName = "用户配件申领单审核通过后的库存信息")
-public class ServiceUserStockServiceImpl extends SkyeyeBusinessServiceImpl<ServiceUserStockDao, ServiceUserStock> implements ServiceUserStockService {
+@SkyeyeService(name = "我的备件库存", groupName = "设备备件")
+public class EquipmentUserStockServiceImpl extends SkyeyeBusinessServiceImpl<EquipmentUserStockDao, EquipmentUserStock>
+    implements EquipmentUserStockService {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(ServiceUserStockServiceImpl.class);
-
-    @Autowired
-    private IMaterialNormsService iMaterialNormsService;
+    private static Logger LOGGER = LoggerFactory.getLogger(EquipmentUserStockServiceImpl.class);
 
     @Autowired
-    private IMaterialService iMaterialService;
+    private MaterialService materialService;
+
+    @Autowired
+    private MaterialNormsService materialNormsService;
 
     @Override
-    public QueryWrapper<ServiceUserStock> getQueryWrapper(CommonPageInfo commonPageInfo) {
-        QueryWrapper<ServiceUserStock> queryWrapper = super.getQueryWrapper(commonPageInfo);
+    public QueryWrapper<EquipmentUserStock> getQueryWrapper(CommonPageInfo commonPageInfo) {
+        QueryWrapper<EquipmentUserStock> queryWrapper = super.getQueryWrapper(commonPageInfo);
         String userId = InputObject.getLogParamsStatic().get("id").toString();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(ServiceUserStock::getUserId), userId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentUserStock::getUserId), userId);
         return queryWrapper;
     }
 
     @Override
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
-        iMaterialService.setMationForMap(beans, "materialId", "materialMation");
-        iMaterialNormsService.setMationForMap(beans, "normsId", "normsMation");
+        materialService.setMationForMap(beans, "materialId", "materialMation");
+        materialNormsService.setMationForMap(beans, "normsId", "normsMation");
         return beans;
     }
 
     /**
      * 修改用户拥有的商品规格库存
      *
-     * @param userId     仓库id
+     * @param userId     用户id
      * @param materialId 商品id
      * @param normsId    规格id
      * @param operNumber 变化数量
-     * @param type       参考#UserStockPutOutType枚举类
+     * @param type       参考#EquipmentUserStockPutOutType枚举类
      */
     @Override
     public void editMaterialNormsUserStock(String userId, String materialId, String normsId, String operNumber, int type) {
-        String lockKey = String.format("userStock_%s_%s", userId, normsId);
+        String lockKey = String.format("equipmentUserStock_%s_%s", userId, normsId);
         RedisLock lock = new RedisLock(lockKey);
         try {
             if (!lock.lock()) {
@@ -91,11 +87,9 @@ public class ServiceUserStockServiceImpl extends SkyeyeBusinessServiceImpl<Servi
                 throw new CustomException("增减库存失败，当前并发量较大，请稍后再次尝试.");
             }
             LOGGER.info("get lock success, lockKey is {}.", lockKey);
-            // 变化的数量
-            ServiceUserStock serviceUserStock = queryUserStock(userId, normsId);
-            // 如果该规格在指定仓库中已经有存储数据，则直接做修改
-            if (ObjectUtil.isNotEmpty(serviceUserStock)) {
-                String stockNumStr = String.valueOf(serviceUserStock.getStock());
+            EquipmentUserStock userStock = queryUserStock(userId, normsId);
+            if (ObjectUtil.isNotEmpty(userStock)) {
+                String stockNumStr = String.valueOf(userStock.getStock());
                 LOGGER.info("update user stock normsId【{}】 Stock. type is {}, old stockNum is {}, change stockNum is {}", normsId, type, stockNumStr, operNumber);
                 stockNumStr = getNewStockNum(type, operNumber, stockNumStr);
                 updateStock(userId, normsId, stockNumStr);
@@ -118,10 +112,10 @@ public class ServiceUserStockServiceImpl extends SkyeyeBusinessServiceImpl<Servi
     }
 
     private String getNewStockNum(int type, String changeNumber, String stockNum) {
-        if (type == UserStockPutOutType.PUT.getKey()) {
+        if (type == EquipmentUserStockPutOutType.PUT.getKey()) {
             // 入库
             stockNum = CalculationUtil.add(stockNum, changeNumber, CommonNumConstants.NUM_TWO);
-        } else if (type == UserStockPutOutType.OUT.getKey()) {
+        } else if (type == EquipmentUserStockPutOutType.OUT.getKey()) {
             // 出库
             stockNum = CalculationUtil.subtract(stockNum, changeNumber, CommonNumConstants.NUM_TWO);
         } else {
@@ -133,58 +127,51 @@ public class ServiceUserStockServiceImpl extends SkyeyeBusinessServiceImpl<Servi
         return stockNum;
     }
 
-    /**
-     * 根据配件规格id获取我的库存
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @Override
     public void queryMyPartsNumByNormsId(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> map = inputObject.getParams();
         String userId = inputObject.getLogParams().get("id").toString();
         String normsId = map.get("normsId").toString();
-        ServiceUserStock serviceUserStock = queryUserStock(userId, normsId);
-        outputObject.setBean(serviceUserStock);
+        EquipmentUserStock userStock = queryUserStock(userId, normsId);
+        outputObject.setBean(userStock);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
     @Override
-    public ServiceUserStock queryUserStock(String userId, String normsId) {
-        QueryWrapper<ServiceUserStock> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(ServiceUserStock::getUserId), userId);
-        queryWrapper.eq(MybatisPlusUtil.toColumns(ServiceUserStock::getNormsId), normsId);
+    public EquipmentUserStock queryUserStock(String userId, String normsId) {
+        QueryWrapper<EquipmentUserStock> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentUserStock::getUserId), userId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentUserStock::getNormsId), normsId);
         return getOne(queryWrapper);
     }
 
     @Override
-    public Map<String, ServiceUserStock> queryUserStock(String userId, List<String> normsIds) {
-        QueryWrapper<ServiceUserStock> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(ServiceUserStock::getUserId), userId);
-        queryWrapper.in(MybatisPlusUtil.toColumns(ServiceUserStock::getNormsId), normsIds);
-        List<ServiceUserStock> userStocks = list(queryWrapper);
+    public Map<String, EquipmentUserStock> queryUserStock(String userId, List<String> normsIds) {
+        QueryWrapper<EquipmentUserStock> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentUserStock::getUserId), userId);
+        queryWrapper.in(MybatisPlusUtil.toColumns(EquipmentUserStock::getNormsId), normsIds);
+        List<EquipmentUserStock> userStocks = list(queryWrapper);
         if (CollectionUtil.isEmpty(userStocks)) {
             return MapUtil.newHashMap();
         }
-        return userStocks.stream().collect(Collectors.toMap(ServiceUserStock::getNormsId, bean -> bean));
+        return userStocks.stream().collect(Collectors.toMap(EquipmentUserStock::getNormsId, bean -> bean));
     }
 
-    @Override
-    public void updateStock(String userId, String normsId, String stock) {
-        UpdateWrapper<ServiceUserStock> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq(MybatisPlusUtil.toColumns(ServiceUserStock::getUserId), userId);
-        updateWrapper.eq(MybatisPlusUtil.toColumns(ServiceUserStock::getNormsId), normsId);
-        updateWrapper.set(MybatisPlusUtil.toColumns(ServiceUserStock::getStock), stock);
+    private void updateStock(String userId, String normsId, String stock) {
+        UpdateWrapper<EquipmentUserStock> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(MybatisPlusUtil.toColumns(EquipmentUserStock::getUserId), userId);
+        updateWrapper.eq(MybatisPlusUtil.toColumns(EquipmentUserStock::getNormsId), normsId);
+        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentUserStock::getStock), stock);
         update(updateWrapper);
     }
 
     private void saveStock(String userId, String materialId, String normsId, String stock) {
-        ServiceUserStock serviceUserStock = new ServiceUserStock();
-        serviceUserStock.setUserId(userId);
-        serviceUserStock.setMaterialId(materialId);
-        serviceUserStock.setNormsId(normsId);
-        serviceUserStock.setStock(stock);
-        createEntity(serviceUserStock, userId);
+        EquipmentUserStock userStock = new EquipmentUserStock();
+        userStock.setUserId(userId);
+        userStock.setMaterialId(materialId);
+        userStock.setNormsId(normsId);
+        userStock.setStock(stock);
+        createEntity(userStock, userId);
     }
 
 }

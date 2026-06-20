@@ -45,7 +45,8 @@ public enum DepotOutFromType implements SkyeyeEnumClass {
     SEAL_APPLY(7, "配件申领单", "com.skyeye.accessory.service.impl.SealApplyServiceImpl", true, false),
     SHOP_OUTLET(8, "门店申领单", ShopOutLetsServiceImpl.class.getName(), true, false),
     PURCHASE_EXCHANGE(9, "采购换货单", PurchaseExchangesServiceImpl.class.getName(), true, false),
-    LOANOUT(10, "借出出库单", ProductLeadOutStockServiceImpl.class.getName(), true, false);
+    LOANOUT(10, "借出出库单", ProductLeadOutStockServiceImpl.class.getName(), true, false),
+    EQUIPMENT_SPARE_PART_APPLY(11, "设备备件申领单", "com.skyeye.sparepart.service.impl.EquipmentSparePartApplyServiceImpl", true, false);
 
     private Integer key;
 

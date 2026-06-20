@@ -64,6 +64,9 @@ import com.skyeye.product.entity.ProductLeadOutStock;
 import com.skyeye.product.service.ProductLeadOutStockService;
 import com.skyeye.product.service.ProductLeadService;
 import com.skyeye.purchase.service.PurchaseReturnsService;
+import com.skyeye.sparepart.entity.EquipmentSparePartApplyChangeStock;
+import com.skyeye.sparepart.entity.EquipmentSparePartApplyLink;
+import com.skyeye.sparepart.service.EquipmentSparePartApplyService;
 import com.skyeye.rest.sealservice.rest.IServiceApplyRest;
 import com.skyeye.rest.shop.service.IShopStoreService;
 import com.skyeye.retail.service.RetailOutLetService;
@@ -136,6 +139,9 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
 
     @Autowired
     private IServiceApplyRest iServiceApplyRest;
+
+    @Autowired
+    private EquipmentSparePartApplyService equipmentSparePartApplyService;
 
     @Autowired
     private OtherWiseOrderService otherWiseOrderService;
@@ -303,6 +309,9 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
         } else if (depotOut.getFromTypeId() == DepotOutFromType.SEAL_APPLY.getKey()) {
             // 配件申领单
             otherWiseOrderService.setDataMation(depotOut, DepotOut::getFromId);
+        } else if (depotOut.getFromTypeId() == DepotOutFromType.EQUIPMENT_SPARE_PART_APPLY.getKey()) {
+            // 设备备件申领单
+            otherWiseOrderService.setDataMation(depotOut, DepotOut::getFromId);
         } else if (depotOut.getFromTypeId() == DepotOutFromType.SHOP_OUTLET.getKey()) {
             // 门店申领单
             shopOutLetsService.setDataMation(depotOut, DepotOut::getFromId);
@@ -328,6 +337,9 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
         } else if (entity.getFromTypeId() == DepotOutFromType.SEAL_APPLY.getKey()) {
             // 配件申领单
             updateSealApply(entity, normsCodeList, result);
+        } else if (entity.getFromTypeId() == DepotOutFromType.EQUIPMENT_SPARE_PART_APPLY.getKey()) {
+            // 设备备件申领单
+            updateEquipmentSparePartApply(entity, result);
         } else if (entity.getFromTypeId() == DepotOutFromType.LOANOUT.getKey()) {
             depotOutPutRecordService.writeOutPutRecord(entity, entity.getFromTypeId());
         }
@@ -367,12 +379,32 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
         ExecuteFeignClient.get(() -> iServiceApplyRest.editSealApplyOtherState(outStateMap));
     }
 
+    private void updateEquipmentSparePartApply(DepotOut entity, boolean result) {
+        List<EquipmentSparePartApplyLink> applyLinkList = new ArrayList<>();
+        for (ErpOrderItem erpOrderItem : entity.getErpOrderItemList()) {
+            applyLinkList.add(BeanUtil.copyProperties(erpOrderItem, EquipmentSparePartApplyLink.class));
+        }
+        EquipmentSparePartApplyChangeStock changeStock = new EquipmentSparePartApplyChangeStock();
+        changeStock.setId(entity.getFromId());
+        changeStock.setCreateId(entity.getCreateId());
+        changeStock.setApplyLinkList(applyLinkList);
+        equipmentSparePartApplyService.editApplyOutNum(changeStock);
+        if (result) {
+            equipmentSparePartApplyService.editApplyOtherState(entity.getFromId(), DepotOutState.COMPLATE_OUT.getKey());
+        } else {
+            equipmentSparePartApplyService.editApplyOtherState(entity.getFromId(), DepotOutState.PARTIAL_OUT.getKey());
+        }
+    }
+
     private boolean checkMaterialNorms(DepotOut entity, String fromTypeIdKey, boolean setData) {
         // 获取来源单据信息
         SkyeyeErpOrderService skyeyeErpOrderService = null;
         ErpOrderHead fromMation;
         if (entity.getFromTypeId() == DepotOutFromType.SEAL_APPLY.getKey()) {
             // 配件申领单
+            fromMation = otherWiseOrderService.selectById(entity.getFromId());
+        } else if (entity.getFromTypeId() == DepotOutFromType.EQUIPMENT_SPARE_PART_APPLY.getKey()) {
+            // 设备备件申领单
             fromMation = otherWiseOrderService.selectById(entity.getFromId());
         } else if (entity.getFromTypeId() == DepotOutFromType.LOANOUT.getKey()) {
             // 借出出库单
@@ -415,6 +447,14 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
                 } else {
                     otherWiseOrderService.editOtherState(entity.getFromId(), DepotOutState.PARTIAL_OUT.getKey());
                 }
+            } else if (entity.getFromTypeId() == DepotOutFromType.EQUIPMENT_SPARE_PART_APPLY.getKey()) {
+                // 设备备件申领单
+                if (CollectionUtil.isEmpty(erpOrderItemList)) {
+                    equipmentSparePartApplyService.editApplyOtherState(entity.getFromId(), DepotOutState.COMPLATE_OUT.getKey());
+                    return true;
+                } else {
+                    equipmentSparePartApplyService.editApplyOtherState(entity.getFromId(), DepotOutState.PARTIAL_OUT.getKey());
+                }
             } else if (entity.getFromTypeId() == DepotOutFromType.LOANOUT.getKey()) {
                 // 借出出库单
                 if (CollectionUtil.isEmpty(erpOrderItemList)) {
@@ -443,6 +483,10 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
      * @param onlyCheck 是否只进行校验，true：是；false：否
      */
     protected List<String> checkNormsCodeAndOutbound(DepotOut entity, Boolean onlyCheck) {
+        // 设备备件申领单按数量出库，不走条形码逻辑，不影响其他来源类型的校验流程
+        if (entity.getFromTypeId() == DepotOutFromType.EQUIPMENT_SPARE_PART_APPLY.getKey()) {
+            return Collections.emptyList();
+        }
         List<String> materialIdList = entity.getErpOrderItemList().stream().map(ErpOrderItem::getMaterialId).distinct().collect(Collectors.toList());
         List<String> normsIdList = entity.getErpOrderItemList().stream().map(ErpOrderItem::getNormsId).distinct().collect(Collectors.toList());
         Map<String, Material> materialMap = materialService.selectMapByIds(materialIdList);

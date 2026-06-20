@@ -88,4 +88,13 @@ public class TeamBusinessController {
         teamBusinessService.queryMyBusinessTeamList(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "transferAllChargeUser", value = "转让全部团队经理身份", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "fromUserId", name = "fromUserId", value = "原团队经理用户id", required = "required"),
+        @ApiImplicitParam(id = "toUserId", name = "toUserId", value = "新团队经理用户id", required = "required")})
+    @RequestMapping("/post/TeamBusinessController/transferAllChargeUser")
+    public void transferAllChargeUser(InputObject inputObject, OutputObject outputObject) {
+        teamBusinessService.transferAllChargeUser(inputObject, outputObject);
+    }
+
 }

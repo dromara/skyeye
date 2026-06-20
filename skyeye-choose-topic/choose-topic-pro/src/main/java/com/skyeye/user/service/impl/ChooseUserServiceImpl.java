@@ -186,7 +186,7 @@ public class ChooseUserServiceImpl extends SkyeyeBusinessServiceImpl<ChooseUserD
                 }
                 insertList.forEach(bean -> {
                     bean.setType(ChooseUserType.TEACHER.getKey());
-                    bean.setActivityType(ActivityType.SINGLE.getKey());
+                    bean.setActivityType(ActivityType.UN_SINGLE.getKey());
                     bean.setPassword(ToolUtil.MD5(bean.getPassword()));
                 });
                 createEntity(insertList, StrUtil.EMPTY);

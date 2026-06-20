@@ -123,7 +123,8 @@ public class CheckWorkController {
         @ApiImplicitParam(id = "startTime", name = "startTime", value = "起始时间"),
         @ApiImplicitParam(id = "endTime", name = "endTime", value = "最后时间"),
         @ApiImplicitParam(id = "timeId", name = "timeId", value = "班次id"),
-        @ApiImplicitParam(id = "day", name = "day", value = "指定日期")})
+        @ApiImplicitParam(id = "day", name = "day", value = "指定日期"),
+        @ApiImplicitParam(id = "userName", name = "userName", value = "员工姓名")})
     @RequestMapping("/post/CheckWorkController/queryReportDetail")
     public void queryReportDetail(InputObject inputObject, OutputObject outputObject) {
         checkWorkService.queryReportDetail(inputObject, outputObject);

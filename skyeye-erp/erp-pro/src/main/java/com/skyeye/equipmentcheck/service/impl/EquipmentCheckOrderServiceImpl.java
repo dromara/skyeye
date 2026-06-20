@@ -11,6 +11,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.equipmentcheck.dao.EquipmentCheckOrderDao;
 import com.skyeye.equipmentcheck.entity.EquipmentCheckOrder;
 import com.skyeye.equipmentcheck.service.EquipmentCheckOrderItemService;
@@ -34,6 +35,9 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
 
     @Autowired
     private EquipmentCheckOrderItemService equipmentCheckOrderItemService;
+
+    @Autowired
+    private EquipmentService equipmentService;
 
     @Override
     protected QueryWrapper<EquipmentCheckOrder> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -90,6 +94,22 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
         if (CollectionUtil.isNotEmpty(ids)) {
             ids.forEach(equipmentCheckOrderItemService::deleteByParentId);
         }
+    }
+
+    @Override
+    public EquipmentCheckOrder selectById(String id) {
+        EquipmentCheckOrder order = super.selectById(id);
+        equipmentService.setDataMation(order, EquipmentCheckOrder::getEquipmentId);
+        iAuthUserService.setDataMation(order, EquipmentCheckOrder::getCheckerId);
+        return order;
+    }
+
+    @Override
+    public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
+        List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
+        equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
+        iAuthUserService.setMationForMap(beans, "checkerId", "checkerMation");
+        return beans;
     }
 
     //统计今日点检设备分布、今日点检设备次数、今日未点检设备分布

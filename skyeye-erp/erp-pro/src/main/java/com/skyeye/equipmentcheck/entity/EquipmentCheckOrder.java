@@ -8,6 +8,7 @@ import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.entity.features.SkyeyeFlowable;
+import com.skyeye.equipment.entity.Equipment;
 import com.skyeye.equipmentcheck.classenum.EquipmentCheckResult;
 import lombok.Data;
 
@@ -34,7 +35,7 @@ public class EquipmentCheckOrder extends SkyeyeFlowable {
 
     @TableField(exist = false)
     @Property(value = "设备信息")
-    private Map<String, Object> equipmentMation;
+    private Equipment equipmentMation;
 
     @TableField(value = "equipment_code")
     @ApiModelProperty(value = "设备编码")
