@@ -65,6 +65,11 @@ public interface LeaveTimeSlotService extends SkyeyeLinkDataService<LeaveTimeSlo
     List<LeaveTimeSlot> queryCheckWorkLeaveSlotByMation(String timeId, String createId, String leaveStartDay, String tenantId);
 
     /**
+     * 指定自然日是否存在审核通过的请假时间段（不限班次）
+     */
+    List<LeaveTimeSlot> queryApprovedLeaveSlotByUserAndDay(String createId, String day, String tenantId);
+
+    /**
      * 获取指定员工在指定月份和班次的所有审核通过的请假时间段
      *
      * @param userId   用户id

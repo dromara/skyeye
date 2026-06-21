@@ -72,6 +72,19 @@
 			AND (e.state != 2 OR e.quit_time IS NULL OR LENGTH(e.quit_time) = 0 OR e.quit_time >= #{yesterdayTime})
 		</if>
 	</select>
+
+	<!-- 排班定时任务：只打上班卡未打下班卡（不依赖固定班次绑定） -->
+	<select id="queryScheduleNotCheckEndWorkId" resultType="java.util.Map">
+		SELECT a.id
+		FROM check_work a
+		WHERE a.check_date = #{checkDate}
+		AND a.time_id = #{schedulingTimeId}
+		AND (a.clock_out IS NULL OR LENGTH(a.clock_out) = 0)
+		AND a.clock_in IS NOT NULL AND LENGTH(a.clock_in) > 0
+		<if test="tenantId != '' and tenantId != null">
+			AND a.tenant_id = #{tenantId}
+		</if>
+	</select>
 	
 	<!-- 定时任务：更新系统补录的下班卡状态 -->
 	<update id="editCheckWorkBySystem" parameterType="java.util.Map">

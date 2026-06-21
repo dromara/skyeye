@@ -49,6 +49,8 @@ import com.skyeye.worktime.entity.CheckWorkTime;
 import com.skyeye.worktime.entity.CheckWorkTimePoint;
 import com.skyeye.worktime.entity.CheckWorkTimeWeek;
 import com.skyeye.worktime.service.CheckWorkTimeService;
+import com.skyeye.worktime.util.CheckWorkTimePeriodUtil;
+import com.skyeye.worktime.util.CheckWorkTimeWeekUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,18 +131,21 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         Map<String, Object> workTime = getWorkTime(userId, todayYMD, timeId, staffId, shiftType);
         validateClockPermission(workTime, map, shiftType);
         validateOnlineClockLocation(workTime, map);
-        // 2.获取今天的打卡记录
         String checkInTime = DateUtil.getHmsTimeAndToString();
         String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
-        CheckWork todayCheckWork = checkWorkDao.queryisAlreadyCheck(DateUtil.getYmdTimeAndToString(), userId, timeId, tenantId);
-        if (ObjectUtil.isEmpty(todayCheckWork) && DateUtil.compareTimeHMS(checkInTime, workTime.get("clockOut").toString())) {
-            // 今日没有打卡，且没有到下班时间，可以进行打卡
+        boolean crossDay = Boolean.TRUE.equals(workTime.get("crossDay"));
+        String clockIn = workTime.get("clockIn").toString();
+        String clockOut = workTime.get("clockOut").toString();
+        String checkDate = CheckWorkTimePeriodUtil.resolveCheckDate(todayYMD, checkInTime, clockIn, clockOut, crossDay);
+        CheckWork todayCheckWork = checkWorkDao.queryisAlreadyCheck(checkDate, userId, timeId, tenantId);
+        if (ObjectUtil.isEmpty(todayCheckWork) && CheckWorkTimePeriodUtil.canClockInNow(checkInTime, clockIn, clockOut, crossDay)) {
+            // 归属日没有打卡，且在上班打卡窗口内
             CheckWork checkWork = new CheckWork();
-            checkWork.setCheckDate(DateUtil.getYmdTimeAndToString());
+            checkWork.setCheckDate(checkDate);
             checkWork.setCreateId(userId);
             checkWork.setTimeId(timeId);
             checkWork.setState(ClockState.START.getKey());
-            if (DateUtil.compareTimeHMS(checkInTime, workTime.get("clockIn").toString())) {
+            if (DateUtil.compareTimeHMS(checkInTime, clockIn)) {
                 // 当前打卡时间是否早于上班时间，视为正常
                 checkWork.setClockInState(ClockInTime.NORMAL.getKey());
             } else {
@@ -164,7 +169,7 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         } else if (ObjectUtil.isNotEmpty(todayCheckWork) && ToolUtil.isBlank(todayCheckWork.getClockOut())) {
             // 今日已经打过晚卡，不能打早卡
             outputObject.setreturnMessage("今日已经打过晚卡，现在不能打早卡！");
-        } else if (!DateUtil.compareTimeHMS(checkInTime, workTime.get("clockOut").toString())) {
+        } else if (!CheckWorkTimePeriodUtil.canClockInNow(checkInTime, clockIn, clockOut, crossDay)) {
             // 今日没有打卡，已是下班时间，不能进行打卡
             outputObject.setreturnMessage("今日打早卡时间已过，不能进行打卡！");
         } else {
@@ -190,8 +195,12 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
                 throw new CustomException("You do not have the attendance authority for this shift.");
             }
             CheckWorkTime checkWorkTime = checkWorkTimeService.selectById(timeId);
+            if (!EnableEnum.ENABLE_USING.getKey().equals(checkWorkTime.getEnabled())) {
+                throw new CustomException("该考勤班次已停用。");
+            }
             bean.put("clockIn", checkWorkTime.getStartTime() + ":00");
             bean.put("clockOut", checkWorkTime.getEndTime() + ":00");
+            bean.put("crossDay", CheckWorkTimePeriodUtil.isCrossDay(checkWorkTime.getStartTime(), checkWorkTime.getEndTime()));
             bean.put("checkWorkTimeWeekList", checkWorkTime.getCheckWorkTimeWeekList());
             bean.put("onlineClockEnabled", ObjectUtil.defaultIfNull(checkWorkTime.getOnlineClockEnabled(), EnableEnum.ENABLE_USING.getKey()));
             bean.put("webClockEnabled", ObjectUtil.defaultIfNull(checkWorkTime.getWebClockEnabled(), EnableEnum.ENABLE_USING.getKey()));
@@ -207,6 +216,11 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
             bean.put("clockIn", schedulingTime.getStartTime());
             bean.put("clockOut", schedulingTime.getEndTime());
             bean.put("isNextDay", schedulingTime.getIsNextDay());
+            boolean crossDay = WhetherEnum.ENABLE_USING.getKey().equals(schedulingTime.getIsNextDay())
+                || CheckWorkTimePeriodUtil.isCrossDay(
+                    normalizeShiftHm(schedulingTime.getStartTime()),
+                    normalizeShiftHm(schedulingTime.getEndTime()));
+            bean.put("crossDay", crossDay);
             // 是否是排班班次
             bean.put("isSchedulingWorkDay", true);
             return bean;
@@ -243,6 +257,10 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
 
     /**
      * 校验线上打卡定位是否在任一点位范围内
+     * 未配置打卡点位时不限制打卡位置；配置多个点位后，员工在任一点位范围内均可打卡。
+     *
+     * @param workTime 班次信息
+     * @param map      入参
      */
     private void validateOnlineClockLocation(Map<String, Object> workTime, Map<String, Object> map) {
         ClockSource clockSource = ClockSource.getByKey(map.containsKey("clockSource") && map.get("clockSource") != null
@@ -299,11 +317,15 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         Map<String, Object> workTime = getWorkTime(userId, todayYMD, timeId, staffId, shiftType);
         validateClockPermission(workTime, map, shiftType);
         validateOnlineClockLocation(workTime, map);
-        // 2.获取今天的打卡记录
         String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
-        CheckWork todayCheckWork = checkWorkDao.queryisAlreadyCheck(DateUtil.getYmdTimeAndToString(), userId, timeId, tenantId);
+        boolean crossDay = Boolean.TRUE.equals(workTime.get("crossDay"));
+        String clockIn = workTime.get("clockIn").toString();
+        String clockOut = workTime.get("clockOut").toString();
+        String clockOutTime = DateUtil.getHmsTimeAndToString();
+        String checkDate = CheckWorkTimePeriodUtil.resolveCheckDate(todayYMD, clockOutTime, clockIn, clockOut, crossDay);
+        CheckWork todayCheckWork = checkWorkDao.queryisAlreadyCheck(checkDate, userId, timeId, tenantId);
         CheckWork checkWork = new CheckWork();
-        checkWork.setCheckDate(DateUtil.getYmdTimeAndToString());
+        checkWork.setCheckDate(checkDate);
         checkWork.setCreateId(userId);
         checkWork.setTimeId(timeId);
 
@@ -312,12 +334,17 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         String address = map.get("address").toString();
         String clockSource = map.get("clockSource").toString();
 
+        if (crossDay && !CheckWorkTimePeriodUtil.canClockOutNow(clockOutTime, clockIn, clockOut, true)) {
+            outputObject.setreturnMessage("当前不在下班打卡时间范围内！");
+            return;
+        }
+
         if (ObjectUtil.isEmpty(todayCheckWork)) {
             // 早卡晚卡都没有打，可以打晚卡【缺早卡】【上班打卡状态-未打卡】
-            checkWork.setClockOut(DateUtil.getHmsTimeAndToString());
+            checkWork.setClockOut(clockOutTime);
             checkWork.setState(ClockState.NOT_START.getKey());
             checkWork.setClockInState(ClockInTime.NOTCLOCK.getKey());
-            if (DateUtil.compareTimeHMS(checkWork.getClockOut(), workTime.get("clockOut").toString())) {
+            if (CheckWorkTimePeriodUtil.isEarlyLeave(checkWork.getClockOut(), clockOut, clockIn, crossDay)) {
                 // 当前打卡时间是否早于下班时间，视为早退
                 checkWork.setClockOutState(ClockOutTime.EARLY.getKey());
             } else {
@@ -335,11 +362,13 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
             createEntity(checkWork, userId);
         } else if (!ToolUtil.isBlank(todayCheckWork.getClockIn())) {
             // 打过早卡，没有打晚卡
-            checkWork.setClockOut(DateUtil.getHmsTimeAndToString());
+            checkWork.setClockOut(clockOutTime);
             // 系统设置的上班时长
-            String a = DateUtil.getDistanceHMS(workTime.get("clockOut").toString(), workTime.get("clockIn").toString());
+            String a = CheckWorkTimePeriodUtil.getWorkDistanceHms(clockIn, clockOut);
             // 用户的上班时长
-            String b = DateUtil.getDistanceHMS(checkWork.getClockOut(), todayCheckWork.getClockIn());
+            String b = crossDay
+                ? CheckWorkTimePeriodUtil.getWorkDistanceHms(todayCheckWork.getClockIn(), checkWork.getClockOut())
+                : DateUtil.getDistanceHMS(checkWork.getClockOut(), todayCheckWork.getClockIn());
             // 当前打卡时间是否早于下班时间
             if (DateUtil.compareTimeHMS(a, b)) {
                 // 全勤
@@ -348,7 +377,7 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
                 // 工时不足
                 checkWork.setState(ClockState.IN_SUFFICIENT.getKey());
             }
-            if (DateUtil.compareTimeHMS(checkWork.getClockOut(), workTime.get("clockOut").toString())) {
+            if (CheckWorkTimePeriodUtil.isEarlyLeave(checkWork.getClockOut(), clockOut, clockIn, crossDay)) {
                 // 早退
                 checkWork.setClockOutState(ClockOutTime.EARLY.getKey());
             } else {
@@ -467,6 +496,9 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
             workTime = overTimeMation.get(0);
             workTime.put("clockIn", workTime.get("clockIn").toString() + ":00");
             workTime.put("clockOut", workTime.get("clockOut").toString() + ":00");
+            workTime.put("crossDay", CheckWorkTimePeriodUtil.isCrossDay(
+                normalizeShiftHm(workTime.get("clockIn").toString()),
+                normalizeShiftHm(workTime.get("clockOut").toString())));
             workTime.put("type", CheckTypeFrom.CHECT_BTN_FROM_OVERTIME.getKey());
         } else {
             // 根据考勤班次判断显示打上班卡或者下班卡
@@ -486,19 +518,23 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
      * @param nowTimeHMS 指定日期，格式为HH:mm:ss(一般为当前时间)
      * @return
      */
-    private Map<String, Object> getChectBtn(String today, String userId, String timeId, Map<String, Object> workTime, String nowTimeHMS) {
+    private Map<String, Object> getChectBtn(String calendarDate, String userId, String timeId, Map<String, Object> workTime, String nowTimeHMS) {
         String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
-        // 获取今天的打卡记录
-        CheckWork todayCheckWork = checkWorkDao.queryisAlreadyCheck(today, userId, timeId, tenantId);
-        Integer checkState = getCheckState(todayCheckWork, nowTimeHMS, workTime, today);
+        boolean crossDay = Boolean.TRUE.equals(workTime.get("crossDay"));
+        String clockIn = workTime.get("clockIn").toString();
+        String clockOut = workTime.get("clockOut").toString();
+        String checkDate = CheckWorkTimePeriodUtil.resolveCheckDate(calendarDate, nowTimeHMS, clockIn, clockOut, crossDay);
+        CheckWork checkWorkRecord = checkWorkDao.queryisAlreadyCheck(checkDate, userId, timeId, tenantId);
+        Integer checkState = getCheckState(checkWorkRecord, nowTimeHMS, workTime, checkDate);
         Map<String, Object> result = new HashMap<>();
         result.put("isCheck", checkState);
+        result.put("checkDate", checkDate);
         result.putAll(workTime);
-        if (ObjectUtil.isNotEmpty(todayCheckWork)) {
-            result.put("realClockIn", todayCheckWork.getClockIn());
-            result.put("realClockOut", todayCheckWork.getClockOut());
-            result.put("clockInSource", todayCheckWork.getClockInSource());
-            result.put("clockOutSource", todayCheckWork.getClockOutSource());
+        if (ObjectUtil.isNotEmpty(checkWorkRecord)) {
+            result.put("realClockIn", checkWorkRecord.getClockIn());
+            result.put("realClockOut", checkWorkRecord.getClockOut());
+            result.put("clockInSource", checkWorkRecord.getClockInSource());
+            result.put("clockOutSource", checkWorkRecord.getClockOutSource());
         }
         return result;
     }
@@ -506,42 +542,41 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
     /**
      * 获取指定日期在规定班次内的打卡状态
      *
-     * @param todayCheckWork 今日打卡信息
-     * @param nowTimeHMS     指定日期，格式为HH:mm:ss
-     * @param workTime       班次考勤信息
-     * @param today          指定日期，格式为yyyy-MM-dd(一般为今天的日期)
+     * @param checkWorkRecord 归属日打卡信息
+     * @param nowTimeHMS      指定日期，格式为HH:mm:ss
+     * @param workTime        班次考勤信息
+     * @param checkDate       考勤归属日，格式为yyyy-MM-dd
      * @return
      */
-    private Integer getCheckState(CheckWork todayCheckWork, String nowTimeHMS, Map<String, Object> workTime, String today) {
+    private Integer getCheckState(CheckWork checkWorkRecord, String nowTimeHMS, Map<String, Object> workTime, String checkDate) {
         Integer checkState = null;
+        boolean crossDay = Boolean.TRUE.equals(workTime.get("crossDay"));
+        String clockIn = workTime.get("clockIn").toString();
+        String clockOut = workTime.get("clockOut").toString();
         if (Integer.parseInt(workTime.get("type").toString()) == CheckTypeFrom.CHECT_BTN_FROM_TIMEID.getKey()) {
             // isSchedulingWorkDay为true则是排班班次
             Boolean isSchedulingWorkDay = (Boolean) workTime.getOrDefault("isSchedulingWorkDay", false);
             // 排班班次，不做节假日判断
             if (!isSchedulingWorkDay) {
-                // 固定班次逻辑
-                // 1. 判断是否是节假日
-                boolean result = iScheduleDayService.judgeISHoliday(today);
-                // 2. 判断今天是否在考勤班次关联的时间段内（工作日类型）
-                boolean isWorkDay = !isWorkDayInCheckWorkTimeWeek(workTime, today);
-                if (result || isWorkDay) {
-                    // 今天不是加班日，但是是节假日，则不显示按钮 || 不在该班次的工作日范围内，也不显示打卡按钮
+                // 固定班次逻辑：按考勤归属日判断节假日与工作日
+                boolean result = iScheduleDayService.judgeISHoliday(checkDate);
+                boolean isNotWorkDay = !isWorkDayInCheckWorkTimeWeek(workTime, checkDate);
+                if (result || isNotWorkDay) {
                     checkState = 5;
                     return checkState;
                 }
             }
         }
-        if (ObjectUtil.isEmpty(todayCheckWork) && DateUtil.compareTimeHMS(nowTimeHMS, workTime.get("clockOut").toString())) {
-            // 今日没有打卡，且没有到下班时间，显示早卡按钮
+        if (ObjectUtil.isEmpty(checkWorkRecord) && CheckWorkTimePeriodUtil.canClockInNow(nowTimeHMS, clockIn, clockOut, crossDay)) {
             checkState = 1;
-        } else if (ObjectUtil.isEmpty(todayCheckWork) && !DateUtil.compareTimeHMS(nowTimeHMS, workTime.get("clockOut").toString())) {
-            // 今日没有打卡，已是下班时间，不显示按钮
+        } else if (ObjectUtil.isEmpty(checkWorkRecord)) {
             checkState = 3;
-        } else if (!ToolUtil.isBlank(todayCheckWork.getClockIn()) && ToolUtil.isBlank(todayCheckWork.getClockOut())) {
-            // 今日打过早卡没打晚卡，显示晚卡按钮
+        } else if (!ToolUtil.isBlank(checkWorkRecord.getClockIn()) && ToolUtil.isBlank(checkWorkRecord.getClockOut())
+            && CheckWorkTimePeriodUtil.canClockOutNow(nowTimeHMS, clockIn, clockOut, crossDay)) {
             checkState = 2;
-        } else if (!ToolUtil.isBlank(todayCheckWork.getClockIn()) && !ToolUtil.isBlank(todayCheckWork.getClockOut())) {
-            // 今日打过早卡打过晚卡，不显示按钮
+        } else if (!ToolUtil.isBlank(checkWorkRecord.getClockIn()) && ToolUtil.isBlank(checkWorkRecord.getClockOut())) {
+            checkState = 3;
+        } else if (!ToolUtil.isBlank(checkWorkRecord.getClockIn()) && !ToolUtil.isBlank(checkWorkRecord.getClockOut())) {
             checkState = 4;
         }
         return checkState;
@@ -561,33 +596,24 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
     private boolean isWorkDayInCheckWorkTimeWeek(Map<String, Object> workTime, String today) {
         Object listObj = workTime.get("checkWorkTimeWeekList");
         if (!(listObj instanceof List)) {
-            // 未配置时间段时，保持老逻辑：认为是工作日
-            return true;
+            return false;
         }
         List<CheckWorkTimeWeek> weekList = (List<CheckWorkTimeWeek>) listObj;
-        if (CollectionUtil.isEmpty(weekList)) {
-            return true;
+        return CheckWorkTimeWeekUtil.isWorkDay(today, weekList);
+    }
+
+    private String normalizeShiftHm(String time) {
+        if (StrUtil.isBlank(time)) {
+            return time;
         }
-        int weekDay = DateUtil.getWeek(today);
-        int weekType = DateUtil.getWeekType(today);
-        CheckWorkTimeWeek simpleDay = weekList.stream()
-            .filter(item -> item.getWeekNumber() == weekDay && !item.getType().equals(CheckWorkTimeWeekType.DOUBLE.getKey()))
-            .findFirst().orElse(null);
-        if (ObjectUtil.isEmpty(simpleDay)) {
-            // 没有为该星期几配置工作日，视为休息
-            return false;
+        String value = StrUtil.trim(time);
+        if (value.length() >= 8) {
+            return value.substring(0, 5);
         }
-        // 在该班次中找到了指定日期的配置，根据周类型判断是否工作
-        if (weekType == WeekTypeEnum.ODD_WEEKS.getKey() && simpleDay.getType().equals(CheckWorkTimeWeekType.SINGLE_DAY.getKey())) {
-            // 单周并且班次配置为单周上班
-            return true;
-        } else if (weekType == WeekTypeEnum.BIWEEKLY.getKey() && simpleDay.getType().equals(CheckWorkTimeWeekType.SINGLE_DAY.getKey())) {
-            // 双周且班次配置为单周上班 → 本周休
-            return false;
-        } else {
-            // 其它情况（每周都上班等）
-            return true;
+        if (value.length() == 5) {
+            return value;
         }
+        return value;
     }
 
     /**
@@ -740,26 +766,10 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         CheckWorkTime checkWorkTime = checkWorkTimeService.selectById(timeId);
         LOGGER.info("获取指定班次中的工作日信息，{}", checkWorkTime.getCheckWorkTimeWeekList());
         for (String day : monthDays) {
-            // 判断该日期在节假日类型中是否包含
             if (!inHolidayScheduleDay(day, beans)) {
-                // 如果该天不是节假日
-                int weekDay = DateUtil.getWeek(day);
-                int weekType = DateUtil.getWeekType(day);
-                CheckWorkTimeWeek simpleDay = checkWorkTime.getCheckWorkTimeWeekList()
-                    .stream().filter(item -> item.getWeekNumber() == weekDay && !item.getType().equals(CheckWorkTimeWeekType.DOUBLE.getKey()))
-                    .findFirst().orElse(null);
-                if (ObjectUtil.isEmpty(simpleDay)) {
-                    continue;
-                }
-                // 如果今天是需要考勤的日期
-                if (weekType == WeekTypeEnum.BIWEEKLY.getKey() && simpleDay.getType().equals(CheckWorkTimeWeekType.SINGLE_DAY.getKey())) {
-                    // 如果获取到的日期是双周，但考勤班次里面是单周，则不做任何操作
-                } else {
-                    // 单周或者每周的当天都上班
+                if (CheckWorkTimeWeekUtil.isWorkDay(day, checkWorkTime.getCheckWorkTimeWeekList())) {
                     beans.add(CheckWorkConstants.structureWorkMation(day));
-                    continue;
                 }
-                beans.add(CheckWorkConstants.structureRestMation(day, StrUtil.EMPTY));
             }
         }
     }
@@ -797,17 +807,16 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         Map<String, Object> map = inputObject.getParams();
         // 1.获取所有的考勤班次在指定日期内需要上班多少天
         Map<String, Integer> timeWorkDay = getAllCheckWorkTime(map.get("startTime").toString(), map.get("endTime").toString());
-        // 2.分页获取员工考勤信息
-        Page pages = PageHelper.startPage(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString()));
-
         String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
         map.put("tenantId", tenantId);
+        Page pages = PageHelper.startPage(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString()));
         List<Map<String, Object>> beans = checkWorkDao.queryCheckWorkReport(map);
         iCompanyService.setNameForMap(beans, "companyId", "companyName");
         iDepmentService.setNameForMap(beans, "departmentId", "departmentName");
         iCompanyJobService.setNameForMap(beans, "jobId", "jobName");
         String filterTimeId = map.get("timeId") != null ? map.get("timeId").toString() : StrUtil.EMPTY;
         setShouldTime(beans, timeWorkDay, filterTimeId);
+        setTimeNames(beans);
         outputObject.setBeans(beans);
         outputObject.settotal(pages.getTotal());
     }
@@ -831,6 +840,53 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
     }
 
     /**
+     * 批量填充员工绑定班次名称
+     */
+    private void setTimeNames(List<Map<String, Object>> beans) {
+        if (CollectionUtil.isEmpty(beans)) {
+            return;
+        }
+        Set<String> timeIdSet = new LinkedHashSet<>();
+        for (Map<String, Object> bean : beans) {
+            String timsIdsStr = bean.getOrDefault("timsIds", StrUtil.EMPTY).toString();
+            if (StrUtil.isBlank(timsIdsStr)) {
+                bean.put("timeNames", StrUtil.EMPTY);
+                continue;
+            }
+            for (String timeId : timsIdsStr.split(CommonCharConstants.COMMA_MARK)) {
+                if (StrUtil.isNotBlank(timeId)) {
+                    timeIdSet.add(timeId.trim());
+                }
+            }
+        }
+        if (CollectionUtil.isEmpty(timeIdSet)) {
+            return;
+        }
+        List<CheckWorkTime> checkWorkTimes = checkWorkTimeService.selectByIds(timeIdSet.toArray(new String[0]));
+        Map<String, String> timeNameMap = checkWorkTimes.stream()
+            .collect(Collectors.toMap(CheckWorkTime::getId, this::buildCheckWorkTimeLabel, (a, b) -> a));
+        for (Map<String, Object> bean : beans) {
+            String timsIdsStr = bean.getOrDefault("timsIds", StrUtil.EMPTY).toString();
+            if (StrUtil.isBlank(timsIdsStr)) {
+                continue;
+            }
+            String timeNames = Arrays.stream(timsIdsStr.split(CommonCharConstants.COMMA_MARK))
+                .map(String::trim)
+                .filter(StrUtil::isNotBlank)
+                .map(timeId -> timeNameMap.getOrDefault(timeId, timeId))
+                .collect(Collectors.joining("、"));
+            bean.put("timeNames", timeNames);
+        }
+    }
+
+    private String buildCheckWorkTimeLabel(CheckWorkTime checkWorkTime) {
+        return String.format("%s [%s ~ %s]",
+            StrUtil.blankToDefault(checkWorkTime.getName(), StrUtil.EMPTY),
+            StrUtil.blankToDefault(checkWorkTime.getStartTime(), StrUtil.EMPTY),
+            StrUtil.blankToDefault(checkWorkTime.getEndTime(), StrUtil.EMPTY));
+    }
+
+    /**
      * 获取所有的考勤班次在指定日期内需要上班多少天
      *
      * @param startTime 开始日期
@@ -841,6 +897,9 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         List<CheckWorkTime> workTime = checkWorkTimeService.queryAllData();
         Map<String, Integer> timeWorkDay = new HashMap<>();
         for (CheckWorkTime bean : workTime) {
+            if (!EnableEnum.ENABLE_USING.getKey().equals(bean.getEnabled())) {
+                continue;
+            }
             timeWorkDay.put(bean.getId(), 0);
         }
         // 1.获取范围内的所有日期
@@ -875,26 +934,10 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
      */
     private boolean getTimeWhetherWork(String timeId, int weekDay, int weekType, List<CheckWorkTime> workTime) {
         CheckWorkTime timeMation = workTime.stream().filter(item -> item.getId().equals(timeId)).findFirst().orElse(null);
-        if (ObjectUtil.isEmpty(timeMation) || CollectionUtil.isEmpty(timeMation.getCheckWorkTimeWeekList())) {
+        if (ObjectUtil.isEmpty(timeMation) || !EnableEnum.ENABLE_USING.getKey().equals(timeMation.getEnabled())) {
             return false;
         }
-        CheckWorkTimeWeek simpleDay = timeMation.getCheckWorkTimeWeekList().stream()
-            .filter(item -> item.getWeekNumber() == weekDay && !item.getType().equals(CheckWorkTimeWeekType.DOUBLE.getKey()))
-            .findFirst().orElse(null);
-        if (ObjectUtil.isEmpty(simpleDay)) {
-            return false;
-        }
-        // 在该班次中找到了指定日期的上班时间
-        if (weekType == WeekTypeEnum.ODD_WEEKS.getKey() && simpleDay.getType().equals(CheckWorkTimeWeekType.SINGLE_DAY.getKey())) {
-            // 该周天是单周并且该班次是单周上班
-            return true;
-        } else if (weekType == WeekTypeEnum.BIWEEKLY.getKey() && simpleDay.getType().equals(CheckWorkTimeWeekType.SINGLE_DAY.getKey())) {
-            // 该周天是双周并且该班次是单周上班
-            return false;
-        } else {
-            // 该周天是双周或者单周并且该班次是每周上班
-            return true;
-        }
+        return CheckWorkTimeWeekUtil.isWorkDay(weekDay, weekType, timeMation.getCheckWorkTimeWeekList());
     }
 
     /**
@@ -963,6 +1006,22 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
         List<Map<String, Object>> beans = checkWorkDao.queryNotCheckEndWorkId(timeId, yesterdayTime, tenantId);
         return beans;
+    }
+
+    /**
+     * 排班缺晚卡：指定排班时间段、考勤日只打上班卡未打下班卡的记录
+     */
+    @Override
+    public List<Map<String, Object>> queryScheduleNotCheckEndWorkId(String schedulingTimeId, String checkDate) {
+        // timeId=schedulingTimeId，不依赖 sys_eve_user_staff_time 固定班次绑定
+        String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
+        return checkWorkDao.queryScheduleNotCheckEndWorkId(schedulingTimeId, checkDate, tenantId);
+    }
+
+    @Override
+    public CheckWork queryAlreadyCheck(String checkDate, String userId, String timeId) {
+        String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
+        return checkWorkDao.queryisAlreadyCheck(checkDate, userId, timeId, tenantId);
     }
 
     /**

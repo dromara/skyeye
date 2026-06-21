@@ -6,6 +6,7 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.scheduling.entity.Scheduling;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SchedulingService extends SkyeyeBusinessService<Scheduling> {
 
@@ -26,5 +27,14 @@ public interface SchedulingService extends SkyeyeBusinessService<Scheduling> {
     void querySchedulingByStaffIdAndDays(InputObject inputObject, OutputObject outputObject);
 
     List<Scheduling> querySchedulingByIdList(List<String> schedulingIdList);
+
+    /**
+     * 指定考勤日应打卡的排班人员列表（供 CheckWorkQuartz 缺勤结算）
+     * <p>
+     * 返回字段：userId、schedulingTimeId、startTime、endTime、isNextDay
+     *
+     * @param checkDate 考勤归属日 yyyy-MM-dd
+     */
+    List<Map<String, Object>> queryScheduleCheckTargetsForDate(String checkDate);
 
 }

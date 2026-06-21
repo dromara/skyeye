@@ -66,7 +66,14 @@ public interface CheckWorkDao extends SkyeyeBaseMapper<CheckWork> {
                                                      @Param("tenantId") String tenantId);
 
     /**
-     * 填充下班卡信息
+     * 排班定时任务：查询指定排班时间段、考勤日只打上班卡未打下班卡的记录
+     */
+    @IgnoreTenant
+    List<Map<String, Object>> queryScheduleNotCheckEndWorkId(@Param("schedulingTimeId") String schedulingTimeId,
+                                                             @Param("checkDate") String checkDate,
+                                                             @Param("tenantId") String tenantId);
+
+    /**
      *
      * @param item
      * @return

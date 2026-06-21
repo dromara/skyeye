@@ -32,6 +32,7 @@ import com.skyeye.leave.entity.LeaveTimeSlot;
 import com.skyeye.leave.service.LeaveService;
 import com.skyeye.worktime.entity.CheckWorkTime;
 import com.skyeye.worktime.service.CheckWorkTimeService;
+import com.skyeye.worktime.util.CheckWorkHourCalcUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -78,8 +79,29 @@ public class CancelLeaveServiceImpl extends SkyeyeBusinessServiceImpl<CancelLeav
 
     @Override
     public void writePostpose(CancelLeave entity, String userId) {
+        // 保存前服务端重算 cancelHour（与请假算法一致，支持跨天）
+        recalcCancelLeaveTimeSlotHours(entity.getCancelLeaveTimeSlotList());
         cancelLeaveTimeSlotService.saveLinkList(entity.getId(), entity.getCancelLeaveTimeSlotList());
         super.writePostpose(entity, userId);
+    }
+
+    /**
+     * 按 cancelDay + 销假时段重算 cancelHour
+     */
+    private void recalcCancelLeaveTimeSlotHours(List<CancelLeaveTimeSlot> cancelLeaveTimeSlots) {
+        if (CollectionUtil.isEmpty(cancelLeaveTimeSlots)) {
+            return;
+        }
+        List<String> timeIds = cancelLeaveTimeSlots.stream().map(CancelLeaveTimeSlot::getTimeId).distinct().collect(Collectors.toList());
+        Map<String, CheckWorkTime> checkWorkTimeMap = checkWorkTimeService.selectMapByIds(timeIds);
+        for (CancelLeaveTimeSlot slot : cancelLeaveTimeSlots) {
+            CheckWorkTime workTime = checkWorkTimeMap.get(slot.getTimeId());
+            if (workTime != null && StrUtil.isNotEmpty(slot.getCancelDay())
+                && StrUtil.isNotEmpty(slot.getCancelStartTime()) && StrUtil.isNotEmpty(slot.getCancelEndTime())) {
+                slot.setCancelHour(CheckWorkHourCalcUtil.calcCancelHour(
+                    slot.getCancelDay(), slot.getCancelStartTime(), slot.getCancelEndTime(), workTime));
+            }
+        }
     }
 
     private void checkOrderItem(List<CancelLeaveTimeSlot> cancelLeaveTimeSlots) {
@@ -164,11 +186,17 @@ public class CancelLeaveServiceImpl extends SkyeyeBusinessServiceImpl<CancelLeav
             String cancelDay = day.getCancelDay();
             String timeId = day.getTimeId();
             String cancelHour = day.getCancelHour();
+            CheckWorkTime workTime = checkWorkTimeService.selectById(timeId);
+            // 审批通过时再次重算，确保年假/补休退还数量准确
+            if (workTime != null && StrUtil.isNotEmpty(day.getCancelStartTime()) && StrUtil.isNotEmpty(day.getCancelEndTime())) {
+                cancelHour = CheckWorkHourCalcUtil.calcCancelHour(
+                    cancelDay, day.getCancelStartTime(), day.getCancelEndTime(), workTime);
+            }
             // 判断该员工在这一天是否有销假成功的记录，如果有，则审核失败，如果没有，则继续操作
             Map<String, Object> mation = skyeyeBaseMapper.queryCheckWorkCancelLeaveByMation(createId, cancelDay, FlowableChildStateEnum.ADEQUATE.getKey(), tenantId);
             if (CollectionUtil.isEmpty(mation)) {
                 // 判断该员工在这一天是否有请假记录，如果没有，则审核失败，如果有，则继续操作
-                LeaveTimeSlot leaveDayMation = leaveService.queryCheckWorkLeaveByMation(createId, timeId, cancelDay);
+                LeaveTimeSlot leaveDayMation = leaveService.queryCheckWorkLeaveByMation(timeId, createId, cancelDay);
                 if (leaveDayMation != null) {
                     if (leaveDayMation.getUseYearHoliday().equals(UseYearHolidayType.USE_ANNUAL_LEAVE.getKey())) {
                         // 如果之前请假使用的是年假，则恢复年假

@@ -38,6 +38,14 @@ public class SysEveUserStaffTimeController {
         sysEveUserStaffTimeService.querySysEveUserStaffTimeListByTimeId(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "countSysEveUserStaffTimeByTimeIds", value = "批量统计各班次绑定员工数", method = "POST", allUse = "0")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "timeIds", name = "timeIds", value = "班次id，多个逗号隔开", required = "required")})
+    @RequestMapping("/post/SysEveUserStaffTimeController/countSysEveUserStaffTimeByTimeIds")
+    public void countSysEveUserStaffTimeByTimeIds(InputObject inputObject, OutputObject outputObject) {
+        sysEveUserStaffTimeService.countSysEveUserStaffTimeByTimeIds(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryStaffCheckWorkTimeRelationNameByStaffId", value = "根据员工id获取该员工的考勤时间段", method = "GET", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "staffId", name = "staffId", value = "员工id", required = "required")})

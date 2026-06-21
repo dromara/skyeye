@@ -22,4 +22,6 @@ public interface EquipmentService extends SkyeyeBusinessService<Equipment> {
     void queryAllEquipmentList(InputObject inputObject, OutputObject outputObject);
 
     void queryLastMonthEquipmentCost(InputObject inputObject, OutputObject outputObject);
+
+    void editEquipmentStateById(String equipmentId, Integer equipmentState);
 }

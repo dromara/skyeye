@@ -103,6 +103,26 @@ public class LeaveTimeSlotServiceImpl extends SkyeyeLinkDataServiceImpl<LeaveTim
         return skyeyeBaseMapper.selectJoinList(LeaveTimeSlot.class, wrapper);
     }
 
+    /**
+     * 查询用户在某自然日已审批通过的请假时段（不限 timeId，排班缺勤结算用）
+     */
+    @Override
+    @IgnoreTenant
+    public List<LeaveTimeSlot> queryApprovedLeaveSlotByUserAndDay(String createId, String day, String tenantId) {
+        // leaveStart~leaveEnd 覆盖 day 即命中
+        MPJLambdaWrapper<LeaveTimeSlot> wrapper = JoinWrappers.lambda("b", LeaveTimeSlot.class)
+            .innerJoin(Leave.class, "a", Leave::getId, LeaveTimeSlot::getParentId)
+            .eq("a." + MybatisPlusUtil.toColumns(Leave::getCreateId), createId)
+            .eq("b." + MybatisPlusUtil.toColumns(LeaveTimeSlot::getState), FlowableChildStateEnum.ADEQUATE.getKey())
+            .le("b.leave_start_time", day + " 23:59:59")
+            .ge("b.leave_end_time", day + " 00:00:00");
+        if (StrUtil.isNotEmpty(tenantId)) {
+            wrapper.eq("a." + CommonConstants.TENANT_ID_FIELD, tenantId);
+            wrapper.eq("b." + CommonConstants.TENANT_ID_FIELD, tenantId);
+        }
+        return skyeyeBaseMapper.selectJoinList(LeaveTimeSlot.class, wrapper);
+    }
+
     @Override
     @IgnoreTenant
     public List<LeaveTimeSlot> queryStateIsSuccessLeaveDayByUserIdAndMonths(String userId, String timeId, List<String> months, String tenantId) {

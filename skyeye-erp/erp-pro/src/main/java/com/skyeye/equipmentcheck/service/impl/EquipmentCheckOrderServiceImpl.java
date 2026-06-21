@@ -11,14 +11,22 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.equipment.classenum.EquipmentState;
 import com.skyeye.equipment.service.EquipmentService;
+import com.skyeye.equipmentcheck.classenum.EquipmentCheckItemResult;
+import com.skyeye.equipmentcheck.classenum.EquipmentCheckResult;
 import com.skyeye.equipmentcheck.dao.EquipmentCheckOrderDao;
 import com.skyeye.equipmentcheck.entity.EquipmentCheckOrder;
+import com.skyeye.equipmentcheck.entity.EquipmentCheckOrderItem;
 import com.skyeye.equipmentcheck.service.EquipmentCheckOrderItemService;
 import com.skyeye.equipmentcheck.service.EquipmentCheckOrderService;
 import com.skyeye.exception.CustomException;
+import com.skyeye.repair.classenum.EquipmentRepairUrgency;
+import com.skyeye.repair.entity.EquipmentRepairOrder;
+import com.skyeye.repair.service.EquipmentRepairOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -38,6 +46,9 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
 
     @Autowired
     private EquipmentService equipmentService;
+
+    @Autowired
+    private EquipmentRepairOrderService equipmentRepairOrderService;
 
     @Override
     protected QueryWrapper<EquipmentCheckOrder> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -110,6 +121,57 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
         equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
         iAuthUserService.setMationForMap(beans, "checkerId", "checkerMation");
         return beans;
+    }
+
+    // 点检审批通过：异常固定映射为带病运行并生成维修草案；正常固定映射为正常运行。
+    @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void approvalEndIsSuccess(EquipmentCheckOrder entity) {
+        EquipmentCheckOrder order = selectById(entity.getId());
+        if (EquipmentCheckResult.ABNORMAL.getKey().equals(order.getCheckResult())) {
+            equipmentService.editEquipmentStateById(order.getEquipmentId(), EquipmentState.DEGRADED.getKey());
+            createRepairDraftFromCheck(order);
+        } else if (EquipmentCheckResult.NORMAL.getKey().equals(order.getCheckResult())) {
+            equipmentService.editEquipmentStateById(order.getEquipmentId(), EquipmentState.NORMAL.getKey());
+        }
+    }
+
+    private void createRepairDraftFromCheck(EquipmentCheckOrder checkOrder) {
+        EquipmentRepairOrder repairOrder = new EquipmentRepairOrder();
+        repairOrder.setEquipmentId(checkOrder.getEquipmentId());
+        repairOrder.setUserId(checkOrder.getCheckerId());
+        repairOrder.setReportTime(checkOrder.getCheckTime());
+        repairOrder.setFaultBrief(buildFaultDesc(checkOrder));
+        repairOrder.setFaultPhoto(checkOrder.getImages());
+        repairOrder.setUrgencyLevel(EquipmentRepairUrgency.NORMAL.getKey());
+        String operatorId = StrUtil.isNotEmpty(checkOrder.getCheckerId()) ? checkOrder.getCheckerId() : checkOrder.getCreateId();
+        equipmentRepairOrderService.createEntity(repairOrder, operatorId);
+    }
+
+    private String buildFaultDesc(EquipmentCheckOrder order) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("点检单[").append(order.getOddNumber()).append("]发现异常");
+        if (CollectionUtil.isNotEmpty(order.getItemList())) {
+            sb.append("：");
+            order.getItemList().stream()
+                .filter(this::isAbnormalItem)
+                .forEach(item -> appendAbnormalItemDesc(sb, item));
+        }
+        return sb.toString();
+    }
+
+    private boolean isAbnormalItem(EquipmentCheckOrderItem item) {
+        return EquipmentCheckItemResult.ABNORMAL.getKey().equals(item.getItemResult());
+    }
+
+    private void appendAbnormalItemDesc(StringBuilder sb, EquipmentCheckOrderItem item) {
+        sb.append("\n- ").append(item.getCheckItem());
+        if (StrUtil.isNotEmpty(item.getCheckValue())) {
+            sb.append("，检查值：").append(item.getCheckValue());
+        }
+        if (StrUtil.isNotEmpty(item.getMinValue()) || StrUtil.isNotEmpty(item.getMaxValue())) {
+            sb.append("，标准：").append(item.getMinValue()).append("~").append(item.getMaxValue());
+        }
     }
 
     //统计今日点检设备分布、今日点检设备次数、今日未点检设备分布

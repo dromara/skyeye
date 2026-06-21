@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.google.common.base.Joiner;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonCharConstants;
@@ -991,6 +992,69 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
         iAuthUserService.setName(schedulingList, "lastUpdateId", "lastUpdateName");
         outputObject.setBeans(schedulingList);
         outputObject.settotal(page.getTotal());
+    }
+
+    /**
+     * 查询指定考勤日应打卡的排班人员（见 {@link SchedulingService#queryScheduleCheckTargetsForDate}）
+     */
+    @Override
+    public List<Map<String, Object>> queryScheduleCheckTargetsForDate(String checkDate) {
+        if (StrUtil.isBlank(checkDate)) {
+            return Collections.emptyList();
+        }
+        // 1. 查出覆盖 checkDate 的排班计划
+        QueryWrapper<Scheduling> schedulingWrapper = new QueryWrapper<>();
+        schedulingWrapper.le(MybatisPlusUtil.toColumns(Scheduling::getStartTime), checkDate);
+        schedulingWrapper.ge(MybatisPlusUtil.toColumns(Scheduling::getEndTime), checkDate);
+        List<Scheduling> schedulingList = list(schedulingWrapper);
+        if (CollectionUtil.isEmpty(schedulingList)) {
+            return Collections.emptyList();
+        }
+        List<String> schedulingIds = schedulingList.stream().map(Scheduling::getId).collect(Collectors.toList());
+        // 2. 排班计划下所有人员-时间段分配
+        QueryWrapper<SchedulingTimeWorkPeople> peopleWrapper = new QueryWrapper<>();
+        peopleWrapper.in(MybatisPlusUtil.toColumns(SchedulingTimeWorkPeople::getSchedulingId), schedulingIds);
+        List<SchedulingTimeWorkPeople> peopleList = schedulingTimeWorkPeopleService.list(peopleWrapper);
+        if (CollectionUtil.isEmpty(peopleList)) {
+            return Collections.emptyList();
+        }
+        List<String> schedulingTimeIds = peopleList.stream()
+            .map(SchedulingTimeWorkPeople::getSchedulingTimeId).distinct().collect(Collectors.toList());
+        Map<String, SchedulingTime> timeMap = schedulingTimeService.querySchedulingTimeByIds(schedulingTimeIds).stream()
+            .collect(Collectors.toMap(SchedulingTime::getId, t -> t, (a, b) -> a));
+        // 3. employeeId(staffId) → userId，供 check_work.create_id 使用
+        List<String> staffIds = peopleList.stream().map(SchedulingTimeWorkPeople::getEmployeeId).distinct().collect(Collectors.toList());
+        List<Map<String, Object>> staffList = iAuthUserService.queryDataMationByIds(Joiner.on(CommonCharConstants.COMMA_MARK).join(staffIds));
+        Map<String, String> staffIdToUserId = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(staffList)) {
+            for (Map<String, Object> staff : staffList) {
+                if (staff.get("userId") != null && staff.get("id") != null) {
+                    staffIdToUserId.put(staff.get("id").toString(), staff.get("userId").toString());
+                }
+            }
+        }
+        Set<String> dedupeKeys = new HashSet<>();
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (SchedulingTimeWorkPeople people : peopleList) {
+            // 同一员工同一排班时间段只结算一次
+            String dedupeKey = people.getEmployeeId() + "_" + people.getSchedulingTimeId();
+            if (!dedupeKeys.add(dedupeKey)) {
+                continue;
+            }
+            SchedulingTime schedulingTime = timeMap.get(people.getSchedulingTimeId());
+            String userId = staffIdToUserId.get(people.getEmployeeId());
+            if (schedulingTime == null || StrUtil.isBlank(userId)) {
+                continue;
+            }
+            Map<String, Object> item = new HashMap<>();
+            item.put("userId", userId);
+            item.put("schedulingTimeId", schedulingTime.getId());
+            item.put("startTime", schedulingTime.getStartTime());
+            item.put("endTime", schedulingTime.getEndTime());
+            item.put("isNextDay", schedulingTime.getIsNextDay());
+            result.add(item);
+        }
+        return result;
     }
 
     @Override

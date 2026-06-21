@@ -24,6 +24,7 @@ import com.skyeye.trip.service.BusinessTripService;
 import com.skyeye.trip.service.BusinessTripTimeSlotService;
 import com.skyeye.worktime.entity.CheckWorkTime;
 import com.skyeye.worktime.service.CheckWorkTimeService;
+import com.skyeye.worktime.util.CheckWorkHourCalcUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,8 +66,29 @@ public class BusinessTripServiceImpl extends SkyeyeBusinessServiceImpl<BusinessT
 
     @Override
     public void writePostpose(BusinessTrip entity, String userId) {
+        // 保存前服务端重算 travelHour（支持跨天整班/部分时段）
+        recalcTripTimeSlotHours(entity.getTripTimeSlotList());
         businessTripTimeSlotService.saveLinkList(entity.getId(), entity.getTripTimeSlotList());
         super.writePostpose(entity, userId);
+    }
+
+    /**
+     * 按班次配置重算各出差明细的 travelHour
+     */
+    private void recalcTripTimeSlotHours(List<BusinessTripTimeSlot> tripTimeSlotList) {
+        if (CollectionUtil.isEmpty(tripTimeSlotList)) {
+            return;
+        }
+        List<String> timeIds = tripTimeSlotList.stream().map(BusinessTripTimeSlot::getTimeId).distinct().collect(Collectors.toList());
+        Map<String, CheckWorkTime> checkWorkTimeMap = checkWorkTimeService.selectMapByIds(timeIds);
+        for (BusinessTripTimeSlot slot : tripTimeSlotList) {
+            CheckWorkTime workTime = checkWorkTimeMap.get(slot.getTimeId());
+            if (workTime != null && StrUtil.isNotEmpty(slot.getTravelDay())
+                && StrUtil.isNotEmpty(slot.getStartTime()) && StrUtil.isNotEmpty(slot.getEndTime())) {
+                slot.setTravelHour(CheckWorkHourCalcUtil.calcTravelHour(
+                    slot.getTravelDay(), slot.getStartTime(), slot.getEndTime(), workTime));
+            }
+        }
     }
 
     private void checkOrderItem(List<BusinessTripTimeSlot> businessTripTimeSlots) {

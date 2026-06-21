@@ -9,6 +9,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Map;
+
 /**
  * @ClassName: ISysEveUserStaffTimeRest
  * @Description: 员工考勤班次服务接口
@@ -27,4 +29,12 @@ public interface ISysEveUserStaffTimeRest {
      */
     @PostMapping("/querySysEveUserStaffTimeListByTimeId")
     String querySysEveUserStaffTimeListByTimeId(@RequestParam("timeId") String timeId);
+
+    /**
+     * 批量统计各班次绑定员工数
+     *
+     * @param params 参数信息：timeIds 班次id，多个逗号隔开
+     */
+    @PostMapping("/countSysEveUserStaffTimeByTimeIds")
+    String countSysEveUserStaffTimeByTimeIds(Map<String, Object> params);
 }

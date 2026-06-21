@@ -68,6 +68,16 @@ public interface CheckWorkService extends SkyeyeBusinessService<CheckWork> {
 
     List<Map<String, Object>> queryCheckWorkOvertimeWaitSettlement();
 
+    /**
+     * 排班定时任务：查询指定排班时间段、考勤日只打上班卡未打下班卡的记录
+     */
+    List<Map<String, Object>> queryScheduleNotCheckEndWorkId(String schedulingTimeId, String checkDate);
+
+    /**
+     * 查询指定用户、班次、考勤日是否已有打卡记录（含系统补卡）
+     */
+    CheckWork queryAlreadyCheck(String checkDate, String userId, String timeId);
+
     void insertCheckWorkBySystem(List<Map<String, Object>> beans);
 
     void queryInfoByStaffIdsAndDates(InputObject inputObject, OutputObject outputObject);

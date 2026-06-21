@@ -7,6 +7,8 @@ package com.skyeye.equipment.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonNumConstants;
@@ -115,6 +117,15 @@ public class EquipmentServiceImpl extends SkyeyeBusinessServiceImpl<EquipmentDao
             result.add(map);
         }
         outputObject.setBeans(result);
+    }
+
+    @Override
+    public void editEquipmentStateById(String equipmentId, Integer equipmentState) {
+        UpdateWrapper<Equipment> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, equipmentId);
+        updateWrapper.set(MybatisPlusUtil.toColumns(Equipment::getEquipmentState), equipmentState);
+        update(updateWrapper);
+        refreshCache(equipmentId);
     }
 
 }

@@ -32,4 +32,9 @@ public interface SysEveUserStaffTimeService extends SkyeyeBusinessService<SysEve
 
     List<Map<String, Object>> getStaffCheckWorkTimeByStaffId(String staffId);
 
+    /**
+     * 批量统计各班次绑定员工数
+     */
+    void countSysEveUserStaffTimeByTimeIds(InputObject inputObject, OutputObject outputObject);
+
 }

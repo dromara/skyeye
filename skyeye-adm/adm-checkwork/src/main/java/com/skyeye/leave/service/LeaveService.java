@@ -37,6 +37,11 @@ public interface LeaveService extends SkyeyeBusinessService<Leave> {
 
     LeaveTimeSlot queryCheckWorkLeaveByMation(String timeId, String createId, String leaveStartDay);
 
+    /**
+     * 指定自然日是否存在审核通过的请假（不限班次，供排班定时任务使用）
+     */
+    boolean hasApprovedLeaveOnDay(String createId, String day);
+
     void getLeaveTypeList(InputObject inputObject, OutputObject outputObject);
 
     List<Leave> queryLeaveByFormalUserIds(List<String> formalUserIds);
