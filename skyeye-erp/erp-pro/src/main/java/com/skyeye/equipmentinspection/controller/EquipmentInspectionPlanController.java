@@ -58,4 +58,3 @@ public class EquipmentInspectionPlanController {
         equipmentInspectionPlanService.selectById(inputObject, outputObject);
     }
 }
-

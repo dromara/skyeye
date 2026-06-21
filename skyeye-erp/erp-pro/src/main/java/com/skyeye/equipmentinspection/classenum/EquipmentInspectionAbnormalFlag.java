@@ -14,19 +14,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @ClassName: EquipmentInspectionFrequencyType
- * @Description: 设备巡检频率
+ * @ClassName: EquipmentInspectionAbnormalFlag
+ * @Description: 设备巡检-是否异常
  */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public enum EquipmentInspectionFrequencyType implements SkyeyeEnumClass {
+public enum EquipmentInspectionAbnormalFlag implements SkyeyeEnumClass {
 
-    DAY(1, "日检", true, true),
-    WEEK(2, "周检", true, false),
-    MONTH(3, "月检", true, false),
-    QUARTER(4, "季检", true, false),
-    YEAR(5, "年检", true, false);
+    NO(0, "否", true, true),
+    YES(1, "是", true, false);
 
     private Integer key;
 
@@ -37,7 +34,7 @@ public enum EquipmentInspectionFrequencyType implements SkyeyeEnumClass {
     private Boolean isDefault;
 
     public static Map<String, Object> getMation(Integer type) {
-        for (EquipmentInspectionFrequencyType bean : EquipmentInspectionFrequencyType.values()) {
+        for (EquipmentInspectionAbnormalFlag bean : EquipmentInspectionAbnormalFlag.values()) {
             if (type != null && type.equals(bean.getKey())) {
                 Map<String, Object> result = new HashMap<>();
                 result.put("id", bean.getKey());

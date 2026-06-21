@@ -7,11 +7,15 @@ package com.skyeye.equipmentinspection.service;
 import com.skyeye.base.business.service.SkyeyeBusinessService;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
 
+import java.util.List;
+
 /**
  * @ClassName: EquipmentInspectionPlanService
  * @Description: 设备巡检方案服务接口层
  */
 public interface EquipmentInspectionPlanService extends SkyeyeBusinessService<EquipmentInspectionPlan> {
+
+    List<EquipmentInspectionPlan> getDataFromDb(List<String> idList);
 
     int calcRequiredInspectionCount(EquipmentInspectionPlan plan, String startTime, String endTime);
 

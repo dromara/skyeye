@@ -15,13 +15,13 @@ import lombok.Data;
 import java.util.Map;
 
 /**
- * @ClassName: EquipmentInspectionPlanItem
- * @Description: 设备巡检方案项目关联实体类
+ * @ClassName: EquipmentInspectionPlanEquipment
+ * @Description: 设备巡检方案设备关联实体类
  */
 @Data
-@TableName(value = "erp_equipment_inspection_plan_item")
-@ApiModel("设备巡检方案项目关联实体类")
-public class EquipmentInspectionPlanItem extends OperatorUserInfo {
+@TableName(value = "erp_equipment_inspection_plan_equipment")
+@ApiModel("设备巡检方案设备关联实体类")
+public class EquipmentInspectionPlanEquipment extends OperatorUserInfo {
 
     @TableId("id")
     @ApiModelProperty("主键id。为空时新增，不为空时编辑")
@@ -31,12 +31,12 @@ public class EquipmentInspectionPlanItem extends OperatorUserInfo {
     @ApiModelProperty(value = "方案ID", required = "required")
     private String planId;
 
-    @TableField(value = "item_id")
-    @ApiModelProperty(value = "巡检项目ID", required = "required")
-    private String itemId;
+    @TableField(value = "equipment_id")
+    @ApiModelProperty(value = "设备ID", required = "required")
+    private String equipmentId;
 
     @TableField(exist = false)
-    @ApiModelProperty(value = "巡检项目信息")
-    private Map<String, Object> itemMation;
+    @ApiModelProperty(value = "设备信息")
+    private Map<String, Object> equipmentMation;
 
 }

@@ -22,13 +22,9 @@ import java.util.Map;
  * @Description: 设备巡检单子表明细实体类
  */
 @Data
-@TableName(value = "erp_equipment_inspection_order_item_zcdemo")
+@TableName(value = "erp_equipment_inspection_order_item")
 @ApiModel("设备巡检单子表明细实体类")
 public class EquipmentInspectionOrderItem extends SkyeyeLinkData {
-
-    @TableField("order_id")
-    @Property(value = "巡检单id")
-    private String parentId;
 
     @TableField("line_no")
     @Property(value = "行号")
@@ -75,7 +71,7 @@ public class EquipmentInspectionOrderItem extends SkyeyeLinkData {
     private String remark;
 
     @TableField(exist = false)
-    @Property(value = "方案检查项信息")
-    private EquipmentInspectionPlanItem planItemMation;
+    @Property(value = "巡检项目信息")
+    private EquipmentInspectionItem itemMation;
 
 }

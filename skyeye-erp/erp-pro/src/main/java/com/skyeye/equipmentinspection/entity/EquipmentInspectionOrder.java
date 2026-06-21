@@ -29,8 +29,8 @@ import java.util.Map;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @UniqueField(value = {"oddNumber"})
-@RedisCacheField(name = "erp:equipmentInspectionOrder:zcdemo", cacheTime = RedisConstants.TOW_MONTH_SECONDS)
-@TableName(value = "erp_equipment_inspection_order_zcdemo", autoResultMap = true)
+@RedisCacheField(name = "erp:equipmentInspectionOrder", cacheTime = RedisConstants.TOW_MONTH_SECONDS)
+@TableName(value = "erp_equipment_inspection_order", autoResultMap = true)
 @ApiModel("设备巡检单实体类")
 public class EquipmentInspectionOrder extends SkyeyeFlowable {
 
@@ -39,14 +39,26 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     private String oddNumber;
 
     @TableField(value = "equipment_id", updateStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "设备档案id", required = "required")
+    @ApiModelProperty(value = "设备id", required = "required")
     private String equipmentId;
 
+    @TableField(value = "plan_id", updateStrategy = FieldStrategy.NEVER)
+    @ApiModelProperty(value = "巡检方案id", required = "required")
+    private String planId;
+
+    @TableField(value = "task_id", updateStrategy = FieldStrategy.NEVER)
+    @ApiModelProperty(value = "巡检任务id")
+    private String taskId;
+
+    @TableField(exist = false)
+    @Property(value = "巡检方案信息")
+    private Map<String, Object> planMation;
+
     @TableField("inspection_time")
-    @ApiModelProperty(value = "巡检时间", required = "required")
+    @ApiModelProperty(value = "巡检时间，格式yyyy-MM-dd HH:mm:ss", required = "required")
     private String inspectionTime;
 
-    @TableField(value = "inspector_user_id", updateStrategy = FieldStrategy.NEVER)
+    @TableField("inspector_user_id")
     @ApiModelProperty(value = "巡检员用户id")
     private String inspectorUserId;
 
@@ -98,16 +110,12 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     @ApiModelProperty(value = "当日第几次巡检", required = "required,num")
     private Integer seqInDay;
 
-    @TableField("biz_key_composite")
-    @ApiModelProperty(value = "业务组合键")
-    private String bizKeyComposite;
-
     @TableField("remark")
     @ApiModelProperty(value = "备注")
     private String remark;
 
     @TableField(exist = false)
-    @Property(value = "设备档案信息")
+    @Property(value = "设备信息")
     private Map<String, Object> equipmentMation;
 
     @TableField(exist = false)

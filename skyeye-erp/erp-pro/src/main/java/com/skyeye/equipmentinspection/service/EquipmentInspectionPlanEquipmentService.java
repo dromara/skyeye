@@ -5,16 +5,16 @@
 package com.skyeye.equipmentinspection.service;
 
 import com.skyeye.base.business.service.SkyeyeBusinessService;
-import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlanItem;
+import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlanEquipment;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * @ClassName: EquipmentInspectionPlanItemService
- * @Description: 设备巡检方案项目关联服务接口层
+ * @ClassName: EquipmentInspectionPlanEquipmentService
+ * @Description: 设备巡检方案设备关联服务接口层
  */
-public interface EquipmentInspectionPlanItemService extends SkyeyeBusinessService<EquipmentInspectionPlanItem> {
+public interface EquipmentInspectionPlanEquipmentService extends SkyeyeBusinessService<EquipmentInspectionPlanEquipment> {
 
     void deleteByParentId(String planId);
 
@@ -22,6 +22,6 @@ public interface EquipmentInspectionPlanItemService extends SkyeyeBusinessServic
 
     Map<String, List<String>> selectMapByParentId(List<String> planIds);
 
-    void saveList(String planId, List<String> itemIds);
+    void saveList(String planId, List<String> equipmentIds);
 
 }
