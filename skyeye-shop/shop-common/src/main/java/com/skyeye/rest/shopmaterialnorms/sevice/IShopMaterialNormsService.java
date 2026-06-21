@@ -29,4 +29,5 @@ public interface IShopMaterialNormsService {
     List<Map<String, Object>> queryShopMaterialByIds(List<String> ids);
 
     List<Map<String, Object>> queryAllShopMaterialListForChoose();
+
 }

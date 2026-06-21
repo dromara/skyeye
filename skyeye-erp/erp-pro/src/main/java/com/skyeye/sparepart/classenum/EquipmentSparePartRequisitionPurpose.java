@@ -17,8 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public enum EquipmentSparePartRequisitionPurpose implements SkyeyeEnumClass {
 
-    EQUIPMENT_REPAIR(1, "设备维修", true, true),
-    EQUIPMENT_MAINTENANCE(2, "设备保养", true, false);
+    EQUIPMENT_REPAIR(1, "设备维修", true, true);
 
     private Integer key;
 

@@ -29,7 +29,7 @@ import java.util.Map;
 public class EquipmentSparePartRequisition extends SkyeyeLinkData {
 
     @TableField(value = "repair_order_id")
-    @ApiModelProperty(value = "来源单据ID（设备维修单/设备保养单）")
+    @ApiModelProperty(value = "来源单据ID（设备维修单）")
     private String repairOrderId;
 
     @TableField(exist = false)
@@ -49,7 +49,7 @@ public class EquipmentSparePartRequisition extends SkyeyeLinkData {
     private Map<String, Object> depotMation;
 
     @TableField(value = "requisition_purpose")
-    @ApiModelProperty(value = "领用目的：1-设备维修、2-设备保养", enumClass = EquipmentSparePartRequisitionPurpose.class, required = "num")
+    @ApiModelProperty(value = "领用目的：1-设备维修", enumClass = EquipmentSparePartRequisitionPurpose.class, required = "num")
     private Integer requisitionPurpose;
 
     @TableField(value = "requisition_date")

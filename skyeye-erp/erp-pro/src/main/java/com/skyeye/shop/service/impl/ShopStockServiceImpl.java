@@ -32,9 +32,12 @@ import com.skyeye.material.service.MaterialService;
 import com.skyeye.rest.shop.service.IShopStoreService;
 import com.skyeye.shop.dao.ShopStockDao;
 import com.skyeye.shop.entity.ShopStock;
+import com.skyeye.shop.entity.StoreProductTransferExecute;
+import com.skyeye.shop.entity.StoreProductTransferLink;
 import com.skyeye.shop.service.ShopStockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.RoundingMode;
 import java.util.List;
@@ -164,6 +167,39 @@ public class ShopStockServiceImpl extends SkyeyeBusinessServiceImpl<ShopStockDao
             }
         });
         return stockMap;
+    }
+
+    @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void executeStoreProductTransfer(InputObject inputObject, OutputObject outputObject) {
+        StoreProductTransferExecute execute = inputObject.getParams(StoreProductTransferExecute.class);
+        String fromStoreId = execute.getFromStoreId();
+        String toStoreId = execute.getToStoreId();
+        List<StoreProductTransferLink> applyLinkList = execute.getApplyLinkList();
+        List<String> normsIds = applyLinkList.stream().map(StoreProductTransferLink::getNormsId).collect(Collectors.toList());
+        Map<String, String> fromStoreStockMap = queryNormsShopStock(fromStoreId, normsIds);
+        for (StoreProductTransferLink link : applyLinkList) {
+            validateTransferStock(fromStoreId, link, fromStoreStockMap);
+            updateShopStock(fromStoreId, link.getMaterialId(), link.getNormsId(), link.getOperNumber(), DepotPutOutType.OUT.getKey());
+            updateShopStock(toStoreId, link.getMaterialId(), link.getNormsId(), link.getOperNumber(), DepotPutOutType.PUT.getKey());
+        }
+    }
+    
+    private void validateTransferStock(String fromStoreId, StoreProductTransferLink link, Map<String, String> fromStoreStockMap) {
+        String normsId = link.getNormsId();
+        String operNumber = link.getOperNumber();
+        String fromStoreStock = fromStoreStockMap.get(normsId);
+        if (StrUtil.isEmpty(fromStoreStock)) {
+            fromStoreStock = CommonNumConstants.NUM_ZERO.toString();
+        }
+        String remainStock = CalculationUtil.subtract(fromStoreStock, operNumber, ErpConstants.NUM_AFTER_DOT);
+        if (CalculationUtil.compareTo(remainStock, CommonNumConstants.NUM_ZERO.toString(), ErpConstants.NUM_AFTER_DOT, RoundingMode.UP) < 0) {
+            throw new CustomException("原门店库存不足，无法调拨");
+        }
+        ShopStock fromShopStock = queryShopStock(fromStoreId, normsId);
+        if (ObjectUtil.isEmpty(fromShopStock) || !StrUtil.equals(fromShopStock.getMaterialId(), link.getMaterialId())) {
+            throw new CustomException("原门店不存在该规格库存，无法调拨");
+        }
     }
 
 }

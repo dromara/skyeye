@@ -38,4 +38,9 @@ public interface ShopStockService extends SkyeyeBusinessService<ShopStock> {
     Map<String, String> queryNormsShopStock(String storeId, List<String> normsIds);
 
     void queryShopStockList(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 执行门店产品库存调拨：原门店出库，目标门店入库（审批通过后调用，含库存校验）
+     */
+    void executeStoreProductTransfer(InputObject inputObject, OutputObject outputObject);
 }

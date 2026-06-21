@@ -10,6 +10,7 @@ import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.shop.entity.StoreProductTransferExecute;
 import com.skyeye.shop.service.ShopStockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,13 @@ public class ShopStockController {
     @RequestMapping("/post/ShopStockController/queryShopStockList")
     public void queryShopStockList(InputObject inputObject, OutputObject outputObject) {
         shopStockService.queryShopStockList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "executeStoreProductTransfer", value = "执行门店产品库存调拨", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = StoreProductTransferExecute.class)
+    @RequestMapping("/post/ShopStockController/executeStoreProductTransfer")
+    public void executeStoreProductTransfer(InputObject inputObject, OutputObject outputObject) {
+        shopStockService.executeStoreProductTransfer(inputObject, outputObject);
     }
 
 }

@@ -17,7 +17,8 @@ import com.skyeye.material.service.MaterialService;
 import com.skyeye.sparepart.dao.EquipmentSparePartRequisitionDao;
 import com.skyeye.sparepart.entity.EquipmentSparePartRequisition;
 import com.skyeye.sparepart.entity.EquipmentSparePartRequisitionDetail;
-import com.skyeye.maintenance.service.EquipmentMaintainOrderService;
+import com.skyeye.repair.classenum.EquipmentRepairOrderState;
+import com.skyeye.repair.entity.EquipmentRepairOrder;
 import com.skyeye.repair.service.EquipmentRepairOrderService;
 import com.skyeye.sparepart.classenum.EquipmentSparePartRequisitionPurpose;
 import com.skyeye.sparepart.classenum.EquipmentUserStockPutOutType;
@@ -46,9 +47,6 @@ public class EquipmentSparePartRequisitionServiceImpl extends SkyeyeLinkDataServ
 
     @Autowired
     private EquipmentRepairOrderService equipmentRepairOrderService;
-
-    @Autowired
-    private EquipmentMaintainOrderService equipmentMaintainOrderService;
 
     @Autowired
     private ErpDepotService erpDepotService;
@@ -120,14 +118,9 @@ public class EquipmentSparePartRequisitionServiceImpl extends SkyeyeLinkDataServ
             return null;
         }
         if (StrUtil.isNotBlank(entity.getRepairOrderId())) {
-            if (EquipmentSparePartRequisitionPurpose.EQUIPMENT_MAINTENANCE.getKey().equals(entity.getRequisitionPurpose())) {
-                entity.setSourceOrderMation(BeanUtil.beanToMap(equipmentMaintainOrderService.selectById(entity.getRepairOrderId())));
-            } else {
-                entity.setSourceOrderMation(BeanUtil.beanToMap(equipmentRepairOrderService.selectById(entity.getRepairOrderId())));
-            }
+            entity.setSourceOrderMation(BeanUtil.beanToMap(equipmentRepairOrderService.selectById(entity.getRepairOrderId())));
             if (entity.getSourceOrderMation() != null) {
                 entity.getSourceOrderMation().remove("sparePartRequisitionList");
-                entity.getSourceOrderMation().remove("maintainOrderItemList");
             }
         }
         erpDepotService.setDataMation(entity, EquipmentSparePartRequisition::getDepotId);

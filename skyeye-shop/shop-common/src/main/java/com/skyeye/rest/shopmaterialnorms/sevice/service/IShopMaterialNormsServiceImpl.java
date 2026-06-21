@@ -70,4 +70,5 @@ public class IShopMaterialNormsServiceImpl extends IServiceImpl implements IShop
         List<Map<String, Object>> rows = resultEntity.getRows();
         return rows;
     }
+
 }

@@ -27,11 +27,11 @@ import java.util.List;
 public class EquipmentSparePartApply extends SkyeyeFlowable {
 
     @TableField(value = "repair_order_id")
-    @ApiModelProperty(value = "来源单据ID（设备维修单/设备保养单）")
+    @ApiModelProperty(value = "来源单据ID（设备维修单）")
     private String repairOrderId;
 
     @TableField(value = "apply_purpose")
-    @ApiModelProperty(value = "申领目的：1-设备维修、2-设备保养", enumClass = EquipmentSparePartRequisitionPurpose.class, required = "num")
+    @ApiModelProperty(value = "申领目的：1-设备维修", enumClass = EquipmentSparePartRequisitionPurpose.class, required = "num")
     private Integer applyPurpose;
 
     @TableField(value = "apply_time")
