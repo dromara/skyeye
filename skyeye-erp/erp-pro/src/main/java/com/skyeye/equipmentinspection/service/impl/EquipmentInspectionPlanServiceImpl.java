@@ -15,6 +15,7 @@ import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.equipmentinspection.dao.EquipmentInspectionPlanDao;
@@ -74,14 +75,13 @@ public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImp
         if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionPlan::getTeamId), commonPageInfo.getObjectId());
         }
-        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentInspectionPlan::getCreateTime));
         return queryWrapper;
     }
 
     @Override
     public void createPrepose(EquipmentInspectionPlan entity) {
-        assignPlanCode(entity);
-        entity.setName(StrUtil.blankToDefault(entity.getName(), entity.getPlanCode()));
+        Map<String, Object> business = BeanUtil.beanToMap(entity);
+        entity.setOddNumber(iCodeRuleService.getNextCodeByClassName(getClass().getName(), business));
     }
 
     @Override
@@ -108,17 +108,12 @@ public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImp
     @Override
     public EquipmentInspectionPlan selectById(String id) {
         EquipmentInspectionPlan plan = super.selectById(id);
-        if (plan == null) {
-            return null;
-        }
         plan.setEquipmentId(equipmentInspectionPlanEquipmentService.selectByParentId(id));
         plan.setItemId(equipmentInspectionPlanItemService.selectByParentId(id));
         plan.setFrequencyTypeMation(EquipmentInspectionFrequencyType.getMation(plan.getFrequencyType()));
         equipmentInspectionTeamService.setDataMation(plan, EquipmentInspectionPlan::getTeamId);
         if (CollectionUtil.isNotEmpty(plan.getEquipmentId())) {
-            plan.setEquipmentMation(equipmentService.selectByIds(plan.getEquipmentId().toArray(new String[]{})).stream()
-                .map(item -> BeanUtil.beanToMap(item, false, true))
-                .collect(Collectors.toList()));
+            plan.setEquipmentMation(equipmentService.selectByIds(plan.getEquipmentId().toArray(new String[]{})));
         }
         if (CollectionUtil.isNotEmpty(plan.getItemId())) {
             List<EquipmentInspectionItem> items = equipmentInspectionItemService.selectByIds(plan.getItemId().toArray(new String[]{}));
@@ -162,19 +157,6 @@ public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImp
         return planList;
     }
 
-    private void assignPlanCode(EquipmentInspectionPlan entity) {
-        Map<String, Object> business = BeanUtil.beanToMap(entity);
-        business.remove("planCode");
-        String planCode = iCodeRuleService.getNextCodeByClassName(getClass().getName(), business);
-        if (StrUtil.isBlank(planCode)) {
-            planCode = iCodeRuleService.getNextCodeByClassName(getServiceClassName(), business);
-        }
-        if (StrUtil.isBlank(planCode)) {
-            throw new CustomException("巡检方案编码生成失败，请检查编码规则 equipInspectionPlan 是否已绑定到业务对象.");
-        }
-        entity.setPlanCode(planCode);
-    }
-
     @Override
     public void deletePostpose(String id) {
         equipmentInspectionPlanEquipmentService.deleteByParentId(id);
@@ -207,6 +189,13 @@ public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImp
             default:
                 return (int) (days * perDay);
         }
+    }
+
+    @Override
+    public void queryAllEquipmentInspectionPlanList(InputObject inputObject, OutputObject outputObject) {
+        List<EquipmentInspectionPlan> planList = list();
+        outputObject.setBeans(planList);
+        outputObject.settotal(planList.size());
     }
 
 }

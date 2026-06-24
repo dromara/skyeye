@@ -5,6 +5,8 @@
 package com.skyeye.equipmentinspection.service;
 
 import com.skyeye.base.business.service.SkyeyeBusinessService;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
 
 import java.util.List;
@@ -18,6 +20,8 @@ public interface EquipmentInspectionPlanService extends SkyeyeBusinessService<Eq
     List<EquipmentInspectionPlan> getDataFromDb(List<String> idList);
 
     int calcRequiredInspectionCount(EquipmentInspectionPlan plan, String startTime, String endTime);
+
+    void queryAllEquipmentInspectionPlanList(InputObject inputObject, OutputObject outputObject);
 
 }
 

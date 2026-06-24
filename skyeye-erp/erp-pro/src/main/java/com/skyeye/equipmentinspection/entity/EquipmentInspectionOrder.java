@@ -11,11 +11,10 @@ import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
-import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeFlowable;
+import com.skyeye.equipment.classenum.EquipmentState;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionResultType;
-import com.skyeye.equipmentinspection.classenum.EquipmentInspectionRunStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -28,7 +27,6 @@ import java.util.Map;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@UniqueField(value = {"oddNumber"})
 @RedisCacheField(name = "erp:equipmentInspectionOrder", cacheTime = RedisConstants.TOW_MONTH_SECONDS)
 @TableName(value = "erp_equipment_inspection_order", autoResultMap = true)
 @ApiModel("设备巡检单实体类")
@@ -58,7 +56,7 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     @ApiModelProperty(value = "巡检时间，格式yyyy-MM-dd HH:mm:ss", required = "required")
     private String inspectionTime;
 
-    @TableField("inspector_user_id")
+    @TableField(value = "inspector_user_id", updateStrategy = FieldStrategy.NEVER)
     @ApiModelProperty(value = "巡检员用户id")
     private String inspectorUserId;
 
@@ -74,9 +72,13 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     @Property(value = "巡检结果信息")
     private Map<String, Object> overallResultMation;
 
-    @TableField("equipment_run_status")
-    @ApiModelProperty(value = "设备运行状态", enumClass = EquipmentInspectionRunStatus.class, required = "num")
+    @TableField(value = "equipment_run_status", insertStrategy = FieldStrategy.NOT_NULL, updateStrategy = FieldStrategy.NOT_NULL)
+    @ApiModelProperty(value = "设备运行状态", enumClass = EquipmentState.class, required = "num", defaultValue = "1")
     private Integer equipmentRunStatus;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "设备运行状态(兼容旧参 equipmentState)", enumClass = EquipmentState.class)
+    private Integer equipmentState;
 
     @TableField(exist = false)
     @Property(value = "设备运行状态信息")

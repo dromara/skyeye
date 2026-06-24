@@ -9,7 +9,6 @@ import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
-import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionItem;
@@ -60,8 +59,6 @@ public class EquipmentInspectionItemController {
     }
 
     @ApiOperation(id = "queryAllEquipmentInspectionItemList", value = "获取所有设备巡检项目（下拉选用）", method = "POST", allUse = "2")
-    @ApiImplicitParams({
-        @ApiImplicitParam(id = "enabled", name = "enabled", value = "启用状态", enumClass = EnableEnum.class)})
     @RequestMapping("/post/EquipmentInspectionItemController/queryAllEquipmentInspectionItemList")
     public void queryAllEquipmentInspectionItemList(InputObject inputObject, OutputObject outputObject) {
         equipmentInspectionItemService.queryAllEquipmentInspectionItemList(inputObject, outputObject);

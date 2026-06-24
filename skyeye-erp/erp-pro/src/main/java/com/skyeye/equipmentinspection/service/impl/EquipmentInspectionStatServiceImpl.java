@@ -32,13 +32,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -162,10 +160,8 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
      */
     private List<PlanEquipmentRow> queryScopedPlanEquipmentRows(StatScope scope) {
         QueryWrapper<EquipmentInspectionPlanEquipment> queryWrapper = new QueryWrapper<>();
-        if (StrUtil.isNotBlank(scope.getObjectId())) {
-            Set<String> equipmentIds = Arrays.stream(scope.getObjectId().split(","))
-                .map(String::trim).filter(StrUtil::isNotBlank).collect(Collectors.toCollection(LinkedHashSet::new));
-            queryWrapper.in(MybatisPlusUtil.toColumns(EquipmentInspectionPlanEquipment::getEquipmentId), equipmentIds);
+        if (StrUtil.isNotBlank(scope.getEquipmentId())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionPlanEquipment::getEquipmentId), scope.getEquipmentId());
         }
         List<EquipmentInspectionPlanEquipment> planEquipmentList = equipmentInspectionPlanEquipmentService.list(queryWrapper);
         if (CollectionUtil.isEmpty(planEquipmentList)) {
@@ -292,7 +288,7 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
         private String startTime;
         private String endTime;
         private String holderId;
-        private String objectId;
+        private String equipmentId;
         private String keyword;
 
         static StatScope of(CommonPageInfo pageInfo) {
@@ -300,7 +296,7 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
             scope.startTime = pageInfo.getStartTime();
             scope.endTime = pageInfo.getEndTime();
             scope.holderId = pageInfo.getHolderId();
-            scope.objectId = pageInfo.getObjectId();
+            scope.equipmentId = pageInfo.getCustomParamsMapStr("equipmentId");
             scope.keyword = pageInfo.getKeyword();
             return scope;
         }
@@ -310,7 +306,7 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
             scope.startTime = tableSelectInfo.getStartTime();
             scope.endTime = tableSelectInfo.getEndTime();
             scope.holderId = tableSelectInfo.getHolderId();
-            scope.objectId = tableSelectInfo.getObjectId();
+            scope.equipmentId = tableSelectInfo.getCustomParamsMapStr("equipmentId");
             scope.keyword = tableSelectInfo.getKeyword();
             return scope;
         }
@@ -335,8 +331,8 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
             return holderId;
         }
 
-        String getObjectId() {
-            return objectId;
+        String getEquipmentId() {
+            return equipmentId;
         }
 
         String getKeyword() {

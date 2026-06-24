@@ -57,4 +57,10 @@ public class EquipmentInspectionPlanController {
     public void queryEquipmentInspectionPlanById(InputObject inputObject, OutputObject outputObject) {
         equipmentInspectionPlanService.selectById(inputObject, outputObject);
     }
+
+    @ApiOperation(id = "queryAllEquipmentInspectionPlanList", value = "获取所有设备巡检方案（下拉选用）", method = "POST", allUse = "2")
+    @RequestMapping("/post/EquipmentInspectionPlanController/queryAllEquipmentInspectionPlanList")
+    public void queryAllEquipmentInspectionPlanList(InputObject inputObject, OutputObject outputObject) {
+        equipmentInspectionPlanService.queryAllEquipmentInspectionPlanList(inputObject, outputObject);
+    }
 }

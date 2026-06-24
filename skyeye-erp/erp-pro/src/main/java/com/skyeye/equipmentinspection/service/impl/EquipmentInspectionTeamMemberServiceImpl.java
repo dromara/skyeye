@@ -4,6 +4,8 @@
 
 package com.skyeye.equipmentinspection.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
@@ -39,14 +41,27 @@ public class EquipmentInspectionTeamMemberServiceImpl extends SkyeyeBusinessServ
     @Override
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
-        List<String> staffIds = beans.stream().map(bean -> bean.get("staffId").toString())
-            .filter(StrUtil::isNotEmpty).distinct().collect(Collectors.toList());
+        setStaffMationForMap(beans);
+        return beans;
+    }
+
+    private void setStaffMationForMap(List<Map<String, Object>> beans) {
+        List<String> staffIds = beans.stream()
+            .map(bean -> bean.get("staffId"))
+            .filter(ObjectUtil::isNotNull)
+            .map(Object::toString)
+            .filter(StrUtil::isNotEmpty)
+            .distinct()
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(staffIds)) {
+            return;
+        }
         Map<String, Map<String, Object>> staffMap = iAuthUserService.queryUserMationListByStaffIds(staffIds);
         beans.forEach(bean -> {
-            String staffId = bean.get("staffId").toString();
-            bean.put("staffMation", staffMap.get(staffId));
+            if (bean.get("staffId") != null) {
+                bean.put("staffMation", staffMap.get(bean.get("staffId").toString()));
+            }
         });
-        return beans;
     }
 
     @Override

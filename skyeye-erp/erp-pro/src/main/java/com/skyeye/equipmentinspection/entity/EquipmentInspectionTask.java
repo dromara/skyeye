@@ -4,6 +4,7 @@
 
 package com.skyeye.equipmentinspection.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -32,7 +33,7 @@ public class EquipmentInspectionTask extends OperatorUserInfo {
     @ApiModelProperty(value = "主键id。为空时新增，不为空时编辑")
     private String id;
 
-    @TableField(value = "odd_number")
+    @TableField(value = "odd_number", updateStrategy = FieldStrategy.NEVER)
     @Property(value = "任务编号", fuzzyLike = true)
     private String oddNumber;
 

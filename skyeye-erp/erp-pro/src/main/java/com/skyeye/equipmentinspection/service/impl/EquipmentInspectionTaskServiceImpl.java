@@ -6,6 +6,7 @@ package com.skyeye.equipmentinspection.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
@@ -96,46 +97,51 @@ public class EquipmentInspectionTaskServiceImpl extends SkyeyeBusinessServiceImp
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         equipmentInspectionPlanService.setMationForMap(beans, "planId", "planMation");
         equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
-        List<String> executorIds = beans.stream()
-            .filter(bean -> bean.get("executorId") != null)
-            .map(bean -> bean.get("executorId").toString())
-            .filter(StrUtil::isNotEmpty)
-            .distinct()
-            .collect(Collectors.toList());
-        if (CollectionUtil.isNotEmpty(executorIds)) {
-            Map<String, Map<String, Object>> executorMap = iAuthUserService.queryUserMationListByStaffIds(executorIds);
-            beans.forEach(bean -> {
-                if (bean.get("executorId") != null) {
-                    bean.put("executorMation", executorMap.get(bean.get("executorId").toString()));
-                }
-            });
-        }
+        setExecutorMationForMap(beans);
         return beans;
     }
 
     @Override
     public EquipmentInspectionTask selectById(String id) {
         EquipmentInspectionTask task = super.selectById(id);
-        if (task == null) {
-            return null;
-        }
         equipmentInspectionPlanService.setDataMation(task, EquipmentInspectionTask::getPlanId);
         equipmentService.setDataMation(task, EquipmentInspectionTask::getEquipmentId);
-        if (StrUtil.isNotEmpty(task.getExecutorId())) {
-            Map<String, Map<String, Object>> executorMap = iAuthUserService.queryUserMationListByStaffIds(
-                java.util.Collections.singletonList(task.getExecutorId()));
-            task.setExecutorMation(executorMap.get(task.getExecutorId()));
-        }
+        setExecutorMation(task);
         return task;
+    }
+
+    private void setExecutorMationForMap(List<Map<String, Object>> beans) {
+        List<String> executorIds = beans.stream()
+            .map(bean -> bean.get("executorId"))
+            .filter(ObjectUtil::isNotNull)
+            .map(Object::toString)
+            .filter(StrUtil::isNotEmpty)
+            .distinct()
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(executorIds)) {
+            return;
+        }
+        Map<String, Map<String, Object>> executorMap = iAuthUserService.queryUserMationListByStaffIds(executorIds);
+        beans.forEach(bean -> {
+            if (bean.get("executorId") != null) {
+                bean.put("executorMation", executorMap.get(bean.get("executorId").toString()));
+            }
+        });
+    }
+
+    private void setExecutorMation(EquipmentInspectionTask task) {
+        if (StrUtil.isEmpty(task.getExecutorId())) {
+            return;
+        }
+        Map<String, Map<String, Object>> executorMap = iAuthUserService.queryUserMationListByStaffIds(
+            java.util.Collections.singletonList(task.getExecutorId()));
+        task.setExecutorMation(executorMap.get(task.getExecutorId()));
     }
 
     @Override
     public void startTask(InputObject inputObject, OutputObject outputObject) {
         String id = inputObject.getParams().get("id").toString();
         EquipmentInspectionTask task = selectById(id);
-        if (task == null) {
-            throw new CustomException("任务不存在");
-        }
         if (!EquipmentInspectionTaskState.PENDING.getKey().equals(task.getState())) {
             throw new CustomException("只有待执行状态的任务才能开始执行");
         }
@@ -151,9 +157,6 @@ public class EquipmentInspectionTaskServiceImpl extends SkyeyeBusinessServiceImp
     public void completeTask(InputObject inputObject, OutputObject outputObject) {
         String id = inputObject.getParams().get("id").toString();
         EquipmentInspectionTask task = selectById(id);
-        if (task == null) {
-            throw new CustomException("任务不存在");
-        }
         if (!EquipmentInspectionTaskState.IN_PROGRESS.getKey().equals(task.getState())) {
             throw new CustomException("只有执行中状态的任务才能完成");
         }
@@ -169,9 +172,6 @@ public class EquipmentInspectionTaskServiceImpl extends SkyeyeBusinessServiceImp
     public void cancelTask(InputObject inputObject, OutputObject outputObject) {
         String id = inputObject.getParams().get("id").toString();
         EquipmentInspectionTask task = selectById(id);
-        if (task == null) {
-            throw new CustomException("任务不存在");
-        }
         if (!EquipmentInspectionTaskState.PENDING.getKey().equals(task.getState())
             && !EquipmentInspectionTaskState.IN_PROGRESS.getKey().equals(task.getState())
             && !EquipmentInspectionTaskState.TIMEOUT.getKey().equals(task.getState())) {
@@ -191,9 +191,6 @@ public class EquipmentInspectionTaskServiceImpl extends SkyeyeBusinessServiceImp
     public void reassignTimeoutTask(InputObject inputObject, OutputObject outputObject) {
         String id = inputObject.getParams().get("id").toString();
         EquipmentInspectionTask task = selectById(id);
-        if (task == null) {
-            throw new CustomException("任务不存在");
-        }
         if (!EquipmentInspectionTaskState.TIMEOUT.getKey().equals(task.getState())) {
             throw new CustomException("只有已超时状态的任务才能重新分配");
         }

@@ -10,7 +10,6 @@ import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.features.SkyeyeLinkData;
-import com.skyeye.equipmentinspection.classenum.EquipmentInspectionAbnormalFlag;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionResultType;
 import lombok.Data;
 
@@ -26,9 +25,9 @@ import java.util.Map;
 @ApiModel("设备巡检单子表明细实体类")
 public class EquipmentInspectionOrderItem extends SkyeyeLinkData {
 
-    @TableField("line_no")
-    @Property(value = "行号")
-    private Integer lineNo;
+    @TableField(value = "order_by")
+    @ApiModelProperty(value = "排序，对应方案itemId顺序", required = "required,num")
+    private Integer orderBy;
 
     @TableField("item_result")
     @ApiModelProperty(value = "检查结果", enumClass = EquipmentInspectionResultType.class, required = "num")
@@ -57,14 +56,6 @@ public class EquipmentInspectionOrderItem extends SkyeyeLinkData {
     @TableField("item_address")
     @ApiModelProperty(value = "定位地址")
     private String itemAddress;
-
-    @TableField("abnormal_flag")
-    @ApiModelProperty(value = "是否异常", enumClass = EquipmentInspectionAbnormalFlag.class, required = "required,num", defaultValue = "0")
-    private Integer abnormalFlag;
-
-    @TableField(exist = false)
-    @Property(value = "是否异常信息")
-    private Map<String, Object> abnormalFlagMation;
 
     @TableField("remark")
     @ApiModelProperty(value = "备注")

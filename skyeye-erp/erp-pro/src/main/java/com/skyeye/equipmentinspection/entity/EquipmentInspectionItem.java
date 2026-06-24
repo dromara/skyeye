@@ -11,28 +11,25 @@ import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
-import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.WhetherEnum;
 import lombok.Data;
-
-import java.math.BigDecimal;
 
 /**
  * @ClassName: EquipmentInspectionItem
  * @Description: 设备巡检项目实体类（主数据，方案通过 itemId 引用）
  */
 @Data
-@UniqueField(value = {"itemCode"})
 @RedisCacheField(name = "erp:equipmentInspectionItem", cacheTime = RedisConstants.TOW_MONTH_SECONDS)
 @TableName(value = "erp_equipment_inspection_item")
 @ApiModel("设备巡检项目实体类")
 public class EquipmentInspectionItem extends BaseGeneralInfo {
 
-    @TableField(value = "item_code", updateStrategy = FieldStrategy.NEVER)
-    @Property(value = "项目编码", fuzzyLike = true)
-    private String itemCode;
+    @TableField(value = "odd_number", updateStrategy = FieldStrategy.NEVER)
+    @Property(value = "项目编号", fuzzyLike = true)
+    private String oddNumber;
 
     @TableField("check_method")
     @ApiModelProperty(value = "检查方法")
@@ -42,20 +39,12 @@ public class EquipmentInspectionItem extends BaseGeneralInfo {
     @ApiModelProperty(value = "结果类型", defaultValue = "text")
     private String resultType;
 
-    @TableField("min_value")
-    @ApiModelProperty(value = "最小值")
-    private BigDecimal minValue;
-
-    @TableField("max_value")
-    @ApiModelProperty(value = "最大值")
-    private BigDecimal maxValue;
-
     @TableField("unit")
     @ApiModelProperty(value = "结果单位")
     private String unit;
 
     @TableField("required_flag")
-    @ApiModelProperty(value = "是否必检 0否 1是", required = "required,num", defaultValue = "1")
+    @ApiModelProperty(value = "是否必检", enumClass = WhetherEnum.class, required = "required,num", defaultValue = "1")
     private Integer requiredFlag;
 
     @TableField("abnormal_rule")

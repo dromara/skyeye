@@ -11,10 +11,10 @@ import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
-import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.equipment.entity.Equipment;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionFrequencyType;
 import lombok.Data;
 
@@ -26,15 +26,14 @@ import java.util.Map;
  * @Description: 设备巡检方案实体类
  */
 @Data
-@UniqueField(value = {"planCode"})
 @RedisCacheField(name = "erp:equipmentInspectionPlan:v2", cacheTime = RedisConstants.TOW_MONTH_SECONDS)
 @TableName(value = "erp_equipment_inspection_plan")
 @ApiModel("设备巡检方案实体类")
 public class EquipmentInspectionPlan extends BaseGeneralInfo {
 
-    @TableField(value = "plan_code", updateStrategy = FieldStrategy.NEVER)
-    @Property(value = "巡检方案编码", fuzzyLike = true)
-    private String planCode;
+    @TableField(value = "odd_number", updateStrategy = FieldStrategy.NEVER)
+    @Property(value = "巡检方案编号", fuzzyLike = true)
+    private String oddNumber;
 
     @TableField(value = "team_id")
     @ApiModelProperty(value = "巡检班组ID", required = "required")
@@ -86,7 +85,7 @@ public class EquipmentInspectionPlan extends BaseGeneralInfo {
 
     @TableField(exist = false)
     @Property(value = "关联的设备信息列表")
-    private List<Map<String, Object>> equipmentMation;
+    private List<Equipment> equipmentMation;
 
     @TableField(exist = false)
     @ApiModelProperty(value = "关联的巡检项目ID列表", required = "required,json")

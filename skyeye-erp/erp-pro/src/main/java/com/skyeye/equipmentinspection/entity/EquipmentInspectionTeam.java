@@ -24,9 +24,9 @@ import lombok.Data;
 @ApiModel("设备巡检班组实体类")
 public class EquipmentInspectionTeam extends BaseGeneralInfo {
 
-    @TableField(value = "team_code")
-    @ApiModelProperty(value = "班组编码", required = "required")
-    private String teamCode;
+    @TableField(value = "odd_number")
+    @ApiModelProperty(value = "班组编号", required = "required")
+    private String oddNumber;
 
     @TableField(value = "order_by")
     @ApiModelProperty(value = "班组排序", required = "required,num")

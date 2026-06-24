@@ -5,7 +5,6 @@
 package com.skyeye.equipmentinspection.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
@@ -24,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName: EquipmentInspectionTeamServiceImpl
@@ -43,7 +41,7 @@ public class EquipmentInspectionTeamServiceImpl extends SkyeyeBusinessServiceImp
         QueryWrapper<EquipmentInspectionTeam> queryWrapper = new QueryWrapper<>();
         queryWrapper.and(wrapper ->
             wrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionTeam::getName), entity.getName())
-                .or().eq(MybatisPlusUtil.toColumns(EquipmentInspectionTeam::getTeamCode), entity.getTeamCode()));
+                .or().eq(MybatisPlusUtil.toColumns(EquipmentInspectionTeam::getOddNumber), entity.getOddNumber()));
         if (StringUtils.isNotEmpty(entity.getId())) {
             queryWrapper.ne(CommonConstants.ID, entity.getId());
         }
@@ -70,13 +68,7 @@ public class EquipmentInspectionTeamServiceImpl extends SkyeyeBusinessServiceImp
 
     @Override
     public void queryAllEquipmentInspectionTeamList(InputObject inputObject, OutputObject outputObject) {
-        Map<String, Object> params = inputObject.getParams();
-        String enabled = params.get("enabled").toString();
-        QueryWrapper<EquipmentInspectionTeam> queryWrapper = new QueryWrapper<>();
-        if (StrUtil.isNotBlank(enabled)) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionTeam::getEnabled), enabled);
-        }
-        List<EquipmentInspectionTeam> teamList = list(queryWrapper);
+        List<EquipmentInspectionTeam> teamList = list();
         outputObject.setBeans(teamList);
         outputObject.settotal(teamList.size());
     }

@@ -14,9 +14,8 @@ import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
-import com.skyeye.equipment.entity.Equipment;
+import com.skyeye.equipment.classenum.EquipmentState;
 import com.skyeye.equipment.service.EquipmentService;
-import com.skyeye.farm.service.FarmService;
 import com.skyeye.equipmentinspection.dao.EquipmentInspectionOrderDao;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionItem;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
@@ -26,9 +25,7 @@ import com.skyeye.equipmentinspection.service.EquipmentInspectionItemService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderItemService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
-import com.skyeye.equipmentinspection.classenum.EquipmentInspectionAbnormalFlag;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionResultType;
-import com.skyeye.equipmentinspection.classenum.EquipmentInspectionRunStatus;
 import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -36,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -57,9 +55,6 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
     private EquipmentService equipmentService;
 
     @Autowired
-    private FarmService farmService;
-
-    @Autowired
     private EquipmentInspectionPlanService equipmentInspectionPlanService;
 
     @Autowired
@@ -68,17 +63,11 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
     @Override
     protected QueryWrapper<EquipmentInspectionOrder> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<EquipmentInspectionOrder> queryWrapper = super.getQueryWrapper(commonPageInfo);
-        if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId), commonPageInfo.getObjectId());
-        }
-        if (StrUtil.isNotEmpty(commonPageInfo.getStartTime())) {
-            queryWrapper.ge(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), commonPageInfo.getStartTime());
-        }
-        if (StrUtil.isNotEmpty(commonPageInfo.getEndTime())) {
-            queryWrapper.le(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), commonPageInfo.getEndTime());
+        String equipmentId = commonPageInfo.getCustomParamsMapStr("equipmentId");
+        if (StrUtil.isNotEmpty(equipmentId)) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId), equipmentId);
         }
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime));
-        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCreateTime));
         return queryWrapper;
     }
 
@@ -89,14 +78,9 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
             return beans;
         }
         equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
-        appendFarmMationForEquipmentMap(beans);
         equipmentInspectionPlanService.setMationForMap(beans, "planId", "planMation");
         iAuthUserService.setMationForMap(beans, "inspectorUserId", "inspectorUserMation");
         beans.forEach(this::appendEnumMationForMap);
-        CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
-        if (StrUtil.isNotBlank(pageInfo.getStartTime()) || StrUtil.isNotBlank(pageInfo.getEndTime())) {
-            appendStatRecordDisplayFields(beans);
-        }
         return beans;
     }
 
@@ -110,8 +94,7 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
     @Override
     public EquipmentInspectionOrder selectById(String id) {
         EquipmentInspectionOrder order = super.selectById(id);
-        Equipment equipment = equipmentService.selectById(order.getEquipmentId());
-        order.setEquipmentMation(BeanUtil.beanToMap(equipment, false, true));
+        equipmentService.setDataMation(order, EquipmentInspectionOrder::getEquipmentId);
         appendPlanItemMation(order);
         appendOrderItemResultMation(order);
         appendEnumMation(order);
@@ -122,12 +105,9 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
 
     @Override
     public void createPrepose(EquipmentInspectionOrder entity) {
+        normalizeEquipmentRunStatus(entity);
         Map<String, Object> business = BeanUtil.beanToMap(entity);
-        String oddNumber = iCodeRuleService.getNextCodeByClassName(getServiceClassName(), business);
-        if (StrUtil.isBlank(oddNumber)) {
-            oddNumber = iCodeRuleService.getNextCodeByClassName(getClass().getName(), business);
-        }
-        entity.setOddNumber(oddNumber);
+        entity.setOddNumber(iCodeRuleService.getNextCodeByClassName(getClass().getName(), business));
         if (entity.getSeqInDay() == null) {
             String today = LocalDate.now().toString();
             QueryWrapper<EquipmentInspectionOrder> queryWrapper = new QueryWrapper<>();
@@ -139,12 +119,12 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
 
     @Override
     public void validatorEntity(EquipmentInspectionOrder entity) {
+        normalizeEquipmentRunStatus(entity);
         super.validatorEntity(entity);
         alignOrderItemsWithPlan(entity.getEquipmentInspectionOrderItemList(), entity.getPlanId());
         if (entity.getOverallResult() == null) {
             boolean abnormal = entity.getEquipmentInspectionOrderItemList().stream()
-                .anyMatch(row -> EquipmentInspectionResultType.ABNORMAL.getKey().equals(row.getItemResult())
-                    || EquipmentInspectionAbnormalFlag.YES.getKey().equals(row.getAbnormalFlag()));
+                .anyMatch(row -> EquipmentInspectionResultType.ABNORMAL.getKey().equals(row.getItemResult()));
             entity.setOverallResult(abnormal
                 ? EquipmentInspectionResultType.ABNORMAL.getKey()
                 : EquipmentInspectionResultType.NORMAL.getKey());
@@ -163,31 +143,13 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         equipmentInspectionOrderItemService.deleteByPId(id);
     }
 
-    private void appendStatRecordDisplayFields(List<Map<String, Object>> beans) {
-        for (Map<String, Object> bean : beans) {
-            String photoUrls = MapUtil.getStr(bean, "headerPhotoUrls");
-            bean.put("photo", photoUrls);
-            bean.put("photoUrls", photoUrls);
-            String location = StrUtil.blankToDefault(MapUtil.getStr(bean, "locationText"),
-                MapUtil.getStr(bean, "headerLocationText"));
-            bean.put("location", location);
-            if (StrUtil.isBlank(MapUtil.getStr(bean, "farmName"))) {
-                Map<String, Object> farmMation = BeanUtil.toBean(bean.get("farmMation"), Map.class);
-                if (farmMation != null) {
-                    bean.put("farmName", farmMation.get("name"));
-                }
-            }
+    private void normalizeEquipmentRunStatus(EquipmentInspectionOrder entity) {
+        if (entity.getEquipmentRunStatus() == null && entity.getEquipmentState() != null) {
+            entity.setEquipmentRunStatus(entity.getEquipmentState());
         }
-    }
-
-    private void appendFarmMationForEquipmentMap(List<Map<String, Object>> beans) {
-        beans.forEach(bean -> {
-            Map<String, Object> equipmentMation = BeanUtil.toBean(bean.get("equipmentMation"), Map.class);
-            if (equipmentMation != null && equipmentMation.get("farmId") != null) {
-                bean.put("farmId", equipmentMation.get("farmId"));
-            }
-        });
-        farmService.setMationForMap(beans, "farmId", "farmMation");
+        if (entity.getEquipmentRunStatus() == null) {
+            entity.setEquipmentRunStatus(EquipmentState.NORMAL.getKey());
+        }
     }
 
     private void appendPlanItemMation(EquipmentInspectionOrder order) {
@@ -205,9 +167,9 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         Map<String, EquipmentInspectionItem> itemMap = planItems.stream()
             .collect(Collectors.toMap(EquipmentInspectionItem::getId, item -> item, (a, b) -> a));
         for (EquipmentInspectionOrderItem orderItem : order.getEquipmentInspectionOrderItemList()) {
-            Integer lineNo = orderItem.getLineNo();
-            if (lineNo != null && lineNo > 0 && lineNo <= plan.getItemId().size()) {
-                orderItem.setItemMation(itemMap.get(plan.getItemId().get(lineNo - 1)));
+            Integer orderBy = orderItem.getOrderBy();
+            if (orderBy != null && orderBy > 0 && orderBy <= plan.getItemId().size()) {
+                orderItem.setItemMation(itemMap.get(plan.getItemId().get(orderBy - 1)));
             }
         }
     }
@@ -218,18 +180,36 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         }
         for (EquipmentInspectionOrderItem orderItem : order.getEquipmentInspectionOrderItemList()) {
             orderItem.setItemResultMation(EquipmentInspectionResultType.getMation(orderItem.getItemResult()));
-            orderItem.setAbnormalFlagMation(EquipmentInspectionAbnormalFlag.getMation(orderItem.getAbnormalFlag()));
         }
     }
 
     private void appendEnumMation(EquipmentInspectionOrder order) {
         order.setOverallResultMation(EquipmentInspectionResultType.getMation(order.getOverallResult()));
-        order.setEquipmentRunStatusMation(EquipmentInspectionRunStatus.getMation(order.getEquipmentRunStatus()));
+        order.setEquipmentRunStatusMation(getEquipmentRunStatusMation(order.getEquipmentRunStatus()));
     }
 
     private void appendEnumMationForMap(Map<String, Object> bean) {
         bean.put("overallResultMation", EquipmentInspectionResultType.getMation(MapUtil.getInt(bean, "overallResult")));
-        bean.put("equipmentRunStatusMation", EquipmentInspectionRunStatus.getMation(MapUtil.getInt(bean, "equipmentRunStatus")));
+        Integer runStatus = MapUtil.getInt(bean, "equipmentRunStatus");
+        if (runStatus == null) {
+            runStatus = MapUtil.getInt(bean, "equipmentState");
+        }
+        bean.put("equipmentRunStatusMation", getEquipmentRunStatusMation(runStatus));
+    }
+
+    private Map<String, Object> getEquipmentRunStatusMation(Integer type) {
+        if (type == null) {
+            return MapUtil.newHashMap();
+        }
+        for (EquipmentState state : EquipmentState.values()) {
+            if (type.equals(state.getKey())) {
+                Map<String, Object> result = new HashMap<>();
+                result.put("id", state.getKey());
+                result.put("name", state.getValue());
+                return result;
+            }
+        }
+        return MapUtil.newHashMap();
     }
 
     private void alignOrderItemsWithPlan(List<EquipmentInspectionOrderItem> orderItems, String planId) {
@@ -241,7 +221,7 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
             throw new CustomException("巡检明细条数与方案巡检项目不一致.");
         }
         for (int i = 0; i < orderItems.size(); i++) {
-            orderItems.get(i).setLineNo(i + 1);
+            orderItems.get(i).setOrderBy(i + 1);
         }
     }
 

@@ -65,8 +65,8 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
         if (StrUtil.isBlank(planId)) {
             return;
         }
-        EquipmentInspectionPlan plan = equipmentInspectionPlanService.selectById(planId);
-        if (plan == null || EnableEnum.DISABLE_USING.getKey().equals(plan.getEnabled())) {
+        EquipmentInspectionPlan plan = equipmentInspectionPlanService.getDataFromDb(planId);
+        if (StrUtil.isBlank(plan.getId()) || EnableEnum.DISABLE_USING.getKey().equals(plan.getEnabled())) {
             return;
         }
         List<String> equipmentIds = equipmentInspectionPlanEquipmentService.selectByParentId(planId);
