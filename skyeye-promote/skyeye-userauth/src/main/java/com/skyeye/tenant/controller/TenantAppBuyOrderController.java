@@ -163,4 +163,12 @@ public class TenantAppBuyOrderController {
         tenantAppBuyOrderService.queryCurrentTenantAppBuyOrderById(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "deleteCurrentTenantAppBuyOrder", value = "当前租户删除订单", method = "DELETE", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "订单主键id", required = "required")})
+    @RequestMapping("/post/TenantAppBuyOrderController/deleteCurrentTenantAppBuyOrder")
+    public void deleteCurrentTenantAppBuyOrder(InputObject inputObject, OutputObject outputObject) {
+        tenantAppBuyOrderService.deleteCurrentTenantAppBuyOrder(inputObject, outputObject);
+    }
+
 }

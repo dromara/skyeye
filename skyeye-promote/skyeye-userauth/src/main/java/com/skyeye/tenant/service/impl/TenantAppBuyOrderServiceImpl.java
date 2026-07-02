@@ -584,4 +584,29 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
+    /**
+     * 当前租户删除订单：仅「取消支付」状态允许删除（与后台 deleteTenantAppBuyOrderById 隔离）。
+     */
+    @Override
+    @IgnoreTenant
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void deleteCurrentTenantAppBuyOrder(InputObject inputObject, OutputObject outputObject) {
+        String id = inputObject.getParams().get("id").toString();
+        String tenantId = TenantContext.getTenantId();
+        if (StrUtil.isBlank(tenantId)) {
+            throw new CustomException("未获取到当前租户信息");
+        }
+        TenantAppBuyOrder order = selectById(id);
+        if (ObjectUtil.isEmpty(order) || StrUtil.isEmpty(order.getId())) {
+            throw new CustomException("订单不存在");
+        }
+        if (!StrUtil.equals(tenantId, order.getBuyTenantId())) {
+            throw new CustomException("无权删除该订单");
+        }
+        if (!TenantAppBuyOrderPayState.PAY_CANCELLED.getKey().equals(order.getPayState())) {
+            throw new CustomException("仅取消支付状态的订单可删除");
+        }
+        deleteById(id);
+    }
+
 }

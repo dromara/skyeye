@@ -74,4 +74,9 @@ public interface TenantAppBuyOrderService extends SkyeyeBusinessService<TenantAp
      */
     void queryCurrentTenantAppBuyOrderById(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 当前租户删除订单：仅取消支付状态可删
+     */
+    void deleteCurrentTenantAppBuyOrder(InputObject inputObject, OutputObject outputObject);
+
 }
