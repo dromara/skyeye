@@ -42,6 +42,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -554,6 +555,33 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
         }
         outputObject.setBeans(beans);
         outputObject.settotal(page.getTotal());
+    }
+
+    /**
+     * 当前租户订单详情：校验归属后返回完整单据（含席位/应用明细、生命周期状态）。
+     */
+    @Override
+    @IgnoreTenant
+    public void queryCurrentTenantAppBuyOrderById(InputObject inputObject, OutputObject outputObject) {
+        String id = inputObject.getParams().get("id").toString();
+        String tenantId = TenantContext.getTenantId();
+        if (StrUtil.isBlank(tenantId)) {
+            throw new CustomException("未获取到当前租户信息");
+        }
+        TenantAppBuyOrder order = selectById(id);
+        if (ObjectUtil.isEmpty(order) || StrUtil.isEmpty(order.getId())) {
+            throw new CustomException("订单不存在");
+        }
+        if (!StrUtil.equals(tenantId, order.getBuyTenantId())) {
+            throw new CustomException("无权查看该订单");
+        }
+        Map<String, Object> bean = JSONUtil.toBean(JSONUtil.toJsonStr(order), null);
+        setDynamicDataForBeans(Collections.singletonList(bean));
+        setDataFlowabledMation(bean);
+        iAuthUserService.setNameForMap(Collections.singletonList(bean), "createId", "createName");
+        iAuthUserService.setNameForMap(Collections.singletonList(bean), "lastUpdateId", "lastUpdateName");
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
 }

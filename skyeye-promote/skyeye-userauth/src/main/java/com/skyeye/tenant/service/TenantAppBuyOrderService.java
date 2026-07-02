@@ -69,4 +69,9 @@ public interface TenantAppBuyOrderService extends SkyeyeBusinessService<TenantAp
      */
     void queryCurrentTenantAppBuyOrderList(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 当前租户订单详情（含明细、生命周期状态）
+     */
+    void queryCurrentTenantAppBuyOrderById(InputObject inputObject, OutputObject outputObject);
+
 }

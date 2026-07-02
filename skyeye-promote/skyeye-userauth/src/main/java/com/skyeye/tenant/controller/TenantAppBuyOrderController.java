@@ -155,4 +155,12 @@ public class TenantAppBuyOrderController {
         tenantAppBuyOrderService.queryCurrentTenantAppBuyOrderList(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryCurrentTenantAppBuyOrderById", value = "当前租户订单详情", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "订单主键id", required = "required")})
+    @RequestMapping("/post/TenantAppBuyOrderController/queryCurrentTenantAppBuyOrderById")
+    public void queryCurrentTenantAppBuyOrderById(InputObject inputObject, OutputObject outputObject) {
+        tenantAppBuyOrderService.queryCurrentTenantAppBuyOrderById(inputObject, outputObject);
+    }
+
 }
