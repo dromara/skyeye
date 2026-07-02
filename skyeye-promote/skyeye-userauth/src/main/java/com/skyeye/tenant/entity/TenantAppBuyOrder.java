@@ -70,6 +70,14 @@ public class TenantAppBuyOrder extends SkyeyeFlowable {
     @ApiModelProperty(value = "支付/取消支付备注")
     private String payRemark;
 
+    @TableField(value = "pay_type")
+    @Property(value = "付款类型")
+    private String payType;
+
+    @TableField(value = "channel_fee_rate")
+    @Property(value = "渠道手续费比例，比如：0.001")
+    private String channelFeeRate;
+
     @TableField(value = "order_source")
     @ApiModelProperty(value = "订单来源", enumClass = TenantAppBuyOrderSource.class)
     @Property(value = "订单来源")

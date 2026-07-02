@@ -43,7 +43,6 @@ import com.skyeye.eve.rest.quartz.SysQuartzMation;
 import com.skyeye.eve.service.IAreaService;
 import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
-import com.skyeye.order.config.PayProperties;
 import com.skyeye.order.dao.OrderDao;
 import com.skyeye.order.entity.Order;
 import com.skyeye.order.entity.OrderItem;
@@ -102,9 +101,6 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
 
     @Autowired
     private ShopAddressHistoryService shopAddressHistoryService;
-
-    @Autowired
-    private PayProperties payProperties;
 
     @Autowired
     private CouponUseMaterialService couponUseMaterialService;
@@ -543,6 +539,10 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         }
     }
 
+    /**
+     * 商城订单发起支付（Feign 调用 promote 统一 PayService，逻辑同租户自购）。
+     * payPrice 已在订单实体中为「分」；同步成功立即改待发货，异步返回 payOrderRespDTO 供前端展示二维码。
+     */
     @Override
     @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
     public void payOrder(InputObject inputObject, OutputObject outputObject) {
@@ -560,29 +560,110 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
             throw new CustomException("该订单不可支付。");
         }
         if (!StrUtil.equals(CommonNumConstants.NUM_ZERO.toString(), one.getAdjustPrice())) {
-            // 订单调整价格后，重新计算实际支付价格
             one.setPayPrice(CalculationUtil.multiply(one.getAdjustPrice(), CommonNumConstants.ONE_HUNDRED.toString()));
         }
-        Map<String, Object> payRresult = iPayService.payment(BeanUtil.beanToMap(one), channelCode, StrUtil.EMPTY, channelExtras, payProperties.getOrderNotifyUrl()).getBean();
-        Map<String, Object> payChannel = JSONUtil.toBean(payRresult.get("payChannel").toString(), null);
-        Map<String, Object> payOrderRespDTO = JSONUtil.toBean(payRresult.get("payOrderRespDTO").toString(), null);
+        Map<String, Object> payData = buildShopOrderPayData(one);
+        // notifyUrl 传空，由 promote PayService 按 PayApp.channelNotifyUrl 自动解析
+        Map<String, Object> payResult = iPayService.payment(payData, channelCode, StrUtil.EMPTY, channelExtras, StrUtil.EMPTY).getBean();
+        Map<String, Object> payChannel = JSONUtil.toBean(payResult.get("payChannel").toString(), null);
+        Map<String, Object> payOrderRespDTO = JSONUtil.toBean(payResult.get("payOrderRespDTO").toString(), null);
+        Integer payStatus = Integer.parseInt(payOrderRespDTO.get("status").toString());
+
+        // PayOrderStatusResp.SUCCESS = 10
+        if (Integer.valueOf(10).equals(payStatus)) {
+            completeShopOrderAfterPay(one, payChannel, channelCode, payOrderRespDTO);
+            outputObject.setBean(selectById(id));
+        } else {
+            // 待用户扫码/跳转支付，完成后由 notifyOrderPaySuccess 落单
+            Map<String, Object> result = new HashMap<>();
+            result.put("orderId", id);
+            result.put("state", ShopOrderState.UNPAID.getKey());
+            result.put("payOrderRespDTO", payOrderRespDTO);
+            result.put("payChannel", payChannel);
+            outputObject.setBean(result);
+        }
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    /**
+     * 商城支付成功业务回调（配置在 PayApp.orderNotifyUrl，由 promote PayNotify 转发）。
+     */
+    @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void notifyOrderPaySuccess(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String outTradeNo = params.get("outTradeNo").toString();
+        String channelCode = params.get("channelCode").toString();
+        Order order = queryOrderByOddNumber(outTradeNo);
+        if (!Objects.equals(order.getState(), ShopOrderState.UNPAID.getKey())) {
+            // 已支付或已取消，幂等忽略
+            return;
+        }
+        Map<String, Object> payChannelMap = new HashMap<>();
+        if (StrUtil.isNotBlank(channelCode)) {
+            // 渠道费率等信息在回调阶段可选填充
+        }
+        Map<String, Object> payOrderRespDTO = new HashMap<>();
+        if (params.containsKey("successTime")) {
+            payOrderRespDTO.put("successTime", params.get("successTime"));
+        }
+        completeShopOrderAfterPay(order, payChannelMap, channelCode, payOrderRespDTO);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    /**
+     * 补充展示用 subject/body，oddNumber、payPrice 沿用订单实体字段
+     */
+    private Map<String, Object> buildShopOrderPayData(Order order) {
+        Map<String, Object> payData = BeanUtil.beanToMap(order);
+        payData.put("subject", "商城商品订单");
+        payData.put("body", "商城订单-" + order.getOddNumber());
+        return payData;
+    }
+
+    private Order queryOrderByOddNumber(String oddNumber) {
+        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(Order::getOddNumber), oddNumber);
+        Order order = getOne(queryWrapper, false);
+        if (ObjectUtil.isEmpty(order)) {
+            throw new CustomException("订单不存在");
+        }
+        return selectById(order.getId());
+    }
+
+    /**
+     * 商城支付成功落单：待支付 → 待发货，更新渠道信息与支付时间，取消支付超时定时任务。
+     */
+    private void completeShopOrderAfterPay(Order one, Map<String, Object> payChannel, String channelCode,
+                                           Map<String, Object> payOrderRespDTO) {
+        String id = one.getId();
         UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, id);
         updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.UNDELIVERED.getKey());
         updateWrapper.set(MybatisPlusUtil.toColumns(Order::getPayType), channelCode);
-        updateWrapper.set(MybatisPlusUtil.toColumns(Order::getPayTime), payOrderRespDTO.get("successTime").toString());
-        updateWrapper.set(MybatisPlusUtil.toColumns(Order::getChannelFeeRate), payChannel.get("feeRate").toString());
-        updateWrapper.set(MybatisPlusUtil.toColumns(Order::getChannelFeePrice), CalculationUtil.multiply(
-            one.getPayPrice(), payChannel.get("feeRate").toString()));
-        updateWrapper.set(MybatisPlusUtil.toColumns(Order::getExtensionId), payOrderRespDTO.get("id").toString());
-        updateWrapper.set(MybatisPlusUtil.toColumns(Order::getExtensionNo), payOrderRespDTO.get("no").toString());
+        if (payOrderRespDTO.get("successTime") != null) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(Order::getPayTime), payOrderRespDTO.get("successTime").toString());
+        } else {
+            updateWrapper.set(MybatisPlusUtil.toColumns(Order::getPayTime), DateUtil.getTimeAndToString());
+        }
+        if (payChannel.get("feeRate") != null) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(Order::getChannelFeeRate), payChannel.get("feeRate").toString());
+            updateWrapper.set(MybatisPlusUtil.toColumns(Order::getChannelFeePrice), CalculationUtil.multiply(
+                one.getPayPrice(), payChannel.get("feeRate").toString()));
+        }
+        if (payOrderRespDTO.get("id") != null) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(Order::getExtensionId), payOrderRespDTO.get("id").toString());
+        }
+        if (payOrderRespDTO.get("no") != null) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(Order::getExtensionNo), payOrderRespDTO.get("no").toString());
+        }
         update(updateWrapper);
         refreshCache(id);
-        // 修改订单子单信息为待发货状态
         orderItemService.updateDeliverStateByParentId(id, ShopOrderItemOtherState.WAIT_DELIVER.getKey());
-        log.info("订单id" + one.getId() + "支付成功--删除定时任务-- 开始");
-        iQuartzService.stopAndDeleteTaskQuartz(id);// 删除定时任务
-        log.info("订单id" + one.getId() + "支付成功--删除定时任务-- 结束");
+        // 支付成功后删除「未支付自动取消」的 quartz 任务
+        log.info("订单id" + id + "支付成功--删除定时任务-- 开始");
+        iQuartzService.stopAndDeleteTaskQuartz(id);
+        log.info("订单id" + id + "支付成功--删除定时任务-- 结束");
     }
 
     @Override
@@ -608,7 +689,8 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         if (!Objects.equals(one.getState(), ShopOrderState.UNPAID.getKey())) {
             throw new CustomException("该订单不可支付。");
         }
-        Map<String, Object> qrCodeResult = iPayService.generatePayRrCode(BeanUtil.beanToMap(one), channelCode, IpUtil.getLocalAddress().toString(), payProperties.getOrderNotifyUrl());
+        Map<String, Object> qrCodeResult = iPayService.generatePayRrCode(BeanUtil.beanToMap(one), channelCode,
+            IpUtil.getLocalAddress().toString(), StrUtil.EMPTY);
         outputObject.setBean(qrCodeResult);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }

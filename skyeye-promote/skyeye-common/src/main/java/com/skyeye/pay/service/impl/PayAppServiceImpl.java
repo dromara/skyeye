@@ -5,6 +5,7 @@
 package com.skyeye.pay.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -28,12 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @ClassName: PayAppServiceImpl
- * @Description: 支付应用服务层--平台隔离
- * @author: skyeye云系列--卫志强
- * @date: 2024/3/9 14:31
- * @Copyright: 2023 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
- * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
+ * 支付应用服务：维护 PayApp 配置，并解析两层回调地址。
  */
 @Service
 @SkyeyeService(name = "支付应用管理", groupName = "支付应用管理", tenant = TenantEnum.PLATE)
@@ -56,8 +52,8 @@ public class PayAppServiceImpl extends SkyeyeBusinessServiceImpl<PayAppDao, PayA
     @Override
     protected void writePostpose(PayApp entity, String userId) {
         super.writePostpose(entity, userId);
+        // 业务约束：全局同时仅允许一个 PayApp 启用，避免渠道回调与业务回调指向混乱
         if (entity.getEnabled().equals(EnableEnum.ENABLE_USING.getKey())) {
-            // 如果将当前数据修改为启动数据，则需要修改之前的数据为禁用
             UpdateWrapper<PayApp> updateWrapper = new UpdateWrapper<>();
             updateWrapper.ne(CommonConstants.ID, entity.getId());
             updateWrapper.set(MybatisPlusUtil.toColumns(PayApp::getEnabled), EnableEnum.DISABLE_USING.getKey());
@@ -70,6 +66,55 @@ public class PayAppServiceImpl extends SkyeyeBusinessServiceImpl<PayAppDao, PayA
         queryWrapper.eq(MybatisPlusUtil.toColumns(PayApp::getEnabled), CommonNumConstants.NUM_ONE);
         List<PayApp> list = list(queryWrapper);
         return JSONUtil.toList(JSONUtil.toJsonStr(list), null);
+    }
+
+    @Override
+    @IgnoreTenant
+    public PayApp getEnabledPayApp() {
+        // 支付模块不隔离租户，需忽略租户上下文查询平台级配置
+        QueryWrapper<PayApp> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(PayApp::getEnabled), EnableEnum.ENABLE_USING.getKey());
+        PayApp payApp = getOne(queryWrapper, false);
+        if (ObjectUtil.isEmpty(payApp)) {
+            throw new CustomException("未配置已启用的支付应用，请先在支付应用中完成配置");
+        }
+        return payApp;
+    }
+
+    @Override
+    @IgnoreTenant
+    public PayApp getEnabledPayAppByAppKey(String appKey) {
+        if (StrUtil.isBlank(appKey)) {
+            throw new CustomException("支付应用标识(appKey)不能为空");
+        }
+        QueryWrapper<PayApp> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(PayApp::getAppKey), appKey.trim());
+        queryWrapper.eq(MybatisPlusUtil.toColumns(PayApp::getEnabled), EnableEnum.ENABLE_USING.getKey());
+        PayApp payApp = getOne(queryWrapper, false);
+        if (ObjectUtil.isEmpty(payApp)) {
+            throw new CustomException(String.format("未找到已启用的支付应用[%s]，请先在支付应用中配置并启用", appKey));
+        }
+        return payApp;
+    }
+
+    @Override
+    @IgnoreTenant
+    public String buildChannelOrderNotifyUrl(PayApp payApp, String channelId) {
+        // 注册到微信/支付宝的 notify 地址，每个渠道 id 唯一，便于 PayNotify 路由到对应 PayClient
+        if (ObjectUtil.isEmpty(payApp) || StrUtil.isBlank(payApp.getChannelNotifyUrl())) {
+            throw new CustomException("请在支付应用中配置渠道回调地址(channelNotifyUrl)");
+        }
+        return StrUtil.removeSuffix(payApp.getChannelNotifyUrl().trim(), "/") + "/" + channelId;
+    }
+
+    @Override
+    @IgnoreTenant
+    public String getBusinessOrderNotifyUrl(PayApp payApp) {
+        // pay 模块验签成功后 HTTP 转发到此地址，由具体业务完成订单状态变更与权益交付
+        if (ObjectUtil.isEmpty(payApp) || StrUtil.isBlank(payApp.getOrderNotifyUrl())) {
+            throw new CustomException("请在支付应用中配置业务支付回调地址(orderNotifyUrl)");
+        }
+        return payApp.getOrderNotifyUrl();
     }
 
     @Override

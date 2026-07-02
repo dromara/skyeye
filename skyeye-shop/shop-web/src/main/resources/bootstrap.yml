@@ -41,8 +41,3 @@ webroot:
   skyeye-pro: skyeye-pro-${spring.profiles.active}
   # ERP相关的服务
   skyeye-erp: skyeye-erp-${spring.profiles.active}
-
-skyeye:
-  pay:
-    order-notify-url: http://XXX/admin-api/pay/notify/order # 支付渠道的【支付】回调地址
-    refund-notify-url: http://XXX/admin-api/pay/notify/refund # 支付渠道的【退款】回调地址

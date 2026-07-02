@@ -27,6 +27,11 @@ public interface OrderService extends SkyeyeBusinessService<Order> {
 
     void payOrder(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 商城订单支付成功业务回调（PayApp.orderNotifyUrl 指向本接口，由 promote PayNotify 转发）
+     */
+    void notifyOrderPaySuccess(InputObject inputObject, OutputObject outputObject);
+
     void updateCommonState(String id, Integer state);
 
     void queryOrderPageList(InputObject inputObject, OutputObject outputObject);

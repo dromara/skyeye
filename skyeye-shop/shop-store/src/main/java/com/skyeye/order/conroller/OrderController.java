@@ -102,6 +102,16 @@ public class OrderController {
         orderService.payOrder(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "notifyOrderPaySuccess", value = "商城订单支付成功回调", method = "POST", allUse = "0")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "outTradeNo", name = "outTradeNo", value = "订单编号", required = "required"),
+        @ApiImplicitParam(id = "channelCode", name = "channelCode", value = "支付渠道编码"),
+        @ApiImplicitParam(id = "successTime", name = "successTime", value = "支付成功时间")})
+    @RequestMapping("/post/OrderController/notifyOrderPaySuccess")
+    public void notifyOrderPaySuccess(InputObject inputObject, OutputObject outputObject) {
+        orderService.notifyOrderPaySuccess(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "generatePayOrderRrCode", value = "生成支付订单的二维码", method = "GET", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),

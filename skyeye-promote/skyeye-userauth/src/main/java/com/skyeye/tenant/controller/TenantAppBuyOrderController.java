@@ -103,4 +103,56 @@ public class TenantAppBuyOrderController {
         tenantAppBuyOrderService.submitTenantSelfPurchaseOrder(inputObject, outputObject);
     }
 
+    /**
+     * 租户收银台发起支付；PayApp.orderNotifyUrl 需指向 notifyTenantAppBuyOrderPaySuccess
+     */
+    @ApiOperation(id = "payTenantSelfPurchaseOrder", value = "租户自购发起支付", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "订单主键id", required = "required"),
+        @ApiImplicitParam(id = "channelCode", name = "channelCode", value = "支付渠道编码", required = "required"),
+        @ApiImplicitParam(id = "returnUrl", name = "returnUrl", value = "支付完成跳转地址"),
+        @ApiImplicitParam(id = "channelExtras", name = "channelExtras", value = "渠道扩展参数", required = "json")})
+    @RequestMapping("/post/TenantAppBuyOrderController/payTenantSelfPurchaseOrder")
+    public void payTenantSelfPurchaseOrder(InputObject inputObject, OutputObject outputObject) {
+        tenantAppBuyOrderService.payTenantSelfPurchaseOrder(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "cancelTenantSelfPurchaseOrder", value = "租户自购取消支付", method = "PUT", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "订单主键id", required = "required"),
+        @ApiImplicitParam(id = "payRemark", name = "payRemark", value = "取消支付备注")})
+    @RequestMapping("/post/TenantAppBuyOrderController/cancelTenantSelfPurchaseOrder")
+    public void cancelTenantSelfPurchaseOrder(InputObject inputObject, OutputObject outputObject) {
+        tenantAppBuyOrderService.cancelTenantSelfPurchaseOrder(inputObject, outputObject);
+    }
+
+    /**
+     * 支付网关转发入口，allUse=0；outTradeNo 为订单 oddNumber
+     */
+    @ApiOperation(id = "notifyTenantAppBuyOrderPaySuccess", value = "租户购买订单支付成功回调", method = "POST", allUse = "0")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "outTradeNo", name = "outTradeNo", value = "订单编号", required = "required"),
+        @ApiImplicitParam(id = "channelCode", name = "channelCode", value = "支付渠道编码"),
+        @ApiImplicitParam(id = "channelOrderNo", name = "channelOrderNo", value = "渠道订单号"),
+        @ApiImplicitParam(id = "successTime", name = "successTime", value = "支付成功时间")})
+    @RequestMapping("/post/TenantAppBuyOrderController/notifyTenantAppBuyOrderPaySuccess")
+    public void notifyTenantAppBuyOrderPaySuccess(InputObject inputObject, OutputObject outputObject) {
+        tenantAppBuyOrderService.notifyTenantAppBuyOrderPaySuccess(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryTenantAppBuyOrderPayState", value = "查询租户购买订单支付状态", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "订单主键id", required = "required")})
+    @RequestMapping("/post/TenantAppBuyOrderController/queryTenantAppBuyOrderPayState")
+    public void queryTenantAppBuyOrderPayState(InputObject inputObject, OutputObject outputObject) {
+        tenantAppBuyOrderService.queryTenantAppBuyOrderPayState(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryCurrentTenantAppBuyOrderList", value = "当前租户购买订单列表", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
+    @RequestMapping("/post/TenantAppBuyOrderController/queryCurrentTenantAppBuyOrderList")
+    public void queryCurrentTenantAppBuyOrderList(InputObject inputObject, OutputObject outputObject) {
+        tenantAppBuyOrderService.queryCurrentTenantAppBuyOrderList(inputObject, outputObject);
+    }
+
 }

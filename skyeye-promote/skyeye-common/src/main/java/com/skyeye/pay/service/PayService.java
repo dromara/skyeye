@@ -7,17 +7,31 @@ package com.skyeye.pay.service;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 
+import java.util.Map;
+
 /**
- * @ClassName: PayService
- * @Description: 统一支付接口
- * @author: skyeye云系列--卫志强
- * @date: 2024/11/21 8:46
- * @Copyright: 2024 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
- * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
+ * 统一支付接口（租户购买、商城订单等共用）。
+ * <p>
+ * data 约定：oddNumber（外部订单号）、payPrice（金额，单位分）；可选 subject、body。
  */
 public interface PayService {
 
     void payment(InputObject inputObject, OutputObject outputObject);
 
     void generatePayRrCode(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 发起统一支付。
+     *
+     * @param notifyUrl 注册到渠道的回调地址；传空则按渠道所属 PayApp.channelNotifyUrl 自动拼接
+     */
+    Map<String, Object> executePayment(Map<String, Object> data, String channelCode, String returnUrl,
+                                       String channelExtras, String notifyUrl);
+
+    /**
+     * 生成支付二维码。notifyUrl 为空时自动从 PayApp.channelNotifyUrl 解析。
+     */
+    Map<String, Object> executeGeneratePayQrCode(Map<String, Object> data, String channelCode, String ip,
+                                                 String notifyUrl);
+
 }

@@ -6,6 +6,7 @@ package com.skyeye.pay.service.impl;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
@@ -16,6 +17,7 @@ import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.pay.core.PayClient;
@@ -31,6 +33,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Validator;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -117,6 +121,7 @@ public class PayChannelServiceImpl extends SkyeyeBusinessServiceImpl<PayChannelD
     @Override
     @IgnoreTenant
     public PayChannel getPayChannelByCode(String codeNum) {
+        // 仅返回「已启用 PayApp + 已启用渠道」的组合，避免调用已下线配置
         MPJLambdaWrapper<PayChannel> queryWrapper = new MPJLambdaWrapper<PayChannel>()
             .innerJoin(PayApp.class, PayApp::getId, PayChannel::getAppId)
             .eq(PayApp::getEnabled, EnableEnum.ENABLE_USING.getKey())
@@ -127,5 +132,39 @@ public class PayChannelServiceImpl extends SkyeyeBusinessServiceImpl<PayChannelD
             throw new CustomException("该支付渠道不存在");
         }
         return one;
+    }
+
+    @Override
+    @IgnoreTenant
+    public void queryEnabledPayChannelList(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String appKey = params.get("appKey").toString();
+        String clientType = params.get("clientType").toString();
+        PayApp payApp = payAppService.getEnabledPayAppByAppKey(appKey);
+
+        QueryWrapper<PayChannel> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(PayChannel::getAppId), payApp.getId());
+        queryWrapper.eq(MybatisPlusUtil.toColumns(PayChannel::getEnabled), EnableEnum.ENABLE_USING.getKey());
+        queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(PayChannel::getCodeNum));
+        List<PayChannel> channelList = list(queryWrapper);
+
+        List<Map<String, Object>> rows = new ArrayList<>();
+        for (PayChannel payChannel : channelList) {
+            if (StrUtil.isNotBlank(clientType) && !PayType.supportsClientType(payChannel.getCodeNum(), clientType)) {
+                continue;
+            }
+            Map<String, Object> row = new HashMap<>();
+            row.put("id", payChannel.getId());
+            row.put("codeNum", payChannel.getCodeNum());
+            row.put("feeRate", payChannel.getFeeRate());
+            row.put("appId", payChannel.getAppId());
+            row.put("appKey", payApp.getAppKey());
+            row.put("codeNumName", PayType.getMation(payChannel.getCodeNum()).get("name"));
+            row.put("clientTypes", PayType.getMation(payChannel.getCodeNum()).get("clientTypes"));
+            row.put("remark", payChannel.getRemark());
+            rows.add(row);
+        }
+        outputObject.setBeans(rows);
+        outputObject.settotal(rows.size());
     }
 }

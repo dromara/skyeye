@@ -7,13 +7,17 @@ package com.skyeye.tenant.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
+import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -24,6 +28,10 @@ import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.eve.flowable.classenum.FormSubType;
 import com.skyeye.exception.CustomException;
+import com.skyeye.pay.entity.PayChannel;
+import com.skyeye.pay.enums.PayOrderStatusResp;
+import com.skyeye.pay.service.PayChannelService;
+import com.skyeye.pay.service.PayService;
 import com.skyeye.tenant.classenum.TenantAppBuyOrderPayState;
 import com.skyeye.tenant.classenum.TenantAppBuyOrderSource;
 import com.skyeye.tenant.dao.TenantAppBuyOrderDao;
@@ -68,6 +76,12 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
 
     @Autowired
     private PlatformBaseSettingService platformBaseSettingService;
+
+    @Autowired
+    private PayService payService;
+
+    @Autowired
+    private PayChannelService payChannelService;
 
     @Override
     protected void createPrepose(TenantAppBuyOrder entity) {
@@ -222,6 +236,182 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
         }
     }
 
+    /**
+     * 租户自购发起支付：对接统一 PayService。
+     * <p>
+     * mock 等同步渠道会立即 {@link #completeOrderPaySuccess}；二维码类渠道返回 WAITING，由前端轮询 + 渠道回调完成。
+     */
+    @Override
+    @IgnoreTenant
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void payTenantSelfPurchaseOrder(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String id = params.get("id").toString();
+        String channelCode = params.get("channelCode").toString();
+        String returnUrl = params.containsKey("returnUrl") ? params.get("returnUrl").toString() : StrUtil.EMPTY;
+        String channelExtras = params.containsKey("channelExtras") ? params.get("channelExtras").toString() : StrUtil.EMPTY;
+
+        TenantAppBuyOrder tenantAppBuyOrder = selectById(id);
+        assertSelfPurchasePayable(tenantAppBuyOrder);
+
+        Map<String, Object> payData = buildTenantOrderPayData(tenantAppBuyOrder);
+        // notifyUrl 传空：由 PayService 按渠道所属 PayApp 解析 channelNotifyUrl
+        Map<String, Object> payResult = payService.executePayment(payData, channelCode, returnUrl, channelExtras, StrUtil.EMPTY);
+        Map<String, Object> payOrderRespDTO = JSONUtil.toBean(payResult.get("payOrderRespDTO").toString(), null);
+        Map<String, Object> payChannel = JSONUtil.toBean(payResult.get("payChannel").toString(), null);
+        Integer payStatus = Integer.parseInt(payOrderRespDTO.get("status").toString());
+
+        if (PayOrderStatusResp.isSuccess(payStatus)) {
+            // 同步支付成功：当场交付席位/应用权益
+            completeOrderPaySuccess(tenantAppBuyOrder, payChannel, channelCode,
+                payOrderRespDTO.containsKey("successTime") ? payOrderRespDTO.get("successTime").toString() : null,
+                "租户在线支付");
+            outputObject.setBean(selectById(id));
+        } else {
+            // 异步待支付：记录渠道，返回二维码/跳转信息给前端，等待 notifyTenantAppBuyOrderPaySuccess
+            UpdateWrapper<TenantAppBuyOrder> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq(CommonConstants.ID, id);
+            updateWrapper.set(MybatisPlusUtil.toColumns(TenantAppBuyOrder::getPayType), channelCode);
+            update(updateWrapper);
+            refreshCache(id);
+            Map<String, Object> result = new HashMap<>();
+            result.put("orderId", id);
+            result.put("payState", TenantAppBuyOrderPayState.UNPAID.getKey());
+            result.put("payOrderRespDTO", payOrderRespDTO);
+            result.put("payChannel", payChannel);
+            outputObject.setBean(result);
+        }
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    /**
+     * 租户自购取消支付（租户资料页订单管理使用，与后台 cancelPayTenantAppBuyOrder 隔离）
+     */
+    @Override
+    @IgnoreTenant
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void cancelTenantSelfPurchaseOrder(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String id = params.get("id").toString();
+        String payRemark = params.containsKey("payRemark") && StrUtil.isNotBlank(params.get("payRemark").toString())
+            ? params.get("payRemark").toString()
+            : "租户取消支付";
+        TenantAppBuyOrder tenantAppBuyOrder = selectById(id);
+        assertSelfPurchasePayable(tenantAppBuyOrder);
+        updatePayState(id, TenantAppBuyOrderPayState.PAY_CANCELLED.getKey(), payRemark);
+    }
+
+    /**
+     * 租户购买支付成功业务回调（配置在 PayApp.orderNotifyUrl，由 PayNotify 转发，allUse=0 无需登录）。
+     * 与 {@link #payTenantSelfPurchaseOrder} 的同步成功分支最终都走 {@link #completeOrderPaySuccess}。
+     */
+    @Override
+    @IgnoreTenant
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void notifyTenantAppBuyOrderPaySuccess(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String outTradeNo = params.get("outTradeNo").toString();
+        String channelCode = params.containsKey("channelCode") ? params.get("channelCode").toString() : null;
+        String successTime = params.containsKey("successTime") ? params.get("successTime").toString() : null;
+
+        TenantAppBuyOrder tenantAppBuyOrder = queryByOddNumber(outTradeNo);
+        if (TenantAppBuyOrderPayState.PAID.getKey().equals(tenantAppBuyOrder.getPayState())) {
+            // 渠道可能重复回调，已支付则幂等返回
+            outputObject.settotal(CommonNumConstants.NUM_ONE);
+            return;
+        }
+        assertApprovedAndUnpaid(tenantAppBuyOrder);
+        Map<String, Object> payChannelMap = new HashMap<>();
+        if (StrUtil.isNotBlank(channelCode)) {
+            PayChannel payChannel = payChannelService.getPayChannelByCode(channelCode);
+            payChannelMap.put("feeRate", payChannel.getFeeRate());
+        }
+        completeOrderPaySuccess(tenantAppBuyOrder, payChannelMap,
+            StrUtil.isNotBlank(channelCode) ? channelCode : tenantAppBuyOrder.getPayType(),
+            successTime, "支付渠道回调");
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    /**
+     * 前端轮询支付结果（二维码支付场景）
+     */
+    @Override
+    @IgnoreTenant
+    public void queryTenantAppBuyOrderPayState(InputObject inputObject, OutputObject outputObject) {
+        String id = inputObject.getParams().get("id").toString();
+        TenantAppBuyOrder tenantAppBuyOrder = selectById(id);
+        if (ObjectUtil.isEmpty(tenantAppBuyOrder)) {
+            throw new CustomException("订单不存在");
+        }
+        Map<String, Object> data = new HashMap<>();
+        data.put("id", tenantAppBuyOrder.getId());
+        data.put("payState", tenantAppBuyOrder.getPayState());
+        data.put("payTime", tenantAppBuyOrder.getPayTime());
+        data.put("oddNumber", tenantAppBuyOrder.getOddNumber());
+        outputObject.setBean(data);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    /**
+     * 租户端订单支付/取消支付前置校验：当前租户归属、审批通过且待支付
+     */
+    private void assertSelfPurchasePayable(TenantAppBuyOrder tenantAppBuyOrder) {
+        if (!StrUtil.equals(TenantContext.getTenantId(), tenantAppBuyOrder.getBuyTenantId())) {
+            throw new CustomException("无权操作该订单");
+        }
+        assertApprovedAndUnpaid(tenantAppBuyOrder);
+    }
+
+    /**
+     * 组装 PayService 所需参数；allPrice 为元，payPrice 需转为分
+     */
+    private Map<String, Object> buildTenantOrderPayData(TenantAppBuyOrder tenantAppBuyOrder) {
+        Map<String, Object> payData = new HashMap<>();
+        payData.put("oddNumber", tenantAppBuyOrder.getOddNumber());
+        payData.put("payPrice", yuanToFen(tenantAppBuyOrder.getAllPrice()));
+        payData.put("subject", "租户扩容购买");
+        payData.put("body", "租户席位/应用购买-" + tenantAppBuyOrder.getOddNumber());
+        return payData;
+    }
+
+    private String yuanToFen(String yuanPrice) {
+        return CalculationUtil.multiply(yuanPrice, CommonNumConstants.ONE_HUNDRED.toString());
+    }
+
+    private TenantAppBuyOrder queryByOddNumber(String oddNumber) {
+        QueryWrapper<TenantAppBuyOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(TenantAppBuyOrder::getOddNumber), oddNumber);
+        TenantAppBuyOrder tenantAppBuyOrder = getOne(queryWrapper, false);
+        if (ObjectUtil.isEmpty(tenantAppBuyOrder)) {
+            throw new CustomException("订单不存在");
+        }
+        return selectById(tenantAppBuyOrder.getId());
+    }
+
+    /**
+     * 支付成功后的统一落单：交付权益 + 更新支付状态。
+     * 幂等：已支付订单直接返回，防止重复回调重复加席位。
+     */
+    private void completeOrderPaySuccess(TenantAppBuyOrder tenantAppBuyOrder, Map<String, Object> payChannel,
+                                         String channelCode, String successTime, String payRemark) {
+        if (TenantAppBuyOrderPayState.PAID.getKey().equals(tenantAppBuyOrder.getPayState())) {
+            return;
+        }
+        deliverOrderBenefits(tenantAppBuyOrder);
+        UpdateWrapper<TenantAppBuyOrder> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, tenantAppBuyOrder.getId());
+        updateWrapper.set(MybatisPlusUtil.toColumns(TenantAppBuyOrder::getPayState), TenantAppBuyOrderPayState.PAID.getKey());
+        updateWrapper.set(MybatisPlusUtil.toColumns(TenantAppBuyOrder::getPayType), channelCode);
+        if (payChannel != null && payChannel.get("feeRate") != null) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(TenantAppBuyOrder::getChannelFeeRate), payChannel.get("feeRate").toString());
+        }
+        updateWrapper.set(MybatisPlusUtil.toColumns(TenantAppBuyOrder::getPayTime),
+            StrUtil.isNotBlank(successTime) ? successTime : DateUtil.getTimeAndToString());
+        updateWrapper.set(MybatisPlusUtil.toColumns(TenantAppBuyOrder::getPayRemark), payRemark);
+        update(updateWrapper);
+        refreshCache(tenantAppBuyOrder.getId());
+    }
+
     @Override
     @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
     public void payTenantAppBuyOrder(InputObject inputObject, OutputObject outputObject) {
@@ -330,6 +520,40 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
     private boolean isPaidBuyOrder(TenantAppBuyOrder order) {
         return order != null
             && TenantAppBuyOrderPayState.PAID.getKey().equals(order.getPayState());
+    }
+
+    /**
+     * 当前租户的全部购买订单（后台添加、租户自购等所有来源）。
+     */
+    @Override
+    @IgnoreTenant
+    public void queryCurrentTenantAppBuyOrderList(InputObject inputObject, OutputObject outputObject) {
+        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        String tenantId = TenantContext.getTenantId();
+        if (StrUtil.isBlank(tenantId)) {
+            throw new CustomException("未获取到当前租户信息");
+        }
+
+        QueryWrapper<TenantAppBuyOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(TenantAppBuyOrder::getBuyTenantId), tenantId);
+        if (StrUtil.isNotBlank(commonPageInfo.getKeyword())) {
+            queryWrapper.like(MybatisPlusUtil.toColumns(TenantAppBuyOrder::getOddNumber), commonPageInfo.getKeyword().trim());
+        }
+        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(TenantAppBuyOrder::getCreateTime));
+
+        Page<?> page = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
+        List<TenantAppBuyOrder> orderList = list(queryWrapper);
+        List<Map<String, Object>> beans = JSONUtil.toList(JSONUtil.toJsonStr(orderList), null);
+        if (CollectionUtil.isNotEmpty(beans)) {
+            setDynamicDataForBeans(beans);
+            for (Map<String, Object> bean : beans) {
+                setDataFlowabledMation(bean);
+            }
+            iAuthUserService.setNameForMap(beans, "createId", "createName");
+            iAuthUserService.setNameForMap(beans, "lastUpdateId", "lastUpdateName");
+        }
+        outputObject.setBeans(beans);
+        outputObject.settotal(page.getTotal());
     }
 
 }

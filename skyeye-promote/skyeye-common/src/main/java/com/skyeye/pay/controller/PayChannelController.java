@@ -61,4 +61,14 @@ public class PayChannelController {
     public void queryPayChannelList(InputObject inputObject, OutputObject outputObject) {
         payChannelService.queryPageList(inputObject, outputObject);
     }
+
+    @ApiOperation(id = "queryEnabledPayChannelList", value = "获取指定支付应用下已启用的支付渠道（收银台用）", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "appKey", name = "appKey", value = "支付应用标识，如 tenant-buy、mall-order", required = "required"),
+        @ApiImplicitParam(id = "clientType", name = "clientType", value = "客户端类型(选填)：pc-PC网页、h5-手机浏览器、wechat_mp-微信公众号、wechat_mini-微信小程序、app-原生App、bar-付款码收银；传则只返回当前终端可用渠道")
+    })
+    @RequestMapping("/post/PayChannelController/queryEnabledPayChannelList")
+    public void queryEnabledPayChannelList(InputObject inputObject, OutputObject outputObject) {
+        payChannelService.queryEnabledPayChannelList(inputObject, outputObject);
+    }
 }

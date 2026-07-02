@@ -18,9 +18,11 @@ import com.skyeye.exception.CustomException;
 import com.skyeye.pay.core.PayClient;
 import com.skyeye.pay.core.dto.order.PayOrderRespDTO;
 import com.skyeye.pay.core.dto.order.PayOrderUnifiedReqDTO;
+import com.skyeye.pay.entity.PayApp;
 import com.skyeye.pay.entity.PayChannel;
 import com.skyeye.pay.enums.PayOrderStatusResp;
 import com.skyeye.pay.enums.PayType;
+import com.skyeye.pay.service.PayAppService;
 import com.skyeye.pay.service.PayChannelService;
 import com.skyeye.pay.service.PayService;
 import org.slf4j.Logger;
@@ -35,21 +37,22 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * @ClassName: PayServiceImpl
- * @Description: 统一支付接口实现类--不隔离
- * @author: skyeye云系列--卫志强
- * @date: 2024/11/21 8:46
- * @Copyright: 2024 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
- * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
+ * 统一支付：租户购买、商城订单等共用。
+ * <p>
+ * 业务侧传入 oddNumber、payPrice（分）等，notifyUrl 留空时由渠道所属 PayApp 自动解析回调地址。
+ * 同步成功（如 mock）由业务方立即落单；异步（二维码等）依赖 PayNotify → 业务 notify 接口。
  */
 @Service
 @SkyeyeService(name = "统一支付", groupName = "统一支付", tenant = TenantEnum.NO_ISOLATION)
 public class PayServiceImpl implements PayService {
 
-    private static Logger log = LoggerFactory.getLogger(PayServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(PayServiceImpl.class);
 
     @Autowired
     private PayChannelService payChannelService;
+
+    @Autowired
+    private PayAppService payAppService;
 
     @Override
     @Transactional(value = "transactionManager", rollbackFor = Exception.class)
@@ -60,61 +63,10 @@ public class PayServiceImpl implements PayService {
         String returnUrl = params.get("returnUrl").toString();
         String channelExtrasStr = params.get("channelExtras").toString();
         String notifyUrl = params.get("notifyUrl").toString();
-        PayOrderUnifiedReqDTO reqDTO = new PayOrderUnifiedReqDTO();
-
-        // 1. 钱包支付事，需要额外传 user_id 和 user_type
-        if (Objects.equals(channelCode, PayType.WALLET.getKey())) {
-            Map<String, String> channelExtras = StrUtil.isBlank(channelExtrasStr) ?
-                Maps.newHashMapWithExpectedSize(1) : JSONUtil.toBean(channelExtrasStr, null);
-            String userId = inputObject.getLogParams().get(CommonConstants.ID).toString();
-            channelExtras.put(CommonConstants.USER_ID_KEY, userId);
-            reqDTO.setChannelExtras(channelExtras);
-        }
-
-        // 支付渠道
-        PayChannel payChannel = payChannelService.getPayChannelByCode(channelCode);
-        PayClient client = payChannelService.getPayClient(payChannel.getId());
-        // 2. 调用支付渠道接口
-        PayOrderUnifiedReqDTO unifiedReqDTO = new PayOrderUnifiedReqDTO();
-        unifiedReqDTO.setOutTradeNo(data.get("oddNumber").toString());
-        unifiedReqDTO.setSubject("购买商品");
-        unifiedReqDTO.setBody("购买商品信息");
-        unifiedReqDTO.setNotifyUrl(notifyUrl);
-        unifiedReqDTO.setReturnUrl(returnUrl);
-        unifiedReqDTO.setPrice(data.get("payPrice").toString());
-        unifiedReqDTO.setExpireTime(LocalDateTimeUtils.addTime(Duration.ofHours(24L)));
-        PayOrderRespDTO payOrderRespDTO = client.unifiedOrder(unifiedReqDTO);
-
-        // 3. 如果调用直接支付成功，则直接更新支付单状态为成功。例如说：付款码支付，免密支付时，就直接验证支付成功
-        if (payOrderRespDTO != null) {
-            notifyOrder(payOrderRespDTO);
-            log.info("[submitOrder][order(%s) payChannel(%s) 支付结果(%s)]",
-                data, payChannel, payOrderRespDTO);
-            // 如有渠道错误码，则抛出业务异常，提示用户
-            if (StrUtil.isNotEmpty(payOrderRespDTO.getChannelErrorCode())) {
-                throw new CustomException(String.format("发起支付报错，错误码：%s，错误提示：%s", payOrderRespDTO.getChannelErrorCode(), payOrderRespDTO.getChannelErrorMsg()));
-            }
-            Map<String, Object> result = new HashMap<>();
-            result.put("payChannel", JSONUtil.toJsonStr(payChannel));
-            result.put("payOrderRespDTO", JSONUtil.toJsonStr(payOrderRespDTO));
-            outputObject.setBean(result);
-            outputObject.settotal(CommonNumConstants.NUM_ONE);
-        } else {
-            throw new CustomException("发起支付失败，请稍后重试");
-        }
-    }
-
-    public void notifyOrder(PayOrderRespDTO notify) {
-        // 情况一：支付成功的回调
-        if (PayOrderStatusResp.isSuccess(notify.getStatus())) {
-            return;
-        }
-        // 情况二：支付失败的回调
-        if (PayOrderStatusResp.isClosed(notify.getStatus())) {
-            throw new CustomException("支付失败，请稍后重试");
-        }
-        // 情况三：WAITING：无需处理
-        // 情况四：REFUND：通过退款回调处理
+        String userId = inputObject.getLogParams().get(CommonConstants.ID).toString();
+        Map<String, Object> result = executePayment(data, channelCode, returnUrl, channelExtrasStr, notifyUrl, userId);
+        outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
     @Override
@@ -124,14 +76,102 @@ public class PayServiceImpl implements PayService {
         String channelCode = params.get("channelCode").toString();
         String notifyUrl = params.get("notifyUrl").toString();
         String ip = params.get("ip").toString();
-        // 支付渠道
-        PayChannel payChannel = payChannelService.getPayChannelByCode(channelCode);
-        PayClient client = payChannelService.getPayClient(payChannel.getId());
-        String qrCodeUrl = client.generateRrCode(data.get("oddNumber").toString(), "购买商品", data.get("payPrice").toString(), ip, notifyUrl);
-        Map<String, Object> result = new HashMap<>();
-        result.put("qrCodeUrl", qrCodeUrl);
+        Map<String, Object> result = executeGeneratePayQrCode(data, channelCode, ip, notifyUrl);
         outputObject.setBean(result);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
+    @Override
+    public Map<String, Object> executePayment(Map<String, Object> data, String channelCode, String returnUrl,
+                                              String channelExtras, String notifyUrl) {
+        return executePayment(data, channelCode, returnUrl, channelExtras, notifyUrl, null);
+    }
+
+    private Map<String, Object> executePayment(Map<String, Object> data, String channelCode, String returnUrl,
+                                               String channelExtrasStr, String notifyUrl, String userId) {
+        // 渠道必须归属已启用的 PayApp，且渠道本身处于启用状态
+        PayChannel payChannel = payChannelService.getPayChannelByCode(channelCode);
+        payAppService.setDataMation(payChannel, PayChannel::getAppId);
+        PayClient client = payChannelService.getPayClient(payChannel.getId());
+
+        PayOrderUnifiedReqDTO unifiedReqDTO = new PayOrderUnifiedReqDTO();
+        // outTradeNo 与各业务 oddNumber 一致，回调时用于反查订单
+        unifiedReqDTO.setOutTradeNo(data.get("oddNumber").toString());
+        unifiedReqDTO.setSubject(getPaySubject(data));
+        unifiedReqDTO.setBody(getPayBody(data));
+        unifiedReqDTO.setNotifyUrl(resolveChannelNotifyUrl(payChannel.getAppMation(), payChannel.getId(), notifyUrl));
+        unifiedReqDTO.setReturnUrl(returnUrl);
+        // payPrice 单位：分，与各业务传给渠道的金额约定一致
+        unifiedReqDTO.setPrice(data.get("payPrice").toString());
+        unifiedReqDTO.setExpireTime(LocalDateTimeUtils.addTime(Duration.ofHours(24L)));
+
+        if (Objects.equals(channelCode, PayType.WALLET.getKey()) && StrUtil.isNotBlank(userId)) {
+            // 钱包支付需携带当前用户 id
+            Map<String, String> channelExtras = StrUtil.isBlank(channelExtrasStr) ?
+                Maps.newHashMapWithExpectedSize(1) : JSONUtil.toBean(channelExtrasStr, null);
+            channelExtras.put(CommonConstants.USER_ID_KEY, userId);
+            unifiedReqDTO.setChannelExtras(channelExtras);
+        } else if (StrUtil.isNotBlank(channelExtrasStr)) {
+            unifiedReqDTO.setChannelExtras(JSONUtil.toBean(channelExtrasStr, null));
+        }
+
+        PayOrderRespDTO payOrderRespDTO = client.unifiedOrder(unifiedReqDTO);
+        if (payOrderRespDTO == null) {
+            throw new CustomException("发起支付失败，请稍后重试");
+        }
+        validatePayResponse(payOrderRespDTO);
+        log.info("[executePayment][outTradeNo({}) channel({}) status({})]",
+            data.get("oddNumber"), channelCode, payOrderRespDTO.getStatus());
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("payChannel", JSONUtil.toJsonStr(payChannel));
+        result.put("payOrderRespDTO", JSONUtil.toJsonStr(payOrderRespDTO));
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> executeGeneratePayQrCode(Map<String, Object> data, String channelCode, String ip,
+                                                        String notifyUrl) {
+        PayChannel payChannel = payChannelService.getPayChannelByCode(channelCode);
+        payAppService.setDataMation(payChannel, PayChannel::getAppId);
+        PayClient client = payChannelService.getPayClient(payChannel.getId());
+        String qrCodeUrl = client.generateRrCode(data.get("oddNumber").toString(), getPayBody(data),
+            data.get("payPrice").toString(), ip, resolveChannelNotifyUrl(payChannel.getAppMation(), payChannel.getId(), notifyUrl));
+        Map<String, Object> result = new HashMap<>();
+        result.put("qrCodeUrl", qrCodeUrl);
+        result.put("payChannel", JSONUtil.toJsonStr(payChannel));
+        return result;
+    }
+
+    /**
+     * 解析注册到第三方渠道的 notify 地址。
+     * 优先使用调用方显式传入（兼容商城 yml 旧配置）；否则从渠道所属 PayApp.channelNotifyUrl 拼接 channelId。
+     */
+    private String resolveChannelNotifyUrl(PayApp payApp, String channelId, String notifyUrlParam) {
+        if (StrUtil.isNotBlank(notifyUrlParam)) {
+            return notifyUrlParam;
+        }
+        return payAppService.buildChannelOrderNotifyUrl(payApp, channelId);
+    }
+
+    private void validatePayResponse(PayOrderRespDTO payOrderRespDTO) {
+        // CLOSED 表示渠道侧已明确失败；WAITING 表示待用户支付，由业务方根据 status 决定是否轮询或展示二维码
+        if (StrUtil.isNotEmpty(payOrderRespDTO.getChannelErrorCode())) {
+            throw new CustomException(String.format("发起支付报错，错误码：%s，错误提示：%s",
+                payOrderRespDTO.getChannelErrorCode(), payOrderRespDTO.getChannelErrorMsg()));
+        }
+        if (PayOrderStatusResp.isClosed(payOrderRespDTO.getStatus())) {
+            throw new CustomException("支付失败，请稍后重试");
+        }
+    }
+
+    private String getPaySubject(Map<String, Object> data) {
+        Object subject = data.get("subject");
+        return subject != null ? subject.toString() : "购买商品";
+    }
+
+    private String getPayBody(Map<String, Object> data) {
+        Object body = data.get("body");
+        return body != null ? body.toString() : "购买商品信息";
+    }
 }
