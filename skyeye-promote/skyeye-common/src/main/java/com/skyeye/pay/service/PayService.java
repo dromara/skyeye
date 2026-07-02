@@ -29,6 +29,12 @@ public interface PayService {
                                        String channelExtras, String notifyUrl);
 
     /**
+     * 发起统一支付（指定 PayApp.appKey，如 tenant-buy、mall-order）。
+     */
+    Map<String, Object> executePayment(Map<String, Object> data, String channelCode, String returnUrl,
+                                       String channelExtras, String notifyUrl, String appKey);
+
+    /**
      * 生成支付二维码。notifyUrl 为空时自动从 PayApp.channelNotifyUrl 解析。
      */
     Map<String, Object> executeGeneratePayQrCode(Map<String, Object> data, String channelCode, String ip,

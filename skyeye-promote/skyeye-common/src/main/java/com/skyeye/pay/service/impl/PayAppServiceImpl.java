@@ -52,13 +52,6 @@ public class PayAppServiceImpl extends SkyeyeBusinessServiceImpl<PayAppDao, PayA
     @Override
     protected void writePostpose(PayApp entity, String userId) {
         super.writePostpose(entity, userId);
-        // 业务约束：全局同时仅允许一个 PayApp 启用，避免渠道回调与业务回调指向混乱
-        if (entity.getEnabled().equals(EnableEnum.ENABLE_USING.getKey())) {
-            UpdateWrapper<PayApp> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.ne(CommonConstants.ID, entity.getId());
-            updateWrapper.set(MybatisPlusUtil.toColumns(PayApp::getEnabled), EnableEnum.DISABLE_USING.getKey());
-            update(updateWrapper);
-        }
     }
 
     public List<Map<String, Object>> queryDataList(InputObject inputObject) {

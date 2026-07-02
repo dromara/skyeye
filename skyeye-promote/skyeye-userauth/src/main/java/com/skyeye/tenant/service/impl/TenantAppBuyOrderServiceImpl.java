@@ -60,6 +60,9 @@ import java.util.stream.Collectors;
 @SkyeyeService(name = "订单管理", groupName = "租户管理", flowable = true, tenant = TenantEnum.PLATE)
 public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<TenantAppBuyOrderDao, TenantAppBuyOrder> implements TenantAppBuyOrderService {
 
+    /** 租户购买 PayApp.appKey，与前端 queryEnabledPayChannelList 一致 */
+    private static final String TENANT_BUY_PAY_APP_KEY = "tenant-buy";
+
     @Autowired
     private TenantService tenantService;
 
@@ -205,6 +208,22 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
     }
 
     @Override
+    protected void deletePostpose(String id) {
+        tenantAppBuyOrderNumService.deleteByParentId(id);
+        tenantAppBuyOrderYearService.deleteByParentId(id);
+        super.deletePostpose(id);
+    }
+
+    @Override
+    protected void deletePostpose(TenantAppBuyOrder entity) {
+        if (entity != null && StrUtil.isNotBlank(entity.getId())) {
+            tenantAppBuyOrderNumService.deleteByParentId(entity.getId());
+            tenantAppBuyOrderYearService.deleteByParentId(entity.getId());
+        }
+        super.deletePostpose(entity);
+    }
+
+    @Override
     public TenantAppBuyOrder getDataFromDb(String id) {
         TenantAppBuyOrder tenantAppBuyOrder = super.getDataFromDb(id);
         tenantAppBuyOrder.setTenantAppBuyOrderNumList(tenantAppBuyOrderNumService.selectByParentId(id));
@@ -253,11 +272,11 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
         String channelExtras = params.containsKey("channelExtras") ? params.get("channelExtras").toString() : StrUtil.EMPTY;
 
         TenantAppBuyOrder tenantAppBuyOrder = selectById(id);
-        assertSelfPurchasePayable(tenantAppBuyOrder);
+        assertTenantOrderPayable(tenantAppBuyOrder);
 
         Map<String, Object> payData = buildTenantOrderPayData(tenantAppBuyOrder);
-        // notifyUrl 传空：由 PayService 按渠道所属 PayApp 解析 channelNotifyUrl
-        Map<String, Object> payResult = payService.executePayment(payData, channelCode, returnUrl, channelExtras, StrUtil.EMPTY);
+        Map<String, Object> payResult = payService.executePayment(payData, channelCode, returnUrl, channelExtras,
+            StrUtil.EMPTY, TENANT_BUY_PAY_APP_KEY);
         Map<String, Object> payOrderRespDTO = JSONUtil.toBean(payResult.get("payOrderRespDTO").toString(), null);
         Map<String, Object> payChannel = JSONUtil.toBean(payResult.get("payChannel").toString(), null);
         Integer payStatus = Integer.parseInt(payOrderRespDTO.get("status").toString());
@@ -298,8 +317,9 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
             ? params.get("payRemark").toString()
             : "租户取消支付";
         TenantAppBuyOrder tenantAppBuyOrder = selectById(id);
-        assertSelfPurchasePayable(tenantAppBuyOrder);
+        assertTenantOrderPayable(tenantAppBuyOrder);
         updatePayState(id, TenantAppBuyOrderPayState.PAY_CANCELLED.getKey(), payRemark);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
     /**
@@ -324,7 +344,7 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
         assertApprovedAndUnpaid(tenantAppBuyOrder);
         Map<String, Object> payChannelMap = new HashMap<>();
         if (StrUtil.isNotBlank(channelCode)) {
-            PayChannel payChannel = payChannelService.getPayChannelByCode(channelCode);
+            PayChannel payChannel = payChannelService.getPayChannelByCode(TENANT_BUY_PAY_APP_KEY, channelCode);
             payChannelMap.put("feeRate", payChannel.getFeeRate());
         }
         completeOrderPaySuccess(tenantAppBuyOrder, payChannelMap,
@@ -344,6 +364,7 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
         if (ObjectUtil.isEmpty(tenantAppBuyOrder)) {
             throw new CustomException("订单不存在");
         }
+        assertTenantOrderOwnership(tenantAppBuyOrder);
         Map<String, Object> data = new HashMap<>();
         data.put("id", tenantAppBuyOrder.getId());
         data.put("payState", tenantAppBuyOrder.getPayState());
@@ -354,12 +375,26 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
     }
 
     /**
-     * 租户端订单支付/取消支付前置校验：当前租户归属、审批通过且待支付
+     * 租户端订单归属校验
      */
-    private void assertSelfPurchasePayable(TenantAppBuyOrder tenantAppBuyOrder) {
-        if (!StrUtil.equals(TenantContext.getTenantId(), tenantAppBuyOrder.getBuyTenantId())) {
+    private void assertTenantOrderOwnership(TenantAppBuyOrder tenantAppBuyOrder) {
+        String tenantId = TenantContext.getTenantId();
+        if (StrUtil.isBlank(tenantId)) {
+            throw new CustomException("未获取到当前租户信息");
+        }
+        if (ObjectUtil.isEmpty(tenantAppBuyOrder) || StrUtil.isEmpty(tenantAppBuyOrder.getId())) {
+            throw new CustomException("订单不存在");
+        }
+        if (!StrUtil.equals(tenantId, tenantAppBuyOrder.getBuyTenantId())) {
             throw new CustomException("无权操作该订单");
         }
+    }
+
+    /**
+     * 租户端订单支付/取消支付前置校验：当前租户归属、审批通过且待支付
+     */
+    private void assertTenantOrderPayable(TenantAppBuyOrder tenantAppBuyOrder) {
+        assertTenantOrderOwnership(tenantAppBuyOrder);
         assertApprovedAndUnpaid(tenantAppBuyOrder);
     }
 
@@ -537,6 +572,11 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
 
         QueryWrapper<TenantAppBuyOrder> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(TenantAppBuyOrder::getBuyTenantId), tenantId);
+        String payState = commonPageInfo.getCustomParamsMapStr("payState");
+        if (StrUtil.isNotBlank(payState)) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(TenantAppBuyOrder::getPayState),
+                Integer.parseInt(payState.trim()));
+        }
         if (StrUtil.isNotBlank(commonPageInfo.getKeyword())) {
             queryWrapper.like(MybatisPlusUtil.toColumns(TenantAppBuyOrder::getOddNumber), commonPageInfo.getKeyword().trim());
         }
@@ -569,12 +609,7 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
             throw new CustomException("未获取到当前租户信息");
         }
         TenantAppBuyOrder order = selectById(id);
-        if (ObjectUtil.isEmpty(order) || StrUtil.isEmpty(order.getId())) {
-            throw new CustomException("订单不存在");
-        }
-        if (!StrUtil.equals(tenantId, order.getBuyTenantId())) {
-            throw new CustomException("无权查看该订单");
-        }
+        assertTenantOrderOwnership(order);
         Map<String, Object> bean = JSONUtil.toBean(JSONUtil.toJsonStr(order), null);
         setDynamicDataForBeans(Collections.singletonList(bean));
         setDataFlowabledMation(bean);
@@ -597,16 +632,12 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
             throw new CustomException("未获取到当前租户信息");
         }
         TenantAppBuyOrder order = selectById(id);
-        if (ObjectUtil.isEmpty(order) || StrUtil.isEmpty(order.getId())) {
-            throw new CustomException("订单不存在");
-        }
-        if (!StrUtil.equals(tenantId, order.getBuyTenantId())) {
-            throw new CustomException("无权删除该订单");
-        }
+        assertTenantOrderOwnership(order);
         if (!TenantAppBuyOrderPayState.PAY_CANCELLED.getKey().equals(order.getPayState())) {
             throw new CustomException("仅取消支付状态的订单可删除");
         }
         deleteById(id);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
 }

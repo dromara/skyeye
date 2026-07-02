@@ -64,7 +64,7 @@ public class PayServiceImpl implements PayService {
         String channelExtrasStr = params.get("channelExtras").toString();
         String notifyUrl = params.get("notifyUrl").toString();
         String userId = inputObject.getLogParams().get(CommonConstants.ID).toString();
-        Map<String, Object> result = executePayment(data, channelCode, returnUrl, channelExtrasStr, notifyUrl, userId);
+        Map<String, Object> result = executePayment(data, channelCode, returnUrl, channelExtrasStr, notifyUrl, null, userId);
         outputObject.setBean(result);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
@@ -84,13 +84,20 @@ public class PayServiceImpl implements PayService {
     @Override
     public Map<String, Object> executePayment(Map<String, Object> data, String channelCode, String returnUrl,
                                               String channelExtras, String notifyUrl) {
-        return executePayment(data, channelCode, returnUrl, channelExtras, notifyUrl, null);
+        return executePayment(data, channelCode, returnUrl, channelExtras, notifyUrl, null, null);
+    }
+
+    @Override
+    public Map<String, Object> executePayment(Map<String, Object> data, String channelCode, String returnUrl,
+                                              String channelExtras, String notifyUrl, String appKey) {
+        return executePayment(data, channelCode, returnUrl, channelExtras, notifyUrl, appKey, null);
     }
 
     private Map<String, Object> executePayment(Map<String, Object> data, String channelCode, String returnUrl,
-                                               String channelExtrasStr, String notifyUrl, String userId) {
-        // 渠道必须归属已启用的 PayApp，且渠道本身处于启用状态
-        PayChannel payChannel = payChannelService.getPayChannelByCode(channelCode);
+                                               String channelExtrasStr, String notifyUrl, String appKey, String userId) {
+        PayChannel payChannel = StrUtil.isNotBlank(appKey)
+            ? payChannelService.getPayChannelByCode(appKey, channelCode)
+            : payChannelService.getPayChannelByCode(channelCode);
         payAppService.setDataMation(payChannel, PayChannel::getAppId);
         PayClient client = payChannelService.getPayClient(payChannel.getId());
 

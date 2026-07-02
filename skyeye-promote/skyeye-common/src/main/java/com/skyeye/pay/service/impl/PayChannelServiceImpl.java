@@ -121,15 +121,25 @@ public class PayChannelServiceImpl extends SkyeyeBusinessServiceImpl<PayChannelD
     @Override
     @IgnoreTenant
     public PayChannel getPayChannelByCode(String codeNum) {
-        // 仅返回「已启用 PayApp + 已启用渠道」的组合，避免调用已下线配置
+        return getPayChannelByCode(null, codeNum);
+    }
+
+    @Override
+    @IgnoreTenant
+    public PayChannel getPayChannelByCode(String appKey, String codeNum) {
         MPJLambdaWrapper<PayChannel> queryWrapper = new MPJLambdaWrapper<PayChannel>()
             .innerJoin(PayApp.class, PayApp::getId, PayChannel::getAppId)
             .eq(PayApp::getEnabled, EnableEnum.ENABLE_USING.getKey())
-            .eq(PayChannel::getEnabled, EnableEnum.ENABLE_USING.getKey());
-        queryWrapper.eq(MybatisPlusUtil.toColumns(PayChannel::getCodeNum), codeNum);
+            .eq(PayChannel::getEnabled, EnableEnum.ENABLE_USING.getKey())
+            .eq(PayChannel::getCodeNum, codeNum);
+        if (StrUtil.isNotBlank(appKey)) {
+            queryWrapper.eq(PayApp::getAppKey, appKey.trim());
+        }
         PayChannel one = getOne(queryWrapper, false);
         if (ObjectUtil.isEmpty(one)) {
-            throw new CustomException("该支付渠道不存在");
+            throw new CustomException(StrUtil.isNotBlank(appKey)
+                ? String.format("支付应用[%s]下未找到渠道[%s]", appKey, codeNum)
+                : "该支付渠道不存在");
         }
         return one;
     }
