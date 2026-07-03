@@ -138,6 +138,30 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         super.writePostpose(entity, userId);
     }
 
+    /**
+     * 巡检审批通过：将巡检结果回写设备档案状态。
+     * 巡检异常时默认映射为「带病运行」；若巡检员指定了其它运行状态（如维修中），则以其为准。
+     */
+    @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void approvalEndIsSuccess(EquipmentInspectionOrder entity) {
+        EquipmentInspectionOrder order = selectById(entity.getId());
+        if (StrUtil.isBlank(order.getEquipmentId())) {
+            return;
+        }
+        equipmentService.editEquipmentStateById(order.getEquipmentId(), resolveSyncEquipmentState(order));
+    }
+
+    private Integer resolveSyncEquipmentState(EquipmentInspectionOrder order) {
+        if (EquipmentInspectionResultType.ABNORMAL.getKey().equals(order.getOverallResult())) {
+            if (order.getEquipmentRunStatus() != null && !EquipmentState.NORMAL.getKey().equals(order.getEquipmentRunStatus())) {
+                return order.getEquipmentRunStatus();
+            }
+            return EquipmentState.DEGRADED.getKey();
+        }
+        return EquipmentState.NORMAL.getKey();
+    }
+
     @Override
     public void deletePostpose(String id) {
         equipmentInspectionOrderItemService.deleteByPId(id);

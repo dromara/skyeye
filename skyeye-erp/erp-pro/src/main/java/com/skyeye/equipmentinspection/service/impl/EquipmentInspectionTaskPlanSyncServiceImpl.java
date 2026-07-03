@@ -14,11 +14,10 @@ import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionFrequencyType;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionTask;
-import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanEquipmentService;
-import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanItemService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionTaskPlanSyncService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionTaskService;
+import com.skyeye.equipmentinspection.support.EquipmentInspectionPlanCronBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,12 +51,6 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
     private EquipmentInspectionPlanService equipmentInspectionPlanService;
 
     @Autowired
-    private EquipmentInspectionPlanEquipmentService equipmentInspectionPlanEquipmentService;
-
-    @Autowired
-    private EquipmentInspectionPlanItemService equipmentInspectionPlanItemService;
-
-    @Autowired
     private EquipmentInspectionTaskService equipmentInspectionTaskService;
 
     @Override
@@ -65,15 +58,15 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
         if (StrUtil.isBlank(planId)) {
             return;
         }
-        EquipmentInspectionPlan plan = equipmentInspectionPlanService.getDataFromDb(planId);
-        if (StrUtil.isBlank(plan.getId()) || EnableEnum.DISABLE_USING.getKey().equals(plan.getEnabled())) {
+        EquipmentInspectionPlan plan = equipmentInspectionPlanService.selectById(planId);
+        if (plan == null || EnableEnum.DISABLE_USING.getKey().equals(plan.getEnabled())) {
             return;
         }
-        List<String> equipmentIds = equipmentInspectionPlanEquipmentService.selectByParentId(planId);
+        List<String> equipmentIds = plan.getEquipmentId();
         if (CollectionUtil.isEmpty(equipmentIds)) {
             return;
         }
-        if (CollectionUtil.isEmpty(equipmentInspectionPlanItemService.selectByParentId(planId))) {
+        if (CollectionUtil.isEmpty(plan.getItemId())) {
             return;
         }
 
@@ -199,6 +192,9 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
                 return java.util.Collections.emptyList();
             }
             return singleSlotFromPatrolTime(day, plan.getPatrolTime());
+        }
+        if (EquipmentInspectionFrequencyType.CUSTOM.getKey().equals(freq)) {
+            return EquipmentInspectionPlanCronBuilder.resolveDaySlots(plan.getCustomCron(), day, zone);
         }
         return java.util.Collections.emptyList();
     }

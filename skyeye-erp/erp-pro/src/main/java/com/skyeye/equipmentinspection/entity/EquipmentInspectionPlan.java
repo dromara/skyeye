@@ -75,6 +75,10 @@ public class EquipmentInspectionPlan extends BaseGeneralInfo {
     @ApiModelProperty(value = "每月巡检日期（1-31，多个用逗号分隔，如：1,15,30）")
     private String monthDays;
 
+    @TableField(value = "custom_cron")
+    @ApiModelProperty(value = "自定义Cron表达式（当频次为自定义时使用）")
+    private String customCron;
+
     @TableField(value = "enabled")
     @ApiModelProperty(value = "状态", enumClass = EnableEnum.class, required = "required,num")
     private Integer enabled;

@@ -35,6 +35,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -175,6 +177,12 @@ public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImp
         long days = cn.hutool.core.date.DateUtil.betweenDay(start, end, true) + 1;
         Integer frequencyType = plan.getFrequencyType() == null
             ? EquipmentInspectionFrequencyType.DAY.getKey() : plan.getFrequencyType();
+        if (EquipmentInspectionFrequencyType.CUSTOM.getKey().equals(frequencyType)) {
+            ZoneId zone = ZoneId.systemDefault();
+            LocalDate rangeStart = start.toInstant().atZone(zone).toLocalDate();
+            LocalDate rangeEnd = end.toInstant().atZone(zone).toLocalDate();
+            return EquipmentInspectionPlanCronBuilder.countRangeSlots(plan.getCustomCron(), rangeStart, rangeEnd, zone) * perDay;
+        }
         switch (frequencyType) {
             case 2:
                 return (int) ((days + 6) / 7 * perDay);

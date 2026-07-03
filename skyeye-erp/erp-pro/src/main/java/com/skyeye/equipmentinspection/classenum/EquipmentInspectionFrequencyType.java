@@ -26,7 +26,8 @@ public enum EquipmentInspectionFrequencyType implements SkyeyeEnumClass {
     WEEK(2, "周检", true, false),
     MONTH(3, "月检", true, false),
     QUARTER(4, "季检", true, false),
-    YEAR(5, "年检", true, false);
+    YEAR(5, "年检", true, false),
+    CUSTOM(99, "自定义", true, false);
 
     private Integer key;
 
