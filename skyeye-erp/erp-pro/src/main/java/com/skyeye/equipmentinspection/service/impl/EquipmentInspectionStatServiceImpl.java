@@ -122,7 +122,20 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
     }
 
     private StatBundle loadStatBundle(StatScope scope) {
-        List<PlanEquipmentRow> scopedRows = queryScopedPlanEquipmentRows(scope);
+        List<EquipmentInspectionPlanEquipment> planEquipmentList = listPlanEquipmentRelations(scope);
+        if (CollectionUtil.isEmpty(planEquipmentList)) {
+            return StatBundle.empty();
+        }
+        List<String> planIds = planEquipmentList.stream()
+            .map(EquipmentInspectionPlanEquipment::getPlanId)
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
+        Map<String, EquipmentInspectionPlan> planMap = loadEnabledPlanMap(planIds);
+        if (planMap.isEmpty()) {
+            return StatBundle.empty();
+        }
+        List<PlanEquipmentRow> scopedRows = buildScopedPlanEquipmentRows(scope, planEquipmentList, planMap.keySet());
         if (CollectionUtil.isEmpty(scopedRows)) {
             return StatBundle.empty();
         }
@@ -132,11 +145,6 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
         Map<String, String> planIdMap = scopedRows.stream()
             .collect(Collectors.toMap(PlanEquipmentRow::getEquipmentId, PlanEquipmentRow::getPlanId,
                 (a, b) -> a, LinkedHashMap::new));
-        List<String> planIds = planIdMap.values().stream().distinct().collect(Collectors.toList());
-        Map<String, EquipmentInspectionPlan> planMap = equipmentInspectionPlanService.getDataFromDb(planIds).stream()
-            .filter(plan -> StrUtil.isNotBlank(plan.getId()))
-            .filter(plan -> EnableEnum.ENABLE_USING.getKey().equals(plan.getEnabled()))
-            .collect(Collectors.toMap(EquipmentInspectionPlan::getId, plan -> plan, (a, b) -> a));
         Map<String, Integer> inspectedMap = countInspected(scope, equipmentMap.keySet());
         Map<String, int[]> statMap = new LinkedHashMap<>();
         for (PlanEquipmentRow row : scopedRows) {
@@ -155,35 +163,35 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
         return bundle;
     }
 
-    /**
-     * 对齐 patrol：先查关联表，再通过 Service 批量取方案/设备，内存过滤车间与关键字。
-     */
-    private List<PlanEquipmentRow> queryScopedPlanEquipmentRows(StatScope scope) {
+    private List<EquipmentInspectionPlanEquipment> listPlanEquipmentRelations(StatScope scope) {
         QueryWrapper<EquipmentInspectionPlanEquipment> queryWrapper = new QueryWrapper<>();
         if (StrUtil.isNotBlank(scope.getEquipmentId())) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionPlanEquipment::getEquipmentId), scope.getEquipmentId());
         }
-        List<EquipmentInspectionPlanEquipment> planEquipmentList = equipmentInspectionPlanEquipmentService.list(queryWrapper);
-        if (CollectionUtil.isEmpty(planEquipmentList)) {
-            return Collections.emptyList();
-        }
+        return equipmentInspectionPlanEquipmentService.list(queryWrapper);
+    }
 
-        List<String> planIds = planEquipmentList.stream()
-            .map(EquipmentInspectionPlanEquipment::getPlanId)
-            .filter(StrUtil::isNotBlank)
-            .distinct()
-            .collect(Collectors.toList());
-        Set<String> enabledPlanIds = equipmentInspectionPlanService.getDataFromDb(planIds).stream()
+    private Map<String, EquipmentInspectionPlan> loadEnabledPlanMap(List<String> planIds) {
+        if (CollectionUtil.isEmpty(planIds)) {
+            return Collections.emptyMap();
+        }
+        return equipmentInspectionPlanService.getDataFromDb(planIds).stream()
             .filter(plan -> StrUtil.isNotBlank(plan.getId()))
             .filter(plan -> EnableEnum.ENABLE_USING.getKey().equals(plan.getEnabled()))
-            .map(EquipmentInspectionPlan::getId)
-            .collect(Collectors.toSet());
+            .collect(Collectors.toMap(EquipmentInspectionPlan::getId, plan -> plan, (a, b) -> a));
+    }
 
+    private List<PlanEquipmentRow> buildScopedPlanEquipmentRows(StatScope scope,
+                                                                List<EquipmentInspectionPlanEquipment> planEquipmentList,
+                                                                Set<String> enabledPlanIds) {
         List<String> equipmentIds = planEquipmentList.stream()
             .map(EquipmentInspectionPlanEquipment::getEquipmentId)
             .filter(StrUtil::isNotBlank)
             .distinct()
             .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(equipmentIds)) {
+            return Collections.emptyList();
+        }
         Map<String, Equipment> equipmentMap = equipmentService.selectByIds(equipmentIds.toArray(new String[]{})).stream()
             .filter(item -> StrUtil.isNotBlank(item.getId()))
             .collect(Collectors.toMap(Equipment::getId, item -> item, (a, b) -> a));

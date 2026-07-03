@@ -19,7 +19,6 @@ import com.skyeye.equipmentinspection.classenum.EquipmentInspectionFrequencyType
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName: EquipmentInspectionPlan
@@ -44,16 +43,8 @@ public class EquipmentInspectionPlan extends BaseGeneralInfo {
     private EquipmentInspectionTeam teamMation;
 
     @TableField("frequency_type")
-    @ApiModelProperty(value = "巡检频率", enumClass = EquipmentInspectionFrequencyType.class, required = "required,num", defaultValue = "1")
-    private Integer frequencyType;
-
-    @TableField(exist = false)
-    @Property(value = "巡检频率信息")
-    private Map<String, Object> frequencyTypeMation;
-
-    @TableField("inspections_per_day")
-    @ApiModelProperty(value = "每日巡检次数", required = "required,num", defaultValue = "1")
-    private Integer inspectionsPerDay;
+    @ApiModelProperty(value = "巡检频次", enumClass = EquipmentInspectionFrequencyType.class, required = "required,num")
+    private Integer frequency;
 
     @TableField(value = "start_time")
     @ApiModelProperty(value = "方案开始时间，格式yyyy-MM-dd HH:mm:ss", required = "required")
@@ -74,6 +65,10 @@ public class EquipmentInspectionPlan extends BaseGeneralInfo {
     @TableField(value = "month_days")
     @ApiModelProperty(value = "每月巡检日期（1-31，多个用逗号分隔，如：1,15,30）")
     private String monthDays;
+
+    @TableField(value = "custom_cron")
+    @ApiModelProperty(value = "自定义Cron表达式（当频次为自定义时使用）")
+    private String customCron;
 
     @TableField(value = "enabled")
     @ApiModelProperty(value = "状态", enumClass = EnableEnum.class, required = "required,num")

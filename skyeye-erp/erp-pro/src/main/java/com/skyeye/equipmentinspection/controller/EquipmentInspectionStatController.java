@@ -32,7 +32,7 @@ public class EquipmentInspectionStatController {
     @Autowired
     private EquipmentInspectionStatService equipmentInspectionStatService;
 
-    @ApiOperation(id = "queryInspectionRecordStatList", value = "巡检记录明细分页", method = "POST", allUse = "1")
+    @ApiOperation(id = "queryInspectionRecordStatList", value = "巡检记录明细分页", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/EquipmentInspectionStatController/queryInspectionRecordStatList")
     public void queryInspectionRecordStatList(InputObject inputObject, OutputObject outputObject) {

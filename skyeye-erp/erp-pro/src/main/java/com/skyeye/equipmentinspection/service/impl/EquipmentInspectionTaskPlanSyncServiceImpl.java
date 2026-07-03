@@ -14,19 +14,19 @@ import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionFrequencyType;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionTask;
-import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanEquipmentService;
-import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanItemService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionTaskPlanSyncService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.support.CronExpression;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,7 +37,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 设备巡检方案与系统生成巡检任务的同步实现。
+ * 设备巡检方案与系统生成巡检任务的同步实现
  */
 @Slf4j
 @Service
@@ -52,12 +52,6 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
     private EquipmentInspectionPlanService equipmentInspectionPlanService;
 
     @Autowired
-    private EquipmentInspectionPlanEquipmentService equipmentInspectionPlanEquipmentService;
-
-    @Autowired
-    private EquipmentInspectionPlanItemService equipmentInspectionPlanItemService;
-
-    @Autowired
     private EquipmentInspectionTaskService equipmentInspectionTaskService;
 
     @Override
@@ -69,11 +63,11 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
         if (StrUtil.isBlank(plan.getId()) || EnableEnum.DISABLE_USING.getKey().equals(plan.getEnabled())) {
             return;
         }
-        List<String> equipmentIds = equipmentInspectionPlanEquipmentService.selectByParentId(planId);
+        List<String> equipmentIds = plan.getEquipmentId();
         if (CollectionUtil.isEmpty(equipmentIds)) {
             return;
         }
-        if (CollectionUtil.isEmpty(equipmentInspectionPlanItemService.selectByParentId(planId))) {
+        if (CollectionUtil.isEmpty(plan.getItemId())) {
             return;
         }
 
@@ -91,7 +85,6 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
             return;
         }
 
-        int perDay = plan.getInspectionsPerDay() == null || plan.getInspectionsPerDay() < 1 ? 1 : plan.getInspectionsPerDay();
         String nowStr = LocalDateTime.now(zone).format(PLANNED_TIME_FORMAT);
         List<EquipmentInspectionTask> candidates = new ArrayList<>();
         for (LocalDate day = rangeStart; !day.isAfter(rangeEnd); day = day.plusDays(1)) {
@@ -102,14 +95,12 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
                     continue;
                 }
                 for (String equipmentId : equipmentIds) {
-                    for (int seq = 1; seq <= perDay; seq++) {
-                        EquipmentInspectionTask task = new EquipmentInspectionTask();
-                        task.setPlanId(plan.getId());
-                        task.setEquipmentId(equipmentId);
-                        task.setPlannedStartTime(planned);
-                        task.setSeqInDay(seq);
-                        candidates.add(task);
-                    }
+                    EquipmentInspectionTask task = new EquipmentInspectionTask();
+                    task.setPlanId(plan.getId());
+                    task.setEquipmentId(equipmentId);
+                    task.setPlannedStartTime(planned);
+                    task.setSeqInDay(1);
+                    candidates.add(task);
                 }
             }
         }
@@ -134,6 +125,26 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
         } catch (Exception e) {
             log.warn("设备巡检方案[{}]批量生成任务失败 err={}", planId, e.getMessage(), e);
         }
+    }
+
+    @Override
+    public int countRangeSlots(EquipmentInspectionPlan plan, String startTime, String endTime) {
+        if (StrUtil.isBlank(plan.getId())) {
+            return 0;
+        }
+        java.util.Date start = cn.hutool.core.date.DateUtil.parse(startTime);
+        java.util.Date end = cn.hutool.core.date.DateUtil.parse(endTime);
+        ZoneId zone = ZoneId.systemDefault();
+        LocalDate rangeStart = start.toInstant().atZone(zone).toLocalDate();
+        LocalDate rangeEnd = end.toInstant().atZone(zone).toLocalDate();
+        if (rangeStart.isAfter(rangeEnd)) {
+            return 0;
+        }
+        int total = 0;
+        for (LocalDate day = rangeStart; !day.isAfter(rangeEnd); day = day.plusDays(1)) {
+            total += resolveSlotsForDay(plan, day, zone).size();
+        }
+        return total;
     }
 
     private static String taskDedupeKey(EquipmentInspectionTask t) {
@@ -166,39 +177,36 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
     }
 
     private List<LocalDateTime> resolveSlotsForDay(EquipmentInspectionPlan plan, LocalDate day, ZoneId zone) {
-        Integer freq = plan.getFrequencyType();
+        Integer freq = plan.getFrequency();
         if (freq == null) {
             return java.util.Collections.emptyList();
         }
-        if (EquipmentInspectionFrequencyType.DAY.getKey().equals(freq)) {
+        if (EquipmentInspectionFrequencyType.DAILY.getKey().equals(freq)) {
             if (!isDayInPlanWindow(plan, day)) {
                 return java.util.Collections.emptyList();
             }
             return singleSlotFromPatrolTime(day, plan.getPatrolTime());
         }
-        if (EquipmentInspectionFrequencyType.WEEK.getKey().equals(freq)) {
-            if (!isDayInPlanWindow(plan, day) || !matchesWeekDays(plan.getWeekDays(), day)) {
+        if (EquipmentInspectionFrequencyType.WEEKLY.getKey().equals(freq)) {
+            if (!isDayInPlanWindow(plan, day)) {
+                return java.util.Collections.emptyList();
+            }
+            if (!matchesWeekDays(plan.getWeekDays(), day)) {
                 return java.util.Collections.emptyList();
             }
             return singleSlotFromPatrolTime(day, plan.getPatrolTime());
         }
-        if (EquipmentInspectionFrequencyType.MONTH.getKey().equals(freq)) {
-            if (!isDayInPlanWindow(plan, day) || !matchesMonthDays(plan.getMonthDays(), day)) {
+        if (EquipmentInspectionFrequencyType.MONTHLY.getKey().equals(freq)) {
+            if (!isDayInPlanWindow(plan, day)) {
+                return java.util.Collections.emptyList();
+            }
+            if (!matchesMonthDays(plan.getMonthDays(), day)) {
                 return java.util.Collections.emptyList();
             }
             return singleSlotFromPatrolTime(day, plan.getPatrolTime());
         }
-        if (EquipmentInspectionFrequencyType.QUARTER.getKey().equals(freq)) {
-            if (!isDayInPlanWindow(plan, day) || !matchesQuarterDay(plan.getMonthDays(), day)) {
-                return java.util.Collections.emptyList();
-            }
-            return singleSlotFromPatrolTime(day, plan.getPatrolTime());
-        }
-        if (EquipmentInspectionFrequencyType.YEAR.getKey().equals(freq)) {
-            if (!isDayInPlanWindow(plan, day) || !matchesYearDay(plan.getMonthDays(), day)) {
-                return java.util.Collections.emptyList();
-            }
-            return singleSlotFromPatrolTime(day, plan.getPatrolTime());
+        if (EquipmentInspectionFrequencyType.CUSTOM.getKey().equals(freq)) {
+            return slotsFromCron(plan.getCustomCron(), day, zone);
         }
         return java.util.Collections.emptyList();
     }
@@ -248,27 +256,6 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
         return parseIntCsv(monthDays).contains(day.getDayOfMonth());
     }
 
-    private boolean matchesQuarterDay(String monthDays, LocalDate day) {
-        int month = day.getMonthValue();
-        if ((month - 1) % 3 != 0) {
-            return false;
-        }
-        if (StrUtil.isBlank(monthDays)) {
-            return day.getDayOfMonth() == 1;
-        }
-        return parseIntCsv(monthDays).contains(day.getDayOfMonth());
-    }
-
-    private boolean matchesYearDay(String monthDays, LocalDate day) {
-        if (day.getMonthValue() != 1) {
-            return false;
-        }
-        if (StrUtil.isBlank(monthDays)) {
-            return day.getDayOfMonth() == 1;
-        }
-        return parseIntCsv(monthDays).contains(day.getDayOfMonth());
-    }
-
     private static Set<Integer> parseIntCsv(String csv) {
         Set<Integer> set = new HashSet<>();
         for (String p : csv.split(",")) {
@@ -283,5 +270,35 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
             }
         }
         return set;
+    }
+
+    private List<LocalDateTime> slotsFromCron(String cron, LocalDate day, ZoneId zone) {
+        if (StrUtil.isBlank(cron)) {
+            return java.util.Collections.emptyList();
+        }
+        try {
+            CronExpression ce = CronExpression.parse(cron.trim());
+            Set<LocalDateTime> uniq = new HashSet<>();
+            List<LocalDateTime> out = new ArrayList<>();
+            ZonedDateTime probe = day.atStartOfDay(zone).minusNanos(1);
+            for (int i = 0; i < 200; i++) {
+                ZonedDateTime next = ce.next(probe);
+                if (next == null) {
+                    break;
+                }
+                if (!next.toLocalDate().equals(day)) {
+                    break;
+                }
+                LocalDateTime ldt = next.toLocalDateTime();
+                if (uniq.add(ldt)) {
+                    out.add(ldt);
+                }
+                probe = next;
+            }
+            return out;
+        } catch (Exception e) {
+            log.warn("解析自定义 Cron 失败 cron={} err={}", cron, e.getMessage());
+            return java.util.Collections.emptyList();
+        }
     }
 }

@@ -26,39 +26,34 @@ public final class EquipmentInspectionPlanCronBuilder {
     }
 
     public static String buildScheduleConf(EquipmentInspectionPlan plan) {
-        if (plan == null || plan.getFrequencyType() == null) {
+        if (plan == null || plan.getFrequency() == null) {
             return null;
         }
-        Integer freq = plan.getFrequencyType();
+        Integer freq = plan.getFrequency();
         LocalTime t = parsePatrolTime(plan.getPatrolTime());
         int second = 0;
         int minute = t.getMinute();
         int hour = t.getHour();
 
-        if (EquipmentInspectionFrequencyType.DAY.getKey().equals(freq)) {
+        if (EquipmentInspectionFrequencyType.CUSTOM.getKey().equals(freq)) {
+            return StrUtil.trimToNull(plan.getCustomCron());
+        }
+        if (EquipmentInspectionFrequencyType.DAILY.getKey().equals(freq)) {
             return String.format("%d %d %d * * ?", second, minute, hour);
         }
-        if (EquipmentInspectionFrequencyType.WEEK.getKey().equals(freq)) {
+        if (EquipmentInspectionFrequencyType.WEEKLY.getKey().equals(freq)) {
             List<String> quartzDows = parseWeekDaysToQuartz(plan.getWeekDays());
             if (quartzDows.isEmpty()) {
                 return null;
             }
             return String.format("%d %d %d ? * %s", second, minute, hour, String.join(",", quartzDows));
         }
-        if (EquipmentInspectionFrequencyType.MONTH.getKey().equals(freq)) {
+        if (EquipmentInspectionFrequencyType.MONTHLY.getKey().equals(freq)) {
             String dom = parseMonthDaysDom(plan.getMonthDays());
             if (StrUtil.isBlank(dom)) {
                 return null;
             }
             return String.format("%d %d %d %s * ?", second, minute, hour, dom);
-        }
-        if (EquipmentInspectionFrequencyType.QUARTER.getKey().equals(freq)) {
-            String dom = StrUtil.blankToDefault(parseMonthDaysDom(plan.getMonthDays()), "1");
-            return String.format("%d %d %d %s 1,4,7,10 ?", second, minute, hour, dom);
-        }
-        if (EquipmentInspectionFrequencyType.YEAR.getKey().equals(freq)) {
-            String dom = StrUtil.blankToDefault(parseMonthDaysDom(plan.getMonthDays()), "1");
-            return String.format("%d %d %d %s 1 ?", second, minute, hour, dom);
         }
         return null;
     }
