@@ -6,7 +6,6 @@ package com.skyeye.equipmentinspection.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
@@ -21,22 +20,21 @@ import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.equipmentinspection.dao.EquipmentInspectionPlanDao;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionItem;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
-import com.skyeye.equipmentinspection.classenum.EquipmentInspectionFrequencyType;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionItemService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanEquipmentService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanItemService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionTeamService;
+import com.skyeye.equipmentinspection.service.EquipmentInspectionTaskPlanSyncService;
 import com.skyeye.equipmentinspection.support.EquipmentInspectionPlanCronBuilder;
 import com.skyeye.eve.rest.quartz.SysQuartzMation;
 import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -67,6 +65,10 @@ public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImp
 
     @Autowired
     private IQuartzService iQuartzService;
+
+    @Lazy
+    @Autowired
+    private EquipmentInspectionTaskPlanSyncService equipmentInspectionTaskPlanSyncService;
 
     @Override
     protected QueryWrapper<EquipmentInspectionPlan> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -112,7 +114,6 @@ public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImp
         EquipmentInspectionPlan plan = super.selectById(id);
         plan.setEquipmentId(equipmentInspectionPlanEquipmentService.selectByParentId(id));
         plan.setItemId(equipmentInspectionPlanItemService.selectByParentId(id));
-        plan.setFrequencyTypeMation(EquipmentInspectionFrequencyType.getMation(plan.getFrequencyType()));
         equipmentInspectionTeamService.setDataMation(plan, EquipmentInspectionPlan::getTeamId);
         if (CollectionUtil.isNotEmpty(plan.getEquipmentId())) {
             plan.setEquipmentMation(equipmentService.selectByIds(plan.getEquipmentId().toArray(new String[]{})));
@@ -128,8 +129,6 @@ public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImp
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         if (CollectionUtil.isNotEmpty(beans)) {
-            beans.forEach(bean -> bean.put("frequencyTypeMation",
-                EquipmentInspectionFrequencyType.getMation(MapUtil.getInt(bean, "frequencyType"))));
             equipmentInspectionTeamService.setMationForMap(beans, "teamId", "teamMation");
         }
         return beans;
@@ -168,35 +167,7 @@ public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImp
 
     @Override
     public int calcRequiredInspectionCount(EquipmentInspectionPlan plan, String startTime, String endTime) {
-        if (StrUtil.isBlank(plan.getId())) {
-            return 0;
-        }
-        int perDay = plan.getInspectionsPerDay() == null || plan.getInspectionsPerDay() < 1 ? 1 : plan.getInspectionsPerDay();
-        java.util.Date start = cn.hutool.core.date.DateUtil.parse(startTime);
-        java.util.Date end = cn.hutool.core.date.DateUtil.parse(endTime);
-        long days = cn.hutool.core.date.DateUtil.betweenDay(start, end, true) + 1;
-        Integer frequencyType = plan.getFrequencyType() == null
-            ? EquipmentInspectionFrequencyType.DAY.getKey() : plan.getFrequencyType();
-        if (EquipmentInspectionFrequencyType.CUSTOM.getKey().equals(frequencyType)) {
-            ZoneId zone = ZoneId.systemDefault();
-            LocalDate rangeStart = start.toInstant().atZone(zone).toLocalDate();
-            LocalDate rangeEnd = end.toInstant().atZone(zone).toLocalDate();
-            return EquipmentInspectionPlanCronBuilder.countRangeSlots(plan.getCustomCron(), rangeStart, rangeEnd, zone) * perDay;
-        }
-        switch (frequencyType) {
-            case 2:
-                return (int) ((days + 6) / 7 * perDay);
-            case 3:
-                return (int) ((cn.hutool.core.date.DateUtil.betweenMonth(start, end, true) + 1) * perDay);
-            case 4:
-                long months = cn.hutool.core.date.DateUtil.betweenMonth(start, end, true) + 1;
-                return (int) ((months + 2) / 3 * perDay);
-            case 5:
-                return (int) ((cn.hutool.core.date.DateUtil.betweenYear(start, end, true) + 1) * perDay);
-            case 1:
-            default:
-                return (int) (days * perDay);
-        }
+        return equipmentInspectionTaskPlanSyncService.countRangeSlots(plan, startTime, endTime);
     }
 
     @Override
