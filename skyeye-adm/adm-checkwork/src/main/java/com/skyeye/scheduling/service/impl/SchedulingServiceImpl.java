@@ -851,6 +851,11 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
         if (isNextDay != null && WhetherEnum.ENABLE_USING.getKey().equals(isNextDay)) {
             return true;
         }
+        String startHm = normalizeShiftHmForOverlap(start);
+        String endHm = normalizeShiftHmForOverlap(end);
+        if (StrUtil.isNotEmpty(startHm) && startHm.equals(endHm)) {
+            return true;
+        }
         return CheckWorkTimePeriodUtil.isCrossDay(start, end);
     }
 

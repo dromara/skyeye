@@ -14,6 +14,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.exception.CustomException;
 import com.skyeye.rest.erp.farm.service.IFarmStationService;
 import com.skyeye.scheduling.dao.SchedulingShiftsDao;
@@ -23,6 +24,7 @@ import com.skyeye.scheduling.entity.SchedulingShiftsTimeWork;
 import com.skyeye.scheduling.service.SchedulingShiftsService;
 import com.skyeye.scheduling.service.SchedulingShiftsTimeService;
 import com.skyeye.scheduling.service.SchedulingShiftsTimeWorkService;
+import com.skyeye.worktime.util.CheckWorkTimePeriodUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,8 +66,32 @@ public class SchedulingShiftsServiceImpl extends SkyeyeBusinessServiceImpl<Sched
                 if (StrUtil.isEmpty(startTime) || StrUtil.isEmpty(endTime)) {
                     throw new CustomException("班次时间不能为空");
                 }
+                normalizeShiftCrossDayFlag(schedulingShiftsTime);
             }
         }
+    }
+
+    /**
+     * 排班时段跨天标记：起止相同视为满24小时跨天；结束早于开始视为跨天；否则不跨天
+     */
+    private void normalizeShiftCrossDayFlag(SchedulingShiftsTime schedulingShiftsTime) {
+        String startTime = schedulingShiftsTime.getStartTime();
+        String endTime = schedulingShiftsTime.getEndTime();
+        String startHm = extractShiftHm(startTime);
+        String endHm = extractShiftHm(endTime);
+        if (startHm.equals(endHm) || CheckWorkTimePeriodUtil.isCrossDay(startTime, endTime)) {
+            schedulingShiftsTime.setIsNextDay(WhetherEnum.ENABLE_USING.getKey());
+        } else {
+            schedulingShiftsTime.setIsNextDay(WhetherEnum.DISABLE_USING.getKey());
+        }
+    }
+
+    private String extractShiftHm(String time) {
+        if (StrUtil.isEmpty(time)) {
+            return "";
+        }
+        String t = time.trim();
+        return t.length() >= 5 ? t.substring(0, 5) : t;
     }
 
     @Override
