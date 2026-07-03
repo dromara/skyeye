@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 设备巡检方案频次：CRON 注册表达式 + 自定义频次槽位推算（对齐 patrol）。
+ * 设备巡检方案频次：CRON 注册表达式 + 自定义频次槽位推算
  */
 @Slf4j
 public final class EquipmentInspectionPlanCronBuilder {
