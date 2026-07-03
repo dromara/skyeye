@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 设备巡检方案频次（对齐 patrol {@link com.skyeye.patrol.classenum.PatrolPlanFrequency}）
+ * 设备巡检方案频次
  */
 @Getter
 @NoArgsConstructor
