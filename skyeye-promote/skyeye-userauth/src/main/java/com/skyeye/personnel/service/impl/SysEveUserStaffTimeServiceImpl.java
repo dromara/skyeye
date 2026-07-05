@@ -92,7 +92,7 @@ public class SysEveUserStaffTimeServiceImpl extends SkyeyeBusinessServiceImpl<Sy
             boolean repeat = judgeRepeatShift(timeIdList);
             if (repeat) {
                 // 存在冲突的工作时间段
-                throw new CustomException("Conflicting working hours.");
+                throw new CustomException("存在重复的考勤时间段");
             }
             List<SysEveUserStaffTime> staffTimeMation = new ArrayList<>();
             timeIdList.stream().forEach(timeId -> {
