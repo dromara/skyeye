@@ -3,14 +3,17 @@ package com.skyeye.scheduling.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.common.entity.features.OperatorUserInfo;
 import com.skyeye.scheduling.classenum.ScheduleType;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
+@ApiModel("员工排班表")
 @TableName(value = "check_work_scheduling", autoResultMap = true)
 public class Scheduling extends OperatorUserInfo {
 
@@ -45,6 +48,10 @@ public class Scheduling extends OperatorUserInfo {
     @TableField(exist = false)
     @ApiModelProperty(value = "班次信息")
     private SchedulingShifts shiftMation;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "车间信息")
+    private Map<String, Object> farmMation;
 
     @TableField(exist = false)
     @ApiModelProperty(value = "排班下员工信息")

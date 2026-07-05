@@ -47,4 +47,8 @@ public class SchedulingTime extends BaseGeneralInfo {
     @ApiModelProperty(value = "排班时间段下的工位信息")
     private List<SchedulingTimeWork> schedulingTimeWorkMation;
 
+    @TableField(exist = false)
+    @ApiModelProperty(value = "当前员工在该时间段下的工位名称")
+    private List<String> workStationNameList;
+
 }

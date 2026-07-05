@@ -9,8 +9,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.yulichang.toolkit.JoinWrappers;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.google.common.base.Joiner;
 import com.skyeye.annotation.service.SkyeyeService;
+import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonConstants;
@@ -19,6 +22,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.eve.service.IAuthUserService;
@@ -27,6 +31,8 @@ import com.skyeye.leave.entity.Leave;
 import com.skyeye.leave.entity.LeaveTimeSlot;
 import com.skyeye.leave.service.LeaveService;
 import com.skyeye.leave.service.LeaveTimeSlotService;
+import com.skyeye.rest.erp.farm.service.IFarmService;
+import com.skyeye.rest.erp.farm.service.IFarmStationService;
 import com.skyeye.scheduling.dao.SchedulingDao;
 import com.skyeye.scheduling.entity.*;
 import com.skyeye.scheduling.service.*;
@@ -85,6 +91,12 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
 
     @Autowired
     private IAuthUserService iAuthUserService;
+
+    @Autowired
+    private IFarmStationService iFarmStationService;
+
+    @Autowired
+    private IFarmService iFarmService;
 
     @Override
     protected void createPrepose(Scheduling entity) {
@@ -474,82 +486,195 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
+    /**
+     * 分页查询当前登录员工参与的排班记录（我的排班考勤列表）。
+     * <p>
+     * 通过 MPJ 将排班实例与员工排班关系联表后再分页，保证 total 与 rows 均为当前员工数据。
+     * 列表展示字段由 {@link #fillStaffSchedulingListMation} 补全。
+     */
     @Override
+    @IgnoreTenant
     public void querySchedulingByStaffId(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
-        Page page = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
-        // 班次名称
+        // 当前登录用户关联的员工 id
         String staffId = InputObject.getLogParamsStatic().get("staffId").toString();
-        // 1. 查询指定时间范围内的排班记录
-        QueryWrapper<Scheduling> schedulingWrapper = new QueryWrapper<>();
-        List<Scheduling> schedulingList = list(schedulingWrapper);
+        // 班次名称模糊搜索关键字
         String keyword = commonPageInfo.getKeyword();
+        String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
+
+        // 在联表结果集上分页，避免对全表排班分页后再过滤员工
+        Page page = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
+        // s=排班实例，p=排班工位下员工；innerJoin 仅保留该员工参与过的排班
+        MPJLambdaWrapper<Scheduling> wrapper = JoinWrappers.lambda("s", Scheduling.class)
+            .innerJoin(SchedulingTimeWorkPeople.class, "p",
+                SchedulingTimeWorkPeople::getSchedulingId, Scheduling::getId)
+            .eq("p." + MybatisPlusUtil.toColumns(SchedulingTimeWorkPeople::getEmployeeId), staffId)
+            // 同一排班多时间段会产生多行，去重保证分页准确
+            .distinct()
+            .orderByDesc(Scheduling::getCreateTime);
+        // 按班次定义名称模糊搜索
         if (StrUtil.isNotEmpty(keyword)) {
-            List<String> shiftIdList = schedulingList.stream().map(Scheduling::getShiftId).collect(Collectors.toList());
-            List<SchedulingShifts> schedulingShifts = schedulingShiftsService.querySchedulingShiftsByIdName(shiftIdList, keyword);
-            List<String> schedulingShiftIdList = schedulingShifts.stream().map(SchedulingShifts::getId).collect(Collectors.toList());
-            schedulingList = schedulingList.stream()
-                .filter(scheduling -> schedulingShiftIdList.contains(scheduling.getShiftId()))
-                .collect(Collectors.toList());
+            wrapper.innerJoin(SchedulingShifts.class, "sh", SchedulingShifts::getId, Scheduling::getShiftId)
+                .like("sh." + MybatisPlusUtil.toColumns(SchedulingShifts::getName), keyword);
+        }
+        // 多租户：联表涉及的每张表均加 tenant_id 条件
+        if (StrUtil.isNotEmpty(tenantId)) {
+            wrapper.eq("s." + CommonConstants.TENANT_ID_FIELD, tenantId);
+            wrapper.eq("p." + CommonConstants.TENANT_ID_FIELD, tenantId);
+            if (StrUtil.isNotEmpty(keyword)) {
+                wrapper.eq("sh." + CommonConstants.TENANT_ID_FIELD, tenantId);
+            }
         }
 
+        List<Scheduling> schedulingList = skyeyeBaseMapper.selectJoinList(Scheduling.class, wrapper);
         if (CollectionUtil.isEmpty(schedulingList)) {
-            outputObject.setBean(new ArrayList<>());
-            outputObject.settotal(CommonNumConstants.NUM_ZERO);
+            outputObject.setBeans(Collections.emptyList());
+            outputObject.settotal(page.getTotal());
             return;
         }
+        // 补全 shiftMation、schedulingTimeMation 等前端展示字段
+        fillStaffSchedulingListMation(schedulingList, staffId, tenantId);
+        outputObject.setBeans(schedulingList);
+        outputObject.settotal(page.getTotal());
+    }
 
+    /**
+     * 补全排班列表展示所需的关联信息。
+     * <ul>
+     *   <li>shiftMation：排班班次名称（SchedulingShifts）</li>
+     *   <li>farmMation：车间名称</li>
+     *   <li>schedulingTimeMation：当前员工在该排班下参与的工作时间段及工位名称</li>
+     * </ul>
+     *
+     * @param schedulingList 当前页排班实例
+     * @param staffId        员工 id
+     * @param tenantId       租户 id，为空时不加租户条件
+     */
+    private void fillStaffSchedulingListMation(List<Scheduling> schedulingList, String staffId, String tenantId) {
         List<String> schedulingIds = schedulingList.stream().map(Scheduling::getId).collect(Collectors.toList());
-        List<SchedulingTimeWorkPeople> timeWorkPeople = schedulingTimeWorkPeopleService.querySchedulingByschedulingIdsAndStaffId(schedulingIds, staffId);
-        if (CollectionUtil.isEmpty(timeWorkPeople)) {
-            return;
-        }
-        getStaffMation(timeWorkPeople);
-        iAuthUserService.setName(timeWorkPeople, "createId", "createName");
-        iAuthUserService.setName(timeWorkPeople, "lastUpdateId", "lastUpdateName");
-        // 获取所有相关的ID
-        List<String> workIds = timeWorkPeople.stream()
-            .map(SchedulingTimeWorkPeople::getSchedulingTimeWorkId).collect(Collectors.toList());
-        List<String> timeIds = timeWorkPeople.stream()
-            .map(SchedulingTimeWorkPeople::getSchedulingTimeId).collect(Collectors.toList());
-        List<SchedulingTimeWork> workList = schedulingTimeWorkService.querySchedulingTimeByIds(workIds);
-        List<SchedulingTime> timeList = schedulingTimeService.querySchedulingTimeByTimeIds(timeIds);
+        // 批量查班次定义，用于列表「班次」列展示
+        schedulingShiftsService.setDataMation(schedulingList, Scheduling::getShiftId);
 
-        // 构建四层嵌套结构
-        List<Scheduling> resultList = new ArrayList<>();
-        for (Scheduling scheduling : schedulingList) {
-            if (!schedulingIds.contains(scheduling.getId())) {
+        // 批量查车间信息
+        iFarmService.setDataMation(schedulingList, Scheduling::getFarmId);
+
+        // 查当前员工在本页各排班下被分配的时间段 id
+        QueryWrapper<SchedulingTimeWorkPeople> peopleWrapper = new QueryWrapper<>();
+        peopleWrapper.eq(MybatisPlusUtil.toColumns(SchedulingTimeWorkPeople::getEmployeeId), staffId);
+        peopleWrapper.in(MybatisPlusUtil.toColumns(SchedulingTimeWorkPeople::getSchedulingId), schedulingIds);
+        if (StrUtil.isNotEmpty(tenantId)) {
+            peopleWrapper.eq(CommonConstants.TENANT_ID_FIELD, tenantId);
+        }
+        List<SchedulingTimeWorkPeople> peopleList = schedulingTimeWorkPeopleService.list(peopleWrapper);
+        Map<String, List<SchedulingTimeWorkPeople>> peopleBySchedulingId = peopleList.stream()
+            .collect(Collectors.groupingBy(SchedulingTimeWorkPeople::getSchedulingId));
+
+        List<String> timeWorkRowIds = peopleList.stream()
+            .map(SchedulingTimeWorkPeople::getSchedulingTimeWorkId)
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
+        Map<String, SchedulingTimeWork> timeWorkRowMap = schedulingTimeWorkService.querySchedulingTimeByIds(timeWorkRowIds).stream()
+            .collect(Collectors.toMap(SchedulingTimeWork::getId, row -> row, (a, b) -> a));
+
+        List<String> workStationIds = timeWorkRowMap.values().stream()
+            .map(SchedulingTimeWork::getWorkId)
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
+        Map<String, String> workStationNameMap = loadWorkStationNameMap(workStationIds);
+
+        List<String> timeIds = peopleList.stream()
+            .map(SchedulingTimeWorkPeople::getSchedulingTimeId)
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
+        // 按排班实例 id 分组，供「工作时间段」列展示
+        Map<String, List<SchedulingTime>> timeMap = CollectionUtil.isEmpty(timeIds)
+            ? Collections.emptyMap()
+            : schedulingTimeService.querySchedulingTimeByTimeIds(timeIds).stream()
+            .collect(Collectors.groupingBy(SchedulingTime::getSchedulingId));
+
+        schedulingList.forEach(scheduling -> {
+            List<SchedulingTimeWorkPeople> schedulingPeople = peopleBySchedulingId.getOrDefault(scheduling.getId(), Collections.emptyList());
+            List<SchedulingTime> times = timeMap.getOrDefault(scheduling.getId(), Collections.emptyList());
+            for (SchedulingTime time : times) {
+                time.setWorkStationNameList(resolveWorkStationNamesForTime(
+                    time.getId(), schedulingPeople, timeWorkRowMap, workStationNameMap));
+            }
+            // 同一员工可能被分配到多个工位，起止相同的时间段合并工位名称后只展示一次
+            scheduling.setSchedulingTimeMation(dedupeSchedulingTimesByRange(times));
+        });
+    }
+
+    private Map<String, String> loadWorkStationNameMap(List<String> workStationIds) {
+        if (CollectionUtil.isEmpty(workStationIds)) {
+            return Collections.emptyMap();
+        }
+        String workIdsStr = String.join(CommonCharConstants.COMMA_MARK, workStationIds);
+        return iFarmStationService.queryFarmStationByIds(workIdsStr).stream()
+            .filter(map -> ObjectUtil.isNotEmpty(map.get("id")))
+            .collect(Collectors.toMap(
+                map -> map.get("id").toString(),
+                map -> ObjectUtil.defaultIfNull(map.get("name"), StrUtil.EMPTY).toString(),
+                (a, b) -> a));
+    }
+
+    private List<String> resolveWorkStationNamesForTime(String schedulingTimeId,
+                                                        List<SchedulingTimeWorkPeople> schedulingPeople,
+                                                        Map<String, SchedulingTimeWork> timeWorkRowMap,
+                                                        Map<String, String> workStationNameMap) {
+        LinkedHashSet<String> names = new LinkedHashSet<>();
+        for (SchedulingTimeWorkPeople people : schedulingPeople) {
+            if (!schedulingTimeId.equals(people.getSchedulingTimeId())) {
                 continue;
             }
-            // 获取当前排班下的时间段
-            List<SchedulingTime> filteredTimeList = timeList.stream()
-                .filter(time -> time.getSchedulingId().equals(scheduling.getId()))
-                .collect(Collectors.toList());
-            for (SchedulingTime time : filteredTimeList) {
-                // 获取当前时间段下的工位
-                List<SchedulingTimeWork> filteredWorkList = workList.stream()
-                    .filter(work -> work.getSchedulingTimeId().equals(time.getId()))
-                    .collect(Collectors.toList());
-
-                for (SchedulingTimeWork work : filteredWorkList) {
-                    // 获取当前工位下的员工
-                    List<SchedulingTimeWorkPeople> filteredPeopleList = timeWorkPeople.stream()
-                        .filter(people -> people.getSchedulingTimeWorkId().equals(work.getId()))
-                        .collect(Collectors.toList());
-                    work.setSchedulingTimeWorkPeopleMation(filteredPeopleList);
-                }
-                time.setSchedulingTimeWorkMation(filteredWorkList);
+            SchedulingTimeWork timeWork = timeWorkRowMap.get(people.getSchedulingTimeWorkId());
+            if (timeWork == null || StrUtil.isBlank(timeWork.getWorkId())) {
+                continue;
             }
-            scheduling.setSchedulingTimeMation(filteredTimeList);
-            resultList.add(scheduling);
+            String workStationName = workStationNameMap.get(timeWork.getWorkId());
+            if (StrUtil.isNotBlank(workStationName)) {
+                names.add(workStationName);
+            }
         }
-        List<String> shiftIdList = resultList.stream().map(Scheduling::getShiftId).collect(Collectors.toList());
-        Map<String, List<SchedulingShifts>> stringListMap = schedulingShiftsService.querySchedulingShiftsByIds(shiftIdList).stream().collect(Collectors.groupingBy(SchedulingShifts::getId));
-        resultList.forEach(scheduling -> {
-            scheduling.setShiftMation(stringListMap.get(scheduling.getShiftId()).get(CommonNumConstants.NUM_ZERO));
+        return new ArrayList<>(names);
+    }
+
+    /**
+     * 按起止时间与跨天标识去重，并合并同一时间段下多个工位名称。
+     */
+    private List<SchedulingTime> dedupeSchedulingTimesByRange(List<SchedulingTime> times) {
+        if (CollectionUtil.isEmpty(times)) {
+            return times;
+        }
+        Map<String, SchedulingTime> uniqueMap = new LinkedHashMap<>();
+        Map<String, LinkedHashSet<String>> workNamesByKey = new HashMap<>();
+        for (SchedulingTime time : times) {
+            String key = buildSchedulingTimeDedupeKey(time);
+            uniqueMap.putIfAbsent(key, time);
+            if (CollectionUtil.isNotEmpty(time.getWorkStationNameList())) {
+                workNamesByKey.computeIfAbsent(key, item -> new LinkedHashSet<>())
+                    .addAll(time.getWorkStationNameList());
+            }
+        }
+        uniqueMap.forEach((key, time) -> {
+            LinkedHashSet<String> names = workNamesByKey.get(key);
+            if (CollectionUtil.isNotEmpty(names)) {
+                time.setWorkStationNameList(new ArrayList<>(names));
+            }
         });
-        outputObject.setBeans(resultList);
-        outputObject.settotal(page.getTotal());
+        return uniqueMap.values().stream()
+            .sorted(Comparator.comparing(item -> normalizeShiftHmForOverlap(item.getStartTime()),
+                Comparator.nullsLast(String::compareTo)))
+            .collect(Collectors.toList());
+    }
+
+    private String buildSchedulingTimeDedupeKey(SchedulingTime time) {
+        String start = normalizeShiftHmForOverlap(time.getStartTime());
+        String end = normalizeShiftHmForOverlap(time.getEndTime());
+        String isNextDay = String.valueOf(ObjectUtil.defaultIfNull(time.getIsNextDay(), WhetherEnum.DISABLE_USING.getKey()));
+        return start + "|" + end + "|" + isNextDay;
     }
 
     @Override

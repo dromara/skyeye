@@ -74,4 +74,12 @@ public class FarmController {
         farmService.queryEnabledFarmList(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryFarmByIds", value = "根据ids批量获取车间信息", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "farmIds", name = "farmIds", value = "车间id，多个逗号分隔", required = "required")})
+    @RequestMapping("/post/FarmController/queryFarmByIds")
+    public void queryFarmByIds(InputObject inputObject, OutputObject outputObject) {
+        farmService.selectByIds(inputObject, outputObject);
+    }
+
 }
