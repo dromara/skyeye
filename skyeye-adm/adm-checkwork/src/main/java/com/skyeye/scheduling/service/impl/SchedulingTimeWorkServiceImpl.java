@@ -117,6 +117,9 @@ public class SchedulingTimeWorkServiceImpl extends SkyeyeBusinessServiceImpl<Sch
         queryWrapper.eq(MybatisPlusUtil.toColumns(SchedulingTimeWork::getSchedulingId), id);
         queryWrapper.in(MybatisPlusUtil.toColumns(SchedulingTimeWork::getSchedulingTimeId), timeIds);
         List<SchedulingTimeWork> schedulingTimeWorkList = list(queryWrapper);
+        if (CollectionUtil.isEmpty(schedulingTimeWorkList)) {
+            return Collections.emptyList();
+        }
         List<String> timeWorkIds = schedulingTimeWorkList.stream().map(SchedulingTimeWork::getId).collect(Collectors.toList());
         List<SchedulingTimeWorkPeople> timeWorkPeople = schedulingTimeWorkPeopleService.queryTimeWorkByThreeId(id, timeIds, timeWorkIds);
         Map<String, Map<String, List<SchedulingTimeWorkPeople>>> collect = timeWorkPeople.stream().collect(Collectors.groupingBy(SchedulingTimeWorkPeople::getSchedulingTimeId, Collectors.groupingBy(SchedulingTimeWorkPeople::getSchedulingTimeWorkId)));

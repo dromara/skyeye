@@ -209,10 +209,14 @@ public class SchedulingShiftsServiceImpl extends SkyeyeBusinessServiceImpl<Sched
         List<SchedulingShiftsTime> schedulingShiftsTimes = schedulingShiftsTimeService.queryTimeByShiftId(id);
         List<String> shiftsTimeIds = schedulingShiftsTimes.stream().map(SchedulingShiftsTime::getId).collect(Collectors.toList());
         List<SchedulingShiftsTimeWork> schedulingShiftsTimeWorks = schedulingShiftsTimeWorkService.queryShiftsTimeWorkByShiftsTimeIds(shiftsTimeIds);
-        List<String> workIds = schedulingShiftsTimeWorks.stream().map(SchedulingShiftsTimeWork::getWorkId).collect(Collectors.toList());
-        String workIdsStr = String.join(CommonCharConstants.COMMA_MARK, workIds);
+        List<String> workIds = schedulingShiftsTimeWorks.stream()
+            .map(SchedulingShiftsTimeWork::getWorkId)
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
         List<Map<String, Object>> mapList = new ArrayList<>();
-        if (StrUtil.isNotEmpty(workIdsStr)) {
+        if (CollectionUtil.isNotEmpty(workIds)) {
+            String workIdsStr = String.join(CommonCharConstants.COMMA_MARK, workIds);
             mapList = iFarmStationService.queryFarmStationByIds(workIdsStr);
         }
         Map<String, Map<String, Object>> mapMap = mapList.stream()
