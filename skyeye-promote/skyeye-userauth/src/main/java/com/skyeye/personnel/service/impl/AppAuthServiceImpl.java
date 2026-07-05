@@ -177,7 +177,11 @@ public class AppAuthServiceImpl implements AppAuthService {
             if (!StrUtil.equals(tenantId, TenantTypeEnum.PLATFORM.getCode())) {
                 // 开启租户功能，并且不是平台租户，查询当前租户下所有权限点的id
                 List<String> ids = tenantService.queryAllMenuListByTenantId(tenantId, null);
-                authPointList = authPointList.stream().filter(authPoint -> ids.contains(authPoint.get("id").toString())).collect(Collectors.toList());
+                if (ids == null) {
+                    ids = new ArrayList<>();
+                }
+                List<String> finalIds = ids;
+                authPointList = authPointList.stream().filter(authPoint -> finalIds.contains(authPoint.get("id").toString())).collect(Collectors.toList());
             } else {
                 // 平台租户，获取所有权限点(包括PC端和移动端)
             }

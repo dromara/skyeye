@@ -11,6 +11,7 @@ import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.tenant.classenum.TenantOrgType;
 import com.skyeye.tenant.entity.Tenant;
 import com.skyeye.tenant.service.TenantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +93,7 @@ public class TenantController {
 
     @ApiOperation(id = "updateCurrentTenantInfo", value = "更新当前组织信息（组织自管）", method = "POST", allUse = "2")
     @ApiImplicitParams({
-        @ApiImplicitParam(id = "name", name = "name", value = "组织名称"),
+        @ApiImplicitParam(id = "name", name = "name", value = "组织名称", required = "required"),
         @ApiImplicitParam(id = "logo", name = "logo", value = "组织Logo"),
         @ApiImplicitParam(id = "remark", name = "remark", value = "组织简介"),
         @ApiImplicitParam(id = "contactName", name = "contactName", value = "联系人/负责人"),
@@ -106,6 +107,25 @@ public class TenantController {
     @RequestMapping("/post/TenantController/updateCurrentTenantInfo")
     public void updateCurrentTenantInfo(InputObject inputObject, OutputObject outputObject) {
         tenantService.updateCurrentTenantInfo(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "createCurrentTenant", value = "当前用户创建组织", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "name", name = "name", value = "组织名称", required = "required"),
+        @ApiImplicitParam(id = "orgType", name = "orgType", value = "组织类型", enumClass = TenantOrgType.class, required = "required,num"),
+        @ApiImplicitParam(id = "logo", name = "logo", value = "组织Logo"),
+        @ApiImplicitParam(id = "remark", name = "remark", value = "组织简介"),
+        @ApiImplicitParam(id = "contactName", name = "contactName", value = "联系人/负责人"),
+        @ApiImplicitParam(id = "contactPhone", name = "contactPhone", value = "联系电话"),
+        @ApiImplicitParam(id = "contactEmail", name = "contactEmail", value = "联系邮箱"),
+        @ApiImplicitParam(id = "address", name = "address", value = "地址"),
+        @ApiImplicitParam(id = "website", name = "website", value = "官网"),
+        @ApiImplicitParam(id = "industry", name = "industry", value = "所属行业"),
+        @ApiImplicitParam(id = "creditCode", name = "creditCode", value = "统一社会信用代码"),
+        @ApiImplicitParam(id = "legalPerson", name = "legalPerson", value = "法定代表人")})
+    @RequestMapping("/post/TenantController/createCurrentTenant")
+    public void createCurrentTenant(InputObject inputObject, OutputObject outputObject) {
+        tenantService.createCurrentTenant(inputObject, outputObject);
     }
 
 }

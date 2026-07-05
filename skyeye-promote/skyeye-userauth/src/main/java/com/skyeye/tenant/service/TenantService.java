@@ -54,4 +54,9 @@ public interface TenantService extends SkyeyeBusinessService<Tenant> {
      * 租户管理员更新当前租户基本信息（名称、Logo、描述）
      */
     void updateCurrentTenantInfo(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 当前登录用户自助创建组织，并自动成为组织管理员
+     */
+    void createCurrentTenant(InputObject inputObject, OutputObject outputObject);
 }

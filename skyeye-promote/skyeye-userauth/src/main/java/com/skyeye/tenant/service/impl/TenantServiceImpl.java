@@ -16,6 +16,7 @@ import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.enumeration.TenantEnum;
+import com.skyeye.common.enumeration.UserStaffState;
 import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -315,9 +316,9 @@ public class TenantServiceImpl extends SkyeyeBusinessServiceImpl<TenantDao, Tena
         tenant.setName(params.get("name").toString().trim());
         tenant.setLogo(params.get("logo").toString());
         tenant.setRemark(params.get("remark").toString());
-        tenant.setContactName(getOptionalString(params, "contactName"));
-        tenant.setContactPhone(getOptionalString(params, "contactPhone"));
-        tenant.setContactEmail(getOptionalString(params, "contactEmail"));
+        tenant.setContactName(params.get("contactName").toString());
+        tenant.setContactPhone(params.get("contactPhone").toString());
+        tenant.setContactEmail(params.get("contactEmail").toString());
         if (TenantOrgType.PERSONAL.getKey().equals(tenant.getOrgType())) {
             // 如果是个人组织，则清空企业相关字段
             tenant.setCreditCode(null);
@@ -328,18 +329,11 @@ public class TenantServiceImpl extends SkyeyeBusinessServiceImpl<TenantDao, Tena
             return;
         }
         // 如果是企业组织，则更新企业相关字段
-        tenant.setCreditCode(getOptionalString(params, "creditCode"));
-        tenant.setLegalPerson(getOptionalString(params, "legalPerson"));
-        tenant.setAddress(getOptionalString(params, "address"));
-        tenant.setWebsite(getOptionalString(params, "website"));
-        tenant.setIndustry(getOptionalString(params, "industry"));
-    }
-
-    private String getOptionalString(Map<String, Object> params, String key) {
-        if (!params.containsKey(key) || params.get(key) == null) {
-            return null;
-        }
-        return StrUtil.trim(params.get(key).toString());
+        tenant.setCreditCode(params.get("creditCode").toString());
+        tenant.setLegalPerson(params.get("legalPerson").toString());
+        tenant.setAddress(params.get("address").toString());
+        tenant.setWebsite(params.get("website").toString());
+        tenant.setIndustry(params.get("industry").toString());
     }
 
     private void validateCurrentTenantAdmin(String tenantId, InputObject inputObject) {
@@ -351,6 +345,67 @@ public class TenantServiceImpl extends SkyeyeBusinessServiceImpl<TenantDao, Tena
         if (tenantUser == null || !WhetherEnum.ENABLE_USING.getKey().equals(tenantUser.getIsAdmin())) {
             throw new CustomException("仅组织管理员可操作.");
         }
+    }
+
+    @Override
+    @IgnoreTenant
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void createCurrentTenant(InputObject inputObject, OutputObject outputObject) {
+        if (!tenantEnable) {
+            throw new CustomException("租户功能未开启");
+        }
+        Map<String, Object> params = inputObject.getParams();
+        String name = params.get("name").toString().trim();
+        Integer orgType = Integer.parseInt(params.get("orgType").toString());
+        if (!TenantOrgType.PERSONAL.getKey().equals(orgType) && !TenantOrgType.ENTERPRISE.getKey().equals(orgType)) {
+            throw new CustomException("组织类型无效");
+        }
+
+        Tenant tenant = new Tenant();
+        tenant.setName(name);
+        tenant.setOrgType(orgType);
+        tenant.setLogo(params.get("logo").toString());
+        tenant.setRemark(params.get("remark").toString());
+        tenant.setContactName(params.get("contactName").toString());
+        tenant.setContactPhone(params.get("contactPhone").toString());
+        tenant.setContactEmail(params.get("contactEmail").toString());
+        if (TenantOrgType.ENTERPRISE.getKey().equals(orgType)) {
+            tenant.setCreditCode(params.get("creditCode").toString());
+            tenant.setLegalPerson(params.get("legalPerson").toString());
+            tenant.setAddress(params.get("address").toString());
+            tenant.setWebsite(params.get("website").toString());
+            tenant.setIndustry(params.get("industry").toString());
+        }
+
+        String userId = inputObject.getLogParams().get("id").toString();
+        String staffId = inputObject.getLogParams().get("staffId").toString();
+        if (StrUtil.isBlank(staffId)) {
+            throw new CustomException("当前用户未绑定员工信息，无法创建组织");
+        }
+
+        String tenantId = createEntity(tenant, userId);
+        try {
+            TenantContext.setTenantId(tenantId);
+            TenantUser tenantUser = new TenantUser();
+            tenantUser.setStaffId(staffId);
+            tenantUser.setIsAdmin(WhetherEnum.ENABLE_USING.getKey());
+            tenantUser.setState(UserStaffState.ON_THE_JOB.getKey());
+            String currentTime = DateUtil.getTimeAndToString();
+            tenantUser.setWorkTime(currentTime);
+            tenantUser.setEntryTime(currentTime);
+            tenantUser.setTrialTime(currentTime);
+            tenantUserService.createEntity(tenantUser, userId);
+        } finally {
+            TenantContext.clear();
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", tenantId);
+        result.put("name", tenant.getName());
+        result.put("logo", tenant.getLogo());
+        result.put("orgType", tenant.getOrgType());
+        result.put("isAdmin", CommonNumConstants.NUM_ONE);
+        outputObject.setBean(result);
     }
 
     @Override
