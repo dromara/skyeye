@@ -40,11 +40,12 @@ import com.skyeye.organization.service.ICompanyService;
 import com.skyeye.organization.service.IDepmentService;
 import com.skyeye.overtime.dao.OvertimeDao;
 import com.skyeye.overtime.service.OvertimeService;
-import com.skyeye.scheduling.entity.SchedulingTime;
+import com.skyeye.scheduling.entity.SchedulingShifts;
+import com.skyeye.scheduling.entity.SchedulingShiftsTime;
 import com.skyeye.scheduling.service.SchedulingService;
-import com.skyeye.scheduling.service.SchedulingTimeService;
+import com.skyeye.scheduling.service.SchedulingShiftsService;
+import com.skyeye.scheduling.service.SchedulingShiftsTimeService;
 import com.skyeye.trip.service.BusinessTripService;
-import com.skyeye.worktime.classenum.CheckWorkTimeWeekType;
 import com.skyeye.worktime.entity.CheckWorkTime;
 import com.skyeye.worktime.entity.CheckWorkTimePoint;
 import com.skyeye.worktime.entity.CheckWorkTimeWeek;
@@ -63,7 +64,15 @@ import java.util.stream.Collectors;
 /**
  * @ClassName: CheckWorkServiceImpl
  * @Description: 考勤打卡管理服务接口层
- * 班次优先级：排版班次 > 节假日 > 固定班次
+ * 班次优先级：排班班次 > 节假日 > 固定班次
+ * <p>
+ * 业务约定（check_work.time_id）：
+ * <ul>
+ *   <li>固定班次：存 {@link com.skyeye.worktime.entity.CheckWorkTime} 主键</li>
+ *   <li>排班班次：存 {@link com.skyeye.scheduling.entity.SchedulingShifts} 主键（排班班次定义 id，非排班实例时间段 id）</li>
+ *   <li>加班打卡：存 "-"，无关联班次</li>
+ * </ul>
+ * 前端打卡时需同时传 shiftType（fixed / schedule），与 timeId 语义配套使用。
  * @author: skyeye云系列--卫志强
  * @date: 2021/4/24 11:11
  * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
@@ -109,7 +118,10 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
     private SchedulingService schedulingService;
 
     @Autowired
-    private SchedulingTimeService schedulingTimeService;
+    private SchedulingShiftsService schedulingShiftsService;
+
+    @Autowired
+    private SchedulingShiftsTimeService schedulingShiftsTimeService;
 
     /**
      * 上班打卡
@@ -178,12 +190,15 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
     }
 
     /**
-     * 获取指定员工指定班次的考勤信息
+     * 获取指定员工指定班次的上下班时间等业务信息，供打卡、按钮状态判断使用。
+     * <p>
+     * timeId 含义见类注释：固定班次为 CheckWorkTime.id，排班班次为 SchedulingShifts.id。
+     * 排班班次含多个时间段时，取最早开始时间与最晚结束时间作为整班打卡窗口。
      *
-     * @param timeId    班次id
-     * @param staffId   员工id
+     * @param timeId    班次 id（固定：CheckWorkTime.id；排班：SchedulingShifts.id）
+     * @param staffId   员工 id
      * @param shiftType 班次类型 {@link com.skyeye.common.enumeration.CheckWorkShiftType}
-     * @return 该班次的上下班时间，时间格式为HH:mm:ss
+     * @return 该班次的上下班时间等信息，时间格式为 HH:mm:ss
      */
     private Map<String, Object> getWorkTimeByUserMation(String timeId, String staffId, String shiftType) {
         String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
@@ -207,21 +222,29 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
             bean.put("checkWorkTimePointList", checkWorkTime.getCheckWorkTimePointList());
             return bean;
         } else {
-            SchedulingTime schedulingTime = schedulingTimeService.selectById(timeId);
-            if (ObjectUtil.isEmpty(schedulingTime)) {
-                // 排班时间不存在
-                throw new CustomException("The scheduling time does not exist.");
+            // 排班班次：timeId 为 SchedulingShifts.id，从班次模板时间段聚合打卡窗口
+            SchedulingShifts schedulingShifts = schedulingShiftsService.selectById(timeId);
+            if (ObjectUtil.isEmpty(schedulingShifts)) {
+                throw new CustomException("The scheduling shift does not exist.");
             }
+            List<SchedulingShiftsTime> shiftTimes = schedulingShifts.getSchedulingShiftsTimeMation();
+            if (CollectionUtil.isEmpty(shiftTimes)) {
+                shiftTimes = schedulingShiftsTimeService.queryTimeByShiftId(timeId);
+            }
+            if (CollectionUtil.isEmpty(shiftTimes)) {
+                throw new CustomException("The scheduling shift time does not exist.");
+            }
+            Map<String, Object> shiftRange = resolveShiftTimeRange(shiftTimes);
             Map<String, Object> bean = new HashMap<>();
-            bean.put("clockIn", schedulingTime.getStartTime());
-            bean.put("clockOut", schedulingTime.getEndTime());
-            bean.put("isNextDay", schedulingTime.getIsNextDay());
-            boolean crossDay = WhetherEnum.ENABLE_USING.getKey().equals(schedulingTime.getIsNextDay())
-                || CheckWorkTimePeriodUtil.isCrossDay(
-                    normalizeShiftHm(schedulingTime.getStartTime()),
-                    normalizeShiftHm(schedulingTime.getEndTime()));
-            bean.put("crossDay", crossDay);
-            // 是否是排班班次
+            String startTime = shiftRange.get("startTime").toString();
+            String endTime = shiftRange.get("endTime").toString();
+            bean.put("clockIn", startTime);
+            bean.put("clockOut", endTime);
+            bean.put("isNextDay", shiftRange.get("isNextDay"));
+            bean.put("crossDay", resolveShiftSegmentCrossDay(
+                normalizeShiftHm(startTime),
+                normalizeShiftHm(endTime),
+                (Integer) shiftRange.get("isNextDay")));
             bean.put("isSchedulingWorkDay", true);
             return bean;
         }
@@ -413,15 +436,36 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
             pageInfo.setTenantId(TenantContext.getTenantId());
         }
         List<Map<String, Object>> beans = skyeyeBaseMapper.queryCheckWorkList(pageInfo);
+        // 1. 优先按固定班次 id 填充 timeMation（CheckWorkTime）
         checkWorkTimeService.setMationForMap(beans, "timeId", "timeMation");
+        // 2. 未匹配到的 timeId 按排班班次 id（SchedulingShifts）补全
+        fillSchedulingTimeMationForMap(beans);
+        // 3. 在班次名称前拼接 [固定]/[排班] 类型标识，供列表展示
+        decorateTimeMationShiftTypeName(beans);
         return beans;
     }
 
+    /**
+     * 打卡详情：补全班次信息并在名称前拼接类型标识。
+     * 固定班次由 setDataMation 直接关联；排班记录在 timeId 为 SchedulingShifts.id 时二次补全。
+     */
     @Override
     public CheckWork selectById(String id) {
         CheckWork checkWork = super.selectById(id);
         checkWorkTimeService.setDataMation(checkWork, CheckWork::getTimeId);
+        boolean isScheduleShift = false;
+        // 固定班次未命中时，尝试按排班班次 id 解析
+        if (ObjectUtil.isEmpty(checkWork.getTimeMation()) && StrUtil.isNotBlank(checkWork.getTimeId())
+            && !"-".equals(checkWork.getTimeId())) {
+            SchedulingShifts schedulingShifts = schedulingShiftsService.selectById(checkWork.getTimeId());
+            if (ObjectUtil.isNotEmpty(schedulingShifts)) {
+                checkWork.setTimeMation(toCheckWorkTimeFromSchedulingShifts(schedulingShifts));
+                isScheduleShift = true;
+            }
+        }
         if (ObjectUtil.isNotEmpty(checkWork.getTimeMation())) {
+            String shiftTypeKey = isScheduleShift ? CheckWorkShiftType.SCHEDULE.getKey() : CheckWorkShiftType.FIXED.getKey();
+            checkWork.getTimeMation().setName(buildShiftDisplayName(shiftTypeKey, checkWork.getTimeMation().getName()));
             checkWork.setName(checkWork.getCheckDate() + "；班次[" + checkWork.getTimeMation().getName() + "]；" + "考勤[" + ClockState.getClockState(checkWork.getState()) + "]");
         } else {
             checkWork.setName(checkWork.getCheckDate() + "；考勤[" + ClockState.getClockState(checkWork.getState()) + "]");
@@ -442,6 +486,9 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         List<Map<String, Object>> beans = checkWorkDao.queryCheckWorkIdByAppealType(userId, FlowableStateEnum.PASS.getKey(),
             Arrays.asList(ClockState.START.getKey(), ClockState.NORMAL.getKey()), tenantId);
         checkWorkTimeService.setMationForMap(beans, "timeId", "timeMation");
+        fillSchedulingTimeMationForMap(beans);
+        // 申诉列表展示名称含班次，需先补全并排班类型前缀
+        decorateTimeMationShiftTypeName(beans);
         for (Map<String, Object> bean : beans) {
             Integer state = Integer.parseInt(bean.get("state").toString());
             Map<String, Object> timeMation = (Map<String, Object>) bean.get("timeMation");
@@ -511,11 +558,11 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
     /**
      * 判断显示打上班卡或者下班卡
      *
-     * @param today      指定日期，格式为yyyy-MM-dd(一般为今天的日期)
-     * @param userId     用户id
-     * @param timeId     班次id
-     * @param workTime   考勤班次信息
-     * @param nowTimeHMS 指定日期，格式为HH:mm:ss(一般为当前时间)
+     * @param calendarDate 指定日期，格式为yyyy-MM-dd(一般为今天的日期)
+     * @param userId       用户id
+     * @param timeId       班次id
+     * @param workTime     考勤班次信息
+     * @param nowTimeHMS   指定日期，格式为HH:mm:ss(一般为当前时间)
      * @return
      */
     private Map<String, Object> getChectBtn(String calendarDate, String userId, String timeId, Map<String, Object> workTime, String nowTimeHMS) {
@@ -602,6 +649,9 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         return CheckWorkTimeWeekUtil.isWorkDay(today, weekList);
     }
 
+    /**
+     * 将 HH:mm:ss 规范为 HH:mm，供跨天判断与时间段排序使用
+     */
     private String normalizeShiftHm(String time) {
         if (StrUtil.isBlank(time)) {
             return time;
@@ -614,6 +664,232 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
             return value;
         }
         return value;
+    }
+
+    /**
+     * 固定班次未匹配到的 timeId，按排班班次 {@link SchedulingShifts} 补全 timeMation。
+     * <p>
+     * 列表查询先走 {@link CheckWorkTimeService#setMationForMap}，能命中的为固定班次；
+     * 排班打卡写入的 timeId 是 SchedulingShifts.id，不会命中固定班次表，需在此二次填充。
+     * 起止时间取自班次模板时间段（SchedulingShiftsTime），多段时取最早开始、最晚结束。
+     *
+     * @param beans 打卡列表数据，需含 timeId、timeMation 字段
+     */
+    private void fillSchedulingTimeMationForMap(List<Map<String, Object>> beans) {
+        if (CollectionUtil.isEmpty(beans)) {
+            return;
+        }
+        // 收集固定班次未匹配、且非加班（timeId != "-"）的 timeId
+        List<String> missingTimeIds = beans.stream()
+            .filter(bean -> bean.get("timeId") != null && StrUtil.isNotBlank(bean.get("timeId").toString()))
+            .filter(bean -> !"-".equals(bean.get("timeId").toString()))
+            .filter(bean -> isTimeMationEmpty(bean.get("timeMation")))
+            .map(bean -> bean.get("timeId").toString())
+            .distinct()
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(missingTimeIds)) {
+            return;
+        }
+        List<SchedulingShifts> schedulingShiftsList = schedulingShiftsService.querySchedulingShiftsByIds(missingTimeIds);
+        if (CollectionUtil.isEmpty(schedulingShiftsList)) {
+            return;
+        }
+        Map<String, List<SchedulingShiftsTime>> shiftTimeMap = schedulingShiftsTimeService.queryTimeByIdListMap(missingTimeIds);
+        Map<String, Map<String, Object>> schedulingShiftMap = schedulingShiftsList.stream()
+            .collect(Collectors.toMap(
+                SchedulingShifts::getId,
+                shift -> buildSchedulingShiftsMationMap(shift, shiftTimeMap.get(shift.getId())),
+                (a, b) -> a));
+        for (Map<String, Object> bean : beans) {
+            if (bean.get("timeId") == null || !isTimeMationEmpty(bean.get("timeMation"))) {
+                continue;
+            }
+            String timeId = bean.get("timeId").toString();
+            Map<String, Object> schedulingMation = schedulingShiftMap.get(timeId);
+            if (CollectionUtil.isNotEmpty(schedulingMation)) {
+                bean.put("timeMation", schedulingMation);
+            }
+        }
+    }
+
+    /**
+     * 批量在 timeMation.name 前拼接班次类型标识（checkwork003 / checkwork004 列表展示用）。
+     * 展示格式与移动端打卡页下拉一致：{@code [固定] 早班}、{@code [排班] 夜班}。
+     */
+    private void decorateTimeMationShiftTypeName(List<Map<String, Object>> beans) {
+        if (CollectionUtil.isEmpty(beans)) {
+            return;
+        }
+        for (Map<String, Object> bean : beans) {
+            decorateTimeMationShiftTypeName(bean.get("timeMation"));
+        }
+    }
+
+    /**
+     * 单条 timeMation 补充 shiftType、shiftTypeName，并格式化展示名称。
+     * 排班记录在 buildSchedulingShiftsMationMap 中已写入 shiftType=schedule，其余默认为 fixed。
+     */
+    @SuppressWarnings("unchecked")
+    private void decorateTimeMationShiftTypeName(Object timeMationObj) {
+        if (isTimeMationEmpty(timeMationObj) || !(timeMationObj instanceof Map)) {
+            return;
+        }
+        Map<String, Object> timeMation = (Map<String, Object>) timeMationObj;
+        String shiftType = timeMation.get("shiftType") != null
+            ? timeMation.get("shiftType").toString()
+            : CheckWorkShiftType.FIXED.getKey();
+        timeMation.put("shiftType", shiftType);
+        timeMation.put("shiftTypeName", resolveShiftTypeLabel(shiftType));
+        String name = timeMation.get("name") != null ? timeMation.get("name").toString() : StrUtil.EMPTY;
+        timeMation.put("name", buildShiftDisplayName(shiftType, name));
+    }
+
+    /**
+     * 班次类型中文名：固定班次 / 排班班次
+     */
+    private String resolveShiftTypeLabel(String shiftTypeKey) {
+        if (CheckWorkShiftType.SCHEDULE.getKey().equals(shiftTypeKey)) {
+            return CheckWorkShiftType.SCHEDULE.getValue();
+        }
+        return CheckWorkShiftType.FIXED.getValue();
+    }
+
+    /**
+     * 拼接带类型前缀的班次展示名，已含前缀则不再重复拼接。
+     *
+     * @param shiftTypeKey fixed / schedule
+     * @param name         原始班次名称
+     */
+    private String buildShiftDisplayName(String shiftTypeKey, String name) {
+        if (StrUtil.isBlank(name)) {
+            return name;
+        }
+        String prefix = CheckWorkShiftType.SCHEDULE.getKey().equals(shiftTypeKey) ? "[排班]" : "[固定]";
+        if (name.startsWith(prefix)) {
+            return name;
+        }
+        return prefix + " " + name;
+    }
+
+    /**
+     * 判断 timeMation 是否为空（null 或空 Map）
+     */
+    private boolean isTimeMationEmpty(Object timeMation) {
+        if (ObjectUtil.isEmpty(timeMation)) {
+            return true;
+        }
+        if (timeMation instanceof Map) {
+            return ((Map<?, ?>) timeMation).isEmpty();
+        }
+        return false;
+    }
+
+    /**
+     * 构建排班班次的 timeMation 结构，供列表/申诉选择等接口返回。
+     * id 与 check_work.time_id 一致，均为 SchedulingShifts.id。
+     */
+    private Map<String, Object> buildSchedulingShiftsMationMap(SchedulingShifts schedulingShifts, List<SchedulingShiftsTime> shiftTimes) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", schedulingShifts.getId());
+        map.put("name", schedulingShifts.getName());
+        map.put("shiftType", CheckWorkShiftType.SCHEDULE.getKey());
+        SchedulingShiftsTime primaryShiftTime = resolveShiftTimeRangeSegment(shiftTimes);
+        if (primaryShiftTime != null) {
+            String startTime = normalizeShiftHm(primaryShiftTime.getStartTime());
+            String endTime = normalizeShiftHm(primaryShiftTime.getEndTime());
+            map.put("startTime", startTime);
+            map.put("endTime", endTime);
+            Integer isNextDay = resolveAggregatedIsNextDay(
+                CollectionUtil.isEmpty(shiftTimes) ? Collections.emptyList() : shiftTimes,
+                startTime,
+                endTime);
+            map.put("isNextDay", isNextDay);
+            map.put("crossDay", resolveShiftSegmentCrossDay(startTime, endTime, isNextDay));
+        }
+        return map;
+    }
+
+    /**
+     * 聚合排班班次多个时间段，得到整班打卡窗口（最早开始 ~ 最晚结束）。
+     * 用于打卡权限判断、跨天归属日计算等。
+     */
+    private Map<String, Object> resolveShiftTimeRange(List<SchedulingShiftsTime> shiftTimes) {
+        List<SchedulingShiftsTime> sortedTimes = sortShiftTimeSegments(shiftTimes);
+        SchedulingShiftsTime first = sortedTimes.get(0);
+        SchedulingShiftsTime last = sortedTimes.get(sortedTimes.size() - 1);
+        Map<String, Object> result = new HashMap<>();
+        result.put("startTime", first.getStartTime());
+        result.put("endTime", last.getEndTime());
+        result.put("isNextDay", resolveAggregatedIsNextDay(sortedTimes, normalizeShiftHm(first.getStartTime()), normalizeShiftHm(last.getEndTime())));
+        return result;
+    }
+
+    /**
+     * 将多段排班时间聚合为一条起止记录，供 timeMation 展示与详情转换使用
+     */
+    private SchedulingShiftsTime resolveShiftTimeRangeSegment(List<SchedulingShiftsTime> shiftTimes) {
+        if (CollectionUtil.isEmpty(shiftTimes)) {
+            return null;
+        }
+        List<SchedulingShiftsTime> sortedTimes = sortShiftTimeSegments(shiftTimes);
+        SchedulingShiftsTime first = sortedTimes.get(0);
+        SchedulingShiftsTime last = sortedTimes.get(sortedTimes.size() - 1);
+        SchedulingShiftsTime range = new SchedulingShiftsTime();
+        range.setStartTime(first.getStartTime());
+        range.setEndTime(last.getEndTime());
+        range.setIsNextDay(resolveAggregatedIsNextDay(sortedTimes, normalizeShiftHm(first.getStartTime()), normalizeShiftHm(last.getEndTime())));
+        return range;
+    }
+
+    /**
+     * 按开始时间升序排列班次时间段
+     */
+    private List<SchedulingShiftsTime> sortShiftTimeSegments(List<SchedulingShiftsTime> shiftTimes) {
+        return shiftTimes.stream()
+            .sorted(Comparator.comparing(time -> normalizeShiftHm(time.getStartTime()), Comparator.nullsLast(String::compareTo)))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * 判断排班班次整体是否跨天：任一时间段标记跨天，或首尾时间构成跨天/满24小时班次。
+     */
+    private Integer resolveAggregatedIsNextDay(List<SchedulingShiftsTime> shiftTimes, String startTime, String endTime) {
+        boolean crossDay = shiftTimes.stream()
+            .anyMatch(time -> WhetherEnum.ENABLE_USING.getKey().equals(time.getIsNextDay()));
+        if (!crossDay) {
+            crossDay = resolveShiftSegmentCrossDay(startTime, endTime, WhetherEnum.DISABLE_USING.getKey());
+        }
+        return crossDay ? WhetherEnum.ENABLE_USING.getKey() : WhetherEnum.DISABLE_USING.getKey();
+    }
+
+    /**
+     * 单段或聚合后的起止时间是否视为跨天（含起止相同视为满24小时跨天）
+     */
+    private boolean resolveShiftSegmentCrossDay(String startTime, String endTime, Integer isNextDay) {
+        return WhetherEnum.ENABLE_USING.getKey().equals(isNextDay)
+            || CheckWorkTimePeriodUtil.isCrossDay(startTime, endTime)
+            || StrUtil.equals(startTime, endTime);
+    }
+
+    /**
+     * 将排班班次（SchedulingShifts）转为 CheckWorkTime 结构，供详情/申诉等复用固定班次展示模型。
+     * id 保持为 SchedulingShifts.id，与打卡记录 timeId 一致。
+     */
+    private CheckWorkTime toCheckWorkTimeFromSchedulingShifts(SchedulingShifts schedulingShifts) {
+        List<SchedulingShiftsTime> shiftTimes = schedulingShifts.getSchedulingShiftsTimeMation();
+        if (CollectionUtil.isEmpty(shiftTimes)) {
+            shiftTimes = schedulingShiftsTimeService.queryTimeByShiftId(schedulingShifts.getId());
+        }
+        SchedulingShiftsTime rangeSegment = resolveShiftTimeRangeSegment(shiftTimes);
+        CheckWorkTime time = new CheckWorkTime();
+        time.setId(schedulingShifts.getId());
+        time.setName(schedulingShifts.getName());
+        if (rangeSegment != null) {
+            time.setStartTime(normalizeShiftHm(rangeSegment.getStartTime()));
+            time.setEndTime(normalizeShiftHm(rangeSegment.getEndTime()));
+            time.setIsNextDay(rangeSegment.getIsNextDay());
+        }
+        return time;
     }
 
     /**

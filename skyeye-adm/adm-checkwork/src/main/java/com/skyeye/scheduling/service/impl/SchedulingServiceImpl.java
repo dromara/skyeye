@@ -16,14 +16,13 @@ import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.eve.service.IAuthUserService;
-import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.exception.CustomException;
-import com.skyeye.worktime.util.CheckWorkTimePeriodUtil;
 import com.skyeye.leave.entity.Leave;
 import com.skyeye.leave.entity.LeaveTimeSlot;
 import com.skyeye.leave.service.LeaveService;
@@ -35,6 +34,7 @@ import com.skyeye.trip.entity.BusinessTrip;
 import com.skyeye.trip.entity.BusinessTripTimeSlot;
 import com.skyeye.trip.service.BusinessTripService;
 import com.skyeye.trip.service.BusinessTripTimeSlotService;
+import com.skyeye.worktime.util.CheckWorkTimePeriodUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -604,33 +604,167 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
         return sortedDates;
     }
 
+    /**
+     * 查询员工在指定日期或指定月份内可打卡的排班班次列表。
+     * <p>
+     * 排班实例 {@link Scheduling} 有 startTime/endTime（年月日）范围限制，必须按时间过滤后再查员工排班。
+     * <ul>
+     *   <li>day（yyyy-MM-dd）：查该日有效的排班，考勤打卡默认传当天</li>
+     *   <li>monthMation（yyyy-MM）：查与该月有交集的排班，考勤月历切换月份时使用</li>
+     *   <li>均未传：默认按当天查询，兼容旧调用</li>
+     * </ul>
+     * 返回项 id 为 {@link SchedulingShifts} 主键，与 check_work.time_id 一致。
+     */
     @Override
     public void querySchedulingByStaffIdAndOneDay(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> map = inputObject.getParams();
         String staffId = map.get("staffId").toString();
+        String day = map.containsKey("day") && map.get("day") != null ? map.get("day").toString().trim() : StrUtil.EMPTY;
+        String monthMation = map.containsKey("monthMation") && map.get("monthMation") != null
+            ? map.get("monthMation").toString().trim() : StrUtil.EMPTY;
+        List<Map<String, Object>> result = queryStaffSchedulingShiftList(staffId, day, monthMation);
+        outputObject.setBeans(result);
+        outputObject.settotal(result.size());
+    }
+
+    /**
+     * 按员工 + 日期/月份查询排班班次（SchedulingShifts）列表。
+     *
+     * @param staffId     员工 id
+     * @param day         指定日 yyyy-MM-dd，优先于 monthMation
+     * @param monthMation 指定月 yyyy-MM，与排班实例时间范围求交集
+     */
+    private List<Map<String, Object>> queryStaffSchedulingShiftList(String staffId, String day, String monthMation) {
         QueryWrapper<Scheduling> schedulingWrapper = new QueryWrapper<>();
+        if (StrUtil.isNotBlank(day)) {
+            // 排班开始 <= 指定日 <= 排班结束
+            schedulingWrapper.le(MybatisPlusUtil.toColumns(Scheduling::getStartTime), day)
+                .ge(MybatisPlusUtil.toColumns(Scheduling::getEndTime), day);
+        } else if (StrUtil.isNotBlank(monthMation)) {
+            String monthStart = monthMation + "-01";
+            String monthEnd = resolveMonthLastDay(monthMation);
+            schedulingWrapper.le(MybatisPlusUtil.toColumns(Scheduling::getStartTime), monthEnd)
+                .ge(MybatisPlusUtil.toColumns(Scheduling::getEndTime), monthStart);
+        } else {
+            String today = DateUtil.getYmdTimeAndToString();
+            schedulingWrapper.le(MybatisPlusUtil.toColumns(Scheduling::getStartTime), today)
+                .ge(MybatisPlusUtil.toColumns(Scheduling::getEndTime), today);
+        }
         List<Scheduling> schedulingList = list(schedulingWrapper);
+        if (CollectionUtil.isEmpty(schedulingList)) {
+            return Collections.emptyList();
+        }
         List<String> schedulingIds = schedulingList.stream().map(Scheduling::getId).collect(Collectors.toList());
         List<SchedulingTimeWorkPeople> timeWorkPeople = schedulingTimeWorkPeopleService.querySchedulingByschedulingIdsAndStaffId(schedulingIds, staffId);
         if (CollectionUtil.isEmpty(timeWorkPeople)) {
-            return;
+            return Collections.emptyList();
         }
         List<String> schedulingTimeList = timeWorkPeople.stream().map(SchedulingTimeWorkPeople::getSchedulingTimeId).collect(Collectors.toList());
         List<SchedulingTime> schedulingTimes = schedulingTimeService.querySchedulingTimeByIds(schedulingTimeList);
         Map<String, List<SchedulingTime>> timeMap = schedulingTimes.stream()
             .collect(Collectors.groupingBy(SchedulingTime::getSchedulingId));
-        Set<SchedulingTime> timeSegments = new HashSet<>();
+        // 按 SchedulingShifts.id 去重，并收集各班次对应的时间段
+        LinkedHashSet<String> shiftIds = new LinkedHashSet<>();
+        Map<String, List<SchedulingTime>> shiftDayTimes = new HashMap<>();
         for (Scheduling scheduling : schedulingList) {
+            if (StrUtil.isBlank(scheduling.getShiftId())) {
+                continue;
+            }
             List<SchedulingTime> times = timeMap.getOrDefault(scheduling.getId(), Collections.emptyList());
             for (SchedulingTime time : times) {
                 if (timeWorkPeople.stream()
                     .anyMatch(p -> p.getSchedulingTimeId().equals(time.getId()))) {
-                    timeSegments.add(time);
+                    shiftIds.add(scheduling.getShiftId());
+                    shiftDayTimes.computeIfAbsent(scheduling.getShiftId(), key -> new ArrayList<>()).add(time);
                 }
             }
         }
-        outputObject.setBeans(new ArrayList<>(timeSegments));
-        outputObject.settotal(timeSegments.size());
+        if (CollectionUtil.isEmpty(shiftIds)) {
+            return Collections.emptyList();
+        }
+        List<SchedulingShifts> shifts = schedulingShiftsService.querySchedulingShiftsByIds(new ArrayList<>(shiftIds));
+        Map<String, SchedulingShifts> shiftMap = shifts.stream()
+            .collect(Collectors.toMap(SchedulingShifts::getId, shift -> shift, (a, b) -> a));
+        Map<String, List<SchedulingShiftsTime>> templateTimeMap = schedulingShiftsTimeService.queryTimeByIdListMap(new ArrayList<>(shiftIds));
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (String shiftId : shiftIds) {
+            SchedulingShifts shift = shiftMap.get(shiftId);
+            if (shift == null) {
+                continue;
+            }
+            result.add(buildStaffSchedulingShiftItem(shift, shiftDayTimes.get(shiftId), templateTimeMap.get(shiftId)));
+        }
+        return result;
+    }
+
+    /**
+     * 根据 yyyy-MM 得到该月最后一天 yyyy-MM-dd
+     */
+    private String resolveMonthLastDay(String monthMation) {
+        LocalDate firstDay = LocalDate.parse(monthMation + "-01");
+        return firstDay.withDayOfMonth(firstDay.lengthOfMonth()).toString();
+    }
+
+    /**
+     * 组装员工当日单个排班班次的下拉展示项。
+     * id = SchedulingShifts.id；起止时间多段时取最早开始、最晚结束。
+     */
+    private Map<String, Object> buildStaffSchedulingShiftItem(SchedulingShifts shift, List<SchedulingTime> dayTimes, List<SchedulingShiftsTime> templateTimes) {
+        Map<String, Object> item = new HashMap<>();
+        item.put("id", shift.getId());
+        item.put("name", shift.getName());
+        if (CollectionUtil.isNotEmpty(dayTimes)) {
+            // 优先使用当日排班实例的实际时间段
+            List<SchedulingTime> sortedTimes = dayTimes.stream()
+                .sorted(Comparator.comparing(time -> normalizeShiftHmForOverlap(time.getStartTime()), Comparator.nullsLast(String::compareTo)))
+                .collect(Collectors.toList());
+            SchedulingTime first = sortedTimes.get(0);
+            SchedulingTime last = sortedTimes.get(sortedTimes.size() - 1);
+            item.put("startTime", first.getStartTime());
+            item.put("endTime", last.getEndTime());
+            item.put("isNextDay", resolveDayTimesCrossDay(sortedTimes, first, last));
+        } else if (CollectionUtil.isNotEmpty(templateTimes)) {
+            // 无当日实例时，回退到班次模板时间段
+            List<SchedulingShiftsTime> sortedTimes = templateTimes.stream()
+                .sorted(Comparator.comparing(time -> normalizeShiftHmForOverlap(time.getStartTime()), Comparator.nullsLast(String::compareTo)))
+                .collect(Collectors.toList());
+            SchedulingShiftsTime first = sortedTimes.get(0);
+            SchedulingShiftsTime last = sortedTimes.get(sortedTimes.size() - 1);
+            item.put("startTime", first.getStartTime());
+            item.put("endTime", last.getEndTime());
+            item.put("isNextDay", resolveTemplateTimesCrossDay(sortedTimes, first, last));
+        }
+        return item;
+    }
+
+    /**
+     * 当日排班实例多段时间的整体跨天判定
+     */
+    private Integer resolveDayTimesCrossDay(List<SchedulingTime> sortedTimes, SchedulingTime first, SchedulingTime last) {
+        boolean crossDay = sortedTimes.stream()
+            .anyMatch(time -> WhetherEnum.ENABLE_USING.getKey().equals(time.getIsNextDay()));
+        if (!crossDay) {
+            crossDay = CheckWorkTimePeriodUtil.isCrossDay(
+                normalizeShiftHmForOverlap(first.getStartTime()),
+                normalizeShiftHmForOverlap(last.getEndTime()))
+                || StrUtil.equals(normalizeShiftHmForOverlap(first.getStartTime()), normalizeShiftHmForOverlap(last.getEndTime()));
+        }
+        return crossDay ? WhetherEnum.ENABLE_USING.getKey() : WhetherEnum.DISABLE_USING.getKey();
+    }
+
+    /**
+     * 班次模板多段时间的整体跨天判定
+     */
+    private Integer resolveTemplateTimesCrossDay(List<SchedulingShiftsTime> sortedTimes, SchedulingShiftsTime first, SchedulingShiftsTime last) {
+        boolean crossDay = sortedTimes.stream()
+            .anyMatch(time -> WhetherEnum.ENABLE_USING.getKey().equals(time.getIsNextDay()));
+        if (!crossDay) {
+            crossDay = CheckWorkTimePeriodUtil.isCrossDay(
+                normalizeShiftHmForOverlap(first.getStartTime()),
+                normalizeShiftHmForOverlap(last.getEndTime()))
+                || StrUtil.equals(normalizeShiftHmForOverlap(first.getStartTime()), normalizeShiftHmForOverlap(last.getEndTime()));
+        }
+        return crossDay ? WhetherEnum.ENABLE_USING.getKey() : WhetherEnum.DISABLE_USING.getKey();
     }
 
     @Override
@@ -859,7 +993,9 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
         return CheckWorkTimePeriodUtil.isCrossDay(start, end);
     }
 
-    /** 排班/请假冲突检测用：HH:mm 补零、去空格 */
+    /**
+     * 排班/请假冲突检测用：HH:mm 补零、去空格
+     */
     private String normalizeShiftHmForOverlap(String time) {
         if (StrUtil.isEmpty(time)) {
             return "00:00";
