@@ -66,6 +66,13 @@ public class QuitServiceImpl extends SkyeyeBusinessServiceImpl<QuitDao, Quit> im
     }
 
     @Override
+    public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
+        List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
+        iAuthUserService.setMationForMap(beans, "managerTransferUserId", "managerTransferUserMation");
+        return beans;
+    }
+
+    @Override
     public Quit selectById(String id) {
         Quit quit = super.selectById(id);
         iAuthUserService.setName(quit, "createId", "createName");
