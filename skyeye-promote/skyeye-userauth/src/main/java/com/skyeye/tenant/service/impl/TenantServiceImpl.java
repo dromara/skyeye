@@ -28,6 +28,7 @@ import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.eve.rest.mq.JobMateMation;
 import com.skyeye.eve.service.IJobMateMationService;
 import com.skyeye.exception.CustomException;
+import com.skyeye.tenant.classenum.TenantCreateSource;
 import com.skyeye.tenant.classenum.TenantOrgType;
 import com.skyeye.tenant.dao.TenantDao;
 import com.skyeye.tenant.entity.*;
@@ -93,6 +94,9 @@ public class TenantServiceImpl extends SkyeyeBusinessServiceImpl<TenantDao, Tena
         }
         if (entity.getWhetherJoinNeedAudit() == null) {
             entity.setWhetherJoinNeedAudit(WhetherEnum.ENABLE_USING.getKey());
+        }
+        if (entity.getCreateSource() == null) {
+            entity.setCreateSource(TenantCreateSource.PLATFORM.getKey());
         }
     }
 
@@ -369,6 +373,9 @@ public class TenantServiceImpl extends SkyeyeBusinessServiceImpl<TenantDao, Tena
             throw new CustomException("组织类型无效");
         }
 
+        String userId = inputObject.getLogParams().get("id").toString();
+        assertCanUserCreateTenant(userId, orgType);
+
         Tenant tenant = new Tenant();
         tenant.setName(name);
         tenant.setOrgType(orgType);
@@ -384,8 +391,8 @@ public class TenantServiceImpl extends SkyeyeBusinessServiceImpl<TenantDao, Tena
             tenant.setWebsite(params.get("website").toString());
             tenant.setIndustry(params.get("industry").toString());
         }
+        tenant.setCreateSource(TenantCreateSource.USER.getKey());
 
-        String userId = inputObject.getLogParams().get("id").toString();
         String staffId = inputObject.getLogParams().get("staffId").toString();
         if (StrUtil.isBlank(staffId)) {
             throw new CustomException("当前用户未绑定员工信息，无法创建组织");
@@ -483,5 +490,45 @@ public class TenantServiceImpl extends SkyeyeBusinessServiceImpl<TenantDao, Tena
         }
         outputObject.setBeans(beans);
         outputObject.settotal(beans.size());
+    }
+
+    @Override
+    @IgnoreTenant
+    public int countUserSelfCreatedTenantByOrgType(String userId, Integer orgType) {
+        if (StrUtil.isBlank(userId) || orgType == null) {
+            return CommonNumConstants.NUM_ZERO;
+        }
+        QueryWrapper<Tenant> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(Tenant::getCreateId), userId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(Tenant::getCreateSource), TenantCreateSource.USER.getKey());
+        queryWrapper.eq(MybatisPlusUtil.toColumns(Tenant::getOrgType), orgType);
+        return (int) count(queryWrapper);
+    }
+
+    @Override
+    @IgnoreTenant
+    public void assertCanUserCreateTenant(String userId, Integer orgType) {
+        if (!platformBaseSettingService.isAllowUserCreateOrg()) {
+            throw new CustomException("平台未开放账号自助创建组织");
+        }
+        if (TenantOrgType.PERSONAL.getKey().equals(orgType)) {
+            assertOrgTypeCreateLimit(userId, orgType, platformBaseSettingService.getMaxPersonalOrgPerUser(), "个人组织");
+            return;
+        }
+        if (TenantOrgType.ENTERPRISE.getKey().equals(orgType)) {
+            assertOrgTypeCreateLimit(userId, orgType, platformBaseSettingService.getMaxEnterpriseOrgPerUser(), "企业组织");
+            return;
+        }
+        throw new CustomException("组织类型无效");
+    }
+
+    private void assertOrgTypeCreateLimit(String userId, Integer orgType, Integer maxCount, String orgTypeLabel) {
+        if (maxCount == null || maxCount < CommonNumConstants.NUM_ONE) {
+            throw new CustomException(orgTypeLabel + "数量上限配置无效");
+        }
+        int currentCount = countUserSelfCreatedTenantByOrgType(userId, orgType);
+        if (currentCount >= maxCount) {
+            throw new CustomException(String.format("您已创建 %d 个%s，已达上限 %d 个", currentCount, orgTypeLabel, maxCount));
+        }
     }
 }

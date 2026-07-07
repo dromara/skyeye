@@ -15,6 +15,7 @@ import com.skyeye.common.constans.CacheConstants;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import com.skyeye.common.enumeration.WhetherEnum;
+import com.skyeye.tenant.classenum.TenantCreateSource;
 import com.skyeye.tenant.classenum.TenantOrgType;
 import lombok.Data;
 
@@ -100,6 +101,14 @@ public class Tenant extends BaseGeneralInfo {
     @TableField("whether_join_need_audit")
     @ApiModelProperty(value = "加入是否需要审核", enumClass = WhetherEnum.class)
     private Integer whetherJoinNeedAudit;
+
+    /**
+     * 组织创建来源：后台创建不计入用户自助创建数量限制。需在表 tenant 增加列 create_source（int，默认 1）。
+     */
+    @TableField("create_source")
+    @ApiModelProperty(value = "创建来源", enumClass = TenantCreateSource.class)
+    @Property(value = "创建来源")
+    private Integer createSource;
 
     @TableField(exist = false)
     @ApiModelProperty("应用信息")

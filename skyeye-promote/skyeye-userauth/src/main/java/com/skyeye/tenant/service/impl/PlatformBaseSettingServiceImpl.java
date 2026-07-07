@@ -18,6 +18,7 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.TenantTypeEnum;
 import com.skyeye.common.tenant.context.TenantContext;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.exception.CustomException;
 import com.skyeye.tenant.classenum.PlatformBaseSettingGroup;
 import com.skyeye.tenant.classenum.TenantOrgType;
@@ -25,6 +26,9 @@ import com.skyeye.tenant.constans.PlatformBaseSettingConst;
 import com.skyeye.tenant.dao.PlatformBaseSettingDao;
 import com.skyeye.tenant.entity.PlatformBaseSetting;
 import com.skyeye.tenant.service.PlatformBaseSettingService;
+import com.skyeye.tenant.service.TenantService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +47,10 @@ import java.util.Map;
 @Service
 @SkyeyeService(name = "平台基础信息设置", groupName = "租户管理", tenant = TenantEnum.PLATE)
 public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<PlatformBaseSettingDao, PlatformBaseSetting> implements PlatformBaseSettingService {
+
+    @Lazy
+    @Autowired
+    private TenantService tenantService;
 
     /**
      * 未配置时的默认席位单价（元/席位）
@@ -68,6 +76,21 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
      * 企业组织默认最低购买席位数
      */
     private static final int DEFAULT_ENTERPRISE_MIN_BUY_ACCOUNT_NUM = 5;
+
+    /**
+     * 默认允许账号自助创建组织
+     */
+    private static final int DEFAULT_ALLOW_USER_CREATE_ORG = WhetherEnum.ENABLE_USING.getKey();
+
+    /**
+     * 默认单个账号最多可自助创建的个人组织数量
+     */
+    private static final int DEFAULT_MAX_PERSONAL_ORG_PER_USER = 5;
+
+    /**
+     * 默认单个账号最多可自助创建的企业组织数量
+     */
+    private static final int DEFAULT_MAX_ENTERPRISE_ORG_PER_USER = 1;
 
     /**
      * 查询平台基础信息（管理端使用，需平台租户身份）
@@ -152,6 +175,56 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
     }
 
     @Override
+    @IgnoreTenant
+    public boolean isAllowUserCreateOrg() {
+        Map<String, Object> tenantGroup = getTenantGroupSetting();
+        Object allow = tenantGroup.get(PlatformBaseSettingConst.KEY_ALLOW_USER_CREATE_ORG);
+        if (ObjectUtil.isEmpty(allow)) {
+            return WhetherEnum.ENABLE_USING.getKey().equals(DEFAULT_ALLOW_USER_CREATE_ORG);
+        }
+        return WhetherEnum.ENABLE_USING.getKey().equals(NumberUtil.parseInt(allow.toString()));
+    }
+
+    @Override
+    @IgnoreTenant
+    public Integer getMaxPersonalOrgPerUser() {
+        return getTenantGroupInt(PlatformBaseSettingConst.KEY_MAX_PERSONAL_ORG_PER_USER, DEFAULT_MAX_PERSONAL_ORG_PER_USER);
+    }
+
+    @Override
+    @IgnoreTenant
+    public Integer getMaxEnterpriseOrgPerUser() {
+        return getTenantGroupInt(PlatformBaseSettingConst.KEY_MAX_ENTERPRISE_ORG_PER_USER, DEFAULT_MAX_ENTERPRISE_ORG_PER_USER);
+    }
+
+    @Override
+    @IgnoreTenant
+    public void queryPlatformTenantCreateConfig(InputObject inputObject, OutputObject outputObject) {
+        if (!tenantEnable) {
+            throw new CustomException("租户功能未开启");
+        }
+        String userId = inputObject.getLogParams().get("id").toString();
+        int personalCount = tenantService.countUserSelfCreatedTenantByOrgType(userId, TenantOrgType.PERSONAL.getKey());
+        int enterpriseCount = tenantService.countUserSelfCreatedTenantByOrgType(userId, TenantOrgType.ENTERPRISE.getKey());
+        Integer maxPersonal = getMaxPersonalOrgPerUser();
+        Integer maxEnterprise = getMaxEnterpriseOrgPerUser();
+        boolean allowUserCreateOrg = isAllowUserCreateOrg();
+        Map<String, Object> data = new HashMap<>();
+        data.put(PlatformBaseSettingConst.KEY_ALLOW_USER_CREATE_ORG, allowUserCreateOrg
+            ? WhetherEnum.ENABLE_USING.getKey() : WhetherEnum.DISABLE_USING.getKey());
+        data.put(PlatformBaseSettingConst.KEY_MAX_PERSONAL_ORG_PER_USER, maxPersonal);
+        data.put(PlatformBaseSettingConst.KEY_MAX_ENTERPRISE_ORG_PER_USER, maxEnterprise);
+        data.put("userPersonalOrgCount", personalCount);
+        data.put("userEnterpriseOrgCount", enterpriseCount);
+        data.put("canCreatePersonal", allowUserCreateOrg && canCreateMore(personalCount, maxPersonal));
+        data.put("canCreateEnterprise", allowUserCreateOrg && canCreateMore(enterpriseCount, maxEnterprise));
+        data.put("canCreateOrg", allowUserCreateOrg && (
+            canCreateMore(personalCount, maxPersonal) || canCreateMore(enterpriseCount, maxEnterprise)));
+        outputObject.setBean(data);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
     public void validatorEntity(PlatformBaseSetting entity) {
         validateSettingData(entity.getSettingData());
     }
@@ -181,6 +254,9 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         Map<String, Map<String, Object>> settingData = new HashMap<>();
         Map<String, Object> tenantGroup = new HashMap<>();
         tenantGroup.put(PlatformBaseSettingConst.KEY_ACCOUNT_UNIT_PRICE, DEFAULT_ACCOUNT_UNIT_PRICE);
+        tenantGroup.put(PlatformBaseSettingConst.KEY_ALLOW_USER_CREATE_ORG, DEFAULT_ALLOW_USER_CREATE_ORG);
+        tenantGroup.put(PlatformBaseSettingConst.KEY_MAX_PERSONAL_ORG_PER_USER, DEFAULT_MAX_PERSONAL_ORG_PER_USER);
+        tenantGroup.put(PlatformBaseSettingConst.KEY_MAX_ENTERPRISE_ORG_PER_USER, DEFAULT_MAX_ENTERPRISE_ORG_PER_USER);
         tenantGroup.put(PlatformBaseSettingConst.KEY_ORG_TYPE_CONFIG, buildDefaultOrgTypeConfig());
         settingData.put(PlatformBaseSettingGroup.TENANT.getKey(), tenantGroup);
         return settingData;
@@ -314,6 +390,17 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
             }
             validatePrice(accountUnitPrice.toString(), "成员席位单价");
         }
+        if (tenantGroup.containsKey(PlatformBaseSettingConst.KEY_ALLOW_USER_CREATE_ORG)) {
+            validateWhetherFlag(tenantGroup.get(PlatformBaseSettingConst.KEY_ALLOW_USER_CREATE_ORG), "是否允许账号创建组织");
+        }
+        if (tenantGroup.containsKey(PlatformBaseSettingConst.KEY_MAX_PERSONAL_ORG_PER_USER)) {
+            validatePositiveInteger(tenantGroup.get(PlatformBaseSettingConst.KEY_MAX_PERSONAL_ORG_PER_USER),
+                "个人组织数量上限");
+        }
+        if (tenantGroup.containsKey(PlatformBaseSettingConst.KEY_MAX_ENTERPRISE_ORG_PER_USER)) {
+            validatePositiveInteger(tenantGroup.get(PlatformBaseSettingConst.KEY_MAX_ENTERPRISE_ORG_PER_USER),
+                "企业组织数量上限");
+        }
         Object orgTypeConfigObj = tenantGroup.get(PlatformBaseSettingConst.KEY_ORG_TYPE_CONFIG);
         if (ObjectUtil.isEmpty(orgTypeConfigObj) || !(orgTypeConfigObj instanceof Map)) {
             return;
@@ -334,6 +421,22 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
             validatePositiveInteger(orgConfig.get(PlatformBaseSettingConst.KEY_MIN_BUY_ACCOUNT_NUM),
                 tenantOrgType.getValue() + "最低购买席位数");
         }
+    }
+
+    private Integer getTenantGroupInt(String configKey, int defaultValue) {
+        Map<String, Object> tenantGroup = getTenantGroupSetting();
+        Object value = tenantGroup.get(configKey);
+        if (ObjectUtil.isEmpty(value) || StrUtil.isBlank(value.toString())) {
+            return defaultValue;
+        }
+        return NumberUtil.parseInt(value.toString());
+    }
+
+    private boolean canCreateMore(int currentCount, Integer maxCount) {
+        if (maxCount == null || maxCount < CommonNumConstants.NUM_ONE) {
+            return false;
+        }
+        return currentCount < maxCount;
     }
 
     /**
@@ -361,6 +464,19 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         }
         if (NumberUtil.parseInt(value.toString()) < CommonNumConstants.NUM_ONE) {
             throw new CustomException(label + "不能小于1");
+        }
+    }
+
+    /**
+     * 校验是否开关（0/1）
+     */
+    private void validateWhetherFlag(Object value, String label) {
+        if (ObjectUtil.isEmpty(value) || StrUtil.isBlank(value.toString())) {
+            throw new CustomException(label + "不能为空");
+        }
+        int flag = NumberUtil.parseInt(value.toString());
+        if (!WhetherEnum.ENABLE_USING.getKey().equals(flag) && !WhetherEnum.DISABLE_USING.getKey().equals(flag)) {
+            throw new CustomException(label + "取值无效");
         }
     }
 

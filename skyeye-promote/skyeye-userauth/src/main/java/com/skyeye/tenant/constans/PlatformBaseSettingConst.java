@@ -36,4 +36,19 @@ public class PlatformBaseSettingConst {
      */
     public static final String KEY_MIN_BUY_ACCOUNT_NUM = "minBuyAccountNum";
 
+    /**
+     * 是否允许账号自助创建组织（0-否，1-是）
+     */
+    public static final String KEY_ALLOW_USER_CREATE_ORG = "allowUserCreateOrg";
+
+    /**
+     * 单个账号最多可自助创建的个人组织数量（>= 1）
+     */
+    public static final String KEY_MAX_PERSONAL_ORG_PER_USER = "maxPersonalOrgPerUser";
+
+    /**
+     * 单个账号最多可自助创建的企业组织数量（>= 1）
+     */
+    public static final String KEY_MAX_ENTERPRISE_ORG_PER_USER = "maxEnterpriseOrgPerUser";
+
 }

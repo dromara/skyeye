@@ -50,4 +50,24 @@ public interface PlatformBaseSettingService extends SkyeyeBusinessService<Platfo
      */
     Integer getMinBuyAccountNum(Integer orgType);
 
+    /**
+     * 是否允许账号自助创建组织
+     */
+    boolean isAllowUserCreateOrg();
+
+    /**
+     * 单个账号最多可自助创建的个人组织数量（0 表示不限制）
+     */
+    Integer getMaxPersonalOrgPerUser();
+
+    /**
+     * 单个账号最多可自助创建的企业组织数量（0 表示不限制）
+     */
+    Integer getMaxEnterpriseOrgPerUser();
+
+    /**
+     * 查询当前用户的组织创建限制与已创建数量（供前端创建组织入口使用）
+     */
+    void queryPlatformTenantCreateConfig(InputObject inputObject, OutputObject outputObject);
+
 }

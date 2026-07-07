@@ -54,4 +54,10 @@ public class PlatformBaseSettingController {
         platformBaseSettingService.queryPlatformTenantOrgSeatConfig(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryPlatformTenantCreateConfig", value = "获取当前用户组织创建限制", method = "GET", allUse = "2")
+    @RequestMapping("/post/PlatformBaseSettingController/queryPlatformTenantCreateConfig")
+    public void queryPlatformTenantCreateConfig(InputObject inputObject, OutputObject outputObject) {
+        platformBaseSettingService.queryPlatformTenantCreateConfig(inputObject, outputObject);
+    }
+
 }
