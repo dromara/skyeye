@@ -10,6 +10,7 @@ import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.entity.features.SkyeyeFlowable;
 import com.skyeye.equipment.entity.Equipment;
 import com.skyeye.equipmentcheck.classenum.EquipmentCheckResult;
+import com.skyeye.equipmentcheckstandard.entity.EquipmentCheckStandard;
 import lombok.Data;
 
 import java.util.List;
@@ -56,6 +57,10 @@ public class EquipmentCheckOrder extends SkyeyeFlowable {
     @TableField(value = "standard_name")
     @ApiModelProperty(value = "点检标准名称")
     private String standardName;
+
+    @TableField(exist = false)
+    @Property(value = "点检标准信息")
+    private EquipmentCheckStandard standardMation;
 
     @TableField(value = "check_time")
     @ApiModelProperty(value = "点检时间", required = "required")
