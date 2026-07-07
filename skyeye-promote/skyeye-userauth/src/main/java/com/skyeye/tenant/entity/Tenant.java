@@ -87,6 +87,20 @@ public class Tenant extends BaseGeneralInfo {
     @Property(value = "是否存在已审批通过的应用购买订单")
     private Integer whetherHasPassedBuyOrder;
 
+    /**
+     * 是否允许被搜索并申请加入。需在表 tenant 增加列 whether_searchable（int，默认 0）。
+     */
+    @TableField("whether_searchable")
+    @ApiModelProperty(value = "是否允许被搜索", enumClass = WhetherEnum.class)
+    private Integer whetherSearchable;
+
+    /**
+     * 用户申请加入时是否需要管理员审核。需在表 tenant 增加列 whether_join_need_audit（int，默认 1）。
+     */
+    @TableField("whether_join_need_audit")
+    @ApiModelProperty(value = "加入是否需要审核", enumClass = WhetherEnum.class)
+    private Integer whetherJoinNeedAudit;
+
     @TableField(exist = false)
     @ApiModelProperty("应用信息")
     private List<TenantAppLink> tenantAppLinkList;

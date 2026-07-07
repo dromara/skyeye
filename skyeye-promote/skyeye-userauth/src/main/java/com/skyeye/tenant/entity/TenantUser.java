@@ -189,6 +189,10 @@ public class TenantUser extends OperatorUserInfo {
     @ApiModelProperty(value = "用户邀请信息id")
     private String tenantUserInviteId;
 
+    @TableField("tenant_user_apply_id")
+    @ApiModelProperty(value = "用户申请加入信息id")
+    private String tenantUserApplyId;
+
     @TableField(exist = false)
     @Property(value = "用户邀请信息")
     private Map<String, Object> tenantUserInviteMation;

@@ -9,6 +9,7 @@ import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.tenant.classenum.TenantOrgType;
@@ -103,7 +104,9 @@ public class TenantController {
         @ApiImplicitParam(id = "website", name = "website", value = "官网"),
         @ApiImplicitParam(id = "industry", name = "industry", value = "所属行业"),
         @ApiImplicitParam(id = "creditCode", name = "creditCode", value = "统一社会信用代码"),
-        @ApiImplicitParam(id = "legalPerson", name = "legalPerson", value = "法定代表人")})
+        @ApiImplicitParam(id = "legalPerson", name = "legalPerson", value = "法定代表人"),
+        @ApiImplicitParam(id = "whetherSearchable", name = "whetherSearchable", value = "是否允许被搜索", enumClass = WhetherEnum.class),
+        @ApiImplicitParam(id = "whetherJoinNeedAudit", name = "whetherJoinNeedAudit", value = "加入是否需要审核", enumClass = WhetherEnum.class)})
     @RequestMapping("/post/TenantController/updateCurrentTenantInfo")
     public void updateCurrentTenantInfo(InputObject inputObject, OutputObject outputObject) {
         tenantService.updateCurrentTenantInfo(inputObject, outputObject);
@@ -126,6 +129,14 @@ public class TenantController {
     @RequestMapping("/post/TenantController/createCurrentTenant")
     public void createCurrentTenant(InputObject inputObject, OutputObject outputObject) {
         tenantService.createCurrentTenant(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "searchSearchableTenantList", value = "搜索可加入的组织", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "keyword", name = "keyword", value = "组织名称关键词", required = "required")})
+    @RequestMapping("/post/TenantController/searchSearchableTenantList")
+    public void searchSearchableTenantList(InputObject inputObject, OutputObject outputObject) {
+        tenantService.searchSearchableTenantList(inputObject, outputObject);
     }
 
 }

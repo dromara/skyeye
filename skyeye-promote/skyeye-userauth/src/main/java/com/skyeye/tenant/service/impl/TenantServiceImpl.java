@@ -30,10 +30,7 @@ import com.skyeye.eve.service.IJobMateMationService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.tenant.classenum.TenantOrgType;
 import com.skyeye.tenant.dao.TenantDao;
-import com.skyeye.tenant.entity.Tenant;
-import com.skyeye.tenant.entity.TenantApp;
-import com.skyeye.tenant.entity.TenantAppLink;
-import com.skyeye.tenant.entity.TenantUser;
+import com.skyeye.tenant.entity.*;
 import com.skyeye.tenant.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +38,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -81,6 +76,9 @@ public class TenantServiceImpl extends SkyeyeBusinessServiceImpl<TenantDao, Tena
     @Autowired
     private TenantAppBuyOrderService tenantAppBuyOrderService;
 
+    @Autowired
+    private TenantUserApplyService tenantUserApplyService;
+
     @Override
     public void createPrepose(Tenant entity) {
         if (entity.getOrgType() == null) {
@@ -89,6 +87,12 @@ public class TenantServiceImpl extends SkyeyeBusinessServiceImpl<TenantDao, Tena
         entity.setAccountNum(platformBaseSettingService.getInitAccountNum(entity.getOrgType()));
         if (entity.getWhetherHasPassedBuyOrder() == null) {
             entity.setWhetherHasPassedBuyOrder(WhetherEnum.DISABLE_USING.getKey());
+        }
+        if (entity.getWhetherSearchable() == null) {
+            entity.setWhetherSearchable(WhetherEnum.DISABLE_USING.getKey());
+        }
+        if (entity.getWhetherJoinNeedAudit() == null) {
+            entity.setWhetherJoinNeedAudit(WhetherEnum.ENABLE_USING.getKey());
         }
     }
 
@@ -294,6 +298,8 @@ public class TenantServiceImpl extends SkyeyeBusinessServiceImpl<TenantDao, Tena
         result.put("industry", tenant.getIndustry());
         result.put("creditCode", tenant.getCreditCode());
         result.put("legalPerson", tenant.getLegalPerson());
+        result.put("whetherSearchable", tenant.getWhetherSearchable() != null ? tenant.getWhetherSearchable() : WhetherEnum.DISABLE_USING.getKey());
+        result.put("whetherJoinNeedAudit", tenant.getWhetherJoinNeedAudit() != null ? tenant.getWhetherJoinNeedAudit() : WhetherEnum.ENABLE_USING.getKey());
     }
 
     @Override
@@ -319,6 +325,8 @@ public class TenantServiceImpl extends SkyeyeBusinessServiceImpl<TenantDao, Tena
         tenant.setContactName(params.get("contactName").toString());
         tenant.setContactPhone(params.get("contactPhone").toString());
         tenant.setContactEmail(params.get("contactEmail").toString());
+        tenant.setWhetherSearchable(Integer.parseInt(params.get("whetherSearchable").toString()));
+        tenant.setWhetherJoinNeedAudit(Integer.parseInt(params.get("whetherJoinNeedAudit").toString()));
         if (TenantOrgType.PERSONAL.getKey().equals(tenant.getOrgType())) {
             // 如果是个人组织，则清空企业相关字段
             tenant.setCreditCode(null);
@@ -421,5 +429,59 @@ public class TenantServiceImpl extends SkyeyeBusinessServiceImpl<TenantDao, Tena
         List<Tenant> tenantList = list(queryWrapper);
         outputObject.setBeans(tenantList);
         outputObject.settotal(tenantList.size());
+    }
+
+    @Override
+    @IgnoreTenant
+    public void searchSearchableTenantList(InputObject inputObject, OutputObject outputObject) {
+        if (!tenantEnable) {
+            throw new CustomException("租户功能未开启");
+        }
+        Map<String, Object> params = inputObject.getParams();
+        String keyword = params.get("keyword").toString().trim();
+        if (StrUtil.isEmpty(keyword)) {
+            return;
+        }
+        String staffId = inputObject.getLogParams().get("staffId").toString();
+
+        QueryWrapper<Tenant> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like(MybatisPlusUtil.toColumns(Tenant::getName), keyword);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(Tenant::getWhetherSearchable), WhetherEnum.ENABLE_USING.getKey());
+        queryWrapper.ne(CommonConstants.ID, TenantTypeEnum.PLATFORM.getCode());
+        List<Tenant> tenantList = list(queryWrapper);
+        if (CollectionUtil.isEmpty(tenantList)) {
+            return;
+        }
+
+        List<String> tenantIds = tenantList.stream().map(Tenant::getId).collect(Collectors.toList());
+        QueryWrapper<TenantUser> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq(MybatisPlusUtil.toColumns(TenantUser::getStaffId), staffId);
+        userQueryWrapper.in(MybatisPlusUtil.toColumns(TenantUser::getTenantId), tenantIds);
+        userQueryWrapper.ne(MybatisPlusUtil.toColumns(TenantUser::getState), UserStaffState.QUIT.getKey());
+        List<TenantUser> joinedList = tenantUserService.list(userQueryWrapper);
+        Set<String> joinedIds = joinedList.stream().map(TenantUser::getTenantId).collect(Collectors.toSet());
+        Map<String, TenantUserApply> pendingApplyMap = tenantUserApplyService.queryPendingApplyMapByStaffId(staffId, tenantIds);
+
+        List<Map<String, Object>> beans = new ArrayList<>();
+        for (Tenant tenant : tenantList) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("id", tenant.getId());
+            item.put("name", tenant.getName());
+            item.put("logo", tenant.getLogo());
+            item.put("remark", tenant.getRemark());
+            item.put("orgType", tenant.getOrgType());
+            item.put("whetherJoinNeedAudit", tenant.getWhetherJoinNeedAudit());
+            if (joinedIds.contains(tenant.getId())) {
+                item.put("joinFlag", 1);
+            } else if (pendingApplyMap.containsKey(tenant.getId())) {
+                item.put("joinFlag", 2);
+                item.put("pendingApplyId", pendingApplyMap.get(tenant.getId()).getId());
+            } else {
+                item.put("joinFlag", 0);
+            }
+            beans.add(item);
+        }
+        outputObject.setBeans(beans);
+        outputObject.settotal(beans.size());
     }
 }

@@ -59,4 +59,9 @@ public interface TenantService extends SkyeyeBusinessService<Tenant> {
      * 当前登录用户自助创建组织，并自动成为组织管理员
      */
     void createCurrentTenant(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 搜索允许被加入的组织（登录用户）
+     */
+    void searchSearchableTenantList(InputObject inputObject, OutputObject outputObject);
 }
