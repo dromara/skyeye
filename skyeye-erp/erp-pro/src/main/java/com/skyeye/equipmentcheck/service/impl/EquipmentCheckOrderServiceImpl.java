@@ -20,6 +20,7 @@ import com.skyeye.equipmentcheck.entity.EquipmentCheckOrder;
 import com.skyeye.equipmentcheck.entity.EquipmentCheckOrderItem;
 import com.skyeye.equipmentcheck.service.EquipmentCheckOrderItemService;
 import com.skyeye.equipmentcheck.service.EquipmentCheckOrderService;
+import com.skyeye.equipmentcheckstandard.service.EquipmentCheckStandardService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.repair.entity.EquipmentRepairOrder;
 import com.skyeye.repair.service.EquipmentRepairOrderService;
@@ -48,6 +49,9 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
 
     @Autowired
     private EquipmentRepairOrderService equipmentRepairOrderService;
+
+    @Autowired
+    private EquipmentCheckStandardService equipmentCheckStandardService;
 
     @Override
     protected QueryWrapper<EquipmentCheckOrder> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -110,6 +114,7 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
     public EquipmentCheckOrder selectById(String id) {
         EquipmentCheckOrder order = super.selectById(id);
         equipmentService.setDataMation(order, EquipmentCheckOrder::getEquipmentId);
+        equipmentCheckStandardService.setDataMation(order, EquipmentCheckOrder::getStandardId);
         iAuthUserService.setDataMation(order, EquipmentCheckOrder::getCheckerId);
         return order;
     }
@@ -118,6 +123,7 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
+        equipmentCheckStandardService.setMationForMap(beans, "standardId", "standardMation");
         iAuthUserService.setMationForMap(beans, "checkerId", "checkerMation");
         return beans;
     }
