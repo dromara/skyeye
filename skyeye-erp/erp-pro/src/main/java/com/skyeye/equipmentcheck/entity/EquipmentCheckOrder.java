@@ -54,10 +54,6 @@ public class EquipmentCheckOrder extends SkyeyeFlowable {
     @ApiModelProperty(value = "点检标准编码")
     private String standardCode;
 
-    @TableField(value = "standard_name")
-    @ApiModelProperty(value = "点检标准名称")
-    private String standardName;
-
     @TableField(exist = false)
     @Property(value = "点检标准信息")
     private EquipmentCheckStandard standardMation;
