@@ -12,6 +12,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.yulichang.toolkit.JoinWrappers;
@@ -275,6 +276,9 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
             // 商品大类ID
             wrapper.eq(ShopMaterialStore::getBigTypeId, commonPageInfo.getCustomParamsMapStr("bigTypeId"));
         }
+        Map<String, Object> params = inputObject.getParams();
+        applyCommaIdFilter(wrapper, params, "materialIds", ShopMaterialStore::getMaterialId);
+        applyCommaIdFilter(wrapper, params, "storeIds", ShopMaterialStore::getStoreId);
         // 设置商品查询的类型
         queryShopSelType(commonPageInfo, wrapper);
         // 已经添加到门店
@@ -288,6 +292,18 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         iShopStoreService.setDataMation(shopMaterialStoreList, ShopMaterialStore::getStoreId);
         outputObject.settotal(pages.getTotal());
         return shopMaterialStoreList;
+    }
+
+    private void applyCommaIdFilter(MPJLambdaWrapper<ShopMaterialStore> wrapper, Map<String, Object> params,
+                                    String paramKey, SFunction<ShopMaterialStore, ?> column) {
+        if (!params.containsKey(paramKey) || StrUtil.isBlank(params.get(paramKey).toString())) {
+            return;
+        }
+        List<String> idList = Arrays.stream(params.get(paramKey).toString().split(CommonCharConstants.COMMA_MARK))
+            .filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+        if (CollectionUtil.isNotEmpty(idList)) {
+            wrapper.in(column, idList);
+        }
     }
 
     private static void queryShopSelType(CommonPageInfo commonPageInfo, MPJLambdaWrapper<ShopMaterialStore> wrapper) {
