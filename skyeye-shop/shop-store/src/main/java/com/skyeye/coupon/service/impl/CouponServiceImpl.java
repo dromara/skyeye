@@ -246,6 +246,9 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             queryWrapper.and(Wrapper -> {
                 Wrapper.isNotNull(typeKey).ne(typeKey, StrUtil.EMPTY);
             });
+            String totalCountKey = MybatisPlusUtil.toColumns(Coupon::getTotalCount);
+            String takeCountKey = MybatisPlusUtil.toColumns(Coupon::getTakeCount);
+            queryWrapper.and(w -> w.eq(totalCountKey, -1).or().apply(takeCountKey + " < " + totalCountKey));
         }
         queryWrapper.eq(MybatisPlusUtil.toColumns(Coupon::getEnabled), EnableEnum.ENABLE_USING.getKey());
         List<Coupon> list = list(queryWrapper);
