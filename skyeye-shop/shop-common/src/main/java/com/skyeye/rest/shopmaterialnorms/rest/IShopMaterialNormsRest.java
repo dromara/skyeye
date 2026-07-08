@@ -64,4 +64,12 @@ public interface IShopMaterialNormsRest {
     @GetMapping("/queryAllShopMaterialListForChoose")
     String queryAllShopMaterialListForChoose();
 
+    /**
+     * 分页获取商城商品信息列表
+     *
+     * @param params page、limit、keyword、objectId、materialIds、storeIds 等
+     */
+    @PostMapping("/queryShopMaterialList")
+    String queryShopMaterialList(Map<String, Object> params);
+
 }
