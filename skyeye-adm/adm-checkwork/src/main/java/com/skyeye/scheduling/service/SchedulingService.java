@@ -22,6 +22,11 @@ public interface SchedulingService extends SkyeyeBusinessService<Scheduling> {
 
     List<String> querySchedulingByStaffIdAndMouths(String staffId, List<String> mouthList);
 
+    /**
+     * 员工在指定月份内、指定排班班次下的出勤日期（与打卡校验 shiftId 一致）
+     */
+    List<String> querySchedulingWorkDaysByStaffAndShift(String staffId, String shiftId, List<String> mouthList);
+
     void querySchedulingByStaffIdAndOneDay(InputObject inputObject, OutputObject outputObject);
 
     void querySchedulingByStaffIdAndDays(InputObject inputObject, OutputObject outputObject);
@@ -36,5 +41,14 @@ public interface SchedulingService extends SkyeyeBusinessService<Scheduling> {
      * @param checkDate 考勤归属日 yyyy-MM-dd
      */
     List<Map<String, Object>> queryScheduleCheckTargetsForDate(String checkDate);
+
+    /**
+     * 员工在指定日期是否安排了某排班班次（SchedulingShifts.id）
+     *
+     * @param staffId 员工 id
+     * @param shiftId 排班班次模板 id（SchedulingShifts.id）
+     * @param day     自然日 yyyy-MM-dd
+     */
+    boolean isStaffScheduledForShiftOnDate(String staffId, String shiftId, String day);
 
 }

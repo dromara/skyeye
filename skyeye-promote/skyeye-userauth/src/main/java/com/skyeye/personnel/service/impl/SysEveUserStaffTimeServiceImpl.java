@@ -14,18 +14,21 @@ import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.personnel.dao.SysEveUserStaffTimeDao;
 import com.skyeye.personnel.entity.SysEveUserStaffTime;
 import com.skyeye.personnel.service.SysEveUserStaffTimeService;
+import com.skyeye.personnel.util.StaffCheckWorkTimeOverlapHelper;
 import com.skyeye.rest.checkwork.service.ICheckWorkTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -82,16 +85,18 @@ public class SysEveUserStaffTimeServiceImpl extends SkyeyeBusinessServiceImpl<Sy
         remove(queryWrapper);
     }
 
+    /**
+     * 保存员工绑定的考勤班次（支持多班次）。
+     * 保存前会校验各班次在工作日及时段上是否冲突，跨天班次日凌晨段也会参与校验。
+     */
     @Override
     public void saveUserStaffCheckWorkTime(List<String> timeIdList, String staffId) {
-        // 删除员工考勤时间段信息再重新添加
+        // 先删后增，保证员工与班次关系与本次提交一致
         deleteByStaffId(staffId);
-        // 逗号隔开的多班次考勤
         if (CollectionUtil.isNotEmpty(timeIdList)) {
-            // 校验多班次考勤是否有重复时间段
+            // 多班次两两比对：含跨天凌晨段重叠检测
             boolean repeat = judgeRepeatShift(timeIdList);
             if (repeat) {
-                // 存在冲突的工作时间段
                 throw new CustomException("存在重复的考勤时间段");
             }
             List<SysEveUserStaffTime> staffTimeMation = new ArrayList<>();
@@ -143,47 +148,13 @@ public class SysEveUserStaffTimeServiceImpl extends SkyeyeBusinessServiceImpl<Sy
         return timeList;
     }
 
+    /**
+     * 校验待绑定的多个考勤班次是否存在时间冲突。
+     * 跨天班次不能仅用字符串时间段比较，需委托 {@link StaffCheckWorkTimeOverlapHelper} 按星期几展开后比对。
+     */
     private boolean judgeRepeatShift(List<String> timeIds) {
-        // 1.获取班次的上下班打卡时间
-        List<Map<String, Object>> timeMation = iCheckWorkTimeService.queryDataMationByIds(Joiner.on(CommonCharConstants.COMMA_MARK).join(timeIds));
-        // 2.校验工作日是否冲突
-        return judgeRepeatWorking(timeMation);
-    }
-
-    private boolean judgeRepeatWorking(List<Map<String, Object>> timeMation) {
-        if (timeMation.size() > 1) {
-            for (int i = 0; i < timeMation.size(); i++) {
-                for (int j = (i + 1); j < timeMation.size(); j++) {
-                    List<String> times = new ArrayList<>();
-                    times.add(timeMation.get(i).get("startTime").toString() + "-"
-                        + timeMation.get(i).get("endTime").toString());
-                    times.add(timeMation.get(j).get("startTime").toString() + "-"
-                        + timeMation.get(j).get("endTime").toString());
-                    // 1.首先判断每天的工作日的开始时间和结束时间是否有重复
-                    boolean flag = DateUtil.checkOverlap(times);
-                    if (flag) {
-                        // 开始时间和结束时间是否有重复
-                        List<Map<String, Object>> iDayMation = (List<Map<String, Object>>) timeMation.get(i)
-                            .get("checkWorkTimeWeekList");
-                        List<Map<String, Object>> jDayMation = (List<Map<String, Object>>) timeMation.get(j)
-                            .get("checkWorkTimeWeekList");
-                        // 求这两个班次的工作日冲突的天数，根据类型和工作日(周几)判断
-                        int size = iDayMation.stream()
-                            .map(t -> jDayMation.stream()
-                                .filter(s -> (Objects.equals(t.get("type").toString(), s.get("type").toString())
-                                    || Objects.equals(t.get("type").toString(), "1")
-                                    || Objects.equals(s.get("type").toString(), "1"))
-                                    && Objects.equals(t.get("weekNumber").toString(), s.get("weekNumber").toString()))
-                                .findAny().orElse(null)).filter(Objects::nonNull).collect(Collectors.toList()).size();
-                        if (size > 0) {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        } else {
-            return false;
-        }
+        List<Map<String, Object>> timeMation = iCheckWorkTimeService.queryDataMationByIds(
+            Joiner.on(CommonCharConstants.COMMA_MARK).join(timeIds));
+        return StaffCheckWorkTimeOverlapHelper.hasConflict(timeMation);
     }
 }

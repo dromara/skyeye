@@ -690,6 +690,21 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
 
     @Override
     public List<String> querySchedulingByStaffIdAndMouths(String staffId, List<String> mouthList) {
+        return querySchedulingWorkDaysByStaffAndShift(staffId, null, mouthList);
+    }
+
+    @Override
+    public List<String> querySchedulingWorkDaysByStaffAndShift(String staffId, String shiftId, List<String> mouthList) {
+        List<Scheduling> schedulingList = listSchedulingsIntersectingMonths(mouthList);
+        if (StrUtil.isNotBlank(shiftId)) {
+            schedulingList = schedulingList.stream()
+                .filter(scheduling -> StrUtil.equals(scheduling.getShiftId(), shiftId))
+                .collect(Collectors.toList());
+        }
+        return expandWorkDaysForStaff(schedulingList, staffId);
+    }
+
+    private List<Scheduling> listSchedulingsIntersectingMonths(List<String> mouthList) {
         QueryWrapper<Scheduling> schedulingWrapper = new QueryWrapper<>();
         mouthList.forEach(month -> {
             String monthPattern = month + "%";
@@ -699,10 +714,16 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
                 .like(MybatisPlusUtil.toColumns(Scheduling::getEndTime), monthPattern)
             );
         });
-        List<Scheduling> schedulingList = list(schedulingWrapper);
+        return list(schedulingWrapper);
+    }
 
+    private List<String> expandWorkDaysForStaff(List<Scheduling> schedulingList, String staffId) {
+        if (CollectionUtil.isEmpty(schedulingList)) {
+            return new ArrayList<>();
+        }
         List<String> schedulingIds = schedulingList.stream().map(Scheduling::getId).collect(Collectors.toList());
-        List<SchedulingTimeWorkPeople> timeWorkPeople = schedulingTimeWorkPeopleService.querySchedulingByschedulingIdsAndStaffId(schedulingIds, staffId);
+        List<SchedulingTimeWorkPeople> timeWorkPeople = schedulingTimeWorkPeopleService
+            .querySchedulingByschedulingIdsAndStaffId(schedulingIds, staffId);
 
         if (CollectionUtil.isEmpty(timeWorkPeople)) {
             return new ArrayList<>();
@@ -710,7 +731,8 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
 
         List<Scheduling> filteredSchedulingList = schedulingList.stream()
             .filter(scheduling -> timeWorkPeople.stream()
-                .anyMatch(people -> people.getSchedulingId().equals(scheduling.getId()) && people.getEmployeeId().equals(staffId)))
+                .anyMatch(people -> people.getSchedulingId().equals(scheduling.getId())
+                    && people.getEmployeeId().equals(staffId)))
             .collect(Collectors.toList());
         Set<LocalDate> allDates = new HashSet<>();
         for (Scheduling scheduling : filteredSchedulingList) {
@@ -723,10 +745,9 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
                 startDate = startDate.plusDays(1);
             }
         }
-        List<String> sortedDates = allDates.stream().sorted()
+        return allDates.stream().sorted()
             .map(LocalDate::toString)
             .collect(Collectors.toList());
-        return sortedDates;
     }
 
     /**
@@ -1369,6 +1390,41 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
             result.add(item);
         }
         return result;
+    }
+
+    @Override
+    public boolean isStaffScheduledForShiftOnDate(String staffId, String shiftId, String day) {
+        if (StrUtil.hasBlank(staffId, shiftId, day)) {
+            return false;
+        }
+        LocalDate targetDay;
+        try {
+            targetDay = LocalDate.parse(day);
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+        QueryWrapper<Scheduling> schedulingWrapper = new QueryWrapper<>();
+        schedulingWrapper.eq(MybatisPlusUtil.toColumns(Scheduling::getShiftId), shiftId);
+        List<Scheduling> schedulingList = list(schedulingWrapper);
+        if (CollectionUtil.isEmpty(schedulingList)) {
+            return false;
+        }
+        List<String> schedulingIds = schedulingList.stream()
+            .filter(scheduling -> isDateInSchedulingRange(targetDay, scheduling.getStartTime(), scheduling.getEndTime()))
+            .map(Scheduling::getId)
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(schedulingIds)) {
+            return false;
+        }
+        List<SchedulingTimeWorkPeople> people = schedulingTimeWorkPeopleService
+            .querySchedulingByschedulingIdsAndStaffId(schedulingIds, staffId);
+        return CollectionUtil.isNotEmpty(people);
+    }
+
+    private boolean isDateInSchedulingRange(LocalDate targetDay, String startTime, String endTime) {
+        LocalDate start = parseDateTime(startTime).toLocalDate();
+        LocalDate end = parseDateTime(endTime).toLocalDate();
+        return !targetDay.isBefore(start) && !targetDay.isAfter(end);
     }
 
     @Override
