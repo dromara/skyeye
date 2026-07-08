@@ -2,7 +2,6 @@ package com.skyeye.equipmentcheck.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
@@ -116,7 +115,7 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
         EquipmentCheckOrder order = super.selectById(id);
         equipmentService.setDataMation(order, EquipmentCheckOrder::getEquipmentId);
         equipmentCheckStandardService.setDataMation(order, EquipmentCheckOrder::getStandardId);
-        setCheckerMation(order);
+        iAuthUserService.setDataMation(order, EquipmentCheckOrder::getCheckerId);
         return order;
     }
 
@@ -125,36 +124,8 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
         equipmentCheckStandardService.setMationForMap(beans, "standardId", "standardMation");
-        setCheckerMationForMap(beans);
+        iAuthUserService.setMationForMap(beans, "checkerId", "checkerMation");
         return beans;
-    }
-
-    private void setCheckerMationForMap(List<Map<String, Object>> beans) {
-        List<String> staffIds = beans.stream()
-            .map(bean -> bean.get("checkerId"))
-            .filter(ObjectUtil::isNotNull)
-            .map(Object::toString)
-            .filter(StrUtil::isNotEmpty)
-            .distinct()
-            .collect(Collectors.toList());
-        if (CollectionUtil.isEmpty(staffIds)) {
-            return;
-        }
-        Map<String, Map<String, Object>> staffMap = iAuthUserService.queryUserMationListByStaffIds(staffIds);
-        beans.forEach(bean -> {
-            if (bean.get("checkerId") != null) {
-                bean.put("checkerMation", staffMap.get(bean.get("checkerId").toString()));
-            }
-        });
-    }
-
-    private void setCheckerMation(EquipmentCheckOrder order) {
-        if (StrUtil.isEmpty(order.getCheckerId())) {
-            return;
-        }
-        Map<String, Map<String, Object>> staffMap = iAuthUserService.queryUserMationListByStaffIds(
-            Collections.singletonList(order.getCheckerId()));
-        order.setCheckerMation(staffMap.get(order.getCheckerId()));
     }
 
     // 点检审批通过：异常固定映射为带病运行并生成维修草案；正常固定映射为正常运行。
