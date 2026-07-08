@@ -23,6 +23,7 @@ import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
+import com.skyeye.common.util.DataCommonUtil;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.eve.service.IAuthUserService;
@@ -33,6 +34,7 @@ import com.skyeye.leave.service.LeaveService;
 import com.skyeye.leave.service.LeaveTimeSlotService;
 import com.skyeye.rest.erp.farm.service.IFarmService;
 import com.skyeye.rest.erp.farm.service.IFarmStationService;
+import com.skyeye.scheduling.classenum.SchedulePublishState;
 import com.skyeye.scheduling.dao.SchedulingDao;
 import com.skyeye.scheduling.entity.*;
 import com.skyeye.scheduling.service.*;
@@ -100,6 +102,9 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
 
     @Override
     protected void createPrepose(Scheduling entity) {
+        if (entity.getPublishState() == null) {
+            entity.setPublishState(SchedulePublishState.DRAFT.getKey());
+        }
         // 排班开始时间（yyyy-MM-dd）
         String startDateStr = entity.getStartTime();
         String endDateStr = entity.getEndTime();
@@ -213,6 +218,15 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
             schedulingTime.setSchedulingId(entity.getId());
         }
         schedulingTimeService.createEntity(schedulingTimeMation, userId);
+    }
+
+    @Override
+    protected void updatePrepose(Scheduling entity) {
+        Scheduling existing = super.selectById(entity.getId());
+        assertSchedulingEditable(existing);
+        if (existing != null) {
+            entity.setPublishState(existing.getPublishState());
+        }
     }
 
     @Override
@@ -509,6 +523,7 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
             .innerJoin(SchedulingTimeWorkPeople.class, "p",
                 SchedulingTimeWorkPeople::getSchedulingId, Scheduling::getId)
             .eq("p." + MybatisPlusUtil.toColumns(SchedulingTimeWorkPeople::getEmployeeId), staffId)
+            .eq("s." + MybatisPlusUtil.toColumns(Scheduling::getPublishState), SchedulePublishState.PUBLISHED.getKey())
             // 同一排班多时间段会产生多行，去重保证分页准确
             .distinct()
             .orderByDesc(Scheduling::getCreateTime);
@@ -706,6 +721,7 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
 
     private List<Scheduling> listSchedulingsIntersectingMonths(List<String> mouthList) {
         QueryWrapper<Scheduling> schedulingWrapper = new QueryWrapper<>();
+        applyPublishedSchedulingCondition(schedulingWrapper);
         mouthList.forEach(month -> {
             String monthPattern = month + "%";
             schedulingWrapper.or(wrap -> wrap
@@ -782,6 +798,7 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
      */
     private List<Map<String, Object>> queryStaffSchedulingShiftList(String staffId, String day, String monthMation) {
         QueryWrapper<Scheduling> schedulingWrapper = new QueryWrapper<>();
+        applyPublishedSchedulingCondition(schedulingWrapper);
         if (StrUtil.isNotBlank(day)) {
             // 排班开始 <= 指定日 <= 排班结束
             schedulingWrapper.le(MybatisPlusUtil.toColumns(Scheduling::getStartTime), day)
@@ -926,6 +943,7 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
         for (String day : specificDays) {
             // 查询该天的排班
             QueryWrapper<Scheduling> schedulingWrapper = new QueryWrapper<>();
+            applyPublishedSchedulingCondition(schedulingWrapper);
             schedulingWrapper.le(MybatisPlusUtil.toColumns(Scheduling::getStartTime), day)
                 .ge(MybatisPlusUtil.toColumns(Scheduling::getEndTime), day);
             List<Scheduling> schedulingList = list(schedulingWrapper);
@@ -1297,7 +1315,57 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
     public void deleteSchedulingByIds(InputObject inputObject, OutputObject outputObject) {
         String ids = inputObject.getParams().get("ids").toString();
         List<String> idList = Arrays.asList(ids.split(CommonCharConstants.COMMA_MARK));
+        List<Scheduling> schedulingList = querySchedulingByIdList(idList);
+        for (Scheduling scheduling : schedulingList) {
+            assertSchedulingEditable(scheduling);
+        }
         deleteById(idList);
+    }
+
+    @Override
+    public void publishSchedulingById(InputObject inputObject, OutputObject outputObject) {
+        String id = inputObject.getParams().get("id").toString();
+        if (StrUtil.isBlank(id)) {
+            throw new CustomException("排班id不能为空");
+        }
+        Scheduling scheduling = selectById(id);
+        if (scheduling == null) {
+            throw new CustomException("排班记录不存在");
+        }
+        if (isPublished(scheduling)) {
+            throw new CustomException("该排班已发布，无需重复发布");
+        }
+        List<SchedulingTime> schedulingTimes = schedulingTimeService.querySchedulingTimeBySchedulingId(id);
+        if (CollectionUtil.isEmpty(schedulingTimes)) {
+            throw new CustomException("请先完善排班后再发布");
+        }
+        String userId = InputObject.getLogParamsStatic().get("id").toString();
+        Scheduling update = new Scheduling();
+        update.setId(id);
+        update.setPublishState(SchedulePublishState.PUBLISHED.getKey());
+        DataCommonUtil.setCommonLastUpdateDataByGenericity(update, userId);
+        updateById(update);
+        outputObject.setBean(selectById(id));
+    }
+
+    private boolean isPublished(Scheduling scheduling) {
+        if (scheduling == null) {
+            return false;
+        }
+        return SchedulePublishState.PUBLISHED.getKey().equals(scheduling.getPublishState());
+    }
+
+    /**
+     * 个人考勤、月历、定时缺卡结算等场景仅使用已发布排班。
+     */
+    private void applyPublishedSchedulingCondition(QueryWrapper<Scheduling> wrapper) {
+        wrapper.eq(MybatisPlusUtil.toColumns(Scheduling::getPublishState), SchedulePublishState.PUBLISHED.getKey());
+    }
+
+    private void assertSchedulingEditable(Scheduling scheduling) {
+        if (isPublished(scheduling)) {
+            throw new CustomException("该排班已发布，不允许编辑或删除");
+        }
     }
 
     @Override
@@ -1337,8 +1405,9 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
         if (StrUtil.isBlank(checkDate)) {
             return Collections.emptyList();
         }
-        // 1. 查出覆盖 checkDate 的排班计划
+        // 1. 查出覆盖 checkDate 且已发布的排班计划
         QueryWrapper<Scheduling> schedulingWrapper = new QueryWrapper<>();
+        applyPublishedSchedulingCondition(schedulingWrapper);
         schedulingWrapper.le(MybatisPlusUtil.toColumns(Scheduling::getStartTime), checkDate);
         schedulingWrapper.ge(MybatisPlusUtil.toColumns(Scheduling::getEndTime), checkDate);
         List<Scheduling> schedulingList = list(schedulingWrapper);
@@ -1405,6 +1474,7 @@ public class SchedulingServiceImpl extends SkyeyeBusinessServiceImpl<SchedulingD
         }
         QueryWrapper<Scheduling> schedulingWrapper = new QueryWrapper<>();
         schedulingWrapper.eq(MybatisPlusUtil.toColumns(Scheduling::getShiftId), shiftId);
+        applyPublishedSchedulingCondition(schedulingWrapper);
         List<Scheduling> schedulingList = list(schedulingWrapper);
         if (CollectionUtil.isEmpty(schedulingList)) {
             return false;

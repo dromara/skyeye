@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.common.entity.features.OperatorUserInfo;
+import com.skyeye.scheduling.classenum.SchedulePublishState;
 import com.skyeye.scheduling.classenum.ScheduleType;
 import lombok.Data;
 
@@ -28,6 +29,10 @@ public class Scheduling extends OperatorUserInfo {
     @TableField(value = "schedule_type")
     @ApiModelProperty(value = "排班状态 1 自动 2 手动", enumClass = ScheduleType.class)
     private Integer scheduleType;
+
+    @TableField(value = "publish_state")
+    @ApiModelProperty(value = "发布状态", enumClass = SchedulePublishState.class)
+    private Integer publishState;
 
     @TableField(value = "farm_id")
     @ApiModelProperty(value = "车间id", required = "required")

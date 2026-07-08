@@ -10,8 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * @ClassName: SchedulePeopleType
- * @Description: 排班人员状态枚举类
+ * @ClassName: SchedulePublishState
+ * @Description: 排班发布状态枚举类
  * @author: skyeye云系列--卫志强
  * @date: 2026/7/8
  * @Copyright: 2026 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
@@ -20,11 +20,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public enum SchedulePeopleType implements SkyeyeEnumClass {
+public enum SchedulePublishState implements SkyeyeEnumClass {
 
-    ONDUTY(1, "在职中", false, false),
-    ONLEAVE(2, "请假中", false, false),
-    ONBUSINESSTRIP(3, "出差中", false, false);
+    DRAFT(1, "未发布", true, true),
+    PUBLISHED(2, "已发布", true, false);
 
     private Integer key;
 

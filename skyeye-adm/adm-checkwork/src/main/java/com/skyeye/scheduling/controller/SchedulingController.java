@@ -92,4 +92,12 @@ public class SchedulingController {
     public void querySchedulingByStaffIdAndDays(InputObject inputObject, OutputObject outputObject) {
         schedulingService.querySchedulingByStaffIdAndDays(inputObject, outputObject);
     }
+
+    @ApiOperation(id = "publishSchedulingById", value = "发布排班", method = "POST", allUse = "1")
+    @ApiImplicitParams(
+        @ApiImplicitParam(id = "id", name = "id", value = "排班id", required = "required"))
+    @RequestMapping("/post/SchedulingController/publishSchedulingById")
+    public void publishSchedulingById(InputObject inputObject, OutputObject outputObject) {
+        schedulingService.publishSchedulingById(inputObject, outputObject);
+    }
 }
