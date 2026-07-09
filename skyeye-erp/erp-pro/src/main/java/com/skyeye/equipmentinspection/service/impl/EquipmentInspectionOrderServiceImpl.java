@@ -21,11 +21,14 @@ import com.skyeye.equipmentinspection.entity.EquipmentInspectionItem;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrderItem;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
+import com.skyeye.equipmentinspection.entity.EquipmentInspectionTask;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionItemService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderItemService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
+import com.skyeye.equipmentinspection.service.EquipmentInspectionTaskService;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionResultType;
+import com.skyeye.equipmentinspection.classenum.EquipmentInspectionTaskState;
 import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -60,6 +63,9 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
     @Autowired
     private EquipmentInspectionItemService equipmentInspectionItemService;
 
+    @Autowired
+    private EquipmentInspectionTaskService equipmentInspectionTaskService;
+
     @Override
     protected QueryWrapper<EquipmentInspectionOrder> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<EquipmentInspectionOrder> queryWrapper = super.getQueryWrapper(commonPageInfo);
@@ -79,6 +85,7 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         }
         equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
         equipmentInspectionPlanService.setMationForMap(beans, "planId", "planMation");
+        equipmentInspectionTaskService.setMationForMap(beans, "taskId", "taskMation");
         iAuthUserService.setMationForMap(beans, "inspectorUserId", "inspectorUserMation");
         beans.forEach(this::appendEnumMationForMap);
         return beans;
@@ -94,6 +101,7 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
     @Override
     public EquipmentInspectionOrder selectById(String id) {
         EquipmentInspectionOrder order = super.selectById(id);
+        equipmentInspectionTaskService.setDataMation(order, EquipmentInspectionOrder::getTaskId);
         equipmentService.setDataMation(order, EquipmentInspectionOrder::getEquipmentId);
         appendPlanItemMation(order);
         appendOrderItemResultMation(order);
@@ -105,6 +113,7 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
 
     @Override
     public void createPrepose(EquipmentInspectionOrder entity) {
+        fillFromTask(entity);
         normalizeEquipmentRunStatus(entity);
         Map<String, Object> business = BeanUtil.beanToMap(entity);
         entity.setOddNumber(iCodeRuleService.getNextCodeByClassName(getClass().getName(), business));
@@ -119,6 +128,7 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
 
     @Override
     public void validatorEntity(EquipmentInspectionOrder entity) {
+        fillFromTask(entity);
         normalizeEquipmentRunStatus(entity);
         super.validatorEntity(entity);
         alignOrderItemsWithPlan(entity.getEquipmentInspectionOrderItemList(), entity.getPlanId());
@@ -173,6 +183,30 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         }
         if (entity.getEquipmentRunStatus() == null) {
             entity.setEquipmentRunStatus(EquipmentState.NORMAL.getKey());
+        }
+    }
+
+    /**
+     * 从巡检任务带出设备、方案等字段（记录依赖 taskMation，写单时仅需 taskId）
+     */
+    private void fillFromTask(EquipmentInspectionOrder entity) {
+        if (StrUtil.isBlank(entity.getTaskId())) {
+            if (StrUtil.isBlank(entity.getEquipmentId()) || StrUtil.isBlank(entity.getPlanId())) {
+                throw new CustomException("请选择巡检任务");
+            }
+            return;
+        }
+        EquipmentInspectionTask task = equipmentInspectionTaskService.selectById(entity.getTaskId());
+        if (task == null) {
+            throw new CustomException("巡检任务不存在");
+        }
+        if (!EquipmentInspectionTaskState.IN_PROGRESS.getKey().equals(task.getState())) {
+            throw new CustomException("请先开始执行巡检任务");
+        }
+        entity.setEquipmentId(task.getEquipmentId());
+        entity.setPlanId(task.getPlanId());
+        if (entity.getSeqInDay() == null) {
+            entity.setSeqInDay(task.getSeqInDay());
         }
     }
 

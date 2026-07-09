@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description: 设备巡检单控制层
  */
 @RestController
-@Api(value = "设备巡检单", tags = "设备巡检单", modelName = "设备巡检")
+@Api(value = "设备巡检单", tags = "设备巡检单", modelName = "设备巡检单")
 public class EquipmentInspectionOrderController {
 
     @Autowired
