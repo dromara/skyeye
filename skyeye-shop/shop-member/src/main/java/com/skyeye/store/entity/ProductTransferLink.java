@@ -5,11 +5,12 @@
 package com.skyeye.store.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
-import com.skyeye.common.entity.features.SkyeyeLinkData;
+import com.skyeye.common.entity.CommonInfo;
 import lombok.Data;
 
 import java.util.Map;
@@ -21,7 +22,15 @@ import java.util.Map;
 @Data
 @TableName(value = "shop_store_product_transfer_link", autoResultMap = true)
 @ApiModel("门店产品调拨明细")
-public class ProductTransferLink extends SkyeyeLinkData {
+public class ProductTransferLink extends CommonInfo {
+
+    @TableId("id")
+    @ApiModelProperty(value = "主键id。为空时新增，不为空时编辑")
+    private String id;
+
+    @TableField("parent_id")
+    @Property(value = "调拨申请主表id")
+    private String parentId;
 
     @TableField(value = "material_id")
     @ApiModelProperty(value = "产品ID", required = "required")
