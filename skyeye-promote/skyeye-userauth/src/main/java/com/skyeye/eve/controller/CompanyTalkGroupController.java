@@ -90,4 +90,23 @@ public class CompanyTalkGroupController {
         companyTalkGroupService.editCreateToExitGroup(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "editGroupMation", value = "编辑群组信息", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "群组id", required = "required"),
+        @ApiImplicitParam(id = "groupName", name = "groupName", value = "群组名称", required = "required"),
+        @ApiImplicitParam(id = "groupImg", name = "groupImg", value = "群组头像")})
+    @RequestMapping("/post/CompanyTalkGroupController/editGroupMation")
+    public void editGroupMation(InputObject inputObject, OutputObject outputObject) {
+        companyTalkGroupService.editGroupMation(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "insertGroupMemberInvite", value = "邀请成员加入群聊", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "groupId", name = "groupId", value = "群组id", required = "required"),
+        @ApiImplicitParam(id = "userIds", name = "userIds", value = "被邀请用户id，逗号隔开", required = "required")})
+    @RequestMapping("/post/CompanyTalkGroupController/insertGroupMemberInvite")
+    public void insertGroupMemberInvite(InputObject inputObject, OutputObject outputObject) {
+        companyTalkGroupService.insertGroupMemberInvite(inputObject, outputObject);
+    }
+
 }

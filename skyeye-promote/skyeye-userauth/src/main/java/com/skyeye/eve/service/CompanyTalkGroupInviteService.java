@@ -23,6 +23,8 @@ public interface CompanyTalkGroupInviteService extends SkyeyeBusinessService<Com
 
     void saveList(String groupId, List<String> userIds, String createId);
 
+    void addInviteList(String groupId, List<String> userIds, String createId);
+
     void deleteByGroupId(String groupId);
 
     List<CompanyTalkGroupInvite> selectByGroupId(String groupId);

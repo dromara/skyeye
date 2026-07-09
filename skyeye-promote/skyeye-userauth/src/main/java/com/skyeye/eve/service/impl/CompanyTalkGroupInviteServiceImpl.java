@@ -79,6 +79,31 @@ public class CompanyTalkGroupInviteServiceImpl extends SkyeyeBusinessServiceImpl
     }
 
     @Override
+    public void addInviteList(String groupId, List<String> userIds, String createId) {
+        if (CollectionUtil.isEmpty(userIds)) {
+            return;
+        }
+        List<CompanyTalkGroupInvite> inviteBeans = new ArrayList<>();
+        for (String str : userIds) {
+            if (ToolUtil.isBlank(str)) {
+                continue;
+            }
+            if (checkGroupInvitationMationByUserId(str, groupId)) {
+                continue;
+            }
+            CompanyTalkGroupInvite inviteBean = new CompanyTalkGroupInvite();
+            inviteBean.setInviteUserId(str);
+            inviteBean.setGroupId(groupId);
+            inviteBean.setState(CompanyTalkGroupInviteState.WAITING_CHECK.getKey());
+            inviteBean.setInGroupType(CompanyTalkGroupInviteInGroupType.INVITE.getKey());
+            inviteBeans.add(inviteBean);
+        }
+        if (CollectionUtil.isNotEmpty(inviteBeans)) {
+            createEntity(inviteBeans, createId);
+        }
+    }
+
+    @Override
     public void deleteByGroupId(String groupId) {
         QueryWrapper<CompanyTalkGroupInvite> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(CompanyTalkGroupInvite::getGroupId), groupId);
@@ -137,7 +162,7 @@ public class CompanyTalkGroupInviteServiceImpl extends SkyeyeBusinessServiceImpl
         }
         CompanyTalkGroup companyTalkGroup = companyTalkGroupService.selectById(companyTalkGroupInvite.getGroupId());
         long userCount = companyTalkGroupUserService.countByGroupId(companyTalkGroup.getId());
-        if (companyTalkGroup.getGroupUserNum() >= userCount) {
+        if (companyTalkGroup.getGroupUserNum() <= userCount) {
             throw new CustomException("群组人数已达上限！");
         }
 

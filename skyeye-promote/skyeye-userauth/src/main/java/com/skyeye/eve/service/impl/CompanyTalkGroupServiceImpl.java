@@ -23,6 +23,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
@@ -164,7 +165,10 @@ public class CompanyTalkGroupServiceImpl extends SkyeyeBusinessServiceImpl<Compa
         Map<String, Object> map = inputObject.getParams();
         String groupId = map.get("id").toString();
         String cacheKey = Constants.checkSysEveTalkGroupUserListByGroupId(groupId);
-        List<Map<String, Object>> beans = redisCache.getList(cacheKey, key -> companyTalkGroupDao.queryGroupMemberByGroupId(groupId), RedisConstants.ALL_USE_TIME);
+        String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
+        List<Map<String, Object>> beans = redisCache.getList(cacheKey, key -> {
+            return companyTalkGroupDao.queryGroupMemberByGroupId(groupId, tenantId);
+        }, RedisConstants.ALL_USE_TIME);
         map.clear();
         map.put("members", beans.size());
         map.put("list", beans);
@@ -239,6 +243,67 @@ public class CompanyTalkGroupServiceImpl extends SkyeyeBusinessServiceImpl<Compa
         updateWrapper.set(MybatisPlusUtil.toColumns(CompanyTalkGroup::getState), CompanyTalkGroupState.DISSOLVED.getKey());
         update(updateWrapper);
         refreshCache(groupId);
+    }
+
+    @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void editGroupMation(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String id = params.get("id").toString();
+        String groupName = params.get("groupName").toString();
+        String groupImg = params.get("groupImg").toString();
+        String userId = inputObject.getLogParams().get("id").toString();
+
+        CompanyTalkGroup companyTalkGroup = selectById(id);
+        if (companyTalkGroup == null || StrUtil.isEmpty(companyTalkGroup.getId())) {
+            throw new CustomException("群信息不存在，请核实后进行操作。");
+        }
+        if (!StrUtil.equals(companyTalkGroup.getCreateId(), userId)) {
+            throw new CustomException("只有群主可以修改群信息。");
+        }
+
+        UpdateWrapper<CompanyTalkGroup> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, id);
+        updateWrapper.set(MybatisPlusUtil.toColumns(CompanyTalkGroup::getGroupName), groupName);
+        if (StrUtil.isNotEmpty(groupImg)) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(CompanyTalkGroup::getGroupImg), groupImg);
+            String historyImg = companyTalkGroup.getGroupHistroyImg();
+            if (StrUtil.isNotEmpty(historyImg) && !historyImg.contains(groupImg)) {
+                updateWrapper.set(MybatisPlusUtil.toColumns(CompanyTalkGroup::getGroupHistroyImg), historyImg + groupImg + ",");
+            }
+        }
+        update(updateWrapper);
+        refreshCache(id);
+    }
+
+    @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void insertGroupMemberInvite(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String groupId = params.get("groupId").toString();
+        String userIds = params.get("userIds").toString();
+        String userId = inputObject.getLogParams().get("id").toString();
+
+        CompanyTalkGroup companyTalkGroup = selectById(groupId);
+        if (companyTalkGroup == null || StrUtil.isEmpty(companyTalkGroup.getId())) {
+            throw new CustomException("群信息不存在，请核实后进行操作。");
+        }
+        boolean isMember = companyTalkGroupUserService.checkGroupUserIsExit(groupId, userId);
+        if (!isMember) {
+            throw new CustomException("您不在该群聊中，无法邀请成员。");
+        }
+
+        List<String> inviteUserIds = Arrays.stream(userIds.split(","))
+            .map(String::trim)
+            .filter(str -> !ToolUtil.isBlank(str))
+            .filter(str -> !companyTalkGroupUserService.checkGroupUserIsExit(groupId, str))
+            .distinct()
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(inviteUserIds)) {
+            outputObject.setreturnMessage("没有可邀请的成员。");
+            return;
+        }
+        companyTalkGroupInviteService.addInviteList(groupId, inviteUserIds, userId);
     }
 
 }

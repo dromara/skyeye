@@ -21,7 +21,9 @@ import java.util.Map;
  */
 public interface CompanyTalkGroupDao extends SkyeyeBaseMapper<CompanyTalkGroup> {
 
-    List<Map<String, Object>> queryGroupMemberByGroupId(@Param("groupId") String groupId);
+    @IgnoreTenant
+    List<Map<String, Object>> queryGroupMemberByGroupId(@Param("groupId") String groupId,
+                                                        @Param("tenantId") String tenantId);
 
     List<Map<String, Object>> queryGroupMemberByGroupIdAndNotThisUser(Map<String, Object> map);
 

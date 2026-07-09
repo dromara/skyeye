@@ -17,6 +17,9 @@
 			a.id = #{groupId}
 		AND a.id = b.group_id
 		AND b.user_id = c.user_id
+		<if test="tenantId != '' and tenantId != null">
+            AND a.tenant_id = #{tenantId}
+        </if>
 		ORDER BY groupMaster DESC
 	</select>
 	

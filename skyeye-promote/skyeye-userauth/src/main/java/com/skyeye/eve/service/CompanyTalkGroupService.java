@@ -29,4 +29,8 @@ public interface CompanyTalkGroupService extends SkyeyeBusinessService<CompanyTa
 
     void editCreateToExitGroup(InputObject inputObject, OutputObject outputObject);
 
+    void editGroupMation(InputObject inputObject, OutputObject outputObject);
+
+    void insertGroupMemberInvite(InputObject inputObject, OutputObject outputObject);
+
 }
