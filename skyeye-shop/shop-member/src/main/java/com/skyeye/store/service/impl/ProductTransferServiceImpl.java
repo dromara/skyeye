@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.entity.search.CommonPageInfo;
-import com.skyeye.common.enumeration.FlowableChildStateEnum;
+import com.skyeye.common.enumeration.FlowableStateEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.erp.service.IMaterialNormsService;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 /**
  * @ClassName: ProductTransferServiceImpl
- * @Description: 门店产品调拨申请服务层（参照 SealApplyServiceImpl）
+ * @Description: 门店产品调拨申请服务层
  */
 @Service
 @SkyeyeService(name = "门店产品调拨", groupName = "门店产品调拨", flowable = true)
@@ -90,12 +90,6 @@ public class ProductTransferServiceImpl extends SkyeyeBusinessServiceImpl<Produc
     }
 
     @Override
-    public void submitToApprovalPostpose(String id, String processInstanceId) {
-        super.submitToApprovalPostpose(id, processInstanceId);
-        productTransferLinkService.editStateByPId(id, FlowableChildStateEnum.IN_EXAMINE.getKey());
-    }
-
-    @Override
     public ProductTransfer getDataFromDb(String id) {
         ProductTransfer productTransfer = super.getDataFromDb(id);
         productTransfer.setApplyLinkList(productTransferLinkService.selectByPId(productTransfer.getId()));
@@ -142,25 +136,15 @@ public class ProductTransferServiceImpl extends SkyeyeBusinessServiceImpl<Produc
         if (toStore != null) {
             productTransfer.setToStoreMation(toStore);
         }
+        productTransfer.setStateName(FlowableStateEnum.getStateName(productTransfer.getState()));
+        iAuthUserService.setName(productTransfer, "createId", "createName");
         return productTransfer;
-    }
-
-    @Override
-    public void revokePostpose(ProductTransfer entity) {
-        super.revokePostpose(entity);
-        productTransferLinkService.editStateByPId(entity.getId(), FlowableChildStateEnum.DRAFT.getKey());
     }
 
     @Override
     protected void approvalEndIsSuccess(ProductTransfer entity) {
         ProductTransfer productTransfer = getDataFromDb(entity.getId());
         executeStoreProductTransfer(productTransfer);
-        productTransferLinkService.editStateByPId(entity.getId(), FlowableChildStateEnum.ADEQUATE.getKey());
-    }
-
-    @Override
-    protected void approvalEndIsFailed(ProductTransfer entity) {
-        productTransferLinkService.editStateByPId(entity.getId(), FlowableChildStateEnum.REJECT.getKey());
     }
 
     private void executeStoreProductTransfer(ProductTransfer productTransfer) {

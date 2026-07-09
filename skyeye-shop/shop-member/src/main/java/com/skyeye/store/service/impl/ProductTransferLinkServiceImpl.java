@@ -4,11 +4,14 @@
 
 package com.skyeye.store.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
-import com.skyeye.base.business.service.impl.SkyeyeLinkDataServiceImpl;
+import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.util.CalculationUtil;
+import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.store.dao.ProductTransferLinkDao;
 import com.skyeye.store.entity.ProductTransferLink;
@@ -26,11 +29,35 @@ import java.util.stream.Collectors;
  */
 @Service
 @SkyeyeService(name = "门店产品调拨明细", groupName = "门店产品调拨", manageShow = false)
-public class ProductTransferLinkServiceImpl extends SkyeyeLinkDataServiceImpl<ProductTransferLinkDao, ProductTransferLink>
+public class ProductTransferLinkServiceImpl extends SkyeyeBusinessServiceImpl<ProductTransferLinkDao, ProductTransferLink>
     implements ProductTransferLinkService {
 
     @Override
-    protected void checkLinkList(String pId, List<ProductTransferLink> beans) {
+    public void saveLinkList(String pId, List<ProductTransferLink> beans) {
+        checkLinkList(beans);
+        deleteByPId(pId);
+        if (CollectionUtil.isEmpty(beans)) {
+            return;
+        }
+        beans.forEach(bean -> bean.setParentId(pId));
+        createEntity(beans, StrUtil.EMPTY);
+    }
+
+    @Override
+    public List<ProductTransferLink> selectByPId(String pId) {
+        QueryWrapper<ProductTransferLink> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ProductTransferLink::getParentId), pId);
+        return list(queryWrapper);
+    }
+
+    @Override
+    public void deleteByPId(String pId) {
+        QueryWrapper<ProductTransferLink> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ProductTransferLink::getParentId), pId);
+        remove(queryWrapper);
+    }
+
+    private void checkLinkList(List<ProductTransferLink> beans) {
         beans.forEach(link -> {
             if (StrUtil.isEmpty(link.getMaterialId()) || StrUtil.isEmpty(link.getNormsId()) || StrUtil.isEmpty(link.getOperNumber())) {
                 throw new CustomException("产品、规格、调拨数量不能为空");
