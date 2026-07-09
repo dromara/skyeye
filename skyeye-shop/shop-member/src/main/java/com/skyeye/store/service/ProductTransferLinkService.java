@@ -4,13 +4,21 @@
 
 package com.skyeye.store.service;
 
-import com.skyeye.base.business.service.SkyeyeLinkDataService;
+import com.skyeye.base.business.service.SkyeyeBusinessService;
 import com.skyeye.store.entity.ProductTransferLink;
+
+import java.util.List;
 
 /**
  * @ClassName: ProductTransferLinkService
- * @Description: 门店产品调拨明细服务接口（参照 ApplyLinkService）
+ * @Description: 门店产品调拨明细服务接口
  */
-public interface ProductTransferLinkService extends SkyeyeLinkDataService<ProductTransferLink> {
+public interface ProductTransferLinkService extends SkyeyeBusinessService<ProductTransferLink> {
+
+    void saveLinkList(String pId, List<ProductTransferLink> beans);
+
+    List<ProductTransferLink> selectByPId(String pId);
+
+    void deleteByPId(String pId);
 
 }
