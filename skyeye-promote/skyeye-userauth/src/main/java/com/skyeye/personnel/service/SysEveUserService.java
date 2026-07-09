@@ -9,6 +9,7 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.personnel.entity.SysEveUser;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,6 +48,14 @@ public interface SysEveUserService extends SkyeyeBusinessService<SysEveUser> {
     void editRoleIdsByUserId(InputObject inputObject, OutputObject outputObject);
 
     void queryAllMenuBySession(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 获取当前登录用户的APP菜单树
+     *
+     * @param userIdAndType 用户id(含APP标识)
+     * @return APP菜单树
+     */
+    List<Map<String, Object>> queryAppMenuTreeBySession(String userIdAndType);
 
     void setUserLoginRedisMation(String userId, Map<String, Object> userMation, boolean editAll);
 

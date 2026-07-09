@@ -496,16 +496,20 @@ public class SysEveUserServiceImpl extends SkyeyeBusinessServiceImpl<SysEveUserD
     @Override
     public void queryAllMenuBySession(InputObject inputObject, OutputObject outputObject) {
         String userIdAndType = GetUserToken.getUserTokenUserId(PutObject.getRequest());
+        List<Map<String, Object>> menuList = queryAppMenuTreeBySession(userIdAndType);
+        outputObject.setBeans(menuList);
+    }
+
+    @Override
+    public List<Map<String, Object>> queryAppMenuTreeBySession(String userIdAndType) {
         List<Map<String, Object>> menuList;
         if (!tenantEnable) {
-            // 单租户模式，获取角色id(逗号隔开的字符串)
             String roleIds = jedisClientService.get(ObjectConstant.getUserHasRoleIds(userIdAndType));
             menuList = roleMenuService.getRoleHasMenuListByRoleIds(roleIds, userIdAndType);
         } else {
-            // 多租户模式
             menuList = getMenuListForSaas(userIdAndType);
         }
-        outputObject.setBeans(menuList);
+        return menuList;
     }
 
     private List<Map<String, Object>> getMenuListForSaas(String userIdAndType) {
