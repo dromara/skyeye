@@ -195,11 +195,11 @@ public class PatrolTaskServiceImpl extends SkyeyeBusinessServiceImpl<PatrolTaskD
             throw new CustomException("只有待执行、执行中或已超时状态的任务才能取消");
         }
         String userId = inputObject.getLogParamsStatic().get("id").toString();
-        task.setState(PatrolTaskState.CANCELLED.getKey());
         // 如果正在执行中，设置结束时间
         if (PatrolTaskState.IN_PROGRESS.getKey().equals(task.getState())) {
             task.setActualEndTime(DateUtil.getTimeAndToString());
         }
+        task.setState(PatrolTaskState.CANCELLED.getKey());
         updateEntity(task, userId);
         outputObject.setBean(task);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
