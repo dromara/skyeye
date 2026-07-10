@@ -17,6 +17,7 @@ import com.skyeye.common.entity.features.OperatorUserInfo;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionTaskState;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,6 +53,13 @@ public class EquipmentInspectionTask extends OperatorUserInfo {
     @TableField(exist = false)
     @Property(value = "设备信息")
     private Map<String, Object> equipmentMation;
+
+    /**
+     * 本任务应检项目列表（来自方案 itemMation，设备巡检为一任务多项目）
+     */
+    @TableField(exist = false)
+    @Property(value = "应检项目列表")
+    private List<EquipmentInspectionItem> itemMationList;
 
     @TableField(value = "executor_id")
     @ApiModelProperty(value = "执行人ID（员工ID）")

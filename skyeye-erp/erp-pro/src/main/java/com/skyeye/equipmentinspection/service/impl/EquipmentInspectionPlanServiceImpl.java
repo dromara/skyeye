@@ -137,8 +137,8 @@ public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImp
     @Override
     public EquipmentInspectionPlan getDataFromDb(String id) {
         EquipmentInspectionPlan entity = super.getDataFromDb(id);
-        entity.setEquipmentId(equipmentInspectionPlanEquipmentService.selectByParentId(entity.getId()));
-        entity.setItemId(equipmentInspectionPlanItemService.selectByParentId(entity.getId()));
+        entity.setEquipmentId(equipmentInspectionPlanEquipmentService.selectByParentId(id));
+        entity.setItemId(equipmentInspectionPlanItemService.selectByParentId(id));
         return entity;
     }
 

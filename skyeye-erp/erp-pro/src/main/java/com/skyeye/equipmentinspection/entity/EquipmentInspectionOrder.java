@@ -37,16 +37,20 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     private String oddNumber;
 
     @TableField(value = "equipment_id", updateStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "设备id", required = "required")
+    @ApiModelProperty(value = "设备id（可由 taskId 自动带出）")
     private String equipmentId;
 
     @TableField(value = "plan_id", updateStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "巡检方案id", required = "required")
+    @ApiModelProperty(value = "巡检方案id（可由 taskId 自动带出）")
     private String planId;
 
     @TableField(value = "task_id", updateStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "巡检任务id")
+    @ApiModelProperty(value = "巡检任务id", required = "required")
     private String taskId;
+
+    @TableField(exist = false)
+    @Property(value = "任务信息")
+    private EquipmentInspectionTask taskMation;
 
     @TableField(exist = false)
     @Property(value = "巡检方案信息")
