@@ -28,7 +28,7 @@ public class EquipmentInspectionTeamMemberController {
     @Autowired
     private EquipmentInspectionTeamMemberService equipmentInspectionTeamMemberService;
 
-    @ApiOperation(id = "queryEquipmentInspectionTeamMemberList", value = "获取设备巡检班组人员列表", method = "POST", allUse = "1")
+    @ApiOperation(id = "queryEquipmentInspectionTeamMemberList", value = "获取设备巡检班组人员列表（objectId=班组id）", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/EquipmentInspectionTeamMemberController/queryEquipmentInspectionTeamMemberList")
     public void queryEquipmentInspectionTeamMemberList(InputObject inputObject, OutputObject outputObject) {
