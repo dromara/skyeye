@@ -119,4 +119,33 @@ public class CompanyTalkGroupUserServiceImpl extends SkyeyeBusinessServiceImpl<C
         remove(queryWrapper);
         evictGroupMemberCache(groupId);
     }
+
+    @Override
+    public List<CompanyTalkGroupUser> selectByUserId(String userId) {
+        QueryWrapper<CompanyTalkGroupUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(CompanyTalkGroupUser::getUserId), userId);
+        return list(queryWrapper);
+    }
+
+    @Override
+    public List<CompanyTalkGroupUser> selectByGroupIds(List<String> groupIds) {
+        if (CollectionUtil.isEmpty(groupIds)) {
+            return Collections.emptyList();
+        }
+        QueryWrapper<CompanyTalkGroupUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in(MybatisPlusUtil.toColumns(CompanyTalkGroupUser::getGroupId), groupIds);
+        return list(queryWrapper);
+    }
+
+    @Override
+    public void deleteByUserIdAndGroupIds(String userId, List<String> groupIds) {
+        if (CollectionUtil.isEmpty(groupIds)) {
+            return;
+        }
+        QueryWrapper<CompanyTalkGroupUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(CompanyTalkGroupUser::getUserId), userId);
+        queryWrapper.in(MybatisPlusUtil.toColumns(CompanyTalkGroupUser::getGroupId), groupIds);
+        remove(queryWrapper);
+        groupIds.forEach(this::evictGroupMemberCache);
+    }
 }

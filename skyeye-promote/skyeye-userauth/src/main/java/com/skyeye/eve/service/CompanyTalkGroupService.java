@@ -33,4 +33,6 @@ public interface CompanyTalkGroupService extends SkyeyeBusinessService<CompanyTa
 
     void insertGroupMemberInvite(InputObject inputObject, OutputObject outputObject);
 
+    void handleUserQuitGroup(String userId, String transferUserId);
+
 }
