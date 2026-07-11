@@ -5,12 +5,11 @@
 package com.skyeye.quit.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.centerrest.entity.staff.UserStaffLeaveRest;
-import com.skyeye.centerrest.team.TeamBusinessRestService;
 import com.skyeye.centerrest.user.SysEveUserStaffService;
 import com.skyeye.common.client.ExecuteFeignClient;
 import com.skyeye.common.constans.CommonConstants;
@@ -18,12 +17,16 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.FlowableStateEnum;
 import com.skyeye.common.enumeration.UserStaffState;
 import com.skyeye.common.object.InputObject;
+import com.skyeye.common.util.PropertiesUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.constans.BossConstants;
+import com.skyeye.eve.rest.mq.JobMateMation;
+import com.skyeye.eve.service.IJobMateMationService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.quit.dao.QuitDao;
 import com.skyeye.quit.entity.Quit;
 import com.skyeye.quit.service.QuitService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +43,7 @@ import java.util.Map;
  * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
+@Slf4j
 @Service
 @SkyeyeService(name = "离职申请", groupName = "离职申请", flowable = true)
 public class QuitServiceImpl extends SkyeyeBusinessServiceImpl<QuitDao, Quit> implements QuitService {
@@ -48,7 +52,7 @@ public class QuitServiceImpl extends SkyeyeBusinessServiceImpl<QuitDao, Quit> im
     private SysEveUserStaffService sysEveUserStaffService;
 
     @Autowired
-    private TeamBusinessRestService teamBusinessRestService;
+    private IJobMateMationService iJobMateMationService;
 
     @Override
     protected QueryWrapper<Quit> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -82,12 +86,18 @@ public class QuitServiceImpl extends SkyeyeBusinessServiceImpl<QuitDao, Quit> im
 
     @Override
     protected void approvalEndIsSuccess(Quit entity) {
-        if (StrUtil.isNotEmpty(entity.getManagerTransferUserId())) {
-            Map<String, Object> params = new HashMap<>();
-            params.put("fromUserId", entity.getCreateId());
-            params.put("toUserId", entity.getManagerTransferUserId());
-            ExecuteFeignClient.get(() -> teamBusinessRestService.transferAllChargeUser(params));
-        }
+        // 发送离职经理转让消息
+        Map<String, Object> jobBody = new HashMap<>();
+        jobBody.put("whetherCreatTask", false);
+        jobBody.put("content", JSONUtil.toJsonStr(entity));
+        jobBody.put("userId", entity.getCreateId());
+        String topic = PropertiesUtil.getPropertiesValue("${topic.quit-manager-transfer-service}");
+        jobBody.put("topic", topic);
+        JobMateMation jobMateMation = new JobMateMation();
+        jobMateMation.setJsonStr(JSONUtil.toJsonStr(jobBody));
+        jobMateMation.setUserId(entity.getCreateId());
+        iJobMateMationService.sendMQProducer(jobMateMation);
+        log.info("离职申请审批通过，已发送经理转让消息，quitId: {}", entity.getId());
 
         Map<String, Object> userMation = iAuthUserService.queryDataMationById(entity.getCreateId());
         UserStaffLeaveRest userStaffLeaveRest = new UserStaffLeaveRest();

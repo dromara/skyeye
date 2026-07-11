@@ -40,4 +40,10 @@ public interface CompanyTalkGroupUserService extends SkyeyeBusinessService<Compa
 
     void deleteByGroupIdAndUserId(String groupId, String userId);
 
+    List<CompanyTalkGroupUser> selectByUserId(String userId);
+
+    List<CompanyTalkGroupUser> selectByGroupIds(List<String> groupIds);
+
+    void deleteByUserIdAndGroupIds(String userId, List<String> groupIds);
+
 }

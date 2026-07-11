@@ -61,6 +61,8 @@ topic:
   mail-drafts-send-service: MAIL_DRAFTS_SEND_SERVICE
   # 笔记输出为压缩包的topic
   output-notes-is-zip-service: OUTPUT_NOTES_IS_ZIP_SERVICE
+  # 离职经理转让的topic
+  quit-manager-transfer-service: QUIT_MANAGER_TRANSFER_SERVICE
 
 feign:
   client:

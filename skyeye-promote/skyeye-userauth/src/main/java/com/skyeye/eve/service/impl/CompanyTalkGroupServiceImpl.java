@@ -42,7 +42,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -303,6 +305,134 @@ public class CompanyTalkGroupServiceImpl extends SkyeyeBusinessServiceImpl<Compa
             return;
         }
         companyTalkGroupInviteService.addInviteList(groupId, inviteUserIds, userId);
+    }
+
+    /**
+     * 员工离职时批量处理群聊：普通成员退群，群主转让或解散。
+     *
+     * @param userId         离职用户id
+     * @param transferUserId 离职单指定的交接人用户id，可为空
+     */
+    @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void handleUserQuitGroup(String userId, String transferUserId) {
+        List<CompanyTalkGroupUser> userGroups = companyTalkGroupUserService.selectByUserId(userId);
+        if (CollectionUtil.isEmpty(userGroups)) {
+            return;
+        }
+        // 批量查询用户所在群信息，过滤已解散/关闭的群
+        List<String> allGroupIds = userGroups.stream()
+            .map(CompanyTalkGroupUser::getGroupId)
+            .distinct()
+            .collect(Collectors.toList());
+        List<CompanyTalkGroup> groups = selectByIds(allGroupIds.toArray(new String[0]));
+        Map<String, CompanyTalkGroup> groupMap = groups.stream()
+            .filter(group -> group != null
+                && StrUtil.isNotEmpty(group.getId())
+                && CompanyTalkGroupState.NORMAL.getKey().equals(group.getState()))
+            .collect(Collectors.toMap(CompanyTalkGroup::getId, group -> group, (a, b) -> a));
+        if (groupMap.isEmpty()) {
+            return;
+        }
+
+        // 按群主/普通成员分组
+        List<String> creatorGroupIds = new ArrayList<>();
+        List<String> memberGroupIds = new ArrayList<>();
+        groupMap.forEach((groupId, group) -> {
+            if (StrUtil.equals(group.getCreateId(), userId)) {
+                creatorGroupIds.add(groupId);
+            } else {
+                memberGroupIds.add(groupId);
+            }
+        });
+
+        // 计算群主群的处理结果：解散 or 转让给新群主
+        List<String> dissolveGroupIds = new ArrayList<>();
+        Map<String, String> transferCreatorMap = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(creatorGroupIds)) {
+            List<CompanyTalkGroupUser> creatorGroupMembers = companyTalkGroupUserService.selectByGroupIds(creatorGroupIds);
+            Map<String, List<CompanyTalkGroupUser>> membersByGroup = creatorGroupMembers.stream()
+                .collect(Collectors.groupingBy(CompanyTalkGroupUser::getGroupId));
+            for (String groupId : creatorGroupIds) {
+                List<CompanyTalkGroupUser> otherMembers = membersByGroup.getOrDefault(groupId, new ArrayList<>()).stream()
+                    .filter(member -> !StrUtil.equals(member.getUserId(), userId))
+                    .collect(Collectors.toList());
+                if (CollectionUtil.isEmpty(otherMembers)) {
+                    dissolveGroupIds.add(groupId);
+                } else {
+                    transferCreatorMap.put(groupId, resolveNewCreator(otherMembers, transferUserId, userId));
+                }
+            }
+        }
+
+        // 批量执行数据库操作
+        batchDissolveGroups(dissolveGroupIds);
+        batchTransferGroupCreator(transferCreatorMap);
+
+        // 批量删除成员记录（解散群不删成员记录，与原逻辑一致）
+        List<String> quitMemberGroupIds = new ArrayList<>(memberGroupIds);
+        quitMemberGroupIds.addAll(transferCreatorMap.keySet());
+        companyTalkGroupUserService.deleteByUserIdAndGroupIds(userId, quitMemberGroupIds);
+
+        // 清理缓存
+        groupMap.keySet().forEach(companyTalkGroupUserService::evictGroupMemberCache);
+        dissolveGroupIds.forEach(this::refreshCache);
+        transferCreatorMap.keySet().forEach(this::refreshCache);
+    }
+
+    /**
+     * 批量解散群聊。
+     *
+     * @param groupIds 待解散的群id列表
+     */
+    private void batchDissolveGroups(List<String> groupIds) {
+        if (CollectionUtil.isEmpty(groupIds)) {
+            return;
+        }
+        UpdateWrapper<CompanyTalkGroup> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.in(CommonConstants.ID, groupIds);
+        updateWrapper.set(MybatisPlusUtil.toColumns(CompanyTalkGroup::getState), CompanyTalkGroupState.DISSOLVED.getKey());
+        update(updateWrapper);
+    }
+
+    /**
+     * 批量转让群主：按新群主分组，相同新群主的群合并为一条 UPDATE。
+     *
+     * @param transferCreatorMap 群id -> 新群主用户id
+     */
+    private void batchTransferGroupCreator(Map<String, String> transferCreatorMap) {
+        if (CollectionUtil.isEmpty(transferCreatorMap)) {
+            return;
+        }
+        Map<String, List<String>> groupsByNewCreator = transferCreatorMap.entrySet().stream()
+            .collect(Collectors.groupingBy(
+                Map.Entry::getValue,
+                Collectors.mapping(Map.Entry::getKey, Collectors.toList())));
+        for (Map.Entry<String, List<String>> entry : groupsByNewCreator.entrySet()) {
+            UpdateWrapper<CompanyTalkGroup> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.in(CommonConstants.ID, entry.getValue());
+            updateWrapper.set(MybatisPlusUtil.toColumns(CompanyTalkGroup::getCreateId), entry.getKey());
+            update(updateWrapper);
+        }
+    }
+
+    /**
+     * 确定群主离职后的新群主：优先转给交接人（需在群内），否则取第一个其他成员。
+     *
+     * @param otherMembers   群内除离职人外的成员
+     * @param transferUserId 离职单指定的交接人用户id
+     * @param quitUserId     离职用户id
+     * @return 新群主用户id
+     */
+    private String resolveNewCreator(List<CompanyTalkGroupUser> otherMembers, String transferUserId, String quitUserId) {
+        if (StrUtil.isNotEmpty(transferUserId) && !StrUtil.equals(transferUserId, quitUserId)) {
+            boolean transferUserInGroup = otherMembers.stream()
+                .anyMatch(member -> StrUtil.equals(member.getUserId(), transferUserId));
+            if (transferUserInGroup) {
+                return transferUserId;
+            }
+        }
+        return otherMembers.get(0).getUserId();
     }
 
 }
