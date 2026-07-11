@@ -4,6 +4,8 @@
 
 package com.skyeye.websocket.handler.client;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.chat.enums.TalkChatType;
@@ -14,11 +16,13 @@ import com.skyeye.common.util.SpringUtils;
 import com.skyeye.eve.entity.talk.group.CompanyTalkGroup;
 import com.skyeye.eve.enumclass.CompanyTalkGroupState;
 import com.skyeye.eve.service.CompanyTalkGroupService;
+import com.skyeye.eve.service.CompanyTalkGroupUserService;
 import com.skyeye.websocket.TalkWebSocket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,13 +41,24 @@ public class EleventhGroupChatHandler implements TalkWebSocketClientMessageHandl
                 finalMap = SocketConstants.sendGroupTalkPeopleMsg(jsonObject);
                 CompanyTalkGroupService companyTalkGroupService = SpringUtils.getBean(CompanyTalkGroupService.class);
                 CompanyTalkGroup groupMation = companyTalkGroupService.selectById(finalMap.get("id").toString());
+                String senderId = jsonObject.getStr("userId");
+                CompanyTalkGroupUserService companyTalkGroupUserService = SpringUtils.getBean(CompanyTalkGroupUserService.class);
+                // 一次缓存读取：同时用于成员校验与消息推送
+                List<String> memberUserIds = companyTalkGroupUserService.selectMemberUserIdsByGroupIdWithCache(groupMation.getId());
+                if (CollectionUtil.isEmpty(memberUserIds) || !memberUserIds.contains(senderId)) {
+                    finalMap.clear();
+                    finalMap.put("messageType", "1301");
+                    finalMap.put("groupId", jsonObject.getStr("to"));
+                    socket.sendMessageToSession(JSONUtil.toJsonStr(finalMap), socket.getWsSession());
+                    return true;
+                }
                 if (CompanyTalkGroupState.NORMAL.getKey() == groupMation.getState()) {
                     TalkChatHistoryService talkChatHistoryService = SpringUtils.getBean(TalkChatHistoryService.class);
                     String id = talkChatHistoryService.createEntity(jsonObject, TalkChatType.GROUP_CHAT.getKey());
                     finalMap.put("createTime", DateUtil.getTimeAndToString());
                     finalMap.put("dataId", id);
                     finalMap.put("groupname", groupMation.getGroupName());
-                    socket.sendMessageToAll(JSONUtil.toJsonStr(finalMap));
+                    sendGroupMessageToMembers(socket, finalMap, memberUserIds, senderId);
                 } else {
                     finalMap.clear();
                     finalMap.put("messageType", "1301");
@@ -57,5 +72,27 @@ public class EleventhGroupChatHandler implements TalkWebSocketClientMessageHandl
                 throw e;
             }
         });
+    }
+
+    /**
+     * 仅向群成员推送消息；发送者当前终端不重复推送（其他终端仍可收到）。
+     */
+    private void sendGroupMessageToMembers(TalkWebSocket socket, Map<String, Object> finalMap,
+                                           List<String> memberUserIds, String senderId) {
+        if (CollectionUtil.isEmpty(memberUserIds)) {
+            return;
+        }
+        String messageJson = JSONUtil.toJsonStr(finalMap);
+        String currentSessionId = socket.getWsSession() != null ? socket.getWsSession().getId() : null;
+        for (String memberUserId : memberUserIds) {
+            if (StrUtil.isBlank(memberUserId)) {
+                continue;
+            }
+            if (StrUtil.equals(senderId, memberUserId)) {
+                socket.sendMessageTo(messageJson, memberUserId, currentSessionId);
+            } else {
+                socket.sendMessageTo(messageJson, memberUserId, null);
+            }
+        }
     }
 }

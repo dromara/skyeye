@@ -30,4 +30,9 @@ public class Constants {
         return SYS_EVE_TALK_GROUP_USER_LIST + groupId;
     }
 
+    /** 群成员 userId 列表缓存（WebSocket 推送等高频场景使用） */
+    public static String checkSysEveTalkGroupUserIdsByGroupId(String groupId) {
+        return SYS_EVE_TALK_GROUP_USER_LIST + groupId + "_user_ids";
+    }
+
 }

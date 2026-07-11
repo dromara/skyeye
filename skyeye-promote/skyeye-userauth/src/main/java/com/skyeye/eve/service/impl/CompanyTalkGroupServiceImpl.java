@@ -101,6 +101,7 @@ public class CompanyTalkGroupServiceImpl extends SkyeyeBusinessServiceImpl<Compa
         groupUser.setGroupId(entity.getId());
         groupUser.setCreateTime(DateUtil.getTimeAndToString());
         companyTalkGroupUserService.createEntity(groupUser, userId);
+        companyTalkGroupUserService.evictGroupMemberCache(entity.getId());
     }
 
     @Override
@@ -214,8 +215,6 @@ public class CompanyTalkGroupServiceImpl extends SkyeyeBusinessServiceImpl<Compa
         }
 
         companyTalkGroupUserService.deleteByGroupIdAndUserId(groupId, userId);
-        // 删除群组成员缓存
-        jedisClientService.del(Constants.checkSysEveTalkGroupUserListByGroupId(groupId));
     }
 
     @Override
@@ -232,7 +231,7 @@ public class CompanyTalkGroupServiceImpl extends SkyeyeBusinessServiceImpl<Compa
             outputObject.setreturnMessage("您不是该群聊的创建人，无法退群，请进行退出群聊操作。");
         }
         // 删除群组成员缓存
-        jedisClientService.del(Constants.checkSysEveTalkGroupUserListByGroupId(groupId));
+        companyTalkGroupUserService.evictGroupMemberCache(groupId);
         dissolvedGroup(groupId);
     }
 

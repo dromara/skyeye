@@ -22,6 +22,16 @@ public interface CompanyTalkGroupUserService extends SkyeyeBusinessService<Compa
 
     List<CompanyTalkGroupUser> selectByGroupId(String groupId);
 
+    /**
+     * 获取群成员 userId 列表（带 Redis 缓存，成员变更时自动失效）
+     */
+    List<String> selectMemberUserIdsByGroupIdWithCache(String groupId);
+
+    /**
+     * 清除群成员相关缓存（成员列表 + userId 列表）
+     */
+    void evictGroupMemberCache(String groupId);
+
     long countByGroupId(String groupId);
 
     Map<String, String> batchCheckGroupUserIsExit(List<String> groupId, String userId);

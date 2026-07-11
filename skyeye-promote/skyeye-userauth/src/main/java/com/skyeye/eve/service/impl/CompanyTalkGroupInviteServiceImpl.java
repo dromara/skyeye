@@ -182,8 +182,7 @@ public class CompanyTalkGroupInviteServiceImpl extends SkyeyeBusinessServiceImpl
         }
         companyTalkGroupUser.setCreateTime(DateUtil.getTimeAndToString());
         companyTalkGroupUserService.createEntity(companyTalkGroupUser, StrUtil.EMPTY);
-        // 删除群组成员缓存
-        jedisClientService.del(Constants.checkSysEveTalkGroupUserListByGroupId(companyTalkGroupInvite.getGroupId()));
+        companyTalkGroupUserService.evictGroupMemberCache(companyTalkGroupInvite.getGroupId());
 
         Map<String, Object> result = JSONUtil.toBean(JSONUtil.toJsonStr(companyTalkGroup), null);
         result.put("inGroupType", companyTalkGroupInvite.getInGroupType());
