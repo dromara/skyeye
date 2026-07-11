@@ -57,17 +57,15 @@
 		SELECT
 			a.id,
 			a.send_id sendId,
-			(SELECT b.user_name FROM sys_eve_user_staff b WHERE a.send_id = b.user_id) sendName,
-			(SELECT b.user_name FROM sys_eve_user_staff b WHERE a.receive_id = b.user_id) receiveName,
+			(SELECT b.user_name FROM sys_eve_user_staff b WHERE a.send_id = b.user_id LIMIT 1) sendName,
 			a.content,
 			#{userId} userId,
 			CONVERT(a.create_time, char) createTime
 		FROM
-			sys_talk_chat_history a,
-			sys_talk_group_user c
-		WHERE a.send_id = #{userId} AND a.receive_id = #{receiveId}
+			sys_talk_chat_history a
+		INNER JOIN sys_talk_group_user c ON c.group_id = a.receive_id AND c.user_id = #{userId}
+		WHERE a.receive_id = #{receiveId}
 		AND a.chat_type = '2'
-		AND c.user_id = a.send_id
 		AND a.create_time > c.create_time
 		ORDER BY a.create_time DESC
 	</select>

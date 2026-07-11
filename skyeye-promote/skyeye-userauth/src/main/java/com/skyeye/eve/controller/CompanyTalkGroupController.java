@@ -55,7 +55,7 @@ public class CompanyTalkGroupController {
         companyTalkGroupService.insertGroupMationToTalk(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "companytalkgroup007", value = "获取群成员", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryGroupMemberByGroupId", value = "获取群成员", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "群组id", required = "required")})
     @RequestMapping("/post/CompanyTalkGroupController/queryGroupMemberByGroupId")
@@ -63,7 +63,7 @@ public class CompanyTalkGroupController {
         companyTalkGroupService.queryGroupMemberByGroupId(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "companytalkgroup008", value = "获取聊天记录", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryChatLogByType", value = "获取聊天记录", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "limit", name = "limit", value = "分页参数,每页多少条数据", required = "required,num"),
         @ApiImplicitParam(id = "page", name = "page", value = "分页参数,第几页", required = "required,num"),

@@ -42,6 +42,7 @@ public class EleventhGroupChatHandler implements TalkWebSocketClientMessageHandl
                     String id = talkChatHistoryService.createEntity(jsonObject, TalkChatType.GROUP_CHAT.getKey());
                     finalMap.put("createTime", DateUtil.getTimeAndToString());
                     finalMap.put("dataId", id);
+                    finalMap.put("groupname", groupMation.getGroupName());
                     socket.sendMessageToAll(JSONUtil.toJsonStr(finalMap));
                 } else {
                     finalMap.clear();

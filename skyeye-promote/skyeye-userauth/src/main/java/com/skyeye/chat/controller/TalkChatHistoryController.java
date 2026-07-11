@@ -8,6 +8,7 @@ import com.skyeye.annotation.api.Api;
 import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
+import com.skyeye.chat.enums.TalkChatType;
 import com.skyeye.chat.service.TalkChatHistoryService;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -38,7 +39,8 @@ public class TalkChatHistoryController {
 
     @ApiOperation(id = "editTalkChatHistoryToRead", value = "修改我与另一个用户/群聊的聊天记录为已读", method = "POST", allUse = "2")
     @ApiImplicitParams({
-        @ApiImplicitParam(id = "sendId", name = "sendId", value = "发送人id", required = "required")})
+        @ApiImplicitParam(id = "sendId", name = "sendId", value = "单聊为对方用户id，群聊为群组id", required = "required"),
+        @ApiImplicitParam(id = "chatType", name = "chatType", value = "消息类型", enumClass = TalkChatType.class)})
     @RequestMapping("/post/TalkChatHistoryController/editTalkChatHistoryToRead")
     public void editTalkChatHistoryToRead(InputObject inputObject, OutputObject outputObject) {
         talkChatHistoryService.editTalkChatHistoryToRead(inputObject, outputObject);
