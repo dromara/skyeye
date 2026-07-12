@@ -4,7 +4,7 @@
 
 package com.skyeye.repair.service;
 
-import com.skyeye.base.business.service.SkyeyeLinkDataService;
+import com.skyeye.base.business.service.SkyeyeBusinessService;
 import com.skyeye.repair.entity.EquipmentSparePartUsageDetail;
 
 import java.util.List;
@@ -12,12 +12,22 @@ import java.util.List;
 /**
  * 维修工单备件使用明细
  */
-public interface EquipmentSparePartUsageDetailService extends SkyeyeLinkDataService<EquipmentSparePartUsageDetail> {
+public interface EquipmentSparePartUsageDetailService extends SkyeyeBusinessService<EquipmentSparePartUsageDetail> {
 
-    void saveByRepairOrderId(String repairOrderId, List<EquipmentSparePartUsageDetail> detailList);
+    void saveLinkList(String parentId, List<EquipmentSparePartUsageDetail> detailList);
 
-    void revertAndDeleteByRepairOrderId(String repairOrderId, String stockUserId);
+    void deleteByParentId(String parentId);
+
+    List<EquipmentSparePartUsageDetail> selectByParentId(String parentId);
 
     void calcDetailPrice(List<EquipmentSparePartUsageDetail> detailList);
+
+    void checkDetailList(String parentId, List<EquipmentSparePartUsageDetail> beans);
+
+    void validateUserStock(String userId, List<EquipmentSparePartUsageDetail> detailList);
+
+    void changeUserStock(String stockUserId, List<EquipmentSparePartUsageDetail> detailList, int type);
+
+    void revertUserStockByDetailOwner(List<EquipmentSparePartUsageDetail> detailList);
 
 }
