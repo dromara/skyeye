@@ -459,6 +459,20 @@ public class TalkWebSocket {
     }
 
     /**
+     * 供消息处理器获取当前连接用户 id。
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * 供消息处理器获取当前连接会话。
+     */
+    public Session getWsSession() {
+        return session;
+    }
+
+    /**
      * 发送消息给指定会话
      *
      * @param message 消息内容
@@ -468,13 +482,6 @@ public class TalkWebSocket {
         if (session != null && session.isOpen()) {
             sendTextWithRetry(message, session, session.getId(), "session");
         }
-    }
-
-    /**
-     * 供消息处理器获取当前连接会话。
-     */
-    public Session getWsSession() {
-        return session;
     }
 
     /**

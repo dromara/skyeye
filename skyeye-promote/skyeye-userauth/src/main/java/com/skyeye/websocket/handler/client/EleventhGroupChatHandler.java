@@ -41,11 +41,20 @@ public class EleventhGroupChatHandler implements TalkWebSocketClientMessageHandl
                 finalMap = SocketConstants.sendGroupTalkPeopleMsg(jsonObject);
                 CompanyTalkGroupService companyTalkGroupService = SpringUtils.getBean(CompanyTalkGroupService.class);
                 CompanyTalkGroup groupMation = companyTalkGroupService.selectById(finalMap.get("id").toString());
-                String senderId = jsonObject.getStr("userId");
+                if (groupMation == null || StrUtil.isBlank(groupMation.getId())) {
+                    finalMap.clear();
+                    finalMap.put("messageType", "1301");
+                    finalMap.put("groupId", jsonObject.getStr("to"));
+                    socket.sendMessageToSession(JSONUtil.toJsonStr(finalMap), socket.getWsSession());
+                    return true;
+                }
+                String senderId = StrUtil.blankToDefault(jsonObject.getStr("userId"), socket.getUserId());
                 CompanyTalkGroupUserService companyTalkGroupUserService = SpringUtils.getBean(CompanyTalkGroupUserService.class);
                 // 一次缓存读取：同时用于成员校验与消息推送
                 List<String> memberUserIds = companyTalkGroupUserService.selectMemberUserIdsByGroupIdWithCache(groupMation.getId());
-                if (CollectionUtil.isEmpty(memberUserIds) || !memberUserIds.contains(senderId)) {
+                boolean senderIsMember = StrUtil.isNotBlank(senderId) && CollectionUtil.isNotEmpty(memberUserIds)
+                    && memberUserIds.stream().anyMatch(memberUserId -> StrUtil.equals(memberUserId, senderId));
+                if (!senderIsMember) {
                     finalMap.clear();
                     finalMap.put("messageType", "1301");
                     finalMap.put("groupId", jsonObject.getStr("to"));

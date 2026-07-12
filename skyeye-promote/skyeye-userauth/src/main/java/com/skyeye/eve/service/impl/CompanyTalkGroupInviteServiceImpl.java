@@ -134,6 +134,9 @@ public class CompanyTalkGroupInviteServiceImpl extends SkyeyeBusinessServiceImpl
         Page pages = PageHelper.startPage(pageInfo.getPage(), pageInfo.getLimit());
         QueryWrapper<CompanyTalkGroupInvite> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(CompanyTalkGroupInvite::getInviteUserId), userId);
+        // 待处理优先，同状态下按邀请时间倒序
+        queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(CompanyTalkGroupInvite::getState));
+        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(CompanyTalkGroupInvite::getCreateTime));
 
         List<CompanyTalkGroupInvite> list = list(queryWrapper);
         companyTalkGroupService.setDataMation(list, CompanyTalkGroupInvite::getGroupId);

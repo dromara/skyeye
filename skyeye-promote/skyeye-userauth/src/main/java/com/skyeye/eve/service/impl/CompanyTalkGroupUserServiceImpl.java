@@ -12,12 +12,15 @@ import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.cache.redis.RedisCache;
 import com.skyeye.common.constans.Constants;
 import com.skyeye.common.constans.RedisConstants;
+import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.eve.dao.CompanyTalkGroupDao;
 import com.skyeye.eve.dao.CompanyTalkGroupUserDao;
 import com.skyeye.eve.entity.talk.group.CompanyTalkGroupUser;
 import com.skyeye.eve.service.CompanyTalkGroupUserService;
 import com.skyeye.jedis.JedisClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -44,6 +47,12 @@ public class CompanyTalkGroupUserServiceImpl extends SkyeyeBusinessServiceImpl<C
     @Autowired
     private JedisClientService jedisClientService;
 
+    @Autowired
+    private CompanyTalkGroupDao companyTalkGroupDao;
+
+    @Value("${skyeye.tenant.enable}")
+    private boolean tenantEnable;
+
     @Override
     public List<CompanyTalkGroupUser> selectByGroupId(String groupId) {
         QueryWrapper<CompanyTalkGroupUser> queryWrapper = new QueryWrapper<>();
@@ -56,21 +65,40 @@ public class CompanyTalkGroupUserServiceImpl extends SkyeyeBusinessServiceImpl<C
         if (StrUtil.isBlank(groupId)) {
             return Collections.emptyList();
         }
-        String cacheKey = Constants.checkSysEveTalkGroupUserIdsByGroupId(groupId);
-        List<String> userIds = redisCache.getList(cacheKey, key -> loadMemberUserIds(groupId),
-            RedisConstants.ALL_USE_TIME, String.class);
-        if (CollectionUtil.isEmpty(userIds)) {
-            return Collections.emptyList();
-        }
+        String cacheKey = buildMemberUserIdsCacheKey(groupId);
+        List<String> userIds = redisCache.getList(cacheKey, key -> {
+            List<String> loaded = loadMemberUserIds(groupId);
+            return CollectionUtil.isEmpty(loaded) ? null : loaded;
+        }, RedisConstants.ALL_USE_TIME, String.class);
         return userIds;
     }
 
+    private String buildMemberUserIdsCacheKey(String groupId) {
+        if (!tenantEnable) {
+            return Constants.checkSysEveTalkGroupUserIdsByGroupId(groupId);
+        }
+        String tenantId = StrUtil.nullToEmpty(TenantContext.getTenantId());
+        return Constants.checkSysEveTalkGroupUserIdsByGroupId(groupId + "_" + tenantId);
+    }
+
     private List<String> loadMemberUserIds(String groupId) {
-        return selectByGroupId(groupId).stream()
-            .map(CompanyTalkGroupUser::getUserId)
+        String tenantId = tenantEnable ? StrUtil.nullToEmpty(TenantContext.getTenantId()) : StrUtil.EMPTY;
+        List<Map<String, Object>> members = companyTalkGroupDao.queryGroupMemberByGroupId(groupId, tenantId);
+        if (CollectionUtil.isEmpty(members)) {
+            return Collections.emptyList();
+        }
+        return members.stream()
+            .map(member -> member.get("id").toString())
             .filter(StrUtil::isNotBlank)
             .distinct()
             .collect(Collectors.toList());
+    }
+
+    private boolean isGroupMember(List<String> memberUserIds, String userId) {
+        if (StrUtil.isBlank(userId) || CollectionUtil.isEmpty(memberUserIds)) {
+            return false;
+        }
+        return memberUserIds.stream().anyMatch(memberUserId -> StrUtil.equals(memberUserId, userId));
     }
 
     @Override
@@ -80,6 +108,10 @@ public class CompanyTalkGroupUserServiceImpl extends SkyeyeBusinessServiceImpl<C
         }
         jedisClientService.del(Constants.checkSysEveTalkGroupUserListByGroupId(groupId));
         jedisClientService.del(Constants.checkSysEveTalkGroupUserIdsByGroupId(groupId));
+        if (tenantEnable) {
+            String tenantId = StrUtil.nullToEmpty(TenantContext.getTenantId());
+            jedisClientService.del(Constants.checkSysEveTalkGroupUserIdsByGroupId(groupId + "_" + tenantId));
+        }
     }
 
     @Override
@@ -96,7 +128,7 @@ public class CompanyTalkGroupUserServiceImpl extends SkyeyeBusinessServiceImpl<C
         }
         Map<String, String> map = new HashMap<>();
         for (String id : groupId) {
-            if (selectMemberUserIdsByGroupIdWithCache(id).contains(userId)) {
+            if (isGroupMember(selectMemberUserIdsByGroupIdWithCache(id), userId)) {
                 map.put(id, id);
             }
         }
@@ -108,7 +140,7 @@ public class CompanyTalkGroupUserServiceImpl extends SkyeyeBusinessServiceImpl<C
         if (StrUtil.isBlank(groupId) || StrUtil.isBlank(userId)) {
             return false;
         }
-        return selectMemberUserIdsByGroupIdWithCache(groupId).contains(userId);
+        return isGroupMember(selectMemberUserIdsByGroupIdWithCache(groupId), userId);
     }
 
     @Override
