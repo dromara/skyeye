@@ -18,7 +18,6 @@ import com.skyeye.equipmentinspection.classenum.EquipmentInspectionResultType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -69,8 +68,8 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     private Integer overallResult;
 
     @TableField("result_value")
-    @ApiModelProperty(value = "数值型结果")
-    private BigDecimal resultValue;
+    @ApiModelProperty(value = "检测结果")
+    private String resultValue;
 
     @TableField(value = "equipment_run_status", insertStrategy = FieldStrategy.NOT_NULL, updateStrategy = FieldStrategy.NOT_NULL)
     @ApiModelProperty(value = "设备运行状态", enumClass = EquipmentState.class, required = "num", defaultValue = "1")
