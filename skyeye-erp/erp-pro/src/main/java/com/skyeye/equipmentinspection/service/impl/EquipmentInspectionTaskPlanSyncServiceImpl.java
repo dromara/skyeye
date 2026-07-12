@@ -87,6 +87,7 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
 
         String nowStr = LocalDateTime.now(zone).format(PLANNED_TIME_FORMAT);
         List<EquipmentInspectionTask> candidates = new ArrayList<>();
+        List<String> itemIds = plan.getItemId();
         for (LocalDate day = rangeStart; !day.isAfter(rangeEnd); day = day.plusDays(1)) {
             List<LocalDateTime> slots = resolveSlotsForDay(plan, day, zone);
             for (LocalDateTime slotStart : slots) {
@@ -95,12 +96,14 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
                     continue;
                 }
                 for (String equipmentId : equipmentIds) {
-                    EquipmentInspectionTask task = new EquipmentInspectionTask();
-                    task.setPlanId(plan.getId());
-                    task.setEquipmentId(equipmentId);
-                    task.setPlannedStartTime(planned);
-                    task.setSeqInDay(1);
-                    candidates.add(task);
+                    for (String itemId : itemIds) {
+                        EquipmentInspectionTask task = new EquipmentInspectionTask();
+                        task.setPlanId(plan.getId());
+                        task.setEquipmentId(equipmentId);
+                        task.setItemId(itemId);
+                        task.setPlannedStartTime(planned);
+                        candidates.add(task);
+                    }
                 }
             }
         }
@@ -140,15 +143,16 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
         if (rangeStart.isAfter(rangeEnd)) {
             return 0;
         }
-        int total = 0;
+        int slots = 0;
         for (LocalDate day = rangeStart; !day.isAfter(rangeEnd); day = day.plusDays(1)) {
-            total += resolveSlotsForDay(plan, day, zone).size();
+            slots += resolveSlotsForDay(plan, day, zone).size();
         }
-        return total;
+        int itemCount = CollectionUtil.isEmpty(plan.getItemId()) ? 0 : plan.getItemId().size();
+        return slots * itemCount;
     }
 
     private static String taskDedupeKey(EquipmentInspectionTask t) {
-        return t.getEquipmentId() + "|" + t.getPlannedStartTime() + "|" + t.getSeqInDay();
+        return t.getEquipmentId() + "|" + t.getItemId() + "|" + t.getPlannedStartTime();
     }
 
     private Set<String> loadExistingTaskKeys(String planId, LocalDate rangeStart, LocalDate rangeEnd) {

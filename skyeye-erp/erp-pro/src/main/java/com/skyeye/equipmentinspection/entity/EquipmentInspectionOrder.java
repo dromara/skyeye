@@ -18,7 +18,7 @@ import com.skyeye.equipmentinspection.classenum.EquipmentInspectionResultType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -69,12 +69,12 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     private Map<String, Object> inspectorUserMation;
 
     @TableField("overall_result")
-    @ApiModelProperty(value = "巡检结果", enumClass = EquipmentInspectionResultType.class, required = "num")
+    @ApiModelProperty(value = "巡检结果", enumClass = EquipmentInspectionResultType.class, required = "required,num")
     private Integer overallResult;
 
-    @TableField(exist = false)
-    @Property(value = "巡检结果信息")
-    private Map<String, Object> overallResultMation;
+    @TableField("result_value")
+    @ApiModelProperty(value = "数值型结果")
+    private BigDecimal resultValue;
 
     @TableField(value = "equipment_run_status", insertStrategy = FieldStrategy.NOT_NULL, updateStrategy = FieldStrategy.NOT_NULL)
     @ApiModelProperty(value = "设备运行状态", enumClass = EquipmentState.class, required = "num", defaultValue = "1")
@@ -83,10 +83,6 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     @TableField(exist = false)
     @ApiModelProperty(value = "设备运行状态(兼容旧参 equipmentState)", enumClass = EquipmentState.class)
     private Integer equipmentState;
-
-    @TableField(exist = false)
-    @Property(value = "设备运行状态信息")
-    private Map<String, Object> equipmentRunStatusMation;
 
     @TableField("summary_richtext")
     @ApiModelProperty(value = "巡检总结")
@@ -113,7 +109,7 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     private String headerPhotoUrls;
 
     @TableField(value = "seq_in_day", updateStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "当日第几次巡检", required = "required,num")
+    @Property(value = "当日第几次巡检")
     private Integer seqInDay;
 
     @TableField("remark")
@@ -123,9 +119,5 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     @TableField(exist = false)
     @Property(value = "设备信息")
     private Map<String, Object> equipmentMation;
-
-    @TableField(exist = false)
-    @ApiModelProperty(value = "巡检项目明细", required = "required,json")
-    private List<EquipmentInspectionOrderItem> equipmentInspectionOrderItemList;
 
 }
