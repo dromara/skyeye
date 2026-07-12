@@ -43,7 +43,7 @@ public class EquipmentInspectionTask extends OperatorUserInfo {
 
     @TableField(exist = false)
     @Property(value = "方案信息")
-    private Map<String, Object> planMation;
+    private EquipmentInspectionPlan planMation;
 
     @TableField(value = "equipment_id")
     @ApiModelProperty(value = "设备ID", required = "required")

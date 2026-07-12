@@ -37,11 +37,11 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     private String oddNumber;
 
     @TableField(value = "equipment_id", updateStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "设备id（可由 taskId 自动带出）")
+    @ApiModelProperty(value = "设备id", required = "required")
     private String equipmentId;
 
     @TableField(value = "plan_id", updateStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "巡检方案id（可由 taskId 自动带出）")
+    @ApiModelProperty(value = "巡检方案id", required = "required")
     private String planId;
 
     @TableField(value = "task_id", updateStrategy = FieldStrategy.NEVER)
@@ -51,10 +51,6 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     @TableField(exist = false)
     @Property(value = "任务信息")
     private EquipmentInspectionTask taskMation;
-
-    @TableField(exist = false)
-    @Property(value = "巡检方案信息")
-    private Map<String, Object> planMation;
 
     @TableField("inspection_time")
     @ApiModelProperty(value = "巡检时间，格式yyyy-MM-dd HH:mm:ss", required = "required")
@@ -108,16 +104,8 @@ public class EquipmentInspectionOrder extends SkyeyeFlowable {
     @ApiModelProperty(value = "拍照URL，逗号分隔")
     private String headerPhotoUrls;
 
-    @TableField(value = "seq_in_day", updateStrategy = FieldStrategy.NEVER)
-    @Property(value = "当日第几次巡检")
-    private Integer seqInDay;
-
     @TableField("remark")
     @ApiModelProperty(value = "备注")
     private String remark;
-
-    @TableField(exist = false)
-    @Property(value = "设备信息")
-    private Map<String, Object> equipmentMation;
 
 }
