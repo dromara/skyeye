@@ -28,7 +28,6 @@ import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -110,13 +109,7 @@ public class EquipmentInspectionTaskServiceImpl extends SkyeyeBusinessServiceImp
     @Override
     public EquipmentInspectionTask selectById(String id) {
         EquipmentInspectionTask task = super.selectById(id);
-        Map<String, Object> taskMap = BeanUtil.beanToMap(task, false, true);
-        List<Map<String, Object>> beans = Collections.singletonList(taskMap);
-        equipmentInspectionPlanService.setMationForMap(beans, "planId", "planMation");
-        Object planMation = beans.get(0).get("planMation");
-        if (planMation instanceof Map) {
-            task.setPlanMation((Map<String, Object>) planMation);
-        }
+        equipmentInspectionPlanService.setDataMation(task, EquipmentInspectionTask::getPlanId);
         equipmentService.setDataMation(task, EquipmentInspectionTask::getEquipmentId);
         equipmentInspectionItemService.setDataMation(task, EquipmentInspectionTask::getItemId);
         setExecutorMation(task);

@@ -18,7 +18,6 @@ import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.equipmentinspection.dao.EquipmentInspectionOrderDao;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionTask;
-import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderItemService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionTaskService;
@@ -29,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -41,9 +39,6 @@ import java.util.Map;
 @SkyeyeService(name = "设备巡检单", groupName = "设备巡检", flowable = true, allowDynamicAttrKey = false)
 public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceImpl<EquipmentInspectionOrderDao, EquipmentInspectionOrder>
     implements EquipmentInspectionOrderService {
-
-    @Autowired
-    private EquipmentInspectionOrderItemService equipmentInspectionOrderItemService;
 
     @Autowired
     private EquipmentService equipmentService;
@@ -90,13 +85,7 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         EquipmentInspectionOrder order = super.selectById(id);
         equipmentInspectionTaskService.setDataMation(order, EquipmentInspectionOrder::getTaskId);
         equipmentService.setDataMation(order, EquipmentInspectionOrder::getEquipmentId);
-        Map<String, Object> orderMap = BeanUtil.beanToMap(order, false, true);
-        List<Map<String, Object>> beans = Collections.singletonList(orderMap);
-        equipmentInspectionPlanService.setMationForMap(beans, "planId", "planMation");
-        Object planMation = beans.get(0).get("planMation");
-        if (planMation instanceof Map) {
-            order.setPlanMation((Map<String, Object>) planMation);
-        }
+        equipmentInspectionPlanService.setDataMation(order, EquipmentInspectionOrder::getPlanId);
         iAuthUserService.setDataMation(order, EquipmentInspectionOrder::getInspectorUserId);
         return order;
     }
@@ -145,11 +134,6 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
             return EquipmentState.DEGRADED.getKey();
         }
         return EquipmentState.NORMAL.getKey();
-    }
-
-    @Override
-    public void deletePostpose(String id) {
-        equipmentInspectionOrderItemService.deleteByPId(id);
     }
 
     private void normalizeEquipmentRunStatus(EquipmentInspectionOrder entity) {
