@@ -17,7 +17,6 @@ import com.skyeye.common.entity.features.OperatorUserInfo;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionTaskState;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,12 +53,13 @@ public class EquipmentInspectionTask extends OperatorUserInfo {
     @Property(value = "设备信息")
     private Map<String, Object> equipmentMation;
 
-    /**
-     * 本任务应检项目列表（来自方案 itemMation，设备巡检为一任务多项目）
-     */
+    @TableField(value = "item_id")
+    @ApiModelProperty(value = "巡检项目ID", required = "required")
+    private String itemId;
+
     @TableField(exist = false)
-    @Property(value = "应检项目列表")
-    private List<EquipmentInspectionItem> itemMationList;
+    @Property(value = "项目信息")
+    private EquipmentInspectionItem itemMation;
 
     @TableField(value = "executor_id")
     @ApiModelProperty(value = "执行人ID（员工ID）")
@@ -80,10 +80,6 @@ public class EquipmentInspectionTask extends OperatorUserInfo {
     @TableField(value = "actual_end_time")
     @ApiModelProperty(value = "实际结束时间，格式yyyy-MM-dd HH:mm:ss")
     private String actualEndTime;
-
-    @TableField(value = "seq_in_day")
-    @ApiModelProperty(value = "当日第几次巡检", required = "required,num")
-    private Integer seqInDay;
 
     @TableField(value = "state")
     @Property(value = "任务状态", enumClass = EquipmentInspectionTaskState.class)

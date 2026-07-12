@@ -20,17 +20,14 @@ import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionTaskState;
 import com.skyeye.equipmentinspection.dao.EquipmentInspectionTaskDao;
-import com.skyeye.equipmentinspection.entity.EquipmentInspectionItem;
-import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionTask;
+import com.skyeye.equipmentinspection.service.EquipmentInspectionItemService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionTaskService;
 import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,6 +43,9 @@ public class EquipmentInspectionTaskServiceImpl extends SkyeyeBusinessServiceImp
 
     @Autowired
     private EquipmentInspectionPlanService equipmentInspectionPlanService;
+
+    @Autowired
+    private EquipmentInspectionItemService equipmentInspectionItemService;
 
     @Autowired
     private EquipmentService equipmentService;
@@ -101,7 +101,7 @@ public class EquipmentInspectionTaskServiceImpl extends SkyeyeBusinessServiceImp
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         equipmentInspectionPlanService.setMationForMap(beans, "planId", "planMation");
         equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
-        setItemMationListForMap(beans);
+        equipmentInspectionItemService.setMationForMap(beans, "itemId", "itemMation");
         setExecutorMationForMap(beans);
         return beans;
     }
@@ -109,52 +109,11 @@ public class EquipmentInspectionTaskServiceImpl extends SkyeyeBusinessServiceImp
     @Override
     public EquipmentInspectionTask selectById(String id) {
         EquipmentInspectionTask task = super.selectById(id);
-        if (task == null) {
-            return null;
-        }
         equipmentInspectionPlanService.setDataMation(task, EquipmentInspectionTask::getPlanId);
         equipmentService.setDataMation(task, EquipmentInspectionTask::getEquipmentId);
-        setItemMationListFromPlan(task);
+        equipmentInspectionItemService.setDataMation(task, EquipmentInspectionTask::getItemId);
         setExecutorMation(task);
         return task;
-    }
-
-    /**
-     * 从已填充的 planMation.itemMation 复制应检项目（复用方案 selectById 的关联加载）
-     */
-    private void setItemMationListFromPlan(EquipmentInspectionTask task) {
-        EquipmentInspectionPlan plan = task.getPlanMation();
-        if (plan != null && CollectionUtil.isNotEmpty(plan.getItemMation())) {
-            task.setItemMationList(plan.getItemMation());
-        } else {
-            task.setItemMationList(Collections.emptyList());
-        }
-    }
-
-    private void setItemMationListForMap(List<Map<String, Object>> beans) {
-        List<String> planIds = beans.stream()
-            .map(bean -> bean.get("planId"))
-            .filter(ObjectUtil::isNotNull)
-            .map(Object::toString)
-            .filter(StrUtil::isNotEmpty)
-            .distinct()
-            .collect(Collectors.toList());
-        if (CollectionUtil.isEmpty(planIds)) {
-            return;
-        }
-        Map<String, List<EquipmentInspectionItem>> planItemMap = new HashMap<>();
-        for (String planId : planIds) {
-            EquipmentInspectionPlan plan = equipmentInspectionPlanService.selectById(planId);
-            if (plan != null && CollectionUtil.isNotEmpty(plan.getItemMation())) {
-                planItemMap.put(planId, plan.getItemMation());
-            }
-        }
-        beans.forEach(bean -> {
-            if (bean.get("planId") != null) {
-                List<EquipmentInspectionItem> items = planItemMap.get(bean.get("planId").toString());
-                bean.put("itemMationList", items != null ? items : Collections.emptyList());
-            }
-        });
     }
 
     private void setExecutorMationForMap(List<Map<String, Object>> beans) {

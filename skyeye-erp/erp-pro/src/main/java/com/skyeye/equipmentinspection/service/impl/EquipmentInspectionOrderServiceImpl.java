@@ -6,7 +6,6 @@ package com.skyeye.equipmentinspection.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
@@ -17,29 +16,16 @@ import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipment.classenum.EquipmentState;
 import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.equipmentinspection.dao.EquipmentInspectionOrderDao;
-import com.skyeye.equipmentinspection.entity.EquipmentInspectionItem;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
-import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrderItem;
-import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
-import com.skyeye.equipmentinspection.entity.EquipmentInspectionTask;
-import com.skyeye.equipmentinspection.service.EquipmentInspectionItemService;
-import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderItemService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
-import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionTaskService;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionResultType;
-import com.skyeye.equipmentinspection.classenum.EquipmentInspectionTaskState;
-import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @ClassName: EquipmentInspectionOrderServiceImpl
@@ -51,17 +37,7 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
     implements EquipmentInspectionOrderService {
 
     @Autowired
-    private EquipmentInspectionOrderItemService equipmentInspectionOrderItemService;
-
-    @Lazy
-    @Autowired
     private EquipmentService equipmentService;
-
-    @Autowired
-    private EquipmentInspectionPlanService equipmentInspectionPlanService;
-
-    @Autowired
-    private EquipmentInspectionItemService equipmentInspectionItemService;
 
     @Autowired
     private EquipmentInspectionTaskService equipmentInspectionTaskService;
@@ -69,9 +45,14 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
     @Override
     protected QueryWrapper<EquipmentInspectionOrder> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<EquipmentInspectionOrder> queryWrapper = super.getQueryWrapper(commonPageInfo);
-        String equipmentId = commonPageInfo.getCustomParamsMapStr("equipmentId");
-        if (StrUtil.isNotEmpty(equipmentId)) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId), equipmentId);
+        if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getTaskId), commonPageInfo.getObjectId());
+        }
+        if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("planId"))) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getPlanId), commonPageInfo.getCustomParamsMapStr("planId"));
+        }
+        if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("equipmentId"))) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId), commonPageInfo.getCustomParamsMapStr("equipmentId"));
         }
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime));
         return queryWrapper;
@@ -83,69 +64,30 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         if (CollectionUtil.isEmpty(beans)) {
             return beans;
         }
-        equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
-        equipmentInspectionPlanService.setMationForMap(beans, "planId", "planMation");
         equipmentInspectionTaskService.setMationForMap(beans, "taskId", "taskMation");
         iAuthUserService.setMationForMap(beans, "inspectorUserId", "inspectorUserMation");
-        beans.forEach(this::appendEnumMationForMap);
         return beans;
-    }
-
-    @Override
-    public EquipmentInspectionOrder getDataFromDb(String id) {
-        EquipmentInspectionOrder entity = super.getDataFromDb(id);
-        entity.setEquipmentInspectionOrderItemList(equipmentInspectionOrderItemService.selectByPId(entity.getId()));
-        return entity;
     }
 
     @Override
     public EquipmentInspectionOrder selectById(String id) {
         EquipmentInspectionOrder order = super.selectById(id);
         equipmentInspectionTaskService.setDataMation(order, EquipmentInspectionOrder::getTaskId);
-        equipmentService.setDataMation(order, EquipmentInspectionOrder::getEquipmentId);
-        appendPlanItemMation(order);
-        appendOrderItemResultMation(order);
-        appendEnumMation(order);
-        equipmentInspectionPlanService.setDataMation(order, EquipmentInspectionOrder::getPlanId);
         iAuthUserService.setDataMation(order, EquipmentInspectionOrder::getInspectorUserId);
         return order;
     }
 
     @Override
     public void createPrepose(EquipmentInspectionOrder entity) {
-        fillFromTask(entity);
         normalizeEquipmentRunStatus(entity);
         Map<String, Object> business = BeanUtil.beanToMap(entity);
         entity.setOddNumber(iCodeRuleService.getNextCodeByClassName(getClass().getName(), business));
-        if (entity.getSeqInDay() == null) {
-            String today = LocalDate.now().toString();
-            QueryWrapper<EquipmentInspectionOrder> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId), entity.getEquipmentId());
-            queryWrapper.apply("DATE_FORMAT(inspection_time, '%Y-%m-%d') = {0}", today);
-            entity.setSeqInDay((int) count(queryWrapper) + 1);
-        }
     }
 
     @Override
     public void validatorEntity(EquipmentInspectionOrder entity) {
-        fillFromTask(entity);
         normalizeEquipmentRunStatus(entity);
         super.validatorEntity(entity);
-        alignOrderItemsWithPlan(entity.getEquipmentInspectionOrderItemList(), entity.getPlanId());
-        if (entity.getOverallResult() == null) {
-            boolean abnormal = entity.getEquipmentInspectionOrderItemList().stream()
-                .anyMatch(row -> EquipmentInspectionResultType.ABNORMAL.getKey().equals(row.getItemResult()));
-            entity.setOverallResult(abnormal
-                ? EquipmentInspectionResultType.ABNORMAL.getKey()
-                : EquipmentInspectionResultType.NORMAL.getKey());
-        }
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void writePostpose(EquipmentInspectionOrder entity, String userId) {
-        equipmentInspectionOrderItemService.saveLinkList(entity.getId(), entity.getEquipmentInspectionOrderItemList());
-        super.writePostpose(entity, userId);
     }
 
     /**
@@ -172,114 +114,12 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         return EquipmentState.NORMAL.getKey();
     }
 
-    @Override
-    public void deletePostpose(String id) {
-        equipmentInspectionOrderItemService.deleteByPId(id);
-    }
-
     private void normalizeEquipmentRunStatus(EquipmentInspectionOrder entity) {
         if (entity.getEquipmentRunStatus() == null && entity.getEquipmentState() != null) {
             entity.setEquipmentRunStatus(entity.getEquipmentState());
         }
         if (entity.getEquipmentRunStatus() == null) {
             entity.setEquipmentRunStatus(EquipmentState.NORMAL.getKey());
-        }
-    }
-
-    /**
-     * 从巡检任务带出设备、方案等字段（记录依赖 taskMation，写单时仅需 taskId）
-     */
-    private void fillFromTask(EquipmentInspectionOrder entity) {
-        if (StrUtil.isBlank(entity.getTaskId())) {
-            if (StrUtil.isBlank(entity.getEquipmentId()) || StrUtil.isBlank(entity.getPlanId())) {
-                throw new CustomException("请选择巡检任务");
-            }
-            return;
-        }
-        EquipmentInspectionTask task = equipmentInspectionTaskService.selectById(entity.getTaskId());
-        if (task == null) {
-            throw new CustomException("巡检任务不存在");
-        }
-        if (!EquipmentInspectionTaskState.IN_PROGRESS.getKey().equals(task.getState())) {
-            throw new CustomException("请先开始执行巡检任务");
-        }
-        entity.setEquipmentId(task.getEquipmentId());
-        entity.setPlanId(task.getPlanId());
-        if (entity.getSeqInDay() == null) {
-            entity.setSeqInDay(task.getSeqInDay());
-        }
-    }
-
-    private void appendPlanItemMation(EquipmentInspectionOrder order) {
-        if (CollectionUtil.isEmpty(order.getEquipmentInspectionOrderItemList()) || StrUtil.isBlank(order.getPlanId())) {
-            return;
-        }
-        EquipmentInspectionPlan plan = equipmentInspectionPlanService.getDataFromDb(order.getPlanId());
-        if (CollectionUtil.isEmpty(plan.getItemId())) {
-            return;
-        }
-        List<EquipmentInspectionItem> planItems = equipmentInspectionItemService.selectByIds(plan.getItemId().toArray(new String[]{}));
-        if (CollectionUtil.isEmpty(planItems)) {
-            return;
-        }
-        Map<String, EquipmentInspectionItem> itemMap = planItems.stream()
-            .collect(Collectors.toMap(EquipmentInspectionItem::getId, item -> item, (a, b) -> a));
-        for (EquipmentInspectionOrderItem orderItem : order.getEquipmentInspectionOrderItemList()) {
-            Integer orderBy = orderItem.getOrderBy();
-            if (orderBy != null && orderBy > 0 && orderBy <= plan.getItemId().size()) {
-                orderItem.setItemMation(itemMap.get(plan.getItemId().get(orderBy - 1)));
-            }
-        }
-    }
-
-    private void appendOrderItemResultMation(EquipmentInspectionOrder order) {
-        if (CollectionUtil.isEmpty(order.getEquipmentInspectionOrderItemList())) {
-            return;
-        }
-        for (EquipmentInspectionOrderItem orderItem : order.getEquipmentInspectionOrderItemList()) {
-            orderItem.setItemResultMation(EquipmentInspectionResultType.getMation(orderItem.getItemResult()));
-        }
-    }
-
-    private void appendEnumMation(EquipmentInspectionOrder order) {
-        order.setOverallResultMation(EquipmentInspectionResultType.getMation(order.getOverallResult()));
-        order.setEquipmentRunStatusMation(getEquipmentRunStatusMation(order.getEquipmentRunStatus()));
-    }
-
-    private void appendEnumMationForMap(Map<String, Object> bean) {
-        bean.put("overallResultMation", EquipmentInspectionResultType.getMation(MapUtil.getInt(bean, "overallResult")));
-        Integer runStatus = MapUtil.getInt(bean, "equipmentRunStatus");
-        if (runStatus == null) {
-            runStatus = MapUtil.getInt(bean, "equipmentState");
-        }
-        bean.put("equipmentRunStatusMation", getEquipmentRunStatusMation(runStatus));
-    }
-
-    private Map<String, Object> getEquipmentRunStatusMation(Integer type) {
-        if (type == null) {
-            return MapUtil.newHashMap();
-        }
-        for (EquipmentState state : EquipmentState.values()) {
-            if (type.equals(state.getKey())) {
-                Map<String, Object> result = new HashMap<>();
-                result.put("id", state.getKey());
-                result.put("name", state.getValue());
-                return result;
-            }
-        }
-        return MapUtil.newHashMap();
-    }
-
-    private void alignOrderItemsWithPlan(List<EquipmentInspectionOrderItem> orderItems, String planId) {
-        EquipmentInspectionPlan plan = equipmentInspectionPlanService.getDataFromDb(planId);
-        if (CollectionUtil.isEmpty(plan.getItemId())) {
-            throw new CustomException("巡检方案未配置巡检项目.");
-        }
-        if (orderItems.size() != plan.getItemId().size()) {
-            throw new CustomException("巡检明细条数与方案巡检项目不一致.");
-        }
-        for (int i = 0; i < orderItems.size(); i++) {
-            orderItems.get(i).setOrderBy(i + 1);
         }
     }
 

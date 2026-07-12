@@ -12,8 +12,6 @@ import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.common.entity.features.OperatorUserInfo;
 import lombok.Data;
 
-import java.util.Map;
-
 /**
  * @ClassName: EquipmentInspectionPlanItem
  * @Description: 设备巡检方案项目关联实体类
@@ -34,9 +32,5 @@ public class EquipmentInspectionPlanItem extends OperatorUserInfo {
     @TableField(value = "item_id")
     @ApiModelProperty(value = "巡检项目ID", required = "required")
     private String itemId;
-
-    @TableField(exist = false)
-    @ApiModelProperty(value = "巡检项目信息")
-    private Map<String, Object> itemMation;
 
 }
