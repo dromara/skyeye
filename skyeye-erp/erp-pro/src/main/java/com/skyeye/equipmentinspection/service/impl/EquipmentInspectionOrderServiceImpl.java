@@ -17,13 +17,9 @@ import com.skyeye.equipment.classenum.EquipmentState;
 import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.equipmentinspection.dao.EquipmentInspectionOrderDao;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
-import com.skyeye.equipmentinspection.entity.EquipmentInspectionTask;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
-import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionTaskService;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionResultType;
-import com.skyeye.equipmentinspection.classenum.EquipmentInspectionTaskState;
-import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,9 +40,6 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
     private EquipmentService equipmentService;
 
     @Autowired
-    private EquipmentInspectionPlanService equipmentInspectionPlanService;
-
-    @Autowired
     private EquipmentInspectionTaskService equipmentInspectionTaskService;
 
     @Override
@@ -55,13 +48,11 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getTaskId), commonPageInfo.getObjectId());
         }
-        String planId = commonPageInfo.getCustomParamsMapStr("planId");
-        if (StrUtil.isNotEmpty(planId)) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getPlanId), planId);
+        if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("planId"))) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getPlanId), commonPageInfo.getCustomParamsMapStr("planId"));
         }
-        String equipmentId = commonPageInfo.getCustomParamsMapStr("equipmentId");
-        if (StrUtil.isNotEmpty(equipmentId)) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId), equipmentId);
+        if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("equipmentId"))) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId), commonPageInfo.getCustomParamsMapStr("equipmentId"));
         }
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime));
         return queryWrapper;
@@ -73,8 +64,6 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         if (CollectionUtil.isEmpty(beans)) {
             return beans;
         }
-        equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
-        equipmentInspectionPlanService.setMationForMap(beans, "planId", "planMation");
         equipmentInspectionTaskService.setMationForMap(beans, "taskId", "taskMation");
         iAuthUserService.setMationForMap(beans, "inspectorUserId", "inspectorUserMation");
         return beans;
@@ -84,30 +73,19 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
     public EquipmentInspectionOrder selectById(String id) {
         EquipmentInspectionOrder order = super.selectById(id);
         equipmentInspectionTaskService.setDataMation(order, EquipmentInspectionOrder::getTaskId);
-        equipmentService.setDataMation(order, EquipmentInspectionOrder::getEquipmentId);
-        equipmentInspectionPlanService.setDataMation(order, EquipmentInspectionOrder::getPlanId);
         iAuthUserService.setDataMation(order, EquipmentInspectionOrder::getInspectorUserId);
         return order;
     }
 
     @Override
     public void createPrepose(EquipmentInspectionOrder entity) {
-        fillFromTask(entity);
         normalizeEquipmentRunStatus(entity);
-        if (StrUtil.isBlank(entity.getId())) {
-            QueryWrapper<EquipmentInspectionOrder> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId), entity.getEquipmentId());
-            String inspectionDay = entity.getInspectionTime().substring(0, 10);
-            queryWrapper.apply("DATE_FORMAT(inspection_time, '%Y-%m-%d') = {0}", inspectionDay);
-            entity.setSeqInDay((int) count(queryWrapper) + 1);
-        }
         Map<String, Object> business = BeanUtil.beanToMap(entity);
         entity.setOddNumber(iCodeRuleService.getNextCodeByClassName(getClass().getName(), business));
     }
 
     @Override
     public void validatorEntity(EquipmentInspectionOrder entity) {
-        fillFromTask(entity);
         normalizeEquipmentRunStatus(entity);
         super.validatorEntity(entity);
     }
@@ -143,24 +121,6 @@ public class EquipmentInspectionOrderServiceImpl extends SkyeyeBusinessServiceIm
         if (entity.getEquipmentRunStatus() == null) {
             entity.setEquipmentRunStatus(EquipmentState.NORMAL.getKey());
         }
-    }
-
-    /**
-     * 从巡检任务带出设备、方案（写单仅需 taskId）
-     */
-    private void fillFromTask(EquipmentInspectionOrder entity) {
-        if (StrUtil.isBlank(entity.getTaskId())) {
-            throw new CustomException("请选择巡检任务");
-        }
-        EquipmentInspectionTask task = equipmentInspectionTaskService.selectById(entity.getTaskId());
-        if (StrUtil.isBlank(task.getId())) {
-            throw new CustomException("巡检任务不存在");
-        }
-        if (!EquipmentInspectionTaskState.IN_PROGRESS.getKey().equals(task.getState())) {
-            throw new CustomException("请先开始执行巡检任务");
-        }
-        entity.setEquipmentId(task.getEquipmentId());
-        entity.setPlanId(task.getPlanId());
     }
 
 }
