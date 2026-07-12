@@ -5,11 +5,12 @@
 package com.skyeye.repair.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
-import com.skyeye.common.entity.features.SkyeyeLinkData;
+import com.skyeye.common.entity.CommonInfo;
 import lombok.Data;
 
 import java.util.Map;
@@ -20,7 +21,15 @@ import java.util.Map;
 @Data
 @TableName(value = "erp_equipment_spare_part_usage_detail")
 @ApiModel("维修工单备件使用明细实体类")
-public class EquipmentSparePartUsageDetail extends SkyeyeLinkData {
+public class EquipmentSparePartUsageDetail extends CommonInfo {
+
+    @TableId("id")
+    @Property(value = "主键id")
+    private String id;
+
+    @TableField("parent_id")
+    @ApiModelProperty(value = "父类id(维修单id)")
+    private String parentId;
 
     @TableField(value = "material_id")
     @ApiModelProperty(value = "商品ID", required = "required")
@@ -53,5 +62,17 @@ public class EquipmentSparePartUsageDetail extends SkyeyeLinkData {
     @TableField(value = "amount")
     @ApiModelProperty(value = "总金额(元)", defaultValue = "0")
     private String allPrice;
+
+    @TableField("create_id")
+    @Property(value = "使用人ID")
+    private String createId;
+
+    @TableField("create_time")
+    @Property(value = "创建时间")
+    private String createTime;
+
+    @TableField(exist = false)
+    @Property(value = "当前登录人库存信息")
+    private Map<String, Object> serviceUserStock;
 
 }

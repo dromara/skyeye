@@ -33,7 +33,5 @@ public interface EquipmentRepairOrderService extends SkyeyeBusinessService<Equip
 
     void receivingEquipmentRepairOrderById(InputObject inputObject, OutputObject outputObject);
 
-    void insertEquipmentRepairSparePartUsage(InputObject inputObject, OutputObject outputObject);
-
     void updateStateById(String id, Integer state);
 }

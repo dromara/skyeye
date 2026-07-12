@@ -74,7 +74,8 @@ public class EquipmentRepairOrderController {
         @ApiImplicitParam(id = "supplierId", name = "supplierId", value = "供应商"),
         @ApiImplicitParam(id = "repairDesc", name = "repairDesc", value = "维修情况说明"),
         @ApiImplicitParam(id = "repairFinishPhoto", name = "repairFinishPhoto", value = "维修完成拍照"),
-        @ApiImplicitParam(id = "repairFinishTime", name = "repairFinishTime", value = "维修完成时间")})
+        @ApiImplicitParam(id = "repairFinishTime", name = "repairFinishTime", value = "维修完成时间"),
+        @ApiImplicitParam(id = "sparePartUsageList", name = "sparePartUsageList", value = "备件使用明细", required = "json")})
     @RequestMapping("/post/EquipmentRepairOrderController/insertEquipmentRepairResult")
     public void insertEquipmentRepairResult(InputObject inputObject, OutputObject outputObject) {
         equipmentRepairOrderService.insertEquipmentRepairResult(inputObject, outputObject);
@@ -106,15 +107,6 @@ public class EquipmentRepairOrderController {
     @RequestMapping("/post/EquipmentRepairOrderController/insertEquipmentRepairAcceptance")
     public void insertEquipmentRepairAcceptance(InputObject inputObject, OutputObject outputObject) {
         equipmentRepairOrderService.insertEquipmentRepairAcceptance(inputObject, outputObject);
-    }
-
-    @ApiOperation(id = "insertEquipmentRepairSparePartUsage", value = "添加备件使用明细", method = "POST", allUse = "1")
-    @ApiImplicitParams({
-        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),
-        @ApiImplicitParam(id = "sparePartUsageList", name = "sparePartUsageList", value = "备件使用明细列表", required = "required,json")})
-    @RequestMapping("/post/EquipmentRepairOrderController/insertEquipmentRepairSparePartUsage")
-    public void insertEquipmentRepairSparePartUsage(InputObject inputObject, OutputObject outputObject) {
-        equipmentRepairOrderService.insertEquipmentRepairSparePartUsage(inputObject, outputObject);
     }
 
     @ApiOperation(id = "receivingEquipmentRepairOrderById", value = "接单", method = "POST", allUse = "1")
