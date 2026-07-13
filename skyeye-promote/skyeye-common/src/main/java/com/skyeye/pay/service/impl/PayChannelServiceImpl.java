@@ -120,26 +120,19 @@ public class PayChannelServiceImpl extends SkyeyeBusinessServiceImpl<PayChannelD
 
     @Override
     @IgnoreTenant
-    public PayChannel getPayChannelByCode(String codeNum) {
-        return getPayChannelByCode(null, codeNum);
-    }
-
-    @Override
-    @IgnoreTenant
     public PayChannel getPayChannelByCode(String appKey, String codeNum) {
+        if (StrUtil.isBlank(appKey)) {
+            throw new CustomException("支付应用标识(appKey)不能为空");
+        }
         MPJLambdaWrapper<PayChannel> queryWrapper = new MPJLambdaWrapper<PayChannel>()
             .innerJoin(PayApp.class, PayApp::getId, PayChannel::getAppId)
             .eq(PayApp::getEnabled, EnableEnum.ENABLE_USING.getKey())
             .eq(PayChannel::getEnabled, EnableEnum.ENABLE_USING.getKey())
-            .eq(PayChannel::getCodeNum, codeNum);
-        if (StrUtil.isNotBlank(appKey)) {
-            queryWrapper.eq(PayApp::getAppKey, appKey.trim());
-        }
+            .eq(PayChannel::getCodeNum, codeNum)
+            .eq(PayApp::getAppKey, appKey.trim());
         PayChannel one = getOne(queryWrapper, false);
         if (ObjectUtil.isEmpty(one)) {
-            throw new CustomException(StrUtil.isNotBlank(appKey)
-                ? String.format("支付应用[%s]下未找到渠道[%s]", appKey, codeNum)
-                : "该支付渠道不存在");
+            throw new CustomException(String.format("支付应用[%s]下未找到渠道[%s]", appKey, codeNum));
         }
         return one;
     }

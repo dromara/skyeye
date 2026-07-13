@@ -92,10 +92,14 @@ public class OrderController {
         orderService.finishOrder(inputObject, outputObject);
     }
 
+    /**
+     * 租户收银台发起支付；PayApp.orderNotifyUrl 需指向 notifyOrderPaySuccess
+     */
     @ApiOperation(id = "payOrder", value = "商品订单支付", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),
         @ApiImplicitParam(id = "channelCode", name = "channelCode", value = "支付渠道编码", required = "required"),
+        @ApiImplicitParam(id = "returnUrl", name = "returnUrl", value = "支付完成跳转地址"),
         @ApiImplicitParam(id = "channelExtras", name = "channelExtras", value = "支付渠道的额外参数，例如说，微信公众号需要传递 openid 参数", required = "json")})
     @RequestMapping("/post/OrderController/payOrder")
     public void payOrder(InputObject inputObject, OutputObject outputObject) {
@@ -115,7 +119,9 @@ public class OrderController {
     @ApiOperation(id = "generatePayOrderRrCode", value = "生成支付订单的二维码", method = "GET", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),
-        @ApiImplicitParam(id = "channelCode", name = "channelCode", value = "支付渠道编码", required = "required")})
+        @ApiImplicitParam(id = "channelCode", name = "channelCode", value = "支付渠道编码", required = "required"),
+        @ApiImplicitParam(id = "returnUrl", name = "returnUrl", value = "支付完成跳转地址"),
+        @ApiImplicitParam(id = "channelExtras", name = "channelExtras", value = "渠道扩展参数", required = "json")})
     @RequestMapping("/post/OrderController/generatePayOrderRrCode")
     public void generatePayOrderRrCode(InputObject inputObject, OutputObject outputObject) {
         orderService.generatePayOrderRrCode(inputObject, outputObject);

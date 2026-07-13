@@ -39,7 +39,7 @@ import java.util.Objects;
 /**
  * 统一支付：租户购买、商城订单等共用。
  * <p>
- * 业务侧传入 oddNumber、payPrice（分）等，notifyUrl 留空时由渠道所属 PayApp 自动解析回调地址。
+ * 业务侧传入 oddNumber、payPrice（分）、appKey 等，notifyUrl 留空时由渠道所属 PayApp 自动解析回调地址。
  * 同步成功（如 mock）由业务方立即落单；异步（二维码等）依赖 PayNotify → 业务 notify 接口。
  */
 @Service
@@ -60,31 +60,14 @@ public class PayServiceImpl implements PayService {
         Map<String, Object> params = inputObject.getParams();
         Map<String, Object> data = JSONUtil.toBean(params.get("data").toString(), null);
         String channelCode = params.get("channelCode").toString();
-        String returnUrl = params.get("returnUrl").toString();
-        String channelExtrasStr = params.get("channelExtras").toString();
-        String notifyUrl = params.get("notifyUrl").toString();
+        String returnUrl = resolveOptionalParam(params, "returnUrl");
+        String channelExtrasStr = resolveOptionalParam(params, "channelExtras");
+        String notifyUrl = resolveOptionalParam(params, "notifyUrl");
+        String appKey = resolveRequiredAppKey(params);
         String userId = inputObject.getLogParams().get(CommonConstants.ID).toString();
-        Map<String, Object> result = executePayment(data, channelCode, returnUrl, channelExtrasStr, notifyUrl, null, userId);
+        Map<String, Object> result = executePayment(data, channelCode, returnUrl, channelExtrasStr, notifyUrl, appKey, userId);
         outputObject.setBean(result);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
-    }
-
-    @Override
-    public void generatePayRrCode(InputObject inputObject, OutputObject outputObject) {
-        Map<String, Object> params = inputObject.getParams();
-        Map<String, Object> data = JSONUtil.toBean(params.get("data").toString(), null);
-        String channelCode = params.get("channelCode").toString();
-        String notifyUrl = params.get("notifyUrl").toString();
-        String ip = params.get("ip").toString();
-        Map<String, Object> result = executeGeneratePayQrCode(data, channelCode, ip, notifyUrl);
-        outputObject.setBean(result);
-        outputObject.settotal(CommonNumConstants.NUM_ONE);
-    }
-
-    @Override
-    public Map<String, Object> executePayment(Map<String, Object> data, String channelCode, String returnUrl,
-                                              String channelExtras, String notifyUrl) {
-        return executePayment(data, channelCode, returnUrl, channelExtras, notifyUrl, null, null);
     }
 
     @Override
@@ -95,25 +78,21 @@ public class PayServiceImpl implements PayService {
 
     private Map<String, Object> executePayment(Map<String, Object> data, String channelCode, String returnUrl,
                                                String channelExtrasStr, String notifyUrl, String appKey, String userId) {
-        PayChannel payChannel = StrUtil.isNotBlank(appKey)
-            ? payChannelService.getPayChannelByCode(appKey, channelCode)
-            : payChannelService.getPayChannelByCode(channelCode);
+        payAppService.getEnabledPayAppByAppKey(appKey);
+        PayChannel payChannel = payChannelService.getPayChannelByCode(appKey, channelCode);
         payAppService.setDataMation(payChannel, PayChannel::getAppId);
         PayClient client = payChannelService.getPayClient(payChannel.getId());
 
         PayOrderUnifiedReqDTO unifiedReqDTO = new PayOrderUnifiedReqDTO();
-        // outTradeNo 与各业务 oddNumber 一致，回调时用于反查订单
         unifiedReqDTO.setOutTradeNo(data.get("oddNumber").toString());
         unifiedReqDTO.setSubject(getPaySubject(data));
         unifiedReqDTO.setBody(getPayBody(data));
         unifiedReqDTO.setNotifyUrl(resolveChannelNotifyUrl(payChannel.getAppMation(), payChannel.getId(), notifyUrl));
         unifiedReqDTO.setReturnUrl(returnUrl);
-        // payPrice 单位：分，与各业务传给渠道的金额约定一致
         unifiedReqDTO.setPrice(data.get("payPrice").toString());
         unifiedReqDTO.setExpireTime(LocalDateTimeUtils.addTime(Duration.ofHours(24L)));
 
         if (Objects.equals(channelCode, PayType.WALLET.getKey()) && StrUtil.isNotBlank(userId)) {
-            // 钱包支付需携带当前用户 id
             Map<String, String> channelExtras = StrUtil.isBlank(channelExtrasStr) ?
                 Maps.newHashMapWithExpectedSize(1) : JSONUtil.toBean(channelExtrasStr, null);
             channelExtras.put(CommonConstants.USER_ID_KEY, userId);
@@ -127,8 +106,8 @@ public class PayServiceImpl implements PayService {
             throw new CustomException("发起支付失败，请稍后重试");
         }
         validatePayResponse(payOrderRespDTO);
-        log.info("[executePayment][outTradeNo({}) channel({}) status({})]",
-            data.get("oddNumber"), channelCode, payOrderRespDTO.getStatus());
+        log.info("[executePayment][appKey({}) outTradeNo({}) channel({}) status({})]",
+            appKey, data.get("oddNumber"), channelCode, payOrderRespDTO.getStatus());
 
         Map<String, Object> result = new HashMap<>();
         result.put("payChannel", JSONUtil.toJsonStr(payChannel));
@@ -136,24 +115,20 @@ public class PayServiceImpl implements PayService {
         return result;
     }
 
-    @Override
-    public Map<String, Object> executeGeneratePayQrCode(Map<String, Object> data, String channelCode, String ip,
-                                                        String notifyUrl) {
-        PayChannel payChannel = payChannelService.getPayChannelByCode(channelCode);
-        payAppService.setDataMation(payChannel, PayChannel::getAppId);
-        PayClient client = payChannelService.getPayClient(payChannel.getId());
-        String qrCodeUrl = client.generateRrCode(data.get("oddNumber").toString(), getPayBody(data),
-            data.get("payPrice").toString(), ip, resolveChannelNotifyUrl(payChannel.getAppMation(), payChannel.getId(), notifyUrl));
-        Map<String, Object> result = new HashMap<>();
-        result.put("qrCodeUrl", qrCodeUrl);
-        result.put("payChannel", JSONUtil.toJsonStr(payChannel));
-        return result;
+    private String resolveOptionalParam(Map<String, Object> params, String key) {
+        if (params.containsKey(key) && params.get(key) != null) {
+            return params.get(key).toString();
+        }
+        return StrUtil.EMPTY;
     }
 
-    /**
-     * 解析注册到第三方渠道的 notify 地址。
-     * 优先使用调用方显式传入（兼容商城 yml 旧配置）；否则从渠道所属 PayApp.channelNotifyUrl 拼接 channelId。
-     */
+    private String resolveRequiredAppKey(Map<String, Object> params) {
+        if (!params.containsKey("appKey") || StrUtil.isBlank(params.get("appKey").toString())) {
+            throw new CustomException("支付应用标识(appKey)不能为空");
+        }
+        return params.get("appKey").toString().trim();
+    }
+
     private String resolveChannelNotifyUrl(PayApp payApp, String channelId, String notifyUrlParam) {
         if (StrUtil.isNotBlank(notifyUrlParam)) {
             return notifyUrlParam;
@@ -162,7 +137,6 @@ public class PayServiceImpl implements PayService {
     }
 
     private void validatePayResponse(PayOrderRespDTO payOrderRespDTO) {
-        // CLOSED 表示渠道侧已明确失败；WAITING 表示待用户支付，由业务方根据 status 决定是否轮询或展示二维码
         if (StrUtil.isNotEmpty(payOrderRespDTO.getChannelErrorCode())) {
             throw new CustomException(String.format("发起支付报错，错误码：%s，错误提示：%s",
                 payOrderRespDTO.getChannelErrorCode(), payOrderRespDTO.getChannelErrorMsg()));

@@ -31,25 +31,15 @@ public class IPayServiceImpl extends IServiceImpl implements IPayService {
     private IPayRest iPayRest;
 
     @Override
-    public ResultEntity payment(Map<String, Object> data, String channelCode, String returnUrl, String channelExtras, String notifyUrl) {
+    public ResultEntity payment(Map<String, Object> data, String channelCode, String returnUrl, String channelExtras,
+                                String notifyUrl, String appKey) {
         Map<String, Object> params = new HashMap<>();
         params.put("data", JSONUtil.toJsonStr(data));
         params.put("channelCode", channelCode);
+        params.put("appKey", appKey);
         params.put("returnUrl", returnUrl);
         params.put("channelExtras", channelExtras);
         params.put("notifyUrl", notifyUrl);
-
         return ExecuteFeignClient.get(() -> iPayRest.payment(params));
-    }
-
-    @Override
-    public Map<String, Object> generatePayRrCode(Map<String, Object> data, String channelCode, String ip, String notifyUrl) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("data", JSONUtil.toJsonStr(data));
-        params.put("channelCode", channelCode);
-        params.put("ip", ip);
-        params.put("notifyUrl", notifyUrl);
-
-        return ExecuteFeignClient.get(() -> iPayRest.generatePayRrCode(params)).getBean();
     }
 }

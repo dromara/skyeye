@@ -18,8 +18,6 @@ public interface PayChannelService extends SkyeyeBusinessService<PayChannel> {
 
     PayClient getPayClient(String id);
 
-    PayChannel getPayChannelByCode(String codeNum);
-
     /** 按 PayApp.appKey + 渠道编码定位渠道，避免多应用同编码串台 */
     PayChannel getPayChannelByCode(String appKey, String codeNum);
 

@@ -34,23 +34,13 @@ public class PayController {
     @ApiImplicitParams({
         @ApiImplicitParam(id = "data", name = "data", value = "业务数据", required = "required,json"),
         @ApiImplicitParam(id = "channelCode", name = "channelCode", value = "支付渠道编码", required = "required"),
+        @ApiImplicitParam(id = "appKey", name = "appKey", value = "支付应用标识，如 tenant-buy、mall-order", required = "required"),
         @ApiImplicitParam(id = "returnUrl", name = "returnUrl", value = "支付结果的return回调地址必须是URL格式"),
         @ApiImplicitParam(id = "channelExtras", name = "channelExtras", value = "支付渠道的额外参数，例如说，微信公众号需要传递 openid 参数", required = "json"),
         @ApiImplicitParam(id = "notifyUrl", name = "notifyUrl", value = "回调地址，支付成功后通知商户的地址，必须是URL格式")})
     @RequestMapping("/post/PayController/payment")
     public void payment(InputObject inputObject, OutputObject outputObject) {
         payService.payment(inputObject, outputObject);
-    }
-
-    @ApiOperation(id = "generatePayRrCode", value = "生成支付二维码", method = "POST", allUse = "2")
-    @ApiImplicitParams({
-        @ApiImplicitParam(id = "data", name = "data", value = "业务数据", required = "required,json"),
-        @ApiImplicitParam(id = "channelCode", name = "channelCode", value = "支付渠道编码", required = "required"),
-        @ApiImplicitParam(id = "ip", name = "ip", value = "用户的IP地址", required = "required"),
-        @ApiImplicitParam(id = "notifyUrl", name = "notifyUrl", value = "回调地址，支付成功后通知商户的地址，必须是URL格式")})
-    @RequestMapping("/post/PayController/generatePayRrCode")
-    public void generatePayRrCode(InputObject inputObject, OutputObject outputObject) {
-        payService.generatePayRrCode(inputObject, outputObject);
     }
 
 }

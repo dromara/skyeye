@@ -60,7 +60,9 @@ import java.util.stream.Collectors;
 @SkyeyeService(name = "订单管理", groupName = "租户管理", flowable = true, tenant = TenantEnum.PLATE)
 public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<TenantAppBuyOrderDao, TenantAppBuyOrder> implements TenantAppBuyOrderService {
 
-    /** 租户购买 PayApp.appKey，与前端 queryEnabledPayChannelList 一致 */
+    /**
+     * 租户购买 PayApp.appKey，与前端 queryEnabledPayChannelList 一致
+     */
     private static final String TENANT_BUY_PAY_APP_KEY = "tenant-buy";
 
     @Autowired
@@ -268,8 +270,8 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
         Map<String, Object> params = inputObject.getParams();
         String id = params.get("id").toString();
         String channelCode = params.get("channelCode").toString();
-        String returnUrl = params.containsKey("returnUrl") ? params.get("returnUrl").toString() : StrUtil.EMPTY;
-        String channelExtras = params.containsKey("channelExtras") ? params.get("channelExtras").toString() : StrUtil.EMPTY;
+        String returnUrl = params.get("returnUrl").toString();
+        String channelExtras = params.get("channelExtras").toString();
 
         TenantAppBuyOrder tenantAppBuyOrder = selectById(id);
         assertTenantOrderPayable(tenantAppBuyOrder);
