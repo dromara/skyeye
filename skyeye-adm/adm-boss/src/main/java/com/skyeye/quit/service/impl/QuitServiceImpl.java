@@ -17,6 +17,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.FlowableStateEnum;
 import com.skyeye.common.enumeration.UserStaffState;
 import com.skyeye.common.object.InputObject;
+import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.PropertiesUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.constans.BossConstants;
@@ -29,6 +30,7 @@ import com.skyeye.quit.service.QuitService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -53,6 +55,9 @@ public class QuitServiceImpl extends SkyeyeBusinessServiceImpl<QuitDao, Quit> im
 
     @Autowired
     private IJobMateMationService iJobMateMationService;
+
+    @Value("${skyeye.tenant.enable}")
+    private boolean tenantEnable;
 
     @Override
     protected QueryWrapper<Quit> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -91,6 +96,9 @@ public class QuitServiceImpl extends SkyeyeBusinessServiceImpl<QuitDao, Quit> im
         jobBody.put("whetherCreatTask", false);
         jobBody.put("content", JSONUtil.toJsonStr(entity));
         jobBody.put("userId", entity.getCreateId());
+        if (tenantEnable) {
+            jobBody.put("tenantId", TenantContext.getTenantId());
+        }
         String topic = PropertiesUtil.getPropertiesValue("${topic.quit-manager-transfer-service}");
         jobBody.put("topic", topic);
         JobMateMation jobMateMation = new JobMateMation();

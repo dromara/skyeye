@@ -8,12 +8,14 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.centerrest.team.TeamBusinessRestService;
 import com.skyeye.common.client.ExecuteFeignClient;
+import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.quit.entity.Quit;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.MessageModel;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -34,9 +36,15 @@ public class QuitManagerTransferConsume implements RocketMQListener<String> {
     @Autowired
     private TeamBusinessRestService teamBusinessRestService;
 
+    @Value("${skyeye.tenant.enable}")
+    private boolean tenantEnable;
+
     @Override
     public void onMessage(String data) {
         Map<String, Object> map = JSONUtil.toBean(data, null);
+        if (tenantEnable) {
+            TenantContext.setTenantId(map.get("tenantId").toString());
+        }
         Quit quit = JSONUtil.toBean(map.get("content").toString(), Quit.class);
         if (StrUtil.isEmpty(quit.getManagerTransferUserId())) {
             log.info("离职申请[{}]未指定经理转让交接人，跳过转让", quit.getId());
