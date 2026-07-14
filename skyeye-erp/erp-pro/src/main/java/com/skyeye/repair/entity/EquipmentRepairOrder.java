@@ -68,6 +68,14 @@ public class EquipmentRepairOrder extends OperatorUserInfo {
     @Property(value = "设备信息")
     private Map<String, Object> equipmentMation;
 
+    @TableField(value = "maintain_order_id")
+    @ApiModelProperty(value = "保养任务id（嵌套在保养任务下时传入）")
+    private String maintainOrderId;
+
+    @TableField(exist = false)
+    @Property(value = "保养任务信息")
+    private Map<String, Object> maintainOrderMation;
+
     @TableField(value = "fault_brief")
     @ApiModelProperty(value = "故障描述", required = "required")
     private String faultBrief;

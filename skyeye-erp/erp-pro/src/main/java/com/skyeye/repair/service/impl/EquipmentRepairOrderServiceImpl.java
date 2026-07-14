@@ -28,6 +28,7 @@ import com.skyeye.eve.service.IJobMateMationService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.material.service.MaterialNormsService;
 import com.skyeye.material.service.MaterialService;
+import com.skyeye.maintenance.service.EquipmentMaintainOrderService;
 import com.skyeye.repair.classenum.EquipmentFaultCategory;
 import com.skyeye.repair.classenum.EquipmentRepairAuditOpinion;
 import com.skyeye.repair.classenum.EquipmentRepairFaultReason;
@@ -67,6 +68,9 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
 
     @Autowired
     private EquipmentService equipmentService;
+
+    @Autowired
+    private EquipmentMaintainOrderService equipmentMaintainOrderService;
 
     @Autowired
     private MaterialService materialService;
@@ -111,7 +115,11 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
         }
 
         if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getEquipmentId), commonPageInfo.getObjectId());
+            // 嵌套在保养任务详情：objectId = 保养任务id
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getMaintainOrderId), commonPageInfo.getObjectId());
+        }
+        if (StrUtil.isNotEmpty(commonPageInfo.getHolderId())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getEquipmentId), commonPageInfo.getHolderId());
         }
         return queryWrapper;
     }
@@ -130,6 +138,7 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
             return null;
         }
         equipmentService.setDataMation(order, EquipmentRepairOrder::getEquipmentId);
+        equipmentMaintainOrderService.setDataMation(order, EquipmentRepairOrder::getMaintainOrderId);
         iAuthUserService.setDataMation(order, EquipmentRepairOrder::getUserId);
         iAuthUserService.setDataMation(order, EquipmentRepairOrder::getServiceUserId);
         supplierService.setDataMation(order, EquipmentRepairOrder::getSupplierId);
@@ -218,27 +227,38 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
     @Override
     @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
     public void insertEquipmentRepairResult(InputObject inputObject, OutputObject outputObject) {
-        EquipmentRepairOrder params = inputObject.getParams(EquipmentRepairOrder.class);
-        EquipmentRepairOrder dbOrder = selectById(params.getId());
+        Map<String, Object> map = inputObject.getParams();
+        String id = map.get("id").toString();
+        EquipmentRepairOrder dbOrder = selectById(id);
         if (ObjectUtil.equal(dbOrder.getState(), EquipmentRepairOrderState.BE_COMPLETED.getKey())) {
             String userId = InputObject.getLogParamsStatic().get("id").toString();
             UpdateWrapper<EquipmentRepairOrder> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.eq(CommonConstants.ID, params.getId());
-            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getIsRepaired), params.getIsRepaired());
-            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getIsReplaceSpare), params.getIsReplaceSpare());
-            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getFaultReason), params.getFaultReason());
-            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getCancelReason), params.getCancelReason());
-            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getRepairDesc), params.getRepairDesc());
-            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getRepairFinishPhoto), params.getRepairFinishPhoto());
-            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getSupplierId), params.getSupplierId());
-            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getRepairFinishTime), params.getRepairFinishTime());
+            updateWrapper.eq(CommonConstants.ID, id);
+            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getIsRepaired),
+                Integer.valueOf(map.get("isRepaired").toString()));
+            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getIsReplaceSpare),
+                Integer.valueOf(map.get("isReplaceSpare").toString()));
+            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getFaultReason),
+                Integer.valueOf(map.get("faultReason").toString()));
+            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getCancelReason),
+                map.get("cancelReason").toString());
+            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getRepairDesc),
+                map.get("repairDesc").toString());
+            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getRepairFinishPhoto),
+                map.get("repairFinishPhoto").toString());
+            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getSupplierId),
+                map.get("supplierId").toString());
+            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getRepairFinishTime),
+                map.get("repairFinishTime").toString());
             update(updateWrapper);
-            if (params.getSparePartUsageList() != null) {
+            if (ObjectUtil.isNotEmpty(map.get("sparePartUsageList"))) {
+                List<EquipmentSparePartUsageDetail> sparePartUsageList = JSONUtil.toList(
+                    map.get("sparePartUsageList").toString(), EquipmentSparePartUsageDetail.class);
                 revertSparePartStock(dbOrder.getId());
-                saveSparePartUsage(dbOrder.getId(), params.getSparePartUsageList(), userId);
+                saveSparePartUsage(dbOrder.getId(), sparePartUsageList, userId);
             }
-            refreshCache(params.getId());
-            outputObject.setBean(selectById(params.getId()));
+            refreshCache(id);
+            outputObject.setBean(selectById(id));
         } else {
             throw new CustomException("该数据状态已改变，请刷新页面！");
         }
@@ -326,6 +346,7 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
             return beans;
         }
         equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
+        equipmentMaintainOrderService.setMationForMap(beans, "maintainOrderId", "maintainOrderMation");
         iAuthUserService.setMationForMap(beans, "userId", "userMation");
         iAuthUserService.setMationForMap(beans, "serviceUserId", "serviceUserMation");
         return beans;
