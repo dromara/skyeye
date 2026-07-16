@@ -25,6 +25,4 @@ public interface CouponService extends SkyeyeBusinessService<Coupon> {
     void queryCouponListByState(InputObject inputObject, OutputObject outputObject);
 
     void queryCouponListByMaterialId(InputObject inputObject, OutputObject outputObject);
-
-    void queryCouponApplicableMaterialList(InputObject inputObject, OutputObject outputObject);
 }
