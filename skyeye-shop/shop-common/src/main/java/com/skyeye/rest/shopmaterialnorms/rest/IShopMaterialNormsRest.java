@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Map;
-
 /**
  * @ClassName: IShopMaterialNormsRest
  * @Description: ERP商城购物车信息管理公共的一些操作
@@ -65,11 +63,14 @@ public interface IShopMaterialNormsRest {
     String queryAllShopMaterialListForChoose();
 
     /**
-     * 分页获取商城商品信息列表
+     * 根据商品id和门店id获取门店商品关系
      *
-     * @param params page、limit、keyword、objectId、materialIds、storeIds 等
+     * @param materialId 商品id
+     * @param storeId 门店id
+     * @return
      */
-    @PostMapping("/queryShopMaterialList")
-    String queryShopMaterialList(Map<String, Object> params);
+    @GetMapping("/queryShopMaterialByMaterialIdAndStoreId")
+    String queryShopMaterialByMaterialIdAndStoreId(@RequestParam("materialId") String materialId,
+                                                   @RequestParam("storeId") String storeId);
 
 }

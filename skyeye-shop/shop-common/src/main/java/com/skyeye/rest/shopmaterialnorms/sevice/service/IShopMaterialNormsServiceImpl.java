@@ -72,8 +72,13 @@ public class IShopMaterialNormsServiceImpl extends IServiceImpl implements IShop
     }
 
     @Override
-    public ResultEntity queryShopMaterialList(Map<String, Object> params) {
-        return ExecuteFeignClient.get(() -> iShopMaterialNormsRest.queryShopMaterialList(params));
+    public Map<String, Object> queryShopMaterialByMaterialIdAndStoreId(String materialId, String storeId) {
+        if (StrUtil.isBlank(materialId) || StrUtil.isBlank(storeId)) {
+            return null;
+        }
+        ResultEntity resultEntity = ExecuteFeignClient.get(() ->
+            iShopMaterialNormsRest.queryShopMaterialByMaterialIdAndStoreId(materialId, storeId));
+        return resultEntity.getBean();
     }
 
 }
