@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
-import com.google.common.base.Joiner;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
@@ -23,6 +22,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.object.ResultEntity;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.coupon.dao.CouponDao;
@@ -30,7 +30,6 @@ import com.skyeye.coupon.entity.Coupon;
 import com.skyeye.coupon.entity.CouponMaterial;
 import com.skyeye.coupon.entity.CouponStore;
 import com.skyeye.coupon.entity.CouponUse;
-import com.skyeye.coupon.enums.CouponJumpType;
 import com.skyeye.coupon.enums.CouponStoreCoverage;
 import com.skyeye.coupon.enums.CouponValidityType;
 import com.skyeye.coupon.enums.PromotionDiscountType;
@@ -330,17 +329,11 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         outputObject.settotal(list.size());
     }
 
-    /**
-     * 获取优惠券「去使用」跳转信息。
-     * 根据商品范围、门店范围及关联数量，返回 jumpType 及后续接口所需参数。
-     * jumpType：1商品列表 2门店列表 3进入门店 4商品详情 5商城首页
-     */
     @Override
     @IgnoreTenant
-    public void queryCouponJumpInfo(InputObject inputObject, OutputObject outputObject) {
-        Map<String, Object> params = inputObject.getParams();
-        String couponId = params.get("couponId").toString();
-        String currentStoreId = params.get("storeId") == null ? StrUtil.EMPTY : params.get("storeId").toString();
+    public void queryCouponApplicableMaterialList(InputObject inputObject, OutputObject outputObject) {
+        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        String couponId = inputObject.getParams().get("couponId").toString();
 
         Coupon coupon = selectById(couponId);
         if (ObjectUtil.isEmpty(coupon)) {
@@ -349,161 +342,50 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         if (!Objects.equals(coupon.getEnabled(), EnableEnum.ENABLE_USING.getKey())) {
             throw new CustomException("优惠券已失效");
         }
-        // 缓存券对象可能缺少适用商品，补查一次
+
+        String materialIds = resolveApplicableMaterialIds(coupon);
+        String storeIds = resolveApplicableStoreIds(coupon);
+
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("page", commonPageInfo.getPage());
+        queryParams.put("limit", commonPageInfo.getLimit());
+        if (StrUtil.isNotBlank(materialIds)) {
+            queryParams.put("materialIds", materialIds);
+        }
+        if (StrUtil.isNotBlank(storeIds)) {
+            queryParams.put("storeIds", storeIds);
+        }
+
+        ResultEntity resultEntity = iShopMaterialNormsService.queryShopMaterialList(queryParams);
+        outputObject.setBeans(resultEntity.getRows());
+        outputObject.settotal(resultEntity.getTotal());
+    }
+
+    private String resolveApplicableMaterialIds(Coupon coupon) {
+        if (Objects.equals(coupon.getProductScope(), PromotionMaterialScope.ALL.getKey())) {
+            return StrUtil.EMPTY;
+        }
         if (CollectionUtil.isEmpty(coupon.getCouponMaterialList())) {
-            coupon.setCouponMaterialList(couponMaterialService.queryListByCouponId(couponId));
-        }
-
-        List<String> materialIdList = resolveMaterialIdList(coupon);
-        List<String> storeIdList = resolveStoreIdList(coupon);
-        boolean specifyMaterial = Objects.equals(coupon.getProductScope(), PromotionMaterialScope.SPU.getKey());
-        boolean specifyStore = Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.SPECIFIED_STORE.getKey());
-
-        Map<String, Object> jumpInfo;
-        if (specifyMaterial && !specifyStore) {
-            // 仅指定商品 → 商品列表
-            if (CollectionUtil.isEmpty(materialIdList)) {
-                jumpInfo = buildHomeJump("优惠券未配置适用商品");
-            } else {
-                jumpInfo = buildJumpInfo(CouponJumpType.PRODUCT_LIST, joinIds(materialIdList), StrUtil.EMPTY,
-                    StrUtil.EMPTY, StrUtil.EMPTY, StrUtil.EMPTY);
-            }
-        } else if (!specifyMaterial && specifyStore) {
-            // 仅指定门店
-            if (CollectionUtil.isEmpty(storeIdList)) {
-                jumpInfo = buildHomeJump("优惠券未配置适用门店");
-            } else if (storeIdList.size() == CommonNumConstants.NUM_ONE) {
-                jumpInfo = buildJumpInfo(CouponJumpType.STORE_HOME, StrUtil.EMPTY, joinIds(storeIdList),
-                    StrUtil.EMPTY, storeIdList.get(CommonNumConstants.NUM_ZERO), StrUtil.EMPTY);
-            } else {
-                jumpInfo = buildJumpInfo(CouponJumpType.STORE_LIST, StrUtil.EMPTY, joinIds(storeIdList),
-                    StrUtil.EMPTY, StrUtil.EMPTY, StrUtil.EMPTY);
-            }
-        } else if (specifyMaterial && specifyStore) {
-            if (CollectionUtil.isEmpty(materialIdList) || CollectionUtil.isEmpty(storeIdList)) {
-                jumpInfo = buildHomeJump("优惠券适用商品或门店配置不完整");
-            } else if (materialIdList.size() == CommonNumConstants.NUM_ONE
-                && storeIdList.size() == CommonNumConstants.NUM_ONE) {
-                // 单商品 + 单门店 → 详情
-                jumpInfo = buildDetailJump(materialIdList.get(CommonNumConstants.NUM_ZERO),
-                    storeIdList.get(CommonNumConstants.NUM_ZERO), materialIdList, storeIdList);
-            } else if (materialIdList.size() == CommonNumConstants.NUM_ONE
-                && storeIdList.size() > CommonNumConstants.NUM_ONE
-                && StrUtil.isNotBlank(currentStoreId)
-                && storeIdList.contains(currentStoreId)) {
-                // 单商品 + 多门店，且当前门店在适用范围内 → 优先详情
-                jumpInfo = buildDetailJump(materialIdList.get(CommonNumConstants.NUM_ZERO),
-                    currentStoreId, materialIdList, storeIdList);
-            } else {
-                // 多商品/多门店 → 列表
-                jumpInfo = buildJumpInfo(CouponJumpType.PRODUCT_LIST, joinIds(materialIdList), joinIds(storeIdList),
-                    StrUtil.EMPTY, StrUtil.EMPTY, StrUtil.EMPTY);
-            }
-        } else {
-            // 全场券等兜底
-            jumpInfo = buildHomeJump("该优惠券适用于全场，请前往商城首页");
-        }
-
-        outputObject.setBean(jumpInfo);
-        outputObject.settotal(CommonNumConstants.NUM_ONE);
-    }
-
-    /**
-     * 解析单商品+单门店的详情跳转：查询 erp_shop_material_store.id。
-     * 查不到或异常时降级为商品列表。
-     *
-     * @param materialId 商品id
-     * @param storeId 门店id
-     * @param materialIdList 适用商品id列表（回填到返回结果）
-     * @param storeIdList 适用门店id列表（回填到返回结果）
-     */
-    private Map<String, Object> buildDetailJump(String materialId, String storeId,
-                                                List<String> materialIdList, List<String> storeIdList) {
-        try {
-            Map<String, Object> shopMaterialStore =
-                iShopMaterialNormsService.queryShopMaterialByMaterialIdAndStoreId(materialId, storeId);
-            if (ObjectUtil.isNotEmpty(shopMaterialStore) && shopMaterialStore.get(CommonConstants.ID) != null
-                && StrUtil.isNotBlank(shopMaterialStore.get(CommonConstants.ID).toString())) {
-                return buildJumpInfo(CouponJumpType.DETAIL, joinIds(materialIdList), joinIds(storeIdList),
-                    shopMaterialStore.get(CommonConstants.ID).toString(), storeId, StrUtil.EMPTY);
-            }
-        } catch (Exception e) {
-            log.warn("解析门店商品关系失败, materialId={}, storeId={}", materialId, storeId, e);
-        }
-        // 未上架等降级为商品列表
-        return buildJumpInfo(CouponJumpType.PRODUCT_LIST, joinIds(materialIdList), joinIds(storeIdList),
-            StrUtil.EMPTY, StrUtil.EMPTY, "未找到可跳转的商品详情，已降级为商品列表");
-    }
-
-    /**
-     * 构建跳转商城首页的结果
-     *
-     * @param message 提示信息
-     */
-    private Map<String, Object> buildHomeJump(String message) {
-        return buildJumpInfo(CouponJumpType.HOME, StrUtil.EMPTY, StrUtil.EMPTY,
-            StrUtil.EMPTY, StrUtil.EMPTY, message);
-    }
-
-    /**
-     * 组装跳转结果
-     *
-     * @param jumpType 跳转类型，参考#CouponJumpType
-     * @param materialIds 商品id，多个逗号隔开
-     * @param storeIds 门店id，多个逗号隔开
-     * @param shopMaterialStoreId 门店商品关系主键（详情跳转用）
-     * @param storeId 单门店场景下的门店id
-     * @param message 提示信息
-     */
-    private Map<String, Object> buildJumpInfo(CouponJumpType jumpType, String materialIds, String storeIds,
-                                              String shopMaterialStoreId, String storeId, String message) {
-        Map<String, Object> result = new HashMap<>();
-        result.put("jumpType", jumpType.getKey());
-        result.put("materialIds", materialIds);
-        result.put("storeIds", storeIds);
-        result.put("shopMaterialStoreId", shopMaterialStoreId);
-        result.put("storeId", storeId);
-        result.put("message", message);
-        return result;
-    }
-
-    /**
-     * 解析优惠券适用商品id列表（仅指定商品范围时返回）
-     */
-    private List<String> resolveMaterialIdList(Coupon coupon) {
-        if (!Objects.equals(coupon.getProductScope(), PromotionMaterialScope.SPU.getKey())
-            || CollectionUtil.isEmpty(coupon.getCouponMaterialList())) {
-            return Collections.emptyList();
+            return StrUtil.EMPTY;
         }
         return coupon.getCouponMaterialList().stream()
             .map(CouponMaterial::getMaterialId)
             .filter(StrUtil::isNotBlank)
             .distinct()
-            .collect(Collectors.toList());
+            .collect(Collectors.joining(CommonCharConstants.COMMA_MARK));
     }
 
-    /**
-     * 解析优惠券适用门店id列表（仅指定门店范围时返回）
-     */
-    private List<String> resolveStoreIdList(Coupon coupon) {
-        if (!Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.SPECIFIED_STORE.getKey())
-            || CollectionUtil.isEmpty(coupon.getStoreIdList())) {
-            return Collections.emptyList();
+    private String resolveApplicableStoreIds(Coupon coupon) {
+        if (Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.SPECIFIED_STORE.getKey())) {
+            if (CollectionUtil.isEmpty(coupon.getStoreIdList())) {
+                return StrUtil.EMPTY;
+            }
+            return coupon.getStoreIdList().stream()
+                .filter(StrUtil::isNotBlank)
+                .distinct()
+                .collect(Collectors.joining(CommonCharConstants.COMMA_MARK));
         }
-        return coupon.getStoreIdList().stream()
-            .filter(StrUtil::isNotBlank)
-            .distinct()
-            .collect(Collectors.toList());
-    }
-
-    /**
-     * 将id列表拼接为逗号分隔字符串
-     */
-    private String joinIds(List<String> idList) {
-        if (CollectionUtil.isEmpty(idList)) {
-            return StrUtil.EMPTY;
-        }
-        return Joiner.on(CommonCharConstants.COMMA_MARK).join(idList);
+        return StrUtil.EMPTY;
     }
 
     private void setDrawState(List<Coupon> list) {

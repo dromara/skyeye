@@ -4,6 +4,8 @@
 
 package com.skyeye.rest.shopmaterialnorms.sevice;
 
+import com.skyeye.common.object.ResultEntity;
+
 import java.util.List;
 import java.util.Map;
 
@@ -31,12 +33,8 @@ public interface IShopMaterialNormsService {
     List<Map<String, Object>> queryAllShopMaterialListForChoose();
 
     /**
-     * 根据商品id和门店id获取门店商品关系
-     *
-     * @param materialId 商品id
-     * @param storeId 门店id
-     * @return
+     * 分页获取商城商品信息列表
      */
-    Map<String, Object> queryShopMaterialByMaterialIdAndStoreId(String materialId, String storeId);
+    ResultEntity queryShopMaterialList(Map<String, Object> params);
 
 }

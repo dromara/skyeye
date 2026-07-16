@@ -48,9 +48,7 @@ public class ShopMaterialController {
     }
 
     @ApiOperation(id = "queryShopMaterialList", value = "获取商城商品信息列表(已经被门店加入到门店下的 && 已经上架的)--商城使用", method = "POST", allUse = "0")
-    @ApiImplicitParams(classBean = CommonPageInfo.class, value = {
-        @ApiImplicitParam(id = "materialIds", name = "materialIds", value = "商品id，多个逗号隔开"),
-        @ApiImplicitParam(id = "storeIds", name = "storeIds", value = "门店id，多个逗号隔开")})
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/ShopMaterialController/queryShopMaterialList")
     public void queryShopMaterialList(InputObject inputObject, OutputObject outputObject) {
         shopMaterialService.queryShopMaterialList(inputObject, outputObject);
