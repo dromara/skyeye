@@ -12,8 +12,14 @@ import java.util.Map;
  */
 public interface IServiceUserStockService {
 
-    Map<String, Map<String, Object>> queryUserStock(String userId, List<String> normsIds);
+    /**
+     * 查询当前登录人规格库存
+     */
+    Map<String, Map<String, Object>> queryUserStock(List<String> normsIds);
 
+    /**
+     * 增减配件库存
+     */
     void editMaterialNormsUserStock(String userId, String materialId, String normsId, String operNumber, int type);
 
 }

@@ -4,6 +4,7 @@
 
 package com.skyeye.maintenance.controller;
 
+import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.maintenance.entity.MaintenancePlan;
 import com.skyeye.annotation.api.Api;
 import com.skyeye.annotation.api.ApiImplicitParam;
@@ -59,7 +60,7 @@ public class MaintenancePlanController {
 
     @ApiOperation(id = "queryAllMaintenancePlanList", value = "查询全部保养计划", method = "POST", allUse = "2")
     @ApiImplicitParams({
-        @ApiImplicitParam(id = "enabled", name = "enabled", value = "状态", required = "required")})
+        @ApiImplicitParam(id = "enabled", name = "enabled", value = "启用状态", enumClass = EnableEnum.class)})
     @RequestMapping("/post/MaintenancePlanController/queryAllMaintenancePlanList")
     public void queryAllMaintenancePlanList(InputObject inputObject, OutputObject outputObject) {
         maintenancePlanService.queryAllMaintenancePlanList(inputObject, outputObject);

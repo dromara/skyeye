@@ -7,7 +7,6 @@ package com.skyeye.accessory.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -154,7 +153,7 @@ public class ServiceUserStockServiceImpl extends SkyeyeBusinessServiceImpl<Servi
     @Override
     public void queryUserStockByNormsIds(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> map = inputObject.getParams();
-        String userId = map.get("userId").toString();
+        String userId = inputObject.getLogParams().get("id").toString();
         List<String> normsIds = JSONUtil.toList(map.get("normsIds").toString(), null);
         Map<String, ServiceUserStock> stockMap = queryUserStock(userId, normsIds);
         outputObject.setBeans(new ArrayList<>(stockMap.values()));
@@ -164,6 +163,9 @@ public class ServiceUserStockServiceImpl extends SkyeyeBusinessServiceImpl<Servi
     @Override
     public void editMaterialNormsUserStockForFeign(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> map = inputObject.getParams();
+        if (map.get("userId") == null) {
+            throw new CustomException("库存所属用户不能为空");
+        }
         editMaterialNormsUserStock(
             map.get("userId").toString(),
             map.get("materialId").toString(),
