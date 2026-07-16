@@ -14,6 +14,7 @@ import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.constans.QuartzConstants;
@@ -21,6 +22,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.object.ResultEntity;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.coupon.dao.CouponDao;
@@ -325,6 +327,65 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         setDrawState(list);// 设置是否可以领取状态
         outputObject.setBeans(list);
         outputObject.settotal(list.size());
+    }
+
+    @Override
+    @IgnoreTenant
+    public void queryCouponApplicableMaterialList(InputObject inputObject, OutputObject outputObject) {
+        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        String couponId = inputObject.getParams().get("couponId").toString();
+
+        Coupon coupon = selectById(couponId);
+        if (ObjectUtil.isEmpty(coupon)) {
+            throw new CustomException("优惠券不存在");
+        }
+        if (!Objects.equals(coupon.getEnabled(), EnableEnum.ENABLE_USING.getKey())) {
+            throw new CustomException("优惠券已失效");
+        }
+
+        String materialIds = resolveApplicableMaterialIds(coupon);
+        String storeIds = resolveApplicableStoreIds(coupon);
+
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("page", commonPageInfo.getPage());
+        queryParams.put("limit", commonPageInfo.getLimit());
+        if (StrUtil.isNotBlank(materialIds)) {
+            queryParams.put("materialIds", materialIds);
+        }
+        if (StrUtil.isNotBlank(storeIds)) {
+            queryParams.put("storeIds", storeIds);
+        }
+
+        ResultEntity resultEntity = iShopMaterialNormsService.queryShopMaterialList(queryParams);
+        outputObject.setBeans(resultEntity.getRows());
+        outputObject.settotal(resultEntity.getTotal());
+    }
+
+    private String resolveApplicableMaterialIds(Coupon coupon) {
+        if (Objects.equals(coupon.getProductScope(), PromotionMaterialScope.ALL.getKey())) {
+            return StrUtil.EMPTY;
+        }
+        if (CollectionUtil.isEmpty(coupon.getCouponMaterialList())) {
+            return StrUtil.EMPTY;
+        }
+        return coupon.getCouponMaterialList().stream()
+            .map(CouponMaterial::getMaterialId)
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.joining(CommonCharConstants.COMMA_MARK));
+    }
+
+    private String resolveApplicableStoreIds(Coupon coupon) {
+        if (Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.SPECIFIED_STORE.getKey())) {
+            if (CollectionUtil.isEmpty(coupon.getStoreIdList())) {
+                return StrUtil.EMPTY;
+            }
+            return coupon.getStoreIdList().stream()
+                .filter(StrUtil::isNotBlank)
+                .distinct()
+                .collect(Collectors.joining(CommonCharConstants.COMMA_MARK));
+        }
+        return StrUtil.EMPTY;
     }
 
     private void setDrawState(List<Coupon> list) {
