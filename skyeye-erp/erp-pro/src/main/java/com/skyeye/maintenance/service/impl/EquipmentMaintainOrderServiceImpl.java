@@ -158,8 +158,7 @@ public class EquipmentMaintainOrderServiceImpl extends SkyeyeBusinessServiceImpl
         List<String> normsIds = task.getSparePartDetailList().stream()
             .map(EquipmentMaintainOrderSparePartDetail::getNormsId)
             .collect(Collectors.toList());
-        String currentUserId = InputObject.getLogParamsStatic().get("id").toString();
-        Map<String, Map<String, Object>> serviceUserStockMap = iServiceUserStockService.queryUserStock(currentUserId, normsIds);
+        Map<String, Map<String, Object>> serviceUserStockMap = iServiceUserStockService.queryUserStock(normsIds);
         task.getSparePartDetailList().forEach(detail ->
             detail.setServiceUserStock(serviceUserStockMap.get(detail.getNormsId())));
         return task;

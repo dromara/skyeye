@@ -20,7 +20,6 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.common.enumeration.WhetherEnum;
-import com.skyeye.depot.classenum.DepotPutOutType;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.eve.rest.mq.JobMateMation;
@@ -157,8 +156,7 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
         List<String> normsIds = order.getSparePartUsageList().stream()
             .map(EquipmentSparePartUsageDetail::getNormsId)
             .collect(Collectors.toList());
-        String currentUserId = InputObject.getLogParamsStatic().get("id").toString();
-        Map<String, Map<String, Object>> serviceUserStockMap = iServiceUserStockService.queryUserStock(currentUserId, normsIds);
+        Map<String, Map<String, Object>> serviceUserStockMap = iServiceUserStockService.queryUserStock(normsIds);
         order.getSparePartUsageList().forEach(detail ->
             detail.setServiceUserStock(serviceUserStockMap.get(detail.getNormsId())));
         return order;
@@ -231,7 +229,6 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
         String id = map.get("id").toString();
         EquipmentRepairOrder dbOrder = selectById(id);
         if (ObjectUtil.equal(dbOrder.getState(), EquipmentRepairOrderState.BE_COMPLETED.getKey())) {
-            String userId = InputObject.getLogParamsStatic().get("id").toString();
             UpdateWrapper<EquipmentRepairOrder> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq(CommonConstants.ID, id);
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getIsRepaired),
@@ -254,8 +251,8 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
             if (ObjectUtil.isNotEmpty(map.get("sparePartUsageList"))) {
                 List<EquipmentSparePartUsageDetail> sparePartUsageList = JSONUtil.toList(
                     map.get("sparePartUsageList").toString(), EquipmentSparePartUsageDetail.class);
-                revertSparePartStock(dbOrder.getId());
-                saveSparePartUsage(dbOrder.getId(), sparePartUsageList, userId);
+                // 编辑维修结果只落明细，不增减库存；待确认→确认时再扣
+                equipmentSparePartUsageDetailService.saveLinkList(dbOrder.getId(), sparePartUsageList);
             }
             refreshCache(id);
             outputObject.setBean(selectById(id));
@@ -314,9 +311,11 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
             updateWrapper.eq(CommonConstants.ID, id);
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getIsFixed), isFixed);
             if (WhetherEnum.DISABLE_USING.getKey().equals(isFixed)) {
-                revertAndDeleteSparePart(dbOrder.getId());
+                equipmentSparePartUsageDetailService.deleteByParentId(dbOrder.getId());
                 updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getState), EquipmentRepairOrderState.PENDING_ORDERS.getKey());
             } else {
+                // 按备件明细 createId（保存时的登录人）扣库存
+                equipmentSparePartUsageDetailService.deductStockByParentId(dbOrder.getId());
                 updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getState), EquipmentRepairOrderState.COMPLATE.getKey());
                 equipmentService.editEquipmentStateById(dbOrder.getEquipmentId(),
                     Integer.valueOf(map.get("equipmentStatus").toString()));
@@ -402,25 +401,4 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
         outputObject.settotal(list.size());
     }
 
-    private void saveSparePartUsage(String repairOrderId, List<EquipmentSparePartUsageDetail> sparePartUsageList, String userId) {
-        equipmentSparePartUsageDetailService.calcDetailPrice(sparePartUsageList);
-        equipmentSparePartUsageDetailService.saveLinkList(repairOrderId, sparePartUsageList);
-        equipmentSparePartUsageDetailService.changeUserStock(userId, sparePartUsageList, DepotPutOutType.OUT.getKey());
-    }
-
-    private void revertSparePartStock(String repairOrderId) {
-        String userId = InputObject.getLogParamsStatic().get("id").toString();
-        List<EquipmentSparePartUsageDetail> oldList = equipmentSparePartUsageDetailService.selectByParentId(repairOrderId);
-        equipmentSparePartUsageDetailService.changeUserStock(userId, oldList, DepotPutOutType.PUT.getKey());
-    }
-
-    private void revertAndDeleteSparePart(String repairOrderId) {
-        List<EquipmentSparePartUsageDetail> oldList = equipmentSparePartUsageDetailService.selectByParentId(repairOrderId);
-        if (CollectionUtil.isEmpty(oldList)) {
-            return;
-        }
-        equipmentSparePartUsageDetailService.revertUserStockByDetailOwner(oldList);
-        equipmentSparePartUsageDetailService.deleteByParentId(repairOrderId);
-        refreshCache(repairOrderId);
-    }
 }

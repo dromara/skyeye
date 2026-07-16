@@ -51,6 +51,7 @@ public class EquipmentSparePartUsageDetailServiceImpl extends SkyeyeBusinessServ
             return;
         }
         checkLinkList(parentId, detailList);
+        calcDetailPrice(detailList);
         deleteByParentId(parentId);
         for (EquipmentSparePartUsageDetail item : detailList) {
             item.setParentId(parentId);
@@ -127,14 +128,35 @@ public class EquipmentSparePartUsageDetailServiceImpl extends SkyeyeBusinessServ
     }
 
     @Override
-    public void validateUserStock(String userId, List<EquipmentSparePartUsageDetail> detailList) {
+    public void deductStockByParentId(String parentId) {
+        List<EquipmentSparePartUsageDetail> detailList = selectByParentId(parentId);
+        if (CollectionUtil.isEmpty(detailList)) {
+            return;
+        }
+        for (EquipmentSparePartUsageDetail detail : detailList) {
+            if (StrUtil.isBlank(detail.getCreateId())) {
+                throw new CustomException("备件使用人信息缺失，无法扣减配件库存！");
+            }
+            iServiceUserStockService.editMaterialNormsUserStock(
+                detail.getCreateId(),
+                detail.getMaterialId(),
+                detail.getNormsId(),
+                detail.getOperNumber(),
+                DepotPutOutType.OUT.getKey());
+        }
+    }
+
+    /**
+     * 校验当前登录人配件库存
+     */
+    private void validateLoginUserStock(List<EquipmentSparePartUsageDetail> detailList) {
         if (CollectionUtil.isEmpty(detailList)) {
             return;
         }
         List<String> normsIds = detailList.stream()
             .map(EquipmentSparePartUsageDetail::getNormsId)
             .collect(Collectors.toList());
-        Map<String, Map<String, Object>> userStockMap = iServiceUserStockService.queryUserStock(userId, normsIds);
+        Map<String, Map<String, Object>> userStockMap = iServiceUserStockService.queryUserStock(normsIds);
         for (EquipmentSparePartUsageDetail detail : detailList) {
             Map<String, Object> stockMation = userStockMap.get(detail.getNormsId());
             if (ObjectUtil.isEmpty(stockMation) || stockMation.get("stock") == null) {
@@ -147,42 +169,17 @@ public class EquipmentSparePartUsageDetailServiceImpl extends SkyeyeBusinessServ
         }
     }
 
-    @Override
-    public void changeUserStock(String stockUserId, List<EquipmentSparePartUsageDetail> detailList, int type) {
-        if (CollectionUtil.isEmpty(detailList) || StrUtil.isEmpty(stockUserId)) {
-            return;
-        }
-        detailList.forEach(detail -> iServiceUserStockService.editMaterialNormsUserStock(
-            stockUserId,
-            detail.getMaterialId(),
-            detail.getNormsId(),
-            detail.getOperNumber(),
-            type));
-    }
-
-    @Override
-    public void revertUserStockByDetailOwner(List<EquipmentSparePartUsageDetail> detailList) {
-        if (CollectionUtil.isEmpty(detailList)) {
-            return;
-        }
-        for (EquipmentSparePartUsageDetail detail : detailList) {
-            if (StrUtil.isBlank(detail.getCreateId())) {
-                continue;
-            }
-            changeUserStock(detail.getCreateId(), java.util.Collections.singletonList(detail), DepotPutOutType.PUT.getKey());
-        }
-    }
-
     private void checkLinkList(String parentId, List<EquipmentSparePartUsageDetail> beans) {
         if (CollectionUtil.isEmpty(beans)) {
             return;
         }
         checkDetailList(parentId, beans);
         String stockUserId = InputObject.getLogParamsStatic().get("id").toString();
-        validateUserStock(stockUserId, beans);
+        validateLoginUserStock(beans);
+        String now = DateUtil.getTimeAndToString();
         beans.forEach(bean -> {
             bean.setCreateId(stockUserId);
-            bean.setCreateTime(DateUtil.getTimeAndToString());
+            bean.setCreateTime(now);
         });
     }
 }
