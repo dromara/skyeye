@@ -24,10 +24,6 @@ public interface EquipmentSparePartUsageDetailService extends SkyeyeBusinessServ
 
     void checkDetailList(String parentId, List<EquipmentSparePartUsageDetail> beans);
 
-    void validateUserStock(String userId, List<EquipmentSparePartUsageDetail> detailList);
-
-    void changeUserStock(String stockUserId, List<EquipmentSparePartUsageDetail> detailList, int type);
-
-    void revertUserStockByDetailOwner(List<EquipmentSparePartUsageDetail> detailList);
+    void deductStockByParentId(String parentId);
 
 }

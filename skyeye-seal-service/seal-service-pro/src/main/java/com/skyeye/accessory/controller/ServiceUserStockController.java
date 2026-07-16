@@ -46,9 +46,8 @@ public class ServiceUserStockController {
         serviceUserStockService.queryMyPartsNumByNormsId(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryUserStockByNormsIds", value = "批量查询用户规格库存（服务间调用）", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryUserStockByNormsIds", value = "批量查询当前登录人规格库存（服务间调用）", method = "POST", allUse = "2")
     @ApiImplicitParams(value = {
-        @ApiImplicitParam(id = "userId", name = "userId", value = "用户id", required = "required"),
         @ApiImplicitParam(id = "normsIds", name = "normsIds", value = "规格id集合", required = "required")})
     @RequestMapping("/post/ServiceUserStockController/queryUserStockByNormsIds")
     public void queryUserStockByNormsIds(InputObject inputObject, OutputObject outputObject) {
@@ -57,7 +56,7 @@ public class ServiceUserStockController {
 
     @ApiOperation(id = "editMaterialNormsUserStock", value = "增减我的配件库存（服务间调用）", method = "POST", allUse = "2")
     @ApiImplicitParams(value = {
-        @ApiImplicitParam(id = "userId", name = "userId", value = "用户id", required = "required"),
+        @ApiImplicitParam(id = "userId", name = "userId", value = "库存所属用户id", required = "required"),
         @ApiImplicitParam(id = "materialId", name = "materialId", value = "商品id", required = "required"),
         @ApiImplicitParam(id = "normsId", name = "normsId", value = "规格id", required = "required"),
         @ApiImplicitParam(id = "operNumber", name = "operNumber", value = "数量", required = "required"),

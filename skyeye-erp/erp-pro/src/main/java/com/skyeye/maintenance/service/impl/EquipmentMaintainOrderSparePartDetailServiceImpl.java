@@ -13,6 +13,7 @@ import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.util.CalculationUtil;
+import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.depot.classenum.DepotPutOutType;
 import com.skyeye.exception.CustomException;
@@ -50,9 +51,19 @@ public class EquipmentMaintainOrderSparePartDetailServiceImpl
     @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
     public void saveLinkList(String parentId, List<EquipmentMaintainOrderSparePartDetail> detailList) {
         deleteByParentId(parentId);
-        calcDetailPrice(detailList);
+        if (CollectionUtil.isEmpty(detailList)) {
+            return;
+        }
         checkDetailList(parentId, detailList);
-        detailList.forEach(item -> item.setParentId(parentId));
+        String stockUserId = InputObject.getLogParamsStatic().get("id").toString();
+        validateLoginUserStock(detailList);
+        String now = DateUtil.getTimeAndToString();
+        detailList.forEach(item -> {
+            item.setParentId(parentId);
+            item.setCreateId(stockUserId);
+            item.setCreateTime(now);
+        });
+        calcDetailPrice(detailList);
         createEntity(detailList, StrUtil.EMPTY);
     }
 
@@ -63,9 +74,18 @@ public class EquipmentMaintainOrderSparePartDetailServiceImpl
         if (CollectionUtil.isEmpty(detailList)) {
             return;
         }
-        String stockUserId = InputObject.getLogParamsStatic().get("id").toString();
-        validateUserStock(stockUserId, detailList);
-        changeUserStock(stockUserId, detailList, DepotPutOutType.OUT.getKey());
+        // 完成任务时按 createId扣库存
+        for (EquipmentMaintainOrderSparePartDetail detail : detailList) {
+            if (StrUtil.isBlank(detail.getCreateId())) {
+                throw new CustomException("备件使用人信息缺失，无法扣减配件库存！");
+            }
+            iServiceUserStockService.editMaterialNormsUserStock(
+                detail.getCreateId(),
+                detail.getMaterialId(),
+                detail.getNormsId(),
+                detail.getOperNumber(),
+                DepotPutOutType.OUT.getKey());
+        }
     }
 
     @Override
@@ -135,14 +155,14 @@ public class EquipmentMaintainOrderSparePartDetailServiceImpl
         }
     }
 
-    private void validateUserStock(String userId, List<EquipmentMaintainOrderSparePartDetail> detailList) {
+    private void validateLoginUserStock(List<EquipmentMaintainOrderSparePartDetail> detailList) {
         if (CollectionUtil.isEmpty(detailList)) {
             return;
         }
         List<String> normsIds = detailList.stream()
             .map(EquipmentMaintainOrderSparePartDetail::getNormsId)
             .collect(Collectors.toList());
-        Map<String, Map<String, Object>> userStockMap = iServiceUserStockService.queryUserStock(userId, normsIds);
+        Map<String, Map<String, Object>> userStockMap = iServiceUserStockService.queryUserStock(normsIds);
         for (EquipmentMaintainOrderSparePartDetail detail : detailList) {
             Map<String, Object> stockMation = userStockMap.get(detail.getNormsId());
             if (ObjectUtil.isEmpty(stockMation) || stockMation.get("stock") == null) {
@@ -153,18 +173,6 @@ public class EquipmentMaintainOrderSparePartDetailServiceImpl
                 throw new CustomException("部分配件库存不足，请重新选择配件！");
             }
         }
-    }
-
-    private void changeUserStock(String stockUserId, List<EquipmentMaintainOrderSparePartDetail> detailList, int type) {
-        if (StrUtil.isEmpty(stockUserId) || CollectionUtil.isEmpty(detailList)) {
-            return;
-        }
-        detailList.forEach(detail -> iServiceUserStockService.editMaterialNormsUserStock(
-            stockUserId,
-            detail.getMaterialId(),
-            detail.getNormsId(),
-            detail.getOperNumber(),
-            type));
     }
 
 }

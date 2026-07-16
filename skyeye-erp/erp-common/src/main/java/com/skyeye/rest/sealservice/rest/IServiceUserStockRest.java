@@ -17,15 +17,15 @@ import java.util.Map;
 public interface IServiceUserStockRest {
 
     /**
-     * 批量查询用户规格库存
+     * 批量查询当前登录人规格库存
      *
-     * @param params userId、normsIds
+     * @param params normsIds
      */
     @PostMapping("/queryUserStockByNormsIds")
     String queryUserStockByNormsIds(Map<String, Object> params);
 
     /**
-     * 增减我的配件库存
+     * 增减指定用户配件库存
      *
      * @param params userId、materialId、normsId、operNumber、type（1入库 2出库）
      */
