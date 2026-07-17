@@ -80,7 +80,14 @@ public class CouponController {
         couponService.queryCouponListByMaterialId(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryCouponApplicableMaterialList", value = "获取优惠券适用商品列表", method = "GET", allUse = "0")
+    @ApiOperation(id = "queryCouponApplicableStoreList", value = "根据优惠券获取适用门店列表", method = "GET", allUse = "0")
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
+    @RequestMapping("/post/CouponController/queryCouponApplicableStoreList")
+    public void queryCouponApplicableStoreList(InputObject inputObject, OutputObject outputObject) {
+        couponService.queryCouponApplicableStoreList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryCouponApplicableMaterialList", value = "根据优惠券和门店获取适用商品列表", method = "GET", allUse = "0")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/CouponController/queryCouponApplicableMaterialList")
     public void queryCouponApplicableMaterialList(InputObject inputObject, OutputObject outputObject) {
