@@ -81,8 +81,7 @@ public class CouponController {
     }
 
     @ApiOperation(id = "queryCouponApplicableMaterialList", value = "获取优惠券适用商品列表", method = "GET", allUse = "0")
-    @ApiImplicitParams({
-        @ApiImplicitParam(id = "couponId", name = "couponId", value = "优惠券id", required = "required")})
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/CouponController/queryCouponApplicableMaterialList")
     public void queryCouponApplicableMaterialList(InputObject inputObject, OutputObject outputObject) {
         couponService.queryCouponApplicableMaterialList(inputObject, outputObject);

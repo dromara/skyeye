@@ -84,6 +84,7 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     @Autowired
     private ShopStoreService shopStoreService;
 
+    /** 批量拉取门店商品时的单次查询上限（多门店分组前需尽量一次取全） */
     private static final int QUERY_LIMIT = 10000;
 
     private static Logger log = LoggerFactory.getLogger(ShopXxlJob.class);
@@ -339,12 +340,17 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
 
     /**
      * 查询优惠券适用的门店/商品列表。
-     * 按「单门店单商品 / 单门店多商品 / 多门店单商品 / 多门店多商品」四种场景分支组装返回结构。
+     * 统一用 storeIds/materialIds 一次批量远程查询，再按场景组装返回结构。
+     * 入参：CommonPageInfo（page、limit）+ customParamsMap.couponId
      */
     @Override
     @IgnoreTenant
     public void queryCouponApplicableMaterialList(InputObject inputObject, OutputObject outputObject) {
-        String couponId = inputObject.getParams().get("couponId").toString();
+        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        String couponId = commonPageInfo.getCustomParamsMapStr("couponId");
+        if (StrUtil.isBlank(couponId)) {
+            throw new CustomException("优惠券id不能为空");
+        }
 
         Coupon coupon = selectById(couponId);
         if (ObjectUtil.isEmpty(coupon)) {
@@ -363,31 +369,28 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         List<String> materialIdList = resolveMaterialIdList(coupon, allMaterial);
         List<String> storeIdList = resolveStoreIdList(coupon, allStore);
 
-        // 指定范围却无关联数据 → 空结果（全部商品+全部门店由前端处理，不会进本接口）
+        // 指定范围却无关联数据 → 空结果
         if (!allMaterial && CollectionUtil.isEmpty(materialIdList)) {
-            outputObject.setBeans(Collections.emptyList());
-            outputObject.settotal(CommonNumConstants.NUM_ZERO);
             return;
         }
         if (!allStore && CollectionUtil.isEmpty(storeIdList)) {
-            outputObject.setBeans(Collections.emptyList());
-            outputObject.settotal(CommonNumConstants.NUM_ZERO);
             return;
         }
 
         boolean singleMaterial = !allMaterial && materialIdList.size() == CommonNumConstants.NUM_ONE;
         boolean singleStore = !allStore && storeIdList.size() == CommonNumConstants.NUM_ONE;
+        // 单门店场景用入参分页；多门店需先批量取商品再按门店分组，分页落在门店列表上
+        boolean useRequestPage = singleStore;
+
+        List<Map<String, Object>> materials = queryShopMaterialsBatch(
+            commonPageInfo, storeIdList, materialIdList, allStore, allMaterial, useRequestPage);
 
         if (singleMaterial && singleStore) {
-            buildOneStoreOneMaterial(outputObject, storeIdList.get(0), materialIdList.get(0));
+            buildOneStoreOneMaterial(outputObject, materials);
         } else if (singleStore) {
-            buildOneStoreMultiMaterial(outputObject, storeIdList.get(0), materialIdList, allMaterial);
-        } else if (singleMaterial) {
-            buildStoreListWithMaterials(outputObject, storeIdList, allStore,
-                loadMaterialsByHolder(materialIdList.get(0), storeIdList, allStore));
+            buildOneStoreMultiMaterial(outputObject, storeIdList.get(0), materials);
         } else {
-            buildStoreListWithMaterials(outputObject, storeIdList, allStore,
-                loadMaterialsForMulti(materialIdList, storeIdList, allMaterial, allStore));
+            buildStoreListWithMaterials(outputObject, commonPageInfo, storeIdList, allStore, materials);
         }
     }
 
@@ -427,14 +430,11 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     /**
      * 单门店 + 单商品：直接返回该门店下该商品的规格数据。
      */
-    private void buildOneStoreOneMaterial(OutputObject outputObject, String storeId, String materialId) {
-        List<Map<String, Object>> rows = queryShopMaterials(storeId, materialId);
-        if (CollectionUtil.isEmpty(rows)) {
-            outputObject.setBeans(Collections.emptyList());
-            outputObject.settotal(CommonNumConstants.NUM_ZERO);
+    private void buildOneStoreOneMaterial(OutputObject outputObject, List<Map<String, Object>> materials) {
+        if (CollectionUtil.isEmpty(materials)) {
             return;
         }
-        outputObject.setBean(rows.get(0));
+        outputObject.setBean(materials.get(0));
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
@@ -442,22 +442,13 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
      * 单门店 + 多商品（或全部商品）：返回门店信息，并挂上该门店下的适用商品列表。
      */
     private void buildOneStoreMultiMaterial(OutputObject outputObject, String storeId,
-                                            List<String> materialIdList, boolean allMaterial) {
+                                            List<Map<String, Object>> materials) {
         ShopStore shopStore = shopStoreService.selectById(storeId);
         if (ObjectUtil.isEmpty(shopStore)) {
-            outputObject.setBeans(Collections.emptyList());
-            outputObject.settotal(CommonNumConstants.NUM_ZERO);
             return;
         }
-        List<Map<String, Object>> materials = queryShopMaterials(storeId, null);
-        if (!allMaterial) {
-            Set<String> materialIdSet = new HashSet<>(materialIdList);
-            materials = materials.stream()
-                .filter(row -> materialIdSet.contains(mapStr(row, "materialId")))
-                .collect(Collectors.toList());
-        }
         Map<String, Object> storeMap = BeanUtil.beanToMap(shopStore);
-        storeMap.put("shopMaterialList", materials);
+        storeMap.put("shopMaterialList", materials == null ? Collections.emptyList() : materials);
         outputObject.setBean(storeMap);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
@@ -465,12 +456,11 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     /**
      * 多门店场景：把门店列表与商品列表按 storeId 组装，每个门店挂上各自的 shopMaterialList。
      */
-    private void buildStoreListWithMaterials(OutputObject outputObject, List<String> storeIdList, boolean allStore,
+    private void buildStoreListWithMaterials(OutputObject outputObject, CommonPageInfo commonPageInfo,
+                                             List<String> storeIdList, boolean allStore,
                                              List<Map<String, Object>> materials) {
         List<ShopStore> stores = loadStores(storeIdList, allStore);
         if (CollectionUtil.isEmpty(stores)) {
-            outputObject.setBeans(Collections.emptyList());
-            outputObject.settotal(CommonNumConstants.NUM_ZERO);
             return;
         }
         Map<String, List<Map<String, Object>>> materialByStore = CollectionUtil.isEmpty(materials)
@@ -489,12 +479,12 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             storeMap.put("shopMaterialList", storeMaterials);
             result.add(storeMap);
         }
-        outputObject.setBeans(result);
+        outputObject.setBeans(pageList(result, commonPageInfo));
         outputObject.settotal(result.size());
     }
 
     /**
-     * 加载门店：全部门店查启用中的门店，否则按指定 storeIdList 查询。
+     * 加载门店：全部门店查启用中的门店，否则按指定 storeIdList 批量查询。
      */
     private List<ShopStore> loadStores(List<String> storeIdList, boolean allStore) {
         if (allStore) {
@@ -506,65 +496,49 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     }
 
     /**
-     * 按单个商品（holderId）查各门店上架数据；非全部门店时再按 storeIdList 过滤。
+     * 一次批量远程查询门店商品：通过 storeIds、materialIds 过滤，避免按门店/商品循环调用。
+     *
+     * @param useRequestPage true 时使用入参 page/limit；false 时用 QUERY_LIMIT 尽量一次取全供门店分组
      */
-    private List<Map<String, Object>> loadMaterialsByHolder(String materialId, List<String> storeIdList, boolean allStore) {
-        List<Map<String, Object>> rows = queryShopMaterials(null, materialId);
-        if (allStore || CollectionUtil.isEmpty(rows)) {
-            return rows;
-        }
-        Set<String> storeIdSet = new HashSet<>(storeIdList);
-        return rows.stream()
-            .filter(row -> storeIdSet.contains(mapStr(row, "storeId")))
-            .collect(Collectors.toList());
-    }
-
-    /**
-     * 多商品场景加载商品数据：
-     * 指定门店时按门店查询后再按商品过滤；全部门店时按商品逐个查询。
-     */
-    private List<Map<String, Object>> loadMaterialsForMulti(List<String> materialIdList, List<String> storeIdList,
-                                                            boolean allMaterial, boolean allStore) {
-        if (!allStore) {
-            List<Map<String, Object>> result = new ArrayList<>();
-            Set<String> materialIdSet = allMaterial ? null : new HashSet<>(materialIdList);
-            for (String storeId : storeIdList) {
-                List<Map<String, Object>> rows = queryShopMaterials(storeId, null);
-                if (materialIdSet != null) {
-                    rows = rows.stream()
-                        .filter(row -> materialIdSet.contains(mapStr(row, "materialId")))
-                        .collect(Collectors.toList());
-                }
-                result.addAll(rows);
-            }
-            return result;
-        }
-        // 全部门店 + 指定多商品
-        List<Map<String, Object>> result = new ArrayList<>();
-        for (String materialId : materialIdList) {
-            result.addAll(queryShopMaterials(null, materialId));
-        }
-        return result;
-    }
-
-    /**
-     * 远程查询门店商品：objectId 为门店 ID，holderId 为商品 ID，均可选。
-     */
-    private List<Map<String, Object>> queryShopMaterials(String objectId, String holderId) {
+    private List<Map<String, Object>> queryShopMaterialsBatch(CommonPageInfo commonPageInfo,
+                                                              List<String> storeIdList,
+                                                              List<String> materialIdList,
+                                                              boolean allStore,
+                                                              boolean allMaterial,
+                                                              boolean useRequestPage) {
         Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("page", CommonNumConstants.NUM_ONE);
-        queryParams.put("limit", QUERY_LIMIT);
-        if (StrUtil.isNotBlank(objectId)) {
-            queryParams.put("objectId", objectId);
+        if (useRequestPage) {
+            queryParams.put("page", commonPageInfo.getPage());
+            queryParams.put("limit", commonPageInfo.getLimit());
+        } else {
+            queryParams.put("page", CommonNumConstants.NUM_ONE);
+            queryParams.put("limit", QUERY_LIMIT);
         }
-        if (StrUtil.isNotBlank(holderId)) {
-            queryParams.put("holderId", holderId);
+        if (!allStore && CollectionUtil.isNotEmpty(storeIdList)) {
+            queryParams.put("storeIds", String.join(CommonCharConstants.COMMA_MARK, storeIdList));
+        }
+        if (!allMaterial && CollectionUtil.isNotEmpty(materialIdList)) {
+            queryParams.put("materialIds", String.join(CommonCharConstants.COMMA_MARK, materialIdList));
         }
         ResultEntity resultEntity = iShopMaterialNormsService.queryShopMaterialList(queryParams);
         if (resultEntity == null || CollectionUtil.isEmpty(resultEntity.getRows())) {
             return Collections.emptyList();
         }
         return resultEntity.getRows();
+    }
+
+    private List<Map<String, Object>> pageList(List<Map<String, Object>> list, CommonPageInfo commonPageInfo) {
+        if (CollectionUtil.isEmpty(list)) {
+            return Collections.emptyList();
+        }
+        int page = commonPageInfo.getPage() == null ? CommonNumConstants.NUM_ONE : commonPageInfo.getPage();
+        int limit = commonPageInfo.getLimit() == null ? list.size() : commonPageInfo.getLimit();
+        int fromIndex = Math.max((page - CommonNumConstants.NUM_ONE) * limit, CommonNumConstants.NUM_ZERO);
+        if (fromIndex >= list.size()) {
+            return Collections.emptyList();
+        }
+        int toIndex = Math.min(fromIndex + limit, list.size());
+        return list.subList(fromIndex, toIndex);
     }
 
     /**
