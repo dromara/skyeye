@@ -378,10 +378,6 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         if (coupon == null) {
             return;
         }
-        if (!Objects.equals(coupon.getProductScope(), PromotionMaterialScope.ALL.getKey())
-            && CollectionUtil.isEmpty(coupon.getCouponMaterialList())) {
-            coupon.setCouponMaterialList(couponMaterialService.queryListByCouponId(couponId));
-        }
 
         boolean allMaterial = Objects.equals(coupon.getProductScope(), PromotionMaterialScope.ALL.getKey());
         boolean allStore = Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.ALL_STORE.getKey());
