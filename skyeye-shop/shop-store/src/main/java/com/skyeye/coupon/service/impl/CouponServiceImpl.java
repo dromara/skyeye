@@ -84,9 +84,6 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     @Autowired
     private ShopStoreService shopStoreService;
 
-    /** 批量拉取门店商品时的单次查询上限（多门店分组前需尽量一次取全） */
-    private static final int QUERY_LIMIT = 10000;
-
     private static Logger log = LoggerFactory.getLogger(ShopXxlJob.class);
 
     @Override
@@ -339,9 +336,7 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     }
 
     /**
-     * 查询优惠券适用的门店/商品列表。
-     * 统一用 storeIds/materialIds 一次批量远程查询，再按场景组装返回结构。
-     * 入参：CommonPageInfo（page、limit）+ customParamsMap.couponId
+     * 查询优惠券适用的门店/商品列表。入参：page、limit + customParamsMap.couponId
      */
     @Override
     @IgnoreTenant
@@ -369,7 +364,6 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         List<String> materialIdList = resolveMaterialIdList(coupon, allMaterial);
         List<String> storeIdList = resolveStoreIdList(coupon, allStore);
 
-        // 指定范围却无关联数据 → 空结果
         if (!allMaterial && CollectionUtil.isEmpty(materialIdList)) {
             return;
         }
@@ -379,12 +373,11 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
 
         boolean singleMaterial = !allMaterial && materialIdList.size() == CommonNumConstants.NUM_ONE;
         boolean singleStore = !allStore && storeIdList.size() == CommonNumConstants.NUM_ONE;
-        // 单门店场景用入参分页；多门店需先批量取商品再按门店分组，分页落在门店列表上
-        boolean useRequestPage = singleStore;
 
         List<Map<String, Object>> materials = queryShopMaterialsBatch(
-            commonPageInfo, storeIdList, materialIdList, allStore, allMaterial, useRequestPage);
+            commonPageInfo, storeIdList, materialIdList, allStore, allMaterial);
 
+        // 1店1品 / 1店多品 / 多门店 → 返回结构不同
         if (singleMaterial && singleStore) {
             buildOneStoreOneMaterial(outputObject, materials);
         } else if (singleStore) {
@@ -394,9 +387,6 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         }
     }
 
-    /**
-     * 解析优惠券适用的商品 ID 列表；全部商品时返回空列表。
-     */
     private List<String> resolveMaterialIdList(Coupon coupon, boolean allMaterial) {
         if (allMaterial) {
             return Collections.emptyList();
@@ -411,9 +401,6 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             .collect(Collectors.toList());
     }
 
-    /**
-     * 解析优惠券适用的门店 ID 列表；全部门店时返回空列表。
-     */
     private List<String> resolveStoreIdList(Coupon coupon, boolean allStore) {
         if (allStore) {
             return Collections.emptyList();
@@ -427,9 +414,6 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             .collect(Collectors.toList());
     }
 
-    /**
-     * 单门店 + 单商品：直接返回该门店下该商品的规格数据。
-     */
     private void buildOneStoreOneMaterial(OutputObject outputObject, List<Map<String, Object>> materials) {
         if (CollectionUtil.isEmpty(materials)) {
             return;
@@ -438,9 +422,6 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
-    /**
-     * 单门店 + 多商品（或全部商品）：返回门店信息，并挂上该门店下的适用商品列表。
-     */
     private void buildOneStoreMultiMaterial(OutputObject outputObject, String storeId,
                                             List<Map<String, Object>> materials) {
         ShopStore shopStore = shopStoreService.selectById(storeId);
@@ -453,9 +434,6 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
-    /**
-     * 多门店场景：把门店列表与商品列表按 storeId 组装，每个门店挂上各自的 shopMaterialList。
-     */
     private void buildStoreListWithMaterials(OutputObject outputObject, CommonPageInfo commonPageInfo,
                                              List<String> storeIdList, boolean allStore,
                                              List<Map<String, Object>> materials) {
@@ -483,9 +461,6 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         outputObject.settotal(result.size());
     }
 
-    /**
-     * 加载门店：全部门店查启用中的门店，否则按指定 storeIdList 批量查询。
-     */
     private List<ShopStore> loadStores(List<String> storeIdList, boolean allStore) {
         if (allStore) {
             QueryWrapper<ShopStore> queryWrapper = new QueryWrapper<>();
@@ -495,25 +470,14 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         return shopStoreService.selectByIds(storeIdList.toArray(new String[0]));
     }
 
-    /**
-     * 一次批量远程查询门店商品：通过 storeIds、materialIds 过滤，避免按门店/商品循环调用。
-     *
-     * @param useRequestPage true 时使用入参 page/limit；false 时用 QUERY_LIMIT 尽量一次取全供门店分组
-     */
     private List<Map<String, Object>> queryShopMaterialsBatch(CommonPageInfo commonPageInfo,
                                                               List<String> storeIdList,
                                                               List<String> materialIdList,
                                                               boolean allStore,
-                                                              boolean allMaterial,
-                                                              boolean useRequestPage) {
+                                                              boolean allMaterial) {
         Map<String, Object> queryParams = new HashMap<>();
-        if (useRequestPage) {
-            queryParams.put("page", commonPageInfo.getPage());
-            queryParams.put("limit", commonPageInfo.getLimit());
-        } else {
-            queryParams.put("page", CommonNumConstants.NUM_ONE);
-            queryParams.put("limit", QUERY_LIMIT);
-        }
+        queryParams.put("page", commonPageInfo.getPage());
+        queryParams.put("limit", commonPageInfo.getLimit());
         if (!allStore && CollectionUtil.isNotEmpty(storeIdList)) {
             queryParams.put("storeIds", String.join(CommonCharConstants.COMMA_MARK, storeIdList));
         }
@@ -541,9 +505,6 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         return list.subList(fromIndex, toIndex);
     }
 
-    /**
-     * 从 Map 中安全取字符串值，空则返回空串。
-     */
     private String mapStr(Map<String, Object> row, String key) {
         Object value = row.get(key);
         return value == null ? StrUtil.EMPTY : value.toString();
