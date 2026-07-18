@@ -22,7 +22,6 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.common.object.ResultEntity;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.coupon.dao.CouponDao;
@@ -335,80 +334,66 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     }
 
     /**
-     * 根据优惠券获取适用门店。入参：couponId
+     * 根据优惠券获取适用门店。
+     * 全部门店返回空列表（前端自行处理）；指定门店返回关联门店。不校验券启用状态。
      */
     @Override
     @IgnoreTenant
     public void queryCouponApplicableStoreList(InputObject inputObject, OutputObject outputObject) {
         String couponId = inputObject.getParams().get("couponId").toString();
-        Coupon coupon = loadEnabledCoupon(couponId);
-        if (coupon == null) {
+        if (StrUtil.isBlank(couponId)) {
             return;
         }
-        List<ShopStore> stores = loadApplicableStores(coupon);
+        Coupon coupon = selectById(couponId);
+        if (ObjectUtil.isEmpty(coupon)) {
+            return;
+        }
+        // 全部门店：返回空，由前端处理
+        if (Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.ALL_STORE.getKey())) {
+            outputObject.setBeans(Collections.emptyList());
+            outputObject.settotal(CommonNumConstants.NUM_ZERO);
+            return;
+        }
+        List<String> storeIdList = resolveStoreIdList(coupon);
+        if (CollectionUtil.isEmpty(storeIdList)) {
+            outputObject.setBeans(Collections.emptyList());
+            outputObject.settotal(CommonNumConstants.NUM_ZERO);
+            return;
+        }
+        List<ShopStore> stores = shopStoreService.selectByIds(storeIdList.toArray(new String[0]));
         outputObject.setBeans(stores);
         outputObject.settotal(stores.size());
     }
 
     /**
-     * 根据优惠券和门店获取适用商品。入参：page、limit + customParamsMap.couponId、storeId
+     * 查询优惠券适用范围，供 ERP queryShopMaterialList 扩展 couponId 过滤使用。不校验启用状态。
+     * 返回：allMaterial、materialIds、allStore、storeIds
      */
     @Override
     @IgnoreTenant
-    public void queryCouponApplicableMaterialList(InputObject inputObject, OutputObject outputObject) {
-        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
-        String storeId = commonPageInfo.getCustomParamsMapStr("storeId");
-        if (StrUtil.isBlank(storeId)) {
-            return;
-        }
-        Coupon coupon = loadEnabledCoupon(commonPageInfo.getCustomParamsMapStr("couponId"));
-        if (coupon == null) {
-            return;
-        }
-        // 指定门店时校验 storeId 是否在适用范围内
-        List<String> storeIdList = resolveStoreIdList(coupon);
-        if (storeIdList != null && !storeIdList.contains(storeId)) {
-            return;
-        }
-        List<String> materialIdList = resolveMaterialIdList(coupon);
-        // 指定商品却无关联 → 空
-        if (materialIdList != null && materialIdList.isEmpty()) {
-            return;
-        }
-
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("page", commonPageInfo.getPage());
-        queryParams.put("limit", commonPageInfo.getLimit());
-        queryParams.put("objectId", storeId);
-        ResultEntity resultEntity = iShopMaterialNormsService.queryShopMaterialList(queryParams);
-        if (resultEntity == null || CollectionUtil.isEmpty(resultEntity.getRows())) {
-            return;
-        }
-        List<Map<String, Object>> rows = resultEntity.getRows();
-        // 指定商品：与券适用商品取交集
-        if (materialIdList != null) {
-            Set<String> materialIdSet = new HashSet<>(materialIdList);
-            rows = rows.stream()
-                .filter(row -> {
-                    Object materialId = row.get("materialId");
-                    return materialId != null && materialIdSet.contains(materialId.toString());
-                })
-                .collect(Collectors.toList());
-        }
-        outputObject.setBeans(rows);
-        outputObject.settotal(rows.size());
-    }
-
-    private Coupon loadEnabledCoupon(String couponId) {
+    public void queryCouponApplicableScope(InputObject inputObject, OutputObject outputObject) {
+        String couponId = inputObject.getParams().get("couponId").toString();
         if (StrUtil.isBlank(couponId)) {
-            return null;
+            return;
         }
         Coupon coupon = selectById(couponId);
-        if (ObjectUtil.isEmpty(coupon)
-            || !Objects.equals(coupon.getEnabled(), EnableEnum.ENABLE_USING.getKey())) {
-            return null;
+        if (ObjectUtil.isEmpty(coupon)) {
+            return;
         }
-        return coupon;
+        boolean allMaterial = Objects.equals(coupon.getProductScope(), PromotionMaterialScope.ALL.getKey());
+        boolean allStore = Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.ALL_STORE.getKey());
+        List<String> materialIdList = resolveMaterialIdList(coupon);
+        List<String> storeIdList = resolveStoreIdList(coupon);
+
+        Map<String, Object> scope = new HashMap<>();
+        scope.put("allMaterial", allMaterial);
+        scope.put("allStore", allStore);
+        scope.put("materialIds", allMaterial || CollectionUtil.isEmpty(materialIdList)
+            ? StrUtil.EMPTY : String.join(CommonCharConstants.COMMA_MARK, materialIdList));
+        scope.put("storeIds", allStore || CollectionUtil.isEmpty(storeIdList)
+            ? StrUtil.EMPTY : String.join(CommonCharConstants.COMMA_MARK, storeIdList));
+        outputObject.setBean(scope);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
     /**
@@ -442,19 +427,6 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             .filter(StrUtil::isNotBlank)
             .distinct()
             .collect(Collectors.toList());
-    }
-
-    private List<ShopStore> loadApplicableStores(Coupon coupon) {
-        List<String> storeIdList = resolveStoreIdList(coupon);
-        if (storeIdList == null) {
-            QueryWrapper<ShopStore> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), EnableEnum.ENABLE_USING.getKey());
-            return shopStoreService.list(queryWrapper);
-        }
-        if (storeIdList.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return shopStoreService.selectByIds(storeIdList.toArray(new String[0]));
     }
 
     private void setDrawState(List<Coupon> list) {

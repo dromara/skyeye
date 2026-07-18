@@ -67,7 +67,7 @@ public interface IShopMaterialNormsRest {
     /**
      * 分页获取商城商品信息列表
      *
-     * @param params page、limit、keyword、objectId、materialIds、storeIds 等
+     * @param params page、limit、keyword、objectId、materialIds、storeIds、customParamsMap.couponId 等
      */
     @PostMapping("/queryShopMaterialList")
     String queryShopMaterialList(Map<String, Object> params);

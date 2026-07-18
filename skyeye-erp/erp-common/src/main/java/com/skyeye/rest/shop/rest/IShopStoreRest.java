@@ -46,4 +46,12 @@ public interface IShopStoreRest {
     @PostMapping("/queryStoreListFoServer")
     String queryStoreListFoServer(CommonPageInfo commonPageInfo);
 
+    /**
+     * 查询优惠券适用商品/门店范围（供商城商品列表按 couponId 过滤）
+     *
+     * @param couponId 优惠券id
+     */
+    @PostMapping("/queryCouponApplicableScope")
+    String queryCouponApplicableScope(@RequestParam("couponId") String couponId);
+
 }

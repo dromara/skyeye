@@ -25,4 +25,12 @@ public interface IShopStoreService extends IService {
 
     ResultEntity queryStoreListFoServer(CommonPageInfo commonPageInfo);
 
+    /**
+     * 查询优惠券适用商品/门店范围
+     *
+     * @param couponId 优惠券id
+     * @return allMaterial、materialIds、allStore、storeIds
+     */
+    Map<String, Object> queryCouponApplicableScope(String couponId);
+
 }

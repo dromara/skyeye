@@ -57,4 +57,13 @@ public class IShopStoreServiceImpl extends IServiceImpl implements IShopStoreSer
     public ResultEntity queryStoreListFoServer(CommonPageInfo commonPageInfo) {
         return ExecuteFeignClient.get(() -> iShopStoreRest.queryStoreListFoServer(commonPageInfo));
     }
+
+    @Override
+    public Map<String, Object> queryCouponApplicableScope(String couponId) {
+        ResultEntity resultEntity = ExecuteFeignClient.get(() -> iShopStoreRest.queryCouponApplicableScope(couponId));
+        if (resultEntity == null || resultEntity.getBean() == null) {
+            return new HashMap<>();
+        }
+        return resultEntity.getBean();
+    }
 }

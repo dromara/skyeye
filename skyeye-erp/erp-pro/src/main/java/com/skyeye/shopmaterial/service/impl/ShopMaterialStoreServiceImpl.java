@@ -252,11 +252,21 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
     @IgnoreTenant
     public List<ShopMaterialStore> queryShopMaterialList(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        // 先解析优惠券范围，避免分页后再过滤导致空页；也避免 PageHelper 提前占用线程变量
+        CouponScopeFilter couponScopeFilter = resolveCouponScopeFilter(commonPageInfo);
+        if (couponScopeFilter != null && couponScopeFilter.empty) {
+            outputObject.settotal(CommonNumConstants.NUM_ZERO);
+            return Collections.emptyList();
+        }
+
         Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
         // 商品名称，型号，门店，品牌
         MPJLambdaWrapper<ShopMaterialStore> wrapper = JoinWrappers.lambda("sms", ShopMaterialStore.class);
         wrapper.innerJoin(Material.class, "m", Material::getId, ShopMaterialStore::getMaterialId)
             .innerJoin(ShopMaterial.class, "sm", ShopMaterial::getMaterialId, ShopMaterialStore::getMaterialId);
+        if (couponScopeFilter != null) {
+            applyCouponScopeFilter(wrapper, couponScopeFilter);
+        }
         if (StrUtil.isNotBlank(commonPageInfo.getObjectId())) {
             wrapper.eq(ShopMaterialStore::getStoreId, commonPageInfo.getObjectId());
         }
@@ -292,6 +302,77 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         iShopStoreService.setDataMation(shopMaterialStoreList, ShopMaterialStore::getStoreId);
         outputObject.settotal(pages.getTotal());
         return shopMaterialStoreList;
+    }
+
+    /**
+     * 解析 customParamsMap.couponId 对应的优惠券适用范围。
+     * null 表示未传 couponId；empty=true 表示无适用数据。
+     */
+    private CouponScopeFilter resolveCouponScopeFilter(CommonPageInfo commonPageInfo) {
+        String couponId = commonPageInfo.getCustomParamsMapStr("couponId");
+        if (StrUtil.isBlank(couponId)) {
+            return null;
+        }
+        Map<String, Object> scope = iShopStoreService.queryCouponApplicableScope(couponId);
+        CouponScopeFilter filter = new CouponScopeFilter();
+        if (MapUtil.isEmpty(scope)) {
+            filter.empty = true;
+            return filter;
+        }
+        filter.allStore = isTrue(scope.get("allStore"));
+        filter.allMaterial = isTrue(scope.get("allMaterial"));
+        String storeId = commonPageInfo.getObjectId();
+        if (!filter.allStore) {
+            String storeIds = scope.get("storeIds") == null ? StrUtil.EMPTY : scope.get("storeIds").toString();
+            if (StrUtil.isBlank(storeIds)) {
+                filter.empty = true;
+                return filter;
+            }
+            List<String> storeIdList = Arrays.stream(storeIds.split(CommonCharConstants.COMMA_MARK))
+                .filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+            if (StrUtil.isNotBlank(storeId) && !storeIdList.contains(storeId)) {
+                filter.empty = true;
+                return filter;
+            }
+            if (StrUtil.isBlank(storeId)) {
+                filter.storeIdList = storeIdList;
+            }
+        }
+        if (!filter.allMaterial) {
+            String materialIds = scope.get("materialIds") == null ? StrUtil.EMPTY : scope.get("materialIds").toString();
+            if (StrUtil.isBlank(materialIds)) {
+                filter.empty = true;
+                return filter;
+            }
+            filter.materialIdList = Arrays.stream(materialIds.split(CommonCharConstants.COMMA_MARK))
+                .filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(filter.materialIdList)) {
+                filter.empty = true;
+                return filter;
+            }
+        }
+        return filter;
+    }
+
+    private void applyCouponScopeFilter(MPJLambdaWrapper<ShopMaterialStore> wrapper, CouponScopeFilter filter) {
+        if (CollectionUtil.isNotEmpty(filter.storeIdList)) {
+            wrapper.in(ShopMaterialStore::getStoreId, filter.storeIdList);
+        }
+        if (CollectionUtil.isNotEmpty(filter.materialIdList)) {
+            wrapper.in(ShopMaterialStore::getMaterialId, filter.materialIdList);
+        }
+    }
+
+    private static boolean isTrue(Object value) {
+        return Boolean.TRUE.equals(value) || "true".equalsIgnoreCase(String.valueOf(value));
+    }
+
+    private static class CouponScopeFilter {
+        private boolean empty;
+        private boolean allStore;
+        private boolean allMaterial;
+        private List<String> storeIdList;
+        private List<String> materialIdList;
     }
 
     private void applyCommaIdFilter(MPJLambdaWrapper<ShopMaterialStore> wrapper, Map<String, Object> params,
