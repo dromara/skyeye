@@ -40,8 +40,6 @@ import com.skyeye.eve.rest.quartz.SysQuartzMation;
 import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.rest.shopmaterialnorms.sevice.IShopMaterialNormsService;
-import com.skyeye.store.entity.ShopStore;
-import com.skyeye.store.service.ShopStoreService;
 import com.skyeye.xxljob.ShopXxlJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,9 +75,6 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
 
     @Autowired
     private CouponStoreService couponStoreService;
-
-    @Autowired
-    private ShopStoreService shopStoreService;
 
     private static Logger log = LoggerFactory.getLogger(ShopXxlJob.class);
 
@@ -330,50 +325,6 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         setDrawState(list);// 设置是否可以领取状态
         outputObject.setBeans(list);
         outputObject.settotal(list.size());
-    }
-
-    /**
-     * 根据优惠券获取适用门店。
-     * 全部门店直接返回（前端自行处理）；指定门店返回关联门店。不校验券启用状态。
-     */
-    @Override
-    @IgnoreTenant
-    public void queryCouponApplicableStoreList(InputObject inputObject, OutputObject outputObject) {
-        String couponId = inputObject.getParams().get("couponId").toString();
-        if (StrUtil.isBlank(couponId)) {
-            return;
-        }
-        Coupon coupon = selectById(couponId);
-        if (ObjectUtil.isEmpty(coupon)) {
-            return;
-        }
-        // 全部门店：由前端处理
-        if (Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.ALL_STORE.getKey())) {
-            return;
-        }
-        List<String> storeIdList = resolveStoreIdList(coupon);
-        if (CollectionUtil.isEmpty(storeIdList)) {
-            return;
-        }
-        List<ShopStore> stores = shopStoreService.selectByIds(storeIdList.toArray(new String[0]));
-        outputObject.setBeans(stores);
-        outputObject.settotal(stores.size());
-    }
-
-    /**
-     * @return null 表示全部门店；空列表表示指定门店但无关联；非空为适用门店 id
-     */
-    private List<String> resolveStoreIdList(Coupon coupon) {
-        if (Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.ALL_STORE.getKey())) {
-            return null;
-        }
-        if (CollectionUtil.isEmpty(coupon.getStoreIdList())) {
-            return Collections.emptyList();
-        }
-        return coupon.getStoreIdList().stream()
-            .filter(StrUtil::isNotBlank)
-            .distinct()
-            .collect(Collectors.toList());
     }
 
     private void setDrawState(List<Coupon> list) {
