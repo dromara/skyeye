@@ -47,11 +47,11 @@ public interface IShopStoreRest {
     String queryStoreListFoServer(CommonPageInfo commonPageInfo);
 
     /**
-     * 查询优惠券适用商品/门店范围（供商城商品列表按 couponId 过滤）
+     * 根据id获取优惠券信息（含适用商品、门店）
      *
-     * @param couponId 优惠券id
+     * @param id 优惠券id
      */
-    @PostMapping("/queryCouponApplicableScope")
-    String queryCouponApplicableScope(@RequestParam("couponId") String couponId);
+    @PostMapping("/queryCouponById")
+    String queryCouponById(@RequestParam("id") String id);
 
 }

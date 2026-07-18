@@ -6,6 +6,7 @@ package com.skyeye.shopmaterial.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -305,7 +306,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
     }
 
     /**
-     * 解析 customParamsMap.couponId 对应的优惠券适用范围。
+     * 解析 customParamsMap.couponId 对应的优惠券适用范围（通过 queryCouponById）。
      * null 表示未传 couponId；empty=true 表示无适用数据。
      */
     private CouponScopeFilter resolveCouponScopeFilter(CommonPageInfo commonPageInfo) {
@@ -313,23 +314,22 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         if (StrUtil.isBlank(couponId)) {
             return null;
         }
-        Map<String, Object> scope = iShopStoreService.queryCouponApplicableScope(couponId);
+        Map<String, Object> coupon = iShopStoreService.queryCouponById(couponId);
         CouponScopeFilter filter = new CouponScopeFilter();
-        if (MapUtil.isEmpty(scope)) {
+        if (MapUtil.isEmpty(coupon)) {
             filter.empty = true;
             return filter;
         }
-        filter.allStore = isTrue(scope.get("allStore"));
-        filter.allMaterial = isTrue(scope.get("allMaterial"));
+        // productScope=1 全部商品；storeCoverage=1 全部门店
+        filter.allMaterial = Objects.equals(MapUtil.getInt(coupon, "productScope"), CommonNumConstants.NUM_ONE);
+        filter.allStore = Objects.equals(MapUtil.getInt(coupon, "storeCoverage"), CommonNumConstants.NUM_ONE);
         String storeId = commonPageInfo.getObjectId();
         if (!filter.allStore) {
-            String storeIds = scope.get("storeIds") == null ? StrUtil.EMPTY : scope.get("storeIds").toString();
-            if (StrUtil.isBlank(storeIds)) {
+            List<String> storeIdList = Convert.toList(String.class, coupon.get("storeIdList"));
+            if (CollectionUtil.isEmpty(storeIdList)) {
                 filter.empty = true;
                 return filter;
             }
-            List<String> storeIdList = Arrays.stream(storeIds.split(CommonCharConstants.COMMA_MARK))
-                .filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
             if (StrUtil.isNotBlank(storeId) && !storeIdList.contains(storeId)) {
                 filter.empty = true;
                 return filter;
@@ -339,17 +339,18 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
             }
         }
         if (!filter.allMaterial) {
-            String materialIds = scope.get("materialIds") == null ? StrUtil.EMPTY : scope.get("materialIds").toString();
-            if (StrUtil.isBlank(materialIds)) {
+            List<Map> materialList = Convert.toList(Map.class, coupon.get("couponMaterialList"));
+            List<String> materialIdList = CollectionUtil.isEmpty(materialList) ? Collections.emptyList()
+                : materialList.stream()
+                .map(item -> MapUtil.getStr(item, "materialId"))
+                .filter(StrUtil::isNotBlank)
+                .distinct()
+                .collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(materialIdList)) {
                 filter.empty = true;
                 return filter;
             }
-            filter.materialIdList = Arrays.stream(materialIds.split(CommonCharConstants.COMMA_MARK))
-                .filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
-            if (CollectionUtil.isEmpty(filter.materialIdList)) {
-                filter.empty = true;
-                return filter;
-            }
+            filter.materialIdList = materialIdList;
         }
         return filter;
     }
@@ -361,10 +362,6 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         if (CollectionUtil.isNotEmpty(filter.materialIdList)) {
             wrapper.in(ShopMaterialStore::getMaterialId, filter.materialIdList);
         }
-    }
-
-    private static boolean isTrue(Object value) {
-        return Boolean.TRUE.equals(value) || "true".equalsIgnoreCase(String.valueOf(value));
     }
 
     private static class CouponScopeFilter {

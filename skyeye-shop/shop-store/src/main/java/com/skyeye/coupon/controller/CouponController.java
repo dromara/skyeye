@@ -55,7 +55,7 @@ public class CouponController {
         couponService.queryCouponListByState(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryCouponById", value = "根据id获取优惠券/模版信息", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryCouponById", value = "根据id获取优惠券/模版信息", method = "POST", allUse = "0")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
     @RequestMapping("/post/CouponController/queryCouponById")
@@ -86,13 +86,5 @@ public class CouponController {
     @RequestMapping("/post/CouponController/queryCouponApplicableStoreList")
     public void queryCouponApplicableStoreList(InputObject inputObject, OutputObject outputObject) {
         couponService.queryCouponApplicableStoreList(inputObject, outputObject);
-    }
-
-    @ApiOperation(id = "queryCouponApplicableScope", value = "查询优惠券适用商品/门店范围", method = "POST", allUse = "0")
-    @ApiImplicitParams({
-        @ApiImplicitParam(id = "couponId", name = "couponId", value = "优惠券id", required = "required")})
-    @RequestMapping("/post/CouponController/queryCouponApplicableScope")
-    public void queryCouponApplicableScope(InputObject inputObject, OutputObject outputObject) {
-        couponService.queryCouponApplicableScope(inputObject, outputObject);
     }
 }

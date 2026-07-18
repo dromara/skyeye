@@ -14,7 +14,6 @@ import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
-import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.constans.QuartzConstants;
@@ -335,7 +334,7 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
 
     /**
      * 根据优惠券获取适用门店。
-     * 全部门店返回空列表（前端自行处理）；指定门店返回关联门店。不校验券启用状态。
+     * 全部门店直接返回（前端自行处理）；指定门店返回关联门店。不校验券启用状态。
      */
     @Override
     @IgnoreTenant
@@ -348,69 +347,17 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         if (ObjectUtil.isEmpty(coupon)) {
             return;
         }
-        // 全部门店：返回空，由前端处理
+        // 全部门店：由前端处理
         if (Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.ALL_STORE.getKey())) {
-            outputObject.setBeans(Collections.emptyList());
-            outputObject.settotal(CommonNumConstants.NUM_ZERO);
             return;
         }
         List<String> storeIdList = resolveStoreIdList(coupon);
         if (CollectionUtil.isEmpty(storeIdList)) {
-            outputObject.setBeans(Collections.emptyList());
-            outputObject.settotal(CommonNumConstants.NUM_ZERO);
             return;
         }
         List<ShopStore> stores = shopStoreService.selectByIds(storeIdList.toArray(new String[0]));
         outputObject.setBeans(stores);
         outputObject.settotal(stores.size());
-    }
-
-    /**
-     * 查询优惠券适用范围，供 ERP queryShopMaterialList 扩展 couponId 过滤使用。不校验启用状态。
-     * 返回：allMaterial、materialIds、allStore、storeIds
-     */
-    @Override
-    @IgnoreTenant
-    public void queryCouponApplicableScope(InputObject inputObject, OutputObject outputObject) {
-        String couponId = inputObject.getParams().get("couponId").toString();
-        if (StrUtil.isBlank(couponId)) {
-            return;
-        }
-        Coupon coupon = selectById(couponId);
-        if (ObjectUtil.isEmpty(coupon)) {
-            return;
-        }
-        boolean allMaterial = Objects.equals(coupon.getProductScope(), PromotionMaterialScope.ALL.getKey());
-        boolean allStore = Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.ALL_STORE.getKey());
-        List<String> materialIdList = resolveMaterialIdList(coupon);
-        List<String> storeIdList = resolveStoreIdList(coupon);
-
-        Map<String, Object> scope = new HashMap<>();
-        scope.put("allMaterial", allMaterial);
-        scope.put("allStore", allStore);
-        scope.put("materialIds", allMaterial || CollectionUtil.isEmpty(materialIdList)
-            ? StrUtil.EMPTY : String.join(CommonCharConstants.COMMA_MARK, materialIdList));
-        scope.put("storeIds", allStore || CollectionUtil.isEmpty(storeIdList)
-            ? StrUtil.EMPTY : String.join(CommonCharConstants.COMMA_MARK, storeIdList));
-        outputObject.setBean(scope);
-        outputObject.settotal(CommonNumConstants.NUM_ONE);
-    }
-
-    /**
-     * @return null 表示全部商品；空列表表示指定商品但无关联；非空为适用商品 id
-     */
-    private List<String> resolveMaterialIdList(Coupon coupon) {
-        if (Objects.equals(coupon.getProductScope(), PromotionMaterialScope.ALL.getKey())) {
-            return null;
-        }
-        if (CollectionUtil.isEmpty(coupon.getCouponMaterialList())) {
-            return Collections.emptyList();
-        }
-        return coupon.getCouponMaterialList().stream()
-            .map(CouponMaterial::getMaterialId)
-            .filter(StrUtil::isNotBlank)
-            .distinct()
-            .collect(Collectors.toList());
     }
 
     /**

@@ -59,8 +59,8 @@ public class IShopStoreServiceImpl extends IServiceImpl implements IShopStoreSer
     }
 
     @Override
-    public Map<String, Object> queryCouponApplicableScope(String couponId) {
-        ResultEntity resultEntity = ExecuteFeignClient.get(() -> iShopStoreRest.queryCouponApplicableScope(couponId));
+    public Map<String, Object> queryCouponById(String id) {
+        ResultEntity resultEntity = ExecuteFeignClient.get(() -> iShopStoreRest.queryCouponById(id));
         if (resultEntity == null || resultEntity.getBean() == null) {
             return new HashMap<>();
         }
