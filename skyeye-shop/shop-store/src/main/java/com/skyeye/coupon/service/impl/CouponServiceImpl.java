@@ -342,6 +342,9 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     public void queryCouponApplicableStoreList(InputObject inputObject, OutputObject outputObject) {
         String couponId = inputObject.getParams().get("couponId").toString();
         Coupon coupon = loadEnabledCoupon(couponId);
+        if (coupon == null) {
+            return;
+        }
         List<ShopStore> stores = loadApplicableStores(coupon);
         outputObject.setBeans(stores);
         outputObject.settotal(stores.size());
@@ -359,6 +362,9 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             return;
         }
         Coupon coupon = loadEnabledCoupon(commonPageInfo.getCustomParamsMapStr("couponId"));
+        if (coupon == null) {
+            return;
+        }
         // 指定门店时校验 storeId 是否在适用范围内
         List<String> storeIdList = resolveStoreIdList(coupon);
         if (storeIdList != null && !storeIdList.contains(storeId)) {
@@ -395,14 +401,12 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
 
     private Coupon loadEnabledCoupon(String couponId) {
         if (StrUtil.isBlank(couponId)) {
-            throw new CustomException("优惠券id不能为空");
+            return null;
         }
         Coupon coupon = selectById(couponId);
-        if (ObjectUtil.isEmpty(coupon)) {
-            throw new CustomException("优惠券不存在");
-        }
-        if (!Objects.equals(coupon.getEnabled(), EnableEnum.ENABLE_USING.getKey())) {
-            throw new CustomException("优惠券已失效");
+        if (ObjectUtil.isEmpty(coupon)
+            || !Objects.equals(coupon.getEnabled(), EnableEnum.ENABLE_USING.getKey())) {
+            return null;
         }
         return coupon;
     }
