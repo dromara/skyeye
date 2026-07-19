@@ -10,6 +10,8 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
@@ -40,6 +42,8 @@ import com.skyeye.eve.rest.quartz.SysQuartzMation;
 import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.rest.shopmaterialnorms.sevice.IShopMaterialNormsService;
+import com.skyeye.store.entity.ShopStore;
+import com.skyeye.store.service.ShopStoreService;
 import com.skyeye.xxljob.ShopXxlJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,6 +79,9 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
 
     @Autowired
     private CouponStoreService couponStoreService;
+
+    @Autowired
+    private ShopStoreService shopStoreService;
 
     private static Logger log = LoggerFactory.getLogger(ShopXxlJob.class);
 
@@ -325,6 +332,45 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         setDrawState(list);// 设置是否可以领取状态
         outputObject.setBeans(list);
         outputObject.settotal(list.size());
+    }
+
+    /**
+     * 分页查询优惠券适用门店。入参：page、limit + customParamsMap.couponId。
+     * 全部门店：分页列出启用门店；指定门店：分页列出适用门店。不校验券启用状态。
+     */
+    @Override
+    @IgnoreTenant
+    public void queryCouponApplicableStoreList(InputObject inputObject, OutputObject outputObject) {
+        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        String couponId = commonPageInfo.getCustomParamsMapStr("couponId");
+        if (StrUtil.isBlank(couponId)) {
+            return;
+        }
+        Coupon coupon = selectById(couponId);
+        if (ObjectUtil.isEmpty(coupon)) {
+            return;
+        }
+
+        boolean allStore = Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.ALL_STORE.getKey());
+        List<String> storeIdList = null;
+        if (!allStore) {
+            storeIdList = CollectionUtil.isEmpty(coupon.getStoreIdList()) ? Collections.emptyList()
+                : coupon.getStoreIdList().stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(storeIdList)) {
+                return;
+            }
+        }
+
+        Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
+        QueryWrapper<ShopStore> queryWrapper = new QueryWrapper<>();
+        if (allStore) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), EnableEnum.ENABLE_USING.getKey());
+        } else {
+            queryWrapper.in(CommonConstants.ID, storeIdList);
+        }
+        List<ShopStore> stores = shopStoreService.list(queryWrapper);
+        outputObject.setBeans(stores);
+        outputObject.settotal(pages.getTotal());
     }
 
     private void setDrawState(List<Coupon> list) {
