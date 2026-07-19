@@ -78,7 +78,7 @@ public class MaintenancePlanServiceImpl extends SkyeyeBusinessServiceImpl<Mainte
             }
             SysQuartzMation quartz = new SysQuartzMation();
             quartz.setName(entity.getId());
-            quartz.setTitle(StrUtil.isNotEmpty(entity.getOddNumber()) ? entity.getOddNumber() : entity.getId());
+            quartz.setTitle(entity.getName());
             quartz.setScheduleConf(cron);
             quartz.setGroupId(QuartzConstants.QuartzMateMationJobType.MAINTENANCE_PLAN_ORDER_GENERATE.getTaskType());
             iQuartzService.startUpTaskQuartz(quartz);

@@ -10,8 +10,10 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipment.classenum.EquipmentState;
 import com.skyeye.equipment.entity.Equipment;
 import com.skyeye.equipment.service.EquipmentService;
@@ -44,6 +46,16 @@ public class EquipmentScrapOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
 
     @Autowired
     private EquipmentService equipmentService;
+
+    @Override
+    protected QueryWrapper<EquipmentScrapOrder> getQueryWrapper(CommonPageInfo commonPageInfo) {
+        QueryWrapper<EquipmentScrapOrder> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        String equipmentId = commonPageInfo.getCustomParamsMapStr("equipmentId");
+        if (StrUtil.isNotEmpty(equipmentId)) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentScrapOrder::getEquipmentId), equipmentId);
+        }
+        return queryWrapper;
+    }
 
     @Override
     public EquipmentScrapOrder selectById(String id) {

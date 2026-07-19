@@ -46,7 +46,7 @@ public class EquipmentScrapOrderController {
         equipmentScrapOrderService.queryAllEquipmentScrapOrderList(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "writeEquipmentScrapOrder", value = "新增/编辑设备报废单", method = "POST", allUse = "2")
+    @ApiOperation(id = "writeEquipmentScrapOrder", value = "新增/编辑设备报废单", method = "POST", allUse = "1")
     @ApiImplicitParams(classBean = EquipmentScrapOrder.class)
     @RequestMapping("/post/EquipmentScrapOrderController/writeEquipmentScrapOrder")
     public void writeEquipmentScrapOrder(InputObject inputObject, OutputObject outputObject) {
@@ -61,7 +61,7 @@ public class EquipmentScrapOrderController {
         equipmentScrapOrderService.selectById(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "deleteEquipmentScrapOrderById", value = "根据ID删除设备报废单", method = "DELETE", allUse = "2")
+    @ApiOperation(id = "deleteEquipmentScrapOrderById", value = "根据ID删除设备报废单", method = "DELETE", allUse = "1")
     @ApiImplicitParams(value = {
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
     @RequestMapping("/post/EquipmentScrapOrderController/deleteEquipmentScrapOrderById")

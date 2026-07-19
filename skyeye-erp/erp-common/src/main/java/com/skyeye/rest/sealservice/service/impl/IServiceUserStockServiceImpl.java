@@ -8,7 +8,6 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.common.client.ExecuteFeignClient;
-import com.skyeye.exception.CustomException;
 import com.skyeye.rest.sealservice.rest.IServiceUserStockRest;
 import com.skyeye.rest.sealservice.service.IServiceUserStockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +45,6 @@ public class IServiceUserStockServiceImpl implements IServiceUserStockService {
 
     @Override
     public void editMaterialNormsUserStock(String userId, String materialId, String normsId, String operNumber, int type) {
-        if (userId == null) {
-            throw new CustomException("库存所属用户不能为空");
-        }
         Map<String, Object> params = new HashMap<>();
         params.put("userId", userId);
         params.put("materialId", materialId);
