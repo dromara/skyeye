@@ -236,6 +236,12 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
         autoHistoryStep.setAutoHistoryStepCase(autoHistoryStepCase);
     }
 
+    /**
+     * 根据步骤入参配置组装 inputParams。
+     * valueFrom=自定义：直接使用 value 字面量；
+     * valueFrom=表达式：用 JsonPath 从结果集 result 读取 $.value。
+     * 返回的 Map 供 API 请求入参，或数据库 SQL 中 #{key} 替换。
+     */
     private Map<String, Object> getInputParams(Map<String, Object> result, List<AutoStepInput> stepInputList) {
         Map<String, Object> inputParams = new HashMap<>();
         if (CollectionUtil.isEmpty(stepInputList)) {
@@ -261,6 +267,10 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
         return inputParams;
     }
 
+    /**
+     * 执行步骤断言。key 为实际值 JsonPath（相对 result）；valueFrom 决定期望值取字面量还是另一条路径。
+     * 比较表达式：'{实际值}' {AttrSymbols.symbols} '{期望值}'，经 JavaScript 引擎求布尔值；任一条失败即短路返回 false。
+     */
     private Boolean executeAssert(List<AutoStepAssert> stepAssertList, List<AutoHistoryStepAssert> autoHistoryStepAssertList, Map<String, Object> result) throws ScriptException {
         if (CollectionUtil.isEmpty(stepAssertList)) {
             return true;

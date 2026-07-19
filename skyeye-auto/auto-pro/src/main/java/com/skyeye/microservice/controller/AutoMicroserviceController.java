@@ -32,12 +32,6 @@ public class AutoMicroserviceController {
     @Autowired
     private AutoMicroserviceService autoMicroserviceService;
 
-    /**
-     * 获取微服务信息列表
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryAutoMicroserviceList", value = "获取微服务信息", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/AutoMicroserviceController/queryAutoMicroserviceList")
@@ -45,12 +39,6 @@ public class AutoMicroserviceController {
         autoMicroserviceService.queryPageList(inputObject, outputObject);
     }
 
-    /**
-     * 添加或修改微服务信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "writeAutoMicroservice", value = "新增/编辑微服务信息", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = AutoMicroservice.class)
     @RequestMapping("/post/AutoMicroserviceController/writeAutoMicroservice")
@@ -58,12 +46,6 @@ public class AutoMicroserviceController {
         autoMicroserviceService.saveOrUpdateEntity(inputObject, outputObject);
     }
 
-    /**
-     * 删除微服务信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "deleteAutoMicroserviceById", value = "根据ID删除微服务信息", method = "DELETE", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -72,12 +54,6 @@ public class AutoMicroserviceController {
         autoMicroserviceService.deleteById(inputObject, outputObject);
     }
 
-    /**
-     * 根据id获取微服务信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryAutoMicroserviceById", value = "根据id获取微服务信息", method = "GET", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -86,12 +62,6 @@ public class AutoMicroserviceController {
         autoMicroserviceService.selectById(inputObject, outputObject);
     }
 
-    /**
-     * 根据服务器id获取微服务列表
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryAutoMicroserviceListByServerId", value = "根据服务器id获取微服务列表", method = "GET", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "serverId", name = "serverId", value = "服务器id", required = "required")})

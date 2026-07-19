@@ -34,16 +34,27 @@ public class AutoStepInput extends CommonInfo {
     @Property(value = "步骤id")
     private String stepId;
 
+    /**
+     * 入参参数名。
+     * API 步骤：作为请求入参字段写入接口；
+     * 数据库步骤：可在 SQL 中用 #{key} 占位，执行时替换为实际值。
+     */
     @TableField("`key`")
-    @ApiModelProperty(value = "键", required = "required")
+    @ApiModelProperty(value = "入参参数名；数据库步骤可在SQL中用#{键}引用", required = "required")
     private String key;
 
+    /**
+     * 值来源，参考 AutoValueFromTypeEnum：1-自定义字面量；2-表达式（从结果集 JsonPath 取值）。
+     */
     @TableField("value_from")
-    @ApiModelProperty(value = "值的数据来源", required = "required")
+    @ApiModelProperty(value = "值的数据来源，参考#AutoValueFromTypeEnum（1自定义/2表达式）", required = "required")
     private Integer valueFrom;
 
+    /**
+     * 入参值：自定义时为字面量；表达式时为 JsonPath（相对结果集 result），如 前序步骤resultKey.data.id。
+     */
     @TableField("value")
-    @ApiModelProperty(value = "值")
+    @ApiModelProperty(value = "入参值：自定义填字面量；表达式填前序步骤JsonPath路径")
     private String value;
 
     @TableField("case_id")

@@ -34,20 +34,38 @@ public class AutoStepAssert extends CommonInfo {
     @Property(value = "步骤id")
     private String stepId;
 
+    /**
+     * 断言实际值的 JsonPath 路径（相对用例执行结果集 result）。
+     * 引擎读取方式：JsonPath.read(resultJson, "$.{key}")。
+     * 示例：步骤resultKey.code、步骤resultKey.data.message、数据库步骤resultKey[0].userId。
+     * 步骤 resultKey 可在前端中间步骤树点击复制。
+     */
     @TableField("`key`")
-    @ApiModelProperty(value = "断言的取值参数", required = "required")
+    @ApiModelProperty(value = "断言实际值路径(JsonPath，相对结果集result)，如：步骤resultKey.code", required = "required")
     private String key;
 
+    /**
+     * 比较运算符，取值参考 AttrSymbols 的 key：
+     * equalTo / notEqual / lessThan / greaterThan / lessThanOrEqual / greaterThanOrEqual / contain。
+     * 执行时两侧均按字符串比较：'{实际值}' {symbols} '{期望值}'。
+     */
     @TableField("operator")
-    @ApiModelProperty(value = "操作符", required = "required")
+    @ApiModelProperty(value = "比较运算符，参考#AttrSymbols（如 equalTo）", required = "required")
     private String operator;
 
+    /**
+     * 期望值来源，参考 AutoValueFromTypeEnum：
+     * 1-自定义：value 为字面期望值；2-表达式：value 为另一条 JsonPath，从 result 再取期望值。
+     */
     @TableField("value_from")
-    @ApiModelProperty(value = "值的数据来源，参考#AutoValueFromTypeEnum", required = "required")
+    @ApiModelProperty(value = "期望值数据来源，参考#AutoValueFromTypeEnum（1自定义/2表达式）", required = "required")
     private Integer valueFrom;
 
+    /**
+     * 期望值：自定义时为字面量（如 200）；表达式时为 JsonPath 路径（如 另一步骤resultKey.userId）。
+     */
     @TableField("value")
-    @ApiModelProperty(value = "断言对比得值")
+    @ApiModelProperty(value = "期望值：自定义填字面量；表达式填JsonPath路径")
     private String value;
 
     @TableField("order_by")
