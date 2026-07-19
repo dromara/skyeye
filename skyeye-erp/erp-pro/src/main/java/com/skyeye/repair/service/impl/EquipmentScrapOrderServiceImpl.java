@@ -50,9 +50,9 @@ public class EquipmentScrapOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
     @Override
     protected QueryWrapper<EquipmentScrapOrder> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<EquipmentScrapOrder> queryWrapper = super.getQueryWrapper(commonPageInfo);
-        if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
-            // objectId = 设备id
-            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentScrapOrder::getEquipmentId), commonPageInfo.getObjectId());
+        String equipmentId = commonPageInfo.getCustomParamsMapStr("equipmentId");
+        if (StrUtil.isNotEmpty(equipmentId)) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentScrapOrder::getEquipmentId), equipmentId);
         }
         return queryWrapper;
     }
