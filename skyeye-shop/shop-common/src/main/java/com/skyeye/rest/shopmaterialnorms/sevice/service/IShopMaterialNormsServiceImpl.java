@@ -71,9 +71,4 @@ public class IShopMaterialNormsServiceImpl extends IServiceImpl implements IShop
         return rows;
     }
 
-    @Override
-    public ResultEntity queryShopMaterialList(Map<String, Object> params) {
-        return ExecuteFeignClient.get(() -> iShopMaterialNormsRest.queryShopMaterialList(params));
-    }
-
 }
