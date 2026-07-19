@@ -33,9 +33,8 @@ public class EquipmentScrapOrderController {
     @Autowired
     private EquipmentScrapOrderService equipmentScrapOrderService;
 
-    @ApiOperation(id = "queryEquipmentScrapOrderList", value = "获取设备报废单列表", method = "POST", allUse = "1")
-    @ApiImplicitParams(classBean = CommonPageInfo.class, value = {
-        @ApiImplicitParam(id = "equipmentId", name = "equipmentId", value = "设备id")})
+    @ApiOperation(id = "queryEquipmentScrapOrderList", value = "获取设备报废单列表", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/EquipmentScrapOrderController/queryEquipmentScrapOrderList")
     public void queryEquipmentScrapOrderList(InputObject inputObject, OutputObject outputObject) {
         equipmentScrapOrderService.queryPageList(inputObject, outputObject);
