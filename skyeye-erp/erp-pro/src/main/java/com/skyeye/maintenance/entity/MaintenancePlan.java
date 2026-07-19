@@ -5,12 +5,11 @@
 package com.skyeye.maintenance.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
-import com.skyeye.common.entity.features.OperatorUserInfo;
+import com.skyeye.common.entity.features.BaseGeneralInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.equipment.entity.Equipment;
 import com.skyeye.maintenance.classenum.MaintenancePlanFrequency;
@@ -24,11 +23,7 @@ import java.util.List;
 @Data
 @TableName("erp_equipment_maintenance_plan")
 @ApiModel("保养计划")
-public class MaintenancePlan extends OperatorUserInfo {
-
-    @TableId("id")
-    @ApiModelProperty(value = "主键id")
-    private String id;
+public class MaintenancePlan extends BaseGeneralInfo {
 
     @TableField(value = "odd_number")
     @Property(value = "保养计划编号", fuzzyLike = true)
