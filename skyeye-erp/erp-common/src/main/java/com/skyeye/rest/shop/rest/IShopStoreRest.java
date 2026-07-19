@@ -46,4 +46,12 @@ public interface IShopStoreRest {
     @PostMapping("/queryStoreListFoServer")
     String queryStoreListFoServer(CommonPageInfo commonPageInfo);
 
+    /**
+     * 根据id获取优惠券信息（含适用商品、门店）
+     *
+     * @param id 优惠券id
+     */
+    @PostMapping("/queryCouponById")
+    String queryCouponById(@RequestParam("id") String id);
+
 }

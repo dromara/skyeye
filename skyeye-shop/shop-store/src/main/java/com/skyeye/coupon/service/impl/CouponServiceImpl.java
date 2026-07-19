@@ -10,11 +10,12 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
-import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.constans.QuartzConstants;
@@ -22,7 +23,6 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.common.object.ResultEntity;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.coupon.dao.CouponDao;
@@ -42,6 +42,8 @@ import com.skyeye.eve.rest.quartz.SysQuartzMation;
 import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.rest.shopmaterialnorms.sevice.IShopMaterialNormsService;
+import com.skyeye.store.entity.ShopStore;
+import com.skyeye.store.service.ShopStoreService;
 import com.skyeye.xxljob.ShopXxlJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +79,9 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
 
     @Autowired
     private CouponStoreService couponStoreService;
+
+    @Autowired
+    private ShopStoreService shopStoreService;
 
     private static Logger log = LoggerFactory.getLogger(ShopXxlJob.class);
 
@@ -329,63 +334,43 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         outputObject.settotal(list.size());
     }
 
+    /**
+     * 分页查询优惠券适用门店。入参：page、limit + customParamsMap.couponId。
+     * 全部门店：分页列出启用门店；指定门店：分页列出适用门店。不校验券启用状态。
+     */
     @Override
     @IgnoreTenant
-    public void queryCouponApplicableMaterialList(InputObject inputObject, OutputObject outputObject) {
+    public void queryCouponApplicableStoreList(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
-        String couponId = inputObject.getParams().get("couponId").toString();
-
+        String couponId = commonPageInfo.getCustomParamsMapStr("couponId");
+        if (StrUtil.isBlank(couponId)) {
+            return;
+        }
         Coupon coupon = selectById(couponId);
         if (ObjectUtil.isEmpty(coupon)) {
-            throw new CustomException("优惠券不存在");
-        }
-        if (!Objects.equals(coupon.getEnabled(), EnableEnum.ENABLE_USING.getKey())) {
-            throw new CustomException("优惠券已失效");
+            return;
         }
 
-        String materialIds = resolveApplicableMaterialIds(coupon);
-        String storeIds = resolveApplicableStoreIds(coupon);
-
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("page", commonPageInfo.getPage());
-        queryParams.put("limit", commonPageInfo.getLimit());
-        if (StrUtil.isNotBlank(materialIds)) {
-            queryParams.put("materialIds", materialIds);
-        }
-        if (StrUtil.isNotBlank(storeIds)) {
-            queryParams.put("storeIds", storeIds);
-        }
-
-        ResultEntity resultEntity = iShopMaterialNormsService.queryShopMaterialList(queryParams);
-        outputObject.setBeans(resultEntity.getRows());
-        outputObject.settotal(resultEntity.getTotal());
-    }
-
-    private String resolveApplicableMaterialIds(Coupon coupon) {
-        if (Objects.equals(coupon.getProductScope(), PromotionMaterialScope.ALL.getKey())) {
-            return StrUtil.EMPTY;
-        }
-        if (CollectionUtil.isEmpty(coupon.getCouponMaterialList())) {
-            return StrUtil.EMPTY;
-        }
-        return coupon.getCouponMaterialList().stream()
-            .map(CouponMaterial::getMaterialId)
-            .filter(StrUtil::isNotBlank)
-            .distinct()
-            .collect(Collectors.joining(CommonCharConstants.COMMA_MARK));
-    }
-
-    private String resolveApplicableStoreIds(Coupon coupon) {
-        if (Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.SPECIFIED_STORE.getKey())) {
-            if (CollectionUtil.isEmpty(coupon.getStoreIdList())) {
-                return StrUtil.EMPTY;
+        boolean allStore = Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.ALL_STORE.getKey());
+        List<String> storeIdList = null;
+        if (!allStore) {
+            storeIdList = CollectionUtil.isEmpty(coupon.getStoreIdList()) ? Collections.emptyList()
+                : coupon.getStoreIdList().stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(storeIdList)) {
+                return;
             }
-            return coupon.getStoreIdList().stream()
-                .filter(StrUtil::isNotBlank)
-                .distinct()
-                .collect(Collectors.joining(CommonCharConstants.COMMA_MARK));
         }
-        return StrUtil.EMPTY;
+
+        Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
+        QueryWrapper<ShopStore> queryWrapper = new QueryWrapper<>();
+        if (allStore) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), EnableEnum.ENABLE_USING.getKey());
+        } else {
+            queryWrapper.in(CommonConstants.ID, storeIdList);
+        }
+        List<ShopStore> stores = shopStoreService.list(queryWrapper);
+        outputObject.setBeans(stores);
+        outputObject.settotal(pages.getTotal());
     }
 
     private void setDrawState(List<Coupon> list) {
