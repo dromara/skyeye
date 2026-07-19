@@ -109,7 +109,8 @@ public class AutoModuleServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoModuleD
         QueryWrapper<AutoModule> queryWrapper = new QueryWrapper();
         queryWrapper.eq(MybatisPlusUtil.toColumns(AutoModule::getObjectKey), objectKey);
         queryWrapper.eq(MybatisPlusUtil.toColumns(AutoModule::getObjectId), objectId);
-        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoModule::getParentId), CommonNumConstants.NUM_ZERO);
+        // parentId 为 String，必须用 "0"：若传 Integer 0，MySQL 会按数字比较，空串/非数字串会被当成 0 误命中
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoModule::getParentId), String.valueOf(CommonNumConstants.NUM_ZERO));
         List<AutoModule> result = list(queryWrapper);
         outputObject.setBeans(result);
         outputObject.settotal(result.size());
