@@ -26,5 +26,8 @@ public interface CouponService extends SkyeyeBusinessService<Coupon> {
 
     void queryCouponListByMaterialId(InputObject inputObject, OutputObject outputObject);
 
-    void queryCouponApplicableMaterialList(InputObject inputObject, OutputObject outputObject);
+    /**
+     * 分页查询优惠券适用门店
+     */
+    void queryCouponApplicableStoreList(InputObject inputObject, OutputObject outputObject);
 }

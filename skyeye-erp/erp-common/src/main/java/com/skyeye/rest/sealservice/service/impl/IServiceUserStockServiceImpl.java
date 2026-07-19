@@ -28,12 +28,11 @@ public class IServiceUserStockServiceImpl implements IServiceUserStockService {
     private IServiceUserStockRest iServiceUserStockRest;
 
     @Override
-    public Map<String, Map<String, Object>> queryUserStock(String userId, List<String> normsIds) {
+    public Map<String, Map<String, Object>> queryUserStock(List<String> normsIds) {
         if (CollectionUtil.isEmpty(normsIds)) {
             return MapUtil.newHashMap();
         }
         Map<String, Object> params = new HashMap<>();
-        params.put("userId", userId);
         params.put("normsIds", JSONUtil.toJsonStr(normsIds));
         List<Map<String, Object>> rows = ExecuteFeignClient.get(() -> iServiceUserStockRest.queryUserStockByNormsIds(params)).getRows();
         if (CollectionUtil.isEmpty(rows)) {

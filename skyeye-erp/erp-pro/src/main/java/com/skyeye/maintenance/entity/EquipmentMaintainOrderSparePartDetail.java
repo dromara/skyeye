@@ -63,6 +63,14 @@ public class EquipmentMaintainOrderSparePartDetail extends CommonInfo {
     @ApiModelProperty(value = "总金额(元)", defaultValue = "0")
     private String allPrice;
 
+    @TableField("create_id")
+    @Property(value = "使用人ID")
+    private String createId;
+
+    @TableField("create_time")
+    @Property(value = "创建时间")
+    private String createTime;
+
     @TableField(exist = false)
     @Property(value = "当前登录人库存信息")
     private Map<String, Object> serviceUserStock;
