@@ -33,10 +33,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * @Description: 设备保养单备件领用明细服务层
+ * @Description: 设备保养单备件使用明细服务层
  */
 @Service
-@SkyeyeService(name = "设备保养单备件领用明细", groupName = "设备保养", manageShow = false)
+@SkyeyeService(name = "设备保养单备件使用明细", groupName = "设备保养", manageShow = false)
 public class EquipmentMaintainOrderSparePartDetailServiceImpl
     extends SkyeyeBusinessServiceImpl<EquipmentMaintainOrderSparePartDetailDao, EquipmentMaintainOrderSparePartDetail>
     implements EquipmentMaintainOrderSparePartDetailService {

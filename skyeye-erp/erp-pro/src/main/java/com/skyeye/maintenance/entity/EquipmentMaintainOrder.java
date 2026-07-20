@@ -90,6 +90,6 @@ public class EquipmentMaintainOrder extends OperatorUserInfo {
     private List<EquipmentMaintainOrderItem> maintainOrderItemList;
 
     @TableField(exist = false)
-    @ApiModelProperty(value = "备件领用明细", required = "json")
+    @ApiModelProperty(value = "备件使用明细", required = "json")
     private List<EquipmentMaintainOrderSparePartDetail> sparePartDetailList;
 }

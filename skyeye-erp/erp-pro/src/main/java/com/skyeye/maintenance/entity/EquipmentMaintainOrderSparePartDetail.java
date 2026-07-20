@@ -15,12 +15,9 @@ import lombok.Data;
 
 import java.util.Map;
 
-/**
- * @Description: 设备保养单-备件领用明细（parentId = 保养单id，字段对齐维修备件使用明细）
- */
 @Data
 @TableName(value = "erp_equipment_maintain_order_spare_part_detail")
-@ApiModel("设备保养单备件领用明细")
+@ApiModel("保养单备件使用明细实体类")
 public class EquipmentMaintainOrderSparePartDetail extends CommonInfo {
 
     @TableId("id")
@@ -48,11 +45,11 @@ public class EquipmentMaintainOrderSparePartDetail extends CommonInfo {
     private Map<String, Object> normsMation;
 
     @TableField(value = "oper_number")
-    @ApiModelProperty(value = "领用数量", required = "required,num")
+    @ApiModelProperty(value = "使用数量", required = "required,num")
     private String operNumber;
 
     @TableField(value = "usage_reason")
-    @ApiModelProperty(value = "领用原因")
+    @ApiModelProperty(value = "使用原因")
     private String usageReason;
 
     @TableField(value = "unit_price")
