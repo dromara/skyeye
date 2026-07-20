@@ -6,8 +6,8 @@
 <div align="center">
   <img src="https://gitee.com/dromara/skyeye/badge/star.svg?theme=blue" alt="gitee Star" height="20">
   <img src="https://img.shields.io/github/stars/dromara/skyeye.svg?style=social&label=Stars" alt="Github Star" height="20">
-  <img src="https://gitcode.com/doc_wei/erp-pro/star/badge.svg?style=flat-square&logoSize=14" alt="GitCode Star" height="20">
-  <img src="https://gitcode.com/doc_wei/erp-pro/star/2025top.svg?style=flat-square&logoSize=14"
+  <img src="https://gitcode.com/doc_wei-dev/erp-pro/star/badge.svg?style=flat-square&logoSize=14" alt="GitCode Star" height="20">
+  <img src="https://gitcode.com/doc_wei-dev/erp-pro/star/2025top.svg?style=flat-square&logoSize=14"
   alt="GitCode Star 2025" height="20">
 </div>
 
@@ -190,7 +190,7 @@ SkyEye云 是面向**智能制造行业**的一站式SaaS化零代码全链路�
 
 ## 📍 项目托管地址
 - Gitee(Dromara): https://gitee.com/dromara/skyeye
-- GitCode: https://gitcode.com/doc_wei/skyeye-oa
+- GitCode: https://gitcode.com/doc_wei-dev/erp-pro
 
 ## 🤝 友情赞助
 
