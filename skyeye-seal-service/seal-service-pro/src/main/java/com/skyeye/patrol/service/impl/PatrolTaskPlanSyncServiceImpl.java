@@ -29,8 +29,9 @@ import java.util.stream.Collectors;
  * 巡检计划与系统生成巡检任务的同步实现。
  * <p>
  * 由 XXL 按计划在触发点调用 {@link #generatePatrolTasksForPlan(String)}，在「今天起若干天」内按频次算出应执行的时段，
- * 为每个「关联点位 × 计划巡检项目 × 时段槽位」生成一条待执行任务；收集后调用 {@link PatrolTaskService#createEntity(java.util.List, String)} 批量落库。
- * 计划未配置项目时仍生成任务（itemId 为空）。同一计划+点位+项目+计划开始时间重复调用不会重复插入（幂等：按窗口内已有任务键过滤）。
+ * 为每个时段生成一条待执行任务，任务上挂载计划关联的全部点位与项目（多选）；收集后调用
+ * {@link PatrolTaskService#createEntity(java.util.List, String)} 批量落库。
+ * 同一计划+计划开始时间重复调用不会重复插入（幂等：按窗口内已有任务键过滤）。
  * 计划保存/删除时在 {@link com.skyeye.patrol.service.impl.PatrolPlanServiceImpl} 中联动取消未结束任务。
  *
  * @author skyeye云系列--卫志强
@@ -126,22 +127,18 @@ public class PatrolTaskPlanSyncServiceImpl implements PatrolTaskPlanSyncService 
                 if (planned.compareTo(nowStr) < 0) {
                     continue;
                 }
-                for (String pointId : pointIds) {
-                    for (String itemId : itemIds) {
-                        PatrolTask task = new PatrolTask();
-                        task.setPlanId(plan.getId());
-                        task.setPointId(pointId);
-                        task.setItemId(itemId);
-                        task.setPlannedStartTime(planned);
-                        candidates.add(task);
-                    }
-                }
+                PatrolTask task = new PatrolTask();
+                task.setPlanId(plan.getId());
+                task.setPointId(pointIds);
+                task.setItemId(itemIds);
+                task.setPlannedStartTime(planned);
+                candidates.add(task);
             }
         }
         if (CollectionUtil.isEmpty(candidates)) {
             return;
         }
-        // 候选集按「点位|项目|计划开始时间」去重，避免同键多条进入批量插入
+        // 候选集按「计划开始时间」去重，避免同键多条进入批量插入
         Map<String, PatrolTask> uniqCandidates = new LinkedHashMap<>();
         for (PatrolTask t : candidates) {
             uniqCandidates.putIfAbsent(patrolTaskDedupeKey(t), t);
@@ -164,10 +161,10 @@ public class PatrolTaskPlanSyncServiceImpl implements PatrolTaskPlanSyncService 
     }
 
     /**
-     * 幂等键：计划内同一点位、同一巡检项目、同一计划开始时间唯一（项目为空时用空串占位）
+     * 幂等键：同一计划下同一计划开始时间唯一（点位/项目已整包挂在任务上）
      */
     private static String patrolTaskDedupeKey(PatrolTask t) {
-        return t.getPointId() + "|" + t.getItemId() + "|" + t.getPlannedStartTime();
+        return t.getPlannedStartTime();
     }
 
     /**

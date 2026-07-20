@@ -19,10 +19,14 @@ import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.patrol.classenum.PatrolTaskState;
 import com.skyeye.patrol.dao.PatrolTaskDao;
+import com.skyeye.patrol.entity.PatrolItem;
+import com.skyeye.patrol.entity.PatrolPoint;
 import com.skyeye.patrol.entity.PatrolTask;
 import com.skyeye.patrol.service.PatrolItemService;
 import com.skyeye.patrol.service.PatrolPlanService;
 import com.skyeye.patrol.service.PatrolPointService;
+import com.skyeye.patrol.service.PatrolTaskItemService;
+import com.skyeye.patrol.service.PatrolTaskPointService;
 import com.skyeye.patrol.service.PatrolTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +55,12 @@ public class PatrolTaskServiceImpl extends SkyeyeBusinessServiceImpl<PatrolTaskD
 
     @Autowired
     private PatrolItemService patrolItemService;
+
+    @Autowired
+    private PatrolTaskPointService patrolTaskPointService;
+
+    @Autowired
+    private PatrolTaskItemService patrolTaskItemService;
 
     @Override
     public void createPrepose(PatrolTask entity) {
@@ -86,6 +96,54 @@ public class PatrolTaskServiceImpl extends SkyeyeBusinessServiceImpl<PatrolTaskD
     }
 
     @Override
+    public void writePostpose(PatrolTask entity, String userId) {
+        patrolTaskPointService.saveList(entity.getId(), entity.getPointId());
+        patrolTaskItemService.saveList(entity.getId(), entity.getItemId());
+        super.writePostpose(entity, userId);
+    }
+
+    @Override
+    protected void createPostpose(List<PatrolTask> entityList, String userId) {
+        if (CollectionUtil.isEmpty(entityList)) {
+            return;
+        }
+        entityList.forEach(entity -> {
+            patrolTaskPointService.saveList(entity.getId(), entity.getPointId());
+            patrolTaskItemService.saveList(entity.getId(), entity.getItemId());
+        });
+    }
+
+    @Override
+    protected void deletePostpose(PatrolTask entity) {
+        patrolTaskPointService.deleteByParentId(entity.getId());
+        patrolTaskItemService.deleteByParentId(entity.getId());
+    }
+
+    @Override
+    public PatrolTask getDataFromDb(String id) {
+        PatrolTask patrolTask = super.getDataFromDb(id);
+        patrolTask.setPointId(patrolTaskPointService.selectByParentId(id));
+        patrolTask.setItemId(patrolTaskItemService.selectByParentId(id));
+        return patrolTask;
+    }
+
+    @Override
+    public List<PatrolTask> getDataFromDb(List<String> idList) {
+        List<PatrolTask> taskList = super.getDataFromDb(idList);
+        if (CollectionUtil.isEmpty(taskList)) {
+            return taskList;
+        }
+        List<String> taskIdList = taskList.stream().map(PatrolTask::getId).collect(Collectors.toList());
+        Map<String, List<String>> pointIdMap = patrolTaskPointService.selectMapByParentId(taskIdList);
+        Map<String, List<String>> itemIdMap = patrolTaskItemService.selectMapByParentId(taskIdList);
+        taskList.forEach(task -> {
+            task.setPointId(pointIdMap.get(task.getId()));
+            task.setItemId(itemIdMap.get(task.getId()));
+        });
+        return taskList;
+    }
+
+    @Override
     protected QueryWrapper<PatrolTask> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<PatrolTask> queryWrapper = super.getQueryWrapper(commonPageInfo);
         if (StrUtil.isNotEmpty(commonPageInfo.getState())) {
@@ -102,10 +160,27 @@ public class PatrolTaskServiceImpl extends SkyeyeBusinessServiceImpl<PatrolTaskD
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         // 设置计划信息
         patrolPlanService.setMationForMap(beans, "planId", "planMation");
-        // 设置点位信息
-        patrolPointService.setMationForMap(beans, "pointId", "pointMation");
-        // 设置项目信息
-        patrolItemService.setMationForMap(beans, "itemId", "itemMation");
+        // 设置点位、项目ID列表
+        List<String> taskIds = beans.stream()
+            .map(bean -> bean.get("id").toString())
+            .collect(Collectors.toList());
+        Map<String, List<String>> pointIdMap = patrolTaskPointService.selectMapByParentId(taskIds);
+        Map<String, List<String>> itemIdMap = patrolTaskItemService.selectMapByParentId(taskIds);
+        List<String> allPointIds = pointIdMap.values().stream().flatMap(List::stream).distinct().collect(Collectors.toList());
+        List<String> allItemIds = itemIdMap.values().stream().flatMap(List::stream).distinct().collect(Collectors.toList());
+        Map<String, PatrolPoint> pointMap = patrolPointService.selectByIds(allPointIds.toArray(new String[]{})).stream()
+            .collect(Collectors.toMap(PatrolPoint::getId, p -> p, (a, b) -> a));
+        Map<String, PatrolItem> itemMap = patrolItemService.selectByIds(allItemIds.toArray(new String[]{})).stream()
+            .collect(Collectors.toMap(PatrolItem::getId, i -> i, (a, b) -> a));
+        beans.forEach(bean -> {
+            String id = bean.get("id").toString();
+            List<String> pointIds = pointIdMap.get(id);
+            List<String> itemIds = itemIdMap.get(id);
+            bean.put("pointId", pointIds);
+            bean.put("itemId", itemIds);
+            bean.put("pointMation", pointIds.stream().map(pointMap::get).collect(Collectors.toList()));
+            bean.put("itemMation", itemIds.stream().map(itemMap::get).collect(Collectors.toList()));
+        });
         // 设置执行人信息
         List<String> executorIds = beans.stream()
             .filter(bean -> bean.get("executorId") != null)
@@ -134,9 +209,11 @@ public class PatrolTaskServiceImpl extends SkyeyeBusinessServiceImpl<PatrolTaskD
         // 设置计划信息
         patrolPlanService.setDataMation(patrolTask, PatrolTask::getPlanId);
         // 设置点位信息
-        patrolPointService.setDataMation(patrolTask, PatrolTask::getPointId);
+        List<PatrolPoint> points = patrolPointService.selectByIds(patrolTask.getPointId().toArray(new String[]{}));
+        patrolTask.setPointMation(points);
         // 设置项目信息
-        patrolItemService.setDataMation(patrolTask, PatrolTask::getItemId);
+        List<PatrolItem> items = patrolItemService.selectByIds(patrolTask.getItemId().toArray(new String[]{}));
+        patrolTask.setItemMation(items);
         // 设置执行人信息
         if (StrUtil.isNotEmpty(patrolTask.getExecutorId())) {
             Map<String, Map<String, Object>> executorMap = iAuthUserService.queryUserMationListByStaffIds(

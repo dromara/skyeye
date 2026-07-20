@@ -20,6 +20,7 @@ import com.skyeye.patrol.classenum.PatrolItemSummaryType;
 import com.skyeye.patrol.classenum.PatrolTaskState;
 import com.skyeye.patrol.dao.PatrolRecordDao;
 import com.skyeye.patrol.dao.PatrolTaskDao;
+import com.skyeye.patrol.entity.PatrolItem;
 import com.skyeye.patrol.entity.PatrolPlan;
 import com.skyeye.patrol.entity.PatrolPoint;
 import com.skyeye.patrol.entity.PatrolRecord;
@@ -271,39 +272,55 @@ public class PatrolStatisticsServiceImpl implements PatrolStatisticsService {
 
         List<PatrolTask> taskList = patrolTaskDao.selectList(queryWrapper);
         long total = taskList.size();
+        List<String> taskIds = taskList.stream().map(PatrolTask::getId).collect(Collectors.toList());
+        taskList = patrolTaskService.selectByIds(taskIds.toArray(new String[0]));
 
-        // 填充点位信息以获取点位名称
-        patrolPointService.setDataMation(taskList, PatrolTask::getPointId);
+        Set<String> pointIds = taskList.stream()
+            .filter(task -> CollectionUtil.isNotEmpty(task.getPointId()))
+            .flatMap(task -> task.getPointId().stream())
+            .filter(StrUtil::isNotEmpty)
+            .collect(Collectors.toSet());
+        Map<String, PatrolPoint> pointMap = patrolPointService.selectByIds(pointIds.toArray(new String[0])).stream()
+            .collect(Collectors.toMap(PatrolPoint::getId, p -> p, (a, b) -> a));
 
-        // 有有效点位的按 pointId 分组，pointId 为空或查不到点位的归为「其他」
-        Map<String, Long> pointStats = taskList.stream()
-            .collect(Collectors.groupingBy(task -> {
-                if (StrUtil.isEmpty(task.getPointId())
-                    || task.getPointMation() == null
-                    || StrUtil.isEmpty(task.getPointMation().getName())) {
-                    return OTHER_LABEL;
+        // 按任务上的巡检点位分组（多点位展开；无效归「其他」）
+        Map<String, Long> pointStats = new HashMap<>();
+        for (PatrolTask task : taskList) {
+            // 没有点位 → 记到「其他」
+            if (CollectionUtil.isEmpty(task.getPointId())) {
+                pointStats.put(OTHER_LABEL, pointStats.getOrDefault(OTHER_LABEL, 0L) + 1);
+                continue;
+            }
+            // 任务上每个点位各计 1 次
+            for (String pointId : task.getPointId()) {
+                PatrolPoint point = pointMap.get(pointId);
+                if (point == null || StrUtil.isEmpty(point.getName())) {
+                    pointStats.put(OTHER_LABEL, pointStats.getOrDefault(OTHER_LABEL, 0L) + 1);
+                    continue;
                 }
-                return task.getPointId();
-            }, Collectors.counting()));
+                pointStats.put(pointId, pointStats.getOrDefault(pointId, 0L) + 1);
+            }
+        }
 
-        // pointId -> 点位名称（优先使用 pointMation.name）
         Map<String, String> pointIdToName = new HashMap<>();
         pointIdToName.put(OTHER_LABEL, OTHER_LABEL);
         for (PatrolTask task : taskList) {
-            if (StrUtil.isEmpty(task.getPointId())
-                || task.getPointMation() == null
-                || StrUtil.isEmpty(task.getPointMation().getName())
-            ) {
+            if (CollectionUtil.isEmpty(task.getPointId())) {
                 continue;
             }
-            if (pointIdToName.containsKey(task.getPointId())) {
-                continue;
+            for (String pointId : task.getPointId()) {
+                if (pointIdToName.containsKey(pointId)) {
+                    continue;
+                }
+                PatrolPoint point = pointMap.get(pointId);
+                if (point == null) {
+                    continue;
+                }
+                String name = StrUtil.isNotEmpty(point.getName())
+                    ? point.getName()
+                    : (StrUtil.isNotEmpty(point.getPointCode()) ? point.getPointCode() : pointId);
+                pointIdToName.put(pointId, name);
             }
-            PatrolPoint point = task.getPointMation();
-            String name = point != null && StrUtil.isNotEmpty(point.getName())
-                ? point.getName()
-                : (point != null && StrUtil.isNotEmpty(point.getPointCode()) ? point.getPointCode() : task.getPointId());
-            pointIdToName.put(task.getPointId(), name);
         }
 
         List<String> xAxisData = new ArrayList<>();
@@ -344,38 +361,54 @@ public class PatrolStatisticsServiceImpl implements PatrolStatisticsService {
             .distinct()
             .collect(Collectors.toList());
         List<PatrolTask> tasks = patrolTaskService.selectByIds(taskIds.toArray(new String[0]));
-        patrolItemService.setDataMation(tasks, PatrolTask::getItemId);
         Map<String, PatrolTask> taskMap = tasks.stream()
             .collect(Collectors.toMap(PatrolTask::getId, t -> t, (a, b) -> a));
 
+        Set<String> itemIds = tasks.stream()
+            .filter(task -> CollectionUtil.isNotEmpty(task.getItemId()))
+            .flatMap(task -> task.getItemId().stream())
+            .filter(StrUtil::isNotEmpty)
+            .collect(Collectors.toSet());
+        Map<String, PatrolItem> itemMap = patrolItemService.selectByIds(itemIds.toArray(new String[0])).stream()
+            .collect(Collectors.toMap(PatrolItem::getId, i -> i, (a, b) -> a));
+
         long total = recordList.size();
-        // 按关联任务上的巡检项目分组
-        Map<String, Long> itemStats = recordList.stream()
-            .collect(Collectors.groupingBy(record -> {
-                PatrolTask task = taskMap.get(record.getTaskId());
-                if (task == null || StrUtil.isEmpty(task.getItemId())
-                    || task.getItemMation() == null
-                    || StrUtil.isEmpty(task.getItemMation().getName())) {
-                    return OTHER_LABEL;
+        // 按关联任务上的巡检项目分组（多项目展开；无效归「其他」）
+        Map<String, Long> itemStats = new HashMap<>();
+        for (PatrolRecord record : recordList) {
+            PatrolTask task = taskMap.get(record.getTaskId());
+            // 找不到任务或没有项目 → 记到「其他」
+            if (task == null || CollectionUtil.isEmpty(task.getItemId())) {
+                itemStats.put(OTHER_LABEL, itemStats.getOrDefault(OTHER_LABEL, 0L) + 1);
+                continue;
+            }
+            // 任务上每个项目各计 1 次
+            for (String itemId : task.getItemId()) {
+                PatrolItem item = itemMap.get(itemId);
+                if (item == null || StrUtil.isEmpty(item.getName())) {
+                    itemStats.put(OTHER_LABEL, itemStats.getOrDefault(OTHER_LABEL, 0L) + 1);
+                    continue;
                 }
-                return task.getItemId();
-            }, Collectors.counting()));
+                itemStats.put(itemId, itemStats.getOrDefault(itemId, 0L) + 1);
+            }
+        }
 
         Map<String, String> itemIdToName = new HashMap<>();
         itemIdToName.put(OTHER_LABEL, OTHER_LABEL);
         for (PatrolTask task : tasks) {
-            if (StrUtil.isEmpty(task.getItemId())
-                || task.getItemMation() == null
-                || StrUtil.isEmpty(task.getItemMation().getName())) {
+            if (CollectionUtil.isEmpty(task.getItemId())) {
                 continue;
             }
-            if (itemIdToName.containsKey(task.getItemId())) {
-                continue;
+            for (String itemId : task.getItemId()) {
+                if (itemIdToName.containsKey(itemId)) {
+                    continue;
+                }
+                PatrolItem item = itemMap.get(itemId);
+                if (item == null || StrUtil.isEmpty(item.getName())) {
+                    continue;
+                }
+                itemIdToName.put(itemId, item.getName());
             }
-            String name = StrUtil.isNotEmpty(task.getItemMation().getName())
-                ? task.getItemMation().getName()
-                : task.getItemId();
-            itemIdToName.put(task.getItemId(), name);
         }
 
         List<String> xAxisData = new ArrayList<>();

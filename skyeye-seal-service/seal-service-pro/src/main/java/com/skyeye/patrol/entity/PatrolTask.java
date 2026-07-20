@@ -16,6 +16,7 @@ import com.skyeye.common.entity.features.OperatorUserInfo;
 import com.skyeye.patrol.classenum.PatrolTaskState;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,21 +49,21 @@ public class PatrolTask extends OperatorUserInfo {
     @Property(value = "计划信息")
     private PatrolPlan planMation;
 
-    @TableField(value = "point_id")
-    @ApiModelProperty(value = "巡检点位ID", required = "required")
-    private String pointId;
+    @TableField(exist = false)
+    @ApiModelProperty(value = "巡检点位ID列表")
+    private List<String> pointId;
 
     @TableField(exist = false)
-    @Property(value = "点位信息")
-    private PatrolPoint pointMation;
-
-    @TableField(value = "item_id")
-    @ApiModelProperty(value = "巡检项目ID（计划未配置项目时可为空）")
-    private String itemId;
+    @Property(value = "点位信息列表")
+    private List<PatrolPoint> pointMation;
 
     @TableField(exist = false)
-    @Property(value = "项目信息")
-    private PatrolItem itemMation;
+    @ApiModelProperty(value = "巡检项目ID列表")
+    private List<String> itemId;
+
+    @TableField(exist = false)
+    @Property(value = "项目信息列表")
+    private List<PatrolItem> itemMation;
 
     @TableField(value = "executor_id")
     @ApiModelProperty(value = "执行人ID（员工ID）")
