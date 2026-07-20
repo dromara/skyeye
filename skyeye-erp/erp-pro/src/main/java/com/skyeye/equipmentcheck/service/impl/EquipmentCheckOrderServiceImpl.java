@@ -6,7 +6,6 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
-import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -28,9 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: EquipmentCheckOrderServiceImpl
@@ -176,72 +174,6 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
         if (StrUtil.isNotEmpty(item.getMinValue()) || StrUtil.isNotEmpty(item.getMaxValue())) {
             sb.append("，标准：").append(item.getMinValue()).append("~").append(item.getMaxValue());
         }
-    }
-
-    //统计今日点检设备分布、今日点检设备次数、今日未点检设备分布
-    @Override
-    public void queryStatistics(InputObject inputObject, OutputObject outputObject) {
-        String today = LocalDate.now().toString();
-        QueryWrapper<EquipmentCheckOrder> todayWrapper = new QueryWrapper<>();
-        todayWrapper.likeRight(MybatisPlusUtil.toColumns(EquipmentCheckOrder::getCheckTime), today);
-        List<EquipmentCheckOrder> todayList = list(todayWrapper);
-
-        List<Map<String, Object>> checkedDistribution = todayList.stream()
-            .collect(Collectors.groupingBy(EquipmentCheckOrder::getEquipmentName, Collectors.counting()))
-            .entrySet().stream().map(e -> {
-                Map<String, Object> map = new HashMap<>();
-                map.put("equipmentName", e.getKey());
-                map.put("count", e.getValue());
-                return map;
-            }).collect(Collectors.toList());
-
-        List<Map<String, Object>> checkTimes = todayList.stream()
-            .collect(Collectors.groupingBy(EquipmentCheckOrder::getEquipmentCode, Collectors.counting()))
-            .entrySet().stream().map(e -> {
-                Map<String, Object> map = new HashMap<>();
-                map.put("equipmentCode", e.getKey());
-                map.put("count", e.getValue());
-                return map;
-            }).collect(Collectors.toList());
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("todayCheckedDistribution", checkedDistribution);
-        result.put("todayEquipmentCheckTimes", checkTimes);
-        result.put("todayUncheckedDistribution", buildTodayUncheckedDistribution(todayList));
-        result.put("detailRows", todayList);
-        outputObject.setBean(result);
-        outputObject.settotal(todayList.size());
-    }
-
-     //今日未点检：基于历史点检单中出现过的设备，排除今日已点检。
-    private List<Map<String, Object>> buildTodayUncheckedDistribution(List<EquipmentCheckOrder> todayList) {
-        Set<String> checkedTodayIds = todayList.stream()
-            .map(EquipmentCheckOrder::getEquipmentId)
-            .filter(StrUtil::isNotEmpty)
-            .collect(Collectors.toSet());
-
-        Map<String, EquipmentCheckOrder> latestByEquipment = new LinkedHashMap<>();
-        QueryWrapper<EquipmentCheckOrder> wrapper = new QueryWrapper<>();
-        wrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentCheckOrder::getCheckTime));
-        for (EquipmentCheckOrder order : list(wrapper)) {
-            if (StrUtil.isEmpty(order.getEquipmentId())) {
-                continue;
-            }
-            latestByEquipment.putIfAbsent(order.getEquipmentId(), order);
-        }
-
-        return latestByEquipment.entrySet().stream()
-            .filter(entry -> !checkedTodayIds.contains(entry.getKey()))
-            .map(entry -> {
-                EquipmentCheckOrder order = entry.getValue();
-                Map<String, Object> map = new HashMap<>();
-                map.put("equipmentId", order.getEquipmentId());
-                map.put("equipmentName", order.getEquipmentName());
-                map.put("equipmentCode", order.getEquipmentCode());
-                map.put("count", CommonNumConstants.NUM_ONE);
-                return map;
-            })
-            .collect(Collectors.toList());
     }
 }
 

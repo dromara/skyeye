@@ -1,8 +1,6 @@
 package com.skyeye.equipmentcheck.service;
 
 import com.skyeye.base.business.service.SkyeyeBusinessService;
-import com.skyeye.common.object.InputObject;
-import com.skyeye.common.object.OutputObject;
 import com.skyeye.equipmentcheck.entity.EquipmentCheckOrder;
 
 /**
@@ -11,6 +9,5 @@ import com.skyeye.equipmentcheck.entity.EquipmentCheckOrder;
  */
 public interface EquipmentCheckOrderService extends SkyeyeBusinessService<EquipmentCheckOrder> {
 
-    void queryStatistics(InputObject inputObject, OutputObject outputObject);
 }
 
