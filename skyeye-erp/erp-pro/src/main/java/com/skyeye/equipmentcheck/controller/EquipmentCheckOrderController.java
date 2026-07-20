@@ -71,11 +71,5 @@ public class EquipmentCheckOrderController {
         equipmentCheckOrderService.deleteByIds(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryEquipmentCheckStatistics", value = "设备点检统计", method = "POST", allUse = "1")
-    @RequestMapping("/post/EquipmentCheckOrderController/queryStatistics")
-    public void queryStatistics(InputObject inputObject, OutputObject outputObject) {
-        equipmentCheckOrderService.queryStatistics(inputObject, outputObject);
-    }
-
 }
 
