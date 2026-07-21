@@ -17,6 +17,7 @@ import com.skyeye.common.base.handler.enclosure.bean.Enclosure;
 import com.skyeye.common.base.handler.enclosure.bean.EnclosureFace;
 import com.skyeye.common.constans.CacheConstants;
 import com.skyeye.common.entity.features.AreaInfo;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.level.entity.ShopMemberLevel;
 import com.skyeye.store.entity.ShopStore;
 import lombok.Data;
@@ -106,7 +107,7 @@ public class Member extends AreaInfo implements EnclosureFace {
     private String userToken;
 
     @TableField(exist = false)
-    @Property(value = "是否已设置密码，参考#WhetherEnum")
+    @Property(value = "是否已设置密码", enumClass = WhetherEnum.class)
     private Integer whetherPassword;
 
 }
