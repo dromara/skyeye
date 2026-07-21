@@ -8,7 +8,7 @@ import com.skyeye.eve.dao.SkyeyeBaseMapper;
 import com.skyeye.maintenance.entity.EquipmentMaintainOrderSparePartDetail;
 
 /**
- * @Description: 设备保养单备件领用明细数据层
+ * @Description: 设备保养单备件使用明细数据层
  */
 public interface EquipmentMaintainOrderSparePartDetailDao extends SkyeyeBaseMapper<EquipmentMaintainOrderSparePartDetail> {
 

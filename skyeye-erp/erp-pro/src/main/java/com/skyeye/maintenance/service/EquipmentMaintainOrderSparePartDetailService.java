@@ -10,7 +10,7 @@ import com.skyeye.maintenance.entity.EquipmentMaintainOrderSparePartDetail;
 import java.util.List;
 
 /**
- * @Description: 设备保养单备件领用明细服务接口
+ * @Description: 设备保养单备件使用明细服务接口
  */
 public interface EquipmentMaintainOrderSparePartDetailService extends SkyeyeBusinessService<EquipmentMaintainOrderSparePartDetail> {
 
@@ -20,7 +20,7 @@ public interface EquipmentMaintainOrderSparePartDetailService extends SkyeyeBusi
     void saveLinkList(String parentId, List<EquipmentMaintainOrderSparePartDetail> detailList);
 
     /**
-     * 完成任务时按当前登录人扣减备件库存。
+     * 完成任务时按 createId 扣减备件库存。
      */
     void deductStockByParentId(String parentId);
 
