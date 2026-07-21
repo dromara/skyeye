@@ -14,10 +14,10 @@ import java.util.List;
  */
 public interface AutoScheduleTaskCaseService extends SkyeyeBusinessService<AutoScheduleTaskCase> {
 
-    void deleteByParentId(String taskId);
+    void deleteByParentId(String parentId);
 
-    List<String> selectByParentId(String taskId);
+    List<String> selectByParentId(String parentId);
 
-    void saveList(String taskId, List<String> caseIds);
+    void saveList(String parentId, List<String> caseIds);
 
 }
