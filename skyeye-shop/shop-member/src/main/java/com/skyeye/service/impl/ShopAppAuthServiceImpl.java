@@ -14,6 +14,7 @@ import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.enumeration.RequestType;
 import com.skyeye.common.enumeration.SmsSceneEnum;
 import com.skyeye.common.enumeration.TenantEnum;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.GetUserToken;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -29,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl.TRANSACTION_MANAGER_VALUE;
@@ -80,6 +82,10 @@ public class ShopAppAuthServiceImpl implements ShopAppAuthService {
 
     @NotNull
     private static Member getMember(String requestType, Member member, String password) {
+        // 先根据库中密码判断是否已设置，再清空密码字段（防泄露）
+        member.setWhetherPassword(StrUtil.isEmpty(member.getPassword())
+            ? WhetherEnum.DISABLE_USING.getKey()
+            : WhetherEnum.ENABLE_USING.getKey());
         member.setPassword(null);
         member.setPwdNumEnc(null);
         String userToken;
@@ -92,6 +98,22 @@ public class ShopAppAuthServiceImpl implements ShopAppAuthService {
         }
         member.setUserToken(userToken);
         return member;
+    }
+
+    /**
+     * 改密成功后只返回 whetherPassword=1，并刷新登录缓存
+     */
+    private void returnHasPassword(OutputObject outputObject, String userId) {
+        Member member = memberService.selectById(userId);
+        member.setWhetherPassword(WhetherEnum.ENABLE_USING.getKey());
+        member.setPassword(null);
+        member.setPwdNumEnc(null);
+        SysUserAuthConstants.setUserLoginRedisCache(member.getId() + SysUserAuthConstants.APP_IDENTIFYING, BeanUtil.beanToMap(member));
+        SysUserAuthConstants.setUserLoginRedisCache(member.getId(), BeanUtil.beanToMap(member));
+        Map<String, Object> result = new HashMap<>();
+        result.put("whetherPassword", WhetherEnum.ENABLE_USING.getKey());
+        outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
     @Override
@@ -119,6 +141,7 @@ public class ShopAppAuthServiceImpl implements ShopAppAuthService {
             newPassword = ToolUtil.MD5(newPassword);
         }
         memberService.editMemberPassword(userId, newPassword, pwdNum);
+        returnHasPassword(outputObject, userId);
     }
 
     @Override
@@ -192,6 +215,10 @@ public class ShopAppAuthServiceImpl implements ShopAppAuthService {
         saveMember.setName("未命名");
         saveMember.setEnabled(EnableEnum.ENABLE_USING.getKey());
         memberService.createEntity(saveMember, null);
+        Map<String, Object> result = new HashMap<>();
+        result.put("whetherPassword", WhetherEnum.DISABLE_USING.getKey());
+        outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
     @Override
@@ -208,5 +235,6 @@ public class ShopAppAuthServiceImpl implements ShopAppAuthService {
             newPassword = ToolUtil.MD5(newPassword);
         }
         memberService.editMemberPassword(member.getId(), newPassword, pwdNum);
+        returnHasPassword(outputObject, member.getId());
     }
 }

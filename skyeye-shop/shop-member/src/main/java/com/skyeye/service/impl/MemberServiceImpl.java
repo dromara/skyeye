@@ -20,6 +20,7 @@ import com.skyeye.common.constans.SysUserAuthConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.DeleteFlagEnum;
 import com.skyeye.common.enumeration.TenantEnum;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CharUtil;
@@ -171,6 +172,9 @@ public class MemberServiceImpl extends SkyeyeBusinessServiceImpl<MemberDao, Memb
         refreshCache(userId);
         // 更新会员登录缓存
         Member member = selectById(userId);
+        member.setWhetherPassword(StrUtil.isEmpty(member.getPassword())
+            ? WhetherEnum.DISABLE_USING.getKey()
+            : WhetherEnum.ENABLE_USING.getKey());
         member.setPassword(null);
         member.setPwdNumEnc(null);
         SysUserAuthConstants.setUserLoginRedisCache(member.getId() + SysUserAuthConstants.APP_IDENTIFYING, BeanUtil.beanToMap(member));
