@@ -105,4 +105,8 @@ public class Member extends AreaInfo implements EnclosureFace {
     @Property(value = "用户token")
     private String userToken;
 
+    @TableField(exist = false)
+    @Property(value = "是否已设置密码，参考#WhetherEnum")
+    private Integer whetherPassword;
+
 }
