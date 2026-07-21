@@ -9,7 +9,6 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
-import com.skyeye.common.object.InputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.schedule.dao.AutoScheduleTaskCaseDao;
 import com.skyeye.schedule.entity.AutoScheduleTaskCase;
@@ -29,35 +28,34 @@ public class AutoScheduleTaskCaseServiceImpl
     implements AutoScheduleTaskCaseService {
 
     @Override
-    public void deleteByParentId(String taskId) {
-        if (StrUtil.isEmpty(taskId)) {
+    public void deleteByParentId(String parentId) {
+        if (StrUtil.isEmpty(parentId)) {
             return;
         }
         QueryWrapper<AutoScheduleTaskCase> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoScheduleTaskCase::getTaskId), taskId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoScheduleTaskCase::getParentId), parentId);
         remove(queryWrapper);
     }
 
     @Override
-    public List<String> selectByParentId(String taskId) {
+    public List<String> selectByParentId(String parentId) {
         QueryWrapper<AutoScheduleTaskCase> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoScheduleTaskCase::getTaskId), taskId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoScheduleTaskCase::getParentId), parentId);
         List<AutoScheduleTaskCase> list = list(queryWrapper);
         return list.stream().map(AutoScheduleTaskCase::getCaseId).collect(Collectors.toList());
     }
 
     @Override
-    public void saveList(String taskId, List<String> caseIds) {
-        deleteByParentId(taskId);
+    public void saveList(String parentId, List<String> caseIds) {
+        deleteByParentId(parentId);
         if (CollectionUtil.isNotEmpty(caseIds)) {
-            String userId = InputObject.getLogParamsStatic().get("id").toString();
             List<AutoScheduleTaskCase> list = caseIds.stream().map(caseId -> {
                 AutoScheduleTaskCase bean = new AutoScheduleTaskCase();
-                bean.setTaskId(taskId);
+                bean.setParentId(parentId);
                 bean.setCaseId(caseId);
                 return bean;
             }).collect(Collectors.toList());
-            createEntity(list, userId);
+            createEntity(list, StrUtil.EMPTY);
         }
     }
 }
