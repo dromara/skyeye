@@ -15,7 +15,10 @@ import com.skyeye.common.entity.features.SkyeyeTeamAuth;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.schedule.classenum.AutoScheduleExecuteType;
 import com.skyeye.schedule.classenum.AutoScheduleFrequency;
+import com.skyeye.usercase.entity.AutoCase;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @Description: 自动化定时任务
@@ -31,7 +34,7 @@ public class AutoScheduleTask extends SkyeyeTeamAuth {
     private String id;
 
     @TableField("`name`")
-    @ApiModelProperty(value = "名称", required = "required")
+    @ApiModelProperty(value = "名称", required = "required", fuzzyLike = true)
     private String name;
 
     @TableField("remark")
@@ -65,5 +68,13 @@ public class AutoScheduleTask extends SkyeyeTeamAuth {
     @TableField(value = "enabled")
     @ApiModelProperty(value = "状态", enumClass = EnableEnum.class, required = "required,num")
     private Integer enabled;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "关联的用例ID列表")
+    private List<String> caseIdList;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "关联的用例信息列表")
+    private List<AutoCase> caseMationList;
 
 }
