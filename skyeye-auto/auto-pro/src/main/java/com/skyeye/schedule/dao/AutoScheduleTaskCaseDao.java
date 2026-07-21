@@ -5,11 +5,11 @@
 package com.skyeye.schedule.dao;
 
 import com.skyeye.eve.dao.SkyeyeBaseMapper;
-import com.skyeye.schedule.entity.AutoScheduleTask;
+import com.skyeye.schedule.entity.AutoScheduleTaskCase;
 
 /**
- * @Description: 自动化定时任务数据层
+ * @Description: 定时任务与用例关联数据层
  */
-public interface AutoScheduleTaskDao extends SkyeyeBaseMapper<AutoScheduleTask> {
+public interface AutoScheduleTaskCaseDao extends SkyeyeBaseMapper<AutoScheduleTaskCase> {
 
 }
