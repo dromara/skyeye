@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.schedule.dao.AutoScheduleTaskDao">
+
+    <select id="queryAutoScheduleTaskList" parameterType="com.skyeye.common.entity.search.CommonPageInfo" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.name,
+            a.remark,
+            a.frequency,
+            a.execute_time executeTime,
+            a.week_days weekDays,
+            a.month_days monthDays,
+            a.custom_cron customCron,
+            a.execute_type executeType,
+            a.enabled,
+            a.object_id objectId,
+            a.object_key objectKey,
+            a.create_id createId,
+            CONVERT(a.create_time, char) createTime,
+            a.last_update_id lastUpdateId,
+            CONVERT(a.last_update_time, char) lastUpdateTime
+        FROM
+            auto_schedule_task a
+        <where>
+            <if test="tenantId != '' and tenantId != null">
+                AND a.tenant_id = #{tenantId}
+            </if>
+            <if test="objectId != null and objectId != ''">
+                AND a.object_id = #{objectId}
+            </if>
+            <if test="objectKey != null and objectKey != ''">
+                AND a.object_key = #{objectKey}
+            </if>
+            <if test="enabled != null">
+                AND a.enabled = #{enabled}
+            </if>
+            <if test="sqlExtract != '' and sqlExtract != null">
+                ${sqlExtract}
+            </if>
+            <if test="keyword != '' and keyword != null">
+                AND a.`name` like '%${keyword}%'
+            </if>
+        </where>
+        ORDER BY a.create_time DESC
+    </select>
+
+</mapper>
