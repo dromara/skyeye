@@ -31,6 +31,7 @@ import com.skyeye.patrol.service.PatrolTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -137,8 +138,8 @@ public class PatrolTaskServiceImpl extends SkyeyeBusinessServiceImpl<PatrolTaskD
         Map<String, List<String>> pointIdMap = patrolTaskPointService.selectMapByParentId(taskIdList);
         Map<String, List<String>> itemIdMap = patrolTaskItemService.selectMapByParentId(taskIdList);
         taskList.forEach(task -> {
-            task.setPointId(pointIdMap.get(task.getId()));
-            task.setItemId(itemIdMap.get(task.getId()));
+            task.setPointId(pointIdMap.getOrDefault(task.getId(), Collections.emptyList()));
+            task.setItemId(itemIdMap.getOrDefault(task.getId(), Collections.emptyList()));
         });
         return taskList;
     }
@@ -166,11 +167,23 @@ public class PatrolTaskServiceImpl extends SkyeyeBusinessServiceImpl<PatrolTaskD
             .collect(Collectors.toList());
         Map<String, List<String>> pointIdMap = patrolTaskPointService.selectMapByParentId(taskIds);
         Map<String, List<String>> itemIdMap = patrolTaskItemService.selectMapByParentId(taskIds);
-        List<String> allPointIds = pointIdMap.values().stream().flatMap(List::stream).distinct().collect(Collectors.toList());
-        List<String> allItemIds = itemIdMap.values().stream().flatMap(List::stream).distinct().collect(Collectors.toList());
-        Map<String, PatrolPoint> pointMap = patrolPointService.selectByIds(allPointIds.toArray(new String[]{})).stream()
+        List<String> allPointIds = pointIdMap.values().stream()
+            .filter(CollectionUtil::isNotEmpty)
+            .flatMap(List::stream)
+            .distinct()
+            .collect(Collectors.toList());
+        List<String> allItemIds = itemIdMap.values().stream()
+            .filter(CollectionUtil::isNotEmpty)
+            .flatMap(List::stream)
+            .distinct()
+            .collect(Collectors.toList());
+        Map<String, PatrolPoint> pointMap = CollectionUtil.isEmpty(allPointIds)
+            ? Collections.emptyMap()
+            : patrolPointService.selectByIds(allPointIds.toArray(new String[]{})).stream()
             .collect(Collectors.toMap(PatrolPoint::getId, p -> p, (a, b) -> a));
-        Map<String, PatrolItem> itemMap = patrolItemService.selectByIds(allItemIds.toArray(new String[]{})).stream()
+        Map<String, PatrolItem> itemMap = CollectionUtil.isEmpty(allItemIds)
+            ? Collections.emptyMap()
+            : patrolItemService.selectByIds(allItemIds.toArray(new String[]{})).stream()
             .collect(Collectors.toMap(PatrolItem::getId, i -> i, (a, b) -> a));
         beans.forEach(bean -> {
             String id = bean.get("id").toString();
@@ -178,8 +191,13 @@ public class PatrolTaskServiceImpl extends SkyeyeBusinessServiceImpl<PatrolTaskD
             List<String> itemIds = itemIdMap.get(id);
             bean.put("pointId", pointIds);
             bean.put("itemId", itemIds);
-            bean.put("pointMation", pointIds.stream().map(pointMap::get).collect(Collectors.toList()));
-            bean.put("itemMation", itemIds.stream().map(itemMap::get).collect(Collectors.toList()));
+            // 关联表无点位/项目时跳过，避免空指针
+            if (CollectionUtil.isNotEmpty(pointIds)) {
+                bean.put("pointMation", pointIds.stream().map(pointMap::get).collect(Collectors.toList()));
+            }
+            if (CollectionUtil.isNotEmpty(itemIds)) {
+                bean.put("itemMation", itemIds.stream().map(itemMap::get).collect(Collectors.toList()));
+            }
         });
         // 设置执行人信息
         List<String> executorIds = beans.stream()
@@ -209,11 +227,15 @@ public class PatrolTaskServiceImpl extends SkyeyeBusinessServiceImpl<PatrolTaskD
         // 设置计划信息
         patrolPlanService.setDataMation(patrolTask, PatrolTask::getPlanId);
         // 设置点位信息
-        List<PatrolPoint> points = patrolPointService.selectByIds(patrolTask.getPointId().toArray(new String[]{}));
-        patrolTask.setPointMation(points);
+        if (CollectionUtil.isNotEmpty(patrolTask.getPointId())) {
+            List<PatrolPoint> points = patrolPointService.selectByIds(patrolTask.getPointId().toArray(new String[]{}));
+            patrolTask.setPointMation(points);
+        }
         // 设置项目信息
-        List<PatrolItem> items = patrolItemService.selectByIds(patrolTask.getItemId().toArray(new String[]{}));
-        patrolTask.setItemMation(items);
+        if (CollectionUtil.isNotEmpty(patrolTask.getItemId())) {
+            List<PatrolItem> items = patrolItemService.selectByIds(patrolTask.getItemId().toArray(new String[]{}));
+            patrolTask.setItemMation(items);
+        }
         // 设置执行人信息
         if (StrUtil.isNotEmpty(patrolTask.getExecutorId())) {
             Map<String, Map<String, Object>> executorMap = iAuthUserService.queryUserMationListByStaffIds(
