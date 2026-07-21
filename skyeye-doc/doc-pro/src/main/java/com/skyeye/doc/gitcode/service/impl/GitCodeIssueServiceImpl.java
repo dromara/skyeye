@@ -150,7 +150,7 @@ public class GitCodeIssueServiceImpl extends SkyeyeBusinessServiceImpl<GitCodeIs
         GitCodeIssue gitCodeIssue = super.selectById(id);
         codeVersionService.setDataMation(gitCodeIssue, GitCodeIssue::getVersionId);
         DocMember docMember = docMemberService.selectById(gitCodeIssue.getCreateId());
-        if (ObjectUtil.isNotEmpty(docMember)) {
+        if (ObjectUtil.isNotEmpty(docMember) && StrUtil.isNotBlank(docMember.getId())) {
             gitCodeIssue.setMemberName(docMember.getName().substring(0, 1).toUpperCase() + "**");
             gitCodeIssue.setPlanetNum(docMember.getPlanetNum());
         }
