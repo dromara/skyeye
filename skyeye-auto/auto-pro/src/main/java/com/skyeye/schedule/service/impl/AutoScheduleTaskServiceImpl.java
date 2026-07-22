@@ -87,7 +87,8 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
         autoScheduleTaskModuleService.deleteByParentId(entity.getId());
         autoScheduleTaskCaseService.deleteByParentId(entity.getId());
         if (AutoScheduleExecuteType.MODULE.getKey().equals(entity.getExecuteType())) {
-            autoScheduleTaskModuleService.saveList(entity.getId(), entity.getModuleIdList());
+            List<String> moduleIds = autoModuleService.queryAllChildIdsByParentId(entity.getModuleIdList());
+            autoScheduleTaskModuleService.saveList(entity.getId(), moduleIds);
         } else if (AutoScheduleExecuteType.CASE.getKey().equals(entity.getExecuteType())) {
             autoScheduleTaskCaseService.saveList(entity.getId(), entity.getCaseIdList());
         }

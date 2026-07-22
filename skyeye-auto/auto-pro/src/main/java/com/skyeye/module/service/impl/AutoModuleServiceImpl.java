@@ -115,4 +115,13 @@ public class AutoModuleServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoModuleD
         outputObject.setBeans(result);
         outputObject.settotal(result.size());
     }
+
+    @Override
+    public List<String> queryAllChildIdsByParentId(List<String> ids) {
+        if (CollectionUtil.isEmpty(ids)) {
+            return CollectionUtil.newArrayList();
+        }
+        String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
+        return skyeyeBaseMapper.queryAllChildIdsByParentId(ids, tenantId);
+    }
 }
