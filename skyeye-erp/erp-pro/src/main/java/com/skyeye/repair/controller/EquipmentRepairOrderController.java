@@ -67,8 +67,8 @@ public class EquipmentRepairOrderController {
     @ApiOperation(id = "insertEquipmentRepairResult", value = "添加维修结果", method = "POST", allUse = "1")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),
-        @ApiImplicitParam(id = "isRepaired", name = "isRepaired", value = "是否已进行维修", enumClass = WhetherEnum.class, required = "required,num"),
-        @ApiImplicitParam(id = "isReplaceSpare", name = "isReplaceSpare", value = "是否已更换配件", enumClass = WhetherEnum.class, required = "num"),
+        @ApiImplicitParam(id = "isRepaired", name = "isRepaired", value = "是否进行维修", enumClass = WhetherEnum.class, required = "required,num"),
+        @ApiImplicitParam(id = "isReplaceSpare", name = "isReplaceSpare", value = "是否更换配件", enumClass = WhetherEnum.class, required = "num"),
         @ApiImplicitParam(id = "faultReason", name = "faultReason", value = "故障原因", enumClass = EquipmentRepairFaultReason.class, required = "num"),
         @ApiImplicitParam(id = "cancelReason", name = "cancelReason", value = "作废原因"),
         @ApiImplicitParam(id = "supplierId", name = "supplierId", value = "供应商"),
