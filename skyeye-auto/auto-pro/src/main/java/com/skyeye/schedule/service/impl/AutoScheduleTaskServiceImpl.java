@@ -14,6 +14,7 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
+import com.skyeye.history.service.AutoHistoryCaseService;
 import com.skyeye.module.service.AutoModuleService;
 import com.skyeye.schedule.classenum.AutoScheduleAuthEnum;
 import com.skyeye.schedule.classenum.AutoScheduleExecuteType;
@@ -54,6 +55,9 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
 
     @Autowired
     private AutoModuleService autoModuleService;
+
+    @Autowired
+    private AutoHistoryCaseService autoHistoryCaseService;
 
     @Override
     public Class getAuthEnumClass() {
@@ -145,11 +149,27 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
         if (CollectionUtil.isEmpty(caseIds)) {
             return;
         }
+        // 全量 / 按模块 / 按用例：走用例原有执行链路，等当前用例结束后再执行下一个
         for (String caseId : caseIds) {
             try {
                 autoCaseService.executeCase(caseId, true);
+                waitCaseFinished(caseId);
             } catch (Exception e) {
                 log.warn("定时任务[{}]执行用例[{}]失败: {}", id, caseId, e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * 等待用例执行结束（执行中历史消失），再继续下一个
+     */
+    private void waitCaseFinished(String caseId) {
+        while (autoHistoryCaseService.checkUserCaseRuning(caseId)) {
+            try {
+                Thread.sleep(500L);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new CustomException("等待用例执行完成被中断");
             }
         }
     }
@@ -171,7 +191,7 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
         if (AutoScheduleExecuteType.CASE.getKey().equals(executeType)) {
             return CollectionUtil.isEmpty(task.getCaseIdList()) ? new ArrayList<>() : task.getCaseIdList();
         }
-        throw new CustomException("不支持的执行范围");
+        return Collections.emptyList();
     }
 
     private List<String> queryCaseIdsByObjectId(String objectId, List<String> moduleIds) {
