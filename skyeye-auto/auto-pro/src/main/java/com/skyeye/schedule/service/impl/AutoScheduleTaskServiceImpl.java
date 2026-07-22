@@ -12,11 +12,13 @@ import com.skyeye.base.business.service.impl.SkyeyeTeamAuthServiceImpl;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
+import com.skyeye.module.service.AutoModuleService;
 import com.skyeye.schedule.classenum.AutoScheduleAuthEnum;
 import com.skyeye.schedule.classenum.AutoScheduleExecuteType;
 import com.skyeye.schedule.dao.AutoScheduleTaskDao;
 import com.skyeye.schedule.entity.AutoScheduleTask;
 import com.skyeye.schedule.service.AutoScheduleTaskCaseService;
+import com.skyeye.schedule.service.AutoScheduleTaskModuleService;
 import com.skyeye.schedule.service.AutoScheduleTaskService;
 import com.skyeye.usercase.service.AutoCaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,13 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
     private AutoScheduleTaskCaseService autoScheduleTaskCaseService;
 
     @Autowired
+    private AutoScheduleTaskModuleService autoScheduleTaskModuleService;
+
+    @Autowired
     private AutoCaseService autoCaseService;
+
+    @Autowired
+    private AutoModuleService autoModuleService;
 
     @Override
     public Class getAuthEnumClass() {
@@ -64,6 +72,10 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
 
     @Override
     public void validatorEntity(AutoScheduleTask entity) {
+        if (AutoScheduleExecuteType.MODULE.getKey().equals(entity.getExecuteType())
+            && CollectionUtil.isEmpty(entity.getModuleIdList())) {
+            throw new CustomException("按模块执行时，请至少选择一个模块");
+        }
         if (AutoScheduleExecuteType.CASE.getKey().equals(entity.getExecuteType())
             && CollectionUtil.isEmpty(entity.getCaseIdList())) {
             throw new CustomException("按用例执行时，请至少选择一个用例");
@@ -72,8 +84,11 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
 
     @Override
     public void writePostpose(AutoScheduleTask entity, String userId) {
+        autoScheduleTaskModuleService.deleteByParentId(entity.getId());
         autoScheduleTaskCaseService.deleteByParentId(entity.getId());
-        if (AutoScheduleExecuteType.CASE.getKey().equals(entity.getExecuteType())) {
+        if (AutoScheduleExecuteType.MODULE.getKey().equals(entity.getExecuteType())) {
+            autoScheduleTaskModuleService.saveList(entity.getId(), entity.getModuleIdList());
+        } else if (AutoScheduleExecuteType.CASE.getKey().equals(entity.getExecuteType())) {
             autoScheduleTaskCaseService.saveList(entity.getId(), entity.getCaseIdList());
         }
         super.writePostpose(entity, userId);
@@ -81,12 +96,14 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
 
     @Override
     protected void deletePostpose(AutoScheduleTask entity) {
+        autoScheduleTaskModuleService.deleteByParentId(entity.getId());
         autoScheduleTaskCaseService.deleteByParentId(entity.getId());
     }
 
     @Override
     public AutoScheduleTask getDataFromDb(String id) {
         AutoScheduleTask task = super.getDataFromDb(id);
+        task.setModuleIdList(autoScheduleTaskModuleService.selectByParentId(id));
         task.setCaseIdList(autoScheduleTaskCaseService.selectByParentId(id));
         return task;
     }
@@ -96,6 +113,9 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
         AutoScheduleTask task = super.selectById(id);
         if (task == null) {
             return null;
+        }
+        if (CollectionUtil.isNotEmpty(task.getModuleIdList())) {
+            task.setModuleMationList(autoModuleService.selectByIds(task.getModuleIdList().toArray(new String[]{})));
         }
         if (CollectionUtil.isNotEmpty(task.getCaseIdList())) {
             task.setCaseMationList(autoCaseService.selectByIds(task.getCaseIdList().toArray(new String[]{})));
