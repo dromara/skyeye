@@ -13,6 +13,7 @@ import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeTeamAuth;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.module.entity.AutoModule;
 import com.skyeye.schedule.classenum.AutoScheduleExecuteType;
 import com.skyeye.schedule.classenum.AutoScheduleFrequency;
 import com.skyeye.usercase.entity.AutoCase;
@@ -68,6 +69,14 @@ public class AutoScheduleTask extends SkyeyeTeamAuth {
     @TableField(value = "enabled")
     @ApiModelProperty(value = "状态", enumClass = EnableEnum.class, required = "required,num")
     private Integer enabled;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "关联的模块ID列表")
+    private List<String> moduleIdList;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "关联的模块信息列表")
+    private List<AutoModule> moduleMationList;
 
     @TableField(exist = false)
     @ApiModelProperty(value = "关联的用例ID列表")
