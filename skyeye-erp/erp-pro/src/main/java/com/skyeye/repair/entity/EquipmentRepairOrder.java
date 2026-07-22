@@ -141,7 +141,7 @@ public class EquipmentRepairOrder extends OperatorUserInfo {
     private Map<String, Object> auditOpinionMation;
 
     @TableField(value = "is_repaired")
-    @ApiModelProperty(value = "是否已进行维修", enumClass = WhetherEnum.class, required = "num")
+    @ApiModelProperty(value = "是否进行维修", enumClass = WhetherEnum.class, required = "num")
     private Integer isRepaired;
 
     @TableField(value = "fault_reason")
@@ -153,7 +153,7 @@ public class EquipmentRepairOrder extends OperatorUserInfo {
     private Map<String, Object> faultReasonMation;
 
     @TableField(value = "is_replace_spare")
-    @ApiModelProperty(value = "是否已更换配件", enumClass = WhetherEnum.class, required = "num")
+    @ApiModelProperty(value = "是否更换配件", enumClass = WhetherEnum.class, required = "num")
     private Integer isReplaceSpare;
 
     @TableField(value = "supplier_id")

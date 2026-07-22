@@ -4,19 +4,23 @@
 
 package com.skyeye.repair.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
-import com.skyeye.equipment.service.EquipmentService;
+import com.skyeye.eve.service.ISysDictDataService;
+import com.skyeye.repair.classenum.EquipmentRepairOrderState;
 import com.skyeye.repair.dao.EquipmentRepairOrderDao;
 import com.skyeye.repair.entity.EquipmentRepairOrder;
-import com.skyeye.repair.service.EquipmentRepairOrderService;
+import com.skyeye.repair.entity.EquipmentSparePartUsageDetail;
 import com.skyeye.repair.service.EquipmentRepairStatisticsService;
+import com.skyeye.repair.service.EquipmentSparePartUsageDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +29,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * 报修维修统计服务层（月度趋势按派工时间 {@link EquipmentRepairOrder#getDispatchTime()} 统计）
  *
  * @author skyeye云系列--卫志强
  * @Copyright 2026 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
@@ -36,55 +40,123 @@ import java.util.stream.Collectors;
 @Service
 public class EquipmentRepairStatisticsServiceImpl implements EquipmentRepairStatisticsService {
 
+    private static final long HOUR_MILLIS = TimeUnit.HOURS.toMillis(1);
+
+    private static final String OTHER_LABEL = "其他";
+
+    private static final EquipmentRepairOrderState[] STATE_ORDER = {
+        EquipmentRepairOrderState.BE_DISPATCHED,
+        EquipmentRepairOrderState.PENDING_ORDERS,
+        EquipmentRepairOrderState.BE_COMPLETED,
+        EquipmentRepairOrderState.BE_EVALUATED,
+        EquipmentRepairOrderState.AUDIT,
+        EquipmentRepairOrderState.COMPLATE
+    };
+
     @Autowired
     private EquipmentRepairOrderDao equipmentRepairOrderDao;
 
     @Autowired
-    private EquipmentService equipmentService;
+    private EquipmentSparePartUsageDetailService equipmentSparePartUsageDetailService;
 
     @Autowired
-    private EquipmentRepairOrderService equipmentRepairOrderService;
+    private ISysDictDataService iSysDictDataService;
 
     @Override
-    public void queryRepairMonthlyTrendStats(InputObject inputObject, OutputObject outputObject) {
+    public void queryEquipmentRepairOrderTrendStats(InputObject inputObject, OutputObject outputObject) {
         TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
-        String startTime;
-        String endTime;
-        if (StrUtil.isNotEmpty(tableSelectInfo.getStartTime()) && StrUtil.isNotEmpty(tableSelectInfo.getEndTime())) {
-            startTime = tableSelectInfo.getStartTime();
-            endTime = tableSelectInfo.getEndTime();
-        } else {
-            startTime = DateUtil.formatDate2Str(
+        if (StrUtil.isEmpty(tableSelectInfo.getStartTime()) || StrUtil.isEmpty(tableSelectInfo.getEndTime())) {
+            tableSelectInfo.setStartTime(DateUtil.formatDate2Str(
                 DateUtil.getAfDate(DateUtil.getPointTime(DateUtil.getYmdTimeAndToString(), DateUtil.YYYY_MM_DD), -30, "d"),
-                DateUtil.YYYY_MM_DD);
-            endTime = DateUtil.getYmdTimeAndToString();
+                DateUtil.YYYY_MM_DD));
+            tableSelectInfo.setEndTime(DateUtil.getYmdTimeAndToString());
         }
 
-        String startMonth = DateUtil.formatDate2Str(DateUtil.getPointTime(startTime, DateUtil.YYYY_MM_DD), DateUtil.YYYY_MM);
-        String endMonth = DateUtil.formatDate2Str(DateUtil.getPointTime(endTime, DateUtil.YYYY_MM_DD), DateUtil.YYYY_MM);
-        List<String> monthList = DateUtil.getMonth(startMonth, endMonth);
-
-        QueryWrapper<EquipmentRepairOrder> queryWrapper = new QueryWrapper<>();
-        queryWrapper.ge(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getServiceTime), startTime)
-            .le(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getServiceTime), endTime);
-
+        List<String> dayList = DateUtil.getDays(tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+        QueryWrapper<EquipmentRepairOrder> queryWrapper = buildTimeRangeWrapper(
+            tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+        // 1. 新增的维修单
         List<EquipmentRepairOrder> orderList = equipmentRepairOrderDao.selectList(queryWrapper);
-        long total = orderList.size();
-
-        Map<String, Long> monthCountMap = orderList.stream()
-            .filter(order -> StrUtil.isNotEmpty(order.getServiceTime()))
+        Map<String, Long> collect = orderList.stream()
+            .filter(order -> StrUtil.isNotEmpty(order.getCreateTime()))
             .collect(Collectors.groupingBy(order -> {
-                Date pointTime = DateUtil.getPointTime(order.getServiceTime(), DateUtil.YYYY_MM_DD);
-                return DateUtil.formatDate2Str(pointTime, DateUtil.YYYY_MM);
+                Date pointTime = DateUtil.getPointTime(order.getCreateTime(), DateUtil.YYYY_MM_DD);
+                return DateUtil.formatDate2Str(pointTime, DateUtil.YYYY_MM_DD);
             }, Collectors.counting()));
+        // 2. 完工的维修单
+        queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getState), EquipmentRepairOrderState.COMPLATE.getKey());
+        List<EquipmentRepairOrder> completedList = equipmentRepairOrderDao.selectList(queryWrapper);
+        Map<String, Long> collect2 = completedList.stream()
+            .filter(order -> StrUtil.isNotEmpty(order.getCreateTime()))
+            .collect(Collectors.groupingBy(order -> {
+                Date pointTime = DateUtil.getPointTime(order.getCreateTime(), DateUtil.YYYY_MM_DD);
+                return DateUtil.formatDate2Str(pointTime, DateUtil.YYYY_MM_DD);
+            }, Collectors.counting()));
+
+        List<Long> allNewOrders = new ArrayList<>();
+        List<Long> completedOrders = new ArrayList<>();
+        Long defaultValue = Long.valueOf(CommonNumConstants.NUM_ZERO);
+        for (String day : dayList) {
+            allNewOrders.add(collect.getOrDefault(day, defaultValue) - collect2.getOrDefault(day, defaultValue));
+            completedOrders.add(collect2.getOrDefault(day, defaultValue));
+        }
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("allNewOrders", allNewOrders);
+        resultMap.put("completedOrders", completedOrders);
+        resultMap.put("dayList", dayList);
+
+        outputObject.setBean(resultMap);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryOverviewEquipmentRepairOrder(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        QueryWrapper<EquipmentRepairOrder> queryWrapper = buildTimeRangeWrapper(
+            tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+
+        Long totalOrders = equipmentRepairOrderDao.selectCount(queryWrapper);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("totalOrders", totalOrders);
+
+        queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getState), EquipmentRepairOrderState.COMPLATE.getKey());
+        Long completedOrders = equipmentRepairOrderDao.selectCount(queryWrapper);
+        resultMap.put("completedOrders", completedOrders);
+
+        List<EquipmentRepairOrder> completedList = completedOrders > CommonNumConstants.NUM_ZERO
+            ? equipmentRepairOrderDao.selectList(queryWrapper) : new ArrayList<>();
+        resultMap.put("useCount", querySparePartUseCount(completedList));
+
+        if (completedOrders > CommonNumConstants.NUM_ZERO) {
+            String totalHours = sumCompletedProcessHours(completedList);
+            resultMap.put("avgProcessTime", CalculationUtil.divide(totalHours,
+                String.valueOf(completedOrders), CommonNumConstants.NUM_TWO));
+        } else {
+            resultMap.put("avgProcessTime", CommonNumConstants.NUM_ZERO);
+        }
+
+        outputObject.setBean(resultMap);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryRepairOrderStateStats(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        QueryWrapper<EquipmentRepairOrder> queryWrapper = buildTimeRangeWrapper(
+            tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+
+        List<EquipmentRepairOrder> list = equipmentRepairOrderDao.selectList(queryWrapper);
+        long total = list.size();
+        Map<Integer, Long> stateCountMap = list.stream()
+            .filter(o -> o.getState() != null)
+            .collect(Collectors.groupingBy(EquipmentRepairOrder::getState, Collectors.counting()));
 
         List<String> xAxisData = new ArrayList<>();
         List<Long> seriesData = new ArrayList<>();
-        Long defaultValue = Long.valueOf(CommonNumConstants.NUM_ZERO);
-        for (String ym : monthList) {
-            Date ymDate = DateUtil.getPointTime(ym, DateUtil.YYYY_MM);
-            xAxisData.add(DateUtil.formatDate2Str(ymDate, "yyyy年MM月"));
-            seriesData.add(monthCountMap.getOrDefault(ym, defaultValue));
+        for (EquipmentRepairOrderState state : STATE_ORDER) {
+            xAxisData.add(state.getValue());
+            seriesData.add(stateCountMap.getOrDefault(state.getKey(), 0L));
         }
 
         Map<String, Object> result = new HashMap<>();
@@ -97,34 +169,37 @@ public class EquipmentRepairStatisticsServiceImpl implements EquipmentRepairStat
     }
 
     @Override
-    public void queryRepairStatsByEquipmentName(InputObject inputObject, OutputObject outputObject) {
-        QueryWrapper<EquipmentRepairOrder> queryWrapper = new QueryWrapper<>();
+    public void queryRepairOrderStatsByUrgency(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        QueryWrapper<EquipmentRepairOrder> queryWrapper = buildTimeRangeWrapper(
+            tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
 
-        List<EquipmentRepairOrder> orderList = equipmentRepairOrderDao.selectList(queryWrapper);
-        long total = orderList.size();
+        List<EquipmentRepairOrder> list = equipmentRepairOrderDao.selectList(queryWrapper);
+        long total = list.size();
+        iSysDictDataService.setDataMation(list, EquipmentRepairOrder::getUrgencyId);
 
-        equipmentService.setDataMation(orderList, EquipmentRepairOrder::getEquipmentId);
+        Map<String, Long> urgencyStats = list.stream()
+            .collect(Collectors.groupingBy(
+                o -> StrUtil.isNotEmpty(o.getUrgencyId()) ? o.getUrgencyId() : OTHER_LABEL,
+                Collectors.counting()));
 
-        // 按 equipmentId 分组统计
-        Map<String, Long> equipmentStats = orderList.stream()
-            .collect(Collectors.groupingBy(EquipmentRepairOrder::getEquipmentId, Collectors.counting()));
-
-        Map<String, String> equipmentIdToName = new HashMap<>();
-        for (EquipmentRepairOrder order : orderList) {
-            if (equipmentIdToName.containsKey(order.getEquipmentId())) {
+        Map<String, String> urgencyIdToName = new HashMap<>();
+        urgencyIdToName.put(OTHER_LABEL, OTHER_LABEL);
+        for (EquipmentRepairOrder bean : list) {
+            if (StrUtil.isEmpty(bean.getUrgencyId()) || urgencyIdToName.containsKey(bean.getUrgencyId())) {
                 continue;
             }
-            Map<String, Object> equipmentMation = order.getEquipmentMation();
-            String name = equipmentMation != null && StrUtil.isNotEmpty(String.valueOf(equipmentMation.get("name")))
-                ? String.valueOf(equipmentMation.get("name"))
-                : order.getEquipmentId();
-            equipmentIdToName.put(order.getEquipmentId(), name);
+            String name = null;
+            if (bean.getUrgencyMation() != null && bean.getUrgencyMation().get("dictName") != null) {
+                name = bean.getUrgencyMation().get("dictName").toString();
+            }
+            urgencyIdToName.put(bean.getUrgencyId(), StrUtil.isNotBlank(name) ? name : bean.getUrgencyId());
         }
 
         List<String> xAxisData = new ArrayList<>();
         List<Long> seriesData = new ArrayList<>();
-        for (Map.Entry<String, Long> entry : equipmentStats.entrySet()) {
-            xAxisData.add(equipmentIdToName.getOrDefault(entry.getKey(), entry.getKey()));
+        for (Map.Entry<String, Long> entry : urgencyStats.entrySet()) {
+            xAxisData.add(urgencyIdToName.getOrDefault(entry.getKey(), entry.getKey()));
             seriesData.add(entry.getValue());
         }
 
@@ -137,8 +212,55 @@ public class EquipmentRepairStatisticsServiceImpl implements EquipmentRepairStat
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
-    @Override
-    public void queryPageList(InputObject inputObject, OutputObject outputObject) {
-        equipmentRepairOrderService.queryPageList(inputObject, outputObject);
+    private QueryWrapper<EquipmentRepairOrder> buildTimeRangeWrapper(String startTime, String endTime) {
+        QueryWrapper<EquipmentRepairOrder> queryWrapper = new QueryWrapper<>();
+        if (StrUtil.isNotEmpty(startTime) && StrUtil.isNotEmpty(endTime)) {
+            queryWrapper.ge(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getCreateTime), startTime)
+                .le(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getCreateTime), endTime);
+        }
+        return queryWrapper;
+    }
+
+    private String querySparePartUseCount(List<EquipmentRepairOrder> completedList) {
+        String total = CommonNumConstants.NUM_ZERO.toString();
+        if (CollectionUtil.isEmpty(completedList)) {
+            return total;
+        }
+        List<String> orderIds = completedList.stream().map(EquipmentRepairOrder::getId).collect(Collectors.toList());
+        QueryWrapper<EquipmentSparePartUsageDetail> detailWrapper = new QueryWrapper<>();
+        detailWrapper.in(MybatisPlusUtil.toColumns(EquipmentSparePartUsageDetail::getParentId), orderIds);
+        List<EquipmentSparePartUsageDetail> detailList = equipmentSparePartUsageDetailService.list(detailWrapper);
+        if (CollectionUtil.isEmpty(detailList)) {
+            return total;
+        }
+        for (EquipmentSparePartUsageDetail detail : detailList) {
+            if (StrUtil.isNotEmpty(detail.getOperNumber())) {
+                total = CalculationUtil.add(CommonNumConstants.NUM_TWO, total, detail.getOperNumber());
+            }
+        }
+        return total;
+    }
+
+    private String sumCompletedProcessHours(List<EquipmentRepairOrder> completedList) {
+        String totalHours = CommonNumConstants.NUM_ZERO.toString();
+        for (EquipmentRepairOrder order : completedList) {
+            String finishTime = order.getRepairFinishTime();
+            String startTime = order.getServiceTime();
+            if (StrUtil.isEmpty(finishTime) || StrUtil.isEmpty(startTime)) {
+                continue;
+            }
+            try {
+                Date finish = DateUtil.getPointTime(finishTime, DateUtil.YYYY_MM_DD_HH_MM_SS);
+                Date start = DateUtil.getPointTime(startTime, DateUtil.YYYY_MM_DD_HH_MM_SS);
+                if (finish == null || start == null || finish.before(start)) {
+                    continue;
+                }
+                double hours = (finish.getTime() - start.getTime()) * 1.0 / HOUR_MILLIS;
+                totalHours = CalculationUtil.add(CommonNumConstants.NUM_TWO, totalHours, String.valueOf(hours));
+            } catch (Exception ignored) {
+                // 时间格式异常的工单跳过
+            }
+        }
+        return totalHours;
     }
 }
