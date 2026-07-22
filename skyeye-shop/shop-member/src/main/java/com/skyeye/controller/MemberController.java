@@ -93,4 +93,10 @@ public class MemberController {
         memberService.updateCurrentLoginMemberAvatar(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryCurrentLoginMember", value = "获取当前登录会员信息", method = "POST", allUse = "2")
+    @RequestMapping("/post/MemberController/queryCurrentLoginMember")
+    public void queryCurrentLoginMember(InputObject inputObject, OutputObject outputObject) {
+        memberService.queryCurrentLoginMember(inputObject, outputObject);
+    }
+
 }

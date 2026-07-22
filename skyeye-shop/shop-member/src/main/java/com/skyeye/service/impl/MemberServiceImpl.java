@@ -196,4 +196,18 @@ public class MemberServiceImpl extends SkyeyeBusinessServiceImpl<MemberDao, Memb
         editCache(outputObject, userId);
     }
 
+    @Override
+    public void queryCurrentLoginMember(InputObject inputObject, OutputObject outputObject) {
+        String userId = inputObject.getLogParams().get("id").toString();
+        Member member = selectById(userId);
+        shopMemberLevelService.setDataMation(member, Member::getLevelId);
+        member.setWhetherPassword(StrUtil.isEmpty(member.getPassword())
+            ? WhetherEnum.DISABLE_USING.getKey()
+            : WhetherEnum.ENABLE_USING.getKey());
+        member.setPassword(null);
+        member.setPwdNumEnc(null);
+        outputObject.setBean(member);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
 }
