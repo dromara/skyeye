@@ -229,12 +229,21 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
         String id = map.get("id").toString();
         EquipmentRepairOrder dbOrder = selectById(id);
         if (ObjectUtil.equal(dbOrder.getState(), EquipmentRepairOrderState.BE_COMPLETED.getKey())) {
+            Integer isReplaceSpare = Integer.valueOf(map.get("isReplaceSpare").toString());
+            List<EquipmentSparePartUsageDetail> sparePartUsageList = CollectionUtil.newArrayList();
+            if (ObjectUtil.isNotEmpty(map.get("sparePartUsageList"))) {
+                sparePartUsageList = JSONUtil.toList(
+                    map.get("sparePartUsageList").toString(), EquipmentSparePartUsageDetail.class);
+            }
+            if (WhetherEnum.ENABLE_USING.getKey().equals(isReplaceSpare) && CollectionUtil.isEmpty(sparePartUsageList)) {
+                throw new CustomException("是否更换配件为是时，备件使用明细不能为空");
+            }
+
             UpdateWrapper<EquipmentRepairOrder> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq(CommonConstants.ID, id);
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getIsRepaired),
                 Integer.valueOf(map.get("isRepaired").toString()));
-            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getIsReplaceSpare),
-                Integer.valueOf(map.get("isReplaceSpare").toString()));
+            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getIsReplaceSpare), isReplaceSpare);
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getFaultReason),
                 Integer.valueOf(map.get("faultReason").toString()));
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getCancelReason),
@@ -248,9 +257,7 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getRepairFinishTime),
                 map.get("repairFinishTime").toString());
             update(updateWrapper);
-            if (ObjectUtil.isNotEmpty(map.get("sparePartUsageList"))) {
-                List<EquipmentSparePartUsageDetail> sparePartUsageList = JSONUtil.toList(
-                    map.get("sparePartUsageList").toString(), EquipmentSparePartUsageDetail.class);
+            if (CollectionUtil.isNotEmpty(sparePartUsageList)) {
                 // 编辑维修结果只落明细，不增减库存；待确认→确认时再扣
                 equipmentSparePartUsageDetailService.saveLinkList(dbOrder.getId(), sparePartUsageList);
             }

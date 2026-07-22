@@ -7,7 +7,6 @@ package com.skyeye.repair.controller;
 import com.skyeye.annotation.api.Api;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
-import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -24,23 +23,31 @@ public class EquipmentRepairStatisticsController {
     @Autowired
     private EquipmentRepairStatisticsService equipmentRepairStatisticsService;
 
-    @ApiOperation(id = "queryRepairMonthlyTrendStats", value = "报修维修统计-按派工时间月度趋势", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryEquipmentRepairOrderTrendStats", value = "报修维修统计-按创建时间日度趋势", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = TableSelectInfo.class)
-    @RequestMapping("/post/EquipmentRepairStatisticsController/queryRepairMonthlyTrendStats")
-    public void queryRepairMonthlyTrendStats(InputObject inputObject, OutputObject outputObject) {
-        equipmentRepairStatisticsService.queryRepairMonthlyTrendStats(inputObject, outputObject);
+    @RequestMapping("/post/EquipmentRepairStatisticsController/queryEquipmentRepairOrderTrendStats")
+    public void queryEquipmentRepairOrderTrendStats(InputObject inputObject, OutputObject outputObject) {
+        equipmentRepairStatisticsService.queryEquipmentRepairOrderTrendStats(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryRepairStatsByEquipmentName", value = "报修维修统计-按设备id统计工单数（全量）", method = "POST", allUse = "2")
-    @RequestMapping("/post/EquipmentRepairStatisticsController/queryRepairStatsByEquipmentName")
-    public void queryRepairStatsByEquipmentName(InputObject inputObject, OutputObject outputObject) {
-        equipmentRepairStatisticsService.queryRepairStatsByEquipmentName(inputObject, outputObject);
+    @ApiOperation(id = "queryOverviewEquipmentRepairOrder", value = "报修维修统计-总览卡片", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @RequestMapping("/post/EquipmentRepairStatisticsController/queryOverviewEquipmentRepairOrder")
+    public void queryOverviewEquipmentRepairOrder(InputObject inputObject, OutputObject outputObject) {
+        equipmentRepairStatisticsService.queryOverviewEquipmentRepairOrder(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryRepairOrderPageList", value = "报修维修统计-按设备分页查询维修单", method = "POST", allUse = "2")
-    @ApiImplicitParams(classBean = CommonPageInfo.class)
-    @RequestMapping("/post/EquipmentRepairStatisticsController/queryRepairOrderPageList")
-    public void queryRepairOrderPageList(InputObject inputObject, OutputObject outputObject) {
-        equipmentRepairStatisticsService.queryPageList(inputObject, outputObject);
+    @ApiOperation(id = "queryRepairOrderStateStats", value = "报修维修统计-按状态划分", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @RequestMapping("/post/EquipmentRepairStatisticsController/queryRepairOrderStateStats")
+    public void queryRepairOrderStateStats(InputObject inputObject, OutputObject outputObject) {
+        equipmentRepairStatisticsService.queryRepairOrderStateStats(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryRepairOrderStatsByUrgency", value = "报修维修统计-按紧急程度划分", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @RequestMapping("/post/EquipmentRepairStatisticsController/queryRepairOrderStatsByUrgency")
+    public void queryRepairOrderStatsByUrgency(InputObject inputObject, OutputObject outputObject) {
+        equipmentRepairStatisticsService.queryRepairOrderStatsByUrgency(inputObject, outputObject);
     }
 }

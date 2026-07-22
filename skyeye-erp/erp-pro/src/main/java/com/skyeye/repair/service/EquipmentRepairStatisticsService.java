@@ -15,17 +15,22 @@ import com.skyeye.common.object.OutputObject;
 public interface EquipmentRepairStatisticsService {
 
     /**
-     * 按派工时间的月度趋势（xAxisData + seriesData + total）
+     * 按创建时间的日度趋势（dayList + allNewOrders + completedOrders）
      */
-    void queryRepairMonthlyTrendStats(InputObject inputObject, OutputObject outputObject);
+    void queryEquipmentRepairOrderTrendStats(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 按设备 id 统计维修单数
+     * 报修维修总览卡片：总工单数、完成工单数、配件使用数、平均处理时长
      */
-    void queryRepairStatsByEquipmentName(InputObject inputObject, OutputObject outputObject);
+    void queryOverviewEquipmentRepairOrder(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 按设备分页查询维修单
+     * 按状态划分
      */
-    void queryPageList(InputObject inputObject, OutputObject outputObject);
+    void queryRepairOrderStateStats(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 按紧急程度划分
+     */
+    void queryRepairOrderStatsByUrgency(InputObject inputObject, OutputObject outputObject);
 }
