@@ -9,7 +9,6 @@ import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
-import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.doc.gitcode.entity.GitCodeIssue;
@@ -59,8 +58,7 @@ public class GitCodeIssueController {
 
     @ApiOperation(id = "updateIssueRecordBug", value = "更新Issue是否记录Bug", method = "PUT", allUse = "1")
     @ApiImplicitParams({
-        @ApiImplicitParam(id = "id", name = "id", value = "Issue ID", required = "required"),
-        @ApiImplicitParam(id = "recordBug", name = "recordBug", value = "是否记录Bug，0否1是", required = "required", enumClass = WhetherEnum.class)})
+        @ApiImplicitParam(id = "id", name = "id", value = "Issue ID", required = "required")})
     @RequestMapping("/post/GitCodeIssueController/updateIssueRecordBug")
     public void updateIssueRecordBug(InputObject inputObject, OutputObject outputObject) {
         gitCodeIssueService.updateIssueRecordBug(inputObject, outputObject);
@@ -68,8 +66,7 @@ public class GitCodeIssueController {
 
     @ApiOperation(id = "updateIssueRecordRequirement", value = "更新Issue是否记录需求", method = "PUT", allUse = "1")
     @ApiImplicitParams({
-        @ApiImplicitParam(id = "id", name = "id", value = "Issue ID", required = "required"),
-        @ApiImplicitParam(id = "recordRequirement", name = "recordRequirement", value = "是否记录需求，0否1是", required = "required", enumClass = WhetherEnum.class)})
+        @ApiImplicitParam(id = "id", name = "id", value = "Issue ID", required = "required")})
     @RequestMapping("/post/GitCodeIssueController/updateIssueRecordRequirement")
     public void updateIssueRecordRequirement(InputObject inputObject, OutputObject outputObject) {
         gitCodeIssueService.updateIssueRecordRequirement(inputObject, outputObject);
@@ -77,8 +74,7 @@ public class GitCodeIssueController {
 
     @ApiOperation(id = "updateIssueBugCompleted", value = "更新Issue的Bug是否完成", method = "PUT", allUse = "1")
     @ApiImplicitParams({
-        @ApiImplicitParam(id = "id", name = "id", value = "Issue ID", required = "required"),
-        @ApiImplicitParam(id = "bugCompleted", name = "bugCompleted", value = "Bug是否完成，0否1是", required = "required", enumClass = WhetherEnum.class)})
+        @ApiImplicitParam(id = "id", name = "id", value = "Issue ID", required = "required")})
     @RequestMapping("/post/GitCodeIssueController/updateIssueBugCompleted")
     public void updateIssueBugCompleted(InputObject inputObject, OutputObject outputObject) {
         gitCodeIssueService.updateIssueBugCompleted(inputObject, outputObject);
@@ -86,8 +82,7 @@ public class GitCodeIssueController {
 
     @ApiOperation(id = "updateIssueRequirementCompleted", value = "更新Issue的需求是否完成", method = "PUT", allUse = "1")
     @ApiImplicitParams({
-        @ApiImplicitParam(id = "id", name = "id", value = "Issue ID", required = "required"),
-        @ApiImplicitParam(id = "requirementCompleted", name = "requirementCompleted", value = "需求是否完成，0否1是", required = "required", enumClass = WhetherEnum.class)})
+        @ApiImplicitParam(id = "id", name = "id", value = "Issue ID", required = "required")})
     @RequestMapping("/post/GitCodeIssueController/updateIssueRequirementCompleted")
     public void updateIssueRequirementCompleted(InputObject inputObject, OutputObject outputObject) {
         gitCodeIssueService.updateIssueRequirementCompleted(inputObject, outputObject);

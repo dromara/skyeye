@@ -182,33 +182,31 @@ public class GitCodeIssueServiceImpl extends SkyeyeBusinessServiceImpl<GitCodeIs
 
     @Override
     public void updateIssueRecordBug(InputObject inputObject, OutputObject outputObject) {
-        updateIssueWhetherField(inputObject, "recordBug", MybatisPlusUtil.toColumns(GitCodeIssue::getRecordBug));
+        updateIssueWhetherField(inputObject, WhetherEnum.ENABLE_USING.getKey(),
+            MybatisPlusUtil.toColumns(GitCodeIssue::getRecordBug));
     }
 
     @Override
     public void updateIssueRecordRequirement(InputObject inputObject, OutputObject outputObject) {
-        updateIssueWhetherField(inputObject, "recordRequirement", MybatisPlusUtil.toColumns(GitCodeIssue::getRecordRequirement));
+        updateIssueWhetherField(inputObject, WhetherEnum.ENABLE_USING.getKey(),
+            MybatisPlusUtil.toColumns(GitCodeIssue::getRecordRequirement));
     }
 
     @Override
     public void updateIssueBugCompleted(InputObject inputObject, OutputObject outputObject) {
-        updateIssueWhetherField(inputObject, "bugCompleted", MybatisPlusUtil.toColumns(GitCodeIssue::getBugCompleted));
+        updateIssueWhetherField(inputObject, WhetherEnum.ENABLE_USING.getKey(),
+            MybatisPlusUtil.toColumns(GitCodeIssue::getBugCompleted));
     }
 
     @Override
     public void updateIssueRequirementCompleted(InputObject inputObject, OutputObject outputObject) {
-        updateIssueWhetherField(inputObject, "requirementCompleted", MybatisPlusUtil.toColumns(GitCodeIssue::getRequirementCompleted));
+        updateIssueWhetherField(inputObject, WhetherEnum.ENABLE_USING.getKey(),
+            MybatisPlusUtil.toColumns(GitCodeIssue::getRequirementCompleted));
     }
 
-    private void updateIssueWhetherField(InputObject inputObject, String fieldKey, String column) {
+    private void updateIssueWhetherField(InputObject inputObject, Integer fieldValue, String column) {
         Map<String, Object> params = inputObject.getParams();
         String id = params.get("id").toString();
-        Integer fieldValue = Integer.parseInt(params.get(fieldKey).toString());
-        if (!WhetherEnum.ENABLE_USING.getKey().equals(fieldValue)
-            && !WhetherEnum.DISABLE_USING.getKey().equals(fieldValue)) {
-            throw new CustomException("参数值无效，仅支持0或1");
-        }
-
         GitCodeIssue gitCodeIssue = selectById(id);
         if (ObjectUtil.isEmpty(gitCodeIssue) || StrUtil.isEmpty(gitCodeIssue.getId())) {
             throw new CustomException("Issue不存在");
