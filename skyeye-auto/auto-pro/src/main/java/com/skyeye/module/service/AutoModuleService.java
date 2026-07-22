@@ -9,6 +9,8 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.module.entity.AutoModule;
 
+import java.util.List;
+
 /**
  * @ClassName: AutoModuleService
  * @Description: 项目模块管理服务接口层
@@ -22,4 +24,6 @@ public interface AutoModuleService extends SkyeyeTeamAuthService<AutoModule> {
     void queryAutoModuleForTree(InputObject inputObject, OutputObject outputObject);
 
     void queryFirstAutoModuleList(InputObject inputObject, OutputObject outputObject);
+
+    List<String> queryAllChildIdsByParentId(List<String> ids);
 }
