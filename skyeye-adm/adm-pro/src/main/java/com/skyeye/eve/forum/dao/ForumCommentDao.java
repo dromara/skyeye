@@ -6,6 +6,10 @@ package com.skyeye.eve.forum.dao;
 
 import com.skyeye.eve.dao.SkyeyeBaseMapper;
 import com.skyeye.eve.forum.entity.ForumComment;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: ForumCommentDao
@@ -16,4 +20,20 @@ import com.skyeye.eve.forum.entity.ForumComment;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 public interface ForumCommentDao extends SkyeyeBaseMapper<ForumComment> {
+
+    /**
+     * 分页查询父评论id
+     */
+    List<Map<String, Object>> queryForumCommentList(@Param("forumId") String forumId);
+
+    /**
+     * 根据父id查询所有子节点id
+     */
+    List<String> queryAllChildIdsByParentId(@Param("ids") List<String> ids);
+
+    /**
+     * 根据id列表查询评论详情
+     */
+    List<Map<String, Object>> queryForumCommentListByIds(@Param("ids") List<String> ids);
+
 }
