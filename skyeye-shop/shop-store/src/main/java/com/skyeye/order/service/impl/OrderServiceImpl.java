@@ -435,6 +435,13 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         setAddressMationForList(list);
         outputObject.setBeans(JSONUtil.toList(JSONUtil.toJsonStr(list), null));
         outputObject.settotal(pages.getTotal());
+        // 复用子项已查的 shopMaterial（含 shopMaterialStore.isLaunchShop）
+        List<Map<String, Object>> shopMaterialStoreList = new ArrayList<>(list.stream()
+            .flatMap(order -> order.getOrderItemList().stream())
+            .filter(item -> StrUtil.isNotBlank(item.getMaterialStoreId()) && CollectionUtil.isNotEmpty(item.getShopMaterial()))
+            .collect(Collectors.toMap(OrderItem::getMaterialStoreId, OrderItem::getShopMaterial, (a, b) -> a, LinkedHashMap::new))
+            .values());
+        outputObject.setCustomBeans("ShopMaterialStoreList", shopMaterialStoreList);
     }
 
     @Override
