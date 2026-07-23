@@ -24,7 +24,7 @@ public interface TenantService extends SkyeyeBusinessService<Tenant> {
     void editTenantAccountNumber(String tenantId, Integer accountNumber);
 
     /**
-     * 将租户标记为「存在已审批通过的应用购买订单」（订单终审通过时调用）。
+     * 将租户标记为「存在已支付成功的应用购买订单」（订单支付完成后调用）。
      *
      * @param tenantId 租户 id
      */

@@ -249,13 +249,7 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
 
     @Override
     public void approvalEndIsSuccess(TenantAppBuyOrder entity) {
-        TenantAppBuyOrder tenantAppBuyOrder = selectById(entity.getId());
-        if (ObjectUtil.isEmpty(tenantAppBuyOrder) || StrUtil.isEmpty(tenantAppBuyOrder.getId())) {
-            throw new CustomException("订单不存在");
-        }
-        if (StrUtil.isNotEmpty(tenantAppBuyOrder.getBuyTenantId())) {
-            tenantService.markHasPassedAppBuyOrder(tenantAppBuyOrder.getBuyTenantId());
-        }
+        // 审批通过后订单进入待支付；标记租户「已购买」及席位/应用交付在支付完成后由 deliverOrderBenefits 处理
     }
 
     /**
@@ -499,6 +493,7 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
                 tenantAppLinkService.saveTenantAppLink(tenantAppBuyOrder.getBuyTenantId(), tenantAppBuyOrderYear.getAppId(), tenantAppBuyOrderYear.getAccountYear());
             });
         }
+        // 支付成功后才标记租户为「已购买」
         if (StrUtil.isNotEmpty(tenantAppBuyOrder.getBuyTenantId())) {
             tenantService.markHasPassedAppBuyOrder(tenantAppBuyOrder.getBuyTenantId());
         }
@@ -520,16 +515,16 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
         QueryWrapper<TenantAppBuyOrder> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(TenantAppBuyOrder::getBuyTenantId), tenantId);
         List<TenantAppBuyOrder> tenantAppBuyOrderList = list(queryWrapper);
-        // 2. 查询租户的总订单金额--审核通过的订单
+        // 2. 审批通过订单金额与数量（含待支付，非付费实收口径）
         BigDecimal totalPrice = tenantAppBuyOrderList.stream()
             .filter(this::isApprovedFlowableEntity)
             .map(bean -> new BigDecimal(bean.getAllPrice()))
             .reduce(BigDecimal.ZERO, BigDecimal::add);
-        // 3. 查询租户的总订单数量--审核通过的订单
+        // 3. 审批通过订单数量
         long totalCount = tenantAppBuyOrderList.stream()
             .filter(this::isApprovedFlowableEntity)
             .count();
-        // 4. 已支付订单金额与数量
+        // 4. 已支付订单金额与数量（付费统计口径）
         BigDecimal paidTotalPrice = tenantAppBuyOrderList.stream()
             .filter(this::isPaidBuyOrder)
             .map(bean -> new BigDecimal(bean.getAllPrice()))
