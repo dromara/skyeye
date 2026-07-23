@@ -15,7 +15,6 @@ import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeTeamAuth;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.module.entity.AutoModule;
-import com.skyeye.schedule.classenum.AutoScheduleExecuteResult;
 import com.skyeye.schedule.classenum.AutoScheduleExecuteType;
 import com.skyeye.schedule.classenum.AutoScheduleFrequency;
 import com.skyeye.usercase.entity.AutoCase;
@@ -73,7 +72,7 @@ public class AutoScheduleTask extends SkyeyeTeamAuth {
     private Integer enabled;
 
     @TableField(value = "execute_result", updateStrategy = FieldStrategy.NEVER, insertStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "最近执行结果", enumClass = AutoScheduleExecuteResult.class)
+    @ApiModelProperty(value = "最近执行结果：-1执行中；结束后为失败率0-100（失败数/总数*100）")
     private Integer executeResult;
 
     @TableField(exist = false)
