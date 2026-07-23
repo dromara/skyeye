@@ -28,6 +28,15 @@ public interface IShopMaterialNormsService {
      */
     List<Map<String, Object>> queryShopMaterialByIds(List<String> ids);
 
+    /**
+     * 根据商品id和门店id批量获取关系id（key: materialId_storeId, value: 关系id）
+     *
+     * @param materialIdList 商品id列表
+     * @param storeIdList    门店id列表（与商品id一一对应）
+     * @return
+     */
+    Map<String, Object> queryShopMaterialMapByMaterialIdAndStoreId(List<String> materialIdList, List<String> storeIdList);
+
     List<Map<String, Object>> queryAllShopMaterialListForChoose();
 
 }

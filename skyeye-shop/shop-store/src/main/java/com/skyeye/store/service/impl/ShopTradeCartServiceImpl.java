@@ -107,11 +107,21 @@ public class ShopTradeCartServiceImpl extends SkyeyeBusinessServiceImpl<ShopTrad
         }
         iMaterialService.setDataMation(beans, ShopTradeCart::getMaterialId);
         // 查询店铺信息
-        List<String> storeIdList = beans.stream().map(ShopTradeCart::getStoreId).collect(Collectors.toList());
+        List<String> storeIdList = beans.stream().map(ShopTradeCart::getStoreId).filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
         List<ShopStore> shopStoreList = shopStoreService.selectByIds(storeIdList.toArray(new String[]{}));
         Map<String, Object> shopStoreMap = shopStoreList.stream().collect(Collectors.toMap(ShopStore::getId, ShopStore::getName));
         outputObject.setBeans(beans);
         outputObject.setCustomBean("AllShopStoreInfo", shopStoreMap);
+        // 按购物车商品+门店查门店商品关系（含 isLaunchShop），前端据此对比是否下架
+        if (CollectionUtil.isNotEmpty(beans)) {
+            List<String> materialIdList = beans.stream().map(ShopTradeCart::getMaterialId).collect(Collectors.toList());
+            List<String> cartStoreIdList = beans.stream().map(ShopTradeCart::getStoreId).collect(Collectors.toList());
+            Map<String, Object> materialStoreIdMap = iShopMaterialNormsService
+                .queryShopMaterialMapByMaterialIdAndStoreId(materialIdList, cartStoreIdList);
+            List<String> materialStoreIds = materialStoreIdMap.values().stream().map(Object::toString).collect(Collectors.toList());
+            outputObject.setCustomBeans("ShopMaterialStoreList",
+                iShopMaterialNormsService.queryShopMaterialByIds(materialStoreIds));
+        }
     }
 
     @Override
