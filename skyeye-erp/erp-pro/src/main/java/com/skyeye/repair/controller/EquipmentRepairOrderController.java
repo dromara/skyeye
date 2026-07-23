@@ -74,7 +74,6 @@ public class EquipmentRepairOrderController {
         @ApiImplicitParam(id = "supplierId", name = "supplierId", value = "供应商"),
         @ApiImplicitParam(id = "repairDesc", name = "repairDesc", value = "维修情况说明"),
         @ApiImplicitParam(id = "repairFinishPhoto", name = "repairFinishPhoto", value = "维修完成拍照"),
-        @ApiImplicitParam(id = "repairFinishTime", name = "repairFinishTime", value = "维修完成时间"),
         @ApiImplicitParam(id = "sparePartUsageList", name = "sparePartUsageList", value = "备件使用明细", required = "json")})
     @RequestMapping("/post/EquipmentRepairOrderController/insertEquipmentRepairResult")
     public void insertEquipmentRepairResult(InputObject inputObject, OutputObject outputObject) {
