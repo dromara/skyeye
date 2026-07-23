@@ -200,4 +200,8 @@ public class EquipmentRepairOrder extends OperatorUserInfo {
     @ApiModelProperty(value = "备件使用明细列表", required = "json")
     private List<EquipmentSparePartUsageDetail> sparePartUsageList;
 
+    @TableField(exist = false)
+    @Property(value = "维修失败履历列表")
+    private List<EquipmentRepairFailRecord> failRecordList;
+
 }

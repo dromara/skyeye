@@ -34,8 +34,10 @@ import com.skyeye.repair.classenum.EquipmentRepairFaultReason;
 import com.skyeye.repair.classenum.EquipmentRepairOrderState;
 import com.skyeye.repair.classenum.EquipmentRepairTeam;
 import com.skyeye.repair.dao.EquipmentRepairOrderDao;
+import com.skyeye.repair.entity.EquipmentRepairFailRecord;
 import com.skyeye.repair.entity.EquipmentRepairOrder;
 import com.skyeye.repair.entity.EquipmentSparePartUsageDetail;
+import com.skyeye.repair.service.EquipmentRepairFailRecordService;
 import com.skyeye.repair.service.EquipmentRepairOrderService;
 import com.skyeye.repair.service.EquipmentSparePartUsageDetailService;
 import com.skyeye.rest.sealservice.service.IServiceUserStockService;
@@ -64,6 +66,9 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
 
     @Autowired
     private EquipmentSparePartUsageDetailService equipmentSparePartUsageDetailService;
+
+    @Autowired
+    private EquipmentRepairFailRecordService equipmentRepairFailRecordService;
 
     @Autowired
     private EquipmentService equipmentService;
@@ -127,6 +132,7 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
     public EquipmentRepairOrder getDataFromDb(String id) {
         EquipmentRepairOrder order = super.getDataFromDb(id);
         order.setSparePartUsageList(equipmentSparePartUsageDetailService.selectByParentId(id));
+        order.setFailRecordList(equipmentRepairFailRecordService.selectByParentId(id));
         return order;
     }
 
@@ -148,6 +154,9 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
         order.setRepairTeamMation(EquipmentRepairTeam.getMation(order.getRepairTeam()));
         order.setAuditOpinionMation(EquipmentRepairAuditOpinion.getMation(order.getAuditOpinion()));
         order.setFaultReasonMation(EquipmentRepairFaultReason.getMation(order.getFaultReason()));
+        if (CollectionUtil.isNotEmpty(order.getFailRecordList())) {
+            iAuthUserService.setDataMation(order.getFailRecordList(), EquipmentRepairFailRecord::getServiceUserId);
+        }
         if (CollectionUtil.isEmpty(order.getSparePartUsageList())) {
             return order;
         }
@@ -255,7 +264,7 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getSupplierId),
                 map.get("supplierId").toString());
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getRepairFinishTime),
-                map.get("repairFinishTime").toString());
+                DateUtil.getTimeAndToString());
             update(updateWrapper);
             if (CollectionUtil.isNotEmpty(sparePartUsageList)) {
                 // 编辑维修结果只落明细，不增减库存；待确认→确认时再扣
@@ -318,8 +327,10 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
             updateWrapper.eq(CommonConstants.ID, id);
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getIsFixed), isFixed);
             if (WhetherEnum.DISABLE_USING.getKey().equals(isFixed)) {
-                equipmentSparePartUsageDetailService.deleteByParentId(dbOrder.getId());
-                updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getState), EquipmentRepairOrderState.PENDING_ORDERS.getKey());
+                equipmentRepairFailRecordService.saveFailRecord(dbOrder);
+                updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getState), EquipmentRepairOrderState.BE_DISPATCHED.getKey());
+                updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getServiceUserId), StrUtil.EMPTY);
+                updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getIsFixed), null);
             } else {
                 // 按备件明细 createId（保存时的登录人）扣库存
                 equipmentSparePartUsageDetailService.deductStockByParentId(dbOrder.getId());
@@ -343,6 +354,12 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
         } else {
             throw new CustomException("该数据状态已改变，请刷新页面！");
         }
+    }
+
+    @Override
+    public void deletePostpose(String id) {
+        equipmentRepairFailRecordService.deleteByParentId(id);
+        equipmentSparePartUsageDetailService.deleteByParentId(id);
     }
 
     @Override
