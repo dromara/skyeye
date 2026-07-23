@@ -13,6 +13,7 @@ import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.equipment.classenum.EquipmentState;
+import com.skyeye.repair.classenum.EquipmentRepairAuditOpinion;
 import com.skyeye.repair.classenum.EquipmentRepairFaultReason;
 import com.skyeye.repair.entity.EquipmentRepairOrder;
 import com.skyeye.repair.service.EquipmentRepairOrderService;
@@ -59,7 +60,8 @@ public class EquipmentRepairOrderController {
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),
         @ApiImplicitParam(id = "serviceUserId", name = "serviceUserId", value = "负责人", required = "required"),
-        @ApiImplicitParam(id = "supplierId", name = "supplierId", value = "供应商")})
+        @ApiImplicitParam(id = "supplierId", name = "supplierId", value = "供应商"),
+        @ApiImplicitParam(id = "auditOpinion", name = "auditOpinion", value = "维修类型", enumClass = EquipmentRepairAuditOpinion.class, required = "required,num")})
     @RequestMapping("/post/EquipmentRepairOrderController/insertEquipmentRepairWaitToWorkMation")
     public void insertEquipmentRepairWaitToWorkMation(InputObject inputObject, OutputObject outputObject) {
         equipmentRepairOrderService.insertEquipmentRepairWaitToWorkMation(inputObject, outputObject);

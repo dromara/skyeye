@@ -138,7 +138,7 @@ public class EquipmentRepairOrder extends OperatorUserInfo {
     private String responseHours;
 
     @TableField(value = "audit_opinion")
-    @ApiModelProperty(value = "审核意见", enumClass = EquipmentRepairAuditOpinion.class, required = "required,num")
+    @ApiModelProperty(value = "维修类型", enumClass = EquipmentRepairAuditOpinion.class, required = "num")
     private Integer auditOpinion;
 
     @TableField(exist = false)
