@@ -22,13 +22,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public enum KnowlgContentState implements SkyeyeEnumClass {
 
-    IN_EXAMINE(1, "审核中", true, false),
-    PASS(2, "审核通过", true, true),
-    NO_PASS(3, "审核不通过", true, false);
+    IN_EXAMINE(1, "审核中", "blue", true, false),
+    PASS(2, "审核通过", "green", true, true),
+    NO_PASS(3, "审核不通过", "red", true, false);
 
     private Integer key;
 
     private String value;
+
+    private String color;
 
     private Boolean show;
 
