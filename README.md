@@ -10,15 +10,9 @@
   <a href="https://gitcode.com/doc_wei-dev/erp-pro"><img alt="AtomGit Download" src="https://gitcode.com/doc_wei-dev/erp-pro/download/badge.svg"></a>
   <img src="https://gitcode.com/doc_wei-dev/erp-pro/star/2025top.svg?style=flat-square&logoSize=14"
   alt="GitCode Star 2025" height="20">
-</p>
-
-<div align="center">
-  <img src="https://gitee.com/dromara/skyeye/badge/star.svg?theme=blue" alt="gitee Star" height="20">
-</div>
-
-<div align="center">
+ <a href="https://gitee.com/dromara/skyeye"><img alt="gitee" src="https://gitee.com/dromara/skyeye/badge/star.svg?theme=blue"></a>
   <img src="https://img.shields.io/github/stars/dromara/skyeye.svg?style=social&label=Stars" alt="Github Star" height="20">
-</div>
+</p>
 
 ## 📖 项目简介
 SkyEye云 是面向**智能制造行业**的一站式SaaS化零代码全链路管理平台，一套底座覆盖企业数字化全场景：
