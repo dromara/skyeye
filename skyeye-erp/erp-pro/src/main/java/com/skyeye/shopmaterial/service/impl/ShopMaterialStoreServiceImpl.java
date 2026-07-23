@@ -263,6 +263,17 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         MPJLambdaWrapper<ShopMaterialStore> wrapper = JoinWrappers.lambda("sms", ShopMaterialStore.class);
         wrapper.innerJoin(Material.class, "m", Material::getId, ShopMaterialStore::getMaterialId)
             .innerJoin(ShopMaterial.class, "sm", ShopMaterial::getMaterialId, ShopMaterialStore::getMaterialId);
+        // 按门店上架选用的配送方式过滤
+        String storeDeliveryMethodColumn = MybatisPlusUtil.toColumns(ShopMaterialStore::getDeliveryMethod);
+        if (StrUtil.equals(commonPageInfo.getCustomParamsMapStr("shopType"), "sameCity")) {
+            Integer key = ShopMaterialDeliveryMethod.LOCAL_DELIVERY.getKey();
+            wrapper.apply("sms." + storeDeliveryMethodColumn + " LIKE {0}",
+                "%\"" + key + "\"%");
+        } else if (StrUtil.equals(commonPageInfo.getCustomParamsMapStr("shopType"), "mallProducts")) {
+            Integer key = ShopMaterialDeliveryMethod.EXPRESS_DELIVERY.getKey();
+            wrapper.apply("sms." + storeDeliveryMethodColumn + " LIKE {0}",
+                "%\"" + key + "\"%");
+        }
         if (couponScopeFilter != null) {
             applyCouponScopeFilter(wrapper, couponScopeFilter);
         }
@@ -357,18 +368,18 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
     }
 
     private static void queryShopSelType(CommonPageInfo commonPageInfo, MPJLambdaWrapper<ShopMaterialStore> wrapper) {
-        String deliveryMethodColumn = MybatisPlusUtil.toColumns(ShopMaterialStore::getDeliveryMethod);
+        String deliveryMethodColumn = MybatisPlusUtil.toColumns(ShopMaterial::getDeliveryMethod);
         if (StrUtil.equals(commonPageInfo.getCustomParamsMapStr("shopType"), "sameCity")) {
             // 同城的商品 - 配送方式包含"同城配送"（key=3）
             // deliveryMethod存储的是JSON字符串数组，如["1","2","3"]，使用LIKE查询字符串"3"
             Integer key = ShopMaterialDeliveryMethod.LOCAL_DELIVERY.getKey();
-            wrapper.apply("sms." + deliveryMethodColumn + " LIKE {0}",
+            wrapper.apply("sm." + deliveryMethodColumn + " LIKE {0}",
                 "%\"" + key + "\"%");
         } else if (StrUtil.equals(commonPageInfo.getCustomParamsMapStr("shopType"), "mallProducts")) {
             // 可以邮寄的商品 - 配送方式包含"快递发货"（key=1）
             // deliveryMethod存储的是JSON字符串数组，如["1","2","3"]，使用LIKE查询字符串"1"
             Integer key = ShopMaterialDeliveryMethod.EXPRESS_DELIVERY.getKey();
-            wrapper.apply("sms." + deliveryMethodColumn + " LIKE {0}",
+            wrapper.apply("sm." + deliveryMethodColumn + " LIKE {0}",
                 "%\"" + key + "\"%");
         }
     }
@@ -489,6 +500,17 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         }
         MPJLambdaWrapper<ShopMaterialStore> queryWrapper = JoinWrappers.lambda("sms", ShopMaterialStore.class);
         queryWrapper.innerJoin(ShopMaterial.class, "sm", ShopMaterial::getMaterialId, ShopMaterialStore::getMaterialId);
+        // 按门店上架选用的配送方式过滤
+        String storeDeliveryMethodColumn = MybatisPlusUtil.toColumns(ShopMaterialStore::getDeliveryMethod);
+        if (StrUtil.equals(commonPageInfo.getCustomParamsMapStr("shopType"), "sameCity")) {
+            Integer key = ShopMaterialDeliveryMethod.LOCAL_DELIVERY.getKey();
+            queryWrapper.apply("sms." + storeDeliveryMethodColumn + " LIKE {0}",
+                "%\"" + key + "\"%");
+        } else if (StrUtil.equals(commonPageInfo.getCustomParamsMapStr("shopType"), "mallProducts")) {
+            Integer key = ShopMaterialDeliveryMethod.EXPRESS_DELIVERY.getKey();
+            queryWrapper.apply("sms." + storeDeliveryMethodColumn + " LIKE {0}",
+                "%\"" + key + "\"%");
+        }
         queryWrapper.in(ShopMaterialStore::getStoreId, storeIds);
         // 已经添加到门店
         queryWrapper.eq(ShopMaterialStore::getIsLaunchStore, WhetherEnum.ENABLE_USING.getKey());
@@ -615,9 +637,6 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
             return;
         }
         List<String> deliveryMethod = JSONUtil.toList(params.get("deliveryMethod").toString(), null);
-        if (CollectionUtil.isEmpty(deliveryMethod)) {
-            throw new CustomException("请选择配送方式");
-        }
         Map<String, Object> storeMation = iShopStoreService.queryDataMationById(storeId);
         if (storeMation == null) {
             throw new CustomException("门店不存在");
