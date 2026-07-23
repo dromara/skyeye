@@ -392,6 +392,8 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getServiceUserId), serviceUserId);
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getServiceTime), DateUtil.getTimeAndToString());
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getSupplierId), map.get("supplierId").toString());
+            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getAuditOpinion),
+                Integer.valueOf(map.get("auditOpinion").toString()));
             update(updateWrapper);
             sendDispatchWork(id, repairOrder.getUserId());
             refreshCache(id);
