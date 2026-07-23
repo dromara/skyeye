@@ -35,4 +35,10 @@ public interface CompanyTalkGroupService extends SkyeyeBusinessService<CompanyTa
 
     void handleUserQuitGroup(String userId, String transferUserId);
 
+    /**
+     * 组织解散时，将该租户下正常状态的群聊全部解散。
+     * <p>开启多租户时，调用方需先设置 TenantContext；未开启多租户时按单租户数据直接处理。</p>
+     */
+    void handleTenantDissolve();
+
 }

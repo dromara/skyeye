@@ -435,4 +435,23 @@ public class CompanyTalkGroupServiceImpl extends SkyeyeBusinessServiceImpl<Compa
         return otherMembers.get(0).getUserId();
     }
 
+    /**
+     * 组织解散时，将该租户下正常状态的群聊全部解散。
+     * <p>开启多租户时，调用方需先设置 TenantContext；未开启多租户时按单租户数据直接处理。</p>
+     */
+    @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void handleTenantDissolve() {
+        QueryWrapper<CompanyTalkGroup> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(CompanyTalkGroup::getState), CompanyTalkGroupState.NORMAL.getKey());
+        List<CompanyTalkGroup> groups = list(queryWrapper);
+        if (CollectionUtil.isEmpty(groups)) {
+            return;
+        }
+        List<String> groupIds = groups.stream().map(CompanyTalkGroup::getId).collect(Collectors.toList());
+        // 批量标记为已解散，并刷新群聊缓存
+        batchDissolveGroups(groupIds);
+        groupIds.forEach(this::refreshCache);
+    }
+
 }

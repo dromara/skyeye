@@ -139,4 +139,10 @@ public class TenantController {
         tenantService.searchSearchableTenantList(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "dissolveCurrentTenant", value = "解散当前组织（仅组织管理员，用户自助创建）", method = "POST", allUse = "2")
+    @RequestMapping("/post/TenantController/dissolveCurrentTenant")
+    public void dissolveCurrentTenant(InputObject inputObject, OutputObject outputObject) {
+        tenantService.dissolveCurrentTenant(inputObject, outputObject);
+    }
+
 }

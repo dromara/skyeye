@@ -615,4 +615,32 @@ public class TenantUserServiceImpl extends SkyeyeBusinessServiceImpl<TenantUserD
         outputObject.settotal(page.getTotal());
     }
 
+    /**
+     * 解散组织时清理该租户下全部成员，并清理对应用户缓存。
+     *
+     * @param tenantId 租户id
+     */
+    @Override
+    @IgnoreTenant
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void removeAllByTenantId(String tenantId) {
+        if (StrUtil.isBlank(tenantId)) {
+            return;
+        }
+        QueryWrapper<TenantUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(TenantUser::getTenantId), tenantId);
+        List<TenantUser> tenantUserList = list(queryWrapper);
+        if (CollectionUtil.isEmpty(tenantUserList)) {
+            return;
+        }
+        // 先收集 staffId，删除成员关系后再清缓存，避免查询不到关联用户
+        List<String> staffIds = tenantUserList.stream()
+            .map(TenantUser::getStaffId)
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
+        remove(queryWrapper);
+        staffIds.forEach(this::deleteUserCache);
+    }
+
 }

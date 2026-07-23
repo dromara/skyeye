@@ -90,4 +90,20 @@ public class TenantAppLinkServiceImpl extends SkyeyeBusinessServiceImpl<TenantAp
         outputObject.settotal(tenantAppLinkList.size());
     }
 
+    /**
+     * 按购买租户删除全部应用关联（解散组织时调用）。
+     *
+     * @param tenantId 购买租户id
+     */
+    @Override
+    @IgnoreTenant
+    public void deleteByTenantId(String tenantId) {
+        if (StrUtil.isBlank(tenantId)) {
+            return;
+        }
+        QueryWrapper<TenantAppLink> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(TenantAppLink::getBuyTenantId), tenantId);
+        remove(queryWrapper);
+    }
+
 }

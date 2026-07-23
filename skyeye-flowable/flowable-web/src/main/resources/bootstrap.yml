@@ -44,3 +44,5 @@ webroot:
 topic:
   # 同步工作流数据到租户下
   synchronize-data-to-tenants: SYNCHRONIZE_DATA_TO_TENANTS_SERVICE
+  # 解散租户消息（广播模式）
+  dissolve-tenant-service: DISSOLVE_TENANT_SERVICE

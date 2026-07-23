@@ -75,4 +75,10 @@ public interface TenantService extends SkyeyeBusinessService<Tenant> {
      */
     void assertCanUserCreateTenant(String userId, Integer orgType);
 
+    /**
+     * 组织管理员解散当前组织（仅用户自助创建），并发送 MQ 异步清理关联数据。
+     * <p>同步清理：成员关系、应用关联、租户主表；异步清理：工作流、群聊等。</p>
+     */
+    void dissolveCurrentTenant(InputObject inputObject, OutputObject outputObject);
+
 }
