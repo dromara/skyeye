@@ -121,7 +121,7 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
     protected void writePostpose(ShopStore entity, String userId) {
         super.writePostpose(entity, userId);
         if (WhetherEnum.DISABLE_USING.getKey().equals(entity.getEnabled())) {
-            // 禁用状态 则删除门店商品
+            // 禁用状态
             ExecuteFeignClient.get(() -> iShopMaterialNormsRest.deleteShopMaterialStoreByStoreIds(entity.getId()));
         } else if (WhetherEnum.ENABLE_USING.getKey().equals(entity.getEnabled())) {
             // 启用状态，新增门店商品
