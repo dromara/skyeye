@@ -46,7 +46,7 @@ import java.util.Map;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
-@SkyeyeService(name = "知识库", groupName = "知识库管理")
+@SkyeyeService(name = "知识库", groupName = "知识库管理",allowDynamicAttrKey = false)
 public class KnowledgeContentServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeContentDao, KnowledgeContent> implements KnowledgeContentService {
 
     @Value("${IMAGES_PATH}")
