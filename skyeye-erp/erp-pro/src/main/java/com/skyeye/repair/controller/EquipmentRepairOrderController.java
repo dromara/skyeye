@@ -58,7 +58,7 @@ public class EquipmentRepairOrderController {
     @ApiOperation(id = "insertEquipmentRepairWaitToWorkMation", value = "派工", method = "POST", allUse = "1")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),
-        @ApiImplicitParam(id = "serviceUserId", name = "serviceUserId", value = "接收人", required = "required"),
+        @ApiImplicitParam(id = "serviceUserId", name = "serviceUserId", value = "负责人", required = "required"),
         @ApiImplicitParam(id = "supplierId", name = "supplierId", value = "供应商")})
     @RequestMapping("/post/EquipmentRepairOrderController/insertEquipmentRepairWaitToWorkMation")
     public void insertEquipmentRepairWaitToWorkMation(InputObject inputObject, OutputObject outputObject) {

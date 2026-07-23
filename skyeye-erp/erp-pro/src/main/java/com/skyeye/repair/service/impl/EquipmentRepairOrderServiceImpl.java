@@ -21,6 +21,8 @@ import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.common.enumeration.WhetherEnum;
 import cn.hutool.json.JSONUtil;
+import com.skyeye.equipment.classenum.EquipmentState;
+import com.skyeye.equipment.entity.Equipment;
 import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.eve.rest.mq.JobMateMation;
 import com.skyeye.eve.service.IJobMateMationService;
@@ -173,6 +175,10 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
 
     @Override
     public void createPrepose(EquipmentRepairOrder entity) {
+        Equipment equipment = equipmentService.selectById(entity.getEquipmentId());
+        if (ObjectUtil.isNotEmpty(equipment) && EquipmentState.SCRAPPED.getKey().equals(equipment.getEquipmentState())) {
+            throw new CustomException("设备已报废，无法新增维修单");
+        }
         Map<String, Object> business = BeanUtil.beanToMap(entity);
         String oddNumber = iCodeRuleService.getNextCodeByClassName(this.getClass().getName(), business);
         entity.setOddNumber(oddNumber);
