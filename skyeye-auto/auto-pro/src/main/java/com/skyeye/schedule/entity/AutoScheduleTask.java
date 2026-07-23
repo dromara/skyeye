@@ -4,6 +4,7 @@
 
 package com.skyeye.schedule.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -14,6 +15,7 @@ import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeTeamAuth;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.module.entity.AutoModule;
+import com.skyeye.schedule.classenum.AutoScheduleExecuteResult;
 import com.skyeye.schedule.classenum.AutoScheduleExecuteType;
 import com.skyeye.schedule.classenum.AutoScheduleFrequency;
 import com.skyeye.usercase.entity.AutoCase;
@@ -67,8 +69,12 @@ public class AutoScheduleTask extends SkyeyeTeamAuth {
     private Integer executeType;
 
     @TableField(value = "enabled")
-    @ApiModelProperty(value = "状态", enumClass = EnableEnum.class, required = "required,num")
+    @ApiModelProperty(value = "启用状态", enumClass = EnableEnum.class, required = "required,num")
     private Integer enabled;
+
+    @TableField(value = "execute_result", updateStrategy = FieldStrategy.NEVER, insertStrategy = FieldStrategy.NEVER)
+    @ApiModelProperty(value = "最近执行结果", enumClass = AutoScheduleExecuteResult.class)
+    private Integer executeResult;
 
     @TableField(exist = false)
     @ApiModelProperty(value = "关联的模块ID列表")
