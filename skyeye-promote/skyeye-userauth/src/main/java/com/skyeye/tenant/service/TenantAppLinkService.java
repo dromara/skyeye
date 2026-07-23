@@ -26,4 +26,9 @@ public interface TenantAppLinkService extends SkyeyeBusinessService<TenantAppLin
     List<TenantAppLink> selectByTenantId(String tenantId);
 
     void queryTenantAppLinkList(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 按购买租户删除全部应用关联。
+     */
+    void deleteByTenantId(String tenantId);
 }

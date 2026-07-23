@@ -64,6 +64,8 @@ topic:
   synchronize-data-to-tenants: SYNCHRONIZE_DATA_TO_TENANTS_SERVICE
   # 离职审批通过消息（广播模式）
   quit-manager-transfer-service: QUIT_MANAGER_TRANSFER_SERVICE
+  # 解散租户消息（广播模式）
+  dissolve-tenant-service: DISSOLVE_TENANT_SERVICE
 
 skyeye:
   sms-code: # 短信验证码相关的配置项

@@ -66,4 +66,10 @@ public interface TenantUserService extends SkyeyeBusinessService<TenantUser> {
     void queryTenantUserStaffIdByTenantId(InputObject inputObject, OutputObject outputObject);
 
     void queryTenantUserListByTenantId(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 解散组织时清理该租户下全部成员，并清理用户缓存。
+     */
+    void removeAllByTenantId(String tenantId);
+
 }

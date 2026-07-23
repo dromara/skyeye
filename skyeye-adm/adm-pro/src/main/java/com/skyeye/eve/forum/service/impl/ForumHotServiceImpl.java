@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
-@SkyeyeService(name = "论坛热门帖子管理", groupName = "论坛热门帖子管理")
+@SkyeyeService(name = "论坛热门帖子管理", groupName = "论坛热门帖子管理",allowDynamicAttrKey = false)
 public class ForumHotServiceImpl extends SkyeyeBusinessServiceImpl<ForumHotDao, ForumHot> implements ForumHotService {
 
     @Autowired

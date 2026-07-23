@@ -294,6 +294,8 @@ public class TenantServiceImpl extends SkyeyeBusinessServiceImpl<TenantDao, Tena
         result.put("remark", tenant.getRemark());
         result.put("accountNum", tenant.getAccountNum());
         result.put("orgType", tenant.getOrgType() != null ? tenant.getOrgType() : TenantOrgType.ENTERPRISE.getKey());
+        // 创建来源：前端据此判断是否展示「解散组织」
+        result.put("createSource", tenant.getCreateSource());
         result.put("contactName", tenant.getContactName());
         result.put("contactPhone", tenant.getContactPhone());
         result.put("contactEmail", tenant.getContactEmail());
@@ -530,5 +532,57 @@ public class TenantServiceImpl extends SkyeyeBusinessServiceImpl<TenantDao, Tena
         if (currentCount >= maxCount) {
             throw new CustomException(String.format("您已创建 %d 个%s，已达上限 %d 个", currentCount, orgTypeLabel, maxCount));
         }
+    }
+
+    /**
+     * 组织管理员解散当前组织。
+     * <p>校验：租户已开启、当前用户为组织管理员、非平台租户、创建来源为用户自助、无进行中的应用购买订单。</p>
+     * <p>同步清理成员与应用关联并删除租户；随后发送广播 MQ，由各模块异步清理工作流、群聊等数据。</p>
+     */
+    @Override
+    @TenantIsolation(TenantEnum.STRONG_ISOLATION)
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void dissolveCurrentTenant(InputObject inputObject, OutputObject outputObject) {
+        if (!tenantEnable) {
+            throw new CustomException("租户功能未开启");
+        }
+        String tenantId = TenantContext.getTenantId();
+        // 仅组织管理员可解散
+        validateCurrentTenantAdmin(tenantId, inputObject);
+        if (StrUtil.equals(tenantId, TenantTypeEnum.PLATFORM.getCode())) {
+            throw new CustomException("平台租户不能解散");
+        }
+        Tenant tenant = selectById(tenantId);
+        if (ObjectUtil.isEmpty(tenant) || StrUtil.isEmpty(tenant.getId())) {
+            throw new CustomException("组织不存在.");
+        }
+        // 平台后台创建的组织走 deleteTenantById，不开放自助解散
+        if (!TenantCreateSource.USER.getKey().equals(tenant.getCreateSource())) {
+            throw new CustomException("仅用户自助创建的组织可解散，平台创建的组织请联系管理员处理.");
+        }
+        assertNoActiveBuyOrders(tenantId);
+
+        String userId = inputObject.getLogParams().get("id").toString();
+        // 先清理成员与应用关联，再删除租户主表
+        tenantUserService.removeAllByTenantId(tenantId);
+        tenantAppLinkService.deleteByTenantId(tenantId);
+        deleteById(tenantId);
+
+        // 发送解散消息（广播模式，参考离职审批通过），由各模块异步清理工作流、群聊等数据
+        Map<String, Object> jobBody = new HashMap<>();
+        jobBody.put("whetherCreatTask", false);
+        jobBody.put("content", JSONUtil.toJsonStr(tenant));
+        jobBody.put("userId", userId);
+        // 与离职 MQ 一致：仅开启多租户时写入 tenantId
+        if (tenantEnable) {
+            jobBody.put("tenantId", tenantId);
+        }
+        String topic = PropertiesUtil.getPropertiesValue("${topic.dissolve-tenant-service}");
+        jobBody.put("topic", topic);
+        JobMateMation jobMateMation = new JobMateMation();
+        jobMateMation.setJsonStr(JSONUtil.toJsonStr(jobBody));
+        jobMateMation.setUserId(userId);
+        iJobMateMationService.sendMQProducer(jobMateMation);
+        log.info("组织解散成功，已发送解散消息，tenantId: {}", tenantId);
     }
 }

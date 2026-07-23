@@ -33,4 +33,9 @@ public interface ActFlowService extends SkyeyeBusinessService<ActFlowMation> {
     void copyActFlowMationById(InputObject inputObject, OutputObject outputObject);
 
     List<ActFlowMation> queryActFlowMationByTenantId(String tenantId);
+
+    /**
+     * 解散租户时按租户清理工作流定义及 Activiti 模型。
+     */
+    void deleteByTenantId(String tenantId);
 }

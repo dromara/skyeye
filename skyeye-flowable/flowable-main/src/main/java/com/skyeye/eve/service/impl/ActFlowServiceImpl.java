@@ -195,4 +195,33 @@ public class ActFlowServiceImpl extends SkyeyeBusinessServiceImpl<ActFlowDao, Ac
         return list(queryWrapper);
     }
 
+    /**
+     * 解散租户时按租户清理工作流定义及 Activiti 模型。
+     *
+     * @param tenantId 租户id
+     */
+    @Override
+    @IgnoreTenant
+    public void deleteByTenantId(String tenantId) {
+        if (StrUtil.isEmpty(tenantId)) {
+            return;
+        }
+        List<ActFlowMation> flowList = queryActFlowMationByTenantId(tenantId);
+        if (CollectionUtil.isEmpty(flowList)) {
+            return;
+        }
+        // 先删 Activiti 模型，再删业务表记录
+        for (ActFlowMation flow : flowList) {
+            if (StrUtil.isNotEmpty(flow.getModelId())) {
+                try {
+                    activitiModelService.deleteActivitiModelById(flow.getModelId());
+                } catch (Exception ignored) {
+                    // 模型可能已不存在，继续清理业务表
+                }
+            }
+        }
+        List<String> ids = flowList.stream().map(ActFlowMation::getId).collect(Collectors.toList());
+        deleteById(ids);
+    }
+
 }

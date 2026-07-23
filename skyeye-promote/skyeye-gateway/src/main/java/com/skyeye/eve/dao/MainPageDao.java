@@ -21,4 +21,8 @@ public interface MainPageDao {
     String queryForumNumByUserId(@Param("userId") String userId,
                                  @Param("tenantId") String tenantId);
 
+    @IgnoreTenant
+    String queryKnowledgeNumByUserId(@Param("userId") String userId,
+                                     @Param("tenantId") String tenantId);
+
 }
