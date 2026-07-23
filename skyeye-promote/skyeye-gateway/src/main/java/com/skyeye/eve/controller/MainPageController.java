@@ -20,7 +20,7 @@ public class MainPageController {
     @Autowired
     private MainPageService mainPageService;
 
-    @ApiOperation(id = "mainpage001", value = "获取本月考勤天数，我的文件数，我的论坛帖数", method = "POST", allUse = "2")
+    @ApiOperation(id = "mainpage001", value = "获取本月考勤天数，我的文件数，我的论坛帖数，我的知识库文档数", method = "POST", allUse = "2")
     @RequestMapping("/post/MainPageController/queryFourNumListByUserId")
     public void queryFourNumListByUserId(InputObject inputObject, OutputObject outputObject) {
         mainPageService.queryFourNumListByUserId(inputObject, outputObject);

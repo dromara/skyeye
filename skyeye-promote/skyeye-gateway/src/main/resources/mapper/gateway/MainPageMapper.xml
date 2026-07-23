@@ -40,4 +40,17 @@
 		</if>
 	</select>
 
+	<select id="queryKnowledgeNumByUserId" resultType="String">
+		SELECT
+			COUNT(a.id) knowledgeNum
+		FROM
+			knowlg_content a
+		WHERE
+			a.create_id = #{userId}
+		AND a.state = 2
+		<if test="tenantId != null and tenantId != ''">
+			AND a.tenant_id = #{tenantId}
+		</if>
+	</select>
+
 </mapper>

@@ -27,7 +27,7 @@ public class MainPageServiceImpl implements MainPageService {
     private boolean tenantEnable;
 
     /**
-     * 获取本月考勤天数，我的文件数，我的论坛帖数
+     * 获取本月考勤天数，我的文件数，我的论坛帖数，我的知识库文档数
      *
      * @param inputObject  入参以及用户信息等获取对象
      * @param outputObject 出参以及提示信息的返回值对象
@@ -42,10 +42,13 @@ public class MainPageServiceImpl implements MainPageService {
         String diskCloudFileNum = mainPageDao.queryDiskCloudFileNumByUserId(userId, tenantId);
         // 3.获取我的论坛帖数
         String forumNum = mainPageDao.queryForumNumByUserId(userId, tenantId);
+        // 4.获取我已审核通过的知识库文档数
+        String knowledgeNum = mainPageDao.queryKnowledgeNumByUserId(userId, tenantId);
         Map<String, Object> map = new HashMap<>();
         map.put("checkOnWorkNum", checkOnWorkNum);
         map.put("diskCloudFileNum", diskCloudFileNum);
         map.put("forumNum", forumNum);
+        map.put("knowledgeNum", knowledgeNum);
         outputObject.setBean(map);
     }
 
