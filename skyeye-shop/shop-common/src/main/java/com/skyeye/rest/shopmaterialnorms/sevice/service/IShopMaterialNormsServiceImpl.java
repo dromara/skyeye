@@ -6,6 +6,7 @@ package com.skyeye.rest.shopmaterialnorms.sevice.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.google.common.base.Joiner;
 import com.skyeye.base.rest.service.impl.IServiceImpl;
 import com.skyeye.common.client.ExecuteFeignClient;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -62,6 +64,15 @@ public class IShopMaterialNormsServiceImpl extends IServiceImpl implements IShop
         ResultEntity resultEntity = ExecuteFeignClient.get(() -> iShopMaterialNormsRest.queryShopMaterialByIds(joinIds));
         List<Map<String, Object>> rows = resultEntity.getRows();
         return rows;
+    }
+
+    @Override
+    public Map<String, Object> queryShopMaterialMapByMaterialIdAndStoreId(List<String> materialIdList, List<String> storeIdList) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("materialId", JSONUtil.toJsonStr(materialIdList));
+        params.put("storeId", JSONUtil.toJsonStr(storeIdList));
+        Map<String, Object> bean = ExecuteFeignClient.get(() -> iShopMaterialNormsRest.queryShopMaterialMapByMaterialIdAndStoreId(params)).getBean();
+        return bean == null ? new HashMap<>() : bean;
     }
 
     @Override

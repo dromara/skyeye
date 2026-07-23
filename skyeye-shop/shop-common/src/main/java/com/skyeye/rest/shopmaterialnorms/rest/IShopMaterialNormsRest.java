@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Map;
+
 /**
  * @ClassName: IShopMaterialNormsRest
  * @Description: ERP商城购物车信息管理公共的一些操作
@@ -35,6 +37,15 @@ public interface IShopMaterialNormsRest {
      */
     @PostMapping("/queryShopMaterialByIds")
     String queryShopMaterialByIds(@RequestParam("ids") String ids);
+
+    /**
+     * 根据商品id和门店id批量获取商城商品关系id
+     *
+     * @param params materialId、storeId（json数组，一一对应）
+     * @return
+     */
+    @PostMapping("/queryShopMaterialMapByMaterialIdAndStoreId")
+    String queryShopMaterialMapByMaterialIdAndStoreId(Map<String, Object> params);
 
     /**
      * 新增门店时，将所有商品同步到该门店
