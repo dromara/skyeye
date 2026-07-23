@@ -75,7 +75,7 @@ public class ForumHotServiceImpl extends SkyeyeBusinessServiceImpl<ForumHotDao, 
         String today = DateUtil.getTimeAndToString();
         QueryWrapper<ForumContent> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(ForumContent::getState), CommonNumConstants.NUM_ONE)
-            .gt(MybatisPlusUtil.toColumns(ForumContent::getBrowseNum), CommonNumConstants.NUM_ONE)
+            .gt(MybatisPlusUtil.toColumns(ForumContent::getBrowseNum), CommonNumConstants.NUM_ZERO)
             .between(MybatisPlusUtil.toColumns(ForumContent::getCreateTime), beforeDay, today)
             .orderByDesc(MybatisPlusUtil.toColumns(ForumContent::getCreateTime));
         List<ForumContent> forumContents = forumContentService.list(queryWrapper);
