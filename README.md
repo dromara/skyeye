@@ -4,10 +4,10 @@
 </p>
 
 <p align="center"> 
-  <a href="您的AtomGit项目链接"><img alt="AtomGit G-Star" src="https://gitcode.com/doc_wei-dev/erp-pro/star/new_badge.svg"></a><br>
-  <a href="您的AtomGit项目链接"><img alt="AtomGit Star" src="https://gitcode.com/doc_wei-dev/erp-pro/star/badge.svg"></a>
-  <a href="您的AtomGit项目链接"><img alt="AtomGit Fork" src="https://gitcode.com/doc_wei-dev/erp-pro/fork/badge.svg"></a>
-  <a href="您的AtomGit项目链接"><img alt="AtomGit Download" src="https://gitcode.com/doc_wei-dev/erp-pro/download/badge.svg"></a>
+  <a href="https://gitcode.com/doc_wei-dev/erp-pro"><img alt="AtomGit G-Star" src="https://gitcode.com/doc_wei-dev/erp-pro/star/new_badge.svg"></a><br>
+  <a href="https://gitcode.com/doc_wei-dev/erp-pro"><img alt="AtomGit Star" src="https://gitcode.com/doc_wei-dev/erp-pro/star/badge.svg"></a>
+  <a href="https://gitcode.com/doc_wei-dev/erp-pro"><img alt="AtomGit Fork" src="https://gitcode.com/doc_wei-dev/erp-pro/fork/badge.svg"></a>
+  <a href="https://gitcode.com/doc_wei-dev/erp-pro"><img alt="AtomGit Download" src="https://gitcode.com/doc_wei-dev/erp-pro/download/badge.svg"></a>
   <img src="https://gitcode.com/doc_wei-dev/erp-pro/star/2025top.svg?style=flat-square&logoSize=14"
   alt="GitCode Star 2025" height="20">
 </p>
