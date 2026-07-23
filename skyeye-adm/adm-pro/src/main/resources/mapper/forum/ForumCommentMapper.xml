@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.forum.dao.ForumCommentDao">
+
+    <!-- 先查父评论id，供 PageHelper 分页 -->
+    <select id="queryForumCommentList" resultType="java.util.Map">
+        SELECT
+            a.id
+        FROM
+            forum_comment a
+        <where>
+            a.forum_id = #{forumId}
+            AND (a.belong_comment_id IS NULL OR a.belong_comment_id = '' OR a.belong_comment_id = '0')
+        </where>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <!-- 递归查出父评论及其所有子孙评论id（包含父id自身） -->
+    <select id="queryAllChildIdsByParentId" resultType="java.lang.String">
+        <foreach collection="ids" item="id" index="idx" separator="UNION">
+            SELECT
+                d.id
+            FROM
+                (
+                    SELECT
+                        @ids${idx} AS _ids,
+                        (
+                            SELECT
+                                @ids${idx} := GROUP_CONCAT(id)
+                            FROM
+                                forum_comment
+                            WHERE FIND_IN_SET(belong_comment_id, @ids${idx})
+                        ) AS cids,
+                        @l${idx} := @l${idx} + 1 AS level
+                    FROM
+                        forum_comment,
+                        (
+                            SELECT
+                                @ids${idx} := #{id},
+                                @l${idx} := 0
+                        ) b
+                    WHERE @ids${idx} IS NOT NULL
+                ) i,
+                forum_comment d
+            WHERE FIND_IN_SET(d.id, i._ids)
+        </foreach>
+    </select>
+
+    <select id="queryForumCommentListByIds" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.forum_id forumId,
+            a.content,
+            a.comment_id commentId,
+            a.belong_comment_id belongCommentId,
+            a.reply_id replyId,
+            a.comment_time commentTime,
+            a.create_id createId,
+            CONVERT(a.create_time, char) createTime,
+            a.last_update_id lastUpdateId,
+            CONVERT(a.last_update_time, char) lastUpdateTime
+        FROM
+            forum_comment a
+        <where>
+            <if test="ids != null and ids.size() &gt; 0">
+                <foreach collection="ids" item="id" separator="," open=" AND a.id in(" close=")">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY a.create_time DESC
+    </select>
+
+</mapper>
