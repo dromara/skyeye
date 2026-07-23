@@ -3,12 +3,21 @@
   <strong>Dromara开源组织 | 基于SpringCloudAlibaba微服务 + Vue3 + Ant Design Vue + uni-app构建</strong>
 </p>
 
-<div align="center">
-  <img src="https://gitee.com/dromara/skyeye/badge/star.svg?theme=blue" alt="gitee Star" height="20">
-  <img src="https://img.shields.io/github/stars/dromara/skyeye.svg?style=social&label=Stars" alt="Github Star" height="20">
-  <img src="https://gitcode.com/doc_wei-dev/erp-pro/star/badge.svg?style=flat-square&logoSize=14" alt="GitCode Star" height="20">
+<p align="center"> 
+  <a href="您的AtomGit项目链接"><img alt="AtomGit G-Star" src="https://gitcode.com/doc_wei-dev/erp-pro/star/new_badge.svg"></a><br>
+  <a href="您的AtomGit项目链接"><img alt="AtomGit Star" src="https://gitcode.com/doc_wei-dev/erp-pro/star/badge.svg"></a>
+  <a href="您的AtomGit项目链接"><img alt="AtomGit Fork" src="https://gitcode.com/doc_wei-dev/erp-pro/fork/badge.svg"></a>
+  <a href="您的AtomGit项目链接"><img alt="AtomGit Download" src="https://gitcode.com/doc_wei-dev/erp-pro/download/badge.svg"></a>
   <img src="https://gitcode.com/doc_wei-dev/erp-pro/star/2025top.svg?style=flat-square&logoSize=14"
   alt="GitCode Star 2025" height="20">
+</p>
+
+<div align="center">
+  <img src="https://gitee.com/dromara/skyeye/badge/star.svg?theme=blue" alt="gitee Star" height="20">
+</div>
+
+<div align="center">
+  <img src="https://img.shields.io/github/stars/dromara/skyeye.svg?style=social&label=Stars" alt="Github Star" height="20">
 </div>
 
 ## 📖 项目简介

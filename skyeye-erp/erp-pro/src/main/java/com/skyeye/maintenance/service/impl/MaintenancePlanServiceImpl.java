@@ -6,6 +6,7 @@ package com.skyeye.maintenance.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
@@ -16,6 +17,8 @@ import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.equipment.classenum.EquipmentState;
+import com.skyeye.equipment.entity.Equipment;
 import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.eve.rest.quartz.SysQuartzMation;
 import com.skyeye.eve.service.IQuartzService;
@@ -62,6 +65,10 @@ public class MaintenancePlanServiceImpl extends SkyeyeBusinessServiceImpl<Mainte
 
     @Override
     public void createPrepose(MaintenancePlan entity) {
+        Equipment equipment = equipmentService.selectById(entity.getEquipmentId());
+        if (ObjectUtil.isNotEmpty(equipment) && EquipmentState.SCRAPPED.getKey().equals(equipment.getEquipmentState())) {
+            throw new CustomException("设备已报废，无法新增保养计划");
+        }
         Map<String, Object> business = BeanUtil.beanToMap(entity);
         entity.setOddNumber(iCodeRuleService.getNextCodeByClassName(this.getClass().getName(), business));
     }

@@ -102,7 +102,8 @@ public class ShopMaterialStoreController {
     @ApiOperation(id = "launchShopMaterialStore", value = "上架指定门店得指定商品到商城--管理端使用", method = "POST", allUse = "2")
     @ApiImplicitParams(value = {
         @ApiImplicitParam(id = "materialIds", name = "materialIds", value = "商品id，多个逗号隔开", required = "required"),
-        @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required")})
+        @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required"),
+        @ApiImplicitParam(id = "deliveryMethod", name = "deliveryMethod", value = "配送方式", required = "required,json")})
     @RequestMapping("/post/ShopMaterialStoreController/launchShopMaterialStore")
     public void launchShopMaterialStore(InputObject inputObject, OutputObject outputObject) {
         shopMaterialStoreService.launchShopMaterialStore(inputObject, outputObject);

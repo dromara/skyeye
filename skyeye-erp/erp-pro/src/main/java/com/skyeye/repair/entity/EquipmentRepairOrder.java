@@ -12,6 +12,7 @@ import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.features.OperatorUserInfo;
 import com.skyeye.common.enumeration.WhetherEnum;
+import com.skyeye.equipment.classenum.EquipmentState;
 import com.skyeye.repair.classenum.EquipmentFaultCategory;
 import com.skyeye.repair.classenum.EquipmentRepairAuditOpinion;
 import com.skyeye.repair.classenum.EquipmentRepairFaultReason;
@@ -67,6 +68,10 @@ public class EquipmentRepairOrder extends OperatorUserInfo {
     @TableField(exist = false)
     @Property(value = "设备信息")
     private Map<String, Object> equipmentMation;
+
+    @TableField(value = "equipment_state")
+    @ApiModelProperty(value = "设备状态", enumClass = EquipmentState.class)
+    private Integer equipmentState;
 
     @TableField(value = "maintain_order_id")
     @ApiModelProperty(value = "保养任务id（嵌套在保养任务下时传入）")
