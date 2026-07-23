@@ -357,18 +357,18 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
     }
 
     private static void queryShopSelType(CommonPageInfo commonPageInfo, MPJLambdaWrapper<ShopMaterialStore> wrapper) {
-        String deliveryMethodColumn = MybatisPlusUtil.toColumns(ShopMaterial::getDeliveryMethod);
+        String deliveryMethodColumn = MybatisPlusUtil.toColumns(ShopMaterialStore::getDeliveryMethod);
         if (StrUtil.equals(commonPageInfo.getCustomParamsMapStr("shopType"), "sameCity")) {
             // 同城的商品 - 配送方式包含"同城配送"（key=3）
             // deliveryMethod存储的是JSON字符串数组，如["1","2","3"]，使用LIKE查询字符串"3"
             Integer key = ShopMaterialDeliveryMethod.LOCAL_DELIVERY.getKey();
-            wrapper.apply("sm." + deliveryMethodColumn + " LIKE {0}",
+            wrapper.apply("sms." + deliveryMethodColumn + " LIKE {0}",
                 "%\"" + key + "\"%");
         } else if (StrUtil.equals(commonPageInfo.getCustomParamsMapStr("shopType"), "mallProducts")) {
             // 可以邮寄的商品 - 配送方式包含"快递发货"（key=1）
             // deliveryMethod存储的是JSON字符串数组，如["1","2","3"]，使用LIKE查询字符串"1"
             Integer key = ShopMaterialDeliveryMethod.EXPRESS_DELIVERY.getKey();
-            wrapper.apply("sm." + deliveryMethodColumn + " LIKE {0}",
+            wrapper.apply("sms." + deliveryMethodColumn + " LIKE {0}",
                 "%\"" + key + "\"%");
         }
     }
@@ -614,6 +614,10 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         if (CollectionUtil.isEmpty(materialIds)) {
             return;
         }
+        List<String> deliveryMethod = JSONUtil.toList(params.get("deliveryMethod").toString(), null);
+        if (CollectionUtil.isEmpty(deliveryMethod)) {
+            throw new CustomException("请选择配送方式");
+        }
         Map<String, Object> storeMation = iShopStoreService.queryDataMationById(storeId);
         if (storeMation == null) {
             throw new CustomException("门店不存在");
@@ -623,6 +627,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
             .in(MybatisPlusUtil.toColumns(ShopMaterialStore::getMaterialId), materialIds);
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getIsLaunchShop), WhetherEnum.ENABLE_USING.getKey());
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreEnabled), storeMation.get("enabled"));
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getDeliveryMethod), JSONUtil.toJsonStr(deliveryMethod));
         update(updateWrapper);
     }
 
