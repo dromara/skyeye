@@ -17,6 +17,9 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.eve.seal.classenum.SealBgColorType;
+
 /**
  * @ClassName: Seal
  * @Description: 印章实体类
@@ -41,11 +44,11 @@ public class Seal extends BaseGeneralInfo {
     private String enableTime;
 
     @TableField(value = "enabled")
-    @ApiModelProperty(value = "启用状态，参考#EnableEnum", required = "num", defaultValue = "1")
+    @ApiModelProperty(value = "启用状态", required = "num", defaultValue = "1", enumClass = EnableEnum.class)
     private Integer enabled;
 
     @TableField(value = "bg_color_type")
-    @ApiModelProperty(value = "背景类型，参考#SealBgColorType", required = "required,num")
+    @ApiModelProperty(value = "背景类型", required = "required,num", enumClass = SealBgColorType.class)
     private Integer bgColorType;
 
     @TableField(value = "logo")

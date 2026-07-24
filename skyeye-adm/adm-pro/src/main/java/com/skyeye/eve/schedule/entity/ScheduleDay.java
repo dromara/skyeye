@@ -92,7 +92,7 @@ public class ScheduleDay extends OperatorUserInfo {
     private String backgroundColor;
 
     @TableField(value = "is_remind")
-    @Property("是否需要提醒，参考#WhetherEnum")
+    @Property(value = "是否需要提醒", enumClass = WhetherEnum.class)
     private Integer isRemind = 1;
 
     @TableField(value = "object_id", updateStrategy = FieldStrategy.NEVER)

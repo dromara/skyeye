@@ -13,6 +13,8 @@ import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import lombok.Data;
 
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: LightApp
  * @Description: 轻应用实体类
@@ -44,7 +46,7 @@ public class LightApp extends BaseGeneralInfo {
     private String appUrl;
 
     @TableField(value = "enabled")
-    @ApiModelProperty(value = "启用状态，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "启用状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
 }
