@@ -13,6 +13,9 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.CommonInfo;
 import lombok.Data;
 
+import com.skyeye.attr.classenum.AttrSymbols;
+import com.skyeye.usercase.classenum.AutoValueFromTypeEnum;
+
 /**
  * @ClassName: AutoStepAssert
  * @Description: 用例步骤关联的断言实体类
@@ -50,7 +53,7 @@ public class AutoStepAssert extends CommonInfo {
      * 执行时两侧均按字符串比较：'{实际值}' {symbols} '{期望值}'。
      */
     @TableField("operator")
-    @ApiModelProperty(value = "比较运算符，参考#AttrSymbols（如 equalTo）", required = "required")
+    @ApiModelProperty(value = "比较运算符", required = "required", enumClass = AttrSymbols.class)
     private String operator;
 
     /**
@@ -58,7 +61,7 @@ public class AutoStepAssert extends CommonInfo {
      * 1-自定义：value 为字面期望值；2-表达式：value 为另一条 JsonPath，从 result 再取期望值。
      */
     @TableField("value_from")
-    @ApiModelProperty(value = "期望值数据来源，参考#AutoValueFromTypeEnum（1自定义/2表达式）", required = "required")
+    @ApiModelProperty(value = "期望值数据来源", required = "required", enumClass = AutoValueFromTypeEnum.class)
     private Integer valueFrom;
 
     /**

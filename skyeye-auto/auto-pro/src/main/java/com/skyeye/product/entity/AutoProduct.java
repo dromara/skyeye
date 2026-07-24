@@ -13,6 +13,8 @@ import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import lombok.Data;
 
+import com.skyeye.product.classenum.AutoProductState;
+
 /**
  * @ClassName: AutoProduct
  * @Description: 产品管理实体层
@@ -28,7 +30,7 @@ import lombok.Data;
 public class AutoProduct extends BaseGeneralInfo {
 
     @TableField("state")
-    @Property(value = "状态，参考#AutoProductState")
+    @Property(value = "状态", enumClass = AutoProductState.class)
     private String state;
 
 

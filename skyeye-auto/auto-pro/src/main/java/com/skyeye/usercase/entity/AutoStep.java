@@ -15,6 +15,8 @@ import lombok.Data;
 
 import java.util.List;
 
+import com.skyeye.usercase.classenum.AutoStepTypeEnum;
+
 /**
  * @ClassName: AutoStep
  * @Description: 用例步骤实体类
@@ -45,7 +47,7 @@ public class AutoStep extends CommonInfo {
     private Integer orderBy;
 
     @TableField("type")
-    @ApiModelProperty(value = "步骤类型，参考#AutoStepTypeEnum", required = "required")
+    @ApiModelProperty(value = "步骤类型", required = "required", enumClass = AutoStepTypeEnum.class)
     private Integer type;
 
     @TableField("case_id")
