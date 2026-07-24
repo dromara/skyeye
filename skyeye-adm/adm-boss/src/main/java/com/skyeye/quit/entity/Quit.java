@@ -16,6 +16,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.common.enumeration.UserQuitType;
+
 /**
  * @ClassName: Quit
  * @Description: 离职申请实体类
@@ -35,7 +37,7 @@ public class Quit extends SkyeyeFlowable {
     private String leaveTime;
 
     @TableField(value = "leave_type")
-    @ApiModelProperty(value = "离职类型，参考#UserQuitType", required = "required")
+    @ApiModelProperty(value = "离职类型", required = "required", enumClass = UserQuitType.class)
     private String leaveType;
 
     @TableField(value = "remark")

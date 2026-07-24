@@ -12,6 +12,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.common.enumeration.FlowableStateEnum;
+
 /**
  * @ClassName: ReceivePayment
  * @Description: 收付款实体类
@@ -86,7 +88,7 @@ public class ReceivePayment extends CommonInfo {
     private Map<String, Object> fromChildMation;
 
     @TableField(value = "state")
-    @ApiModelProperty(value = "状态，参考#FlowableStateEnum")
+    @ApiModelProperty(value = "状态", enumClass = FlowableStateEnum.class)
     private String state;
 
     @TableField("collection_time")

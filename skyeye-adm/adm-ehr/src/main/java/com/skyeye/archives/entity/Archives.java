@@ -21,6 +21,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: Archives
  * @Description: 员工档案实体类
@@ -69,11 +71,11 @@ public class Archives extends OperatorUserInfo implements EnclosureFace {
     private String educationId;
 
     @TableField(value = "whether_archives")
-    @ApiModelProperty(value = "是否在档，参考#WhetherEnum", required = "required,num")
+    @ApiModelProperty(value = "是否在档", required = "required,num", enumClass = WhetherEnum.class)
     private Integer whetherArchives;
 
     @TableField(value = "state")
-    @ApiModelProperty(value = "是否有效，参考#WhetherEnum", required = "required,num")
+    @ApiModelProperty(value = "是否有效", required = "required,num", enumClass = WhetherEnum.class)
     private Integer state;
 
     @TableField("remark")

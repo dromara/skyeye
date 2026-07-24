@@ -16,6 +16,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.interviewee.classenum.UserTransferType;
+
 /**
  * @ClassName: JobTransfer
  * @Description: 岗位调动申请实体类
@@ -31,7 +33,7 @@ import java.util.Map;
 public class JobTransfer extends SkyeyeFlowable {
 
     @TableField(value = "transfer_type")
-    @ApiModelProperty(value = "调动类型，参考#UserTransferType", required = "required")
+    @ApiModelProperty(value = "调动类型", required = "required", enumClass = UserTransferType.class)
     private Integer transferType;
 
     @TableField(value = "transfer_staff_id")

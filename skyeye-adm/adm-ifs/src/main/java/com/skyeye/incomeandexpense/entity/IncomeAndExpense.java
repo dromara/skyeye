@@ -15,6 +15,8 @@ import com.skyeye.common.entity.features.BaseGeneralInfo;
 import com.skyeye.subject.entity.AccountSubject;
 import lombok.Data;
 
+import com.skyeye.incomeandexpense.classenum.IncomeAndExpenseType;
+
 /**
  * @ClassName: IncomeAndExpense
  * @Description: 收支信息实体类
@@ -31,7 +33,7 @@ import lombok.Data;
 public class IncomeAndExpense extends BaseGeneralInfo {
 
     @TableField(value = "type")
-    @ApiModelProperty(value = "类型，参考#IncomeAndExpenseType", required = "required,num")
+    @ApiModelProperty(value = "类型", required = "required,num", enumClass = IncomeAndExpenseType.class)
     private Integer type;
 
     @TableField(value = "subject_id")
