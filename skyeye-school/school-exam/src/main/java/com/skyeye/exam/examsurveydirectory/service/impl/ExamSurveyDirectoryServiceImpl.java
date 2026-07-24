@@ -79,6 +79,7 @@ import com.skyeye.school.subject.service.SubjectService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -1118,8 +1119,9 @@ public class ExamSurveyDirectoryServiceImpl extends SkyeyeBusinessServiceImpl<Ex
      *
      * @param inputObject  输入对象，包含试卷ID和组卷规则列表
      * @param outputObject 输出对象
-     */
+    */
     @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
     public void autoGeneratePaper(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String surveyId = params.get("id").toString();
@@ -1190,6 +1192,9 @@ public class ExamSurveyDirectoryServiceImpl extends SkyeyeBusinessServiceImpl<Ex
                 selectedQuestions.add(newQuestion);
             }
         }
+
+        // 自动组卷应替换原有题目，避免重复执行时将新题目追加到试卷中
+        questionService.deleteBySurveyDirectoryId(surveyId);
 
         // 创建题目
         if (CollectionUtil.isNotEmpty(selectedQuestions)) {

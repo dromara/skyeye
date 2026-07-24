@@ -11,6 +11,9 @@
         <where>
             a.forum_id = #{forumId}
             AND (a.belong_comment_id IS NULL OR a.belong_comment_id = '' OR a.belong_comment_id = '0')
+            <if test="tenantId != '' and tenantId != null">
+                AND a.tenant_id = #{tenantId}
+            </if>
         </where>
         ORDER BY a.create_time DESC
     </select>
@@ -30,6 +33,9 @@
                             FROM
                                 forum_comment
                             WHERE FIND_IN_SET(belong_comment_id, @ids${idx})
+                            <if test="tenantId != '' and tenantId != null">
+                                AND tenant_id = #{tenantId}
+                            </if>
                         ) AS cids,
                         @l${idx} := @l${idx} + 1 AS level
                     FROM
@@ -40,9 +46,15 @@
                                 @l${idx} := 0
                         ) b
                     WHERE @ids${idx} IS NOT NULL
+                    <if test="tenantId != '' and tenantId != null">
+                        AND tenant_id = #{tenantId}
+                    </if>
                 ) i,
                 forum_comment d
             WHERE FIND_IN_SET(d.id, i._ids)
+            <if test="tenantId != '' and tenantId != null">
+                AND d.tenant_id = #{tenantId}
+            </if>
         </foreach>
     </select>
 
@@ -66,6 +78,9 @@
                 <foreach collection="ids" item="id" separator="," open=" AND a.id in(" close=")">
                     #{id}
                 </foreach>
+            </if>
+            <if test="tenantId != '' and tenantId != null">
+                AND a.tenant_id = #{tenantId}
             </if>
         </where>
         ORDER BY a.create_time DESC

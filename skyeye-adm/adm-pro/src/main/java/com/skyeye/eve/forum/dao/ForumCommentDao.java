@@ -26,18 +26,21 @@ public interface ForumCommentDao extends SkyeyeBaseMapper<ForumComment> {
      * 分页查询父评论id
      */
     @IgnoreTenant
-    List<Map<String, Object>> queryForumCommentList(@Param("forumId") String forumId);
+    List<Map<String, Object>> queryForumCommentList(@Param("forumId") String forumId,
+                                                    @Param("tenantId") String tenantId);
 
     /**
      * 根据父id查询所有子节点id
      */
     @IgnoreTenant
-    List<String> queryAllChildIdsByParentId(@Param("ids") List<String> ids);
+    List<String> queryAllChildIdsByParentId(@Param("ids") List<String> ids,
+                                            @Param("tenantId") String tenantId);
 
     /**
      * 根据id列表查询评论详情
      */
     @IgnoreTenant
-    List<Map<String, Object>> queryForumCommentListByIds(@Param("ids") List<String> ids);
+    List<Map<String, Object>> queryForumCommentListByIds(@Param("ids") List<String> ids,
+                                                         @Param("tenantId") String tenantId);
 
 }
