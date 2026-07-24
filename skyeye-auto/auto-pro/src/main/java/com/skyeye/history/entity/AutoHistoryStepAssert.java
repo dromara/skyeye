@@ -12,6 +12,9 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.CommonInfo;
 import lombok.Data;
 
+import com.skyeye.history.classenum.AutoHistoryCaseExecuteResult;
+import com.skyeye.usercase.classenum.AutoValueFromTypeEnum;
+
 /**
  * @ClassName: AutoHistoryStepAssert
  * @Description: 断言执行历史实体类
@@ -42,7 +45,7 @@ public class AutoHistoryStepAssert extends CommonInfo {
     private String operator;
 
     @TableField("value_from")
-    @Property(value = "值的数据来源，参考#AutoValueFromTypeEnum")
+    @Property(value = "值的数据来源", enumClass = AutoValueFromTypeEnum.class)
     private Integer valueFrom;
 
     @TableField("value")
@@ -62,7 +65,7 @@ public class AutoHistoryStepAssert extends CommonInfo {
     private String historyCaseId;
 
     @TableField("execute_result")
-    @Property(value = "执行结果，参考#AutoHistoryCaseExecuteResult")
+    @Property(value = "执行结果", enumClass = AutoHistoryCaseExecuteResult.class)
     private Integer executeResult;
 
 }

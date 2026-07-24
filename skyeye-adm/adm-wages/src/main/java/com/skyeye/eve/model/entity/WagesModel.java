@@ -16,6 +16,8 @@ import lombok.Data;
 
 import java.util.List;
 
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: WagesModel
  * @Description: 薪资模板
@@ -48,7 +50,7 @@ public class WagesModel extends BaseGeneralInfo {
     private Integer orderBy;
 
     @TableField("enabled")
-    @ApiModelProperty(value = "状态，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
     @TableField(exist = false)

@@ -21,6 +21,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.demand.classenum.AutoDemandStateEnum;
+
 /**
  * @ClassName: AutoDemand
  * @Description: 需求表实体类
@@ -56,7 +58,7 @@ public class AutoDemand extends SkyeyeTeamAuth implements EnclosureFace {
     private String content;
 
     @TableField(value = "state")
-    @ApiModelProperty(value = "状态，参考#AutoDemandStateEnum")
+    @ApiModelProperty(value = "状态", enumClass = AutoDemandStateEnum.class)
     private String state;
 
     @TableField(value = "version_id")

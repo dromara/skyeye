@@ -15,6 +15,8 @@ import lombok.Data;
 
 import java.util.List;
 
+import com.skyeye.history.classenum.AutoHistoryCaseExecuteResult;
+
 /**
  * @ClassName: AutoHistoryCase
  * @Description: 用例执行历史实体类
@@ -62,7 +64,7 @@ public class AutoHistoryCase extends CommonInfo {
     private String executeTime;
 
     @TableField("execute_result")
-    @Property(value = "执行结果，参考#AutoHistoryCaseExecuteResult")
+    @Property(value = "执行结果", enumClass = AutoHistoryCaseExecuteResult.class)
     private Integer executeResult;
 
     @TableField(exist = false)
