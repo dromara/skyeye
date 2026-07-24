@@ -16,6 +16,7 @@ import com.skyeye.equipment.classenum.EquipmentState;
 import com.skyeye.repair.classenum.EquipmentFaultCategory;
 import com.skyeye.repair.classenum.EquipmentRepairAuditOpinion;
 import com.skyeye.repair.classenum.EquipmentRepairFaultReason;
+import com.skyeye.repair.classenum.EquipmentRepairFromType;
 import com.skyeye.repair.classenum.EquipmentRepairOrderState;
 import com.skyeye.repair.classenum.EquipmentRepairTeam;
 import com.skyeye.supplier.entity.Supplier;
@@ -73,13 +74,21 @@ public class EquipmentRepairOrder extends OperatorUserInfo {
     @ApiModelProperty(value = "设备状态", enumClass = EquipmentState.class)
     private Integer equipmentState;
 
-    @TableField(value = "maintain_order_id")
-    @ApiModelProperty(value = "保养任务id（嵌套在保养任务下时传入）")
-    private String maintainOrderId;
+    @TableField(value = "from_type_id")
+    @ApiModelProperty(value = "来源单据类型", enumClass = EquipmentRepairFromType.class)
+    private Integer fromTypeId;
 
     @TableField(exist = false)
-    @Property(value = "保养任务信息")
-    private Map<String, Object> maintainOrderMation;
+    @Property(value = "来源单据类型信息")
+    private Map<String, Object> fromTypeMation;
+
+    @TableField(value = "from_id")
+    @ApiModelProperty(value = "来源单据id")
+    private String fromId;
+
+    @TableField(exist = false)
+    @Property(value = "来源单据信息")
+    private Map<String, Object> fromMation;
 
     @TableField(value = "fault_brief")
     @ApiModelProperty(value = "故障描述", required = "required")

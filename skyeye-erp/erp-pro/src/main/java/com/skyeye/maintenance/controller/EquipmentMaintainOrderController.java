@@ -13,6 +13,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.maintenance.service.EquipmentMaintainOrderService;
+import com.skyeye.repair.entity.EquipmentRepairOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -89,5 +90,13 @@ public class EquipmentMaintainOrderController {
     @RequestMapping("/post/EquipmentMaintainOrderController/reassignEquipmentMaintainTimeoutTask")
     public void reassignEquipmentMaintainTimeoutTask(InputObject inputObject, OutputObject outputObject) {
         equipmentMaintainOrderService.reassignTimeoutTask(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "insertMaintainOrderToRepair", value = "保养任务转维修单", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = EquipmentRepairOrder.class, value = {
+        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
+    @RequestMapping("/post/EquipmentRepairOrderController/insertMaintainOrderToRepair")
+    public void insertMaintainOrderToRepair(InputObject inputObject, OutputObject outputObject) {
+        equipmentMaintainOrderService.insertMaintainOrderToRepair(inputObject, outputObject);
     }
 }

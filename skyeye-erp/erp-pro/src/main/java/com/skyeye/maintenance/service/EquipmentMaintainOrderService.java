@@ -21,4 +21,9 @@ public interface EquipmentMaintainOrderService extends SkyeyeBusinessService<Equ
     void cancelTask(InputObject inputObject, OutputObject outputObject);
 
     void reassignTimeoutTask(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 保养任务转维修单
+     */
+    void insertMaintainOrderToRepair(InputObject inputObject, OutputObject outputObject);
 }
