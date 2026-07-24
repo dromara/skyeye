@@ -13,6 +13,8 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.CommonInfo;
 import lombok.Data;
 
+import com.skyeye.material.classenum.MaterialNormsCodeType;
+
 /**
  * @ClassName: MaterialNormsCodeHis
  * @Description: 商品规格一物一码条形码变更历史实体类
@@ -35,7 +37,7 @@ public class MaterialNormsCodeHis extends CommonInfo {
     private String normsCodeId;
 
     @TableField(value = "type")
-    @Property(value = "类型，参考#MaterialNormsCodeType")
+    @Property(value = "类型", enumClass = MaterialNormsCodeType.class)
     private Integer type;
 
     @TableField(value = "operator_id")
