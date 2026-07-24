@@ -76,6 +76,22 @@ public class AutoScheduleTask extends SkyeyeTeamAuth {
     @ApiModelProperty(value = "最近执行结果", enumClass = AutoScheduleExecuteResult.class)
     private Integer executeResult;
 
+    @TableField(value = "total_num", updateStrategy = FieldStrategy.NEVER, insertStrategy = FieldStrategy.NEVER)
+    @ApiModelProperty(value = "最近执行用例总数")
+    private Integer totalNum;
+
+    @TableField(value = "success_num", updateStrategy = FieldStrategy.NEVER, insertStrategy = FieldStrategy.NEVER)
+    @ApiModelProperty(value = "最近执行成功数")
+    private Integer successNum;
+
+    @TableField(value = "fail_num", updateStrategy = FieldStrategy.NEVER, insertStrategy = FieldStrategy.NEVER)
+    @ApiModelProperty(value = "最近执行失败数")
+    private Integer failNum;
+
+    @TableField(value = "success_rate", updateStrategy = FieldStrategy.NEVER, insertStrategy = FieldStrategy.NEVER)
+    @ApiModelProperty(value = "最近执行成功率（0-100，保留两位小数）")
+    private Double successRate;
+
     @TableField(exist = false)
     @ApiModelProperty(value = "关联的模块ID列表")
     private List<String> moduleIdList;
