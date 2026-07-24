@@ -13,6 +13,9 @@ import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import lombok.Data;
 
+import com.skyeye.voucher.classenum.VoucherState;
+import com.skyeye.voucher.classenum.VoucherType;
+
 /**
  * @ClassName: Voucher
  * @Description: 凭证实体类
@@ -33,11 +36,11 @@ public class Voucher extends BaseGeneralInfo {
     private String path;
 
     @TableField(value = "state")
-    @ApiModelProperty(value = "状态，参考#VoucherState")
+    @ApiModelProperty(value = "状态", enumClass = VoucherState.class)
     private Integer state;
 
     @TableField(value = "type")
-    @ApiModelProperty(value = "类型，参考#VoucherType", required = "required,num")
+    @ApiModelProperty(value = "类型", required = "required,num", enumClass = VoucherType.class)
     private Integer type;
 
 }
