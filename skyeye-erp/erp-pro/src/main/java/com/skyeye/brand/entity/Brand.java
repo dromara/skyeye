@@ -13,6 +13,8 @@ import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import lombok.Data;
 
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: Brand
  * @Description: 品牌管理实体类
@@ -33,7 +35,7 @@ public class Brand extends BaseGeneralInfo {
     private String img;
 
     @TableField(value = "enabled")
-    @ApiModelProperty(value = "启用状态，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "启用状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
     @TableField(value = "logo")

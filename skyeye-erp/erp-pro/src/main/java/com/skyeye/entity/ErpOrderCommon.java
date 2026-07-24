@@ -17,6 +17,10 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.depot.classenum.DepotPutOutType;
+import com.skyeye.business.classenum.OrderQualityInspectionType;
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: ErpOrderHead
  * @Description: ERP相关订单实体类，包括：采购入库单
@@ -30,7 +34,7 @@ import java.util.Map;
 public class ErpOrderCommon extends SkyeyeFlowable {
 
     @TableField(value = "type", updateStrategy = FieldStrategy.NEVER)
-    @Property(value = "出入库类型，参考#DepotPutOutType")
+    @Property(value = "出入库类型", enumClass = DepotPutOutType.class)
     private Integer type;
 
     /**
@@ -76,11 +80,11 @@ public class ErpOrderCommon extends SkyeyeFlowable {
     private List<ErpOrderItem> erpOrderItemList;
 
     @TableField("quality_inspection")
-    @Property(value = "质检类型，参考#OrderQualityInspectionType")
+    @Property(value = "质检类型", enumClass = OrderQualityInspectionType.class)
     private Integer qualityInspection;
 
     @TableField("need_depot")
-    @ApiModelProperty(value = "是否需要出入库，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否需要出入库", enumClass = WhetherEnum.class)
     private Integer needDepot;
 
     @TableField("other_state")

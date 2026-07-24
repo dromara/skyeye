@@ -18,6 +18,8 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.material.classenum.MaterialNormsCodeType;
+
 /**
  * @ClassName: InventoryChild
  * @Description: 盘点任务表-子单据表信息
@@ -104,7 +106,7 @@ public class InventoryChild extends SkyeyeLinkData {
     private String lossPrice;
 
     @TableField(value = "type")
-    @ApiModelProperty(value = "盘点的商品的类型，参考#MaterialNormsCodeType")
+    @ApiModelProperty(value = "盘点的商品的类型", enumClass = MaterialNormsCodeType.class)
     private Integer type;
 
     @TableField(exist = false)

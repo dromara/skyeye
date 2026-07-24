@@ -18,6 +18,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.business.classenum.OrderItemQualityInspectionType;
+
 /**
  * @ClassName: QualityInspectionItem
  * @Description: 质检单子单据实体类
@@ -88,7 +90,7 @@ public class QualityInspectionItem extends CommonInfo {
     private String taxLastMoney;
 
     @TableField("quality_inspection")
-    @ApiModelProperty(value = "质检类型，参考#OrderItemQualityInspectionType", required = "num")
+    @ApiModelProperty(value = "质检类型", required = "num", enumClass = OrderItemQualityInspectionType.class)
     private Integer qualityInspection;
 
     @TableField(exist = false)
