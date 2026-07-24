@@ -11,6 +11,7 @@ import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.depot.classenum.GenerateDepotLevelValType;
 import com.skyeye.depot.entity.DepotLevelVal;
 import com.skyeye.depot.service.DepotLevelValService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +95,7 @@ public class DepotLevelValController {
      */
     @ApiOperation(id = "batchGenerateDepotLevelVal", value = "批量生成仓库级别的值信息", method = "POST", allUse = "2")
     @ApiImplicitParams(value = {
-        @ApiImplicitParam(id = "type", name = "type", value = "生成的编号类型，参考#GenerateDepotLevelValType", required = "required,num"),
+        @ApiImplicitParam(id = "type", name = "type", value = "生成的编号类型", enumClass = GenerateDepotLevelValType.class, required = "required,num"),
         @ApiImplicitParam(id = "number", name = "number", value = "生成的数量", required = "required,num"),
         @ApiImplicitParam(id = "parentId", name = "parentId", value = "父节点id", required = "required"),
         @ApiImplicitParam(id = "depotId", name = "depotId", value = "仓库id", required = "required")})
