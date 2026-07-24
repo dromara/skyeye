@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @SkyeyeService(name = "工序验收员工生产数量", groupName = "工序验收", manageShow = false)
@@ -22,26 +20,14 @@ public class MachinProcedureAcceptProductNumServiceImpl extends SkyeyeBusinessSe
 
     @Override
     public void writeList(String parentId, List<MachinProcedureAcceptProductNum> machinProcedureAcceptProductNumList) {
-        // 查询验收单下的员工生产数量信息
-        List<MachinProcedureAcceptProductNum> oldList = queryListByParentIdOnly(parentId);
-        if (CollectionUtil.isEmpty(oldList)) {
-            super.createEntity(machinProcedureAcceptProductNumList, StrUtil.EMPTY);
+        deleteByParentId(parentId);
+        if (CollectionUtil.isEmpty(machinProcedureAcceptProductNumList)) {
+            return;
         }
-        // 根据员工id进行分组
-        Map<String, MachinProcedureAcceptProductNum> mapProductNum = machinProcedureAcceptProductNumList.stream().collect(Collectors.toMap(MachinProcedureAcceptProductNum::getStaffId, e -> e));
-        // 数据库未存在的信息
-        List<MachinProcedureAcceptProductNum> insertList = oldList.stream().filter(oldEntity -> !mapProductNum.containsKey(oldEntity.getStaffId())).collect(Collectors.toList());
-        // 数据库已存在的信息
-        List<MachinProcedureAcceptProductNum> updateList = oldList.stream().filter(oldEntity -> mapProductNum.containsKey(oldEntity.getStaffId())).collect(Collectors.toList());
-        // 更新数据库已存在的数据
-        for (MachinProcedureAcceptProductNum updateEntity : updateList) {
-            updateEntity.setAllNumber(mapProductNum.get(updateEntity.getStaffId()).getAllNumber() + updateEntity.getAllNumber());
-            updateEntity.setQualifiedNum(mapProductNum.get(updateEntity.getStaffId()).getQualifiedNum() + updateEntity.getQualifiedNum());
-            updateEntity.setReworkNum(mapProductNum.get(updateEntity.getStaffId()).getReworkNum() + updateEntity.getReworkNum());
-            updateEntity.setScrapNum(mapProductNum.get(updateEntity.getStaffId()).getScrapNum() + updateEntity.getScrapNum());
+        for (MachinProcedureAcceptProductNum productNum : machinProcedureAcceptProductNumList) {
+            productNum.setParentId(parentId);
         }
-        super.updateEntity(updateList, StrUtil.EMPTY);
-        super.createEntity(insertList, StrUtil.EMPTY);
+        createEntity(machinProcedureAcceptProductNumList, StrUtil.EMPTY);
     }
 
     @Override

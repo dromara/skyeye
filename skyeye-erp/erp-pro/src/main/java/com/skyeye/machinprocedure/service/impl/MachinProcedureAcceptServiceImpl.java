@@ -182,19 +182,8 @@ public class MachinProcedureAcceptServiceImpl extends SkyeyeBusinessServiceImpl<
         // 保存商品规格编码信息
         saveErpOrderItemCode(entity);
 
-        if (StrUtil.isNotEmpty(entity.getId())) {
-            // 更新操作删除原有员工生产数量信息
-            machinProcedureAcceptProductNumService.deleteByParentId(entity.getId());
-        }
-        if (CollectionUtil.isNotEmpty(entity.getMachinProcedureAcceptProductNumList())) {
-            // 保存/修改员工生产数量信息
-            entity.getMachinProcedureAcceptProductNumList().forEach(productNum -> {
-                productNum.setParentId(entity.getId());
-                productNum.setMaterialId(productNum.getMaterialId());
-                productNum.setNormsId(productNum.getNormsId());
-            });
-            machinProcedureAcceptProductNumService.writeList(entity.getId(), entity.getMachinProcedureAcceptProductNumList());
-        }
+        // 保存/修改员工生产数量信息（内部先删后写）
+        machinProcedureAcceptProductNumService.writeList(entity.getId(), entity.getMachinProcedureAcceptProductNumList());
 
         super.writePostpose(entity, userId);
     }
