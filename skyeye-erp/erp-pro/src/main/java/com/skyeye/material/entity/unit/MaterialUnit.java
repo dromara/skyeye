@@ -17,6 +17,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: MaterialUnit
  * @Description: 计量单位实体类
@@ -51,7 +53,7 @@ public class MaterialUnit extends OperatorUserInfo {
     private String groupId;
 
     @TableField(value = "base_unit")
-    @ApiModelProperty(value = "是否是基础单位，参考#WhetherEnum", required = "required,num")
+    @ApiModelProperty(value = "是否是基础单位", required = "required,num", enumClass = WhetherEnum.class)
     private Integer baseUnit;
 
     @TableField(exist = false)

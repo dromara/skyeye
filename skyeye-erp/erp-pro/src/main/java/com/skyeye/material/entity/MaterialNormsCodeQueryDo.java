@@ -12,6 +12,10 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+import com.skyeye.machinprocedure.classenum.MachinProcedureAcceptChildType;
+import com.skyeye.material.classenum.MaterialNormsCodeInDepot;
+import com.skyeye.pick.classenum.PickNormsCodeUseState;
+
 /**
  * @ClassName: MaterialNormsCodeQueryDo
  * @Description: 商品规格一物一码查询条件实体类
@@ -45,13 +49,13 @@ public class MaterialNormsCodeQueryDo extends CommonPageInfo implements Serializ
     @ApiModelProperty(value = "出库单据的id")
     private String toObjectId;
 
-    @ApiModelProperty(value = "库存状态，参考#MaterialNormsCodeInDepot")
+    @ApiModelProperty(value = "库存状态", enumClass = MaterialNormsCodeInDepot.class)
     private Integer inDepot;
 
-    @ApiModelProperty(value = "加工时，物料使用状态，参考#PickNormsCodeUseState")
+    @ApiModelProperty(value = "加工时，物料使用状态", enumClass = PickNormsCodeUseState.class)
     private Integer pickUseState;
 
-    @ApiModelProperty(value = "加工使用结果状态，参考#MachinProcedureAcceptChildType")
+    @ApiModelProperty(value = "加工使用结果状态", enumClass = MachinProcedureAcceptChildType.class)
     private Integer pickState;
 
     @ApiModelProperty(value = "获取的数量")
