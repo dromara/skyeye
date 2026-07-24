@@ -20,6 +20,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.common.enumeration.SexEnum;
+
 /**
  * @ClassName: Interviewee
  * @Description: 面试者实体类
@@ -43,7 +45,7 @@ public class Interviewee extends OperatorUserInfo implements EnclosureFace {
     private String name;
 
     @TableField(value = "sex")
-    @ApiModelProperty(value = "性别，参考#SexEnum", required = "required,num")
+    @ApiModelProperty(value = "性别", required = "required,num", enumClass = SexEnum.class)
     private Integer sex;
 
     @TableField(value = "idcard")

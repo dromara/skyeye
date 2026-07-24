@@ -20,6 +20,9 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.common.enumeration.SexEnum;
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: Family
  * @Description: 员工家庭情况实体类
@@ -63,7 +66,7 @@ public class Family extends OperatorUserInfo implements EnclosureFace {
     private String cardNumber;
 
     @TableField(value = "sex")
-    @ApiModelProperty(value = "性别，参考#SexEnum", required = "required")
+    @ApiModelProperty(value = "性别", required = "required", enumClass = SexEnum.class)
     private Integer sex;
 
     @TableField(value = "work_unit")
@@ -83,7 +86,7 @@ public class Family extends OperatorUserInfo implements EnclosureFace {
     private Map<String, Object> politicMation;
 
     @TableField(value = "emergency_contact")
-    @ApiModelProperty(value = "是否紧急联系人，参考#WhetherEnum", required = "required")
+    @ApiModelProperty(value = "是否紧急联系人", required = "required", enumClass = WhetherEnum.class)
     private String emergencyContact;
 
     @TableField(value = "object_id", updateStrategy = FieldStrategy.NEVER)

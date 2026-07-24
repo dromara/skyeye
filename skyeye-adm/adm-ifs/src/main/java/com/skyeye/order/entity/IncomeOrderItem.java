@@ -14,6 +14,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.subject.classenum.AmountDirection;
+
 /**
  * @ClassName: IncomeOrderItem
  * @Description: 明细账订单子内容实体类
@@ -48,7 +50,7 @@ public class IncomeOrderItem extends SkyeyeLinkData {
     private String eachAmount;
 
     @TableField("direction_type")
-    @ApiModelProperty(value = "金额类型，参考#AmountDirection", required = "required,num")
+    @ApiModelProperty(value = "金额类型", required = "required,num", enumClass = AmountDirection.class)
     private Integer directionType;
 
 }
