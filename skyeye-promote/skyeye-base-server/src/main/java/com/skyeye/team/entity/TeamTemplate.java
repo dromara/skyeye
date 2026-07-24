@@ -15,6 +15,8 @@ import com.skyeye.common.constans.CacheConstants;
 import com.skyeye.common.constans.RedisConstants;
 import lombok.Data;
 
+import com.skyeye.common.enumeration.IsUsedEnum;
+
 /**
  * @ClassName: TeamTemplate
  * @Description: 团队模板实体类
@@ -51,7 +53,7 @@ public class TeamTemplate extends AbstractTeam {
     private Integer enabled;
 
     @TableField("is_used")
-    @Property(value = "是否使用中，参考#IsUsedEnum")
+    @Property(value = "是否使用中", enumClass = IsUsedEnum.class)
     private Integer isUsed;
 
 }

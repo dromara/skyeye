@@ -22,6 +22,8 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.task.classenum.TaskImported;
+
 /**
  * @ClassName: Task
  * @Description: 任务实体类
@@ -98,7 +100,7 @@ public class Task extends SkyeyeFlowable {
     private Enclosure executionEnclosureInfo;
 
     @TableField("imported")
-    @ApiModelProperty(value = "重要性，参考#TaskImported", required = "required")
+    @ApiModelProperty(value = "重要性", required = "required", enumClass = TaskImported.class)
     private String imported;
 
     @TableField(value = "milestone_id", updateStrategy = FieldStrategy.NEVER)

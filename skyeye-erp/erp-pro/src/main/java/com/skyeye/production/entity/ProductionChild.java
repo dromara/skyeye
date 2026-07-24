@@ -19,6 +19,8 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.production.classenum.ProductionChildType;
+
 /**
  * @ClassName: ProductionChild
  * @Description: 生产计划单子单据实体类
@@ -85,7 +87,7 @@ public class ProductionChild extends CommonInfo {
     private List<Bom> bomList;
 
     @TableField(value = "production_type")
-    @ApiModelProperty(value = "生产类型，参考#ProductionChildType", required = "required,num")
+    @ApiModelProperty(value = "生产类型", required = "required,num", enumClass = ProductionChildType.class)
     private Integer productionType;
 
     @TableField(exist = false)

@@ -17,6 +17,8 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.procedure.classenum.ProcedureCapacitySubject;
+
 /**
  * @ClassName: WorkProcedure
  * @Description: 工序信息
@@ -55,7 +57,7 @@ public class WorkProcedure extends BaseGeneralInfo {
     private Integer deleteFlag;
 
     @TableField(value = "capacity_subject")
-    @ApiModelProperty(value = "产能主体，参考#ProcedureCapacitySubject", required = "required,num")
+    @ApiModelProperty(value = "产能主体", required = "required,num", enumClass = ProcedureCapacitySubject.class)
     private Integer capacitySubject;
 
     @TableField(exist = false)

@@ -17,6 +17,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.request.classenum.PurchaseRequestChildInquiry;
+
 /**
  * @ClassName: PurchaseRequestChild
  * @Description: 采购申请-子单据实体类
@@ -83,7 +85,7 @@ public class PurchaseRequestChild extends CommonInfo {
     private String operNumber;
 
     @TableField("need_inquiry")
-    @ApiModelProperty(value = "询价状态，参考#PurchaseRequestChildInquiry", required = "required,num")
+    @ApiModelProperty(value = "询价状态", required = "required,num", enumClass = PurchaseRequestChildInquiry.class)
     private Integer needInquiry;
 
     @TableField(exist = false)
