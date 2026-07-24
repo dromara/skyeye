@@ -19,6 +19,10 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.production.classenum.ProductionPlanFromType;
+import com.skyeye.production.classenum.ProductionPlanProduceState;
+import com.skyeye.production.classenum.ProductionPlanPurchaseState;
+
 /**
  * @ClassName: ProductionPlan
  * @Description: 出货计划单
@@ -34,7 +38,7 @@ import java.util.Map;
 public class ProductionPlan extends SkyeyeFlowable {
 
     @TableField(value = "from_type_id", updateStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "来源单据类型，参考#ProductionPlanFromType")
+    @ApiModelProperty(value = "来源单据类型", enumClass = ProductionPlanFromType.class)
     private Integer fromTypeId;
 
     @TableField(value = "from_id", updateStrategy = FieldStrategy.NEVER)
@@ -54,11 +58,11 @@ public class ProductionPlan extends SkyeyeFlowable {
     private String remark;
 
     @TableField("purchase_state")
-    @Property("采购状态，参考#ProductionPlanPurchaseState")
+    @Property(value = "采购状态", enumClass = ProductionPlanPurchaseState.class)
     private Integer purchaseState;
 
     @TableField("produce_state")
-    @Property("生产状态，参考#ProductionPlanProduceState")
+    @Property(value = "生产状态", enumClass = ProductionPlanProduceState.class)
     private Integer produceState;
 
     @TableField(exist = false)

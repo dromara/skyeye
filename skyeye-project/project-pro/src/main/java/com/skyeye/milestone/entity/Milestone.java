@@ -20,6 +20,8 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.milestone.classenum.MilestoneImported;
+
 /**
  * @ClassName: Milestone
  * @Description: 里程碑管理实体类
@@ -76,7 +78,7 @@ public class Milestone extends SkyeyeFlowable {
     private String completedWorkload;
 
     @TableField("imported")
-    @ApiModelProperty(value = "重要性，参考#MilestoneImported", required = "required")
+    @ApiModelProperty(value = "重要性", required = "required", enumClass = MilestoneImported.class)
     private String imported;
 
     @TableField(exist = false)

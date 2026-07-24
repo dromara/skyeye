@@ -21,6 +21,8 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.production.classenum.ProductionFromType;
+
 /**
  * @ClassName: Production
  * @Description: 生产计划单
@@ -41,7 +43,7 @@ public class Production extends SkyeyeFlowable {
     private String name;
 
     @TableField(value = "from_type_id", updateStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "来源单据类型，参考#ProductionFromType")
+    @ApiModelProperty(value = "来源单据类型", enumClass = ProductionFromType.class)
     private Integer fromTypeId;
 
     @TableField(value = "from_id", updateStrategy = FieldStrategy.NEVER)
