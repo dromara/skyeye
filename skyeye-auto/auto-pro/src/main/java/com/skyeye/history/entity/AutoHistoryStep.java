@@ -14,6 +14,9 @@ import lombok.Data;
 
 import java.util.List;
 
+import com.skyeye.history.classenum.AutoHistoryCaseExecuteResult;
+import com.skyeye.usercase.classenum.AutoStepTypeEnum;
+
 /**
  * @ClassName: AutoHistoryStep
  * @Description: 步骤执行历史实体类
@@ -44,7 +47,7 @@ public class AutoHistoryStep extends CommonInfo {
     private Integer orderBy;
 
     @TableField("type")
-    @Property(value = "步骤类型，参考#AutoStepTypeEnum")
+    @Property(value = "步骤类型", enumClass = AutoStepTypeEnum.class)
     private Integer type;
 
     @TableField("result_key")
@@ -52,7 +55,7 @@ public class AutoHistoryStep extends CommonInfo {
     private String resultKey;
 
     @TableField("execute_result")
-    @Property(value = "执行结果，参考#AutoHistoryCaseExecuteResult")
+    @Property(value = "执行结果", enumClass = AutoHistoryCaseExecuteResult.class)
     private Integer executeResult;
 
     @TableField(exist = false)

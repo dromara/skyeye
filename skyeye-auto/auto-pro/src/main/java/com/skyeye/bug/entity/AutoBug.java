@@ -22,6 +22,9 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.bug.classenum.BugNecessaryToPresent;
+import com.skyeye.bug.classenum.BugState;
+
 /**
  * @ClassName: AutoBug
  * @Description: bug管理---objectId就是项目id
@@ -57,7 +60,7 @@ public class AutoBug extends SkyeyeTeamAuth implements EnclosureFace {
     private String content;
 
     @TableField("state")
-    @ApiModelProperty(value = "状态，参考#BugState", required = "required")
+    @ApiModelProperty(value = "状态", required = "required", enumClass = BugState.class)
     private String state;
 
     @TableField("version_id")
@@ -93,7 +96,7 @@ public class AutoBug extends SkyeyeTeamAuth implements EnclosureFace {
     private AutoModule moduleMation;
 
     @TableField("necessary_to_present")
-    @ApiModelProperty(value = "必现类型，参考#BugNecessaryToPresent", required = "required")
+    @ApiModelProperty(value = "必现类型", required = "required", enumClass = BugNecessaryToPresent.class)
     private String necessaryToPresent;
 
     @TableField("bug_reason")

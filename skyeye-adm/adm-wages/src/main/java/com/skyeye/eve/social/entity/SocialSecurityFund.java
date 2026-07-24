@@ -16,6 +16,8 @@ import lombok.Data;
 
 import java.util.List;
 
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: SocialSecurityFund
  * @Description: 社保公积金实体类
@@ -40,7 +42,7 @@ public class SocialSecurityFund extends BaseGeneralInfo {
     private String endTime;
 
     @TableField("enabled")
-    @ApiModelProperty(value = "状态，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
     @TableField("endowment_base")
