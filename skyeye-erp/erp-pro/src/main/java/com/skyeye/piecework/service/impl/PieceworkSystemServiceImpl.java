@@ -90,13 +90,10 @@ public class PieceworkSystemServiceImpl extends SkyeyeBusinessServiceImpl<Piecew
             .map(Map.Entry::getKey)
             .collect(Collectors.toSet());
 
-        // 车间id→员工id列表（只含临时工）
-        Map<String, List<String>> farmStaffMap = farmStaffList1.stream()
+        // 车间id→FarmStaff列表（只含临时工），保证单价/工位按当前车间取值
+        Map<String, List<FarmStaff>> farmStaffMap = farmStaffList1.stream()
             .filter(staff -> tempStaffIds.contains(staff.getStaffId()))
-            .collect(Collectors.groupingBy(
-                FarmStaff::getFarmId,
-                Collectors.mapping(FarmStaff::getStaffId, Collectors.toList())
-            ));
+            .collect(Collectors.groupingBy(FarmStaff::getFarmId));
 
         // 获取前一天日期
         LocalDate yesterday = LocalDate.now().minusDays(CommonNumConstants.NUM_ONE);
@@ -106,9 +103,10 @@ public class PieceworkSystemServiceImpl extends SkyeyeBusinessServiceImpl<Piecew
         String yesterdayStr = yesterday.toString();
 
         // 遍历所有车间和临时员工
-        for (Map.Entry<String, List<String>> entry : farmStaffMap.entrySet()) {
+        for (Map.Entry<String, List<FarmStaff>> entry : farmStaffMap.entrySet()) {
             String farmId = entry.getKey();
-            for (String staffId : entry.getValue()) {
+            for (FarmStaff farmStaff : entry.getValue()) {
+                String staffId = farmStaff.getStaffId();
                 Map<String, Object> staffMation = stringMapMap.get(staffId);
                 if (ObjectUtil.isEmpty(staffMation)) continue;
 
@@ -164,37 +162,41 @@ public class PieceworkSystemServiceImpl extends SkyeyeBusinessServiceImpl<Piecew
                     currentWorkType = 2;
                     hasWorkRecord = true;
                 } else if (workstationType.equals(UserStaffWorkstationType.PIECE_WORKER.getKey())) {
-                    // 计件工逻辑
-                    List<FarmStaff> farmStaffList = farmStaffService.queryFarmsStaffByStaffId(staffId);
-                    if (CollectionUtil.isNotEmpty(farmStaffList)) {
-                        String piecePrice = farmStaffList.get(CommonNumConstants.NUM_ZERO).getPieceWorkPrice();
-                        piecePriceDecimal = (piecePrice == null || piecePrice.trim().isEmpty())
-                            ? BigDecimal.ZERO : new BigDecimal(piecePrice.trim());
+                    // 计件工逻辑：使用当前车间的计件单价
+                    String piecePrice = farmStaff.getPieceWorkPrice();
+                    piecePriceDecimal = (piecePrice == null || piecePrice.trim().isEmpty())
+                        ? BigDecimal.ZERO : new BigDecimal(piecePrice.trim());
 
-                        List<MachinProcedureAcceptProductNum> allPieces =
-                            machinProcedureAcceptProductNumService.queryMachinProcedureAcceptProductNumByStaffId(staffId);
+                    List<MachinProcedureAcceptProductNum> allPieces =
+                        machinProcedureAcceptProductNumService.queryMachinProcedureAcceptProductNumByStaffId(staffId);
 
-                        if (CollectionUtil.isNotEmpty(allPieces)) {
-                            List<String> parentIds = allPieces.stream().map(MachinProcedureAcceptProductNum::getParentId)
-                                .distinct().collect(Collectors.toList());
+                    if (CollectionUtil.isNotEmpty(allPieces)) {
+                        List<String> parentIds = allPieces.stream().map(MachinProcedureAcceptProductNum::getParentId)
+                            .distinct().collect(Collectors.toList());
 
-                            List<MachinProcedureAccept> acceptList =
-                                machinProcedureAcceptService.queryProcedureAcceptByIds(parentIds);
+                        List<MachinProcedureAccept> acceptList =
+                            machinProcedureAcceptService.queryProcedureAcceptByIds(parentIds);
 
-                            Map<String, String> acceptCreateDateMap = new HashMap<>();
-                            for (MachinProcedureAccept accept : acceptList) {
-                                String createDate = accept.getCreateTime().substring(0, 10);
-                                acceptCreateDateMap.put(accept.getId(), createDate);
+                        // 只统计当前车间的验收单：日期 + farmId
+                        Map<String, String> acceptCreateDateMap = new HashMap<>();
+                        for (MachinProcedureAccept accept : acceptList) {
+                            if (!farmId.equals(accept.getFarmId())) {
+                                continue;
                             }
+                            String createDate = accept.getCreateTime().substring(0, 10);
+                            acceptCreateDateMap.put(accept.getId(), createDate);
+                        }
 
-                            String totalPieces = CommonNumConstants.NUM_ZERO.toString();
-                            for (MachinProcedureAcceptProductNum piece : allPieces) {
-                                String createDate = acceptCreateDateMap.get(piece.getParentId());
-                                if (yesterdayStr.equals(createDate)) {
-                                    String allNumber = StrUtil.isEmpty(piece.getAllNumber()) ? CommonNumConstants.NUM_ZERO.toString() : piece.getAllNumber();
-                                    totalPieces = CalculationUtil.add(totalPieces, allNumber, ErpConstants.NUM_AFTER_DOT, RoundingMode.UP);
-                                }
+                        String totalPieces = CommonNumConstants.NUM_ZERO.toString();
+                        for (MachinProcedureAcceptProductNum piece : allPieces) {
+                            String createDate = acceptCreateDateMap.get(piece.getParentId());
+                            if (yesterdayStr.equals(createDate)) {
+                                String allNumber = StrUtil.isEmpty(piece.getAllNumber()) ? CommonNumConstants.NUM_ZERO.toString() : piece.getAllNumber();
+                                totalPieces = CalculationUtil.add(totalPieces, allNumber, ErpConstants.NUM_AFTER_DOT, RoundingMode.UP);
                             }
+                        }
+                        // 当天在该车间无产量时不写记录
+                        if (!CommonNumConstants.NUM_ZERO.toString().equals(totalPieces)) {
                             dayValue = "A-" + totalPieces;
                             currentWorkType = 1;
                             hasWorkRecord = true;
@@ -211,11 +213,7 @@ public class PieceworkSystemServiceImpl extends SkyeyeBusinessServiceImpl<Piecew
                     record.setStaffId(staffId);
                     record.setDepartmentId(staffMation.get("departmentId").toString());
                     record.setFarmId(farmId);
-
-                    List<FarmStaff> farmStaffList = farmStaffService.queryFarmsStaffByStaffId(staffId);
-                    if (CollectionUtil.isNotEmpty(farmStaffList)) {
-                        record.setFarmStationId(farmStaffList.get(CommonNumConstants.NUM_ZERO).getFarmStationId());
-                    }
+                    record.setFarmStationId(farmStaff.getFarmStationId());
 
                     record.setDayMouth(month);
                     for (int i = 1; i <= 31; i++) {
