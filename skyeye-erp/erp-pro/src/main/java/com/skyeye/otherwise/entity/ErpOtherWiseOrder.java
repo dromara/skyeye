@@ -11,6 +11,11 @@ import lombok.Data;
 
 import java.util.List;
 
+import com.skyeye.depot.classenum.DepotPutOutType;
+import com.skyeye.business.classenum.OrderQualityInspectionType;
+import com.skyeye.common.enumeration.PayTypeEnum;
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: ErpOtherWiseOrder
  * @Description: 其他微服务创建ERP单据的实体类
@@ -35,7 +40,7 @@ public class ErpOtherWiseOrder extends OperatorUserInfo {
     @ApiModelProperty(value = "流程实例id")
     private String processInstanceId;
 
-    @ApiModelProperty(value = "出入库类型，参考#DepotPutOutType", required = "required")
+    @ApiModelProperty(value = "出入库类型", required = "required", enumClass = DepotPutOutType.class)
     private Integer type;
 
     @ApiModelProperty(value = "订单类型，每个服务类的serviceClassName", required = "required")
@@ -62,10 +67,10 @@ public class ErpOtherWiseOrder extends OperatorUserInfo {
     @ApiModelProperty(value = "商品列表,json串", required = "required,json")
     private List<ErpOtherWiseOrderItem> erpOrderItemList;
 
-    @ApiModelProperty(value = "质检类型，参考#OrderQualityInspectionType")
+    @ApiModelProperty(value = "质检类型", enumClass = OrderQualityInspectionType.class)
     private Integer qualityInspection;
 
-    @ApiModelProperty(value = "是否需要出入库，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否需要出入库", enumClass = WhetherEnum.class)
     private Integer needDepot;
 
     @ApiModelProperty("其他状态信息，根据单据类型不同，状态信息表达含义不同。")
@@ -86,13 +91,13 @@ public class ErpOtherWiseOrder extends OperatorUserInfo {
     @ApiModelProperty(value = "优惠金额/折损扣费,默认为0.00", required = "double")
     private String discountMoney;
 
-    @ApiModelProperty(value = "是否需要统筹，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否需要统筹", enumClass = WhetherEnum.class)
     private Integer needOverPlan;
 
     @ApiModelProperty(value = "计划完成时间")
     private String planComplateTime;
 
-    @ApiModelProperty(value = "付款类型，参考#PayTypeEnum", required = "num", defaultValue = "0")
+    @ApiModelProperty(value = "付款类型", required = "num", defaultValue = "0", enumClass = PayTypeEnum.class)
     private String payType;
 
     @ApiModelProperty(value = "关联的客户/供应商/会员id")

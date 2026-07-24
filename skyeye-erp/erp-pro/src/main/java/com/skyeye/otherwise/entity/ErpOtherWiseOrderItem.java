@@ -9,6 +9,9 @@ import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.common.entity.features.SkyeyeLinkData;
 import lombok.Data;
 
+import com.skyeye.material.classenum.MaterialInOrderType;
+import com.skyeye.business.classenum.OrderItemQualityInspectionType;
+
 /**
  * @ClassName: ErpOtherWiseOrderItem
  * @Description: 其他微服务创建ERP单据的子单据实体类
@@ -54,10 +57,10 @@ public class ErpOtherWiseOrderItem extends SkyeyeLinkData {
     @ApiModelProperty(value = "价税合计", defaultValue = "0")
     private String taxLastMoney;
 
-    @ApiModelProperty(value = "商品在单据中的类型，参考#MaterialInOrderType", required = "num")
+    @ApiModelProperty(value = "商品在单据中的类型", required = "num", enumClass = MaterialInOrderType.class)
     private Integer mType;
 
-    @ApiModelProperty(value = "质检类型，参考#OrderItemQualityInspectionType", required = "num")
+    @ApiModelProperty(value = "质检类型", required = "num", enumClass = OrderItemQualityInspectionType.class)
     private Integer qualityInspection;
 
     @ApiModelProperty(value = "质检比例(%)，质检类型为抽检时才生效")
