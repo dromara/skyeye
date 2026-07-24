@@ -15,6 +15,7 @@ import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeTeamAuth;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.module.entity.AutoModule;
+import com.skyeye.schedule.classenum.AutoScheduleExecuteResult;
 import com.skyeye.schedule.classenum.AutoScheduleExecuteType;
 import com.skyeye.schedule.classenum.AutoScheduleFrequency;
 import com.skyeye.usercase.entity.AutoCase;
@@ -72,8 +73,24 @@ public class AutoScheduleTask extends SkyeyeTeamAuth {
     private Integer enabled;
 
     @TableField(value = "execute_result", updateStrategy = FieldStrategy.NEVER, insertStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "最近执行结果：-1执行中；结束后为失败率0-100（失败数/总数*100）")
+    @ApiModelProperty(value = "最近执行结果", enumClass = AutoScheduleExecuteResult.class)
     private Integer executeResult;
+
+    @TableField(value = "total_num", updateStrategy = FieldStrategy.NEVER, insertStrategy = FieldStrategy.NEVER)
+    @ApiModelProperty(value = "最近执行用例总数")
+    private Integer totalNum;
+
+    @TableField(value = "success_num", updateStrategy = FieldStrategy.NEVER, insertStrategy = FieldStrategy.NEVER)
+    @ApiModelProperty(value = "最近执行成功数")
+    private Integer successNum;
+
+    @TableField(value = "fail_num", updateStrategy = FieldStrategy.NEVER, insertStrategy = FieldStrategy.NEVER)
+    @ApiModelProperty(value = "最近执行失败数")
+    private Integer failNum;
+
+    @TableField(value = "success_rate", updateStrategy = FieldStrategy.NEVER, insertStrategy = FieldStrategy.NEVER)
+    @ApiModelProperty(value = "最近执行成功率（0-100，保留两位小数）")
+    private Double successRate;
 
     @TableField(exist = false)
     @ApiModelProperty(value = "关联的模块ID列表")
