@@ -33,6 +33,7 @@ import com.skyeye.maintenance.service.EquipmentMaintainOrderService;
 import com.skyeye.repair.classenum.EquipmentFaultCategory;
 import com.skyeye.repair.classenum.EquipmentRepairAuditOpinion;
 import com.skyeye.repair.classenum.EquipmentRepairFaultReason;
+import com.skyeye.repair.classenum.EquipmentRepairFromType;
 import com.skyeye.repair.classenum.EquipmentRepairOrderState;
 import com.skyeye.repair.classenum.EquipmentRepairTeam;
 import com.skyeye.repair.dao.EquipmentRepairOrderDao;
@@ -120,9 +121,8 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
             }
         }
 
-        if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
-            // 嵌套在保养任务详情：objectId = 保养任务id
-            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getMaintainOrderId), commonPageInfo.getObjectId());
+        if (StrUtil.isNotEmpty(commonPageInfo.getFromId())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getFromId), commonPageInfo.getFromId());
         }
         if (StrUtil.isNotEmpty(commonPageInfo.getHolderId())) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getEquipmentId), commonPageInfo.getHolderId());
@@ -145,13 +145,18 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
             return null;
         }
         equipmentService.setDataMation(order, EquipmentRepairOrder::getEquipmentId);
-        equipmentMaintainOrderService.setDataMation(order, EquipmentRepairOrder::getMaintainOrderId);
+        // 设置来源单据信息（保养任务）
+        if (ObjectUtil.isNotEmpty(order.getFromTypeId())
+            && order.getFromTypeId().equals(EquipmentRepairFromType.MAINTAIN_ORDER.getKey())) {
+            equipmentMaintainOrderService.setDataMation(order, EquipmentRepairOrder::getFromId);
+        }
         iAuthUserService.setDataMation(order, EquipmentRepairOrder::getUserId);
         iAuthUserService.setDataMation(order, EquipmentRepairOrder::getServiceUserId);
         supplierService.setDataMation(order, EquipmentRepairOrder::getSupplierId);
         iSysDictDataService.setDataMation(order, EquipmentRepairOrder::getUrgencyId);
         iSysDictDataService.setDataMation(order, EquipmentRepairOrder::getEvaluateTypeId);
         order.setStateMation(EquipmentRepairOrderState.getMation(order.getState()));
+        order.setFromTypeMation(EquipmentRepairFromType.getMation(order.getFromTypeId()));
         order.setFaultTypeMation(EquipmentFaultCategory.getMation(order.getFaultType()));
         order.setRepairTeamMation(EquipmentRepairTeam.getMation(order.getRepairTeam()));
         order.setAuditOpinionMation(EquipmentRepairAuditOpinion.getMation(order.getAuditOpinion()));
@@ -372,7 +377,8 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
-        equipmentMaintainOrderService.setMationForMap(beans, "maintainOrderId", "maintainOrderMation");
+        // 设置保养任务
+        equipmentMaintainOrderService.setMationForMap(beans, "fromId", "fromMation");
         iAuthUserService.setMationForMap(beans, "userId", "userMation");
         iAuthUserService.setMationForMap(beans, "serviceUserId", "serviceUserMation");
         return beans;

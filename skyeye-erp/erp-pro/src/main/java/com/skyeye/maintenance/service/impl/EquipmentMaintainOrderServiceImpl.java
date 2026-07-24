@@ -32,8 +32,12 @@ import com.skyeye.maintenance.service.EquipmentMaintainOrderItemService;
 import com.skyeye.maintenance.service.EquipmentMaintainOrderService;
 import com.skyeye.maintenance.service.EquipmentMaintainOrderSparePartDetailService;
 import com.skyeye.maintenance.service.MaintenancePlanService;
+import com.skyeye.repair.classenum.EquipmentRepairFromType;
+import com.skyeye.repair.entity.EquipmentRepairOrder;
+import com.skyeye.repair.service.EquipmentRepairOrderService;
 import com.skyeye.rest.sealservice.service.IServiceUserStockService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,6 +74,10 @@ public class EquipmentMaintainOrderServiceImpl extends SkyeyeBusinessServiceImpl
 
     @Autowired
     private IServiceUserStockService iServiceUserStockService;
+
+    @Autowired
+    @Lazy
+    private EquipmentRepairOrderService equipmentRepairOrderService;
 
     @Override
     public void createPrepose(EquipmentMaintainOrder entity) {
@@ -285,5 +293,28 @@ public class EquipmentMaintainOrderServiceImpl extends SkyeyeBusinessServiceImpl
         updateEntity(task, userId);
         outputObject.setBean(task);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void insertMaintainOrderToRepair(InputObject inputObject, OutputObject outputObject) {
+        EquipmentRepairOrder repairOrder = inputObject.getParams(EquipmentRepairOrder.class);
+        EquipmentMaintainOrder maintainOrder = selectById(repairOrder.getId());
+        if (ObjectUtil.isEmpty(maintainOrder)) {
+            throw new CustomException("该数据不存在.");
+        }
+        // 执行中的保养任务可以转维修
+        if (EquipmentMaintainTaskState.IN_PROGRESS.getKey().equals(maintainOrder.getState())) {
+            String userId = inputObject.getLogParams().get("id").toString();
+            repairOrder.setFromId(repairOrder.getId());
+            repairOrder.setFromTypeId(EquipmentRepairFromType.MAINTAIN_ORDER.getKey());
+            repairOrder.setId(StrUtil.EMPTY);
+            if (StrUtil.isEmpty(repairOrder.getEquipmentId())) {
+                repairOrder.setEquipmentId(maintainOrder.getEquipmentId());
+            }
+            equipmentRepairOrderService.createEntity(repairOrder, userId);
+        } else {
+            outputObject.setreturnMessage("状态错误，无法转维修单.");
+        }
     }
 }

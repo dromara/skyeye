@@ -5,7 +5,6 @@
 package com.skyeye.eve.forum.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -15,6 +14,7 @@ import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
@@ -93,15 +93,21 @@ public class ForumCommentServiceImpl extends SkyeyeBusinessServiceImpl<ForumComm
     }
 
     @Override
-    public List<Map<String, Object>> queryDataList(InputObject inputObject) {
+    public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
         String forumId = inputObject.getParams().get("id").toString();
-        QueryWrapper<ForumComment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(ForumComment::getForumId), forumId)
-                .orderByDesc(MybatisPlusUtil.toColumns(ForumComment::getCreateTime));
-        List<ForumComment> commentList = list(queryWrapper);
-        List<Map<String, Object>> beans = commentList.stream().map(forumComment -> {
-            return JSONUtil.<Map<String, Object>>toBean(JSONUtil.toJsonStr(forumComment), null);
-        }).collect(Collectors.toList());
+        String tenantId = null;
+        if (tenantEnable) {
+            tenantId = TenantContext.getTenantId();
+        }
+        // 按父评论分页
+        List<Map<String, Object>> beans = skyeyeBaseMapper.queryForumCommentList(forumId, tenantId);
+        List<String> ids = beans.stream().map(bean -> bean.get("id").toString()).collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(ids)) {
+            return new ArrayList<>();
+        }
+        // 查询子节点信息
+        List<String> childIds = skyeyeBaseMapper.queryAllChildIdsByParentId(ids, tenantId);
+        beans = skyeyeBaseMapper.queryForumCommentListByIds(childIds, tenantId);
         // 设置评论人信息和回复人信息
         iAuthUserService.setMationForMap(beans, "commentId", "commentMation");
         iAuthUserService.setMationForMap(beans, "replyId", "replyMation");

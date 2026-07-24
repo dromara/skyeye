@@ -40,11 +40,11 @@ public class ForumCommentController {
     }
 
     @ApiOperation(id = "queryForumCommentList", value = "获取帖子评论信息", method = "POST", allUse = "2")
-    @ApiImplicitParams(value = {
-        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
+    @ApiImplicitParams(classBean = CommonPageInfo.class, value = {
+        @ApiImplicitParam(id = "id", name = "id", value = "帖子id", required = "required")})
     @RequestMapping("/post/ForumCommentController/queryForumCommentList")
     public void queryForumCommentList(InputObject inputObject, OutputObject outputObject) {
-        forumContentService.queryList(inputObject, outputObject);
+        forumContentService.queryPageList(inputObject, outputObject);
     }
 
     @ApiOperation(id = "queryMyForumCommentList", value = "获取我的评论信息", method = "POST", allUse = "2")
