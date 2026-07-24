@@ -12,6 +12,7 @@ import com.skyeye.common.entity.features.SubmitSkyeyeFlowable;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.contract.classenum.CrmContractChildStateEnum;
 import com.skyeye.contract.entity.CrmContract;
 import com.skyeye.contract.service.CrmContractService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,7 +130,7 @@ public class CrmContractController {
     @ApiOperation(id = "editCrmContractChildState", value = "修改合同产品状态", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),
-        @ApiImplicitParam(id = "childState", name = "childState", value = "合同产品状态，参考#CrmContractChildStateEnum", required = "required")})
+        @ApiImplicitParam(id = "childState", name = "childState", value = "合同产品状态", enumClass = CrmContractChildStateEnum.class, required = "required")})
     @RequestMapping("/post/CrmContractController/editChildState")
     public void editChildState(InputObject inputObject, OutputObject outputObject) {
         crmContractService.editChildState(inputObject, outputObject);
