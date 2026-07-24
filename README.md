@@ -3,16 +3,45 @@
   <strong>Dromara开源组织 | 基于SpringCloudAlibaba微服务 + Vue3 + Ant Design Vue + uni-app构建</strong>
 </p>
 
-<p align="center"> 
-  <a href="https://gitcode.com/doc_wei-dev/erp-pro"><img alt="AtomGit G-Star" src="https://gitcode.com/doc_wei-dev/erp-pro/star/new_badge.svg"></a><br />
-  <a href="https://gitcode.com/doc_wei-dev/erp-pro"><img alt="AtomGit Star" src="https://gitcode.com/doc_wei-dev/erp-pro/star/badge.svg"></a>
-  <a href="https://gitcode.com/doc_wei-dev/erp-pro"><img alt="AtomGit Fork" src="https://gitcode.com/doc_wei-dev/erp-pro/fork/badge.svg"></a>
-  <a href="https://gitcode.com/doc_wei-dev/erp-pro"><img alt="AtomGit Download" src="https://gitcode.com/doc_wei-dev/erp-pro/download/badge.svg"></a>
-  <img src="https://gitcode.com/doc_wei-dev/erp-pro/star/2025top.svg?style=flat-square&logoSize=14"
-  alt="GitCode Star 2025" height="20"><br />
- <a href="https://gitee.com/dromara/skyeye"><img alt="gitee" src="https://gitee.com/dromara/skyeye/badge/star.svg?theme=blue"></a><br />
-  <img src="https://img.shields.io/github/stars/dromara/skyeye.svg?style=social&label=Stars" alt="Github Star" height="20">
-</p>
+<p align="center">
+  <a href="https://gitcode.com/doc_wei-dev/erp-pro">
+    <img alt="GitCode G-Star" src="https://gitcode.com/doc_wei-dev/erp-pro/star/new_badge.svg">
+  </a>
+  <br>
+
+  <a href="https://gitcode.com/doc_wei-dev/erp-pro">
+    <img alt="GitCode Star" src="https://gitcode.com/doc_wei-dev/erp-pro/star/badge.svg">
+  </a>
+
+  <a href="https://gitcode.com/doc_wei-dev/erp-pro">
+    <img alt="GitCode Fork" src="https://gitcode.com/doc_wei-dev/erp-pro/fork/badge.svg">
+  </a>
+
+  <a href="https://gitcode.com/doc_wei-dev/erp-pro">
+    <img alt="GitCode Download" src="https://gitcode.com/doc_wei-dev/erp-pro/download/badge.svg">
+  </a>
+  
+  <a href="https://gitcode.com/doc_wei-dev/erp-pro">
+    <img src="https://gitcode.com/doc_wei-dev/erp-pro/star/2025top.svg?style=flat-square&logoSize=14"
+  alt="GitCode Star 2025" height="20">
+  </a>
+  <br>
+
+  <a href="https://gitee.com/dromara/skyeye">
+    <img
+      alt="Gitee Star"
+      src="https://gitee.com/dromara/skyeye/badge/star.svg?theme=blue"
+    >
+  </a>
+  <br>
+
+ <a href="https://github.com/dromara/skyeye">
+  <img
+    src="https://img.shields.io/github/stars/dromara/skyeye?style=social&amp;label=Stars"
+    alt="GitHub Stars"
+    height="20"
+  >
+</a>
 
 ## 📖 项目简介
 SkyEye云 是面向**智能制造行业**的一站式SaaS化零代码全链路管理平台，一套底座覆盖企业数字化全场景：
