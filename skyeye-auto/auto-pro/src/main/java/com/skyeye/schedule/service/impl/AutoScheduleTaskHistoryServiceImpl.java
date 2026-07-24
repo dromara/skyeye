@@ -27,7 +27,7 @@ import java.util.List;
  * @Description: 定时任务执行记录服务层
  */
 @Service
-@SkyeyeService(name = "定时任务执行记录", groupName = "定时任务执行记录", manageShow = false)
+@SkyeyeService(name = "定时任务执行记录", groupName = "定时任务执行记录", manageShow = false, allowDynamicAttrKey = false)
 public class AutoScheduleTaskHistoryServiceImpl
     extends SkyeyeBusinessServiceImpl<AutoScheduleTaskHistoryDao, AutoScheduleTaskHistory>
     implements AutoScheduleTaskHistoryService {
