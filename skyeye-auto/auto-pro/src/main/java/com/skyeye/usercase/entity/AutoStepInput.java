@@ -13,6 +13,8 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.CommonInfo;
 import lombok.Data;
 
+import com.skyeye.usercase.classenum.AutoValueFromTypeEnum;
+
 /**
  * @ClassName: AutoStepInput
  * @Description: 用例步骤前置条件实体类
@@ -47,7 +49,7 @@ public class AutoStepInput extends CommonInfo {
      * 值来源，参考 AutoValueFromTypeEnum：1-自定义字面量；2-表达式（从结果集 JsonPath 取值）。
      */
     @TableField("value_from")
-    @ApiModelProperty(value = "值的数据来源，参考#AutoValueFromTypeEnum（1自定义/2表达式）", required = "required")
+    @ApiModelProperty(value = "值的数据来源", required = "required", enumClass = AutoValueFromTypeEnum.class)
     private Integer valueFrom;
 
     /**

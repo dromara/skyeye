@@ -15,6 +15,8 @@ import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeTeamAuth;
 import lombok.Data;
 
+import com.skyeye.version.classenum.AutoVersionState;
+
 /**
  * @ClassName: AutoVersion
  * @Description: 版本管理实体层
@@ -47,7 +49,7 @@ public class AutoVersion extends SkyeyeTeamAuth {
     private String no;
 
     @TableField("state")
-    @ApiModelProperty(value = "状态，参考#AutoVersionState", required = "required")
+    @ApiModelProperty(value = "状态", required = "required", enumClass = AutoVersionState.class)
     private String state;
 
 }

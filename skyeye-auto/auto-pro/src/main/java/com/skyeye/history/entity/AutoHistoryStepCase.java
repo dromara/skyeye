@@ -12,6 +12,8 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.CommonInfo;
 import lombok.Data;
 
+import com.skyeye.history.classenum.AutoHistoryCaseExecuteResult;
+
 /**
  * @ClassName: AutoHistoryStepApi
  * @Description: 步骤为用例的执行历史实体类
@@ -50,7 +52,7 @@ public class AutoHistoryStepCase extends CommonInfo {
     private String historyCaseId;
 
     @TableField("execute_result")
-    @Property(value = "执行结果，参考#AutoHistoryCaseExecuteResult")
+    @Property(value = "执行结果", enumClass = AutoHistoryCaseExecuteResult.class)
     private Integer executeResult;
 
 }

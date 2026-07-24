@@ -17,6 +17,8 @@ import com.skyeye.common.entity.features.BaseGeneralInfo;
 import com.skyeye.product.entity.AutoProduct;
 import lombok.Data;
 
+import com.skyeye.project.classenum.AutoProjectState;
+
 /**
  * @ClassName: AutoProject
  * @Description: 项目管理
@@ -41,7 +43,7 @@ public class AutoProject extends BaseGeneralInfo {
     private AutoProduct productMation;
 
     @TableField("state")
-    @ApiModelProperty(value = "状态，参考#AutoProjectState", required = "required")
+    @ApiModelProperty(value = "状态", required = "required", enumClass = AutoProjectState.class)
     private String state;
 
     @TableField(value = "team_template_id", updateStrategy = FieldStrategy.NEVER)

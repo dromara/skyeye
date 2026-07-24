@@ -14,6 +14,8 @@ import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeTeamAuth;
 import lombok.Data;
 
+import com.skyeye.variable.classenum.AutoVariableType;
+
 /**
  * @ClassName: AutoVariable
  * @Description: 变量管理实体层
@@ -41,7 +43,7 @@ public class AutoVariable extends SkyeyeTeamAuth {
     private String value;
 
     @TableField("type")
-    @ApiModelProperty(value = "类型，参考#AutoVariableType", required = "required")
+    @ApiModelProperty(value = "类型", required = "required", enumClass = AutoVariableType.class)
     private String type;
 
     @TableField("remark")
