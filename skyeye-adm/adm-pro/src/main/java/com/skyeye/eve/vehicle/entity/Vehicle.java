@@ -17,6 +17,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.eve.vehicle.classenum.VehicleState;
+
 /**
  * @ClassName: Vehicle
  * @Description: 车辆实体类
@@ -105,7 +107,7 @@ public class Vehicle extends BaseGeneralInfo {
     private Map<String, Object> vehicleAdminMation;
 
     @TableField(value = "state")
-    @Property(value = "车辆状态，参考#VehicleState")
+    @Property(value = "车辆状态", enumClass = VehicleState.class)
     private Integer state;
 
     @TableField(value = "delete_flag")

@@ -14,6 +14,8 @@ import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import lombok.Data;
 
+import com.skyeye.eve.vehicle.classenum.MaintenanceType;
+
 /**
  * @ClassName: Maintenance
  * @Description: 车辆维修实体类
@@ -37,7 +39,7 @@ public class Maintenance extends BaseGeneralInfo {
     private Vehicle vehicleMation;
 
     @TableField("maintenance_type")
-    @ApiModelProperty(value = "类型，参考#MaintenanceType", required = "required")
+    @ApiModelProperty(value = "类型", required = "required", enumClass = MaintenanceType.class)
     private Integer maintenanceType;
 
     @TableField("maintenance_price")

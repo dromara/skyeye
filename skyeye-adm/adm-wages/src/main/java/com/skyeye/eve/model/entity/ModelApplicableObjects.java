@@ -14,6 +14,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.common.enumeration.ApplicableObjectsType;
+
 /**
  * @ClassName: ModelApplicableObjects
  * @Description: 薪资模板适用对象实体类
@@ -40,7 +42,7 @@ public class ModelApplicableObjects extends CommonInfo {
     private Map<String, Object> objectMation;
 
     @TableField("object_type")
-    @ApiModelProperty(value = "适用对象类型，参考#ApplicableObjectsType", required = "required,num")
+    @ApiModelProperty(value = "适用对象类型", required = "required,num", enumClass = ApplicableObjectsType.class)
     private Integer objectType;
 
 }

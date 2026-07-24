@@ -13,6 +13,8 @@ import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.entity.features.IconOrImgInfo;
 import lombok.Data;
 
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: LightAppType
  * @Description: 轻应用类型实体类
@@ -40,7 +42,7 @@ public class LightAppType extends IconOrImgInfo {
     private Integer orderBy;
 
     @TableField(value = "enabled")
-    @ApiModelProperty(value = "启用状态，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "启用状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
 }

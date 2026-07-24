@@ -18,6 +18,10 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.eve.notice.classenum.NoticeRealLinesType;
+import com.skyeye.eve.notice.classenum.NoticeState;
+import com.skyeye.eve.notice.classenum.NoticeTimeSend;
+
 /**
  * @ClassName: Notice
  * @Description: 公告实体类
@@ -38,7 +42,7 @@ public class Notice extends BaseGeneralInfo {
     private String content;
 
     @TableField(value = "state")
-    @ApiModelProperty(value = "状态，参考#NoticeState", required = "required,num")
+    @ApiModelProperty(value = "状态", required = "required,num", enumClass = NoticeState.class)
     private Integer state;
 
     @TableField(value = "order_by")
@@ -46,11 +50,11 @@ public class Notice extends BaseGeneralInfo {
     private Integer orderBy;
 
     @TableField(value = "whether_email")
-    @ApiModelProperty(value = "是否发送邮件通知，参考#WhetherEnum", required = "required,num")
+    @ApiModelProperty(value = "是否发送邮件通知", required = "required,num", enumClass = WhetherEnum.class)
     private Integer whetherEmail;
 
     @TableField(value = "time_send")
-    @ApiModelProperty(value = "是否设置定时发送，参考#NoticeTimeSend", required = "required,num")
+    @ApiModelProperty(value = "是否设置定时发送", required = "required,num", enumClass = NoticeTimeSend.class)
     private Integer timeSend;
 
     @TableField(value = "delayed_time")
@@ -62,7 +66,7 @@ public class Notice extends BaseGeneralInfo {
     private String typeId;
 
     @TableField(value = "real_lines_type")
-    @Property(value = "上线类型，参考#NoticeRealLinesType")
+    @Property(value = "上线类型", enumClass = NoticeRealLinesType.class)
     private Integer realLinesType;
 
     @TableField(value = "real_lines_time")
