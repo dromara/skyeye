@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public enum AutoScheduleExecuteResult implements SkyeyeEnumClass {
 
     IN_PROGRESS(1, "执行中", true, false),
-    SUCCESS(2, "执行成功", true, true),
+    SUCCESS(2, "执行成功", true, false),
     FAILED(3, "执行失败", true, false);
 
     private Integer key;
