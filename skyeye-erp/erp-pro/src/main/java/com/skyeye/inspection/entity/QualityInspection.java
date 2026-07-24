@@ -19,6 +19,10 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.inspection.classenum.QualityInspectionFromType;
+import com.skyeye.inspection.classenum.QualityInspectionPutState;
+import com.skyeye.inspection.classenum.QualityInspectionReturnState;
+
 /**
  * @ClassName: QualityInspection
  * @Description: 质检单实体类
@@ -38,7 +42,7 @@ public class QualityInspection extends SkyeyeFlowable {
     private String operTime;
 
     @TableField(value = "from_type_id", updateStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "来源单据类型，参考#QualityInspectionFromType")
+    @ApiModelProperty(value = "来源单据类型", enumClass = QualityInspectionFromType.class)
     private Integer fromTypeId;
 
     @TableField(value = "from_id", updateStrategy = FieldStrategy.NEVER)
@@ -62,11 +66,11 @@ public class QualityInspection extends SkyeyeFlowable {
     private String remark;
 
     @TableField("put_state")
-    @Property(value = "入库状态，参考#QualityInspectionPutState")
+    @Property(value = "入库状态", enumClass = QualityInspectionPutState.class)
     private Integer putState;
 
     @TableField("return_state")
-    @Property(value = "退货状态，参考#QualityInspectionReturnState")
+    @Property(value = "退货状态", enumClass = QualityInspectionReturnState.class)
     private Integer returnState;
 
     @TableField("exchanges_state")

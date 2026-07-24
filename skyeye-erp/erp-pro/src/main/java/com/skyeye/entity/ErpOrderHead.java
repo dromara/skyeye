@@ -12,6 +12,9 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.common.enumeration.PayTypeEnum;
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: ErpOrderHead
  * @Description: ERP相关订单实体类
@@ -41,7 +44,7 @@ public class ErpOrderHead extends ErpOrderCommon {
     private String discountMoney;
 
     @TableField("need_over_plan")
-    @ApiModelProperty(value = "是否需要统筹，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否需要统筹", enumClass = WhetherEnum.class)
     private Integer needOverPlan;
 
     @TableField("plan_complate_time")
@@ -49,7 +52,7 @@ public class ErpOrderHead extends ErpOrderCommon {
     private String planComplateTime;
 
     @TableField("pay_type")
-    @ApiModelProperty(value = "付款类型，参考#PayTypeEnum", required = "num", defaultValue = "0")
+    @ApiModelProperty(value = "付款类型", required = "num", defaultValue = "0", enumClass = PayTypeEnum.class)
     private String payType;
 
     @TableField("holder_id")
