@@ -18,6 +18,8 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: Licence
  * @Description: 证照实体类
@@ -46,7 +48,7 @@ public class Licence extends BaseGeneralInfo {
     private String issueTime;
 
     @TableField(value = "annual_review")
-    @ApiModelProperty(value = "是否年审，参考#WhetherEnum", required = "required,num")
+    @ApiModelProperty(value = "是否年审", required = "required,num", enumClass = WhetherEnum.class)
     private Integer annualReview;
 
     @TableField(value = "next_annual_review")
@@ -54,7 +56,7 @@ public class Licence extends BaseGeneralInfo {
     private String nextAnnualReview;
 
     @TableField(value = "term_of_validity")
-    @ApiModelProperty(value = "有效期是否永久，参考#WhetherEnum", required = "required,num")
+    @ApiModelProperty(value = "有效期是否永久", required = "required,num", enumClass = WhetherEnum.class)
     private Integer termOfValidity;
 
     @TableField(value = "term_of_validity_time")

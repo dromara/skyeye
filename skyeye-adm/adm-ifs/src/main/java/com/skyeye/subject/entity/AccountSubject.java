@@ -13,6 +13,10 @@ import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import lombok.Data;
 
+import com.skyeye.subject.classenum.AccountSubjectType;
+import com.skyeye.subject.classenum.AmountDirection;
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: AccountSubject
  * @Description: 会计科目实体类
@@ -33,15 +37,15 @@ public class AccountSubject extends BaseGeneralInfo {
     private String num;
 
     @TableField(value = "type")
-    @ApiModelProperty(value = "类型，参考#AccountSubjectType", required = "required,num")
+    @ApiModelProperty(value = "类型", required = "required,num", enumClass = AccountSubjectType.class)
     private Integer type;
 
     @TableField("enabled")
-    @ApiModelProperty(value = "状态，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
     @TableField("amount_direction")
-    @ApiModelProperty(value = "余额方向，参考#AmountDirection", required = "required,num")
+    @ApiModelProperty(value = "余额方向", required = "required,num", enumClass = AmountDirection.class)
     private Integer amountDirection;
 
 }

@@ -16,6 +16,9 @@ import lombok.Data;
 
 import java.util.List;
 
+import com.skyeye.eve.email.classenum.EmailState;
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: Email
  * @Description: 邮件实体类
@@ -55,15 +58,15 @@ public class Email extends CommonInfo {
     private String sendTime;
 
     @TableField("replay_sign")
-    @Property(value = "是否需要回复，参考#WhetherEnum")
+    @Property(value = "是否需要回复", enumClass = WhetherEnum.class)
     private Integer replaySign;
 
     @TableField("is_new")
-    @Property(value = "是否已读，参考#WhetherEnum")
+    @Property(value = "是否已读", enumClass = WhetherEnum.class)
     private Integer isNew;
 
     @TableField("is_contain_attach")
-    @Property(value = "是否包含附件，参考#WhetherEnum")
+    @Property(value = "是否包含附件", enumClass = WhetherEnum.class)
     private Integer isContainAttach;
 
     @TableField("from_people")
@@ -91,7 +94,7 @@ public class Email extends CommonInfo {
     private String createTime;
 
     @TableField("state")
-    @Property(value = "状态，参考#EmailState")
+    @Property(value = "状态", enumClass = EmailState.class)
     private Integer state;
 
     @TableField(exist = false)

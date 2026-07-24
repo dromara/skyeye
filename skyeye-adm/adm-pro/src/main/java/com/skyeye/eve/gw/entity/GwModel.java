@@ -14,6 +14,8 @@ import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import lombok.Data;
 
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: GwModel
  * @Description: 公文模版实体类
@@ -30,7 +32,7 @@ import lombok.Data;
 public class GwModel extends BaseGeneralInfo {
 
     @TableField(value = "enabled")
-    @ApiModelProperty(value = "启用状态，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "启用状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
     @TableField(value = "path")

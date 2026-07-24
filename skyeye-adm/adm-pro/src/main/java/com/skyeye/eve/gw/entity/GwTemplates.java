@@ -16,6 +16,8 @@ import com.skyeye.common.entity.features.BaseGeneralInfo;
 import com.skyeye.eve.seal.entity.Seal;
 import lombok.Data;
 
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: GwTemplates
  * @Description: 套红模板实体类
@@ -32,7 +34,7 @@ import lombok.Data;
 public class GwTemplates extends BaseGeneralInfo {
 
     @TableField(value = "enabled")
-    @ApiModelProperty(value = "启用状态，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "启用状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
     @TableField(value = "seal_id")

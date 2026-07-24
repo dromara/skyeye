@@ -18,6 +18,9 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.eve.assets.classenum.PurchasePutFromType;
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: AssetPurchasePut
  * @Description: 资产采购入库实体类
@@ -49,11 +52,11 @@ public class AssetPurchasePut extends SkyeyeFlowable {
     private String allPrice;
 
     @TableField("need_depot")
-    @ApiModelProperty(value = "是否需要出入库，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否需要出入库", enumClass = WhetherEnum.class)
     private Integer needDepot;
 
     @TableField(value = "from_type_id", updateStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "来源单据类型，参考#PurchasePutFromType")
+    @ApiModelProperty(value = "来源单据类型", enumClass = PurchasePutFromType.class)
     private Integer fromTypeId;
 
     @TableField(value = "from_id", updateStrategy = FieldStrategy.NEVER)

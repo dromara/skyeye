@@ -16,6 +16,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.eve.knowlg.classenum.KnowlgContentState;
+
 /**
  * @ClassName: KnowledgeContent
  * @Description: 知识库实体类
@@ -43,7 +45,7 @@ public class KnowledgeContent extends BaseGeneralInfo {
     private Map<String, Object> typeMation;
 
     @TableField(value = "state")
-    @ApiModelProperty(value = "状态，参考#KnowlgContentState")
+    @ApiModelProperty(value = "状态", enumClass = KnowlgContentState.class)
     private Integer state;
 
     @TableField(value = "examine_nopass_reason")
