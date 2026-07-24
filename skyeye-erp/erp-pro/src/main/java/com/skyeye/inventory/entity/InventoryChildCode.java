@@ -16,6 +16,9 @@ import com.skyeye.material.entity.Material;
 import com.skyeye.material.entity.MaterialNorms;
 import lombok.Data;
 
+import com.skyeye.material.classenum.MaterialNormsCodeInDepot;
+import com.skyeye.material.classenum.MaterialNormsCodeType;
+
 /**
  * @ClassName: InventoryChildCode
  * @Description: 盘点任务表-子单据关联的编码实体类
@@ -62,11 +65,11 @@ public class InventoryChildCode extends CommonInfo {
     private String codeNum;
 
     @TableField(value = "in_depot")
-    @Property(value = "库存状态，参考#MaterialNormsCodeInDepot")
+    @Property(value = "库存状态", enumClass = MaterialNormsCodeInDepot.class)
     private Integer inDepot;
 
     @TableField(value = "type")
-    @Property(value = "类型，参考#MaterialNormsCodeType")
+    @Property(value = "类型", enumClass = MaterialNormsCodeType.class)
     private Integer type;
 
 }
