@@ -14,8 +14,8 @@ import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.ScheduleFrequency;
 import com.skyeye.equipment.entity.Equipment;
-import com.skyeye.equipmentinspection.classenum.EquipmentInspectionFrequencyType;
 import lombok.Data;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class EquipmentInspectionPlan extends BaseGeneralInfo {
     private EquipmentInspectionTeam teamMation;
 
     @TableField("frequency_type")
-    @ApiModelProperty(value = "巡检频次", enumClass = EquipmentInspectionFrequencyType.class, required = "required,num")
+    @ApiModelProperty(value = "巡检频次", enumClass = ScheduleFrequency.class, required = "required,num")
     private Integer frequency;
 
     @TableField(value = "start_time")

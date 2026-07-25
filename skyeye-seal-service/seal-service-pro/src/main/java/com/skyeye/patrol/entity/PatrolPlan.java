@@ -13,7 +13,7 @@ import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import com.skyeye.common.enumeration.EnableEnum;
-import com.skyeye.patrol.classenum.PatrolPlanFrequency;
+import com.skyeye.common.enumeration.ScheduleFrequency;
 import lombok.Data;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public class PatrolPlan extends BaseGeneralInfo {
     private String endTime;
 
     @TableField(value = "frequency")
-    @ApiModelProperty(value = "巡检频次", enumClass = PatrolPlanFrequency.class, required = "required,num")
+    @ApiModelProperty(value = "巡检频次", enumClass = ScheduleFrequency.class, required = "required,num")
     private Integer frequency;
 
     @TableField(value = "patrol_time")

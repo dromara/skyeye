@@ -11,8 +11,8 @@ import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.ScheduleFrequency;
 import com.skyeye.equipment.entity.Equipment;
-import com.skyeye.maintenance.classenum.MaintenancePlanFrequency;
 import lombok.Data;
 
 import java.util.List;
@@ -46,7 +46,7 @@ public class MaintenancePlan extends BaseGeneralInfo {
     private String endTime;
 
     @TableField(value = "frequency")
-    @ApiModelProperty(value = "保养频次", enumClass = MaintenancePlanFrequency.class, required = "required,num")
+    @ApiModelProperty(value = "保养频次", enumClass = ScheduleFrequency.class, required = "required,num")
     private Integer frequency;
 
     @TableField(value = "maintain_time")

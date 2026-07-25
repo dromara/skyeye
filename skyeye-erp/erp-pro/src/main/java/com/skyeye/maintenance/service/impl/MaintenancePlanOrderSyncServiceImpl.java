@@ -11,7 +11,7 @@ import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
-import com.skyeye.maintenance.classenum.MaintenancePlanFrequency;
+import com.skyeye.common.enumeration.ScheduleFrequency;
 import com.skyeye.maintenance.dao.EquipmentMaintainOrderDao;
 import com.skyeye.maintenance.entity.EquipmentMaintainOrder;
 import com.skyeye.maintenance.entity.EquipmentMaintainOrderItem;
@@ -186,13 +186,13 @@ public class MaintenancePlanOrderSyncServiceImpl implements MaintenancePlanOrder
         if (freq == null) {
             return Collections.emptyList();
         }
-        if (MaintenancePlanFrequency.DAILY.getKey().equals(freq)) {
+        if (ScheduleFrequency.DAILY.getKey().equals(freq)) {
             if (!isDayInPlanWindow(plan, day)) {
                 return Collections.emptyList();
             }
             return singleSlotFromMaintainTime(day, plan.getMaintainTime());
         }
-        if (MaintenancePlanFrequency.WEEKLY.getKey().equals(freq)) {
+        if (ScheduleFrequency.WEEKLY.getKey().equals(freq)) {
             if (!isDayInPlanWindow(plan, day)) {
                 return Collections.emptyList();
             }
@@ -201,7 +201,7 @@ public class MaintenancePlanOrderSyncServiceImpl implements MaintenancePlanOrder
             }
             return singleSlotFromMaintainTime(day, plan.getMaintainTime());
         }
-        if (MaintenancePlanFrequency.MONTHLY.getKey().equals(freq)) {
+        if (ScheduleFrequency.MONTHLY.getKey().equals(freq)) {
             if (!isDayInPlanWindow(plan, day)) {
                 return Collections.emptyList();
             }
@@ -210,7 +210,7 @@ public class MaintenancePlanOrderSyncServiceImpl implements MaintenancePlanOrder
             }
             return singleSlotFromMaintainTime(day, plan.getMaintainTime());
         }
-        if (MaintenancePlanFrequency.CUSTOM.getKey().equals(freq)) {
+        if (ScheduleFrequency.CUSTOM.getKey().equals(freq)) {
             return slotsFromCron(plan.getCustomCron(), day, zone);
         }
         return Collections.emptyList();
