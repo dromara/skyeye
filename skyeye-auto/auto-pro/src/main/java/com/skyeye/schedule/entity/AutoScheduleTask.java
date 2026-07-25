@@ -13,9 +13,9 @@ import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeTeamAuth;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.ScheduleFrequency;
 import com.skyeye.module.entity.AutoModule;
 import com.skyeye.schedule.classenum.AutoScheduleExecuteType;
-import com.skyeye.schedule.classenum.AutoScheduleFrequency;
 import com.skyeye.usercase.entity.AutoCase;
 import lombok.Data;
 
@@ -43,7 +43,7 @@ public class AutoScheduleTask extends SkyeyeTeamAuth {
     private String remark;
 
     @TableField(value = "frequency")
-    @ApiModelProperty(value = "执行频次", enumClass = AutoScheduleFrequency.class, required = "required,num")
+    @ApiModelProperty(value = "执行频次", enumClass = ScheduleFrequency.class, required = "required,num")
     private Integer frequency;
 
     @TableField(value = "execute_time")
