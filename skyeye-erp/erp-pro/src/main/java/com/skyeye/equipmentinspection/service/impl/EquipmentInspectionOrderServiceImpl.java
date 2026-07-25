@@ -154,6 +154,10 @@ public class EquipmentInspectionOrderServiceImpl
         if (entity.getSlotIndex() == null) {
             entity.setSlotIndex(1);
         }
+        if (StrUtil.isNotBlank(entity.getPlannedStartTime()) && StrUtil.isBlank(entity.getPlanDate())
+            && entity.getPlannedStartTime().length() >= 10) {
+            entity.setPlanDate(entity.getPlannedStartTime().substring(0, 10));
+        }
     }
 
     @Override

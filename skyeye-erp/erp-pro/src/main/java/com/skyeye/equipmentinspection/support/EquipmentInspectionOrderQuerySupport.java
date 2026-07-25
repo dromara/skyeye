@@ -28,28 +28,26 @@ public class EquipmentInspectionOrderQuerySupport {
     private EquipmentService equipmentService;
 
     /**
-     * 时间：优先 plan_date，无则 create_time
+     * 时间：优先 planned_start_time，无则 create_time（对齐保养单）
      */
     public void applyStatTimeRange(QueryWrapper<EquipmentInspectionOrder> queryWrapper, String startTime, String endTime) {
         if (StrUtil.isBlank(startTime) && StrUtil.isBlank(endTime)) {
             return;
         }
-        String planDateCol = MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getPlanDate);
+        String plannedCol = MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getPlannedStartTime);
         String createTimeCol = MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCreateTime);
-        String startDate = StrUtil.isNotBlank(startTime) && startTime.length() >= 10 ? startTime.substring(0, 10) : null;
-        String endDate = StrUtil.isNotBlank(endTime) && endTime.length() >= 10 ? endTime.substring(0, 10) : null;
         queryWrapper.and(w -> {
             w.nested(n -> {
-                n.isNotNull(planDateCol).ne(planDateCol, StrUtil.EMPTY);
-                if (StrUtil.isNotBlank(startDate)) {
-                    n.ge(planDateCol, startDate);
+                n.isNotNull(plannedCol).ne(plannedCol, StrUtil.EMPTY);
+                if (StrUtil.isNotBlank(startTime)) {
+                    n.ge(plannedCol, startTime);
                 }
-                if (StrUtil.isNotBlank(endDate)) {
-                    n.le(planDateCol, endDate);
+                if (StrUtil.isNotBlank(endTime)) {
+                    n.le(plannedCol, endTime);
                 }
             });
             w.or(n -> {
-                n.and(a -> a.isNull(planDateCol).or().eq(planDateCol, StrUtil.EMPTY));
+                n.and(a -> a.isNull(plannedCol).or().eq(plannedCol, StrUtil.EMPTY));
                 if (StrUtil.isNotBlank(startTime)) {
                     n.ge(createTimeCol, startTime);
                 }

@@ -9,9 +9,10 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.enumeration.EnableEnum;
-import com.skyeye.common.util.DateUtil;
-import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.common.enumeration.ScheduleFrequency;
+import com.skyeye.common.util.DateUtil;
+import com.skyeye.common.util.QuartzCronUtil;
+import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderPlanSyncService;
@@ -39,19 +40,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 设备巡检方案与系统生成巡检单的同步实现。
- * 
- * XXL 按方案触发后，在「今天起若干天」内按频次算出时段槽位，
- * 为每个「关联设备 × 时段槽位」生成一张待派工巡检单；幂等键 planId + equipmentId + planDate + slotIndex。
- * 当天规定巡检次数（inspectionsPerDay）不参与生单数。
+ * 设备巡检方案与系统生成巡检单的同步实现（对齐工单巡检/保养：按计划开始时刻生单）。
+ * <p>
+ * XXL 触发后，在「今天起若干天」内按频次算出时段，为每个「设备 × 计划开始时刻」生成待派工单；
+ * 已过时刻跳过；幂等键 planId + equipmentId + plannedStartTime。
+ * inspectionsPerDay 不参与生单数。
  */
 @Slf4j
 @Service
 public class EquipmentInspectionOrderPlanSyncServiceImpl implements EquipmentInspectionOrderPlanSyncService {
 
+    private static final DateTimeFormatter PLANNED_TIME_FORMAT = DateTimeFormatter.ofPattern(DateUtil.YYYY_MM_DD_HH_MM_SS);
     private static final DateTimeFormatter PLAN_DATE_PREFIX = DateTimeFormatter.ofPattern(DateUtil.YYYY_MM_DD);
     private static final int ROLLING_DAYS = 7;
-    private static final String DEFAULT_PATROL_TIME = "09:00";
 
     @Autowired
     private EquipmentInspectionPlanService equipmentInspectionPlanService;
@@ -64,11 +65,9 @@ public class EquipmentInspectionOrderPlanSyncServiceImpl implements EquipmentIns
 
     @Override
     public void generateInspectionOrdersForPlan(String planId) {
-        // XXL 入参，非接口实体校验，空则直接结束
         if (StrUtil.isBlank(planId)) {
             return;
         }
-        // selectById 不会返回 null（查无则空对象）；用 id 是否为空判断是否存在
         EquipmentInspectionPlan plan = equipmentInspectionPlanService.selectById(planId);
         if (StrUtil.isBlank(plan.getId())
             || EnableEnum.DISABLE_USING.getKey().equals(plan.getEnabled())) {
@@ -85,7 +84,6 @@ public class EquipmentInspectionOrderPlanSyncServiceImpl implements EquipmentIns
         LocalDate today = LocalDate.now(zone);
         LocalDate end = today.plusDays(ROLLING_DAYS - 1);
 
-        // startTime 解析失败则无法定窗口；endTime 允许为空（无结束日）
         LocalDate planStart = parsePlanDate(plan.getStartTime());
         LocalDate planEnd = parsePlanDate(plan.getEndTime());
         if (planStart == null) {
@@ -97,18 +95,24 @@ public class EquipmentInspectionOrderPlanSyncServiceImpl implements EquipmentIns
             return;
         }
 
+        String nowStr = LocalDateTime.now(zone).format(PLANNED_TIME_FORMAT);
         List<EquipmentInspectionOrder> candidates = new ArrayList<>();
         for (LocalDate day = rangeStart; !day.isAfter(rangeEnd); day = day.plusDays(1)) {
             List<LocalDateTime> slots = resolveSlotsForDay(plan, day, zone);
             int slotIndex = 0;
             for (LocalDateTime slotStart : slots) {
                 slotIndex++;
+                String planned = slotStart.format(PLANNED_TIME_FORMAT);
+                if (planned.compareTo(nowStr) < 0) {
+                    continue;
+                }
                 String planDate = day.format(PLAN_DATE_PREFIX);
                 for (String equipmentId : equipmentIds) {
                     EquipmentInspectionOrder order = new EquipmentInspectionOrder();
                     order.setPlanId(plan.getId());
                     order.setEquipmentId(equipmentId);
                     order.setPlanDate(planDate);
+                    order.setPlannedStartTime(planned);
                     order.setSlotIndex(slotIndex);
                     candidates.add(order);
                 }
@@ -137,20 +141,17 @@ public class EquipmentInspectionOrderPlanSyncServiceImpl implements EquipmentIns
         }
     }
 
-    /**
-     * 幂等键：方案内同一设备、同一计划日、同一槽位唯一
-     */
     private static String orderDedupeKey(EquipmentInspectionOrder o) {
-        return o.getEquipmentId() + "|" + o.getPlanDate() + "|" + o.getSlotIndex();
+        return o.getEquipmentId() + "|" + o.getPlannedStartTime();
     }
 
     private Set<String> loadExistingOrderKeys(String planId, LocalDate rangeStart, LocalDate rangeEnd) {
-        String dMin = rangeStart.format(PLAN_DATE_PREFIX);
-        String dMax = rangeEnd.format(PLAN_DATE_PREFIX);
+        String tMin = rangeStart.format(PLAN_DATE_PREFIX) + " 00:00:00";
+        String tMax = rangeEnd.format(PLAN_DATE_PREFIX) + " 23:59:59";
         QueryWrapper<EquipmentInspectionOrder> qw = new QueryWrapper<>();
         qw.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getPlanId), planId);
-        qw.ge(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getPlanDate), dMin);
-        qw.le(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getPlanDate), dMax);
+        qw.ge(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getPlannedStartTime), tMin);
+        qw.le(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getPlannedStartTime), tMax);
         List<EquipmentInspectionOrder> list = equipmentInspectionOrderService.list(qw);
         if (CollectionUtil.isEmpty(list)) {
             return new HashSet<>();
@@ -169,9 +170,6 @@ public class EquipmentInspectionOrderPlanSyncServiceImpl implements EquipmentIns
         }
     }
 
-    /**
-     * 根据方案频次解析某一天内应生成的时刻列表
-     */
     private List<LocalDateTime> resolveSlotsForDay(EquipmentInspectionPlan plan, LocalDate day, ZoneId zone) {
         Integer freq = plan.getFrequency();
         if (ScheduleFrequency.DAILY.getKey().equals(freq)) {
@@ -214,24 +212,8 @@ public class EquipmentInspectionOrderPlanSyncServiceImpl implements EquipmentIns
     }
 
     private List<LocalDateTime> singleSlotFromPatrolTime(LocalDate day, String patrolTime) {
-        LocalTime t = parsePatrolTime(patrolTime);
+        LocalTime t = QuartzCronUtil.parseExecuteTime(patrolTime);
         return Collections.singletonList(LocalDateTime.of(day, t));
-    }
-
-    private LocalTime parsePatrolTime(String patrolTime) {
-        String s = StrUtil.isBlank(patrolTime) ? DEFAULT_PATROL_TIME : patrolTime.trim();
-        try {
-            if (s.length() == 5 && s.charAt(2) == ':') {
-                return LocalTime.parse(s, DateTimeFormatter.ofPattern("HH:mm"));
-            }
-            return LocalTime.parse(s, DateTimeFormatter.ofPattern("HH:mm:ss"));
-        } catch (Exception e1) {
-            try {
-                return LocalTime.parse(s, DateTimeFormatter.ofPattern("HH:mm"));
-            } catch (Exception e2) {
-                return LocalTime.parse(DEFAULT_PATROL_TIME, DateTimeFormatter.ofPattern("HH:mm"));
-            }
-        }
     }
 
     private boolean matchesWeekDays(String weekDays, LocalDate day) {

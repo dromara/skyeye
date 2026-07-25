@@ -130,8 +130,12 @@ public class EquipmentInspectionOrder extends OperatorUserInfo {
     private String address;
 
     @TableField(value = "plan_date")
-    @ApiModelProperty(value = "计划所属日期 yyyy-MM-dd")
+    @ApiModelProperty(value = "计划所属日期 yyyy-MM-dd（可由计划开始时刻推导，便于按日统计）")
     private String planDate;
+
+    @TableField(value = "planned_start_time")
+    @ApiModelProperty(value = "计划开始执行时间，格式yyyy-MM-dd HH:mm:ss")
+    private String plannedStartTime;
 
     @TableField(value = "slot_index")
     @ApiModelProperty(value = "当日第几次巡检槽位", required = "num")
