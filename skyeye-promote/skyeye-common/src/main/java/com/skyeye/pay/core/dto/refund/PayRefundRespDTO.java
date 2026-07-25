@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @ApiModel("渠道退款订单 Response DTO")
 public class PayRefundRespDTO {
 
-    @Property(value = "退款状态，参考#PayRefundStatusResp")
+    @Property(value = "退款状态", enumClass = PayRefundStatusResp.class)
     private Integer status;
 
     @Property(value = "外部退款号，对应 PayRefundDO 的 no 字段")

@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @ApiModel("统一转账")
 public class PayTransferRespDTO {
 
-    @Property(value = "转账状态，参考#PayTransferStatusResp")
+    @Property(value = "转账状态", enumClass = PayTransferStatusResp.class)
     private Integer status;
 
     @Property(value = "外部转账单号")
