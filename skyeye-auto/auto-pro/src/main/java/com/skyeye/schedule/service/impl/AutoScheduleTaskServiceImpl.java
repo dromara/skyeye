@@ -15,6 +15,7 @@ import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
+import com.skyeye.common.util.QuartzCronUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.history.classenum.AutoHistoryCaseExecuteResult;
@@ -32,7 +33,6 @@ import com.skyeye.schedule.service.AutoScheduleTaskCaseService;
 import com.skyeye.schedule.service.AutoScheduleTaskHistoryService;
 import com.skyeye.schedule.service.AutoScheduleTaskModuleService;
 import com.skyeye.schedule.service.AutoScheduleTaskService;
-import com.skyeye.schedule.support.AutoScheduleTaskCronBuilder;
 import com.skyeye.usercase.entity.AutoCase;
 import com.skyeye.usercase.service.AutoCaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,7 +131,9 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
         }
         // 启用时提前校验 Cron 可生成，避免写库后注册失败
         if (EnableEnum.ENABLE_USING.getKey().equals(entity.getEnabled())
-            && StrUtil.isEmpty(AutoScheduleTaskCronBuilder.buildScheduleConf(entity))) {
+            && StrUtil.isEmpty(QuartzCronUtil.buildScheduleConf(
+            entity.getFrequency(), entity.getExecuteTime(),
+            entity.getWeekDays(), entity.getMonthDays(), entity.getCustomCron()))) {
             throw new CustomException("定时Cron生成失败，请检查执行时间与频次配置");
         }
     }
