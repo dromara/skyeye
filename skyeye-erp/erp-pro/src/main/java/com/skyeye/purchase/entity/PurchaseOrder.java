@@ -13,8 +13,8 @@ import lombok.Data;
 
 /**
  * @ClassName: PurchaseOrder
- * @Description: 采购订单实体类
- * --otherState：这里表示【采购订单到货状态】
+ * @Description: 采购订单管理实体类
+ * --otherState：这里表示【采购订单到货状态】{@link com.skyeye.purchase.classenum.OrderArrivalState}
  * @author: skyeye云系列--卫志强
  * @date: 2022/3/23 16:19
  * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.

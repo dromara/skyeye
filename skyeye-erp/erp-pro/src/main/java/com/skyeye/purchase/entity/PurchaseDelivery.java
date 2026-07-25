@@ -13,8 +13,8 @@ import lombok.Data;
 
 /**
  * @ClassName: PurchaseDelivery
- * @Description: 到货单实体类
- * --otherState：这里表示【采购到货单免检商品入库状态】
+ * @Description: 采购到货单管理实体类
+ * --otherState：这里表示【采购到货单免检商品入库状态】{@link com.skyeye.purchase.classenum.DeliveryPutState}
  * @author: skyeye云系列--卫志强
  * @date: 2024/5/21 20:40
  * @Copyright: 2024 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
