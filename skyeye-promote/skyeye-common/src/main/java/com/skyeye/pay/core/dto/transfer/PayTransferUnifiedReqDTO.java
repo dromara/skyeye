@@ -10,6 +10,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.pay.enums.PayTransferType;
+
 /**
  * @ClassName: PayTransferUnifiedReqDTO
  * @Description: 统一转账
@@ -22,7 +24,7 @@ import java.util.Map;
 @ApiModel("统一转账")
 public class PayTransferUnifiedReqDTO {
 
-    @ApiModelProperty(value = "转账类型，参考#PayTransferType", required = "required")
+    @ApiModelProperty(value = "转账类型", required = "required", enumClass = PayTransferType.class)
     private Integer type;
 
     @ApiModelProperty(value = "用户 IP", required = "required")
