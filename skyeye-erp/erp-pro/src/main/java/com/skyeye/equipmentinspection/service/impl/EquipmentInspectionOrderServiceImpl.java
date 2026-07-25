@@ -31,7 +31,6 @@ import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
-import com.skyeye.equipmentinspection.support.EquipmentInspectionOrderBatchCreateSupport;
 import com.skyeye.equipmentinspection.support.EquipmentInspectionOrderQuerySupport;
 import com.skyeye.exception.CustomException;
 import com.skyeye.repair.entity.EquipmentRepairOrder;
@@ -68,15 +67,11 @@ public class EquipmentInspectionOrderServiceImpl
     @Autowired
     private EquipmentInspectionOrderQuerySupport orderQuerySupport;
 
-    @Autowired
-    private EquipmentInspectionOrderBatchCreateSupport orderBatchCreateSupport;
-
     @Override
     protected QueryWrapper<EquipmentInspectionOrder> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<EquipmentInspectionOrder> queryWrapper = super.getQueryWrapper(commonPageInfo);
         String userId = InputObject.getLogParamsStatic().get("id").toString();
         String state = commonPageInfo.getState();
-        // 待接单/待填报：只看指派给当前用户；其它状态：该状态下全部
         if (StrUtil.isNotEmpty(state) && StrUtil.isNumeric(state)) {
             Integer stateVal = Integer.valueOf(state);
             if (EquipmentInspectionOrderState.PENDING_ORDERS.getKey().equals(stateVal)
@@ -138,23 +133,14 @@ public class EquipmentInspectionOrderServiceImpl
     }
 
     private void fillCreateDefaults(EquipmentInspectionOrder entity) {
-        if (StrUtil.isEmpty(entity.getServiceUserId())) {
-            entity.setState(EquipmentInspectionOrderState.BE_DISPATCHED.getKey());
-            entity.setServiceTime(null);
-        } else {
-            entity.setState(EquipmentInspectionOrderState.PENDING_ORDERS.getKey());
-            entity.setServiceTime(DateUtil.getTimeAndToString());
-            if (StrUtil.isBlank(entity.getAssignType())) {
-                entity.setAssignType(EquipmentInspectionAssignType.MANUAL.getKey());
-            }
-        }
+        applyServiceUserState(entity, true);
         if (entity.getInspectedCount() == null) {
             entity.setInspectedCount(0);
         }
         if (entity.getSlotIndex() == null) {
             entity.setSlotIndex(1);
         }
-        if (StrUtil.isNotBlank(entity.getPlannedStartTime()) && StrUtil.isBlank(entity.getPlanDate())
+        if (StrUtil.isNotEmpty(entity.getPlannedStartTime()) && StrUtil.isEmpty(entity.getPlanDate())
             && entity.getPlannedStartTime().length() >= 10) {
             entity.setPlanDate(entity.getPlannedStartTime().substring(0, 10));
         }
@@ -162,26 +148,32 @@ public class EquipmentInspectionOrderServiceImpl
 
     @Override
     protected void updatePrepose(EquipmentInspectionOrder entity) {
+        applyServiceUserState(entity, false);
+    }
+
+    private void applyServiceUserState(EquipmentInspectionOrder entity, boolean create) {
         if (StrUtil.isEmpty(entity.getServiceUserId())) {
             entity.setState(EquipmentInspectionOrderState.BE_DISPATCHED.getKey());
             entity.setServiceTime(null);
-        } else {
-            entity.setState(EquipmentInspectionOrderState.PENDING_ORDERS.getKey());
+            return;
+        }
+        entity.setState(EquipmentInspectionOrderState.PENDING_ORDERS.getKey());
+        if (create || StrUtil.isEmpty(entity.getServiceTime())) {
             entity.setServiceTime(DateUtil.getTimeAndToString());
-            if (StrUtil.isBlank(entity.getAssignType())) {
-                entity.setAssignType(EquipmentInspectionAssignType.MANUAL.getKey());
-            }
+        }
+        if (StrUtil.isEmpty(entity.getAssignType())) {
+            entity.setAssignType(EquipmentInspectionAssignType.MANUAL.getKey());
         }
     }
 
     @Override
     public void validatorEntity(EquipmentInspectionOrder entity) {
-        super.validatorEntity(entity);
-        orderBatchCreateSupport.validateOnWrite(entity);
         if (StrUtil.isNotEmpty(entity.getId())) {
             EquipmentInspectionOrder dbOrder = selectById(entity.getId());
-            if (!ObjectUtil.equal(dbOrder.getState(), EquipmentInspectionOrderState.BE_DISPATCHED.getKey())
-                && !ObjectUtil.equal(dbOrder.getState(), EquipmentInspectionOrderState.PENDING_ORDERS.getKey())) {
+            if (ObjectUtil.equal(dbOrder.getState(), EquipmentInspectionOrderState.BE_DISPATCHED.getKey())
+                || ObjectUtil.equal(dbOrder.getState(), EquipmentInspectionOrderState.PENDING_ORDERS.getKey())) {
+                // 待派工、待接单可以进行编辑
+            } else {
                 throw new CustomException("该数据状态已改变，请刷新页面！");
             }
         }
@@ -230,7 +222,7 @@ public class EquipmentInspectionOrderServiceImpl
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getServiceTime), DateUtil.getTimeAndToString());
             Object assignType = map.get("assignType");
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getAssignType),
-                assignType == null || StrUtil.isBlank(assignType.toString())
+                assignType == null || StrUtil.isEmpty(assignType.toString())
                     ? EquipmentInspectionAssignType.MANUAL.getKey() : assignType.toString());
             update(updateWrapper);
             refreshCache(id);
@@ -291,10 +283,9 @@ public class EquipmentInspectionOrderServiceImpl
             throw new CustomException("未达规定巡检次数（已巡 " + current + " / 规定 " + required + "），无法提交结果");
         }
         Integer checkResult = Integer.valueOf(map.get("checkResult").toString());
-        String inspectionTime = map.get("inspectionTime") == null ? null : map.get("inspectionTime").toString();
-        if (StrUtil.isBlank(inspectionTime)) {
-            inspectionTime = DateUtil.getTimeAndToString();
-        }
+        Object inspectionTimeObj = map.get("inspectionTime");
+        String inspectionTime = inspectionTimeObj == null || StrUtil.isEmpty(inspectionTimeObj.toString())
+            ? DateUtil.getTimeAndToString() : inspectionTimeObj.toString();
         UpdateWrapper<EquipmentInspectionOrder> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, id);
         updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCheckResult), checkResult);
@@ -325,7 +316,7 @@ public class EquipmentInspectionOrderServiceImpl
             if (raw instanceof Number && ((Number) raw).intValue() >= 1) {
                 return ((Number) raw).intValue();
             }
-            if (raw != null && StrUtil.isNumeric(raw.toString())) {
+            if (StrUtil.isNumeric(raw.toString())) {
                 int v = Integer.parseInt(raw.toString());
                 if (v >= 1) {
                     return v;
@@ -333,7 +324,7 @@ public class EquipmentInspectionOrderServiceImpl
             }
         }
         EquipmentInspectionPlan plan = equipmentInspectionPlanService.selectById(order.getPlanId());
-        if (StrUtil.isBlank(plan.getId()) || plan.getInspectionsPerDay() == null || plan.getInspectionsPerDay() < 1) {
+        if (StrUtil.isEmpty(plan.getId()) || plan.getInspectionsPerDay() == null || plan.getInspectionsPerDay() < 1) {
             return 1;
         }
         return plan.getInspectionsPerDay();
@@ -377,7 +368,7 @@ public class EquipmentInspectionOrderServiceImpl
         if (!EquipmentInspectionCheckResult.ABNORMAL.getKey().equals(order.getCheckResult())) {
             throw new CustomException("仅检查结果为异常的巡检单可转维修");
         }
-        if (StrUtil.isNotBlank(order.getRepairOrderId())) {
+        if (StrUtil.isNotEmpty(order.getRepairOrderId())) {
             throw new CustomException("该巡检单已转维修，请勿重复操作");
         }
         EquipmentRepairOrder repairOrder = new EquipmentRepairOrder();
@@ -400,7 +391,7 @@ public class EquipmentInspectionOrderServiceImpl
     private String buildFaultDesc(EquipmentInspectionOrder order) {
         StringBuilder sb = new StringBuilder();
         sb.append("巡检单[").append(order.getOddNumber()).append("]检查异常");
-        if (StrUtil.isNotBlank(order.getSummary())) {
+        if (StrUtil.isNotEmpty(order.getSummary())) {
             sb.append("：").append(order.getSummary());
         }
         return sb.toString();
