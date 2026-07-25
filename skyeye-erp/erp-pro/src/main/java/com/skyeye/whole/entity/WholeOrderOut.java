@@ -14,7 +14,7 @@ import lombok.Data;
 /**
  * @ClassName: WholeOrderOut
  * @Description: 整单委外单实体类
- * --otherState：这里表示【整单委外单到货状态】参考#OrderArrivalState
+ * --otherState：这里表示【整单委外单到货状态】{@link com.skyeye.purchase.classenum.OrderArrivalState}
  * @author: skyeye云系列--卫志强
  * @date: 2024/6/22 20:32
  * @Copyright: 2024 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.

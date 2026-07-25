@@ -17,6 +17,9 @@ import lombok.Data;
 
 import java.util.List;
 
+import com.skyeye.dsform.classenum.DateTimeType;
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: DsFormPageContent
  * @Description: 表单布局关联的组件实体类
@@ -107,11 +110,11 @@ public class DsFormPageContent extends OperatorUserInfo {
     private String teamObjectType;
 
     @TableField("is_edit")
-    @ApiModelProperty(value = "是否可以编辑，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否可以编辑", enumClass = WhetherEnum.class)
     private Integer isEdit;
 
     @TableField("date_time_type")
-    @ApiModelProperty(value = "日期组件的类型，参考#DateTimeType")
+    @ApiModelProperty(value = "日期组件的类型", enumClass = DateTimeType.class)
     private String dateTimeType;
 
     @TableField("choose_or_not_my")
