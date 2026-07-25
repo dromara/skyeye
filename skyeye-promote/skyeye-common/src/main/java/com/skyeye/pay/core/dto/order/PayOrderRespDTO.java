@@ -12,6 +12,8 @@ import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
+import com.skyeye.pay.enums.PayOrderDisplayMode;
+
 /**
  * @ClassName: PayOrderRespDTO
  * @Description: 渠道支付订单 Response DTO
@@ -25,7 +27,7 @@ import java.time.LocalDateTime;
 @ApiModel("渠道支付订单 Response DTO")
 public class PayOrderRespDTO {
 
-    @Property("支付状态，参考#PayOrderStatusResp")
+    @Property(value = "支付状态", enumClass = PayOrderStatusResp.class)
     private Integer status;
 
     @Property("外部订单号，对应 PayOrderExtensionDO 的 no 字段")
@@ -45,7 +47,7 @@ public class PayOrderRespDTO {
 
     // ========== 主动发起支付时，会返回的字段 ==========
 
-    @Property("展示模式，参考#PayOrderDisplayMode")
+    @Property(value = "展示模式", enumClass = PayOrderDisplayMode.class)
     private String displayMode;
 
     @Property("展示内容")

@@ -11,6 +11,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+import com.skyeye.pay.enums.PayOrderDisplayMode;
+
 /**
  * @ClassName: PayOrderUnifiedReqDTO
  * @Description: 统一下单 Request DTO
@@ -55,7 +57,7 @@ public class PayOrderUnifiedReqDTO {
     @ApiModelProperty(value = "支付渠道的额外参数，例如说，微信公众号需要传递 openid 参数")
     private Map<String, String> channelExtras;
 
-    @ApiModelProperty(value = "展示模式，参考#PayOrderDisplayMode")
+    @ApiModelProperty(value = "展示模式", enumClass = PayOrderDisplayMode.class)
     private String displayMode;
 
 }
