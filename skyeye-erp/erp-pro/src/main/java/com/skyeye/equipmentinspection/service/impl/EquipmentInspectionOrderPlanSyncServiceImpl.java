@@ -40,7 +40,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 设备巡检方案与系统生成巡检单的同步实现（对齐工单巡检/保养：按计划开始时刻生单）。
+ * 设备巡检方案与系统生成巡检单的同步实现。
  * <p>
  * XXL 触发后，在「今天起若干天」内按频次算出时段，为每个「设备 × 计划开始时刻」生成待派工单；
  * 已过时刻跳过；幂等键 planId + equipmentId + plannedStartTime。
