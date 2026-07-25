@@ -12,6 +12,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.eve.entity.userauth.user.UserTreeQueryDo;
+import com.skyeye.personnel.classenum.UserIsTermOfValidity;
 import com.skyeye.personnel.entity.SysEveUser;
 import com.skyeye.personnel.service.SysEveUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,7 +190,7 @@ public class SysEveUserController {
     @ApiOperation(id = "resetUserEffectiveDate", value = "重置用户有效期", method = "POST", allUse = "1")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "用户ID", required = "required"),
-        @ApiImplicitParam(id = "isTermOfValidity", name = "isTermOfValidity", value = "是否长期有效，参考#UserIsTermOfValidity", required = "required,num"),
+        @ApiImplicitParam(id = "isTermOfValidity", name = "isTermOfValidity", value = "是否长期有效", enumClass = UserIsTermOfValidity.class, required = "required,num"),
         @ApiImplicitParam(id = "startTime", name = "startTime", value = "有效期开始时间"),
         @ApiImplicitParam(id = "endTime", name = "endTime", value = "有效期结束时间")})
     @RequestMapping("/post/SysEveUserController/resetUserEffectiveDate")

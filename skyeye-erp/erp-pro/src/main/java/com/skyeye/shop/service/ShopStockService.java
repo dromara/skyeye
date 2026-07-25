@@ -29,7 +29,7 @@ public interface ShopStockService extends SkyeyeBusinessService<ShopStock> {
      * @param materialId 商品id
      * @param normsId    规格id
      * @param operNumber 变化数量
-     * @param type       出入库类型，参考#DepotPutOutType
+     * @param type       出入库类型，{@link com.skyeye.depot.classenum.DepotPutOutType}
      */
     void updateShopStock(String storeId, String materialId, String normsId, String operNumber, int type);
 
