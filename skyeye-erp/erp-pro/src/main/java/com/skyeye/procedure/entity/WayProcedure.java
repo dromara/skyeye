@@ -16,6 +16,8 @@ import lombok.Data;
 
 import java.util.List;
 
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: WayProcedure
  * @Description: 工艺路线实体类
@@ -43,7 +45,7 @@ public class WayProcedure extends Version {
     private String number;
 
     @TableField(value = "enabled")
-    @ApiModelProperty(value = "启用状态，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "启用状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
     @TableField(value = "all_price")

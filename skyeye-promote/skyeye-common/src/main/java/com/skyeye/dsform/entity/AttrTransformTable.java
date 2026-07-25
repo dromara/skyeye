@@ -12,6 +12,10 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.List;
 
+import com.skyeye.attr.classenum.AttrKeyDataType;
+
+import com.skyeye.attr.classenum.Alignment;
+
 /**
  * @ClassName: AttrTransformTable
  * @Description: 表格模型属性
@@ -30,7 +34,7 @@ public class AttrTransformTable implements Serializable {
     @ApiModelProperty(value = "显示名称")
     private String name;
 
-    @ApiModelProperty(value = "对齐方式，可参考#Alignment枚举类，相当于表格中的align", required = "required")
+    @ApiModelProperty(value = "对齐方式，相当于表格中的align", required = "required", enumClass = Alignment.class)
     private String align;
 
     @ApiModelProperty(value = "排序，值越大越往后", required = "required,num")
@@ -45,7 +49,7 @@ public class AttrTransformTable implements Serializable {
     @ApiModelProperty(value = "显示方式", required = "required")
     private String showType;
 
-    @ApiModelProperty(value = "数据类型，参考#AttrKeyDataType", required = "num")
+    @ApiModelProperty(value = "数据类型", required = "num", enumClass = AttrKeyDataType.class)
     private Integer dataType;
 
     @ApiModelProperty(value = "数据类型为1时，默认数据，需要是json字符串", required = "json")
