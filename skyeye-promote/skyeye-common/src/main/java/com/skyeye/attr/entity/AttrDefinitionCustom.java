@@ -19,6 +19,8 @@ import com.skyeye.dsform.entity.DsFormComponent;
 import com.skyeye.server.entity.ServiceBean;
 import lombok.Data;
 
+import com.skyeye.attr.classenum.AttrKeyDataType;
+
 /**
  * @ClassName: AttrDefinitionCustom
  * @Description: 用户自定义服务类属性实体类
@@ -86,7 +88,7 @@ public class AttrDefinitionCustom extends OperatorUserInfo {
     private String enumClassStr;
 
     @TableField(value = "data_type", updateStrategy = FieldStrategy.IGNORED)
-    @ApiModelProperty(value = "数据类型，参考#AttrKeyDataType", required = "num")
+    @ApiModelProperty(value = "数据类型", required = "num", enumClass = AttrKeyDataType.class)
     private Integer dataType;
 
     @TableField("default_data")

@@ -14,7 +14,7 @@ import lombok.Data;
 /**
  * @ClassName: ProductLeadPut
  * @Description: 采购入库单实体类
- * --otherState：这里表示【采购入库单入库状态】参考#DepotPutState
+ * --otherState：这里表示【采购入库单入库状态】
  * @author: skyeye云系列--卫志强
  * @date: 2022/3/23 16:19
  * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
