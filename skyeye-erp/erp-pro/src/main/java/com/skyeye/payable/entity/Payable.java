@@ -12,6 +12,9 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.payable.classenum.ErpPayStateEnum;
+import com.skyeye.common.enumeration.FlowableStateEnum;
+
 /**
  * @ClassName: Payable
  * @Description: 供应商应付事项实体类
@@ -62,11 +65,11 @@ public class Payable extends SkyeyeFlowable {
     private String amountPrice;
 
     @TableField(value = "state")
-    @Property(value = "状态，参考#FlowableStateEnum")
+    @Property(value = "状态", enumClass = FlowableStateEnum.class)
     private String state;
 
     @TableField(value = "pay_state")
-    @ApiModelProperty(value = "付款状态，参考#ErpPayStateEnum", defaultValue = "0")
+    @ApiModelProperty(value = "付款状态", defaultValue = "0", enumClass = ErpPayStateEnum.class)
     private Integer payState;
 
     @TableField(value = "paid_price")
