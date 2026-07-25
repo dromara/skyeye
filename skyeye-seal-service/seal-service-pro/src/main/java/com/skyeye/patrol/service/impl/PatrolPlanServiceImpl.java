@@ -15,6 +15,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.util.QuartzCronUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.eve.rest.quartz.SysQuartzMation;
 import com.skyeye.eve.service.IQuartzService;
@@ -24,7 +25,6 @@ import com.skyeye.patrol.entity.PatrolItem;
 import com.skyeye.patrol.entity.PatrolPlan;
 import com.skyeye.patrol.entity.PatrolPoint;
 import com.skyeye.patrol.service.*;
-import com.skyeye.patrol.support.PatrolPlanCronBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -89,7 +89,9 @@ public class PatrolPlanServiceImpl extends SkyeyeBusinessServiceImpl<PatrolPlanD
         patrolPlanItemService.saveList(entity.getId(), entity.getItemId());
         super.writePostpose(entity, userId);
         if (EnableEnum.ENABLE_USING.getKey().equals(entity.getEnabled())) {
-            String cron = PatrolPlanCronBuilder.buildScheduleConf(entity);
+            String cron = QuartzCronUtil.buildScheduleConf(
+                entity.getFrequency(), entity.getPatrolTime(),
+                entity.getWeekDays(), entity.getMonthDays(), entity.getCustomCron());
             if (StrUtil.isEmpty(cron)) {
                 throw new CustomException("定时Cron生成失败");
             }

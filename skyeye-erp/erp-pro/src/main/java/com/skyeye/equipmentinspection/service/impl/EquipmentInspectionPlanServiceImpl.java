@@ -15,6 +15,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.util.QuartzCronUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.equipmentinspection.dao.EquipmentInspectionPlanDao;
@@ -26,7 +27,6 @@ import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanItemService
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionTeamService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionTaskPlanSyncService;
-import com.skyeye.equipmentinspection.support.EquipmentInspectionPlanCronBuilder;
 import com.skyeye.eve.rest.quartz.SysQuartzMation;
 import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
@@ -96,7 +96,9 @@ public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImp
         equipmentInspectionPlanItemService.saveList(entity.getId(), entity.getItemId());
         super.writePostpose(entity, userId);
         if (EnableEnum.ENABLE_USING.getKey().equals(entity.getEnabled())) {
-            String cron = EquipmentInspectionPlanCronBuilder.buildScheduleConf(entity);
+            String cron = QuartzCronUtil.buildScheduleConf(
+                entity.getFrequency(), entity.getPatrolTime(),
+                entity.getWeekDays(), entity.getMonthDays(), entity.getCustomCron());
             if (StrUtil.isEmpty(cron)) {
                 throw new CustomException("定时Cron生成失败");
             }
