@@ -5,7 +5,6 @@
 package com.skyeye.equipmentinspection.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
@@ -15,6 +14,7 @@ import com.skyeye.equipmentinspection.dao.EquipmentInspectionPlanEquipmentDao;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlanEquipment;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanEquipmentService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,14 +27,13 @@ import java.util.stream.Collectors;
  */
 @Service
 @SkyeyeService(name = "设备巡检方案设备关联", groupName = "设备巡检", manageShow = false)
-public class EquipmentInspectionPlanEquipmentServiceImpl extends SkyeyeBusinessServiceImpl<EquipmentInspectionPlanEquipmentDao, EquipmentInspectionPlanEquipment>
+public class EquipmentInspectionPlanEquipmentServiceImpl
+    extends SkyeyeBusinessServiceImpl<EquipmentInspectionPlanEquipmentDao, EquipmentInspectionPlanEquipment>
     implements EquipmentInspectionPlanEquipmentService {
 
     @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
     public void deleteByParentId(String planId) {
-        if (StrUtil.isEmpty(planId)) {
-            return;
-        }
         QueryWrapper<EquipmentInspectionPlanEquipment> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionPlanEquipment::getPlanId), planId);
         remove(queryWrapper);
@@ -76,4 +75,5 @@ public class EquipmentInspectionPlanEquipmentServiceImpl extends SkyeyeBusinessS
             createEntity(planEquipmentList, userId);
         }
     }
+
 }

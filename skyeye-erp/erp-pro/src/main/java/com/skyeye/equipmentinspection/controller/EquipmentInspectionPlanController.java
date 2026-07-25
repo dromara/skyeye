@@ -9,6 +9,7 @@ import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
@@ -28,7 +29,7 @@ public class EquipmentInspectionPlanController {
     @Autowired
     private EquipmentInspectionPlanService equipmentInspectionPlanService;
 
-    @ApiOperation(id = "queryEquipmentInspectionPlanList", value = "分页获取设备巡检方案列表", method = "POST", allUse = "1")
+    @ApiOperation(id = "queryEquipmentInspectionPlanList", value = "获取设备巡检方案列表", method = "POST", allUse = "1")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/EquipmentInspectionPlanController/queryEquipmentInspectionPlanList")
     public void queryEquipmentInspectionPlanList(InputObject inputObject, OutputObject outputObject) {
@@ -42,25 +43,28 @@ public class EquipmentInspectionPlanController {
         equipmentInspectionPlanService.saveOrUpdateEntity(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "deleteEquipmentInspectionPlanById", value = "根据ID删除设备巡检方案", method = "DELETE", allUse = "1")
-    @ApiImplicitParams({
-        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
-    @RequestMapping("/post/EquipmentInspectionPlanController/deleteEquipmentInspectionPlanById")
-    public void deleteEquipmentInspectionPlanById(InputObject inputObject, OutputObject outputObject) {
-        equipmentInspectionPlanService.deleteById(inputObject, outputObject);
-    }
-
-    @ApiOperation(id = "queryEquipmentInspectionPlanById", value = "根据ID获取设备巡检方案(含明细)", method = "GET", allUse = "2")
-    @ApiImplicitParams({
+    @ApiOperation(id = "queryEquipmentInspectionPlanById", value = "根据ID查询设备巡检方案详情", method = "GET", allUse = "2")
+    @ApiImplicitParams(value = {
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
     @RequestMapping("/post/EquipmentInspectionPlanController/queryEquipmentInspectionPlanById")
     public void queryEquipmentInspectionPlanById(InputObject inputObject, OutputObject outputObject) {
         equipmentInspectionPlanService.selectById(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryAllEquipmentInspectionPlanList", value = "获取所有设备巡检方案（下拉选用）", method = "POST", allUse = "2")
+    @ApiOperation(id = "deleteEquipmentInspectionPlanById", value = "根据ID删除设备巡检方案", method = "DELETE", allUse = "1")
+    @ApiImplicitParams(value = {
+        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
+    @RequestMapping("/post/EquipmentInspectionPlanController/deleteEquipmentInspectionPlanById")
+    public void deleteEquipmentInspectionPlanById(InputObject inputObject, OutputObject outputObject) {
+        equipmentInspectionPlanService.deleteById(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryAllEquipmentInspectionPlanList", value = "获取所有设备巡检方案列表", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "enabled", name = "enabled", value = "启用状态", enumClass = EnableEnum.class)})
     @RequestMapping("/post/EquipmentInspectionPlanController/queryAllEquipmentInspectionPlanList")
     public void queryAllEquipmentInspectionPlanList(InputObject inputObject, OutputObject outputObject) {
         equipmentInspectionPlanService.queryAllEquipmentInspectionPlanList(inputObject, outputObject);
     }
+
 }

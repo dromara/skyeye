@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
+import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.features.OperatorUserInfo;
 import lombok.Data;
 
@@ -36,7 +37,7 @@ public class EquipmentInspectionPlanEquipment extends OperatorUserInfo {
     private String equipmentId;
 
     @TableField(exist = false)
-    @ApiModelProperty(value = "设备信息")
+    @Property(value = "设备信息")
     private Map<String, Object> equipmentMation;
 
 }
