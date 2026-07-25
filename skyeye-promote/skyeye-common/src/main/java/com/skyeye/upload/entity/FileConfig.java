@@ -14,6 +14,9 @@ import com.skyeye.common.entity.features.BaseGeneralInfo;
 import com.skyeye.framework.file.core.client.FileClientConfig;
 import lombok.Data;
 
+import com.skyeye.upload.enums.FileStorageEnum;
+import com.skyeye.common.enumeration.IsDefaultEnum;
+
 /**
  * @ClassName: FileConfig
  * @Description: 文件配置实体类
@@ -29,11 +32,11 @@ import lombok.Data;
 public class FileConfig extends BaseGeneralInfo {
 
     @TableField(value = "is_default")
-    @ApiModelProperty(value = "是否默认，参考#IsDefaultEnum", required = "required,num")
+    @ApiModelProperty(value = "是否默认", required = "required,num", enumClass = IsDefaultEnum.class)
     private Integer isDefault;
 
     @TableField(value = "storage")
-    @ApiModelProperty(value = "存储器，参考#FileStorageEnum", required = "required,num")
+    @ApiModelProperty(value = "存储器", required = "required,num", enumClass = FileStorageEnum.class)
     private Integer storage;
 
     @TableField(value = "config")
