@@ -16,6 +16,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.util.QuartzCronUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipment.classenum.EquipmentState;
 import com.skyeye.equipment.entity.Equipment;
@@ -27,7 +28,6 @@ import com.skyeye.maintenance.dao.MaintenancePlanDao;
 import com.skyeye.maintenance.entity.MaintenancePlan;
 import com.skyeye.maintenance.service.MaintenancePlanItemService;
 import com.skyeye.maintenance.service.MaintenancePlanService;
-import com.skyeye.maintenance.support.MaintenancePlanCronBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,7 +79,9 @@ public class MaintenancePlanServiceImpl extends SkyeyeBusinessServiceImpl<Mainte
         maintenancePlanItemService.saveList(entity.getId(), entity.getMaintenancePlanItemList());
         super.writePostpose(entity, userId);
         if (EnableEnum.ENABLE_USING.getKey().equals(entity.getEnabled())) {
-            String cron = MaintenancePlanCronBuilder.buildScheduleConf(entity);
+            String cron = QuartzCronUtil.buildScheduleConf(
+                entity.getFrequency(), entity.getMaintainTime(),
+                entity.getWeekDays(), entity.getMonthDays(), entity.getCustomCron());
             if (StrUtil.isEmpty(cron)) {
                 throw new CustomException("定时Cron生成失败");
             }
