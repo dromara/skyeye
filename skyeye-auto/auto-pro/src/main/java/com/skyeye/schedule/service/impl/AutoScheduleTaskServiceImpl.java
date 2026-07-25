@@ -178,6 +178,7 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
         autoScheduleTaskModuleService.deleteByParentId(entity.getId());
         autoScheduleTaskCaseService.deleteByParentId(entity.getId());
         autoScheduleTaskHistoryService.deleteByScheduleTaskId(entity.getId());
+        iQuartzService.stopAndDeleteTaskQuartz(entity.getId());
     }
 
     @Override
