@@ -2,6 +2,7 @@ package com.skyeye.equipmentcheck.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
@@ -19,7 +20,11 @@ import com.skyeye.equipmentcheck.service.EquipmentCheckOrderItemService;
 import com.skyeye.equipmentcheck.service.EquipmentCheckOrderService;
 import com.skyeye.equipmentcheckstandard.service.EquipmentCheckStandardService;
 import com.skyeye.exception.CustomException;
+import com.skyeye.repair.classenum.EquipmentRepairFromType;
+import com.skyeye.repair.entity.EquipmentRepairOrder;
+import com.skyeye.repair.service.EquipmentRepairOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +48,10 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
 
     @Autowired
     private EquipmentCheckStandardService equipmentCheckStandardService;
+
+    @Autowired
+    @Lazy
+    private EquipmentRepairOrderService equipmentRepairOrderService;
 
     @Override
     protected QueryWrapper<EquipmentCheckOrder> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -128,6 +137,28 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
             equipmentService.editEquipmentStateById(order.getEquipmentId(), EquipmentState.DEGRADED.getKey());
         } else if (EquipmentCheckResult.NORMAL.getKey().equals(order.getCheckResult())) {
             equipmentService.editEquipmentStateById(order.getEquipmentId(), EquipmentState.NORMAL.getKey());
+        }
+    }
+
+    @Override
+    public void insertCheckOrderToRepair(InputObject inputObject, OutputObject outputObject) {
+        EquipmentRepairOrder repairOrder = inputObject.getParams(EquipmentRepairOrder.class);
+        EquipmentCheckOrder checkOrder = selectById(repairOrder.getId());
+        if (ObjectUtil.isEmpty(checkOrder)) {
+            throw new CustomException("该数据不存在.");
+        }
+        // 点检结果异常才可以转维修
+        if (EquipmentCheckResult.ABNORMAL.getKey().equals(checkOrder.getCheckResult())) {
+            String userId = inputObject.getLogParams().get("id").toString();
+            repairOrder.setFromId(repairOrder.getId());
+            repairOrder.setFromTypeId(EquipmentRepairFromType.CHECK_ORDER.getKey());
+            repairOrder.setId(StrUtil.EMPTY);
+            if (StrUtil.isEmpty(repairOrder.getEquipmentId())) {
+                repairOrder.setEquipmentId(checkOrder.getEquipmentId());
+            }
+            equipmentRepairOrderService.createEntity(repairOrder, userId);
+        } else {
+            outputObject.setreturnMessage("点检结果非异常，无法转维修单.");
         }
     }
 }

@@ -24,6 +24,7 @@ import cn.hutool.json.JSONUtil;
 import com.skyeye.equipment.classenum.EquipmentState;
 import com.skyeye.equipment.entity.Equipment;
 import com.skyeye.equipment.service.EquipmentService;
+import com.skyeye.equipmentcheck.service.EquipmentCheckOrderService;
 import com.skyeye.eve.rest.mq.JobMateMation;
 import com.skyeye.eve.service.IJobMateMationService;
 import com.skyeye.exception.CustomException;
@@ -78,6 +79,9 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
 
     @Autowired
     private EquipmentMaintainOrderService equipmentMaintainOrderService;
+
+    @Autowired
+    private EquipmentCheckOrderService equipmentCheckOrderService;
 
     @Autowired
     private MaterialService materialService;
@@ -145,10 +149,13 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
             return null;
         }
         equipmentService.setDataMation(order, EquipmentRepairOrder::getEquipmentId);
-        // 设置来源单据信息（保养任务）
-        if (ObjectUtil.isNotEmpty(order.getFromTypeId())
-            && order.getFromTypeId().equals(EquipmentRepairFromType.MAINTAIN_ORDER.getKey())) {
-            equipmentMaintainOrderService.setDataMation(order, EquipmentRepairOrder::getFromId);
+        // 设置来源单据信息
+        if (ObjectUtil.isNotEmpty(order.getFromTypeId())) {
+            if (order.getFromTypeId().equals(EquipmentRepairFromType.MAINTAIN_ORDER.getKey())) {
+                equipmentMaintainOrderService.setDataMation(order, EquipmentRepairOrder::getFromId);
+            } else if (order.getFromTypeId().equals(EquipmentRepairFromType.CHECK_ORDER.getKey())) {
+                equipmentCheckOrderService.setDataMation(order, EquipmentRepairOrder::getFromId);
+            }
         }
         iAuthUserService.setDataMation(order, EquipmentRepairOrder::getUserId);
         iAuthUserService.setDataMation(order, EquipmentRepairOrder::getServiceUserId);
@@ -379,6 +386,8 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
         equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
         // 设置保养任务
         equipmentMaintainOrderService.setMationForMap(beans, "fromId", "fromMation");
+        // 设置点检单
+        equipmentCheckOrderService.setMationForMap(beans, "fromId", "fromMation");
         iAuthUserService.setMationForMap(beans, "userId", "userMation");
         iAuthUserService.setMationForMap(beans, "serviceUserId", "serviceUserMation");
         return beans;

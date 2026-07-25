@@ -10,6 +10,7 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.equipmentcheck.entity.EquipmentCheckOrder;
 import com.skyeye.equipmentcheck.service.EquipmentCheckOrderService;
+import com.skyeye.repair.entity.EquipmentRepairOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -69,6 +70,14 @@ public class EquipmentCheckOrderController {
     @RequestMapping(value = "/post/EquipmentCheckOrderController/deleteEquipmentCheckOrderByIds", method = RequestMethod.DELETE)
     public void deleteEquipmentCheckOrderByIds(InputObject inputObject, OutputObject outputObject) {
         equipmentCheckOrderService.deleteByIds(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "insertCheckOrderToRepair", value = "点检单转维修单", method = "POST", allUse = "1")
+    @ApiImplicitParams(classBean = EquipmentRepairOrder.class, value = {
+        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
+    @RequestMapping("/post/EquipmentRepairOrderController/insertCheckOrderToRepair")
+    public void insertCheckOrderToRepair(InputObject inputObject, OutputObject outputObject) {
+        equipmentCheckOrderService.insertCheckOrderToRepair(inputObject, outputObject);
     }
 
 }
