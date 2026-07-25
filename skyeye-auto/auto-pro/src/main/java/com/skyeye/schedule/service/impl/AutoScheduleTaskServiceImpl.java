@@ -9,6 +9,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeTeamAuthServiceImpl;
+import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.enumeration.ScheduleFrequency;
@@ -18,6 +19,8 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.QuartzCronUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.eve.rest.quartz.SysQuartzMation;
+import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.history.classenum.AutoHistoryCaseExecuteResult;
 import com.skyeye.history.entity.AutoHistoryCase;
@@ -77,6 +80,9 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
 
     @Autowired
     private AutoScheduleTaskHistoryService autoScheduleTaskHistoryService;
+
+    @Autowired
+    private IQuartzService iQuartzService;
 
     /**
      * 定时任务用例执行线程池，Bean 定义见 ExecutorConfig#scheduleTaskExecutor
@@ -140,6 +146,8 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
 
     @Override
     public void writePostpose(AutoScheduleTask entity, String userId) {
+        // 先停旧 XXL 子任务，再保存关联，最后按启用状态重新注册（对齐保养/巡检计划）
+        iQuartzService.stopAndDeleteTaskQuartz(entity.getId());
         autoScheduleTaskModuleService.deleteByParentId(entity.getId());
         autoScheduleTaskCaseService.deleteByParentId(entity.getId());
         if (AutoScheduleExecuteType.MODULE.getKey().equals(entity.getExecuteType())) {
@@ -149,6 +157,20 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
             autoScheduleTaskCaseService.saveList(entity.getId(), entity.getCaseIdList());
         }
         super.writePostpose(entity, userId);
+        if (EnableEnum.ENABLE_USING.getKey().equals(entity.getEnabled())) {
+            String cron = QuartzCronUtil.buildScheduleConf(
+                entity.getFrequency(), entity.getExecuteTime(),
+                entity.getWeekDays(), entity.getMonthDays(), entity.getCustomCron());
+            if (StrUtil.isEmpty(cron)) {
+                throw new CustomException("定时Cron生成失败");
+            }
+            SysQuartzMation quartz = new SysQuartzMation();
+            quartz.setName(entity.getId());
+            quartz.setTitle(entity.getName());
+            quartz.setScheduleConf(cron);
+            quartz.setGroupId(QuartzConstants.QuartzMateMationJobType.AUTO_SCHEDULE_TASK_EXECUTE.getTaskType());
+            iQuartzService.startUpTaskQuartz(quartz);
+        }
     }
 
     @Override
