@@ -11,7 +11,7 @@ import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
-import com.skyeye.patrol.classenum.PatrolPlanFrequency;
+import com.skyeye.common.enumeration.ScheduleFrequency;
 import com.skyeye.patrol.entity.PatrolPlan;
 import com.skyeye.patrol.entity.PatrolTask;
 import com.skyeye.patrol.service.*;
@@ -206,13 +206,13 @@ public class PatrolTaskPlanSyncServiceImpl implements PatrolTaskPlanSyncService 
         if (freq == null) {
             return java.util.Collections.emptyList();
         }
-        if (PatrolPlanFrequency.DAILY.getKey().equals(freq)) {
+        if (ScheduleFrequency.DAILY.getKey().equals(freq)) {
             if (!isDayInPlanWindow(plan, day)) {
                 return java.util.Collections.emptyList();
             }
             return singleSlotFromPatrolTime(day, plan.getPatrolTime());
         }
-        if (PatrolPlanFrequency.WEEKLY.getKey().equals(freq)) {
+        if (ScheduleFrequency.WEEKLY.getKey().equals(freq)) {
             if (!isDayInPlanWindow(plan, day)) {
                 return java.util.Collections.emptyList();
             }
@@ -221,7 +221,7 @@ public class PatrolTaskPlanSyncServiceImpl implements PatrolTaskPlanSyncService 
             }
             return singleSlotFromPatrolTime(day, plan.getPatrolTime());
         }
-        if (PatrolPlanFrequency.MONTHLY.getKey().equals(freq)) {
+        if (ScheduleFrequency.MONTHLY.getKey().equals(freq)) {
             if (!isDayInPlanWindow(plan, day)) {
                 return java.util.Collections.emptyList();
             }
@@ -230,7 +230,7 @@ public class PatrolTaskPlanSyncServiceImpl implements PatrolTaskPlanSyncService 
             }
             return singleSlotFromPatrolTime(day, plan.getPatrolTime());
         }
-        if (PatrolPlanFrequency.CUSTOM.getKey().equals(freq)) {
+        if (ScheduleFrequency.CUSTOM.getKey().equals(freq)) {
             return slotsFromCron(plan.getCustomCron(), day, zone);
         }
         return java.util.Collections.emptyList();

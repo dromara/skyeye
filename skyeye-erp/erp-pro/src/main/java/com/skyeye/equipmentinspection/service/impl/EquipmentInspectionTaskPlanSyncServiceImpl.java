@@ -11,7 +11,7 @@ import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
-import com.skyeye.equipmentinspection.classenum.EquipmentInspectionFrequencyType;
+import com.skyeye.common.enumeration.ScheduleFrequency;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionTask;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
@@ -185,13 +185,13 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
         if (freq == null) {
             return java.util.Collections.emptyList();
         }
-        if (EquipmentInspectionFrequencyType.DAILY.getKey().equals(freq)) {
+        if (ScheduleFrequency.DAILY.getKey().equals(freq)) {
             if (!isDayInPlanWindow(plan, day)) {
                 return java.util.Collections.emptyList();
             }
             return singleSlotFromPatrolTime(day, plan.getPatrolTime());
         }
-        if (EquipmentInspectionFrequencyType.WEEKLY.getKey().equals(freq)) {
+        if (ScheduleFrequency.WEEKLY.getKey().equals(freq)) {
             if (!isDayInPlanWindow(plan, day)) {
                 return java.util.Collections.emptyList();
             }
@@ -200,7 +200,7 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
             }
             return singleSlotFromPatrolTime(day, plan.getPatrolTime());
         }
-        if (EquipmentInspectionFrequencyType.MONTHLY.getKey().equals(freq)) {
+        if (ScheduleFrequency.MONTHLY.getKey().equals(freq)) {
             if (!isDayInPlanWindow(plan, day)) {
                 return java.util.Collections.emptyList();
             }
@@ -209,7 +209,7 @@ public class EquipmentInspectionTaskPlanSyncServiceImpl implements EquipmentInsp
             }
             return singleSlotFromPatrolTime(day, plan.getPatrolTime());
         }
-        if (EquipmentInspectionFrequencyType.CUSTOM.getKey().equals(freq)) {
+        if (ScheduleFrequency.CUSTOM.getKey().equals(freq)) {
             return slotsFromCron(plan.getCustomCron(), day, zone);
         }
         return java.util.Collections.emptyList();
