@@ -24,6 +24,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: Member
  * @Description: 会员实体类
@@ -84,7 +86,7 @@ public class Member extends AreaInfo implements EnclosureFace {
     private String email;
 
     @TableField("enabled")
-    @ApiModelProperty(value = "状态，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
     @TableField(value = "store_id", updateStrategy = FieldStrategy.NEVER)

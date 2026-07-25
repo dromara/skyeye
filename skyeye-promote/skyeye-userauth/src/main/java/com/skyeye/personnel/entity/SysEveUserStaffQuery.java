@@ -9,6 +9,9 @@ import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import lombok.Data;
 
+import com.skyeye.personnel.classenum.StaffWagesStateEnum;
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: SysEveUserStaffQuery
  * @Description: 员工查询实体类
@@ -21,10 +24,10 @@ import lombok.Data;
 @ApiModel("员工查询实体类")
 public class SysEveUserStaffQuery extends CommonPageInfo {
 
-    @ApiModelProperty(value = "薪资设定情况，参考#StaffWagesStateEnum")
+    @ApiModelProperty(value = "薪资设定情况", enumClass = StaffWagesStateEnum.class)
     private Integer designWages;
 
-    @ApiModelProperty(value = "是否绑定账号，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否绑定账号", enumClass = WhetherEnum.class)
     private Integer bindAccount;
 
 }

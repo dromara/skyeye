@@ -13,6 +13,10 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.features.OperatorUserInfo;
 import lombok.Data;
 
+import com.skyeye.personnel.classenum.UserInstallMenuSize;
+import com.skyeye.personnel.classenum.UserInstallTaskPosition;
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: SysEveUserInstall
  * @Description: 用户个人配置信息
@@ -55,15 +59,15 @@ public class SysEveUserInstall extends OperatorUserInfo {
     private String winThemeColor;
 
     @TableField("win_bottom_menu_icon")
-    @Property(value = "是否只展示图标，参考#WhetherEnum")
+    @Property(value = "是否只展示图标", enumClass = WhetherEnum.class)
     private String winBottomMenuIcon;
 
     @TableField("win_start_menu_size")
-    @Property(value = "开始菜单尺寸，参考#UserInstallMenuSize")
+    @Property(value = "开始菜单尺寸", enumClass = UserInstallMenuSize.class)
     private String winStartMenuSize;
 
     @TableField("win_task_position")
-    @Property(value = "任务栏在屏幕的位置，参考#UserInstallTaskPosition")
+    @Property(value = "任务栏在屏幕的位置", enumClass = UserInstallTaskPosition.class)
     private String winTaskPosition;
 
 }
