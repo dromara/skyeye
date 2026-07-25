@@ -11,6 +11,7 @@ import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeTeamAuthServiceImpl;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.ScheduleFrequency;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -25,7 +26,6 @@ import com.skyeye.module.service.AutoModuleService;
 import com.skyeye.schedule.classenum.AutoScheduleAuthEnum;
 import com.skyeye.schedule.classenum.AutoScheduleExecuteResult;
 import com.skyeye.schedule.classenum.AutoScheduleExecuteType;
-import com.skyeye.schedule.classenum.AutoScheduleFrequency;
 import com.skyeye.schedule.dao.AutoScheduleTaskDao;
 import com.skyeye.schedule.entity.AutoScheduleTask;
 import com.skyeye.schedule.entity.AutoScheduleTaskHistory;
@@ -117,15 +117,15 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
             && CollectionUtil.isEmpty(entity.getCaseIdList())) {
             throw new CustomException("按用例执行时，请至少选择一个用例");
         }
-        if (AutoScheduleFrequency.WEEKLY.getKey().equals(entity.getFrequency())
+        if (ScheduleFrequency.WEEKLY.getKey().equals(entity.getFrequency())
             && StrUtil.isBlank(entity.getWeekDays())) {
             throw new CustomException("每周执行时，请至少选择一个星期");
         }
-        if (AutoScheduleFrequency.MONTHLY.getKey().equals(entity.getFrequency())
+        if (ScheduleFrequency.MONTHLY.getKey().equals(entity.getFrequency())
             && StrUtil.isBlank(entity.getMonthDays())) {
             throw new CustomException("每月执行时，请至少选择一个日期");
         }
-        if (AutoScheduleFrequency.CUSTOM.getKey().equals(entity.getFrequency())
+        if (ScheduleFrequency.CUSTOM.getKey().equals(entity.getFrequency())
             && StrUtil.isBlank(entity.getCustomCron())) {
             throw new CustomException("自定义频次时，请填写 Cron 表达式");
         }
