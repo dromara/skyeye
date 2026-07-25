@@ -6,18 +6,21 @@ package com.skyeye.equipmentinspection.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.constans.RedisConstants;
-import com.skyeye.common.entity.features.SkyeyeFlowable;
-import com.skyeye.equipment.classenum.EquipmentState;
-import com.skyeye.equipmentinspection.classenum.EquipmentInspectionResultType;
+import com.skyeye.common.entity.features.OperatorUserInfo;
+import com.skyeye.equipmentinspection.classenum.EquipmentInspectionAssignType;
+import com.skyeye.equipmentinspection.classenum.EquipmentInspectionCheckResult;
+import com.skyeye.equipmentinspection.classenum.EquipmentInspectionOrderState;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,85 +28,124 @@ import java.util.Map;
  * @Description: 设备巡检单实体类
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @RedisCacheField(name = "erp:equipmentInspectionOrder", cacheTime = RedisConstants.TOW_MONTH_SECONDS)
 @TableName(value = "erp_equipment_inspection_order", autoResultMap = true)
 @ApiModel("设备巡检单实体类")
-public class EquipmentInspectionOrder extends SkyeyeFlowable {
+public class EquipmentInspectionOrder extends OperatorUserInfo {
+
+    @TableId("id")
+    @ApiModelProperty(value = "主键id。为空时新增，不为空时编辑")
+    private String id;
 
     @TableField(value = "odd_number", updateStrategy = FieldStrategy.NEVER)
-    @Property(value = "设备巡检单编号", fuzzyLike = true)
+    @Property(value = "巡检单编号", fuzzyLike = true)
     private String oddNumber;
-
-    @TableField(value = "equipment_id", updateStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "设备id", required = "required")
-    private String equipmentId;
 
     @TableField(value = "plan_id", updateStrategy = FieldStrategy.NEVER)
     @ApiModelProperty(value = "巡检方案id", required = "required")
     private String planId;
 
-    @TableField(value = "task_id", updateStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "巡检任务id", required = "required")
-    private String taskId;
+    @TableField(exist = false)
+    @Property(value = "巡检方案信息")
+    private Map<String, Object> planMation;
+
+    @TableField(value = "equipment_id", updateStrategy = FieldStrategy.NEVER)
+    @ApiModelProperty(value = "设备id", required = "required")
+    private String equipmentId;
 
     @TableField(exist = false)
-    @Property(value = "任务信息")
-    private EquipmentInspectionTask taskMation;
+    @Property(value = "设备信息")
+    private Map<String, Object> equipmentMation;
 
-    @TableField("inspection_time")
-    @ApiModelProperty(value = "巡检时间，格式yyyy-MM-dd HH:mm:ss", required = "required")
-    private String inspectionTime;
+    @TableField(value = "state")
+    @ApiModelProperty(value = "状态", enumClass = EquipmentInspectionOrderState.class, required = "num")
+    private Integer state;
 
-    @TableField(value = "inspector_user_id", updateStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "巡检员用户id")
-    private String inspectorUserId;
+    @TableField(exist = false)
+    @Property(value = "状态信息")
+    private Map<String, Object> stateMation;
+
+    @TableField(value = "assign_type")
+    @ApiModelProperty(value = "巡检员指派方式", enumClass = EquipmentInspectionAssignType.class)
+    private String assignType;
+
+    @TableField(exist = false)
+    @Property(value = "巡检员指派方式信息")
+    private Map<String, Object> assignTypeMation;
+
+    @TableField(value = "service_user_id")
+    @ApiModelProperty(value = "巡检员id")
+    private String serviceUserId;
 
     @TableField(exist = false)
     @Property(value = "巡检员信息")
-    private Map<String, Object> inspectorUserMation;
+    private Map<String, Object> serviceUserMation;
 
-    @TableField("overall_result")
-    @ApiModelProperty(value = "巡检结果", enumClass = EquipmentInspectionResultType.class, required = "required,num")
-    private Integer overallResult;
+    @TableField(value = "service_time")
+    @Property(value = "派工时间")
+    private String serviceTime;
 
-    @TableField("result_value")
-    @ApiModelProperty(value = "检测结果")
-    private String resultValue;
-
-    @TableField(value = "equipment_run_status", insertStrategy = FieldStrategy.NOT_NULL, updateStrategy = FieldStrategy.NOT_NULL)
-    @ApiModelProperty(value = "设备运行状态", enumClass = EquipmentState.class, required = "num", defaultValue = "1")
-    private Integer equipmentRunStatus;
+    @TableField(value = "cooperation_user_id", typeHandler = JacksonTypeHandler.class)
+    @ApiModelProperty(value = "协助巡检员id", required = "json")
+    private List<String> cooperationUserId;
 
     @TableField(exist = false)
-    @ApiModelProperty(value = "设备运行状态(兼容旧参 equipmentState)", enumClass = EquipmentState.class)
-    private Integer equipmentState;
+    @Property(value = "协助巡检员信息")
+    private List<Map<String, Object>> cooperationUserMation;
 
-    @TableField("summary_richtext")
-    @ApiModelProperty(value = "巡检总结")
-    private String summaryRichtext;
+    @TableField(value = "inspection_time")
+    @ApiModelProperty(value = "巡检时间，格式yyyy-MM-dd HH:mm:ss")
+    private String inspectionTime;
 
-    @TableField("header_location_text")
+    @TableField(value = "check_result")
+    @ApiModelProperty(value = "检查结果", enumClass = EquipmentInspectionCheckResult.class, required = "num")
+    private Integer checkResult;
+
+    @TableField(exist = false)
+    @Property(value = "检查结果信息")
+    private Map<String, Object> checkResultMation;
+
+    @TableField(value = "summary")
+    @ApiModelProperty(value = "本次巡检总结")
+    private String summary;
+
+    @TableField(value = "photo_urls")
+    @ApiModelProperty(value = "拍照URL，多个逗号分隔")
+    private String photoUrls;
+
+    @TableField(value = "location_text")
     @ApiModelProperty(value = "定位文本")
-    private String headerLocationText;
+    private String locationText;
 
-    @TableField("header_longitude")
-    @ApiModelProperty(value = "定位经度")
-    private String headerLongitude;
+    @TableField(value = "longitude")
+    @ApiModelProperty(value = "经度")
+    private String longitude;
 
-    @TableField("header_latitude")
-    @ApiModelProperty(value = "定位纬度")
-    private String headerLatitude;
+    @TableField(value = "latitude")
+    @ApiModelProperty(value = "纬度")
+    private String latitude;
 
-    @TableField("header_address")
+    @TableField(value = "address")
     @ApiModelProperty(value = "定位地址")
-    private String headerAddress;
+    private String address;
 
-    @TableField("header_photo_urls")
-    @ApiModelProperty(value = "拍照URL，逗号分隔")
-    private String headerPhotoUrls;
+    @TableField(value = "plan_date")
+    @ApiModelProperty(value = "计划所属日期 yyyy-MM-dd")
+    private String planDate;
 
-    @TableField("remark")
+    @TableField(value = "slot_index")
+    @ApiModelProperty(value = "当日第几次巡检槽位", required = "num")
+    private Integer slotIndex;
+
+    @TableField(value = "inspected_count")
+    @ApiModelProperty(value = "本单已巡检次数（对齐套餐 useNum 累计；须达方案 inspectionsPerDay 才可提交结果）", required = "num")
+    private Integer inspectedCount;
+
+    @TableField(value = "repair_order_id")
+    @Property(value = "转维修后的维修单id")
+    private String repairOrderId;
+
+    @TableField(value = "remark")
     @ApiModelProperty(value = "备注")
     private String remark;
 
