@@ -14,4 +14,3 @@ import com.skyeye.eve.dao.SkyeyeBaseMapper;
 public interface EquipmentInspectionPlanDao extends SkyeyeBaseMapper<EquipmentInspectionPlan> {
 
 }
-

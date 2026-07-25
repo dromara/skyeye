@@ -15,36 +15,40 @@ import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.enumeration.ScheduleFrequency;
-import com.skyeye.equipment.entity.Equipment;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: EquipmentInspectionPlan
  * @Description: 设备巡检方案实体类
  */
 @Data
-@RedisCacheField(name = "erp:equipmentInspectionPlan:v2", cacheTime = RedisConstants.TOW_MONTH_SECONDS)
+@RedisCacheField(name = "erp:equipmentInspectionPlan", cacheTime = RedisConstants.TOW_MONTH_SECONDS)
 @TableName(value = "erp_equipment_inspection_plan")
 @ApiModel("设备巡检方案实体类")
 public class EquipmentInspectionPlan extends BaseGeneralInfo {
 
     @TableField(value = "odd_number", updateStrategy = FieldStrategy.NEVER)
-    @Property(value = "巡检方案编号", fuzzyLike = true)
+    @Property(value = "巡检方案编码", fuzzyLike = true)
     private String oddNumber;
 
-    @TableField(value = "team_id")
-    @ApiModelProperty(value = "巡检班组ID", required = "required")
-    private String teamId;
+    @TableField(value = "frequency")
+    @ApiModelProperty(value = "巡检频率", enumClass = ScheduleFrequency.class, required = "required,num")
+    private Integer frequency;
 
     @TableField(exist = false)
-    @Property(value = "班组信息")
-    private EquipmentInspectionTeam teamMation;
+    @Property(value = "巡检频率信息")
+    private Map<String, Object> frequencyMation;
 
-    @TableField("frequency_type")
-    @ApiModelProperty(value = "巡检频次", enumClass = ScheduleFrequency.class, required = "required,num")
-    private Integer frequency;
+    @TableField(value = "inspections_per_day")
+    @ApiModelProperty(value = "当天规定巡检次数", required = "required,num", defaultValue = "1")
+    private Integer inspectionsPerDay;
+
+    @TableField(value = "inspection_item")
+    @ApiModelProperty(value = "巡检项目", required = "required")
+    private String inspectionItem;
 
     @TableField(value = "start_time")
     @ApiModelProperty(value = "方案开始时间，格式yyyy-MM-dd HH:mm:ss", required = "required")
@@ -78,15 +82,11 @@ public class EquipmentInspectionPlan extends BaseGeneralInfo {
     @ApiModelProperty(value = "关联的设备ID列表", required = "required,json")
     private List<String> equipmentId;
 
+    /**
+     * 关联设备信息列表
+     */
     @TableField(exist = false)
     @Property(value = "关联的设备信息列表")
-    private List<Equipment> equipmentMation;
+    private List<Map<String, Object>> equipmentMation;
 
-    @TableField(exist = false)
-    @ApiModelProperty(value = "关联的巡检项目ID列表", required = "required,json")
-    private List<String> itemId;
-
-    @TableField(exist = false)
-    @Property(value = "关联的巡检项目信息列表")
-    private List<EquipmentInspectionItem> itemMation;
 }

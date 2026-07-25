@@ -4,8 +4,8 @@
 
 package com.skyeye.equipmentinspection.dao;
 
-import com.skyeye.eve.dao.SkyeyeBaseMapper;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlanEquipment;
+import com.skyeye.eve.dao.SkyeyeBaseMapper;
 
 /**
  * @ClassName: EquipmentInspectionPlanEquipmentDao
