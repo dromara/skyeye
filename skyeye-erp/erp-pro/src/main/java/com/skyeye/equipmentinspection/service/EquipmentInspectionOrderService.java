@@ -5,6 +5,8 @@
 package com.skyeye.equipmentinspection.service;
 
 import com.skyeye.base.business.service.SkyeyeBusinessService;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
 
 /**
@@ -12,5 +14,28 @@ import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
  * @Description: 设备巡检单服务接口层
  */
 public interface EquipmentInspectionOrderService extends SkyeyeBusinessService<EquipmentInspectionOrder> {
+
+    /**
+     * 派工/指派
+     */
+    void editEquipmentInspectionWaitToWorkMation(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 接单
+     */
+    void receivingEquipmentInspectionOrderById(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 登记本单巡检一次
+     */
+    void registerEquipmentInspectionOnce(InputObject inputObject, OutputObject outputObject);
+
+    void submitEquipmentInspectionResult(InputObject inputObject, OutputObject outputObject);
+
+    void auditEquipmentInspectionOrderById(InputObject inputObject, OutputObject outputObject);
+
+    void transferEquipmentInspectionToRepair(InputObject inputObject, OutputObject outputObject);
+
+    void updateStateById(String id, Integer state);
 
 }
