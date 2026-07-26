@@ -17,6 +17,10 @@ import lombok.Data;
 
 import java.util.List;
 
+import com.skyeye.sms.classenum.SmsTemplateTypeEnum;
+
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: SmsTemplate
  * @Description: 短信模板
@@ -32,11 +36,11 @@ import java.util.List;
 public class SmsTemplate extends BaseGeneralInfo {
 
     @TableField("type")
-    @ApiModelProperty(value = "短信类型，参考#SmsTemplateTypeEnum", required = "required")
+    @ApiModelProperty(value = "短信类型", required = "required", enumClass = SmsTemplateTypeEnum.class)
     private Integer type;
 
     @TableField("enabled")
-    @ApiModelProperty(value = "状态，参考#EnableEnum枚举类", required = "required,num")
+    @ApiModelProperty(value = "状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
     @TableField("code_num")

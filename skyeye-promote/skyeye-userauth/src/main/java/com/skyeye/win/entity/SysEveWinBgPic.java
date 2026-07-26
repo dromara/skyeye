@@ -14,6 +14,8 @@ import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.OperatorUserInfo;
 import lombok.Data;
 
+import com.skyeye.win.enums.PicTypeEnum;
+
 /**
  * @ClassName: SysEveWinBgPic
  * @Description: win系统桌面图片实体类
@@ -37,7 +39,7 @@ public class SysEveWinBgPic extends OperatorUserInfo {
     private String picUrl;
 
     @TableField("pic_type")
-    @ApiModelProperty(value = "图片类型，参考#PicTypeEnum", required = "required,num")
+    @ApiModelProperty(value = "图片类型", required = "required,num", enumClass = PicTypeEnum.class)
     private Integer picType;
 
 }

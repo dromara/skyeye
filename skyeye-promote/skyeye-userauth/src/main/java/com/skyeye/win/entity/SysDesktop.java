@@ -13,6 +13,8 @@ import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.entity.features.OperatorUserInfo;
 import lombok.Data;
 
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: SysDesktop
  * @Description: 桌面管理实体类
@@ -48,7 +50,7 @@ public class SysDesktop extends OperatorUserInfo {
     private Integer orderBy;
 
     @TableField("enabled")
-    @ApiModelProperty(value = "状态，参考#EnableEnum枚举类", required = "required,num")
+    @ApiModelProperty(value = "状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
     @TableField("code")

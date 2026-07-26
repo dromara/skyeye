@@ -17,6 +17,10 @@ import lombok.experimental.Accessors;
 
 import java.util.Map;
 
+import com.skyeye.sms.classenum.SmsChannelEnum;
+
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: SmsChannel
  * @Description: 短信渠道
@@ -33,7 +37,7 @@ import java.util.Map;
 public class SmsChannel extends BaseGeneralInfo {
 
     @TableField("code_num")
-    @ApiModelProperty(value = "渠道编码，参考#SmsChannelEnum", required = "required", fuzzyLike = true)
+    @ApiModelProperty(value = "渠道编码", required = "required", fuzzyLike = true, enumClass = SmsChannelEnum.class)
     private String codeNum;
 
     @TableField(exist = false)
@@ -41,7 +45,7 @@ public class SmsChannel extends BaseGeneralInfo {
     private Map<String, Object> codeNumMation;
 
     @TableField("enabled")
-    @ApiModelProperty(value = "状态，参考#EnableEnum枚举类", required = "required,num")
+    @ApiModelProperty(value = "状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
     @TableField("api_key")
