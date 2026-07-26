@@ -40,8 +40,10 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
     /** 自动好评内容 */
     private static final String AUTO_EVALUATE_CONTENT = "系统默认好评";
 
-    /** 自动好评评价类型占位 */
-    private static final String AUTO_EVALUATE_TYPE_ID = "system-auto-good";
+    /**
+     * 自动好评的评价类型（数据字典 id，与人工评价同一字典）
+     */
+    private static final String AUTO_EVALUATE_TYPE_ID = "1";
 
     @Autowired
     private EquipmentInspectionOrderService equipmentInspectionOrderService;
@@ -89,8 +91,8 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
         if (count(existWrapper) > 0) {
             throw new CustomException("该巡检单已经评价。");
         }
-        // 挂巡检单业务 key，对齐 SealEvaluate.objectKey
-        entity.setObjectKey(EquipmentInspectionOrderServiceImpl.class.getName());
+        // 挂巡检单业务 key
+        entity.setObjectKey(equipmentInspectionOrderService.getServiceClassName());
     }
 
     @Override
