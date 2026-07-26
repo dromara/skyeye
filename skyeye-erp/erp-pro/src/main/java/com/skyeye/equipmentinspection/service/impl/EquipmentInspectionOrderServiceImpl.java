@@ -73,8 +73,8 @@ public class EquipmentInspectionOrderServiceImpl
         String state = commonPageInfo.getState();
         if (StrUtil.isNotEmpty(state) && StrUtil.isNumeric(state)) {
             Integer stateVal = Integer.valueOf(state);
-            if (EquipmentInspectionOrderState.PENDING_ORDERS.getKey().equals(stateVal)
-                || EquipmentInspectionOrderState.BE_EXECUTED.getKey().equals(stateVal)) {
+            if (ObjectUtil.equal(stateVal, EquipmentInspectionOrderState.PENDING_ORDERS.getKey())
+                || ObjectUtil.equal(stateVal, EquipmentInspectionOrderState.BE_EXECUTED.getKey())) {
                 queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getServiceUserId), userId)
                     .eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getState), stateVal);
             } else {
@@ -190,8 +190,10 @@ public class EquipmentInspectionOrderServiceImpl
 
     @Override
     public void deletePreExecution(EquipmentInspectionOrder entity) {
-        if (!ObjectUtil.equal(entity.getState(), EquipmentInspectionOrderState.BE_DISPATCHED.getKey())
-            && !ObjectUtil.equal(entity.getState(), EquipmentInspectionOrderState.PENDING_ORDERS.getKey())) {
+        if (ObjectUtil.equal(entity.getState(), EquipmentInspectionOrderState.BE_DISPATCHED.getKey())
+            || ObjectUtil.equal(entity.getState(), EquipmentInspectionOrderState.PENDING_ORDERS.getKey())) {
+            // 待派工、待接单可以进行删除
+        } else {
             throw new CustomException("该数据状态已改变，请刷新页面！");
         }
     }
@@ -203,24 +205,23 @@ public class EquipmentInspectionOrderServiceImpl
         String id = map.get("id").toString();
         String serviceUserId = map.get("serviceUserId").toString();
         EquipmentInspectionOrder order = selectById(id);
-        if (ObjectUtil.equal(order.getState(), EquipmentInspectionOrderState.BE_DISPATCHED.getKey())) {
-            UpdateWrapper<EquipmentInspectionOrder> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.eq(CommonConstants.ID, order.getId());
-            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getState),
-                EquipmentInspectionOrderState.PENDING_ORDERS.getKey());
-            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getServiceUserId), serviceUserId);
-            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCooperationUserId),
-                map.get("cooperationUserId").toString());
-            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getServiceTime), DateUtil.getTimeAndToString());
-            String assignType = map.get("assignType").toString();
-            updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getAssignType),
-                StrUtil.isEmpty(assignType) ? EquipmentInspectionAssignType.MANUAL.getKey() : assignType);
-            update(updateWrapper);
-            refreshCache(id);
-            outputObject.setBean(selectById(id));
-        } else {
-            outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
+        if (!ObjectUtil.equal(order.getState(), EquipmentInspectionOrderState.BE_DISPATCHED.getKey())) {
+            throw new CustomException("该数据状态已改变，请刷新页面！");
         }
+        UpdateWrapper<EquipmentInspectionOrder> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, order.getId());
+        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getState),
+            EquipmentInspectionOrderState.PENDING_ORDERS.getKey());
+        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getServiceUserId), serviceUserId);
+        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCooperationUserId),
+            map.get("cooperationUserId").toString());
+        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getServiceTime), DateUtil.getTimeAndToString());
+        String assignType = map.get("assignType").toString();
+        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getAssignType),
+            StrUtil.isEmpty(assignType) ? EquipmentInspectionAssignType.MANUAL.getKey() : assignType);
+        update(updateWrapper);
+        refreshCache(id);
+        outputObject.setBean(selectById(id));
     }
 
     @Override
@@ -228,12 +229,11 @@ public class EquipmentInspectionOrderServiceImpl
     public void receivingEquipmentInspectionOrderById(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> map = inputObject.getParams();
         EquipmentInspectionOrder order = selectById(map.get("id").toString());
-        if (ObjectUtil.equal(order.getState(), EquipmentInspectionOrderState.PENDING_ORDERS.getKey())) {
-            updateStateById(order.getId(), EquipmentInspectionOrderState.BE_EXECUTED.getKey());
-            outputObject.setBean(selectById(order.getId()));
-        } else {
-            outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
+        if (!ObjectUtil.equal(order.getState(), EquipmentInspectionOrderState.PENDING_ORDERS.getKey())) {
+            throw new CustomException("该数据状态已改变，请刷新页面！");
         }
+        updateStateById(order.getId(), EquipmentInspectionOrderState.BE_EXECUTED.getKey());
+        outputObject.setBean(selectById(order.getId()));
     }
 
     @Override
@@ -323,9 +323,9 @@ public class EquipmentInspectionOrderServiceImpl
             if (dbOrder.getCheckResult() == null) {
                 throw new CustomException("检查结果为空，无法审核");
             }
-            if (EquipmentInspectionCheckResult.ABNORMAL.getKey().equals(dbOrder.getCheckResult())) {
+            if (ObjectUtil.equal(dbOrder.getCheckResult(), EquipmentInspectionCheckResult.ABNORMAL.getKey())) {
                 equipmentService.editEquipmentStateById(dbOrder.getEquipmentId(), EquipmentState.DEGRADED.getKey());
-            } else if (EquipmentInspectionCheckResult.NORMAL.getKey().equals(dbOrder.getCheckResult())) {
+            } else if (ObjectUtil.equal(dbOrder.getCheckResult(), EquipmentInspectionCheckResult.NORMAL.getKey())) {
                 equipmentService.editEquipmentStateById(dbOrder.getEquipmentId(), EquipmentState.NORMAL.getKey());
             }
             updateStateById(id, EquipmentInspectionOrderState.COMPLETED.getKey());
@@ -344,7 +344,7 @@ public class EquipmentInspectionOrderServiceImpl
         if (!ObjectUtil.equal(order.getState(), EquipmentInspectionOrderState.COMPLETED.getKey())) {
             throw new CustomException("仅已完成的巡检单可转维修");
         }
-        if (!EquipmentInspectionCheckResult.ABNORMAL.getKey().equals(order.getCheckResult())) {
+        if (!ObjectUtil.equal(order.getCheckResult(), EquipmentInspectionCheckResult.ABNORMAL.getKey())) {
             throw new CustomException("仅检查结果为异常的巡检单可转维修");
         }
         if (StrUtil.isNotEmpty(order.getRepairOrderId())) {
