@@ -12,6 +12,8 @@ import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import lombok.Data;
 
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: BgImage
  * @Description: 背景图片实体类
@@ -27,7 +29,7 @@ import lombok.Data;
 public class BgImage extends BaseGeneralInfo {
 
     @TableField("enabled")
-    @ApiModelProperty(value = "状态，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
     @TableField("img_path")
