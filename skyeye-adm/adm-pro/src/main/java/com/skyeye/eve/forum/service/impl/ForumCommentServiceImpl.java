@@ -5,6 +5,10 @@
 package com.skyeye.eve.forum.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeNodeConfig;
+import cn.hutool.core.lang.tree.TreeUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -114,6 +118,22 @@ public class ForumCommentServiceImpl extends SkyeyeBusinessServiceImpl<ForumComm
         iAuthUserService.setMationForMap(beans, "createId", "createMation");
         iAuthUserService.setMationForMap(beans, "lastUpdateId", "lastUpdateMation");
         return beans;
+    }
+
+    @Override
+    public Boolean builderTree(List<Map<String, Object>> beans, OutputObject outputObject) {
+        List<Tree<String>> treeNodes = TreeUtil.build(beans, String.valueOf(CommonNumConstants.NUM_ZERO), new TreeNodeConfig(),
+            (treeNode, tree) -> {
+                tree.setId(treeNode.get("id").toString());
+                tree.setParentId(treeNode.get("belongCommentId").toString());
+                tree.setName(treeNode.get("content").toString());
+                tree.putExtra("createName", treeNode.get("createName"));
+                tree.putExtra("createTime", treeNode.get("createTime"));
+                tree.putExtra("createMation", treeNode.get("createMation"));
+            });
+        beans.clear();
+        beans.addAll(JSONUtil.toList(JSONUtil.toJsonStr(treeNodes), null));
+        return false;
     }
 
     @Override

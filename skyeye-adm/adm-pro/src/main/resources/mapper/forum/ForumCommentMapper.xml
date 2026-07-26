@@ -64,7 +64,7 @@
             a.forum_id forumId,
             a.content,
             a.comment_id commentId,
-            a.belong_comment_id belongCommentId,
+            IFNULL(NULLIF(a.belong_comment_id, ''), '0') belongCommentId,
             a.reply_id replyId,
             a.comment_time commentTime,
             a.create_id createId,
