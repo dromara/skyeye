@@ -15,6 +15,7 @@ import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonConstants;
+import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -31,6 +32,8 @@ import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
 import com.skyeye.equipmentinspection.support.EquipmentInspectionOrderQuerySupport;
+import com.skyeye.eve.rest.quartz.SysQuartzMation;
+import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.repair.entity.EquipmentRepairOrder;
 import com.skyeye.repair.service.EquipmentRepairOrderService;
@@ -39,6 +42,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -65,6 +71,12 @@ public class EquipmentInspectionOrderServiceImpl
 
     @Autowired
     private EquipmentInspectionOrderQuerySupport orderQuerySupport;
+
+    @Autowired
+    private IQuartzService iQuartzService;
+
+    /** 审核完成后多少天无人评价则系统自动好评 */
+    private static final int AUTO_EVALUATE_DELAY_DAYS = 30;
 
     @Override
     protected QueryWrapper<EquipmentInspectionOrder> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -328,10 +340,28 @@ public class EquipmentInspectionOrderServiceImpl
                 equipmentService.editEquipmentStateById(dbOrder.getEquipmentId(), EquipmentState.NORMAL.getKey());
             }
             updateStateById(id, EquipmentInspectionOrderState.COMPLETED.getKey());
+            // 完成后挂 30 天延时任务，到期默认好评
+            startAutoEvaluateQuartz(dbOrder);
         } else {
             updateStateById(id, EquipmentInspectionOrderState.BE_EXECUTED.getKey());
         }
         outputObject.setBean(selectById(id));
+    }
+
+    /**
+     * 注册「30 天后自动好评」延时任务（objectId=巡检单id）
+     */
+    private void startAutoEvaluateQuartz(EquipmentInspectionOrder order) {
+        iQuartzService.stopAndDeleteTaskQuartz(order.getId());
+        Date now = DateUtil.getPointTime(DateUtil.getTimeAndToString(), DateUtil.YYYY_MM_DD_HH_MM_SS);
+        Date afterDays = DateUtil.getAfDate(now, AUTO_EVALUATE_DELAY_DAYS, "d");
+        DateFormat df = new SimpleDateFormat(DateUtil.YYYY_MM_DD_HH_MM_SS);
+        SysQuartzMation quartz = new SysQuartzMation();
+        quartz.setName(order.getId());
+        quartz.setTitle(StrUtil.blankToDefault(order.getOddNumber(), order.getId()));
+        quartz.setDelayedTime(df.format(afterDays));
+        quartz.setGroupId(QuartzConstants.QuartzMateMationJobType.EQUIPMENT_INSPECTION_ORDER_AUTO_EVALUATE.getTaskType());
+        iQuartzService.startUpTaskQuartz(quartz);
     }
 
     @Override

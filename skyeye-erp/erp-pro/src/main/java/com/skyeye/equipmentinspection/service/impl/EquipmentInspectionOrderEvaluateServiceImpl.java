@@ -18,6 +18,7 @@ import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrderEvaluate;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderEvaluateService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
+import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,8 +36,22 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
     extends SkyeyeBusinessServiceImpl<EquipmentInspectionOrderEvaluateDao, EquipmentInspectionOrderEvaluate>
     implements EquipmentInspectionOrderEvaluateService {
 
+    /** 系统自动评价 */
+    public static final int EVALUATE_TYPE_SYSTEM = 1;
+
+    /** 自动好评内容 */
+    public static final String AUTO_EVALUATE_CONTENT = "系统默认好评";
+
+    /**
+     * 自动好评评价类型占位
+     */
+    public static final String AUTO_EVALUATE_TYPE_ID = "system-auto-good";
+
     @Autowired
     private EquipmentInspectionOrderService equipmentInspectionOrderService;
+
+    @Autowired
+    private IQuartzService iQuartzService;
 
     @Override
     protected QueryWrapper<EquipmentInspectionOrderEvaluate> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -73,6 +88,36 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
         if (StrUtil.isBlank(entity.getObjectKey())) {
             entity.setObjectKey(EquipmentInspectionOrderServiceImpl.class.getName());
         }
+    }
+
+    @Override
+    protected void createPostpose(EquipmentInspectionOrderEvaluate entity, String userId) {
+        // 评价落库后取消「30 天自动好评」延时任务
+        iQuartzService.stopAndDeleteTaskQuartz(entity.getObjectId());
+    }
+
+    @Override
+    public void autoEvaluateByOrderId(String orderId, String userId) {
+        if (StrUtil.isBlank(orderId)) {
+            return;
+        }
+        EquipmentInspectionOrder order = equipmentInspectionOrderService.selectById(orderId);
+        if (StrUtil.isBlank(order.getId())
+            || !ObjectUtil.equal(order.getState(), EquipmentInspectionOrderState.COMPLETED.getKey())) {
+            return;
+        }
+        QueryWrapper<EquipmentInspectionOrderEvaluate> existWrapper = new QueryWrapper<>();
+        existWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrderEvaluate::getObjectId), orderId);
+        if (count(existWrapper) > 0) {
+            return;
+        }
+        EquipmentInspectionOrderEvaluate evaluate = new EquipmentInspectionOrderEvaluate();
+        evaluate.setObjectId(orderId);
+        evaluate.setObjectKey(EquipmentInspectionOrderServiceImpl.class.getName());
+        evaluate.setType(EVALUATE_TYPE_SYSTEM);
+        evaluate.setTypeId(AUTO_EVALUATE_TYPE_ID);
+        evaluate.setContent(AUTO_EVALUATE_CONTENT);
+        createEntity(evaluate, StrUtil.blankToDefault(userId, order.getCreateId()));
     }
 
 }
