@@ -16,6 +16,8 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: WordModel
  * @Description: 文字模型实体类
@@ -31,7 +33,7 @@ import java.util.Map;
 public class WordModel extends BaseGeneralInfo {
 
     @TableField("enabled")
-    @ApiModelProperty(value = "状态，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
     @TableField("img_path")

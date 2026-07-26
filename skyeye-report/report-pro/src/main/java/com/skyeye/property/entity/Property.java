@@ -14,6 +14,8 @@ import lombok.Data;
 
 import java.util.List;
 
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: Property
  * @Description: 样式属性实体类
@@ -37,7 +39,7 @@ public class Property extends BaseGeneralInfo {
     private Integer editorType;
 
     @TableField(value = "optional")
-    @ApiModelProperty(value = "属性值是否可选，参考#WhetherEnum", required = "required,num")
+    @ApiModelProperty(value = "属性值是否可选", required = "required,num", enumClass = WhetherEnum.class)
     private Integer optional;
 
     @TableField(value = "default_value")
