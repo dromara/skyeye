@@ -54,6 +54,10 @@ public class AutoStep extends CommonInfo {
     @Property(value = "所属用例")
     private String caseId;
 
+    @TableField("parent_id")
+    @ApiModelProperty(value = "父步骤id，顶级步骤可为空或0")
+    private String parentId;
+
     @TableField(exist = false)
     @ApiModelProperty(value = "API", required = "json")
     private AutoStepApi stepApi;
