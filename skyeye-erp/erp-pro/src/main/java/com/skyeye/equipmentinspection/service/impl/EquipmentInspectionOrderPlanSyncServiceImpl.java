@@ -39,7 +39,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 设备巡检方案与系统生成巡检单的同步实现（对齐工单巡检/保养：按计划开始时刻生单）。
+ * 设备巡检方案与系统生成巡检单的同步实现。
  * <p>
  * 日期窗口、比较、周几/日号均用 {@link DateUtil}；执行时刻用 {@link QuartzCronUtil}。
  * 已过时刻跳过；幂等键 equipmentId + plannedStartTime。inspectionsPerDay 不参与生单数。
@@ -82,7 +82,7 @@ public class EquipmentInspectionOrderPlanSyncServiceImpl implements EquipmentIns
         if (StrUtil.isBlank(planStart)) {
             return;
         }
-        // compare：time1 不晚于 time2 为 true → planStart<=today 用 today，否则用 planStart
+
         String rangeStart = DateUtil.compare(planStart + " 00:00:00", today + " 00:00:00") ? today : planStart;
         String rangeEnd = StrUtil.isNotBlank(planEnd) && DateUtil.compare(planEnd + " 00:00:00", end + " 00:00:00")
             ? planEnd : end;
@@ -98,7 +98,7 @@ public class EquipmentInspectionOrderPlanSyncServiceImpl implements EquipmentIns
             int slotIndex = 0;
             for (String planned : plannedTimes) {
                 slotIndex++;
-                // 已过时刻跳过（planned < now）
+                // 已过时刻跳过
                 if (DateUtil.compare(planned, nowStr) && !StrUtil.equals(planned, nowStr)) {
                     continue;
                 }
@@ -248,7 +248,7 @@ public class EquipmentInspectionOrderPlanSyncServiceImpl implements EquipmentIns
     }
 
     /**
-     * 自定义 Cron：Spring CronExpression 无 DateUtil 等价物，仅此处保留 java.time
+     * 自定义 Cron
      */
     private List<String> plannedTimesFromCron(String cron, String planDate) {
         if (StrUtil.isBlank(cron)) {

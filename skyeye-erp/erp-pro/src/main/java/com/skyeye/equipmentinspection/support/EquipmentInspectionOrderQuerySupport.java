@@ -28,7 +28,7 @@ public class EquipmentInspectionOrderQuerySupport {
     private EquipmentService equipmentService;
 
     /**
-     * 时间：优先 planned_start_time，无则 create_time（对齐保养单）
+     * 时间：优先 planned_start_time，无则 create_time
      */
     public void applyStatTimeRange(QueryWrapper<EquipmentInspectionOrder> queryWrapper, String startTime, String endTime) {
         if (StrUtil.isBlank(startTime) && StrUtil.isBlank(endTime)) {
