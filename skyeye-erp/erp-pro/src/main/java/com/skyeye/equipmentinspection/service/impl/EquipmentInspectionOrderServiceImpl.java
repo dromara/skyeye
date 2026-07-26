@@ -6,7 +6,6 @@ package com.skyeye.equipmentinspection.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -134,12 +133,6 @@ public class EquipmentInspectionOrderServiceImpl
 
     private void fillCreateDefaults(EquipmentInspectionOrder entity) {
         applyServiceUserState(entity, true);
-        if (entity.getInspectedCount() == null) {
-            entity.setInspectedCount(0);
-        }
-        if (entity.getSlotIndex() == null) {
-            entity.setSlotIndex(1);
-        }
         if (StrUtil.isNotEmpty(entity.getPlannedStartTime()) && StrUtil.isEmpty(entity.getPlanDate())
             && entity.getPlannedStartTime().length() >= 10) {
             entity.setPlanDate(entity.getPlannedStartTime().substring(0, 10));
@@ -216,14 +209,12 @@ public class EquipmentInspectionOrderServiceImpl
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getState),
                 EquipmentInspectionOrderState.PENDING_ORDERS.getKey());
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getServiceUserId), serviceUserId);
-            Object cooperationUserId = map.get("cooperationUserId");
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCooperationUserId),
-                cooperationUserId == null ? StrUtil.EMPTY : cooperationUserId.toString());
+                map.get("cooperationUserId").toString());
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getServiceTime), DateUtil.getTimeAndToString());
-            Object assignType = map.get("assignType");
+            String assignType = map.get("assignType").toString();
             updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getAssignType),
-                assignType == null || StrUtil.isEmpty(assignType.toString())
-                    ? EquipmentInspectionAssignType.MANUAL.getKey() : assignType.toString());
+                StrUtil.isEmpty(assignType) ? EquipmentInspectionAssignType.MANUAL.getKey() : assignType);
             update(updateWrapper);
             refreshCache(id);
             outputObject.setBean(selectById(id));
@@ -255,7 +246,7 @@ public class EquipmentInspectionOrderServiceImpl
             throw new CustomException("仅待填报状态可登记巡检次数");
         }
         int required = resolveRequiredInspectCount(order);
-        int current = order.getInspectedCount() == null ? 0 : order.getInspectedCount();
+        int current = order.getInspectedCount();
         int next = current + 1;
         if (next > required) {
             throw new CustomException("已达规定巡检次数，请提交巡检结果");
@@ -278,30 +269,31 @@ public class EquipmentInspectionOrderServiceImpl
             throw new CustomException("该数据状态已改变，请刷新页面！");
         }
         int required = resolveRequiredInspectCount(dbOrder);
-        int current = dbOrder.getInspectedCount() == null ? 0 : dbOrder.getInspectedCount();
+        int current = dbOrder.getInspectedCount();
         if (current < required) {
             throw new CustomException("未达规定巡检次数（已巡 " + current + " / 规定 " + required + "），无法提交结果");
         }
         Integer checkResult = Integer.valueOf(map.get("checkResult").toString());
-        Object inspectionTimeObj = map.get("inspectionTime");
-        String inspectionTime = inspectionTimeObj == null || StrUtil.isEmpty(inspectionTimeObj.toString())
-            ? DateUtil.getTimeAndToString() : inspectionTimeObj.toString();
+        String inspectionTime = map.get("inspectionTime").toString();
+        if (StrUtil.isEmpty(inspectionTime)) {
+            inspectionTime = DateUtil.getTimeAndToString();
+        }
         UpdateWrapper<EquipmentInspectionOrder> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, id);
         updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCheckResult), checkResult);
         updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), inspectionTime);
         updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getSummary),
-            map.get("summary") == null ? StrUtil.EMPTY : map.get("summary").toString());
+            map.get("summary").toString());
         updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getPhotoUrls),
-            map.get("photoUrls") == null ? StrUtil.EMPTY : map.get("photoUrls").toString());
+            map.get("photoUrls").toString());
         updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getLocationText),
-            map.get("locationText") == null ? StrUtil.EMPTY : map.get("locationText").toString());
+            map.get("locationText").toString());
         updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getLongitude),
-            map.get("longitude") == null ? StrUtil.EMPTY : map.get("longitude").toString());
+            map.get("longitude").toString());
         updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getLatitude),
-            map.get("latitude") == null ? StrUtil.EMPTY : map.get("latitude").toString());
+            map.get("latitude").toString());
         updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getAddress),
-            map.get("address") == null ? StrUtil.EMPTY : map.get("address").toString());
+            map.get("address").toString());
         updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getState),
             EquipmentInspectionOrderState.BE_AUDITED.getKey());
         update(updateWrapper);
@@ -310,19 +302,6 @@ public class EquipmentInspectionOrderServiceImpl
     }
 
     private int resolveRequiredInspectCount(EquipmentInspectionOrder order) {
-        Map<String, Object> planMation = order.getPlanMation();
-        if (MapUtil.isNotEmpty(planMation) && planMation.get("inspectionsPerDay") != null) {
-            Object raw = planMation.get("inspectionsPerDay");
-            if (raw instanceof Number && ((Number) raw).intValue() >= 1) {
-                return ((Number) raw).intValue();
-            }
-            if (StrUtil.isNumeric(raw.toString())) {
-                int v = Integer.parseInt(raw.toString());
-                if (v >= 1) {
-                    return v;
-                }
-            }
-        }
         EquipmentInspectionPlan plan = equipmentInspectionPlanService.selectById(order.getPlanId());
         if (StrUtil.isEmpty(plan.getId()) || plan.getInspectionsPerDay() == null || plan.getInspectionsPerDay() < 1) {
             return 1;
@@ -335,7 +314,7 @@ public class EquipmentInspectionOrderServiceImpl
     public void auditEquipmentInspectionOrderById(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> map = inputObject.getParams();
         String id = map.get("id").toString();
-        boolean pass = !"0".equals(String.valueOf(map.get("pass")));
+        boolean pass = !"0".equals(map.get("pass").toString());
         EquipmentInspectionOrder dbOrder = selectById(id);
         if (!ObjectUtil.equal(dbOrder.getState(), EquipmentInspectionOrderState.BE_AUDITED.getKey())) {
             throw new CustomException("该数据状态已改变，请刷新页面！");
