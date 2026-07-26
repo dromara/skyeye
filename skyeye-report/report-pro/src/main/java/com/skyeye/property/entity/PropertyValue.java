@@ -12,6 +12,8 @@ import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.common.entity.CommonInfo;
 import lombok.Data;
 
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: PropertyValue
  * @Description: 样式属性值实体类
@@ -42,7 +44,7 @@ public class PropertyValue extends CommonInfo {
     private String value;
 
     @TableField("default_choose")
-    @ApiModelProperty(value = "是否是默认值，参考#WhetherEnum", required = "required,num")
+    @ApiModelProperty(value = "是否是默认值", required = "required,num", enumClass = WhetherEnum.class)
     private Integer defaultChoose;
 
     @TableField(value = "order_by")
