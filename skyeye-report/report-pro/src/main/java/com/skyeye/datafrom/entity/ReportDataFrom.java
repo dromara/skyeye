@@ -13,6 +13,8 @@ import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import lombok.Data;
 
+import com.skyeye.datafrom.classenum.ReportDataFromType;
+
 /**
  * @ClassName: ReportDataFrom
  * @Description: 数据来源实体类
@@ -29,7 +31,7 @@ import lombok.Data;
 public class ReportDataFrom extends BaseGeneralInfo {
 
     @TableField(value = "type")
-    @ApiModelProperty(value = "数据来源类型，参考#ReportDataFromType", required = "required,num")
+    @ApiModelProperty(value = "数据来源类型", required = "required,num", enumClass = ReportDataFromType.class)
     private Integer type;
 
     @TableField(exist = false)
