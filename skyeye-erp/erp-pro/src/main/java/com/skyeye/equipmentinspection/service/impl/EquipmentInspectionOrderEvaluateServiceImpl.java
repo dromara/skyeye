@@ -12,6 +12,7 @@ import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.equipmentinspection.classenum.EquipmentInspectionEvaluateType;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionOrderState;
 import com.skyeye.equipmentinspection.dao.EquipmentInspectionOrderEvaluateDao;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
@@ -36,16 +37,11 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
     extends SkyeyeBusinessServiceImpl<EquipmentInspectionOrderEvaluateDao, EquipmentInspectionOrderEvaluate>
     implements EquipmentInspectionOrderEvaluateService {
 
-    /** 系统自动评价 */
-    public static final int EVALUATE_TYPE_SYSTEM = 1;
-
     /** 自动好评内容 */
-    public static final String AUTO_EVALUATE_CONTENT = "系统默认好评";
+    private static final String AUTO_EVALUATE_CONTENT = "系统默认好评";
 
-    /**
-     * 自动好评评价类型占位
-     */
-    public static final String AUTO_EVALUATE_TYPE_ID = "system-auto-good";
+    /** 自动好评评价类型占位 */
+    private static final String AUTO_EVALUATE_TYPE_ID = "system-auto-good";
 
     @Autowired
     private EquipmentInspectionOrderService equipmentInspectionOrderService;
@@ -67,8 +63,16 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
     @Override
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
-        iSysDictDataService.setMationForMap(beans, "typeId", "typeMation");
+        iSysDictDataService.setMationForMap(beans, "typeId", "typeIdMation");
         return beans;
+    }
+
+    @Override
+    public EquipmentInspectionOrderEvaluate selectById(String id) {
+        EquipmentInspectionOrderEvaluate evaluate = super.selectById(id);
+        evaluate.setTypeMation(EquipmentInspectionEvaluateType.getMation(evaluate.getType()));
+        iSysDictDataService.setDataMation(evaluate, EquipmentInspectionOrderEvaluate::getTypeId);
+        return evaluate;
     }
 
     @Override
@@ -85,39 +89,26 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
         if (count(existWrapper) > 0) {
             throw new CustomException("该巡检单已经评价。");
         }
-        if (StrUtil.isBlank(entity.getObjectKey())) {
-            entity.setObjectKey(EquipmentInspectionOrderServiceImpl.class.getName());
-        }
+        // 挂巡检单业务 key，对齐 SealEvaluate.objectKey
+        entity.setObjectKey(EquipmentInspectionOrderServiceImpl.class.getName());
     }
 
     @Override
     protected void createPostpose(EquipmentInspectionOrderEvaluate entity, String userId) {
-        // 评价落库后取消「30 天自动好评」延时任务
-        iQuartzService.stopAndDeleteTaskQuartz(entity.getObjectId());
+        // 人工评价提前取消延时任务；系统自动由 XXL finally 删
+        if (!ObjectUtil.equal(entity.getType(), EquipmentInspectionEvaluateType.SYSTEM.getKey())) {
+            iQuartzService.stopAndDeleteTaskQuartz(entity.getObjectId());
+        }
     }
 
     @Override
     public void autoEvaluateByOrderId(String orderId, String userId) {
-        if (StrUtil.isBlank(orderId)) {
-            return;
-        }
-        EquipmentInspectionOrder order = equipmentInspectionOrderService.selectById(orderId);
-        if (StrUtil.isBlank(order.getId())
-            || !ObjectUtil.equal(order.getState(), EquipmentInspectionOrderState.COMPLETED.getKey())) {
-            return;
-        }
-        QueryWrapper<EquipmentInspectionOrderEvaluate> existWrapper = new QueryWrapper<>();
-        existWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrderEvaluate::getObjectId), orderId);
-        if (count(existWrapper) > 0) {
-            return;
-        }
         EquipmentInspectionOrderEvaluate evaluate = new EquipmentInspectionOrderEvaluate();
         evaluate.setObjectId(orderId);
-        evaluate.setObjectKey(EquipmentInspectionOrderServiceImpl.class.getName());
-        evaluate.setType(EVALUATE_TYPE_SYSTEM);
+        evaluate.setType(EquipmentInspectionEvaluateType.SYSTEM.getKey());
         evaluate.setTypeId(AUTO_EVALUATE_TYPE_ID);
         evaluate.setContent(AUTO_EVALUATE_CONTENT);
-        createEntity(evaluate, StrUtil.blankToDefault(userId, order.getCreateId()));
+        createEntity(evaluate, userId);
     }
 
 }

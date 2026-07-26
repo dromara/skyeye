@@ -340,8 +340,9 @@ public class EquipmentInspectionOrderServiceImpl
                 equipmentService.editEquipmentStateById(dbOrder.getEquipmentId(), EquipmentState.NORMAL.getKey());
             }
             updateStateById(id, EquipmentInspectionOrderState.COMPLETED.getKey());
-            // 完成后挂 30 天延时任务，到期默认好评
-            startAutoEvaluateQuartz(dbOrder);
+            // 对齐商城下单挂延时任务：完成后 30 天自动好评
+            startUpTaskQuartz(dbOrder.getId(), StrUtil.blankToDefault(dbOrder.getOddNumber(), dbOrder.getId()),
+                DateUtil.getTimeAndToString());
         } else {
             updateStateById(id, EquipmentInspectionOrderState.BE_EXECUTED.getKey());
         }
@@ -349,19 +350,18 @@ public class EquipmentInspectionOrderServiceImpl
     }
 
     /**
-     * 注册「30 天后自动好评」延时任务（objectId=巡检单id）
+     * 启动延时任务
      */
-    private void startAutoEvaluateQuartz(EquipmentInspectionOrder order) {
-        iQuartzService.stopAndDeleteTaskQuartz(order.getId());
-        Date now = DateUtil.getPointTime(DateUtil.getTimeAndToString(), DateUtil.YYYY_MM_DD_HH_MM_SS);
-        Date afterDays = DateUtil.getAfDate(now, AUTO_EVALUATE_DELAY_DAYS, "d");
+    private void startUpTaskQuartz(String name, String title, String delayedTime) {
+        Date stringToDate = DateUtil.getPointTime(delayedTime, DateUtil.YYYY_MM_DD_HH_MM_SS);
+        Date afterDays = DateUtil.getAfDate(stringToDate, AUTO_EVALUATE_DELAY_DAYS, "d");
         DateFormat df = new SimpleDateFormat(DateUtil.YYYY_MM_DD_HH_MM_SS);
-        SysQuartzMation quartz = new SysQuartzMation();
-        quartz.setName(order.getId());
-        quartz.setTitle(StrUtil.blankToDefault(order.getOddNumber(), order.getId()));
-        quartz.setDelayedTime(df.format(afterDays));
-        quartz.setGroupId(QuartzConstants.QuartzMateMationJobType.EQUIPMENT_INSPECTION_ORDER_AUTO_EVALUATE.getTaskType());
-        iQuartzService.startUpTaskQuartz(quartz);
+        SysQuartzMation sysQuartzMation = new SysQuartzMation();
+        sysQuartzMation.setName(name);
+        sysQuartzMation.setTitle(title);
+        sysQuartzMation.setDelayedTime(df.format(afterDays));
+        sysQuartzMation.setGroupId(QuartzConstants.QuartzMateMationJobType.EQUIPMENT_INSPECTION_ORDER_AUTO_EVALUATE.getTaskType());
+        iQuartzService.startUpTaskQuartz(sysQuartzMation);
     }
 
     @Override
