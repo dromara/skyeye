@@ -96,8 +96,6 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
         });
         autoStepService.deleteByObjectId(autoCase.getId());
         autoStepService.createEntity(autoCase.getStepList(), userId);
-        // 步骤落库后覆盖 Redis，避免 queryAutoCaseById 仍命中旧缓存（含 stepList）
-        putCache(getDataFromDb(autoCase.getId()));
     }
 
     @Override
