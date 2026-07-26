@@ -15,6 +15,7 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.OperatorUserInfo;
+import com.skyeye.equipment.entity.Equipment;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionAssignType;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionCheckResult;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionOrderState;
@@ -47,7 +48,7 @@ public class EquipmentInspectionOrder extends OperatorUserInfo {
 
     @TableField(exist = false)
     @Property(value = "巡检方案信息")
-    private Map<String, Object> planMation;
+    private EquipmentInspectionPlan planMation;
 
     @TableField(value = "equipment_id", updateStrategy = FieldStrategy.NEVER)
     @ApiModelProperty(value = "设备id", required = "required")
@@ -55,7 +56,7 @@ public class EquipmentInspectionOrder extends OperatorUserInfo {
 
     @TableField(exist = false)
     @Property(value = "设备信息")
-    private Map<String, Object> equipmentMation;
+    private Equipment equipmentMation;
 
     @TableField(value = "state")
     @ApiModelProperty(value = "状态", enumClass = EquipmentInspectionOrderState.class, required = "num")

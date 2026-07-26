@@ -6,7 +6,6 @@ package com.skyeye.equipmentinspection.service;
 
 /**
  * 设备巡检方案与系统生成巡检单的同步：由 XXL 子任务按 planId 生成实例。
- * 形态对齐工单 {@link com.skyeye.patrol.service.PatrolTaskPlanSyncService}。
  */
 public interface EquipmentInspectionOrderPlanSyncService {
 

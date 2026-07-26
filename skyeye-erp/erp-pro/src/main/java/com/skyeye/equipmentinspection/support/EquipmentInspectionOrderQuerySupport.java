@@ -4,28 +4,17 @@
 
 package com.skyeye.equipmentinspection.support;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
-import com.skyeye.equipment.entity.Equipment;
-import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
- * 巡检单列表/统计共用查询条件（时间、设备名称编码）
+ * 巡检单列表/统计共用查询条件（时间范围）
  */
 @Component
 public class EquipmentInspectionOrderQuerySupport {
-
-    @Autowired
-    private EquipmentService equipmentService;
 
     /**
      * 时间：优先 planned_start_time，无则 create_time
@@ -56,36 +45,6 @@ public class EquipmentInspectionOrderQuerySupport {
                 }
             });
         });
-    }
-
-    /**
-     * 设备名称/编码：先查设备 id 再 in
-     */
-    public void applyEquipmentNameCodeFilter(QueryWrapper<EquipmentInspectionOrder> queryWrapper,
-                                             CommonPageInfo commonPageInfo) {
-        String equipmentName = commonPageInfo.getCustomParamsMapStr("equipmentName");
-        String equipmentCode = commonPageInfo.getCustomParamsMapStr("equipmentCode");
-        if (StrUtil.isBlank(equipmentName) && StrUtil.isBlank(equipmentCode)) {
-            return;
-        }
-        QueryWrapper<Equipment> equipmentWrapper = new QueryWrapper<>();
-        if (StrUtil.isNotBlank(equipmentName)) {
-            equipmentWrapper.like(MybatisPlusUtil.toColumns(Equipment::getName), equipmentName);
-        }
-        if (StrUtil.isNotBlank(equipmentCode)) {
-            equipmentWrapper.like(MybatisPlusUtil.toColumns(Equipment::getOddNumber), equipmentCode);
-        }
-        List<Equipment> equipmentList = equipmentService.list(equipmentWrapper);
-        if (CollectionUtil.isEmpty(equipmentList)) {
-            queryWrapper.apply("1 = 0");
-            return;
-        }
-        List<String> ids = equipmentList.stream().map(Equipment::getId).filter(StrUtil::isNotBlank).collect(Collectors.toList());
-        if (CollectionUtil.isEmpty(ids)) {
-            queryWrapper.apply("1 = 0");
-            return;
-        }
-        queryWrapper.in(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getEquipmentId), ids);
     }
 
 }

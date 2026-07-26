@@ -96,7 +96,6 @@ public class EquipmentInspectionOrderServiceImpl
             queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCheckResult), Integer.valueOf(checkResult));
         }
         orderQuerySupport.applyStatTimeRange(queryWrapper, commonPageInfo.getStartTime(), commonPageInfo.getEndTime());
-        orderQuerySupport.applyEquipmentNameCodeFilter(queryWrapper, commonPageInfo);
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCreateTime));
         return queryWrapper;
     }
