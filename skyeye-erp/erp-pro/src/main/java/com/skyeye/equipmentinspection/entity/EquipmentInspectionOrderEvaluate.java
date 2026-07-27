@@ -33,7 +33,7 @@ public class EquipmentInspectionOrderEvaluate extends OperatorUserInfo {
     private String id;
 
     @TableField(value = "type_id")
-    @ApiModelProperty(value = "评价类型，参考数据字典", required = "required")
+    @ApiModelProperty(value = "评价类型，参考数据字典")
     private String typeId;
 
     @TableField(exist = false)

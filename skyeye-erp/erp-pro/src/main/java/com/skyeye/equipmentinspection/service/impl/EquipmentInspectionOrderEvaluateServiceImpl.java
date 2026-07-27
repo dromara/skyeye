@@ -40,11 +40,6 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
     /** 自动好评内容 */
     private static final String AUTO_EVALUATE_CONTENT = "系统默认好评";
 
-    /**
-     * 自动好评的评价类型（数据字典 id，与人工评价同一字典）
-     */
-    private static final String AUTO_EVALUATE_TYPE_ID = "1";
-
     @Autowired
     private EquipmentInspectionOrderService equipmentInspectionOrderService;
 
@@ -108,7 +103,6 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
         EquipmentInspectionOrderEvaluate evaluate = new EquipmentInspectionOrderEvaluate();
         evaluate.setObjectId(orderId);
         evaluate.setType(EquipmentInspectionEvaluateType.SYSTEM.getKey());
-        evaluate.setTypeId(AUTO_EVALUATE_TYPE_ID);
         evaluate.setContent(AUTO_EVALUATE_CONTENT);
         createEntity(evaluate, userId);
     }
