@@ -15,8 +15,8 @@ import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionCheckResult;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionOrderState;
-import com.skyeye.equipmentinspection.dao.EquipmentInspectionOrderDao;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
+import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionStatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +50,7 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
     };
 
     @Autowired
-    private EquipmentInspectionOrderDao equipmentInspectionOrderDao;
+    private EquipmentInspectionOrderService equipmentInspectionOrderService;
 
     @Autowired
     private EquipmentService equipmentService;
@@ -61,7 +61,7 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
         QueryWrapper<EquipmentInspectionOrder> queryWrapper = buildTimeRangeWrapper(
             tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
 
-        List<EquipmentInspectionOrder> list = equipmentInspectionOrderDao.selectList(queryWrapper);
+        List<EquipmentInspectionOrder> list = equipmentInspectionOrderService.list(queryWrapper);
         long total = list.size();
         Map<Integer, Long> stateCountMap = list.stream()
             .filter(o -> o.getState() != null)
@@ -89,7 +89,7 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
         QueryWrapper<EquipmentInspectionOrder> queryWrapper = buildTimeRangeWrapper(
             tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
 
-        List<EquipmentInspectionOrder> list = equipmentInspectionOrderDao.selectList(queryWrapper);
+        List<EquipmentInspectionOrder> list = equipmentInspectionOrderService.list(queryWrapper);
         long total = list.size();
         long completed = list.stream()
             .filter(o -> EquipmentInspectionOrderState.COMPLETED.getKey().equals(o.getState()))
@@ -115,7 +115,7 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
         QueryWrapper<EquipmentInspectionOrder> queryWrapper = buildTimeRangeWrapper(
             tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
 
-        List<EquipmentInspectionOrder> list = equipmentInspectionOrderDao.selectList(queryWrapper);
+        List<EquipmentInspectionOrder> list = equipmentInspectionOrderService.list(queryWrapper);
         long total = list.size();
         Map<String, Long> resultCountMap = list.stream()
             .collect(Collectors.groupingBy(
@@ -148,7 +148,7 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
         QueryWrapper<EquipmentInspectionOrder> queryWrapper = buildTimeRangeWrapper(
             tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
 
-        List<EquipmentInspectionOrder> list = equipmentInspectionOrderDao.selectList(queryWrapper);
+        List<EquipmentInspectionOrder> list = equipmentInspectionOrderService.list(queryWrapper);
         equipmentService.setDataMation(list, EquipmentInspectionOrder::getEquipmentId);
 
         long total = list.size();
