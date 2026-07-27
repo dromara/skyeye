@@ -9,10 +9,14 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
+import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.OperatorUserInfo;
+import com.skyeye.equipmentinspection.classenum.EquipmentInspectionEvaluateType;
 import lombok.Data;
+
+import java.util.Map;
 
 /**
  * @ClassName: EquipmentInspectionOrderEvaluate
@@ -29,8 +33,12 @@ public class EquipmentInspectionOrderEvaluate extends OperatorUserInfo {
     private String id;
 
     @TableField(value = "type_id")
-    @ApiModelProperty(value = "评价类型，参考数据字典", required = "required")
+    @ApiModelProperty(value = "评价类型，参考数据字典")
     private String typeId;
+
+    @TableField(exist = false)
+    @Property(value = "评价类型信息")
+    private Map<String, Object> typeIdMation;
 
     @TableField(value = "object_id")
     @ApiModelProperty(value = "巡检单id", required = "required")
@@ -45,7 +53,11 @@ public class EquipmentInspectionOrderEvaluate extends OperatorUserInfo {
     private String content;
 
     @TableField(value = "type")
-    @ApiModelProperty(value = "类型 1.系统自动 2.人工评价", required = "num", defaultValue = "2")
+    @ApiModelProperty(value = "类型", enumClass = EquipmentInspectionEvaluateType.class, required = "num", defaultValue = "2")
     private Integer type;
+
+    @TableField(exist = false)
+    @Property(value = "类型信息")
+    private Map<String, Object> typeMation;
 
 }
