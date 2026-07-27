@@ -12,12 +12,14 @@ import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.equipmentinspection.classenum.EquipmentInspectionEvaluateType;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionOrderState;
 import com.skyeye.equipmentinspection.dao.EquipmentInspectionOrderEvaluateDao;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrderEvaluate;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderEvaluateService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
+import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,8 +37,14 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
     extends SkyeyeBusinessServiceImpl<EquipmentInspectionOrderEvaluateDao, EquipmentInspectionOrderEvaluate>
     implements EquipmentInspectionOrderEvaluateService {
 
+    /** 自动好评内容 */
+    private static final String AUTO_EVALUATE_CONTENT = "系统默认好评";
+
     @Autowired
     private EquipmentInspectionOrderService equipmentInspectionOrderService;
+
+    @Autowired
+    private IQuartzService iQuartzService;
 
     @Override
     protected QueryWrapper<EquipmentInspectionOrderEvaluate> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -52,8 +60,16 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
     @Override
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
-        iSysDictDataService.setMationForMap(beans, "typeId", "typeMation");
+        iSysDictDataService.setMationForMap(beans, "typeId", "typeIdMation");
         return beans;
+    }
+
+    @Override
+    public EquipmentInspectionOrderEvaluate selectById(String id) {
+        EquipmentInspectionOrderEvaluate evaluate = super.selectById(id);
+        evaluate.setTypeMation(EquipmentInspectionEvaluateType.getMation(evaluate.getType()));
+        iSysDictDataService.setDataMation(evaluate, EquipmentInspectionOrderEvaluate::getTypeId);
+        return evaluate;
     }
 
     @Override
@@ -70,9 +86,25 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
         if (count(existWrapper) > 0) {
             throw new CustomException("该巡检单已经评价。");
         }
-        if (StrUtil.isBlank(entity.getObjectKey())) {
-            entity.setObjectKey(EquipmentInspectionOrderServiceImpl.class.getName());
+        // 挂巡检单业务 key
+        entity.setObjectKey(equipmentInspectionOrderService.getServiceClassName());
+    }
+
+    @Override
+    protected void createPostpose(EquipmentInspectionOrderEvaluate entity, String userId) {
+        // 人工评价提前取消延时任务；系统自动由 XXL finally 删
+        if (!ObjectUtil.equal(entity.getType(), EquipmentInspectionEvaluateType.SYSTEM.getKey())) {
+            iQuartzService.stopAndDeleteTaskQuartz(entity.getObjectId());
         }
+    }
+
+    @Override
+    public void autoEvaluateByOrderId(String orderId, String userId) {
+        EquipmentInspectionOrderEvaluate evaluate = new EquipmentInspectionOrderEvaluate();
+        evaluate.setObjectId(orderId);
+        evaluate.setType(EquipmentInspectionEvaluateType.SYSTEM.getKey());
+        evaluate.setContent(AUTO_EVALUATE_CONTENT);
+        createEntity(evaluate, userId);
     }
 
 }

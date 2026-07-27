@@ -9,14 +9,28 @@ import com.skyeye.common.object.OutputObject;
 
 /**
  * @ClassName: EquipmentInspectionStatService
- * @Description: 设备巡检统计服务接口层
+ * @Description: 设备巡检统计服务接口
  */
 public interface EquipmentInspectionStatService {
 
-    void queryEquipmentInspectionSummaryList(InputObject inputObject, OutputObject outputObject);
+    /**
+     * 巡检单按状态统计：各状态数量（待派工、待接单、待填报、待审核、已完成）
+     */
+    void queryInspectionOrderStateStats(InputObject inputObject, OutputObject outputObject);
 
-    void queryEquipmentInspectionMissedList(InputObject inputObject, OutputObject outputObject);
+    /**
+     * 巡检单完成率统计：时间范围内总数、已完成数、完成率
+     */
+    void queryInspectionOrderCompletionRateStats(InputObject inputObject, OutputObject outputObject);
 
-    void queryEquipmentInspectionDistributionPanel(InputObject inputObject, OutputObject outputObject);
+    /**
+     * 巡检单按检查结果统计：正常 / 异常
+     */
+    void queryInspectionOrderStatsByCheckResult(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 巡检单按设备统计：按 equipmentId 分组数量
+     */
+    void queryInspectionOrderStatsByEquipment(InputObject inputObject, OutputObject outputObject);
 
 }
