@@ -446,18 +446,49 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
 
     @Override
     public void updateOrderToPayState(InputObject inputObject, OutputObject outputObject) {
-        String orderId = inputObject.getParams().get("id").toString();
-        //获取订单当前状态
-        Order order = selectById(orderId);
+        String id = inputObject.getParams().get("id").toString();
+        // 先判断是否子单（叶子）；不是再按父单处理
+        OrderItem orderItem = orderItemService.getById(id);
+        if (ObjectUtil.isNotEmpty(orderItem) && StrUtil.isNotEmpty(orderItem.getId())) {
+            // 子单：只改自己；若父单下已无其他未付子单，再完结父单
+            if (!Objects.equals(orderItem.getState(), ShopOrderItemOtherState.WAIT_PAY.getKey())) {
+                throw new CustomException("该子单状态不为待支付，不可完成支付");
+            }
+            Order parentOrder = super.selectById(orderItem.getParentId());
+            if (ObjectUtil.isEmpty(parentOrder) || StrUtil.isEmpty(parentOrder.getId())) {
+                throw new CustomException("父订单不存在");
+            }
+            Integer parentState = parentOrder.getState();
+            if (ShopOrderState.UNPAID.getKey() != parentState && ShopOrderState.FAIRPAID.getKey() != parentState) {
+                throw new CustomException("当前订单状态不为待支付或支付失败状态，不可修改");
+            }
+            String userId = InputObject.getLogParamsStatic().get("id").toString();
+            orderItem.setState(ShopOrderItemOtherState.WAIT_DELIVER.getKey());
+            orderItemService.updateEntity(orderItem, userId);
+
+            List<OrderItem> orderItemList = orderItemService.queryOrderItemByParentId(orderItem.getParentId());
+            boolean hasOtherUnpaid = orderItemList.stream()
+                .anyMatch(item -> Objects.equals(item.getState(), ShopOrderItemOtherState.WAIT_PAY.getKey()));
+            if (!hasOtherUnpaid) {
+                UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
+                updateWrapper.eq(CommonConstants.ID, orderItem.getParentId());
+                updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.UNDELIVERED.getKey());
+                update(updateWrapper);
+                refreshCache(orderItem.getParentId());
+            }
+            return;
+        }
+
+        // 父单：父单改待发货，其下子单全部改待发货（已支付）
+        Order order = selectById(id);
         Integer state = order.getState();
         if (ShopOrderState.UNPAID.getKey() == state || ShopOrderState.FAIRPAID.getKey() == state) {
             UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.eq(CommonConstants.ID, orderId);
+            updateWrapper.eq(CommonConstants.ID, id);
             updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.UNDELIVERED.getKey());
             update(updateWrapper);
-            refreshCache(orderId);
-            // 修改订单子单信息为待发货状态
-            orderItemService.updateDeliverStateByParentId(orderId, ShopOrderItemOtherState.WAIT_DELIVER.getKey());
+            refreshCache(id);
+            orderItemService.updateDeliverStateByParentId(id, ShopOrderItemOtherState.WAIT_DELIVER.getKey());
         } else {
             throw new CustomException("当前订单状态不为待支付或支付失败状态，不可修改");
         }
@@ -696,25 +727,7 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
 
     private Map<String, Object> initiateShopOrderPayment(Order one, String channelCode, String returnUrl,
                                                          String channelExtras) {
-        // 有已付子单时，只收仍待支付子单的金额；否则保持原父单金额逻辑
-        List<OrderItem> orderItemList = orderItemService.queryOrderItemByParentId(one.getId());
-        boolean hasPaidItem = CollectionUtil.isNotEmpty(orderItemList)
-            && orderItemList.stream().anyMatch(item -> !Objects.equals(item.getState(), ShopOrderItemOtherState.WAIT_PAY.getKey()));
-        if (hasPaidItem) {
-            String remainingPayPrice = CommonNumConstants.NUM_ZERO.toString();
-            for (OrderItem item : orderItemList) {
-                if (!Objects.equals(item.getState(), ShopOrderItemOtherState.WAIT_PAY.getKey())) {
-                    continue;
-                }
-                String itemPayPrice = item.getPayPrice();
-                if (StrUtil.isNotEmpty(item.getAdjustPrice())
-                    && Double.parseDouble(item.getAdjustPrice()) > CommonNumConstants.NUM_ZERO) {
-                    itemPayPrice = item.getAdjustPrice();
-                }
-                remainingPayPrice = CalculationUtil.add(remainingPayPrice, itemPayPrice, CommonNumConstants.NUM_SIX);
-            }
-            one.setPayPrice(remainingPayPrice);
-        } else if (!StrUtil.equals(CommonNumConstants.NUM_ZERO.toString(), one.getAdjustPrice())) {
+        if (!StrUtil.equals(CommonNumConstants.NUM_ZERO.toString(), one.getAdjustPrice())) {
             one.setPayPrice(CalculationUtil.multiply(one.getAdjustPrice(), CommonNumConstants.ONE_HUNDRED.toString()));
         }
         Map<String, Object> payData = buildShopOrderPayData(one);
