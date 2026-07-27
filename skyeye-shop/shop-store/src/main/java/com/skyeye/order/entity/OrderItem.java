@@ -41,10 +41,6 @@ public class OrderItem extends OperatorUserInfo {
     @ApiModelProperty(value = "订单id")
     private String parentId;
 
-    @TableField(exist = false)
-    @Property(value = "订单信息")
-    private Order parentMation;
-
     @TableField("store_id")
     @Property(value = "门店id")
     private String storeId;

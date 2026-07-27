@@ -321,41 +321,48 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         List<Integer> stateList = new ArrayList<>();
         switch (commonPageInfo.getType()) {
             case "1": // 未支付
-                stateList = Arrays.asList(new Integer[]{ShopOrderState.UNPAID.getKey()});
+                stateList = Arrays.asList(new Integer[]{ShopOrderItemOtherState.WAIT_PAY.getKey()});
                 break;
             case "2": // 待收货
                 stateList = Arrays.asList(new Integer[]{
-                    ShopOrderState.UNDELIVERED.getKey(),// 待发货
-                    ShopOrderState.DELIVERED.getKey(), //  已发货
-                    ShopOrderState.TRANSPORTING.getKey()});//运输中
+                    ShopOrderItemOtherState.WAIT_DELIVER.getKey(),// 待发货
+                    ShopOrderItemOtherState.ALL_DELIVERED.getKey(), //  已发货
+                    ShopOrderItemOtherState.TRANSPORTING.getKey()});//运输中
                 break;
             case "3":// 已完成
                 stateList = Arrays.asList(new Integer[]{
-                    ShopOrderState.SIGN.getKey(),       // 已签收
-                    ShopOrderState.COMPLETED.getKey(),  // 已完成
-                    ShopOrderState.UNEVALUATE.getKey(), // 待评价
-                    ShopOrderState.EVALUATED.getKey(),// 已评价
-                    ShopOrderState.PARTIALLYDONE.getKey(),//部分完成
-                    ShopOrderState.PARTIALEVALUATION.getKey()});//部分评价
+                    ShopOrderItemOtherState.SIGN.getKey(),       // 已签收
+                    ShopOrderItemOtherState.COMPLETED.getKey(),  // 已完成
+                    ShopOrderItemOtherState.UNEVALUATE.getKey(), // 待评价
+                    ShopOrderItemOtherState.EVALUATED.getKey(),// 已评价
+                    ShopOrderItemOtherState.PARTIALLYDONE.getKey(),//部分完成
+                    ShopOrderItemOtherState.PARTIALEVALUATION.getKey()});//部分评价
                 break;
             case "4":// 已取消
-                stateList = Arrays.asList(new Integer[]{ShopOrderState.CANCELED.getKey()});
+                stateList = Arrays.asList(new Integer[]{ShopOrderItemOtherState.CANCELED.getKey()});
                 break;
             case "5":// 处理中
                 stateList = Arrays.asList(new Integer[]{
-                    ShopOrderState.REFUNDING.getKey(),  // 退款中
-                    ShopOrderState.SALESRETURNING.getKey(),//退货中
-                    ShopOrderState.EXCHANGEING.getKey()});//换货中
+                    ShopOrderItemOtherState.REFUNDING.getKey(),  // 退款中
+                    ShopOrderItemOtherState.SALESRETURNING.getKey(),//退货中
+                    ShopOrderItemOtherState.EXCHANGEING.getKey()});//换货中
                 break;
             case "6": // 申请记录
                 stateList = Arrays.asList(new Integer[]{
-                    ShopOrderState.REFUND.getKey(),     // 已退款
-                    ShopOrderState.SALESRETURNED.getKey(),//已退货
-                    ShopOrderState.EXCHANGED.getKey()});//已换货
+                    ShopOrderItemOtherState.REFUND.getKey(),     // 已退款
+                    ShopOrderItemOtherState.SALESRETURNED.getKey(),//已退货
+                    ShopOrderItemOtherState.EXCHANGED.getKey()});//已换货
         }
         QueryWrapper<Order> wrapper = super.getQueryWrapper(commonPageInfo);
-        if (CollectionUtil.isNotEmpty(stateList)) { // 状态列表为空时，则查询全部订单
-            wrapper.in(MybatisPlusUtil.toColumns(Order::getState), stateList);
+        if (CollectionUtil.isNotEmpty(stateList)) { // 状态在子单，先筛出符合 Tab 的订单 id
+            QueryWrapper<OrderItem> itemWrapper = new QueryWrapper<>();
+            itemWrapper.in(MybatisPlusUtil.toColumns(OrderItem::getState), stateList);
+            List<OrderItem> orderItemList = orderItemService.list(itemWrapper);
+            if (CollectionUtil.isEmpty(orderItemList)) {
+                return CollectionUtil.newArrayList();
+            }
+            List<String> orderIdList = orderItemList.stream().map(OrderItem::getParentId).distinct().collect(Collectors.toList());
+            wrapper.in(CommonConstants.ID, orderIdList);
         }
         wrapper.orderByDesc(MybatisPlusUtil.toColumns(Order::getCreateTime));
         List<Order> list = list(wrapper);
@@ -381,55 +388,41 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
         List<Integer> stateList = new ArrayList<>();
         switch (StrUtil.isEmpty(commonPageInfo.getType()) ? CommonNumConstants.NUM_ZERO.toString() : commonPageInfo.getType()) {
-            // 未提交、已提交和支付失败三个枚举未处理
             case "1": // 未支付
-                stateList = Arrays.asList(ShopOrderState.UNPAID.getKey());
+                stateList = Arrays.asList(ShopOrderItemOtherState.WAIT_PAY.getKey());
                 break;
             case "2": // 待收货
-                stateList = Arrays.asList(ShopOrderState.UNDELIVERED.getKey(),// 待发货
-                    ShopOrderState.DELIVERED.getKey(), //  已发货
-                    ShopOrderState.TRANSPORTING.getKey());//运输中
+                stateList = Arrays.asList(ShopOrderItemOtherState.WAIT_DELIVER.getKey(),// 待发货
+                    ShopOrderItemOtherState.ALL_DELIVERED.getKey(), //  已发货
+                    ShopOrderItemOtherState.TRANSPORTING.getKey());//运输中
                 break;
             case "3":// 已完成
-                stateList = Arrays.asList(ShopOrderState.SIGN.getKey(),       // 已签收
-                    ShopOrderState.COMPLETED.getKey(),  // 已完成
-                    ShopOrderState.UNEVALUATE.getKey(), // 待评价
-                    ShopOrderState.EVALUATED.getKey(),// 已评价
-                    ShopOrderState.PARTIALLYDONE.getKey(),//部分完成
-                    ShopOrderState.PARTIALEVALUATION.getKey());//部分评价
+                stateList = Arrays.asList(ShopOrderItemOtherState.SIGN.getKey(),       // 已签收
+                    ShopOrderItemOtherState.COMPLETED.getKey(),  // 已完成
+                    ShopOrderItemOtherState.UNEVALUATE.getKey(), // 待评价
+                    ShopOrderItemOtherState.EVALUATED.getKey(),// 已评价
+                    ShopOrderItemOtherState.PARTIALLYDONE.getKey(),//部分完成
+                    ShopOrderItemOtherState.PARTIALEVALUATION.getKey());//部分评价
                 break;
             case "4":// 已取消
-                stateList = Arrays.asList(ShopOrderState.CANCELED.getKey());
+                stateList = Arrays.asList(ShopOrderItemOtherState.CANCELED.getKey());
                 break;
             case "5":// 处理中
-                stateList = Arrays.asList(ShopOrderState.REFUNDING.getKey(),  // 退款中
-                    ShopOrderState.SALESRETURNING.getKey(),//退货中
-                    ShopOrderState.EXCHANGEING.getKey());//换货中
+                stateList = Arrays.asList(ShopOrderItemOtherState.REFUNDING.getKey(),  // 退款中
+                    ShopOrderItemOtherState.SALESRETURNING.getKey(),//退货中
+                    ShopOrderItemOtherState.EXCHANGEING.getKey());//换货中
                 break;
             case "6": // 申请记录
-                stateList = Arrays.asList(ShopOrderState.REFUND.getKey(),     // 已退款
-                    ShopOrderState.SALESRETURNED.getKey(),//已退货
-                    ShopOrderState.EXCHANGED.getKey());//已换货
+                stateList = Arrays.asList(ShopOrderItemOtherState.REFUND.getKey(),     // 已退款
+                    ShopOrderItemOtherState.SALESRETURNED.getKey(),//已退货
+                    ShopOrderItemOtherState.EXCHANGED.getKey());//已换货
         }
         String userId = InputObject.getLogParamsStatic().get("id").toString();
-        // 状态在订单主表，先筛出符合 Tab 的订单 id
-        List<String> orderIdList = null;
-        if (CollectionUtil.isNotEmpty(stateList)) {
-            QueryWrapper<Order> orderWrapper = new QueryWrapper<>();
-            orderWrapper.eq(MybatisPlusUtil.toColumns(Order::getCreateId), userId);
-            orderWrapper.in(MybatisPlusUtil.toColumns(Order::getState), stateList);
-            List<Order> orderList = list(orderWrapper);
-            if (CollectionUtil.isEmpty(orderList)) {
-                return;
-            }
-            orderIdList = orderList.stream().map(Order::getId).collect(Collectors.toList());
-        }
-        // 按订单子单分页
         Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
         QueryWrapper<OrderItem> wrapper = new QueryWrapper<>();
         wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getCreateId), userId);
-        if (CollectionUtil.isNotEmpty(orderIdList)) {
-            wrapper.in(MybatisPlusUtil.toColumns(OrderItem::getParentId), orderIdList);
+        if (CollectionUtil.isNotEmpty(stateList)) {
+            wrapper.in(MybatisPlusUtil.toColumns(OrderItem::getState), stateList);
         }
         wrapper.orderByDesc(MybatisPlusUtil.toColumns(OrderItem::getCreateTime));
         List<OrderItem> orderItemList = orderItemService.list(wrapper);
@@ -437,14 +430,13 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
             return;
         }
         orderItemList = orderItemService.setDateForItemLIst(orderItemList);
-        setParentOrderMation(orderItemList);
-        outputObject.setBeans(JSONUtil.toList(JSONUtil.toJsonStr(orderItemList), null));
-        outputObject.settotal(pages.getTotal());
         List<Map<String, Object>> shopMaterialStoreList = new ArrayList<>(orderItemList.stream()
             .filter(item -> StrUtil.isNotBlank(item.getMaterialStoreId()) && CollectionUtil.isNotEmpty(item.getShopMaterial()))
             .collect(Collectors.toMap(OrderItem::getMaterialStoreId, OrderItem::getShopMaterial, (a, b) -> a, LinkedHashMap::new))
             .values());
         outputObject.setCustomBeans("ShopMaterialStoreList", shopMaterialStoreList);
+        outputObject.setBeans(orderItemList);
+        outputObject.settotal(pages.getTotal());
     }
 
     @Override
@@ -456,7 +448,7 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         if (ShopOrderState.UNPAID.getKey() == state || ShopOrderState.FAIRPAID.getKey() == state) {
             UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq(CommonConstants.ID, orderId);
-            updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.UNDELIVERED.getKey());
+            updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.PAY_SUCCESS.getKey());
             update(updateWrapper);
             refreshCache(orderId);
             // 修改订单子单信息为待发货状态
@@ -509,35 +501,6 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     }
 
     @Override
-    public void setParentOrderMation(List<OrderItem> orderItemList) {
-        if (CollectionUtil.isEmpty(orderItemList)) {
-            return;
-        }
-        List<String> parentIdList = orderItemList.stream()
-            .map(OrderItem::getParentId)
-            .filter(StrUtil::isNotEmpty)
-            .distinct()
-            .collect(Collectors.toList());
-        if (CollectionUtil.isEmpty(parentIdList)) {
-            return;
-        }
-        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in(CommonConstants.ID, parentIdList);
-        List<Order> parentOrderList = list(queryWrapper);
-        if (CollectionUtil.isEmpty(parentOrderList)) {
-            return;
-        }
-        iAreaService.setDataMation(parentOrderList, Order::getProvinceId);
-        iAreaService.setDataMation(parentOrderList, Order::getCityId);
-        iAreaService.setDataMation(parentOrderList, Order::getAreaId);
-        iAreaService.setDataMation(parentOrderList, Order::getTownshipId);
-        setAddressMationForList(parentOrderList);
-        Map<String, Order> parentOrderMap = parentOrderList.stream()
-            .collect(Collectors.toMap(Order::getId, order -> order, (a, b) -> a));
-        orderItemList.forEach(item -> item.setParentMation(parentOrderMap.get(item.getParentId())));
-    }
-
-    @Override
     public void cancelOrder(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
@@ -546,15 +509,23 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         if (ObjectUtil.isEmpty(one)) {
             throw new CustomException("订单不存在");
         }
-        // 可取消的订单状态：未提交(0)、已提交(1)、待支付(2)、待发货(5)
-        if (Objects.equals(one.getState(), ShopOrderState.UNSUBMIT.getKey()) ||
-            Objects.equals(one.getState(), ShopOrderState.SUBMIT.getKey()) ||
-            Objects.equals(one.getState(), ShopOrderState.UNPAID.getKey()) ||
-            Objects.equals(one.getState(), ShopOrderState.UNDELIVERED.getKey())) {
-            updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.CANCELED.getKey());
+        // 可取消：待支付、支付失败；或支付成功且子单仍为待发货
+        boolean canCancel = Objects.equals(one.getState(), ShopOrderState.UNPAID.getKey())
+            || Objects.equals(one.getState(), ShopOrderState.FAIRPAID.getKey());
+        if (Objects.equals(one.getState(), ShopOrderState.PAY_SUCCESS.getKey())) {
+            List<OrderItem> itemList = orderItemService.queryOrderItemByParentId(one.getId());
+            canCancel = CollectionUtil.isNotEmpty(itemList)
+                && itemList.stream().allMatch(item -> Objects.equals(item.getState(), ShopOrderItemOtherState.WAIT_DELIVER.getKey()));
+        }
+        if (canCancel) {
+            // 未支付/支付失败取消：主单回到待支付；已支付成功取消：主单保持支付成功
+            if (!Objects.equals(one.getState(), ShopOrderState.PAY_SUCCESS.getKey())) {
+                updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.UNPAID.getKey());
+            }
             updateWrapper.set(MybatisPlusUtil.toColumns(Order::getCancelType), params.get("cancelType"));
             updateWrapper.set(MybatisPlusUtil.toColumns(Order::getCancelTime), DateUtil.getTimeAndToString());
             update(updateWrapper);
+            orderItemService.updateDeliverStateByParentId(one.getId(), ShopOrderItemOtherState.CANCELED.getKey());
             log.info("订单id" + one.getId() + "取消订单--取消定时任务-- 开始");
             iQuartzService.stopAndDeleteTaskQuartz(one.getId());// 删除任务
             log.info("订单id" + one.getId() + "取消订单--取消定时任务-- 结束");
@@ -572,12 +543,16 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         if (ObjectUtil.isEmpty(one)) {
             throw new CustomException("订单不存在");
         }
-        List<Integer> stateList = Arrays.asList(ShopOrderState.SIGN.getKey(), ShopOrderState.UNEVALUATE.getKey(), ShopOrderState.EVALUATED.getKey());
-        if (stateList.contains(one.getState())) {// 处于签收、待评价、已评价状态时，才可以完成订单
-            updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.COMPLETED.getKey());
+        List<Integer> stateList = Arrays.asList(ShopOrderItemOtherState.SIGN.getKey(),
+            ShopOrderItemOtherState.UNEVALUATE.getKey(), ShopOrderItemOtherState.EVALUATED.getKey());
+        List<OrderItem> itemList = orderItemService.queryOrderItemByParentId(one.getId());
+        boolean canFinish = CollectionUtil.isNotEmpty(itemList)
+            && itemList.stream().allMatch(item -> stateList.contains(item.getState()));
+        if (canFinish) {// 子单均处于签收、待评价、已评价状态时，才可以完成订单
             updateWrapper.set(MybatisPlusUtil.toColumns(Order::getFinishTime), DateUtil.getTimeAndToString());
             updateWrapper.set(MybatisPlusUtil.toColumns(Order::getReceiveTime), DateUtil.getTimeAndToString());
             update(updateWrapper);
+            orderItemService.updateDeliverStateByParentId(one.getId(), ShopOrderItemOtherState.COMPLETED.getKey());
             refreshCache(one.getId());
         } else {
             throw new CustomException("不可完成订单。");
@@ -647,14 +622,14 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     }
 
     /**
-     * 商城支付成功落单：待支付 → 待发货，更新渠道信息与支付时间，取消支付超时定时任务。
+     * 商城支付成功落单：主单待支付 → 支付成功，子单 → 待发货；更新渠道信息与支付时间，取消支付超时定时任务。
      */
     private void completeShopOrderAfterPay(Order one, Map<String, Object> payChannel, String channelCode,
                                            Map<String, Object> payOrderRespDTO) {
         String id = one.getId();
         UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, id);
-        updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.UNDELIVERED.getKey());
+        updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.PAY_SUCCESS.getKey());
         updateWrapper.set(MybatisPlusUtil.toColumns(Order::getPayType), channelCode);
         if (payOrderRespDTO.get("successTime") != null) {
             updateWrapper.set(MybatisPlusUtil.toColumns(Order::getPayTime), payOrderRespDTO.get("successTime").toString());
@@ -751,7 +726,7 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
                 outputObject.setBean(selectById(id));
             } else {
                 Map<String, Object> result = buildShopOrderPayWaitingResult(id, payOrderRespDTO, payChannel);
-                result.put("state", ShopOrderState.UNDELIVERED.getKey());
+                result.put("state", ShopOrderState.PAY_SUCCESS.getKey());
                 outputObject.setBean(result);
             }
         } else {
@@ -780,19 +755,13 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     public void setOrderCancle(String orderId) {
         UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, orderId);
-        updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.CANCELED.getKey())
+        // 支付超时取消：主单回到待支付
+        updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.UNPAID.getKey())
             .set(MybatisPlusUtil.toColumns(Order::getCancelType), ShopOrderCancelType.PAY_TIMEOUT.getKey())
             .set(MybatisPlusUtil.toColumns(Order::getCancelTime), DateUtil.getTimeAndToString());
         update(updateWrapper);
+        orderItemService.updateDeliverStateByParentId(orderId, ShopOrderItemOtherState.CANCELED.getKey());
         refreshCache(orderId);
-    }
-
-    @Override
-    public void updateOrderState(String orderId, Integer partiallydoneKey) {
-        UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq(CommonConstants.ID, orderId);
-        updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), partiallydoneKey);
-        update(updateWrapper);
     }
 
     @Override
@@ -825,10 +794,8 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         if (ObjectUtil.isEmpty(order)) {
             throw new CustomException("订单不存在");
         }
-        List<Integer> stateList = Arrays.asList(ShopOrderState.UNSUBMIT.getKey(), ShopOrderState.SUBMIT.getKey(),
-            ShopOrderState.UNPAID.getKey(), ShopOrderState.FAIRPAID.getKey(),
-            ShopOrderState.CANCELED.getKey(), ShopOrderState.UNDELIVERED.getKey(),
-            ShopOrderState.DELIVERED.getKey(), ShopOrderState.TRANSPORTING.getKey());
+        List<Integer> stateList = Arrays.asList(ShopOrderState.UNPAID.getKey(), ShopOrderState.FAIRPAID.getKey(),
+            ShopOrderState.PAY_SUCCESS.getKey());
         if (!stateList.contains(order.getState())) {
             throw new CustomException("订单的当前状态不允许修改收货地址");
         }
@@ -839,15 +806,6 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         super.updateEntity(order, inputObject.getLogParams().get("id").toString());
         outputObject.setBean(order);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
-    }
-
-    @Override
-    public void updateOrderItemDeliverState(String id, int remainingNum) {
-        UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq(CommonConstants.ID, id);
-        updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), remainingNum);
-        update(updateWrapper);
-        refreshCache(id);
     }
 
     @Override

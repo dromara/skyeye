@@ -18,10 +18,26 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public enum ShopOrderItemOtherState implements SkyeyeEnumClass {
 
-    WAIT_PAY(0, "待支付",true,false),
-    WAIT_DELIVER(1, "待发货",true,false),
-    PART_DELIVERED(2, "部分发货",true,false),
-    ALL_DELIVERED(3, "全部发货",true,false);
+    WAIT_PAY(0, "待支付", true, true),
+    FAIRPAID(1, "支付失败", true, false),
+    CANCELED(2, "已取消", true, false),
+    WAIT_DELIVER(3, "待发货", true, false),
+    ALL_DELIVERED(4, "全部发货", true, false),
+    TRANSPORTING(5, "运输中", true, false),
+    SIGN(6, "已签收", true, false),
+    COMPLETED(7, "已完成", true, false),
+    UNEVALUATE(8, "待评价", true, false),
+    EVALUATED(9, "已评价", true, false),
+    REFUNDING(10, "退款中", true, false),
+    REFUND(11, "已退款", true, false),
+    SALESRETURNING(12, "退货中", true, false),
+    SALESRETURNED(13, "已退货", true, false),
+    EXCHANGEING(14, "换货中", true, false),
+    EXCHANGED(15, "已换货", true, false),
+    PARTIALLYDONE(16, "部分完成", true, false),
+    PARTIALEVALUATION(17, "部分评价", true, false),
+    PART_DELIVERED(18, "部分发货", true, false),
+    PART_SIGN(19, "部分签收", true, false);
 
     private Integer key;
 
