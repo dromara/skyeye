@@ -696,7 +696,25 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
 
     private Map<String, Object> initiateShopOrderPayment(Order one, String channelCode, String returnUrl,
                                                          String channelExtras) {
-        if (!StrUtil.equals(CommonNumConstants.NUM_ZERO.toString(), one.getAdjustPrice())) {
+        // 有已付子单时，只收仍待支付子单的金额；否则保持原父单金额逻辑
+        List<OrderItem> orderItemList = orderItemService.queryOrderItemByParentId(one.getId());
+        boolean hasPaidItem = CollectionUtil.isNotEmpty(orderItemList)
+            && orderItemList.stream().anyMatch(item -> !Objects.equals(item.getState(), ShopOrderItemOtherState.WAIT_PAY.getKey()));
+        if (hasPaidItem) {
+            String remainingPayPrice = CommonNumConstants.NUM_ZERO.toString();
+            for (OrderItem item : orderItemList) {
+                if (!Objects.equals(item.getState(), ShopOrderItemOtherState.WAIT_PAY.getKey())) {
+                    continue;
+                }
+                String itemPayPrice = item.getPayPrice();
+                if (StrUtil.isNotEmpty(item.getAdjustPrice())
+                    && Double.parseDouble(item.getAdjustPrice()) > CommonNumConstants.NUM_ZERO) {
+                    itemPayPrice = item.getAdjustPrice();
+                }
+                remainingPayPrice = CalculationUtil.add(remainingPayPrice, itemPayPrice, CommonNumConstants.NUM_SIX);
+            }
+            one.setPayPrice(remainingPayPrice);
+        } else if (!StrUtil.equals(CommonNumConstants.NUM_ZERO.toString(), one.getAdjustPrice())) {
             one.setPayPrice(CalculationUtil.multiply(one.getAdjustPrice(), CommonNumConstants.ONE_HUNDRED.toString()));
         }
         Map<String, Object> payData = buildShopOrderPayData(one);
