@@ -6,6 +6,7 @@ package com.skyeye.equipmentinspection.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
@@ -184,9 +185,9 @@ public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImp
     public void queryAllEquipmentInspectionPlanList(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         QueryWrapper<EquipmentInspectionPlan> queryWrapper = new QueryWrapper<>();
-        Object enabledObj = params.get("enabled");
-        if (enabledObj != null && StrUtil.isNotBlank(enabledObj.toString())) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionPlan::getEnabled), enabledObj.toString());
+        String enabled = MapUtil.getStr(params, "enabled");
+        if (StrUtil.isNotEmpty(enabled)) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionPlan::getEnabled), enabled);
         }
         List<EquipmentInspectionPlan> planList = list(queryWrapper);
         outputObject.setBeans(planList);
