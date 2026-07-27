@@ -379,7 +379,6 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     @Override
     public void queryOrderPageList(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
-        Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
         List<Integer> stateList = new ArrayList<>();
         switch (StrUtil.isEmpty(commonPageInfo.getType()) ? CommonNumConstants.NUM_ZERO.toString() : commonPageInfo.getType()) {
             // 未提交、已提交和支付失败三个枚举未处理
@@ -412,32 +411,36 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
                     ShopOrderState.SALESRETURNED.getKey(),//已退货
                     ShopOrderState.EXCHANGED.getKey());//已换货
         }
-        QueryWrapper<Order> wrapper = new QueryWrapper<>();
-        if (CollectionUtil.isNotEmpty(stateList)) { // 状态列表为空时，则查询全部订单
-            wrapper.in(MybatisPlusUtil.toColumns(Order::getState), stateList);
-        }
         String userId = InputObject.getLogParamsStatic().get("id").toString();
-        wrapper.eq(MybatisPlusUtil.toColumns(Order::getCreateId), userId);// 查询自己的订单
-        wrapper.orderByDesc(MybatisPlusUtil.toColumns(Order::getCreateTime));
-        List<Order> list = list(wrapper);
-        if (CollectionUtil.isEmpty(list)) {
+        // 状态在订单主表，先筛出符合 Tab 的订单 id
+        List<String> orderIdList = null;
+        if (CollectionUtil.isNotEmpty(stateList)) {
+            QueryWrapper<Order> orderWrapper = new QueryWrapper<>();
+            orderWrapper.eq(MybatisPlusUtil.toColumns(Order::getCreateId), userId);
+            orderWrapper.in(MybatisPlusUtil.toColumns(Order::getState), stateList);
+            List<Order> orderList = list(orderWrapper);
+            if (CollectionUtil.isEmpty(orderList)) {
+                return;
+            }
+            orderIdList = orderList.stream().map(Order::getId).collect(Collectors.toList());
+        }
+        // 按订单子单分页
+        Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
+        QueryWrapper<OrderItem> wrapper = new QueryWrapper<>();
+        wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getCreateId), userId);
+        if (CollectionUtil.isNotEmpty(orderIdList)) {
+            wrapper.in(MybatisPlusUtil.toColumns(OrderItem::getParentId), orderIdList);
+        }
+        wrapper.orderByDesc(MybatisPlusUtil.toColumns(OrderItem::getCreateTime));
+        List<OrderItem> orderItemList = orderItemService.list(wrapper);
+        if (CollectionUtil.isEmpty(orderItemList)) {
             return;
         }
-        List<String> idList = list.stream().map(Order::getId).collect(Collectors.toList());
-        Map<String, List<OrderItem>> mapByIds = orderItemService.queryListByParentId(idList);
-        for (Order order : list) {
-            order.setOrderItemList(mapByIds.containsKey(order.getId()) ? mapByIds.get(order.getId()) : new ArrayList<>());
-        }
-        iAreaService.setDataMation(list, Order::getProvinceId);
-        iAreaService.setDataMation(list, Order::getCityId);
-        iAreaService.setDataMation(list, Order::getAreaId);
-        iAreaService.setDataMation(list, Order::getTownshipId);
-        setAddressMationForList(list);
-        outputObject.setBeans(JSONUtil.toList(JSONUtil.toJsonStr(list), null));
+        orderItemList = orderItemService.setDateForItemLIst(orderItemList);
+        setParentOrderMation(orderItemList);
+        outputObject.setBeans(JSONUtil.toList(JSONUtil.toJsonStr(orderItemList), null));
         outputObject.settotal(pages.getTotal());
-        // 复用子项已查的 shopMaterial（含 shopMaterialStore.isLaunchShop）
-        List<Map<String, Object>> shopMaterialStoreList = new ArrayList<>(list.stream()
-            .flatMap(order -> order.getOrderItemList().stream())
+        List<Map<String, Object>> shopMaterialStoreList = new ArrayList<>(orderItemList.stream()
             .filter(item -> StrUtil.isNotBlank(item.getMaterialStoreId()) && CollectionUtil.isNotEmpty(item.getShopMaterial()))
             .collect(Collectors.toMap(OrderItem::getMaterialStoreId, OrderItem::getShopMaterial, (a, b) -> a, LinkedHashMap::new))
             .values());
@@ -503,6 +506,35 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
             });
         }
         return orderList;
+    }
+
+    @Override
+    public void setParentOrderMation(List<OrderItem> orderItemList) {
+        if (CollectionUtil.isEmpty(orderItemList)) {
+            return;
+        }
+        List<String> parentIdList = orderItemList.stream()
+            .map(OrderItem::getParentId)
+            .filter(StrUtil::isNotEmpty)
+            .distinct()
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(parentIdList)) {
+            return;
+        }
+        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in(CommonConstants.ID, parentIdList);
+        List<Order> parentOrderList = list(queryWrapper);
+        if (CollectionUtil.isEmpty(parentOrderList)) {
+            return;
+        }
+        iAreaService.setDataMation(parentOrderList, Order::getProvinceId);
+        iAreaService.setDataMation(parentOrderList, Order::getCityId);
+        iAreaService.setDataMation(parentOrderList, Order::getAreaId);
+        iAreaService.setDataMation(parentOrderList, Order::getTownshipId);
+        setAddressMationForList(parentOrderList);
+        Map<String, Order> parentOrderMap = parentOrderList.stream()
+            .collect(Collectors.toMap(Order::getId, order -> order, (a, b) -> a));
+        orderItemList.forEach(item -> item.setParentMation(parentOrderMap.get(item.getParentId())));
     }
 
     @Override

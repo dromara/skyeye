@@ -8,6 +8,7 @@ import com.skyeye.base.business.service.SkyeyeBusinessService;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.order.entity.Order;
+import com.skyeye.order.entity.OrderItem;
 
 import java.util.List;
 import java.util.Map;
@@ -53,4 +54,9 @@ public interface OrderService extends SkyeyeBusinessService<Order> {
     void updateOrderItemDeliverState(String id, int remainingNum);
 
     void changeAdjustPriceById(String id, String interpolation);
+
+    /**
+     * 给订单子单列表挂上父订单信息
+     */
+    void setParentOrderMation(List<OrderItem> orderItemList);
 }

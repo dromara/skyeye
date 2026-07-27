@@ -108,7 +108,8 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         return result;
     }
 
-    private List<OrderItem> setDateForItemLIst(List<OrderItem> list) {
+    @Override
+    public List<OrderItem> setDateForItemLIst(List<OrderItem> list) {
         // 计算评价信息
         List<String> orderItemIds = list.stream().map(OrderItem::getId).collect(Collectors.toList());
         List<OrderComment> orderCommentList = orderCommentService.queryListByOrderItemIdAndType(orderItemIds, OrderCommentType.CUSTOMERLATER.getKey());
