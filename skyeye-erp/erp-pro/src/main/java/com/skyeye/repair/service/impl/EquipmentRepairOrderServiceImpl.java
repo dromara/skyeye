@@ -128,8 +128,8 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
         if (StrUtil.isNotEmpty(commonPageInfo.getFromId())) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getFromId), commonPageInfo.getFromId());
         }
-        if (StrUtil.isNotEmpty(commonPageInfo.getHolderId())) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getEquipmentId), commonPageInfo.getHolderId());
+        if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentRepairOrder::getEquipmentId), commonPageInfo.getObjectId());
         }
         return queryWrapper;
     }
