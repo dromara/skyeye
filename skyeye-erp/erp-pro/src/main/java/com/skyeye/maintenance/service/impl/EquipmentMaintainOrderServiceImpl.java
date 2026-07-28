@@ -227,7 +227,8 @@ public class EquipmentMaintainOrderServiceImpl extends SkyeyeBusinessServiceImpl
     @Override
     @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
     public void completeTask(InputObject inputObject, OutputObject outputObject) {
-        String id = inputObject.getParams().get("id").toString();
+        Map<String, Object> map = inputObject.getParams();
+        String id = map.get("id").toString();
         EquipmentMaintainOrder task = selectById(id);
         if (task == null) {
             throw new CustomException("任务不存在");
@@ -239,6 +240,8 @@ public class EquipmentMaintainOrderServiceImpl extends SkyeyeBusinessServiceImpl
         equipmentMaintainOrderSparePartDetailService.deductStockByParentId(id);
         task.setState(EquipmentMaintainTaskState.COMPLETED.getKey());
         task.setActualEndTime(DateUtil.getTimeAndToString());
+        task.setMaintainResult(Integer.valueOf(map.get("maintainResult").toString()));
+        task.setIsToRepair(Integer.valueOf(map.get("isToRepair").toString()));
         updateEntity(task, userId);
         outputObject.setBean(selectById(id));
         outputObject.settotal(CommonNumConstants.NUM_ONE);

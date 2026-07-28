@@ -10,8 +10,10 @@ import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.maintenance.classenum.EquipmentMaintainResult;
 import com.skyeye.maintenance.service.EquipmentMaintainOrderService;
 import com.skyeye.repair.entity.EquipmentRepairOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +70,9 @@ public class EquipmentMaintainOrderController {
 
     @ApiOperation(id = "completeEquipmentMaintainTask", value = "完成设备保养任务", method = "POST", allUse = "1")
     @ApiImplicitParams({
-        @ApiImplicitParam(id = "id", name = "id", value = "任务ID", required = "required")})
+        @ApiImplicitParam(id = "id", name = "id", value = "任务ID", required = "required"),
+        @ApiImplicitParam(id = "maintainResult", name = "maintainResult", value = "保养结果", enumClass = EquipmentMaintainResult.class, required = "required,num"),
+        @ApiImplicitParam(id = "isToRepair", name = "isToRepair", value = "是否转维修", enumClass = WhetherEnum.class, required = "required,num")})
     @RequestMapping("/post/EquipmentMaintainOrderController/completeEquipmentMaintainTask")
     public void completeEquipmentMaintainTask(InputObject inputObject, OutputObject outputObject) {
         equipmentMaintainOrderService.completeTask(inputObject, outputObject);
