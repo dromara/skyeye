@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @ClassName: ShopOrderState
- * @Description: 订单状态
+ * @Description: 订单支付状态
  * @author: skyeye云系列--卫志强
  * @date: 2024/9/8 10:33
  * @Copyright: 2024 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
@@ -22,28 +22,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public enum ShopOrderState implements SkyeyeEnumClass {
 
-    UNSUBMIT(0, "未提交", true, false),
-    SUBMIT(1, "已提交", true, false),
-    UNPAID(2, "待支付", true, false),
-    FAIRPAID(3, "支付失败", true, false),
-    CANCELED(4, "已取消", true, false),
-    UNDELIVERED(5, "待发货", true, false),
-    DELIVERED(6, "全部发货", true, false),
-    TRANSPORTING(7, "运输中", true, false),
-    SIGN(8, "已签收", true, false),
-    COMPLETED(9, "已完成", true, false),
-    UNEVALUATE(10, "待评价", true, false),
-    EVALUATED(11, "已评价", true, false),
-    REFUNDING(12, "退款中", true, false),
-    REFUND(13, "已退款", true, false),
-    SALESRETURNING(14, "退货中", true, false),
-    SALESRETURNED(15, "已退货", true, false),
-    EXCHANGEING(16, "换货中", true, false),
-    EXCHANGED(17, "已换货", true, false),
-    PARTIALLYDONE(18,"部分完成",true,false),
-    PARTIALEVALUATION(19,"部分评价",true,false),
-    PART_DELIVERY(20,"部分发货",true,false),
-    PART_SIGN(21,"部分签收",true,false),;
+    UNPAID(1, "待支付", true, true),
+    FAIRPAID(2, "支付失败", true, false),
+    PAY_SUCCESS(3, "支付成功", true, false);
 
     private Integer key;
 

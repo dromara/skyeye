@@ -32,7 +32,6 @@ import com.skyeye.order.entity.OrderItem;
 import com.skyeye.order.enums.ItemSignState;
 import com.skyeye.order.enums.OrderCommentType;
 import com.skyeye.order.enums.ShopOrderItemOtherState;
-import com.skyeye.order.enums.ShopOrderState;
 import com.skyeye.order.service.ItemDeliverHistoryService;
 import com.skyeye.order.service.OrderCommentService;
 import com.skyeye.order.service.OrderItemService;
@@ -108,7 +107,8 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         return result;
     }
 
-    private List<OrderItem> setDateForItemLIst(List<OrderItem> list) {
+    @Override
+    public List<OrderItem> setDateForItemLIst(List<OrderItem> list) {
         // 计算评价信息
         List<String> orderItemIds = list.stream().map(OrderItem::getId).collect(Collectors.toList());
         List<OrderComment> orderCommentList = orderCommentService.queryListByOrderItemIdAndType(orderItemIds, OrderCommentType.CUSTOMERLATER.getKey());
@@ -253,17 +253,6 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         }
         // 更新数据
         super.updateEntity(targetItem, inputObject.getLogParams().get("id").toString());
-        // 修改总单状态
-        boolean allMatch = orderItemList.stream().allMatch(item -> item.getState() == ShopOrderItemOtherState.ALL_DELIVERED.getKey());
-        Order order = orderService.getById(orderId);
-        if (allMatch && (order.getState() == ShopOrderState.PART_DELIVERY.getKey() || order.getState() == ShopOrderState.UNDELIVERED.getKey())) {
-            // 所有子单全部发货，并且总单本来就是待发货状态
-            orderService.updateOrderItemDeliverState(targetItem.getParentId(), ShopOrderState.DELIVERED.getKey());
-        }
-        if (!allMatch && order.getState() == ShopOrderState.UNDELIVERED.getKey()) {
-            // 总单是待发货状态(此次发货为第一次发货)
-            orderService.updateOrderItemDeliverState(targetItem.getParentId(), ShopOrderState.PART_DELIVERY.getKey());
-        }
         // 创建快递信息
         itemDeliverHistoryService.insertEntity(targetItem, deliverNumber, deliveryTemplateChargeId, deliveryCompanyId, num);
     }
@@ -345,23 +334,13 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         if (remainingNum == CommonNumConstants.NUM_ZERO) {
             orderItem.setSignNum(orderItem.getCount());
             orderItem.setSignState(ItemSignState.ALL_SIGN.getKey());
+            orderItem.setState(ShopOrderItemOtherState.SIGN.getKey());
         } else {
             orderItem.setSignNum(num);
             orderItem.setSignState(ItemSignState.PART_SIGN.getKey());
+            orderItem.setState(ShopOrderItemOtherState.PART_SIGN.getKey());
         }
         super.updateEntity(orderItem, currenUserId);
-        // 判断所有子单是否全部签收
-        boolean allMatch = orderItemList.stream().map(OrderItem::getSignState).allMatch(signState -> Objects.equals(signState, ItemSignState.ALL_SIGN.getKey()));
-        Order order = orderService.getById(orderId);
-        if (allMatch && (order.getState() == ShopOrderState.PART_SIGN.getKey() || order.getState() == ShopOrderState.DELIVERED.getKey())) {
-            // 所有子单签收，并且总单本来的状态为部分签收/全部发货，则修改总单状态为已签收
-            orderService.updateOrderState(orderId, ShopOrderState.SIGN.getKey());
-            return;
-        }
-        if (!allMatch && order.getState() == ShopOrderState.PART_DELIVERY.getKey()) {
-            // 总单本来是部分发货或者已发货，则修改总单状态为部分签收
-            orderService.updateOrderState(orderId, ShopOrderState.PART_SIGN.getKey());
-        }
     }
 
     @Override
