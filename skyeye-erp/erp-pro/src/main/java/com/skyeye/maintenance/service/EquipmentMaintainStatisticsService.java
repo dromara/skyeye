@@ -26,4 +26,14 @@ public interface EquipmentMaintainStatisticsService {
      * 保养单备件使用统计：领用数量、金额、涉及工单数及按备件分布
      */
     void queryMaintainOrderSparePartStats(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 保养单日度趋势统计：已/未完成单量
+     */
+    void queryMaintainOrderTrendStats(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 保养单按执行人统计
+     */
+    void queryMaintainOrderStatsByExecutor(InputObject inputObject, OutputObject outputObject);
 }
