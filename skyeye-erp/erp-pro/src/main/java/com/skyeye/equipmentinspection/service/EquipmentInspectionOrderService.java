@@ -32,9 +32,6 @@ public interface EquipmentInspectionOrderService extends SkyeyeBusinessService<E
 
     void submitEquipmentInspectionResult(InputObject inputObject, OutputObject outputObject);
 
-    /**
-     * 完工（对齐工单 finish：待完工 → 已完成）
-     */
     void finishEquipmentInspectionOrderById(InputObject inputObject, OutputObject outputObject);
 
     void transferEquipmentInspectionToRepair(InputObject inputObject, OutputObject outputObject);
