@@ -15,6 +15,7 @@ import com.skyeye.equipmentinspection.classenum.EquipmentInspectionAssignType;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionCheckResult;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
+import com.skyeye.repair.entity.EquipmentRepairOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -114,8 +115,8 @@ public class EquipmentInspectionOrderController {
         equipmentInspectionOrderService.auditEquipmentInspectionOrderById(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "transferEquipmentInspectionToRepair", value = "转维修", method = "POST", allUse = "1")
-    @ApiImplicitParams({
+    @ApiOperation(id = "transferEquipmentInspectionToRepair", value = "巡检单转维修单", method = "POST", allUse = "1")
+    @ApiImplicitParams(classBean = EquipmentRepairOrder.class, value = {
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
     @RequestMapping("/post/EquipmentInspectionOrderController/transferEquipmentInspectionToRepair")
     public void transferEquipmentInspectionToRepair(InputObject inputObject, OutputObject outputObject) {
