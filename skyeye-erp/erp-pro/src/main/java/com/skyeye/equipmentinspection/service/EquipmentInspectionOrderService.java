@@ -32,7 +32,7 @@ public interface EquipmentInspectionOrderService extends SkyeyeBusinessService<E
 
     void submitEquipmentInspectionResult(InputObject inputObject, OutputObject outputObject);
 
-    void auditEquipmentInspectionOrderById(InputObject inputObject, OutputObject outputObject);
+    void finishEquipmentInspectionOrderById(InputObject inputObject, OutputObject outputObject);
 
     void transferEquipmentInspectionToRepair(InputObject inputObject, OutputObject outputObject);
 
