@@ -34,7 +34,7 @@ import com.skyeye.order.entity.OrderComment;
 import com.skyeye.order.entity.OrderItem;
 import com.skyeye.order.enums.OrderCommentType;
 import com.skyeye.order.enums.ShopOrderCommentState;
-import com.skyeye.order.enums.ShopOrderState;
+import com.skyeye.order.enums.ShopOrderItemOtherState;
 import com.skyeye.order.service.OrderCommentService;
 import com.skyeye.order.service.OrderItemService;
 import com.skyeye.order.service.OrderService;
@@ -160,10 +160,10 @@ public class OrderCommentServiceImpl extends SkyeyeBusinessServiceImpl<OrderComm
                 .allMatch(Orderitem -> Orderitem.getCommentState() == WhetherEnum.ENABLE_USING.getKey());
             if (allMatch) {
                 orderService.updateCommonState(orderComment.getOrderId(), ShopOrderCommentState.FINISHED.getKey());
-                orderService.updateOrderState(orderComment.getOrderId(), ShopOrderState.EVALUATED.getKey());
+                orderItemService.updateDeliverStateByParentId(orderComment.getOrderId(), ShopOrderItemOtherState.EVALUATED.getKey());
             } else {
                 orderService.updateCommonState(orderComment.getOrderId(), ShopOrderCommentState.PORTION.getKey());
-                orderService.updateOrderState(orderComment.getOrderId(), ShopOrderState.PARTIALEVALUATION.getKey());
+                orderItemService.updateDeliverStateByParentId(orderComment.getOrderId(), ShopOrderItemOtherState.PARTIALEVALUATION.getKey());
             }
         }
     }

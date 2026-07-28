@@ -35,6 +35,7 @@ import com.skyeye.equipmentinspection.support.EquipmentInspectionOrderQuerySuppo
 import com.skyeye.eve.rest.quartz.SysQuartzMation;
 import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
+import com.skyeye.repair.classenum.EquipmentRepairFromType;
 import com.skyeye.repair.entity.EquipmentRepairOrder;
 import com.skyeye.repair.service.EquipmentRepairOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -365,44 +366,25 @@ public class EquipmentInspectionOrderServiceImpl
     }
 
     @Override
-    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
     public void transferEquipmentInspectionToRepair(InputObject inputObject, OutputObject outputObject) {
-        Map<String, Object> map = inputObject.getParams();
-        String id = map.get("id").toString();
-        EquipmentInspectionOrder order = selectById(id);
-        if (!ObjectUtil.equal(order.getState(), EquipmentInspectionOrderState.COMPLETED.getKey())) {
-            throw new CustomException("仅已完成的巡检单可转维修");
+        EquipmentRepairOrder repairOrder = inputObject.getParams(EquipmentRepairOrder.class);
+        EquipmentInspectionOrder inspectionOrder = selectById(repairOrder.getId());
+        if (ObjectUtil.isEmpty(inspectionOrder)) {
+            throw new CustomException("该数据不存在.");
         }
-        if (!ObjectUtil.equal(order.getCheckResult(), EquipmentInspectionCheckResult.ABNORMAL.getKey())) {
-            throw new CustomException("仅检查结果为异常的巡检单可转维修");
+        // 巡检结果异常才可以转维修
+        if (EquipmentInspectionCheckResult.ABNORMAL.getKey().equals(inspectionOrder.getCheckResult())) {
+            String userId = inputObject.getLogParams().get("id").toString();
+            repairOrder.setFromId(repairOrder.getId());
+            repairOrder.setFromTypeId(EquipmentRepairFromType.INSPECTION_TASK.getKey());
+            repairOrder.setId(StrUtil.EMPTY);
+            if (StrUtil.isEmpty(repairOrder.getEquipmentId())) {
+                repairOrder.setEquipmentId(inspectionOrder.getEquipmentId());
+            }
+            equipmentRepairOrderService.createEntity(repairOrder, userId);
+        } else {
+            outputObject.setreturnMessage("巡检结果非异常，无法转维修单.");
         }
-        if (StrUtil.isNotEmpty(order.getRepairOrderId())) {
-            throw new CustomException("该巡检单已转维修，请勿重复操作");
-        }
-        EquipmentRepairOrder repairOrder = new EquipmentRepairOrder();
-        repairOrder.setEquipmentId(order.getEquipmentId());
-        repairOrder.setUserId(StrUtil.blankToDefault(order.getServiceUserId(), order.getCreateId()));
-        repairOrder.setReportTime(StrUtil.blankToDefault(order.getInspectionTime(), DateUtil.getTimeAndToString()));
-        repairOrder.setFaultBrief(buildFaultDesc(order));
-        repairOrder.setFaultPhoto(order.getPhotoUrls());
-        String operatorId = InputObject.getLogParamsStatic().get("id").toString();
-        equipmentRepairOrderService.createEntity(repairOrder, operatorId);
-
-        UpdateWrapper<EquipmentInspectionOrder> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq(CommonConstants.ID, id);
-        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getRepairOrderId), repairOrder.getId());
-        update(updateWrapper);
-        refreshCache(id);
-        outputObject.setBean(selectById(id));
-    }
-
-    private String buildFaultDesc(EquipmentInspectionOrder order) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("巡检单[").append(order.getOddNumber()).append("]检查异常");
-        if (StrUtil.isNotEmpty(order.getSummary())) {
-            sb.append("：").append(order.getSummary());
-        }
-        return sb.toString();
     }
 
     @Override

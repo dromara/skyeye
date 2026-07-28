@@ -42,4 +42,9 @@ public interface OrderItemService extends SkyeyeBusinessService<OrderItem> {
     void changeOrderItemAdjustPrice(InputObject inputObject, OutputObject outputObject);
 
     void signOrderItem(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 补全子单展示信息
+     */
+    List<OrderItem> setDateForItemLIst(List<OrderItem> list);
 }

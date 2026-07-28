@@ -42,15 +42,11 @@ public interface OrderService extends SkyeyeBusinessService<Order> {
 
     void setOrderCancle(String orderId);
 
-    void updateOrderState(String orderId, Integer partiallydoneKey);
-
     List<Order> queryOrderList(String orderId);
 
     void updateByAddressId(Map<String, String> map);
 
     void changeOrderAddress(InputObject inputObject, OutputObject outputObject);
-
-    void updateOrderItemDeliverState(String id, int remainingNum);
 
     void changeAdjustPriceById(String id, String interpolation);
 }
