@@ -114,23 +114,19 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
         TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
         QueryWrapper<EquipmentInspectionOrder> queryWrapper = buildTimeRangeWrapper(
             tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+        // 仅统计已填检查结果的单；未完成/未填报不入图
+        queryWrapper.isNotNull(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCheckResult));
 
         List<EquipmentInspectionOrder> list = equipmentInspectionOrderService.list(queryWrapper);
         long total = list.size();
-        Map<String, Long> resultCountMap = list.stream()
-            .collect(Collectors.groupingBy(
-                o -> o.getCheckResult() != null ? String.valueOf(o.getCheckResult()) : OTHER_LABEL,
-                Collectors.counting()));
+        Map<Integer, Long> resultCountMap = list.stream()
+            .collect(Collectors.groupingBy(EquipmentInspectionOrder::getCheckResult, Collectors.counting()));
 
         List<String> xAxisData = new ArrayList<>();
         List<Long> seriesData = new ArrayList<>();
         for (EquipmentInspectionCheckResult checkResult : CHECK_RESULT_ORDER) {
             xAxisData.add(checkResult.getValue());
-            seriesData.add(resultCountMap.getOrDefault(String.valueOf(checkResult.getKey()), 0L));
-        }
-        if (resultCountMap.containsKey(OTHER_LABEL)) {
-            xAxisData.add(OTHER_LABEL);
-            seriesData.add(resultCountMap.get(OTHER_LABEL));
+            seriesData.add(resultCountMap.getOrDefault(checkResult.getKey(), 0L));
         }
 
         Map<String, Object> result = new HashMap<>();
