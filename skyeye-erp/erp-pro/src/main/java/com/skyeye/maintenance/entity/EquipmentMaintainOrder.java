@@ -14,6 +14,8 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.OperatorUserInfo;
+import com.skyeye.common.enumeration.WhetherEnum;
+import com.skyeye.maintenance.classenum.EquipmentMaintainResult;
 import com.skyeye.maintenance.classenum.EquipmentMaintainTaskState;
 import lombok.Data;
 
@@ -76,6 +78,14 @@ public class EquipmentMaintainOrder extends OperatorUserInfo {
     @TableField(value = "state")
     @Property(value = "任务状态", enumClass = EquipmentMaintainTaskState.class)
     private Integer state;
+
+    @TableField(value = "maintain_result")
+    @ApiModelProperty(value = "保养结果", enumClass = EquipmentMaintainResult.class, required = "num")
+    private Integer maintainResult;
+
+    @TableField(value = "is_to_repair")
+    @ApiModelProperty(value = "是否转维修", enumClass = WhetherEnum.class, required = "num")
+    private Integer isToRepair;
 
     @TableField(value = "maintain_photos")
     @ApiModelProperty(value = "保养拍照")

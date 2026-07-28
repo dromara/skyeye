@@ -92,7 +92,7 @@ public class EquipmentMaintainOrderController {
         equipmentMaintainOrderService.reassignTimeoutTask(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "insertMaintainOrderToRepair", value = "保养任务转维修单", method = "POST", allUse = "2")
+    @ApiOperation(id = "insertMaintainOrderToRepair", value = "保养任务转维修单", method = "POST", allUse = "1")
     @ApiImplicitParams(classBean = EquipmentRepairOrder.class, value = {
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
     @RequestMapping("/post/EquipmentRepairOrderController/insertMaintainOrderToRepair")
