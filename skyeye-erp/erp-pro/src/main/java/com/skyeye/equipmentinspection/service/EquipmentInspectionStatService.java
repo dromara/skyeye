@@ -24,7 +24,7 @@ public interface EquipmentInspectionStatService {
     void queryInspectionOrderCompletionRateStats(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 巡检单按检查结果统计：正常 / 异常
+     * 巡检单按检查结果统计：正常 / 异常；未完成不入统计
      */
     void queryInspectionOrderStatsByCheckResult(InputObject inputObject, OutputObject outputObject);
 
