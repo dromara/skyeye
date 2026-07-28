@@ -303,8 +303,8 @@ public class EquipmentMaintainOrderServiceImpl extends SkyeyeBusinessServiceImpl
         if (ObjectUtil.isEmpty(maintainOrder)) {
             throw new CustomException("该数据不存在.");
         }
-        // 执行中的保养任务可以转维修
-        if (EquipmentMaintainTaskState.IN_PROGRESS.getKey().equals(maintainOrder.getState())) {
+        // 已完成的保养任务可以转维修
+        if (EquipmentMaintainTaskState.COMPLETED.getKey().equals(maintainOrder.getState())) {
             String userId = inputObject.getLogParams().get("id").toString();
             repairOrder.setFromId(repairOrder.getId());
             repairOrder.setFromTypeId(EquipmentRepairFromType.MAINTAIN_ORDER.getKey());

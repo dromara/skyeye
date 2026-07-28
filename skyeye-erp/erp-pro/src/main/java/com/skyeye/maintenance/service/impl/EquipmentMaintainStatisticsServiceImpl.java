@@ -12,7 +12,9 @@ import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
+import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.eve.service.IAuthUserService;
 import com.skyeye.maintenance.classenum.EquipmentMaintainTaskState;
 import com.skyeye.maintenance.dao.EquipmentMaintainOrderDao;
 import com.skyeye.maintenance.dao.EquipmentMaintainOrderSparePartDetailDao;
@@ -26,16 +28,19 @@ import org.springframework.stereotype.Service;
 
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 设备保养单统计服务实现：按状态、完成率、备件使用等维度统计（仅支持时间范围筛选）
+ * 设备保养单统计服务实现：按状态、完成率、备件、趋势、执行人等维度统计（仅支持时间范围筛选）
  */
 @Service
 public class EquipmentMaintainStatisticsServiceImpl implements EquipmentMaintainStatisticsService {
+
+    private static final String OTHER_LABEL = "其他";
 
     @Autowired
     private EquipmentMaintainOrderDao equipmentMaintainOrderDao;
@@ -48,6 +53,9 @@ public class EquipmentMaintainStatisticsServiceImpl implements EquipmentMaintain
 
     @Autowired
     private MaterialNormsService materialNormsService;
+
+    @Autowired
+    private IAuthUserService iAuthUserService;
 
     /**
      * 柱状图固定顺序：与 EquipmentMaintainTaskState 枚举顺序一致
@@ -191,6 +199,98 @@ public class EquipmentMaintainStatisticsServiceImpl implements EquipmentMaintain
         result.put("useAmount", useAmount);
         result.put("orderWithSparePartCount", orderWithSparePartCount);
         result.put("orderWithoutSparePartCount", total - orderWithSparePartCount);
+        result.put("xAxisData", xAxisData);
+        result.put("seriesData", seriesData);
+
+        outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryMaintainOrderTrendStats(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        if (StrUtil.isEmpty(tableSelectInfo.getStartTime()) || StrUtil.isEmpty(tableSelectInfo.getEndTime())) {
+            tableSelectInfo.setStartTime(DateUtil.formatDate2Str(
+                DateUtil.getAfDate(DateUtil.getPointTime(DateUtil.getYmdTimeAndToString(), DateUtil.YYYY_MM_DD), -30, "d"),
+                DateUtil.YYYY_MM_DD));
+            tableSelectInfo.setEndTime(DateUtil.getYmdTimeAndToString());
+        }
+
+        List<String> dayList = DateUtil.getDays(tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+        // 1. 新增的保养单
+        List<EquipmentMaintainOrder> orderList = queryOrdersInTimeRange(tableSelectInfo);
+        Map<String, Long> newOrderMap = orderList.stream()
+            .filter(order -> StrUtil.isNotEmpty(order.getCreateTime()))
+            .collect(Collectors.groupingBy(order -> {
+                Date pointTime = DateUtil.getPointTime(order.getCreateTime(), DateUtil.YYYY_MM_DD);
+                return DateUtil.formatDate2Str(pointTime, DateUtil.YYYY_MM_DD);
+            }, Collectors.counting()));
+        // 2. 已完成的保养单
+        Map<String, Long> completedMap = orderList.stream()
+            .filter(order -> EquipmentMaintainTaskState.COMPLETED.getKey().equals(order.getState()))
+            .filter(order -> StrUtil.isNotEmpty(order.getCreateTime()))
+            .collect(Collectors.groupingBy(order -> {
+                Date pointTime = DateUtil.getPointTime(order.getCreateTime(), DateUtil.YYYY_MM_DD);
+                return DateUtil.formatDate2Str(pointTime, DateUtil.YYYY_MM_DD);
+            }, Collectors.counting()));
+
+        List<Long> allNewOrders = new ArrayList<>();
+        List<Long> completedOrders = new ArrayList<>();
+        Long defaultValue = Long.valueOf(CommonNumConstants.NUM_ZERO);
+        for (String day : dayList) {
+            allNewOrders.add(newOrderMap.getOrDefault(day, defaultValue) - completedMap.getOrDefault(day, defaultValue));
+            completedOrders.add(completedMap.getOrDefault(day, defaultValue));
+        }
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("allNewOrders", allNewOrders);
+        resultMap.put("completedOrders", completedOrders);
+        resultMap.put("dayList", dayList);
+
+        outputObject.setBean(resultMap);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryMaintainOrderStatsByExecutor(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        List<EquipmentMaintainOrder> list = queryOrdersInTimeRange(tableSelectInfo);
+
+        long total = list.size();
+        Map<String, Long> executorStats = list.stream()
+            .collect(Collectors.groupingBy(
+                o -> StrUtil.isNotEmpty(o.getExecutorId()) ? o.getExecutorId() : OTHER_LABEL,
+                Collectors.counting()));
+
+        List<String> executorIds = list.stream()
+            .map(EquipmentMaintainOrder::getExecutorId)
+            .filter(StrUtil::isNotEmpty)
+            .distinct()
+            .collect(Collectors.toList());
+        Map<String, Map<String, Object>> executorMap = CollectionUtil.isEmpty(executorIds)
+            ? new HashMap<>()
+            : iAuthUserService.queryUserMationListByStaffIds(executorIds);
+
+        Map<String, String> executorIdToName = new HashMap<>();
+        executorIdToName.put(OTHER_LABEL, OTHER_LABEL);
+        for (String executorId : executorIds) {
+            Map<String, Object> userMation = executorMap.get(executorId);
+            String name = null;
+            if (userMation != null && userMation.get("name") != null) {
+                name = userMation.get("name").toString();
+            }
+            executorIdToName.put(executorId, StrUtil.isNotBlank(name) ? name : executorId);
+        }
+
+        List<String> xAxisData = new ArrayList<>();
+        List<Long> seriesData = new ArrayList<>();
+        for (Map.Entry<String, Long> entry : executorStats.entrySet()) {
+            xAxisData.add(executorIdToName.getOrDefault(entry.getKey(), entry.getKey()));
+            seriesData.add(entry.getValue());
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("total", total);
         result.put("xAxisData", xAxisData);
         result.put("seriesData", seriesData);
 
