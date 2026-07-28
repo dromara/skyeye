@@ -106,13 +106,12 @@ public class EquipmentInspectionOrderController {
         equipmentInspectionOrderService.submitEquipmentInspectionResult(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "auditEquipmentInspectionOrderById", value = "审核巡检单", method = "POST", allUse = "1")
+    @ApiOperation(id = "finishEquipmentInspectionOrderById", value = "完工", method = "POST", allUse = "1")
     @ApiImplicitParams({
-        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),
-        @ApiImplicitParam(id = "pass", name = "pass", value = "是否通过 1通过 0驳回", required = "required")})
-    @RequestMapping("/post/EquipmentInspectionOrderController/auditEquipmentInspectionOrderById")
-    public void auditEquipmentInspectionOrderById(InputObject inputObject, OutputObject outputObject) {
-        equipmentInspectionOrderService.auditEquipmentInspectionOrderById(inputObject, outputObject);
+        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
+    @RequestMapping("/post/EquipmentInspectionOrderController/finishEquipmentInspectionOrderById")
+    public void finishEquipmentInspectionOrderById(InputObject inputObject, OutputObject outputObject) {
+        equipmentInspectionOrderService.finishEquipmentInspectionOrderById(inputObject, outputObject);
     }
 
     @ApiOperation(id = "transferEquipmentInspectionToRepair", value = "巡检单转维修单", method = "POST", allUse = "1")

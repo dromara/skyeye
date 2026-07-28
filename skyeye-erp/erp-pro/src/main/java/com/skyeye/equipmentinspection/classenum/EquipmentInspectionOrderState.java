@@ -20,7 +20,7 @@ public enum EquipmentInspectionOrderState implements SkyeyeEnumClass {
     BE_DISPATCHED(1, "待派工", true, true),
     PENDING_ORDERS(2, "待接单", true, false),
     BE_EXECUTED(3, "待填报", true, false),
-    BE_AUDITED(4, "待审核", true, false),
+    BE_AUDITED(4, "待完工", true, false),
     COMPLETED(5, "已完成", true, false);
 
     private Integer key;

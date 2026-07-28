@@ -51,7 +51,7 @@ import java.util.Map;
 
 /**
  * @ClassName: EquipmentInspectionOrderServiceImpl
- * @Description: 设备巡检单服务层（CRUD 钩子 + 派工/接单/填报/审核/转维修）
+ * @Description: 设备巡检单服务层（CRUD 钩子 + 派工/接单/填报/完工/转维修）
  */
 @Service
 @SkyeyeService(name = "设备巡检单", groupName = "设备巡检", allowDynamicAttrKey = false)
@@ -76,7 +76,7 @@ public class EquipmentInspectionOrderServiceImpl
     @Autowired
     private IQuartzService iQuartzService;
 
-    /** 审核完成后多少天无人评价则系统自动好评 */
+    /** 完工后多少天无人评价则系统自动好评 */
     private static final int AUTO_EVALUATE_DELAY_DAYS = 30;
 
     @Override
@@ -323,30 +323,25 @@ public class EquipmentInspectionOrderServiceImpl
 
     @Override
     @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
-    public void auditEquipmentInspectionOrderById(InputObject inputObject, OutputObject outputObject) {
+    public void finishEquipmentInspectionOrderById(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> map = inputObject.getParams();
         String id = map.get("id").toString();
-        boolean pass = !"0".equals(map.get("pass").toString());
         EquipmentInspectionOrder dbOrder = selectById(id);
         if (!ObjectUtil.equal(dbOrder.getState(), EquipmentInspectionOrderState.BE_AUDITED.getKey())) {
             throw new CustomException("该数据状态已改变，请刷新页面！");
         }
-        if (pass) {
-            if (dbOrder.getCheckResult() == null) {
-                throw new CustomException("检查结果为空，无法审核");
-            }
-            if (ObjectUtil.equal(dbOrder.getCheckResult(), EquipmentInspectionCheckResult.ABNORMAL.getKey())) {
-                equipmentService.editEquipmentStateById(dbOrder.getEquipmentId(), EquipmentState.DEGRADED.getKey());
-            } else if (ObjectUtil.equal(dbOrder.getCheckResult(), EquipmentInspectionCheckResult.NORMAL.getKey())) {
-                equipmentService.editEquipmentStateById(dbOrder.getEquipmentId(), EquipmentState.NORMAL.getKey());
-            }
-            updateStateById(id, EquipmentInspectionOrderState.COMPLETED.getKey());
-            // 对齐商城下单挂延时任务：完成后 30 天自动好评
-            startUpTaskQuartz(dbOrder.getId(), StrUtil.blankToDefault(dbOrder.getOddNumber(), dbOrder.getId()),
-                DateUtil.getTimeAndToString());
-        } else {
-            updateStateById(id, EquipmentInspectionOrderState.BE_EXECUTED.getKey());
+        if (dbOrder.getCheckResult() == null) {
+            throw new CustomException("检查结果为空，无法完工");
         }
+        if (ObjectUtil.equal(dbOrder.getCheckResult(), EquipmentInspectionCheckResult.ABNORMAL.getKey())) {
+            equipmentService.editEquipmentStateById(dbOrder.getEquipmentId(), EquipmentState.DEGRADED.getKey());
+        } else if (ObjectUtil.equal(dbOrder.getCheckResult(), EquipmentInspectionCheckResult.NORMAL.getKey())) {
+            equipmentService.editEquipmentStateById(dbOrder.getEquipmentId(), EquipmentState.NORMAL.getKey());
+        }
+        updateStateById(id, EquipmentInspectionOrderState.COMPLETED.getKey());
+        // 对齐商城下单挂延时任务：完成后 30 天自动好评
+        startUpTaskQuartz(dbOrder.getId(), StrUtil.blankToDefault(dbOrder.getOddNumber(), dbOrder.getId()),
+            DateUtil.getTimeAndToString());
         outputObject.setBean(selectById(id));
     }
 
