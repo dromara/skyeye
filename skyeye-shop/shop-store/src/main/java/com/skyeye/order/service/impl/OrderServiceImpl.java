@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.yulichang.toolkit.JoinWrappers;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.google.common.base.Joiner;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
@@ -353,19 +355,18 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
                     ShopOrderItemOtherState.SALESRETURNED.getKey(),//已退货
                     ShopOrderItemOtherState.EXCHANGED.getKey()});//已换货
         }
-        QueryWrapper<Order> wrapper = super.getQueryWrapper(commonPageInfo);
-        if (CollectionUtil.isNotEmpty(stateList)) { // 状态在子单，先筛出符合 Tab 的订单 id
-            QueryWrapper<OrderItem> itemWrapper = new QueryWrapper<>();
-            itemWrapper.in(MybatisPlusUtil.toColumns(OrderItem::getState), stateList);
-            List<OrderItem> orderItemList = orderItemService.list(itemWrapper);
-            if (CollectionUtil.isEmpty(orderItemList)) {
-                return CollectionUtil.newArrayList();
-            }
-            List<String> orderIdList = orderItemList.stream().map(OrderItem::getParentId).distinct().collect(Collectors.toList());
-            wrapper.in(CommonConstants.ID, orderIdList);
+        MPJLambdaWrapper<Order> wrapper = JoinWrappers.lambda("o", Order.class);
+        if (CollectionUtil.isNotEmpty(stateList)) {
+            wrapper.innerJoin(OrderItem.class, "oi", OrderItem::getParentId, Order::getId)
+                .in("oi." + MybatisPlusUtil.toColumns(OrderItem::getState), stateList)
+                .distinct();
         }
+        if (StrUtil.isNotEmpty(commonPageInfo.getKeyword())) {
+            wrapper.like(Order::getOddNumber, commonPageInfo.getKeyword());
+        }
+        wrapper.selectAll(Order.class);
         wrapper.orderByDesc(MybatisPlusUtil.toColumns(Order::getCreateTime));
-        List<Order> list = list(wrapper);
+        List<Order> list = skyeyeBaseMapper.selectJoinList(Order.class, wrapper);
         if (CollectionUtil.isEmpty(list)) {
             return CollectionUtil.newArrayList();
         }
