@@ -468,19 +468,19 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
             if (!hasOtherUnpaid) {
                 UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
                 updateWrapper.eq(CommonConstants.ID, orderItem.getParentId());
-                updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.UNDELIVERED.getKey());
+                updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.PAY_SUCCESS.getKey());
                 update(updateWrapper);
                 refreshCache(orderItem.getParentId());
             }
             return;
         }
 
-        // 父单：父单改待发货，其下子单全部改待发货（已支付）
+        // 父单：父单改支付成功，其下子单全部改待发货
         Order order = selectById(id);
         Integer state = order.getState();
         if (ShopOrderState.UNPAID.getKey() == state || ShopOrderState.FAIRPAID.getKey() == state) {
             UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.eq(CommonConstants.ID, orderId);
+            updateWrapper.eq(CommonConstants.ID, id);
             updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.PAY_SUCCESS.getKey());
             update(updateWrapper);
             refreshCache(id);
