@@ -14,7 +14,6 @@ import com.skyeye.common.entity.features.OperatorUserInfo;
 import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.order.enums.ItemSignState;
 import com.skyeye.order.enums.ShopOrderItemOtherState;
-import com.skyeye.order.enums.ShopOrderItemState;
 import lombok.Data;
 
 import java.util.List;
@@ -154,7 +153,7 @@ public class OrderItem extends OperatorUserInfo {
     private String vipPrice;
 
     @TableField("order_item_state")
-    @ApiModelProperty(value = "订单子单状态", enumClass = ShopOrderItemState.class)
+    @ApiModelProperty(value = "订单子单状态", enumClass = ShopOrderItemOtherState.class)
     private Integer orderItemState;
 
     @TableField(exist = false)
