@@ -442,18 +442,49 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
 
     @Override
     public void updateOrderToPayState(InputObject inputObject, OutputObject outputObject) {
-        String orderId = inputObject.getParams().get("id").toString();
-        //获取订单当前状态
-        Order order = selectById(orderId);
+        String id = inputObject.getParams().get("id").toString();
+        // 先判断是否子单（叶子）；不是再按父单处理
+        OrderItem orderItem = orderItemService.getById(id);
+        if (ObjectUtil.isNotEmpty(orderItem) && StrUtil.isNotEmpty(orderItem.getId())) {
+            // 子单：只改自己；若父单下已无其他未付子单，再完结父单
+            if (!Objects.equals(orderItem.getState(), ShopOrderItemOtherState.WAIT_PAY.getKey())) {
+                throw new CustomException("该子单状态不为待支付，不可完成支付");
+            }
+            Order parentOrder = super.selectById(orderItem.getParentId());
+            if (ObjectUtil.isEmpty(parentOrder) || StrUtil.isEmpty(parentOrder.getId())) {
+                throw new CustomException("父订单不存在");
+            }
+            Integer parentState = parentOrder.getState();
+            if (ShopOrderState.UNPAID.getKey() != parentState && ShopOrderState.FAIRPAID.getKey() != parentState) {
+                throw new CustomException("当前订单状态不为待支付或支付失败状态，不可修改");
+            }
+            String userId = InputObject.getLogParamsStatic().get("id").toString();
+            orderItem.setState(ShopOrderItemOtherState.WAIT_DELIVER.getKey());
+            orderItemService.updateEntity(orderItem, userId);
+
+            List<OrderItem> orderItemList = orderItemService.queryOrderItemByParentId(orderItem.getParentId());
+            boolean hasOtherUnpaid = orderItemList.stream()
+                .anyMatch(item -> Objects.equals(item.getState(), ShopOrderItemOtherState.WAIT_PAY.getKey()));
+            if (!hasOtherUnpaid) {
+                UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
+                updateWrapper.eq(CommonConstants.ID, orderItem.getParentId());
+                updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.UNDELIVERED.getKey());
+                update(updateWrapper);
+                refreshCache(orderItem.getParentId());
+            }
+            return;
+        }
+
+        // 父单：父单改待发货，其下子单全部改待发货（已支付）
+        Order order = selectById(id);
         Integer state = order.getState();
         if (ShopOrderState.UNPAID.getKey() == state || ShopOrderState.FAIRPAID.getKey() == state) {
             UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq(CommonConstants.ID, orderId);
             updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.PAY_SUCCESS.getKey());
             update(updateWrapper);
-            refreshCache(orderId);
-            // 修改订单子单信息为待发货状态
-            orderItemService.updateDeliverStateByParentId(orderId, ShopOrderItemOtherState.WAIT_DELIVER.getKey());
+            refreshCache(id);
+            orderItemService.updateDeliverStateByParentId(id, ShopOrderItemOtherState.WAIT_DELIVER.getKey());
         } else {
             throw new CustomException("当前订单状态不为待支付或支付失败状态，不可修改");
         }
