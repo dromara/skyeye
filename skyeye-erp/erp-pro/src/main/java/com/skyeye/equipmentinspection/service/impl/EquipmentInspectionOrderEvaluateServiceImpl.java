@@ -32,7 +32,7 @@ import java.util.Map;
  * @Description: 设备巡检单评价服务层
  */
 @Service
-@SkyeyeService(name = "设备巡检单评价", groupName = "设备巡检", manageShow = false)
+@SkyeyeService(name = "设备巡检单评价", groupName = "设备巡检", manageShow = true)
 public class EquipmentInspectionOrderEvaluateServiceImpl
     extends SkyeyeBusinessServiceImpl<EquipmentInspectionOrderEvaluateDao, EquipmentInspectionOrderEvaluate>
     implements EquipmentInspectionOrderEvaluateService {
