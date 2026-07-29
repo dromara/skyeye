@@ -9,6 +9,8 @@
 			a.type_id typeId,
 			a.documentary_time documentaryTime,
 			a.content,
+			a.object_id objectId,
+			a.object_key objectKey,
 			a.create_id createId,
 			CONVERT(a.create_time, char) createTime,
 			a.last_update_id lastUpdateId,
@@ -24,6 +26,9 @@
 			</if>
 			<if test="objectId != null and objectId != ''">
 				AND a.object_id = #{objectId}
+			</if>
+			<if test="createId != null and createId != ''">
+				AND a.create_id = #{createId}
 			</if>
 		</where>
         ORDER BY a.create_time DESC
