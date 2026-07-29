@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * @Description: 设备巡检方案服务层
  */
 @Service
-@SkyeyeService(name = "设备巡检方案", groupName = "设备巡检", allowDynamicAttrKey = true)
+@SkyeyeService(name = "设备巡检方案", groupName = "设备巡检", allowDynamicAttrKey = false)
 public class EquipmentInspectionPlanServiceImpl extends SkyeyeBusinessServiceImpl<EquipmentInspectionPlanDao, EquipmentInspectionPlan>
     implements EquipmentInspectionPlanService {
 
