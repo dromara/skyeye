@@ -115,7 +115,9 @@ public class ReportImportModelServiceImpl extends SkyeyeBusinessServiceImpl<Repo
                 if (attrs == null) {
                     return;
                 }
-                Map<String, ReportModelAttr> attrsMap = attrs.stream().collect(Collectors.toMap(ReportModelAttr::getAttrCode, item -> item));
+                // LinkedHashMap 保留按 orderBy 查询后的顺序，供设计器右侧属性面板使用
+                Map<String, ReportModelAttr> attrsMap = attrs.stream()
+                    .collect(Collectors.toMap(ReportModelAttr::getAttrCode, item -> item, (a, b) -> a, java.util.LinkedHashMap::new));
                 model.setAttr(attrsMap);
             } catch (Exception ee) {
                 LOGGER.warn("queryAllMaxVersionReportModel -> reportModelAttrDao.getReportModelAttrToEditorByModelId failed.", ee);

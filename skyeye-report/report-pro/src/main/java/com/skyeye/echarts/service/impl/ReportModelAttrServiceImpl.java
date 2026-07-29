@@ -18,7 +18,6 @@ import com.skyeye.echarts.service.ReportModelAttrService;
 import net.sf.json.JSONArray;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,8 +38,12 @@ public class ReportModelAttrServiceImpl extends SkyeyeBusinessServiceImpl<Report
     public void saveList(String reportModelId, List<ReportModelAttr> beans) {
         deleteByReportModelId(reportModelId);
         if (CollectionUtil.isNotEmpty(beans)) {
-            for (ReportModelAttr reportModelAttr : beans) {
+            for (int i = 0; i < beans.size(); i++) {
+                ReportModelAttr reportModelAttr = beans.get(i);
                 reportModelAttr.setReportModelId(reportModelId);
+                if (reportModelAttr.getOrderBy() == null) {
+                    reportModelAttr.setOrderBy(i + 1);
+                }
             }
             createEntity(beans, StrUtil.EMPTY);
         }
@@ -50,7 +53,7 @@ public class ReportModelAttrServiceImpl extends SkyeyeBusinessServiceImpl<Report
     public Map<String, List<ReportModelAttr>> queryReportModelAttrMapByModelIds(List<String> reportModelIds) {
         QueryWrapper<ReportModelAttr> queryWrapper = new QueryWrapper<>();
         queryWrapper.in(MybatisPlusUtil.toColumns(ReportModelAttr::getReportModelId), reportModelIds);
-        queryWrapper.last(String.format("ORDER BY LENGTH(%s) ASC", MybatisPlusUtil.toColumns(ReportModelAttr::getAttrCode)));
+        queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(ReportModelAttr::getOrderBy));
         List<ReportModelAttr> reportModelAttrList = list(queryWrapper);
         reportModelAttrList.forEach(reportModelAttr -> {
             if (AnalysisDataToMapUtil.isJsonStringArray(reportModelAttr.getDefaultValue())) {
@@ -64,7 +67,7 @@ public class ReportModelAttrServiceImpl extends SkyeyeBusinessServiceImpl<Report
     public List<ReportModelAttr> queryReportModelAttrMapByModelId(String reportModelId) {
         QueryWrapper<ReportModelAttr> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(ReportModelAttr::getReportModelId), reportModelId);
-        queryWrapper.last(String.format("ORDER BY LENGTH(%s) ASC", MybatisPlusUtil.toColumns(ReportModelAttr::getAttrCode)));
+        queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(ReportModelAttr::getOrderBy));
         List<ReportModelAttr> reportModelAttrList = list(queryWrapper);
         reportModelAttrList.forEach(reportModelAttr -> {
             if (AnalysisDataToMapUtil.isJsonStringArray(reportModelAttr.getDefaultValue())) {

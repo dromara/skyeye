@@ -65,4 +65,8 @@ public class ReportModelAttr extends CommonInfo {
     @ApiModelProperty(value = "可选值")
     private String optionalValue;
 
+    @TableField(value = "order_by")
+    @ApiModelProperty(value = "排序", required = "required,num")
+    private Integer orderBy;
+
 }
