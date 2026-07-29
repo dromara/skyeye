@@ -11,6 +11,7 @@ import com.skyeye.base.business.service.impl.SkyeyeTeamAuthServiceImpl;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.FlowableStateEnum;
 import com.skyeye.common.object.InputObject;
+import com.skyeye.customer.service.CustomerService;
 import com.skyeye.documentary.classenum.CrmDocumentaryAuthEnum;
 import com.skyeye.documentary.dao.CrmDocumentaryDao;
 import com.skyeye.documentary.entity.Documentary;
@@ -45,6 +46,9 @@ public class CrmDocumentaryServiceImpl extends SkyeyeTeamAuthServiceImpl<CrmDocu
     @Autowired
     private CrmOpportunityService crmOpportunityService;
 
+    @Autowired
+    private CustomerService customerService;
+
     @Override
     public Class getAuthEnumClass() {
         return CrmDocumentaryAuthEnum.class;
@@ -73,7 +77,13 @@ public class CrmDocumentaryServiceImpl extends SkyeyeTeamAuthServiceImpl<CrmDocu
     @Override
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
         CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
+        // type=myCreate：仅查询当前登录人创建的跟单（仪表盘「我的跟进记录」）
+        if (StrUtil.equals(pageInfo.getType(), "myCreate")) {
+            pageInfo.setCreateId(inputObject.getLogParams().get("id").toString());
+        }
         List<Map<String, Object>> beans = skyeyeBaseMapper.queryDocumentaryList(pageInfo);
+        // 填充客户名称
+        customerService.setMationForMap(beans, "objectId", "objectMation");
         return beans;
     }
 
