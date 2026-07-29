@@ -100,4 +100,16 @@ public class AutoCaseController {
         autoCaseService.executeCase(inputObject, outputObject);
     }
 
+    /**
+     * 按前端提交的步骤配置试跑（可未保存），不写入执行历史
+     */
+    @ApiOperation(id = "executeStep", value = "试跑单个步骤（不落历史，可未保存）", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "stepJson", name = "stepJson", value = "当前步骤JSON", required = "required"),
+        @ApiImplicitParam(id = "preStepList", name = "preStepList", value = "前序步骤JSON数组（可选，用于表达式上下文）")})
+    @RequestMapping("/post/AutoCaseController/executeStep")
+    public void executeStep(InputObject inputObject, OutputObject outputObject) {
+        autoCaseService.executeStep(inputObject, outputObject);
+    }
+
 }

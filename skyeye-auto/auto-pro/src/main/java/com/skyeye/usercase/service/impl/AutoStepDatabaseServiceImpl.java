@@ -98,7 +98,8 @@ public class AutoStepDatabaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoS
 
     @Override
     public void executeAtepDatabase(AutoStep autoStep, Map<String, Object> result, Map<String, Object> inputParams, AutoHistoryStep autoHistoryStep) {
-        if (ObjectUtil.isEmpty(autoStep.getStepDatabase()) || StrUtil.isEmpty(autoStep.getStepDatabase().getId())
+        // 试跑未保存步骤时可能没有 stepDatabase.id，只需绑定了 databaseId 即可
+        if (ObjectUtil.isEmpty(autoStep.getStepDatabase())
             || StrUtil.isEmpty(autoStep.getStepDatabase().getDatabaseId())) {
             throw new CustomException("不存在该数据库或者未绑定数据库");
         }
@@ -114,7 +115,8 @@ public class AutoStepDatabaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoS
         AutoDataSource autoDataSource = autoDataBaseService.getReportDataSource(autoStep.getStepDatabase().getDatabaseId());
         // 数据库执行信息
         AutoHistoryStepDatabase autoHistoryStepDatabase = new AutoHistoryStepDatabase();
-        autoHistoryStepDatabase.setDatabaseId(autoStep.getStepDatabase().getId());
+        String historyDbId = StrUtil.blankToDefault(autoStep.getStepDatabase().getId(), autoStep.getStepDatabase().getDatabaseId());
+        autoHistoryStepDatabase.setDatabaseId(historyDbId);
         autoHistoryStepDatabase.setSqlContent(sqlContent);
         try {
             List<ReportMetaDataRow> metaDataRows = QueryerFactory.create(autoDataSource).getMetaDataRows(sqlContent);

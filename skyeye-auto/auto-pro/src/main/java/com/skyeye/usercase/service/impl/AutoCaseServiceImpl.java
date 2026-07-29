@@ -118,6 +118,162 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
     }
 
     @Override
+    public void executeStep(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        Object stepJson = params.get("stepJson");
+        if (ObjectUtil.isEmpty(stepJson) || StrUtil.isBlank(stepJson.toString())) {
+            throw new CustomException("步骤配置不能为空");
+        }
+        AutoStep targetStep = JSONUtil.toBean(stepJson.toString(), AutoStep.class);
+        if (ObjectUtil.isEmpty(targetStep) || StrUtil.isEmpty(targetStep.getResultKey())) {
+            throw new CustomException("步骤编码不能为空");
+        }
+        if (targetStep.getType() == null) {
+            throw new CustomException("步骤类型不能为空");
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        // 可选：前序步骤，用于入参/断言表达式引用（同样按前端内存配置，无需已保存）
+        Object preStepListObj = params.get("preStepList");
+        if (ObjectUtil.isNotEmpty(preStepListObj) && StrUtil.isNotBlank(preStepListObj.toString())) {
+            List<AutoStep> preSteps = JSONUtil.toList(preStepListObj.toString(), AutoStep.class);
+            if (CollectionUtil.isNotEmpty(preSteps)) {
+                for (AutoStep preStep : preSteps) {
+                    Map<String, Object> preResult = runStepOnce(preStep, result);
+                    if (!Boolean.TRUE.equals(preResult.get("success"))) {
+                        preResult.put("message", "前序步骤失败：" + StrUtil.blankToDefault(String.valueOf(preResult.get("message")), "执行失败"));
+                        outputObject.setBean(preResult);
+                        return;
+                    }
+                }
+            }
+        }
+
+        Map<String, Object> bean = runStepOnce(targetStep, result);
+        outputObject.setBean(bean);
+    }
+
+    /**
+     * 执行单个步骤（内存配置即可），不落库；结果写入 result，并返回执行摘要。
+     */
+    private Map<String, Object> runStepOnce(AutoStep autoStep, Map<String, Object> result) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("resultKey", autoStep.getResultKey());
+        response.put("stepName", autoStep.getName());
+        response.put("success", false);
+
+        AutoHistoryStep autoHistoryStep = new AutoHistoryStep();
+        autoHistoryStep.setName(autoStep.getName());
+        autoHistoryStep.setOrderBy(autoStep.getOrderBy());
+        autoHistoryStep.setResultKey(autoStep.getResultKey());
+        autoHistoryStep.setType(autoStep.getType());
+        autoHistoryStep.setExecuteResult(AutoHistoryCaseExecuteResult.EXECUTION_SUCCESSFUL.getKey());
+
+        Map<String, Object> inputParams = getInputParams(result, autoStep.getStepInputList());
+        response.put("inputParams", inputParams);
+        try {
+            executeOneStep(autoStep, result, inputParams, autoHistoryStep);
+        } catch (Exception ex) {
+            autoHistoryStep.setExecuteResult(AutoHistoryCaseExecuteResult.EXECUTION_FAILED.getKey());
+            logger.warn("execute step:{} is Failed，Msg is: ", autoStep.getResultKey(), ex);
+            response.put("message", StrUtil.blankToDefault(ex.getMessage(), "步骤执行失败"));
+            response.put("output", result.get(autoStep.getResultKey()));
+            fillStepHistoryOutput(response, autoHistoryStep);
+            return response;
+        }
+
+        if (autoHistoryStep.getExecuteResult() != AutoHistoryCaseExecuteResult.EXECUTION_SUCCESSFUL.getKey()) {
+            response.put("message", "步骤执行失败");
+            response.put("output", result.get(autoStep.getResultKey()));
+            fillStepHistoryOutput(response, autoHistoryStep);
+            return response;
+        }
+
+        List<AutoHistoryStepAssert> assertList = new ArrayList<>();
+        try {
+            Boolean assertOk = executeAssert(autoStep.getStepAssertList(), assertList, result);
+            autoHistoryStep.setAutoHistoryStepAssertList(assertList);
+            response.put("assertList", assertList);
+            if (!assertOk) {
+                autoHistoryStep.setExecuteResult(AutoHistoryCaseExecuteResult.EXECUTION_FAILED.getKey());
+                response.put("message", "断言执行失败");
+                response.put("output", result.get(autoStep.getResultKey()));
+                fillStepHistoryOutput(response, autoHistoryStep);
+                return response;
+            }
+        } catch (Exception ex) {
+            autoHistoryStep.setExecuteResult(AutoHistoryCaseExecuteResult.EXECUTION_FAILED.getKey());
+            response.put("assertList", assertList);
+            response.put("message", StrUtil.blankToDefault(ex.getMessage(), "断言执行异常"));
+            response.put("output", result.get(autoStep.getResultKey()));
+            fillStepHistoryOutput(response, autoHistoryStep);
+            return response;
+        }
+
+        response.put("success", true);
+        response.put("message", "执行成功");
+        response.put("output", result.get(autoStep.getResultKey()));
+        fillStepHistoryOutput(response, autoHistoryStep);
+        return response;
+    }
+
+    private void fillStepHistoryOutput(Map<String, Object> response, AutoHistoryStep autoHistoryStep) {
+        if (ObjectUtil.isNotEmpty(autoHistoryStep.getAutoHistoryStepApi())) {
+            response.put("api", autoHistoryStep.getAutoHistoryStepApi());
+        }
+        if (ObjectUtil.isNotEmpty(autoHistoryStep.getAutoHistoryStepDatabase())) {
+            response.put("database", autoHistoryStep.getAutoHistoryStepDatabase());
+        }
+        if (ObjectUtil.isNotEmpty(autoHistoryStep.getAutoHistoryStepCase())) {
+            response.put("case", autoHistoryStep.getAutoHistoryStepCase());
+        }
+    }
+
+    /**
+     * 解析关联用例 id：优先 linkCaseId；兼容前端未保存时可能把关联 id 放在 id 上。
+     */
+    private String resolveLinkCaseId(AutoStep autoStep) {
+        if (ObjectUtil.isEmpty(autoStep.getStepCase())) {
+            return StrUtil.EMPTY;
+        }
+        if (StrUtil.isNotEmpty(autoStep.getStepCase().getLinkCaseId())) {
+            return autoStep.getStepCase().getLinkCaseId();
+        }
+        // 前端传入用例节点时，偶发只带了被关联用例的 id
+        if (StrUtil.isNotEmpty(autoStep.getId()) && !StrUtil.equals(autoStep.getId(), autoStep.getCaseId())) {
+            return autoStep.getId();
+        }
+        return StrUtil.EMPTY;
+    }
+
+    private void executeOneStep(AutoStep autoStep, Map<String, Object> result, Map<String, Object> inputParams,
+                                AutoHistoryStep autoHistoryStep) {
+        if (autoStep.getType() == AutoStepTypeEnum.STEP.getKey()) {
+            autoStepApiService.executeStepApi(autoStep, result, inputParams, autoHistoryStep);
+        } else if (autoStep.getType() == AutoStepTypeEnum.CASE.getKey()) {
+            String linkCaseId = resolveLinkCaseId(autoStep);
+            if (StrUtil.isEmpty(linkCaseId)) {
+                throw new CustomException("未绑定用例");
+            }
+            AutoCase childAutoCase = selectById(linkCaseId);
+            if (ObjectUtil.isEmpty(childAutoCase) || CollectionUtil.isEmpty(childAutoCase.getStepList())) {
+                throw new CustomException("关联用例不存在或无步骤");
+            }
+            Object aCase = executeCase(childAutoCase, false);
+            result.put(autoStep.getResultKey(), aCase);
+            controctCaseMation(autoHistoryStep, result, autoStep);
+        } else if (autoStep.getType() == AutoStepTypeEnum.SCRIPT.getKey()) {
+            // 脚本步骤暂未实现
+        } else if (autoStep.getType() == AutoStepTypeEnum.TIMER.getKey()) {
+            // 定时器步骤暂未实现
+        } else if (autoStep.getType() == AutoStepTypeEnum.DATABASE.getKey()) {
+            autoStepDatabaseService.executeAtepDatabase(autoStep, result, inputParams, autoHistoryStep);
+        } else {
+            throw new CustomException("不支持的步骤类型");
+        }
+    }
+
+    @Override
     public void executeCase(String id, Boolean recordData) {
         AutoCase autoCase = selectById(id);
         executeCase(autoCase, recordData);
@@ -173,24 +329,7 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
                 // 获取前置条件(入参)
                 Map<String, Object> inputParams = getInputParams(result, autoStep.getStepInputList());
                 try {
-                    // 执行
-                    if (autoStep.getType() == AutoStepTypeEnum.STEP.getKey()) {
-                        autoStepApiService.executeStepApi(autoStep, result, inputParams, autoHistoryStep);
-                    } else if (autoStep.getType() == AutoStepTypeEnum.CASE.getKey()) {
-                        if (ObjectUtil.isEmpty(autoStep.getStepCase()) || StrUtil.isEmpty(autoStep.getStepCase().getCaseId())) {
-                            throw new CustomException("未绑定用例");
-                        }
-                        AutoCase childAutoCase = selectById(autoStep.getStepCase().getCaseId());
-                        Object aCase = executeCase(childAutoCase, false);
-                        result.put(autoStep.getResultKey(), aCase);
-                        controctCaseMation(autoHistoryStep, result, autoStep);
-                    } else if (autoStep.getType() == AutoStepTypeEnum.SCRIPT.getKey()) {
-
-                    } else if (autoStep.getType() == AutoStepTypeEnum.TIMER.getKey()) {
-
-                    } else if (autoStep.getType() == AutoStepTypeEnum.DATABASE.getKey()) {
-                        autoStepDatabaseService.executeAtepDatabase(autoStep, result, inputParams, autoHistoryStep);
-                    }
+                    executeOneStep(autoStep, result, inputParams, autoHistoryStep);
                 } catch (Exception ex) {
                     autoHistoryStep.setExecuteResult(AutoHistoryCaseExecuteResult.EXECUTION_FAILED.getKey());
                     logger.warn("execute step:{} is Failed，Msg is: ", autoStep.getId(), ex);
@@ -229,7 +368,7 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
 
     private void controctCaseMation(AutoHistoryStep autoHistoryStep, Map<String, Object> result, AutoStep autoStep) {
         AutoHistoryStepCase autoHistoryStepCase = new AutoHistoryStepCase();
-        autoHistoryStepCase.setExecuteCaseId(autoStep.getStepCase().getLinkCaseId());
+        autoHistoryStepCase.setExecuteCaseId(resolveLinkCaseId(autoStep));
         autoHistoryStepCase.setExecuteResult(AutoHistoryCaseExecuteResult.EXECUTION_SUCCESSFUL.getKey());
         autoHistoryStepCase.setInputValue("");
         autoHistoryStepCase.setOutputValue(String.valueOf(result.get(autoStep.getResultKey())));

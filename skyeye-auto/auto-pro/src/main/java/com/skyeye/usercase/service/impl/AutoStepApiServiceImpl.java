@@ -72,8 +72,8 @@ public class AutoStepApiServiceImpl extends SkyeyeBusinessServiceImpl<AutoStepAp
 
     @Override
     public void executeStepApi(AutoStep autoStep, Map<String, Object> result, Map<String, Object> inputParams, AutoHistoryStep autoHistoryStep) {
-        if (ObjectUtil.isEmpty(autoStep.getStepApi()) || StrUtil.isEmpty(autoStep.getStepApi().getId())
-            || StrUtil.isEmpty(autoStep.getStepApi().getApiId())) {
+        // 试跑未保存步骤时可能没有 stepApi.id，只需绑定了 apiId 即可
+        if (ObjectUtil.isEmpty(autoStep.getStepApi()) || StrUtil.isEmpty(autoStep.getStepApi().getApiId())) {
             throw new CustomException("不存在该API或者未绑定API");
         }
         AutoApi autoApi = autoApiService.selectById(autoStep.getStepApi().getApiId());

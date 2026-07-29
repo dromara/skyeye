@@ -22,6 +22,11 @@ public interface AutoCaseService extends SkyeyeBusinessService<AutoCase> {
 
     void executeCase(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 按前端提交的步骤配置试跑单步（可未保存），不写入历史。
+     */
+    void executeStep(InputObject inputObject, OutputObject outputObject);
+
     void executeCase(String id, Boolean recordData);
 
     Object executeCase(AutoCase autoCase, Boolean recordData);
