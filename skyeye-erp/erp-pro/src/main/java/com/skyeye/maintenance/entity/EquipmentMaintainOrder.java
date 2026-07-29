@@ -87,6 +87,10 @@ public class EquipmentMaintainOrder extends OperatorUserInfo {
     @ApiModelProperty(value = "是否转维修", enumClass = WhetherEnum.class, required = "num")
     private Integer isToRepair;
 
+    @TableField(value = "repair_order_id")
+    @Property(value = "转维修后的维修单id")
+    private String repairOrderId;
+
     @TableField(value = "maintain_photos")
     @ApiModelProperty(value = "保养拍照")
     private String maintainPhotos;

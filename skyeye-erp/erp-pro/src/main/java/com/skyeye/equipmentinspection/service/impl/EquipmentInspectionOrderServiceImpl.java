@@ -361,11 +361,15 @@ public class EquipmentInspectionOrderServiceImpl
     }
 
     @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
     public void transferEquipmentInspectionToRepair(InputObject inputObject, OutputObject outputObject) {
         EquipmentRepairOrder repairOrder = inputObject.getParams(EquipmentRepairOrder.class);
         EquipmentInspectionOrder inspectionOrder = selectById(repairOrder.getId());
         if (ObjectUtil.isEmpty(inspectionOrder)) {
             throw new CustomException("该数据不存在.");
+        }
+        if (StrUtil.isNotEmpty(inspectionOrder.getRepairOrderId())) {
+            throw new CustomException("该巡检单已转维修单，无法重复转单.");
         }
         // 巡检结果异常才可以转维修
         if (EquipmentInspectionCheckResult.ABNORMAL.getKey().equals(inspectionOrder.getCheckResult())) {
@@ -373,13 +377,19 @@ public class EquipmentInspectionOrderServiceImpl
             repairOrder.setFromId(repairOrder.getId());
             repairOrder.setFromTypeId(EquipmentRepairFromType.INSPECTION_TASK.getKey());
             repairOrder.setId(StrUtil.EMPTY);
-            if (StrUtil.isEmpty(repairOrder.getEquipmentId())) {
-                repairOrder.setEquipmentId(inspectionOrder.getEquipmentId());
-            }
-            equipmentRepairOrderService.createEntity(repairOrder, userId);
+            String repairOrderId = equipmentRepairOrderService.createEntity(repairOrder, userId);
+            updateRepairOrderId(inspectionOrder.getId(), repairOrderId);
         } else {
             outputObject.setreturnMessage("巡检结果非异常，无法转维修单.");
         }
+    }
+
+    private void updateRepairOrderId(String id, String repairOrderId) {
+        UpdateWrapper<EquipmentInspectionOrder> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, id);
+        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getRepairOrderId), repairOrderId);
+        update(updateWrapper);
+        refreshCache(id);
     }
 
     @Override
