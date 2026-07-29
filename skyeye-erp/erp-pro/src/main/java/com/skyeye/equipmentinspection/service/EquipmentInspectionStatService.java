@@ -14,7 +14,7 @@ import com.skyeye.common.object.OutputObject;
 public interface EquipmentInspectionStatService {
 
     /**
-     * 巡检单按状态统计：各状态数量（待派工、待接单、待填报、待审核、已完成）
+     * 巡检单按状态统计：各状态数量（待派工、待接单、待填报、待完工、已完成）
      */
     void queryInspectionOrderStateStats(InputObject inputObject, OutputObject outputObject);
 
@@ -24,7 +24,7 @@ public interface EquipmentInspectionStatService {
     void queryInspectionOrderCompletionRateStats(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 巡检单按检查结果统计：正常 / 异常
+     * 巡检单按检查结果统计：正常 / 异常；未完成不入统计
      */
     void queryInspectionOrderStatsByCheckResult(InputObject inputObject, OutputObject outputObject);
 
