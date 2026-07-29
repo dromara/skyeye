@@ -5,8 +5,10 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -141,11 +143,15 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
     }
 
     @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
     public void insertCheckOrderToRepair(InputObject inputObject, OutputObject outputObject) {
         EquipmentRepairOrder repairOrder = inputObject.getParams(EquipmentRepairOrder.class);
         EquipmentCheckOrder checkOrder = selectById(repairOrder.getId());
         if (ObjectUtil.isEmpty(checkOrder)) {
             throw new CustomException("该数据不存在.");
+        }
+        if (StrUtil.isNotEmpty(checkOrder.getRepairOrderId())) {
+            throw new CustomException("该点检单已转维修单，无法重复转单.");
         }
         // 点检结果异常才可以转维修
         if (EquipmentCheckResult.ABNORMAL.getKey().equals(checkOrder.getCheckResult())) {
@@ -153,13 +159,19 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
             repairOrder.setFromId(repairOrder.getId());
             repairOrder.setFromTypeId(EquipmentRepairFromType.CHECK_ORDER.getKey());
             repairOrder.setId(StrUtil.EMPTY);
-            if (StrUtil.isEmpty(repairOrder.getEquipmentId())) {
-                repairOrder.setEquipmentId(checkOrder.getEquipmentId());
-            }
-            equipmentRepairOrderService.createEntity(repairOrder, userId);
+            String repairOrderId = equipmentRepairOrderService.createEntity(repairOrder, userId);
+            updateRepairOrderId(checkOrder.getId(), repairOrderId);
         } else {
             outputObject.setreturnMessage("点检结果非异常，无法转维修单.");
         }
+    }
+
+    private void updateRepairOrderId(String id, String repairOrderId) {
+        UpdateWrapper<EquipmentCheckOrder> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, id);
+        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentCheckOrder::getRepairOrderId), repairOrderId);
+        update(updateWrapper);
+        refreshCache(id);
     }
 }
 

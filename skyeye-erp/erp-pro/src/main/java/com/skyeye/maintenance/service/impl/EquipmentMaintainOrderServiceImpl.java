@@ -9,6 +9,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
@@ -306,18 +307,27 @@ public class EquipmentMaintainOrderServiceImpl extends SkyeyeBusinessServiceImpl
         if (ObjectUtil.isEmpty(maintainOrder)) {
             throw new CustomException("该数据不存在.");
         }
+        if (StrUtil.isNotEmpty(maintainOrder.getRepairOrderId())) {
+            throw new CustomException("该保养任务已转维修单，无法重复转单.");
+        }
         // 已完成的保养任务可以转维修
         if (EquipmentMaintainTaskState.COMPLETED.getKey().equals(maintainOrder.getState())) {
             String userId = inputObject.getLogParams().get("id").toString();
             repairOrder.setFromId(repairOrder.getId());
             repairOrder.setFromTypeId(EquipmentRepairFromType.MAINTAIN_ORDER.getKey());
             repairOrder.setId(StrUtil.EMPTY);
-            if (StrUtil.isEmpty(repairOrder.getEquipmentId())) {
-                repairOrder.setEquipmentId(maintainOrder.getEquipmentId());
-            }
-            equipmentRepairOrderService.createEntity(repairOrder, userId);
+            String repairOrderId = equipmentRepairOrderService.createEntity(repairOrder, userId);
+            updateRepairOrderId(maintainOrder.getId(), repairOrderId);
         } else {
             outputObject.setreturnMessage("状态错误，无法转维修单.");
         }
+    }
+
+    private void updateRepairOrderId(String id, String repairOrderId) {
+        UpdateWrapper<EquipmentMaintainOrder> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, id);
+        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentMaintainOrder::getRepairOrderId), repairOrderId);
+        update(updateWrapper);
+        refreshCache(id);
     }
 }

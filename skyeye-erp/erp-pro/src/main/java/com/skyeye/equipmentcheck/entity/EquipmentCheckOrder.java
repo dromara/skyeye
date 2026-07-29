@@ -90,6 +90,10 @@ public class EquipmentCheckOrder extends SkyeyeFlowable {
     @ApiModelProperty(value = "项目id")
     private String projectId;
 
+    @TableField(value = "repair_order_id")
+    @Property(value = "转维修后的维修单id")
+    private String repairOrderId;
+
     @TableField(exist = false)
     @ApiModelProperty(value = "点检项目明细", required = "required,json")
     private List<EquipmentCheckOrderItem> itemList;
