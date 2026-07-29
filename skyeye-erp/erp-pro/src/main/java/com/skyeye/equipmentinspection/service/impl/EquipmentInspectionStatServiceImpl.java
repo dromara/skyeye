@@ -18,6 +18,7 @@ import com.skyeye.equipmentinspection.classenum.EquipmentInspectionOrderState;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionStatService;
+import com.skyeye.eve.service.IAuthUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,9 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
 
     @Autowired
     private EquipmentService equipmentService;
+
+    @Autowired
+    private IAuthUserService iAuthUserService;
 
     @Override
     public void queryInspectionOrderStateStats(InputObject inputObject, OutputObject outputObject) {
@@ -164,6 +168,49 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
         List<Long> seriesData = new ArrayList<>();
         for (Map.Entry<String, Long> entry : equipmentStats.entrySet()) {
             xAxisData.add(equipmentIdToName.getOrDefault(entry.getKey(), entry.getKey()));
+            seriesData.add(entry.getValue());
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("total", total);
+        result.put("xAxisData", xAxisData);
+        result.put("seriesData", seriesData);
+
+        outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryInspectionOrderStatsByInspector(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        QueryWrapper<EquipmentInspectionOrder> queryWrapper = buildTimeRangeWrapper(
+            tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+        List<EquipmentInspectionOrder> list = equipmentInspectionOrderService.list(queryWrapper);
+        iAuthUserService.setDataMation(list, EquipmentInspectionOrder::getServiceUserId);
+
+        long total = list.size();
+        Map<String, Long> inspectorStats = list.stream()
+            .collect(Collectors.groupingBy(
+                o -> StrUtil.isNotEmpty(o.getServiceUserId()) ? o.getServiceUserId() : OTHER_LABEL,
+                Collectors.counting()));
+
+        Map<String, String> inspectorIdToName = new HashMap<>();
+        inspectorIdToName.put(OTHER_LABEL, OTHER_LABEL);
+        for (EquipmentInspectionOrder bean : list) {
+            if (StrUtil.isEmpty(bean.getServiceUserId()) || inspectorIdToName.containsKey(bean.getServiceUserId())) {
+                continue;
+            }
+            Map<String, Object> userMation = bean.getServiceUserMation();
+            String name = userMation != null && userMation.get("name") != null
+                ? userMation.get("name").toString() : null;
+            inspectorIdToName.put(bean.getServiceUserId(),
+                StrUtil.isNotBlank(name) ? name : bean.getServiceUserId());
+        }
+
+        List<String> xAxisData = new ArrayList<>();
+        List<Long> seriesData = new ArrayList<>();
+        for (Map.Entry<String, Long> entry : inspectorStats.entrySet()) {
+            xAxisData.add(inspectorIdToName.getOrDefault(entry.getKey(), entry.getKey()));
             seriesData.add(entry.getValue());
         }
 

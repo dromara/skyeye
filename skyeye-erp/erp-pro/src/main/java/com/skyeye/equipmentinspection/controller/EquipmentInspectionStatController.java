@@ -54,4 +54,11 @@ public class EquipmentInspectionStatController {
         equipmentInspectionStatService.queryInspectionOrderStatsByEquipment(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryInspectionOrderStatsByInspector", value = "巡检单按巡检员统计", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @RequestMapping("/post/EquipmentInspectionStatController/queryInspectionOrderStatsByInspector")
+    public void queryInspectionOrderStatsByInspector(InputObject inputObject, OutputObject outputObject) {
+        equipmentInspectionStatService.queryInspectionOrderStatsByInspector(inputObject, outputObject);
+    }
+
 }

@@ -33,4 +33,9 @@ public interface EquipmentInspectionStatService {
      */
     void queryInspectionOrderStatsByEquipment(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 巡检单按巡检员统计：未指派归为其他
+     */
+    void queryInspectionOrderStatsByInspector(InputObject inputObject, OutputObject outputObject);
+
 }
