@@ -243,6 +243,7 @@ public class EquipmentMaintainOrderServiceImpl extends SkyeyeBusinessServiceImpl
         task.setActualEndTime(DateUtil.getTimeAndToString());
         task.setMaintainResult(Integer.valueOf(map.get("maintainResult").toString()));
         task.setIsToRepair(Integer.valueOf(map.get("isToRepair").toString()));
+        task.setMaintainPhotos(map.get("maintainPhotos").toString());
         updateEntity(task, userId);
         outputObject.setBean(selectById(id));
         outputObject.settotal(CommonNumConstants.NUM_ONE);

@@ -61,7 +61,7 @@ public class Announcement extends OperatorUserInfo implements EnclosureFace {
     private Enclosure enclosureInfo;
 
     @TableField("is_confirm")
-    @ApiModelProperty(value = "公告是否需要确认，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "公告是否需要确认", required = "required,num", enumClass = EnableEnum.class)
     private Integer isConfirm;
 
     @TableField(exist = false)
