@@ -25,6 +25,7 @@ import com.skyeye.equipment.classenum.EquipmentState;
 import com.skyeye.equipment.entity.Equipment;
 import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.equipmentcheck.service.EquipmentCheckOrderService;
+import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
 import com.skyeye.eve.rest.mq.JobMateMation;
 import com.skyeye.eve.service.IJobMateMationService;
 import com.skyeye.exception.CustomException;
@@ -82,6 +83,9 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
 
     @Autowired
     private EquipmentCheckOrderService equipmentCheckOrderService;
+
+    @Autowired
+    private EquipmentInspectionOrderService equipmentInspectionOrderService;
 
     @Autowired
     private MaterialService materialService;
@@ -153,6 +157,8 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
         if (ObjectUtil.isNotEmpty(order.getFromTypeId())) {
             if (order.getFromTypeId().equals(EquipmentRepairFromType.MAINTAIN_ORDER.getKey())) {
                 equipmentMaintainOrderService.setDataMation(order, EquipmentRepairOrder::getFromId);
+            } else if (order.getFromTypeId().equals(EquipmentRepairFromType.INSPECTION_TASK.getKey())) {
+                equipmentInspectionOrderService.setDataMation(order, EquipmentRepairOrder::getFromId);
             } else if (order.getFromTypeId().equals(EquipmentRepairFromType.CHECK_ORDER.getKey())) {
                 equipmentCheckOrderService.setDataMation(order, EquipmentRepairOrder::getFromId);
             }
@@ -384,10 +390,13 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
-        // 设置保养任务
-        equipmentMaintainOrderService.setMationForMap(beans, "fromId", "fromMation");
-        // 设置点检单
-        equipmentCheckOrderService.setMationForMap(beans, "fromId", "fromMation");
+        // 按来源类型分别填充 fromMation，避免互相覆盖
+        List<Map<String, Object>> maintainList = filterByFromType(beans, EquipmentRepairFromType.MAINTAIN_ORDER.getKey());
+        equipmentMaintainOrderService.setMationForMap(maintainList, "fromId", "fromMation");
+        List<Map<String, Object>> inspectionList = filterByFromType(beans, EquipmentRepairFromType.INSPECTION_TASK.getKey());
+        equipmentInspectionOrderService.setMationForMap(inspectionList, "fromId", "fromMation");
+        List<Map<String, Object>> checkList = filterByFromType(beans, EquipmentRepairFromType.CHECK_ORDER.getKey());
+        equipmentCheckOrderService.setMationForMap(checkList, "fromId", "fromMation");
         iAuthUserService.setMationForMap(beans, "userId", "userMation");
         iAuthUserService.setMationForMap(beans, "serviceUserId", "serviceUserMation");
         return beans;
@@ -444,6 +453,13 @@ public class EquipmentRepairOrderServiceImpl extends SkyeyeBusinessServiceImpl<E
         List<EquipmentRepairOrder> list = list();
         outputObject.setBeans(list);
         outputObject.settotal(list.size());
+    }
+
+    private List<Map<String, Object>> filterByFromType(List<Map<String, Object>> beans, Integer fromTypeId) {
+        return beans.stream()
+            .filter(bean -> bean.get("fromTypeId") != null
+                && String.valueOf(fromTypeId).equals(String.valueOf(bean.get("fromTypeId"))))
+            .collect(Collectors.toList());
     }
 
 }
