@@ -13,6 +13,8 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.CommonInfo;
 import lombok.Data;
 
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: WordModelAttr
  * @Description: 文字模型属性实体类
@@ -43,11 +45,11 @@ public class WordModelAttr extends CommonInfo {
     private com.skyeye.property.entity.Property propertyMation;
 
     @TableField("editor")
-    @ApiModelProperty(value = "是否可编辑，参考#WhetherEnum", required = "required,num")
+    @ApiModelProperty(value = "是否可编辑", required = "required,num", enumClass = WhetherEnum.class)
     private Integer editor;
 
     @TableField("show_to_editor")
-    @ApiModelProperty(value = "是否显示在编辑框，参考#WhetherEnum", required = "required,num")
+    @ApiModelProperty(value = "是否显示在编辑框", required = "required,num", enumClass = WhetherEnum.class)
     private Integer showToEditor;
 
     @TableField(value = "order_by")

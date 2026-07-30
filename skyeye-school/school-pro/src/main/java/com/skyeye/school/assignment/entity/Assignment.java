@@ -19,6 +19,10 @@ import com.skyeye.school.assignment.classenum.AssignmentTimeState;
 import com.skyeye.school.chapter.entity.Chapter;
 import lombok.Data;
 
+import com.skyeye.school.assignment.classenum.AssignmentApplicationProcess;
+import com.skyeye.school.assignment.classenum.AssignmentSubState;
+import com.skyeye.school.assignment.classenum.AssignmentType;
+
 /**
  * @ClassName: Assignment
  * @Description: 作业管理实体类
@@ -54,7 +58,7 @@ public class Assignment extends BaseGeneralInfo implements EnclosureFace {
     private Chapter chapterMation;
 
     @TableField("application_process")
-    @ApiModelProperty(value = "应用环节，参考#AssignmentApplicationProcess", required = "required")
+    @ApiModelProperty(value = "应用环节", required = "required", enumClass = AssignmentApplicationProcess.class)
     private String applicationProcess;
 
     @TableField("start_time")
@@ -66,7 +70,7 @@ public class Assignment extends BaseGeneralInfo implements EnclosureFace {
     private String endTime;
 
     @TableField("type")
-    @ApiModelProperty(value = "类型，参考#AssignmentType", required = "required")
+    @ApiModelProperty(value = "类型", required = "required", enumClass = AssignmentType.class)
     private String type;
 
     @TableField("full_marks")
@@ -82,7 +86,7 @@ public class Assignment extends BaseGeneralInfo implements EnclosureFace {
     private String timeState;
 
     @TableField(exist = false)
-    @Property(value = "学生作业提交状态，参考#AssignmentSubState")
+    @Property(value = "学生作业提交状态", enumClass = AssignmentSubState.class)
     private String subState;
 
     @TableField(exist = false)
