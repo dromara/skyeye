@@ -19,6 +19,10 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.tms.car.classenum.CarAttribute;
+import com.skyeye.tms.car.classenum.CarState;
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: Car
  * @Description: 车辆管理实体类
@@ -63,11 +67,11 @@ public class Car extends OperatorUserInfo {
     private TmsCarType typeMation;
 
     @TableField(value = "attribute_id")
-    @ApiModelProperty(value = "车辆属性，参考#CarAttribute", required = "required")
+    @ApiModelProperty(value = "车辆属性", required = "required", enumClass = CarAttribute.class)
     private Integer attributeId;
 
     @TableField(value = "state")
-    @ApiModelProperty(value = "当前状态，参考#CarState", required = "required")
+    @ApiModelProperty(value = "当前状态", required = "required", enumClass = CarState.class)
     private Integer state;
 
     @TableField(value = "common_driver_id")
@@ -143,7 +147,7 @@ public class Car extends OperatorUserInfo {
     private Map<String, Object> objectMation;
 
     @TableField(value = "enabled")
-    @ApiModelProperty(value = "启用状态，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "启用状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
 }

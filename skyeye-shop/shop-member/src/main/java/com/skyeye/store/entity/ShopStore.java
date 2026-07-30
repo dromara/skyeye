@@ -22,6 +22,8 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.store.classenum.StoreOnlineBookType;
+
 /**
  * @ClassName: ShopStore
  * @Description: 门店管理实体类
@@ -98,7 +100,7 @@ public class ShopStore extends AreaInfo {
     private Integer onlineBookRadix;
 
     @TableField(value = "online_book_type")
-    @ApiModelProperty(value = "线上预约类型的设定，参考#StoreOnlineBookType", required = "num")
+    @ApiModelProperty(value = "线上预约类型的设定", required = "num", enumClass = StoreOnlineBookType.class)
     private Integer onlineBookType;
 
     @TableField(value = "online_book_json", typeHandler = JacksonTypeHandler.class)

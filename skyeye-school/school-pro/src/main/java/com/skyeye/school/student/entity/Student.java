@@ -24,6 +24,18 @@ import lombok.Data;
 
 import java.util.List;
 
+import com.skyeye.school.student.classenum.AdmissionMethod;
+import com.skyeye.school.student.classenum.ModeOfStudy;
+import com.skyeye.common.enumeration.BloodTypeEnum;
+import com.skyeye.common.enumeration.HealthStatus;
+import com.skyeye.common.enumeration.IDCardType;
+import com.skyeye.common.enumeration.RegistrationType;
+import com.skyeye.common.enumeration.SexEnum;
+import com.skyeye.school.student.classenum.StudentState;
+import com.skyeye.school.student.classenum.StudentType;
+import com.skyeye.school.student.classenum.VaccinationStatus;
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: Student
  * @Description: 学生实体类
@@ -79,7 +91,7 @@ public class Student extends OperatorUserInfo {
     private String no;
 
     @TableField("sex")
-    @ApiModelProperty(value = "性别，参考#SexEnum", required = "required")
+    @ApiModelProperty(value = "性别", required = "required", enumClass = SexEnum.class)
     @Excel(name = "性别", width = 10, isImportField = "true_st", replace = {"保密_0", "男生_1", "女生_2"}, orderNum = "4")
     private Integer sex;
 
@@ -89,7 +101,7 @@ public class Student extends OperatorUserInfo {
     private String nation;
 
     @TableField("idcard_type")
-    @ApiModelProperty(value = "证件类型，参考#IDCardType", required = "required")
+    @ApiModelProperty(value = "证件类型", required = "required", enumClass = IDCardType.class)
     @Excel(name = "证件类型", width = 30, isImportField = "true_st", orderNum = "6")
     private Integer idCardType;
 
@@ -135,7 +147,7 @@ public class Student extends OperatorUserInfo {
     private Classes classMation;
 
     @TableField("residence_type")
-    @ApiModelProperty(value = "户口类型，参考#RegistrationType")
+    @ApiModelProperty(value = "户口类型", enumClass = RegistrationType.class)
     @Excel(name = "户口类型", width = 15, isImportField = "true_st", orderNum = "12")
     private Integer residenceType;
 
@@ -210,57 +222,57 @@ public class Student extends OperatorUserInfo {
     private String contactPhone;
 
     @TableField("type")
-    @ApiModelProperty(value = "学生类别，参考#StudentType", required = "required")
+    @ApiModelProperty(value = "学生类别", required = "required", enumClass = StudentType.class)
     @Excel(name = "学生类别", width = 30, isImportField = "true_st", orderNum = "27")
     private Integer type;
 
     @TableField("outside_school")
-    @ApiModelProperty(value = "是否学区外，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否学区外", enumClass = WhetherEnum.class)
     @Excel(name = "是否学区外", width = 15, isImportField = "true_st", dict = "yesORno", addressList = true, orderNum = "28")
     private Integer outsideSchool;
 
     @TableField("foreign_students")
-    @ApiModelProperty(value = "是否外地学生，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否外地学生", enumClass = WhetherEnum.class)
     @Excel(name = "是否外地学生", width = 15, isImportField = "true_st", orderNum = "29")
     private Integer foreignStudents;
 
     @TableField("behind_children")
-    @ApiModelProperty(value = "是否留守儿童，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否留守儿童", enumClass = WhetherEnum.class)
     @Excel(name = "是否留守儿童", width = 15, isImportField = "true_st", orderNum = "30")
     private Integer behindChildren;
 
     @TableField("floating_population")
-    @ApiModelProperty(value = "是否流动人口，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否流动人口", enumClass = WhetherEnum.class)
     @Excel(name = "是否流动人口", width = 15, isImportField = "true_st", orderNum = "31")
     private Integer floatingPopulation;
 
     @TableField("single_parent_family")
-    @ApiModelProperty(value = "是否单亲家庭，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否单亲家庭", enumClass = WhetherEnum.class)
     @Excel(name = "单亲家庭", width = 15, isImportField = "true_st", replace = {"是_1", "否_2"}, orderNum = "32")
     private Integer singleParentFamily;
 
     @TableField("entrance_type")
-    @ApiModelProperty(value = "入学方式，参考#AdmissionMethod")
+    @ApiModelProperty(value = "入学方式", enumClass = AdmissionMethod.class)
     @Excel(name = "入学方式", width = 15, isImportField = "true_st", orderNum = "33")
     private Integer entranceType;
 
     @TableField("school_choice_students")
-    @ApiModelProperty(value = "择校生(不可修改)，参考#WhetherEnum")
+    @ApiModelProperty(value = "择校生(不可修改)", enumClass = WhetherEnum.class)
     @Excel(name = "择校生", width = 15, isImportField = "true_st", orderNum = "34")
     private Integer schoolChoiceStudents;
 
     @TableField("attend_type")
-    @ApiModelProperty(value = "就读方式，参考#ModeOfStudy")
+    @ApiModelProperty(value = "就读方式", enumClass = ModeOfStudy.class)
     @Excel(name = "就读方式", width = 15, isImportField = "true_st", orderNum = "35")
     private Integer attendType;
 
     @TableField("health_condition")
-    @ApiModelProperty(value = "健康状态，参考#HealthStatus")
+    @ApiModelProperty(value = "健康状态", enumClass = HealthStatus.class)
     @Excel(name = "健康状态", width = 15, isImportField = "true_st", orderNum = "36")
     private Integer healthCondition;
 
     @TableField("overseas_chinese")
-    @ApiModelProperty(value = "是否港台华侨，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否港台华侨", enumClass = WhetherEnum.class)
     @Excel(name = "是否港台华侨", width = 15, isImportField = "true_st", orderNum = "37")
     private Integer overseasChinese;
 
@@ -270,17 +282,17 @@ public class Student extends OperatorUserInfo {
     private String birthday;
 
     @TableField("state")
-    @ApiModelProperty(value = "状态，参考#StudentState", required = "required")
+    @ApiModelProperty(value = "状态", required = "required", enumClass = StudentState.class)
     @Excel(name = "状态 ", width = 15, isImportField = "true_st", replace = {"在校_1", "毕业_2", "休学_3"}, orderNum = "39")
     private String state;
 
     @TableField("blood_type")
-    @ApiModelProperty(value = "血型，参考#BloodTypeEnum")
+    @ApiModelProperty(value = "血型", enumClass = BloodTypeEnum.class)
     @Excel(name = "血型", width = 15, isImportField = "true_st", orderNum = "40")
     private Integer bloodType;
 
     @TableField("preschool_education")
-    @ApiModelProperty(value = "学前教育，参考#WhetherEnum")
+    @ApiModelProperty(value = "学前教育", enumClass = WhetherEnum.class)
     @Excel(name = "学前教育", width = 15, isImportField = "true_st", orderNum = "41")
     private Integer preschoolEducation;
 
@@ -290,22 +302,22 @@ public class Student extends OperatorUserInfo {
     private String preschoolSchool;
 
     @TableField("only_child")
-    @ApiModelProperty(value = "是否独生子女，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否独生子女", enumClass = WhetherEnum.class)
     @Excel(name = "是否独生子女", width = 15, isImportField = "true_st", orderNum = "43")
     private Integer onlyChild;
 
     @TableField("orphan")
-    @ApiModelProperty(value = "是否孤儿，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否孤儿", enumClass = WhetherEnum.class)
     @Excel(name = "是否孤儿", width = 15, isImportField = "true_st", orderNum = "44")
     private Integer orphan;
 
     @TableField("preferential")
-    @ApiModelProperty(value = "是否烈士/优抚子女，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否烈士/优抚子女", enumClass = WhetherEnum.class)
     @Excel(name = "是否烈士/优抚子女", width = 15, isImportField = "true_st", orderNum = "45")
     private Integer preferential;
 
     @TableField("one_patch")
-    @ApiModelProperty(value = "是否享受一补，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否享受一补", enumClass = WhetherEnum.class)
     @Excel(name = "是否享受一补", width = 15, isImportField = "true_st", orderNum = "46")
     private Integer onePatch;
 
@@ -315,12 +327,12 @@ public class Student extends OperatorUserInfo {
     private String modeOfTransportation;
 
     @TableField("school_bus")
-    @ApiModelProperty(value = "是否乘坐校车，参考#WhetherEnum")
+    @ApiModelProperty(value = "是否乘坐校车", enumClass = WhetherEnum.class)
     @Excel(name = "是否乘坐校车", width = 15, isImportField = "true_st", orderNum = "48")
     private Integer schoolBus;
 
     @TableField("vaccination")
-    @ApiModelProperty(value = "疫苗接种情况，参考#VaccinationStatus")
+    @ApiModelProperty(value = "疫苗接种情况", enumClass = VaccinationStatus.class)
     @Excel(name = "疫苗接种情况", width = 15, isImportField = "true_st", orderNum = "49")
     private Integer vaccination;
 

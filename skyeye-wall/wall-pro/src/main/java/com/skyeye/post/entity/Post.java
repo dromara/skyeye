@@ -20,6 +20,8 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: Post
  * @Description: 帖子实体类
@@ -51,7 +53,7 @@ public class Post extends OperatorUserInfo {
     private String ip;
 
     @TableField("anonymity")
-    @ApiModelProperty(value = "是否匿名,参考#WhetherEnum", required = "required,num")
+    @ApiModelProperty(value = "是否匿名", required = "required,num", enumClass = WhetherEnum.class)
     private Integer anonymity;
 
     @TableField("city")
