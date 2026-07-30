@@ -80,7 +80,7 @@ public class ServiceUserStockServiceImpl extends SkyeyeBusinessServiceImpl<Servi
      * @param materialId 商品id
      * @param normsId    规格id
      * @param operNumber 变化数量
-     * @param type       参考#UserStockPutOutType枚举类
+     * @param type       出入库类型，{@link com.skyeye.accessory.classenum.UserStockPutOutType}
      */
     @Override
     public void editMaterialNormsUserStock(String userId, String materialId, String normsId, String operNumber, int type) {

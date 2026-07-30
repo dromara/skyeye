@@ -17,6 +17,8 @@ import com.skyeye.common.entity.features.BaseGeneralInfo;
 import com.skyeye.tms.address.entity.BillingAddress;
 import lombok.Data;
 
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: TransportationPath
  * @Description: 运输路径实体类
@@ -61,7 +63,7 @@ public class TransportationPath extends BaseGeneralInfo {
     private String actualMileage;
 
     @TableField(value = "enabled")
-    @ApiModelProperty(value = "启用状态，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "启用状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 
 }

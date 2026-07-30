@@ -15,6 +15,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.school.checkwork.classenum.CheckworkSignState;
+
 /**
  * @ClassName: CheckworkSign
  * @Description: 学生考勤签到实体类
@@ -53,7 +55,7 @@ public class CheckworkSign extends CommonInfo {
     private String signTime;
 
     @TableField("state")
-    @Property(value = "签到状态，参考#CheckworkSignState")
+    @Property(value = "签到状态", enumClass = CheckworkSignState.class)
     private Integer state;
 
 }

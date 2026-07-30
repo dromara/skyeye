@@ -16,6 +16,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.common.enumeration.EnableEnum;
+
 /**
  * @ClassName: TmsDriver
  * @Description: 司机管理实体类
@@ -59,6 +61,6 @@ public class TmsDriver extends OperatorUserInfo {
     private String effectEndTime;
 
     @TableField(value = "enabled")
-    @ApiModelProperty(value = "启用状态，参考#EnableEnum", required = "required,num")
+    @ApiModelProperty(value = "启用状态", required = "required,num", enumClass = EnableEnum.class)
     private Integer enabled;
 }

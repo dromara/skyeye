@@ -11,6 +11,7 @@ import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.features.OperatorUserInfo;
+import com.skyeye.team.classenum.ObjectPermissionFromType;
 import lombok.Data;
 
 /**
@@ -63,7 +64,7 @@ public class TeamObjectPermission extends OperatorUserInfo {
     private String ownerKey;
 
     @TableField("from_type")
-    @ApiModelProperty(value = "权限来源  参考：#ObjectPermissionFromType", required = "required,num")
+    @ApiModelProperty(value = "权限来源", enumClass = ObjectPermissionFromType.class, required = "required,num")
     private Integer fromType;
 
 }

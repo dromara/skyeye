@@ -18,6 +18,8 @@ import lombok.Data;
 
 import java.util.List;
 
+import com.skyeye.school.checkwork.classenum.CheckworkType;
+
 /**
  * @ClassName: Checkwork
  * @Description: 考勤管理实体类
@@ -45,7 +47,7 @@ public class Checkwork extends OperatorUserInfo {
     private SubjectClasses subClassLinkMation;
 
     @TableField("type")
-    @ApiModelProperty(value = "考勤方式，参考#CheckworkType", required = "required,num")
+    @ApiModelProperty(value = "考勤方式", required = "required,num", enumClass = CheckworkType.class)
     private Integer type;
 
     @TableField("source_code")

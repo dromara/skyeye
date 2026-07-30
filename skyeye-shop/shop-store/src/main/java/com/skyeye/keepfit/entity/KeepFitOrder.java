@@ -23,6 +23,8 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.meal.classenum.ShopMealOrderType;
+
 /**
  * @ClassName: KeepFitOrderMation
  * @Description: 保养订单管理实体类
@@ -46,7 +48,7 @@ public class KeepFitOrder extends OperatorUserInfo {
     private String oddNumber;
 
     @TableField("type")
-    @ApiModelProperty(value = "订单来源，和套餐订单一样，参考#ShopMealOrderType", required = "required,num")
+    @ApiModelProperty(value = "订单来源，和套餐订单一样", required = "required,num", enumClass = ShopMealOrderType.class)
     private Integer type;
 
     @TableField("remark")

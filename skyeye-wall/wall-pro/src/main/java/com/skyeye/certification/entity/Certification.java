@@ -19,6 +19,10 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.common.enumeration.IDCardType;
+import com.skyeye.school.student.classenum.StudentState;
+import com.skyeye.school.student.classenum.StudentType;
+
 /**
  * @ClassName: Certification
  * @Description: 学生信息认证实体类
@@ -94,15 +98,15 @@ public class Certification extends CommonInfo {
     private String idCard;
 
     @TableField("idcard_type")
-    @ApiModelProperty(value = "身份证类型，证件类型，参考#IDCardType", required = "required")
+    @ApiModelProperty(value = "身份证类型，证件类型", required = "required", enumClass = IDCardType.class)
     private Integer idCardType;
 
     @TableField("type")
-    @ApiModelProperty(value = "学生类别，1普通学生,2转校生,参考#StudentType", required = "required")
+    @ApiModelProperty(value = "学生类别，1普通学生,2转校生", required = "required", enumClass = StudentType.class)
     private Integer type;
 
     @TableField("status")
-    @ApiModelProperty(value = "学生状态，1在校，2毕业，3休学，参考#StudentState", required = "required")
+    @ApiModelProperty(value = "学生状态，1在校，2毕业，3休学", required = "required", enumClass = StudentState.class)
     private Integer status;
 
     @TableField("student_number")

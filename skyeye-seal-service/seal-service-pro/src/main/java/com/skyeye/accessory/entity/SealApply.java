@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * @ClassName: SealApply
- * @Description: 配件申请单实体类
+ * @Description: 配件申请单实体类；otherState 出入库状态参考 {@link com.skyeye.depot.classenum.DepotOutState}
  * @author: skyeye云系列--卫志强
  * @date: 2023/8/17 17:13
  * @Copyright: 2023 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
@@ -55,7 +55,7 @@ public class SealApply extends SkyeyeFlowable {
     private List<ApplyLink> applyLinkList;
 
     @TableField("other_state")
-    @Property("出入库状态，参考ERP仓库的出入库状态#DepotOutState")
+    @Property(value = "出入库状态")
     private Integer otherState;
 
 }

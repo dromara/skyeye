@@ -16,6 +16,8 @@ import lombok.Data;
 
 import java.util.Map;
 
+import com.skyeye.common.enumeration.WhetherEnum;
+
 /**
  * @ClassName: Comment
  * @Description: 评论实体类
@@ -46,7 +48,7 @@ public class Comment extends OperatorUserInfo {
     private String upvoteNum;
 
     @TableField("anonymity")
-    @ApiModelProperty(value = "是否匿名,参考#WhetherEnum", required = "required,num")
+    @ApiModelProperty(value = "是否匿名", required = "required,num", enumClass = WhetherEnum.class)
     private Integer anonymity;
 
     @TableField("comment_id")
