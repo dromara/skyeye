@@ -5,8 +5,10 @@
 package com.skyeye.coupon.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
@@ -21,6 +23,7 @@ import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
@@ -337,6 +340,7 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     /**
      * 分页查询优惠券适用门店。入参：page、limit + customParamsMap.couponId。
      * 全部门店：分页列出启用门店；指定门店：分页列出适用门店。不校验券启用状态。
+     * 全部门店 + 指定商品：按 couponMaterialList 过滤掉没有任何适用商品（已上架）的门店。
      */
     @Override
     @IgnoreTenant
@@ -350,10 +354,73 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         if (ObjectUtil.isEmpty(coupon)) {
             return;
         }
+        // 与 queryCouponById / getDataFromDb 同源
+        coupon.setCouponMaterialList(couponMaterialService.queryListByCouponId(couponId));
 
         boolean allStore = Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.ALL_STORE.getKey());
+        boolean specifiedMaterial = Objects.equals(coupon.getProductScope(), PromotionMaterialScope.SPU.getKey());
         List<String> storeIdList = null;
-        if (!allStore) {
+        if (allStore && specifiedMaterial) {
+            if (CollectionUtil.isEmpty(coupon.getCouponMaterialList())) {
+                return;
+            }
+            List<String> materialIdList = coupon.getCouponMaterialList().stream()
+                .map(CouponMaterial::getMaterialId).filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(materialIdList)) {
+                return;
+            }
+            QueryWrapper<ShopStore> enabledStoreQuery = new QueryWrapper<>();
+            enabledStoreQuery.select(CommonConstants.ID)
+                .eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), EnableEnum.ENABLE_USING.getKey());
+            List<String> enabledStoreIdList = shopStoreService.list(enabledStoreQuery).stream()
+                .map(ShopStore::getId).filter(StrUtil::isNotBlank).collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(enabledStoreIdList)) {
+                return;
+            }
+            // 按购物车同款方式：materialId 与 storeId 一一对应后查关系，再查详情取已上架门店
+            List<String> pairMaterialIdList = new ArrayList<>();
+            List<String> pairStoreIdList = new ArrayList<>();
+            for (String storeId : enabledStoreIdList) {
+                for (String materialId : materialIdList) {
+                    pairMaterialIdList.add(materialId);
+                    pairStoreIdList.add(storeId);
+                }
+            }
+            Map<String, Object> materialStoreIdMap = iShopMaterialNormsService
+                .queryShopMaterialMapByMaterialIdAndStoreId(pairMaterialIdList, pairStoreIdList);
+            if (CollectionUtil.isEmpty(materialStoreIdMap)) {
+                return;
+            }
+            List<String> materialStoreIds = materialStoreIdMap.values().stream()
+                .map(Object::toString).collect(Collectors.toList());
+            List<Map<String, Object>> materialByIds = iShopMaterialNormsService.queryShopMaterialByIds(materialStoreIds);
+            if (CollectionUtil.isEmpty(materialByIds)) {
+                return;
+            }
+            storeIdList = materialByIds.stream().map(map -> {
+                if (ObjectUtil.isEmpty(map.get("shopMaterialStore"))) {
+                    return null;
+                }
+                // 与订单侧一致：先 toJsonStr 再转 Map，避免 Map.toString 导致上架字段解析失败
+                Map<String, Object> shopMaterialStore = JSONUtil.toBean(JSONUtil.toJsonStr(map.get("shopMaterialStore")), null);
+                if (CollectionUtil.isEmpty(shopMaterialStore) || ObjectUtil.isEmpty(shopMaterialStore.get("storeId"))) {
+                    return null;
+                }
+                Integer isLaunchStore = MapUtil.getInt(shopMaterialStore, "isLaunchStore");
+                Integer isLaunchShop = MapUtil.getInt(shopMaterialStore, "isLaunchShop");
+                Integer storeEnabled = MapUtil.getInt(shopMaterialStore, "storeEnabled");
+                // 必须：已添加到门店 + 已上架商城 + 门店启用
+                if (Objects.equals(isLaunchStore, WhetherEnum.ENABLE_USING.getKey())
+                    && Objects.equals(isLaunchShop, WhetherEnum.ENABLE_USING.getKey())
+                    && Objects.equals(storeEnabled, EnableEnum.ENABLE_USING.getKey())) {
+                    return shopMaterialStore.get("storeId").toString();
+                }
+                return null;
+            }).filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(storeIdList)) {
+                return;
+            }
+        } else if (!allStore) {
             storeIdList = CollectionUtil.isEmpty(coupon.getStoreIdList()) ? Collections.emptyList()
                 : coupon.getStoreIdList().stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
             if (CollectionUtil.isEmpty(storeIdList)) {
@@ -363,7 +430,9 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
 
         Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
         QueryWrapper<ShopStore> queryWrapper = new QueryWrapper<>();
-        if (allStore) {
+        if (allStore && specifiedMaterial) {
+            queryWrapper.in(CommonConstants.ID, storeIdList);
+        } else if (allStore) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), EnableEnum.ENABLE_USING.getKey());
         } else {
             queryWrapper.in(CommonConstants.ID, storeIdList);
