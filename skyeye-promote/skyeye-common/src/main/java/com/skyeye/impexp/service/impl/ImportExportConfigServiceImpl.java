@@ -120,6 +120,9 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
                 .thenComparing(item -> item.getSortNo())
                 .thenComparing(item -> item.getLastUpdateTime(), Comparator.reverseOrder()))
             .collect(Collectors.toList());
+
+        iAuthUserService.setName(configList, "createId", "createName");
+        iAuthUserService.setName(configList, "lastUpdateId", "lastUpdateName");
         outputObject.setBeans(configList);
         outputObject.settotal(configList.size());
     }
@@ -144,6 +147,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             option.setAttrKey(attrDefinition.getAttrKey());
             option.setAttrType(attrDefinition.getAttrType());
             option.setFieldType(attrDefinition.getFieldType());
+            option.setAttrModelType(attrDefinition.getAttrModelType());
             option.setWhetherInputParams(attrDefinition.getWhetherInputParams());
             option.setRemark(attrDefinition.getRemark());
 
@@ -159,9 +163,10 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
                 && attrDefinition.getWhetherInputParams().equals(WhetherEnum.ENABLE_USING.getKey());
             // required 规则命中时，标记为“导入必填且前端不可取消”。
             boolean importRequiredFixed = canImport && StrUtil.containsIgnoreCase(attrDefinition.getRequired(), VerificationParamsEnum.REQUIRED.getKey());
-            option.setDefaultImportChecked(canImport);
+            // 默认仅勾选必填字段；非必填需用户手动选择。
+            option.setDefaultImportChecked(importRequiredFixed);
             option.setImportRequiredFixed(importRequiredFixed);
-            option.setDefaultExportChecked(true);
+            option.setDefaultExportChecked(false);
             return option;
         }).collect(Collectors.toList());
 

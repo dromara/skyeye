@@ -16,6 +16,7 @@ import com.skyeye.attr.service.AttrDefinitionCustomService;
 import com.skyeye.attr.service.AttrDefinitionService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
+import com.skyeye.common.enumeration.AttrModelType;
 import com.skyeye.common.enumeration.ServiceBeanType;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.enumeration.WhetherEnum;
@@ -94,6 +95,10 @@ public class AttrDefinitionServiceImpl extends SkyeyeBusinessServiceImpl<AttrDef
 
         entity.setWhetherInputParams(WhetherEnum.ENABLE_USING.getKey());
         entity.setModelAttribute(WhetherEnum.DISABLE_USING.getKey());
+        // 虚拟模型属性无实体反射信息，未传时默认按简单类型处理
+        if (entity.getAttrModelType() == null) {
+            entity.setAttrModelType(AttrModelType.SCALAR.getKey());
+        }
         entity.setCreateTime(DateUtil.getTimeAndToString());
         entity.setLastUpdateTime(DateUtil.getTimeAndToString());
     }
@@ -223,6 +228,7 @@ public class AttrDefinitionServiceImpl extends SkyeyeBusinessServiceImpl<AttrDef
                 bean.setDecimalPlaces(attrDefinition.getDecimalPlaces());
                 bean.setDbDefaultValue(attrDefinition.getDbDefaultValue());
                 bean.setIsPrimaryKey(attrDefinition.getIsPrimaryKey());
+                bean.setAttrModelType(attrDefinition.getAttrModelType());
             });
             updateEntity(editBeans, StrUtil.EMPTY);
         }
@@ -244,8 +250,8 @@ public class AttrDefinitionServiceImpl extends SkyeyeBusinessServiceImpl<AttrDef
     }
 
     private String getKey(AttrDefinition attrDefinition) {
-        return String.format(Locale.ROOT, "%s:%s:%s:%s", attrDefinition.getClassName(), attrDefinition.getAttrKey(), attrDefinition.getAttrType(),
-            attrDefinition.getDbFieldName());
+        return String.format(Locale.ROOT, "%s:%s:%s:%s:%s:%s", attrDefinition.getClassName(), attrDefinition.getAttrKey(), attrDefinition.getAttrType(),
+            attrDefinition.getDbFieldName(), attrDefinition.getIsFuzzyLike(), attrDefinition.getAttrModelType());
     }
 
     @Override

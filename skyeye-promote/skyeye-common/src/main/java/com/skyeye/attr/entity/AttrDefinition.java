@@ -13,6 +13,7 @@ import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.attr.classenum.AttrDefinitionAttrType;
 import com.skyeye.common.entity.CommonInfo;
+import com.skyeye.common.enumeration.AttrModelType;
 import com.skyeye.common.enumeration.FieldType;
 import com.skyeye.common.enumeration.ServiceBeanType;
 import com.skyeye.common.enumeration.WhetherEnum;
@@ -61,6 +62,10 @@ public class AttrDefinition extends CommonInfo {
     @TableField("attr_type")
     @ApiModelProperty(value = "字段类型", enumClass = AttrDefinitionAttrType.class, required = "required")
     private String attrType;
+
+    @TableField("attr_model_type")
+    @ApiModelProperty(value = "属性模型结构类型：简单类型/对象/集合", enumClass = AttrModelType.class, required = "required,num", defaultValue = "1")
+    private Integer attrModelType;
 
     @TableField("`name`")
     @ApiModelProperty(value = "属性名称", required = "required")

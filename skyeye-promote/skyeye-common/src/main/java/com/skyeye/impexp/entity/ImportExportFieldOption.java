@@ -30,6 +30,9 @@ public class ImportExportFieldOption {
     @ApiModelProperty("数据库字段类型")
     private String fieldType;
 
+    @ApiModelProperty("属性模型结构类型：1简单类型 2对象 3集合")
+    private Integer attrModelType;
+
     @ApiModelProperty("是否可作为入参")
     private Integer whetherInputParams;
 
