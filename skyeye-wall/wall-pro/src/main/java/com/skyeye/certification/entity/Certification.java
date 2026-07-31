@@ -13,6 +13,8 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.certification.classenum.StateEnum;
+import com.skyeye.certification.classenum.StudentState;
+import com.skyeye.certification.classenum.StudentType;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.CommonInfo;
 import lombok.Data;
@@ -20,8 +22,6 @@ import lombok.Data;
 import java.util.Map;
 
 import com.skyeye.common.enumeration.IDCardType;
-import com.skyeye.school.student.classenum.StudentState;
-import com.skyeye.school.student.classenum.StudentType;
 
 /**
  * @ClassName: Certification
@@ -102,11 +102,11 @@ public class Certification extends CommonInfo {
     private Integer idCardType;
 
     @TableField("type")
-    @ApiModelProperty(value = "学生类别，1普通学生,2转校生", required = "required", enumClass = StudentType.class)
+    @ApiModelProperty(value = "学生类别", required = "required", enumClass = StudentType.class)
     private Integer type;
 
     @TableField("status")
-    @ApiModelProperty(value = "学生状态，1在校，2毕业，3休学", required = "required", enumClass = StudentState.class)
+    @ApiModelProperty(value = "学生状态", required = "required", enumClass = StudentState.class)
     private Integer status;
 
     @TableField("student_number")
