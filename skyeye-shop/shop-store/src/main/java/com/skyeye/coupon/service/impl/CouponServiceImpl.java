@@ -340,7 +340,7 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     /**
      * 分页查询优惠券适用门店。入参：page、limit + customParamsMap.couponId。
      * 全部门店：分页列出启用门店；指定门店：分页列出适用门店。不校验券启用状态。
-     * 全部门店 + 指定商品：按 couponMaterialList 过滤掉没有任何适用商品（已上架）的门店。
+     * 指定商品（全部门店/指定门店）：按 couponMaterialList 过滤掉没有任何适用商品（已上架）的门店。
      */
     @Override
     @IgnoreTenant
@@ -354,13 +354,14 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         if (ObjectUtil.isEmpty(coupon)) {
             return;
         }
-        // 与 queryCouponById / getDataFromDb 同源
+        // 与 queryCouponById / getDataFromDb 同源，补全适用商品
         coupon.setCouponMaterialList(couponMaterialService.queryListByCouponId(couponId));
 
         boolean allStore = Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.ALL_STORE.getKey());
         boolean specifiedMaterial = Objects.equals(coupon.getProductScope(), PromotionMaterialScope.SPU.getKey());
         List<String> storeIdList = null;
-        if (allStore && specifiedMaterial) {
+        if (specifiedMaterial) {
+            // ---------- 指定商品：先定候选门店，再按是否有已上架适用商品过滤 ----------
             if (CollectionUtil.isEmpty(coupon.getCouponMaterialList())) {
                 return;
             }
@@ -369,23 +370,31 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             if (CollectionUtil.isEmpty(materialIdList)) {
                 return;
             }
-            QueryWrapper<ShopStore> enabledStoreQuery = new QueryWrapper<>();
-            enabledStoreQuery.select(CommonConstants.ID)
-                .eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), EnableEnum.ENABLE_USING.getKey());
-            List<String> enabledStoreIdList = shopStoreService.list(enabledStoreQuery).stream()
-                .map(ShopStore::getId).filter(StrUtil::isNotBlank).collect(Collectors.toList());
-            if (CollectionUtil.isEmpty(enabledStoreIdList)) {
+            // 候选门店：全部门店 = 启用门店；指定门店 = 券关联门店（不与全部门店比对）
+            List<String> candidateStoreIdList;
+            if (allStore) {
+                QueryWrapper<ShopStore> enabledStoreQuery = new QueryWrapper<>();
+                enabledStoreQuery.select(CommonConstants.ID)
+                    .eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), EnableEnum.ENABLE_USING.getKey());
+                candidateStoreIdList = shopStoreService.list(enabledStoreQuery).stream()
+                    .map(ShopStore::getId).filter(StrUtil::isNotBlank).collect(Collectors.toList());
+            } else {
+                candidateStoreIdList = CollectionUtil.isEmpty(coupon.getStoreIdList()) ? Collections.emptyList()
+                    : coupon.getStoreIdList().stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+            }
+            if (CollectionUtil.isEmpty(candidateStoreIdList)) {
                 return;
             }
-            // 按购物车同款方式：materialId 与 storeId 一一对应后查关系，再查详情取已上架门店
+            // 现有 Feign 要求 materialId、storeId 一一对应，故展开候选门店 × 适用商品
             List<String> pairMaterialIdList = new ArrayList<>();
             List<String> pairStoreIdList = new ArrayList<>();
-            for (String storeId : enabledStoreIdList) {
+            for (String storeId : candidateStoreIdList) {
                 for (String materialId : materialIdList) {
                     pairMaterialIdList.add(materialId);
                     pairStoreIdList.add(storeId);
                 }
             }
+            // 1）查门店-商品关系；2）查详情并校验已添加门店、已上架商城、门店启用
             Map<String, Object> materialStoreIdMap = iShopMaterialNormsService
                 .queryShopMaterialMapByMaterialIdAndStoreId(pairMaterialIdList, pairStoreIdList);
             if (CollectionUtil.isEmpty(materialStoreIdMap)) {
@@ -401,7 +410,7 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
                 if (ObjectUtil.isEmpty(map.get("shopMaterialStore"))) {
                     return null;
                 }
-                // 与订单侧一致：先 toJsonStr 再转 Map，避免 Map.toString 导致上架字段解析失败
+                // toJsonStr 再转 Map，避免 Map.toString 解析失败
                 Map<String, Object> shopMaterialStore = JSONUtil.toBean(JSONUtil.toJsonStr(map.get("shopMaterialStore")), null);
                 if (CollectionUtil.isEmpty(shopMaterialStore) || ObjectUtil.isEmpty(shopMaterialStore.get("storeId"))) {
                     return null;
@@ -409,7 +418,7 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
                 Integer isLaunchStore = MapUtil.getInt(shopMaterialStore, "isLaunchStore");
                 Integer isLaunchShop = MapUtil.getInt(shopMaterialStore, "isLaunchShop");
                 Integer storeEnabled = MapUtil.getInt(shopMaterialStore, "storeEnabled");
-                // 必须：已添加到门店 + 已上架商城 + 门店启用
+                // 门店至少有一个适用商品满足：已添加 + 已上架 + 门店启用
                 if (Objects.equals(isLaunchStore, WhetherEnum.ENABLE_USING.getKey())
                     && Objects.equals(isLaunchShop, WhetherEnum.ENABLE_USING.getKey())
                     && Objects.equals(storeEnabled, EnableEnum.ENABLE_USING.getKey())) {
@@ -421,6 +430,7 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
                 return;
             }
         } else if (!allStore) {
+            // 全部商品 + 指定门店：不按商品过滤，直接用券关联门店
             storeIdList = CollectionUtil.isEmpty(coupon.getStoreIdList()) ? Collections.emptyList()
                 : coupon.getStoreIdList().stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
             if (CollectionUtil.isEmpty(storeIdList)) {
@@ -428,14 +438,15 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             }
         }
 
+        // 过滤完成后再分页，保证 total 准确
         Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
         QueryWrapper<ShopStore> queryWrapper = new QueryWrapper<>();
-        if (allStore && specifiedMaterial) {
+        if (specifiedMaterial || !allStore) {
+            // 指定商品（已过滤）或指定门店：按门店 id 分页
             queryWrapper.in(CommonConstants.ID, storeIdList);
-        } else if (allStore) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), EnableEnum.ENABLE_USING.getKey());
         } else {
-            queryWrapper.in(CommonConstants.ID, storeIdList);
+            // 全部商品 + 全部门店：分页启用门店
+            queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), EnableEnum.ENABLE_USING.getKey());
         }
         List<ShopStore> stores = shopStoreService.list(queryWrapper);
         outputObject.setBeans(stores);
