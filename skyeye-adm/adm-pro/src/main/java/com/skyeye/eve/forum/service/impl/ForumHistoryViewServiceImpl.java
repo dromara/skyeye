@@ -4,7 +4,6 @@
 
 package com.skyeye.eve.forum.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -24,11 +23,10 @@ import com.skyeye.eve.forum.service.ForumHistoryViewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @ClassName: HistoryPostServiceImpl
+ * @ClassName: ForumHistoryViewServiceImpl
  * @Description: 历史帖子信息管理
  * @author: skyeye云系列--卫志强
  * @date: 2024/3/9 14:31
@@ -117,7 +115,6 @@ public class ForumHistoryViewServiceImpl extends SkyeyeBusinessServiceImpl<Forum
             "AND t1." + idColumn + " = t3.max_id" +
             ")", currentUserId);
         queryWrapper.orderByDesc(createTimeColumn);
-        List<ForumHistoryView> list = list(queryWrapper);
-        return CollectionUtil.isEmpty(list) ? new ArrayList<>() : list;
+        return list(queryWrapper);
     }
 }

@@ -87,8 +87,7 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         QueryWrapper<OrderItem> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getParentId), orderId);
         queryWrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getCommentState), state);
-        List<OrderItem> list = list(queryWrapper);
-        return CollectionUtil.isEmpty(list) ? new ArrayList<>() : list;
+        return list(queryWrapper);
     }
 
     @Override
