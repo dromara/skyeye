@@ -150,6 +150,10 @@ public class EquipmentInspectionOrder extends OperatorUserInfo {
     @Property(value = "转维修后的维修单id")
     private String repairOrderId;
 
+    @TableField(exist = false)
+    @Property(value = "评价信息")
+    private EquipmentInspectionOrderEvaluate evaluateMation;
+
     @TableField(value = "remark")
     @ApiModelProperty(value = "备注")
     private String remark;

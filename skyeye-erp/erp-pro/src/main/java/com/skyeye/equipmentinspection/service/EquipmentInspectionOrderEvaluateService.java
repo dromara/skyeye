@@ -14,6 +14,11 @@ import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrderEvaluate;
 public interface EquipmentInspectionOrderEvaluateService extends SkyeyeBusinessService<EquipmentInspectionOrderEvaluate> {
 
     /**
+     * 按巡检单 id 查询评价
+     */
+    EquipmentInspectionOrderEvaluate selectByObjectId(String objectId);
+
+    /**
      * 系统自动好评（已完成且尚未评价时）
      */
     void autoEvaluateByOrderId(String orderId, String userId);

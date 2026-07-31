@@ -29,6 +29,7 @@ import com.skyeye.equipmentinspection.classenum.EquipmentInspectionOrderState;
 import com.skyeye.equipmentinspection.dao.EquipmentInspectionOrderDao;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionPlan;
+import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderEvaluateService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
 import com.skyeye.equipmentinspection.support.EquipmentInspectionOrderQuerySupport;
@@ -69,6 +70,10 @@ public class EquipmentInspectionOrderServiceImpl
     @Lazy
     @Autowired
     private EquipmentRepairOrderService equipmentRepairOrderService;
+
+    @Lazy
+    @Autowired
+    private EquipmentInspectionOrderEvaluateService equipmentInspectionOrderEvaluateService;
 
     @Autowired
     private EquipmentInspectionOrderQuerySupport orderQuerySupport;
@@ -197,6 +202,8 @@ public class EquipmentInspectionOrderServiceImpl
         order.setStateMation(EquipmentInspectionOrderState.getMation(order.getState()));
         order.setCheckResultMation(EquipmentInspectionCheckResult.getMation(order.getCheckResult()));
         order.setAssignTypeMation(EquipmentInspectionAssignType.getMation(order.getAssignType()));
+        // 评价挂详情
+        order.setEvaluateMation(equipmentInspectionOrderEvaluateService.selectByObjectId(id));
         return order;
     }
 
