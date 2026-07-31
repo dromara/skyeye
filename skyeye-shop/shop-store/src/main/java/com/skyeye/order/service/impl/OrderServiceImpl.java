@@ -322,34 +322,36 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
         List<Integer> stateList = new ArrayList<>();
         switch (commonPageInfo.getType()) {
-            case "1": // 未支付
-                stateList = Arrays.asList(new Integer[]{ShopOrderItemOtherState.WAIT_PAY.getKey()});
+            case "1": // 待支付
+                stateList = Arrays.asList(new Integer[]{ShopOrderItemOtherState.WAIT_PAY.getKey()}); // 待支付
                 break;
-            case "2": // 待收货
-                stateList = Arrays.asList(new Integer[]{
-                    ShopOrderItemOtherState.WAIT_DELIVER.getKey(),// 待发货
-                    ShopOrderItemOtherState.ALL_DELIVERED.getKey(), //  已发货
-                    ShopOrderItemOtherState.TRANSPORTING.getKey()});//运输中
+            case "2": // 待发货
+                stateList = Arrays.asList(new Integer[]{ShopOrderItemOtherState.WAIT_DELIVER.getKey()}); // 待发货
                 break;
-            case "3":// 已完成
+            case "3": // 待收货
                 stateList = Arrays.asList(new Integer[]{
-                    ShopOrderItemOtherState.SIGN.getKey(),       // 已签收
-                    ShopOrderItemOtherState.COMPLETED.getKey(),  // 已完成
+                    ShopOrderItemOtherState.ALL_DELIVERED.getKey(), // 全部发货
+                    ShopOrderItemOtherState.TRANSPORTING.getKey()});// 运输中
+                break;
+            case "4": // 评价
+                stateList = Arrays.asList(new Integer[]{
                     ShopOrderItemOtherState.UNEVALUATE.getKey(), // 待评价
-                    ShopOrderItemOtherState.EVALUATED.getKey(),// 已评价
-                    ShopOrderItemOtherState.PARTIALLYDONE.getKey(),//部分完成
-                    ShopOrderItemOtherState.PARTIALEVALUATION.getKey()});//部分评价
+                    ShopOrderItemOtherState.EVALUATED.getKey(), // 已评价
+                    ShopOrderItemOtherState.PARTIALEVALUATION.getKey(), // 部分评价
+                    ShopOrderItemOtherState.SIGN.getKey(), // 已签收
+                    ShopOrderItemOtherState.COMPLETED.getKey(), // 已完成
+                    ShopOrderItemOtherState.PARTIALLYDONE.getKey()}); // 部分完成
                 break;
-            case "4":// 已取消
+            case "5": // 已取消
                 stateList = Arrays.asList(new Integer[]{ShopOrderItemOtherState.CANCELED.getKey()});
                 break;
-            case "5":// 处理中
+            case "6": // 处理中
                 stateList = Arrays.asList(new Integer[]{
                     ShopOrderItemOtherState.REFUNDING.getKey(),  // 退款中
                     ShopOrderItemOtherState.SALESRETURNING.getKey(),//退货中
                     ShopOrderItemOtherState.EXCHANGEING.getKey()});//换货中
                 break;
-            case "6": // 申请记录
+            case "7": // 申请记录
                 stateList = Arrays.asList(new Integer[]{
                     ShopOrderItemOtherState.REFUND.getKey(),     // 已退款
                     ShopOrderItemOtherState.SALESRETURNED.getKey(),//已退货
@@ -389,31 +391,33 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
         List<Integer> stateList = new ArrayList<>();
         switch (StrUtil.isEmpty(commonPageInfo.getType()) ? CommonNumConstants.NUM_ZERO.toString() : commonPageInfo.getType()) {
-            case "1": // 未支付
-                stateList = Arrays.asList(ShopOrderItemOtherState.WAIT_PAY.getKey());
+            case "1": // 待支付
+                stateList = Arrays.asList(ShopOrderItemOtherState.WAIT_PAY.getKey()); // 待支付
                 break;
-            case "2": // 待收货
-                stateList = Arrays.asList(ShopOrderItemOtherState.WAIT_DELIVER.getKey(),// 待发货
-                    ShopOrderItemOtherState.ALL_DELIVERED.getKey(), //  已发货
-                    ShopOrderItemOtherState.TRANSPORTING.getKey());//运输中
+            case "2": // 待发货
+                stateList = Arrays.asList(ShopOrderItemOtherState.WAIT_DELIVER.getKey()); // 待发货
                 break;
-            case "3":// 已完成
-                stateList = Arrays.asList(ShopOrderItemOtherState.SIGN.getKey(),       // 已签收
-                    ShopOrderItemOtherState.COMPLETED.getKey(),  // 已完成
-                    ShopOrderItemOtherState.UNEVALUATE.getKey(), // 待评价
-                    ShopOrderItemOtherState.EVALUATED.getKey(),// 已评价
-                    ShopOrderItemOtherState.PARTIALLYDONE.getKey(),//部分完成
-                    ShopOrderItemOtherState.PARTIALEVALUATION.getKey());//部分评价
+            case "3": // 待收货
+                stateList = Arrays.asList(ShopOrderItemOtherState.ALL_DELIVERED.getKey(), // 全部发货
+                    ShopOrderItemOtherState.TRANSPORTING.getKey());// 运输中
                 break;
-            case "4":// 已取消
+            case "4": // 评价
+                stateList = Arrays.asList(ShopOrderItemOtherState.UNEVALUATE.getKey(), // 待评价
+                    ShopOrderItemOtherState.EVALUATED.getKey(), // 已评价
+                    ShopOrderItemOtherState.PARTIALEVALUATION.getKey(), // 部分评价
+                    ShopOrderItemOtherState.SIGN.getKey(), // 已签收
+                    ShopOrderItemOtherState.COMPLETED.getKey(), // 已完成
+                    ShopOrderItemOtherState.PARTIALLYDONE.getKey()); // 部分完成
+                break;
+            case "5": // 已取消
                 stateList = Arrays.asList(ShopOrderItemOtherState.CANCELED.getKey());
                 break;
-            case "5":// 处理中
+            case "6": // 处理中
                 stateList = Arrays.asList(ShopOrderItemOtherState.REFUNDING.getKey(),  // 退款中
                     ShopOrderItemOtherState.SALESRETURNING.getKey(),//退货中
                     ShopOrderItemOtherState.EXCHANGEING.getKey());//换货中
                 break;
-            case "6": // 申请记录
+            case "7": // 申请记录
                 stateList = Arrays.asList(ShopOrderItemOtherState.REFUND.getKey(),     // 已退款
                     ShopOrderItemOtherState.SALESRETURNED.getKey(),//已退货
                     ShopOrderItemOtherState.EXCHANGED.getKey());//已换货
