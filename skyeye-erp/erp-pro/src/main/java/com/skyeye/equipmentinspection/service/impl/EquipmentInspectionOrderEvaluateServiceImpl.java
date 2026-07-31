@@ -22,6 +22,7 @@ import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
 import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
     /** 自动好评内容 */
     private static final String AUTO_EVALUATE_CONTENT = "系统默认好评";
 
+    @Lazy
     @Autowired
     private EquipmentInspectionOrderService equipmentInspectionOrderService;
 
@@ -73,6 +75,17 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
     }
 
     @Override
+    public EquipmentInspectionOrderEvaluate selectByObjectId(String objectId) {
+        QueryWrapper<EquipmentInspectionOrderEvaluate> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrderEvaluate::getObjectId), objectId);
+        EquipmentInspectionOrderEvaluate evaluate = getOne(queryWrapper, false);
+        if (ObjectUtil.isEmpty(evaluate)) {
+            return null;
+        }
+        return selectById(evaluate.getId());
+    }
+
+    @Override
     protected void validatorEntity(EquipmentInspectionOrderEvaluate entity) {
         EquipmentInspectionOrder order = equipmentInspectionOrderService.selectById(entity.getObjectId());
         if (StrUtil.isBlank(order.getId())) {
@@ -81,9 +94,7 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
         if (!ObjectUtil.equal(order.getState(), EquipmentInspectionOrderState.COMPLETED.getKey())) {
             throw new CustomException("仅已完成的巡检单可以评价");
         }
-        QueryWrapper<EquipmentInspectionOrderEvaluate> existWrapper = new QueryWrapper<>();
-        existWrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrderEvaluate::getObjectId), entity.getObjectId());
-        if (count(existWrapper) > 0) {
+        if (ObjectUtil.isNotEmpty(selectByObjectId(entity.getObjectId()))) {
             throw new CustomException("该巡检单已经评价。");
         }
         // 挂巡检单业务 key
