@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-enum ModeOfStudy implements SkyeyeEnumClass {
+public enum ModeOfStudy implements SkyeyeEnumClass {
     ATTEND_A_DAY(1, "走读", true, true),
     RESIDENCY(2, "住校", true, false),
     OTHER(3, "其他", true, false);
