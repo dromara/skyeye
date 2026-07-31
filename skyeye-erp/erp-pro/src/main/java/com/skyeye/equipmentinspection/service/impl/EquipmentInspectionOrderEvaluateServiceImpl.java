@@ -69,8 +69,7 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
     @Override
     public EquipmentInspectionOrderEvaluate selectById(String id) {
         EquipmentInspectionOrderEvaluate evaluate = super.selectById(id);
-        evaluate.setTypeMation(EquipmentInspectionEvaluateType.getMation(evaluate.getType()));
-        iSysDictDataService.setDataMation(evaluate, EquipmentInspectionOrderEvaluate::getTypeId);
+        fillEvaluateMation(evaluate);
         return evaluate;
     }
 
@@ -82,7 +81,13 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
         if (ObjectUtil.isEmpty(evaluate)) {
             return null;
         }
-        return selectById(evaluate.getId());
+        fillEvaluateMation(evaluate);
+        return evaluate;
+    }
+
+    private void fillEvaluateMation(EquipmentInspectionOrderEvaluate evaluate) {
+        evaluate.setTypeMation(EquipmentInspectionEvaluateType.getMation(evaluate.getType()));
+        iSysDictDataService.setDataMation(evaluate, EquipmentInspectionOrderEvaluate::getTypeId);
     }
 
     @Override
@@ -94,7 +99,8 @@ public class EquipmentInspectionOrderEvaluateServiceImpl
         if (!ObjectUtil.equal(order.getState(), EquipmentInspectionOrderState.COMPLETED.getKey())) {
             throw new CustomException("仅已完成的巡检单可以评价");
         }
-        if (ObjectUtil.isNotEmpty(selectByObjectId(entity.getObjectId()))) {
+        // 详情 selectById 已挂 evaluateMation，直接复用，不再二次查询
+        if (ObjectUtil.isNotEmpty(order.getEvaluateMation())) {
             throw new CustomException("该巡检单已经评价。");
         }
         // 挂巡检单业务 key
