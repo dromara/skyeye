@@ -77,7 +77,7 @@ public class OrderController {
 
     @ApiOperation(id = "cancelOrder", value = "商品订单取消", method = "POST", allUse = "2")
     @ApiImplicitParams({
-        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),
+        @ApiImplicitParam(id = "id", name = "id", value = "子单id", required = "required"),
         @ApiImplicitParam(id = "cancelType", name = "cancelType", value = "取消类型", required = "required")})
     @RequestMapping("/post/OrderController/cancelOrder")
     public void cancelOrder(InputObject inputObject, OutputObject outputObject) {

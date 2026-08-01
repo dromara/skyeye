@@ -539,36 +539,41 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     @Override
     public void cancelOrder(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
+        String id = params.get("id").toString();
+        Object cancelType = params.get("cancelType");
+        OrderItem orderItem = orderItemService.getById(id);
+        if (ObjectUtil.isEmpty(orderItem) || StrUtil.isEmpty(orderItem.getId())) {
+            throw new CustomException("子单不存在");
+        }
+        if (!Objects.equals(orderItem.getState(), ShopOrderItemOtherState.WAIT_PAY.getKey())
+            && !Objects.equals(orderItem.getState(), ShopOrderItemOtherState.WAIT_DELIVER.getKey())) {
+            throw new CustomException("该子单不可取消");
+        }
+        // 只取消当前子单
+        orderItemService.editStateById(orderItem.getId(), String.valueOf(ShopOrderItemOtherState.CANCELED.getKey()));
+        List<OrderItem> itemList = orderItemService.queryOrderItemByParentId(orderItem.getParentId());
+        boolean allCanceled = CollectionUtil.isNotEmpty(itemList)
+            && itemList.stream().allMatch(item -> Objects.equals(item.getState(), ShopOrderItemOtherState.CANCELED.getKey()));
+        if (!allCanceled) {
+            return;
+        }
+        // 全部子单都取消后，回写主单取消信息并停掉超时任务
         UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq(CommonConstants.ID, params.get("id"));
+        updateWrapper.eq(CommonConstants.ID, orderItem.getParentId());
         Order one = getOne(updateWrapper);
         if (ObjectUtil.isEmpty(one)) {
             throw new CustomException("订单不存在");
         }
-        // 可取消：待支付、支付失败；或支付成功且子单仍为待发货
-        boolean canCancel = Objects.equals(one.getState(), ShopOrderState.UNPAID.getKey())
-            || Objects.equals(one.getState(), ShopOrderState.FAIRPAID.getKey());
-        if (Objects.equals(one.getState(), ShopOrderState.PAY_SUCCESS.getKey())) {
-            List<OrderItem> itemList = orderItemService.queryOrderItemByParentId(one.getId());
-            canCancel = CollectionUtil.isNotEmpty(itemList)
-                && itemList.stream().allMatch(item -> Objects.equals(item.getState(), ShopOrderItemOtherState.WAIT_DELIVER.getKey()));
+        if (!Objects.equals(one.getState(), ShopOrderState.PAY_SUCCESS.getKey())) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.UNPAID.getKey());
         }
-        if (canCancel) {
-            // 未支付/支付失败取消：主单回到待支付；已支付成功取消：主单保持支付成功
-            if (!Objects.equals(one.getState(), ShopOrderState.PAY_SUCCESS.getKey())) {
-                updateWrapper.set(MybatisPlusUtil.toColumns(Order::getState), ShopOrderState.UNPAID.getKey());
-            }
-            updateWrapper.set(MybatisPlusUtil.toColumns(Order::getCancelType), params.get("cancelType"));
-            updateWrapper.set(MybatisPlusUtil.toColumns(Order::getCancelTime), DateUtil.getTimeAndToString());
-            update(updateWrapper);
-            orderItemService.updateDeliverStateByParentId(one.getId(), ShopOrderItemOtherState.CANCELED.getKey());
-            log.info("订单id" + one.getId() + "取消订单--取消定时任务-- 开始");
-            iQuartzService.stopAndDeleteTaskQuartz(one.getId());// 删除任务
-            log.info("订单id" + one.getId() + "取消订单--取消定时任务-- 结束");
-            refreshCache(params.get("id").toString());
-        } else {
-            throw new CustomException("订单不可取消");
-        }
+        updateWrapper.set(MybatisPlusUtil.toColumns(Order::getCancelType), cancelType);
+        updateWrapper.set(MybatisPlusUtil.toColumns(Order::getCancelTime), DateUtil.getTimeAndToString());
+        update(updateWrapper);
+        log.info("订单id" + one.getId() + "取消订单--取消定时任务-- 开始");
+        iQuartzService.stopAndDeleteTaskQuartz(one.getId());
+        log.info("订单id" + one.getId() + "取消订单--取消定时任务-- 结束");
+        refreshCache(one.getId());
     }
 
     @Override
