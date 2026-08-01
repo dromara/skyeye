@@ -46,7 +46,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * @ClassName: SealSeServiceApplyServiceImpl
+ * @ClassName: SealApplyServiceImpl
  * @Description: 配件申领单管理服务层
  * @author: skyeye云系列--卫志强
  * @date: 2022/1/11 22:42
@@ -165,7 +165,6 @@ public class SealApplyServiceImpl extends SkyeyeBusinessServiceImpl<SealApplyDao
         params.put("discount", CommonNumConstants.NUM_ZERO);
         params.put("discountMoney", CommonNumConstants.NUM_ZERO);
         params.put("totalPrice", sealApply.getAllPrice());
-        params.put("operTime", sealApply.getApplyTime());
         List<Map<String, Object>> erpOrderItemList = new ArrayList<>();
         sealApply.getApplyLinkList().forEach(applyLink -> {
             Map<String, Object> erpOrderItem = BeanUtil.beanToMap(applyLink);
