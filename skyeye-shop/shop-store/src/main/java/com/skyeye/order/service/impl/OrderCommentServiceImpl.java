@@ -34,7 +34,6 @@ import com.skyeye.order.entity.OrderComment;
 import com.skyeye.order.entity.OrderItem;
 import com.skyeye.order.enums.OrderCommentType;
 import com.skyeye.order.enums.ShopOrderCommentState;
-import com.skyeye.order.enums.ShopOrderItemOtherState;
 import com.skyeye.order.service.OrderCommentService;
 import com.skyeye.order.service.OrderItemService;
 import com.skyeye.order.service.OrderService;
@@ -154,16 +153,16 @@ public class OrderCommentServiceImpl extends SkyeyeBusinessServiceImpl<OrderComm
             updateWrapper.set(MybatisPlusUtil.toColumns(OrderComment::getIsComment), WhetherEnum.ENABLE_USING.getKey());
             update(updateWrapper);
         } else if (orderComment.getType() == OrderCommentType.CUSTOMERFiRST.getKey()) {// 客户首评
-            orderItemService.updateCommentStateById(orderComment.getOrderItemId());// 修改此子订单的评价状态为已评价
-            List<OrderItem> orderItemList = orderItemService.queryListByStateAndOrderId(orderComment.getOrderId(), WhetherEnum.DISABLE_USING.getKey());
-            boolean allMatch = orderItemList.stream()
-                .allMatch(Orderitem -> Orderitem.getCommentState() == WhetherEnum.ENABLE_USING.getKey());
+            // 只更新当前评价的子单
+            orderItemService.updateCommentStateById(orderComment.getOrderItemId());
+            List<OrderItem> orderItemList = orderItemService.queryOrderItemByParentId(orderComment.getOrderId());
+            boolean allMatch = CollectionUtil.isNotEmpty(orderItemList)
+                && orderItemList.stream()
+                .allMatch(orderItem -> WhetherEnum.ENABLE_USING.getKey().equals(orderItem.getCommentState()));
             if (allMatch) {
                 orderService.updateCommonState(orderComment.getOrderId(), ShopOrderCommentState.FINISHED.getKey());
-                orderItemService.updateDeliverStateByParentId(orderComment.getOrderId(), ShopOrderItemOtherState.EVALUATED.getKey());
             } else {
                 orderService.updateCommonState(orderComment.getOrderId(), ShopOrderCommentState.PORTION.getKey());
-                orderItemService.updateDeliverStateByParentId(orderComment.getOrderId(), ShopOrderItemOtherState.PARTIALEVALUATION.getKey());
             }
         }
     }
