@@ -177,8 +177,10 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
     public void updateCommentStateById(String id) {
         UpdateWrapper<OrderItem> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, id)
-                .set(MybatisPlusUtil.toColumns(OrderItem::getCommentState), WhetherEnum.ENABLE_USING.getKey());
+                .set(MybatisPlusUtil.toColumns(OrderItem::getCommentState), WhetherEnum.ENABLE_USING.getKey())
+                .set(MybatisPlusUtil.toColumns(OrderItem::getState), ShopOrderItemOtherState.EVALUATED.getKey());
         update(updateWrapper);
+        refreshCache(id);
     }
 
     @Override
