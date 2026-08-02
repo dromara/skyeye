@@ -10,6 +10,8 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.history.entity.AutoHistoryCase;
 import com.skyeye.usercase.entity.AutoCase;
 
+import java.util.List;
+
 /**
  * @ClassName: AutoCaseService
  * @Description: 用例管理服务接口层
@@ -32,5 +34,10 @@ public interface AutoCaseService extends SkyeyeBusinessService<AutoCase> {
     Object executeCase(AutoCase autoCase, Boolean recordData);
 
     Object updateHistoryCase(AutoCase autoCase, Boolean recordData, AutoHistoryCase autoHistoryCase);
+
+    /**
+     * 按项目（可选模块）查询用例 id
+     */
+    List<String> queryCaseIdsByObjectId(String objectId, List<String> moduleIds);
 
 }

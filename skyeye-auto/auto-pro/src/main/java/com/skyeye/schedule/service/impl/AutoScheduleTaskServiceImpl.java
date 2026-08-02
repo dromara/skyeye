@@ -48,7 +48,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 /**
  * @ClassName: AutoScheduleTaskServiceImpl
@@ -333,14 +332,8 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
     }
 
     private List<String> queryCaseIdsByObjectId(String objectId, List<String> moduleIds) {
-        QueryWrapper<AutoCase> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoCase::getObjectId), objectId);
-        if (CollectionUtil.isNotEmpty(moduleIds)) {
-            queryWrapper.in(MybatisPlusUtil.toColumns(AutoCase::getModuleId), moduleIds);
-        }
-        queryWrapper.select(MybatisPlusUtil.toColumns(AutoCase::getId));
-        return autoCaseService.list(queryWrapper).stream()
-            .map(AutoCase::getId)
-            .collect(Collectors.toList());
+        // 对齐用例列表 XML 查询，避免 MP selectList + 租户拦截器改写 SQL 触发 PersistenceException
+        List<String> caseIds = autoCaseService.queryCaseIdsByObjectId(objectId, moduleIds);
+        return caseIds == null ? Collections.emptyList() : caseIds;
     }
 }
