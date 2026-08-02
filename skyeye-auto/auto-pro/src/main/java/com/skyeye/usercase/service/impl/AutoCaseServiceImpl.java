@@ -89,12 +89,6 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
     }
 
     @Override
-    public List<String> queryCaseIdsByObjectId(String objectId, List<String> moduleIds) {
-        String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
-        return skyeyeBaseMapper.queryCaseIdList(objectId, moduleIds, tenantId);
-    }
-
-    @Override
     public void writePostpose(AutoCase autoCase, String userId) {
         List<AutoStep> autoStepList = autoCase.getStepList();
         autoStepList.forEach(autoStep -> {

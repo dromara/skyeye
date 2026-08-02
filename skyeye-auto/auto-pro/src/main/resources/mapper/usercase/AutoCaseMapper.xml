@@ -35,22 +35,4 @@
         </where>
         ORDER BY a.create_time DESC
     </select>
-
-    <select id="queryCaseIdList" resultType="java.lang.String">
-        SELECT a.id
-        FROM auto_case a
-        <where>
-            a.object_id = #{objectId}
-            <if test="tenantId != null and tenantId != ''">
-                AND a.tenant_id = #{tenantId}
-            </if>
-            <if test="moduleIds != null and moduleIds.size() > 0">
-                AND a.module_id IN
-                <foreach collection="moduleIds" item="moduleId" open="(" separator="," close=")">
-                    #{moduleId}
-                </foreach>
-            </if>
-        </where>
-    </select>
-
 </mapper>

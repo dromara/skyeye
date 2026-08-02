@@ -9,6 +9,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeTeamAuthServiceImpl;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
@@ -48,6 +49,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName: AutoScheduleTaskServiceImpl
@@ -332,8 +334,14 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
     }
 
     private List<String> queryCaseIdsByObjectId(String objectId, List<String> moduleIds) {
-        // 对齐用例列表 XML 查询，避免 MP selectList + 租户拦截器改写 SQL 触发 PersistenceException
-        List<String> caseIds = autoCaseService.queryCaseIdsByObjectId(objectId, moduleIds);
-        return caseIds == null ? Collections.emptyList() : caseIds;
+        QueryWrapper<AutoCase> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("object_id", objectId);
+        if (CollectionUtil.isNotEmpty(moduleIds)) {
+            queryWrapper.in("module_id", moduleIds);
+        }
+        queryWrapper.select(CommonConstants.ID);
+        return autoCaseService.list(queryWrapper).stream()
+            .map(AutoCase::getId)
+            .collect(Collectors.toList());
     }
 }

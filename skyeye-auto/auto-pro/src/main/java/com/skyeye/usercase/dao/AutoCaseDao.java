@@ -6,7 +6,6 @@ package com.skyeye.usercase.dao;
 import com.skyeye.eve.dao.SkyeyeBaseMapper;
 import com.skyeye.usercase.entity.AutoCase;
 import com.skyeye.usercase.entity.AutoUserCaseQueryDo;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -21,11 +20,4 @@ import java.util.Map;
  */
 public interface AutoCaseDao extends SkyeyeBaseMapper<AutoCase> {
     List<Map<String, Object>> queryAutoCaseList(AutoUserCaseQueryDo pageInfo);
-
-    /**
-     * 按项目（可选模块）查询用例 id，供定时任务解析执行范围
-     */
-    List<String> queryCaseIdList(@Param("objectId") String objectId,
-                                 @Param("moduleIds") List<String> moduleIds,
-                                 @Param("tenantId") String tenantId);
 }
