@@ -11,75 +11,83 @@ import cn.hutool.json.JSONUtil;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * 解析 config_json：根级可配表头/数据行高、默认表头色；items 中可配列宽与表头样式。
+ * 解析 config_json。
  * <pre>
  * {
+ *   "sheetMode": "single",          // single=单Sheet主从同行；multi=多Sheet（主表+明细Sheet）
  *   "headerRowHeight": 22,
  *   "dataRowHeight": 18,
  *   "defaultHeaderBackgroundColor": "#4472C4",
  *   "defaultHeaderFontColor": "#FFFFFF",
  *   "items": [{
- *     "attrKey": "name",
- *     "columnTitle": "名称",
- *     "columnWidth": 5000,
- *     "headerBackgroundColor": "#E2EFDA",
- *     "headerFontColor": "#000000"
+ *     "attrKey": "title",
+ *     "columnTitle": "单据主题",
+ *     "sheetKey": "main"
+ *   }, {
+ *     "attrKey": "purchaseRequestChildList.materialId",
+ *     "columnTitle": "物料",
+ *     "sheetKey": "purchaseRequestChildList"
  *   }]
  * }
  * </pre>
  * columnWidth 与 POI Sheet#setColumnWidth 一致（1/256 字符宽）。
+ * multi 模式下明细 Sheet 通过「主表序号」列关联主表行。
  */
 public final class ImportExportConfigJsonHelper {
+
+    public static final String SHEET_MODE_SINGLE = "single";
+    public static final String SHEET_MODE_MULTI = "multi";
+    public static final String MAIN_SHEET_KEY = "main";
+    public static final String MAIN_SHEET_NAME = "主表";
+    public static final String LINK_ATTR_KEY = "__rowNo";
+    public static final String LINK_COLUMN_TITLE = "主表序号";
 
     private ImportExportConfigJsonHelper() {
     }
 
     @Data
     public static class SheetLayoutOptions {
-        /**
-         * 表头行高（磅），如 15～30
-         */
         private Float headerRowHeight;
-        /**
-         * 数据行行高（磅）
-         */
         private Float dataRowHeight;
-        /**
-         * 表头默认背景色 #RRGGBB
-         */
         private String defaultHeaderBackgroundColor;
-        /**
-         * 表头默认字体色 #RRGGBB
-         */
         private String defaultHeaderFontColor;
+        /**
+         * 一级表头样式：key=父属性 attrKey（如 purchaseRequestChildList）
+         */
+        private Map<String, HeaderGroupStyle> headerGroups = new LinkedHashMap<>();
+    }
+
+    @Data
+    public static class HeaderGroupStyle {
+        private String title;
+        private String headerBackgroundColor;
+        private String headerFontColor;
     }
 
     @Data
     public static class ColumnSpec {
         private String attrKey;
-        /**
-         * 配置里显式写的列名，可为空
-         */
         private String columnTitle;
-        /**
-         * 列宽，POI 单位，与 Sheet#setColumnWidth 一致；为空则用系统默认
-         */
         private Integer columnWidth;
-        /**
-         * 该列表头背景色，可覆盖根级 default
-         */
         private String headerBackgroundColor;
-        /**
-         * 该列表头字体色
-         */
         private String headerFontColor;
+        /**
+         * 所属 Sheet：main=主表；明细集合则为集合 attrKey
+         */
+        private String sheetKey;
     }
 
     @Data
     public static class ParsedConfig {
+        /**
+         * single / multi，默认 single
+         */
+        private String sheetMode = SHEET_MODE_SINGLE;
         private SheetLayoutOptions layout = new SheetLayoutOptions();
         private List<ColumnSpec> items = new ArrayList<>();
     }
@@ -90,6 +98,12 @@ public final class ImportExportConfigJsonHelper {
             return out;
         }
         JSONObject root = JSONUtil.parseObj(configJson);
+        String mode = root.getStr("sheetMode");
+        if (SHEET_MODE_MULTI.equalsIgnoreCase(mode)) {
+            out.setSheetMode(SHEET_MODE_MULTI);
+        } else {
+            out.setSheetMode(SHEET_MODE_SINGLE);
+        }
         SheetLayoutOptions layout = out.getLayout();
         if (root.containsKey("headerRowHeight")) {
             layout.setHeaderRowHeight(root.getFloat("headerRowHeight"));
@@ -99,6 +113,25 @@ public final class ImportExportConfigJsonHelper {
         }
         layout.setDefaultHeaderBackgroundColor(StrUtil.blankToDefault(root.getStr("defaultHeaderBackgroundColor"), null));
         layout.setDefaultHeaderFontColor(StrUtil.blankToDefault(root.getStr("defaultHeaderFontColor"), null));
+        JSONObject headerGroups = root.getJSONObject("headerGroups");
+        if (headerGroups != null && !headerGroups.isEmpty()) {
+            Map<String, HeaderGroupStyle> groupMap = new LinkedHashMap<>();
+            for (String parentKey : headerGroups.keySet()) {
+                if (StrUtil.isBlank(parentKey)) {
+                    continue;
+                }
+                JSONObject g = headerGroups.getJSONObject(parentKey);
+                if (g == null) {
+                    continue;
+                }
+                HeaderGroupStyle style = new HeaderGroupStyle();
+                style.setTitle(StrUtil.blankToDefault(g.getStr("title"), null));
+                style.setHeaderBackgroundColor(StrUtil.blankToDefault(g.getStr("headerBackgroundColor"), null));
+                style.setHeaderFontColor(StrUtil.blankToDefault(g.getStr("headerFontColor"), null));
+                groupMap.put(parentKey, style);
+            }
+            layout.setHeaderGroups(groupMap);
+        }
 
         JSONArray items = root.getJSONArray("items");
         if (items == null || items.isEmpty()) {
@@ -129,9 +162,18 @@ public final class ImportExportConfigJsonHelper {
             }
             spec.setHeaderBackgroundColor(StrUtil.blankToDefault(row.getStr("headerBackgroundColor"), null));
             spec.setHeaderFontColor(StrUtil.blankToDefault(row.getStr("headerFontColor"), null));
+            String sheetKey = row.getStr("sheetKey");
+            if (StrUtil.isBlank(sheetKey)) {
+                sheetKey = MAIN_SHEET_KEY;
+            }
+            spec.setSheetKey(sheetKey);
             result.add(spec);
         }
         out.setItems(result);
         return out;
+    }
+
+    public static boolean isMultiSheet(ParsedConfig parsed) {
+        return parsed != null && SHEET_MODE_MULTI.equalsIgnoreCase(parsed.getSheetMode());
     }
 }

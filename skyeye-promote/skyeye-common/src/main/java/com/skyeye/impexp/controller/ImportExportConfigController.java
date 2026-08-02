@@ -76,7 +76,7 @@ public class ImportExportConfigController {
     @ApiImplicitParams(value = {
         @ApiImplicitParam(id = "appId", name = "appId", value = "应用的appId", required = "required"),
         @ApiImplicitParam(id = "className", name = "className", value = "业务对象className", required = "required"),
-        @ApiImplicitParam(id = "id", name = "id", value = "配置id，可选，不传则默认配置")})
+        @ApiImplicitParam(id = "id", name = "id", value = "配置id", required = "required")})
     @RequestMapping("/post/ImportExportConfigController/downloadImportTemplate")
     public void downloadImportTemplate(InputObject inputObject, OutputObject outputObject) {
         importExportConfigService.downloadImportTemplate(inputObject, outputObject);
@@ -86,12 +86,22 @@ public class ImportExportConfigController {
     @ApiImplicitParams(value = {
         @ApiImplicitParam(id = "appId", name = "appId", value = "应用的appId", required = "required"),
         @ApiImplicitParam(id = "className", name = "className", value = "业务对象className", required = "required"),
-        @ApiImplicitParam(id = "id", name = "id", value = "配置id，可选，不传则默认配置"),
+        @ApiImplicitParam(id = "id", name = "id", value = "配置id", required = "required"),
         @ApiImplicitParam(id = "filters", name = "filters", value = "筛选条件JSON字符串，可选；可与顶层 page/limit 二选一，顶层优先", required = "json"),
         @ApiImplicitParam(id = "limit", name = "limit", value = "导出条数：-1 或省略表示全部；正整数表示最多导出条数（本页）", required = "required,num")})
     @RequestMapping("/post/ImportExportConfigController/exportByConfig")
     public void exportByConfig(InputObject inputObject, OutputObject outputObject) {
         importExportConfigService.exportByConfig(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "importByConfig", value = "按导入配置上传Excel并落库", method = "POST", allUse = "2")
+    @ApiImplicitParams(value = {
+        @ApiImplicitParam(id = "appId", name = "appId", value = "应用的appId", required = "required"),
+        @ApiImplicitParam(id = "className", name = "className", value = "业务对象className", required = "required"),
+        @ApiImplicitParam(id = "id", name = "id", value = "配置id", required = "required")})
+    @RequestMapping("/post/ImportExportConfigController/importByConfig")
+    public void importByConfig(InputObject inputObject, OutputObject outputObject) {
+        importExportConfigService.importByConfig(inputObject, outputObject);
     }
 
     @ApiOperation(id = "deleteImportExportConfigById", value = "根据id删除导入导出配置", method = "DELETE", allUse = "2")

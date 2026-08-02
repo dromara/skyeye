@@ -62,7 +62,7 @@ public class ImportExportConfig extends BaseGeneralInfo {
      * </ul>
      * <p>items 数组（每一列）字段：</p>
      * <ul>
-     *     <li>attrKey：字段属性键（必填）</li>
+     *     <li>attrKey：字段属性键（必填；对象子字段可用点路径，如 contact.name）</li>
      *     <li>columnTitle：列标题（可选）</li>
      *     <li>columnWidth：列宽（POI Sheet#setColumnWidth 单位，1/256 字符宽）</li>
      *     <li>headerBackgroundColor：该列表头背景色（优先级高于默认背景色）</li>

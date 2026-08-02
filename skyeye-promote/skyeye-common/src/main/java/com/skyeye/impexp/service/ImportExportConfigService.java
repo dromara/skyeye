@@ -24,5 +24,10 @@ public interface ImportExportConfigService extends SkyeyeBusinessService<ImportE
      * 按配置导出数据（不接收rows，后端按filters查询数据）
      */
     void exportByConfig(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 按导入配置上传 Excel 并落库（multipart，file + appId/className/id）
+     */
+    void importByConfig(InputObject inputObject, OutputObject outputObject);
 }
 

@@ -12,6 +12,7 @@ import com.skyeye.common.constans.FileConstants;
 import com.skyeye.common.constans.MqConstants;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.ExcelUtil;
+import com.skyeye.common.util.ImportExportRowUtil;
 import com.skyeye.service.JobMateMationService;
 import com.skyeye.exception.CustomException;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
@@ -75,10 +76,14 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
                 throw new CustomException("导出 JSON 文件不存在: " + jsonPath);
             }
 
-            String[] keys = toStringArray(map.get("keys"));
-            String[] columnNames = toStringArray(map.get("columnNames"));
-            if (keys.length == 0 || columnNames.length == 0 || keys.length != columnNames.length) {
-                throw new CustomException("导入导出异步任务列配置无效.");
+            String sheetMode = map.get("sheetMode") == null ? "single" : String.valueOf(map.get("sheetMode"));
+            List<String> collectionAttrKeys = toStringList(map.get("collectionAttrKeys"));
+            String collectionAttrKey = map.get("collectionAttrKey") == null ? null : String.valueOf(map.get("collectionAttrKey"));
+            if (StrUtil.isBlank(collectionAttrKey) || "null".equals(collectionAttrKey)) {
+                collectionAttrKey = null;
+            }
+            if (collectionAttrKeys.isEmpty() && StrUtil.isNotBlank(collectionAttrKey)) {
+                collectionAttrKeys.add(collectionAttrKey);
             }
 
             int exportType = FileConstants.FileUploadPath.EXPORT_DATA.getType()[0];
@@ -88,7 +93,8 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
             long jsonBytes = Files.size(jsonPath);
             String excelFileName;
             Path outPath;
-            if (jsonBytes <= MAX_JSON_FILE_BYTES_BUFFERED) {
+            boolean multi = "multi".equalsIgnoreCase(sheetMode) && !collectionAttrKeys.isEmpty();
+            if (multi || jsonBytes <= MAX_JSON_FILE_BYTES_BUFFERED) {
                 String jsonContent = new String(Files.readAllBytes(jsonPath), StandardCharsets.UTF_8);
                 JSONArray arr = JSONUtil.parseArray(jsonContent);
                 List<Map<String, Object>> rows = new ArrayList<>();
@@ -98,15 +104,31 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
                 excelFileName = "export-excel-" + System.currentTimeMillis() + ".xls";
                 outPath = Paths.get(saveDir).resolve(excelFileName);
                 String title = map.containsKey("title") ? map.get("title").toString() : "导出数据";
-                String[] dataType = new String[0];
-                ExcelUtil.SheetExportStyle exportStyle = parseExportStyle(map.get("exportStyleJson"));
-                ExcelUtil.createWorkBookToFile(title, "导出数据", rows, keys, columnNames, dataType, outPath.toFile(), exportStyle);
+                if (multi) {
+                    writeMultiSheetAsync(map, rows, collectionAttrKeys, outPath.toFile());
+                } else {
+                    String[] keys = toStringArray(map.get("keys"));
+                    String[] columnNames = toStringArray(map.get("columnNames"));
+                    if (keys.length == 0 || columnNames.length == 0 || keys.length != columnNames.length) {
+                        throw new CustomException("导入导出异步任务列配置无效.");
+                    }
+                    if (StrUtil.isNotBlank(collectionAttrKey)) {
+                        rows = ImportExportRowUtil.flattenByCollection(rows, collectionAttrKey);
+                    }
+                    ExcelUtil.SheetExportStyle exportStyle = parseExportStyle(map.get("exportStyleJson"));
+                    ExcelUtil.createWorkBookToFile(title, "导出数据", rows, keys, columnNames, new String[0], outPath.toFile(), exportStyle);
+                }
             } else {
+                String[] keys = toStringArray(map.get("keys"));
+                String[] columnNames = toStringArray(map.get("columnNames"));
+                if (keys.length == 0 || columnNames.length == 0 || keys.length != columnNames.length) {
+                    throw new CustomException("导入导出异步任务列配置无效.");
+                }
                 excelFileName = "export-excel-" + System.currentTimeMillis() + ".xlsx";
                 outPath = Paths.get(saveDir).resolve(excelFileName);
                 ExcelUtil.SheetExportStyle exportStyle = parseExportStyle(map.get("exportStyleJson"));
                 ExcelUtil.createSxssfExcelFromJsonArrayFile(jsonPath.toFile(), "导出数据", keys, columnNames,
-                    outPath.toFile(), SXSSF_ROW_ACCESS_WINDOW, exportStyle);
+                    outPath.toFile(), SXSSF_ROW_ACCESS_WINDOW, exportStyle, collectionAttrKey);
             }
             Files.deleteIfExists(jsonPath);
 
@@ -194,10 +216,130 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
                     s.headerFontColors[i] = v == null || StrUtil.isBlank(String.valueOf(v)) ? null : String.valueOf(v);
                 }
             }
+            JSONArray groups = o.getJSONArray("headerGroupNames");
+            if (groups != null && !groups.isEmpty()) {
+                s.headerGroupNames = new String[groups.size()];
+                for (int i = 0; i < groups.size(); i++) {
+                    Object v = groups.get(i);
+                    s.headerGroupNames[i] = v == null || StrUtil.isBlank(String.valueOf(v)) ? null : String.valueOf(v);
+                }
+            }
+            JSONArray groupBg = o.getJSONArray("headerGroupBackgroundColors");
+            if (groupBg != null && !groupBg.isEmpty()) {
+                s.headerGroupBackgroundColors = new String[groupBg.size()];
+                for (int i = 0; i < groupBg.size(); i++) {
+                    Object v = groupBg.get(i);
+                    s.headerGroupBackgroundColors[i] = v == null || StrUtil.isBlank(String.valueOf(v)) ? null : String.valueOf(v);
+                }
+            }
+            JSONArray groupFg = o.getJSONArray("headerGroupFontColors");
+            if (groupFg != null && !groupFg.isEmpty()) {
+                s.headerGroupFontColors = new String[groupFg.size()];
+                for (int i = 0; i < groupFg.size(); i++) {
+                    Object v = groupFg.get(i);
+                    s.headerGroupFontColors[i] = v == null || StrUtil.isBlank(String.valueOf(v)) ? null : String.valueOf(v);
+                }
+            }
+            JSONArray dropdowns = o.getJSONArray("columnDropdownOptions");
+            if (dropdowns != null && !dropdowns.isEmpty()) {
+                s.columnDropdownOptions = new String[dropdowns.size()][];
+                for (int i = 0; i < dropdowns.size(); i++) {
+                    Object cell = dropdowns.get(i);
+                    if (cell instanceof JSONArray) {
+                        JSONArray arr = (JSONArray) cell;
+                        String[] opts = new String[arr.size()];
+                        for (int j = 0; j < arr.size(); j++) {
+                            Object v = arr.get(j);
+                            opts[j] = v == null ? null : String.valueOf(v);
+                        }
+                        s.columnDropdownOptions[i] = opts;
+                    }
+                }
+            }
             return s;
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void writeMultiSheetAsync(Map<String, Object> map, List<Map<String, Object>> rows,
+                                      List<String> collectionAttrKeys, java.io.File outFile) {
+        String[] masterKeys = toStringArray(map.get("masterKeys"));
+        String[] masterColumnNames = toStringArray(map.get("masterColumnNames"));
+        if (masterKeys.length == 0) {
+            throw new CustomException("多 Sheet 异步任务主表列配置无效.");
+        }
+        ImportExportRowUtil.MultiSheetRows split = ImportExportRowUtil.splitToMultiSheets(rows, collectionAttrKeys);
+        List<Map<String, Object>> sheetDefs = new ArrayList<>();
+        Map<String, Object> masterDef = new HashMap<>();
+        masterDef.put("sheetName", "主表");
+        masterDef.put("keys", masterKeys);
+        masterDef.put("columnNames", masterColumnNames);
+        masterDef.put("rows", split.getMasterRows());
+        masterDef.put("exportStyle", parseExportStyle(map.get("masterExportStyleJson")));
+        sheetDefs.add(masterDef);
+
+        Object detailSheetsObj = map.get("detailSheets");
+        if (detailSheetsObj instanceof List) {
+            for (Object item : (List<?>) detailSheetsObj) {
+                Map<String, Object> ds = item instanceof Map ? (Map<String, Object>) item
+                    : JSONUtil.toBean(JSONUtil.toJsonStr(item), Map.class);
+                if (ds == null) {
+                    continue;
+                }
+                String collectionAttrKey = ds.get("collectionAttrKey") == null ? null : String.valueOf(ds.get("collectionAttrKey"));
+                String sheetName = ds.get("sheetName") == null ? collectionAttrKey : String.valueOf(ds.get("sheetName"));
+                String[] detailKeys = toStringArray(ds.get("keys"));
+                String[] detailColumnNames = toStringArray(ds.get("columnNames"));
+                if (StrUtil.isBlank(collectionAttrKey) || detailKeys.length == 0) {
+                    continue;
+                }
+                Map<String, Object> detailDef = new HashMap<>();
+                detailDef.put("sheetName", sheetName);
+                detailDef.put("keys", detailKeys);
+                detailDef.put("columnNames", detailColumnNames);
+                detailDef.put("rows", split.getDetailRowsByCollection()
+                    .getOrDefault(collectionAttrKey, new ArrayList<>()));
+                detailDef.put("exportStyle", parseExportStyle(ds.get("exportStyleJson")));
+                sheetDefs.add(detailDef);
+            }
+        } else if (collectionAttrKeys.size() == 1) {
+            // 兼容旧任务格式
+            String collectionAttrKey = collectionAttrKeys.get(0);
+            Map<String, Object> detailDef = new HashMap<>();
+            detailDef.put("sheetName", map.getOrDefault("detailSheetName", collectionAttrKey));
+            detailDef.put("keys", toStringArray(map.get("detailKeys")));
+            detailDef.put("columnNames", toStringArray(map.get("detailColumnNames")));
+            detailDef.put("rows", split.getDetailRowsByCollection()
+                .getOrDefault(collectionAttrKey, new ArrayList<>()));
+            detailDef.put("exportStyle", parseExportStyle(map.get("detailExportStyleJson")));
+            sheetDefs.add(detailDef);
+        }
+        ExcelUtil.createMultiSheetWorkBookToFile(sheetDefs, outFile);
+    }
+
+    private static List<String> toStringList(Object o) {
+        List<String> list = new ArrayList<>();
+        if (o == null) {
+            return list;
+        }
+        if (o instanceof List) {
+            for (Object item : (List<?>) o) {
+                if (item != null && StrUtil.isNotBlank(String.valueOf(item))) {
+                    list.add(String.valueOf(item));
+                }
+            }
+            return list;
+        }
+        if (o instanceof String[]) {
+            for (String s : (String[]) o) {
+                if (StrUtil.isNotBlank(s)) {
+                    list.add(s);
+                }
+            }
+        }
+        return list;
     }
 
     private static String[] toStringArray(Object o) {

@@ -373,24 +373,34 @@ public class AttrDefinitionServiceImpl extends SkyeyeBusinessServiceImpl<AttrDef
         String className = params.get("className").toString();
         String attrKey = params.get("attrKey").toString();
         String appId = params.get("appId").toString();
+        List<AttrDefinition> attrDefinitionList = queryChildAttrDefinitionList(appId, className, attrKey);
+        outputObject.setBeans(attrDefinitionList);
+        outputObject.settotal(attrDefinitionList.size());
+    }
 
+    @Override
+    public List<AttrDefinition> queryChildAttrDefinitionList(String appId, String className, String attrKey) {
+        if (StrUtil.isBlank(appId) || StrUtil.isBlank(className) || StrUtil.isBlank(attrKey)) {
+            return new ArrayList<>();
+        }
         QueryWrapper<AttrDefinition> wrapper = new QueryWrapper<>();
         wrapper.eq(MybatisPlusUtil.toColumns(AttrDefinition::getAppId), appId);
         wrapper.eq(MybatisPlusUtil.toColumns(AttrDefinition::getClassName), className);
         wrapper.eq(MybatisPlusUtil.toColumns(AttrDefinition::getAttrKey), attrKey);
         AttrDefinition attrDefinition = getOne(wrapper);
-        if (attrDefinition == null) {
-            return;
+        if (attrDefinition == null || StrUtil.isBlank(attrDefinition.getAttrType())) {
+            return new ArrayList<>();
         }
-
         ServiceBean service = serviceBeanService.getByEntityClassName(appId, attrDefinition.getAttrType());
-        if (service == null) {
-            return;
+        if (service == null || StrUtil.isBlank(service.getClassName())) {
+            return new ArrayList<>();
         }
         List<AttrDefinition> attrDefinitionList = getAttrDefinitions(appId, service.getClassName());
+        if (CollectionUtil.isEmpty(attrDefinitionList)) {
+            return new ArrayList<>();
+        }
         setCustomDefinition(appId, service.getClassName(), attrDefinitionList);
-        outputObject.setBeans(attrDefinitionList);
-        outputObject.settotal(attrDefinitionList.size());
+        return attrDefinitionList;
     }
 
     /**

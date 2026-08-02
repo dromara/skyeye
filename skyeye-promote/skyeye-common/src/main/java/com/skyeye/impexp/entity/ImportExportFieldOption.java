@@ -33,6 +33,15 @@ public class ImportExportFieldOption {
     @ApiModelProperty("属性模型结构类型：1简单类型 2对象 3集合")
     private Integer attrModelType;
 
+    @ApiModelProperty("父属性key；对象/集合拆列时子字段为父key")
+    private String parentAttrKey;
+
+    @ApiModelProperty("父属性模型类型：2对象 3集合；子字段时有值")
+    private Integer parentAttrModelType;
+
+    @ApiModelProperty("展示层级，0为顶级，1为对象/集合子字段")
+    private Integer depth;
+
     @ApiModelProperty("是否可作为入参")
     private Integer whetherInputParams;
 
