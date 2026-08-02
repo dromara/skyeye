@@ -305,14 +305,20 @@ public class EquipmentInspectionOrderServiceImpl
             map.get("summary").toString());
         updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getPhotoUrls),
             map.get("photoUrls").toString());
-        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getLocationText),
-            map.get("locationText").toString());
+        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getProvinceId),
+            map.get("provinceId").toString());
+        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCityId),
+            map.get("cityId").toString());
+        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getAreaId),
+            map.get("areaId").toString());
+        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getTownshipId),
+            map.get("townshipId").toString());
+        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getAbsoluteAddress),
+            map.get("absoluteAddress").toString());
         updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getLongitude),
             map.get("longitude").toString());
         updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getLatitude),
             map.get("latitude").toString());
-        updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getAddress),
-            map.get("address").toString());
         updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getState),
             EquipmentInspectionOrderState.BE_AUDITED.getKey());
         update(updateWrapper);

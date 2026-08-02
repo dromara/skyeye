@@ -114,9 +114,41 @@ public class EquipmentInspectionOrder extends OperatorUserInfo {
     @ApiModelProperty(value = "拍照URL，多个逗号分隔")
     private String photoUrls;
 
-    @TableField(value = "location_text")
-    @ApiModelProperty(value = "定位文本")
-    private String locationText;
+    @TableField("province_id")
+    @ApiModelProperty(value = "省ID")
+    private String provinceId;
+
+    @TableField(exist = false)
+    @Property(value = "省信息")
+    private Map<String, Object> provinceMation;
+
+    @TableField("city_id")
+    @ApiModelProperty(value = "市ID")
+    private String cityId;
+
+    @TableField(exist = false)
+    @Property(value = "市信息")
+    private Map<String, Object> cityMation;
+
+    @TableField("area_id")
+    @ApiModelProperty(value = "区县ID")
+    private String areaId;
+
+    @TableField(exist = false)
+    @Property(value = "区/县信息")
+    private Map<String, Object> areaMation;
+
+    @TableField("township_id")
+    @ApiModelProperty(value = "乡镇ID")
+    private String townshipId;
+
+    @TableField(exist = false)
+    @Property(value = "乡镇信息")
+    private Map<String, Object> townshipMation;
+
+    @TableField("absolute_address")
+    @ApiModelProperty(value = "具体地址")
+    private String absoluteAddress;
 
     @TableField(value = "longitude")
     @ApiModelProperty(value = "经度")
@@ -125,10 +157,6 @@ public class EquipmentInspectionOrder extends OperatorUserInfo {
     @TableField(value = "latitude")
     @ApiModelProperty(value = "纬度")
     private String latitude;
-
-    @TableField(value = "address")
-    @ApiModelProperty(value = "定位地址")
-    private String address;
 
     @TableField(value = "plan_date")
     @ApiModelProperty(value = "计划所属日期 yyyy-MM-dd（可由计划开始时刻推导，便于按日统计）")
