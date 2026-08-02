@@ -114,10 +114,6 @@ public class EquipmentInspectionOrder extends OperatorUserInfo {
     @ApiModelProperty(value = "拍照URL，多个逗号分隔")
     private String photoUrls;
 
-    @TableField(value = "location_text")
-    @ApiModelProperty(value = "定位文本")
-    private String locationText;
-
     @TableField(value = "longitude")
     @ApiModelProperty(value = "经度")
     private String longitude;
@@ -126,9 +122,9 @@ public class EquipmentInspectionOrder extends OperatorUserInfo {
     @ApiModelProperty(value = "纬度")
     private String latitude;
 
-    @TableField(value = "address")
-    @ApiModelProperty(value = "定位地址")
-    private String address;
+    @TableField(value = "absolute_address")
+    @ApiModelProperty(value = "具体地址")
+    private String absoluteAddress;
 
     @TableField(value = "plan_date")
     @ApiModelProperty(value = "计划所属日期 yyyy-MM-dd（可由计划开始时刻推导，便于按日统计）")

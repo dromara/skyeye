@@ -97,10 +97,9 @@ public class EquipmentInspectionOrderController {
         @ApiImplicitParam(id = "inspectionTime", name = "inspectionTime", value = "巡检时间"),
         @ApiImplicitParam(id = "summary", name = "summary", value = "本次巡检总结"),
         @ApiImplicitParam(id = "photoUrls", name = "photoUrls", value = "拍照URL，逗号分隔"),
-        @ApiImplicitParam(id = "locationText", name = "locationText", value = "定位文本"),
         @ApiImplicitParam(id = "longitude", name = "longitude", value = "经度"),
         @ApiImplicitParam(id = "latitude", name = "latitude", value = "纬度"),
-        @ApiImplicitParam(id = "address", name = "address", value = "定位地址")})
+        @ApiImplicitParam(id = "absoluteAddress", name = "absoluteAddress", value = "具体地址")})
     @RequestMapping("/post/EquipmentInspectionOrderController/submitEquipmentInspectionResult")
     public void submitEquipmentInspectionResult(InputObject inputObject, OutputObject outputObject) {
         equipmentInspectionOrderService.submitEquipmentInspectionResult(inputObject, outputObject);
