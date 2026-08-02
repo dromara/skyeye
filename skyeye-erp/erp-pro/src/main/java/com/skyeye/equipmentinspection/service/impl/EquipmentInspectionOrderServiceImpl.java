@@ -216,12 +216,6 @@ public class EquipmentInspectionOrderServiceImpl
     }
 
     @Override
-    protected void writePostpose(EquipmentInspectionOrder entity, String userId) {
-        super.writePostpose(entity, userId);
-        sendDispatchWork(entity.getId(), userId);
-    }
-
-    @Override
     public void deletePreExecution(EquipmentInspectionOrder entity) {
         if (ObjectUtil.equal(entity.getState(), EquipmentInspectionOrderState.BE_DISPATCHED.getKey())
             || ObjectUtil.equal(entity.getState(), EquipmentInspectionOrderState.PENDING_ORDERS.getKey())) {
