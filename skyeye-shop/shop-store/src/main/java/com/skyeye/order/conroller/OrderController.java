@@ -97,7 +97,7 @@ public class OrderController {
      */
     @ApiOperation(id = "payOrder", value = "商品订单支付", method = "POST", allUse = "2")
     @ApiImplicitParams({
-        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),
+        @ApiImplicitParam(id = "id", name = "id", value = "主单id或子单id", required = "required"),
         @ApiImplicitParam(id = "channelCode", name = "channelCode", value = "支付渠道编码", required = "required"),
         @ApiImplicitParam(id = "returnUrl", name = "returnUrl", value = "支付完成跳转地址"),
         @ApiImplicitParam(id = "channelExtras", name = "channelExtras", value = "支付渠道的额外参数，例如说，微信公众号需要传递 openid 参数", required = "json")})
@@ -108,7 +108,7 @@ public class OrderController {
 
     @ApiOperation(id = "notifyOrderPaySuccess", value = "商城订单支付成功回调", method = "POST", allUse = "0")
     @ApiImplicitParams({
-        @ApiImplicitParam(id = "outTradeNo", name = "outTradeNo", value = "订单编号", required = "required"),
+        @ApiImplicitParam(id = "outTradeNo", name = "outTradeNo", value = "主单编号或子单编号", required = "required"),
         @ApiImplicitParam(id = "channelCode", name = "channelCode", value = "支付渠道编码"),
         @ApiImplicitParam(id = "successTime", name = "successTime", value = "支付成功时间")})
     @RequestMapping("/post/OrderController/notifyOrderPaySuccess")
