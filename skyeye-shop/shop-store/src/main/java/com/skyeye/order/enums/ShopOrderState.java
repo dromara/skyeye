@@ -24,7 +24,8 @@ public enum ShopOrderState implements SkyeyeEnumClass {
 
     UNPAID(1, "待支付", true, true),
     FAIRPAID(2, "支付失败", true, false),
-    PAY_SUCCESS(3, "支付成功", true, false);
+    PAY_SUCCESS(3, "支付成功", true, false),
+    PARTIAL_PAID(4, "部分支付", true, false);
 
     private Integer key;
 
