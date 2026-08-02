@@ -391,16 +391,15 @@ public class AttrDefinitionServiceImpl extends SkyeyeBusinessServiceImpl<AttrDef
         if (attrDefinition == null || StrUtil.isBlank(attrDefinition.getAttrType())) {
             return new ArrayList<>();
         }
-        ServiceBean service = serviceBeanService.getByEntityClassName(appId, attrDefinition.getAttrType());
-        if (service == null || StrUtil.isBlank(service.getClassName())) {
-            return new ArrayList<>();
-        }
-        List<AttrDefinition> attrDefinitionList = getAttrDefinitions(appId, service.getClassName());
-        if (CollectionUtil.isEmpty(attrDefinitionList)) {
-            return new ArrayList<>();
-        }
-        setCustomDefinition(appId, service.getClassName(), attrDefinitionList);
-        return attrDefinitionList;
+        // 复用批量逻辑，单条场景也走同一路径
+        fillChildAttrDefinitions(appId, CollectionUtil.newArrayList(attrDefinition));
+        return attrDefinition.getChildAttrDefinitions() == null
+            ? new ArrayList<>() : attrDefinition.getChildAttrDefinitions();
+    }
+
+    @Override
+    public void fillChildAttrDefinitions(String appId, List<AttrDefinition> attrDefinitionList) {
+        setChildAttrDefinitionsBatch(appId, attrDefinitionList);
     }
 
     /**

@@ -112,8 +112,8 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
                     if (keys.length == 0 || columnNames.length == 0 || keys.length != columnNames.length) {
                         throw new CustomException("导入导出异步任务列配置无效.");
                     }
-                    if (StrUtil.isNotBlank(collectionAttrKey)) {
-                        rows = ImportExportRowUtil.flattenByCollection(rows, collectionAttrKey);
+                    if (!collectionAttrKeys.isEmpty()) {
+                        rows = ImportExportRowUtil.flattenByCollections(rows, collectionAttrKeys);
                     }
                     ExcelUtil.SheetExportStyle exportStyle = parseExportStyle(map.get("exportStyleJson"));
                     ExcelUtil.createWorkBookToFile(title, "导出数据", rows, keys, columnNames, new String[0], outPath.toFile(), exportStyle);
@@ -128,7 +128,7 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
                 outPath = Paths.get(saveDir).resolve(excelFileName);
                 ExcelUtil.SheetExportStyle exportStyle = parseExportStyle(map.get("exportStyleJson"));
                 ExcelUtil.createSxssfExcelFromJsonArrayFile(jsonPath.toFile(), "导出数据", keys, columnNames,
-                    outPath.toFile(), SXSSF_ROW_ACCESS_WINDOW, exportStyle, collectionAttrKey);
+                    outPath.toFile(), SXSSF_ROW_ACCESS_WINDOW, exportStyle, collectionAttrKeys);
             }
             Files.deleteIfExists(jsonPath);
 

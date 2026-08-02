@@ -42,6 +42,11 @@ public interface AttrDefinitionService extends SkyeyeBusinessService<AttrDefinit
     List<AttrDefinition> queryChildAttrDefinitionList(String appId, String className, String attrKey);
 
     /**
+     * 批量为属性填充子属性到 {@link AttrDefinition#getChildAttrDefinitions()}，避免循环内逐条查库。
+     */
+    void fillChildAttrDefinitions(String appId, List<AttrDefinition> attrDefinitionList);
+
+    /**
      * 批量获取业务对象指定的属性信息
      *
      * @param className
