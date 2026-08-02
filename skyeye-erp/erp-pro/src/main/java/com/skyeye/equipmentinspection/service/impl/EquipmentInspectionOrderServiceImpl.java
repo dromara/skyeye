@@ -218,9 +218,7 @@ public class EquipmentInspectionOrderServiceImpl
     @Override
     protected void writePostpose(EquipmentInspectionOrder entity, String userId) {
         super.writePostpose(entity, userId);
-        if (!EquipmentInspectionOrderState.COMPLETED.getKey().equals(entity.getState())) {
-            sendDispatchWork(entity.getId(), userId);
-        }
+        sendDispatchWork(entity.getId(), userId);
     }
 
     @Override
