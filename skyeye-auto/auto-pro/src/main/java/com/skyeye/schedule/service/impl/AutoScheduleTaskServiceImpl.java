@@ -335,9 +335,9 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
 
     private List<String> queryCaseIdsByObjectId(String objectId, List<String> moduleIds) {
         QueryWrapper<AutoCase> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("object_id", objectId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoCase::getObjectId), objectId);
         if (CollectionUtil.isNotEmpty(moduleIds)) {
-            queryWrapper.in("module_id", moduleIds);
+            queryWrapper.in(MybatisPlusUtil.toColumns(AutoCase::getModuleId), moduleIds);
         }
         queryWrapper.select(CommonConstants.ID);
         return autoCaseService.list(queryWrapper).stream()
