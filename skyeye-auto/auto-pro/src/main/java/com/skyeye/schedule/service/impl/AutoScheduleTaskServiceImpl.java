@@ -9,6 +9,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeTeamAuthServiceImpl;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
@@ -338,7 +339,7 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
         if (CollectionUtil.isNotEmpty(moduleIds)) {
             queryWrapper.in(MybatisPlusUtil.toColumns(AutoCase::getModuleId), moduleIds);
         }
-        queryWrapper.select(MybatisPlusUtil.toColumns(AutoCase::getId));
+        queryWrapper.select(CommonConstants.ID);
         return autoCaseService.list(queryWrapper).stream()
             .map(AutoCase::getId)
             .collect(Collectors.toList());
