@@ -61,10 +61,22 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @ClassName: ImportExportConfigServiceImpl
- * @Description: 业务对象导入导出配置服务层
- * @author: skyeye云系列--卫志强
- * @date: 2026/4/8 22:10
+ * 业务对象导入导出配置服务。
+ * <p>
+ * 主流程：
+ * <ol>
+ *   <li>下载模板 {@link #downloadImportTemplate}：按配置列写出空 Excel（含隐藏 attrKey、两级表头、下拉）</li>
+ *   <li>导出 {@link #exportByConfig}：查数据 → 小数据同步写 Excel；大数据落 JSON 后发 MQ 异步转 Excel</li>
+ *   <li>导入 {@link #importByConfig}：读 Excel（按 attrKey 匹配列）→ 主从组装 → 批量入库</li>
+ * </ol>
+ * Sheet 模式：
+ * <ul>
+ *   <li>single：主表+明细同页；多集合并排列，按最大条数对齐行</li>
+ *   <li>multi：主表 Sheet + 各明细 Sheet，用「主表序号」{@code __rowNo} 关联</li>
+ * </ul>
+ *
+ * @author skyeye云系列--卫志强
+ * @date 2026/4/8 22:10
  */
 @Service
 @SkyeyeService(name = "导入导出配置", groupName = "系统公共模块", tenant = TenantEnum.WEAK_ISOLATION)
@@ -253,20 +265,33 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         option.setDefaultExportChecked(false);
     }
 
+    /**
+     * 下载导入模板（无数据行）。
+     * <pre>
+     * 1. 解析配置列 / 布局
+     * 2. 一次加载属性元数据（标题、下拉数据源）
+     * 3. 无配置列时回退默认导入字段
+     * 4. 写出 Excel（rows=null，只含表头/键行/下拉）
+     * </pre>
+     */
     @Override
     public void downloadImportTemplate(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
+        // ① 取导入类型配置
         ImportExportConfig config = resolveConfigForDownload(params, ImportExportConfigTypeEnum.IMPORT.getKey());
         if (config == null) {
             throw new CustomException("未找到导入导出配置，请先保存配置。");
         }
+        // ② 解析 configJson → 列定义 + 样式布局
         ParsedConfig parsed = ImportExportConfigJsonHelper.parseConfig(config.getConfigJson());
         List<ColumnSpec> specs = parsed.getItems();
         SheetLayoutOptions layout = parsed.getLayout();
         String appId = params.get("appId").toString();
         String className = params.get("className").toString();
+        // ③ 批量加载属性（避免后续下拉时 N+1）
         AttrMetaBundle attrMeta = loadAttrMetaBundle(appId, className);
         Map<String, String> titleMap = attrMeta.titleMap;
+        // ④ 未保存过列时用默认导入字段
         if (CollectionUtil.isEmpty(specs)) {
             specs = buildDefaultImportColumnSpecs(appId, className, titleMap);
             layout = new SheetLayoutOptions();
@@ -276,12 +301,22 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         if (CollectionUtil.isEmpty(specs)) {
             throw new CustomException("未配置导入列且无可用属性，无法生成模板。");
         }
+        // ⑤ 写出模板（无业务数据）
         writeExcelByParsedConfig(config.getName(), "导入模板", parsed, titleMap, appId, className, null, attrMeta.attrIndex);
     }
 
+    /**
+     * 按配置导出数据。
+     * <pre>
+     * 1. 解析配置列
+     * 2. 按筛选条件拉取导出数据
+     * 3. storageType=file → 异步 MQ（JSON→Excel）；否则同步写 Excel
+     * </pre>
+     */
     @Override
     public void exportByConfig(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
+        // ① 取导出类型配置
         ImportExportConfig config = resolveConfigForDownload(params, ImportExportConfigTypeEnum.EXPORT.getKey());
         if (config == null) {
             throw new CustomException("未找到导入导出配置，请先保存配置。");
@@ -290,6 +325,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         String className = params.get("className").toString();
         AttrMetaBundle attrMeta = loadAttrMetaBundle(appId, className);
         Map<String, String> titleMap = attrMeta.titleMap;
+        // ② 解析列配置，空则回退默认导出字段
         ParsedConfig parsed = ImportExportConfigJsonHelper.parseConfig(config.getConfigJson());
         List<ColumnSpec> specs = parsed.getItems();
         SheetLayoutOptions layout = parsed.getLayout();
@@ -302,12 +338,14 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         if (CollectionUtil.isEmpty(specs)) {
             throw new CustomException("未配置导出列且无可用属性，无法导出。");
         }
+        // ③ 查询导出数据（可能直返 rows，也可能落盘 JSON）
         Map<String, Object> filters = parseFilters(params.get("filters").toString());
         int limit = Integer.parseInt(params.get("limit").toString());
         CommonPageInfo pageInfo = buildExportCommonPageInfo(appId, className, filters, limit);
         ResultEntity result = iDataService.queryExportAllData(appId, className, pageInfo);
         List<String> collectionRoots = resolveCollectionRootsForSpecs(appId, className, specs);
         Map<String, Object> bean = result.getBean();
+        // ④ 大数据：发异步任务，前端去「我的输出」下载
         if (bean != null && "file".equals(String.valueOf(bean.get("storageType")))) {
             String filePath = String.valueOf(bean.get("filePath"));
             sendImportExportJsonToExcelJob(config, parsed, titleMap, filePath, collectionRoots, inputObject, attrMeta.attrIndex);
@@ -315,6 +353,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             outputObject.settotal(0);
             return;
         }
+        // ⑤ 小数据：当前请求直接写 Excel 到 response
         List<Map<String, Object>> rows = result.getRows();
         if (rows == null) {
             rows = CollectionUtil.newArrayList();
@@ -322,9 +361,20 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         writeExcelByParsedConfig(config.getName(), "导出数据", parsed, titleMap, appId, className, rows, attrMeta.attrIndex);
     }
 
+    /**
+     * 按配置导入 Excel。
+     * <pre>
+     * 1. 解析配置列、识别明细集合根
+     * 2. 按 sheetMode 读单 Sheet / 多 Sheet
+     * 3. 按隐藏 attrKey 行匹配列（无键行则按列序兼容旧模板）
+     * 4. 主从扁平行组装成业务对象列表
+     * 5. 批量入库
+     * </pre>
+     */
     @Override
     public void importByConfig(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
+        // ① 配置与列定义
         ImportExportConfig config = resolveConfigForDownload(params, ImportExportConfigTypeEnum.IMPORT.getKey());
         if (config == null) {
             throw new CustomException("未找到导入导出配置，请先保存配置。");
@@ -342,9 +392,11 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             throw new CustomException("未配置导入列且无可用属性，无法导入。");
         }
 
+        // ② 属性类型（点路径叶子）+ 明细集合根 + Sheet 模式
         Map<String, Integer> attrModelTypeMap = buildAttrModelTypeMap(appId, className);
         List<String> collectionRoots = resolveCollectionRootsForSpecs(appId, className, specs);
         boolean useMulti = shouldUseMultiSheet(parsed, collectionRoots);
+        // ③ 读 Excel → 扁平行 / 多 Sheet 行，再组装为主表+明细列表
         List<Map<String, Object>> dataRows;
         if (useMulti) {
             dataRows = importRowsFromMultiSheet(parsed, titleMap, collectionRoots, attrModelTypeMap);
@@ -358,6 +410,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             throw new CustomException("单次最多导入 2000 条主表数据，请拆分后重试.");
         }
 
+        // ④ 调用数据服务批量导入
         ResultEntity result = iDataService.importBatchData(appId, className, dataRows);
         Map<String, Object> bean = result.getBean() == null ? new LinkedHashMap<>() : new LinkedHashMap<>(result.getBean());
         bean.put("uploadNum", bean.getOrDefault("successNum", dataRows.size()));
@@ -389,37 +442,32 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         throw new CustomException("请上传 Excel 文件。");
     }
 
+    /**
+     * 单 Sheet 导入：
+     * <pre>
+     * 1. 读首个 Sheet（识别隐藏 attrKey 行 + 跳过 1/2 行可见表头）
+     * 2. 单元格按键（或列序）写入嵌套 Map
+     * 3. 有明细集合时：扁平行 → 主表+多集合列表
+     * </pre>
+     */
     private List<Map<String, Object>> importRowsFromSingleSheet(List<ColumnSpec> specs, List<String> collectionRoots,
                                                                 Map<String, Integer> attrModelTypeMap) {
-        List<List<String>> excelRows;
+        ExcelUtil.SheetReadResult sheetRead;
         try {
             String[] keys = specs.stream().map(ColumnSpec::getAttrKey).toArray(String[]::new);
+            // 点路径列 → 两级可见表头，跳过行数=2；否则=1（均不含隐藏键行）
             int headerRows = ExcelUtil.needTwoLevelHeader(keys) ? 2 : 1;
-            excelRows = ExcelUtil.readExcelContent(readUploadExcelFile().getInputStream(), headerRows);
+            sheetRead = ExcelUtil.readFirstSheetForImport(readUploadExcelFile().getInputStream(), headerRows,
+                java.util.Arrays.asList(keys));
         } catch (IOException e) {
             throw new CustomException(e);
         }
-        if (CollectionUtil.isEmpty(excelRows)) {
-            return new ArrayList<>();
-        }
-        List<Map<String, Object>> dataRows = new ArrayList<>();
-        for (List<String> excelRow : excelRows) {
-            if (isBlankExcelRow(excelRow)) {
-                continue;
-            }
-            Map<String, Object> row = new LinkedHashMap<>();
-            for (int col = 0; col < specs.size(); col++) {
-                ColumnSpec spec = specs.get(col);
-                String cell = col < excelRow.size() ? excelRow.get(col) : StrUtil.EMPTY;
-                putImportCellValue(row, spec.getAttrKey(), cell, attrModelTypeMap.get(spec.getAttrKey()));
-            }
-            if (!row.isEmpty()) {
-                dataRows.add(row);
-            }
-        }
+        // 扁平行：每行 Map 已含 collection.xxx 嵌套
+        List<Map<String, Object>> dataRows = parseSheetRowsByKeys(sheetRead, specs, attrModelTypeMap, false);
         if (dataRows.size() > 2000) {
             throw new CustomException("单次最多导入 2000 行（含明细行），请拆分后重试.");
         }
+        // 主表列非空开新单；各集合有值则追加
         if (CollectionUtil.isNotEmpty(collectionRoots)) {
             List<String> masterKeys = specs.stream()
                 .map(ColumnSpec::getAttrKey)
@@ -434,34 +482,72 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         return dataRows;
     }
 
+    /**
+     * 多 Sheet 导入：
+     * <pre>
+     * 1. 按 Sheet 名准备期望 attrKey（含 __rowNo）
+     * 2. 读全部 Sheet
+     * 3. 主表 / 各明细页分别解析
+     * 4. 按主表序号挂回明细列表
+     * </pre>
+     */
     private List<Map<String, Object>> importRowsFromMultiSheet(ParsedConfig parsed, Map<String, String> titleMap,
                                                                List<String> collectionRoots,
                                                                Map<String, Integer> attrModelTypeMap) {
-        Map<String, List<List<String>>> allSheets;
+        // ① 主表列 + 各明细 Sheet 名/列（与导出时命名规则一致）
+        List<ColumnSpec> masterSpecs = filterMasterSpecs(parsed.getItems(), collectionRoots);
+        Map<String, List<String>> expectedKeysBySheet = new LinkedHashMap<>();
+        List<String> masterKeys = new ArrayList<>();
+        masterKeys.add(ImportExportConfigJsonHelper.LINK_ATTR_KEY);
+        for (ColumnSpec spec : masterSpecs) {
+            if (StrUtil.isNotBlank(spec.getAttrKey())) {
+                masterKeys.add(spec.getAttrKey());
+            }
+        }
+        expectedKeysBySheet.put(ImportExportConfigJsonHelper.MAIN_SHEET_NAME, masterKeys);
+        Set<String> usedSheetNames = new HashSet<>();
+        usedSheetNames.add(ImportExportConfigJsonHelper.MAIN_SHEET_NAME);
+        Map<String, String> detailSheetNameByRoot = new LinkedHashMap<>();
+        Map<String, List<ColumnSpec>> detailSpecsByRoot = new LinkedHashMap<>();
+        for (String collectionRoot : collectionRoots) {
+            String detailSheetName = resolveDetailSheetName(collectionRoot, titleMap, usedSheetNames);
+            detailSheetNameByRoot.put(collectionRoot, detailSheetName);
+            List<ColumnSpec> detailSpecs = filterDetailSpecs(parsed.getItems(), collectionRoot);
+            detailSpecsByRoot.put(collectionRoot, detailSpecs);
+            List<String> detailKeys = new ArrayList<>();
+            detailKeys.add(ImportExportConfigJsonHelper.LINK_ATTR_KEY);
+            for (ColumnSpec spec : detailSpecs) {
+                if (StrUtil.isNotBlank(spec.getAttrKey())) {
+                    detailKeys.add(spec.getAttrKey());
+                }
+            }
+            expectedKeysBySheet.put(detailSheetName, detailKeys);
+        }
+        // ② 读全部 Sheet（每页识别隐藏键行）
+        Map<String, ExcelUtil.SheetReadResult> allSheets;
         try {
-            allSheets = ExcelUtil.readExcelAllSheets(readUploadExcelFile().getInputStream());
+            allSheets = ExcelUtil.readAllSheetsForImport(readUploadExcelFile().getInputStream(), 1, expectedKeysBySheet);
         } catch (IOException e) {
             throw new CustomException(e);
         }
-        List<List<String>> masterExcel = allSheets.get(ImportExportConfigJsonHelper.MAIN_SHEET_NAME);
+        // ③ 解析主表
+        ExcelUtil.SheetReadResult masterExcel = allSheets.get(ImportExportConfigJsonHelper.MAIN_SHEET_NAME);
         if (masterExcel == null) {
             throw new CustomException("多 Sheet 导入缺少「" + ImportExportConfigJsonHelper.MAIN_SHEET_NAME + "」页。");
         }
-        List<ColumnSpec> masterSpecs = filterMasterSpecs(parsed.getItems(), collectionRoots);
-        List<Map<String, Object>> masterRows = parseSheetRowsWithLink(masterExcel, masterSpecs, attrModelTypeMap);
+        List<Map<String, Object>> masterRows = parseSheetRowsByKeys(masterExcel, masterSpecs, attrModelTypeMap, true);
+        // ④ 解析各明细页
         Map<String, List<Map<String, Object>>> detailRowsByCollection = new LinkedHashMap<>();
-        Set<String> usedSheetNames = new HashSet<>();
-        usedSheetNames.add(ImportExportConfigJsonHelper.MAIN_SHEET_NAME);
         for (String collectionRoot : collectionRoots) {
-            String detailSheetName = resolveDetailSheetName(collectionRoot, titleMap, usedSheetNames);
-            List<List<String>> detailExcel = allSheets.get(detailSheetName);
+            String detailSheetName = detailSheetNameByRoot.get(collectionRoot);
+            ExcelUtil.SheetReadResult detailExcel = allSheets.get(detailSheetName);
             if (detailExcel == null) {
                 throw new CustomException("多 Sheet 导入缺少明细页「" + detailSheetName + "」。");
             }
-            List<ColumnSpec> detailSpecs = filterDetailSpecs(parsed.getItems(), collectionRoot);
             detailRowsByCollection.put(collectionRoot,
-                parseSheetRowsWithLink(detailExcel, detailSpecs, attrModelTypeMap));
+                parseSheetRowsByKeys(detailExcel, detailSpecsByRoot.get(collectionRoot), attrModelTypeMap, true));
         }
+        // ⑤ 按 __rowNo 把明细挂回主表
         try {
             return ImportExportRowUtil.assembleFromMultiSheets(masterRows, detailRowsByCollection, collectionRoots);
         } catch (IllegalArgumentException ex) {
@@ -469,26 +555,48 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         }
     }
 
-    private List<Map<String, Object>> parseSheetRowsWithLink(List<List<String>> excelRows, List<ColumnSpec> specs,
-                                                             Map<String, Integer> attrModelTypeMap) {
+    /**
+     * 把 Excel 数据行转成业务 Map。
+     * <ul>
+     *   <li>有 attrKey 行：按键定位列（用户调换列顺序不影响）</li>
+     *   <li>无键行（旧模板）：按配置列序；多 Sheet 时第 0 列是主表序号</li>
+     * </ul>
+     */
+    private List<Map<String, Object>> parseSheetRowsByKeys(ExcelUtil.SheetReadResult sheetRead, List<ColumnSpec> specs,
+                                                           Map<String, Integer> attrModelTypeMap, boolean withLink) {
         List<Map<String, Object>> rows = new ArrayList<>();
-        if (CollectionUtil.isEmpty(excelRows)) {
+        if (sheetRead == null || CollectionUtil.isEmpty(sheetRead.dataRows)) {
             return rows;
         }
-        // 列顺序：主表序号 + 配置列
-        for (List<String> excelRow : excelRows) {
+        // attrKey → 列下标
+        Map<String, Integer> colByKey = null;
+        if (sheetRead.hasAttrKeys()) {
+            colByKey = new HashMap<>();
+            for (int i = 0; i < sheetRead.attrKeys.length; i++) {
+                String key = sheetRead.attrKeys[i];
+                if (StrUtil.isNotBlank(key) && !colByKey.containsKey(key)) {
+                    colByKey.put(key.trim(), i);
+                }
+            }
+        }
+        for (List<String> excelRow : sheetRead.dataRows) {
             if (isBlankExcelRow(excelRow)) {
                 continue;
             }
             Map<String, Object> row = new LinkedHashMap<>();
-            String link = excelRow.isEmpty() ? StrUtil.EMPTY : excelRow.get(0);
-            if (StrUtil.isNotBlank(link)) {
-                row.put(ImportExportConfigJsonHelper.LINK_ATTR_KEY, link.trim());
+            // 多 Sheet：写入关联键 __rowNo
+            if (withLink) {
+                String link = resolveImportCell(excelRow, colByKey, ImportExportConfigJsonHelper.LINK_ATTR_KEY, 0);
+                if (StrUtil.isNotBlank(link)) {
+                    row.put(ImportExportConfigJsonHelper.LINK_ATTR_KEY, link.trim());
+                }
             }
+            // 配置列：点路径写入嵌套 Map（如 purchaseChild.materialId）
             for (int i = 0; i < specs.size(); i++) {
-                int col = i + 1;
                 ColumnSpec spec = specs.get(i);
-                String cell = col < excelRow.size() ? excelRow.get(col) : StrUtil.EMPTY;
+                // 旧模板无键行时：多 Sheet 数据列从第 1 列开始（0 是序号）
+                int fallbackCol = withLink ? i + 1 : i;
+                String cell = resolveImportCell(excelRow, colByKey, spec.getAttrKey(), fallbackCol);
                 putImportCellValue(row, spec.getAttrKey(), cell, attrModelTypeMap.get(spec.getAttrKey()));
             }
             if (!row.isEmpty()) {
@@ -496,6 +604,21 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             }
         }
         return rows;
+    }
+
+    /** 优先按 attrKey 取列；无键映射时用 fallbackCol（列序兼容）。 */
+    private String resolveImportCell(List<String> excelRow, Map<String, Integer> colByKey, String attrKey, int fallbackCol) {
+        if (excelRow == null) {
+            return StrUtil.EMPTY;
+        }
+        int col = fallbackCol;
+        if (colByKey != null && StrUtil.isNotBlank(attrKey) && colByKey.containsKey(attrKey)) {
+            col = colByKey.get(attrKey);
+        }
+        if (col < 0 || col >= excelRow.size()) {
+            return StrUtil.EMPTY;
+        }
+        return excelRow.get(col) == null ? StrUtil.EMPTY : excelRow.get(col);
     }
 
     private boolean isBlankExcelRow(List<String> excelRow) {
@@ -538,7 +661,12 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
     }
 
     /**
-     * 写入导入单元格：对象/集合字段若为 JSON 则反序列化；attrKey 含点号时按嵌套路径写入。
+     * 写入导入单元格。
+     * <pre>
+     * 1. 空单元格 → 不写（避免空串污染）
+     * 2. 对象/集合整列 JSON → 反序列化
+     * 3. 无点号 → 顶层 put；有点号 → 逐级创建嵌套 Map 后写叶子
+     * </pre>
      */
     @SuppressWarnings("unchecked")
     private void putImportCellValue(Map<String, Object> row, String attrKey, String cell, Integer attrModelType) {
@@ -549,6 +677,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         if (StrUtil.isBlank(cell)) {
             value = null;
         } else if (AttrModelType.OBJECT.getKey().equals(attrModelType) || AttrModelType.COLLECTION.getKey().equals(attrModelType)) {
+            // 整列存 JSON 字符串时解析
             String trimmed = cell.trim();
             if (JSONUtil.isTypeJSON(trimmed)) {
                 if (trimmed.startsWith("[")) {
@@ -558,12 +687,14 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
                 }
             }
         }
+        // 简单字段
         if (!attrKey.contains(".")) {
             if (value != null) {
                 row.put(attrKey, value);
             }
             return;
         }
+        // 点路径：a.b.c → row.a.b.c
         String[] parts = attrKey.split("\\.");
         Map<String, Object> cursor = row;
         for (int i = 0; i < parts.length - 1; i++) {
@@ -592,6 +723,10 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         return tip;
     }
 
+    /**
+     * 大数据异步导出：把「列配置 + 样式 + JSON 文件路径」打成 MQ 任务，
+     * 由 {@code ImportExportJsonToExcelConsume} 消费后生成 Excel。
+     */
     private void sendImportExportJsonToExcelJob(ImportExportConfig config, ParsedConfig parsed, Map<String, String> titleMap,
                                                 String filePath, List<String> collectionRoots, InputObject inputObject,
                                                 Map<String, AttrDefinition> attrIndex) {
@@ -599,6 +734,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         SheetLayoutOptions layout = parsed.getLayout();
         String userId = inputObject.getLogParams().get("id").toString();
         String safeName = StrUtil.blankToDefault(config.getName(), "导入导出");
+        // ① 任务公共参数
         Map<String, Object> json = new HashMap<>();
         json.put("title", safeName + "导出");
         json.put("type", MqConstants.JobMateMationJobType.IMPORT_EXPORT_JSON_TO_EXCEL.getJobType());
@@ -676,17 +812,21 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         return ImportExportRowUtil.resolveCollectionRoots(attrKeys, collectionKeys);
     }
 
+    /** 是否走多 Sheet：无明细集合时一律单页；否则看配置 sheetMode。 */
     private boolean shouldUseMultiSheet(ParsedConfig parsed, List<String> collectionRoots) {
         if (CollectionUtil.isEmpty(collectionRoots)) {
             return false;
         }
-        // 尊重配置的 sheetMode：单 Sheet 支持多个明细集合并排列
         return ImportExportConfigJsonHelper.isMultiSheet(parsed);
     }
 
+    /**
+     * 组装导出样式：列宽、表头色、行高；并开启隐藏 attrKey 行（导入按键匹配）。
+     */
     private ExcelUtil.SheetExportStyle buildSheetExportStyle(List<ColumnSpec> specs, SheetLayoutOptions layout) {
         int n = specs.size();
         ExcelUtil.SheetExportStyle s = new ExcelUtil.SheetExportStyle();
+        s.writeAttrKeyRow = true;
         s.columnWidths = new int[n];
         s.headerBackgroundColors = new String[n];
         s.headerFontColors = new String[n];
@@ -716,7 +856,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
     }
 
     /**
-     * 单 Sheet 父子点路径列：写入一级父标题（连续同父横向合并），供 ExcelUtil 生成两级表头。
+     * 单 Sheet 两级表头：为连续同父列写入一级父标题名与组颜色，供 ExcelUtil 横向合并。
      */
     private void applyHeaderGroupNames(String[] keys, String[] columnNames, ExcelUtil.SheetExportStyle style,
                                        Map<String, String> titleMap, SheetLayoutOptions layout) {
@@ -1107,39 +1247,57 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         return list;
     }
 
+    /**
+     * 按配置写出 Excel（模板或导出数据）。
+     * <pre>
+     * multi  → 主表 Sheet + 各明细 Sheet
+     * single → 明细并排展开后写单 Sheet（含隐藏 attrKey、两级表头、下拉、白边框）
+     * </pre>
+     */
     private void writeExcelByParsedConfig(String configName, String fileSuffix, ParsedConfig parsed,
                                           Map<String, String> titleMap, String appId, String className,
                                           List<Map<String, Object>> rows, Map<String, AttrDefinition> attrIndex) {
         List<ColumnSpec> specs = parsed.getItems();
         SheetLayoutOptions layout = parsed.getLayout();
+        // ① 从列 attrKey 识别勾选了哪些明细集合
         List<String> collectionRoots = resolveCollectionRootsForSpecs(appId, className, specs);
         String safeName = StrUtil.blankToDefault(configName, "导入导出") + fileSuffix;
         Map<String, AttrDefinition> index = attrIndex != null ? attrIndex
             : loadAttrMetaBundle(appId, className).attrIndex;
         Map<String, String[]> enumLabelCache = new HashMap<>();
+        // ② 多 Sheet
         if (shouldUseMultiSheet(parsed, collectionRoots)) {
             writeMultiSheetExcel(safeName, specs, titleMap, layout, rows, collectionRoots, index, enumLabelCache);
             return;
         }
-        // 单 Sheet：0～N 个明细集合并排列（按各集合最大条数对齐行）
+        // ③ 单 Sheet：多集合按最大条数并排展开（模板 rows=null 跳过）
         List<Map<String, Object>> outRows = rows;
         if (outRows != null && CollectionUtil.isNotEmpty(collectionRoots)) {
             outRows = ImportExportRowUtil.flattenByCollections(outRows, collectionRoots);
         }
+        // ④ 列键 / 显示标题
         String[] keys = new String[specs.size()];
         String[] columnNames = new String[specs.size()];
         for (int i = 0; i < specs.size(); i++) {
             keys[i] = specs.get(i).getAttrKey();
             columnNames[i] = resolveColumnTitle(specs.get(i), titleMap);
         }
+        // ⑤ 样式：隐藏键行 + 一级组标题 + 下拉 + 白边框（在 ExcelUtil 内）
         ExcelUtil.SheetExportStyle exportStyle = buildSheetExportStyle(specs, layout);
         applyHeaderGroupNames(keys, columnNames, exportStyle, titleMap, layout);
-        // 导入模板 / 导出均按数据来源加下拉，便于选择枚举、字典等
         applyColumnDropdownOptions(exportStyle, keys, index, enumLabelCache);
         ExcelUtil.createWorkBook(safeName, fileSuffix, outRows, keys, columnNames, new String[0],
             PutObject.getResponse(), exportStyle);
     }
 
+    /**
+     * 多 Sheet 写出：
+     * <pre>
+     * 1. 校验至少有主表列 + 明细列
+     * 2. 拆成主表行 / 各集合明细行（写入 __rowNo）
+     * 3. 组装 sheetDefs 后一次性写 Workbook
+     * </pre>
+     */
     private void writeMultiSheetExcel(String fileName, List<ColumnSpec> specs, Map<String, String> titleMap,
                                       SheetLayoutOptions layout, List<Map<String, Object>> rows,
                                       List<String> collectionRoots, Map<String, AttrDefinition> attrIndex,
@@ -1158,16 +1316,19 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         if (!hasAnyDetail) {
             throw new CustomException("多 Sheet 模式至少需要勾选一个明细字段。");
         }
+        // 拆分主从行（模板时 rows=null，只出空结构）
         ImportExportRowUtil.MultiSheetRows split = rows == null
             ? ImportExportRowUtil.splitToMultiSheets(null, collectionRoots)
             : ImportExportRowUtil.splitToMultiSheets(rows, collectionRoots);
         List<Map<String, Object>> sheetDefs = new ArrayList<>();
+        // 主表页：首列主表序号
         String[] masterKeys = buildKeysWithLink(masterSpecs);
         ExcelUtil.SheetExportStyle masterStyle = buildSheetExportStyleWithLink(masterSpecs, layout);
         applyColumnDropdownOptions(masterStyle, masterKeys, attrIndex, enumLabelCache);
         sheetDefs.add(buildSheetDef(ImportExportConfigJsonHelper.MAIN_SHEET_NAME,
             masterKeys, buildNamesWithLink(masterSpecs, titleMap),
             split.getMasterRows(), masterStyle));
+        // 每个明细集合一页
         Set<String> usedSheetNames = new HashSet<>();
         usedSheetNames.add(ImportExportConfigJsonHelper.MAIN_SHEET_NAME);
         for (String collectionRoot : collectionRoots) {

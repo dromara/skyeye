@@ -58,24 +58,36 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
     @Value("${skyeye.tenant.enable}")
     private boolean tenantEnable;
 
+    /**
+     * 异步导出消费：JSON 数据文件 → Excel。
+     * <pre>
+     * 1. 标记任务处理中，解析租户 / JSON 路径 / Sheet 模式
+     * 2. 多 Sheet 或小文件：整包读入内存后写 .xls
+     * 3. 单 Sheet 大文件：SXSSF 流式读 JSON 写 .xlsx（边展开明细边写）
+     * 4. 删掉临时 JSON，回写访问路径并标记成功/失败
+     * </pre>
+     */
     @Override
     public void onMessage(String data) {
         Map<String, Object> map = JSONUtil.toBean(data, null);
         String jobId = map.get("jobMateId").toString();
         Map<String, Object> mation = new HashMap<>();
         try {
+            // ① 租户上下文 + 任务状态
             String tenantId = map.getOrDefault("tenantId", StrUtil.EMPTY).toString();
             if (tenantEnable) {
                 TenantContext.setTenantId(tenantId);
             }
             jobMateMationService.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_PROCESSING, StrUtil.EMPTY);
 
+            // ② 定位数据服务落盘的 JSON
             String visitJsonPath = map.get("filePath").toString();
             Path jsonPath = resolveAbsolutePathFromVisitFilePath(visitJsonPath);
             if (!Files.isRegularFile(jsonPath)) {
                 throw new CustomException("导出 JSON 文件不存在: " + jsonPath);
             }
 
+            // ③ 解析 Sheet 模式与明细集合键
             String sheetMode = map.get("sheetMode") == null ? "single" : String.valueOf(map.get("sheetMode"));
             List<String> collectionAttrKeys = toStringList(map.get("collectionAttrKeys"));
             String collectionAttrKey = map.get("collectionAttrKey") == null ? null : String.valueOf(map.get("collectionAttrKey"));
@@ -95,6 +107,7 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
             Path outPath;
             boolean multi = "multi".equalsIgnoreCase(sheetMode) && !collectionAttrKeys.isEmpty();
             if (multi || jsonBytes <= MAX_JSON_FILE_BYTES_BUFFERED) {
+                // ④a 内存写出：多 Sheet 或小 JSON → .xls
                 String jsonContent = new String(Files.readAllBytes(jsonPath), StandardCharsets.UTF_8);
                 JSONArray arr = JSONUtil.parseArray(jsonContent);
                 List<Map<String, Object>> rows = new ArrayList<>();
@@ -112,6 +125,7 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
                     if (keys.length == 0 || columnNames.length == 0 || keys.length != columnNames.length) {
                         throw new CustomException("导入导出异步任务列配置无效.");
                     }
+                    // 单 Sheet 多集合并排展开
                     if (!collectionAttrKeys.isEmpty()) {
                         rows = ImportExportRowUtil.flattenByCollections(rows, collectionAttrKeys);
                     }
@@ -119,6 +133,7 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
                     ExcelUtil.createWorkBookToFile(title, "导出数据", rows, keys, columnNames, new String[0], outPath.toFile(), exportStyle);
                 }
             } else {
+                // ④b 流式写出：超大单 Sheet → SXSSF .xlsx
                 String[] keys = toStringArray(map.get("keys"));
                 String[] columnNames = toStringArray(map.get("columnNames"));
                 if (keys.length == 0 || columnNames.length == 0 || keys.length != columnNames.length) {
@@ -130,6 +145,7 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
                 ExcelUtil.createSxssfExcelFromJsonArrayFile(jsonPath.toFile(), "导出数据", keys, columnNames,
                     outPath.toFile(), SXSSF_ROW_ACCESS_WINDOW, exportStyle, collectionAttrKeys);
             }
+            // ⑤ 清理 JSON，回传 Excel 访问路径
             Files.deleteIfExists(jsonPath);
 
             String visitExcel = FileConstants.FileUploadPath.getVisitPath(exportType) + excelFileName;
@@ -255,6 +271,9 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
                         s.columnDropdownOptions[i] = opts;
                     }
                 }
+            }
+            if (o.containsKey("writeAttrKeyRow")) {
+                s.writeAttrKeyRow = o.getBool("writeAttrKeyRow", false);
             }
             return s;
         } catch (Exception e) {
