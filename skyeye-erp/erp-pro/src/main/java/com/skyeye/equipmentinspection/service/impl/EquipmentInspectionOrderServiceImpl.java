@@ -15,12 +15,14 @@ import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonConstants;
+import com.skyeye.common.constans.MqConstants;
 import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import cn.hutool.json.JSONUtil;
 import com.skyeye.equipment.classenum.EquipmentState;
 import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionAssignType;
@@ -33,7 +35,9 @@ import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderEvaluateSe
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionPlanService;
 import com.skyeye.equipmentinspection.support.EquipmentInspectionOrderQuerySupport;
+import com.skyeye.eve.rest.mq.JobMateMation;
 import com.skyeye.eve.rest.quartz.SysQuartzMation;
+import com.skyeye.eve.service.IJobMateMationService;
 import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.repair.classenum.EquipmentRepairFromType;
@@ -47,6 +51,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,6 +85,9 @@ public class EquipmentInspectionOrderServiceImpl
 
     @Autowired
     private IQuartzService iQuartzService;
+
+    @Autowired
+    private IJobMateMationService iJobMateMationService;
 
     /** 完工后多少天无人评价则系统自动好评 */
     private static final int AUTO_EVALUATE_DELAY_DAYS = 30;
@@ -239,8 +247,20 @@ public class EquipmentInspectionOrderServiceImpl
         updateWrapper.set(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getAssignType),
             StrUtil.isEmpty(assignType) ? EquipmentInspectionAssignType.MANUAL.getKey() : assignType);
         update(updateWrapper);
+        // 派工成功 mq 消息任务
+        sendDispatchWork(id, order.getCreateId());
         refreshCache(id);
         outputObject.setBean(selectById(id));
+    }
+
+    private void sendDispatchWork(String id, String userId) {
+        Map<String, Object> notice = new HashMap<>();
+        notice.put("serviceId", id);
+        notice.put("type", MqConstants.JobMateMationJobType.EQUIPMENT_INSPECTION_DISPATCH.getJobType());
+        JobMateMation jobMateMation = new JobMateMation();
+        jobMateMation.setJsonStr(JSONUtil.toJsonStr(notice));
+        jobMateMation.setUserId(userId);
+        iJobMateMationService.sendMQProducer(jobMateMation);
     }
 
     @Override
