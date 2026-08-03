@@ -15,8 +15,6 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.enumeration.ScheduleFrequency;
 import com.skyeye.common.enumeration.TenantEnum;
-import com.skyeye.common.object.InputObject;
-import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.QuartzCronUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
@@ -99,7 +97,7 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
     @Override
     public List<String> getAuthPermissionKeyList() {
         return Arrays.asList(AutoScheduleAuthEnum.ADD.getKey(), AutoScheduleAuthEnum.EDIT.getKey(),
-            AutoScheduleAuthEnum.DELETE.getKey(), AutoScheduleAuthEnum.EXECUTE.getKey());
+            AutoScheduleAuthEnum.DELETE.getKey());
     }
 
     @Override
@@ -200,12 +198,6 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
             task.setCaseMationList(autoCaseService.selectByIds(task.getCaseIdList().toArray(new String[]{})));
         }
         return task;
-    }
-
-    @Override
-    public void executeScheduleTask(InputObject inputObject, OutputObject outputObject) {
-        String id = inputObject.getParams().get("id").toString();
-        executeScheduleTask(id);
     }
 
     @Override
