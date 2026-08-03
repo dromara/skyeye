@@ -19,8 +19,7 @@ public enum AutoScheduleAuthEnum implements SkyeyeEnumClass {
 
     ADD("add", "新增", true, false),
     EDIT("edit", "编辑", true, false),
-    DELETE("delete", "删除", true, false),
-    EXECUTE("execute", "执行", true, false);
+    DELETE("delete", "删除", true, false);
 
     private String key;
 
