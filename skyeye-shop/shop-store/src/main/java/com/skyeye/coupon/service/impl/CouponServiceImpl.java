@@ -132,21 +132,10 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             throw new CustomException("优惠券总使用次数不能为零");
         }
     }
-
+ 
     @Override
     public void createPrepose(Coupon entity) {
         entity.setTakeCount(CommonNumConstants.NUM_ZERO);
-    }
-
-    @Override
-    public void createPostpose(Coupon entity, String userId) {
-        if (StrUtil.isNotEmpty(entity.getTemplateId())) {// 优惠券
-            if (Objects.equals(entity.getValidityType(), CouponValidityType.DATE.getKey())) {
-                log.info("优惠券id" + entity.getId() + "创建定时任务-- 开始");
-                startUpTaskQuartz(entity.getId(), entity.getName(), entity.getValidEndTime());
-                log.info("优惠券id" + entity.getId() + "创建定时任务-- 结束");
-            }
-        }
     }
 
     private void startUpTaskQuartz(String name, String title, String delayedTime) {
@@ -194,6 +183,17 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         } else if (coupon.getStoreCoverage() == CouponStoreCoverage.ALL_STORE.getKey()) {
             // 全部门店
             couponStoreService.deleteByCouponIds(Collections.singletonList(coupon.getId()));
+        }
+        // 优惠券：先删调度任务再按固定日期重建，避免编辑后任务未更新导致过期仍可用
+        if (StrUtil.isNotEmpty(coupon.getTemplateId())) {
+            log.info("优惠券id" + coupon.getId() + "删除定时任务-- 开始");
+            iQuartzService.stopAndDeleteTaskQuartz(coupon.getId());
+            log.info("优惠券id" + coupon.getId() + "删除定时任务-- 结束");
+            if (Objects.equals(coupon.getValidityType(), CouponValidityType.DATE.getKey())) {
+                log.info("优惠券id" + coupon.getId() + "创建定时任务-- 开始");
+                startUpTaskQuartz(coupon.getId(), coupon.getName(), coupon.getValidEndTime());
+                log.info("优惠券id" + coupon.getId() + "创建定时任务-- 结束");
+            }
         }
     }
 
