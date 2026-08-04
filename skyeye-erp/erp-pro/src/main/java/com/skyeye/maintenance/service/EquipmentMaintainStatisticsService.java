@@ -36,4 +36,9 @@ public interface EquipmentMaintainStatisticsService {
      * 保养单按执行人统计
      */
     void queryMaintainOrderStatsByExecutor(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 保养单按保养结果统计（已完成 / 未完成）
+     */
+    void queryMaintainOrderStatsByResult(InputObject inputObject, OutputObject outputObject);
 }
