@@ -50,4 +50,11 @@ public class EquipmentRepairStatisticsController {
     public void queryRepairOrderStatsByUrgency(InputObject inputObject, OutputObject outputObject) {
         equipmentRepairStatisticsService.queryRepairOrderStatsByUrgency(inputObject, outputObject);
     }
+
+    @ApiOperation(id = "queryRepairOrderStatsByServiceUser", value = "报修维修统计-按维修负责人划分", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @RequestMapping("/post/EquipmentRepairStatisticsController/queryRepairOrderStatsByServiceUser")
+    public void queryRepairOrderStatsByServiceUser(InputObject inputObject, OutputObject outputObject) {
+        equipmentRepairStatisticsService.queryRepairOrderStatsByServiceUser(inputObject, outputObject);
+    }
 }
