@@ -4,9 +4,11 @@
 
 package com.skyeye.equipmentcheck.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.TableSelectInfo;
+import com.skyeye.common.enumeration.FlowableStateEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
@@ -16,6 +18,7 @@ import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipmentcheck.classenum.EquipmentCheckResult;
 import com.skyeye.equipmentcheck.dao.EquipmentCheckOrderDao;
 import com.skyeye.equipmentcheck.entity.EquipmentCheckOrder;
+import com.skyeye.equipmentcheck.service.EquipmentCheckOrderService;
 import com.skyeye.equipmentcheck.service.EquipmentCheckStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName: EquipmentCheckStatisticsServiceImpl
@@ -35,8 +39,20 @@ public class EquipmentCheckStatisticsServiceImpl implements EquipmentCheckStatis
 
     private static final int DEFAULT_STAT_DAYS = 7;
 
+    private static final FlowableStateEnum[] STATE_ORDER = {
+        FlowableStateEnum.DRAFT,
+        FlowableStateEnum.IN_EXAMINE,
+        FlowableStateEnum.PASS,
+        FlowableStateEnum.REJECT,
+        FlowableStateEnum.INVALID,
+        FlowableStateEnum.REVOKE
+    };
+
     @Autowired
     private EquipmentCheckOrderDao equipmentCheckOrderDao;
+
+    @Autowired
+    private EquipmentCheckOrderService equipmentCheckOrderService;
 
     @Override
     public void queryTodayCheckedTotal(InputObject inputObject, OutputObject outputObject) {
@@ -62,6 +78,34 @@ public class EquipmentCheckStatisticsServiceImpl implements EquipmentCheckStatis
     @Override
     public void queryAbnormalCheckStatsByCheckTime(InputObject inputObject, OutputObject outputObject) {
         outputCheckDayTrend(inputObject, outputObject, EquipmentCheckResult.ABNORMAL.getKey());
+    }
+
+    @Override
+    public void queryCheckOrderStateStats(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        QueryWrapper<EquipmentCheckOrder> queryWrapper = buildTimeRangeWrapper(
+            tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+
+        List<EquipmentCheckOrder> list = equipmentCheckOrderService.list(queryWrapper);
+        long total = list.size();
+        Map<String, Long> stateCountMap = list.stream()
+            .filter(o -> StrUtil.isNotEmpty(o.getState()))
+            .collect(Collectors.groupingBy(EquipmentCheckOrder::getState, Collectors.counting()));
+
+        List<String> xAxisData = new ArrayList<>();
+        List<Long> seriesData = new ArrayList<>();
+        for (FlowableStateEnum state : STATE_ORDER) {
+            xAxisData.add(state.getValue());
+            seriesData.add(stateCountMap.getOrDefault(state.getKey(), 0L));
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("total", total);
+        result.put("xAxisData", xAxisData);
+        result.put("seriesData", seriesData);
+
+        outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
     private Long countTodayOrders(Integer checkResult) {
@@ -122,6 +166,17 @@ public class EquipmentCheckStatisticsServiceImpl implements EquipmentCheckStatis
         result.put("seriesData", seriesData);
         outputObject.setBean(result);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    private QueryWrapper<EquipmentCheckOrder> buildTimeRangeWrapper(String startTime, String endTime) {
+        QueryWrapper<EquipmentCheckOrder> queryWrapper = new QueryWrapper<>();
+        if (StrUtil.isNotEmpty(startTime)) {
+            queryWrapper.ge(MybatisPlusUtil.toColumns(EquipmentCheckOrder::getCreateTime), startTime);
+        }
+        if (StrUtil.isNotEmpty(endTime)) {
+            queryWrapper.le(MybatisPlusUtil.toColumns(EquipmentCheckOrder::getCreateTime), endTime);
+        }
+        return queryWrapper;
     }
 
 }

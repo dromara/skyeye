@@ -52,4 +52,11 @@ public class EquipmentCheckStatisticsController {
         equipmentCheckStatisticsService.queryAbnormalCheckStatsByCheckTime(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryCheckOrderStateStats", value = "点检单按审批状态统计", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @RequestMapping("/post/EquipmentCheckStatisticsController/queryCheckOrderStateStats")
+    public void queryCheckOrderStateStats(InputObject inputObject, OutputObject outputObject) {
+        equipmentCheckStatisticsService.queryCheckOrderStateStats(inputObject, outputObject);
+    }
+
 }
