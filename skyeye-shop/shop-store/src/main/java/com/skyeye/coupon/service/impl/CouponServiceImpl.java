@@ -189,7 +189,9 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             log.info("优惠券id" + coupon.getId() + "删除定时任务-- 开始");
             iQuartzService.stopAndDeleteTaskQuartz(coupon.getId());
             log.info("优惠券id" + coupon.getId() + "删除定时任务-- 结束");
-            if (Objects.equals(coupon.getValidityType(), CouponValidityType.DATE.getKey())) {
+            if (Objects.equals(coupon.getValidityType(), CouponValidityType.DATE.getKey())
+                && DateUtil.compare(DateUtil.getTimeAndToString(), coupon.getValidEndTime())) {
+                // 结束时间晚于当前时间才创建定时任务，已过期则不再创建
                 log.info("优惠券id" + coupon.getId() + "创建定时任务-- 开始");
                 startUpTaskQuartz(coupon.getId(), coupon.getName(), coupon.getValidEndTime());
                 log.info("优惠券id" + coupon.getId() + "创建定时任务-- 结束");
