@@ -59,4 +59,11 @@ public class EquipmentMaintainStatisticsController {
     public void queryMaintainOrderStatsByExecutor(InputObject inputObject, OutputObject outputObject) {
         equipmentMaintainStatisticsService.queryMaintainOrderStatsByExecutor(inputObject, outputObject);
     }
+
+    @ApiOperation(id = "queryMaintainOrderStatsByResult", value = "保养单按保养结果统计", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @RequestMapping("/post/EquipmentMaintainStatisticsController/queryMaintainOrderStatsByResult")
+    public void queryMaintainOrderStatsByResult(InputObject inputObject, OutputObject outputObject) {
+        equipmentMaintainStatisticsService.queryMaintainOrderStatsByResult(inputObject, outputObject);
+    }
 }

@@ -15,6 +15,7 @@ import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.eve.service.IAuthUserService;
+import com.skyeye.maintenance.classenum.EquipmentMaintainResult;
 import com.skyeye.maintenance.classenum.EquipmentMaintainTaskState;
 import com.skyeye.maintenance.dao.EquipmentMaintainOrderDao;
 import com.skyeye.maintenance.dao.EquipmentMaintainOrderSparePartDetailDao;
@@ -287,6 +288,35 @@ public class EquipmentMaintainStatisticsServiceImpl implements EquipmentMaintain
         for (Map.Entry<String, Long> entry : executorStats.entrySet()) {
             xAxisData.add(executorIdToName.getOrDefault(entry.getKey(), entry.getKey()));
             seriesData.add(entry.getValue());
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("total", total);
+        result.put("xAxisData", xAxisData);
+        result.put("seriesData", seriesData);
+
+        outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryMaintainOrderStatsByResult(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        List<EquipmentMaintainOrder> list = queryOrdersInTimeRange(tableSelectInfo);
+        long total = list.size();
+        
+        Map<Integer, Long> resultCountMap = list.stream()
+            .collect(Collectors.groupingBy(
+                o -> o.getMaintainResult() != null
+                    ? o.getMaintainResult()
+                    : EquipmentMaintainResult.INCOMPLETE.getKey(),
+                Collectors.counting()));
+
+        List<String> xAxisData = new ArrayList<>();
+        List<Long> seriesData = new ArrayList<>();
+        for (EquipmentMaintainResult maintainResult : EquipmentMaintainResult.values()) {
+            xAxisData.add(maintainResult.getValue());
+            seriesData.add(resultCountMap.getOrDefault(maintainResult.getKey(), 0L));
         }
 
         Map<String, Object> result = new HashMap<>();

@@ -16,12 +16,12 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 172.18.92.40:8848 # 配置服务注册nacos地址
+        server-addr: 172.18.92.41:8848 # 配置服务注册nacos地址
         namespace: ${spring.profiles.active} # 配置命名空间
         service: ${spring.application.name} # 配置服务名
       config:
         # 指定nacos server的地址
-        server-addr: 172.18.92.40:8848
+        server-addr: 172.18.92.41:8848
         # 配置文件后缀
         file-extension: yml
         # 命名空间 常用场景之一是不同环境的配置的区分隔离，例如开发测试环境和生产环境的资源（如配置、服务）隔离等
@@ -40,6 +40,8 @@ topic:
   material-norms-code-generate-barcode: MATERIAL_NORMS_CODE_GENERATE_BARCODE
   # 设备维修单派工通知
   equipment-repair-dispatch-service: EQUIPMENT_REPAIR_DISPATCH_SERVICE
+  # 设备巡检单派工通知
+  equipment-inspection-dispatch-service: EQUIPMENT_INSPECTION_DISPATCH_SERVICE
 
 webroot:
   # 项目相关的服务

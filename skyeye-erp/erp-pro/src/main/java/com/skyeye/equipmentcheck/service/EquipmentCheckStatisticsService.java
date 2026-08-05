@@ -21,4 +21,14 @@ public interface EquipmentCheckStatisticsService {
 
     void queryAbnormalCheckStatsByCheckTime(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 点检单按审批状态统计：草稿、审核中、审核通过、驳回、作废、撤销
+     */
+    void queryCheckOrderStateStats(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 点检转维修统计：异常单中已转维修 / 未转维修（饼图 name/value）
+     */
+    void queryCheckOrderToRepairRateStats(InputObject inputObject, OutputObject outputObject);
+
 }

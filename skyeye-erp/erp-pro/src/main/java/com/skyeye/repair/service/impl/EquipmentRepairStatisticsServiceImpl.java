@@ -14,6 +14,7 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.eve.service.IAuthUserService;
 import com.skyeye.eve.service.ISysDictDataService;
 import com.skyeye.repair.classenum.EquipmentRepairOrderState;
 import com.skyeye.repair.dao.EquipmentRepairOrderDao;
@@ -61,6 +62,9 @@ public class EquipmentRepairStatisticsServiceImpl implements EquipmentRepairStat
 
     @Autowired
     private ISysDictDataService iSysDictDataService;
+
+    @Autowired
+    private IAuthUserService iAuthUserService;
 
     @Override
     public void queryEquipmentRepairOrderTrendStats(InputObject inputObject, OutputObject outputObject) {
@@ -200,6 +204,50 @@ public class EquipmentRepairStatisticsServiceImpl implements EquipmentRepairStat
         List<Long> seriesData = new ArrayList<>();
         for (Map.Entry<String, Long> entry : urgencyStats.entrySet()) {
             xAxisData.add(urgencyIdToName.getOrDefault(entry.getKey(), entry.getKey()));
+            seriesData.add(entry.getValue());
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("total", total);
+        result.put("xAxisData", xAxisData);
+        result.put("seriesData", seriesData);
+
+        outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryRepairOrderStatsByServiceUser(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        QueryWrapper<EquipmentRepairOrder> queryWrapper = buildTimeRangeWrapper(
+            tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+
+        List<EquipmentRepairOrder> list = equipmentRepairOrderDao.selectList(queryWrapper);
+        long total = list.size();
+        iAuthUserService.setDataMation(list, EquipmentRepairOrder::getServiceUserId);
+
+        Map<String, Long> serviceUserStats = list.stream()
+            .collect(Collectors.groupingBy(
+                o -> StrUtil.isNotEmpty(o.getServiceUserId()) ? o.getServiceUserId() : OTHER_LABEL,
+                Collectors.counting()));
+
+        Map<String, String> serviceUserIdToName = new HashMap<>();
+        serviceUserIdToName.put(OTHER_LABEL, OTHER_LABEL);
+        for (EquipmentRepairOrder bean : list) {
+            if (StrUtil.isEmpty(bean.getServiceUserId()) || serviceUserIdToName.containsKey(bean.getServiceUserId())) {
+                continue;
+            }
+            String name = null;
+            if (bean.getServiceUserMation() != null && bean.getServiceUserMation().get("name") != null) {
+                name = bean.getServiceUserMation().get("name").toString();
+            }
+            serviceUserIdToName.put(bean.getServiceUserId(), StrUtil.isNotBlank(name) ? name : bean.getServiceUserId());
+        }
+
+        List<String> xAxisData = new ArrayList<>();
+        List<Long> seriesData = new ArrayList<>();
+        for (Map.Entry<String, Long> entry : serviceUserStats.entrySet()) {
+            xAxisData.add(serviceUserIdToName.getOrDefault(entry.getKey(), entry.getKey()));
             seriesData.add(entry.getValue());
         }
 
