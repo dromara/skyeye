@@ -50,7 +50,6 @@ seata:
       application: ${spring.application.name}
       server-addr: ${spring.cloud.nacos.discovery.server-addr}
       namespace: ${spring.profiles.active}
-      group: SEATA_GROUP
       cluster: default
   server:
     service-port: 8091
