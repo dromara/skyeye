@@ -1,0 +1,33 @@
+# 二、bootstrap.yml：Nacos 配置中心 / 服务发现（仅基础设施，不含 seata.*）
+spring:
+  application:
+    # Spring 服务名（控制台列表可见）；业务端按 seata.registry.nacos.application 发现 TC
+    name: seata-server-${spring.profiles.active:dev}
+  main:
+    allow-circular-references: true
+    allow-bean-definition-overriding: true
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      config:
+        server-addr: 172.18.92.41:8848
+        file-extension: yml
+        namespace: ${spring.profiles.active}
+        # 与 skyeye 体系一致，拉取公共 jdbc 等
+        ext-config:
+          - data-id: skyeye-common.yml
+            group: DEFAULT_GROUP
+            refresh: false
+      discovery:
+        server-addr: 172.18.92.41:8848
+        namespace: ${spring.profiles.active}
+        service: ${spring.application.name}
+        group: DEFAULT_GROUP
+        # 注册事务端口，避免客户端连到控制台 7091
+        port: 8091
+
+logging:
+  level:
+    com.skyeye: debug
+    io.seata: info

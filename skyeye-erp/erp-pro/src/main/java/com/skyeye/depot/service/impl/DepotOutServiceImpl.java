@@ -74,8 +74,10 @@ import com.skyeye.shop.entity.ShopConfirmReturn;
 import com.skyeye.shop.service.ShopConfirmPutService;
 import com.skyeye.shop.service.ShopConfirmReturnService;
 import com.skyeye.shop.service.ShopOutLetsService;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.RoundingMode;
 import java.util.*;
@@ -310,6 +312,21 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
         return depotOut;
     }
 
+    /**
+     * 出库单审批结束入口（开启 Seata 全局事务）。
+     * <p>
+     * 注意：不能只标注在 {@link #approvalEndIsSuccess} 上——基类内部 this 调用会绕过 Spring AOP，
+     * 导致 @GlobalTransactional 不生效。必须覆盖对外入口方法。
+     * </p>
+     * Seata 关闭（seata.enabled=false）时注解等价于空操作，行为与原先本地事务一致。
+     */
+    @Override
+    @GlobalTransactional(name = "erp-depot-out-approval-end", rollbackFor = Exception.class)
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void approvalEnd(String processInstanceId, String result) {
+        super.approvalEnd(processInstanceId, result);
+    }
+
     @Override
     public void approvalEndIsSuccess(DepotOut entity) {
         entity = selectById(entity.getId());
@@ -325,15 +342,17 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
         if (entity.getFromTypeId() == DepotOutFromType.PURCHASE_RETURNS.getKey()) {
             // 修改采购退货的商品状态为退货状态
             holderNormsChildService.editHolderNormsChildState(entity.getHolderId(), normsCodeList, HolderNormsChildState.RETURN_OF_GOODS.getKey());
-        } else if (entity.getFromTypeId() == DepotOutFromType.SEAL_APPLY.getKey()) {
-            // 配件申领单
-            updateSealApply(entity, normsCodeList, result);
         } else if (entity.getFromTypeId() == DepotOutFromType.LOANOUT.getKey()) {
             depotOutPutRecordService.writeOutPutRecord(entity, entity.getFromTypeId());
         }
-        // 修改库存信息以及记录客户/供应商/会员关联的商品
+        // 先本地库存（可回滚）；再 Feign 写配件申领。
+        // 开启 Seata 后，两边同属全局事务，任一步失败均全局回滚。
         super.depotOutOrPutSuccess(entity.getHolderId(), entity.getHolderKey(), entity.getErpOrderItemList(), DepotPutOutType.OUT.getKey(),
             entity.getFromId(), fromTypeIdKey);
+        if (entity.getFromTypeId() == DepotOutFromType.SEAL_APPLY.getKey()) {
+            // 配件申领单：更新出库数量/状态及用户配件库存（远程，Seata 分支事务）
+            updateSealApply(entity, normsCodeList, result);
+        }
     }
 
     private void updateSealApply(DepotOut entity, List<String> normsCodeList, boolean result) {

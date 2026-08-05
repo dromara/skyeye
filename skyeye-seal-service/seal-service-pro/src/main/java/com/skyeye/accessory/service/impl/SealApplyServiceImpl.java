@@ -39,6 +39,7 @@ import com.skyeye.rest.depot.rest.IERPOrderRest;
 import com.skyeye.rest.depot.service.IDepotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -185,6 +186,7 @@ public class SealApplyServiceImpl extends SkyeyeBusinessServiceImpl<SealApplyDao
     }
 
     @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
     public void editSealApplyOtherState(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String id = params.get("id").toString();
@@ -197,6 +199,7 @@ public class SealApplyServiceImpl extends SkyeyeBusinessServiceImpl<SealApplyDao
     }
 
     @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
     public void editSealApplyOutNum(InputObject inputObject, OutputObject outputObject) {
         SealApplyChangeStock sealApplyChangeStock = inputObject.getParams(SealApplyChangeStock.class);
         List<SealApplyCode> sealApplyCodeList = new ArrayList<>();

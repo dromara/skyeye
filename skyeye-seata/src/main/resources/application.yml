@@ -1,0 +1,59 @@
+# 三、application.yml：Seata Server（TC）本体 —— Nacos 注册 + DB 存储（不写 Nacos 连接重复项）
+server:
+  # 控制台 HTTP
+  port: 7091
+
+console:
+  user:
+    username: seata
+    password: seata
+
+seata:
+  # 本地 file 即可；后续若迁到 Nacos 配置中心再改 type: nacos
+  config:
+    type: file
+  registry:
+    type: nacos
+    nacos:
+      # 与业务端 seata.registry.nacos.application 一致（erp/seal 当前为 seata-server）
+      application: ${spring.application.name}
+      server-addr: ${spring.cloud.nacos.discovery.server-addr}
+      namespace: ${spring.profiles.active}
+      group: DEFAULT_GROUP
+      cluster: default
+  server:
+    # 事务通信端口（Netty）
+    service-port: 8091
+  store:
+    mode: db
+    session:
+      mode: db
+    lock:
+      mode: db
+    db:
+      datasource: druid
+      db-type: mysql
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      # 库连接走 Nacos skyeye-common.yml 的 jdbc.database.*，只改 common 一处
+      url: ${jdbc.database.path}
+      user: ${jdbc.database.username}
+      password: ${jdbc.database.password}
+      min-conn: 5
+      max-conn: 30
+      global-table: global_table
+      branch-table: branch_table
+      lock-table: lock_table
+      distributed-lock-table: distributed_lock
+      query-limit: 1000
+      max-wait: 5000
+  service:
+    vgroup-mapping:
+      skyeye_tx_group: default
+    enable-degrade: false
+    disable-global-transaction: false
+  # 控制台 JWT；项目 application.yml 会盖掉 seata-server 包内默认值，必须显式保留
+  security:
+    secretKey: SeataSecretKey0c382ef121d778043159209298fd40bf3850a017
+    tokenValidityInMilliseconds: 1800000
+    ignore:
+      urls: /,/**/*.css,/**/*.js,/**/*.html,/**/*.map,/**/*.svg,/**/*.png,/**/*.ico,/console-fe/public/**,/api/v1/auth/login

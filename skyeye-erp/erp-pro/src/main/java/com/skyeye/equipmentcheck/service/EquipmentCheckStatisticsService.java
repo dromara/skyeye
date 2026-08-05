@@ -31,4 +31,9 @@ public interface EquipmentCheckStatisticsService {
      */
     void queryCheckOrderToRepairRateStats(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 点检单按点检结果统计：正常 / 异常；未填结果不入统计
+     */
+    void queryCheckOrderStatsByCheckResult(InputObject inputObject, OutputObject outputObject);
+
 }
