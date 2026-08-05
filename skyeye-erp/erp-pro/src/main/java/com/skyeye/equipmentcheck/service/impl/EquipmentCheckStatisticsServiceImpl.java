@@ -48,6 +48,11 @@ public class EquipmentCheckStatisticsServiceImpl implements EquipmentCheckStatis
         FlowableStateEnum.REVOKE
     };
 
+    private static final EquipmentCheckResult[] CHECK_RESULT_ORDER = {
+        EquipmentCheckResult.NORMAL,
+        EquipmentCheckResult.ABNORMAL
+    };
+
     @Autowired
     private EquipmentCheckOrderDao equipmentCheckOrderDao;
 
@@ -133,6 +138,30 @@ public class EquipmentCheckStatisticsServiceImpl implements EquipmentCheckStatis
         notRepairRow.put("name", "未转维修");
         notRepairRow.put("value", String.valueOf(notRepairCount));
         rows.add(notRepairRow);
+
+        outputObject.setBeans(rows);
+        outputObject.settotal(rows.size());
+    }
+
+    @Override
+    public void queryCheckOrderStatsByCheckResult(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        QueryWrapper<EquipmentCheckOrder> queryWrapper = buildTimeRangeWrapper(
+            tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+        // 仅统计已填点检结果的单；未填报不入图
+        queryWrapper.isNotNull(MybatisPlusUtil.toColumns(EquipmentCheckOrder::getCheckResult));
+
+        List<EquipmentCheckOrder> list = equipmentCheckOrderService.list(queryWrapper);
+        Map<Integer, Long> resultCountMap = list.stream()
+            .collect(Collectors.groupingBy(EquipmentCheckOrder::getCheckResult, Collectors.counting()));
+
+        List<Map<String, Object>> rows = new ArrayList<>();
+        for (EquipmentCheckResult checkResult : CHECK_RESULT_ORDER) {
+            Map<String, Object> row = new HashMap<>(2);
+            row.put("name", checkResult.getValue());
+            row.put("value", String.valueOf(resultCountMap.getOrDefault(checkResult.getKey(), 0L)));
+            rows.add(row);
+        }
 
         outputObject.setBeans(rows);
         outputObject.settotal(rows.size());

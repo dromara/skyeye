@@ -66,4 +66,11 @@ public class EquipmentCheckStatisticsController {
         equipmentCheckStatisticsService.queryCheckOrderToRepairRateStats(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryCheckOrderStatsByCheckResult", value = "点检单按点检结果统计", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @RequestMapping("/post/EquipmentCheckStatisticsController/queryCheckOrderStatsByCheckResult")
+    public void queryCheckOrderStatsByCheckResult(InputObject inputObject, OutputObject outputObject) {
+        equipmentCheckStatisticsService.queryCheckOrderStatsByCheckResult(inputObject, outputObject);
+    }
+
 }
