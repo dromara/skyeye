@@ -127,7 +127,7 @@ public class EquipmentCheckStatisticsServiceImpl implements EquipmentCheckStatis
         Map<String, Object> toRepairRow = new HashMap<>(2);
         toRepairRow.put("name", "已转维修");
         toRepairRow.put("value", String.valueOf(toRepairCount));
-        rows.add(toRepairRow);5
+        rows.add(toRepairRow);
 
         Map<String, Object> notRepairRow = new HashMap<>(2);
         notRepairRow.put("name", "未转维修");
