@@ -307,29 +307,22 @@ public class EquipmentMaintainStatisticsServiceImpl implements EquipmentMaintain
     public void queryMaintainOrderStatsByResult(InputObject inputObject, OutputObject outputObject) {
         TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
         List<EquipmentMaintainOrder> list = queryOrdersInTimeRange(tableSelectInfo);
-        long total = list.size();
-        
         Map<Integer, Long> resultCountMap = list.stream()
             .collect(Collectors.groupingBy(
                 o -> o.getMaintainResult() != null
                     ? o.getMaintainResult()
                     : EquipmentMaintainResult.INCOMPLETE.getKey(),
                 Collectors.counting()));
-
-        List<String> xAxisData = new ArrayList<>();
-        List<Long> seriesData = new ArrayList<>();
+        List<Map<String, Object>> rows = new ArrayList<>();
         for (EquipmentMaintainResult maintainResult : EquipmentMaintainResult.values()) {
-            xAxisData.add(maintainResult.getValue());
-            seriesData.add(resultCountMap.getOrDefault(maintainResult.getKey(), 0L));
+            Map<String, Object> row = new HashMap<>(2);
+            row.put("name", maintainResult.getValue());
+            row.put("value", String.valueOf(resultCountMap.getOrDefault(maintainResult.getKey(), 0L)));
+            rows.add(row);
         }
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("total", total);
-        result.put("xAxisData", xAxisData);
-        result.put("seriesData", seriesData);
-
-        outputObject.setBean(result);
-        outputObject.settotal(CommonNumConstants.NUM_ONE);
+        outputObject.setBeans(rows);
+        outputObject.settotal(rows.size());
     }
 
     @Override
