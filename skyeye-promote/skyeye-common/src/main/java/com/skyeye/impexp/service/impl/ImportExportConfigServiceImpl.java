@@ -18,6 +18,7 @@ import com.skyeye.attr.entity.AttrDefinitionCustom;
 import com.skyeye.attr.service.AttrDefinitionCustomService;
 import com.skyeye.attr.service.AttrDefinitionService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.clazz.entity.classenum.SkyeyeClassEnumMation;
 import com.skyeye.clazz.service.SkyeyeClassEnumService;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.MqConstants;
@@ -606,7 +607,9 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         return rows;
     }
 
-    /** 优先按 attrKey 取列；无键映射时用 fallbackCol（列序兼容）。 */
+    /**
+     * 优先按 attrKey 取列；无键映射时用 fallbackCol（列序兼容）。
+     */
     private String resolveImportCell(List<String> excelRow, Map<String, Integer> colByKey, String attrKey, int fallbackCol) {
         if (excelRow == null) {
             return StrUtil.EMPTY;
@@ -745,12 +748,12 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         json.put("sheetMode", useMulti ? ImportExportConfigJsonHelper.SHEET_MODE_MULTI : ImportExportConfigJsonHelper.SHEET_MODE_SINGLE);
         Map<String, AttrDefinition> index = attrIndex != null ? attrIndex
             : loadAttrMetaBundle(config.getAppId(), config.getClassName()).attrIndex;
-        Map<String, String[]> enumLabelCache = new HashMap<>();
+        DropdownLabelCache labelCache = new DropdownLabelCache();
         if (useMulti) {
             List<ColumnSpec> masterSpecs = filterMasterSpecs(specs, collectionRoots);
             String[] masterKeys = buildKeysWithLink(masterSpecs);
             ExcelUtil.SheetExportStyle masterStyle = buildSheetExportStyleWithLink(masterSpecs, layout);
-            applyColumnDropdownOptions(masterStyle, masterKeys, index, enumLabelCache);
+            applyColumnDropdownOptions(masterStyle, masterKeys, index, labelCache);
             json.put("collectionAttrKeys", collectionRoots);
             json.put("masterKeys", masterKeys);
             json.put("masterColumnNames", buildNamesWithLink(masterSpecs, titleMap));
@@ -762,7 +765,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
                 List<ColumnSpec> detailSpecs = filterDetailSpecs(specs, collectionRoot);
                 String[] detailKeys = buildKeysWithLink(detailSpecs);
                 ExcelUtil.SheetExportStyle detailStyle = buildSheetExportStyleWithLink(detailSpecs, layout);
-                applyColumnDropdownOptions(detailStyle, detailKeys, index, enumLabelCache);
+                applyColumnDropdownOptions(detailStyle, detailKeys, index, labelCache);
                 Map<String, Object> one = new LinkedHashMap<>();
                 one.put("collectionAttrKey", collectionRoot);
                 one.put("sheetName", resolveDetailSheetName(collectionRoot, titleMap, usedSheetNames));
@@ -789,7 +792,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             }
             ExcelUtil.SheetExportStyle exportStyle = buildSheetExportStyle(specs, layout);
             applyHeaderGroupNames(keys, columnNames, exportStyle, titleMap, layout);
-            applyColumnDropdownOptions(exportStyle, keys, index, enumLabelCache);
+            applyColumnDropdownOptions(exportStyle, keys, index, labelCache);
             json.put("exportStyleJson", JSONUtil.toJsonStr(exportStyle));
         }
         JobMateMation jobMateMation = new JobMateMation();
@@ -812,7 +815,9 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         return ImportExportRowUtil.resolveCollectionRoots(attrKeys, collectionKeys);
     }
 
-    /** 是否走多 Sheet：无明细集合时一律单页；否则看配置 sheetMode。 */
+    /**
+     * 是否走多 Sheet：无明细集合时一律单页；否则看配置 sheetMode。
+     */
     private boolean shouldUseMultiSheet(ParsedConfig parsed, List<String> collectionRoots) {
         if (CollectionUtil.isEmpty(collectionRoots)) {
             return false;
@@ -899,45 +904,401 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
     }
 
     /**
-     * 按属性数据来源（枚举 / 字典 / 自定义 JSON）为列附加 Excel 下拉选项。
-     * 使用预加载的属性索引，避免按列循环查库。
+     * 下拉选项本地缓存（单次导入模板/导出过程内共享）。
+     * <p>
+     * 设计说明：
+     * <ul>
+     *   <li>枚举、数据字典属于系统级公共数据，列与 Sheet 间会大量重复，适合先批量查询再内存复用。</li>
+     *   <li>自定义 JSON / 自定义 API 与具体字段绑定、不宜与公共表混成一套批量接口，故按列即时解析。</li>
+     *   <li>缓存 key 为配置里保存的原始标识（枚举 ref、字典 code），value 为 Excel 下拉展示用的文案数组；
+     *       空数组也要写入，表示「已查过且无数据」，避免重复打空查。</li>
+     * </ul>
+     * 使用范围：一次 {@code writeExcelByParsedConfig} / 异步 MQ 打包过程中，
+     * 主表与各明细 Sheet 共用同一实例，后继 Sheet 只补加载缺失项。
+     */
+    private static class DropdownLabelCache {
+        /**
+         * 枚举 className 原始 ref → 下拉文案（name/value）
+         */
+        private final Map<String, String[]> enumLabels = new HashMap<>();
+        /**
+         * 字典类型 dictCode → 字典项名称列表（dictName）
+         */
+        private final Map<String, String[]> dictLabels = new HashMap<>();
+    }
+
+    /**
+     * 按属性「数据来源」为 Excel 各列附加数据有效性下拉（写入 {@link ExcelUtil.SheetExportStyle#columnDropdownOptions}）。
+     * <p>
+     * 处理流程：
+     * <ol>
+     *   <li>根据当前 Sheet 的列 attrKey，从属性索引收集枚举/字典标识；</li>
+     *   <li>批量预加载枚举、字典到 {@link DropdownLabelCache}；</li>
+     *   <li>再按列调用 {@link #resolveDropdownLabels} 组装 options[i]；</li>
+     *   <li>任一列失败仅跳过该列，整体失败也不阻断模板/导出（catch 吞掉）。</li>
+     * </ol>
+     *
+     * @param style      导出样式对象，成功时设置 columnDropdownOptions
+     * @param keys       本 Sheet 列 attrKey 数组（与列顺序一一对应，可含 __rowNo 等关联列）
+     * @param attrIndex  attrKey → 属性定义（含 AttrDefinitionCustom 数据来源）
+     * @param labelCache 过程内共享的枚举/字典缓存；为 null 时临时新建，不与其它 Sheet 共享
      */
     private void applyColumnDropdownOptions(ExcelUtil.SheetExportStyle style, String[] keys,
                                             Map<String, AttrDefinition> attrIndex,
-                                            Map<String, String[]> enumLabelCache) {
+                                            DropdownLabelCache labelCache) {
+        // 无样式或无列时无需处理
         if (style == null || keys == null || keys.length == 0) {
             return;
         }
         if (attrIndex == null) {
             attrIndex = Collections.emptyMap();
         }
-        if (enumLabelCache == null) {
-            enumLabelCache = new HashMap<>();
+        // 兼容未传入缓存的调用方（例如单次调试）；正常路径由上层创建并跨 Sheet 复用
+        if (labelCache == null) {
+            labelCache = new DropdownLabelCache();
         }
         try {
+            // ① 先批量把本 Sheet 用到的枚举/字典灌进缓存
+            preloadEnumAndDictLabels(keys, attrIndex, labelCache);
+            // ② 再按列解析；options[i] 与 keys[i] 对齐，null 表示该列无下拉
             String[][] options = new String[keys.length][];
             boolean any = false;
             for (int i = 0; i < keys.length; i++) {
                 try {
-                    String[] labels = resolveDropdownLabels(keys[i], attrIndex, enumLabelCache);
+                    String[] labels = resolveDropdownLabels(keys[i], attrIndex, labelCache);
                     if (labels != null && labels.length > 0) {
                         options[i] = labels;
                         any = true;
                     }
                 } catch (Exception ignore) {
-                    // 单列失败跳过
+                    // 单列失败不拖垮整表：该列不设下拉即可
                 }
             }
+            // 全无下拉时不必写空二维数组，减少序列化体积
             if (any) {
                 style.columnDropdownOptions = options;
             }
         } catch (Exception ignore) {
-            // 下拉解析失败不影响模板下载
+            // 下拉仅为辅助编辑能力，解析失败不影响模板下载 / 数据导出主体
         }
     }
 
+    /**
+     * 汇总当前 keys 所需的枚举 ref、字典 code，并分别批量写入缓存。
+     * <p>
+     * 已在 {@code labelCache} 中存在的 key 不会重复查询（多 Sheet 第二页起多为 cache hit）。
+     *
+     * @param keys       列 attrKey
+     * @param attrIndex  属性索引
+     * @param labelCache 共享缓存
+     */
+    private void preloadEnumAndDictLabels(String[] keys, Map<String, AttrDefinition> attrIndex,
+                                          DropdownLabelCache labelCache) {
+        if (keys == null || keys.length == 0 || attrIndex == null || labelCache == null) {
+            return;
+        }
+        // LinkedHashSet：去重且保持首次出现顺序，便于排查日志时对照列序
+        Set<String> enumRefs = new LinkedHashSet<>();
+        Set<String> dictCodes = new LinkedHashSet<>();
+        for (String attrKey : keys) {
+            collectEnumAndDictRefs(attrKey, attrIndex, enumRefs, dictCodes);
+        }
+        // 分通道批量加载：枚举走枚举表，字典走类型+字典项两表
+        preloadEnumLabels(enumRefs, labelCache);
+        preloadDictLabels(dictCodes, labelCache);
+    }
+
+    /**
+     * 从单个字段属性定义中收集「需要批量预加载」的枚举标识与字典编码。
+     * <p>
+     * 收集来源（与 {@link #resolveDropdownLabels} 解析顺序保持一致，避免解析用到未预加载的 key）：
+     * <ol>
+     *   <li>属性本身的 enumClassStr</li>
+     *   <li>自定义 dataType=枚举：objectId、enumClassStr</li>
+     *   <li>自定义 dataType=字典：objectId（dictCode）</li>
+     *   <li>名称/备注中「参考#XxxEnum」兼容写法</li>
+     * </ol>
+     * 自定义 JSON、自定义 API 不在此收集（按列解析）。
+     *
+     * @param attrKey   列字段 key；关联列 {@code LINK_ATTR_KEY} 跳过
+     * @param attrIndex 属性索引
+     * @param enumRefs  输出：待加载的枚举引用（写入时 trim）
+     * @param dictCodes 输出：待加载的字典 code
+     */
+    private void collectEnumAndDictRefs(String attrKey, Map<String, AttrDefinition> attrIndex,
+                                        Set<String> enumRefs, Set<String> dictCodes) {
+        // 主表序号等内部列、空 key：无属性元数据
+        if (StrUtil.isBlank(attrKey) || ImportExportConfigJsonHelper.LINK_ATTR_KEY.equals(attrKey)
+            || attrIndex == null) {
+            return;
+        }
+        AttrDefinition attr = attrIndex.get(attrKey);
+        if (attr == null) {
+            return;
+        }
+        // 实体/模型上标注的枚举类路径
+        if (StrUtil.isNotBlank(attr.getEnumClassStr())) {
+            enumRefs.add(attr.getEnumClassStr().trim());
+        }
+        AttrDefinitionCustom custom = attr.getAttrDefinitionCustom();
+        if (custom != null && custom.getDataType() != null) {
+            Integer dataType = custom.getDataType();
+            if (AttrKeyDataType.ENUM_DATA.getKey().equals(dataType)) {
+                // 枚举类型：业务配置里 objectId 多为枚举 className，enumClassStr 为补充写法
+                if (StrUtil.isNotBlank(custom.getEnumClassStr())) {
+                    enumRefs.add(custom.getEnumClassStr().trim());
+                }
+            } else if (AttrKeyDataType.DICT_DATA.getKey().equals(dataType)
+                && StrUtil.isNotBlank(custom.getObjectId())) {
+                // 字典类型：objectId 存字典类型编码 dictCode
+                dictCodes.add(custom.getObjectId().trim());
+            }
+        }
+    }
+
+    /**
+     * 批量加载枚举下拉文案。
+     * <p>
+     * 步骤：
+     * <ol>
+     *   <li>过滤缓存已有项，得到 needLoad（缓存 key 保持配置原始 ref）</li>
+     *   <li>将每个 ref 归一成可能库中存的 className（全限定名 / 简单类名）并入 queryNames</li>
+     *   <li>一次 {@code className IN (...)} 查询 SkyeyeClassEnumMation</li>
+     *   <li>只保留 show=true 的枚举项，按 className 建 index</li>
+     *   <li>按 needLoad 中的原始 ref 回填缓存（命中写文案，未命中写空数组）</li>
+     * </ol>
+     * 不做单列回退查询：枚举数据仅依赖本方法批量加载结果。
+     *
+     * @param enumRefs   收集到的枚举原始标识集合
+     * @param labelCache 目标缓存
+     */
+    private void preloadEnumLabels(Set<String> enumRefs, DropdownLabelCache labelCache) {
+        if (CollectionUtil.isEmpty(enumRefs) || labelCache == null) {
+            return;
+        }
+        // needLoad：真正还要写入缓存的原始 ref；queryNames：SQL IN 用的 className 候选
+        Set<String> needLoad = new LinkedHashSet<>();
+        for (String ref : enumRefs) {
+            if (StrUtil.isBlank(ref)) {
+                continue;
+            }
+            String cacheKey = ref.trim();
+            // 多 Sheet 共用缓存时，前序 Sheet 已加载则直接跳过
+            if (labelCache.enumLabels.containsKey(cacheKey)) {
+                continue;
+            }
+            // 配置是「app#com.xx.Enum」或者code
+            needLoad.add(cacheKey);
+        }
+        if (needLoad.isEmpty()) {
+            return;
+        }
+        // className → 可展示的枚举值列表（已过滤 show）
+        Map<String, List<Map<String, Object>>> enumValueByClassName = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(needLoad)) {
+            try {
+                QueryWrapper<SkyeyeClassEnumMation> queryWrapper = new QueryWrapper<>();
+                queryWrapper.in(MybatisPlusUtil.toColumns(SkyeyeClassEnumMation::getClassName), needLoad);
+                List<SkyeyeClassEnumMation> list = skyeyeClassEnumService.list(queryWrapper);
+                if (CollectionUtil.isNotEmpty(list)) {
+                    for (SkyeyeClassEnumMation mation : list) {
+                        if (mation == null || StrUtil.isBlank(mation.getClassName())) {
+                            continue;
+                        }
+                        List<Map<String, Object>> valueList = mation.getValueList();
+                        if (CollectionUtil.isEmpty(valueList)) {
+                            enumValueByClassName.put(mation.getClassName(), Collections.emptyList());
+                            continue;
+                        }
+                        // 与 getEnumDataByClassName 一致：只展示 show 为 true 的项
+                        List<Map<String, Object>> showList = valueList.stream()
+                            .filter(this::isShowEnumValue)
+                            .collect(Collectors.toList());
+                        enumValueByClassName.put(mation.getClassName(), showList);
+                    }
+                }
+            } catch (Exception ignore) {
+                // 批量失败：下方按 needLoad 写空数组，避免 resolve 阶段反复 miss
+            }
+        }
+        // 以配置侧原始 ref 为 cache key 回填，保证 resolve 时与 collect 使用同一 key
+        for (String cacheKey : needLoad) {
+            List<String> labels = extractEnumLabelsFromBatch(cacheKey, enumValueByClassName);
+            // 空数组也要 put，防止多 Sheet 重复 miss
+            labelCache.enumLabels.put(cacheKey, labels.toArray(new String[0]));
+        }
+    }
+
+    /**
+     * 用批量查询结果集，按一个枚举 ref 的候选 className 顺序取第一份非空文案列表。
+     * <p>
+     * normalize 后通常先试全限定名再试简单名。
+     *
+     * @param enumClassStr         配置中的枚举标识
+     * @param enumValueByClassName 批量结果索引
+     * @return 下拉文案；未命中返回空 List（非 null）
+     */
+    private List<String> extractEnumLabelsFromBatch(String enumClassStr,
+                                                    Map<String, List<Map<String, Object>>> enumValueByClassName) {
+        List<String> labels = new ArrayList<>();
+        if (StrUtil.isBlank(enumClassStr) || enumValueByClassName == null || enumValueByClassName.isEmpty()) {
+            return labels;
+        }
+        List<Map<String, Object>> list = enumValueByClassName.get(enumClassStr);
+        if (CollectionUtil.isEmpty(list)) {
+            return labels;
+        }
+        for (Map<String, Object> one : list) {
+            appendEnumLabel(labels, one);
+        }
+        return labels;
+    }
+
+    /**
+     * 从枚举值 Map 追加一条下拉显示名：优先 name，其次 value。
+     *
+     * @param labels 结果列表（原地追加）
+     * @param one    单条枚举值
+     */
+    private void appendEnumLabel(List<String> labels, Map<String, Object> one) {
+        if (labels == null || one == null) {
+            return;
+        }
+        Object name = one.get("name");
+        if (name == null) {
+            name = one.get("value");
+        }
+        if (name != null && StrUtil.isNotBlank(String.valueOf(name))) {
+            labels.add(String.valueOf(name).trim());
+        }
+    }
+
+    /**
+     * 判断枚举项是否在前端/下拉中展示（对应枚举项 show 字段）。
+     *
+     * @param enumValueMap 单条枚举值
+     * @return true 表示需要出现在下拉中
+     */
+    private boolean isShowEnumValue(Map<String, Object> enumValueMap) {
+        if (enumValueMap == null) {
+            return false;
+        }
+        Object show = enumValueMap.get("show");
+        if (show instanceof Boolean) {
+            return (Boolean) show;
+        }
+        // 兼容字符串 "true"/"false"
+        return show != null && Boolean.parseBoolean(String.valueOf(show));
+    }
+
+    /**
+     * 批量加载数据字典下拉文案。
+     * <p>
+     * 两阶段查询降低往返次数：
+     * <ol>
+     *   <li>按 dictCode 列表批量查 {@link SysDictType}（仅启用）</li>
+     *   <li>按 typeId 列表一次性 in 查 {@link SysDictData}，再反查 code 分组</li>
+     *   <li>needLoad 中每个 code 都写入缓存（无数据写空数组，避免解析阶段反复 miss）</li>
+     * </ol>
+     * 不做单列回退查询：字典数据仅依赖本方法批量加载结果。
+     *
+     * @param dictCodes  字典类型编码集合
+     * @param labelCache 目标缓存
+     */
+    private void preloadDictLabels(Set<String> dictCodes, DropdownLabelCache labelCache) {
+        if (CollectionUtil.isEmpty(dictCodes) || labelCache == null) {
+            return;
+        }
+        // 仅加载缓存中尚不存在的 code
+        List<String> needLoad = dictCodes.stream()
+            .filter(StrUtil::isNotBlank)
+            .map(String::trim)
+            .filter(code -> !labelCache.dictLabels.containsKey(code))
+            .distinct()
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(needLoad)) {
+            return;
+        }
+        try {
+            // 阶段 1：code → 字典类型实体
+            List<SysDictType> dictTypeList = sysDictTypeService.queryDictTypeIdByDictCode(
+                needLoad, EnableEnum.ENABLE_USING.getKey());
+            if (CollectionUtil.isEmpty(dictTypeList)) {
+                // 全部 code 均无对应类型，直接打空
+                for (String code : needLoad) {
+                    labelCache.dictLabels.put(code, new String[0]);
+                }
+                return;
+            }
+            // typeId ↔ dictCode 映射，供阶段 2 回填
+            Map<String, String> typeId2Code = new HashMap<>();
+            List<String> typeIds = new ArrayList<>();
+            for (SysDictType type : dictTypeList) {
+                if (type == null || StrUtil.isBlank(type.getId()) || StrUtil.isBlank(type.getDictCode())) {
+                    continue;
+                }
+                typeId2Code.put(type.getId(), type.getDictCode().trim());
+                typeIds.add(type.getId());
+            }
+            // 阶段 2：按 typeId 批量取字典项，再按 code 聚合成 labels
+            Map<String, List<String>> labelsByCode = new HashMap<>();
+            if (CollectionUtil.isNotEmpty(typeIds)) {
+                QueryWrapper<SysDictData> queryWrapper = new QueryWrapper<>();
+                queryWrapper.in(MybatisPlusUtil.toColumns(SysDictData::getDictTypeId), typeIds);
+                queryWrapper.eq(MybatisPlusUtil.toColumns(SysDictData::getEnabled), EnableEnum.ENABLE_USING.getKey());
+                // 与业务侧字典列表排序保持一致
+                queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(SysDictData::getDictSort));
+                List<SysDictData> dictDataList = sysDictDataService.list(queryWrapper);
+                if (CollectionUtil.isNotEmpty(dictDataList)) {
+                    for (SysDictData data : dictDataList) {
+                        if (data == null || StrUtil.isBlank(data.getDictTypeId()) || StrUtil.isBlank(data.getDictName())) {
+                            continue;
+                        }
+                        String code = typeId2Code.get(data.getDictTypeId());
+                        if (StrUtil.isBlank(code)) {
+                            continue;
+                        }
+                        labelsByCode.computeIfAbsent(code, k -> new ArrayList<>()).add(data.getDictName().trim());
+                    }
+                }
+            }
+            // 阶段 3：needLoad 每个 code 都必须有 cache 条目
+            for (String code : needLoad) {
+                List<String> labels = labelsByCode.getOrDefault(code, Collections.emptyList());
+                labelCache.dictLabels.put(code, labels.toArray(new String[0]));
+            }
+        } catch (Exception e) {
+            // 批量异常：对尚未写入的 code 打空，避免 resolve 阶段反复 miss 查库
+            for (String code : needLoad) {
+                if (!labelCache.dictLabels.containsKey(code)) {
+                    labelCache.dictLabels.put(code, new String[0]);
+                }
+            }
+        }
+    }
+
+    /**
+     * 解析单列 Excel 下拉文案。
+     * <p>
+     * 优先级（与历史逻辑一致）：
+     * <ol>
+     *   <li>属性 enumClassStr（枚举，读缓存）</li>
+     *   <li>自定义 dataType=枚举（objectId → enumClassStr，读缓存）</li>
+     *   <li>自定义 dataType=字典（objectId=dictCode，读缓存）</li>
+     *   <li>自定义 dataType=JSON 串（按列即时解析 defaultData）</li>
+     *   <li>自定义 dataType=API（模板场景暂不远程调用，返回 null）</li>
+     *   <li>名称/备注中「参考#枚举」兼容（读缓存）</li>
+     * </ol>
+     * 枚举/字典只读 {@link DropdownLabelCache}，不在本方法内再查库。
+     *
+     * @param attrKey    列字段 key
+     * @param attrIndex  属性索引
+     * @param labelCache 枚举/字典缓存
+     * @return 下拉选项数组；无可用数据返回 null（该列不设数据有效性）
+     */
     private String[] resolveDropdownLabels(String attrKey, Map<String, AttrDefinition> attrIndex,
-                                           Map<String, String[]> enumLabelCache) {
+                                           DropdownLabelCache labelCache) {
+        // 内部关联列不生成用户可选下拉
         if (StrUtil.isBlank(attrKey) || ImportExportConfigJsonHelper.LINK_ATTR_KEY.equals(attrKey)) {
             return null;
         }
@@ -945,157 +1306,91 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         if (attr == null) {
             return null;
         }
-        // 1) 属性上直接配置的枚举类
-        List<String> fromEnum = loadEnumLabels(attr.getEnumClassStr(), enumLabelCache);
-        if (CollectionUtil.isNotEmpty(fromEnum)) {
-            return fromEnum.toArray(new String[0]);
+        // ---------- 1. 属性级枚举 ----------
+        String[] fromEnum = getCachedEnumLabels(attr.getEnumClassStr(), labelCache);
+        if (fromEnum != null && fromEnum.length > 0) {
+            return fromEnum;
         }
         AttrDefinitionCustom custom = attr.getAttrDefinitionCustom();
         if (custom != null && custom.getDataType() != null) {
             Integer dataType = custom.getDataType();
-            // 2) 自定义：枚举
+            // ---------- 2. 字段自定义：枚举 ----------
             if (AttrKeyDataType.ENUM_DATA.getKey().equals(dataType)) {
-                List<String> labels = loadEnumLabels(custom.getObjectId(), enumLabelCache);
-                if (CollectionUtil.isEmpty(labels)) {
-                    labels = loadEnumLabels(custom.getEnumClassStr(), enumLabelCache);
+                // 先 objectId（常见配置），再枚举类字符串
+                String[] labels = getCachedEnumLabels(custom.getObjectId(), labelCache);
+                if (labels == null || labels.length == 0) {
+                    labels = getCachedEnumLabels(custom.getEnumClassStr(), labelCache);
                 }
-                if (CollectionUtil.isNotEmpty(labels)) {
-                    return labels.toArray(new String[0]);
+                if (labels != null && labels.length > 0) {
+                    return labels;
                 }
             }
-            // 3) 数据字典
+            // ---------- 3. 字段自定义：数据字典 ----------
             if (AttrKeyDataType.DICT_DATA.getKey().equals(dataType) && StrUtil.isNotBlank(custom.getObjectId())) {
-                List<String> labels = loadDictLabels(custom.getObjectId());
-                if (CollectionUtil.isNotEmpty(labels)) {
-                    return labels.toArray(new String[0]);
+                String[] labels = getCachedDictLabels(custom.getObjectId(), labelCache);
+                if (labels != null && labels.length > 0) {
+                    return labels;
                 }
             }
-            // 4) 自定义 JSON
+            // ---------- 4. 自定义 JSON：体积小、与字段绑定，循环内解析足够 ----------
             if (AttrKeyDataType.CUSTOM.getKey().equals(dataType) && StrUtil.isNotBlank(custom.getDefaultData())) {
                 List<String> labels = loadCustomJsonLabels(custom.getDefaultData());
                 if (CollectionUtil.isNotEmpty(labels)) {
                     return labels.toArray(new String[0]);
                 }
             }
+            // ---------- 5. 自定义 API：导入/导出模板生成不应强依赖外部服务 ----------
+            if (AttrKeyDataType.CUSTOM_API.getKey().equals(dataType)) {
+                // 预留：若以后需支持「生成时拉接口」，可在此循环调用 businessApi
+                return null;
+            }
         }
-        // 5) 兼容「参考#EnumClass」写在名称/备注中的情况
-        String ref = extractEnumRefFromText(attr.getName());
-        if (StrUtil.isBlank(ref)) {
-            ref = extractEnumRefFromText(attr.getRemark());
-        }
-        if (StrUtil.isBlank(ref) && custom != null) {
-            ref = extractEnumRefFromText(custom.getRemark());
-        }
-        fromEnum = loadEnumLabels(ref, enumLabelCache);
-        return CollectionUtil.isEmpty(fromEnum) ? null : fromEnum.toArray(new String[0]);
+        return null;
     }
 
-    /** 从「询价状态，参考#PurchaseRequestChildInquiry」一类文案提取枚举类名 */
-    private String extractEnumRefFromText(String text) {
-        if (StrUtil.isBlank(text) || !text.contains("#")) {
+    /**
+     * 仅从缓存读取枚举下拉；缓存未命中返回 null（不单查库）。
+     * <p>
+     * 枚举数据应已由 {@link #preloadEnumLabels} 写入缓存。
+     *
+     * @param enumClassStr 枚举标识
+     * @param labelCache   缓存
+     * @return 文案数组（可能 length=0）；入参空白或未预加载返回 null
+     */
+    private String[] getCachedEnumLabels(String enumClassStr, DropdownLabelCache labelCache) {
+        if (StrUtil.isBlank(enumClassStr) || labelCache == null) {
             return null;
         }
-        int idx = text.lastIndexOf('#');
-        if (idx < 0 || idx >= text.length() - 1) {
+        return labelCache.enumLabels.get(enumClassStr.trim());
+    }
+
+    /**
+     * 仅从缓存读取字典下拉；缓存未命中返回 null（不单查库）。
+     * <p>
+     * 字典数据应已由 {@link #preloadDictLabels} 写入缓存。
+     *
+     * @param dictTypeCode 字典类型编码
+     * @param labelCache   缓存
+     * @return 文案数组（可能 length=0）；入参空白或未预加载返回 null
+     */
+    private String[] getCachedDictLabels(String dictTypeCode, DropdownLabelCache labelCache) {
+        if (StrUtil.isBlank(dictTypeCode) || labelCache == null) {
             return null;
         }
-        String ref = text.substring(idx + 1).trim();
-        ref = ref.replaceAll("[，,;；\\s].*$", "");
-        return StrUtil.isBlank(ref) ? null : ref;
+        return labelCache.dictLabels.get(dictTypeCode.trim());
     }
 
-    private List<String> loadEnumLabels(String enumClassStr, Map<String, String[]> enumLabelCache) {
-        if (StrUtil.isBlank(enumClassStr)) {
-            return Collections.emptyList();
-        }
-        String cacheKey = enumClassStr.trim();
-        if (enumLabelCache != null && enumLabelCache.containsKey(cacheKey)) {
-            String[] cached = enumLabelCache.get(cacheKey);
-            if (cached == null || cached.length == 0) {
-                return Collections.emptyList();
-            }
-            return Arrays.asList(cached);
-        }
-        List<String> labels = new ArrayList<>();
-        for (String className : normalizeEnumClassNames(enumClassStr)) {
-            try {
-                List<Map<String, Object>> list = skyeyeClassEnumService.queryEnumDataList(className, StrUtil.EMPTY, StrUtil.EMPTY);
-                if (CollectionUtil.isEmpty(list)) {
-                    continue;
-                }
-                for (Map<String, Object> one : list) {
-                    if (one == null) {
-                        continue;
-                    }
-                    Object name = one.get("name");
-                    if (name == null) {
-                        name = one.get("value");
-                    }
-                    if (name != null && StrUtil.isNotBlank(String.valueOf(name))) {
-                        labels.add(String.valueOf(name).trim());
-                    }
-                }
-                if (CollectionUtil.isNotEmpty(labels)) {
-                    break;
-                }
-            } catch (Exception ignore) {
-                // 枚举未注册时忽略，继续尝试其它 className 形态
-            }
-        }
-        if (enumLabelCache != null) {
-            enumLabelCache.put(cacheKey, labels.toArray(new String[0]));
-        }
-        return labels;
-    }
-
-    private List<String> normalizeEnumClassNames(String enumClassStr) {
-        List<String> names = new ArrayList<>();
-        if (StrUtil.isBlank(enumClassStr)) {
-            return names;
-        }
-        String s = enumClassStr.trim();
-        if (s.contains("#")) {
-            s = s.substring(s.indexOf('#') + 1).trim();
-        }
-        if (StrUtil.isNotBlank(s)) {
-            names.add(s);
-            int dot = s.lastIndexOf('.');
-            if (dot >= 0 && dot < s.length() - 1) {
-                String simple = s.substring(dot + 1);
-                if (!names.contains(simple)) {
-                    names.add(simple);
-                }
-            }
-        }
-        return names;
-    }
-
-    private List<String> loadDictLabels(String dictTypeCode) {
-        List<String> labels = new ArrayList<>();
-        try {
-            SysDictType dictType = sysDictTypeService.queryDictTypeIdByDictCode(dictTypeCode, EnableEnum.ENABLE_USING.getKey());
-            if (dictType == null) {
-                return labels;
-            }
-            QueryWrapper<SysDictData> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq(MybatisPlusUtil.toColumns(SysDictData::getDictTypeId), dictType.getId());
-            queryWrapper.eq(MybatisPlusUtil.toColumns(SysDictData::getEnabled), EnableEnum.ENABLE_USING.getKey());
-            queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(SysDictData::getDictSort));
-            List<SysDictData> dictDataList = sysDictDataService.list(queryWrapper);
-            if (CollectionUtil.isEmpty(dictDataList)) {
-                return labels;
-            }
-            for (SysDictData data : dictDataList) {
-                if (data != null && StrUtil.isNotBlank(data.getDictName())) {
-                    labels.add(data.getDictName().trim());
-                }
-            }
-        } catch (Exception ignore) {
-            // ignore
-        }
-        return labels;
-    }
-
+    /**
+     * 解析字段上配置的自定义 JSON 下拉数据（{@link AttrKeyDataType#CUSTOM} 的 defaultData）。
+     * <p>
+     * 支持 JSON 数组；元素为对象时依次取 name / label / title / id 作为展示文案，
+     * 元素为简单类型时直接 toString。非数组或解析失败返回空列表。
+     * <p>
+     * 说明：按列即时解析即可，不作批量预取（内容在各自属性 defaultData 中，无法像枚举表一次扫）。
+     *
+     * @param defaultData JSON 数组字符串
+     * @return 下拉文案
+     */
     private List<String> loadCustomJsonLabels(String defaultData) {
         List<String> labels = new ArrayList<>();
         try {
@@ -1147,7 +1442,9 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         return config;
     }
 
-    /** 标题映射 + 属性索引（含 parent.child），一次加载复用 */
+    /**
+     * 标题映射 + 属性索引（含 parent.child），一次加载复用
+     */
     private static class AttrMetaBundle {
         private final Map<String, String> titleMap = new LinkedHashMap<>();
         private final Map<String, AttrDefinition> attrIndex = new HashMap<>();
@@ -1264,10 +1561,10 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         String safeName = StrUtil.blankToDefault(configName, "导入导出") + fileSuffix;
         Map<String, AttrDefinition> index = attrIndex != null ? attrIndex
             : loadAttrMetaBundle(appId, className).attrIndex;
-        Map<String, String[]> enumLabelCache = new HashMap<>();
+        DropdownLabelCache labelCache = new DropdownLabelCache();
         // ② 多 Sheet
         if (shouldUseMultiSheet(parsed, collectionRoots)) {
-            writeMultiSheetExcel(safeName, specs, titleMap, layout, rows, collectionRoots, index, enumLabelCache);
+            writeMultiSheetExcel(safeName, specs, titleMap, layout, rows, collectionRoots, index, labelCache);
             return;
         }
         // ③ 单 Sheet：多集合按最大条数并排展开（模板 rows=null 跳过）
@@ -1285,7 +1582,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         // ⑤ 样式：隐藏键行 + 一级组标题 + 下拉 + 白边框（在 ExcelUtil 内）
         ExcelUtil.SheetExportStyle exportStyle = buildSheetExportStyle(specs, layout);
         applyHeaderGroupNames(keys, columnNames, exportStyle, titleMap, layout);
-        applyColumnDropdownOptions(exportStyle, keys, index, enumLabelCache);
+        applyColumnDropdownOptions(exportStyle, keys, index, labelCache);
         ExcelUtil.createWorkBook(safeName, fileSuffix, outRows, keys, columnNames, new String[0],
             PutObject.getResponse(), exportStyle);
     }
@@ -1301,7 +1598,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
     private void writeMultiSheetExcel(String fileName, List<ColumnSpec> specs, Map<String, String> titleMap,
                                       SheetLayoutOptions layout, List<Map<String, Object>> rows,
                                       List<String> collectionRoots, Map<String, AttrDefinition> attrIndex,
-                                      Map<String, String[]> enumLabelCache) {
+                                      DropdownLabelCache labelCache) {
         List<ColumnSpec> masterSpecs = filterMasterSpecs(specs, collectionRoots);
         if (CollectionUtil.isEmpty(masterSpecs)) {
             throw new CustomException("多 Sheet 模式至少需要勾选一个主表字段。");
@@ -1324,7 +1621,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         // 主表页：首列主表序号
         String[] masterKeys = buildKeysWithLink(masterSpecs);
         ExcelUtil.SheetExportStyle masterStyle = buildSheetExportStyleWithLink(masterSpecs, layout);
-        applyColumnDropdownOptions(masterStyle, masterKeys, attrIndex, enumLabelCache);
+        applyColumnDropdownOptions(masterStyle, masterKeys, attrIndex, labelCache);
         sheetDefs.add(buildSheetDef(ImportExportConfigJsonHelper.MAIN_SHEET_NAME,
             masterKeys, buildNamesWithLink(masterSpecs, titleMap),
             split.getMasterRows(), masterStyle));
@@ -1340,7 +1637,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
                 .getOrDefault(collectionRoot, new ArrayList<>());
             String[] detailKeys = buildKeysWithLink(detailSpecs);
             ExcelUtil.SheetExportStyle detailStyle = buildSheetExportStyleWithLink(detailSpecs, layout);
-            applyColumnDropdownOptions(detailStyle, detailKeys, attrIndex, enumLabelCache);
+            applyColumnDropdownOptions(detailStyle, detailKeys, attrIndex, labelCache);
             sheetDefs.add(buildSheetDef(resolveDetailSheetName(collectionRoot, titleMap, usedSheetNames),
                 detailKeys, buildNamesWithLink(detailSpecs, titleMap),
                 detailRows, detailStyle));
