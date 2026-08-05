@@ -22,6 +22,7 @@ import com.skyeye.maintenance.dao.EquipmentMaintainOrderSparePartDetailDao;
 import com.skyeye.maintenance.entity.EquipmentMaintainOrder;
 import com.skyeye.maintenance.entity.EquipmentMaintainOrderSparePartDetail;
 import com.skyeye.maintenance.service.EquipmentMaintainStatisticsService;
+import com.skyeye.maintenance.service.MaintenancePlanService;
 import com.skyeye.material.service.MaterialNormsService;
 import com.skyeye.material.service.MaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,9 @@ public class EquipmentMaintainStatisticsServiceImpl implements EquipmentMaintain
 
     @Autowired
     private IAuthUserService iAuthUserService;
+
+    @Autowired
+    private MaintenancePlanService maintenancePlanService;
 
     /**
      * 柱状图固定顺序：与 EquipmentMaintainTaskState 枚举顺序一致
@@ -303,20 +307,52 @@ public class EquipmentMaintainStatisticsServiceImpl implements EquipmentMaintain
     public void queryMaintainOrderStatsByResult(InputObject inputObject, OutputObject outputObject) {
         TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
         List<EquipmentMaintainOrder> list = queryOrdersInTimeRange(tableSelectInfo);
-        long total = list.size();
-        
         Map<Integer, Long> resultCountMap = list.stream()
             .collect(Collectors.groupingBy(
                 o -> o.getMaintainResult() != null
                     ? o.getMaintainResult()
                     : EquipmentMaintainResult.INCOMPLETE.getKey(),
                 Collectors.counting()));
+        List<Map<String, Object>> rows = new ArrayList<>();
+        for (EquipmentMaintainResult maintainResult : EquipmentMaintainResult.values()) {
+            Map<String, Object> row = new HashMap<>(2);
+            row.put("name", maintainResult.getValue());
+            row.put("value", String.valueOf(resultCountMap.getOrDefault(maintainResult.getKey(), 0L)));
+            rows.add(row);
+        }
+
+        outputObject.setBeans(rows);
+        outputObject.settotal(rows.size());
+    }
+
+    @Override
+    public void queryMaintainOrderStatsByPlan(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        List<EquipmentMaintainOrder> list = queryOrdersInTimeRange(tableSelectInfo);
+        long total = list.size();
+        maintenancePlanService.setDataMation(list, EquipmentMaintainOrder::getPlanId);
+
+        Map<String, Long> planStats = new HashMap<>();
+        Map<String, String> planIdToName = new HashMap<>();
+        planIdToName.put(OTHER_LABEL, OTHER_LABEL);
+        for (EquipmentMaintainOrder bean : list) {
+            String name = null;
+            if (bean.getPlanMation() != null && StrUtil.isNotBlank(bean.getPlanMation().getName())) {
+                name = bean.getPlanMation().getName();
+            }
+            if (StrUtil.isEmpty(bean.getPlanId()) || StrUtil.isBlank(name)) {
+                planStats.put(OTHER_LABEL, planStats.getOrDefault(OTHER_LABEL, 0L) + 1);
+                continue;
+            }
+            planStats.put(bean.getPlanId(), planStats.getOrDefault(bean.getPlanId(), 0L) + 1);
+            planIdToName.putIfAbsent(bean.getPlanId(), name);
+        }
 
         List<String> xAxisData = new ArrayList<>();
         List<Long> seriesData = new ArrayList<>();
-        for (EquipmentMaintainResult maintainResult : EquipmentMaintainResult.values()) {
-            xAxisData.add(maintainResult.getValue());
-            seriesData.add(resultCountMap.getOrDefault(maintainResult.getKey(), 0L));
+        for (Map.Entry<String, Long> entry : planStats.entrySet()) {
+            xAxisData.add(planIdToName.getOrDefault(entry.getKey(), entry.getKey()));
+            seriesData.add(entry.getValue());
         }
 
         Map<String, Object> result = new HashMap<>();
