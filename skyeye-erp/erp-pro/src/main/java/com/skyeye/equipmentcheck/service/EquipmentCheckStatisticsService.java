@@ -26,4 +26,9 @@ public interface EquipmentCheckStatisticsService {
      */
     void queryCheckOrderStateStats(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 点检转维修统计：异常单中已转维修 / 未转维修（饼图 name/value）
+     */
+    void queryCheckOrderToRepairRateStats(InputObject inputObject, OutputObject outputObject);
+
 }

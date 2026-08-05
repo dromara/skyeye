@@ -108,6 +108,36 @@ public class EquipmentCheckStatisticsServiceImpl implements EquipmentCheckStatis
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
+    @Override
+    public void queryCheckOrderToRepairRateStats(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        QueryWrapper<EquipmentCheckOrder> queryWrapper = buildTimeRangeWrapper(
+            tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+        // 仅统计异常点检单；正常单不入转修饼图
+        queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentCheckOrder::getCheckResult),
+            EquipmentCheckResult.ABNORMAL.getKey());
+
+        List<EquipmentCheckOrder> list = equipmentCheckOrderService.list(queryWrapper);
+        long toRepairCount = list.stream()
+            .filter(o -> StrUtil.isNotEmpty(o.getRepairOrderId()))
+            .count();
+        long notRepairCount = list.size() - toRepairCount;
+
+        List<Map<String, Object>> rows = new ArrayList<>();
+        Map<String, Object> toRepairRow = new HashMap<>(2);
+        toRepairRow.put("name", "已转维修");
+        toRepairRow.put("value", String.valueOf(toRepairCount));
+        rows.add(toRepairRow);5
+
+        Map<String, Object> notRepairRow = new HashMap<>(2);
+        notRepairRow.put("name", "未转维修");
+        notRepairRow.put("value", String.valueOf(notRepairCount));
+        rows.add(notRepairRow);
+
+        outputObject.setBeans(rows);
+        outputObject.settotal(rows.size());
+    }
+
     private Long countTodayOrders(Integer checkResult) {
         String today = LocalDate.now().toString();
         QueryWrapper<EquipmentCheckOrder> wrapper = new QueryWrapper<>();
