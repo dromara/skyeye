@@ -67,6 +67,8 @@ public class ImportExportConfig extends BaseGeneralInfo {
      *     <li>columnWidth：列宽（POI Sheet#setColumnWidth 单位，1/256 字符宽）</li>
      *     <li>headerBackgroundColor：该列表头背景色（优先级高于默认背景色）</li>
      *     <li>headerFontColor：该列表头字体色（优先级高于默认字体色）</li>
+     *     <li>cellDataType：列数据类型，text=文本（默认），date=日期</li>
+     *     <li>cellDateFormat：日期格式，与枚举 dateTimeType 的 id 一致（year/month/date/time/datetime/timeminute）</li>
      * </ul>
      * <p>示例：</p>
      * <pre>
@@ -81,12 +83,21 @@ public class ImportExportConfig extends BaseGeneralInfo {
      *       "columnTitle": "名称",
      *       "columnWidth": 5000,
      *       "headerBackgroundColor": "#E2EFDA",
-     *       "headerFontColor": "#000000"
+     *       "headerFontColor": "#000000",
+     *       "cellDataType": "text"
      *     },
      *     {
      *       "attrKey": "code",
      *       "columnTitle": "编码",
-     *       "columnWidth": 4200
+     *       "columnWidth": 4200,
+     *       "cellDataType": "text"
+     *     },
+     *     {
+     *       "attrKey": "createTime",
+     *       "columnTitle": "创建时间",
+     *       "columnWidth": 5000,
+     *       "cellDataType": "date",
+     *       "cellDateFormat": "datetime"
      *     }
      *   ]
      * }

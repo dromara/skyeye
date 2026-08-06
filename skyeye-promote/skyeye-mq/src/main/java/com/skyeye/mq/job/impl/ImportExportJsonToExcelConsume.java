@@ -130,7 +130,10 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
                         rows = ImportExportRowUtil.flattenByCollections(rows, collectionAttrKeys);
                     }
                     ExcelUtil.SheetExportStyle exportStyle = parseExportStyle(map.get("exportStyleJson"));
-                    ExcelUtil.createWorkBookToFile(title, "导出数据", rows, keys, columnNames, new String[0], outPath.toFile(), exportStyle);
+                    // 列类型唯一来源：exportStyle.columnDataTypes（任务组装时已写入 exportStyleJson）
+                    String[] dataTypes = exportStyle != null && exportStyle.columnDataTypes != null
+                        ? exportStyle.columnDataTypes : new String[0];
+                    ExcelUtil.createWorkBookToFile(title, "导出数据", rows, keys, columnNames, dataTypes, outPath.toFile(), exportStyle);
                 }
             } else {
                 // ④b 流式写出：超大单 Sheet → SXSSF .xlsx
@@ -141,6 +144,7 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
                 }
                 excelFileName = "export-excel-" + System.currentTimeMillis() + ".xlsx";
                 outPath = Paths.get(saveDir).resolve(excelFileName);
+                // SXSSF 只从 exportStyle 读 columnDataTypes / columnDateFormats
                 ExcelUtil.SheetExportStyle exportStyle = parseExportStyle(map.get("exportStyleJson"));
                 ExcelUtil.createSxssfExcelFromJsonArrayFile(jsonPath.toFile(), "导出数据", keys, columnNames,
                     outPath.toFile(), SXSSF_ROW_ACCESS_WINDOW, exportStyle, collectionAttrKeys);
@@ -275,6 +279,27 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
             if (o.containsKey("writeAttrKeyRow")) {
                 s.writeAttrKeyRow = o.getBool("writeAttrKeyRow", false);
             }
+            if (o.containsKey("columnDataTypes")) {
+                JSONArray arr = o.getJSONArray("columnDataTypes");
+                if (arr != null && !arr.isEmpty()) {
+                    String[] types = new String[arr.size()];
+                    for (int i = 0; i < arr.size(); i++) {
+                        types[i] = arr.getStr(i);
+                    }
+                    s.columnDataTypes = types;
+                }
+            }
+            if (o.containsKey("columnDateFormats")) {
+                JSONArray arr = o.getJSONArray("columnDateFormats");
+                if (arr != null && !arr.isEmpty()) {
+                    String[] formats = new String[arr.size()];
+                    for (int i = 0; i < arr.size(); i++) {
+                        String f = arr.getStr(i);
+                        formats[i] = StrUtil.isBlank(f) ? null : f;
+                    }
+                    s.columnDateFormats = formats;
+                }
+            }
             return s;
         } catch (Exception e) {
             return null;
@@ -295,8 +320,10 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
         masterDef.put("sheetName", "主表");
         masterDef.put("keys", masterKeys);
         masterDef.put("columnNames", masterColumnNames);
+        ExcelUtil.SheetExportStyle masterStyle = parseExportStyle(map.get("masterExportStyleJson"));
+        masterDef.put("dataType", masterStyle != null ? masterStyle.columnDataTypes : null);
         masterDef.put("rows", split.getMasterRows());
-        masterDef.put("exportStyle", parseExportStyle(map.get("masterExportStyleJson")));
+        masterDef.put("exportStyle", masterStyle);
         sheetDefs.add(masterDef);
 
         Object detailSheetsObj = map.get("detailSheets");
@@ -318,9 +345,11 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
                 detailDef.put("sheetName", sheetName);
                 detailDef.put("keys", detailKeys);
                 detailDef.put("columnNames", detailColumnNames);
+                ExcelUtil.SheetExportStyle detailStyle = parseExportStyle(ds.get("exportStyleJson"));
+                detailDef.put("dataType", detailStyle != null ? detailStyle.columnDataTypes : null);
                 detailDef.put("rows", split.getDetailRowsByCollection()
                     .getOrDefault(collectionAttrKey, new ArrayList<>()));
-                detailDef.put("exportStyle", parseExportStyle(ds.get("exportStyleJson")));
+                detailDef.put("exportStyle", detailStyle);
                 sheetDefs.add(detailDef);
             }
         } else if (collectionAttrKeys.size() == 1) {

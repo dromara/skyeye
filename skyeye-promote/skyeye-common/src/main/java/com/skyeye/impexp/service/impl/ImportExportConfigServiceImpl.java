@@ -757,6 +757,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             json.put("collectionAttrKeys", collectionRoots);
             json.put("masterKeys", masterKeys);
             json.put("masterColumnNames", buildNamesWithLink(masterSpecs, titleMap));
+            // 列类型/日期格式只放在 exportStyleJson（columnDataTypes / columnDateFormats），避免双份冗余
             json.put("masterExportStyleJson", JSONUtil.toJsonStr(masterStyle));
             List<Map<String, Object>> detailSheets = new ArrayList<>();
             Set<String> usedSheetNames = new HashSet<>();
@@ -793,6 +794,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             ExcelUtil.SheetExportStyle exportStyle = buildSheetExportStyle(specs, layout);
             applyHeaderGroupNames(keys, columnNames, exportStyle, titleMap, layout);
             applyColumnDropdownOptions(exportStyle, keys, index, labelCache);
+            // 列类型只序列化在 exportStyleJson.columnDataTypes / columnDateFormats
             json.put("exportStyleJson", JSONUtil.toJsonStr(exportStyle));
         }
         JobMateMation jobMateMation = new JobMateMation();
@@ -835,6 +837,8 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         s.columnWidths = new int[n];
         s.headerBackgroundColors = new String[n];
         s.headerFontColors = new String[n];
+        s.columnDataTypes = ImportExportConfigJsonHelper.toExcelDataTypes(specs);
+        s.columnDateFormats = ImportExportConfigJsonHelper.toExcelDateFormats(specs);
         for (int i = 0; i < n; i++) {
             ColumnSpec sp = specs.get(i);
             if (sp.getColumnWidth() != null && sp.getColumnWidth() > 0) {
@@ -1579,11 +1583,12 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             keys[i] = specs.get(i).getAttrKey();
             columnNames[i] = resolveColumnTitle(specs.get(i), titleMap);
         }
-        // ⑤ 样式：隐藏键行 + 一级组标题 + 下拉 + 白边框（在 ExcelUtil 内）
+        String[] dataTypes = ImportExportConfigJsonHelper.toExcelDataTypes(specs);
+        // ⑤ 样式：隐藏键行 + 一级组标题 + 下拉 + 列类型；dataTypes 与 style.columnDataTypes 一致
         ExcelUtil.SheetExportStyle exportStyle = buildSheetExportStyle(specs, layout);
         applyHeaderGroupNames(keys, columnNames, exportStyle, titleMap, layout);
         applyColumnDropdownOptions(exportStyle, keys, index, labelCache);
-        ExcelUtil.createWorkBook(safeName, fileSuffix, outRows, keys, columnNames, new String[0],
+        ExcelUtil.createWorkBook(safeName, fileSuffix, outRows, keys, columnNames, dataTypes,
             PutObject.getResponse(), exportStyle);
     }
 
@@ -1624,7 +1629,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         applyColumnDropdownOptions(masterStyle, masterKeys, attrIndex, labelCache);
         sheetDefs.add(buildSheetDef(ImportExportConfigJsonHelper.MAIN_SHEET_NAME,
             masterKeys, buildNamesWithLink(masterSpecs, titleMap),
-            split.getMasterRows(), masterStyle));
+            masterStyle.columnDataTypes, split.getMasterRows(), masterStyle));
         // 每个明细集合一页
         Set<String> usedSheetNames = new HashSet<>();
         usedSheetNames.add(ImportExportConfigJsonHelper.MAIN_SHEET_NAME);
@@ -1640,17 +1645,19 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             applyColumnDropdownOptions(detailStyle, detailKeys, attrIndex, labelCache);
             sheetDefs.add(buildSheetDef(resolveDetailSheetName(collectionRoot, titleMap, usedSheetNames),
                 detailKeys, buildNamesWithLink(detailSpecs, titleMap),
-                detailRows, detailStyle));
+                detailStyle.columnDataTypes, detailRows, detailStyle));
         }
         ExcelUtil.createMultiSheetWorkBook(fileName, sheetDefs, PutObject.getResponse());
     }
 
     private Map<String, Object> buildSheetDef(String sheetName, String[] keys, String[] columnNames,
-                                              List<Map<String, Object>> rows, ExcelUtil.SheetExportStyle style) {
+                                              String[] dataTypes, List<Map<String, Object>> rows,
+                                              ExcelUtil.SheetExportStyle style) {
         Map<String, Object> def = new LinkedHashMap<>();
         def.put("sheetName", sheetName);
         def.put("keys", keys);
         def.put("columnNames", columnNames);
+        def.put("dataType", dataTypes == null ? new String[0] : dataTypes);
         def.put("rows", rows);
         def.put("exportStyle", style);
         return def;
