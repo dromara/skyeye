@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -237,6 +238,53 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
         result.put("seriesData", seriesData);
 
         outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryInspectionOrderTrendStats(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        if (StrUtil.isEmpty(tableSelectInfo.getStartTime()) || StrUtil.isEmpty(tableSelectInfo.getEndTime())) {
+            tableSelectInfo.setStartTime(DateUtil.formatDate2Str(
+                DateUtil.getAfDate(DateUtil.getPointTime(DateUtil.getYmdTimeAndToString(), DateUtil.YYYY_MM_DD), -30, "d"),
+                DateUtil.YYYY_MM_DD));
+            tableSelectInfo.setEndTime(DateUtil.getYmdTimeAndToString());
+        }
+
+        List<String> dayList = DateUtil.getDays(tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+        QueryWrapper<EquipmentInspectionOrder> queryWrapper = buildTimeRangeWrapper(
+            tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+        // 新增的巡检单
+        List<EquipmentInspectionOrder> orderList = equipmentInspectionOrderService.list(queryWrapper);
+        Map<String, Long> newOrderMap = orderList.stream()
+            .filter(order -> StrUtil.isNotEmpty(order.getCreateTime()))
+            .collect(Collectors.groupingBy(order -> {
+                Date pointTime = DateUtil.getPointTime(order.getCreateTime(), DateUtil.YYYY_MM_DD);
+                return DateUtil.formatDate2Str(pointTime, DateUtil.YYYY_MM_DD);
+            }, Collectors.counting()));
+        // 已完成的巡检单
+        Map<String, Long> completedMap = orderList.stream()
+            .filter(order -> EquipmentInspectionOrderState.COMPLETED.getKey().equals(order.getState()))
+            .filter(order -> StrUtil.isNotEmpty(order.getCreateTime()))
+            .collect(Collectors.groupingBy(order -> {
+                Date pointTime = DateUtil.getPointTime(order.getCreateTime(), DateUtil.YYYY_MM_DD);
+                return DateUtil.formatDate2Str(pointTime, DateUtil.YYYY_MM_DD);
+            }, Collectors.counting()));
+
+        List<Long> allNewOrders = new ArrayList<>();
+        List<Long> completedOrders = new ArrayList<>();
+        Long defaultValue = Long.valueOf(CommonNumConstants.NUM_ZERO);
+        for (String day : dayList) {
+            allNewOrders.add(newOrderMap.getOrDefault(day, defaultValue) - completedMap.getOrDefault(day, defaultValue));
+            completedOrders.add(completedMap.getOrDefault(day, defaultValue));
+        }
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("allNewOrders", allNewOrders);
+        resultMap.put("completedOrders", completedOrders);
+        resultMap.put("dayList", dayList);
+
+        outputObject.setBean(resultMap);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
