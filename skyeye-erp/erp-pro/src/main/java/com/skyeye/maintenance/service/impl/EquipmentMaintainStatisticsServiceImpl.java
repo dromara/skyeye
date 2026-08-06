@@ -110,11 +110,8 @@ public class EquipmentMaintainStatisticsServiceImpl implements EquipmentMaintain
         Map<String, Object> result = new HashMap<>();
         result.put("total", total);
         result.put("completed", completed);
-        if (total > 0) {
-            result.put("completionRate", CalculationUtil.divide(String.valueOf(completed), String.valueOf(total), CommonNumConstants.NUM_TWO));
-        } else {
-            result.put("completionRate", CommonNumConstants.NUM_ZERO);
-        }
+        double completionRate = total == 0 ? 0D : (completed * 100D / total);
+        result.put("completionRate", Math.round(completionRate * 100D) / 100D);
 
         outputObject.setBean(result);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
