@@ -232,8 +232,7 @@ public class ReportCommonServiceImpl implements ReportCommonService {
                 Object firstElement = tempList.get(0);
 
                 if (firstElement instanceof Map) {
-                    // 对象数组：暴露根路径
-                    sets.add(currentPath);
+                    // 处理对象数组
                     for (Object object : tempList) {
                         if (object instanceof Map) {
                             parseJsonSubNode((Map<String, Object>) object, sets, false, arrayPath);
