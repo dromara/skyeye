@@ -121,4 +121,8 @@ public class ShopMaterial extends OperatorUserInfo {
     @TableField(value = "store_self_made")
     @ApiModelProperty(value = "门店自制", enumClass = WhetherEnum.class, required = "required,num")
     private Integer storeSelfMade;
+
+    @TableField(exist = false)
+    @Property(value = "提示编码")
+    private Integer returnCode;
 }

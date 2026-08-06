@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @ClassName: ShopMaterialPcTipCode
- * @Description: PC 商城提示编码（接口 returnCode / returnMessage，供前端识别展示）
+ * @Description: PC 商城提示编码（挂在单个商品 shopMaterial.returnCode，供前端识别展示）
  * @author: skyeye云系列--卫志强
  * @date: 2026/8/5
  * @Copyright: 2026 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
