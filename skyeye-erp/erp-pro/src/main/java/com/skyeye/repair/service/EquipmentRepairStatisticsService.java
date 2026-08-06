@@ -38,4 +38,9 @@ public interface EquipmentRepairStatisticsService {
      * 按维修负责人划分
      */
     void queryRepairOrderStatsByServiceUser(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 按故障类别划分
+     */
+    void queryRepairOrderStatsByFaultType(InputObject inputObject, OutputObject outputObject);
 }

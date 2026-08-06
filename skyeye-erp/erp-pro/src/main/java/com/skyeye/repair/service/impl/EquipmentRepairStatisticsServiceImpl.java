@@ -16,6 +16,7 @@ import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.eve.service.IAuthUserService;
 import com.skyeye.eve.service.ISysDictDataService;
+import com.skyeye.repair.classenum.EquipmentFaultCategory;
 import com.skyeye.repair.classenum.EquipmentRepairOrderState;
 import com.skyeye.repair.dao.EquipmentRepairOrderDao;
 import com.skyeye.repair.entity.EquipmentRepairOrder;
@@ -258,6 +259,30 @@ public class EquipmentRepairStatisticsServiceImpl implements EquipmentRepairStat
 
         outputObject.setBean(result);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryRepairOrderStatsByFaultType(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        QueryWrapper<EquipmentRepairOrder> queryWrapper = buildTimeRangeWrapper(
+            tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+        List<EquipmentRepairOrder> list = equipmentRepairOrderDao.selectList(queryWrapper);
+        Map<Integer, Long> faultTypeCountMap = list.stream()
+            .collect(Collectors.groupingBy(
+                o -> o.getFaultType() != null
+                    ? o.getFaultType()
+                    : EquipmentFaultCategory.OTHER.getKey(),
+                Collectors.counting()));
+        List<Map<String, Object>> rows = new ArrayList<>();
+        for (EquipmentFaultCategory faultCategory : EquipmentFaultCategory.values()) {
+            Map<String, Object> row = new HashMap<>(2);
+            row.put("name", faultCategory.getValue());
+            row.put("value", String.valueOf(faultTypeCountMap.getOrDefault(faultCategory.getKey(), 0L)));
+            rows.add(row);
+        }
+
+        outputObject.setBeans(rows);
+        outputObject.settotal(rows.size());
     }
 
     private QueryWrapper<EquipmentRepairOrder> buildTimeRangeWrapper(String startTime, String endTime) {
