@@ -20,6 +20,7 @@ import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.ShopMaterialDeliveryMethod;
 import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -33,6 +34,7 @@ import com.skyeye.shopmaterial.dao.ShopMaterialDao;
 import com.skyeye.shopmaterial.entity.ShopMaterial;
 import com.skyeye.shopmaterial.entity.ShopMaterialNorms;
 import com.skyeye.shopmaterial.entity.ShopMaterialStore;
+import com.skyeye.shopmaterial.enums.ShopMaterialPcTipCode;
 import com.skyeye.shopmaterial.enums.ShopMaterialStoreCoverage;
 import com.skyeye.shopmaterial.service.ShopMaterialNormsService;
 import com.skyeye.shopmaterial.service.ShopMaterialService;
@@ -173,6 +175,10 @@ public class ShopMaterialServiceImpl extends SkyeyeBusinessServiceImpl<ShopMater
     @Override
     @IgnoreTenant
     public void queryShopMaterialList(InputObject inputObject, OutputObject outputObject) {
+        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        // 门店 + 优惠券场景：仅同城商品需在 shopMaterial 上打 returnCode
+        boolean couponAndStoreQuery = StrUtil.isNotBlank(commonPageInfo.getObjectId())
+            && StrUtil.isNotBlank(commonPageInfo.getCustomParamsMapStr("couponId"));
         List<ShopMaterialStore> shopMaterialStoreList = shopMaterialStoreService.queryShopMaterialList(inputObject, outputObject);
         if (CollectionUtil.isEmpty(shopMaterialStoreList)) {
             return;
@@ -188,13 +194,23 @@ public class ShopMaterialServiceImpl extends SkyeyeBusinessServiceImpl<ShopMater
         // 如果遇到materialId相同的商品，则只保留一个
         Map<String, ShopMaterial> materialMap = shopMaterials.stream().collect(
             Collectors.toMap(ShopMaterial::getMaterialId, Function.identity(), (v1, v2) -> v1));
+        String expressKey = String.valueOf(ShopMaterialDeliveryMethod.EXPRESS_DELIVERY.getKey());
+        String localKey = String.valueOf(ShopMaterialDeliveryMethod.LOCAL_DELIVERY.getKey());
         shopMaterialStoreList.forEach(shopMaterialStore -> {
             ShopMaterial shopMaterial = materialMap.get(shopMaterialStore.getMaterialId());
-            if (ObjectUtil.isNotEmpty(shopMaterial.getMaterialMation())) {
+            if (ObjectUtil.isNotEmpty(shopMaterial) && ObjectUtil.isNotEmpty(shopMaterial.getMaterialMation())) {
                 shopMaterial.getMaterialMation().setMaterialNorms(null);
                 shopMaterial.getMaterialMation().setUnitGroupMation(null);
                 shopMaterial.getMaterialMation().setMaterialProcedure(null);
                 shopMaterial.getMaterialMation().setNormsSpec(null);
+            }
+            // 门店+优惠券：仅同城（含3无1）的商品打编码，接口头 returnCode 仍为成功
+            if (couponAndStoreQuery && ObjectUtil.isNotEmpty(shopMaterial)) {
+                List<String> deliveryMethod = shopMaterialStore.getDeliveryMethod();
+                if (CollectionUtil.isNotEmpty(deliveryMethod)
+                    && deliveryMethod.contains(localKey) && !deliveryMethod.contains(expressKey)) {
+                    shopMaterial.setReturnCode(ShopMaterialPcTipCode.LOCAL_DELIVERY_ONLY.getKey());
+                }
             }
             shopMaterialStore.setShopMaterial(shopMaterial);
         });
