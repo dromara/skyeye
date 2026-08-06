@@ -11,6 +11,7 @@ import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
+import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionCheckResult;
@@ -22,7 +23,6 @@ import com.skyeye.eve.service.IAuthUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -244,7 +244,7 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
      * 今日单量
      */
     private Long countTodayOrders(Integer checkResult) {
-        String today = LocalDate.now().toString();
+        String today = DateUtil.getYmdTimeAndToString();
         QueryWrapper<EquipmentInspectionOrder> wrapper = new QueryWrapper<>();
         wrapper.likeRight(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), today);
         if (checkResult != null) {
