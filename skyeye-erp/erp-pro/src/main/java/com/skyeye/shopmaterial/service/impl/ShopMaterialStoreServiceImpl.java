@@ -568,6 +568,37 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
     }
 
     @Override
+    @IgnoreTenant
+    public void queryLaunchedStoreIdsByMaterialId(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        List<String> materialIdList = JSONUtil.toList(params.get("materialId").toString(), null);
+        materialIdList = materialIdList.stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(materialIdList)) {
+            return;
+        }
+        List<String> storeIdList = Collections.emptyList();
+        if (ObjectUtil.isNotEmpty(params.get("storeId"))) {
+            storeIdList = JSONUtil.toList(params.get("storeId").toString(), null).stream()
+                .filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+        }
+        QueryWrapper<ShopMaterialStore> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreId))
+            .in(MybatisPlusUtil.toColumns(ShopMaterialStore::getMaterialId), materialIdList)
+            .eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getIsLaunchStore), WhetherEnum.ENABLE_USING.getKey())
+            .eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getIsLaunchShop), WhetherEnum.ENABLE_USING.getKey())
+            .eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreEnabled), EnableEnum.ENABLE_USING.getKey());
+        if (CollectionUtil.isNotEmpty(storeIdList)) {
+            queryWrapper.in(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreId), storeIdList);
+        }
+        List<String> launchedStoreIdList = list(queryWrapper).stream()
+            .map(ShopMaterialStore::getStoreId).filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+        Map<String, Object> bean = new HashMap<>();
+        bean.put("storeIdList", launchedStoreIdList);
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
     public void deleteShopMaterialStoreByStoreIds(InputObject inputObject, OutputObject outputObject) {
         List<String> storeIdList = Arrays.asList(inputObject.getParams().get("storeIds").toString()
                 .split(CommonCharConstants.COMMA_MARK))

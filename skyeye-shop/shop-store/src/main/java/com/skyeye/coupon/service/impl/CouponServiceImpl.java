@@ -5,10 +5,8 @@
 package com.skyeye.coupon.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
@@ -23,7 +21,6 @@ import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
-import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
@@ -356,14 +353,12 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         if (ObjectUtil.isEmpty(coupon)) {
             return;
         }
-        // 与 queryCouponById / getDataFromDb 同源，补全适用商品
-        coupon.setCouponMaterialList(couponMaterialService.queryListByCouponId(couponId));
 
         boolean allStore = Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.ALL_STORE.getKey());
         boolean specifiedMaterial = Objects.equals(coupon.getProductScope(), PromotionMaterialScope.SPU.getKey());
         List<String> storeIdList = null;
         if (specifiedMaterial) {
-            // ---------- 指定商品：先定候选门店，再按是否有已上架适用商品过滤 ----------
+            // ---------- 指定商品：按适用商品查已上架门店（ERP IN 查询，可选限定门店范围） ----------
             if (CollectionUtil.isEmpty(coupon.getCouponMaterialList())) {
                 return;
             }
@@ -372,62 +367,15 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             if (CollectionUtil.isEmpty(materialIdList)) {
                 return;
             }
-            // 候选门店：全部门店 = 启用门店；指定门店 = 券关联门店（不与全部门店比对）
-            List<String> candidateStoreIdList;
-            if (allStore) {
-                QueryWrapper<ShopStore> enabledStoreQuery = new QueryWrapper<>();
-                enabledStoreQuery.select(CommonConstants.ID)
-                    .eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), EnableEnum.ENABLE_USING.getKey());
-                candidateStoreIdList = shopStoreService.list(enabledStoreQuery).stream()
-                    .map(ShopStore::getId).filter(StrUtil::isNotBlank).collect(Collectors.toList());
-            } else {
+            List<String> candidateStoreIdList = null;
+            if (!allStore) {
                 candidateStoreIdList = CollectionUtil.isEmpty(coupon.getStoreIdList()) ? Collections.emptyList()
                     : coupon.getStoreIdList().stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
-            }
-            if (CollectionUtil.isEmpty(candidateStoreIdList)) {
-                return;
-            }
-            // 现有 Feign 要求 materialId、storeId 一一对应，故展开候选门店 × 适用商品
-            List<String> pairMaterialIdList = new ArrayList<>();
-            List<String> pairStoreIdList = new ArrayList<>();
-            for (String storeId : candidateStoreIdList) {
-                for (String materialId : materialIdList) {
-                    pairMaterialIdList.add(materialId);
-                    pairStoreIdList.add(storeId);
+                if (CollectionUtil.isEmpty(candidateStoreIdList)) {
+                    return;
                 }
             }
-            // 1）查门店-商品关系；2）查详情并校验已添加门店、已上架商城、门店启用
-            Map<String, Object> materialStoreIdMap = iShopMaterialNormsService
-                .queryShopMaterialMapByMaterialIdAndStoreId(pairMaterialIdList, pairStoreIdList);
-            if (CollectionUtil.isEmpty(materialStoreIdMap)) {
-                return;
-            }
-            List<String> materialStoreIds = materialStoreIdMap.values().stream()
-                .map(Object::toString).collect(Collectors.toList());
-            List<Map<String, Object>> materialByIds = iShopMaterialNormsService.queryShopMaterialByIds(materialStoreIds);
-            if (CollectionUtil.isEmpty(materialByIds)) {
-                return;
-            }
-            storeIdList = materialByIds.stream().map(map -> {
-                if (ObjectUtil.isEmpty(map.get("shopMaterialStore"))) {
-                    return null;
-                }
-                // toJsonStr 再转 Map，避免 Map.toString 解析失败
-                Map<String, Object> shopMaterialStore = JSONUtil.toBean(JSONUtil.toJsonStr(map.get("shopMaterialStore")), null);
-                if (CollectionUtil.isEmpty(shopMaterialStore) || ObjectUtil.isEmpty(shopMaterialStore.get("storeId"))) {
-                    return null;
-                }
-                Integer isLaunchStore = MapUtil.getInt(shopMaterialStore, "isLaunchStore");
-                Integer isLaunchShop = MapUtil.getInt(shopMaterialStore, "isLaunchShop");
-                Integer storeEnabled = MapUtil.getInt(shopMaterialStore, "storeEnabled");
-                // 门店至少有一个适用商品满足：已添加 + 已上架 + 门店启用
-                if (Objects.equals(isLaunchStore, WhetherEnum.ENABLE_USING.getKey())
-                    && Objects.equals(isLaunchShop, WhetherEnum.ENABLE_USING.getKey())
-                    && Objects.equals(storeEnabled, EnableEnum.ENABLE_USING.getKey())) {
-                    return shopMaterialStore.get("storeId").toString();
-                }
-                return null;
-            }).filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+            storeIdList = iShopMaterialNormsService.queryLaunchedStoreIdsByMaterialId(materialIdList, candidateStoreIdList);
             if (CollectionUtil.isEmpty(storeIdList)) {
                 return;
             }
