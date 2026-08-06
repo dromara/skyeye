@@ -22,6 +22,7 @@ import com.skyeye.eve.service.IAuthUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +59,22 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
 
     @Autowired
     private IAuthUserService iAuthUserService;
+
+    @Override
+    public void queryTodayInspectedTotal(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("total", countTodayOrders(null));
+        outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryTodayAbnormalInspectionTotal(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("total", countTodayOrders(EquipmentInspectionCheckResult.ABNORMAL.getKey()));
+        outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
 
     @Override
     public void queryInspectionOrderStateStats(InputObject inputObject, OutputObject outputObject) {
@@ -221,6 +238,19 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
 
         outputObject.setBean(result);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    /**
+     * 今日单量
+     */
+    private Long countTodayOrders(Integer checkResult) {
+        String today = LocalDate.now().toString();
+        QueryWrapper<EquipmentInspectionOrder> wrapper = new QueryWrapper<>();
+        wrapper.likeRight(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), today);
+        if (checkResult != null) {
+            wrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCheckResult), checkResult);
+        }
+        return equipmentInspectionOrderService.count(wrapper);
     }
 
     private QueryWrapper<EquipmentInspectionOrder> buildTimeRangeWrapper(String startTime, String endTime) {

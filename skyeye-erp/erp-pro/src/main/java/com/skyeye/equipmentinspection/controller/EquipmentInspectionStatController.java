@@ -26,6 +26,18 @@ public class EquipmentInspectionStatController {
     @Autowired
     private EquipmentInspectionStatService equipmentInspectionStatService;
 
+    @ApiOperation(id = "queryTodayInspectedTotal", value = "今日已巡检次数", method = "POST", allUse = "2")
+    @RequestMapping("/post/EquipmentInspectionStatController/queryTodayInspectedTotal")
+    public void queryTodayInspectedTotal(InputObject inputObject, OutputObject outputObject) {
+        equipmentInspectionStatService.queryTodayInspectedTotal(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryTodayAbnormalInspectionTotal", value = "今日异常巡检数", method = "POST", allUse = "2")
+    @RequestMapping("/post/EquipmentInspectionStatController/queryTodayAbnormalInspectionTotal")
+    public void queryTodayAbnormalInspectionTotal(InputObject inputObject, OutputObject outputObject) {
+        equipmentInspectionStatService.queryTodayAbnormalInspectionTotal(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryInspectionOrderStateStats", value = "巡检单按状态统计", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = TableSelectInfo.class)
     @RequestMapping("/post/EquipmentInspectionStatController/queryInspectionOrderStateStats")
