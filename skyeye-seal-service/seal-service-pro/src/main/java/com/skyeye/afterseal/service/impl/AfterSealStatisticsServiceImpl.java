@@ -14,7 +14,6 @@ import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.eve.service.ISysDictDataService;
 import com.skyeye.rest.project.service.IProProjectService;
@@ -102,11 +101,8 @@ public class AfterSealStatisticsServiceImpl implements AfterSealStatisticsServic
         Map<String, Object> result = new HashMap<>();
         result.put("total", total);
         result.put("completed", completed);
-        if (total > 0) {
-            result.put("completionRate", CalculationUtil.divide(String.valueOf(completed), String.valueOf(total), CommonNumConstants.NUM_TWO));
-        } else {
-            result.put("completionRate", CommonNumConstants.NUM_ZERO);
-        }
+        double completionRate = total == 0 ? 0D : (completed * 100D / total);
+        result.put("completionRate", Math.round(completionRate * 100D) / 100D);
 
         outputObject.setBean(result);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
