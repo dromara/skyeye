@@ -40,7 +40,6 @@ import com.skyeye.shopmaterial.dao.ShopMaterialStoreDao;
 import com.skyeye.shopmaterial.entity.ShopMaterial;
 import com.skyeye.shopmaterial.entity.ShopMaterialNorms;
 import com.skyeye.shopmaterial.entity.ShopMaterialStore;
-import com.skyeye.shopmaterial.enums.ShopMaterialPcTipCode;
 import com.skyeye.shopmaterial.enums.ShopMaterialStoreCoverage;
 import com.skyeye.shopmaterial.service.ShopMaterialService;
 import com.skyeye.shopmaterial.service.ShopMaterialStoreService;
@@ -258,7 +257,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         if (couponScopeFilter != null && couponScopeFilter.empty) {
             return Collections.emptyList();
         }
-        // 门店id + 优惠券id 查适用商品：跳过 shopType 配送过滤，查出后若有仅同城则 returnCode=3003
+        // 门店id + 优惠券id 查适用商品：跳过 shopType 配送过滤；仅同城编码由上层写到 shopMaterial.returnCode
         boolean couponAndStoreQuery = couponScopeFilter != null && StrUtil.isNotBlank(commonPageInfo.getObjectId());
 
         Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
@@ -300,9 +299,6 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         wrapper.eq(ShopMaterialStore::getStoreEnabled, EnableEnum.ENABLE_USING.getKey());
 
         List<ShopMaterialStore> shopMaterialStoreList = skyeyeBaseMapper.selectJoinList(ShopMaterialStore.class, wrapper);
-        if (couponAndStoreQuery) {
-            fillLocalDeliveryOnlyReturnCode(shopMaterialStoreList, outputObject);
-        }
         iShopStoreService.setDataMation(shopMaterialStoreList, ShopMaterialStore::getStoreId);
         outputObject.settotal(pages.getTotal());
         return shopMaterialStoreList;
@@ -381,30 +377,6 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
                 "%\"" + expressKey + "\"%");
             wrapper.apply("sms." + deliveryMethodColumn + " LIKE {0}",
                 "%\"" + expressKey + "\"%");
-        }
-    }
-
-    /**
-     * 门店+优惠券查适用商品：若存在仅同城配送（含 key=3 且无快递 key=1），
-     * 接口返回 returnCode=3003 及提示文案；rows 仍返回商品，前端可结合 deliveryMethod 识别。
-     */
-    private static void fillLocalDeliveryOnlyReturnCode(List<ShopMaterialStore> shopMaterialStoreList,
-                                                        OutputObject outputObject) {
-        if (CollectionUtil.isEmpty(shopMaterialStoreList) || outputObject == null) {
-            return;
-        }
-        String expressKey = String.valueOf(ShopMaterialDeliveryMethod.EXPRESS_DELIVERY.getKey());
-        String localKey = String.valueOf(ShopMaterialDeliveryMethod.LOCAL_DELIVERY.getKey());
-        boolean hasLocalDeliveryOnly = shopMaterialStoreList.stream().anyMatch(shopMaterialStore -> {
-            List<String> deliveryMethod = shopMaterialStore.getDeliveryMethod();
-            if (CollectionUtil.isEmpty(deliveryMethod)) {
-                return false;
-            }
-            return deliveryMethod.contains(localKey) && !deliveryMethod.contains(expressKey);
-        });
-        if (hasLocalDeliveryOnly) {
-            outputObject.setreturnMessage(ShopMaterialPcTipCode.LOCAL_DELIVERY_ONLY.getValue(),
-                ShopMaterialPcTipCode.LOCAL_DELIVERY_ONLY.getKey());
         }
     }
 

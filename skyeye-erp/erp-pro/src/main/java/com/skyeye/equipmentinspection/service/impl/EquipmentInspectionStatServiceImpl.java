@@ -11,6 +11,7 @@ import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
+import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.equipmentinspection.classenum.EquipmentInspectionCheckResult;
@@ -58,6 +59,22 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
 
     @Autowired
     private IAuthUserService iAuthUserService;
+
+    @Override
+    public void queryTodayInspectedTotal(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("total", countTodayOrders(null));
+        outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryTodayAbnormalInspectionTotal(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("total", countTodayOrders(EquipmentInspectionCheckResult.ABNORMAL.getKey()));
+        outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
 
     @Override
     public void queryInspectionOrderStateStats(InputObject inputObject, OutputObject outputObject) {
@@ -221,6 +238,19 @@ public class EquipmentInspectionStatServiceImpl implements EquipmentInspectionSt
 
         outputObject.setBean(result);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    /**
+     * 今日单量
+     */
+    private Long countTodayOrders(Integer checkResult) {
+        String today = DateUtil.getYmdTimeAndToString();
+        QueryWrapper<EquipmentInspectionOrder> wrapper = new QueryWrapper<>();
+        wrapper.likeRight(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getInspectionTime), today);
+        if (checkResult != null) {
+            wrapper.eq(MybatisPlusUtil.toColumns(EquipmentInspectionOrder::getCheckResult), checkResult);
+        }
+        return equipmentInspectionOrderService.count(wrapper);
     }
 
     private QueryWrapper<EquipmentInspectionOrder> buildTimeRangeWrapper(String startTime, String endTime) {
