@@ -358,7 +358,7 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         boolean specifiedMaterial = Objects.equals(coupon.getProductScope(), PromotionMaterialScope.SPU.getKey());
         List<String> storeIdList = null;
         if (specifiedMaterial) {
-            // ---------- 指定商品：按适用商品查已上架门店（ERP IN 查询，可选限定门店范围） ----------
+            // ---------- 指定商品：先定候选门店，再按是否有已上架适用商品过滤 ----------
             if (CollectionUtil.isEmpty(coupon.getCouponMaterialList())) {
                 return;
             }
@@ -367,14 +367,22 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             if (CollectionUtil.isEmpty(materialIdList)) {
                 return;
             }
-            List<String> candidateStoreIdList = null;
-            if (!allStore) {
+            // 候选门店：全部门店 = 启用门店；指定门店 = 券关联门店（不与全部门店比对）
+            List<String> candidateStoreIdList;
+            if (allStore) {
+                QueryWrapper<ShopStore> enabledStoreQuery = new QueryWrapper<>();
+                enabledStoreQuery.select(CommonConstants.ID)
+                    .eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), EnableEnum.ENABLE_USING.getKey());
+                candidateStoreIdList = shopStoreService.list(enabledStoreQuery).stream()
+                    .map(ShopStore::getId).filter(StrUtil::isNotBlank).collect(Collectors.toList());
+            } else {
                 candidateStoreIdList = CollectionUtil.isEmpty(coupon.getStoreIdList()) ? Collections.emptyList()
                     : coupon.getStoreIdList().stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
-                if (CollectionUtil.isEmpty(candidateStoreIdList)) {
-                    return;
-                }
             }
+            if (CollectionUtil.isEmpty(candidateStoreIdList)) {
+                return;
+            }
+            // 用 ERP IN 查询替代门店×商品笛卡尔积 + 二次查详情
             storeIdList = iShopMaterialNormsService.queryLaunchedStoreIdsByMaterialId(materialIdList, candidateStoreIdList);
             if (CollectionUtil.isEmpty(storeIdList)) {
                 return;
