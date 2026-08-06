@@ -72,7 +72,7 @@ public class EquipmentMaintainOrderController {
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "任务ID", required = "required"),
         @ApiImplicitParam(id = "maintainResult", name = "maintainResult", value = "保养结果", enumClass = EquipmentMaintainResult.class, required = "required,num"),
-        @ApiImplicitParam(id = "isToRepair", name = "isToRepair", value = "是否转维修", enumClass = WhetherEnum.class, required = "required,num"),
+        @ApiImplicitParam(id = "isToRepair", name = "isToRepair", value = "是否转维修", enumClass = WhetherEnum.class, required = "num"),
         @ApiImplicitParam(id = "maintainPhotos", name = "maintainPhotos", value = "保养拍照")})
     @RequestMapping("/post/EquipmentMaintainOrderController/completeEquipmentMaintainTask")
     public void completeEquipmentMaintainTask(InputObject inputObject, OutputObject outputObject) {

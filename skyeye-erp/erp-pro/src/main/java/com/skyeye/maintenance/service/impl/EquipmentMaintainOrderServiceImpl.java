@@ -23,6 +23,7 @@ import com.skyeye.equipment.classenum.EquipmentState;
 import com.skyeye.equipment.entity.Equipment;
 import com.skyeye.equipment.service.EquipmentService;
 import com.skyeye.exception.CustomException;
+import com.skyeye.maintenance.classenum.EquipmentMaintainResult;
 import com.skyeye.maintenance.classenum.EquipmentMaintainTaskState;
 import com.skyeye.maintenance.entity.EquipmentMaintainOrderSparePartDetail;
 import com.skyeye.material.service.MaterialNormsService;
@@ -238,12 +239,19 @@ public class EquipmentMaintainOrderServiceImpl extends SkyeyeBusinessServiceImpl
             throw new CustomException("只有执行中状态的任务才能完成");
         }
         String userId = inputObject.getLogParamsStatic().get("id").toString();
-        equipmentMaintainOrderSparePartDetailService.deductStockByParentId(id);
-        task.setState(EquipmentMaintainTaskState.COMPLETED.getKey());
-        task.setActualEndTime(DateUtil.getTimeAndToString());
-        task.setMaintainResult(Integer.valueOf(map.get("maintainResult").toString()));
-        task.setIsToRepair(Integer.valueOf(map.get("isToRepair").toString()));
+        Integer maintainResult = Integer.valueOf(map.get("maintainResult").toString());
+        task.setMaintainResult(maintainResult);
+        if (ObjectUtil.isNotEmpty(map.get("isToRepair"))) {
+            task.setIsToRepair(Integer.valueOf(map.get("isToRepair").toString()));
+        }
         task.setMaintainPhotos(map.get("maintainPhotos").toString());
+        task.setActualEndTime(DateUtil.getTimeAndToString());
+        if (EquipmentMaintainResult.INCOMPLETE.getKey().equals(maintainResult)) {
+            task.setState(EquipmentMaintainTaskState.PENDING.getKey());
+        } else {
+            equipmentMaintainOrderSparePartDetailService.deductStockByParentId(id);
+            task.setState(EquipmentMaintainTaskState.COMPLETED.getKey());
+        }
         updateEntity(task, userId);
         outputObject.setBean(selectById(id));
         outputObject.settotal(CommonNumConstants.NUM_ONE);
