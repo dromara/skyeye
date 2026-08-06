@@ -14,6 +14,16 @@ import com.skyeye.common.object.OutputObject;
 public interface EquipmentInspectionStatService {
 
     /**
+     * 今日已巡检次数
+     */
+    void queryTodayInspectedTotal(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 今日异常巡检数
+     */
+    void queryTodayAbnormalInspectionTotal(InputObject inputObject, OutputObject outputObject);
+
+    /**
      * 巡检单按状态统计：各状态数量（待派工、待接单、待填报、待完工、已完成）
      */
     void queryInspectionOrderStateStats(InputObject inputObject, OutputObject outputObject);
