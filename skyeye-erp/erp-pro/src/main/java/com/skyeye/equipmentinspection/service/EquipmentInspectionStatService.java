@@ -48,4 +48,9 @@ public interface EquipmentInspectionStatService {
      */
     void queryInspectionOrderStatsByInspector(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 巡检单日度趋势统计：新增 / 已完成
+     */
+    void queryInspectionOrderTrendStats(InputObject inputObject, OutputObject outputObject);
+
 }
