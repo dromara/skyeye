@@ -28,6 +28,11 @@ public interface ShopMaterialService extends SkyeyeBusinessService<ShopMaterial>
 
     void queryShopMaterialListForStore(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 批量门店id + 优惠券id 查询适用商品，外层门店、内层商品
+     */
+    void queryCouponApplicableMaterialByStoreIds(InputObject inputObject, OutputObject outputObject);
+
     void queryShopMaterialByNormsIdList(InputObject inputObject, OutputObject outputObject);
 
     void queryBrandShopMaterialList(InputObject inputObject, OutputObject outputObject);

@@ -183,12 +183,48 @@ public class ShopMaterialServiceImpl extends SkyeyeBusinessServiceImpl<ShopMater
         if (CollectionUtil.isEmpty(shopMaterialStoreList)) {
             return;
         }
+        fillShopMaterialForCouponStoreQuery(shopMaterialStoreList, couponAndStoreQuery);
+        outputObject.setBeans(shopMaterialStoreList);
+    }
+
+    @Override
+    @IgnoreTenant
+    public void queryCouponApplicableMaterialByStoreIds(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String couponId = params.get("couponId") == null ? StrUtil.EMPTY : params.get("couponId").toString();
+        String storeIds = params.get("storeIds") == null ? StrUtil.EMPTY : params.get("storeIds").toString();
+        if (StrUtil.isBlank(couponId) || StrUtil.isBlank(storeIds)) {
+            return;
+        }
+        List<String> storeIdList = Arrays.stream(storeIds.split(CommonCharConstants.COMMA_MARK))
+            .filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(storeIdList)) {
+            return;
+        }
+        // 复用单店适用商品查询条件（券范围 + 上架），仅门店改为 IN
+        List<ShopMaterialStore> shopMaterialStoreList =
+            shopMaterialStoreService.queryCouponApplicableMaterialStoreList(couponId, storeIdList);
+        if (CollectionUtil.isEmpty(shopMaterialStoreList)) {
+            return;
+        }
+        fillShopMaterialForCouponStoreQuery(shopMaterialStoreList, true);
+        outputObject.setBeans(shopMaterialStoreList);
+        outputObject.settotal(shopMaterialStoreList.size());
+    }
+
+    /**
+     * 与 queryShopMaterialList 门店+优惠券场景同源：补全 shopMaterial，仅同城配送商品打 returnCode
+     */
+    private void fillShopMaterialForCouponStoreQuery(List<ShopMaterialStore> shopMaterialStoreList, boolean couponAndStoreQuery) {
         List<String> materialIdList = shopMaterialStoreList.stream().map(ShopMaterialStore::getMaterialId).collect(Collectors.toList());
         // 根据商品id查询上架的商品信息
         QueryWrapper<ShopMaterial> queryWrapper = new QueryWrapper<>();
         queryWrapper.in(MybatisPlusUtil.toColumns(ShopMaterial::getMaterialId), materialIdList);
         List<ShopMaterial> shopMaterialList = list(queryWrapper);
         // 根据id批量查询详细的商品信息
+        if (CollectionUtil.isEmpty(shopMaterialList)) {
+            return;
+        }
         List<String> idList = shopMaterialList.stream().map(ShopMaterial::getId).collect(Collectors.toList());
         List<ShopMaterial> shopMaterials = selectByIds(idList.toArray(new String[]{}));
         // 如果遇到materialId相同的商品，则只保留一个
@@ -214,8 +250,6 @@ public class ShopMaterialServiceImpl extends SkyeyeBusinessServiceImpl<ShopMater
             }
             shopMaterialStore.setShopMaterial(shopMaterial);
         });
-
-        outputObject.setBeans(shopMaterialStoreList);
     }
 
     @Override

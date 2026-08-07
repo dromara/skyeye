@@ -304,6 +304,80 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         return shopMaterialStoreList;
     }
 
+    @Override
+    @IgnoreTenant
+    public List<ShopMaterialStore> queryCouponApplicableMaterialStoreList(String couponId, List<String> storeIdList) {
+        if (StrUtil.isBlank(couponId) || CollectionUtil.isEmpty(storeIdList)) {
+            return Collections.emptyList();
+        }
+        List<String> requestStoreIdList = storeIdList.stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(requestStoreIdList)) {
+            return Collections.emptyList();
+        }
+        CouponScopeFilter couponScopeFilter = resolveCouponScopeFilterForStores(couponId, requestStoreIdList);
+        if (couponScopeFilter.empty || CollectionUtil.isEmpty(couponScopeFilter.storeIdList)) {
+            return Collections.emptyList();
+        }
+        MPJLambdaWrapper<ShopMaterialStore> wrapper = JoinWrappers.lambda("sms", ShopMaterialStore.class);
+        wrapper.innerJoin(Material.class, "m", Material::getId, ShopMaterialStore::getMaterialId)
+            .innerJoin(ShopMaterial.class, "sm", ShopMaterial::getMaterialId, ShopMaterialStore::getMaterialId);
+        applyCouponScopeFilter(wrapper, couponScopeFilter);
+        wrapper.in(ShopMaterialStore::getStoreId, couponScopeFilter.storeIdList);
+        // 已经添加到门店
+        wrapper.eq(ShopMaterialStore::getIsLaunchStore, WhetherEnum.ENABLE_USING.getKey());
+        // 上架到商城
+        wrapper.eq(ShopMaterialStore::getIsLaunchShop, WhetherEnum.ENABLE_USING.getKey());
+        // 门店是启用状态的
+        wrapper.eq(ShopMaterialStore::getStoreEnabled, EnableEnum.ENABLE_USING.getKey());
+        List<ShopMaterialStore> shopMaterialStoreList = skyeyeBaseMapper.selectJoinList(ShopMaterialStore.class, wrapper);
+        return shopMaterialStoreList;
+    }
+
+    /**
+     * 批量门店场景解析优惠券范围：与单店 resolveCouponScopeFilter 同源，门店做交集。
+     */
+    private CouponScopeFilter resolveCouponScopeFilterForStores(String couponId, List<String> requestStoreIdList) {
+        Map<String, Object> coupon = iShopStoreService.queryCouponById(couponId);
+        CouponScopeFilter filter = new CouponScopeFilter();
+        if (MapUtil.isEmpty(coupon)) {
+            filter.empty = true;
+            return filter;
+        }
+        filter.allMaterial = Objects.equals(MapUtil.getInt(coupon, "productScope"), CommonNumConstants.NUM_ONE);
+        filter.allStore = Objects.equals(MapUtil.getInt(coupon, "storeCoverage"), CommonNumConstants.NUM_ONE);
+        if (!filter.allStore) {
+            List<String> couponStoreIdList = Convert.toList(String.class, coupon.get("storeIdList"));
+            if (CollectionUtil.isEmpty(couponStoreIdList)) {
+                filter.empty = true;
+                return filter;
+            }
+            List<String> intersectStoreIdList = requestStoreIdList.stream()
+                .filter(couponStoreIdList::contains).distinct().collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(intersectStoreIdList)) {
+                filter.empty = true;
+                return filter;
+            }
+            filter.storeIdList = intersectStoreIdList;
+        } else {
+            filter.storeIdList = requestStoreIdList;
+        }
+        if (!filter.allMaterial) {
+            List<Map> materialList = Convert.toList(Map.class, coupon.get("couponMaterialList"));
+            List<String> materialIdList = CollectionUtil.isEmpty(materialList) ? Collections.emptyList()
+                : materialList.stream()
+                .map(item -> MapUtil.getStr(item, "materialId"))
+                .filter(StrUtil::isNotBlank)
+                .distinct()
+                .collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(materialIdList)) {
+                filter.empty = true;
+                return filter;
+            }
+            filter.materialIdList = materialIdList;
+        }
+        return filter;
+    }
+
     /**
      * 解析 customParamsMap.couponId 对应的优惠券适用范围（通过 queryCouponById）。
      * null 表示未传 couponId；empty=true 表示无适用数据。
@@ -358,6 +432,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         private boolean allStore;
         private boolean allMaterial;
         private List<String> materialIdList;
+        private List<String> storeIdList;
     }
 
     private static void queryShopSelType(CommonPageInfo commonPageInfo, MPJLambdaWrapper<ShopMaterialStore> wrapper) {
