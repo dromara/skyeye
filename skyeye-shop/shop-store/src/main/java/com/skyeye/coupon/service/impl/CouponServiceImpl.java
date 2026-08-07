@@ -5,8 +5,10 @@
 package com.skyeye.coupon.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
@@ -21,6 +23,7 @@ import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
@@ -382,8 +385,38 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             if (CollectionUtil.isEmpty(candidateStoreIdList)) {
                 return;
             }
-            // 用 ERP IN 查询替代门店×商品笛卡尔积 + 二次查详情
-            storeIdList = iShopMaterialNormsService.queryLaunchedStoreIdsByMaterialId(materialIdList, candidateStoreIdList);
+            // IN 查询商品-门店关系（替代一一对应笛卡尔积），上架判断仍在 shop
+            Map<String, Object> materialStoreIdMap = iShopMaterialNormsService
+                .queryShopMaterialMapByMaterialIdsAndStoreIds(materialIdList, candidateStoreIdList);
+            if (CollectionUtil.isEmpty(materialStoreIdMap)) {
+                return;
+            }
+            List<String> materialStoreIds = materialStoreIdMap.values().stream()
+                .map(Object::toString).collect(Collectors.toList());
+            List<Map<String, Object>> materialByIds = iShopMaterialNormsService.queryShopMaterialByIds(materialStoreIds);
+            if (CollectionUtil.isEmpty(materialByIds)) {
+                return;
+            }
+            storeIdList = materialByIds.stream().map(map -> {
+                if (ObjectUtil.isEmpty(map.get("shopMaterialStore"))) {
+                    return null;
+                }
+                // toJsonStr 再转 Map，避免 Map.toString 解析失败
+                Map<String, Object> shopMaterialStore = JSONUtil.toBean(JSONUtil.toJsonStr(map.get("shopMaterialStore")), null);
+                if (CollectionUtil.isEmpty(shopMaterialStore) || ObjectUtil.isEmpty(shopMaterialStore.get("storeId"))) {
+                    return null;
+                }
+                Integer isLaunchStore = MapUtil.getInt(shopMaterialStore, "isLaunchStore");
+                Integer isLaunchShop = MapUtil.getInt(shopMaterialStore, "isLaunchShop");
+                Integer storeEnabled = MapUtil.getInt(shopMaterialStore, "storeEnabled");
+                // 门店至少有一个适用商品满足：已添加 + 已上架 + 门店启用
+                if (Objects.equals(isLaunchStore, WhetherEnum.ENABLE_USING.getKey())
+                    && Objects.equals(isLaunchShop, WhetherEnum.ENABLE_USING.getKey())
+                    && Objects.equals(storeEnabled, EnableEnum.ENABLE_USING.getKey())) {
+                    return shopMaterialStore.get("storeId").toString();
+                }
+                return null;
+            }).filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
             if (CollectionUtil.isEmpty(storeIdList)) {
                 return;
             }

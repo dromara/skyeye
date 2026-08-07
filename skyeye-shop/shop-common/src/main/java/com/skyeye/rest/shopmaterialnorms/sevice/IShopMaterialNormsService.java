@@ -38,13 +38,13 @@ public interface IShopMaterialNormsService {
     Map<String, Object> queryShopMaterialMapByMaterialIdAndStoreId(List<String> materialIdList, List<String> storeIdList);
 
     /**
-     * 根据商品id查询已上架（已添加门店+已上架商城+门店启用）的去重门店id
+     * 根据商品id列表和门店id列表批量获取关系id（IN 查询，非一一对应；key: materialId_storeId, value: 关系id）
      *
      * @param materialIdList 商品id列表
-     * @param storeIdList    可选门店范围；空则不限门店
-     * @return 门店id列表
+     * @param storeIdList    门店id列表
+     * @return
      */
-    List<String> queryLaunchedStoreIdsByMaterialId(List<String> materialIdList, List<String> storeIdList);
+    Map<String, Object> queryShopMaterialMapByMaterialIdsAndStoreIds(List<String> materialIdList, List<String> storeIdList);
 
     List<Map<String, Object>> queryAllShopMaterialListForChoose();
 

@@ -56,9 +56,9 @@ public interface ShopMaterialStoreService extends SkyeyeBusinessService<ShopMate
     void queryShopMaterialMapByMaterialIdAndStoreId(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 按商品id（可选再限门店id）查询已添加门店、已上架商城、门店启用的去重门店id列表
+     * 按商品id列表 + 门店id列表（IN，非一一对应）批量获取商城商品-门店关系id
      */
-    void queryLaunchedStoreIdsByMaterialId(InputObject inputObject, OutputObject outputObject);
+    void queryShopMaterialMapByMaterialIdsAndStoreIds(InputObject inputObject, OutputObject outputObject);
 
     void deleteShopMaterialStoreByStoreIds(InputObject inputObject, OutputObject outputObject);
 

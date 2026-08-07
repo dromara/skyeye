@@ -569,32 +569,23 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
 
     @Override
     @IgnoreTenant
-    public void queryLaunchedStoreIdsByMaterialId(InputObject inputObject, OutputObject outputObject) {
+    public void queryShopMaterialMapByMaterialIdsAndStoreIds(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         List<String> materialIdList = JSONUtil.toList(params.get("materialId").toString(), null);
+        List<String> storeIdList = JSONUtil.toList(params.get("storeId").toString(), null);
         materialIdList = materialIdList.stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
-        if (CollectionUtil.isEmpty(materialIdList)) {
+        storeIdList = storeIdList.stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(materialIdList) || CollectionUtil.isEmpty(storeIdList)) {
             return;
         }
-        List<String> storeIdList = Collections.emptyList();
-        if (ObjectUtil.isNotEmpty(params.get("storeId"))) {
-            storeIdList = JSONUtil.toList(params.get("storeId").toString(), null).stream()
-                .filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
-        }
         QueryWrapper<ShopMaterialStore> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreId))
-            .in(MybatisPlusUtil.toColumns(ShopMaterialStore::getMaterialId), materialIdList)
-            .eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getIsLaunchStore), WhetherEnum.ENABLE_USING.getKey())
-            .eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getIsLaunchShop), WhetherEnum.ENABLE_USING.getKey())
-            .eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreEnabled), EnableEnum.ENABLE_USING.getKey());
-        if (CollectionUtil.isNotEmpty(storeIdList)) {
-            queryWrapper.in(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreId), storeIdList);
-        }
-        List<String> launchedStoreIdList = list(queryWrapper).stream()
-            .map(ShopMaterialStore::getStoreId).filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
-        Map<String, Object> bean = new HashMap<>();
-        bean.put("storeIdList", launchedStoreIdList);
-        outputObject.setBean(bean);
+        queryWrapper.in(MybatisPlusUtil.toColumns(ShopMaterialStore::getMaterialId), materialIdList)
+            .in(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreId), storeIdList);
+        List<ShopMaterialStore> list = list(queryWrapper);
+        Map<String, String> collect = list.stream()
+            .collect(Collectors.toMap(bean -> String.format("%s_%s", bean.getMaterialId(), bean.getStoreId()),
+                bean -> bean.getId(), (a, b) -> a));
+        outputObject.setBean(collect);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 

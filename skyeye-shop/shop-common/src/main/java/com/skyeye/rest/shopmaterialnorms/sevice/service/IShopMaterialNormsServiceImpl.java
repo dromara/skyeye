@@ -76,22 +76,12 @@ public class IShopMaterialNormsServiceImpl extends IServiceImpl implements IShop
     }
 
     @Override
-    public List<String> queryLaunchedStoreIdsByMaterialId(List<String> materialIdList, List<String> storeIdList) {
-        if (CollectionUtil.isEmpty(materialIdList)) {
-            return new ArrayList<>();
-        }
-        materialIdList = materialIdList.stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
-        if (CollectionUtil.isEmpty(materialIdList)) {
-            return new ArrayList<>();
-        }
+    public Map<String, Object> queryShopMaterialMapByMaterialIdsAndStoreIds(List<String> materialIdList, List<String> storeIdList) {
         Map<String, Object> params = new HashMap<>();
         params.put("materialId", JSONUtil.toJsonStr(materialIdList));
-        params.put("storeId", JSONUtil.toJsonStr(storeIdList == null ? new ArrayList<>() : storeIdList));
-        Map<String, Object> bean = ExecuteFeignClient.get(() -> iShopMaterialNormsRest.queryLaunchedStoreIdsByMaterialId(params)).getBean();
-        if (bean == null || bean.get("storeIdList") == null) {
-            return new ArrayList<>();
-        }
-        return JSONUtil.toList(JSONUtil.toJsonStr(bean.get("storeIdList")), String.class);
+        params.put("storeId", JSONUtil.toJsonStr(storeIdList));
+        Map<String, Object> bean = ExecuteFeignClient.get(() -> iShopMaterialNormsRest.queryShopMaterialMapByMaterialIdsAndStoreIds(params)).getBean();
+        return bean == null ? new HashMap<>() : bean;
     }
 
     @Override
