@@ -356,8 +356,6 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         if (ObjectUtil.isEmpty(coupon)) {
             return;
         }
-        // 与 queryCouponById / getDataFromDb 同源，补全适用商品
-        coupon.setCouponMaterialList(couponMaterialService.queryListByCouponId(couponId));
 
         boolean allStore = Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.ALL_STORE.getKey());
         boolean specifiedMaterial = Objects.equals(coupon.getProductScope(), PromotionMaterialScope.SPU.getKey());
@@ -387,18 +385,9 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             if (CollectionUtil.isEmpty(candidateStoreIdList)) {
                 return;
             }
-            // 现有 Feign 要求 materialId、storeId 一一对应，故展开候选门店 × 适用商品
-            List<String> pairMaterialIdList = new ArrayList<>();
-            List<String> pairStoreIdList = new ArrayList<>();
-            for (String storeId : candidateStoreIdList) {
-                for (String materialId : materialIdList) {
-                    pairMaterialIdList.add(materialId);
-                    pairStoreIdList.add(storeId);
-                }
-            }
-            // 1）查门店-商品关系；2）查详情并校验已添加门店、已上架商城、门店启用
+            // IN 查询商品-门店关系（替代一一对应笛卡尔积），上架判断仍在 shop
             Map<String, Object> materialStoreIdMap = iShopMaterialNormsService
-                .queryShopMaterialMapByMaterialIdAndStoreId(pairMaterialIdList, pairStoreIdList);
+                .queryShopMaterialMapByMaterialIdsAndStoreIds(materialIdList, candidateStoreIdList);
             if (CollectionUtil.isEmpty(materialStoreIdMap)) {
                 return;
             }

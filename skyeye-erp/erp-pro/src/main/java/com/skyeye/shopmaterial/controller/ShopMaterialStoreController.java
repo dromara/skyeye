@@ -73,6 +73,15 @@ public class ShopMaterialStoreController {
         shopMaterialStoreService.queryShopMaterialMapByMaterialIdAndStoreId(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryShopMaterialMapByMaterialIdsAndStoreIds", value = "根据商品id列表和门店id列表（IN）批量获取商城商品关系", method = "POST", allUse = "0")
+    @ApiImplicitParams(value = {
+        @ApiImplicitParam(id = "materialId", name = "materialId", value = "商品id，json数组格式", required = "required,json"),
+        @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id，json数组格式", required = "required,json")})
+    @RequestMapping("/post/ShopMaterialStoreController/queryShopMaterialMapByMaterialIdsAndStoreIds")
+    public void queryShopMaterialMapByMaterialIdsAndStoreIds(InputObject inputObject, OutputObject outputObject) {
+        shopMaterialStoreService.queryShopMaterialMapByMaterialIdsAndStoreIds(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "deleteShopMaterialStoreByStoreIds", value = "修改商城商品关联得指定门店为禁用，也就是这个门店下得商品都不在商城显示", method = "POST", allUse = "2")
     @ApiImplicitParams(value = {
         @ApiImplicitParam(id = "storeIds", name = "storeIds", value = "门店id，多个逗号隔开", required = "required")})

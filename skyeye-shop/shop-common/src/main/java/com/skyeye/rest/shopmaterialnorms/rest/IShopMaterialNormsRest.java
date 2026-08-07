@@ -48,6 +48,15 @@ public interface IShopMaterialNormsRest {
     String queryShopMaterialMapByMaterialIdAndStoreId(Map<String, Object> params);
 
     /**
+     * 根据商品id和门店id批量获取商城商品关系id（IN 查询，非一一对应）
+     *
+     * @param params materialId、storeId（json数组）
+     * @return
+     */
+    @PostMapping("/queryShopMaterialMapByMaterialIdsAndStoreIds")
+    String queryShopMaterialMapByMaterialIdsAndStoreIds(Map<String, Object> params);
+
+    /**
      * 新增门店时，将所有商品同步到该门店
      *
      * @param storeId 门店id
