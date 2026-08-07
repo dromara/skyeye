@@ -74,7 +74,6 @@ SkyEye云 是面向**智能制造行业**的一站式SaaS化零代码全链路�
 | 资源类型 | 访问地址 |
 | ---- | ---- |
 | 二开开发文档 | http://ip.makerview.cn:30003/skyDoc/ |
-| 全量功能清单 | https://kdocs.cn/l/cbf2cgCLrUyz |
 | 产品架构流程图 | https://www.kdocs.cn/l/ctDzURtzHWXE |
 | B站合集-二开教程 | https://www.bilibili.com/video/BV1w34y1M7ZH/ |
 | B站合集-操作教程 | https://www.bilibili.com/video/BV16mwVeKE4X/ |
