@@ -8,7 +8,6 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.Page;
@@ -222,26 +221,6 @@ public class CouponUseServiceImpl extends SkyeyeBusinessServiceImpl<CouponUseDao
     }
 
     @Override
-    public List<Map<String, Object>> queryDataList(InputObject inputObject) {
-        Map<String, Object> params = inputObject.getParams();
-        QueryWrapper<CouponUse> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(CouponUse::getCreateId), inputObject.getLogParams().get("id").toString());
-        if (params.containsKey("state")) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(CouponUse::getState), params.get("state").toString());
-        }
-        // 查询时获取数据
-        List<CouponUse> list = list(queryWrapper);
-        couponService.setDataMation(list, CouponUse::getCouponId);
-        List<CouponUse> collect = list.stream().map(item -> {
-            if (item.getCouponMation() != null) {
-                item.setUsageCount(item.getCouponMation().getUseCount());
-            }
-            return item;
-        }).collect(Collectors.toList());
-        return JSONUtil.toList(JSONUtil.toJsonStr(collect), null);
-    }
-
-    @Override
     public void queryMyCouponUseByState(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
         Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
@@ -253,11 +232,6 @@ public class CouponUseServiceImpl extends SkyeyeBusinessServiceImpl<CouponUseDao
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(CouponUse::getCreateTime));
         List<CouponUse> list = list(queryWrapper);
         couponService.setDataMation(list, CouponUse::getCouponId);
-        list.forEach(item -> {
-            if (item.getCouponMation() != null) {
-                item.setUsageCount(item.getCouponMation().getUseCount());
-            }
-        });
         outputObject.setBeans(list);
         outputObject.settotal(pages.getTotal());
     }
