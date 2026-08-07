@@ -22,6 +22,7 @@ import com.skyeye.equipmentcheck.service.EquipmentCheckOrderItemService;
 import com.skyeye.equipmentcheck.service.EquipmentCheckOrderService;
 import com.skyeye.equipmentcheckstandard.service.EquipmentCheckStandardService;
 import com.skyeye.exception.CustomException;
+import com.skyeye.farm.service.FarmService;
 import com.skyeye.repair.classenum.EquipmentRepairFromType;
 import com.skyeye.repair.entity.EquipmentRepairOrder;
 import com.skyeye.repair.service.EquipmentRepairOrderService;
@@ -50,6 +51,9 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
 
     @Autowired
     private EquipmentCheckStandardService equipmentCheckStandardService;
+
+    @Autowired
+    private FarmService farmService;
 
     @Autowired
     @Lazy
@@ -118,6 +122,7 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
         equipmentService.setDataMation(order, EquipmentCheckOrder::getEquipmentId);
         equipmentCheckStandardService.setDataMation(order, EquipmentCheckOrder::getStandardId);
         iAuthUserService.setDataMation(order, EquipmentCheckOrder::getCheckerId);
+        farmService.setDataMation(order, EquipmentCheckOrder::getPosition);
         return order;
     }
 
@@ -127,6 +132,7 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
         equipmentService.setMationForMap(beans, "equipmentId", "equipmentMation");
         equipmentCheckStandardService.setMationForMap(beans, "standardId", "standardMation");
         iAuthUserService.setMationForMap(beans, "checkerId", "checkerMation");
+        farmService.setMationForMap(beans, "position", "positionMation");
         return beans;
     }
 
