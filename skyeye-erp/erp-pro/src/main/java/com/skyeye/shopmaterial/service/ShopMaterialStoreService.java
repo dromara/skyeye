@@ -43,6 +43,11 @@ public interface ShopMaterialStoreService extends SkyeyeBusinessService<ShopMate
 
     List<ShopMaterialStore> queryShopMaterialList(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 批量门店 + 优惠券：查询已上架适用商品（门店商品关系），不含商品详情组装
+     */
+    List<ShopMaterialStore> queryCouponApplicableMaterialStoreList(String couponId, List<String> storeIdList);
+
     Map<String, ShopMaterialStore> queryShopMaterialStoreByMaterialIds(String... materialIds);
 
     void queryShopMaterialById(InputObject inputObject, OutputObject outputObject);

@@ -61,6 +61,15 @@ public class ShopMaterialController {
         shopMaterialService.queryShopMaterialListForStore(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryCouponApplicableMaterialByStoreIds", value = "批量门店+优惠券查询适用商品", method = "POST", allUse = "0")
+    @ApiImplicitParams(value = {
+        @ApiImplicitParam(id = "couponId", name = "couponId", value = "优惠券id", required = "required"),
+        @ApiImplicitParam(id = "storeIds", name = "storeIds", value = "门店id，多个逗号隔开", required = "required")})
+    @RequestMapping("/post/ShopMaterialController/queryCouponApplicableMaterialByStoreIds")
+    public void queryCouponApplicableMaterialByStoreIds(InputObject inputObject, OutputObject outputObject) {
+        shopMaterialService.queryCouponApplicableMaterialByStoreIds(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryShopMaterialByNormsIdList", value = "根据规格id获取商城商品信息", method = "POST", allUse = "0")
     @ApiImplicitParams(value = {
         @ApiImplicitParam(id = "normsIds", name = "normsIds", value = "规格id，多个逗号隔开", required = "required")})
