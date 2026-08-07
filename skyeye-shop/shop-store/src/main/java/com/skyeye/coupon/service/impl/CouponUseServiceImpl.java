@@ -11,15 +11,19 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.constans.SysUserAuthConstants;
+import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.GetUserToken;
 import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.coupon.dao.CouponUseDao;
@@ -235,6 +239,27 @@ public class CouponUseServiceImpl extends SkyeyeBusinessServiceImpl<CouponUseDao
             return item;
         }).collect(Collectors.toList());
         return JSONUtil.toList(JSONUtil.toJsonStr(collect), null);
+    }
+
+    @Override
+    public void queryMyCouponUseByState(InputObject inputObject, OutputObject outputObject) {
+        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
+        QueryWrapper<CouponUse> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(CouponUse::getCreateId), inputObject.getLogParams().get("id").toString());
+        if (StrUtil.isNotEmpty(commonPageInfo.getState())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(CouponUse::getState), commonPageInfo.getState());
+        }
+        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(CouponUse::getCreateTime));
+        List<CouponUse> list = list(queryWrapper);
+        couponService.setDataMation(list, CouponUse::getCouponId);
+        list.forEach(item -> {
+            if (item.getCouponMation() != null) {
+                item.setUsageCount(item.getCouponMation().getUseCount());
+            }
+        });
+        outputObject.setBeans(list);
+        outputObject.settotal(pages.getTotal());
     }
 
     @Override

@@ -5,6 +5,8 @@
 package com.skyeye.coupon.service;
 
 import com.skyeye.base.business.service.SkyeyeBusinessService;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.coupon.entity.CouponUse;
 
 import java.util.List;
@@ -19,6 +21,11 @@ import java.util.Map;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 public interface CouponUseService extends SkyeyeBusinessService<CouponUse> {
+
+    /**
+     * 根据状态分页查询自己的优惠券领取信息
+     */
+    void queryMyCouponUseByState(InputObject inputObject, OutputObject outputObject);
 
     Map<String, Integer> queryIdTotalMapByCouponId(List<String> couponIdList);
 
