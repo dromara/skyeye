@@ -11,6 +11,7 @@ import com.skyeye.common.entity.features.SkyeyeFlowable;
 import com.skyeye.equipment.entity.Equipment;
 import com.skyeye.equipmentcheck.classenum.EquipmentCheckResult;
 import com.skyeye.equipmentcheckstandard.entity.EquipmentCheckStandard;
+import com.skyeye.farm.entity.Farm;
 import lombok.Data;
 
 import java.util.List;
@@ -75,8 +76,12 @@ public class EquipmentCheckOrder extends SkyeyeFlowable {
     private String equipmentState;
 
     @TableField(value = "position")
-    @ApiModelProperty(value = "定位")
+    @ApiModelProperty(value = "车间id")
     private String position;
+
+    @TableField(exist = false)
+    @Property(value = "车间信息")
+    private Farm positionMation;
 
     @TableField(value = "images")
     @ApiModelProperty(value = "拍照附件，多个逗号分隔")
