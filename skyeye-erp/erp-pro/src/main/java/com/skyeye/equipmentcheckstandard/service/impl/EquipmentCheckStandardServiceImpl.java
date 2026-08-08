@@ -2,6 +2,7 @@ package com.skyeye.equipmentcheckstandard.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
@@ -33,6 +34,9 @@ public class EquipmentCheckStandardServiceImpl extends SkyeyeBusinessServiceImpl
     @Override
     protected QueryWrapper<EquipmentCheckStandard> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<EquipmentCheckStandard> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        if (StrUtil.isNotEmpty(commonPageInfo.getState())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentCheckStandard::getState), commonPageInfo.getState());
+        }
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentCheckStandard::getCreateTime));
         return queryWrapper;
     }
