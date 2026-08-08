@@ -19,7 +19,6 @@ import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,12 +46,8 @@ public class EquipmentCheckStandardServiceImpl extends SkyeyeBusinessServiceImpl
 
     @Override
     public void queryApprovedEquipmentCheckStandardList(InputObject inputObject, OutputObject outputObject) {
-        QueryWrapper<EquipmentCheckStandard> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentCheckStandard::getState), FlowableStateEnum.PASS.getKey());
-        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentCheckStandard::getCreateTime));
-        List<EquipmentCheckStandard> list = list(queryWrapper);
-        outputObject.setBeans(list);
-        outputObject.settotal(list.size());
+        inputObject.getParams().put("state", FlowableStateEnum.PASS.getKey());
+        queryPageList(inputObject, outputObject);
     }
 
     //新增时点检标准编码由后端按编码规则自动生成
