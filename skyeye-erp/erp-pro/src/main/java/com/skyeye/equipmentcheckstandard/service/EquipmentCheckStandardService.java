@@ -9,3 +9,4 @@ import com.skyeye.equipmentcheckstandard.entity.EquipmentCheckStandard;
  */
 public interface EquipmentCheckStandardService extends SkyeyeBusinessService<EquipmentCheckStandard> {
 }
+
