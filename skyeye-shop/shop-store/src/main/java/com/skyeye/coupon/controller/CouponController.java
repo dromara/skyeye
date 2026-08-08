@@ -71,7 +71,7 @@ public class CouponController {
         couponService.deleteByIds(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryCouponListByMaterialId", value = "根据商品id分页获取已启用的优惠券列表", method = "POST", allUse = "0")
+    @ApiOperation(id = "queryCouponListByMaterialId", value = "根据商品id分页获取已启用的优惠券列表", method = "GET", allUse = "0")
     @ApiImplicitParams(classBean = CommonPageInfo.class, value = {
         @ApiImplicitParam(id = "materialId", name = "materialId", value = "商品id", required = "required"),
         @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required")})
