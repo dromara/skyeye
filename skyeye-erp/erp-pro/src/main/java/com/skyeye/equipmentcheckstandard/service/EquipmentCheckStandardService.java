@@ -12,7 +12,7 @@ import com.skyeye.equipmentcheckstandard.entity.EquipmentCheckStandard;
 public interface EquipmentCheckStandardService extends SkyeyeBusinessService<EquipmentCheckStandard> {
 
     /**
-     * 分页获取审批通过的设备点检标准列表
+     * 获取审批通过的设备点检标准列表
      */
     void queryApprovedEquipmentCheckStandardList(InputObject inputObject, OutputObject outputObject);
 }

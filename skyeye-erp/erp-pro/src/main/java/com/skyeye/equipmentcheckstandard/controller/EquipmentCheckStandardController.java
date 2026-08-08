@@ -33,8 +33,7 @@ public class EquipmentCheckStandardController {
         equipmentCheckStandardService.queryPageList(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryApprovedEquipmentCheckStandardList", value = "分页获取审批通过的设备点检标准列表", method = "POST", allUse = "2")
-    @ApiImplicitParams(classBean = CommonPageInfo.class)
+    @ApiOperation(id = "queryApprovedEquipmentCheckStandardList", value = "获取审批通过的设备点检标准列表", method = "POST", allUse = "2")
     @RequestMapping("/post/EquipmentCheckStandardController/queryApprovedEquipmentCheckStandardList")
     public void queryApprovedEquipmentCheckStandardList(InputObject inputObject, OutputObject outputObject) {
         equipmentCheckStandardService.queryApprovedEquipmentCheckStandardList(inputObject, outputObject);
