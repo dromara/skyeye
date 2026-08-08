@@ -318,11 +318,14 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     @Override
     @IgnoreTenant
     public void queryCouponListByMaterialId(InputObject inputObject, OutputObject outputObject) {
+        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
         Map<String, Object> params = inputObject.getParams();
-        String materialId = params.get("materialId").toString();
-        String storeId = params.get("storeId").toString();
+        String materialId = MapUtil.getStr(params, "materialId");
+        String storeId = MapUtil.getStr(params, "storeId");
+        String type = commonPageInfo.getType();
 
         String typeKey = MybatisPlusUtil.toColumns(Coupon::getTemplateId);
+        Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
         MPJLambdaWrapper<Coupon> wrapper = new MPJLambdaWrapper<Coupon>()
             .innerJoin(CouponMaterial.class, CouponMaterial::getCouponId, Coupon::getId)
             .eq(CouponMaterial::getMaterialId, materialId)
@@ -333,10 +336,13 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
                 .or(w2 -> w2.eq(Coupon::getStoreCoverage, CouponStoreCoverage.SPECIFIED_STORE.getKey())
                     .eq(CouponStore::getStoreId, storeId)))
             .groupBy(Coupon::getId);
+        if (StrUtil.isNotEmpty(type)) {
+            wrapper.eq(Coupon::getDiscountType, type);
+        }
         List<Coupon> list = skyeyeBaseMapper.selectJoinList(Coupon.class, wrapper);
         setDrawState(list);// 设置是否可以领取状态
         outputObject.setBeans(list);
-        outputObject.settotal(list.size());
+        outputObject.settotal(pages.getTotal());
     }
 
     /**
