@@ -33,13 +33,6 @@ public class EquipmentCheckStandardController {
         equipmentCheckStandardService.queryPageList(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryApprovedEquipmentCheckStandardList", value = "分页获取审批通过的设备点检标准列表", method = "POST", allUse = "2")
-    @ApiImplicitParams(classBean = CommonPageInfo.class)
-    @RequestMapping("/post/EquipmentCheckStandardController/queryApprovedEquipmentCheckStandardList")
-    public void queryApprovedEquipmentCheckStandardList(InputObject inputObject, OutputObject outputObject) {
-        equipmentCheckStandardService.queryApprovedEquipmentCheckStandardList(inputObject, outputObject);
-    }
-
     @ApiOperation(id = "writeEquipmentCheckStandard", value = "新增/编辑设备点检标准", method = "POST", allUse = "1")
     @ApiImplicitParams(classBean = EquipmentCheckStandard.class)
     @RequestMapping("/post/EquipmentCheckStandardController/writeEquipmentCheckStandard")
@@ -79,4 +72,3 @@ public class EquipmentCheckStandardController {
     }
 
 }
-
