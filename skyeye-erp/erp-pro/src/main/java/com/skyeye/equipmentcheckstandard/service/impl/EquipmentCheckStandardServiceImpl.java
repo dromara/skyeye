@@ -2,10 +2,14 @@ package com.skyeye.equipmentcheckstandard.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.enumeration.FlowableStateEnum;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipmentcheckstandard.dao.EquipmentCheckStandardDao;
 import com.skyeye.equipmentcheckstandard.entity.EquipmentCheckStandard;
@@ -33,8 +37,17 @@ public class EquipmentCheckStandardServiceImpl extends SkyeyeBusinessServiceImpl
     @Override
     protected QueryWrapper<EquipmentCheckStandard> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<EquipmentCheckStandard> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        if (StrUtil.isNotEmpty(commonPageInfo.getState())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(EquipmentCheckStandard::getState), commonPageInfo.getState());
+        }
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(EquipmentCheckStandard::getCreateTime));
         return queryWrapper;
+    }
+
+    @Override
+    public void queryApprovedEquipmentCheckStandardList(InputObject inputObject, OutputObject outputObject) {
+        inputObject.getParams().put("state", FlowableStateEnum.PASS.getKey());
+        queryPageList(inputObject, outputObject);
     }
 
     //新增时点检标准编码由后端按编码规则自动生成
@@ -77,4 +90,3 @@ public class EquipmentCheckStandardServiceImpl extends SkyeyeBusinessServiceImpl
     }
 
 }
-
