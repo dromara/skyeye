@@ -229,6 +229,9 @@ public class CouponUseServiceImpl extends SkyeyeBusinessServiceImpl<CouponUseDao
         if (StrUtil.isNotEmpty(commonPageInfo.getState())) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(CouponUse::getState), commonPageInfo.getState());
         }
+        if (StrUtil.isNotEmpty(commonPageInfo.getType())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(CouponUse::getDiscountType), commonPageInfo.getType());
+        }
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(CouponUse::getCreateTime));
         List<CouponUse> list = list(queryWrapper);
         couponService.setDataMation(list, CouponUse::getCouponId);
