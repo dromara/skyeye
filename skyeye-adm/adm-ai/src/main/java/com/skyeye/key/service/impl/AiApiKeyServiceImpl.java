@@ -33,7 +33,7 @@ import java.util.Map;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
-@SkyeyeService(name = "API配置", groupName = "API配置")
+@SkyeyeService(name = "AI配置", groupName = "AI配置")
 public class AiApiKeyServiceImpl extends SkyeyeBusinessServiceImpl<AiApiKeyDao, AiApiKey> implements AiApiKeyService {
 
     @Autowired
