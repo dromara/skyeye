@@ -80,6 +80,15 @@ public class CouponController {
         couponService.queryCouponListByMaterialId(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryMaxCouponByMaterialId", value = "根据商品/门店获取力度最大的折扣券和满减券信息", method = "GET", allUse = "0")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "materialId", name = "materialId", value = "商品id", required = "required"),
+        @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required")})
+    @RequestMapping("/post/CouponController/queryMaxCouponByMaterialId")
+    public void queryMaxCouponByMaterialId(InputObject inputObject, OutputObject outputObject) {
+        couponService.queryMaxCouponByMaterialId(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryCouponApplicableStoreList", value = "分页获取优惠券适用门店列表", method = "POST", allUse = "0")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/CouponController/queryCouponApplicableStoreList")
