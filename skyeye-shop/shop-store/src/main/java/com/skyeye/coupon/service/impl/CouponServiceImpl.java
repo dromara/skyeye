@@ -345,6 +345,54 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         outputObject.settotal(pages.getTotal());
     }
 
+    @Override
+    @IgnoreTenant
+    public void queryMaxCouponByMaterialId(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String materialId = MapUtil.getStr(params, "materialId");
+        String storeId = MapUtil.getStr(params, "storeId");
+
+        String typeKey = MybatisPlusUtil.toColumns(Coupon::getTemplateId);
+        MPJLambdaWrapper<Coupon> wrapper = new MPJLambdaWrapper<Coupon>()
+            .innerJoin(CouponMaterial.class, CouponMaterial::getCouponId, Coupon::getId)
+            .eq(CouponMaterial::getMaterialId, materialId)
+            .eq(MybatisPlusUtil.toColumns(Coupon::getEnabled), EnableEnum.ENABLE_USING.getKey())
+            .isNotNull(typeKey).ne(typeKey, StrUtil.EMPTY)
+            .leftJoin(CouponStore.class, CouponStore::getCouponId, Coupon::getId)
+            .and(w -> w.eq(Coupon::getStoreCoverage, CouponStoreCoverage.ALL_STORE.getKey())
+                .or(w2 -> w2.eq(Coupon::getStoreCoverage, CouponStoreCoverage.SPECIFIED_STORE.getKey())
+                    .eq(CouponStore::getStoreId, storeId)))
+            .groupBy(Coupon::getId);
+        List<Coupon> allList = skyeyeBaseMapper.selectJoinList(Coupon.class, wrapper);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("maxDiscountPercentCoupon", null);
+        result.put("maxDiscountPriceCoupon", null);
+        if (CollectionUtil.isNotEmpty(allList)) {
+            // 折扣：百分比越小力度越大
+            allList.stream()
+                .filter(coupon -> Objects.equals(coupon.getDiscountType(), PromotionDiscountType.PERCENT.getKey()))
+                .filter(coupon -> ObjectUtil.isNotEmpty(coupon.getDiscountPercent()))
+                .min(Comparator.comparing(Coupon::getDiscountPercent))
+                .ifPresent(coupon -> result.put("maxDiscountPercentCoupon", coupon));
+            // 满减：优惠金额越大力度越大
+            allList.stream()
+                .filter(coupon -> Objects.equals(coupon.getDiscountType(), PromotionDiscountType.PRICE.getKey()))
+                .filter(coupon -> StrUtil.isNotEmpty(coupon.getDiscountPrice()))
+                .max(Comparator.comparing(Coupon::getDiscountPrice))
+                .ifPresent(coupon -> result.put("maxDiscountPriceCoupon", coupon));
+            List<Coupon> maxCouponList = new ArrayList<>();
+            if (ObjectUtil.isNotEmpty(result.get("maxDiscountPercentCoupon"))) {
+                maxCouponList.add((Coupon) result.get("maxDiscountPercentCoupon"));
+            }
+            if (ObjectUtil.isNotEmpty(result.get("maxDiscountPriceCoupon"))) {
+                maxCouponList.add((Coupon) result.get("maxDiscountPriceCoupon"));
+            }
+            setDrawState(maxCouponList);// 设置是否可以领取状态
+        }
+        outputObject.setBean(result);
+    }
+
     /**
      * 分页查询优惠券适用门店。入参：page、limit + customParamsMap.couponId。
      * 全部门店：分页列出启用门店；指定门店：分页列出适用门店。不校验券启用状态。

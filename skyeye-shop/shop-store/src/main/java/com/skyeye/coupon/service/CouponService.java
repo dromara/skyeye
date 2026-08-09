@@ -27,6 +27,11 @@ public interface CouponService extends SkyeyeBusinessService<Coupon> {
     void queryCouponListByMaterialId(InputObject inputObject, OutputObject outputObject);
 
     /**
+     * 根据商品/门店查询力度最大的折扣券、满减券信息
+     */
+    void queryMaxCouponByMaterialId(InputObject inputObject, OutputObject outputObject);
+
+    /**
      * 分页查询优惠券适用门店
      */
     void queryCouponApplicableStoreList(InputObject inputObject, OutputObject outputObject);
