@@ -85,6 +85,7 @@ public class EquipmentServiceImpl extends SkyeyeBusinessServiceImpl<EquipmentDao
     @Override
     public void queryAllEquipmentList(InputObject inputObject, OutputObject outputObject) {
         List<Equipment> equipmentList = list();
+        farmService.setDataMation(equipmentList, Equipment::getFarmId);
         outputObject.setBeans(equipmentList);
         outputObject.settotal(equipmentList.size());
     }
