@@ -32,13 +32,16 @@ import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.coupon.entity.Coupon;
+import com.skyeye.coupon.entity.CouponStore;
 import com.skyeye.coupon.entity.CouponUse;
 import com.skyeye.coupon.entity.CouponUseMaterial;
+import com.skyeye.coupon.enums.CouponStoreCoverage;
 import com.skyeye.coupon.enums.CouponUseState;
 import com.skyeye.coupon.enums.CouponValidityType;
 import com.skyeye.coupon.enums.PromotionDiscountType;
 import com.skyeye.coupon.enums.PromotionMaterialScope;
 import com.skyeye.coupon.service.CouponService;
+import com.skyeye.coupon.service.CouponStoreService;
 import com.skyeye.coupon.service.CouponUseMaterialService;
 import com.skyeye.coupon.service.CouponUseService;
 import com.skyeye.eve.rest.quartz.SysQuartzMation;
@@ -114,6 +117,9 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
 
     @Autowired
     private CouponUseMaterialService couponUseMaterialService;
+
+    @Autowired
+    private CouponStoreService couponStoreService;
 
     @Autowired
     private IQuartzService iQuartzService;
@@ -206,7 +212,8 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
             throw new CustomException("优惠券不存在");
         } else if (couponUse.getState() != CouponUseState.UNUSED.getKey()) {
             throw new CustomException("该优惠券已使用或已过期");
-        } else if (Double.parseDouble(couponUse.getUsePrice()) > totalPrice) {
+        } else if (Objects.equals(couponUse.getDiscountType(), PromotionDiscountType.PERCENT.getKey())
+            && Double.parseDouble(couponUse.getUsePrice()) > totalPrice) {
             throw new CustomException("优惠券不满足使用金额");
         }
         List<OrderItem> orderItemList = order.getOrderItemList();//子单列表
@@ -231,6 +238,29 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         }
         // 删除优惠券定时任务
         deleteJobForCouponUse(couponUse);
+    }
+
+    /**
+     * 指定门店券：只保留适用门店下的子单
+     */
+    private List<OrderItem> filterOrderItemsByCouponStore(CouponUse couponUse, List<OrderItem> orderItemList) {
+        Coupon coupon = couponService.selectById(couponUse.getCouponId());
+        if (ObjectUtil.isEmpty(coupon)
+            || !Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.SPECIFIED_STORE.getKey())) {
+            return orderItemList;
+        }
+        List<String> couponStoreIds = couponStoreService.queryListByCouponId(coupon.getId()).stream()
+            .map(CouponStore::getStoreId)
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
+        List<OrderItem> storeEligibleItems = orderItemList.stream()
+            .filter(item -> couponStoreIds.contains(item.getStoreId()))
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(storeEligibleItems)) {
+            throw new CustomException("当前门店不在优惠券适用范围内");
+        }
+        return storeEligibleItems;
     }
 
     @Autowired
@@ -282,14 +312,63 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
                     break;
                 }
             }
-        } else {// 满减 直接在总单减去价格,子单不做处理
-            couponUseService.UpdateUsedCount(order.getCouponUseId());// 修改优惠券使用次数
-            String discountPrice = couponUse.getDiscountPrice();
-            // 折后价
-            String afterPrice = CalculationUtil.subtract(order.getTotalPrice(), discountPrice, CommonNumConstants.NUM_SIX);
-            order.setPayPrice(afterPrice);
-            order.setCouponPrice(discountPrice);
+        } else {// 满减：只在适用商品/门店子单间按原价占比分摊
+            List<OrderItem> eligibleItems = order.getOrderItemList();
+            if (Objects.equals(couponUse.getProductScope(), PromotionMaterialScope.SPU.getKey())) {
+                List<String> couponUseMaterialIds = couponUseMaterialService.queryListByCouponIds(Collections.singletonList(order.getCouponUseId()))
+                    .stream().map(CouponUseMaterial::getMaterialId).collect(Collectors.toList());
+                eligibleItems = order.getOrderItemList().stream()
+                    .filter(item -> couponUseMaterialIds.contains(item.getMaterialId()))
+                    .collect(Collectors.toList());
+            }
+            // 再按适用门店过滤
+            eligibleItems = filterOrderItemsByCouponStore(couponUse, eligibleItems);
+            // 满减门槛按适用子单合计校验
+            String eligibleTotalPrice = CommonNumConstants.NUM_ZERO.toString();
+            for (OrderItem item : eligibleItems) {
+                eligibleTotalPrice = CalculationUtil.add(eligibleTotalPrice, item.getPrice(), CommonNumConstants.NUM_TWO);
+            }
+            if (Double.parseDouble(couponUse.getUsePrice()) > Double.parseDouble(eligibleTotalPrice)) {
+                throw new CustomException("优惠券不满足使用金额");
+            }
+            couponUseService.UpdateUsedCount(order.getCouponUseId());
+            allocateFullReductionCouponToItems(order, couponUse.getDiscountPrice(), eligibleItems, eligibleTotalPrice);
         }
+    }
+
+    /**
+     * 满减券只在适用商品/门店子单间按原价占比分摊
+     */
+    private void allocateFullReductionCouponToItems(Order order, String discountPrice, List<OrderItem> eligibleItems,
+                                                    String eligibleTotalPrice) {
+        String orderPayPrice = CalculationUtil.subtract(order.getTotalPrice(), discountPrice, CommonNumConstants.NUM_TWO);
+        order.setPayPrice(orderPayPrice);
+        order.setCouponPrice(discountPrice);
+
+        if (eligibleItems.size() == CommonNumConstants.NUM_ONE) {
+            OrderItem only = eligibleItems.get(CommonNumConstants.NUM_ZERO);
+            only.setCouponUseId(order.getCouponUseId());
+            only.setCouponPrice(discountPrice);
+            only.setPayPrice(CalculationUtil.subtract(only.getPrice(), discountPrice, CommonNumConstants.NUM_TWO));
+            return;
+        }
+
+        String allocatedCoupon = CommonNumConstants.NUM_ZERO.toString();
+        for (OrderItem item : eligibleItems.subList(CommonNumConstants.NUM_ZERO, eligibleItems.size() - CommonNumConstants.NUM_ONE)) {
+            item.setCouponUseId(order.getCouponUseId());
+            String itemCoupon = CalculationUtil.divide(
+                CalculationUtil.multiply(discountPrice, item.getPrice(), CommonNumConstants.NUM_SIX),
+                eligibleTotalPrice, CommonNumConstants.NUM_TWO);
+            String itemPay = CalculationUtil.subtract(item.getPrice(), itemCoupon, CommonNumConstants.NUM_TWO);
+            item.setCouponPrice(itemCoupon);
+            item.setPayPrice(itemPay);
+            allocatedCoupon = CalculationUtil.add(allocatedCoupon, itemCoupon, CommonNumConstants.NUM_TWO);
+        }
+        OrderItem lastItem = eligibleItems.get(eligibleItems.size() - CommonNumConstants.NUM_ONE);
+        lastItem.setCouponUseId(order.getCouponUseId());
+        String lastCoupon = CalculationUtil.subtract(discountPrice, allocatedCoupon, CommonNumConstants.NUM_TWO);
+        lastItem.setCouponPrice(lastCoupon);
+        lastItem.setPayPrice(CalculationUtil.subtract(lastItem.getPrice(), lastCoupon, CommonNumConstants.NUM_TWO));
     }
 
     @Override
