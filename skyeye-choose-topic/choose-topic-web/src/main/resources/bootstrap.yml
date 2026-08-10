@@ -42,3 +42,36 @@ feign:
       default:
         loggerLevel: FULL
 
+seata:
+  # 总开关。默认 false：不连 TC、@GlobalTransactional 不生效；生产启用：SEATA_ENABLED=true
+  enabled: true
+  # 当前微服务在 Seata 中的应用名，一般与 spring.application.name 一致
+  application-id: ${spring.application.name}
+  # 事务分组名，须与 seataServer.properties 中 service.vgroupMapping.xxx 对应
+  tx-service-group: skyeye_tx_group
+  # false：关闭 Seata 默认数据源代理；改由 baomidou dynamic-datasource 代理
+  # 注意：业务端不需要 seata.store（会话库只在 TC）；本库只需建 undo_log，连接用本服务 jdbc
+  enable-auto-data-source-proxy: false
+  service:
+    # 事务组 -> 集群名映射（与 TC 侧 vgroupMapping 保持一致；Nacos 也有一份作兜底）
+    vgroup-mapping:
+      skyeye_tx_group: default
+  # Seata Server 通过下方 registry.nacos 发现，无需 grouplist 直连
+  registry:
+    type: nacos
+    nacos:
+      # 与 skyeye-seata 注册名一致（bootstrap: seata-server-${profile}）
+      application: seata-server-${spring.profiles.active}
+      server-addr: ${spring.cloud.nacos.discovery.server-addr}
+      group: DEFAULT_GROUP
+      # 须与 Seata Server 注册的 namespace 一致（注意各服务 profiles 是否相同）
+      namespace: ${spring.profiles.active}
+      cluster: default
+  # 运行参数从 Nacos 拉取（DataId 与 skyeye-seata/seataServer.properties 一致）
+  config:
+    type: nacos
+    nacos:
+      server-addr: ${spring.cloud.nacos.config.server-addr}
+      group: DEFAULT_GROUP
+      namespace: ${spring.profiles.active}
+      data-id: seataServer.properties
