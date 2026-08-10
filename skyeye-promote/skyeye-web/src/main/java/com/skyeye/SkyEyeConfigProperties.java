@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-public class ConfigProperties {
+public class SkyEyeConfigProperties {
 
     @Value("${spring.cloud.nacos.config.server-addr}")
     private String serverAddr;

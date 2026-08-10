@@ -24,12 +24,12 @@ import java.util.Map;
 public class ConfigrationController {
 
     @Autowired
-    private ConfigProperties configProperties;
+    private SkyEyeConfigProperties skyEyeConfigProperties;
 
     @Cacheable(value = "configRation", key = "#env", unless = "#result == null")
     @GetMapping(value = "/getConfigRation")
     public Map<String, String> getConfigRation(@RequestParam("env") String env) {
-        return configProperties.getConfig(env);
+        return skyEyeConfigProperties.getConfig(env);
     }
 
 }
