@@ -55,7 +55,7 @@ public class EquipmentScrapOrder extends SkyeyeFlowable {
     private Map<String, Object> staffMation;
 
     @TableField(value = "scrap_reason")
-    @ApiModelProperty(value = "报废原因", fuzzyLike = true)
+    @ApiModelProperty(value = "报废原因")
     private String scrapReason;
 
 
