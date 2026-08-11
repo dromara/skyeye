@@ -15,9 +15,11 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.equipment.classenum.EquipmentState;
 import com.skyeye.equipment.service.EquipmentService;
+import com.skyeye.equipmentcheck.classenum.EquipmentCheckItemResult;
 import com.skyeye.equipmentcheck.classenum.EquipmentCheckResult;
 import com.skyeye.equipmentcheck.dao.EquipmentCheckOrderDao;
 import com.skyeye.equipmentcheck.entity.EquipmentCheckOrder;
+import com.skyeye.equipmentcheck.entity.EquipmentCheckOrderItem;
 import com.skyeye.equipmentcheck.service.EquipmentCheckOrderItemService;
 import com.skyeye.equipmentcheck.service.EquipmentCheckOrderService;
 import com.skyeye.equipmentcheckstandard.service.EquipmentCheckStandardService;
@@ -123,6 +125,11 @@ public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<Eq
         equipmentCheckStandardService.setDataMation(order, EquipmentCheckOrder::getStandardId);
         iAuthUserService.setDataMation(order, EquipmentCheckOrder::getCheckerId);
         farmService.setDataMation(order, EquipmentCheckOrder::getPosition);
+        if (CollectionUtil.isNotEmpty(order.getItemList())) {
+            for (EquipmentCheckOrderItem item : order.getItemList()) {
+                item.setItemResultMation(EquipmentCheckItemResult.getMation(item.getItemResult()));
+            }
+        }
         return order;
     }
 
