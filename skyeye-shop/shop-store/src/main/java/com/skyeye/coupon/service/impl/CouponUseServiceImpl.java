@@ -223,6 +223,7 @@ public class CouponUseServiceImpl extends SkyeyeBusinessServiceImpl<CouponUseDao
     @Override
     public void queryMyCouponUseByState(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        String couponId = commonPageInfo.getCustomParamsMapStr("couponId");
         Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
         QueryWrapper<CouponUse> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(CouponUse::getCreateId), inputObject.getLogParams().get("id").toString());
@@ -231,6 +232,9 @@ public class CouponUseServiceImpl extends SkyeyeBusinessServiceImpl<CouponUseDao
         }
         if (StrUtil.isNotEmpty(commonPageInfo.getType())) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(CouponUse::getDiscountType), commonPageInfo.getType());
+        }
+        if (StrUtil.isNotEmpty(couponId)) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(CouponUse::getCouponId), couponId);
         }
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(CouponUse::getCreateTime));
         List<CouponUse> list = list(queryWrapper);
