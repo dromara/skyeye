@@ -10,6 +10,8 @@ import com.skyeye.common.entity.CommonInfo;
 import com.skyeye.equipmentcheck.classenum.EquipmentCheckItemResult;
 import lombok.Data;
 
+import java.util.Map;
+
 /**
  * @ClassName: EquipmentCheckOrderItem
  * @Description: 设备点检单明细实体类
@@ -50,6 +52,10 @@ public class EquipmentCheckOrderItem extends CommonInfo {
     @TableField("item_result")
     @ApiModelProperty(value = "检查结果", enumClass = EquipmentCheckItemResult.class, required = "required")
     private String itemResult;
+
+    @TableField(exist = false)
+    @Property(value = "检查结果信息")
+    private Map<String, Object> itemResultMation;
 
     @TableField("sort_no")
     @ApiModelProperty(value = "排序号", defaultValue = "1")
