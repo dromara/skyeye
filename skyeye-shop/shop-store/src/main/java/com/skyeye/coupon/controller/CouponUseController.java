@@ -47,7 +47,8 @@ public class CouponUseController {
     }
 
     @ApiOperation(id = "queryMyCouponUseByState", value = "根据状态分页查询自己的优惠券领取信息", method = "POST", allUse = "2")
-    @ApiImplicitParams(classBean = CommonPageInfo.class)
+    @ApiImplicitParams(classBean = CommonPageInfo.class, value = {
+        @ApiImplicitParam(id = "couponId", name = "couponId", value = "优惠券id")})
     @RequestMapping("/post/CouponUseController/queryMyCouponUseByState")
     public void queryMyCouponUseByState(InputObject inputObject, OutputObject outputObject) {
         couponUseService.queryMyCouponUseByState(inputObject, outputObject);
