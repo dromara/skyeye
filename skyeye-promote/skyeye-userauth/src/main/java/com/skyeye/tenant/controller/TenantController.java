@@ -8,6 +8,7 @@ import com.skyeye.annotation.api.Api;
 import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
+import com.skyeye.annotation.operationlog.IgnoreOperationLog;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
@@ -72,6 +73,7 @@ public class TenantController {
         tenantService.deleteById(inputObject, outputObject);
     }
 
+    @IgnoreOperationLog
     @ApiOperation(id = "queryAllTenantList", value = "获取所有租户信息", method = "GET", allUse = "0")
     @RequestMapping("/post/TenantController/queryAllTenantList")
     public void queryAllTenantList(InputObject inputObject, OutputObject outputObject) {
