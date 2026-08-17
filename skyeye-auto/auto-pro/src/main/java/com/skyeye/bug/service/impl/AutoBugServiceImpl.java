@@ -5,17 +5,17 @@
 package com.skyeye.bug.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
-import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeTeamAuthServiceImpl;
 import com.skyeye.bug.classenum.BugAuthEnum;
 import com.skyeye.bug.dao.AutoBugDao;
 import com.skyeye.bug.entity.AutoBug;
-import com.skyeye.bug.entity.AutoBugQueryDo;
 import com.skyeye.bug.service.AutoBugService;
+import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
-import com.skyeye.common.object.OutputObject;
-import com.skyeye.common.tenant.context.TenantContext;
+import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.environment.service.AutoEnvironmentService;
 import com.skyeye.module.service.AutoModuleService;
 import com.skyeye.version.service.AutoVersionService;
@@ -58,19 +58,25 @@ public class AutoBugServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoBugDao, Au
     }
 
     @Override
-    @IgnoreTenant
-    public void queryPageList(InputObject inputObject, OutputObject outputObject) {
-        super.queryPageList(inputObject, outputObject);
+    protected QueryWrapper<AutoBug> getQueryWrapper(CommonPageInfo commonPageInfo) {
+        QueryWrapper<AutoBug> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getObjectId), commonPageInfo.getObjectId());
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getObjectKey), commonPageInfo.getObjectKey());
+        if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("moduleId"))) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getModuleId), commonPageInfo.getCustomParamsMapStr("moduleId"));
+        }
+        if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("environmentId"))) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getEnvironmentId), commonPageInfo.getCustomParamsMapStr("environmentId"));
+        }
+        if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("versionId"))) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getVersionId), commonPageInfo.getCustomParamsMapStr("versionId"));
+        }
+        return queryWrapper;
     }
 
     @Override
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
-        AutoBugQueryDo pageInfo = inputObject.getParams(AutoBugQueryDo.class);
-        pageInfo.setCreateId(inputObject.getLogParams().get("id").toString());
-        if (tenantEnable) {
-            pageInfo.setTenantId(TenantContext.getTenantId());
-        }
-        List<Map<String, Object>> beans = skyeyeBaseMapper.queryAutoBugList(pageInfo);
+        List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         autoModuleService.setMationForMap(beans, "moduleId", "moduleMation");
         autoVersionService.setMationForMap(beans, "versionId", "versionMation");
         autoEnvironmentService.setMationForMap(beans, "environmentId", "environmentMation");

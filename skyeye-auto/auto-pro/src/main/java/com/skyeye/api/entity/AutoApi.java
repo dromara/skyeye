@@ -38,11 +38,11 @@ public class AutoApi extends SkyeyeTeamAuth {
     private String id;
 
     @TableField("`name`")
-    @ApiModelProperty(value = "名称", required = "required")
+    @ApiModelProperty(value = "名称", required = "required", fuzzyLike = true)
     private String name;
 
     @TableField("address")
-    @ApiModelProperty(value = "接口地址", required = "required")
+    @ApiModelProperty(value = "接口地址", required = "required", fuzzyLike = true)
     private String address;
 
     @TableField("remark")

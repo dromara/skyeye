@@ -5,11 +5,7 @@
 package com.skyeye.api.dao;
 
 import com.skyeye.api.entity.AutoApi;
-import com.skyeye.api.entity.AutoApiQueryDo;
 import com.skyeye.eve.dao.SkyeyeBaseMapper;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName: AutoApiDao
@@ -20,6 +16,5 @@ import java.util.Map;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 public interface AutoApiDao extends SkyeyeBaseMapper<AutoApi> {
-    List<Map<String, Object>> queryAutoApiList(AutoApiQueryDo commonPageInfo);
 
 }

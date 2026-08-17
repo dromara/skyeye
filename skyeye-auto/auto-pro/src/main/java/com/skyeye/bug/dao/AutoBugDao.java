@@ -5,11 +5,7 @@
 package com.skyeye.bug.dao;
 
 import com.skyeye.bug.entity.AutoBug;
-import com.skyeye.bug.entity.AutoBugQueryDo;
 import com.skyeye.eve.dao.SkyeyeBaseMapper;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName: AutoBugDao
@@ -20,7 +16,5 @@ import java.util.Map;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 public interface AutoBugDao extends SkyeyeBaseMapper<AutoBug> {
-
-    List<Map<String, Object>> queryAutoBugList(AutoBugQueryDo pageInfo);
 
 }

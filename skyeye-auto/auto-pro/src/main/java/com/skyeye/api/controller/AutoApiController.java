@@ -32,12 +32,6 @@ public class AutoApiController {
     @Autowired
     private AutoApiService autoApiService;
 
-    /**
-     * 获取接口信息列表
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryAutoApiList", value = "获取接口信息", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = AutoApiQueryDo.class)
     @RequestMapping("/post/AutoApiController/queryAutoApiList")
@@ -45,12 +39,6 @@ public class AutoApiController {
         autoApiService.queryPageList(inputObject, outputObject);
     }
 
-    /**
-     * 添加或修改接口信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "writeAutoApi", value = "新增/编辑接口信息", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = AutoApi.class)
     @RequestMapping("/post/AutoApiController/writeAutoApi")
@@ -58,12 +46,6 @@ public class AutoApiController {
         autoApiService.saveOrUpdateEntity(inputObject, outputObject);
     }
 
-    /**
-     * 删除接口信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "deleteAutoApiById", value = "根据ID删除接口信息", method = "DELETE", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -72,12 +54,6 @@ public class AutoApiController {
         autoApiService.deleteById(inputObject, outputObject);
     }
 
-    /**
-     * 根据id查询接口信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryAutoApiById", value = "根据id查询接口信息", method = "GET", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -86,12 +62,6 @@ public class AutoApiController {
         autoApiService.selectById(inputObject, outputObject);
     }
 
-    /**
-     * 接口测试
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "apiTest", value = "接口测试", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = AutoApi.class)
     @RequestMapping("/post/AutoApiController/apiTest")
@@ -99,12 +69,6 @@ public class AutoApiController {
         autoApiService.apiTest(inputObject, outputObject);
     }
 
-    /**
-     * 根据ID测试接口信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "apiTestById", value = "根据ID测试接口信息", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})

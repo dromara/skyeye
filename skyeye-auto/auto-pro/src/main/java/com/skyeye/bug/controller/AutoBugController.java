@@ -9,8 +9,8 @@ import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.bug.entity.AutoBug;
-import com.skyeye.bug.entity.AutoBugQueryDo;
 import com.skyeye.bug.service.AutoBugService;
+import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,25 +32,13 @@ public class AutoBugController {
     @Autowired
     private AutoBugService autoBugService;
 
-    /**
-     * 获取bug列表
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryAutoBugList", value = "获取bug列表", method = "POST", allUse = "2")
-    @ApiImplicitParams(classBean = AutoBugQueryDo.class)
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/AutoBugController/queryAutoBugList")
     public void queryAutoBugList(InputObject inputObject, OutputObject outputObject) {
         autoBugService.queryPageList(inputObject, outputObject);
     }
 
-    /**
-     * 新增/编辑bug
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "writeAutoBug", value = "新增/编辑bug", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = AutoBug.class)
     @RequestMapping("/post/AutoBugController/writeAutoBug")
@@ -58,12 +46,6 @@ public class AutoBugController {
         autoBugService.saveOrUpdateEntity(inputObject, outputObject);
     }
 
-    /**
-     * 删除bug信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "deleteAutoBugById", value = "删除bug信息", method = "DELETE", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -72,12 +54,6 @@ public class AutoBugController {
         autoBugService.deleteById(inputObject, outputObject);
     }
 
-    /**
-     * 根据id查询bug信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryAutoBugById", value = "根据id查询bug信息", method = "GET", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
