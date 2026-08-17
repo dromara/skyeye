@@ -8,10 +8,10 @@ import com.skyeye.annotation.api.Api;
 import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
+import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.demand.entity.AutoDemand;
-import com.skyeye.demand.entity.AutoDemandQueryDo;
 import com.skyeye.demand.service.AutoDemandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,39 +32,21 @@ public class AutoDemandController {
     @Autowired
     private AutoDemandService autoDemandService;
 
-    /**
-     * 获取需求表列表
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
-    @ApiOperation(id = "queryAutoDemandList", value = "获取需求表列表", method = "POST", allUse = "2")
-    @ApiImplicitParams(classBean = AutoDemandQueryDo.class)
+    @ApiOperation(id = "queryAutoDemandList", value = "获取需求列表", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/AutoDemandController/queryAutoDemandList")
     public void queryAutoDemandList(InputObject inputObject, OutputObject outputObject) {
         autoDemandService.queryPageList(inputObject, outputObject);
     }
 
-    /**
-     * 新增/编辑需求表信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
-    @ApiOperation(id = "writeAutoDemand", value = "新增/编辑需求表信息", method = "POST", allUse = "2")
+    @ApiOperation(id = "writeAutoDemand", value = "新增/编辑需求信息", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = AutoDemand.class)
     @RequestMapping("/post/AutoDemandController/writeAutoDemand")
     public void writeAutoDemand(InputObject inputObject, OutputObject outputObject) {
         autoDemandService.saveOrUpdateEntity(inputObject, outputObject);
     }
 
-    /**
-     * 根据id删除需求表信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
-    @ApiOperation(id = "deleteAutoDemandById", value = "根据id删除需求表信息", method = "DELETE", allUse = "2")
+    @ApiOperation(id = "deleteAutoDemandById", value = "根据id删除需求信息", method = "DELETE", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
     @RequestMapping("/post/AutoDemandController/deleteAutoDemandById")
@@ -72,13 +54,7 @@ public class AutoDemandController {
         autoDemandService.deleteById(inputObject, outputObject);
     }
 
-    /**
-     * 根据id查询需求表配置信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
-    @ApiOperation(id = "queryAutoDemandById", value = "根据id查询需求表配置信息", method = "GET", allUse = "2")
+    @ApiOperation(id = "queryAutoDemandById", value = "根据id查询需求信息", method = "GET", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
     @RequestMapping("/post/AutoDemandController/queryAutoDemandById")
@@ -86,12 +62,6 @@ public class AutoDemandController {
         autoDemandService.selectById(inputObject, outputObject);
     }
 
-    /**
-     * 更新需求状态
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "updateStateAutoDemandById", value = "更新需求状态", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -100,12 +70,6 @@ public class AutoDemandController {
         autoDemandService.updateStateAutoDemandById(inputObject, outputObject);
     }
 
-    /**
-     * 作废需求
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "invalidAutoDemandById", value = "作废需求", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -113,10 +77,6 @@ public class AutoDemandController {
     public void invalidAutoDemandById(InputObject inputObject, OutputObject outputObject) {
         autoDemandService.invalidAutoDemandById(inputObject, outputObject);
     }
-
-
-
-
 
 }
 

@@ -15,13 +15,12 @@ import com.skyeye.common.base.handler.enclosure.bean.Enclosure;
 import com.skyeye.common.base.handler.enclosure.bean.EnclosureFace;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeTeamAuth;
+import com.skyeye.demand.classenum.AutoDemandStateEnum;
 import com.skyeye.module.entity.AutoModule;
 import com.skyeye.version.entity.AutoVersion;
 import lombok.Data;
 
 import java.util.Map;
-
-import com.skyeye.demand.classenum.AutoDemandStateEnum;
 
 /**
  * @ClassName: AutoDemand
@@ -58,7 +57,7 @@ public class AutoDemand extends SkyeyeTeamAuth implements EnclosureFace {
     private String content;
 
     @TableField(value = "state")
-    @ApiModelProperty(value = "状态", enumClass = AutoDemandStateEnum.class)
+    @ApiModelProperty(value = "状态", required = "required", enumClass = AutoDemandStateEnum.class)
     private String state;
 
     @TableField(value = "version_id")

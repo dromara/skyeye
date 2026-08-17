@@ -32,12 +32,6 @@ public class AutoVersionController {
     @Autowired
     private AutoVersionService autoVersionService;
 
-    /**
-     * 获取版本信息列表
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryAutoVersionList", value = "获取版本信息", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/AutoVersionController/queryAutoVersionList")
@@ -45,12 +39,6 @@ public class AutoVersionController {
         autoVersionService.queryPageList(inputObject, outputObject);
     }
 
-    /**
-     * 添加或修改版本信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "writeAutoVersion", value = "新增/编辑版本信息", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = AutoVersion.class)
     @RequestMapping("/post/AutoVersionController/writeAutoVersion")
@@ -58,12 +46,6 @@ public class AutoVersionController {
         autoVersionService.saveOrUpdateEntity(inputObject, outputObject);
     }
 
-    /**
-     * 删除版本信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "deleteAutoVersionById", value = "根据ID删除版本信息", method = "DELETE", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -72,12 +54,6 @@ public class AutoVersionController {
         autoVersionService.deleteById(inputObject, outputObject);
     }
 
-    /**
-     * 根据项目id获取版本信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryAutoVersionByObjectId", value = "根据项目id获取版本信息", method = "GET", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "objectId", name = "objectId", value = "项目id", required = "required")})

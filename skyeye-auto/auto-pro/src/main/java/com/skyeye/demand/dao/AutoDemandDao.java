@@ -5,11 +5,7 @@
 package com.skyeye.demand.dao;
 
 import com.skyeye.demand.entity.AutoDemand;
-import com.skyeye.demand.entity.AutoDemandQueryDo;
 import com.skyeye.eve.dao.SkyeyeBaseMapper;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName: AutoDemandDao
@@ -21,5 +17,4 @@ import java.util.Map;
  */
 public interface AutoDemandDao extends SkyeyeBaseMapper<AutoDemand> {
 
-    List<Map<String, Object>> queryAutoDemandList(AutoDemandQueryDo pageInfo);
 }

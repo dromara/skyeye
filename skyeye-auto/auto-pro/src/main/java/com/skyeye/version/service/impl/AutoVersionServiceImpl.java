@@ -13,7 +13,6 @@ import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.version.classenum.AutoVersionAuthEnum;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName: AutoVersionServiceImpl
@@ -37,7 +35,7 @@ import java.util.Map;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
-@SkyeyeService(name = "版本管理", groupName = "版本管理", teamAuth = true)
+@SkyeyeService(name = "版本管理", groupName = "版本管理", teamAuth = true, allowDynamicAttrKey = false)
 public class AutoVersionServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoVersionDao, AutoVersion> implements AutoVersionService {
 
     @Override
@@ -48,6 +46,14 @@ public class AutoVersionServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoVersio
     @Override
     public List<String> getAuthPermissionKeyList() {
         return Arrays.asList(AutoVersionAuthEnum.ADD.getKey(), AutoVersionAuthEnum.EDIT.getKey(), AutoVersionAuthEnum.DELETE.getKey());
+    }
+
+    @Override
+    protected QueryWrapper<AutoVersion> getQueryWrapper(CommonPageInfo commonPageInfo) {
+        QueryWrapper<AutoVersion> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoVersion::getObjectId), commonPageInfo.getObjectId());
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoVersion::getObjectKey), commonPageInfo.getObjectKey());
+        return queryWrapper;
     }
 
     @Override
@@ -64,16 +70,6 @@ public class AutoVersionServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoVersio
                 throw new CustomException("该项目存在进行中的版本，请先结束该版本。");
             }
         }
-    }
-
-    @Override
-    public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
-        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
-        if (tenantEnable) {
-            commonPageInfo.setTenantId(TenantContext.getTenantId());
-        }
-        List<Map<String, Object>> beans = skyeyeBaseMapper.queryAutoVersionList(commonPageInfo);
-        return beans;
     }
 
     @Override
