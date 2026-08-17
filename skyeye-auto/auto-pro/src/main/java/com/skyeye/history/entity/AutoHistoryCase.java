@@ -11,11 +11,10 @@ import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.entity.CommonInfo;
+import com.skyeye.history.classenum.AutoHistoryCaseExecuteResult;
 import lombok.Data;
 
 import java.util.List;
-
-import com.skyeye.history.classenum.AutoHistoryCaseExecuteResult;
 
 /**
  * @ClassName: AutoHistoryCase
@@ -36,7 +35,7 @@ public class AutoHistoryCase extends CommonInfo {
     private String id;
 
     @TableField(value = "`name`")
-    @Property(value = "名称")
+    @Property(value = "名称", fuzzyLike = true)
     private String name;
 
     @TableField("module_id")

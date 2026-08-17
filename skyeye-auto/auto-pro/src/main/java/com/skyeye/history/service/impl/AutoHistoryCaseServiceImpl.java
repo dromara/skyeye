@@ -13,7 +13,6 @@ import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.history.classenum.AutoHistoryCaseExecuteResult;
@@ -26,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName: AutoHistoryCaseServiceImpl
@@ -44,13 +42,10 @@ public class AutoHistoryCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoHi
     private AutoHistoryStepService autoHistoryStepService;
 
     @Override
-    public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
-        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
-        if (tenantEnable) {
-            commonPageInfo.setTenantId(TenantContext.getTenantId());
-        }
-        List<Map<String, Object>> beans = skyeyeBaseMapper.queryAutoCaseHistoryList(commonPageInfo);
-        return beans;
+    protected QueryWrapper<AutoHistoryCase> getQueryWrapper(CommonPageInfo commonPageInfo) {
+        QueryWrapper<AutoHistoryCase> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoHistoryCase::getCaseId), commonPageInfo.getObjectId());
+        return queryWrapper;
     }
 
     @Override
@@ -68,6 +63,7 @@ public class AutoHistoryCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoHi
         autoHistoryStepService.createEntity(autoHistoryCase.getStepList(), userId);
     }
 
+    @Override
     public AutoHistoryCase getDataFromDb(String id) {
         AutoHistoryCase autoHistoryCase = super.getDataFromDb(id);
         autoHistoryCase.setStepList(autoHistoryStepService.queryAutoStepListByCaseId(id));

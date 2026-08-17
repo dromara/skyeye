@@ -11,7 +11,6 @@ import com.skyeye.base.business.service.impl.SkyeyeTeamAuthServiceImpl;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.database.classenum.AutoDataBaseAuthEnum;
 import com.skyeye.database.dao.AutoDataBaseDao;
@@ -56,12 +55,16 @@ public class AutoDataBaseServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDataB
     }
 
     @Override
+    protected QueryWrapper<AutoDataBase> getQueryWrapper(CommonPageInfo commonPageInfo) {
+        QueryWrapper<AutoDataBase> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoDataBase::getObjectId), commonPageInfo.getObjectId());
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoDataBase::getObjectKey), commonPageInfo.getObjectKey());
+        return queryWrapper;
+    }
+
+    @Override
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
-        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
-        if (tenantEnable) {
-            commonPageInfo.setTenantId(TenantContext.getTenantId());
-        }
-        List<Map<String, Object>> beans = skyeyeBaseMapper.getAutoDataBaseList(commonPageInfo);
+        List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         beans.forEach(bean -> {
             String driverClass = bean.get("driverClass").toString();
             String poolClass = bean.get("poolClass").toString();
