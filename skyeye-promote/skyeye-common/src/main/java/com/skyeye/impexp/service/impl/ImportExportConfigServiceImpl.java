@@ -1587,6 +1587,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         // ⑤ 样式：隐藏键行 + 一级组标题 + 下拉 + 列类型；dataTypes 与 style.columnDataTypes 一致
         ExcelUtil.SheetExportStyle exportStyle = buildSheetExportStyle(specs, layout);
         applyHeaderGroupNames(keys, columnNames, exportStyle, titleMap, layout);
+        // 按属性「数据来源」为 Excel 各列附加数据有效性下拉
         applyColumnDropdownOptions(exportStyle, keys, index, labelCache);
         ExcelUtil.createWorkBook(safeName, fileSuffix, outRows, keys, columnNames, dataTypes,
             PutObject.getResponse(), exportStyle);
