@@ -23,15 +23,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public enum AutoDemandStateEnum implements SkyeyeEnumClass {
 
-    WAIT_RESEARCH("waitResearch", "待研发", true, false),
-    RESEARCH("research", "研发中", true, false),
-    WAIT_TEST("waitTest", "待测试", true, false),
-    FINISH("finish", "已完成", true, false),
-    INVALID("invalid", "作废", true, false);
+    WAIT_RESEARCH("waitResearch", "待研发", "orange", true, false),
+    RESEARCH("research", "研发中", "blue", true, false),
+    WAIT_TEST("waitTest", "待测试", "purple", true, false),
+    FINISH("finish", "已完成", "green", true, false),
+    INVALID("invalid", "作废", "red", true, false);
 
     private String key;
 
     private String value;
+
+    private String color;
 
     private Boolean show;
 
