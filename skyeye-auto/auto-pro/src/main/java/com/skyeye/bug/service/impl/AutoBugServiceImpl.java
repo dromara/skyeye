@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeTeamAuthServiceImpl;
 import com.skyeye.bug.classenum.BugAuthEnum;
+import com.skyeye.bug.classenum.BugState;
 import com.skyeye.bug.dao.AutoBugDao;
 import com.skyeye.bug.entity.AutoBug;
 import com.skyeye.bug.service.AutoBugService;
@@ -17,6 +18,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.environment.service.AutoEnvironmentService;
+import com.skyeye.exception.CustomException;
 import com.skyeye.module.service.AutoModuleService;
 import com.skyeye.version.service.AutoVersionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,11 +67,42 @@ public class AutoBugServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoBugDao, Au
         if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("moduleId"))) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getModuleId), commonPageInfo.getCustomParamsMapStr("moduleId"));
         }
-        if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("environmentId"))) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getEnvironmentId), commonPageInfo.getCustomParamsMapStr("environmentId"));
-        }
         if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("versionId"))) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getVersionId), commonPageInfo.getCustomParamsMapStr("versionId"));
+        }
+        String type = commonPageInfo.getType();
+        if (StrUtil.isEmpty(type)) {
+            throw new CustomException("类型不能为空");
+        }
+        String userId = InputObject.getLogParamsStatic().get("id").toString();
+        if (StrUtil.equals(type, "myWaitResolved")) {
+            // 待我解决的
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getHandleId), userId);
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getState), BugState.UNRESOLVED.getKey());
+        } else if (StrUtil.equals(type, "myResolved")) {
+            // 我已解决的
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getHandleId), userId);
+            queryWrapper.in(MybatisPlusUtil.toColumns(AutoBug::getState),
+                Arrays.asList(BugState.TO_BE_RETURNED.getKey(), BugState.RESOLVED.getKey()));
+        } else if (StrUtil.equals(type, "myHandle")) {
+            // 我处理的
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getHandleId), userId);
+        } else if (StrUtil.equals(type, "unResolved")) {
+            // 所有未解决的
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getState), BugState.UNRESOLVED.getKey());
+        } else if (StrUtil.equals(type, "allToBeReturned")) {
+            // 所有待回归的
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getState), BugState.TO_BE_RETURNED.getKey());
+        } else if (StrUtil.equals(type, "toBeReturned")) {
+            // 待我回归的
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getState), BugState.TO_BE_RETURNED.getKey());
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getCreateId), userId);
+        } else if (StrUtil.equals(type, "resolved")) {
+            // 所有已解决的
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getState), BugState.RESOLVED.getKey());
+        } else if (StrUtil.equals(type, "myCreate")) {
+            // 我创建的
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getCreateId), userId);
         }
         return queryWrapper;
     }
