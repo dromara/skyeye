@@ -26,7 +26,7 @@ import com.skyeye.version.classenum.AutoVersionState;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Data
-@UniqueField("no")
+@UniqueField(value = "no", message = "版本号不能重复。")
 @RedisCacheField(name = "auto:version", cacheTime = RedisConstants.TOW_MONTH_SECONDS)
 @TableName("auto_version")
 @ApiModel(value = "版本实体类")

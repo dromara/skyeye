@@ -5,6 +5,7 @@
 package com.skyeye.demand.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeTeamAuthServiceImpl;
@@ -12,13 +13,11 @@ import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.demand.classenum.AutoDemandAuthEnum;
 import com.skyeye.demand.classenum.AutoDemandStateEnum;
 import com.skyeye.demand.dao.AutoDemandDao;
 import com.skyeye.demand.entity.AutoDemand;
-import com.skyeye.demand.entity.AutoDemandQueryDo;
 import com.skyeye.demand.service.AutoDemandService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.module.service.AutoModuleService;
@@ -39,7 +38,7 @@ import java.util.Map;
  * 注意：本内容具体规则请参照readme执行，地址：https://gitee.com/doc_wei01/skyeye-report/blob/master/README.md
  */
 @Service
-@SkyeyeService(name = "需求管理", groupName = "需求管理", teamAuth = true)
+@SkyeyeService(name = "需求管理", groupName = "需求管理", teamAuth = true, allowDynamicAttrKey = false)
 public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandDao, AutoDemand> implements AutoDemandService {
 
     @Autowired
@@ -66,7 +65,6 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         Map<String, Object> business = BeanUtil.beanToMap(autoDemand);
         String no = iCodeRuleService.getNextCodeByClassName(getClass().getName(), business);
         autoDemand.setNo(no);
-        autoDemand.setState("waitResearch");                  //设置默认值
     }
 
 
@@ -82,17 +80,18 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
     protected QueryWrapper<AutoDemand> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<AutoDemand> queryWrapper = super.getQueryWrapper(commonPageInfo);
         queryWrapper.eq(MybatisPlusUtil.toColumns(AutoDemand::getObjectId), commonPageInfo.getObjectId());
+        if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("moduleId"))) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoDemand::getModuleId), commonPageInfo.getCustomParamsMapStr("moduleId"));
+        }
+        if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("versionId"))) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoDemand::getVersionId), commonPageInfo.getCustomParamsMapStr("versionId"));
+        }
         return queryWrapper;
     }
 
     @Override
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
-        AutoDemandQueryDo pageInfo = inputObject.getParams(AutoDemandQueryDo.class);
-        pageInfo.setCreateId(inputObject.getLogParams().get("id").toString());
-        if (tenantEnable) {
-            pageInfo.setTenantId(TenantContext.getTenantId());
-        }
-        List<Map<String, Object>> beans = skyeyeBaseMapper.queryAutoDemandList(pageInfo);
+        List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         autoVersionService.setMationForMap(beans, "versionId", "versionMation");
         autoModuleService.setMationForMap(beans, "moduleId", "moduleMation");
         iAuthUserService.setMationForMap(beans, "handleId", "handleMation");

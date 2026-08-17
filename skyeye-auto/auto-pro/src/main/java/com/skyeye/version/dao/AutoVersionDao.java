@@ -4,12 +4,8 @@
 
 package com.skyeye.version.dao;
 
-import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.eve.dao.SkyeyeBaseMapper;
 import com.skyeye.version.entity.AutoVersion;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName: AutoVersionDao
@@ -21,5 +17,4 @@ import java.util.Map;
  */
 public interface AutoVersionDao extends SkyeyeBaseMapper<AutoVersion> {
 
-    List<Map<String, Object>> queryAutoVersionList(CommonPageInfo commonPageInfo);
 }
