@@ -22,13 +22,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public enum AutoVersionState implements SkyeyeEnumClass {
 
-    GET("get", "新建", true, true),
-    PROGRESS("progress", "进行中", true, false),
-    END("end", "结束", true, false);
+    GET("get", "新建", "blue", true, true),
+    PROGRESS("progress", "进行中", "orange", true, false),
+    END("end", "结束", "green", true, false);
 
     private String key;
 
     private String value;
+
+    private String color;
 
     private Boolean show;
 
