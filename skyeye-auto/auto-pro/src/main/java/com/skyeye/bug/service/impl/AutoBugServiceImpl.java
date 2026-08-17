@@ -17,6 +17,7 @@ import com.skyeye.bug.service.AutoBugService;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.demand.service.AutoDemandService;
 import com.skyeye.environment.service.AutoEnvironmentService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.module.service.AutoModuleService;
@@ -48,6 +49,9 @@ public class AutoBugServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoBugDao, Au
 
     @Autowired
     private AutoEnvironmentService autoEnvironmentService;
+
+    @Autowired
+    private AutoDemandService autoDemandService;
 
     @Override
     public Class getAuthEnumClass() {
@@ -112,6 +116,7 @@ public class AutoBugServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoBugDao, Au
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         autoModuleService.setMationForMap(beans, "moduleId", "moduleMation");
         autoVersionService.setMationForMap(beans, "versionId", "versionMation");
+        autoDemandService.setMationForMap(beans, "demandId", "demandMation");
         autoEnvironmentService.setMationForMap(beans, "environmentId", "environmentMation");
         iAuthUserService.setMationForMap(beans, "handleId", "handleMation");
         return beans;
@@ -127,9 +132,10 @@ public class AutoBugServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoBugDao, Au
     @Override
     public AutoBug selectById(String id) {
         AutoBug autoBug = super.selectById(id);
-        // 设置模块信息
         autoModuleService.setDataMation(autoBug, AutoBug::getModuleId);
-        // 设置处理人信息
+        autoVersionService.setDataMation(autoBug, AutoBug::getVersionId);
+        autoDemandService.setDataMation(autoBug, AutoBug::getDemandId);
+        autoEnvironmentService.setDataMation(autoBug, AutoBug::getEnvironmentId);
         iAuthUserService.setDataMation(autoBug, AutoBug::getHandleId);
         return autoBug;
     }

@@ -13,6 +13,7 @@ import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeTeamAuth;
+import com.skyeye.common.enumeration.IsDefaultEnum;
 import lombok.Data;
 
 import com.skyeye.version.classenum.AutoVersionState;
@@ -51,5 +52,9 @@ public class AutoVersion extends SkyeyeTeamAuth {
     @TableField("state")
     @ApiModelProperty(value = "状态", required = "required", enumClass = AutoVersionState.class)
     private String state;
+
+    @TableField("is_default")
+    @ApiModelProperty(value = "是否默认", required = "required,num", enumClass = IsDefaultEnum.class)
+    private Integer isDefault;
 
 }
