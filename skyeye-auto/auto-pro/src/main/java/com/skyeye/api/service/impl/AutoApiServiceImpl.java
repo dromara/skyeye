@@ -7,19 +7,19 @@ package com.skyeye.api.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
-import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.api.classenum.AutoApiAuthEnum;
 import com.skyeye.api.dao.AutoApiDao;
 import com.skyeye.api.entity.AutoApi;
-import com.skyeye.api.entity.AutoApiQueryDo;
 import com.skyeye.api.service.AutoApiService;
 import com.skyeye.base.business.service.impl.SkyeyeTeamAuthServiceImpl;
+import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.HttpRequestUtil;
+import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.environment.service.AutoEnvironmentService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.history.entity.AutoHistoryStepApi;
@@ -76,18 +76,19 @@ public class AutoApiServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoApiDao, Au
     }
 
     @Override
-    @IgnoreTenant
-    public void queryPageList(InputObject inputObject, OutputObject outputObject) {
-        super.queryPageList(inputObject, outputObject);
+    protected QueryWrapper<AutoApi> getQueryWrapper(CommonPageInfo commonPageInfo) {
+        QueryWrapper<AutoApi> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoApi::getObjectId), commonPageInfo.getObjectId());
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoApi::getObjectKey), commonPageInfo.getObjectKey());
+        if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("moduleId"))) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoApi::getModuleId), commonPageInfo.getCustomParamsMapStr("moduleId"));
+        }
+        return queryWrapper;
     }
 
     @Override
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
-        AutoApiQueryDo commonPageInfo = inputObject.getParams(AutoApiQueryDo.class);
-        if (tenantEnable) {
-            commonPageInfo.setTenantId(TenantContext.getTenantId());
-        }
-        List<Map<String, Object>> beans = skyeyeBaseMapper.queryAutoApiList(commonPageInfo);
+        List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         autoModuleService.setMationForMap(beans, "moduleId", "moduleMation");
         autoEnvironmentService.setMationForMap(beans, "environmentId", "environmentMation");
         autoServerService.setMationForMap(beans, "serverId", "serverMation");

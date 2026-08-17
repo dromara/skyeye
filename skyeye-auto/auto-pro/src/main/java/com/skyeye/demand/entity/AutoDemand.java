@@ -49,7 +49,7 @@ public class AutoDemand extends SkyeyeTeamAuth implements EnclosureFace {
     private String remark;
 
     @TableField(value = "no")
-    @Property(value = "单据编号")
+    @Property(value = "单据编号", fuzzyLike = true)
     private String no;
 
     @TableField(value = "content")
