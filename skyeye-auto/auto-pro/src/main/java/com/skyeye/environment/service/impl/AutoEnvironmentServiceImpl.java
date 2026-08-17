@@ -10,7 +10,6 @@ import com.skyeye.base.business.service.impl.SkyeyeTeamAuthServiceImpl;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.environment.classenum.AutoEnvironmentAuthEnum;
 import com.skyeye.environment.dao.AutoEnvironmentDao;
@@ -45,13 +44,11 @@ public class AutoEnvironmentServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoEn
     }
 
     @Override
-    public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
-        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
-        if (tenantEnable) {
-            commonPageInfo.setTenantId(TenantContext.getTenantId());
-        }
-        List<Map<String, Object>> beans = skyeyeBaseMapper.queryAutoEnvironmentList(commonPageInfo);
-        return beans;
+    protected QueryWrapper<AutoEnvironment> getQueryWrapper(CommonPageInfo commonPageInfo) {
+        QueryWrapper<AutoEnvironment> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoEnvironment::getObjectId), commonPageInfo.getObjectId());
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoEnvironment::getObjectKey), commonPageInfo.getObjectKey());
+        return queryWrapper;
     }
 
     @Override
