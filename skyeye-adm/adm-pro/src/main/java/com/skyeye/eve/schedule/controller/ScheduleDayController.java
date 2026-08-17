@@ -173,7 +173,7 @@ public class ScheduleDayController {
         scheduleDayService.queryHolidayScheduleListBySys(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "myagency001", value = "获取我的代办列表", method = "POST", allUse = "1")
+    @ApiOperation(id = "myagency001", value = "获取我的代办列表", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/ScheduleDayController/queryMyAgencyList")
     public void queryMyAgencyList(InputObject inputObject, OutputObject outputObject) {
