@@ -7,10 +7,12 @@ package com.skyeye.version.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeTeamAuthServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.enumeration.IsDefaultEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @ClassName: AutoVersionServiceImpl
@@ -69,6 +72,26 @@ public class AutoVersionServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoVersio
             if (ObjectUtil.isNotEmpty(autoVersion)) {
                 throw new CustomException("该项目存在进行中的版本，请先结束该版本。");
             }
+        }
+    }
+
+    @Override
+    protected void writePostpose(AutoVersion entity, String userId) {
+        super.writePostpose(entity, userId);
+        if (Objects.equals(entity.getIsDefault(), IsDefaultEnum.IS_DEFAULT.getKey())) {
+            QueryWrapper<AutoVersion> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoVersion::getObjectId), entity.getObjectId());
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoVersion::getIsDefault), IsDefaultEnum.IS_DEFAULT.getKey());
+            queryWrapper.ne(CommonConstants.ID, entity.getId());
+            List<AutoVersion> oldDefaults = list(queryWrapper);
+
+            UpdateWrapper<AutoVersion> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq(MybatisPlusUtil.toColumns(AutoVersion::getObjectId), entity.getObjectId());
+            updateWrapper.ne(CommonConstants.ID, entity.getId());
+            updateWrapper.set(MybatisPlusUtil.toColumns(AutoVersion::getIsDefault), IsDefaultEnum.NOT_DEFAULT.getKey());
+            update(updateWrapper);
+
+            oldDefaults.forEach(item -> refreshCache(item.getId()));
         }
     }
 

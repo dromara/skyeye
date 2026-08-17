@@ -15,6 +15,7 @@ import com.skyeye.common.base.handler.enclosure.bean.Enclosure;
 import com.skyeye.common.base.handler.enclosure.bean.EnclosureFace;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeTeamAuth;
+import com.skyeye.demand.entity.AutoDemand;
 import com.skyeye.environment.entity.AutoEnvironment;
 import com.skyeye.module.entity.AutoModule;
 import com.skyeye.version.entity.AutoVersion;
@@ -68,8 +69,16 @@ public class AutoBug extends SkyeyeTeamAuth implements EnclosureFace {
     private String versionId;
 
     @TableField(exist = false)
-    @Property(value = "环境信息")
+    @Property(value = "版本信息")
     private AutoVersion versionMation;
+
+    @TableField("demand_id")
+    @ApiModelProperty(value = "关联需求id")
+    private String demandId;
+
+    @TableField(exist = false)
+    @Property(value = "关联需求信息")
+    private AutoDemand demandMation;
 
     @TableField("environment_id")
     @ApiModelProperty(value = "环境id", required = "required")
