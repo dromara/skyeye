@@ -5,6 +5,7 @@
 package com.skyeye.skill.service;
 
 import com.skyeye.skill.entity.Skill;
+import com.skyeye.skill.entity.SkillExec;
 
 import java.util.List;
 
@@ -67,11 +68,37 @@ public interface SkillService {
     void deleteById(String id);
 
     /**
-     * 执行技能（空壳：只识别，不生成大屏）
+     * 执行技能。skyeye-bigscreen 会生成大屏 JSON 并落执行记录。
      *
      * @param skillCode 技能编码
      * @param userInput 用户自然语言需求
-     * @return 执行说明
+     * @return 执行记录（含解析后的 screen）
      */
-    String executeSkill(String skillCode, String userInput);
+    SkillExec executeSkill(String skillCode, String userInput);
+
+    /**
+     * 根据id查询执行记录
+     *
+     * @param id 执行记录id
+     * @return 执行记录
+     */
+    SkillExec selectExecById(String id);
+
+    /**
+     * 分页查询执行记录
+     *
+     * @param page      页码
+     * @param limit     每页条数
+     * @param skillCode 技能编码，可空
+     * @return 执行记录
+     */
+    List<SkillExec> queryExecPageList(int page, int limit, String skillCode);
+
+    /**
+     * 执行记录数量
+     *
+     * @param skillCode 技能编码，可空
+     * @return 总数
+     */
+    long countExec(String skillCode);
 }

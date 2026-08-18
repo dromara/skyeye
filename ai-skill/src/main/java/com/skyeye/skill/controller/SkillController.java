@@ -5,6 +5,7 @@
 package com.skyeye.skill.controller;
 
 import com.skyeye.skill.entity.Skill;
+import com.skyeye.skill.entity.SkillExec;
 import com.skyeye.skill.service.SkillService;
 import com.skyeye.skill.web.SkillResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,20 @@ public class SkillController {
     @RequestMapping("/post/SkillController/executeSkill")
     public SkillResult executeSkill(@RequestBody Map<String, Object> params) {
         return SkillResult.ok(skillService.executeSkill(stringValue(params, "skillCode"), stringValue(params, "userInput")));
+    }
+
+    @RequestMapping("/post/SkillController/querySkillExecPageList")
+    public SkillResult querySkillExecPageList(@RequestBody(required = false) Map<String, Object> params) {
+        int page = intValue(params, "page", 1);
+        int limit = intValue(params, "limit", 10);
+        String skillCode = stringValue(params, "skillCode");
+        List<SkillExec> list = skillService.queryExecPageList(page, limit, skillCode);
+        return SkillResult.list(list, skillService.countExec(skillCode));
+    }
+
+    @RequestMapping(value = "/post/SkillController/selectSkillExecById", method = RequestMethod.GET)
+    public SkillResult selectSkillExecById(@RequestParam("id") String id) {
+        return SkillResult.ok(skillService.selectExecById(id));
     }
 
     private int intValue(Map<String, Object> params, String key, int defaultValue) {
