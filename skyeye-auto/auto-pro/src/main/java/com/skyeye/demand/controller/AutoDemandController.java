@@ -78,5 +78,16 @@ public class AutoDemandController {
         autoDemandService.invalidAutoDemandById(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "updateAutoDemandEstimateTime", value = "更新需求角色预计时间", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "需求id", required = "required"),
+        @ApiImplicitParam(id = "roleKey", name = "roleKey", value = "角色：front/back/test", required = "required"),
+        @ApiImplicitParam(id = "startTime", name = "startTime", value = "预计开始时间", required = "required"),
+        @ApiImplicitParam(id = "endTime", name = "endTime", value = "预计结束时间", required = "required")})
+    @RequestMapping("/post/AutoDemandController/updateAutoDemandEstimateTime")
+    public void updateAutoDemandEstimateTime(InputObject inputObject, OutputObject outputObject) {
+        autoDemandService.updateAutoDemandEstimateTime(inputObject, outputObject);
+    }
+
 }
 

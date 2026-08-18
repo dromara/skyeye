@@ -15,6 +15,8 @@ import com.skyeye.common.base.handler.enclosure.bean.Enclosure;
 import com.skyeye.common.base.handler.enclosure.bean.EnclosureFace;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeTeamAuth;
+import com.skyeye.common.enumeration.IsDefaultEnum;
+import com.skyeye.demand.classenum.AutoDemandRoleStateEnum;
 import com.skyeye.demand.classenum.AutoDemandStateEnum;
 import com.skyeye.module.entity.AutoModule;
 import com.skyeye.version.entity.AutoVersion;
@@ -76,17 +78,117 @@ public class AutoDemand extends SkyeyeTeamAuth implements EnclosureFace {
     @Property(value = "模块信息")
     private AutoModule moduleMation;
 
-    @TableField("handle_id")
-    @ApiModelProperty(value = "处理人id")
-    private String handleId;
-
-    @TableField(exist = false)
-    @Property(value = "处理人信息")
-    private Map<String, Object> handleMation;
-
     @TableField(exist = false)
     @ApiModelProperty(value = "附件", required = "json")
     private Enclosure enclosureInfo;
+
+    @TableField("test_join_analysis")
+    @ApiModelProperty(value = "测试是否参与需求分析", required = "required,num", enumClass = IsDefaultEnum.class)
+    private Integer testJoinAnalysis;
+
+    @TableField("total_score")
+    @ApiModelProperty(value = "总积分", required = "required")
+    private String totalScore;
+
+    @TableField("front_ratio")
+    @ApiModelProperty(value = "前端积分比例", required = "required")
+    private Integer frontRatio;
+
+    @TableField("back_ratio")
+    @ApiModelProperty(value = "后端积分比例", required = "required")
+    private Integer backRatio;
+
+    @TableField("test_ratio")
+    @ApiModelProperty(value = "测试积分比例", required = "required")
+    private Integer testRatio;
+
+    @TableField(exist = false)
+    @Property(value = "未分配积分")
+    private String unallocatedScore;
+
+    @TableField("front_handle_id")
+    @ApiModelProperty(value = "前端负责人id")
+    private String frontHandleId;
+
+    @TableField(exist = false)
+    @Property(value = "前端负责人信息")
+    private Map<String, Object> frontHandleMation;
+
+    @TableField("front_estimate_start_time")
+    @ApiModelProperty(value = "前端预计开始时间")
+    private String frontEstimateStartTime;
+
+    @TableField("front_estimate_end_time")
+    @ApiModelProperty(value = "前端预计结束时间")
+    private String frontEstimateEndTime;
+
+    @TableField("front_state")
+    @ApiModelProperty(value = "前端状态", enumClass = AutoDemandRoleStateEnum.class)
+    private String frontState;
+
+    @TableField("front_init_score")
+    @ApiModelProperty(value = "前端初始积分")
+    private String frontInitScore;
+
+    @TableField("front_earned_score")
+    @ApiModelProperty(value = "前端已获得积分")
+    private String frontEarnedScore;
+
+    @TableField("back_handle_id")
+    @ApiModelProperty(value = "后端负责人id")
+    private String backHandleId;
+
+    @TableField(exist = false)
+    @Property(value = "后端负责人信息")
+    private Map<String, Object> backHandleMation;
+
+    @TableField("back_estimate_start_time")
+    @ApiModelProperty(value = "后端预计开始时间")
+    private String backEstimateStartTime;
+
+    @TableField("back_estimate_end_time")
+    @ApiModelProperty(value = "后端预计结束时间")
+    private String backEstimateEndTime;
+
+    @TableField("back_state")
+    @ApiModelProperty(value = "后端状态", enumClass = AutoDemandRoleStateEnum.class)
+    private String backState;
+
+    @TableField("back_init_score")
+    @ApiModelProperty(value = "后端初始积分")
+    private String backInitScore;
+
+    @TableField("back_earned_score")
+    @ApiModelProperty(value = "后端已获得积分")
+    private String backEarnedScore;
+
+    @TableField("test_handle_id")
+    @ApiModelProperty(value = "测试负责人id")
+    private String testHandleId;
+
+    @TableField(exist = false)
+    @Property(value = "测试负责人信息")
+    private Map<String, Object> testHandleMation;
+
+    @TableField("test_estimate_start_time")
+    @ApiModelProperty(value = "测试预计开始时间")
+    private String testEstimateStartTime;
+
+    @TableField("test_estimate_end_time")
+    @ApiModelProperty(value = "测试预计结束时间")
+    private String testEstimateEndTime;
+
+    @TableField("test_state")
+    @ApiModelProperty(value = "测试状态", enumClass = AutoDemandRoleStateEnum.class)
+    private String testState;
+
+    @TableField("test_init_score")
+    @ApiModelProperty(value = "测试初始积分")
+    private String testInitScore;
+
+    @TableField("test_earned_score")
+    @ApiModelProperty(value = "测试已获得积分")
+    private String testEarnedScore;
 
 }
 
