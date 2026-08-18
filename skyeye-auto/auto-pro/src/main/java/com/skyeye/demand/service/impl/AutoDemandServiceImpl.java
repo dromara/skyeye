@@ -16,9 +16,11 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
+import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.NumberParseUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.demand.classenum.AutoDemandAuthEnum;
+import com.skyeye.demand.classenum.AutoDemandRoleStateEnum;
 import com.skyeye.demand.classenum.AutoDemandStateEnum;
 import com.skyeye.demand.dao.AutoDemandDao;
 import com.skyeye.demand.entity.AutoDemand;
@@ -77,12 +79,22 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         autoDemand.setFrontEarnedScore(nvlScore(autoDemand.getFrontEarnedScore()));
         autoDemand.setBackEarnedScore(nvlScore(autoDemand.getBackEarnedScore()));
         autoDemand.setTestEarnedScore(nvlScore(autoDemand.getTestEarnedScore()));
+        if (StrUtil.isEmpty(autoDemand.getFrontState())) {
+            autoDemand.setFrontState(AutoDemandRoleStateEnum.WAIT.getKey());
+        }
+        if (StrUtil.isEmpty(autoDemand.getBackState())) {
+            autoDemand.setBackState(AutoDemandRoleStateEnum.WAIT.getKey());
+        }
+        if (StrUtil.isEmpty(autoDemand.getTestState())) {
+            autoDemand.setTestState(AutoDemandRoleStateEnum.WAIT.getKey());
+        }
+        syncDemandStateFromRoles(autoDemand);
     }
 
     @Override
     protected void writePostpose(AutoDemand entity, String userId) {
         super.writePostpose(entity, userId);
-        autoScoreRecordService.grantDemandScoreByState(entity, userId);
+        autoScoreRecordService.grantDemandScoreByState(entity);
     }
 
     @Override
@@ -94,6 +106,69 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         entity.setFrontEarnedScore(nvlScore(oldDemand.getFrontEarnedScore()));
         entity.setBackEarnedScore(nvlScore(oldDemand.getBackEarnedScore()));
         entity.setTestEarnedScore(nvlScore(oldDemand.getTestEarnedScore()));
+        protectFinishedRole(oldDemand, entity, "front");
+        protectFinishedRole(oldDemand, entity, "back");
+        protectFinishedRole(oldDemand, entity, "test");
+        keepActualTimeIfBlank(oldDemand, entity);
+        if (!StrUtil.equals(oldDemand.getState(), AutoDemandStateEnum.INVALID.getKey())
+            && !StrUtil.equals(oldDemand.getState(), AutoDemandStateEnum.FINISH.getKey())) {
+            syncDemandStateFromRoles(entity);
+        }
+    }
+
+    private void protectFinishedRole(AutoDemand oldDemand, AutoDemand entity, String roleKey) {
+        if (!isRoleFinish(getRoleState(oldDemand, roleKey))) {
+            return;
+        }
+        if ("front".equals(roleKey)) {
+            entity.setFrontHandleId(oldDemand.getFrontHandleId());
+            entity.setFrontEstimateStartTime(oldDemand.getFrontEstimateStartTime());
+            entity.setFrontEstimateEndTime(oldDemand.getFrontEstimateEndTime());
+            entity.setFrontActualStartTime(oldDemand.getFrontActualStartTime());
+            entity.setFrontActualEndTime(oldDemand.getFrontActualEndTime());
+            entity.setFrontState(oldDemand.getFrontState());
+            entity.setFrontRatio(oldDemand.getFrontRatio());
+            entity.setFrontInitScore(oldDemand.getFrontInitScore());
+        } else if ("back".equals(roleKey)) {
+            entity.setBackHandleId(oldDemand.getBackHandleId());
+            entity.setBackEstimateStartTime(oldDemand.getBackEstimateStartTime());
+            entity.setBackEstimateEndTime(oldDemand.getBackEstimateEndTime());
+            entity.setBackActualStartTime(oldDemand.getBackActualStartTime());
+            entity.setBackActualEndTime(oldDemand.getBackActualEndTime());
+            entity.setBackState(oldDemand.getBackState());
+            entity.setBackRatio(oldDemand.getBackRatio());
+            entity.setBackInitScore(oldDemand.getBackInitScore());
+        } else {
+            entity.setTestHandleId(oldDemand.getTestHandleId());
+            entity.setTestEstimateStartTime(oldDemand.getTestEstimateStartTime());
+            entity.setTestEstimateEndTime(oldDemand.getTestEstimateEndTime());
+            entity.setTestActualStartTime(oldDemand.getTestActualStartTime());
+            entity.setTestActualEndTime(oldDemand.getTestActualEndTime());
+            entity.setTestState(oldDemand.getTestState());
+            entity.setTestRatio(oldDemand.getTestRatio());
+            entity.setTestInitScore(oldDemand.getTestInitScore());
+        }
+    }
+
+    private void keepActualTimeIfBlank(AutoDemand oldDemand, AutoDemand entity) {
+        if (StrUtil.isEmpty(entity.getFrontActualStartTime())) {
+            entity.setFrontActualStartTime(oldDemand.getFrontActualStartTime());
+        }
+        if (StrUtil.isEmpty(entity.getFrontActualEndTime())) {
+            entity.setFrontActualEndTime(oldDemand.getFrontActualEndTime());
+        }
+        if (StrUtil.isEmpty(entity.getBackActualStartTime())) {
+            entity.setBackActualStartTime(oldDemand.getBackActualStartTime());
+        }
+        if (StrUtil.isEmpty(entity.getBackActualEndTime())) {
+            entity.setBackActualEndTime(oldDemand.getBackActualEndTime());
+        }
+        if (StrUtil.isEmpty(entity.getTestActualStartTime())) {
+            entity.setTestActualStartTime(oldDemand.getTestActualStartTime());
+        }
+        if (StrUtil.isEmpty(entity.getTestActualEndTime())) {
+            entity.setTestActualEndTime(oldDemand.getTestActualEndTime());
+        }
     }
 
     @Override
@@ -112,19 +187,32 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         if (CalculationUtil.compareTo(totalScore, "0", 2, RoundingMode.HALF_UP) < 0) {
             throw new CustomException("总积分不能小于0。");
         }
-        // 设置初始积分
-        fillInitScoreByRatio(entity);
+        // 设置初始积分，已完成角色保持原积分
+        AutoDemand oldDemand = StrUtil.isEmpty(entity.getId()) ? null : getById(entity.getId());
+        fillInitScoreByRatio(entity, oldDemand);
         // 校验预计开始时间和结束时间
         validateEstimateTime(entity.getFrontEstimateStartTime(), entity.getFrontEstimateEndTime(), "前端");
         validateEstimateTime(entity.getBackEstimateStartTime(), entity.getBackEstimateEndTime(), "后端");
         validateEstimateTime(entity.getTestEstimateStartTime(), entity.getTestEstimateEndTime(), "测试");
     }
 
-    private void fillInitScoreByRatio(AutoDemand entity) {
+    private void fillInitScoreByRatio(AutoDemand entity, AutoDemand oldDemand) {
         String total = nvlScore(entity.getTotalScore());
-        entity.setFrontInitScore(calcRoleInit(total, entity.getFrontRatio()));
-        entity.setBackInitScore(calcRoleInit(total, entity.getBackRatio()));
-        entity.setTestInitScore(calcRoleInit(total, entity.getTestRatio()));
+        if (oldDemand != null && isRoleFinish(oldDemand.getFrontState())) {
+            entity.setFrontInitScore(nvlScore(oldDemand.getFrontInitScore()));
+        } else {
+            entity.setFrontInitScore(calcRoleInit(total, entity.getFrontRatio()));
+        }
+        if (oldDemand != null && isRoleFinish(oldDemand.getBackState())) {
+            entity.setBackInitScore(nvlScore(oldDemand.getBackInitScore()));
+        } else {
+            entity.setBackInitScore(calcRoleInit(total, entity.getBackRatio()));
+        }
+        if (oldDemand != null && isRoleFinish(oldDemand.getTestState())) {
+            entity.setTestInitScore(nvlScore(oldDemand.getTestInitScore()));
+        } else {
+            entity.setTestInitScore(calcRoleInit(total, entity.getTestRatio()));
+        }
     }
 
     private String calcRoleInit(String total, Integer ratio) {
@@ -191,24 +279,29 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         queryWrapper.ne(MybatisPlusUtil.toColumns(AutoDemand::getState), AutoDemandStateEnum.INVALID.getKey());
         if (StrUtil.equals(type, "myWaitDev")) {
             queryWrapper.and(wrapper -> wrapper
-                .eq(MybatisPlusUtil.toColumns(AutoDemand::getFrontHandleId), userId)
-                .or()
-                .eq(MybatisPlusUtil.toColumns(AutoDemand::getBackHandleId), userId));
-            queryWrapper.in(MybatisPlusUtil.toColumns(AutoDemand::getState),
-                Arrays.asList(AutoDemandStateEnum.WAIT_RESEARCH.getKey(), AutoDemandStateEnum.RESEARCH.getKey()));
+                .and(item -> item.eq(MybatisPlusUtil.toColumns(AutoDemand::getFrontHandleId), userId)
+                    .and(st -> st.isNull(MybatisPlusUtil.toColumns(AutoDemand::getFrontState))
+                        .or().ne(MybatisPlusUtil.toColumns(AutoDemand::getFrontState), AutoDemandRoleStateEnum.FINISH.getKey()))
+                    .in(MybatisPlusUtil.toColumns(AutoDemand::getState),
+                        Arrays.asList(AutoDemandStateEnum.WAIT_RESEARCH.getKey(), AutoDemandStateEnum.RESEARCH.getKey())))
+                .or(item -> item.eq(MybatisPlusUtil.toColumns(AutoDemand::getBackHandleId), userId)
+                    .and(st -> st.isNull(MybatisPlusUtil.toColumns(AutoDemand::getBackState))
+                        .or().ne(MybatisPlusUtil.toColumns(AutoDemand::getBackState), AutoDemandRoleStateEnum.FINISH.getKey()))
+                    .in(MybatisPlusUtil.toColumns(AutoDemand::getState),
+                        Arrays.asList(AutoDemandStateEnum.WAIT_RESEARCH.getKey(), AutoDemandStateEnum.RESEARCH.getKey()))));
         } else if (StrUtil.equals(type, "myWaitTest")) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(AutoDemand::getTestHandleId), userId);
+            queryWrapper.and(st -> st.isNull(MybatisPlusUtil.toColumns(AutoDemand::getTestState))
+                .or().ne(MybatisPlusUtil.toColumns(AutoDemand::getTestState), AutoDemandRoleStateEnum.FINISH.getKey()));
             queryWrapper.eq(MybatisPlusUtil.toColumns(AutoDemand::getState), AutoDemandStateEnum.WAIT_TEST.getKey());
         } else if (StrUtil.equals(type, "myFinish")) {
             queryWrapper.and(wrapper -> wrapper
                 .and(item -> item.eq(MybatisPlusUtil.toColumns(AutoDemand::getFrontHandleId), userId)
-                    .in(MybatisPlusUtil.toColumns(AutoDemand::getState),
-                        Arrays.asList(AutoDemandStateEnum.WAIT_TEST.getKey(), AutoDemandStateEnum.FINISH.getKey())))
+                    .eq(MybatisPlusUtil.toColumns(AutoDemand::getFrontState), AutoDemandRoleStateEnum.FINISH.getKey()))
                 .or(item -> item.eq(MybatisPlusUtil.toColumns(AutoDemand::getBackHandleId), userId)
-                    .in(MybatisPlusUtil.toColumns(AutoDemand::getState),
-                        Arrays.asList(AutoDemandStateEnum.WAIT_TEST.getKey(), AutoDemandStateEnum.FINISH.getKey())))
+                    .eq(MybatisPlusUtil.toColumns(AutoDemand::getBackState), AutoDemandRoleStateEnum.FINISH.getKey()))
                 .or(item -> item.eq(MybatisPlusUtil.toColumns(AutoDemand::getTestHandleId), userId)
-                    .eq(MybatisPlusUtil.toColumns(AutoDemand::getState), AutoDemandStateEnum.FINISH.getKey())));
+                    .eq(MybatisPlusUtil.toColumns(AutoDemand::getTestState), AutoDemandRoleStateEnum.FINISH.getKey())));
         } else if (StrUtil.equals(type, "unFinish")) {
             queryWrapper.in(MybatisPlusUtil.toColumns(AutoDemand::getState),
                 Arrays.asList(AutoDemandStateEnum.WAIT_RESEARCH.getKey(), AutoDemandStateEnum.RESEARCH.getKey(),
@@ -251,24 +344,53 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
 
     @Override
     public void updateStateAutoDemandById(InputObject inputObject, OutputObject outputObject) {
-        String id = inputObject.getParams().get("id").toString();
+        Map<String, Object> params = inputObject.getParams();
+        String id = String.valueOf(params.get("id"));
+        String roleKey = NumberParseUtil.toStr(params.get("roleKey"));
         String userId = InputObject.getLogParamsStatic().get("id").toString();
         AutoDemand autoDemand = this.selectById(id);
-        String state = autoDemand.getState();
-        if (state.equals(AutoDemandStateEnum.INVALID.getKey()) || state.equals(AutoDemandStateEnum.FINISH.getKey())) {
-            throw new CustomException("已完成或已作废，不可修改");
-        } else if (state.equals(AutoDemandStateEnum.WAIT_RESEARCH.getKey())) {
-            autoDemand.setState(AutoDemandStateEnum.RESEARCH.getKey());
-        } else if (state.equals(AutoDemandStateEnum.RESEARCH.getKey())) {
-            autoDemand.setState(AutoDemandStateEnum.WAIT_TEST.getKey());
-        } else if (state.equals(AutoDemandStateEnum.WAIT_TEST.getKey())) {
-            autoDemand.setState(AutoDemandStateEnum.FINISH.getKey());
-        } else {
-            throw new CustomException("false");
+        if (autoDemand == null) {
+            throw new CustomException("需求不存在。");
         }
+        String demandState = autoDemand.getState();
+        if (StrUtil.equals(demandState, AutoDemandStateEnum.INVALID.getKey())
+            || StrUtil.equals(demandState, AutoDemandStateEnum.FINISH.getKey())) {
+            throw new CustomException("已完成或已作废，不可修改");
+        }
+        String roleName = roleName(roleKey);
+        String handleId = getRoleHandleId(autoDemand, roleKey);
+        String roleState = getRoleState(autoDemand, roleKey);
+        if (StrUtil.isEmpty(handleId)) {
+            throw new CustomException("未指定" + roleName + "负责人，不能推进状态。");
+        }
+        if (!StrUtil.equals(handleId, userId)) {
+            throw new CustomException("仅" + roleName + "负责人可推进自己的状态。");
+        }
+        if (isRoleFinish(roleState)) {
+            throw new CustomException(roleName + "已完成，不可再修改。");
+        }
+        if ("test".equals(roleKey)) {
+            if (!StrUtil.equals(demandState, AutoDemandStateEnum.WAIT_TEST.getKey())) {
+                throw new CustomException("请等待前端、后端完成后再开始测试。");
+            }
+        } else if (!StrUtil.equals(demandState, AutoDemandStateEnum.WAIT_RESEARCH.getKey())
+            && !StrUtil.equals(demandState, AutoDemandStateEnum.RESEARCH.getKey())) {
+            throw new CustomException("研发已结束，不能再推进" + roleName + "状态。");
+        }
+        String now = DateUtil.getTimeAndToString();
+        if (isRoleWait(roleState)) {
+            setRoleState(autoDemand, roleKey, AutoDemandRoleStateEnum.PROGRESS.getKey());
+            setRoleActualStartTime(autoDemand, roleKey, now);
+        } else if (isRoleProgress(roleState)) {
+            setRoleState(autoDemand, roleKey, AutoDemandRoleStateEnum.FINISH.getKey());
+            setRoleActualEndTime(autoDemand, roleKey, now);
+        } else {
+            throw new CustomException(roleName + "状态不正确。");
+        }
+        syncDemandStateFromRoles(autoDemand);
         autoDemandService.updateEntity(autoDemand, userId);
         this.refreshCache(id);
-        outputObject.setBean(autoDemand);
+        outputObject.setBean(selectById(id));
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
@@ -302,27 +424,16 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         if (autoDemand == null) {
             throw new CustomException("需求不存在。");
         }
-        if (StrUtil.equals(autoDemand.getState(), AutoDemandStateEnum.INVALID.getKey())) {
-            throw new CustomException("已作废，不可修改预计时间。");
+        if (StrUtil.equals(autoDemand.getState(), AutoDemandStateEnum.INVALID.getKey())
+            || StrUtil.equals(autoDemand.getState(), AutoDemandStateEnum.FINISH.getKey())) {
+            throw new CustomException("已完成或已作废，不可修改预计时间。");
         }
-        String roleName;
-        if ("front".equals(roleKey)) {
-            roleName = "前端";
-            if (StrUtil.isEmpty(autoDemand.getFrontHandleId())) {
-                throw new CustomException("未指定前端负责人，不能设置预计时间。");
-            }
-        } else if ("back".equals(roleKey)) {
-            roleName = "后端";
-            if (StrUtil.isEmpty(autoDemand.getBackHandleId())) {
-                throw new CustomException("未指定后端负责人，不能设置预计时间。");
-            }
-        } else if ("test".equals(roleKey)) {
-            roleName = "测试";
-            if (StrUtil.isEmpty(autoDemand.getTestHandleId())) {
-                throw new CustomException("未指定测试负责人，不能设置预计时间。");
-            }
-        } else {
-            throw new CustomException("角色不正确。");
+        String roleName = roleName(roleKey);
+        if (StrUtil.isEmpty(getRoleHandleId(autoDemand, roleKey))) {
+            throw new CustomException("未指定" + roleName + "负责人，不能设置预计时间。");
+        }
+        if (isRoleFinish(getRoleState(autoDemand, roleKey))) {
+            throw new CustomException(roleName + "已完成，不可再修改预计时间。");
         }
         if (StrUtil.isBlank(startTime) || StrUtil.isBlank(endTime) || "null".equalsIgnoreCase(startTime) || "null".equalsIgnoreCase(endTime)) {
             throw new CustomException("请设置预计开始时间和结束时间。");
@@ -344,6 +455,108 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         this.refreshCache(id);
         outputObject.setBean(selectById(id));
         outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    private void syncDemandStateFromRoles(AutoDemand demand) {
+        boolean frontDone = isRoleDone(demand.getFrontHandleId(), demand.getFrontState());
+        boolean backDone = isRoleDone(demand.getBackHandleId(), demand.getBackState());
+        boolean testDone = isRoleDone(demand.getTestHandleId(), demand.getTestState());
+        boolean frontStarted = isRoleStarted(demand.getFrontHandleId(), demand.getFrontState());
+        boolean backStarted = isRoleStarted(demand.getBackHandleId(), demand.getBackState());
+        if (frontDone && backDone && testDone) {
+            demand.setState(AutoDemandStateEnum.FINISH.getKey());
+        } else if (frontDone && backDone) {
+            demand.setState(AutoDemandStateEnum.WAIT_TEST.getKey());
+        } else if (frontStarted || backStarted) {
+            demand.setState(AutoDemandStateEnum.RESEARCH.getKey());
+        } else {
+            demand.setState(AutoDemandStateEnum.WAIT_RESEARCH.getKey());
+        }
+    }
+
+    private boolean isRoleDone(String handleId, String roleState) {
+        return StrUtil.isEmpty(handleId) || isRoleFinish(roleState);
+    }
+
+    private boolean isRoleStarted(String handleId, String roleState) {
+        return StrUtil.isNotEmpty(handleId) && (isRoleProgress(roleState) || isRoleFinish(roleState));
+    }
+
+    private boolean isRoleWait(String roleState) {
+        return StrUtil.isEmpty(roleState) || StrUtil.equals(roleState, AutoDemandRoleStateEnum.WAIT.getKey());
+    }
+
+    private boolean isRoleProgress(String roleState) {
+        return StrUtil.equals(roleState, AutoDemandRoleStateEnum.PROGRESS.getKey());
+    }
+
+    private boolean isRoleFinish(String roleState) {
+        return StrUtil.equals(roleState, AutoDemandRoleStateEnum.FINISH.getKey());
+    }
+
+    private String roleName(String roleKey) {
+        if ("front".equals(roleKey)) {
+            return "前端";
+        }
+        if ("back".equals(roleKey)) {
+            return "后端";
+        }
+        if ("test".equals(roleKey)) {
+            return "测试";
+        }
+        throw new CustomException("角色不正确。");
+    }
+
+    private String getRoleHandleId(AutoDemand demand, String roleKey) {
+        roleName(roleKey);
+        if ("front".equals(roleKey)) {
+            return demand.getFrontHandleId();
+        }
+        if ("back".equals(roleKey)) {
+            return demand.getBackHandleId();
+        }
+        return demand.getTestHandleId();
+    }
+
+    private String getRoleState(AutoDemand demand, String roleKey) {
+        roleName(roleKey);
+        if ("front".equals(roleKey)) {
+            return demand.getFrontState();
+        }
+        if ("back".equals(roleKey)) {
+            return demand.getBackState();
+        }
+        return demand.getTestState();
+    }
+
+    private void setRoleState(AutoDemand demand, String roleKey, String state) {
+        if ("front".equals(roleKey)) {
+            demand.setFrontState(state);
+        } else if ("back".equals(roleKey)) {
+            demand.setBackState(state);
+        } else {
+            demand.setTestState(state);
+        }
+    }
+
+    private void setRoleActualStartTime(AutoDemand demand, String roleKey, String time) {
+        if ("front".equals(roleKey)) {
+            demand.setFrontActualStartTime(time);
+        } else if ("back".equals(roleKey)) {
+            demand.setBackActualStartTime(time);
+        } else {
+            demand.setTestActualStartTime(time);
+        }
+    }
+
+    private void setRoleActualEndTime(AutoDemand demand, String roleKey, String time) {
+        if ("front".equals(roleKey)) {
+            demand.setFrontActualEndTime(time);
+        } else if ("back".equals(roleKey)) {
+            demand.setBackActualEndTime(time);
+        } else {
+            demand.setTestActualEndTime(time);
+        }
     }
 
 }

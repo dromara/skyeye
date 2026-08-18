@@ -21,6 +21,7 @@ import com.skyeye.common.enumeration.IsDefaultEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
+import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.NumberParseUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.demand.classenum.AutoDemandRoleStateEnum;
@@ -70,11 +71,11 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
     private AutoScoreSettleService autoScoreSettleService;
 
     @Override
-    public void grantDemandScoreByState(AutoDemand demand, String userId) {
-        grantDemandScoreByStateInternal(demand, userId);
+    public void grantDemandScoreByState(AutoDemand demand) {
+        grantDemandScoreByStateInternal(demand);
     }
 
-    private int grantDemandScoreByStateInternal(AutoDemand demand, String userId) {
+    private int grantDemandScoreByStateInternal(AutoDemand demand) {
         if (demand == null || StrUtil.isEmpty(demand.getState())) {
             return 0;
         }
@@ -86,16 +87,16 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         boolean grantTest = StrUtil.equals(demand.getState(), AutoDemandStateEnum.FINISH.getKey());
         int count = 0;
         if (grantDev) {
-            count += grantRoleScore(demand, "front", AutoScoreTypeEnum.FRONT_GRANT, userId);
-            count += grantRoleScore(demand, "back", AutoScoreTypeEnum.BACK_GRANT, userId);
+            count += grantRoleScore(demand, "front", AutoScoreTypeEnum.FRONT_GRANT);
+            count += grantRoleScore(demand, "back", AutoScoreTypeEnum.BACK_GRANT);
         }
         if (grantTest) {
-            count += grantRoleScore(demand, "test", AutoScoreTypeEnum.TEST_GRANT, userId);
+            count += grantRoleScore(demand, "test", AutoScoreTypeEnum.TEST_GRANT);
         }
         return count;
     }
 
-    private int grantRoleScore(AutoDemand demand, String roleKey, AutoScoreTypeEnum scoreType, String operatorId) {
+    private int grantRoleScore(AutoDemand demand, String roleKey, AutoScoreTypeEnum scoreType) {
         String handleId;
         String initScore;
         if ("front".equals(roleKey)) {
@@ -121,12 +122,30 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         if ("front".equals(roleKey)) {
             updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getFrontEarnedScore), initScore);
             updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getFrontState), AutoDemandRoleStateEnum.FINISH.getKey());
+            if (StrUtil.isEmpty(demand.getFrontActualEndTime())) {
+                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getFrontActualEndTime), DateUtil.getTimeAndToString());
+            }
+            if (StrUtil.isEmpty(demand.getFrontActualStartTime())) {
+                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getFrontActualStartTime), DateUtil.getTimeAndToString());
+            }
         } else if ("back".equals(roleKey)) {
             updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getBackEarnedScore), initScore);
             updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getBackState), AutoDemandRoleStateEnum.FINISH.getKey());
+            if (StrUtil.isEmpty(demand.getBackActualEndTime())) {
+                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getBackActualEndTime), DateUtil.getTimeAndToString());
+            }
+            if (StrUtil.isEmpty(demand.getBackActualStartTime())) {
+                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getBackActualStartTime), DateUtil.getTimeAndToString());
+            }
         } else {
             updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getTestEarnedScore), initScore);
             updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getTestState), AutoDemandRoleStateEnum.FINISH.getKey());
+            if (StrUtil.isEmpty(demand.getTestActualEndTime())) {
+                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getTestActualEndTime), DateUtil.getTimeAndToString());
+            }
+            if (StrUtil.isEmpty(demand.getTestActualStartTime())) {
+                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getTestActualStartTime), DateUtil.getTimeAndToString());
+            }
         }
         autoDemandDao.update(null, updateWrapper);
         return 1;

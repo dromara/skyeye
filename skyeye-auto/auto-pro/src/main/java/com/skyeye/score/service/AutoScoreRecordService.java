@@ -21,7 +21,7 @@ import com.skyeye.score.entity.AutoScoreRecord;
  */
 public interface AutoScoreRecordService extends SkyeyeBusinessService<AutoScoreRecord> {
 
-    void grantDemandScoreByState(AutoDemand demand, String userId);
+    void grantDemandScoreByState(AutoDemand demand);
 
     void settleResolvedBug(AutoBug bug, String userId);
 

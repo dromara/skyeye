@@ -62,9 +62,10 @@ public class AutoDemandController {
         autoDemandService.selectById(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "updateStateAutoDemandById", value = "更新需求状态", method = "POST", allUse = "2")
+    @ApiOperation(id = "updateStateAutoDemandById", value = "按负责人角色推进需求状态", method = "POST", allUse = "2")
     @ApiImplicitParams({
-        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
+        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),
+        @ApiImplicitParam(id = "roleKey", name = "roleKey", value = "角色：front/back/test", required = "required")})
     @RequestMapping("/post/UserController/updateStateAutoDemandById")
     public void updateStateAutoDemandById(InputObject inputObject, OutputObject outputObject) {
         autoDemandService.updateStateAutoDemandById(inputObject, outputObject);
