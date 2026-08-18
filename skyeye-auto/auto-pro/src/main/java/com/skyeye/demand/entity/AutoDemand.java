@@ -78,14 +78,6 @@ public class AutoDemand extends SkyeyeTeamAuth implements EnclosureFace {
     @Property(value = "模块信息")
     private AutoModule moduleMation;
 
-    @TableField("handle_id")
-    @ApiModelProperty(value = "处理人id")
-    private String handleId;
-
-    @TableField(exist = false)
-    @Property(value = "处理人信息")
-    private Map<String, Object> handleMation;
-
     @TableField(exist = false)
     @ApiModelProperty(value = "附件", required = "json")
     private Enclosure enclosureInfo;

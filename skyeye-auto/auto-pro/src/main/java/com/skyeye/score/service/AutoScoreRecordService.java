@@ -27,6 +27,8 @@ public interface AutoScoreRecordService extends SkyeyeBusinessService<AutoScoreR
 
     void queryMyAutoScore(InputObject inputObject, OutputObject outputObject);
 
-    void settleAutoScoreByVersion(InputObject inputObject, OutputObject outputObject);
+    void queryAutoScoreBoard(InputObject inputObject, OutputObject outputObject);
+
+    void settleAutoScore(InputObject inputObject, OutputObject outputObject);
 
 }

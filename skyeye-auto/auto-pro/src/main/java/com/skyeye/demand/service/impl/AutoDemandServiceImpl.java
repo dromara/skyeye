@@ -7,8 +7,10 @@ package com.skyeye.demand.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeTeamAuthServiceImpl;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
@@ -23,6 +25,7 @@ import com.skyeye.demand.entity.AutoDemand;
 import com.skyeye.demand.service.AutoDemandService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.module.service.AutoModuleService;
+import com.skyeye.score.service.AutoScoreRecordService;
 import com.skyeye.version.service.AutoVersionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +56,9 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
     @Autowired
     private AutoDemandService autoDemandService;
 
+    @Autowired
+    private AutoScoreRecordService autoScoreRecordService;
+
     @Override
     public Class getAuthEnumClass() {
         return AutoDemandAuthEnum.class;
@@ -71,6 +77,12 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         autoDemand.setFrontEarnedScore(nvlScore(autoDemand.getFrontEarnedScore()));
         autoDemand.setBackEarnedScore(nvlScore(autoDemand.getBackEarnedScore()));
         autoDemand.setTestEarnedScore(nvlScore(autoDemand.getTestEarnedScore()));
+    }
+
+    @Override
+    protected void writePostpose(AutoDemand entity, String userId) {
+        super.writePostpose(entity, userId);
+        autoScoreRecordService.grantDemandScoreByState(entity, userId);
     }
 
     @Override
@@ -167,7 +179,45 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("versionId"))) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(AutoDemand::getVersionId), commonPageInfo.getCustomParamsMapStr("versionId"));
         }
+        applyListTypeFilter(queryWrapper, commonPageInfo.getType());
         return queryWrapper;
+    }
+
+    private void applyListTypeFilter(QueryWrapper<AutoDemand> queryWrapper, String type) {
+        if (StrUtil.isEmpty(type)) {
+            type = "unFinish";
+        }
+        String userId = InputObject.getLogParamsStatic().get("id").toString();
+        queryWrapper.ne(MybatisPlusUtil.toColumns(AutoDemand::getState), AutoDemandStateEnum.INVALID.getKey());
+        if (StrUtil.equals(type, "myWaitDev")) {
+            queryWrapper.and(wrapper -> wrapper
+                .eq(MybatisPlusUtil.toColumns(AutoDemand::getFrontHandleId), userId)
+                .or()
+                .eq(MybatisPlusUtil.toColumns(AutoDemand::getBackHandleId), userId));
+            queryWrapper.in(MybatisPlusUtil.toColumns(AutoDemand::getState),
+                Arrays.asList(AutoDemandStateEnum.WAIT_RESEARCH.getKey(), AutoDemandStateEnum.RESEARCH.getKey()));
+        } else if (StrUtil.equals(type, "myWaitTest")) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoDemand::getTestHandleId), userId);
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoDemand::getState), AutoDemandStateEnum.WAIT_TEST.getKey());
+        } else if (StrUtil.equals(type, "myFinish")) {
+            queryWrapper.and(wrapper -> wrapper
+                .and(item -> item.eq(MybatisPlusUtil.toColumns(AutoDemand::getFrontHandleId), userId)
+                    .in(MybatisPlusUtil.toColumns(AutoDemand::getState),
+                        Arrays.asList(AutoDemandStateEnum.WAIT_TEST.getKey(), AutoDemandStateEnum.FINISH.getKey())))
+                .or(item -> item.eq(MybatisPlusUtil.toColumns(AutoDemand::getBackHandleId), userId)
+                    .in(MybatisPlusUtil.toColumns(AutoDemand::getState),
+                        Arrays.asList(AutoDemandStateEnum.WAIT_TEST.getKey(), AutoDemandStateEnum.FINISH.getKey())))
+                .or(item -> item.eq(MybatisPlusUtil.toColumns(AutoDemand::getTestHandleId), userId)
+                    .eq(MybatisPlusUtil.toColumns(AutoDemand::getState), AutoDemandStateEnum.FINISH.getKey())));
+        } else if (StrUtil.equals(type, "unFinish")) {
+            queryWrapper.in(MybatisPlusUtil.toColumns(AutoDemand::getState),
+                Arrays.asList(AutoDemandStateEnum.WAIT_RESEARCH.getKey(), AutoDemandStateEnum.RESEARCH.getKey(),
+                    AutoDemandStateEnum.WAIT_TEST.getKey()));
+        } else if (StrUtil.equals(type, "finish")) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoDemand::getState), AutoDemandStateEnum.FINISH.getKey());
+        } else if (StrUtil.equals(type, "all")) {
+            // 全部有效需求
+        }
     }
 
     @Override
@@ -175,7 +225,6 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         autoVersionService.setMationForMap(beans, "versionId", "versionMation");
         autoModuleService.setMationForMap(beans, "moduleId", "moduleMation");
-        iAuthUserService.setMationForMap(beans, "handleId", "handleMation");
         iAuthUserService.setMationForMap(beans, "frontHandleId", "frontHandleMation");
         iAuthUserService.setMationForMap(beans, "backHandleId", "backHandleMation");
         iAuthUserService.setMationForMap(beans, "testHandleId", "testHandleMation");
@@ -192,7 +241,6 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         AutoDemand autoDemand = super.selectById(id);
         autoVersionService.setDataMation(autoDemand, AutoDemand::getVersionId);
         autoModuleService.setDataMation(autoDemand, AutoDemand::getModuleId);
-        iAuthUserService.setDataMation(autoDemand, AutoDemand::getHandleId);
         iAuthUserService.setDataMation(autoDemand, AutoDemand::getFrontHandleId);
         iAuthUserService.setDataMation(autoDemand, AutoDemand::getBackHandleId);
         iAuthUserService.setDataMation(autoDemand, AutoDemand::getTestHandleId);
@@ -240,6 +288,61 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         autoDemandService.updateEntity(autoDemand, userId);
         this.refreshCache(id);
         outputObject.setBean(autoDemand);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void updateAutoDemandEstimateTime(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String id = String.valueOf(params.get("id"));
+        String roleKey = NumberParseUtil.toStr(params.get("roleKey"));
+        String startTime = NumberParseUtil.toStr(params.get("startTime"));
+        String endTime = NumberParseUtil.toStr(params.get("endTime"));
+        AutoDemand autoDemand = getById(id);
+        if (autoDemand == null) {
+            throw new CustomException("需求不存在。");
+        }
+        if (StrUtil.equals(autoDemand.getState(), AutoDemandStateEnum.INVALID.getKey())) {
+            throw new CustomException("已作废，不可修改预计时间。");
+        }
+        String roleName;
+        if ("front".equals(roleKey)) {
+            roleName = "前端";
+            if (StrUtil.isEmpty(autoDemand.getFrontHandleId())) {
+                throw new CustomException("未指定前端负责人，不能设置预计时间。");
+            }
+        } else if ("back".equals(roleKey)) {
+            roleName = "后端";
+            if (StrUtil.isEmpty(autoDemand.getBackHandleId())) {
+                throw new CustomException("未指定后端负责人，不能设置预计时间。");
+            }
+        } else if ("test".equals(roleKey)) {
+            roleName = "测试";
+            if (StrUtil.isEmpty(autoDemand.getTestHandleId())) {
+                throw new CustomException("未指定测试负责人，不能设置预计时间。");
+            }
+        } else {
+            throw new CustomException("角色不正确。");
+        }
+        if (StrUtil.isBlank(startTime) || StrUtil.isBlank(endTime) || "null".equalsIgnoreCase(startTime) || "null".equalsIgnoreCase(endTime)) {
+            throw new CustomException("请设置预计开始时间和结束时间。");
+        }
+        validateEstimateTime(startTime, endTime, roleName);
+        UpdateWrapper<AutoDemand> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, id);
+        if ("front".equals(roleKey)) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getFrontEstimateStartTime), startTime);
+            updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getFrontEstimateEndTime), endTime);
+        } else if ("back".equals(roleKey)) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getBackEstimateStartTime), startTime);
+            updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getBackEstimateEndTime), endTime);
+        } else {
+            updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getTestEstimateStartTime), startTime);
+            updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getTestEstimateEndTime), endTime);
+        }
+        update(updateWrapper);
+        this.refreshCache(id);
+        outputObject.setBean(selectById(id));
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 

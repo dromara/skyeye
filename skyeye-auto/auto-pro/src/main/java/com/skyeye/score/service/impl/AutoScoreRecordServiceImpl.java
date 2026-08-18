@@ -6,6 +6,7 @@ package com.skyeye.score.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
@@ -30,20 +31,16 @@ import com.skyeye.exception.CustomException;
 import com.skyeye.score.classenum.AutoScoreTypeEnum;
 import com.skyeye.score.dao.AutoScoreRecordDao;
 import com.skyeye.score.entity.AutoScoreRecord;
+import com.skyeye.score.entity.AutoScoreSettle;
 import com.skyeye.score.service.AutoScoreRecordService;
+import com.skyeye.score.service.AutoScoreSettleService;
 import com.skyeye.team.rest.ITeamBusinessRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -68,6 +65,9 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
 
     @Autowired
     private ITeamBusinessRest iTeamBusinessRest;
+
+    @Autowired
+    private AutoScoreSettleService autoScoreSettleService;
 
     @Override
     public void grantDemandScoreByState(AutoDemand demand, String userId) {
@@ -137,6 +137,7 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         if (bug == null || !StrUtil.equals(bug.getState(), BugState.RESOLVED.getKey())) {
             return;
         }
+        // 是否是非问题
         boolean nonIssue = Objects.equals(bug.getIsNonIssue(), IsDefaultEnum.IS_DEFAULT.getKey());
         String targetUserId = nonIssue ? bug.getCreateId() : bug.getHandleId();
         if (StrUtil.isEmpty(targetUserId)) {
@@ -149,21 +150,71 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
 
     @Override
     @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
-    public void settleAutoScoreByVersion(InputObject inputObject, OutputObject outputObject) {
+    public void settleAutoScore(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String objectId = String.valueOf(params.get("objectId"));
         String objectKey = NumberParseUtil.toStr(params.get("objectKey"));
-        String versionId = String.valueOf(params.get("versionId"));
-        checkVersionParams(objectId, versionId);
-        String userId = InputObject.getLogParamsStatic().get("id").toString();
-        checkProjectManager(objectId, userId);
-        List<AutoDemand> demandList = listVersionDemands(objectId, objectKey, versionId);
-        int grantCount = 0;
-        for (AutoDemand demand : demandList) {
-            grantCount += grantDemandScoreByStateInternal(demand, userId);
+        String remark = NumberParseUtil.toStr(params.get("remark"));
+        checkObjectId(objectId);
+        String operatorId = InputObject.getLogParamsStatic().get("id").toString();
+        checkProjectManager(objectId, operatorId);
+        List<Map<String, Object>> settleUsers = JSONUtil.toList(params.get("userList").toString(), null);
+        if (CollectionUtil.isEmpty(settleUsers)) {
+            throw new CustomException("请填写本次结算积分。");
+        }
+        Map<String, String> remainMap = buildRemainScoreMap(objectId, objectKey);
+        int settleCount = 0;
+        String totalSettleScore = "0";
+        for (Map<String, Object> item : settleUsers) {
+            String userId = NumberParseUtil.toStr(item.get("userId"));
+            String score = nvlScore(item.get("score"));
+            if (StrUtil.isEmpty(userId) || CalculationUtil.compareTo(score, "0", 2, RoundingMode.HALF_UP) <= 0) {
+                continue;
+            }
+            String remainScore = nvlScore(remainMap.get(userId));
+            if (CalculationUtil.compareTo(score, remainScore, 2, RoundingMode.HALF_UP) > 0) {
+                throw new CustomException("结算积分不能大于待结算积分。");
+            }
+            AutoScoreSettle settle = new AutoScoreSettle();
+            settle.setObjectId(objectId);
+            settle.setObjectKey(objectKey);
+            settle.setUserId(userId);
+            settle.setScore(score);
+            settle.setRemark(remark);
+            autoScoreSettleService.createEntity(settle, operatorId);
+            remainMap.put(userId, CalculationUtil.subtract(remainScore, score, 2));
+            settleCount++;
+            totalSettleScore = CalculationUtil.add(totalSettleScore, score, 2);
+        }
+        if (settleCount == 0) {
+            throw new CustomException("请填写本次结算积分。");
         }
         Map<String, Object> bean = new HashMap<>();
-        bean.put("grantCount", grantCount);
+        bean.put("settleCount", settleCount);
+        bean.put("totalSettleScore", totalSettleScore);
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryAutoScoreBoard(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String objectId = String.valueOf(params.get("objectId"));
+        String objectKey = NumberParseUtil.toStr(params.get("objectKey"));
+        checkObjectId(objectId);
+        String userId = InputObject.getLogParamsStatic().get("id").toString();
+        List<Map<String, Object>> userList = buildUserScoreList(objectId, objectKey, null);
+        String totalScore = "0";
+        String remainScore = "0";
+        for (Map<String, Object> row : userList) {
+            totalScore = CalculationUtil.add(totalScore, nvlScore(row.get("totalScore")), 2);
+            remainScore = CalculationUtil.add(remainScore, nvlScore(row.get("remainScore")), 2);
+        }
+        Map<String, Object> bean = new HashMap<>();
+        bean.put("isCharge", isProjectManager(objectId, userId));
+        bean.put("totalScore", totalScore);
+        bean.put("remainScore", remainScore);
+        bean.put("userList", userList);
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
@@ -173,17 +224,17 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         Map<String, Object> params = inputObject.getParams();
         String objectId = String.valueOf(params.get("objectId"));
         String objectKey = NumberParseUtil.toStr(params.get("objectKey"));
-        String versionId = String.valueOf(params.get("versionId"));
-        checkVersionParams(objectId, versionId);
+        String versionId = NumberParseUtil.toStr(params.get("versionId"));
+        checkObjectId(objectId);
         String userId = InputObject.getLogParamsStatic().get("id").toString();
 
-        List<AutoDemand> demandList = listVersionDemands(objectId, objectKey, versionId);
-        List<AutoScoreRecord> versionRecords = listVersionRecords(objectId, versionId, null);
-        Set<String> grantedTypes = versionRecords.stream()
+        List<AutoDemand> demandList = listDemands(objectId, objectKey, versionId);
+        List<AutoScoreRecord> scoreRecords = listScoreRecords(objectId, versionId, null);
+        Set<String> grantedTypes = scoreRecords.stream()
             .filter(item -> StrUtil.isNotEmpty(item.getDemandId()) && StrUtil.isNotEmpty(item.getScoreType()))
             .map(item -> item.getDemandId() + ":" + item.getScoreType())
             .collect(Collectors.toSet());
-        List<AutoScoreRecord> myRecords = versionRecords.stream()
+        List<AutoScoreRecord> myRecords = scoreRecords.stream()
             .filter(item -> StrUtil.equals(item.getUserId(), userId))
             .collect(Collectors.toList());
 
@@ -225,35 +276,67 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
                 bugRows.add(row);
             }
         }
-
-        boolean isCharge = isProjectManager(objectId, userId);
+        String settledScore = nvlScore(sumSettledByUser(objectId, objectKey).get(userId));
+        String projectEarnedScore = sumUserEarnedScore(listScoreRecords(objectId, null, userId));
+        String versionEarnedScore = earnedScore;
         Map<String, Object> bean = new HashMap<>();
+        bean.put("projectTotalScore", projectEarnedScore);
+        bean.put("versionTotalScore", versionEarnedScore);
+        bean.put("totalScore", projectEarnedScore);
         bean.put("expectedScore", expectedScore);
         bean.put("earnedScore", earnedScore);
+        bean.put("settledScore", settledScore);
+        bean.put("remainScore", CalculationUtil.subtract(projectEarnedScore, settledScore, 2));
         bean.put("bugDeductScore", bugDeductScore);
-        bean.put("versionTotalScore", sumDemandTotalScore(demandList));
-        bean.put("isCharge", isCharge);
         bean.put("demandList", demandRows);
         bean.put("bugList", bugRows);
-        bean.put("userList", isCharge ? buildUserScoreList(demandList, versionRecords, grantedTypes) : new ArrayList<>());
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
-    private List<Map<String, Object>> buildUserScoreList(List<AutoDemand> demandList, List<AutoScoreRecord> versionRecords,
-                                                         Set<String> grantedTypes) {
+    private String sumUserEarnedScore(List<AutoScoreRecord> records) {
+        String earnedScore = "0";
+        for (AutoScoreRecord record : records) {
+            earnedScore = CalculationUtil.add(earnedScore, nvlScore(record.getScore()), 2);
+        }
+        return earnedScore;
+    }
+
+    private Map<String, String> buildRemainScoreMap(String objectId, String objectKey) {
+        List<Map<String, Object>> userList = buildUserScoreList(objectId, objectKey, null);
+        Map<String, String> remainMap = new HashMap<>();
+        for (Map<String, Object> row : userList) {
+            remainMap.put(String.valueOf(row.get("userId")), nvlScore(row.get("remainScore")));
+        }
+        return remainMap;
+    }
+
+    private List<Map<String, Object>> buildUserScoreList(String objectId, String objectKey, String versionId) {
+        List<AutoDemand> demandList = listDemands(objectId, objectKey, versionId);
+        List<AutoScoreRecord> scoreRecords = listScoreRecords(objectId, versionId, null);
+        Set<String> grantedTypes = scoreRecords.stream()
+            .filter(item -> StrUtil.isNotEmpty(item.getDemandId()) && StrUtil.isNotEmpty(item.getScoreType()))
+            .map(item -> item.getDemandId() + ":" + item.getScoreType())
+            .collect(Collectors.toSet());
+        return buildUserScoreList(demandList, scoreRecords, grantedTypes, objectId, objectKey);
+    }
+
+    private List<Map<String, Object>> buildUserScoreList(List<AutoDemand> demandList, List<AutoScoreRecord> scoreRecords,
+                                                         Set<String> grantedTypes, String objectId, String objectKey) {
         Map<String, Map<String, Object>> userMap = new LinkedHashMap<>();
+        addTeamUsers(userMap, objectId);
         for (AutoDemand demand : demandList) {
             addUserIfPresent(userMap, demand.getFrontHandleId());
             addUserIfPresent(userMap, demand.getBackHandleId());
             addUserIfPresent(userMap, demand.getTestHandleId());
         }
-        for (AutoScoreRecord record : versionRecords) {
+        for (AutoScoreRecord record : scoreRecords) {
             addUserIfPresent(userMap, record.getUserId());
         }
-        Map<String, List<AutoScoreRecord>> recordGroup = versionRecords.stream()
+        Map<String, List<AutoScoreRecord>> recordGroup = scoreRecords.stream()
             .filter(item -> StrUtil.isNotEmpty(item.getUserId()))
             .collect(Collectors.groupingBy(AutoScoreRecord::getUserId));
+        Map<String, String> settledMap = sumSettledByUser(objectId, objectKey);
         for (Map.Entry<String, Map<String, Object>> entry : userMap.entrySet()) {
             String userId = entry.getKey();
             String expectedScore = "0";
@@ -270,9 +353,13 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
                     bugDeductScore = CalculationUtil.add(bugDeductScore, score, 2);
                 }
             }
+            String settledScore = nvlScore(settledMap.get(userId));
             Map<String, Object> row = entry.getValue();
             row.put("expectedScore", expectedScore);
+            row.put("totalScore", earnedScore);
             row.put("earnedScore", earnedScore);
+            row.put("settledScore", settledScore);
+            row.put("remainScore", CalculationUtil.subtract(earnedScore, settledScore, 2));
             row.put("bugDeductScore", bugDeductScore);
         }
         List<Map<String, Object>> userList = new ArrayList<>(userMap.values());
@@ -287,6 +374,46 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         Map<String, Object> row = new HashMap<>();
         row.put("userId", userId);
         userMap.put(userId, row);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addTeamUsers(Map<String, Map<String, Object>> userMap, String objectId) {
+        try {
+            Map<String, Object> team = ExecuteFeignClient.get(() -> iTeamBusinessRest.queryTeamBusiness(objectId)).getBean();
+            if (CollectionUtil.isEmpty(team)) {
+                return;
+            }
+            addUserIfPresent(userMap, NumberParseUtil.toStr(team.get("chargeUser")));
+            if (team.get("chargeUserMation") instanceof Map) {
+                addUserIfPresent(userMap, NumberParseUtil.toStr(((Map<String, Object>) team.get("chargeUserMation")).get("id")));
+            }
+            Object roleList = team.get("teamRoleList");
+            if (!(roleList instanceof List)) {
+                return;
+            }
+            for (Object roleObj : (List<?>) roleList) {
+                if (!(roleObj instanceof Map)) {
+                    continue;
+                }
+                Object users = ((Map<String, Object>) roleObj).get("teamRoleUserList");
+                if (!(users instanceof List)) {
+                    continue;
+                }
+                for (Object userObj : (List<?>) users) {
+                    if (!(userObj instanceof Map)) {
+                        continue;
+                    }
+                    Map<String, Object> user = (Map<String, Object>) userObj;
+                    String userId = NumberParseUtil.toStr(user.get("userId"));
+                    if (StrUtil.isEmpty(userId) && user.get("userMation") instanceof Map) {
+                        userId = NumberParseUtil.toStr(((Map<String, Object>) user.get("userMation")).get("id"));
+                    }
+                    addUserIfPresent(userMap, userId);
+                }
+            }
+        } catch (Exception ignored) {
+            // 团队查询失败时，仍展示需求和流水中的人员
+        }
     }
 
     private String appendMergedDemandRow(List<Map<String, Object>> rows, AutoDemand demand, String userId, Set<String> grantedTypes) {
@@ -349,38 +476,52 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         return CalculationUtil.add(current, nvlScore(initScore), 2);
     }
 
-    private String sumDemandTotalScore(List<AutoDemand> demandList) {
-        String total = "0";
-        for (AutoDemand demand : demandList) {
-            total = CalculationUtil.add(total, nvlScore(demand.getTotalScore()), 2);
-        }
-        return total;
-    }
-
-    private List<AutoDemand> listVersionDemands(String objectId, String objectKey, String versionId) {
+    private List<AutoDemand> listDemands(String objectId, String objectKey, String versionId) {
         QueryWrapper<AutoDemand> demandQuery = new QueryWrapper<>();
         demandQuery.eq(MybatisPlusUtil.toColumns(AutoDemand::getObjectId), objectId);
         if (StrUtil.isNotEmpty(objectKey) && !"null".equals(objectKey)) {
             demandQuery.eq(MybatisPlusUtil.toColumns(AutoDemand::getObjectKey), objectKey);
         }
-        demandQuery.eq(MybatisPlusUtil.toColumns(AutoDemand::getVersionId), versionId);
+        if (StrUtil.isNotEmpty(versionId) && !"null".equals(versionId)) {
+            demandQuery.eq(MybatisPlusUtil.toColumns(AutoDemand::getVersionId), versionId);
+        }
         demandQuery.ne(MybatisPlusUtil.toColumns(AutoDemand::getState), AutoDemandStateEnum.INVALID.getKey());
         return autoDemandDao.selectList(demandQuery);
     }
 
-    private List<AutoScoreRecord> listVersionRecords(String objectId, String versionId, String userId) {
+    private List<AutoScoreRecord> listScoreRecords(String objectId, String versionId, String userId) {
         QueryWrapper<AutoScoreRecord> recordQuery = new QueryWrapper<>();
         recordQuery.eq(MybatisPlusUtil.toColumns(AutoScoreRecord::getObjectId), objectId);
-        recordQuery.eq(MybatisPlusUtil.toColumns(AutoScoreRecord::getVersionId), versionId);
+        if (StrUtil.isNotEmpty(versionId) && !"null".equals(versionId)) {
+            recordQuery.eq(MybatisPlusUtil.toColumns(AutoScoreRecord::getVersionId), versionId);
+        }
         if (StrUtil.isNotEmpty(userId)) {
             recordQuery.eq(MybatisPlusUtil.toColumns(AutoScoreRecord::getUserId), userId);
         }
         return list(recordQuery);
     }
 
-    private void checkVersionParams(String objectId, String versionId) {
-        if (StrUtil.isEmpty(objectId) || StrUtil.isEmpty(versionId) || "null".equals(objectId) || "null".equals(versionId)) {
-            throw new CustomException("项目和版本不能为空。");
+    private Map<String, String> sumSettledByUser(String objectId, String objectKey) {
+        QueryWrapper<AutoScoreSettle> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoScoreSettle::getObjectId), objectId);
+        if (StrUtil.isNotEmpty(objectKey) && !"null".equals(objectKey)) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoScoreSettle::getObjectKey), objectKey);
+        }
+        List<AutoScoreSettle> settleList = autoScoreSettleService.list(queryWrapper);
+        Map<String, String> settledMap = new HashMap<>();
+        for (AutoScoreSettle settle : settleList) {
+            if (StrUtil.isEmpty(settle.getUserId())) {
+                continue;
+            }
+            String current = nvlScore(settledMap.get(settle.getUserId()));
+            settledMap.put(settle.getUserId(), CalculationUtil.add(current, nvlScore(settle.getScore()), 2));
+        }
+        return settledMap;
+    }
+
+    private void checkObjectId(String objectId) {
+        if (StrUtil.isEmpty(objectId) || "null".equals(objectId)) {
+            throw new CustomException("项目不能为空。");
         }
     }
 

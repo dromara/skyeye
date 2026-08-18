@@ -125,7 +125,7 @@ public class AutoBug extends SkyeyeTeamAuth implements EnclosureFace {
     private String severity;
 
     @TableField("is_non_issue")
-    @ApiModelProperty(value = "是否非问题", enumClass = IsDefaultEnum.class)
+    @ApiModelProperty(value = "是否非问题", required = "required,num", enumClass = IsDefaultEnum.class)
     private Integer isNonIssue;
 
     @TableField(exist = false)
