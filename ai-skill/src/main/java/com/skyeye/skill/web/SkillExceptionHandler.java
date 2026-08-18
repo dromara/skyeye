@@ -22,6 +22,15 @@ public class SkillExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public SkillResult handleOther(Exception e) {
-        return SkillResult.fail("Skills异常: " + e.getMessage());
+        Throwable cause = unwrap(e);
+        return SkillResult.fail("Skills异常: " + (cause.getMessage() == null ? cause.getClass().getSimpleName() : cause.getMessage()));
+    }
+
+    private Throwable unwrap(Throwable e) {
+        Throwable current = e;
+        while (current.getCause() != null && current.getCause() != current) {
+            current = current.getCause();
+        }
+        return current;
     }
 }

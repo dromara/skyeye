@@ -13,7 +13,9 @@ import com.skyeye.skill.dao.SkillExecDao;
 import com.skyeye.skill.entity.Skill;
 import com.skyeye.skill.entity.SkillExec;
 import com.skyeye.skill.exception.CustomException;
+import com.skyeye.skill.generator.BigScreenLlmGenerator;
 import com.skyeye.skill.generator.BigScreenTemplateGenerator;
+import com.skyeye.skill.llm.LlmChatService;
 import com.skyeye.skill.service.SkillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +50,12 @@ public class SkillServiceImpl implements SkillService {
 
     @Autowired
     private BigScreenTemplateGenerator bigScreenTemplateGenerator;
+
+    @Autowired
+    private BigScreenLlmGenerator bigScreenLlmGenerator;
+
+    @Autowired
+    private LlmChatService llmChatService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -136,7 +144,7 @@ public class SkillServiceImpl implements SkillService {
             throw new CustomException("暂只支持执行 skyeye-bigscreen，当前技能: " + skillCode);
         }
 
-        Map<String, Object> screen = bigScreenTemplateGenerator.generate(userInput);
+        Map<String, Object> screen = generateScreen(skill, userInput);
         String screenJson;
         try {
             screenJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen);
@@ -156,6 +164,33 @@ public class SkillServiceImpl implements SkillService {
         skillExecDao.insert(exec);
         exec.setScreen(screen);
         return exec;
+    }
+
+    private Map<String, Object> generateScreen(Skill skill, String userInput) {
+        if (!llmChatService.isEnabled()) {
+            return markTemplate(bigScreenTemplateGenerator.generate(userInput), "skill.llm.enabled=false，使用模板");
+        }
+        if (!llmChatService.hasApiKey()) {
+            if (!llmChatService.isFallbackToTemplate()) {
+                throw new CustomException(llmChatService.missingKeyHint());
+            }
+            return markTemplate(bigScreenTemplateGenerator.generate(userInput), llmChatService.missingKeyHint() + "，已回退模板");
+        }
+        try {
+            return bigScreenLlmGenerator.generate(userInput, skill.getInstruction());
+        } catch (Exception e) {
+            if (!llmChatService.isFallbackToTemplate()) {
+                throw e instanceof CustomException ? (CustomException) e : new CustomException(e.getMessage());
+            }
+            return markTemplate(bigScreenTemplateGenerator.generate(userInput),
+                "大模型失败已回退模板: " + e.getMessage());
+        }
+    }
+
+    private Map<String, Object> markTemplate(Map<String, Object> screen, String remark) {
+        screen.put("source", "template");
+        screen.put("remark", remark);
+        return screen;
     }
 
     @Override

@@ -36,3 +36,22 @@ mybatis-plus:
 logging:
   level:
     com.skyeye.skill: debug
+
+# 第3步：大模型。不配 Key 时仍走第2步模板，不影响现有接口。
+skill:
+  llm:
+    enabled: true
+    # TongYi / YiYan / XunFei
+    platform: TongYi
+    fallback-to-template: true
+    tongyi:
+      api-key: sk-4e03005246654a9682ec9e4564ed51e3
+      model: qwen-turbo
+    yiyan:
+      api-key:
+      secret-key:
+      model: ERNIE-Speed-8K
+    xunfei:
+      app-id:
+      api-key:
+      secret-key:

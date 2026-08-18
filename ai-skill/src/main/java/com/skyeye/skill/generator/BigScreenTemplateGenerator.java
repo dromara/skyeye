@@ -38,7 +38,7 @@ public class BigScreenTemplateGenerator {
         screen.put("background", "#0b1a33");
         screen.put("userInput", userInput == null ? "" : userInput);
         screen.put("source", "template");
-        screen.put("remark", "当前由模板生成，后续可换成大模型输出");
+        screen.put("remark", "由固定模板生成");
 
         List<Map<String, Object>> widgets = new ArrayList<>();
         widgets.add(widget("header", "标题栏", 40, 20, 1840, 80, title));
