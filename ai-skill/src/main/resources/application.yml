@@ -1,0 +1,38 @@
+# ============================================================
+# 项目路径 E:\maven\erp\ai-skill（以 erp 为根目录）。
+# 启动类：com.skyeye.skill.AiSkillApplication
+# 端口：8099
+# ============================================================
+
+server:
+  port: 8099
+
+spring:
+  application:
+    name: skyeye-ai-skill
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # ---------- 你只需要改下面 3 项 ----------
+    # 1) url：改 IP、端口、库名。库名必须和 SQL 里建的库一致。
+    #    格式：jdbc:mysql://{IP}:{端口}/{库名}?后面参数保持不动
+    url: jdbc:mysql://127.0.0.1:3306/skyeye_ai_local?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    # 2) username：本地 MySQL 账号
+    username: root
+    # 3) password：本地 MySQL 密码（没有密码就写成 password: ）
+    password: 123456
+    # ---------- 上面 3 项改完即可 ----------
+  sql:
+    init:
+      mode: never
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: assign_id
+
+logging:
+  level:
+    com.skyeye.skill: debug
