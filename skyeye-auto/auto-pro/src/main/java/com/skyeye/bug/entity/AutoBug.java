@@ -11,10 +11,13 @@ import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
+import com.skyeye.bug.classenum.BugNecessaryToPresent;
+import com.skyeye.bug.classenum.BugState;
 import com.skyeye.common.base.handler.enclosure.bean.Enclosure;
 import com.skyeye.common.base.handler.enclosure.bean.EnclosureFace;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.entity.features.SkyeyeTeamAuth;
+import com.skyeye.common.enumeration.IsDefaultEnum;
 import com.skyeye.demand.entity.AutoDemand;
 import com.skyeye.environment.entity.AutoEnvironment;
 import com.skyeye.module.entity.AutoModule;
@@ -22,9 +25,6 @@ import com.skyeye.version.entity.AutoVersion;
 import lombok.Data;
 
 import java.util.Map;
-
-import com.skyeye.bug.classenum.BugNecessaryToPresent;
-import com.skyeye.bug.classenum.BugState;
 
 /**
  * @ClassName: AutoBug
@@ -123,6 +123,10 @@ public class AutoBug extends SkyeyeTeamAuth implements EnclosureFace {
     @TableField("severity")
     @ApiModelProperty(value = "严重性，参考数据字典")
     private String severity;
+
+    @TableField("is_non_issue")
+    @ApiModelProperty(value = "是否非问题", enumClass = IsDefaultEnum.class)
+    private Integer isNonIssue;
 
     @TableField(exist = false)
     @ApiModelProperty(value = "附件", required = "json")

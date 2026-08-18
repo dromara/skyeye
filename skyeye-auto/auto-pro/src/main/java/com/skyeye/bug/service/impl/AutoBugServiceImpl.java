@@ -15,12 +15,14 @@ import com.skyeye.bug.dao.AutoBugDao;
 import com.skyeye.bug.entity.AutoBug;
 import com.skyeye.bug.service.AutoBugService;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.enumeration.IsDefaultEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.demand.service.AutoDemandService;
 import com.skyeye.environment.service.AutoEnvironmentService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.module.service.AutoModuleService;
+import com.skyeye.score.service.AutoScoreRecordService;
 import com.skyeye.version.service.AutoVersionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,9 @@ public class AutoBugServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoBugDao, Au
 
     @Autowired
     private AutoDemandService autoDemandService;
+
+    @Autowired
+    private AutoScoreRecordService autoScoreRecordService;
 
     @Override
     public Class getAuthEnumClass() {
@@ -127,6 +132,15 @@ public class AutoBugServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoBugDao, Au
         Map<String, Object> business = BeanUtil.beanToMap(entity);
         String no = iCodeRuleService.getNextCodeByClassName(getClass().getName(), business);
         entity.setNo(no);
+        if (entity.getIsNonIssue() == null) {
+            entity.setIsNonIssue(IsDefaultEnum.NOT_DEFAULT.getKey());
+        }
+    }
+
+    @Override
+    protected void writePostpose(AutoBug entity, String userId) {
+        super.writePostpose(entity, userId);
+        autoScoreRecordService.settleResolvedBug(entity, userId);
     }
 
     @Override
