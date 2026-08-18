@@ -6,9 +6,14 @@ package com.skyeye.skill.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skyeye.skill.dao.SkillDao;
+import com.skyeye.skill.dao.SkillExecDao;
 import com.skyeye.skill.entity.Skill;
+import com.skyeye.skill.entity.SkillExec;
 import com.skyeye.skill.exception.CustomException;
+import com.skyeye.skill.generator.BigScreenTemplateGenerator;
 import com.skyeye.skill.service.SkillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +22,7 @@ import org.springframework.util.StringUtils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -32,9 +38,18 @@ public class SkillServiceImpl implements SkillService {
 
     private static final String LOCAL_USER = "local";
     private static final int ENABLED = 1;
+    private static final String CODE_BIGSCREEN = "skyeye-bigscreen";
 
     @Autowired
     private SkillDao skillDao;
+
+    @Autowired
+    private SkillExecDao skillExecDao;
+
+    @Autowired
+    private BigScreenTemplateGenerator bigScreenTemplateGenerator;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public Skill saveOrUpdate(Skill skill) {
@@ -103,9 +118,12 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public String executeSkill(String skillCode, String userInput) {
+    public SkillExec executeSkill(String skillCode, String userInput) {
         if (!StringUtils.hasText(skillCode)) {
             throw new CustomException("skillCode不能为空");
+        }
+        if (!StringUtils.hasText(userInput)) {
+            throw new CustomException("userInput不能为空，请用一句话描述大屏需求");
         }
         Skill skill = skillDao.selectOne(new LambdaQueryWrapper<Skill>().eq(Skill::getCode, skillCode));
         if (skill == null) {
@@ -114,8 +132,75 @@ public class SkillServiceImpl implements SkillService {
         if (skill.getEnabled() == null || skill.getEnabled() != ENABLED) {
             throw new CustomException("技能未启用: " + skillCode);
         }
-        return "技能已识别：" + skill.getName() + "（" + skill.getCode()
-            + "）。当前是空壳，尚未执行。用户输入：" + (userInput == null ? "" : userInput);
+        if (!CODE_BIGSCREEN.equals(skill.getCode())) {
+            throw new CustomException("暂只支持执行 skyeye-bigscreen，当前技能: " + skillCode);
+        }
+
+        Map<String, Object> screen = bigScreenTemplateGenerator.generate(userInput);
+        String screenJson;
+        try {
+            screenJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen);
+        } catch (JsonProcessingException e) {
+            throw new CustomException("生成大屏JSON失败");
+        }
+        SkillExec exec = new SkillExec();
+        exec.setId(UUID.randomUUID().toString().replace("-", ""));
+        exec.setSkillId(skill.getId());
+        exec.setSkillCode(skill.getCode());
+        exec.setSkillName(skill.getName());
+        exec.setUserInput(userInput);
+        exec.setScreenJson(screenJson);
+        exec.setStatus(1);
+        exec.setCreateId(LOCAL_USER);
+        exec.setCreateTime(now());
+        skillExecDao.insert(exec);
+        exec.setScreen(screen);
+        return exec;
+    }
+
+    @Override
+    public SkillExec selectExecById(String id) {
+        SkillExec exec = skillExecDao.selectById(id);
+        if (exec == null) {
+            throw new CustomException("执行记录不存在: " + id);
+        }
+        fillScreen(exec);
+        return exec;
+    }
+
+    @Override
+    public List<SkillExec> queryExecPageList(int page, int limit, String skillCode) {
+        Page<SkillExec> mpPage = new Page<>(Math.max(page, 1), Math.max(limit, 1));
+        List<SkillExec> list = skillExecDao.selectPage(mpPage, buildExecQuery(skillCode)).getRecords();
+        for (SkillExec exec : list) {
+            fillScreen(exec);
+        }
+        return list;
+    }
+
+    @Override
+    public long countExec(String skillCode) {
+        return skillExecDao.selectCount(buildExecQuery(skillCode));
+    }
+
+    private LambdaQueryWrapper<SkillExec> buildExecQuery(String skillCode) {
+        LambdaQueryWrapper<SkillExec> queryWrapper = new LambdaQueryWrapper<>();
+        if (StringUtils.hasText(skillCode)) {
+            queryWrapper.eq(SkillExec::getSkillCode, skillCode);
+        }
+        queryWrapper.orderByDesc(SkillExec::getCreateTime);
+        return queryWrapper;
+    }
+
+    private void fillScreen(SkillExec exec) {
+        if (exec == null || !StringUtils.hasText(exec.getScreenJson())) {
+            return;
+        }
+        try {
+            exec.setScreen(objectMapper.readValue(exec.getScreenJson(), Object.class));
+        } catch (Exception e) {
+            exec.setScreen(exec.getScreenJson());
+        }
     }
 
     private void checkCodeUnique(Skill skill) {
