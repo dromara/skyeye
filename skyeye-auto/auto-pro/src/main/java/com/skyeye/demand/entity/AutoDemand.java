@@ -122,6 +122,14 @@ public class AutoDemand extends SkyeyeTeamAuth implements EnclosureFace {
     @ApiModelProperty(value = "前端预计结束时间")
     private String frontEstimateEndTime;
 
+    @TableField("front_actual_start_time")
+    @Property(value = "前端实际开始时间")
+    private String frontActualStartTime;
+
+    @TableField("front_actual_end_time")
+    @Property(value = "前端实际结束时间")
+    private String frontActualEndTime;
+
     @TableField("front_state")
     @ApiModelProperty(value = "前端状态", enumClass = AutoDemandRoleStateEnum.class)
     private String frontState;
@@ -150,6 +158,14 @@ public class AutoDemand extends SkyeyeTeamAuth implements EnclosureFace {
     @ApiModelProperty(value = "后端预计结束时间")
     private String backEstimateEndTime;
 
+    @TableField("back_actual_start_time")
+    @Property(value = "后端实际开始时间")
+    private String backActualStartTime;
+
+    @TableField("back_actual_end_time")
+    @Property(value = "后端实际结束时间")
+    private String backActualEndTime;
+
     @TableField("back_state")
     @ApiModelProperty(value = "后端状态", enumClass = AutoDemandRoleStateEnum.class)
     private String backState;
@@ -177,6 +193,14 @@ public class AutoDemand extends SkyeyeTeamAuth implements EnclosureFace {
     @TableField("test_estimate_end_time")
     @ApiModelProperty(value = "测试预计结束时间")
     private String testEstimateEndTime;
+
+    @TableField("test_actual_start_time")
+    @Property(value = "测试实际开始时间")
+    private String testActualStartTime;
+
+    @TableField("test_actual_end_time")
+    @Property(value = "测试实际结束时间")
+    private String testActualEndTime;
 
     @TableField("test_state")
     @ApiModelProperty(value = "测试状态", enumClass = AutoDemandRoleStateEnum.class)
