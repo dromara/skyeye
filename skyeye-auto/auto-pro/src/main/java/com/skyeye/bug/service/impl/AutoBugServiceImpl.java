@@ -111,6 +111,10 @@ public class AutoBugServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoBugDao, Au
         } else if (StrUtil.equals(type, "myCreate")) {
             // 我创建的
             queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getCreateId), userId);
+        } else if (StrUtil.equals(type, "all")) {
+            // 全部 bug
+        } else if (StrUtil.equals(type, "mine")) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getHandleId), userId);
         }
         return queryWrapper;
     }

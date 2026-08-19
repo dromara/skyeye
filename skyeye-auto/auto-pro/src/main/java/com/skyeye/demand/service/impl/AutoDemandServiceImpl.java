@@ -306,6 +306,11 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
             queryWrapper.eq(MybatisPlusUtil.toColumns(AutoDemand::getState), AutoDemandStateEnum.FINISH.getKey());
         } else if (StrUtil.equals(type, "all")) {
             // 全部有效需求
+        } else if (StrUtil.equals(type, "mine")) {
+            queryWrapper.and(wrapper -> wrapper
+                .eq(MybatisPlusUtil.toColumns(AutoDemand::getFrontHandleId), userId)
+                .or().eq(MybatisPlusUtil.toColumns(AutoDemand::getBackHandleId), userId)
+                .or().eq(MybatisPlusUtil.toColumns(AutoDemand::getTestHandleId), userId));
         }
     }
 
