@@ -109,15 +109,16 @@ public class AbstractTeamServiceImpl<D extends SkyeyeBaseMapper<T>, T extends Ab
     }
 
     private void updateRoleUser(String userId, String teamId, List<TeamRole> newTeamRoleList, String serviceClassName, List<TeamRole> oldTeamRole) {
-        // 新数据 - 旧数据 更新到数据库
         List<TeamRoleUser> newRoleUser = getTeamRoleUserList(newTeamRoleList);
-        List<String> newRoleUserKeys = newRoleUser.stream().map(bean -> teamId + bean.getUserId()).collect(Collectors.toList());
-        // 数据库里面的该团队模板下的用户信息
         List<TeamRoleUser> oldRoleUser = getTeamRoleUserList(oldTeamRole);
-        List<String> oldRoleUserKeys = oldRoleUser.stream().map(bean -> teamId + bean.getUserId()).collect(Collectors.toList());
-        // 需要新增的用户信息
-        List<TeamRoleUser> addTeamRoleUser = newRoleUser.stream()
-            .filter(item -> !oldRoleUserKeys.contains(teamId + item.getUserId())).collect(Collectors.toList());
+        // 同一团队下，一个人只能属于一个角色，比较键使用 teamId + userId
+        Map<String, TeamRoleUser> newRoleUserMap = newRoleUser.stream()
+            .collect(Collectors.toMap(bean -> teamId + bean.getUserId(), bean -> bean, (a, b) -> b));
+        Map<String, TeamRoleUser> oldRoleUserMap = oldRoleUser.stream()
+            .collect(Collectors.toMap(bean -> teamId + bean.getUserId(), bean -> bean, (a, b) -> a));
+
+        List<TeamRoleUser> addTeamRoleUser = newRoleUserMap.values().stream()
+            .filter(item -> !oldRoleUserMap.containsKey(teamId + item.getUserId())).collect(Collectors.toList());
         addTeamRoleUser.forEach(p -> {
             p.setId(null);
             p.setTeamId(teamId);
@@ -126,12 +127,24 @@ public class AbstractTeamServiceImpl<D extends SkyeyeBaseMapper<T>, T extends Ab
         if (CollectionUtil.isNotEmpty(addTeamRoleUser)) {
             teamRoleUserService.createEntity(addTeamRoleUser, userId);
         }
-        // 删除用户关联信息
-        List<TeamRoleUser> deleteRoleUser = oldRoleUser.stream()
-            .filter(predicate -> !newRoleUserKeys.contains(teamId + predicate.getUserId())).collect(Collectors.toList());
+
+        List<TeamRoleUser> deleteRoleUser = oldRoleUserMap.values().stream()
+            .filter(item -> !newRoleUserMap.containsKey(teamId + item.getUserId())).collect(Collectors.toList());
         if (CollectionUtil.isNotEmpty(deleteRoleUser)) {
             List<String> deleteRoleUserLinkIds = deleteRoleUser.stream().map(TeamRoleUser::getId).collect(Collectors.toList());
             teamRoleUserService.deleteById(deleteRoleUserLinkIds);
+        }
+
+        List<TeamRoleUser> updateTeamRoleUser = new ArrayList<>();
+        newRoleUserMap.forEach((key, newItem) -> {
+            TeamRoleUser oldItem = oldRoleUserMap.get(key);
+            if (oldItem != null && !Objects.equals(oldItem.getRoleId(), newItem.getRoleId())) {
+                oldItem.setRoleId(newItem.getRoleId());
+                updateTeamRoleUser.add(oldItem);
+            }
+        });
+        if (CollectionUtil.isNotEmpty(updateTeamRoleUser)) {
+            teamRoleUserService.updateEntity(updateTeamRoleUser, userId);
         }
     }
 
