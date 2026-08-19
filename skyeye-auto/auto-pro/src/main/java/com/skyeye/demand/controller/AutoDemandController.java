@@ -99,5 +99,29 @@ public class AutoDemandController {
         autoDemandService.updateAutoDemandEstimateTime(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "aiGenerateDemandDraft", value = "AI生成需求草稿", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "name", name = "name", value = "标题", required = "required"),
+        @ApiImplicitParam(id = "objectId", name = "objectId", value = "项目id", required = "required"),
+        @ApiImplicitParam(id = "objectKey", name = "objectKey", value = "项目objectKey", required = "required"),
+        @ApiImplicitParam(id = "id", name = "id", value = "需求id，编辑时传入"),
+        @ApiImplicitParam(id = "moduleId", name = "moduleId", value = "模块id"),
+        @ApiImplicitParam(id = "versionId", name = "versionId", value = "版本id"),
+        @ApiImplicitParam(id = "content", name = "content", value = "已有内容"),
+        @ApiImplicitParam(id = "remark", name = "remark", value = "已有备注"),
+        @ApiImplicitParam(id = "testJoinAnalysis", name = "testJoinAnalysis", value = "测试是否参与需求分析")})
+    @RequestMapping("/post/AutoDemandController/aiGenerateDemandDraft")
+    public void aiGenerateDemandDraft(InputObject inputObject, OutputObject outputObject) {
+        autoDemandService.aiGenerateDemandDraft(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "aiParseDemandDraft", value = "解析AI需求草稿", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "answer", name = "answer", value = "AI完整返回文本", required = "required")})
+    @RequestMapping("/post/AutoDemandController/aiParseDemandDraft")
+    public void aiParseDemandDraft(InputObject inputObject, OutputObject outputObject) {
+        autoDemandService.aiParseDemandDraft(inputObject, outputObject);
+    }
+
 }
 

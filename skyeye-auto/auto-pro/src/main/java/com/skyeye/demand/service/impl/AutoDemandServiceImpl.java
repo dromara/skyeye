@@ -61,6 +61,9 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
     @Autowired
     private AutoScoreRecordService autoScoreRecordService;
 
+    @Autowired
+    private AutoDemandAiDraftService autoDemandAiDraftService;
+
     @Override
     public Class getAuthEnumClass() {
         return AutoDemandAuthEnum.class;
@@ -455,6 +458,21 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         update(updateWrapper);
         this.refreshCache(id);
         outputObject.setBean(selectById(id));
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void aiGenerateDemandDraft(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        Map<String, Object> bean = autoDemandAiDraftService.generate(params);
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void aiParseDemandDraft(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> bean = autoDemandAiDraftService.parseAnswer(inputObject.getParams());
+        outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 

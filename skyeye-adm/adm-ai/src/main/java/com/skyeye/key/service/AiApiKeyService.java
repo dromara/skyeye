@@ -16,4 +16,9 @@ import com.skyeye.base.business.service.SkyeyeBusinessService;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 public interface AiApiKeyService extends SkyeyeBusinessService<AiApiKey> {
+
+    /**
+     * 获取一条已启用的 AI 配置；指定 id 时校验必须启用
+     */
+    AiApiKey selectEnabledKey(String apiKeyId);
 }

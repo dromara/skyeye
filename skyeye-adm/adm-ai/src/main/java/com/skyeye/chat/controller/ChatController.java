@@ -36,6 +36,16 @@ public class ChatController {
         chatService.sendChatMessage(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "syncChatCompletion", value = "流式调用大模型", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "content", name = "content", value = "用户消息", required = "required"),
+        @ApiImplicitParam(id = "apiKeyId", name = "apiKeyId", value = "AI配置id，为空时使用一条已启用配置", required = "required"),
+        @ApiImplicitParam(id = "bizType", name = "bizType", value = "业务类型，如 demandDraft")})
+    @RequestMapping("/post/ChatController/syncChatCompletion")
+    public void syncChatCompletion(InputObject inputObject, OutputObject outputObject) {
+        chatService.syncChatCompletion(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryPageMessageList", value = "分页查询聊天记录", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/ChatController/queryPageMessageList")
