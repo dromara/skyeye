@@ -26,6 +26,10 @@ public interface AutoDemandService extends SkyeyeTeamAuthService<AutoDemand> {
 
     void updateAutoDemandEstimateTime(InputObject inputObject, OutputObject outputObject);
 
+    void aiGenerateDemandDraft(InputObject inputObject, OutputObject outputObject);
+
+    void aiParseDemandDraft(InputObject inputObject, OutputObject outputObject);
+
 }
 
 

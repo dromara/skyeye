@@ -94,6 +94,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         AiPlatformEnum aiModel = AiPlatformEnum.getName(platform);
         // 获取role实例
         com.skyeye.role.entity.Role role = roleService.selectById(aiApiKey.getRoleId());
+        String systemPrompt = role == null ? null : role.getPrompt();
         // 创建AI实例
         chat.setMessage(content);
         chat.setPlatform(platform);
@@ -101,13 +102,13 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         String id = createEntity(chat, userId);
         switch (aiModel) {
             case YI_YAN:
-                QianFanResponse(content, userId, id, aiApiKey);
+                QianFanResponse(content, systemPrompt, userId, id, aiApiKey);
                 break;
             case XUN_FEI:
-                XunFeiResponse(content, userId, id, aiApiKey);
+                XunFeiResponse(content, systemPrompt, userId, id, aiApiKey);
                 break;
             case TONG_YI:
-                TongYiResponse(content, userId, id, aiApiKey);
+                TongYiResponse(content, systemPrompt, userId, id, aiApiKey);
                 break;
         }
         aiApiKey.setRoleMation(role);
@@ -118,12 +119,187 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
-    private void QianFanResponse(String message, String userId, String chatId, AiApiKey aiApiKey) {
+    @Override
+    public void syncChatCompletion(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String content = params.get("content").toString();
+        String apiKeyId = params.get("apiKeyId").toString();
+        String bizType = params.get("bizType") == null ? "demandDraft" : params.get("bizType").toString();
+        String userId = InputObject.getLogParamsStatic().get("id").toString();
+        AiApiKey aiApiKey = aiApiKeyService.selectEnabledKey(apiKeyId);
+        com.skyeye.role.entity.Role role = roleService.selectById(aiApiKey.getRoleId());
+        String systemPrompt = role == null ? null : role.getPrompt();
+        AiPlatformEnum aiModel = AiPlatformEnum.getName(aiApiKey.getPlatform());
+        Chat chat = new Chat();
+        chat.setMessage(content);
+        chat.setPlatform(aiApiKey.getPlatform());
+        chat.setApiKeyId(aiApiKey.getId());
+        String id = createEntity(chat, userId);
+        chat.setId(id);
+        switch (aiModel) {
+            case YI_YAN:
+                streamYiYan(content, systemPrompt, userId, id, aiApiKey, bizType);
+                break;
+            case XUN_FEI:
+                streamXunFei(content, systemPrompt, userId, id, aiApiKey, bizType);
+                break;
+            case TONG_YI:
+                streamTongYi(content, systemPrompt, userId, id, aiApiKey, bizType);
+                break;
+            default:
+                throw new CustomException("不支持的AI平台");
+        }
+        outputObject.setBean(chat);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    private void sendStreamChunk(String userId, String chatId, String bizType, String chunk, boolean end, Object orderBy) {
+        Map<String, Object> messageMap = new HashMap<>();
+        messageMap.put("message", chunk);
+        messageMap.put("end", end);
+        messageMap.put("orderBy", orderBy);
+        messageMap.put("chatId", chatId);
+        messageMap.put("bizType", bizType);
+        aiMessageWebSocket.sendMessageTo(JSONUtil.toJsonStr(messageMap), userId);
+    }
+
+    private void streamTongYi(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType) {
+        messageStreamExecutor.execute(() -> {
+            List<Message> messages = new ArrayList<>();
+            if (StrUtil.isNotBlank(systemPrompt)) {
+                messages.add(Message.builder().role(Role.SYSTEM.getValue()).content(systemPrompt).build());
+            }
+            messages.add(Message.builder().role(Role.USER.getValue()).content(content).build());
+            Generation generation = (Generation) aiFactory.getDefaultChatModel(AiPlatformEnum.TONG_YI, aiApiKey);
+            GenerationParam param = GenerationParam.builder()
+                .model("qwen-turbo")
+                .messages(messages)
+                .resultFormat(GenerationParam.ResultFormat.MESSAGE)
+                .topP(0.3)
+                .apiKey(aiApiKey.getApiKey())
+                .incrementalOutput(true)
+                .build();
+            try {
+                Flowable<GenerationResult> result = generation.streamCall(param);
+                result.blockingForEach(chunk -> {
+                    String key = String.format(Locale.ROOT, "chat:%s", chatId);
+                    List<String> chunkMessage = new ArrayList<>();
+                    if (jedisClientService.exists(key)) {
+                        chunkMessage = JSONUtil.toList(jedisClientService.get(key), null);
+                    }
+                    boolean end = false;
+                    String piece = StrUtil.EMPTY;
+                    List<GenerationOutput.Choice> choiceList = chunk.getOutput().getChoices();
+                    GenerationOutput.Choice choice = choiceList.stream().findFirst().orElse(null);
+                    if (ObjectUtil.isEmpty(choice)) {
+                        end = true;
+                    } else {
+                        if ("stop".equals(choice.getFinishReason())) {
+                            end = true;
+                        }
+                        if (choice.getMessage() != null && choice.getMessage().getContent() != null) {
+                            piece = choice.getMessage().getContent();
+                        }
+                    }
+                    chunkMessage.add(piece);
+                    if (end) {
+                        jedisClientService.del(key);
+                        Chat chat = chatService.selectById(chatId);
+                        chat.setContent(Joiner.on("").join(chunkMessage));
+                        chatService.updateEntity(chat, userId);
+                    } else {
+                        jedisClientService.set(key, JSONUtil.toJsonStr(chunkMessage));
+                    }
+                    sendStreamChunk(userId, chatId, bizType, piece, end, chunkMessage.size() - 1);
+                });
+            } catch (Exception e) {
+                sendStreamChunk(userId, chatId, bizType, e.getMessage(), true, -1);
+            }
+        });
+    }
+
+    private void streamYiYan(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType) {
+        messageStreamExecutor.execute(() -> {
+            Qianfan qianfan = (Qianfan) aiFactory.getDefaultChatModel(AiPlatformEnum.YI_YAN, aiApiKey);
+            ChatBuilder model = qianfan.chatCompletion().model("ERNIE-Speed-8K");
+            // 千帆 V1 不支持 messages 里 role=system，提示词走独立的 system 字段
+            if (StrUtil.isNotBlank(systemPrompt)) {
+                model.system(systemPrompt);
+            }
+            model.addMessage("user", content);
+            model.executeStream().forEachRemaining(chunk -> {
+                String key = String.format(Locale.ROOT, "chat:%s", chatId);
+                List<String> chunkMessage = new ArrayList<>();
+                if (jedisClientService.exists(key)) {
+                    chunkMessage = JSONUtil.toList(jedisClientService.get(key), null);
+                }
+                chunkMessage.add(chunk.getResult());
+                if (Boolean.TRUE.equals(chunk.getEnd())) {
+                    jedisClientService.del(key);
+                    Chat chat = chatService.selectById(chatId);
+                    chat.setContent(Joiner.on("").join(chunkMessage));
+                    chatService.updateEntity(chat, userId);
+                } else {
+                    jedisClientService.set(key, JSONUtil.toJsonStr(chunkMessage));
+                }
+                sendStreamChunk(userId, chatId, bizType, chunk.getResult(), Boolean.TRUE.equals(chunk.getEnd()), chunk.getSentenceId());
+            });
+        });
+    }
+
+    private void streamXunFei(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType) {
+        messageStreamExecutor.execute(() -> {
+            List<SparkMessage> messageList = new ArrayList<>();
+            if (StrUtil.isNotBlank(systemPrompt)) {
+                messageList.add(SparkMessage.systemContent(systemPrompt));
+            }
+            messageList.add(SparkMessage.userContent(content));
+            SparkClient sparkClient = (SparkClient) aiFactory.getDefaultChatModel(AiPlatformEnum.XUN_FEI, aiApiKey);
+            SparkRequest sparkRequest = SparkRequest.builder()
+                .messages(messageList)
+                .maxTokens(2048)
+                .temperature(0.3)
+                .apiVersion(SparkApiVersion.V3_5)
+                .build();
+            sparkClient.chatStream(sparkRequest, new SparkListener() {
+                @Override
+                public void onMessage(String chunk, SparkResponseUsage usage, Integer status, SparkRequest request,
+                                      SparkResponse response, WebSocket webSocket) {
+                    String key = String.format(Locale.ROOT, "chat:%s", chatId);
+                    List<String> chunkMessage = new ArrayList<>();
+                    if (jedisClientService.exists(key)) {
+                        chunkMessage = JSONUtil.toList(jedisClientService.get(key), null);
+                    }
+                    chunkMessage.add(chunk);
+                    boolean end = status != null && status == 2;
+                    if (end) {
+                        jedisClientService.del(key);
+                        Chat chat = chatService.selectById(chatId);
+                        chat.setContent(Joiner.on("").join(chunkMessage));
+                        chatService.updateEntity(chat, userId);
+                    } else {
+                        jedisClientService.set(key, JSONUtil.toJsonStr(chunkMessage));
+                    }
+                    sendStreamChunk(userId, chatId, bizType, chunk, end, chunkMessage.size() - 1);
+                }
+
+                @Override
+                public void onFailure(WebSocket webSocket, Throwable t, okhttp3.Response httpResponse) {
+                    sendStreamChunk(userId, chatId, bizType, t == null ? "讯飞星火调用失败" : t.getMessage(), true, -1);
+                }
+            });
+        });
+    }
+
+    private void QianFanResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {
         // 开启异步请求
         messageStreamExecutor.execute(() -> {
             Qianfan qianfan = (Qianfan) aiFactory.getDefaultChatModel(AiPlatformEnum.YI_YAN, aiApiKey);
             ChatBuilder model = qianfan.chatCompletion()
                 .model("ERNIE-Speed-8K");
+            if (StrUtil.isNotBlank(systemPrompt)) {
+                model.system(systemPrompt);
+            }
             List<Chat> chatList = getRecentlyChats(userId, aiApiKey.getId());
 
             chatList.forEach(chat -> {
@@ -161,14 +337,17 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
 
     }
 
-    private void XunFeiResponse(String message, String userId, String chatId, AiApiKey aiApiKey) {
+    private void XunFeiResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {
         messageStreamExecutor.execute(() -> {
             List<SparkMessage> messageList = new ArrayList<>();
+            if (StrUtil.isNotBlank(systemPrompt)) {
+                messageList.add(SparkMessage.systemContent(systemPrompt));
+            }
             List<Chat> chatList = getRecentlyChats(userId, aiApiKey.getId());
             chatList.forEach(chat -> {
                 if (StrUtil.isNotEmpty(chat.getMessage()) && StrUtil.isNotEmpty(chat.getContent())) {
                     messageList.add(SparkMessage.userContent(chat.getMessage()));
-                    messageList.add(SparkMessage.systemContent(chat.getContent()));
+                    messageList.add(SparkMessage.assistantContent(chat.getContent()));
                 }
             });
             messageList.add(SparkMessage.userContent(message));
@@ -233,17 +412,20 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         return chatList;
     }
 
-    private void TongYiResponse(String message, String userId, String chatId, AiApiKey aiApiKey) {
+    private void TongYiResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {
         // 开启异步请求：
         messageStreamExecutor.execute(() -> {
             List<Message> messages = new ArrayList<>();
+            if (StrUtil.isNotBlank(systemPrompt)) {
+                messages.add(Message.builder().role(Role.SYSTEM.getValue()).content(systemPrompt).build());
+            }
             Message question = Message.builder().role(Role.USER.getValue()).content(message).build();
             Generation generation = (Generation) aiFactory.getDefaultChatModel(AiPlatformEnum.TONG_YI, aiApiKey);
             List<Chat> chatList = getRecentlyChats(userId, aiApiKey.getId());
             chatList.forEach(chat -> {
                 if (StrUtil.isNotEmpty(chat.getMessage()) && StrUtil.isNotEmpty(chat.getContent())) {
                     Message userMsg = Message.builder().role(Role.USER.getValue()).content(chat.getMessage()).build();
-                    Message assistantMsg = Message.builder().role(Role.SYSTEM.getValue()).content(chat.getContent()).build();
+                    Message assistantMsg = Message.builder().role(Role.ASSISTANT.getValue()).content(chat.getContent()).build();
                     messages.add(userMsg);
                     messages.add(assistantMsg);
                 }

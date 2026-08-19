@@ -44,4 +44,8 @@ public class Role extends OperatorUserInfo {
     @TableField(value = "`logo`")
     @ApiModelProperty(value = "角色logo")
     private String logo;
+
+    @TableField(value = "prompt")
+    @ApiModelProperty(value = "提示词")
+    private String prompt;
 }

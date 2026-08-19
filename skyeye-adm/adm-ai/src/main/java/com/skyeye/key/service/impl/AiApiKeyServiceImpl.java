@@ -4,6 +4,7 @@
 
 package com.skyeye.key.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
@@ -71,5 +72,27 @@ public class AiApiKeyServiceImpl extends SkyeyeBusinessServiceImpl<AiApiKeyDao, 
         List<Map<String, Object>> beans = super.queryDataList(inputObject);
         roleService.setMationForMap(beans, "roleId", "roleMation");
         return beans;
+    }
+
+    @Override
+    public AiApiKey selectEnabledKey(String apiKeyId) {
+        if (StrUtil.isNotEmpty(apiKeyId)) {
+            AiApiKey aiApiKey = selectById(apiKeyId);
+            if (aiApiKey == null || StrUtil.isEmpty(aiApiKey.getId())) {
+                throw new CustomException("AI配置不存在");
+            }
+            if (!String.valueOf(EnableEnum.ENABLE_USING.getKey()).equals(String.valueOf(aiApiKey.getEnabled()))) {
+                throw new CustomException("AI配置已禁用: " + aiApiKey.getName());
+            }
+            return aiApiKey;
+        }
+        QueryWrapper<AiApiKey> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AiApiKey::getEnabled), EnableEnum.ENABLE_USING.getKey());
+        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(AiApiKey::getCreateTime));
+        List<AiApiKey> list = list(queryWrapper);
+        if (CollectionUtil.isEmpty(list)) {
+            throw new CustomException("未配置可用的AI Key，请先在AI配置中启用一条。");
+        }
+        return selectById(list.get(0).getId());
     }
 }

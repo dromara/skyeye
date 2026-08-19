@@ -11,6 +11,7 @@ import com.alibaba.dashscope.common.Message;
 import com.alibaba.dashscope.common.Role;
 import com.baidubce.qianfan.Qianfan;
 import com.baidubce.qianfan.core.auth.Auth;
+import com.baidubce.qianfan.core.builder.ChatBuilder;
 import com.baidubce.qianfan.model.chat.ChatResponse;
 import com.skyeye.skill.exception.CustomException;
 import io.github.briqt.spark4j.SparkClient;
@@ -132,10 +133,11 @@ public class LlmChatService {
         String model = StringUtils.hasText(yiyan.getModel()) ? yiyan.getModel() : "ERNIE-Speed-8K";
         try {
             Qianfan qianfan = new Qianfan(Auth.TYPE_OAUTH, yiyan.getApiKey(), yiyan.getSecretKey());
-            ChatResponse response = qianfan.chatCompletion()
-                .model(model)
-                .addMessage("user", systemPrompt + "\n\n用户需求：\n" + userInput)
-                .execute();
+            ChatBuilder builder = qianfan.chatCompletion().model(model);
+            if (StringUtils.hasText(systemPrompt)) {
+                builder.system(systemPrompt);
+            }
+            ChatResponse response = builder.addMessage("user", userInput).execute();
             if (response == null || !StringUtils.hasText(response.getResult())) {
                 throw new CustomException("文心一言返回为空");
             }
