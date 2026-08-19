@@ -88,7 +88,7 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         if (StrUtil.isEmpty(autoDemand.getTestState())) {
             autoDemand.setTestState(AutoDemandRoleStateEnum.WAIT.getKey());
         }
-        syncDemandStateFromRoles(autoDemand);
+        autoDemand.setState(AutoDemandStateEnum.WAIT_RESEARCH.getKey());
     }
 
     @Override
@@ -110,10 +110,6 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         protectFinishedRole(oldDemand, entity, "back");
         protectFinishedRole(oldDemand, entity, "test");
         keepActualTimeIfBlank(oldDemand, entity);
-        if (!StrUtil.equals(oldDemand.getState(), AutoDemandStateEnum.INVALID.getKey())
-            && !StrUtil.equals(oldDemand.getState(), AutoDemandStateEnum.FINISH.getKey())) {
-            syncDemandStateFromRoles(entity);
-        }
     }
 
     private void protectFinishedRole(AutoDemand oldDemand, AutoDemand entity, String roleKey) {
