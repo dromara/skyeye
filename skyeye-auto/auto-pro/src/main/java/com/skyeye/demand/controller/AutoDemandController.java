@@ -9,6 +9,7 @@ import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.demand.entity.AutoDemand;
@@ -36,6 +37,14 @@ public class AutoDemandController {
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/AutoDemandController/queryAutoDemandList")
     public void queryAutoDemandList(InputObject inputObject, OutputObject outputObject) {
+        autoDemandService.queryPageList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryAutoDemandAllList", value = "获取需求全部列表(不分页)", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class, value = {
+        @ApiImplicitParam(id = "isPaging", name = "isPaging", value = "是否分页", defaultValue = "false")})
+    @RequestMapping("/post/AutoDemandController/queryAutoDemandAllList")
+    public void queryAutoDemandAllList(InputObject inputObject, OutputObject outputObject) {
         autoDemandService.queryPageList(inputObject, outputObject);
     }
 

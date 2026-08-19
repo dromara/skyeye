@@ -11,6 +11,7 @@ import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.bug.entity.AutoBug;
 import com.skyeye.bug.service.AutoBugService;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,14 @@ public class AutoBugController {
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/AutoBugController/queryAutoBugList")
     public void queryAutoBugList(InputObject inputObject, OutputObject outputObject) {
+        autoBugService.queryPageList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryAutoBugAllList", value = "获取bug全部列表(不分页)", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class, value = {
+        @ApiImplicitParam(id = "isPaging", name = "isPaging", value = "是否分页", defaultValue = "false")})
+    @RequestMapping("/post/AutoBugController/queryAutoBugAllList")
+    public void queryAutoBugAllList(InputObject inputObject, OutputObject outputObject) {
         autoBugService.queryPageList(inputObject, outputObject);
     }
 
