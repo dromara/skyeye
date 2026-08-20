@@ -83,6 +83,13 @@ public class AiApiKeyServiceImpl extends SkyeyeBusinessServiceImpl<AiApiKeyDao, 
     }
 
     @Override
+    public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
+        List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
+        roleService.setMationForMap(beans, "roleId", "roleMation");
+        return beans;
+    }
+
+    @Override
     public AiApiKey selectEnabledKey(String apiKeyId) {
         if (StrUtil.isNotEmpty(apiKeyId)) {
             AiApiKey aiApiKey = selectById(apiKeyId);
