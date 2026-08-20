@@ -8,7 +8,7 @@ import cn.hutool.core.lang.Singleton;
 import cn.hutool.core.lang.func.Func0;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.dashscope.aigc.generation.Generation;
+import com.alibaba.dashscope.app.Application;
 import com.skyeye.ai.core.enums.AiPlatformEnum;
 import com.skyeye.ai.core.qianfan.QianfanChatClient;
 import com.skyeye.exception.CustomException;
@@ -102,8 +102,12 @@ public class AiFactoryImpl implements AiFactory {
     }
 
 
-    private static Generation buildTongYiChatClient() {
-        return new Generation();
+    /**
+     * 通义走百炼「应用」接口，不是模型 Generation。
+     * 配置里的 apiAppId 填应用管理中的应用 ID。
+     */
+    private static Application buildTongYiChatClient() {
+        return new Application();
     }
 
 }
