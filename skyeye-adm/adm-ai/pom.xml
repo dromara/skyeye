@@ -52,12 +52,7 @@
             <version>${druid.version}</version>
         </dependency>
 
-        <!-- 千帆 V2 OpenAI 兼容 SDK，文心对话用 API Key 鉴权，见 https://cloud.baidu.com/doc/qianfan-docs/s/nm9l6oc8e -->
-        <dependency>
-            <groupId>com.openai</groupId>
-            <artifactId>openai-java</artifactId>
-            <version>0.22.0</version>
-        </dependency>
+        <!-- 千帆 V2 用现有 OkHttp SSE 调用，不再引入 openai-java（Kotlin 版本会和项目冲突） -->
 
         <dependency>
             <groupId>io.github.briqt</groupId>
@@ -74,14 +69,16 @@
             <version>2.14.4</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>logging-interceptor</artifactId>
-                    <groupId>com.squareup.okhttp3</groupId>
-                </exclusion>
-                <exclusion>
                     <artifactId>slf4j-simple</artifactId>
                     <groupId>org.slf4j</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <!-- DashScope OkHttp 工厂会加载 HttpLoggingInterceptor，排除后运行时报 NoClassDefFoundError -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>logging-interceptor</artifactId>
+            <version>4.9.3</version>
         </dependency>
 
         <!--        智普ai-->
