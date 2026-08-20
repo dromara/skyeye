@@ -52,10 +52,11 @@
             <version>${druid.version}</version>
         </dependency>
 
+        <!-- 千帆 V2 OpenAI 兼容 SDK，文心对话用 API Key 鉴权，见 https://cloud.baidu.com/doc/qianfan-docs/s/nm9l6oc8e -->
         <dependency>
-            <groupId>com.baidubce</groupId>
-            <artifactId>qianfan</artifactId>
-            <version>0.1.1</version>
+            <groupId>com.openai</groupId>
+            <artifactId>openai-java</artifactId>
+            <version>0.22.0</version>
         </dependency>
 
         <dependency>

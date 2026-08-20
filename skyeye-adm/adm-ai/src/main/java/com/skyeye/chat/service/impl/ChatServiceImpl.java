@@ -12,13 +12,16 @@ import com.alibaba.dashscope.common.Message;
 import com.alibaba.dashscope.common.Role;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
-import com.baidubce.qianfan.Qianfan;
-import com.baidubce.qianfan.core.builder.ChatBuilder;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.base.Joiner;
+import com.openai.client.OpenAIClient;
+import com.openai.core.http.StreamResponse;
+import com.openai.models.ChatCompletionAssistantMessageParam;
+import com.openai.models.ChatCompletionChunk;
+import com.openai.models.ChatCompletionCreateParams;
 import com.skyeye.ai.core.enums.AiPlatformEnum;
 import com.skyeye.ai.core.factory.AiFactory;
 import com.skyeye.aiStreamModle.SparkListener;
@@ -61,6 +64,13 @@ import java.util.concurrent.Executor;
  */
 @Service
 public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> implements ChatService {
+
+    /**
+     * 千帆 V2 OpenAI 兼容接口的模型名。
+     * 对应旧 SDK 的 ERNIE-Speed-8K；V2 要求小写加连字符。
+     * 若报模型不存在，请到千帆模型列表换成当前可用的 model，例如 ernie-4.5-turbo-32k。
+     */
+    private static final String YI_YAN_MODEL = "ernie-speed-8k";
 
     @Autowired
     private AiFactory aiFactory;
@@ -224,32 +234,15 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         });
     }
 
+    /**
+     * 需求草稿等业务场景的文心流式调用：只发当前这一轮用户消息，不带历史。
+     * HTTP 接口已返回 chatId，正文通过 WebSocket 按块推给前端。
+     */
     private void streamYiYan(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType) {
         messageStreamExecutor.execute(() -> {
-            Qianfan qianfan = (Qianfan) aiFactory.getDefaultChatModel(AiPlatformEnum.YI_YAN, aiApiKey);
-            ChatBuilder model = qianfan.chatCompletion().model("ERNIE-Speed-8K");
-            // 千帆 V1 不支持 messages 里 role=system，提示词走独立的 system 字段
-            if (StrUtil.isNotBlank(systemPrompt)) {
-                model.system(systemPrompt);
-            }
-            model.addMessage("user", content);
-            model.executeStream().forEachRemaining(chunk -> {
-                String key = String.format(Locale.ROOT, "chat:%s", chatId);
-                List<String> chunkMessage = new ArrayList<>();
-                if (jedisClientService.exists(key)) {
-                    chunkMessage = JSONUtil.toList(jedisClientService.get(key), null);
-                }
-                chunkMessage.add(chunk.getResult());
-                if (Boolean.TRUE.equals(chunk.getEnd())) {
-                    jedisClientService.del(key);
-                    Chat chat = chatService.selectById(chatId);
-                    chat.setContent(Joiner.on("").join(chunkMessage));
-                    chatService.updateEntity(chat, userId);
-                } else {
-                    jedisClientService.set(key, JSONUtil.toJsonStr(chunkMessage));
-                }
-                sendStreamChunk(userId, chatId, bizType, chunk.getResult(), Boolean.TRUE.equals(chunk.getEnd()), chunk.getSentenceId());
-            });
+            ChatCompletionCreateParams.Builder builder = buildYiYanParams(aiApiKey, systemPrompt);
+            builder.addUserMessage(content);
+            consumeYiYanStream(aiApiKey, builder.build(), userId, chatId, bizType);
         });
     }
 
@@ -297,50 +290,167 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         });
     }
 
+    /**
+     * 普通聊天页的文心流式调用：会把近期 user/assistant 历史拼进 messages，再追加本轮用户输入。
+     * bizType 传 null，走旧聊天页的 WebSocket 协议（不含 chatId、bizType 字段）。
+     */
     private void QianFanResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {
-        // 开启异步请求
         messageStreamExecutor.execute(() -> {
-            Qianfan qianfan = (Qianfan) aiFactory.getDefaultChatModel(AiPlatformEnum.YI_YAN, aiApiKey);
-            ChatBuilder model = qianfan.chatCompletion()
-                .model("ERNIE-Speed-8K");
-            if (StrUtil.isNotBlank(systemPrompt)) {
-                model.system(systemPrompt);
-            }
+            ChatCompletionCreateParams.Builder builder = buildYiYanParams(aiApiKey, systemPrompt);
             List<Chat> chatList = getRecentlyChats(userId, aiApiKey.getId());
-
             chatList.forEach(chat -> {
                 if (StrUtil.isNotEmpty(chat.getMessage()) && StrUtil.isNotEmpty(chat.getContent())) {
-                    model.addMessage("user", chat.getMessage())
-                        .addMessage("assistant", chat.getContent());
+                    // 0.22.0 只有 addUserMessage(String)，没有 addAssistantMessage(String)
+                    // 历史回复要用 AssistantMessageParam 再走 addMessage(...)
+                    builder.addUserMessage(chat.getMessage())
+                        .addMessage(ChatCompletionAssistantMessageParam.builder()
+                            .content(chat.getContent())
+                            .build());
                 }
             });
-            model.addMessage("user", message);
-            model.executeStream()
-                .forEachRemaining(chunk -> {
-                    String key = String.format(Locale.ROOT, "chat:%s", chatId);
-                    List<String> chunkMessage = new ArrayList<>();
-                    if (jedisClientService.exists(key)) {
-                        chunkMessage = JSONUtil.toList(jedisClientService.get(key), null);
-                    }
-                    chunkMessage.add(chunk.getResult());
-                    if (chunk.getEnd()) {
-                        jedisClientService.del(key);
-                        String content = Joiner.on("").join(chunkMessage);
-                        // 修改回复内容
-                        Chat chat = chatService.selectById(chatId);
-                        chat.setContent(content);
-                        chatService.updateEntity(chat, userId);
-                    } else {
-                        jedisClientService.set(key, JSONUtil.toJsonStr(chunkMessage));
-                    }
-                    Map<String, Object> messageMap = new HashMap<>();
-                    messageMap.put("message", chunk.getResult());
-                    messageMap.put("end", chunk.getEnd());
-                    messageMap.put("orderBy", chunk.getSentenceId());
-                    aiMessageWebSocket.sendMessageTo(JSONUtil.toJsonStr(messageMap), userId);
-                });
+            builder.addUserMessage(message);
+            consumeYiYanStream(aiApiKey, builder.build(), userId, chatId, null);
         });
+    }
 
+    /**
+     * 组装千帆 V2 Chat Completions 请求。
+     * 官方文档：https://cloud.baidu.com/doc/qianfan-docs/s/nm9l6oc8e
+     * V2 已支持 messages 里的 system；旧 V1 只能走独立的 system 字段，不能把 system 放进 messages。
+     */
+    private ChatCompletionCreateParams.Builder buildYiYanParams(AiApiKey aiApiKey, String systemPrompt) {
+        ChatCompletionCreateParams.Builder builder = ChatCompletionCreateParams.builder()
+            .model(YI_YAN_MODEL);
+        // 多应用场景把应用 ID 放到自定义 Header，对应官方 putAdditionalHeader("appid", ...)
+        if (StrUtil.isNotBlank(aiApiKey.getApiAppId())) {
+            builder.putAdditionalHeader("appid", aiApiKey.getApiAppId());
+        }
+        if (StrUtil.isNotBlank(systemPrompt)) {
+            builder.addSystemMessage(systemPrompt);
+        }
+        return builder;
+    }
+
+    /**
+     * 消费千帆流式响应：边收边通过 WebSocket 推给前端。
+     * 鉴权只使用 API Key（IAM 密钥），不再使用应用 Secret Key。
+     *
+     * @param bizType 业务类型；null 表示普通聊天页，非空表示需求草稿等业务流式
+     */
+    private void consumeYiYanStream(AiApiKey aiApiKey, ChatCompletionCreateParams params,
+                                    String userId, String chatId, String bizType) {
+        OpenAIClient client = (OpenAIClient) aiFactory.getDefaultChatModel(AiPlatformEnum.YI_YAN, aiApiKey);
+        // 流可能在最后一个有内容的 chunk 上不带 finish_reason，结束后要补一条 end=true
+        final boolean[] finished = {false};
+        try (StreamResponse<ChatCompletionChunk> stream = client.chat().completions().createStreaming(params)) {
+            stream.stream().forEach(chunk -> {
+                String piece = readYiYanDelta(chunk);
+                boolean end = isYiYanStreamEnd(chunk);
+                // 心跳/空 delta 且未结束：直接丢掉，避免前端拼进空白
+                if (StrUtil.isBlank(piece) && !end) {
+                    return;
+                }
+                finished[0] = appendYiYanChunk(userId, chatId, bizType, piece, end) || finished[0];
+            });
+            if (!finished[0]) {
+                appendYiYanChunk(userId, chatId, bizType, StrUtil.EMPTY, true);
+            }
+        } catch (Exception e) {
+            persistYiYanPartial(userId, chatId);
+            // orderBy = -1 给前端当错误标记，用于弹 Toast，不再当作正常增量拼接
+            if (bizType == null) {
+                Map<String, Object> messageMap = new HashMap<>();
+                messageMap.put("message", e.getMessage());
+                messageMap.put("end", true);
+                messageMap.put("orderBy", -1);
+                aiMessageWebSocket.sendMessageTo(JSONUtil.toJsonStr(messageMap), userId);
+            } else {
+                sendStreamChunk(userId, chatId, bizType, e.getMessage(), true, -1);
+            }
+        }
+    }
+
+    /**
+     * 把当前增量写入 Redis 缓存，结束时拼成完整回复落库，并推 WebSocket。
+     * Redis key 为 chat:{chatId}，存已收到的文本片段列表。
+     *
+     * @return 本包是否已标记结束
+     */
+    private boolean appendYiYanChunk(String userId, String chatId, String bizType, String piece, boolean end) {
+        String key = String.format(Locale.ROOT, "chat:%s", chatId);
+        List<String> chunkMessage = new ArrayList<>();
+        if (jedisClientService.exists(key)) {
+            chunkMessage = JSONUtil.toList(jedisClientService.get(key), null);
+        }
+        if (StrUtil.isNotEmpty(piece)) {
+            chunkMessage.add(piece);
+        }
+        if (end) {
+            jedisClientService.del(key);
+            Chat chat = chatService.selectById(chatId);
+            chat.setContent(Joiner.on("").join(chunkMessage));
+            chatService.updateEntity(chat, userId);
+        } else {
+            jedisClientService.set(key, JSONUtil.toJsonStr(chunkMessage));
+        }
+        int orderBy = chunkMessage.isEmpty() ? 0 : chunkMessage.size() - 1;
+        if (bizType == null) {
+            Map<String, Object> messageMap = new HashMap<>();
+            messageMap.put("message", piece);
+            messageMap.put("end", end);
+            messageMap.put("orderBy", orderBy);
+            aiMessageWebSocket.sendMessageTo(JSONUtil.toJsonStr(messageMap), userId);
+        } else {
+            sendStreamChunk(userId, chatId, bizType, piece, end, orderBy);
+        }
+        return end;
+    }
+
+    /**
+     * 流式中途异常时，把 Redis 里已经收到的半段回复落库，避免 chat 记录一直空着。
+     */
+    private void persistYiYanPartial(String userId, String chatId) {
+        String key = String.format(Locale.ROOT, "chat:%s", chatId);
+        if (!jedisClientService.exists(key)) {
+            return;
+        }
+        List<String> chunkMessage = JSONUtil.toList(jedisClientService.get(key), null);
+        jedisClientService.del(key);
+        Chat chat = chatService.selectById(chatId);
+        chat.setContent(Joiner.on("").join(chunkMessage));
+        chatService.updateEntity(chat, userId);
+    }
+
+    /**
+     * 读取 OpenAI 兼容流式 chunk 的增量文本。
+     * openai-java 0.22 里 delta().content() 返回 Optional&lt;String&gt;，空包常见于只有 finish_reason 的最后一帧。
+     */
+    private String readYiYanDelta(ChatCompletionChunk chunk) {
+        try {
+            if (chunk == null || chunk.choices() == null || chunk.choices().isEmpty()) {
+                return StrUtil.EMPTY;
+            }
+            Optional<String> content = chunk.choices().get(0).delta().content();
+            return content == null ? StrUtil.EMPTY : content.orElse(StrUtil.EMPTY);
+        } catch (Exception e) {
+            // 个别 chunk 没有 delta 字段时 SDK 会抛异常，按空增量处理即可
+            return StrUtil.EMPTY;
+        }
+    }
+
+    /**
+     * 是否流结束：choices[0].finishReason 有值（一般是 stop）。
+     * 空 choices 不当作结束，避免心跳包提前关掉前端流。
+     */
+    private boolean isYiYanStreamEnd(ChatCompletionChunk chunk) {
+        try {
+            if (chunk == null || chunk.choices() == null || chunk.choices().isEmpty()) {
+                return false;
+            }
+            return chunk.choices().get(0).finishReason().isPresent();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private void XunFeiResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {
