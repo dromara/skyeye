@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
@@ -141,7 +142,7 @@ public class AiApiKeyServiceImpl extends SkyeyeBusinessServiceImpl<AiApiKeyDao, 
         queryWrapper.eq(MybatisPlusUtil.toColumns(AiApiKey::getRoleId), aiApiKey.getRoleId());
         queryWrapper.eq(MybatisPlusUtil.toColumns(AiApiKey::getEnabled), EnableEnum.ENABLE_USING.getKey());
         if (StrUtil.isNotBlank(aiApiKey.getId())) {
-            queryWrapper.ne(MybatisPlusUtil.toColumns(AiApiKey::getId), aiApiKey.getId());
+            queryWrapper.ne(CommonConstants.ID, aiApiKey.getId());
         }
         List<AiApiKey> others = list(queryWrapper);
         if (CollectionUtil.isEmpty(others)) {
@@ -151,7 +152,7 @@ public class AiApiKeyServiceImpl extends SkyeyeBusinessServiceImpl<AiApiKeyDao, 
         updateWrapper.eq(MybatisPlusUtil.toColumns(AiApiKey::getRoleId), aiApiKey.getRoleId());
         updateWrapper.eq(MybatisPlusUtil.toColumns(AiApiKey::getEnabled), EnableEnum.ENABLE_USING.getKey());
         if (StrUtil.isNotBlank(aiApiKey.getId())) {
-            updateWrapper.ne(MybatisPlusUtil.toColumns(AiApiKey::getId), aiApiKey.getId());
+            updateWrapper.ne(CommonConstants.ID, aiApiKey.getId());
         }
         updateWrapper.set(MybatisPlusUtil.toColumns(AiApiKey::getEnabled), EnableEnum.DISABLE_USING.getKey());
         update(updateWrapper);
