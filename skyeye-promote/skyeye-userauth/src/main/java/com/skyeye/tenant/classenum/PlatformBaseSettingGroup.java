@@ -23,7 +23,12 @@ public enum PlatformBaseSettingGroup {
     /**
      * 租户计费相关：席位单价等
      */
-    TENANT("tenant", "租户计费");
+    TENANT("tenant", "租户计费"),
+
+    /**
+     * AI 角色绑定：需求草稿等业务使用的平台级 AI 角色
+     */
+    AI("ai", "AI角色");
 
     /**
      * 分组标识，存入 settingData 的 key

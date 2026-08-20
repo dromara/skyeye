@@ -39,7 +39,8 @@ public class ChatController {
     @ApiOperation(id = "syncChatCompletion", value = "流式调用大模型", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "content", name = "content", value = "用户消息", required = "required"),
-        @ApiImplicitParam(id = "apiKeyId", name = "apiKeyId", value = "AI配置id，为空时使用一条已启用配置", required = "required"),
+        @ApiImplicitParam(id = "roleId", name = "roleId", value = "AI角色id，优先按角色取唯一启用配置"),
+        @ApiImplicitParam(id = "apiKeyId", name = "apiKeyId", value = "AI配置id，roleId为空时使用"),
         @ApiImplicitParam(id = "bizType", name = "bizType", value = "业务类型，如 demandDraft")})
     @RequestMapping("/post/ChatController/syncChatCompletion")
     public void syncChatCompletion(InputObject inputObject, OutputObject outputObject) {

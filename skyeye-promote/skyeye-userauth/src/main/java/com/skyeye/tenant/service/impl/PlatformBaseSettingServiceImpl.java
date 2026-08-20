@@ -225,6 +225,23 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
     }
 
     @Override
+    @IgnoreTenant
+    public void queryPlatformAiRole(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> data = new HashMap<>();
+        data.put(PlatformBaseSettingConst.KEY_AI_ROLE_ID, getAiRoleId());
+        outputObject.setBean(data);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    @IgnoreTenant
+    public String getAiRoleId() {
+        Map<String, Object> aiGroup = getAiGroupSetting();
+        Object roleId = aiGroup.get(PlatformBaseSettingConst.KEY_AI_ROLE_ID);
+        return ObjectUtil.isEmpty(roleId) ? StrUtil.EMPTY : roleId.toString();
+    }
+
+    @Override
     public void validatorEntity(PlatformBaseSetting entity) {
         validateSettingData(entity.getSettingData());
     }
@@ -259,6 +276,9 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         tenantGroup.put(PlatformBaseSettingConst.KEY_MAX_ENTERPRISE_ORG_PER_USER, DEFAULT_MAX_ENTERPRISE_ORG_PER_USER);
         tenantGroup.put(PlatformBaseSettingConst.KEY_ORG_TYPE_CONFIG, buildDefaultOrgTypeConfig());
         settingData.put(PlatformBaseSettingGroup.TENANT.getKey(), tenantGroup);
+        Map<String, Object> aiGroup = new HashMap<>();
+        aiGroup.put(PlatformBaseSettingConst.KEY_AI_ROLE_ID, StrUtil.EMPTY);
+        settingData.put(PlatformBaseSettingGroup.AI.getKey(), aiGroup);
         return settingData;
     }
 
@@ -298,6 +318,19 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         }
         Map<String, Map<String, Object>> merged = mergeSettingData(buildDefaultSettingData(), setting.getSettingData());
         return merged.get(PlatformBaseSettingGroup.TENANT.getKey());
+    }
+
+    private Map<String, Object> getAiGroupSetting() {
+        PlatformBaseSetting setting = getOne(new QueryWrapper<>(), false);
+        if (ObjectUtil.isEmpty(setting) || MapUtil.isEmpty(setting.getSettingData())) {
+            return buildDefaultSettingData().get(PlatformBaseSettingGroup.AI.getKey());
+        }
+        Map<String, Map<String, Object>> merged = mergeSettingData(buildDefaultSettingData(), setting.getSettingData());
+        Map<String, Object> aiGroup = merged.get(PlatformBaseSettingGroup.AI.getKey());
+        if (MapUtil.isEmpty(aiGroup)) {
+            return buildDefaultSettingData().get(PlatformBaseSettingGroup.AI.getKey());
+        }
+        return aiGroup;
     }
 
     @SuppressWarnings("unchecked")
@@ -380,9 +413,20 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
             return;
         }
         Map<String, Object> tenantGroup = settingData.get(PlatformBaseSettingGroup.TENANT.getKey());
-        if (MapUtil.isEmpty(tenantGroup)) {
-            return;
+        if (MapUtil.isNotEmpty(tenantGroup)) {
+            validateTenantGroup(tenantGroup);
         }
+        Map<String, Object> aiGroup = settingData.get(PlatformBaseSettingGroup.AI.getKey());
+        if (MapUtil.isNotEmpty(aiGroup) && aiGroup.containsKey(PlatformBaseSettingConst.KEY_AI_ROLE_ID)) {
+            Object roleId = aiGroup.get(PlatformBaseSettingConst.KEY_AI_ROLE_ID);
+            if (ObjectUtil.isNotEmpty(roleId) && StrUtil.isBlank(roleId.toString().trim())) {
+                aiGroup.put(PlatformBaseSettingConst.KEY_AI_ROLE_ID, StrUtil.EMPTY);
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void validateTenantGroup(Map<String, Object> tenantGroup) {
         if (tenantGroup.containsKey(PlatformBaseSettingConst.KEY_ACCOUNT_UNIT_PRICE)) {
             Object accountUnitPrice = tenantGroup.get(PlatformBaseSettingConst.KEY_ACCOUNT_UNIT_PRICE);
             if (ObjectUtil.isEmpty(accountUnitPrice) || StrUtil.isBlank(accountUnitPrice.toString())) {

@@ -123,11 +123,17 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     public void syncChatCompletion(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String content = params.get("content").toString();
-        String apiKeyId = params.get("apiKeyId").toString();
+        String roleId = params.get("roleId") == null ? "" : params.get("roleId").toString();
+        String apiKeyId = params.get("apiKeyId") == null ? "" : params.get("apiKeyId").toString();
         String bizType = params.get("bizType") == null ? "demandDraft" : params.get("bizType").toString();
         String userId = InputObject.getLogParamsStatic().get("id").toString();
-        AiApiKey aiApiKey = aiApiKeyService.selectEnabledKey(apiKeyId);
-        com.skyeye.role.entity.Role role = roleService.selectById(aiApiKey.getRoleId());
+        AiApiKey aiApiKey = StrUtil.isNotBlank(roleId)
+            ? aiApiKeyService.selectEnabledKeyByRoleId(roleId)
+            : aiApiKeyService.selectEnabledKey(apiKeyId);
+        com.skyeye.role.entity.Role role = aiApiKey.getRoleMation();
+        if (role == null && StrUtil.isNotBlank(aiApiKey.getRoleId())) {
+            role = roleService.selectById(aiApiKey.getRoleId());
+        }
         String systemPrompt = role == null ? null : role.getPrompt();
         AiPlatformEnum aiModel = AiPlatformEnum.getName(aiApiKey.getPlatform());
         Chat chat = new Chat();

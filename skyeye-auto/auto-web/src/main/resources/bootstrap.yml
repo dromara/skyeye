@@ -42,6 +42,9 @@ feign:
       default:
         loggerLevel: FULL
 
+webroot:
+  skyeye-adm: skyeye-adm-${spring.profiles.active}
+
 topic:
   # 用例执行的topic
   usercase-execute-service: USERCASE_EXECUTE_SERVICE

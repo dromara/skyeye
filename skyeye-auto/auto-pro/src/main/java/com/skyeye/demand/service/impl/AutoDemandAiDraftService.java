@@ -19,6 +19,7 @@ import com.skyeye.module.service.AutoModuleService;
 import com.skyeye.project.entity.AutoProject;
 import com.skyeye.project.service.AutoProjectService;
 import com.skyeye.rest.ai.IAiChatRest;
+import com.skyeye.rest.platform.IPlatformBaseSettingRest;
 import com.skyeye.version.entity.AutoVersion;
 import com.skyeye.version.service.AutoVersionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ public class AutoDemandAiDraftService {
     private IAiChatRest iAiChatRest;
 
     @Autowired
+    private IPlatformBaseSettingRest iPlatformBaseSettingRest;
+
+    @Autowired
     private AutoProjectService autoProjectService;
 
     @Autowired
@@ -61,9 +65,11 @@ public class AutoDemandAiDraftService {
         String remark = params.get("remark") == null ? "" : params.get("remark").toString();
         String testJoin = formatTestJoin(params.get("testJoinAnalysis"));
 
+        String roleId = loadPlatformAiRoleId();
         Map<String, Object> chatParams = new HashMap<>();
         chatParams.put("content", buildUserContent(name, projectName, moduleName, versionName, content, remark, testJoin));
         chatParams.put("bizType", "demandDraft");
+        chatParams.put("roleId", roleId);
         Map<String, Object> chatBean = ExecuteFeignClient.get(() -> iAiChatRest.syncChatCompletion(chatParams)).getBean();
         if (chatBean == null || chatBean.get("id") == null) {
             throw new CustomException("启动AI生成失败");
@@ -83,6 +89,15 @@ public class AutoDemandAiDraftService {
             throw new CustomException("生成结果不能为空");
         }
         return parseDraft(answer);
+    }
+
+    private String loadPlatformAiRoleId() {
+        Map<String, Object> bean = ExecuteFeignClient.get(() -> iPlatformBaseSettingRest.queryPlatformAiRole()).getBean();
+        String roleId = bean == null || bean.get("roleId") == null ? "" : bean.get("roleId").toString();
+        if (StrUtil.isBlank(roleId)) {
+            throw new CustomException("请先在平台信息设置中绑定AI角色");
+        }
+        return roleId;
     }
 
     private String loadProjectName(String objectId) {

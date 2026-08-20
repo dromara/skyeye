@@ -25,8 +25,8 @@ public interface IAiChatRest {
      * 流式调用大模型，立即返回 chatId
      * <p>
      * content: 用户消息（必填）
-     * systemPrompt: 系统提示词，为空时使用AI角色提示词
-     * apiKeyId: AI配置id，为空时使用一条已启用配置
+     * roleId: 平台绑定的 AI 角色 id，优先按角色取唯一启用配置
+     * apiKeyId: AI配置id，roleId 为空时使用
      * bizType: 业务类型
      *
      * @param params 请求参数

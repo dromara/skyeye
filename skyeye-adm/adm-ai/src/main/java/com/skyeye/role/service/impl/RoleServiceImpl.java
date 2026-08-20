@@ -5,6 +5,7 @@
 package com.skyeye.role.service.impl;
 
 import com.skyeye.annotation.service.SkyeyeService;
+import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.role.dao.RoleDao;
 import com.skyeye.role.entity.Role;
@@ -22,5 +23,11 @@ import org.springframework.stereotype.Service;
 @Service
 @SkyeyeService(name = "AI角色", groupName = "AI角色")
 public class RoleServiceImpl extends SkyeyeBusinessServiceImpl<RoleDao, Role> implements RoleService {
+
+    @Override
+    @IgnoreTenant
+    public Role selectById(String id) {
+        return super.selectById(id);
+    }
 
 }
