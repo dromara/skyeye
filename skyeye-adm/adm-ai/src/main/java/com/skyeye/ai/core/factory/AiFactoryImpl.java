@@ -9,9 +9,8 @@ import cn.hutool.core.lang.func.Func0;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.dashscope.aigc.generation.Generation;
-import com.openai.client.OpenAIClient;
-import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.skyeye.ai.core.enums.AiPlatformEnum;
+import com.skyeye.ai.core.qianfan.QianfanChatClient;
 import com.skyeye.exception.CustomException;
 import com.skyeye.key.entity.AiApiKey;
 import io.github.briqt.spark4j.SparkClient;
@@ -32,7 +31,7 @@ public class AiFactoryImpl implements AiFactory {
         return Singleton.get(cacheKey, (Func0<Object>) () -> {
             switch (platform) {
                 case YI_YAN:
-                    // 文心走千帆 V2 OpenAI 兼容接口，只需要 API Key，不再传 Secret Key
+                    // 文心走千帆 V2 HTTP/SSE，只需要 API Key，不再传 Secret Key
                     return buildYiYanChatModel(apiKey, url);
                 case XUN_FEI:
                     return buildXunFeiClient(appId, apiKey, secretKey);
@@ -87,18 +86,11 @@ public class AiFactoryImpl implements AiFactory {
      * 千帆已停用应用 AK/SK（OAuth）鉴权，改为 IAM API Key：
      * https://console.bce.baidu.com/iam/#/iam/apikey/list
      * <p>
-     * 默认地址为 https://qianfan.baidubce.com/v2/ ；配置表 url 为空时用这个。
-     * openai-java 会把路径拼在 baseUrl 后面，所以末尾必须带 /。
+     * 不用 openai-java，避免 Kotlin 1.9 与项目里旧 kotlin-stdlib 冲突
+     * （运行时缺 kotlin.enums.EnumEntriesKt）。
      */
-    private static OpenAIClient buildYiYanChatModel(String apiKey, String url) {
-        String baseUrl = StrUtil.isBlank(url) ? "https://qianfan.baidubce.com/v2/" : url;
-        if (!baseUrl.endsWith("/")) {
-            baseUrl = baseUrl + "/";
-        }
-        return OpenAIOkHttpClient.builder()
-            .apiKey(apiKey)
-            .baseUrl(baseUrl)
-            .build();
+    private static QianfanChatClient buildYiYanChatModel(String apiKey, String url) {
+        return new QianfanChatClient(apiKey, url);
     }
 
     private static SparkClient buildXunFeiClient(String appId, String apiKey, String secretKey) {

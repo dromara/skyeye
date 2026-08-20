@@ -52,12 +52,7 @@
             <version>${druid.version}</version>
         </dependency>
 
-        <!-- 千帆 V2 OpenAI 兼容 SDK，文心对话用 API Key 鉴权，见 https://cloud.baidu.com/doc/qianfan-docs/s/nm9l6oc8e -->
-        <dependency>
-            <groupId>com.openai</groupId>
-            <artifactId>openai-java</artifactId>
-            <version>0.22.0</version>
-        </dependency>
+        <!-- 千帆 V2 用现有 OkHttp SSE 调用，不再引入 openai-java（Kotlin 版本会和项目冲突） -->
 
         <dependency>
             <groupId>io.github.briqt</groupId>
