@@ -37,6 +37,12 @@ public class SkillExec {
     @TableField("screen_json")
     private String screenJson;
 
+    @TableField("report_page_id")
+    private String reportPageId;
+
+    @TableField("report_content")
+    private String reportContent;
+
     @TableField("status")
     private Integer status;
 
@@ -49,6 +55,10 @@ public class SkillExec {
     /** 接口返回时把 JSON 解析成对象，不落库 */
     @TableField(exist = false)
     private Object screen;
+
+    /** 接口返回时把报表 content 解析成对象，不落库 */
+    @TableField(exist = false)
+    private Object reportPage;
 
     public String getId() {
         return id;
@@ -98,6 +108,22 @@ public class SkillExec {
         this.screenJson = screenJson;
     }
 
+    public String getReportPageId() {
+        return reportPageId;
+    }
+
+    public void setReportPageId(String reportPageId) {
+        this.reportPageId = reportPageId;
+    }
+
+    public String getReportContent() {
+        return reportContent;
+    }
+
+    public void setReportContent(String reportContent) {
+        this.reportContent = reportContent;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -128,5 +154,13 @@ public class SkillExec {
 
     public void setScreen(Object screen) {
         this.screen = screen;
+    }
+
+    public Object getReportPage() {
+        return reportPage;
+    }
+
+    public void setReportPage(Object reportPage) {
+        this.reportPage = reportPage;
     }
 }
