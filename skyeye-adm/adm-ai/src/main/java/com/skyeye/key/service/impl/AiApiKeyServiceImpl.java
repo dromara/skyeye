@@ -7,7 +7,9 @@ package com.skyeye.key.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
+import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.enumeration.EnableEnum;
@@ -54,6 +56,12 @@ public class AiApiKeyServiceImpl extends SkyeyeBusinessServiceImpl<AiApiKeyDao, 
     }
 
     @Override
+    public void writePostpose(AiApiKey entity, String userId) {
+        super.writePostpose(entity, userId);
+        disableOtherEnabledKeysOfRole(entity);
+    }
+
+    @Override
     public AiApiKey selectById(String id) {
         AiApiKey aiApiKey = super.selectById(id);
         roleService.setDataMation(aiApiKey, AiApiKey::getRoleId);
@@ -94,5 +102,58 @@ public class AiApiKeyServiceImpl extends SkyeyeBusinessServiceImpl<AiApiKeyDao, 
             throw new CustomException("未配置可用的AI Key，请先在AI配置中启用一条。");
         }
         return selectById(list.get(0).getId());
+    }
+
+    @Override
+    @IgnoreTenant
+    public AiApiKey selectEnabledKeyByRoleId(String roleId) {
+        if (StrUtil.isBlank(roleId)) {
+            throw new CustomException("AI角色不能为空");
+        }
+        QueryWrapper<AiApiKey> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AiApiKey::getRoleId), roleId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AiApiKey::getEnabled), EnableEnum.ENABLE_USING.getKey());
+        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(AiApiKey::getCreateTime));
+        List<AiApiKey> list = list(queryWrapper);
+        if (CollectionUtil.isEmpty(list)) {
+            throw new CustomException("该AI角色未绑定已启用的AI配置");
+        }
+        AiApiKey aiApiKey = list.get(0);
+        if (list.size() > 1) {
+            disableOtherEnabledKeysOfRole(aiApiKey);
+        }
+        roleService.setDataMation(aiApiKey, AiApiKey::getRoleId);
+        return aiApiKey;
+    }
+
+    private void disableOtherEnabledKeysOfRole(AiApiKey aiApiKey) {
+        if (!isEnabled(aiApiKey.getEnabled()) || StrUtil.isBlank(aiApiKey.getRoleId())) {
+            return;
+        }
+        QueryWrapper<AiApiKey> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AiApiKey::getRoleId), aiApiKey.getRoleId());
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AiApiKey::getEnabled), EnableEnum.ENABLE_USING.getKey());
+        if (StrUtil.isNotBlank(aiApiKey.getId())) {
+            queryWrapper.ne(MybatisPlusUtil.toColumns(AiApiKey::getId), aiApiKey.getId());
+        }
+        List<AiApiKey> others = list(queryWrapper);
+        if (CollectionUtil.isEmpty(others)) {
+            return;
+        }
+        UpdateWrapper<AiApiKey> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(MybatisPlusUtil.toColumns(AiApiKey::getRoleId), aiApiKey.getRoleId());
+        updateWrapper.eq(MybatisPlusUtil.toColumns(AiApiKey::getEnabled), EnableEnum.ENABLE_USING.getKey());
+        if (StrUtil.isNotBlank(aiApiKey.getId())) {
+            updateWrapper.ne(MybatisPlusUtil.toColumns(AiApiKey::getId), aiApiKey.getId());
+        }
+        updateWrapper.set(MybatisPlusUtil.toColumns(AiApiKey::getEnabled), EnableEnum.DISABLE_USING.getKey());
+        update(updateWrapper);
+        for (AiApiKey other : others) {
+            refreshCache(other.getId());
+        }
+    }
+
+    private boolean isEnabled(String enabled) {
+        return String.valueOf(EnableEnum.ENABLE_USING.getKey()).equals(String.valueOf(enabled));
     }
 }

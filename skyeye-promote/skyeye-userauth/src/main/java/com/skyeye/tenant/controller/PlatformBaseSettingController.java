@@ -60,4 +60,10 @@ public class PlatformBaseSettingController {
         platformBaseSettingService.queryPlatformTenantCreateConfig(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryPlatformAiRole", value = "获取平台绑定的AI角色", method = "GET", allUse = "2")
+    @RequestMapping("/post/PlatformBaseSettingController/queryPlatformAiRole")
+    public void queryPlatformAiRole(InputObject inputObject, OutputObject outputObject) {
+        platformBaseSettingService.queryPlatformAiRole(inputObject, outputObject);
+    }
+
 }

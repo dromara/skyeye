@@ -51,4 +51,9 @@ public class PlatformBaseSettingConst {
      */
     public static final String KEY_MAX_ENTERPRISE_ORG_PER_USER = "maxEnterpriseOrgPerUser";
 
+    /**
+     * AI 角色分组 - 平台绑定的 AI 角色 id
+     */
+    public static final String KEY_AI_ROLE_ID = "roleId";
+
 }

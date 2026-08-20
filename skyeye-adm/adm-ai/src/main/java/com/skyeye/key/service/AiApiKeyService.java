@@ -21,4 +21,9 @@ public interface AiApiKeyService extends SkyeyeBusinessService<AiApiKey> {
      * 获取一条已启用的 AI 配置；指定 id 时校验必须启用
      */
     AiApiKey selectEnabledKey(String apiKeyId);
+
+    /**
+     * 按角色获取唯一一条已启用的 AI 配置
+     */
+    AiApiKey selectEnabledKeyByRoleId(String roleId);
 }
