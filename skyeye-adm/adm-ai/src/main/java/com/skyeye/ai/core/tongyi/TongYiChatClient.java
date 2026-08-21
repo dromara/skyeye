@@ -12,6 +12,7 @@ import com.alibaba.dashscope.common.History;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.skyeye.common.util.ImagesUtil;
 import com.skyeye.exception.CustomException;
 import io.reactivex.Flowable;
 import lombok.Data;
@@ -119,9 +120,18 @@ public class TongYiChatClient {
             return result;
         }
         for (String image : images) {
-            if (StrUtil.isNotBlank(image)) {
-                result.add(image);
+            if (StrUtil.isBlank(image) || result.size() >= 3) {
+                continue;
             }
+            if (image.startsWith("data:")) {
+                result.add(image);
+                continue;
+            }
+            String encoded = ImagesUtil.urlToBase64(image.trim());
+            if (StrUtil.isBlank(encoded)) {
+                continue;
+            }
+            result.add(encoded.startsWith("data:") ? encoded : "data:image/png;base64," + encoded);
         }
         return result;
     }
