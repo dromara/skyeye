@@ -8,12 +8,12 @@ import cn.hutool.core.lang.Singleton;
 import cn.hutool.core.lang.func.Func0;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.dashscope.app.Application;
 import com.skyeye.ai.core.enums.AiPlatformEnum;
 import com.skyeye.ai.core.qianfan.QianfanChatClient;
+import com.skyeye.ai.core.tongyi.TongYiChatClient;
+import com.skyeye.ai.core.xunfei.XunFeiChatClient;
 import com.skyeye.exception.CustomException;
 import com.skyeye.key.entity.AiApiKey;
-import io.github.briqt.spark4j.SparkClient;
 
 /**
  * @ClassName: AiFactoryImpl
@@ -27,7 +27,7 @@ public class AiFactoryImpl implements AiFactory {
 
     @Override
     public Object getOrCreateChatModel(AiPlatformEnum platform, String appId, String apiKey, String secretKey, String url) {
-        String cacheKey = buildClientCacheKey(platform, apiKey, url);
+        String cacheKey = buildClientCacheKey(platform, appId, apiKey, secretKey, url);
         return Singleton.get(cacheKey, (Func0<Object>) () -> {
             switch (platform) {
                 case YI_YAN:
@@ -36,7 +36,7 @@ public class AiFactoryImpl implements AiFactory {
                 case XUN_FEI:
                     return buildXunFeiClient(appId, apiKey, secretKey);
                 case TONG_YI:
-                    return buildTongYiChatClient();
+                    return buildTongYiChatClient(appId, apiKey);
                 default:
                     throw new IllegalArgumentException(StrUtil.format("未知平台({})", platform));
             }
@@ -93,21 +93,16 @@ public class AiFactoryImpl implements AiFactory {
         return new QianfanChatClient(apiKey, url);
     }
 
-    private static SparkClient buildXunFeiClient(String appId, String apiKey, String secretKey) {
-        SparkClient xunFeiApi = new SparkClient();
-        xunFeiApi.appid = appId;
-        xunFeiApi.apiKey = apiKey;
-        xunFeiApi.apiSecret = secretKey;
-        return xunFeiApi;
+    private static XunFeiChatClient buildXunFeiClient(String appId, String apiKey, String secretKey) {
+        return new XunFeiChatClient(appId, apiKey, secretKey);
     }
-
 
     /**
      * 通义走百炼「应用」接口，不是模型 Generation。
      * 配置里的 apiAppId 填应用管理中的应用 ID。
      */
-    private static Application buildTongYiChatClient() {
-        return new Application();
+    private static TongYiChatClient buildTongYiChatClient(String appId, String apiKey) {
+        return new TongYiChatClient(appId, apiKey);
     }
 
 }

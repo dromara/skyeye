@@ -1,21 +1,16 @@
 package com.skyeye.chat.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.alibaba.dashscope.app.Application;
-import com.alibaba.dashscope.app.ApplicationParam;
-import com.alibaba.dashscope.app.ApplicationResult;
-import com.alibaba.dashscope.common.History;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.base.Joiner;
 import com.skyeye.ai.core.enums.AiPlatformEnum;
 import com.skyeye.ai.core.factory.AiFactory;
 import com.skyeye.ai.core.qianfan.QianfanChatClient;
-import com.skyeye.aiStreamModle.SparkListener;
+import com.skyeye.ai.core.tongyi.TongYiChatClient;
+import com.skyeye.ai.core.xunfei.XunFeiChatClient;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.chat.dao.ChatDao;
 import com.skyeye.chat.entity.Chat;
@@ -32,14 +27,6 @@ import com.skyeye.key.entity.AiApiKey;
 import com.skyeye.key.service.AiApiKeyService;
 import com.skyeye.role.service.RoleService;
 import com.skyeye.websocket.AiMessageWebSocket;
-import io.github.briqt.spark4j.SparkClient;
-import io.github.briqt.spark4j.constant.SparkApiVersion;
-import io.github.briqt.spark4j.model.SparkMessage;
-import io.github.briqt.spark4j.model.request.SparkRequest;
-import io.github.briqt.spark4j.model.response.SparkResponse;
-import io.github.briqt.spark4j.model.response.SparkResponseUsage;
-import io.reactivex.Flowable;
-import okhttp3.WebSocket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -196,7 +183,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
 
     private void streamTongYi(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType) {
         runStreamTask(userId, chatId, bizType, () -> {
-            consumeTongYiAppStream(aiApiKey, systemPrompt, null, content, userId, chatId, bizType);
+            consumeTongYiStream(aiApiKey, systemPrompt, null, content, userId, chatId, bizType);
         });
     }
 
@@ -206,58 +193,13 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
      */
     private void streamYiYan(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType) {
         runStreamTask(userId, chatId, bizType, () -> {
-            consumeYiYanStream(aiApiKey, buildYiYanMessages(systemPrompt, null, content), userId, chatId, bizType);
+            consumeYiYanStream(aiApiKey, buildChatMessages(systemPrompt, null, content), userId, chatId, bizType);
         });
     }
 
     private void streamXunFei(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType) {
         runStreamTask(userId, chatId, bizType, () -> {
-            List<SparkMessage> messageList = new ArrayList<>();
-            if (StrUtil.isNotBlank(systemPrompt)) {
-                messageList.add(SparkMessage.systemContent(systemPrompt));
-            }
-            messageList.add(SparkMessage.userContent(content));
-            SparkClient sparkClient = (SparkClient) aiFactory.getDefaultChatModel(AiPlatformEnum.XUN_FEI, aiApiKey);
-            SparkRequest sparkRequest = SparkRequest.builder()
-                .messages(messageList)
-                .maxTokens(2048)
-                .temperature(0.3)
-                .apiVersion(SparkApiVersion.V3_5)
-                .build();
-            final String tenantId = TenantContext.getTenantId();
-            final TenantEnum isolationType = TenantContext.getIsolationType();
-            sparkClient.chatStream(sparkRequest, new SparkListener() {
-                @Override
-                public void onMessage(String chunk, SparkResponseUsage usage, Integer status, SparkRequest request,
-                                      SparkResponse response, WebSocket webSocket) {
-                    try {
-                        bindTenantContext(tenantId, isolationType);
-                        String key = String.format(Locale.ROOT, "chat:%s", chatId);
-                        List<String> chunkMessage = new ArrayList<>();
-                        if (jedisClientService.exists(key)) {
-                            chunkMessage = JSONUtil.toList(jedisClientService.get(key), null);
-                        }
-                        chunkMessage.add(chunk);
-                        boolean end = status != null && status == 2;
-                        if (end) {
-                            jedisClientService.del(key);
-                            Chat chat = chatService.selectById(chatId);
-                            chat.setContent(Joiner.on("").join(chunkMessage));
-                            chatService.updateEntity(chat, userId);
-                        } else {
-                            jedisClientService.set(key, JSONUtil.toJsonStr(chunkMessage));
-                        }
-                        sendStreamChunk(userId, chatId, bizType, chunk, end, chunkMessage.size() - 1);
-                    } finally {
-                        TenantContext.clear();
-                    }
-                }
-
-                @Override
-                public void onFailure(WebSocket webSocket, Throwable t, okhttp3.Response httpResponse) {
-                    sendStreamChunk(userId, chatId, bizType, t == null ? "讯飞星火调用失败" : t.getMessage(), true, -1);
-                }
-            });
+            consumeXunFeiStream(aiApiKey, buildChatMessages(systemPrompt, null, content), 0.3, userId, chatId, bizType);
         });
     }
 
@@ -268,37 +210,56 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     private void QianFanResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {
         runStreamTask(userId, chatId, null, () -> {
             List<Chat> chatList = getRecentlyChats(userId, aiApiKey.getId());
-            consumeYiYanStream(aiApiKey, buildYiYanMessages(systemPrompt, chatList, message), userId, chatId, null);
+            consumeYiYanStream(aiApiKey, buildChatMessages(systemPrompt, chatList, message), userId, chatId, null);
         });
     }
 
     /**
-     * 组装千帆 V2 Chat Completions 的 messages。
-     * 官方文档：https://cloud.baidu.com/doc/qianfan-docs/s/nm9l6oc8e
-     * V2 已支持 role=system；旧 V1 只能走独立的 system 字段。
+     * 组装通用 messages：system + 历史 user/assistant + 当前用户输入。
+     * 千帆、讯飞都用这套 role/content 结构。
      */
-    private List<Map<String, String>> buildYiYanMessages(String systemPrompt, List<Chat> history, String currentUserMessage) {
+    private List<Map<String, String>> buildChatMessages(String systemPrompt, List<Chat> history, String currentUserMessage) {
         List<Map<String, String>> messages = new ArrayList<>();
         if (StrUtil.isNotBlank(systemPrompt)) {
-            messages.add(yiYanMessage("system", systemPrompt));
+            messages.add(chatMessage("system", systemPrompt));
         }
         if (history != null) {
             history.forEach(chat -> {
                 if (StrUtil.isNotEmpty(chat.getMessage()) && StrUtil.isNotEmpty(chat.getContent())) {
-                    messages.add(yiYanMessage("user", chat.getMessage()));
-                    messages.add(yiYanMessage("assistant", chat.getContent()));
+                    messages.add(chatMessage("user", chat.getMessage()));
+                    messages.add(chatMessage("assistant", chat.getContent()));
                 }
             });
         }
-        messages.add(yiYanMessage("user", currentUserMessage));
+        messages.add(chatMessage("user", currentUserMessage));
         return messages;
     }
 
-    private Map<String, String> yiYanMessage(String role, String content) {
+    private Map<String, String> chatMessage(String role, String content) {
         Map<String, String> item = new HashMap<>();
         item.put("role", role);
         item.put("content", content);
         return item;
+    }
+
+    /**
+     * 通义百炼应用用的多轮历史：user / assistant，时间从旧到新。
+     */
+    private List<Map<String, String>> buildTongYiHistory(List<Chat> history) {
+        List<Map<String, String>> items = new ArrayList<>();
+        if (history == null || history.isEmpty()) {
+            return items;
+        }
+        for (int i = history.size() - 1; i >= 0; i--) {
+            Chat chat = history.get(i);
+            if (StrUtil.isNotEmpty(chat.getMessage()) && StrUtil.isNotEmpty(chat.getContent())) {
+                Map<String, String> item = new HashMap<>();
+                item.put("user", chat.getMessage());
+                item.put("assistant", chat.getContent());
+                items.add(item);
+            }
+        }
+        return items;
     }
 
     /**
@@ -310,43 +271,99 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     private void consumeYiYanStream(AiApiKey aiApiKey, List<Map<String, String>> messages,
                                     String userId, String chatId, String bizType) {
         QianfanChatClient client = (QianfanChatClient) aiFactory.getDefaultChatModel(AiPlatformEnum.YI_YAN, aiApiKey);
-        final String tenantId = TenantContext.getTenantId();
-        final TenantEnum isolationType = TenantContext.getIsolationType();
-        final boolean[] finished = {false};
-        try {
+        consumeClientStream(userId, chatId, bizType, (tenantId, isolationType, finished) ->
             client.streamChat(messages, aiApiKey.getApiAppId(), new QianfanChatClient.StreamListener() {
                 @Override
                 public void onDelta(String piece, boolean end) {
-                    if (StrUtil.isBlank(piece) && !end) {
-                        return;
-                    }
-                    // SSE 回调在 OkHttp 线程，必须重新绑定租户再落库
-                    try {
-                        bindTenantContext(tenantId, isolationType);
-                        finished[0] = appendYiYanChunk(userId, chatId, bizType, piece, end) || finished[0];
-                    } finally {
-                        TenantContext.clear();
-                    }
+                    handleStreamDelta(tenantId, isolationType, userId, chatId, bizType, piece, end, finished);
                 }
 
                 @Override
                 public void onError(String message) {
-                    try {
-                        bindTenantContext(tenantId, isolationType);
-                        persistYiYanPartial(userId, chatId);
-                        sendYiYanError(userId, chatId, bizType, message);
-                        finished[0] = true;
-                    } finally {
-                        TenantContext.clear();
-                    }
+                    handleStreamError(tenantId, isolationType, userId, chatId, bizType, message, finished);
                 }
-            });
+            }));
+    }
+
+    private void consumeXunFeiStream(AiApiKey aiApiKey, List<Map<String, String>> messages, double temperature,
+                                     String userId, String chatId, String bizType) {
+        XunFeiChatClient client = (XunFeiChatClient) aiFactory.getDefaultChatModel(AiPlatformEnum.XUN_FEI, aiApiKey);
+        consumeClientStream(userId, chatId, bizType, (tenantId, isolationType, finished) ->
+            client.streamChat(messages, temperature, new XunFeiChatClient.StreamListener() {
+                @Override
+                public void onDelta(String piece, boolean end) {
+                    handleStreamDelta(tenantId, isolationType, userId, chatId, bizType, piece, end, finished);
+                }
+
+                @Override
+                public void onError(String message) {
+                    handleStreamError(tenantId, isolationType, userId, chatId, bizType, message, finished);
+                }
+            }));
+    }
+
+    private void consumeTongYiStream(AiApiKey aiApiKey, String systemPrompt, List<Chat> history,
+                                     String currentUserMessage, String userId, String chatId, String bizType) {
+        TongYiChatClient client = (TongYiChatClient) aiFactory.getDefaultChatModel(AiPlatformEnum.TONG_YI, aiApiKey);
+        consumeClientStream(userId, chatId, bizType, (tenantId, isolationType, finished) ->
+            client.streamChat(systemPrompt, buildTongYiHistory(history), currentUserMessage, new TongYiChatClient.StreamListener() {
+                @Override
+                public void onDelta(String piece, boolean end) {
+                    handleStreamDelta(tenantId, isolationType, userId, chatId, bizType, piece, end, finished);
+                }
+
+                @Override
+                public void onError(String message) {
+                    handleStreamError(tenantId, isolationType, userId, chatId, bizType, message, finished);
+                }
+            }));
+    }
+
+    @FunctionalInterface
+    private interface StreamInvoker {
+        void invoke(String tenantId, TenantEnum isolationType, boolean[] finished);
+    }
+
+    /**
+     * 三个平台客户端都是阻塞式 streamChat，回调可能在 SDK 线程，落库前要重新绑租户。
+     */
+    private void consumeClientStream(String userId, String chatId, String bizType, StreamInvoker invoker) {
+        final String tenantId = TenantContext.getTenantId();
+        final TenantEnum isolationType = TenantContext.getIsolationType();
+        final boolean[] finished = {false};
+        try {
+            invoker.invoke(tenantId, isolationType, finished);
             if (!finished[0]) {
                 appendYiYanChunk(userId, chatId, bizType, StrUtil.EMPTY, true);
             }
         } catch (Throwable e) {
             persistYiYanPartial(userId, chatId);
             sendYiYanError(userId, chatId, bizType, StrUtil.blankToDefault(e.getMessage(), e.getClass().getSimpleName()));
+        }
+    }
+
+    private void handleStreamDelta(String tenantId, TenantEnum isolationType, String userId, String chatId,
+                                   String bizType, String piece, boolean end, boolean[] finished) {
+        if (StrUtil.isBlank(piece) && !end) {
+            return;
+        }
+        try {
+            bindTenantContext(tenantId, isolationType);
+            finished[0] = appendYiYanChunk(userId, chatId, bizType, piece, end) || finished[0];
+        } finally {
+            TenantContext.clear();
+        }
+    }
+
+    private void handleStreamError(String tenantId, TenantEnum isolationType, String userId, String chatId,
+                                   String bizType, String message, boolean[] finished) {
+        try {
+            bindTenantContext(tenantId, isolationType);
+            persistYiYanPartial(userId, chatId);
+            sendYiYanError(userId, chatId, bizType, message);
+            finished[0] = true;
+        } finally {
+            TenantContext.clear();
         }
     }
 
@@ -426,146 +443,9 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
 
     private void XunFeiResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {
         runStreamTask(userId, chatId, null, () -> {
-            List<SparkMessage> messageList = new ArrayList<>();
-            if (StrUtil.isNotBlank(systemPrompt)) {
-                messageList.add(SparkMessage.systemContent(systemPrompt));
-            }
             List<Chat> chatList = getRecentlyChats(userId, aiApiKey.getId());
-            chatList.forEach(chat -> {
-                if (StrUtil.isNotEmpty(chat.getMessage()) && StrUtil.isNotEmpty(chat.getContent())) {
-                    messageList.add(SparkMessage.userContent(chat.getMessage()));
-                    messageList.add(SparkMessage.assistantContent(chat.getContent()));
-                }
-            });
-            messageList.add(SparkMessage.userContent(message));
-
-            SparkClient sparkClient = (SparkClient) aiFactory.getDefaultChatModel(AiPlatformEnum.XUN_FEI, aiApiKey);
-            // 构造请求
-            SparkRequest sparkRequest = SparkRequest.builder()
-                .messages(messageList)
-                .maxTokens(2048)
-                .temperature(0.5)
-                .apiVersion(SparkApiVersion.V3_5)
-                .build();
-            // 封装聊天信息
-            final String tenantId = TenantContext.getTenantId();
-            final TenantEnum isolationType = TenantContext.getIsolationType();
-            sparkClient.chatStream(sparkRequest, new SparkListener() {
-                @Override
-                public void onMessage(String content, SparkResponseUsage usage, Integer status, SparkRequest sparkRequest, SparkResponse sparkResponse, WebSocket webSocket) {
-
-                    try {
-                        bindTenantContext(tenantId, isolationType);
-                        JSONObject jsonObject = new JSONObject(this.objectMapper.writeValueAsString(sparkResponse));
-                        // 获取payload对象
-                        JSONObject payload = jsonObject.getJSONObject("payload");
-                        // 获取choices对象
-                        JSONObject choices = payload.getJSONObject("choices");
-                        String key = String.format(Locale.ROOT, "chat:%s", chatId);
-                        List<String> chunkMessage = new ArrayList<>();
-                        if (jedisClientService.exists(key)) {
-                            chunkMessage = JSONUtil.toList(jedisClientService.get(key), null);
-                        }
-                        chunkMessage.add(content);
-                        if (status == 2) {
-                            jedisClientService.del(key);
-                            String totalMessage = Joiner.on("").join(chunkMessage);
-                            // 修改回复内容
-                            Chat chat = chatService.selectById(chatId);
-                            chat.setContent(totalMessage);
-                            chatService.updateEntity(chat, userId);
-                        } else {
-                            jedisClientService.set(key, JSONUtil.toJsonStr(chunkMessage));
-                        }
-                        Map<String, Object> messageMap = new HashMap<>();
-                        messageMap.put("message", content);
-                        messageMap.put("end", status == 2);
-                        messageMap.put("orderBy", choices.get("seq"));
-                        aiMessageWebSocket.sendMessageTo(JSONUtil.toJsonStr(messageMap), userId);
-                    } catch (JsonProcessingException var9) {
-                        JsonProcessingException e = var9;
-                        throw new RuntimeException(e);
-                    } finally {
-                        TenantContext.clear();
-                    }
-                }
-
-                @Override
-                public void onFailure(WebSocket webSocket, Throwable t, okhttp3.Response httpResponse) {
-                    sendYiYanError(userId, chatId, null, t == null ? "讯飞星火调用失败" : t.getMessage());
-                }
-            });
+            consumeXunFeiStream(aiApiKey, buildChatMessages(systemPrompt, chatList, message), 0.5, userId, chatId, null);
         });
-    }
-
-    /**
-     * 通义走百炼「应用」接口（Application），不是模型 Generation。
-     * apiAppId 必须填应用管理里的应用 ID；应用自己的模型和提示词在控制台配置。
-     * dashscope 2.14.4 没有 messages / incrementalOutput 方法，用 prompt + history，增量参数走 extra parameters。
-     */
-    private ApplicationParam buildTongYiAppParam(AiApiKey aiApiKey, String systemPrompt,
-                                                 List<Chat> history, String currentUserMessage) {
-        if (StrUtil.isBlank(aiApiKey.getApiAppId())) {
-            throw new CustomException("通义配置缺少应用 ID，请填写百炼「应用管理」中的应用 ID");
-        }
-        if (StrUtil.isBlank(aiApiKey.getApiKey())) {
-            throw new CustomException("通义配置缺少 API Key");
-        }
-        String prompt = currentUserMessage;
-        if (StrUtil.isNotBlank(systemPrompt)) {
-            prompt = systemPrompt + "\n\n" + currentUserMessage;
-        }
-        ApplicationParam.ApplicationParamBuilder<?, ?> builder = ApplicationParam.builder()
-            .apiKey(aiApiKey.getApiKey())
-            .appId(aiApiKey.getApiAppId())
-            .prompt(prompt)
-            .parameter("incremental_output", true);
-        if (history != null && !history.isEmpty()) {
-            List<History> items = new ArrayList<>();
-            for (int i = history.size() - 1; i >= 0; i--) {
-                Chat chat = history.get(i);
-                if (StrUtil.isNotEmpty(chat.getMessage()) && StrUtil.isNotEmpty(chat.getContent())) {
-                    items.add(History.builder().user(chat.getMessage()).bot(chat.getContent()).build());
-                }
-            }
-            if (!items.isEmpty()) {
-                builder.history(items);
-            }
-        }
-        return builder.build();
-    }
-
-    /**
-     * 消费百炼应用流式响应。流结束后再发 end 包，避免前端一直转圈。
-     * 2.14.4 默认累积输出，这里按增量切片后再推给前端。
-     */
-    private void consumeTongYiAppStream(AiApiKey aiApiKey, String systemPrompt, List<Chat> history,
-                                        String currentUserMessage, String userId, String chatId, String bizType) {
-        try {
-            Application application = (Application) aiFactory.getDefaultChatModel(AiPlatformEnum.TONG_YI, aiApiKey);
-            ApplicationParam param = buildTongYiAppParam(aiApiKey, systemPrompt, history, currentUserMessage);
-            Flowable<ApplicationResult> result = application.streamCall(param);
-            final String[] last = {StrUtil.EMPTY};
-            result.blockingForEach(chunk -> {
-                String text = StrUtil.EMPTY;
-                if (chunk.getOutput() != null && chunk.getOutput().getText() != null) {
-                    text = chunk.getOutput().getText();
-                }
-                if (StrUtil.isEmpty(text)) {
-                    return;
-                }
-                String delta = text.startsWith(last[0]) ? text.substring(last[0].length()) : text;
-                last[0] = text;
-                if (StrUtil.isEmpty(delta)) {
-                    return;
-                }
-                appendYiYanChunk(userId, chatId, bizType, delta, false);
-            });
-            appendYiYanChunk(userId, chatId, bizType, StrUtil.EMPTY, true);
-        } catch (Throwable t) {
-            persistYiYanPartial(userId, chatId);
-            sendYiYanError(userId, chatId, bizType, StrUtil.blankToDefault(t.getMessage(), t.getClass().getSimpleName()));
-        }
     }
 
     private List<Chat> getRecentlyChats(String userId, String apiKeyId) {
@@ -580,7 +460,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     private void TongYiResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {
         runStreamTask(userId, chatId, null, () -> {
             List<Chat> chatList = getRecentlyChats(userId, aiApiKey.getId());
-            consumeTongYiAppStream(aiApiKey, systemPrompt, chatList, message, userId, chatId, null);
+            consumeTongYiStream(aiApiKey, systemPrompt, chatList, message, userId, chatId, null);
         });
     }
 
