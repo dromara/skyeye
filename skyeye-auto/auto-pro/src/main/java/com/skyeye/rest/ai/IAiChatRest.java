@@ -28,6 +28,7 @@ public interface IAiChatRest {
      * roleId: 平台绑定的 AI 角色 id，优先按角色取唯一启用配置
      * apiKeyId: AI配置id，roleId 为空时使用
      * bizType: 业务类型
+     * images: 截图地址列表，看图生成时传入
      *
      * @param params 请求参数
      * @return 平台统一 JSON 字符串

@@ -6,6 +6,8 @@ package com.skyeye.bug.service;
 
 import com.skyeye.base.business.service.SkyeyeTeamAuthService;
 import com.skyeye.bug.entity.AutoBug;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 
 /**
  * @ClassName: AutoBugService
@@ -17,4 +19,7 @@ import com.skyeye.bug.entity.AutoBug;
  */
 public interface AutoBugService extends SkyeyeTeamAuthService<AutoBug> {
 
+    void aiGenerateBugDraft(InputObject inputObject, OutputObject outputObject);
+
+    void aiParseBugDraft(InputObject inputObject, OutputObject outputObject);
 }

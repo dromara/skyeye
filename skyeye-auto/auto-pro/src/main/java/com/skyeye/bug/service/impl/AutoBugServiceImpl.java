@@ -14,8 +14,10 @@ import com.skyeye.bug.classenum.BugState;
 import com.skyeye.bug.dao.AutoBugDao;
 import com.skyeye.bug.entity.AutoBug;
 import com.skyeye.bug.service.AutoBugService;
+import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.demand.service.AutoDemandService;
 import com.skyeye.environment.service.AutoEnvironmentService;
@@ -56,6 +58,9 @@ public class AutoBugServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoBugDao, Au
 
     @Autowired
     private AutoScoreRecordService autoScoreRecordService;
+
+    @Autowired
+    private AutoBugAiDraftService autoBugAiDraftService;
 
     @Override
     public Class getAuthEnumClass() {
@@ -152,5 +157,19 @@ public class AutoBugServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoBugDao, Au
         autoEnvironmentService.setDataMation(autoBug, AutoBug::getEnvironmentId);
         iAuthUserService.setDataMation(autoBug, AutoBug::getHandleId);
         return autoBug;
+    }
+
+    @Override
+    public void aiGenerateBugDraft(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> bean = autoBugAiDraftService.generate(inputObject.getParams());
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void aiParseBugDraft(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> bean = autoBugAiDraftService.parseAnswer(inputObject.getParams());
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 }
