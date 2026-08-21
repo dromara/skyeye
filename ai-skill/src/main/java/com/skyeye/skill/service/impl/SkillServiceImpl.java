@@ -16,7 +16,9 @@ import com.skyeye.skill.exception.CustomException;
 import com.skyeye.skill.generator.BigScreenLlmGenerator;
 import com.skyeye.skill.generator.BigScreenTemplateGenerator;
 import com.skyeye.skill.llm.LlmChatService;
+import com.skyeye.skill.report.ReportPagePersistService;
 import com.skyeye.skill.service.SkillService;
+import com.skyeye.skill.entity.ReportPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -56,6 +58,9 @@ public class SkillServiceImpl implements SkillService {
 
     @Autowired
     private LlmChatService llmChatService;
+
+    @Autowired
+    private ReportPagePersistService reportPagePersistService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -151,6 +156,27 @@ public class SkillServiceImpl implements SkillService {
         } catch (JsonProcessingException e) {
             throw new CustomException("生成大屏JSON失败");
         }
+
+        String reportPageId = null;
+        String reportContent = null;
+        Object reportPageBean = null;
+        if (reportPagePersistService.isEnabled()) {
+            try {
+                ReportPage page = reportPagePersistService.createFromScreen(screen, userInput);
+                reportPageId = page.getId();
+                reportContent = page.getContent();
+                reportPageBean = parseJsonObject(reportContent);
+            } catch (Exception e) {
+                // 报表落库失败不阻断执行记录；remark 写进 screen 方便排查
+                screen.put("reportPersistError", e.getMessage());
+                try {
+                    screenJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(screen);
+                } catch (JsonProcessingException ignored) {
+                    // keep previous screenJson
+                }
+            }
+        }
+
         SkillExec exec = new SkillExec();
         exec.setId(UUID.randomUUID().toString().replace("-", ""));
         exec.setSkillId(skill.getId());
@@ -158,11 +184,14 @@ public class SkillServiceImpl implements SkillService {
         exec.setSkillName(skill.getName());
         exec.setUserInput(userInput);
         exec.setScreenJson(screenJson);
+        exec.setReportPageId(reportPageId);
+        exec.setReportContent(reportContent);
         exec.setStatus(1);
         exec.setCreateId(LOCAL_USER);
         exec.setCreateTime(now());
         skillExecDao.insert(exec);
         exec.setScreen(screen);
+        exec.setReportPage(reportPageBean);
         return exec;
     }
 
@@ -228,14 +257,39 @@ public class SkillServiceImpl implements SkillService {
     }
 
     private void fillScreen(SkillExec exec) {
-        if (exec == null || !StringUtils.hasText(exec.getScreenJson())) {
+        if (exec == null) {
             return;
         }
-        try {
-            exec.setScreen(objectMapper.readValue(exec.getScreenJson(), Object.class));
-        } catch (Exception e) {
-            exec.setScreen(exec.getScreenJson());
+        if (StringUtils.hasText(exec.getScreenJson())) {
+            try {
+                exec.setScreen(objectMapper.readValue(exec.getScreenJson(), Object.class));
+            } catch (Exception e) {
+                exec.setScreen(exec.getScreenJson());
+            }
         }
+        if (StringUtils.hasText(exec.getReportContent())) {
+            try {
+                exec.setReportPage(objectMapper.readValue(exec.getReportContent(), Object.class));
+            } catch (Exception e) {
+                exec.setReportPage(exec.getReportContent());
+            }
+        }
+    }
+
+    private Object parseJsonObject(String json) {
+        if (!StringUtils.hasText(json)) {
+            return null;
+        }
+        try {
+            return objectMapper.readValue(json, Object.class);
+        } catch (Exception e) {
+            return json;
+        }
+    }
+
+    @Override
+    public ReportPage selectReportPageById(String id) {
+        return reportPagePersistService.selectById(id);
     }
 
     private void checkCodeUnique(Skill skill) {

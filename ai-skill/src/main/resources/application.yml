@@ -55,3 +55,6 @@ skill:
       app-id:
       api-key:
       secret-key:
+  # 第4步：写入本地 report_page（结构对齐 Skyeye）
+  report:
+    enabled: true

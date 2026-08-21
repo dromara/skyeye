@@ -6,6 +6,7 @@ package com.skyeye.skill.service;
 
 import com.skyeye.skill.entity.Skill;
 import com.skyeye.skill.entity.SkillExec;
+import com.skyeye.skill.entity.ReportPage;
 
 import java.util.List;
 
@@ -101,4 +102,12 @@ public interface SkillService {
      * @return 总数
      */
     long countExec(String skillCode);
+
+    /**
+     * 根据id查询本地报表页
+     *
+     * @param id 报表页id
+     * @return 报表页
+     */
+    ReportPage selectReportPageById(String id);
 }

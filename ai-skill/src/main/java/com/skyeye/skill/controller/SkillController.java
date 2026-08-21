@@ -6,6 +6,7 @@ package com.skyeye.skill.controller;
 
 import com.skyeye.skill.entity.Skill;
 import com.skyeye.skill.entity.SkillExec;
+import com.skyeye.skill.entity.ReportPage;
 import com.skyeye.skill.service.SkillService;
 import com.skyeye.skill.web.SkillResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,8 +65,18 @@ public class SkillController {
     }
 
     @RequestMapping("/post/SkillController/executeSkill")
-    public SkillResult executeSkill(@RequestBody Map<String, Object> params) {
-        return SkillResult.ok(skillService.executeSkill(stringValue(params, "skillCode"), stringValue(params, "userInput")));
+    public SkillResult executeSkill(@RequestBody(required = false) Map<String, Object> params,
+                                    @RequestParam(value = "skillCode", required = false) String skillCodeParam,
+                                    @RequestParam(value = "userInput", required = false) String userInputParam) {
+        String skillCode = firstText(stringValue(params, "skillCode"),
+            stringValue(params, "code"),
+            stringValue(params, "skill_code"),
+            skillCodeParam);
+        String userInput = firstText(stringValue(params, "userInput"),
+            stringValue(params, "user_input"),
+            stringValue(params, "content"),
+            userInputParam);
+        return SkillResult.ok(skillService.executeSkill(skillCode, userInput));
     }
 
     @RequestMapping("/post/SkillController/querySkillExecPageList")
@@ -80,6 +91,11 @@ public class SkillController {
     @RequestMapping(value = "/post/SkillController/selectSkillExecById", method = RequestMethod.GET)
     public SkillResult selectSkillExecById(@RequestParam("id") String id) {
         return SkillResult.ok(skillService.selectExecById(id));
+    }
+
+    @RequestMapping(value = "/post/SkillController/selectReportPageById", method = RequestMethod.GET)
+    public SkillResult selectReportPageById(@RequestParam("id") String id) {
+        return SkillResult.ok(skillService.selectReportPageById(id));
     }
 
     private int intValue(Map<String, Object> params, String key, int defaultValue) {
@@ -98,5 +114,17 @@ public class SkillController {
             return null;
         }
         return String.valueOf(params.get(key));
+    }
+
+    private String firstText(String... values) {
+        if (values == null) {
+            return null;
+        }
+        for (String value : values) {
+            if (value != null && value.trim().length() > 0 && !"null".equalsIgnoreCase(value.trim())) {
+                return value.trim();
+            }
+        }
+        return null;
     }
 }
