@@ -71,4 +71,31 @@ public class AutoBugController {
         autoBugService.selectById(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "aiGenerateBugDraft", value = "AI生成Bug草稿", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "name", name = "name", value = "一句话描述，可与截图二选一"),
+        @ApiImplicitParam(id = "objectId", name = "objectId", value = "项目id", required = "required"),
+        @ApiImplicitParam(id = "objectKey", name = "objectKey", value = "项目objectKey", required = "required"),
+        @ApiImplicitParam(id = "moduleId", name = "moduleId", value = "模块id"),
+        @ApiImplicitParam(id = "versionId", name = "versionId", value = "版本id"),
+        @ApiImplicitParam(id = "content", name = "content", value = "已有问题描述"),
+        @ApiImplicitParam(id = "remark", name = "remark", value = "已有备注"),
+        @ApiImplicitParam(id = "images", name = "images", value = "截图地址列表"),
+        @ApiImplicitParam(id = "severityOptions", name = "severityOptions", value = "可选严重性"),
+        @ApiImplicitParam(id = "necessaryOptions", name = "necessaryOptions", value = "可选必现类型"),
+        @ApiImplicitParam(id = "terminalOptions", name = "terminalOptions", value = "可选终端"),
+        @ApiImplicitParam(id = "moduleOptions", name = "moduleOptions", value = "可选模块")})
+    @RequestMapping("/post/AutoBugController/aiGenerateBugDraft")
+    public void aiGenerateBugDraft(InputObject inputObject, OutputObject outputObject) {
+        autoBugService.aiGenerateBugDraft(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "aiParseBugDraft", value = "解析AI Bug草稿", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "answer", name = "answer", value = "AI完整返回文本", required = "required")})
+    @RequestMapping("/post/AutoBugController/aiParseBugDraft")
+    public void aiParseBugDraft(InputObject inputObject, OutputObject outputObject) {
+        autoBugService.aiParseBugDraft(inputObject, outputObject);
+    }
+
 }

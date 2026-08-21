@@ -9,8 +9,14 @@ import com.alibaba.dashscope.app.Application;
 import com.alibaba.dashscope.app.ApplicationParam;
 import com.alibaba.dashscope.app.ApplicationResult;
 import com.alibaba.dashscope.common.History;
+import com.alibaba.dashscope.exception.InputRequiredException;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.skyeye.exception.CustomException;
 import io.reactivex.Flowable;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +59,12 @@ public class TongYiChatClient {
      */
     public void streamChat(String systemPrompt, List<Map<String, String>> history,
                            String currentUserMessage, StreamListener listener) {
-        ApplicationParam param = buildParam(systemPrompt, history, currentUserMessage);
+        streamChat(systemPrompt, history, currentUserMessage, null, listener);
+    }
+
+    public void streamChat(String systemPrompt, List<Map<String, String>> history,
+                           String currentUserMessage, List<String> images, StreamListener listener) {
+        ApplicationParam param = buildParam(systemPrompt, history, currentUserMessage, images);
         AtomicBoolean ended = new AtomicBoolean(false);
         try {
             Flowable<ApplicationResult> result = application.streamCall(param);
@@ -84,21 +95,35 @@ public class TongYiChatClient {
     }
 
     private ApplicationParam buildParam(String systemPrompt, List<Map<String, String>> history,
-                                        String currentUserMessage) {
+                                        String currentUserMessage, List<String> images) {
         String prompt = currentUserMessage;
         if (StrUtil.isNotBlank(systemPrompt)) {
             prompt = systemPrompt + "\n\n" + currentUserMessage;
         }
-        ApplicationParam.ApplicationParamBuilder<?, ?> builder = ApplicationParam.builder()
+        AppParamWithImages.AppParamWithImagesBuilder<?, ?> builder = AppParamWithImages.builder()
             .apiKey(apiKey)
             .appId(appId)
             .prompt(prompt)
-            .parameter("incremental_output", true);
+            .parameter("incremental_output", true)
+            .imageList(filterImages(images));
         List<History> items = toHistory(history);
         if (!items.isEmpty()) {
             builder.history(items);
         }
         return builder.build();
+    }
+
+    private List<String> filterImages(List<String> images) {
+        List<String> result = new ArrayList<>();
+        if (images == null) {
+            return result;
+        }
+        for (String image : images) {
+            if (StrUtil.isNotBlank(image)) {
+                result.add(image);
+            }
+        }
+        return result;
     }
 
     private List<History> toHistory(List<Map<String, String>> history) {
@@ -123,5 +148,33 @@ public class TongYiChatClient {
         void onDelta(String content, boolean end);
 
         void onError(String message);
+    }
+
+    /**
+     * 2.14.4 没有 images()，按百炼应用 HTTP 协议把截图放进 input.image_list。
+     */
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder
+    private static class AppParamWithImages extends ApplicationParam {
+        private List<String> imageList;
+
+        @Override
+        public JsonObject getInput() {
+            JsonObject input = super.getInput();
+            if (imageList != null && !imageList.isEmpty()) {
+                JsonArray arr = new JsonArray();
+                for (String image : imageList) {
+                    arr.add(image);
+                }
+                input.add("image_list", arr);
+            }
+            return input;
+        }
+
+        @Override
+        public void validate() throws InputRequiredException {
+            super.validate();
+        }
     }
 }

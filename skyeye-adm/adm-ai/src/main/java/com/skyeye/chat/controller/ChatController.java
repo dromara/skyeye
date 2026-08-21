@@ -41,7 +41,8 @@ public class ChatController {
         @ApiImplicitParam(id = "content", name = "content", value = "用户消息", required = "required"),
         @ApiImplicitParam(id = "roleId", name = "roleId", value = "AI角色id，优先按角色取唯一启用配置"),
         @ApiImplicitParam(id = "apiKeyId", name = "apiKeyId", value = "AI配置id，roleId为空时使用"),
-        @ApiImplicitParam(id = "bizType", name = "bizType", value = "业务类型，如 demandDraft")})
+        @ApiImplicitParam(id = "bizType", name = "bizType", value = "业务类型，如 demandDraft、bugDraft"),
+        @ApiImplicitParam(id = "images", name = "images", value = "截图地址列表，看图提 Bug 时传入")})
     @RequestMapping("/post/ChatController/syncChatCompletion")
     public void syncChatCompletion(InputObject inputObject, OutputObject outputObject) {
         chatService.syncChatCompletion(inputObject, outputObject);

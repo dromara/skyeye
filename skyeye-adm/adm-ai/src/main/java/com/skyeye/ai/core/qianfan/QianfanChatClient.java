@@ -42,6 +42,12 @@ public class QianfanChatClient {
      */
     public static final String DEFAULT_MODEL = "ernie-5.0-thinking-preview";
 
+    /**
+     * 看图提 Bug 时使用的视觉模型。
+     * 支持的模型：https://cloud.baidu.com/doc/qianfan-docs/s/7m95lyy43
+     */
+    public static final String DEFAULT_VL_MODEL = "ernie-4.5-turbo-vl";
+
     private static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
 
     private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
@@ -68,10 +74,18 @@ public class QianfanChatClient {
      * @param listener 增量回调
      */
     public void streamChat(List<Map<String, String>> messages, String appId, StreamListener listener) {
+        streamChat(messages, appId, null, listener);
+    }
+
+    /**
+     * @param images 截图地址，可空；有值时走视觉模型，content 改为图文混排
+     */
+    public void streamChat(List<Map<String, String>> messages, String appId, List<String> images, StreamListener listener) {
+        boolean vision = images != null && !images.isEmpty();
         JSONObject body = new JSONObject();
-        body.set("model", DEFAULT_MODEL);
+        body.set("model", vision ? DEFAULT_VL_MODEL : DEFAULT_MODEL);
         body.set("stream", true);
-        body.set("messages", messages);
+        body.set("messages", vision ? buildVisionMessages(messages, images) : messages);
 
         Request.Builder requestBuilder = new Request.Builder()
             .url(baseUrl + "chat/completions")
@@ -154,6 +168,51 @@ public class QianfanChatClient {
         if (StrUtil.isNotBlank(error)) {
             listener.onError(error);
         }
+    }
+
+    /**
+     * 千帆 V2 视觉消息：最后一条 user 的 content 改为 text + image_url 数组。
+     */
+    private JSONArray buildVisionMessages(List<Map<String, String>> messages, List<String> images) {
+        JSONArray result = new JSONArray();
+        int lastUserIndex = -1;
+        if (messages != null) {
+            for (int i = 0; i < messages.size(); i++) {
+                if ("user".equals(messages.get(i).get("role"))) {
+                    lastUserIndex = i;
+                }
+            }
+        }
+        if (messages != null) {
+            for (int i = 0; i < messages.size(); i++) {
+                Map<String, String> item = messages.get(i);
+                JSONObject msg = new JSONObject();
+                msg.set("role", item.get("role"));
+                if (i == lastUserIndex) {
+                    JSONArray content = new JSONArray();
+                    JSONObject text = new JSONObject();
+                    text.set("type", "text");
+                    text.set("text", item.get("content"));
+                    content.add(text);
+                    for (String image : images) {
+                        if (StrUtil.isBlank(image)) {
+                            continue;
+                        }
+                        JSONObject imageUrl = new JSONObject();
+                        imageUrl.set("url", image);
+                        JSONObject imagePart = new JSONObject();
+                        imagePart.set("type", "image_url");
+                        imagePart.set("image_url", imageUrl);
+                        content.add(imagePart);
+                    }
+                    msg.set("content", content);
+                } else {
+                    msg.set("content", item.get("content"));
+                }
+                result.add(msg);
+            }
+        }
+        return result;
     }
 
     private void completeQuietly(StreamListener listener, AtomicBoolean ended, AtomicReference<String> errorMessage) {

@@ -108,6 +108,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         String roleId = params.get("roleId") == null ? "" : params.get("roleId").toString();
         String apiKeyId = params.get("apiKeyId") == null ? "" : params.get("apiKeyId").toString();
         String bizType = params.get("bizType") == null ? "demandDraft" : params.get("bizType").toString();
+        List<String> images = readImages(params.get("images").toString());
         String userId = InputObject.getLogParamsStatic().get("id").toString();
         AiApiKey aiApiKey = StrUtil.isNotBlank(roleId)
             ? aiApiKeyService.selectEnabledKeyByRoleId(roleId)
@@ -126,13 +127,13 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         chat.setId(id);
         switch (aiModel) {
             case YI_YAN:
-                streamYiYan(content, systemPrompt, userId, id, aiApiKey, bizType);
+                streamYiYan(content, systemPrompt, userId, id, aiApiKey, bizType, images);
                 break;
             case XUN_FEI:
-                streamXunFei(content, systemPrompt, userId, id, aiApiKey, bizType);
+                streamXunFei(content, systemPrompt, userId, id, aiApiKey, bizType, images);
                 break;
             case TONG_YI:
-                streamTongYi(content, systemPrompt, userId, id, aiApiKey, bizType);
+                streamTongYi(content, systemPrompt, userId, id, aiApiKey, bizType, images);
                 break;
             default:
                 throw new CustomException("不支持的AI平台");
@@ -181,25 +182,21 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         }
     }
 
-    private void streamTongYi(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType) {
+    private void streamTongYi(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType, List<String> images) {
         runStreamTask(userId, chatId, bizType, () -> {
-            consumeTongYiStream(aiApiKey, systemPrompt, null, content, userId, chatId, bizType);
+            consumeTongYiStream(aiApiKey, systemPrompt, null, content, images, userId, chatId, bizType);
         });
     }
 
-    /**
-     * 需求草稿等业务场景的文心流式调用：只发当前这一轮用户消息，不带历史。
-     * HTTP 接口已返回 chatId，正文通过 WebSocket 按块推给前端。
-     */
-    private void streamYiYan(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType) {
+    private void streamYiYan(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType, List<String> images) {
         runStreamTask(userId, chatId, bizType, () -> {
-            consumeYiYanStream(aiApiKey, buildChatMessages(systemPrompt, null, content), userId, chatId, bizType);
+            consumeYiYanStream(aiApiKey, buildChatMessages(systemPrompt, null, content), images, userId, chatId, bizType);
         });
     }
 
-    private void streamXunFei(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType) {
+    private void streamXunFei(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType, List<String> images) {
         runStreamTask(userId, chatId, bizType, () -> {
-            consumeXunFeiStream(aiApiKey, buildChatMessages(systemPrompt, null, content), 0.3, userId, chatId, bizType);
+            consumeXunFeiStream(aiApiKey, buildChatMessages(systemPrompt, null, content), 0.3, images, userId, chatId, bizType);
         });
     }
 
@@ -210,14 +207,17 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     private void QianFanResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {
         runStreamTask(userId, chatId, null, () -> {
             List<Chat> chatList = getRecentlyChats(userId, aiApiKey.getId());
-            consumeYiYanStream(aiApiKey, buildChatMessages(systemPrompt, chatList, message), userId, chatId, null);
+            consumeYiYanStream(aiApiKey, buildChatMessages(systemPrompt, chatList, message), null, userId, chatId, null);
         });
     }
 
-    /**
-     * 组装通用 messages：system + 历史 user/assistant + 当前用户输入。
-     * 千帆、讯飞都用这套 role/content 结构。
-     */
+    private List<String> readImages(String raw) {
+        if (StrUtil.isEmpty(raw)) {
+            return new ArrayList<>();
+        }
+        return JSONUtil.toList(raw, null);
+    }
+
     private List<Map<String, String>> buildChatMessages(String systemPrompt, List<Chat> history, String currentUserMessage) {
         List<Map<String, String>> messages = new ArrayList<>();
         if (StrUtil.isNotBlank(systemPrompt)) {
@@ -268,11 +268,11 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
      *
      * @param bizType 业务类型；null 表示普通聊天页，非空表示需求草稿等业务流式
      */
-    private void consumeYiYanStream(AiApiKey aiApiKey, List<Map<String, String>> messages,
+    private void consumeYiYanStream(AiApiKey aiApiKey, List<Map<String, String>> messages, List<String> images,
                                     String userId, String chatId, String bizType) {
         QianfanChatClient client = (QianfanChatClient) aiFactory.getDefaultChatModel(AiPlatformEnum.YI_YAN, aiApiKey);
         consumeClientStream(userId, chatId, bizType, (tenantId, isolationType, finished) ->
-            client.streamChat(messages, aiApiKey.getApiAppId(), new QianfanChatClient.StreamListener() {
+            client.streamChat(messages, aiApiKey.getApiAppId(), images, new QianfanChatClient.StreamListener() {
                 @Override
                 public void onDelta(String piece, boolean end) {
                     handleStreamDelta(tenantId, isolationType, userId, chatId, bizType, piece, end, finished);
@@ -287,9 +287,14 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
 
     private void consumeXunFeiStream(AiApiKey aiApiKey, List<Map<String, String>> messages, double temperature,
                                      String userId, String chatId, String bizType) {
+        consumeXunFeiStream(aiApiKey, messages, temperature, null, userId, chatId, bizType);
+    }
+
+    private void consumeXunFeiStream(AiApiKey aiApiKey, List<Map<String, String>> messages, double temperature,
+                                     List<String> images, String userId, String chatId, String bizType) {
         XunFeiChatClient client = (XunFeiChatClient) aiFactory.getDefaultChatModel(AiPlatformEnum.XUN_FEI, aiApiKey);
         consumeClientStream(userId, chatId, bizType, (tenantId, isolationType, finished) ->
-            client.streamChat(messages, temperature, new XunFeiChatClient.StreamListener() {
+            client.streamChat(messages, temperature, images, new XunFeiChatClient.StreamListener() {
                 @Override
                 public void onDelta(String piece, boolean end) {
                     handleStreamDelta(tenantId, isolationType, userId, chatId, bizType, piece, end, finished);
@@ -303,10 +308,11 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     }
 
     private void consumeTongYiStream(AiApiKey aiApiKey, String systemPrompt, List<Chat> history,
-                                     String currentUserMessage, String userId, String chatId, String bizType) {
+                                     String currentUserMessage, List<String> images,
+                                     String userId, String chatId, String bizType) {
         TongYiChatClient client = (TongYiChatClient) aiFactory.getDefaultChatModel(AiPlatformEnum.TONG_YI, aiApiKey);
         consumeClientStream(userId, chatId, bizType, (tenantId, isolationType, finished) ->
-            client.streamChat(systemPrompt, buildTongYiHistory(history), currentUserMessage, new TongYiChatClient.StreamListener() {
+            client.streamChat(systemPrompt, buildTongYiHistory(history), currentUserMessage, images, new TongYiChatClient.StreamListener() {
                 @Override
                 public void onDelta(String piece, boolean end) {
                     handleStreamDelta(tenantId, isolationType, userId, chatId, bizType, piece, end, finished);
@@ -460,7 +466,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     private void TongYiResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {
         runStreamTask(userId, chatId, null, () -> {
             List<Chat> chatList = getRecentlyChats(userId, aiApiKey.getId());
-            consumeTongYiStream(aiApiKey, systemPrompt, chatList, message, userId, chatId, null);
+            consumeTongYiStream(aiApiKey, systemPrompt, chatList, message, null, userId, chatId, null);
         });
     }
 
