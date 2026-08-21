@@ -8,6 +8,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.skyeye.common.util.ImagesUtil;
 import com.skyeye.exception.CustomException;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -18,6 +19,7 @@ import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
 import okhttp3.sse.EventSources;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -81,11 +83,12 @@ public class QianfanChatClient {
      * @param images 截图地址，可空；有值时走视觉模型，content 改为图文混排
      */
     public void streamChat(List<Map<String, String>> messages, String appId, List<String> images, StreamListener listener) {
-        boolean vision = images != null && !images.isEmpty();
+        List<String> sendableImages = toSendableImages(images);
+        boolean vision = !sendableImages.isEmpty();
         JSONObject body = new JSONObject();
         body.set("model", vision ? DEFAULT_VL_MODEL : DEFAULT_MODEL);
         body.set("stream", true);
-        body.set("messages", vision ? buildVisionMessages(messages, images) : messages);
+        body.set("messages", vision ? buildVisionMessages(messages, sendableImages) : messages);
 
         Request.Builder requestBuilder = new Request.Builder()
             .url(baseUrl + "chat/completions")
@@ -211,6 +214,31 @@ public class QianfanChatClient {
                 }
                 result.add(msg);
             }
+        }
+        return result;
+    }
+
+    /**
+     * 内网地址云端拉不到，先用 ImagesUtil 转成 data URI 再发给千帆视觉模型。
+     */
+    private List<String> toSendableImages(List<String> images) {
+        List<String> result = new ArrayList<>();
+        if (images == null) {
+            return result;
+        }
+        for (String image : images) {
+            if (StrUtil.isBlank(image) || result.size() >= 3) {
+                continue;
+            }
+            if (image.startsWith("data:")) {
+                result.add(image);
+                continue;
+            }
+            String encoded = ImagesUtil.urlToBase64(image.trim());
+            if (StrUtil.isBlank(encoded)) {
+                continue;
+            }
+            result.add(encoded.startsWith("data:") ? encoded : "data:image/png;base64," + encoded);
         }
         return result;
     }

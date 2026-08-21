@@ -100,10 +100,10 @@ public class AutoBugAiDraftService {
 
     private String buildUserContent(Map<String, Object> params, String name, List<String> images) {
         String objectId = params.get("objectId").toString();
-        String moduleId = params.get("moduleId").toString();
-        String versionId = params.get("versionId").toString();
-        String content = params.get("content").toString();
-        String remark = params.get("remark").toString();
+        String moduleId = params.get("moduleId") == null ? "" : params.get("moduleId").toString();
+        String versionId = params.get("versionId") == null ? "" : params.get("versionId").toString();
+        String content = params.get("content") == null ? "" : params.get("content").toString();
+        String remark = params.get("remark") == null ? "" : params.get("remark").toString();
         StringBuilder sb = new StringBuilder();
         sb.append("请根据以下信息生成 Bug 草稿，只输出 JSON，不要 markdown 代码块。\n");
         if (StrUtil.isNotBlank(name)) {
@@ -112,17 +112,19 @@ public class AutoBugAiDraftService {
             sb.append("用户一句话描述：无，请主要根据截图识别问题。\n");
         }
         sb.append("项目：").append(nvlText(loadProjectName(objectId))).append("\n");
-        sb.append("模块：").append(nvlText(loadModuleName(moduleId))).append("\n");
+        if (StrUtil.isNotBlank(moduleId)) {
+            sb.append("用户已选模块：").append(nvlText(loadModuleName(moduleId))).append("\n");
+        }
         sb.append("版本：").append(nvlText(loadVersionName(versionId))).append("\n");
         sb.append("已有问题描述：").append(nvlText(plainText(content))).append("\n");
         sb.append("已有备注：").append(nvlText(remark)).append("\n");
         if (!images.isEmpty()) {
             sb.append("用户上传了 ").append(images.size()).append(" 张截图，请结合截图里的界面、报错和文案分析问题。\n");
+            sb.append("识别模块时：只看截图里实际出现的顶部导航、左侧菜单高亮、页面标题、弹窗标题，把看到的菜单或页面名称原样写入 moduleName。截图里没出现的名称一律不要填，禁止猜测。\n");
         }
         appendOptions(sb, "可选严重性", params.get("severityOptions"));
         appendOptions(sb, "可选必现类型", params.get("necessaryOptions"));
         appendOptions(sb, "可选终端", params.get("terminalOptions"));
-        appendOptions(sb, "可选模块", params.get("moduleOptions"));
         sb.append("请输出 JSON：\n");
         sb.append("{\n");
         sb.append("  \"name\": \"简洁的 Bug 标题\",\n");
@@ -131,9 +133,9 @@ public class AutoBugAiDraftService {
         sb.append("  \"severity\": \"从可选严重性中选一个原文\",\n");
         sb.append("  \"necessaryToPresent\": \"必现 或 非必现\",\n");
         sb.append("  \"terminalOccurrence\": \"从可选终端中选一个原文\",\n");
-        sb.append("  \"moduleName\": \"从可选模块中选一个原文，不确定则留空\"\n");
+        sb.append("  \"moduleName\": \"截图中看到的模块或菜单名称，看不清则留空\"\n");
         sb.append("}\n");
-        sb.append("要求：contentHtml 为可直接放入富文本的 HTML；分类字段必须从可选值中选，不要自造。");
+        sb.append("要求：contentHtml 为可直接放入富文本的 HTML；分类字段必须从可选值中选，不要自造。moduleName 只能来自截图可见文字，不要编造。");
         return sb.toString();
     }
 

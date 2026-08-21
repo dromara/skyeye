@@ -9,6 +9,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.aiStreamModle.SparkListener;
+import com.skyeye.common.util.ImagesUtil;
 import com.skyeye.exception.CustomException;
 import io.github.briqt.spark4j.SparkClient;
 import io.github.briqt.spark4j.constant.SparkApiVersion;
@@ -58,18 +59,10 @@ public class XunFeiChatClient {
      */
     private static final String IMAGE_DOMAIN = "imagev3";
 
-    private static final int MAX_IMAGE_BYTES = 4 * 1024 * 1024;
-
     private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
         .readTimeout(0, TimeUnit.MILLISECONDS)
-        .build();
-
-    private static final OkHttpClient IMAGE_FETCH_CLIENT = new OkHttpClient.Builder()
-        .connectTimeout(15, TimeUnit.SECONDS)
-        .writeTimeout(15, TimeUnit.SECONDS)
-        .readTimeout(15, TimeUnit.SECONDS)
         .build();
 
     private final SparkClient sparkClient;
@@ -355,25 +348,19 @@ public class XunFeiChatClient {
     }
 
     private String toImageBase64(String source) {
-        try {
-            if (source.startsWith("data:")) {
-                int comma = source.indexOf(',');
-                return comma >= 0 ? source.substring(comma + 1) : "";
-            }
-            Request request = new Request.Builder().url(source).get().build();
-            try (Response response = IMAGE_FETCH_CLIENT.newCall(request).execute()) {
-                if (!response.isSuccessful() || response.body() == null) {
-                    return "";
-                }
-                byte[] bytes = response.body().bytes();
-                if (bytes.length == 0 || bytes.length > MAX_IMAGE_BYTES) {
-                    return "";
-                }
-                return Base64.getEncoder().encodeToString(bytes);
-            }
-        } catch (Exception e) {
+        if (source.startsWith("data:")) {
+            int comma = source.indexOf(',');
+            return comma >= 0 ? source.substring(comma + 1) : "";
+        }
+        String encoded = ImagesUtil.urlToBase64(source);
+        if (StrUtil.isBlank(encoded)) {
             return "";
         }
+        if (encoded.startsWith("data:")) {
+            int comma = encoded.indexOf(',');
+            return comma >= 0 ? encoded.substring(comma + 1) : "";
+        }
+        return encoded;
     }
 
     private String assembleAuthUrl(String wsUrl) throws Exception {
