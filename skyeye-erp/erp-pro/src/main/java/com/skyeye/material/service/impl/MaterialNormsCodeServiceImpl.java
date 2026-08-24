@@ -160,7 +160,7 @@ public class MaterialNormsCodeServiceImpl extends SkyeyeBusinessServiceImpl<Mate
         entity.forEach(materialNormsCode -> {
             MaterialNormsCodeHis materialNormsCodeHis = new MaterialNormsCodeHis();
             materialNormsCodeHis.setNormsCodeId(materialNormsCode.getId());
-            materialNormsCodeHis.setType(MaterialNormsCodeInDepot.WAREHOUSING.getKey());
+            materialNormsCodeHis.setType(materialNormsCode.getType());
             materialNormsCodeHis.setOperatorTime(currentTime);
             if (materialNormsCode.getInDepot() == MaterialNormsCodeInDepot.WAREHOUSING.getKey()) {
                 // 入库
