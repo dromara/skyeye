@@ -5,6 +5,7 @@
 package com.skyeye.portal.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonNumConstants;
@@ -16,6 +17,7 @@ import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.NumberParseUtil;
 import com.skyeye.common.util.StatQueryUtil;
 import com.skyeye.common.util.ToolUtil;
+import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.portal.dao.PortalPageVisitLogDao;
 import com.skyeye.portal.entity.PortalPageVisitLog;
 import com.skyeye.portal.service.PortalPageVisitLogService;
@@ -57,6 +59,13 @@ public class PortalPageVisitLogServiceImpl extends SkyeyeBusinessServiceImpl<Por
 
     @Autowired
     private PortalPageVisitUvDailyService portalPageVisitUvDailyService;
+
+    @Override
+    public QueryWrapper<PortalPageVisitLog> getQueryWrapper(TableSelectInfo tableSelectInfo) {
+        QueryWrapper<PortalPageVisitLog> queryWrapper = super.getQueryWrapper(tableSelectInfo);
+        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(PortalPageVisitLog::getCreateTime));
+        return queryWrapper;
+    }
 
     /**
      * 记录官网页面访问：
