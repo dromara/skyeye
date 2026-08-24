@@ -19,9 +19,11 @@ import com.skyeye.chat.service.ChatService;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.TenantEnum;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
+import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.key.entity.AiApiKey;
@@ -114,7 +116,9 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         String roleId = params.get("roleId") == null ? "" : params.get("roleId").toString();
         String apiKeyId = params.get("apiKeyId") == null ? "" : params.get("apiKeyId").toString();
         String bizType = params.get("bizType") == null ? "demandDraft" : params.get("bizType").toString();
-        List<String> images = readImages(params.get("images").toString());
+        boolean saveChat = isSaveChat(params.get("saveChat"));
+        Object imagesObj = params.get("images");
+        List<String> images = readImages(imagesObj == null ? "" : imagesObj.toString());
         String userId = InputObject.getLogParamsStatic().get("id").toString();
         AiApiKey aiApiKey = StrUtil.isNotBlank(roleId)
             ? aiApiKeyService.selectEnabledKeyByRoleId(roleId)
@@ -125,30 +129,53 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         }
         String systemPrompt = role == null ? null : role.getPrompt();
         AiPlatformEnum aiModel = AiPlatformEnum.getName(aiApiKey.getPlatform());
-        Chat chat = new Chat();
-        chat.setMessage(content);
-        chat.setPlatform(aiApiKey.getPlatform());
-        chat.setApiKeyId(aiApiKey.getId());
-        String id = createEntity(chat, userId);
-        chat.setId(id);
+        String id;
+        if (saveChat) {
+            Chat chat = new Chat();
+            chat.setMessage(content);
+            chat.setPlatform(aiApiKey.getPlatform());
+            chat.setApiKeyId(aiApiKey.getId());
+            id = createEntity(chat, userId);
+        } else {
+            id = ToolUtil.getSurFaceId();
+        }
+        Map<String, Object> bean = new HashMap<>();
+        bean.put("id", id);
+        bean.put("chatId", id);
+        bean.put("apiKeyId", aiApiKey.getId());
+        bean.put("platform", aiApiKey.getPlatform());
         switch (aiModel) {
             case YI_YAN:
-                streamYiYan(content, systemPrompt, userId, id, aiApiKey, bizType, images);
+                streamYiYan(content, systemPrompt, userId, id, aiApiKey, bizType, images, saveChat);
                 break;
             case XUN_FEI:
-                streamXunFei(content, systemPrompt, userId, id, aiApiKey, bizType, images);
+                streamXunFei(content, systemPrompt, userId, id, aiApiKey, bizType, images, saveChat);
                 break;
             case TONG_YI:
-                streamTongYi(content, systemPrompt, userId, id, aiApiKey, bizType, images);
+                streamTongYi(content, systemPrompt, userId, id, aiApiKey, bizType, images, saveChat);
                 break;
             case DOU_BAO:
-                streamDouBao(content, systemPrompt, userId, id, aiApiKey, bizType, images);
+                streamDouBao(content, systemPrompt, userId, id, aiApiKey, bizType, images, saveChat);
                 break;
             default:
                 throw new CustomException("不支持的AI平台");
         }
-        outputObject.setBean(chat);
+        outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    /**
+     * 是否写入 skyeye_ai_chat。
+     */
+    private boolean isSaveChat(Object value) {
+        if (value == null || StrUtil.isBlank(value.toString())) {
+            return true;
+        }
+        String text = value.toString().trim();
+        if (String.valueOf(WhetherEnum.DISABLE_USING.getKey()).equals(text)) {
+            return false;
+        }
+        return true;
     }
 
     private void sendStreamChunk(String userId, String chatId, String bizType, String chunk, boolean end, Object orderBy) {
@@ -191,28 +218,43 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         }
     }
 
-    private void streamTongYi(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType, List<String> images) {
+    private void streamTongYi(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey,
+                              String bizType, List<String> images, boolean saveChat) {
         runStreamTask(userId, chatId, bizType, () -> {
-            consumeTongYiStream(aiApiKey, systemPrompt, null, content, images, userId, chatId, bizType);
+            consumeTongYiStream(aiApiKey, systemPrompt, resolveHistory(saveChat, userId, aiApiKey.getId()),
+                content, images, userId, chatId, bizType);
         });
     }
 
-    private void streamYiYan(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType, List<String> images) {
+    private void streamYiYan(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey,
+                             String bizType, List<String> images, boolean saveChat) {
         runStreamTask(userId, chatId, bizType, () -> {
-            consumeYiYanStream(aiApiKey, buildChatMessages(systemPrompt, null, content), images, userId, chatId, bizType);
+            consumeYiYanStream(aiApiKey, buildChatMessages(systemPrompt, resolveHistory(saveChat, userId, aiApiKey.getId()), content),
+                images, userId, chatId, bizType);
         });
     }
 
-    private void streamXunFei(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType, List<String> images) {
+    private void streamXunFei(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey,
+                              String bizType, List<String> images, boolean saveChat) {
         runStreamTask(userId, chatId, bizType, () -> {
-            consumeXunFeiStream(aiApiKey, buildChatMessages(systemPrompt, null, content), 0.3, images, userId, chatId, bizType);
+            consumeXunFeiStream(aiApiKey, buildChatMessages(systemPrompt, resolveHistory(saveChat, userId, aiApiKey.getId()), content),
+                0.3, images, userId, chatId, bizType);
         });
     }
 
-    private void streamDouBao(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType, List<String> images) {
+    private void streamDouBao(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey,
+                              String bizType, List<String> images, boolean saveChat) {
         runStreamTask(userId, chatId, bizType, () -> {
-            consumeDouBaoStream(aiApiKey, buildChatMessages(systemPrompt, null, content), images, userId, chatId, bizType);
+            consumeDouBaoStream(aiApiKey, buildChatMessages(systemPrompt, resolveHistory(saveChat, userId, aiApiKey.getId()), content),
+                images, userId, chatId, bizType);
         });
+    }
+
+    /**
+     * 仅正式聊天拼近期历史；Bug/需求草稿不记库，也不带历史。
+     */
+    private List<Chat> resolveHistory(boolean saveChat, String userId, String apiKeyId) {
+        return saveChat ? getRecentlyChats(userId, apiKeyId) : null;
     }
 
     /**
@@ -239,12 +281,14 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
             messages.add(chatMessage("system", systemPrompt));
         }
         if (history != null) {
-            history.forEach(chat -> {
+            // getRecentlyChats 按时间倒序，这里倒着拼成从旧到新
+            for (int i = history.size() - 1; i >= 0; i--) {
+                Chat chat = history.get(i);
                 if (StrUtil.isNotEmpty(chat.getMessage()) && StrUtil.isNotEmpty(chat.getContent())) {
                     messages.add(chatMessage("user", chat.getMessage()));
                     messages.add(chatMessage("assistant", chat.getContent()));
                 }
-            });
+            }
         }
         messages.add(chatMessage("user", currentUserMessage));
         return messages;
@@ -437,7 +481,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         }
         if (end) {
             jedisClientService.del(key);
-            Chat chat = chatService.selectById(chatId);
+            Chat chat = findSavedChat(chatId);
             if (chat != null) {
                 chat.setContent(Joiner.on("").join(chunkMessage));
                 chatService.updateEntity(chat, userId);
@@ -471,12 +515,26 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         }
         List<String> chunkMessage = JSONUtil.toList(jedisClientService.get(key), null);
         jedisClientService.del(key);
-        Chat chat = chatService.selectById(chatId);
+        Chat chat = findSavedChat(chatId);
         if (chat == null) {
             return;
         }
         chat.setContent(Joiner.on("").join(chunkMessage));
         chatService.updateEntity(chat, userId);
+    }
+
+    /**
+     * saveChat=false 时 chatId 只是临时 id，库里没有记录，selectById 会返回空对象。
+     */
+    private Chat findSavedChat(String chatId) {
+        if (StrUtil.isBlank(chatId)) {
+            return null;
+        }
+        Chat chat = chatService.getById(chatId);
+        if (chat == null || StrUtil.isBlank(chat.getId())) {
+            return null;
+        }
+        return chat;
     }
 
     private void XunFeiResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {

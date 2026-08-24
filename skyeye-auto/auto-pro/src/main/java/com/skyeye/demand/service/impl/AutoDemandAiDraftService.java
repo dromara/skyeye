@@ -70,6 +70,7 @@ public class AutoDemandAiDraftService {
         chatParams.put("content", buildUserContent(name, projectName, moduleName, versionName, content, remark, testJoin));
         chatParams.put("bizType", "demandDraft");
         chatParams.put("roleId", roleId);
+        chatParams.put("saveChat", 0);
         Map<String, Object> chatBean = ExecuteFeignClient.get(() -> iAiChatRest.syncChatCompletion(chatParams)).getBean();
         if (chatBean == null || chatBean.get("id") == null) {
             throw new CustomException("启动AI生成失败");

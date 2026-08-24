@@ -6,6 +6,7 @@ import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.chat.service.ChatService;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,8 @@ public class ChatController {
         @ApiImplicitParam(id = "content", name = "content", value = "用户消息", required = "required"),
         @ApiImplicitParam(id = "roleId", name = "roleId", value = "AI角色id，优先按角色取唯一启用配置"),
         @ApiImplicitParam(id = "apiKeyId", name = "apiKeyId", value = "AI配置id，roleId为空时使用"),
-        @ApiImplicitParam(id = "bizType", name = "bizType", value = "业务类型，如 demandDraft、bugDraft"),
+        @ApiImplicitParam(id = "bizType", name = "bizType", value = "业务类型，如 demandDraft、bugDraft、chat"),
+        @ApiImplicitParam(id = "saveChat", name = "saveChat", value = "是否记录聊天，1是 0否，默认是。需求/Bug草稿传0", enumClass = WhetherEnum.class),
         @ApiImplicitParam(id = "images", name = "images", value = "截图地址列表，看图提 Bug 时传入")})
     @RequestMapping("/post/ChatController/syncChatCompletion")
     public void syncChatCompletion(InputObject inputObject, OutputObject outputObject) {
