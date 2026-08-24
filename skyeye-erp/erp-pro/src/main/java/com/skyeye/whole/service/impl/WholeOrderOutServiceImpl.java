@@ -363,7 +363,7 @@ public class WholeOrderOutServiceImpl extends SkyeyeErpOrderServiceImpl<WholeOrd
             purchaseExchange.setId(StrUtil.EMPTY);
             purchaseExchangesService.createEntity(purchaseExchange, userId);
         } else {
-            outputObject.setreturnMessage("状态错误，无法下达采购退货单.");
+            outputObject.setreturnMessage("状态错误，无法下达采购换货单.");
         }
     }
 }
