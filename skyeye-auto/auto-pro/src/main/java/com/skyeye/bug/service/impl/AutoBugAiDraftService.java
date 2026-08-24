@@ -106,7 +106,8 @@ public class AutoBugAiDraftService {
         String content = params.get("content") == null ? "" : params.get("content").toString();
         String remark = params.get("remark") == null ? "" : params.get("remark").toString();
         StringBuilder sb = new StringBuilder();
-        sb.append("请根据以下信息生成 Bug 草稿，只输出 JSON，不要 markdown 代码块。\n");
+        sb.append("你是软件测试工程师，只输出 JSON，不要 markdown。\n");
+        sb.append("请按测试工程师写缺陷单的习惯生成 Bug 草稿：标题点明现象，描述包含复现步骤、预期结果、实际结果，分类客观准确，不要 markdown 代码块。\n");
         if (StrUtil.isNotBlank(name)) {
             sb.append("用户一句话描述：").append(name).append("\n");
         } else {

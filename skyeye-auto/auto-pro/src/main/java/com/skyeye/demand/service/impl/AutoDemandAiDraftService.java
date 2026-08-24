@@ -139,7 +139,8 @@ public class AutoDemandAiDraftService {
     private String buildUserContent(String name, String projectName, String moduleName, String versionName,
                                     String content, String remark, String testJoin) {
         StringBuilder sb = new StringBuilder();
-        sb.append("请根据以下信息生成需求草稿，只输出 JSON，不要 markdown 代码块。\n");
+        sb.append("你是软件研发需求分析师，只输出 JSON，不要 markdown。\n");
+        sb.append("请按需求分析师写需求的习惯生成需求草稿：讲清背景、范围、前后端与测试任务拆分及工期，表述给研发可直接落地，不要 markdown 代码块。\n");
         sb.append("标题：").append(name).append("\n");
         sb.append("项目：").append(nvlText(projectName)).append("\n");
         sb.append("模块：").append(nvlText(moduleName)).append("\n");

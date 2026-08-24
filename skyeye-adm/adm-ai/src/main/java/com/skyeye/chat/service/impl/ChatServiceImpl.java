@@ -127,7 +127,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         if (role == null && StrUtil.isNotBlank(aiApiKey.getRoleId())) {
             role = roleService.selectById(aiApiKey.getRoleId());
         }
-        String systemPrompt = role == null ? null : role.getPrompt();
+        String systemPrompt = "chat".equals(bizType) && role != null ? role.getPrompt() : null;
         AiPlatformEnum aiModel = AiPlatformEnum.getName(aiApiKey.getPlatform());
         String id;
         if (saveChat) {
