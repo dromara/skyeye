@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.base.Joiner;
+import com.skyeye.ai.core.doubao.DouBaoChatClient;
 import com.skyeye.ai.core.enums.AiPlatformEnum;
 import com.skyeye.ai.core.factory.AiFactory;
 import com.skyeye.ai.core.qianfan.QianfanChatClient;
@@ -92,6 +93,11 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
             case TONG_YI:
                 TongYiResponse(content, systemPrompt, userId, id, aiApiKey);
                 break;
+            case DOU_BAO:
+                DouBaoResponse(content, systemPrompt, userId, id, aiApiKey);
+                break;
+            default:
+                throw new CustomException("不支持的AI平台");
         }
         aiApiKey.setRoleMation(role);
         chat.setApiKeyMation(aiApiKey);
@@ -134,6 +140,9 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
                 break;
             case TONG_YI:
                 streamTongYi(content, systemPrompt, userId, id, aiApiKey, bizType, images);
+                break;
+            case DOU_BAO:
+                streamDouBao(content, systemPrompt, userId, id, aiApiKey, bizType, images);
                 break;
             default:
                 throw new CustomException("不支持的AI平台");
@@ -197,6 +206,12 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     private void streamXunFei(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType, List<String> images) {
         runStreamTask(userId, chatId, bizType, () -> {
             consumeXunFeiStream(aiApiKey, buildChatMessages(systemPrompt, null, content), 0.3, images, userId, chatId, bizType);
+        });
+    }
+
+    private void streamDouBao(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey, String bizType, List<String> images) {
+        runStreamTask(userId, chatId, bizType, () -> {
+            consumeDouBaoStream(aiApiKey, buildChatMessages(systemPrompt, null, content), images, userId, chatId, bizType);
         });
     }
 
@@ -325,13 +340,30 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
             }));
     }
 
+    private void consumeDouBaoStream(AiApiKey aiApiKey, List<Map<String, String>> messages, List<String> images,
+                                     String userId, String chatId, String bizType) {
+        DouBaoChatClient client = (DouBaoChatClient) aiFactory.getDefaultChatModel(AiPlatformEnum.DOU_BAO, aiApiKey);
+        consumeClientStream(userId, chatId, bizType, (tenantId, isolationType, finished) ->
+            client.streamChat(messages, images, new DouBaoChatClient.StreamListener() {
+                @Override
+                public void onDelta(String piece, boolean end) {
+                    handleStreamDelta(tenantId, isolationType, userId, chatId, bizType, piece, end, finished);
+                }
+
+                @Override
+                public void onError(String message) {
+                    handleStreamError(tenantId, isolationType, userId, chatId, bizType, message, finished);
+                }
+            }));
+    }
+
     @FunctionalInterface
     private interface StreamInvoker {
         void invoke(String tenantId, TenantEnum isolationType, boolean[] finished);
     }
 
     /**
-     * 三个平台客户端都是阻塞式 streamChat，回调可能在 SDK 线程，落库前要重新绑租户。
+     * 各平台客户端都是阻塞式 streamChat，回调可能在 SDK 线程，落库前要重新绑租户。
      */
     private void consumeClientStream(String userId, String chatId, String bizType, StreamInvoker invoker) {
         final String tenantId = TenantContext.getTenantId();
@@ -467,6 +499,13 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         runStreamTask(userId, chatId, null, () -> {
             List<Chat> chatList = getRecentlyChats(userId, aiApiKey.getId());
             consumeTongYiStream(aiApiKey, systemPrompt, chatList, message, null, userId, chatId, null);
+        });
+    }
+
+    private void DouBaoResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {
+        runStreamTask(userId, chatId, null, () -> {
+            List<Chat> chatList = getRecentlyChats(userId, aiApiKey.getId());
+            consumeDouBaoStream(aiApiKey, buildChatMessages(systemPrompt, chatList, message), null, userId, chatId, null);
         });
     }
 

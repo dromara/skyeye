@@ -8,6 +8,7 @@ import cn.hutool.core.lang.Singleton;
 import cn.hutool.core.lang.func.Func0;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
+import com.skyeye.ai.core.doubao.DouBaoChatClient;
 import com.skyeye.ai.core.enums.AiPlatformEnum;
 import com.skyeye.ai.core.qianfan.QianfanChatClient;
 import com.skyeye.ai.core.tongyi.TongYiChatClient;
@@ -37,6 +38,8 @@ public class AiFactoryImpl implements AiFactory {
                     return buildXunFeiClient(appId, apiKey, secretKey);
                 case TONG_YI:
                     return buildTongYiChatClient(appId, apiKey);
+                case DOU_BAO:
+                    return buildDouBaoChatClient(appId, apiKey, url);
                 default:
                     throw new IllegalArgumentException(StrUtil.format("未知平台({})", platform));
             }
@@ -103,6 +106,14 @@ public class AiFactoryImpl implements AiFactory {
      */
     private static TongYiChatClient buildTongYiChatClient(String appId, String apiKey) {
         return new TongYiChatClient(appId, apiKey);
+    }
+
+    /**
+     * 豆包走火山引擎方舟 OpenAI 兼容接口。
+     * 配置里的 apiAppId 填接入点 ID（ep-xxxx）或模型名，url 可空。
+     */
+    private static DouBaoChatClient buildDouBaoChatClient(String appId, String apiKey, String url) {
+        return new DouBaoChatClient(apiKey, url, appId);
     }
 
 }
