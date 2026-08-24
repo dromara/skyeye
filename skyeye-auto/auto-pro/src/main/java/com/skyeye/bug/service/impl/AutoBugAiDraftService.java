@@ -58,6 +58,7 @@ public class AutoBugAiDraftService {
         chatParams.put("content", buildUserContent(params, name, images));
         chatParams.put("bizType", "bugDraft");
         chatParams.put("roleId", roleId);
+        chatParams.put("saveChat", 0);
         if (!images.isEmpty()) {
             chatParams.put("images", JSONUtil.toJsonStr(images));
         }
