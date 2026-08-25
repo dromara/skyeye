@@ -64,6 +64,15 @@ public class KnowledgeController {
         knowledgeService.queryList(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "writeAiKnowledgeSyncList", value = "保存AI知识库同步表配置", method = "POST", allUse = "1")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "知识库id", required = "required"),
+        @ApiImplicitParam(id = "syncList", name = "syncList", value = "同步表配置JSON数组", required = "required")})
+    @RequestMapping("/post/knowledgeController/writeAiKnowledgeSyncList")
+    public void writeAiKnowledgeSyncList(InputObject inputObject, OutputObject outputObject) {
+        knowledgeService.writeSyncList(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "testKnowledgeDbConnection", value = "测试知识库同步数据库连接", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "知识库id，编辑时可不传密码"),

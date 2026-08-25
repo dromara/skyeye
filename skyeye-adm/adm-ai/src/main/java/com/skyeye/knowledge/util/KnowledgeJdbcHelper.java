@@ -67,12 +67,75 @@ public final class KnowledgeJdbcHelper {
                     result.add(item);
                 }
             }
+            // MySQL 等场景 DatabaseMetaData 常取不到表注释，再补一轮
+            fillTableRemarks(conn, catalog, result);
             return result;
         } catch (CustomException e) {
             throw e;
         } catch (Exception e) {
             throw new CustomException("读取表列表失败: " + e.getMessage());
         }
+    }
+
+    /**
+     * 从 information_schema 补充表注释（无注释则跳过）
+     */
+    private static void fillTableRemarks(Connection conn, String catalog, List<Map<String, Object>> tables) {
+        if (tables == null || tables.isEmpty()) {
+            return;
+        }
+        boolean needFill = false;
+        for (Map<String, Object> table : tables) {
+            if (StrUtil.isBlank(str(table.get("remark")))) {
+                needFill = true;
+                break;
+            }
+        }
+        if (!needFill) {
+            return;
+        }
+        String schema = StrUtil.blankToDefault(catalog, null);
+        if (StrUtil.isBlank(schema)) {
+            try {
+                schema = conn.getCatalog();
+            } catch (SQLException ignored) {
+                return;
+            }
+        }
+        if (StrUtil.isBlank(schema)) {
+            return;
+        }
+        String sql = "SELECT TABLE_NAME, TABLE_COMMENT FROM information_schema.TABLES "
+            + "WHERE TABLE_SCHEMA = ? AND TABLE_TYPE = 'BASE TABLE'";
+        Map<String, String> commentMap = new LinkedHashMap<>();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, schema);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String tableName = rs.getString("TABLE_NAME");
+                    String comment = rs.getString("TABLE_COMMENT");
+                    if (StrUtil.isNotBlank(tableName) && StrUtil.isNotBlank(comment)) {
+                        commentMap.put(tableName, comment);
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+            // 非 MySQL/无 information_schema 权限时忽略
+            return;
+        }
+        for (Map<String, Object> table : tables) {
+            if (StrUtil.isNotBlank(str(table.get("remark")))) {
+                continue;
+            }
+            String remark = commentMap.get(str(table.get("id")));
+            if (StrUtil.isNotBlank(remark)) {
+                table.put("remark", remark);
+            }
+        }
+    }
+
+    private static String str(Object value) {
+        return value == null ? StrUtil.EMPTY : String.valueOf(value);
     }
 
     public static List<Map<String, Object>> listColumns(String driverClass, String jdbcUrl, String user,
