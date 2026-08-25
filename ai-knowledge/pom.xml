@@ -15,7 +15,7 @@
     <artifactId>ai-knowledge</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>ai-knowledge</name>
-    <description>AI 知识库独立模块骨架（RAG：文档分段/向量化/检索，业务实现待恢复）</description>
+    <description>AI 知识库独立模块（RAG：文档分段/向量化/检索）</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -42,6 +42,27 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dashscope-sdk-java</artifactId>
+            <version>2.14.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>logging-interceptor</artifactId>
+            <version>4.9.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baidubce</groupId>
+            <artifactId>qianfan</artifactId>
+            <version>0.1.1</version>
         </dependency>
     </dependencies>
 

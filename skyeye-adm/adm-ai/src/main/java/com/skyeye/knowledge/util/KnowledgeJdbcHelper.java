@@ -4,6 +4,7 @@
 
 package com.skyeye.knowledge.util;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.skyeye.exception.CustomException;
 
@@ -16,9 +17,12 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -28,11 +32,12 @@ public final class KnowledgeJdbcHelper {
 
     public static final String DEFAULT_DRIVER = "com.mysql.cj.jdbc.Driver";
 
+    /** 单批拉取行数，避免大表一次加载导致 OOM */
+    public static final int BATCH_SIZE = 500;
+
     private static final Pattern IDENTIFIER = Pattern.compile("^[A-Za-z_][A-Za-z0-9_]*$");
 
     private static final int LOGIN_TIMEOUT_SECONDS = 8;
-
-    private static final int MAX_ROWS = 10000;
 
     private KnowledgeJdbcHelper() {
     }
@@ -67,7 +72,6 @@ public final class KnowledgeJdbcHelper {
                     result.add(item);
                 }
             }
-            // MySQL 等场景 DatabaseMetaData 常取不到表注释，再补一轮
             fillTableRemarks(conn, catalog, result);
             return result;
         } catch (CustomException e) {
@@ -75,6 +79,102 @@ public final class KnowledgeJdbcHelper {
         } catch (Exception e) {
             throw new CustomException("读取表列表失败: " + e.getMessage());
         }
+    }
+
+    /**
+     * 同步前校验：表是否存在，以及配置字段是否都在表中。
+     */
+    public static void validateTableAndColumns(String driverClass, String jdbcUrl, String user, String password,
+                                               String tableName, Collection<String> columns) {
+        checkIdentifier(tableName, "表名");
+        if (CollectionUtil.isEmpty(columns)) {
+            throw new CustomException("同步字段不能为空");
+        }
+        for (String column : columns) {
+            checkIdentifier(column, "字段名");
+        }
+        try (Connection conn = open(driverClass, jdbcUrl, user, password)) {
+            if (!tableExists(conn, tableName)) {
+                throw new CustomException("源库不存在表: " + tableName);
+            }
+            Set<String> existColumns = loadColumnNames(conn, tableName);
+            List<String> missing = new ArrayList<>();
+            for (String column : columns) {
+                if (!existColumns.contains(column) && !containsIgnoreCase(existColumns, column)) {
+                    missing.add(column);
+                }
+            }
+            if (!missing.isEmpty()) {
+                throw new CustomException("表 " + tableName + " 不存在字段: " + String.join(", ", missing));
+            }
+        } catch (CustomException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new CustomException("校验表结构失败: " + e.getMessage());
+        }
+    }
+
+    private static boolean tableExists(Connection conn, String tableName) throws SQLException {
+        DatabaseMetaData metaData = conn.getMetaData();
+        String catalog = conn.getCatalog();
+        try (ResultSet rs = metaData.getTables(catalog, null, tableName, new String[]{"TABLE"})) {
+            if (rs.next()) {
+                return true;
+            }
+        }
+        // 部分驱动对大小写敏感，再按小写/大写试一次
+        try (ResultSet rs = metaData.getTables(catalog, null, tableName.toLowerCase(), new String[]{"TABLE"})) {
+            if (rs.next()) {
+                return true;
+            }
+        }
+        try (ResultSet rs = metaData.getTables(catalog, null, tableName.toUpperCase(), new String[]{"TABLE"})) {
+            return rs.next();
+        }
+    }
+
+    private static Set<String> loadColumnNames(Connection conn, String tableName) throws SQLException {
+        Set<String> names = new HashSet<>();
+        DatabaseMetaData metaData = conn.getMetaData();
+        String catalog = conn.getCatalog();
+        try (ResultSet rs = metaData.getColumns(catalog, null, tableName, "%")) {
+            while (rs.next()) {
+                String columnName = rs.getString("COLUMN_NAME");
+                if (StrUtil.isNotBlank(columnName)) {
+                    names.add(columnName);
+                }
+            }
+        }
+        if (names.isEmpty()) {
+            try (ResultSet rs = metaData.getColumns(catalog, null, tableName.toLowerCase(), "%")) {
+                while (rs.next()) {
+                    String columnName = rs.getString("COLUMN_NAME");
+                    if (StrUtil.isNotBlank(columnName)) {
+                        names.add(columnName);
+                    }
+                }
+            }
+        }
+        if (names.isEmpty()) {
+            try (ResultSet rs = metaData.getColumns(catalog, null, tableName.toUpperCase(), "%")) {
+                while (rs.next()) {
+                    String columnName = rs.getString("COLUMN_NAME");
+                    if (StrUtil.isNotBlank(columnName)) {
+                        names.add(columnName);
+                    }
+                }
+            }
+        }
+        return names;
+    }
+
+    private static boolean containsIgnoreCase(Set<String> names, String target) {
+        for (String name : names) {
+            if (name != null && name.equalsIgnoreCase(target)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -120,7 +220,6 @@ public final class KnowledgeJdbcHelper {
                 }
             }
         } catch (Exception ignored) {
-            // 非 MySQL/无 information_schema 权限时忽略
             return;
         }
         for (Map<String, Object> table : tables) {
@@ -167,10 +266,21 @@ public final class KnowledgeJdbcHelper {
         }
     }
 
-    public static List<Map<String, Object>> queryRows(String driverClass, String jdbcUrl, String user, String password,
-                                                      String tableName, List<String> columns, String tenantField,
-                                                      String tenantId, String watermarkField, String lastWatermark) {
+    /**
+     * 按主键/水位游标分批查询，避免大表一次全量加载。
+     *
+     * @param idField         主键字段（用于 keyset 翻页）
+     * @param lastId          上一批最后一条主键，空表示从起点
+     * @param watermarkField  增量水位字段，空表示全量按主键翻页
+     * @param lastWatermark   上一批水位游标
+     * @param limit           本批条数
+     */
+    public static List<Map<String, Object>> queryRowsBatch(String driverClass, String jdbcUrl, String user, String password,
+                                                           String tableName, List<String> columns, String tenantField,
+                                                           String tenantId, String idField, String lastId,
+                                                           String watermarkField, String lastWatermark, int limit) {
         checkIdentifier(tableName, "表名");
+        checkIdentifier(idField, "主键字段");
         if (columns == null || columns.isEmpty()) {
             throw new CustomException("同步字段不能为空");
         }
@@ -183,6 +293,8 @@ public final class KnowledgeJdbcHelper {
         if (StrUtil.isNotBlank(watermarkField)) {
             checkIdentifier(watermarkField, "水位字段");
         }
+        int pageSize = limit <= 0 ? BATCH_SIZE : limit;
+
         StringBuilder sql = new StringBuilder("SELECT ");
         for (int i = 0; i < columns.size(); i++) {
             if (i > 0) {
@@ -191,26 +303,46 @@ public final class KnowledgeJdbcHelper {
             sql.append('`').append(columns.get(i)).append('`');
         }
         sql.append(" FROM `").append(tableName).append('`');
+
         List<Object> params = new ArrayList<>();
         List<String> where = new ArrayList<>();
         if (StrUtil.isNotBlank(tenantField) && StrUtil.isNotBlank(tenantId)) {
             where.add("`".concat(tenantField).concat("` = ?"));
             params.add(tenantId);
         }
-        if (StrUtil.isNotBlank(watermarkField) && StrUtil.isNotBlank(lastWatermark)) {
-            where.add("`".concat(watermarkField).concat("` > ?"));
-            params.add(lastWatermark);
+
+        boolean useWatermark = StrUtil.isNotBlank(watermarkField);
+        if (useWatermark) {
+            if (StrUtil.isNotBlank(lastWatermark)) {
+                // (watermark > lastWm) OR (watermark = lastWm AND id > lastId)
+                where.add("(`".concat(watermarkField).concat("` > ? OR (`")
+                    .concat(watermarkField).concat("` = ? AND `")
+                    .concat(idField).concat("` > ?))"));
+                params.add(lastWatermark);
+                params.add(lastWatermark);
+                params.add(StrUtil.blankToDefault(lastId, StrUtil.EMPTY));
+            } else if (StrUtil.isNotBlank(lastId)) {
+                where.add("`".concat(idField).concat("` > ?"));
+                params.add(lastId);
+            }
+            sql.append(where.isEmpty() ? "" : " WHERE " + String.join(" AND ", where));
+            sql.append(" ORDER BY `").append(watermarkField).append("` ASC, `").append(idField).append("` ASC");
+        } else {
+            if (StrUtil.isNotBlank(lastId)) {
+                where.add("`".concat(idField).concat("` > ?"));
+                params.add(lastId);
+            }
+            if (!where.isEmpty()) {
+                sql.append(" WHERE ").append(String.join(" AND ", where));
+            }
+            sql.append(" ORDER BY `").append(idField).append("` ASC");
         }
-        if (!where.isEmpty()) {
-            sql.append(" WHERE ").append(String.join(" AND ", where));
-        }
-        if (StrUtil.isNotBlank(watermarkField)) {
-            sql.append(" ORDER BY `").append(watermarkField).append("` ASC");
-        }
+        sql.append(" LIMIT ?");
+        params.add(pageSize);
+
         List<Map<String, Object>> rows = new ArrayList<>();
         try (Connection conn = open(driverClass, jdbcUrl, user, password);
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {
-            ps.setMaxRows(MAX_ROWS);
             for (int i = 0; i < params.size(); i++) {
                 ps.setObject(i + 1, params.get(i));
             }

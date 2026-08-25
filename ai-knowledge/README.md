@@ -1,28 +1,30 @@
 # ai-knowledge
 
-独立 AI 知识库服务骨架（对齐 `ai-skill`）。
+独立 AI 知识库服务（对齐 `ai-skill`）。
 
-> 当前为**框架占位**：Controller / Service 接口路径已保留，业务实现（向量化、检索等）已清空，调用会返回「功能待实现，后续恢复」。
+> **业务实现已恢复**：Controller + Service + embedding（TongYi / YiYan 向量化、文档切段、余弦相似度检索）可完整跑通。
 
-## 已保留
+## 能力
 
-- 工程启动：`AiKnowledgeApplication`（端口 **8100**）
+1. `writeEmbedModel` → 向量模型 CRUD（TongYi / YiYan）
+2. `writeKnowledge`（需 `embedId`）→ 知识库 CRUD；更换模型会触发文档重建
+3. `writeKnowledgeDoc` → 保存后异步切段 + embedding，状态 `draft → building → complete/failed`
+4. `knowledgeHitTest` / `knowledgeEmbeddingSearch` → MySQL 存向量 JSON + 余弦相似度检索（无 PgVector）
+
+## 工程说明
+
+- 启动类：`AiKnowledgeApplication`（端口 **8100**）
 - 表结构 SQL：`src/main/resources/sql/skyeye_ai_knowledge.sql`
-- 实体 / 枚举 / DAO / 通用返回与异常
-- 接口路径（Controller 方法签名）
-
-## 已清空（待恢复）
-
-- 向量化客户端（TongYi / YiYan）
-- 文档切段、embedding、命中测试等 Service 实现
+- 向量客户端：`com.skyeye.knowledge.embedding`（TongYi DashScope / YiYan Qianfan；XunFei 不支持 embedding）
 
 ## 启动
 
-1. 执行 SQL 建库（可选，骨架阶段可不连库验证编译）
+1. 执行 SQL 建库
 2. 修改 `application.yml` 数据库账号密码
 3. 运行 `com.skyeye.knowledge.AiKnowledgeApplication`
 
-## 当前保留的接口（占位）
+## 接口
 
-仅保留知识库 Controller：`/post/KnowledgeController/*`  
-（`EmbedModelController`、`KnowledgeDocController` 已删，后续可再恢复）
+- `EmbedModelController`：`/post/EmbedModelController/*`
+- `KnowledgeController`：`/post/KnowledgeController/*`
+- `KnowledgeDocController`：`/post/KnowledgeDocController/*`
