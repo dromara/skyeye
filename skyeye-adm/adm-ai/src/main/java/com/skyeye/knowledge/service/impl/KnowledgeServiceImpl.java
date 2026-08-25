@@ -13,13 +13,17 @@ import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
+import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.enumeration.ScheduleFrequency;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.DateUtil;
+import com.skyeye.common.util.QuartzCronUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.eve.rest.quartz.SysQuartzMation;
+import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.knowledge.classenum.KnowledgeSyncResultEnum;
 import com.skyeye.knowledge.classenum.KnowledgeSyncTriggerEnum;
@@ -29,7 +33,6 @@ import com.skyeye.knowledge.entity.Knowledge;
 import com.skyeye.knowledge.entity.KnowledgeSync;
 import com.skyeye.knowledge.service.*;
 import com.skyeye.knowledge.util.KnowledgeJdbcHelper;
-import com.skyeye.knowledge.util.KnowledgeScheduleHelper;
 import com.skyeye.role.entity.Role;
 import com.skyeye.role.service.RoleService;
 import org.slf4j.Logger;
@@ -60,6 +63,9 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
     private KnowledgeSyncHistoryService knowledgeSyncHistoryService;
 
     @Autowired
+    private IQuartzService iQuartzService;
+
+    @Autowired
     @Lazy
     private RoleService roleService;
 
@@ -79,6 +85,12 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         if (ScheduleFrequency.CUSTOM == frequency && StrUtil.isBlank(entity.getCustomCron())) {
             throw new CustomException("请配置自定义同步规则");
         }
+        if (EnableEnum.ENABLE_USING.getKey().equals(entity.getEnabled())
+            && StrUtil.isEmpty(QuartzCronUtil.buildScheduleConf(
+            entity.getFrequency(), entity.getExecuteTime(),
+            entity.getWeekDays(), entity.getMonthDays(), entity.getCustomCron()))) {
+            throw new CustomException("定时Cron生成失败，请检查执行时间与频次配置");
+        }
         if (StrUtil.isBlank(entity.getDriverClass())) {
             entity.setDriverClass(KnowledgeJdbcHelper.DEFAULT_DRIVER);
         }
@@ -87,6 +99,27 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             if (old != null) {
                 entity.setJdbcPassword(old.getJdbcPassword());
             }
+        }
+    }
+
+    @Override
+    public void writePostpose(Knowledge entity, String userId) {
+        // 对齐巡检计划：先删旧 XXL 子任务，再按启用状态用业务 Cron 重新注册
+        iQuartzService.stopAndDeleteTaskQuartz(entity.getId());
+        super.writePostpose(entity, userId);
+        if (EnableEnum.ENABLE_USING.getKey().equals(entity.getEnabled())) {
+            String cron = QuartzCronUtil.buildScheduleConf(
+                entity.getFrequency(), entity.getExecuteTime(),
+                entity.getWeekDays(), entity.getMonthDays(), entity.getCustomCron());
+            if (StrUtil.isEmpty(cron)) {
+                throw new CustomException("定时Cron生成失败");
+            }
+            SysQuartzMation quartz = new SysQuartzMation();
+            quartz.setName(entity.getId());
+            quartz.setTitle(entity.getName());
+            quartz.setScheduleConf(cron);
+            quartz.setGroupId(QuartzConstants.QuartzMateMationJobType.AI_KNOWLEDGE_SYNC.getTaskType());
+            iQuartzService.startUpTaskQuartz(quartz);
         }
     }
 
@@ -159,6 +192,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         knowledgeDocService.deleteByKnowledgeId(id);
         knowledgeSegmentService.deleteByKnowledgeId(id);
         knowledgeSyncHistoryService.deleteByKnowledgeId(id);
+        iQuartzService.stopAndDeleteTaskQuartz(id);
     }
 
     @Override
@@ -226,7 +260,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         String id = inputObject.getParams().get("id").toString();
         Knowledge knowledge = selectByIdForSync(id);
         int count = syncKnowledge(knowledge, KnowledgeSyncTriggerEnum.MANUAL.getKey());
-        Map<String, Object> bean = new java.util.HashMap<>();
+        Map<String, Object> bean = new HashMap<>();
         bean.put("id", knowledge.getId());
         bean.put("syncCount", count);
         bean.put("lastSyncTime", knowledge.getLastSyncTime());
@@ -236,6 +270,12 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
     @Override
     public int syncKnowledge(Knowledge knowledge) {
         return syncKnowledge(knowledge, KnowledgeSyncTriggerEnum.MANUAL.getKey());
+    }
+
+    @Override
+    public int syncKnowledgeById(String knowledgeId) {
+        Knowledge knowledge = selectByIdForSync(knowledgeId);
+        return syncKnowledge(knowledge, KnowledgeSyncTriggerEnum.SCHEDULE.getKey());
     }
 
     @Override
@@ -289,31 +329,6 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         }
     }
 
-    @Override
-    public void syncDueKnowledges() {
-        QueryWrapper<Knowledge> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(Knowledge::getEnabled), EnableEnum.ENABLE_USING.getKey());
-        List<Knowledge> list = list(queryWrapper);
-        if (CollectionUtil.isEmpty(list)) {
-            return;
-        }
-        Date now = new Date();
-        for (Knowledge item : list) {
-            if (!KnowledgeScheduleHelper.isDue(item, now)) {
-                continue;
-            }
-            try {
-                if (StrUtil.isNotBlank(item.getTenantId())) {
-                    TenantContext.setTenantId(item.getTenantId());
-                }
-                Knowledge knowledge = selectByIdForSync(item.getId());
-                syncKnowledge(knowledge, KnowledgeSyncTriggerEnum.SCHEDULE.getKey());
-            } catch (Exception e) {
-                LOGGER.warn("知识库[{}]定时同步失败: {}", item.getName(), e.getMessage());
-            }
-        }
-    }
-
     private int syncOneTable(Knowledge knowledge, KnowledgeSync sync, String tenantId) {
         KnowledgeJdbcHelper.checkIdentifier(sync.getTableName(), "表名");
         KnowledgeJdbcHelper.checkIdentifier(sync.getIdField(), "主键字段");
@@ -330,26 +345,60 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         columnSet.addAll(contentFields);
         boolean fullSync = !KnowledgeSyncTypeEnum.INCREMENTAL.getKey().equals(sync.getSyncType());
         String watermarkField = fullSync ? StrUtil.EMPTY : sync.getWatermarkField();
-        String lastWatermark = fullSync ? StrUtil.EMPTY : sync.getLastWatermark();
+        String lastWatermark = fullSync ? StrUtil.EMPTY : StrUtil.blankToDefault(sync.getLastWatermark(), StrUtil.EMPTY);
         if (StrUtil.isNotBlank(watermarkField)) {
+            KnowledgeJdbcHelper.checkIdentifier(watermarkField, "水位字段");
             columnSet.add(watermarkField);
         }
         String tenantField = StrUtil.blankToDefault(sync.getTenantField(), "tenant_id");
-        List<Map<String, Object>> rows = KnowledgeJdbcHelper.queryRows(
+        if (StrUtil.isNotBlank(tenantField) && StrUtil.isNotBlank(tenantId)) {
+            KnowledgeJdbcHelper.checkIdentifier(tenantField, "租户字段");
+            columnSet.add(tenantField);
+        }
+
+        // 同步前校验表与字段是否存在
+        KnowledgeJdbcHelper.validateTableAndColumns(
             knowledge.getDriverClass(), knowledge.getJdbcUrl(), knowledge.getJdbcUser(), knowledge.getJdbcPassword(),
-            sync.getTableName(), new ArrayList<>(columnSet), tenantField, tenantId, watermarkField, lastWatermark);
-        int count = knowledgeDocService.saveSyncedRows(knowledge.getId(), sync.getTableName(), rows,
-            sync.getIdField(), sync.getTitleField(), contentFields, fullSync);
-        if (StrUtil.isNotBlank(watermarkField) && CollectionUtil.isNotEmpty(rows)) {
-            Object max = rows.get(rows.size() - 1).get(watermarkField);
-            if (max != null) {
-                UpdateWrapper<KnowledgeSync> updateWrapper = new UpdateWrapper<>();
-                updateWrapper.eq(CommonConstants.ID, sync.getId());
-                updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeSync::getLastWatermark), String.valueOf(max));
-                knowledgeSyncService.update(updateWrapper);
+            sync.getTableName(), columnSet);
+
+        // 全量：先清空再分批写入（源表为空时也要清掉旧文档）
+        if (fullSync) {
+            knowledgeDocService.deleteByKnowledgeAndTable(knowledge.getId(), sync.getTableName());
+        }
+
+        List<String> columns = new ArrayList<>(columnSet);
+        String lastId = StrUtil.EMPTY;
+        String cursorWatermark = lastWatermark;
+        int total = 0;
+        while (true) {
+            List<Map<String, Object>> rows = KnowledgeJdbcHelper.queryRowsBatch(
+                knowledge.getDriverClass(), knowledge.getJdbcUrl(), knowledge.getJdbcUser(), knowledge.getJdbcPassword(),
+                sync.getTableName(), columns, tenantField, tenantId,
+                sync.getIdField(), lastId, watermarkField, cursorWatermark, KnowledgeJdbcHelper.BATCH_SIZE);
+            if (CollectionUtil.isEmpty(rows)) {
+                break;
+            }
+            total += knowledgeDocService.saveSyncedRows(knowledge.getId(), sync.getTableName(), rows,
+                sync.getIdField(), sync.getTitleField(), contentFields, fullSync, false);
+
+            Map<String, Object> lastRow = rows.get(rows.size() - 1);
+            lastId = valueOf(lastRow.get(sync.getIdField()));
+            if (StrUtil.isNotBlank(watermarkField)) {
+                String batchMaxWm = valueOf(lastRow.get(watermarkField));
+                if (StrUtil.isNotBlank(batchMaxWm)) {
+                    cursorWatermark = batchMaxWm;
+                    UpdateWrapper<KnowledgeSync> updateWrapper = new UpdateWrapper<>();
+                    updateWrapper.eq(CommonConstants.ID, sync.getId());
+                    updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeSync::getLastWatermark), batchMaxWm);
+                    knowledgeSyncService.update(updateWrapper);
+                    sync.setLastWatermark(batchMaxWm);
+                }
+            }
+            if (rows.size() < KnowledgeJdbcHelper.BATCH_SIZE) {
+                break;
             }
         }
-        return count;
+        return total;
     }
 
     private Knowledge selectByIdForSync(String id) {
@@ -406,6 +455,10 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
 
     private String str(Object value) {
         return value == null ? StrUtil.EMPTY : value.toString();
+    }
+
+    private String valueOf(Object value) {
+        return value == null ? StrUtil.EMPTY : String.valueOf(value);
     }
 
     private static class JdbcParam {

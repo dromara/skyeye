@@ -94,8 +94,9 @@ public class KnowledgeDocServiceImpl extends SkyeyeBusinessServiceImpl<Knowledge
 
     @Override
     public int saveSyncedRows(String knowledgeId, String sourceTable, List<Map<String, Object>> rows,
-                              String idField, String titleField, List<String> contentFields, boolean fullSync) {
-        if (fullSync) {
+                              String idField, String titleField, List<String> contentFields,
+                              boolean fullSync, boolean clearBefore) {
+        if (fullSync && clearBefore) {
             deleteByKnowledgeAndTable(knowledgeId, sourceTable);
         }
         if (CollectionUtil.isEmpty(rows)) {

@@ -23,7 +23,12 @@ public interface KnowledgeDocService extends SkyeyeBusinessService<KnowledgeDoc>
      */
     String searchContext(String knowledgeId, String queryText, int topN);
 
+    /**
+     * @param fullSync    全量模式（按源主键直接写入，不做增量 upsert）
+     * @param clearBefore 是否先清空该表已同步文档（仅全量首批为 true）
+     */
     int saveSyncedRows(String knowledgeId, String sourceTable, List<Map<String, Object>> rows,
-                       String idField, String titleField, List<String> contentFields, boolean fullSync);
+                       String idField, String titleField, List<String> contentFields,
+                       boolean fullSync, boolean clearBefore);
 
 }

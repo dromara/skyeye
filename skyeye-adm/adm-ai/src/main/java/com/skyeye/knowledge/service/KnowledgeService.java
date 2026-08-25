@@ -37,8 +37,8 @@ public interface KnowledgeService extends SkyeyeBusinessService<Knowledge> {
     int syncKnowledge(Knowledge knowledge, Integer triggerType);
 
     /**
-     * 扫描到期的知识库并同步（定时任务）
+     * 按知识库 id 执行定时同步（XXL 动态子任务入口）
      */
-    void syncDueKnowledges();
+    int syncKnowledgeById(String knowledgeId);
 
 }
