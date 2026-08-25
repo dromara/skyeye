@@ -27,11 +27,7 @@ import com.skyeye.knowledge.classenum.KnowledgeSyncTypeEnum;
 import com.skyeye.knowledge.dao.KnowledgeDao;
 import com.skyeye.knowledge.entity.Knowledge;
 import com.skyeye.knowledge.entity.KnowledgeSync;
-import com.skyeye.knowledge.service.KnowledgeDocService;
-import com.skyeye.knowledge.service.KnowledgeSegmentService;
-import com.skyeye.knowledge.service.KnowledgeService;
-import com.skyeye.knowledge.service.KnowledgeSyncHistoryService;
-import com.skyeye.knowledge.service.KnowledgeSyncService;
+import com.skyeye.knowledge.service.*;
 import com.skyeye.knowledge.util.KnowledgeJdbcHelper;
 import com.skyeye.knowledge.util.KnowledgeScheduleHelper;
 import com.skyeye.role.entity.Role;
@@ -68,30 +64,6 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
     private RoleService roleService;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void saveOrUpdateEntity(InputObject inputObject, OutputObject outputObject) {
-        Knowledge entity = inputObject.getParams(Knowledge.class);
-        fillSyncList(entity, inputObject.getParams().get("syncList"));
-        String id = saveOrUpdateEntity(entity, inputObject.getLogParams().get("id").toString());
-        outputObject.setBean(selectById(id));
-        outputObject.settotal(CommonNumConstants.NUM_ONE);
-    }
-
-    private void fillSyncList(Knowledge entity, Object syncListObj) {
-        if (entity == null || CollectionUtil.isNotEmpty(entity.getSyncList()) || syncListObj == null) {
-            return;
-        }
-        if (syncListObj instanceof String) {
-            String text = syncListObj.toString().trim();
-            if (StrUtil.isNotBlank(text)) {
-                entity.setSyncList(JSONUtil.toList(text, KnowledgeSync.class));
-            }
-        } else if (syncListObj instanceof List) {
-            entity.setSyncList(JSONUtil.toList(JSONUtil.toJsonStr(syncListObj), KnowledgeSync.class));
-        }
-    }
-
-    @Override
     public void validatorEntity(Knowledge entity) {
         super.validatorEntity(entity);
         ScheduleFrequency frequency = ScheduleFrequency.getByKey(entity.getFrequency());
@@ -116,28 +88,60 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                 entity.setJdbcPassword(old.getJdbcPassword());
             }
         }
-        List<KnowledgeSync> syncList = entity.getSyncList();
-        if (CollectionUtil.isNotEmpty(syncList)) {
-            for (KnowledgeSync sync : syncList) {
-                if (StrUtil.isBlank(sync.getTableName()) || StrUtil.isBlank(sync.getIdField())
-                    || StrUtil.isBlank(sync.getContentFields())) {
-                    throw new CustomException("请完善同步表、主键字段和内容字段");
-                }
-                if (sync.getSyncType() == null) {
-                    sync.setSyncType(KnowledgeSyncTypeEnum.FULL.getKey());
-                }
-                if (KnowledgeSyncTypeEnum.INCREMENTAL.getKey().equals(sync.getSyncType())
-                    && StrUtil.isBlank(sync.getWatermarkField())) {
-                    throw new CustomException("增量同步必须指定水位字段");
-                }
-            }
-        }
     }
 
     @Override
-    public void writePostpose(Knowledge entity, String userId) {
-        super.writePostpose(entity, userId);
-        knowledgeSyncService.saveList(entity.getId(), entity.getSyncList());
+    @Transactional(rollbackFor = Exception.class)
+    public void writeSyncList(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String knowledgeId = str(params.get("id"));
+        if (StrUtil.isBlank(knowledgeId)) {
+            throw new CustomException("请选择知识库");
+        }
+        Knowledge knowledge = super.selectById(knowledgeId);
+        if (knowledge == null || StrUtil.isBlank(knowledge.getId())) {
+            throw new CustomException("知识库不存在");
+        }
+        List<KnowledgeSync> syncList = parseSyncList(params.get("syncList"));
+        for (KnowledgeSync sync : syncList) {
+            if (StrUtil.isBlank(sync.getTableName()) || StrUtil.isBlank(sync.getIdField())
+                || StrUtil.isBlank(sync.getContentFields())) {
+                throw new CustomException("请完善同步表、主键字段和内容字段");
+            }
+            if (sync.getSyncType() == null) {
+                sync.setSyncType(KnowledgeSyncTypeEnum.FULL.getKey());
+            }
+            if (KnowledgeSyncTypeEnum.INCREMENTAL.getKey().equals(sync.getSyncType())
+                && StrUtil.isBlank(sync.getWatermarkField())) {
+                throw new CustomException("增量同步必须指定水位字段");
+            }
+        }
+        knowledgeSyncService.saveList(knowledgeId, syncList);
+        Map<String, Object> bean = new HashMap<>();
+        bean.put("id", knowledgeId);
+        bean.put("syncList", knowledgeSyncService.selectByKnowledgeId(knowledgeId));
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    /**
+     * 解析前端传入的同步表配置（JSON 字符串或 List）
+     */
+    private List<KnowledgeSync> parseSyncList(Object syncListObj) {
+        if (syncListObj == null) {
+            return new ArrayList<>();
+        }
+        if (syncListObj instanceof String) {
+            String text = syncListObj.toString().trim();
+            if (StrUtil.isBlank(text)) {
+                return new ArrayList<>();
+            }
+            return JSONUtil.toList(text, KnowledgeSync.class);
+        }
+        if (syncListObj instanceof List) {
+            return JSONUtil.toList(JSONUtil.toJsonStr(syncListObj), KnowledgeSync.class);
+        }
+        return new ArrayList<>();
     }
 
     @Override
@@ -162,6 +166,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         Knowledge knowledge = super.selectById(id);
         if (knowledge != null) {
             knowledge.setSyncList(knowledgeSyncService.selectByKnowledgeId(id));
+            knowledge.setHasJdbcPassword(StrUtil.isNotBlank(knowledge.getJdbcPassword()));
             knowledge.setJdbcPassword(StrUtil.EMPTY);
         }
         return knowledge;

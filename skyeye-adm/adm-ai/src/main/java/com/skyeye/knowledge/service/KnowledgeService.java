@@ -20,6 +20,11 @@ public interface KnowledgeService extends SkyeyeBusinessService<Knowledge> {
     void syncNow(InputObject inputObject, OutputObject outputObject);
 
     /**
+     * 单独保存知识库同步表配置
+     */
+    void writeSyncList(InputObject inputObject, OutputObject outputObject);
+
+    /**
      * 按当前知识库配置执行一次同步（默认手动触发）
      */
     int syncKnowledge(Knowledge knowledge);
