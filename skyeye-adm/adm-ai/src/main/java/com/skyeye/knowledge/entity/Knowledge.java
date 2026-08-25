@@ -52,8 +52,8 @@ public class Knowledge extends OperatorUserInfo {
     @ApiModelProperty(value = "同步数据库用户名")
     private String jdbcUser;
 
-    @TableField(value = "jdbc_password")
-    @ApiModelProperty(value = "同步数据库密码")
+    @TableField(value = "jdbc_password", updateStrategy = FieldStrategy.NOT_EMPTY)
+    @ApiModelProperty(value = "同步数据库密码。编辑时不传则保留原密码")
     private String jdbcPassword;
 
     @TableField(value = "driver_class")
@@ -91,5 +91,9 @@ public class Knowledge extends OperatorUserInfo {
     @TableField(exist = false)
     @ApiModelProperty(value = "同步表配置列表")
     private List<KnowledgeSync> syncList;
+
+    @TableField(exist = false)
+    @Property("是否已设置 JDBC 密码")
+    private Boolean hasJdbcPassword;
 
 }

@@ -15,7 +15,9 @@ import com.skyeye.knowledge.entity.KnowledgeSync;
 import com.skyeye.knowledge.service.KnowledgeSyncService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @SkyeyeService(name = "AI知识库同步配置", groupName = "AI知识库", allowDynamicAttrKey = false)
@@ -24,14 +26,27 @@ public class KnowledgeSyncServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
 
     @Override
     public void saveList(String knowledgeId, List<KnowledgeSync> syncList) {
+        Map<String, String> oldWatermarkMap = new HashMap<>();
+        List<KnowledgeSync> oldList = selectByKnowledgeId(knowledgeId);
+        if (CollectionUtil.isNotEmpty(oldList)) {
+            for (KnowledgeSync old : oldList) {
+                if (StrUtil.isNotBlank(old.getTableName()) && StrUtil.isNotBlank(old.getLastWatermark())) {
+                    oldWatermarkMap.put(old.getTableName(), old.getLastWatermark());
+                }
+            }
+        }
         deleteByKnowledgeId(knowledgeId);
         if (CollectionUtil.isEmpty(syncList)) {
             return;
         }
         for (KnowledgeSync sync : syncList) {
+            sync.setId(null);
             sync.setKnowledgeId(knowledgeId);
             if (StrUtil.isBlank(sync.getTenantField())) {
                 sync.setTenantField("tenant_id");
+            }
+            if (StrUtil.isBlank(sync.getLastWatermark()) && oldWatermarkMap.containsKey(sync.getTableName())) {
+                sync.setLastWatermark(oldWatermarkMap.get(sync.getTableName()));
             }
         }
         createEntity(syncList, StrUtil.EMPTY);
