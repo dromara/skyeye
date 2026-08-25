@@ -12,7 +12,7 @@ import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.common.entity.features.OperatorUserInfo;
-import com.skyeye.key.entity.AiApiKey;
+import com.skyeye.knowledge.entity.Knowledge;
 import lombok.Data;
 
 /**
@@ -48,4 +48,12 @@ public class Role extends OperatorUserInfo {
     @TableField(value = "prompt")
     @ApiModelProperty(value = "提示词")
     private String prompt;
+
+    @TableField(value = "knowledge_id")
+    @ApiModelProperty(value = "绑定知识库id")
+    private String knowledgeId;
+
+    @TableField(exist = false)
+    @Property("绑定的知识库")
+    private Knowledge knowledgeMation;
 }

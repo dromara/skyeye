@@ -28,6 +28,7 @@ import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.key.entity.AiApiKey;
 import com.skyeye.key.service.AiApiKeyService;
+import com.skyeye.knowledge.service.KnowledgeDocService;
 import com.skyeye.role.service.RoleService;
 import com.skyeye.websocket.AiMessageWebSocket;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,9 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private KnowledgeDocService knowledgeDocService;
 
     @Autowired
     private ChatService chatService;
@@ -139,6 +143,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         } else {
             id = ToolUtil.getSurFaceId();
         }
+        content = appendRoleKnowledge(bizType, role, content);
         Map<String, Object> bean = new HashMap<>();
         bean.put("id", id);
         bean.put("chatId", id);
@@ -162,6 +167,21 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         }
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    /**
+     * 闲聊时只从当前角色绑定的知识库取数，拼进用户问话。
+     */
+    private String appendRoleKnowledge(String bizType, com.skyeye.role.entity.Role role, String content) {
+        if (!"chat".equals(bizType) || role == null || StrUtil.isBlank(role.getKnowledgeId()) || StrUtil.isBlank(content)) {
+            return content;
+        }
+        String knowledgeText = knowledgeDocService.searchContext(role.getKnowledgeId(), content, 5);
+        if (StrUtil.isBlank(knowledgeText)) {
+            return content;
+        }
+        return "请结合下列知识库内容回答用户问题。只使用该知识库中的信息，没有相关内容时请明确说明。\n【知识库】\n"
+            + knowledgeText + "\n【用户问题】\n" + content;
     }
 
     /**
