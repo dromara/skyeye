@@ -181,7 +181,7 @@ public class TongYiChatClient {
         }
         String delta = sliceIncremental(lastReasoning[0], reasoningFull);
         lastReasoning[0] = reasoningFull;
-        if (StrUtil.isNotBlank(delta)) {
+        if (!StrUtil.isEmpty(delta)) {
             listener.onReasoningDelta(delta, false);
         }
     }

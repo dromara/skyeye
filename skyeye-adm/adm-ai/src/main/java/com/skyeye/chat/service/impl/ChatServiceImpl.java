@@ -490,7 +490,8 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
 
     private void handleStreamDelta(String tenantId, TenantEnum isolationType, String userId, String chatId,
                                    String bizType, String piece, boolean end, boolean[] finished) {
-        if (StrUtil.isBlank(piece) && !end) {
+        // 不能用 isBlank：单独一包的 "\n" 也是有效内容
+        if (StrUtil.isEmpty(piece) && !end) {
             return;
         }
         try {
@@ -502,7 +503,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     }
 
     private void handleStreamReasoningDelta(String userId, String chatId, String bizType, String piece) {
-        if (StrUtil.isBlank(piece) || StrUtil.isBlank(userId)) {
+        if (StrUtil.isEmpty(piece) || StrUtil.isBlank(userId)) {
             return;
         }
         if (bizType == null) {

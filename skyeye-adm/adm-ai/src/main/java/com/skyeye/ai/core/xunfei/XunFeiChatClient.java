@@ -175,7 +175,7 @@ public class XunFeiChatClient {
                 }
                 String piece = content == null ? StrUtil.EMPTY : content;
                 boolean end = status != null && status == 2;
-                if (StrUtil.isBlank(piece) && !end) {
+                if (StrUtil.isEmpty(piece) && !end) {
                     return;
                 }
                 listener.onDelta(piece, end);
@@ -245,10 +245,10 @@ public class XunFeiChatClient {
                         String reasoning = readDeltaReasoning(choice);
                         String piece = readDeltaContent(choice);
                         boolean end = StrUtil.isNotBlank(choice.getStr("finish_reason"));
-                        if (StrUtil.isNotBlank(reasoning)) {
+                        if (!StrUtil.isEmpty(reasoning)) {
                             listener.onReasoningDelta(reasoning, false);
                         }
-                        if (StrUtil.isNotBlank(piece) || end) {
+                        if (!StrUtil.isEmpty(piece) || end) {
                             listener.onDelta(piece, end);
                         }
                         if (end) {
@@ -412,7 +412,7 @@ public class XunFeiChatClient {
                     String piece = readImageDelta(json);
                     Integer status = header == null ? null : header.getInt("status");
                     boolean end = status != null && status == 2;
-                    if (StrUtil.isBlank(piece) && !end) {
+                    if (StrUtil.isEmpty(piece) && !end) {
                         return;
                     }
                     listener.onDelta(piece, end);

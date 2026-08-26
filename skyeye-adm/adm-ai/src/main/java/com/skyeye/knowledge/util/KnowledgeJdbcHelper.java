@@ -258,11 +258,142 @@ public final class KnowledgeJdbcHelper {
                     result.add(item);
                 }
             }
+            fillColumnRemarks(conn, catalog, tableName, result);
             return result;
         } catch (CustomException e) {
             throw e;
         } catch (Exception e) {
             throw new CustomException("读取字段列表失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 读取表注释（优先 information_schema）。
+     */
+    public static String loadTableComment(String driverClass, String jdbcUrl, String user, String password,
+                                          String tableName) {
+        checkIdentifier(tableName, "表名");
+        try (Connection conn = open(driverClass, jdbcUrl, user, password)) {
+            return loadTableComment(conn, tableName);
+        } catch (CustomException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new CustomException("读取表注释失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 读取字段名 -> 注释，供同步正文展示字段含义。
+     */
+    public static Map<String, String> loadColumnCommentMap(String driverClass, String jdbcUrl, String user,
+                                                           String password, String tableName) {
+        checkIdentifier(tableName, "表名");
+        Map<String, String> result = new LinkedHashMap<>();
+        try (Connection conn = open(driverClass, jdbcUrl, user, password)) {
+            DatabaseMetaData metaData = conn.getMetaData();
+            String catalog = conn.getCatalog();
+            try (ResultSet rs = metaData.getColumns(catalog, null, tableName, "%")) {
+                while (rs.next()) {
+                    String columnName = rs.getString("COLUMN_NAME");
+                    String remark = rs.getString("REMARKS");
+                    if (StrUtil.isNotBlank(columnName) && StrUtil.isNotBlank(remark)) {
+                        result.put(columnName, remark.trim());
+                    }
+                }
+            }
+            fillColumnCommentMap(conn, catalog, tableName, result);
+            return result;
+        } catch (CustomException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new CustomException("读取字段注释失败: " + e.getMessage());
+        }
+    }
+
+    private static String loadTableComment(Connection conn, String tableName) throws SQLException {
+        DatabaseMetaData metaData = conn.getMetaData();
+        String catalog = conn.getCatalog();
+        try (ResultSet rs = metaData.getTables(catalog, null, tableName, new String[]{"TABLE"})) {
+            if (rs.next()) {
+                String remark = rs.getString("REMARKS");
+                if (StrUtil.isNotBlank(remark)) {
+                    return remark.trim();
+                }
+            }
+        }
+        String schema = StrUtil.blankToDefault(catalog, conn.getCatalog());
+        if (StrUtil.isBlank(schema)) {
+            return StrUtil.EMPTY;
+        }
+        String sql = "SELECT TABLE_COMMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? LIMIT 1";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, schema);
+            ps.setString(2, tableName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return StrUtil.blankToDefault(rs.getString("TABLE_COMMENT"), StrUtil.EMPTY).trim();
+                }
+            }
+        }
+        return StrUtil.EMPTY;
+    }
+
+    private static void fillColumnRemarks(Connection conn, String catalog, String tableName,
+                                            List<Map<String, Object>> columns) {
+        if (columns == null || columns.isEmpty()) {
+            return;
+        }
+        Map<String, String> commentMap = new LinkedHashMap<>();
+        for (Map<String, Object> column : columns) {
+            String remark = str(column.get("remark"));
+            if (StrUtil.isNotBlank(remark)) {
+                commentMap.put(str(column.get("id")), remark);
+            }
+        }
+        fillColumnCommentMap(conn, catalog, tableName, commentMap);
+        for (Map<String, Object> column : columns) {
+            if (StrUtil.isNotBlank(str(column.get("remark")))) {
+                continue;
+            }
+            String remark = commentMap.get(str(column.get("id")));
+            if (StrUtil.isNotBlank(remark)) {
+                column.put("remark", remark);
+            }
+        }
+    }
+
+    private static void fillColumnCommentMap(Connection conn, String catalog, String tableName,
+                                               Map<String, String> commentMap) {
+        if (commentMap == null) {
+            return;
+        }
+        String schema = StrUtil.blankToDefault(catalog, null);
+        if (StrUtil.isBlank(schema)) {
+            try {
+                schema = conn.getCatalog();
+            } catch (SQLException ignored) {
+                return;
+            }
+        }
+        if (StrUtil.isBlank(schema)) {
+            return;
+        }
+        String sql = "SELECT COLUMN_NAME, COLUMN_COMMENT FROM information_schema.COLUMNS "
+            + "WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, schema);
+            ps.setString(2, tableName);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String columnName = rs.getString("COLUMN_NAME");
+                    String comment = rs.getString("COLUMN_COMMENT");
+                    if (StrUtil.isNotBlank(columnName) && StrUtil.isNotBlank(comment)) {
+                        commentMap.putIfAbsent(columnName, comment.trim());
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+            // 非 MySQL 或权限不足时跳过
         }
     }
 

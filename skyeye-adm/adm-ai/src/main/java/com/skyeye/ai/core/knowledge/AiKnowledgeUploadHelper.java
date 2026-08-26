@@ -53,25 +53,49 @@ public final class AiKnowledgeUploadHelper {
         return kbId + "_" + date + "_part_" + seq + ".txt";
     }
 
-    public static String buildRowBlock(String tableName, String idField, String titleField,
-                                      Map<String, Object> row, List<String> contentFields) {
+    public static String buildRowBlock(String tableName, String tableRemark, String idField, String titleField,
+                                      Map<String, Object> row, List<String> contentFields,
+                                      Map<String, String> fieldRemarks) {
         StringBuilder sb = new StringBuilder();
-        sb.append("表: ").append(tableName).append('\n');
-        if (row.get(idField) != null) {
-            sb.append("主键: ").append(row.get(idField)).append('\n');
+        sb.append("表: ").append(tableName);
+        if (StrUtil.isNotBlank(tableRemark)) {
+            sb.append(" (").append(tableRemark).append(')');
         }
+        sb.append('\n');
+        appendFieldLine(sb, "主键", idField, row.get(idField), fieldRemarks);
         if (StrUtil.isNotBlank(titleField) && row.get(titleField) != null) {
-            sb.append("标题: ").append(row.get(titleField)).append('\n');
+            appendFieldLine(sb, "标题", titleField, row.get(titleField), fieldRemarks);
         }
         for (String field : contentFields) {
             Object val = row.get(field);
             if (val == null || StrUtil.isBlank(String.valueOf(val))) {
                 continue;
             }
-            sb.append(field).append(": ").append(val).append('\n');
+            appendFieldLine(sb, null, field, val, fieldRemarks);
         }
         sb.append("---\n");
         return sb.toString();
+    }
+
+    private static void appendFieldLine(StringBuilder sb, String roleLabel, String field, Object value,
+                                        Map<String, String> fieldRemarks) {
+        if (value == null || StrUtil.isBlank(String.valueOf(value))) {
+            return;
+        }
+        String remark = fieldRemarks == null ? null : fieldRemarks.get(field);
+        if (StrUtil.isNotBlank(roleLabel)) {
+            sb.append(roleLabel).append('(').append(formatFieldName(field, remark)).append("): ")
+                .append(value).append('\n');
+            return;
+        }
+        sb.append(formatFieldName(field, remark)).append(": ").append(value).append('\n');
+    }
+
+    private static String formatFieldName(String field, String remark) {
+        if (StrUtil.isBlank(remark)) {
+            return field;
+        }
+        return field + " (" + remark + ")";
     }
 
 }
