@@ -425,7 +425,7 @@ public class UploadServiceImpl implements UploadService {
      * 按指定文件存储器类型上传。storage 为空用默认；对应类型不存在则 uploaded=false，不抛错。
      */
     @Override
-    public void uploadToFileStorage(InputObject inputObject, OutputObject outputObject) {
+    public void skyeyeUploadToFileStorage(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         Integer storage = null;
         Object storageObj = params.get("storage");
