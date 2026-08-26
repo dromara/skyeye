@@ -114,12 +114,15 @@ public class DouBaoChatClient {
                             return;
                         }
                         JSONObject choice = choices.getJSONObject(0);
+                        String reasoning = readDeltaReasoning(choice);
                         String piece = readDeltaContent(choice);
                         boolean end = StrUtil.isNotBlank(choice.getStr("finish_reason"));
-                        if (StrUtil.isBlank(piece) && !end) {
-                            return;
+                        if (StrUtil.isNotBlank(reasoning)) {
+                            listener.onReasoningDelta(reasoning, false);
                         }
-                        listener.onDelta(piece, end);
+                        if (StrUtil.isNotBlank(piece) || end) {
+                            listener.onDelta(piece, end);
+                        }
                         if (end) {
                             ended.set(true);
                         }
@@ -264,6 +267,15 @@ public class DouBaoChatClient {
         return content == null ? StrUtil.EMPTY : content;
     }
 
+    private String readDeltaReasoning(JSONObject choice) {
+        JSONObject delta = choice.getJSONObject("delta");
+        if (delta == null) {
+            return StrUtil.EMPTY;
+        }
+        String reasoning = delta.getStr("reasoning_content");
+        return reasoning == null ? StrUtil.EMPTY : reasoning;
+    }
+
     private String readErrorMessage(JSONObject json) {
         Object error = json.get("error");
         if (error instanceof JSONObject) {
@@ -307,5 +319,8 @@ public class DouBaoChatClient {
         void onDelta(String content, boolean end);
 
         void onError(String message);
+
+        default void onReasoningDelta(String content, boolean end) {
+        }
     }
 }

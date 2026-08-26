@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Validator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -105,18 +106,39 @@ public class FileConfigServiceImpl extends SkyeyeBusinessServiceImpl<FileConfigD
     }
 
     /**
-     * 设为默认时，把其它配置的默认标记清掉（新增/编辑都要处理）
+     * 设为默认时，把其它配置的默认标记清掉（新增/编辑都要处理），并同步清理相关缓存。
      */
     private void clearOtherDefaults(FileConfig entity) {
         if (!Objects.equals(entity.getIsDefault(), IsDefaultEnum.IS_DEFAULT.getKey())) {
             return;
         }
+        QueryWrapper<FileConfig> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(FileConfig::getIsDefault), IsDefaultEnum.IS_DEFAULT.getKey());
+        if (StrUtil.isNotBlank(entity.getId())) {
+            queryWrapper.ne(CommonConstants.ID, entity.getId());
+        }
+        List<FileConfig> previousDefaults = list(queryWrapper);
+
         UpdateWrapper<FileConfig> updateWrapper = new UpdateWrapper<>();
         updateWrapper.set(MybatisPlusUtil.toColumns(FileConfig::getIsDefault), IsDefaultEnum.NOT_DEFAULT.getKey());
         if (StrUtil.isNotBlank(entity.getId())) {
             updateWrapper.ne(CommonConstants.ID, entity.getId());
         }
         update(updateWrapper);
+
+        if (previousDefaults != null && !previousDefaults.isEmpty()) {
+            List<String> previousDefaultIds = new ArrayList<>();
+            for (FileConfig previousDefault : previousDefaults) {
+                if (StrUtil.isNotBlank(previousDefault.getId())) {
+                    previousDefaultIds.add(previousDefault.getId());
+                    fileClientFactory.removeFileClient(previousDefault.getId());
+                }
+            }
+            if (!previousDefaultIds.isEmpty()) {
+                clearCache(previousDefaultIds);
+            }
+        }
+        jedisClientService.del(FILE_CONFIG_IS_DEFAULT_CACHE_KEY);
     }
 
     @Override
