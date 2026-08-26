@@ -517,6 +517,33 @@ public class UploadServiceImpl implements UploadService {
         }
     }
 
+    @Override
+    public void skyeyeDeleteFromFileStorage(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String configId = params.get("configId") == null ? StrUtil.EMPTY : params.get("configId").toString().trim();
+        String path = params.get("path") == null ? StrUtil.EMPTY : params.get("path").toString().trim();
+        if (StrUtil.isBlank(configId)) {
+            throw new CustomException("configId 不能为空");
+        }
+        if (StrUtil.isBlank(path)) {
+            throw new CustomException("path 不能为空");
+        }
+        FileClient client = fileConfigService.getFileClient(configId);
+        if (client == null) {
+            throw new CustomException("文件存储配置不存在");
+        }
+        try {
+            client.delete(path);
+        } catch (Exception e) {
+            throw new CustomException("删除对象存储文件失败: " + e.getMessage());
+        }
+        com.skyeye.upload.entity.File file = fileService.queryByPath(path);
+        if (file != null && StrUtil.isNotBlank(file.getId())) {
+            fileService.deleteById(file.getId());
+        }
+        outputObject.setreturnMessage("删除成功");
+    }
+
     private byte[] resolveUploadBytes(String contentBase64, String localPath) {
         if (StrUtil.isNotBlank(contentBase64)) {
             return Base64.decodeBase64(contentBase64.getBytes(StandardCharsets.UTF_8));

@@ -4,6 +4,8 @@
 
 package com.skyeye.ai.core.knowledge;
 
+import cn.hutool.core.util.StrUtil;
+
 /**
  * 各 AI 平台知识库统一客户端：上传文档 + 检索。
  */
@@ -20,7 +22,13 @@ public interface AiKnowledgeClient {
 
     /**
      * 上传文本；若平台支持 URL/TOS 整文件导入，可传入 fileUrl / tosPath。
+     * platformDocName 为平台侧展示用文档名（如含日期目录信息），为空则用 fileName。
      */
+    default String uploadText(AiKnowledgeConfig config, String fileName, String content,
+                              String fileUrl, String tosPath, String platformDocName) {
+        return uploadText(config, StrUtil.blankToDefault(platformDocName, fileName), content);
+    }
+
     default String uploadText(AiKnowledgeConfig config, String fileName, String content,
                               String fileUrl, String tosPath) {
         return uploadText(config, fileName, content);

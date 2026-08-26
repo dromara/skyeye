@@ -131,4 +131,13 @@ public class UploadController {
         uploadService.skyeyeUploadToFileStorage(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "skyeyeDeleteFromFileStorage", value = "从指定文件配置的对象存储删除对象（供业务侧临时文件清理）", method = "POST", allUse = "0")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "configId", name = "configId", value = "文件配置ID", required = "required"),
+        @ApiImplicitParam(id = "path", name = "path", value = "对象存储路径（objectKey）", required = "required")})
+    @RequestMapping("/post/UploadController/skyeyeDeleteFromFileStorage")
+    public void skyeyeDeleteFromFileStorage(InputObject inputObject, OutputObject outputObject) {
+        uploadService.skyeyeDeleteFromFileStorage(inputObject, outputObject);
+    }
+
 }

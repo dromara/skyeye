@@ -42,12 +42,13 @@ public class DouBaoKnowledgeClient implements AiKnowledgeClient {
 
     @Override
     public String uploadText(AiKnowledgeConfig config, String fileName, String content,
-                             String fileUrl, String tosPath) {
+                             String fileUrl, String tosPath, String platformDocName) {
         check(config);
         String vikingKey = resolveVikingKey(config);
         String knowledgeId = config.getKnowledgeId();
-        String docId = sanitizeDocId(fileName);
-        String docName = StrUtil.blankToDefault(fileName, docId + ".txt");
+        String displayName = StrUtil.blankToDefault(platformDocName, fileName);
+        String docId = sanitizeDocId(displayName);
+        String docName = StrUtil.blankToDefault(displayName, docId + ".txt");
         if (!StrUtil.endWithIgnoreCase(docName, ".txt")) {
             docName = docName + ".txt";
         }
@@ -75,6 +76,12 @@ public class DouBaoKnowledgeClient implements AiKnowledgeClient {
         } catch (Exception e) {
             throw new CustomException("豆包知识库上传失败: " + e.getMessage());
         }
+    }
+
+    @Override
+    public String uploadText(AiKnowledgeConfig config, String fileName, String content,
+                             String fileUrl, String tosPath) {
+        return uploadText(config, fileName, content, fileUrl, tosPath, null);
     }
 
     @Override

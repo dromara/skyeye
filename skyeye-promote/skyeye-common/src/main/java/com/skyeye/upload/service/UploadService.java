@@ -42,4 +42,9 @@ public interface UploadService {
      * 按指定文件存储器类型上传（storage 为空用默认；对应类型配置不存在则不上传）
      */
     void skyeyeUploadToFileStorage(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 从指定文件配置的对象存储删除对象（供业务侧临时文件清理）
+     */
+    void skyeyeDeleteFromFileStorage(InputObject inputObject, OutputObject outputObject);
 }

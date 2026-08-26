@@ -79,6 +79,10 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
     @Value("${skyeye.ai.knowledge.sync.flush-max-bytes:" + DEFAULT_FLUSH_MAX_BYTES + "}")
     private int flushMaxBytes;
 
+    /** 导入平台知识库成功后删除 S3/TOS 临时文件 */
+    @Value("${skyeye.ai.knowledge.sync.delete-storage-after-import:true}")
+    private boolean deleteStorageAfterImport;
+
     /**
      * 与 skyeye-pro FileStorageEnum.S3 一致，豆包知识库走 S3/TOS
      */
@@ -507,8 +511,11 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         }
         int partIndex = uploadContext.nextPart();
         String fileName = AiKnowledgeUploadHelper.buildFileName(partIndex);
+        String platformDocName = AiKnowledgeUploadHelper.buildPlatformDocName(knowledge.getId(), partIndex);
         String objectDir = uploadContext.getObjectDir();
         String localPath = writeLocalTempFile(objectDir, fileName, content);
+        String storageConfigId = StrUtil.EMPTY;
+        String storageObjectPath = StrUtil.EMPTY;
         try {
             String contentBase64 = Base64.getEncoder().encodeToString(content.getBytes(StandardCharsets.UTF_8));
             int type = FileConstants.FileUploadPath.KNOWLG_CONTENT.getType()[0];
@@ -524,6 +531,8 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             boolean uploaded = isUploaded(storageResult);
             String fileUrl = uploaded ? str(storageResult.get("url")) : StrUtil.EMPTY;
             String tosPath = uploaded ? str(storageResult.get("tosPath")) : StrUtil.EMPTY;
+            storageConfigId = uploaded ? str(storageResult.get("configId")) : StrUtil.EMPTY;
+            storageObjectPath = uploaded ? str(storageResult.get("path")) : StrUtil.EMPTY;
 
             AiKnowledgeClient client = aiFactory.getKnowledgeClient(platform);
             if (AiPlatformEnum.DOU_BAO == platform) {
@@ -531,11 +540,25 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                     throw new CustomException("豆包知识库同步需要可用的文件存储器（请在知识库配置中指定文件配置，或配置 S3/TOS）");
                 }
             }
-            client.uploadText(apiKey.toAiKnowledgeConfig(), fileName, content, fileUrl, tosPath);
+            client.uploadText(apiKey.toAiKnowledgeConfig(), fileName, content, fileUrl, tosPath, platformDocName);
+            deleteStorageObjectIfNeeded(storageConfigId, storageObjectPath);
         } finally {
             if (StrUtil.isNotBlank(localPath)) {
                 FileUtil.deleteFile(localPath);
             }
+        }
+    }
+
+    /** 平台导入成功后清理 S3/TOS 临时对象（失败仅打日志，不影响同步结果） */
+    private void deleteStorageObjectIfNeeded(String configId, String objectPath) {
+        if (!deleteStorageAfterImport || StrUtil.isBlank(configId) || StrUtil.isBlank(objectPath)) {
+            return;
+        }
+        try {
+            iUploadService.deleteFromFileStorage(configId, objectPath);
+        } catch (Exception e) {
+            LOGGER.warn("知识库同步后删除临时存储文件失败 configId={} path={}: {}",
+                configId, objectPath, e.getMessage());
         }
     }
 

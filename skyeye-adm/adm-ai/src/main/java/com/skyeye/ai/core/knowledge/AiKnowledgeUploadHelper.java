@@ -31,10 +31,26 @@ public final class AiKnowledgeUploadHelper {
         return OBJECT_DIR_PREFIX + kbId + "/" + date + "/";
     }
 
-    /** 分片文件名（豆包 doc_id 要求字母/下划线开头） */
+    /** 分片文件名（含日期，便于 TOS/平台侧识别） */
     public static String buildFileName(int partIndex) {
+        String date = DateUtil.getYmdTimeAndToString();
         String seq = String.format("%04d", Math.max(partIndex, 1));
-        return "part_" + seq + "_" + IdUtil.fastSimpleUUID().substring(0, 8) + ".txt";
+        return date + "_part_" + seq + "_" + IdUtil.fastSimpleUUID().substring(0, 8) + ".txt";
+    }
+
+    /**
+     * 平台知识库展示用文档名：{知识库id}_{日期}_part_{序号}.txt
+     * （豆包 doc_name 不允许含 /，目录信息用下划线表达）
+     */
+    public static String buildPlatformDocName(String knowledgeId, int partIndex) {
+        String kbId = StrUtil.blankToDefault(knowledgeId, "unknown");
+        kbId = kbId.replaceAll("[^A-Za-z0-9_-]", "_");
+        if (kbId.length() > 32) {
+            kbId = kbId.substring(0, 32);
+        }
+        String date = DateUtil.getYmdTimeAndToString();
+        String seq = String.format("%04d", Math.max(partIndex, 1));
+        return kbId + "_" + date + "_part_" + seq + ".txt";
     }
 
     public static String buildRowBlock(String tableName, String idField, String titleField,
