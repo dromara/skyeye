@@ -7,21 +7,14 @@ package com.skyeye.demand.service.impl;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
-import com.skyeye.common.client.ExecuteFeignClient;
+import com.skyeye.ai.util.AutoAiChatHelper;
+import com.skyeye.ai.util.AutoAiHtmlHelper;
+import com.skyeye.ai.util.AutoAiJsonHelper;
+import com.skyeye.ai.util.AutoAiProjectContextHelper;
 import com.skyeye.common.enumeration.IsDefaultEnum;
 import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.NumberParseUtil;
-import com.skyeye.exception.CustomException;
-import com.skyeye.module.entity.AutoModule;
-import com.skyeye.module.service.AutoModuleService;
-import com.skyeye.project.entity.AutoProject;
-import com.skyeye.project.service.AutoProjectService;
-import com.skyeye.rest.ai.IAiChatRest;
-import com.skyeye.rest.platform.IPlatformBaseSettingRest;
-import com.skyeye.version.entity.AutoVersion;
-import com.skyeye.version.service.AutoVersionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,94 +25,38 @@ import java.util.Map;
 /**
  * @ClassName: AutoDemandAiDraftService
  * @Description: 需求草稿 AI 生成编排（不落库）
- * @author: skyeye云系列--卫志强
- * @date: 2026/8/19
- * @Copyright: 2026 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
- * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
 public class AutoDemandAiDraftService {
 
-    @Autowired
-    private IAiChatRest iAiChatRest;
+    private static final String[] DEMAND_SECTION_LABELS = {
+        "背景", "范围", "前端任务", "后端任务", "测试任务", "功能说明", "验收标准"
+    };
 
     @Autowired
-    private IPlatformBaseSettingRest iPlatformBaseSettingRest;
+    private AutoAiChatHelper autoAiChatHelper;
 
     @Autowired
-    private AutoProjectService autoProjectService;
-
-    @Autowired
-    private AutoModuleService autoModuleService;
-
-    @Autowired
-    private AutoVersionService autoVersionService;
+    private AutoAiProjectContextHelper autoAiProjectContextHelper;
 
     public Map<String, Object> generate(Map<String, Object> params) {
         String name = params.get("name").toString().trim();
         String objectId = params.get("objectId").toString();
-        String projectName = loadProjectName(objectId);
-        String moduleName = loadModuleName(params.get("moduleId") == null ? "" : params.get("moduleId").toString());
-        String versionName = loadVersionName(params.get("versionId") == null ? "" : params.get("versionId").toString());
+        String projectName = autoAiProjectContextHelper.loadProjectName(objectId);
+        String moduleName = autoAiProjectContextHelper.loadModuleName(
+            params.get("moduleId") == null ? "" : params.get("moduleId").toString());
+        String versionName = autoAiProjectContextHelper.loadVersionName(
+            params.get("versionId") == null ? "" : params.get("versionId").toString());
         String content = params.get("content") == null ? "" : params.get("content").toString();
         String remark = params.get("remark") == null ? "" : params.get("remark").toString();
         String testJoin = formatTestJoin(params.get("testJoinAnalysis"));
-
-        String roleId = loadPlatformAiRoleId();
-        Map<String, Object> chatParams = new HashMap<>();
-        chatParams.put("content", buildUserContent(name, projectName, moduleName, versionName, content, remark, testJoin));
-        chatParams.put("bizType", "demandDraft");
-        chatParams.put("roleId", roleId);
-        chatParams.put("saveChat", 0);
-        Map<String, Object> chatBean = ExecuteFeignClient.get(() -> iAiChatRest.syncChatCompletion(chatParams)).getBean();
-        if (chatBean == null || chatBean.get("id") == null) {
-            throw new CustomException("启动AI生成失败");
-        }
-        Map<String, Object> bean = new HashMap<>();
-        bean.put("chatId", chatBean.get("id").toString());
-        bean.put("streaming", true);
-        return bean;
+        return autoAiChatHelper.startStreamingChat(
+            buildUserContent(name, projectName, moduleName, versionName, content, remark, testJoin),
+            "demandDraft");
     }
 
     public Map<String, Object> parseAnswer(Map<String, Object> params) {
-        if (params.get("answer") == null) {
-            throw new CustomException("生成结果不能为空");
-        }
-        String answer = params.get("answer").toString();
-        if (StrUtil.isBlank(answer)) {
-            throw new CustomException("生成结果不能为空");
-        }
-        return parseDraft(answer);
-    }
-
-    private String loadPlatformAiRoleId() {
-        Map<String, Object> bean = ExecuteFeignClient.get(() -> iPlatformBaseSettingRest.queryPlatformAiRole()).getBean();
-        String roleId = bean == null || bean.get("roleId") == null ? "" : bean.get("roleId").toString();
-        if (StrUtil.isBlank(roleId)) {
-            throw new CustomException("请先在平台信息设置中绑定AI角色");
-        }
-        return roleId;
-    }
-
-    private String loadProjectName(String objectId) {
-        AutoProject project = autoProjectService.selectById(objectId);
-        return project == null || project.getName() == null ? "" : project.getName().toString();
-    }
-
-    private String loadModuleName(String moduleId) {
-        if (StrUtil.isBlank(moduleId)) {
-            return "";
-        }
-        AutoModule module = autoModuleService.selectById(moduleId);
-        return module == null || module.getName() == null ? "" : module.getName().toString();
-    }
-
-    private String loadVersionName(String versionId) {
-        if (StrUtil.isBlank(versionId)) {
-            return "";
-        }
-        AutoVersion version = autoVersionService.selectById(versionId);
-        return version == null || version.getName() == null ? "" : version.getName().toString();
+        return parseDraft(autoAiChatHelper.requireAnswer(params));
     }
 
     private String formatTestJoin(Object value) {
@@ -142,12 +79,12 @@ public class AutoDemandAiDraftService {
         sb.append("你是软件研发需求分析师，只输出 JSON，不要 markdown。\n");
         sb.append("请按需求分析师写需求的习惯生成需求草稿：讲清背景、范围、前后端与测试任务拆分及工期，表述给研发可直接落地，不要 markdown 代码块。\n");
         sb.append("标题：").append(name).append("\n");
-        sb.append("项目：").append(nvlText(projectName)).append("\n");
-        sb.append("模块：").append(nvlText(moduleName)).append("\n");
-        sb.append("版本：").append(nvlText(versionName)).append("\n");
+        sb.append("项目：").append(AutoAiHtmlHelper.nvlText(projectName)).append("\n");
+        sb.append("模块：").append(AutoAiHtmlHelper.nvlText(moduleName)).append("\n");
+        sb.append("版本：").append(AutoAiHtmlHelper.nvlText(versionName)).append("\n");
         sb.append("测试参与需求分析：").append(testJoin).append("\n");
-        sb.append("已有内容：").append(nvlText(content)).append("\n");
-        sb.append("已有备注：").append(nvlText(remark)).append("\n");
+        sb.append("已有内容：").append(AutoAiHtmlHelper.nvlText(content)).append("\n");
+        sb.append("已有备注：").append(AutoAiHtmlHelper.nvlText(remark)).append("\n");
         sb.append("请输出 JSON：\n");
         sb.append("{\n");
         sb.append("  \"contentHtml\": \"需求正文 HTML\",\n");
@@ -171,11 +108,10 @@ public class AutoDemandAiDraftService {
     }
 
     private Map<String, Object> parseDraft(String answer) {
-        String jsonText = extractJson(answer);
-        JSONObject json = parseJson(jsonText);
+        JSONObject json = AutoAiJsonHelper.parseJsonObject(AutoAiJsonHelper.extractJson(answer));
         Map<String, Object> bean = new HashMap<>();
         if (json == null) {
-            bean.put("content", ensureDemandSectionBold(wrapAsHtml(answer)));
+            bean.put("content", AutoAiHtmlHelper.ensureSectionBold(AutoAiHtmlHelper.wrapAsHtml(answer), DEMAND_SECTION_LABELS));
             bean.put("remark", "");
             bean.put("totalScore", "0.00");
             fillEstimate(bean, 1, 1, 1);
@@ -189,76 +125,13 @@ public class AutoDemandAiDraftService {
             contentHtml = contentHtml + taskHtml;
         }
         if (StrUtil.isBlank(contentHtml)) {
-            contentHtml = wrapAsHtml(answer);
+            contentHtml = AutoAiHtmlHelper.wrapAsHtml(answer);
         }
-        bean.put("content", ensureDemandSectionBold(contentHtml));
+        bean.put("content", AutoAiHtmlHelper.ensureSectionBold(contentHtml, DEMAND_SECTION_LABELS));
         bean.put("remark", json.getStr("remark") == null ? "" : json.getStr("remark").toString());
         bean.put("totalScore", formatScore(json.get("totalScore")));
         fillEstimate(bean, parseDays(json.get("frontDays")), parseDays(json.get("backDays")), parseDays(json.get("testDays")));
         return bean;
-    }
-
-    /**
-     * 兜底：模型常输出纯文本小节，补上 strong 加粗。
-     */
-    private String ensureDemandSectionBold(String html) {
-        if (StrUtil.isBlank(html)) {
-            return html;
-        }
-        String result = html;
-        String[] labels = {"背景", "范围", "前端任务", "后端任务", "测试任务", "功能说明", "验收标准"};
-        for (String label : labels) {
-            if (result.contains("<strong>" + label) || result.contains("<b>" + label)
-                || result.contains("<h3>" + label) || result.contains("<h2>" + label)) {
-                continue;
-            }
-            String withCnColon = label + "：";
-            String withEnColon = label + ":";
-            if (result.contains(withCnColon)) {
-                result = result.replace(withCnColon, "<strong>" + withCnColon + "</strong>");
-            } else if (result.contains(withEnColon)) {
-                result = result.replace(withEnColon, "<strong>" + withEnColon + "</strong>");
-            } else if (result.contains(label)) {
-                result = result.replaceFirst(java.util.regex.Pattern.quote(label),
-                    "<strong>" + label + "</strong>");
-            }
-        }
-        return result;
-    }
-
-    private JSONObject parseJson(String jsonText) {
-        if (StrUtil.isBlank(jsonText)) {
-            return null;
-        }
-        try {
-            return JSONUtil.parseObj(jsonText);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private String extractJson(String answer) {
-        if (StrUtil.isBlank(answer)) {
-            return "";
-        }
-        String text = answer.trim();
-        if (text.startsWith("```")) {
-            int firstNl = text.indexOf('\n');
-            if (firstNl > 0) {
-                text = text.substring(firstNl + 1);
-            }
-            int lastFence = text.lastIndexOf("```");
-            if (lastFence >= 0) {
-                text = text.substring(0, lastFence);
-            }
-            text = text.trim();
-        }
-        int start = text.indexOf('{');
-        int end = text.lastIndexOf('}');
-        if (start >= 0 && end > start) {
-            return text.substring(start, end + 1);
-        }
-        return text;
     }
 
     private String buildHtmlFromTasks(JSONObject json) {
@@ -282,34 +155,15 @@ public class AutoDemandAiDraftService {
             return "";
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("<p><strong>").append(escapeHtml(title)).append("：</strong></p><ul>");
+        sb.append("<p><strong>").append(AutoAiHtmlHelper.escapeHtml(title)).append("：</strong></p><ul>");
         for (Object item : tasks) {
             if (item == null) {
                 continue;
             }
-            sb.append("<li>").append(escapeHtml(item.toString())).append("</li>");
+            sb.append("<li>").append(AutoAiHtmlHelper.escapeHtml(item.toString())).append("</li>");
         }
         sb.append("</ul>");
         return sb.toString();
-    }
-
-    private String wrapAsHtml(String raw) {
-        if (StrUtil.isBlank(raw)) {
-            return "";
-        }
-        String text = raw.trim();
-        if (text.startsWith("<")) {
-            return text;
-        }
-        String escaped = escapeHtml(text);
-        return "<p>" + escaped.replace("\n", "</p><p>") + "</p>";
-    }
-
-    private String escapeHtml(String text) {
-        if (text == null) {
-            return "";
-        }
-        return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
     }
 
     private String formatScore(Object value) {
@@ -354,9 +208,5 @@ public class AutoDemandAiDraftService {
             DateUtil.formatDate2Str(start, DateUtil.YYYY_MM_DD),
             DateUtil.formatDate2Str(end, DateUtil.YYYY_MM_DD)
         };
-    }
-
-    private String nvlText(String value) {
-        return StrUtil.isBlank(value) ? "无" : value;
     }
 }

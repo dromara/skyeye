@@ -13,6 +13,7 @@ import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.attr.classenum.AttrSymbols;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.MqConstants;
+import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
@@ -76,6 +77,9 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
 
     @Autowired
     private IJobMateMationService iJobMateMationService;
+
+    @Autowired
+    private AutoCaseAiAssertService autoCaseAiAssertService;
 
     @Override
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
@@ -151,6 +155,20 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
 
         Map<String, Object> bean = runStepOnce(targetStep, result);
         outputObject.setBean(bean);
+    }
+
+    @Override
+    public void aiGenerateStepAssert(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> bean = autoCaseAiAssertService.generate(inputObject.getParams());
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void aiParseStepAssert(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> bean = autoCaseAiAssertService.parseAnswer(inputObject.getParams());
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
     /**
