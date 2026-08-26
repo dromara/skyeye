@@ -422,11 +422,12 @@ public class UploadServiceImpl implements UploadService {
     }
 
     /**
-     * 按指定文件存储器类型上传。storage 为空用默认；对应类型不存在则 uploaded=false，不抛错。
+     * 按指定文件配置/存储器类型上传。优先 configId，其次 storage，都空用默认；不存在则 uploaded=false。
      */
     @Override
     public void skyeyeUploadToFileStorage(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
+        String configId = params.get("configId") == null ? StrUtil.EMPTY : params.get("configId").toString().trim();
         Integer storage = null;
         Object storageObj = params.get("storage");
         if (storageObj != null && StrUtil.isNotBlank(storageObj.toString())) {
@@ -453,11 +454,20 @@ public class UploadServiceImpl implements UploadService {
         FileConfig fileConfig;
         FileClient fileClient;
         try {
-            fileConfig = fileConfigService.getFileConfigByStorage(storage);
-            if (fileConfig == null) {
-                LOGGER.warn("uploadToFileStorage skip, storage not found: {}", storage);
-                outputObject.setBean(result);
-                return;
+            if (StrUtil.isNotBlank(configId)) {
+                fileConfig = fileConfigService.selectById(configId);
+                if (fileConfig == null || StrUtil.isBlank(fileConfig.getId())) {
+                    LOGGER.warn("uploadToFileStorage skip, configId not found: {}", configId);
+                    outputObject.setBean(result);
+                    return;
+                }
+            } else {
+                fileConfig = fileConfigService.getFileConfigByStorage(storage);
+                if (fileConfig == null) {
+                    LOGGER.warn("uploadToFileStorage skip, storage not found: {}", storage);
+                    outputObject.setBean(result);
+                    return;
+                }
             }
             fileClient = fileConfigService.getFileClient(fileConfig.getId());
         } catch (Exception e) {

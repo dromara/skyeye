@@ -6,15 +6,20 @@ package com.skyeye.upload.service.impl;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.cache.redis.RedisCache;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.enumeration.IsDefaultEnum;
 import com.skyeye.common.enumeration.TenantEnum;
+import com.skyeye.common.entity.search.TableSelectInfo;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.framework.file.core.client.FileClient;
@@ -28,6 +33,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Validator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @ClassName: FileConfigServiceImpl
@@ -53,6 +61,25 @@ public class FileConfigServiceImpl extends SkyeyeBusinessServiceImpl<FileConfigD
     private static final String FILE_CONFIG_IS_DEFAULT_CACHE_KEY = "skyeye:fileConfig:isDefault";
 
     @Override
+    public void queryFileConfigSelectList(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        QueryWrapper<FileConfig> wrapper = new QueryWrapper<>();
+        if (tableSelectInfo != null && StrUtil.isNotBlank(tableSelectInfo.getKeyword())) {
+            wrapper.like("name", tableSelectInfo.getKeyword().trim());
+        }
+        wrapper.orderByDesc(MybatisPlusUtil.toColumns(FileConfig::getIsDefault));
+        wrapper.orderByDesc(CommonConstants.CREATE_TIME_KEY);
+        List<FileConfig> list = list(wrapper);
+        List<Map<String, Object>> beans = JSONUtil.toList(JSONUtil.toJsonStr(list), null);
+        // 下拉列表不返回 config（含密钥等敏感信息）
+        beans.forEach(bean -> bean.remove("config"));
+        iAuthUserService.setNameForMap(beans, "createId", "createName");
+        iAuthUserService.setNameForMap(beans, "lastUpdateId", "lastUpdateName");
+        outputObject.setBeans(beans);
+        outputObject.settotal(beans.size());
+    }
+
+    @Override
     public void validatorEntity(FileConfig entity) {
         super.validatorEntity(entity);
         // 解析配置
@@ -69,11 +96,27 @@ public class FileConfigServiceImpl extends SkyeyeBusinessServiceImpl<FileConfigD
 
     @Override
     public void createPrepose(FileConfig entity) {
-        if (entity.getIsDefault() == IsDefaultEnum.IS_DEFAULT.getKey()) {
-            UpdateWrapper<FileConfig> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.set(MybatisPlusUtil.toColumns(FileConfig::getIsDefault), IsDefaultEnum.NOT_DEFAULT.getKey());
-            update(updateWrapper);
+        clearOtherDefaults(entity);
+    }
+
+    @Override
+    public void updatePrepose(FileConfig entity) {
+        clearOtherDefaults(entity);
+    }
+
+    /**
+     * 设为默认时，把其它配置的默认标记清掉（新增/编辑都要处理）
+     */
+    private void clearOtherDefaults(FileConfig entity) {
+        if (!Objects.equals(entity.getIsDefault(), IsDefaultEnum.IS_DEFAULT.getKey())) {
+            return;
         }
+        UpdateWrapper<FileConfig> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set(MybatisPlusUtil.toColumns(FileConfig::getIsDefault), IsDefaultEnum.NOT_DEFAULT.getKey());
+        if (StrUtil.isNotBlank(entity.getId())) {
+            updateWrapper.ne(CommonConstants.ID, entity.getId());
+        }
+        update(updateWrapper);
     }
 
     @Override
@@ -84,9 +127,8 @@ public class FileConfigServiceImpl extends SkyeyeBusinessServiceImpl<FileConfigD
 
     @Override
     public void writePostpose(FileConfig entity, String userId) {
-        if (entity.getIsDefault() == IsDefaultEnum.IS_DEFAULT.getKey()) {
-            jedisClientService.del(FILE_CONFIG_IS_DEFAULT_CACHE_KEY);
-        }
+        // 默认配置可能变化，统一清缓存（含「取消默认」场景）
+        jedisClientService.del(FILE_CONFIG_IS_DEFAULT_CACHE_KEY);
     }
 
     @Override
@@ -100,9 +142,8 @@ public class FileConfigServiceImpl extends SkyeyeBusinessServiceImpl<FileConfigD
 
     @Override
     public void deletePostpose(FileConfig entity) {
-        if (entity.getIsDefault() == IsDefaultEnum.IS_DEFAULT.getKey()) {
-            jedisClientService.del(FILE_CONFIG_IS_DEFAULT_CACHE_KEY);
-        }
+        // 删除后默认缓存一律失效，避免残留指向已删配置
+        jedisClientService.del(FILE_CONFIG_IS_DEFAULT_CACHE_KEY);
         // 移除文件客户端
         fileClientFactory.removeFileClient(entity.getId());
     }

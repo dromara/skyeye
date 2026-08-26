@@ -5,6 +5,8 @@
 package com.skyeye.upload.service;
 
 import com.skyeye.base.business.service.SkyeyeBusinessService;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.framework.file.core.client.FileClient;
 import com.skyeye.upload.entity.FileConfig;
 
@@ -17,6 +19,11 @@ import com.skyeye.upload.entity.FileConfig;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 public interface FileConfigService extends SkyeyeBusinessService<FileConfig> {
+
+    /**
+     * 下拉选择用：返回全部文件配置（不分页，不含 config 敏感字段）
+     */
+    void queryFileConfigSelectList(InputObject inputObject, OutputObject outputObject);
 
     /**
      * 获得默认的文件客户端

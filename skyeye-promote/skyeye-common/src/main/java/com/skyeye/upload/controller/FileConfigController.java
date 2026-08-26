@@ -9,6 +9,7 @@ import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.upload.entity.FileConfig;
@@ -37,6 +38,13 @@ public class FileConfigController {
     @RequestMapping("/post/FileConfigController/queryFileConfigList")
     public void queryFileConfigList(InputObject inputObject, OutputObject outputObject) {
         fileConfigService.queryPageList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryFileConfigSelectList", value = "获取文件配置下拉列表（不分页）", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @RequestMapping("/post/FileConfigController/queryFileConfigSelectList")
+    public void queryFileConfigSelectList(InputObject inputObject, OutputObject outputObject) {
+        fileConfigService.queryFileConfigSelectList(inputObject, outputObject);
     }
 
     @ApiOperation(id = "writeFileConfig", value = "新增/编辑文件配置", method = "POST", allUse = "1")

@@ -60,6 +60,10 @@ public class Knowledge extends OperatorUserInfo {
     @ApiModelProperty(value = "JDBC 驱动类")
     private String driverClass;
 
+    @TableField(value = "file_config_id")
+    @ApiModelProperty(value = "文件配置ID（同步上传用；多 S3 时指定具体存储器）")
+    private String fileConfigId;
+
     @TableField(value = "frequency")
     @ApiModelProperty(value = "同步频次", enumClass = ScheduleFrequency.class, required = "required,num")
     private Integer frequency;

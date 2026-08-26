@@ -461,7 +461,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                 bufferRows++;
                 total++;
                 if (bufferRows >= FLUSH_ROWS) {
-                    flushUpload(apiKey, tenantId, uploadBuffer);
+                    flushUpload(knowledge, apiKey, tenantId, uploadBuffer);
                     bufferRows = 0;
                 }
             }
@@ -484,12 +484,12 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             }
         }
         if (bufferRows > 0) {
-            flushUpload(apiKey, tenantId, uploadBuffer);
+            flushUpload(knowledge, apiKey, tenantId, uploadBuffer);
         }
         return total;
     }
 
-    private void flushUpload(AiApiKey apiKey, String tenantId, StringBuilder uploadBuffer) {
+    private void flushUpload(Knowledge knowledge, AiApiKey apiKey, String tenantId, StringBuilder uploadBuffer) {
         String content = uploadBuffer.toString();
         uploadBuffer.setLength(0);
         if (StrUtil.isBlank(content)) {
@@ -501,10 +501,14 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             String contentBase64 = Base64.getEncoder().encodeToString(content.getBytes(StandardCharsets.UTF_8));
             int type = FileConstants.FileUploadPath.KNOWLG_CONTENT.getType()[0];
             AiPlatformEnum platform = AiPlatformEnum.getName(apiKey.getPlatform());
-            // 豆包指定 S3；其它平台不传 storage，走默认存储器
-            Integer storage = AiPlatformEnum.DOU_BAO == platform ? FILE_STORAGE_S3 : null;
+            // 优先用知识库绑定的文件配置；未绑定时豆包按 S3 类型取，其它走默认
+            String configId = knowledge == null ? StrUtil.EMPTY : StrUtil.blankToDefault(knowledge.getFileConfigId(), StrUtil.EMPTY);
+            Integer storage = null;
+            if (StrUtil.isBlank(configId) && AiPlatformEnum.DOU_BAO == platform) {
+                storage = FILE_STORAGE_S3;
+            }
             Map<String, Object> storageResult = iUploadService.uploadToFileStorage(
-                storage, type, fileName, contentBase64, localPath);
+                configId, storage, type, fileName, contentBase64, localPath);
             boolean uploaded = isUploaded(storageResult);
             String fileUrl = uploaded ? str(storageResult.get("url")) : StrUtil.EMPTY;
             String tosPath = uploaded ? str(storageResult.get("tosPath")) : StrUtil.EMPTY;
@@ -512,7 +516,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             AiKnowledgeClient client = aiFactory.getKnowledgeClient(platform);
             if (AiPlatformEnum.DOU_BAO == platform) {
                 if (!uploaded || (StrUtil.isBlank(fileUrl) && StrUtil.isBlank(tosPath))) {
-                    throw new CustomException("豆包知识库同步需要可用的 S3 文件存储器（请在基础模块配置 FileStorageEnum.S3）");
+                    throw new CustomException("豆包知识库同步需要可用的文件存储器（请在知识库配置中指定文件配置，或配置 S3/TOS）");
                 }
             }
             client.uploadText(apiKey.toAiKnowledgeConfig(), fileName, content, fileUrl, tosPath);
