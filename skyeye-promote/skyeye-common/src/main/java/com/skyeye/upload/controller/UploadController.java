@@ -117,16 +117,16 @@ public class UploadController {
         uploadService.getFilePresignedUrl(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "uploadToFileStorage", value = "按指定文件存储器上传（供业务侧如 AI 知识库同步调用；存储器不存在则跳过）", method = "POST", allUse = "0")
+    @ApiOperation(id = "skyeyeUploadToFileStorage", value = "按指定文件存储器上传（供业务侧如 AI 知识库同步调用；存储器不存在则跳过）", method = "POST", allUse = "0")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "storage", name = "storage", value = "存储器类型，见 FileStorageEnum（如 20=S3）；为空则用默认存储器", enumClass = FileStorageEnum.class),
         @ApiImplicitParam(id = "type", name = "type", value = "文件目录类型", required = "required,num"),
         @ApiImplicitParam(id = "fileName", name = "fileName", value = "文件名（含后缀）", required = "required"),
         @ApiImplicitParam(id = "contentBase64", name = "contentBase64", value = "文件内容 Base64，与 localPath 二选一"),
         @ApiImplicitParam(id = "localPath", name = "localPath", value = "本机绝对路径（需在 IMAGES_PATH 下），与 contentBase64 二选一")})
-    @RequestMapping("/post/UploadController/uploadToFileStorage")
-    public void uploadToFileStorage(InputObject inputObject, OutputObject outputObject) {
-        uploadService.uploadToFileStorage(inputObject, outputObject);
+    @RequestMapping("/post/UploadController/skyeyeUploadToFileStorage")
+    public void skyeyeUploadToFileStorage(InputObject inputObject, OutputObject outputObject) {
+        uploadService.skyeyeUploadToFileStorage(inputObject, outputObject);
     }
 
 }

@@ -118,7 +118,7 @@ public class KnowledgeController {
         knowledgeService.syncNow(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryAiKnowledgeSyncHistory", value = "分页查询知识库同步历史", method = "POST", allUse = "1")
+    @ApiOperation(id = "queryAiKnowledgeSyncHistory", value = "分页查询知识库同步历史", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/knowledgeController/queryAiKnowledgeSyncHistory")
     public void queryAiKnowledgeSyncHistory(InputObject inputObject, OutputObject outputObject) {
