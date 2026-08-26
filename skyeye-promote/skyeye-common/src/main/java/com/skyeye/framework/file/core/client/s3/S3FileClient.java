@@ -34,17 +34,43 @@ public class S3FileClient extends AbstractFileClient<S3FileClientConfig> {
 
     @Override
     protected void doInit() {
+        normalizeEndpoint();
         // 补全 domain
         if (StrUtil.isEmpty(config.getDomain())) {
             config.setDomain(buildDomain());
         }
         // 初始化客户端
-        client = MinioClient.builder()
+        MinioClient.Builder builder = MinioClient.builder()
             .endpoint(buildEndpointURL()) // Endpoint URL
-            .region(buildRegion()) // Region
-            .credentials(config.getAccessKey(), config.getAccessSecret()) // 认证密钥
-            .build();
+            .credentials(config.getAccessKey(), config.getAccessSecret()); // 认证密钥
+        String region = buildRegion();
+        if (StrUtil.isNotBlank(region)) {
+            builder.region(region);
+        }
+        client = builder.build();
         enableVirtualStyleEndpoint();
+    }
+
+    /**
+     * 规范化 endpoint：去协议/路径，并修正火山 TOS 常见写法（缺 s3 段会导致 DNS 失败）
+     */
+    private void normalizeEndpoint() {
+        String endpoint = StrUtil.trim(config.getEndpoint());
+        if (StrUtil.isBlank(endpoint)) {
+            return;
+        }
+        endpoint = endpoint.replaceAll("^https?://", "");
+        int slashIdx = endpoint.indexOf('/');
+        if (slashIdx > 0) {
+            endpoint = endpoint.substring(0, slashIdx);
+        }
+        // 火山 TOS S3 协议域名必须是 tos-s3-{region}.volces.com，不是 tos-{region}.volces.com
+        if (endpoint.contains(S3FileClientConfig.ENDPOINT_VOLCES)
+            && endpoint.startsWith("tos-")
+            && !endpoint.startsWith("tos-s3-")) {
+            endpoint = "tos-s3-" + endpoint.substring("tos-".length());
+        }
+        config.setEndpoint(endpoint);
     }
 
     /**
@@ -90,6 +116,17 @@ public class S3FileClient extends AbstractFileClient<S3FileClientConfig> {
         if (config.getEndpoint().contains(S3FileClientConfig.ENDPOINT_TENCENT)) {
             return StrUtil.subAfter(config.getEndpoint(), "cos.", false)
                 .replaceAll("." + S3FileClientConfig.ENDPOINT_TENCENT, ""); // 去除 Endpoint
+        }
+        // 火山 TOS 必须带 region，如 tos-s3-cn-beijing.volces.com -> cn-beijing
+        if (config.getEndpoint().contains(S3FileClientConfig.ENDPOINT_VOLCES)) {
+            String ep = config.getEndpoint().replaceAll("^https?://", "");
+            if (ep.startsWith("tos-s3-")) {
+                String region = StrUtil.subBetween(ep, "tos-s3-", ".");
+                if (StrUtil.isNotBlank(region)) {
+                    return region;
+                }
+            }
+            return "cn-beijing";
         }
         return null;
     }

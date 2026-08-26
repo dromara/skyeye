@@ -427,7 +427,7 @@ public class UploadServiceImpl implements UploadService {
     @Override
     public void skyeyeUploadToFileStorage(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
-        String configId = params.get("configId") == null ? StrUtil.EMPTY : params.get("configId").toString().trim();
+        String configId = params.get("configId").toString().trim();
         Integer storage = null;
         Object storageObj = params.get("storage");
         if (storageObj != null && StrUtil.isNotBlank(storageObj.toString())) {
@@ -436,15 +436,9 @@ public class UploadServiceImpl implements UploadService {
                 throw new CustomException("非法的文件存储器类型: " + storage);
             }
         }
-        Object typeObj = params.get("type");
-        if (typeObj == null || StrUtil.isBlank(typeObj.toString())) {
-            throw new CustomException("文件目录类型 type 不能为空");
-        }
-        int type = Integer.parseInt(typeObj.toString());
-        String fileName = params.get("fileName") == null ? StrUtil.EMPTY : params.get("fileName").toString();
-        if (StrUtil.isBlank(fileName)) {
-            throw new CustomException("fileName 不能为空");
-        }
+        int type = Integer.parseInt(params.get("type").toString());
+        String fileName = params.get("fileName").toString();
+        String objectDir = params.get("objectDir") == null ? StrUtil.EMPTY : params.get("objectDir").toString();
         String contentBase64 = params.get("contentBase64") == null ? StrUtil.EMPTY : params.get("contentBase64").toString();
         String localPath = params.get("localPath") == null ? StrUtil.EMPTY : params.get("localPath").toString();
 
@@ -485,7 +479,7 @@ public class UploadServiceImpl implements UploadService {
             throw new CustomException("上传内容为空，请传 contentBase64 或有效的 localPath");
         }
 
-        String objectKey = buildStorageObjectKey(type, fileName);
+        String objectKey = buildStorageObjectKey(type, objectDir, fileName);
         String mimeType = FileUtil.getMineType(fileName);
         try {
             String url = fileClient.upload(content, objectKey, mimeType);
@@ -513,6 +507,26 @@ public class UploadServiceImpl implements UploadService {
             outputObject.settotal(CommonNumConstants.NUM_ONE);
         } catch (Exception e) {
             throw new CustomException("上传到文件存储器失败: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void skyeyeDeleteFromFileStorage(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String configId = params.get("configId").toString().trim();
+        String path = params.get("path").toString().trim();
+        FileClient client = fileConfigService.getFileClient(configId);
+        if (client == null) {
+            throw new CustomException("文件存储配置不存在");
+        }
+        try {
+            client.delete(path);
+        } catch (Exception e) {
+            throw new CustomException("删除对象存储文件失败: " + e.getMessage());
+        }
+        com.skyeye.upload.entity.File file = fileService.queryByPath(path);
+        if (file != null && StrUtil.isNotBlank(file.getId())) {
+            fileService.deleteById(file.getId());
         }
     }
 
@@ -545,7 +559,7 @@ public class UploadServiceImpl implements UploadService {
         }
     }
 
-    private String buildStorageObjectKey(int type, String fileName) {
+    private String buildStorageObjectKey(int type, String objectDir, String fileName) {
         String visit = FileConstants.FileUploadPath.getVisitPath(type);
         // /images/upload/wordfolder/ -> wordfolder/
         String prefix = visit;
@@ -557,8 +571,23 @@ public class UploadServiceImpl implements UploadService {
         if (StrUtil.isNotBlank(prefix) && !prefix.endsWith("/")) {
             prefix = prefix + "/";
         }
+        String dir = sanitizeObjectDir(objectDir);
         String name = fileName.replaceAll("^/+", "");
-        return prefix + name;
+        return prefix + dir + name;
+    }
+
+    private String sanitizeObjectDir(String objectDir) {
+        if (StrUtil.isBlank(objectDir)) {
+            return StrUtil.EMPTY;
+        }
+        String dir = objectDir.trim().replace('\\', '/');
+        dir = dir.replaceAll("\\.\\.", "");
+        dir = dir.replaceAll("[^A-Za-z0-9_\\-/]", "_");
+        dir = dir.replaceAll("^/+", "");
+        if (StrUtil.isNotBlank(dir) && !dir.endsWith("/")) {
+            dir = dir + "/";
+        }
+        return dir;
     }
 
     private void saveStorageFile(String configId, String fileName, String path, String url,

@@ -67,10 +67,21 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeServiceImpl.class);
 
+    /** 单文件最大约 5MB，与行数阈值取先到者 */
+    private static final int DEFAULT_FLUSH_MAX_BYTES = 5 * 1024 * 1024;
+
     /**
-     * 累计多少行后刷一次上传，避免单文件过大
+     * 累计多少行后刷一次上传（可通过 skyeye.ai.knowledge.sync.flush-rows 配置）
      */
-    private static final int FLUSH_ROWS = 200;
+    @Value("${skyeye.ai.knowledge.sync.flush-rows:5000}")
+    private int flushRows;
+
+    @Value("${skyeye.ai.knowledge.sync.flush-max-bytes:" + DEFAULT_FLUSH_MAX_BYTES + "}")
+    private int flushMaxBytes;
+
+    /** 导入平台知识库成功后删除 S3/TOS 临时文件 */
+    @Value("${skyeye.ai.knowledge.sync.delete-storage-after-import:true}")
+    private boolean deleteStorageAfterImport;
 
     /**
      * 与 skyeye-pro FileStorageEnum.S3 一致，豆包知识库走 S3/TOS
@@ -383,8 +394,9 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                 syncList = knowledgeSyncService.selectByKnowledgeId(knowledge.getId());
             }
             String tenantId = StrUtil.blankToDefault(TenantContext.getTenantId(), knowledge.getTenantId());
+            SyncUploadContext uploadContext = new SyncUploadContext(knowledge.getId());
             for (KnowledgeSync sync : syncList) {
-                total += syncOneTable(knowledge, sync, tenantId, apiKey);
+                total += syncOneTable(knowledge, sync, tenantId, apiKey, uploadContext);
             }
             UpdateWrapper<Knowledge> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq(CommonConstants.ID, knowledge.getId());
@@ -409,7 +421,8 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         }
     }
 
-    private int syncOneTable(Knowledge knowledge, KnowledgeSync sync, String tenantId, AiApiKey apiKey) {
+    private int syncOneTable(Knowledge knowledge, KnowledgeSync sync, String tenantId, AiApiKey apiKey,
+                             SyncUploadContext uploadContext) {
         KnowledgeJdbcHelper.checkIdentifier(sync.getTableName(), "表名");
         KnowledgeJdbcHelper.checkIdentifier(sync.getIdField(), "主键字段");
         Set<String> columnSet = new LinkedHashSet<>();
@@ -460,8 +473,8 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                     sync.getTableName(), sync.getIdField(), sync.getTitleField(), row, contentFields));
                 bufferRows++;
                 total++;
-                if (bufferRows >= FLUSH_ROWS) {
-                    flushUpload(knowledge, apiKey, tenantId, uploadBuffer);
+                if (bufferRows >= flushRows || uploadBuffer.length() >= flushMaxBytes) {
+                    flushUpload(knowledge, apiKey, uploadContext, uploadBuffer);
                     bufferRows = 0;
                 }
             }
@@ -484,19 +497,25 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             }
         }
         if (bufferRows > 0) {
-            flushUpload(knowledge, apiKey, tenantId, uploadBuffer);
+            flushUpload(knowledge, apiKey, uploadContext, uploadBuffer);
         }
         return total;
     }
 
-    private void flushUpload(Knowledge knowledge, AiApiKey apiKey, String tenantId, StringBuilder uploadBuffer) {
+    private void flushUpload(Knowledge knowledge, AiApiKey apiKey, SyncUploadContext uploadContext,
+                             StringBuilder uploadBuffer) {
         String content = uploadBuffer.toString();
         uploadBuffer.setLength(0);
         if (StrUtil.isBlank(content)) {
             return;
         }
-        String fileName = AiKnowledgeUploadHelper.buildFileName(tenantId);
-        String localPath = writeLocalTempFile(fileName, content);
+        int partIndex = uploadContext.nextPart();
+        String fileName = AiKnowledgeUploadHelper.buildFileName(partIndex);
+        String platformDocName = AiKnowledgeUploadHelper.buildPlatformDocName(knowledge.getId(), partIndex);
+        String objectDir = uploadContext.getObjectDir();
+        String localPath = writeLocalTempFile(objectDir, fileName, content);
+        String storageConfigId = StrUtil.EMPTY;
+        String storageObjectPath = StrUtil.EMPTY;
         try {
             String contentBase64 = Base64.getEncoder().encodeToString(content.getBytes(StandardCharsets.UTF_8));
             int type = FileConstants.FileUploadPath.KNOWLG_CONTENT.getType()[0];
@@ -508,10 +527,12 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                 storage = FILE_STORAGE_S3;
             }
             Map<String, Object> storageResult = iUploadService.uploadToFileStorage(
-                configId, storage, type, fileName, contentBase64, localPath);
+                configId, storage, type, fileName, contentBase64, localPath, objectDir);
             boolean uploaded = isUploaded(storageResult);
             String fileUrl = uploaded ? str(storageResult.get("url")) : StrUtil.EMPTY;
             String tosPath = uploaded ? str(storageResult.get("tosPath")) : StrUtil.EMPTY;
+            storageConfigId = uploaded ? str(storageResult.get("configId")) : StrUtil.EMPTY;
+            storageObjectPath = uploaded ? str(storageResult.get("path")) : StrUtil.EMPTY;
 
             AiKnowledgeClient client = aiFactory.getKnowledgeClient(platform);
             if (AiPlatformEnum.DOU_BAO == platform) {
@@ -519,7 +540,8 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                     throw new CustomException("豆包知识库同步需要可用的文件存储器（请在知识库配置中指定文件配置，或配置 S3/TOS）");
                 }
             }
-            client.uploadText(apiKey.toAiKnowledgeConfig(), fileName, content, fileUrl, tosPath);
+            client.uploadText(apiKey.toAiKnowledgeConfig(), fileName, content, fileUrl, tosPath, platformDocName);
+            deleteStorageObjectIfNeeded(storageConfigId, storageObjectPath);
         } finally {
             if (StrUtil.isNotBlank(localPath)) {
                 FileUtil.deleteFile(localPath);
@@ -527,14 +549,33 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         }
     }
 
+    /** 平台导入成功后清理 S3/TOS 临时对象（失败仅打日志，不影响同步结果） */
+    private void deleteStorageObjectIfNeeded(String configId, String objectPath) {
+        if (!deleteStorageAfterImport || StrUtil.isBlank(configId) || StrUtil.isBlank(objectPath)) {
+            return;
+        }
+        try {
+            iUploadService.deleteFromFileStorage(configId, objectPath);
+        } catch (Exception e) {
+            LOGGER.warn("知识库同步后删除临时存储文件失败 configId={} path={}: {}",
+                configId, objectPath, e.getMessage());
+        }
+    }
+
     /**
      * 先落到 IMAGES_PATH 临时目录，上传完成后删除
      */
-    private String writeLocalTempFile(String fileName, String content) {
+    private String writeLocalTempFile(String objectDir, String fileName, String content) {
         try {
             int type = FileConstants.FileUploadPath.KNOWLG_CONTENT.getType()[0];
             String savePath = FileConstants.FileUploadPath.getSavePath(type);
             String dirPath = tPath + savePath;
+            if (StrUtil.isNotBlank(objectDir)) {
+                dirPath = dirPath + objectDir.replace('\\', '/');
+                if (!dirPath.endsWith("/")) {
+                    dirPath = dirPath + "/";
+                }
+            }
             File dir = new File(dirPath);
             if (!dir.exists() && !dir.mkdirs()) {
                 LOGGER.warn("创建知识库临时目录失败: {}", dirPath);
@@ -546,6 +587,24 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         } catch (Exception e) {
             LOGGER.warn("写入知识库临时文件失败: {}", e.getMessage());
             return StrUtil.EMPTY;
+        }
+    }
+
+    /** 单次同步的上传上下文：统一目录 + 分片序号 */
+    private static final class SyncUploadContext {
+        private final String objectDir;
+        private int partSeq;
+
+        SyncUploadContext(String knowledgeId) {
+            this.objectDir = AiKnowledgeUploadHelper.buildObjectDir(knowledgeId);
+        }
+
+        String getObjectDir() {
+            return objectDir;
+        }
+
+        int nextPart() {
+            return ++partSeq;
         }
     }
 
