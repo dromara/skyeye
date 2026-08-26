@@ -8,6 +8,8 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.github.yulichang.toolkit.JoinWrappers;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
@@ -15,6 +17,7 @@ import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
+import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.key.dao.AiApiKeyDao;
@@ -132,6 +135,31 @@ public class AiApiKeyServiceImpl extends SkyeyeBusinessServiceImpl<AiApiKeyDao, 
         }
         roleService.setDataMation(aiApiKey, AiApiKey::getRoleId);
         return aiApiKey;
+    }
+
+    @Override
+    @IgnoreTenant
+    public AiApiKey selectEnabledKeyByKnowledgeId(String knowledgeId) {
+        if (StrUtil.isBlank(knowledgeId)) {
+            throw new CustomException("知识库不能为空");
+        }
+        // join 查询必须 @IgnoreTenant，再手动带表别名过滤租户，否则拦截器会追加无别名的 tenant_id 导致歧义
+        MPJLambdaWrapper<AiApiKey> wrapper = JoinWrappers.lambda("ak", AiApiKey.class)
+            .selectAll(AiApiKey.class)
+            .innerJoin(Role.class, "r", Role::getId, AiApiKey::getRoleId)
+            .eq(Role::getKnowledgeId, knowledgeId)
+            .eq(AiApiKey::getEnabled, EnableEnum.ENABLE_USING.getKey())
+            .orderByDesc(AiApiKey::getCreateTime);
+        if (tenantEnable) {
+            String tenantId = TenantContext.getTenantId();
+            wrapper.eq("ak." + CommonConstants.TENANT_ID_FIELD, tenantId);
+            wrapper.eq("r." + CommonConstants.TENANT_ID_FIELD, tenantId);
+        }
+        List<AiApiKey> list = skyeyeBaseMapper.selectJoinList(AiApiKey.class, wrapper);
+        if (CollectionUtil.isEmpty(list)) {
+            throw new CustomException("请先在 AI 角色中绑定该知识库，并启用对应 AI 配置");
+        }
+        return list.get(0);
     }
 
     private void disableOtherEnabledKeysOfRole(AiApiKey aiApiKey) {

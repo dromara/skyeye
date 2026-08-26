@@ -32,4 +32,15 @@ public class ExecutorConfig {
         executor.initialize();
         return executor;
     }
+
+    @Bean(name = "knowledgeSyncExecutor")
+    public Executor knowledgeSyncExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(4);
+        executor.setQueueCapacity(200);
+        executor.setThreadNamePrefix("knowledgeSyncExecutor-");
+        executor.initialize();
+        return executor;
+    }
 }

@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public enum KnowledgeSyncResultEnum implements SkyeyeEnumClass {
 
+    RUNNING(0, "同步中", true, false),
     SUCCESS(1, "成功", true, true),
     FAIL(2, "失败", true, false);
 

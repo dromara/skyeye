@@ -20,7 +20,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * AI 知识库。按租户隔离，可供多个 AI 角色绑定，每个角色只从绑定库取数。
+ * AI 知识库：业务库拉表同步；平台类型/密钥/平台知识库 ID 均在「AI配置」。
  */
 @Data
 @UniqueField

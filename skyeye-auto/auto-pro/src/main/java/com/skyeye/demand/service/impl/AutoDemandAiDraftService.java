@@ -150,7 +150,7 @@ public class AutoDemandAiDraftService {
         sb.append("已有备注：").append(nvlText(remark)).append("\n");
         sb.append("请输出 JSON：\n");
         sb.append("{\n");
-        sb.append("  \"contentHtml\": \"需求正文 HTML，包含背景、范围、前端/后端/测试拆分\",\n");
+        sb.append("  \"contentHtml\": \"需求正文 HTML\",\n");
         sb.append("  \"remark\": \"简要备注\",\n");
         sb.append("  \"frontTasks\": [\"前端任务\"],\n");
         sb.append("  \"backTasks\": [\"后端任务\"],\n");
@@ -160,6 +160,12 @@ public class AutoDemandAiDraftService {
         sb.append("  \"backDays\": 3,\n");
         sb.append("  \"testDays\": 1\n");
         sb.append("}\n");
+        sb.append("contentHtml 必须严格按以下 HTML 结构输出（小节标题用 strong 加粗，不要纯文本标题）：\n");
+        sb.append("<p><strong>背景：</strong>…</p>");
+        sb.append("<p><strong>范围：</strong>…</p>");
+        sb.append("<p><strong>前端任务：</strong><br/>1. …</p>");
+        sb.append("<p><strong>后端任务：</strong><br/>1. …</p>");
+        sb.append("<p><strong>测试任务：</strong><br/>1. …</p>\n");
         sb.append("要求：contentHtml 为可直接放入富文本的 HTML；totalScore 为数字；frontDays/backDays/testDays 为正整数，表示各端预计工期（天）。");
         return sb.toString();
     }
@@ -169,7 +175,7 @@ public class AutoDemandAiDraftService {
         JSONObject json = parseJson(jsonText);
         Map<String, Object> bean = new HashMap<>();
         if (json == null) {
-            bean.put("content", wrapAsHtml(answer));
+            bean.put("content", ensureDemandSectionBold(wrapAsHtml(answer)));
             bean.put("remark", "");
             bean.put("totalScore", "0.00");
             fillEstimate(bean, 1, 1, 1);
@@ -185,11 +191,39 @@ public class AutoDemandAiDraftService {
         if (StrUtil.isBlank(contentHtml)) {
             contentHtml = wrapAsHtml(answer);
         }
-        bean.put("content", contentHtml);
+        bean.put("content", ensureDemandSectionBold(contentHtml));
         bean.put("remark", json.getStr("remark") == null ? "" : json.getStr("remark").toString());
         bean.put("totalScore", formatScore(json.get("totalScore")));
         fillEstimate(bean, parseDays(json.get("frontDays")), parseDays(json.get("backDays")), parseDays(json.get("testDays")));
         return bean;
+    }
+
+    /**
+     * 兜底：模型常输出纯文本小节，补上 strong 加粗。
+     */
+    private String ensureDemandSectionBold(String html) {
+        if (StrUtil.isBlank(html)) {
+            return html;
+        }
+        String result = html;
+        String[] labels = {"背景", "范围", "前端任务", "后端任务", "测试任务", "功能说明", "验收标准"};
+        for (String label : labels) {
+            if (result.contains("<strong>" + label) || result.contains("<b>" + label)
+                || result.contains("<h3>" + label) || result.contains("<h2>" + label)) {
+                continue;
+            }
+            String withCnColon = label + "：";
+            String withEnColon = label + ":";
+            if (result.contains(withCnColon)) {
+                result = result.replace(withCnColon, "<strong>" + withCnColon + "</strong>");
+            } else if (result.contains(withEnColon)) {
+                result = result.replace(withEnColon, "<strong>" + withEnColon + "</strong>");
+            } else if (result.contains(label)) {
+                result = result.replaceFirst(java.util.regex.Pattern.quote(label),
+                    "<strong>" + label + "</strong>");
+            }
+        }
+        return result;
     }
 
     private JSONObject parseJson(String jsonText) {
@@ -248,7 +282,7 @@ public class AutoDemandAiDraftService {
             return "";
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("<h3>").append(escapeHtml(title)).append("</h3><ul>");
+        sb.append("<p><strong>").append(escapeHtml(title)).append("：</strong></p><ul>");
         for (Object item : tasks) {
             if (item == null) {
                 continue;

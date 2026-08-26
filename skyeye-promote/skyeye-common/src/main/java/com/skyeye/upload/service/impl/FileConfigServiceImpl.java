@@ -141,4 +141,39 @@ public class FileConfigServiceImpl extends SkyeyeBusinessServiceImpl<FileConfigD
         }
         return fileClient;
     }
+
+    @Override
+    public FileConfig getFileConfigByStorage(Integer storage) {
+        if (storage == null) {
+            QueryWrapper<FileConfig> wrapper = new QueryWrapper<>();
+            wrapper.eq(MybatisPlusUtil.toColumns(FileConfig::getIsDefault), IsDefaultEnum.IS_DEFAULT.getKey());
+            FileConfig bean = getOne(wrapper, false);
+            if (bean == null) {
+                return null;
+            }
+            return selectById(bean.getId());
+        }
+        FileStorageEnum storageEnum = FileStorageEnum.getByStorage(storage);
+        if (storageEnum == null) {
+            return null;
+        }
+        // 优先取该类型下的默认配置，否则取第一条
+        QueryWrapper<FileConfig> wrapper = new QueryWrapper<>();
+        wrapper.eq(MybatisPlusUtil.toColumns(FileConfig::getStorage), storage);
+        wrapper.orderByDesc(MybatisPlusUtil.toColumns(FileConfig::getIsDefault));
+        FileConfig bean = getOne(wrapper, false);
+        if (bean == null) {
+            return null;
+        }
+        return selectById(bean.getId());
+    }
+
+    @Override
+    public FileClient getFileClientByStorage(Integer storage) {
+        FileConfig fileConfig = getFileConfigByStorage(storage);
+        if (fileConfig == null) {
+            return null;
+        }
+        return getFileClient(fileConfig.getId());
+    }
 }

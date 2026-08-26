@@ -6,10 +6,13 @@ package com.skyeye.knowledge.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.knowledge.classenum.KnowledgeSyncResultEnum;
 import com.skyeye.knowledge.dao.KnowledgeSyncHistoryDao;
 import com.skyeye.knowledge.entity.KnowledgeSyncHistory;
 import com.skyeye.knowledge.service.KnowledgeSyncHistoryService;
@@ -52,6 +55,50 @@ public class KnowledgeSyncHistoryServiceImpl
                 ? errorMsg.substring(0, ERROR_MSG_LIMIT) : errorMsg);
         }
         createEntity(history, StrUtil.EMPTY);
+    }
+
+    @Override
+    public String createRunningHistory(String knowledgeId, Integer triggerType, String startTime) {
+        if (StrUtil.isBlank(knowledgeId)) {
+            return StrUtil.EMPTY;
+        }
+        KnowledgeSyncHistory history = new KnowledgeSyncHistory();
+        history.setKnowledgeId(knowledgeId);
+        history.setTriggerType(triggerType);
+        history.setStatus(KnowledgeSyncResultEnum.RUNNING.getKey());
+        history.setSyncCount(0);
+        history.setStartTime(startTime);
+        history.setEndTime(StrUtil.EMPTY);
+        createEntity(history, StrUtil.EMPTY);
+        return history.getId();
+    }
+
+    @Override
+    public void finishHistory(String historyId, Integer status, Integer syncCount, String endTime, String errorMsg) {
+        if (StrUtil.isBlank(historyId)) {
+            return;
+        }
+        UpdateWrapper<KnowledgeSyncHistory> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, historyId);
+        updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeSyncHistory::getStatus), status);
+        updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeSyncHistory::getSyncCount), syncCount == null ? 0 : syncCount);
+        updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeSyncHistory::getEndTime), endTime);
+        if (StrUtil.isNotBlank(errorMsg)) {
+            String msg = errorMsg.length() > ERROR_MSG_LIMIT ? errorMsg.substring(0, ERROR_MSG_LIMIT) : errorMsg;
+            updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeSyncHistory::getErrorMsg), msg);
+        }
+        update(updateWrapper);
+    }
+
+    @Override
+    public boolean hasRunning(String knowledgeId) {
+        if (StrUtil.isBlank(knowledgeId)) {
+            return false;
+        }
+        QueryWrapper<KnowledgeSyncHistory> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(KnowledgeSyncHistory::getKnowledgeId), knowledgeId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(KnowledgeSyncHistory::getStatus), KnowledgeSyncResultEnum.RUNNING.getKey());
+        return count(queryWrapper) > 0;
     }
 
     @Override

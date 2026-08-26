@@ -26,4 +26,20 @@ public interface FileConfigService extends SkyeyeBusinessService<FileConfig> {
     FileClient getMasterFileClient();
 
     FileClient getFileClient(String configId);
+
+    /**
+     * 按存储器类型获取文件客户端（{@link com.skyeye.upload.enums.FileStorageEnum}）
+     *
+     * @param storage 存储器类型，为空则返回默认
+     * @return 文件客户端；找不到时返回 null
+     */
+    FileClient getFileClientByStorage(Integer storage);
+
+    /**
+     * 按存储器类型获取文件配置
+     *
+     * @param storage 存储器类型，为空则返回默认配置
+     * @return 文件配置；找不到时返回 null
+     */
+    FileConfig getFileConfigByStorage(Integer storage);
 }

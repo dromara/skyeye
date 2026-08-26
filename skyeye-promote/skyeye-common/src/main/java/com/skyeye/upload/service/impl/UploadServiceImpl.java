@@ -20,8 +20,10 @@ import com.skyeye.exception.CustomException;
 import com.skyeye.framework.file.core.client.FileClient;
 import com.skyeye.framework.file.core.client.s3.FilePresignedUrlRespDTO;
 import com.skyeye.jedis.JedisClientService;
+import com.skyeye.upload.entity.FileConfig;
 import com.skyeye.upload.entity.Upload;
 import com.skyeye.upload.entity.UploadChunks;
+import com.skyeye.upload.enums.FileStorageEnum;
 import com.skyeye.upload.service.FileConfigService;
 import com.skyeye.upload.service.FileService;
 import com.skyeye.upload.service.UploadService;
@@ -416,6 +418,166 @@ public class UploadServiceImpl implements UploadService {
             outputObject.settotal(CommonNumConstants.NUM_ONE);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 按指定文件存储器类型上传。storage 为空用默认；对应类型不存在则 uploaded=false，不抛错。
+     */
+    @Override
+    public void uploadToFileStorage(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        Integer storage = null;
+        Object storageObj = params.get("storage");
+        if (storageObj != null && StrUtil.isNotBlank(storageObj.toString())) {
+            storage = Integer.parseInt(storageObj.toString());
+            if (FileStorageEnum.getByStorage(storage) == null) {
+                throw new CustomException("非法的文件存储器类型: " + storage);
+            }
+        }
+        Object typeObj = params.get("type");
+        if (typeObj == null || StrUtil.isBlank(typeObj.toString())) {
+            throw new CustomException("文件目录类型 type 不能为空");
+        }
+        int type = Integer.parseInt(typeObj.toString());
+        String fileName = params.get("fileName") == null ? StrUtil.EMPTY : params.get("fileName").toString();
+        if (StrUtil.isBlank(fileName)) {
+            throw new CustomException("fileName 不能为空");
+        }
+        String contentBase64 = params.get("contentBase64") == null ? StrUtil.EMPTY : params.get("contentBase64").toString();
+        String localPath = params.get("localPath") == null ? StrUtil.EMPTY : params.get("localPath").toString();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("uploaded", false);
+
+        FileConfig fileConfig;
+        FileClient fileClient;
+        try {
+            fileConfig = fileConfigService.getFileConfigByStorage(storage);
+            if (fileConfig == null) {
+                LOGGER.warn("uploadToFileStorage skip, storage not found: {}", storage);
+                outputObject.setBean(result);
+                return;
+            }
+            fileClient = fileConfigService.getFileClient(fileConfig.getId());
+        } catch (Exception e) {
+            LOGGER.warn("uploadToFileStorage skip, storage unavailable: {}", e.getMessage());
+            outputObject.setBean(result);
+            return;
+        }
+        if (fileClient == null || fileConfig == null) {
+            outputObject.setBean(result);
+            return;
+        }
+
+        byte[] content = resolveUploadBytes(contentBase64, localPath);
+        if (content == null || content.length == 0) {
+            throw new CustomException("上传内容为空，请传 contentBase64 或有效的 localPath");
+        }
+
+        String objectKey = buildStorageObjectKey(type, fileName);
+        String mimeType = FileUtil.getMineType(fileName);
+        try {
+            String url = fileClient.upload(content, objectKey, mimeType);
+            saveStorageFile(fileClient.getId(), fileName, objectKey, url, mimeType, type, content.length);
+
+            result.put("uploaded", true);
+            result.put("configId", fileClient.getId());
+            result.put("storage", fileConfig.getStorage());
+            result.put("path", objectKey);
+            result.put("url", url);
+            result.put("fileName", fileName);
+            result.put("size", content.length);
+            // 火山 TOS：供知识库 doc/add add_type=tos 使用（bucket/objectKey）
+            if (FileStorageEnum.S3.getKey().equals(fileConfig.getStorage())
+                && fileConfig.getConfigMation() instanceof com.skyeye.framework.file.core.client.s3.S3FileClientConfig) {
+                com.skyeye.framework.file.core.client.s3.S3FileClientConfig s3Config =
+                    (com.skyeye.framework.file.core.client.s3.S3FileClientConfig) fileConfig.getConfigMation();
+                if (StrUtil.containsIgnoreCase(s3Config.getEndpoint(),
+                    com.skyeye.framework.file.core.client.s3.S3FileClientConfig.ENDPOINT_VOLCES)) {
+                    result.put("tosPath", s3Config.getBucket() + "/" + objectKey);
+                    result.put("bucket", s3Config.getBucket());
+                }
+            }
+            outputObject.setBean(result);
+            outputObject.settotal(CommonNumConstants.NUM_ONE);
+        } catch (Exception e) {
+            throw new CustomException("上传到文件存储器失败: " + e.getMessage());
+        }
+    }
+
+    private byte[] resolveUploadBytes(String contentBase64, String localPath) {
+        if (StrUtil.isNotBlank(contentBase64)) {
+            return Base64.decodeBase64(contentBase64.getBytes(StandardCharsets.UTF_8));
+        }
+        if (StrUtil.isBlank(localPath)) {
+            return null;
+        }
+        File file = new File(localPath);
+        String canonical;
+        String imagesCanonical;
+        try {
+            canonical = file.getCanonicalPath();
+            imagesCanonical = new File(tPath).getCanonicalPath();
+        } catch (IOException e) {
+            throw new CustomException("localPath 无效: " + e.getMessage());
+        }
+        if (!canonical.startsWith(imagesCanonical)) {
+            throw new CustomException("localPath 必须位于 IMAGES_PATH 目录下");
+        }
+        if (!file.exists() || !file.isFile()) {
+            throw new CustomException("本地文件不存在: " + localPath);
+        }
+        try {
+            return Files.readAllBytes(file.toPath());
+        } catch (IOException e) {
+            throw new CustomException("读取本地文件失败: " + e.getMessage());
+        }
+    }
+
+    private String buildStorageObjectKey(int type, String fileName) {
+        String visit = FileConstants.FileUploadPath.getVisitPath(type);
+        // /images/upload/wordfolder/ -> wordfolder/
+        String prefix = visit;
+        int idx = prefix.indexOf("/upload/");
+        if (idx >= 0) {
+            prefix = prefix.substring(idx + "/upload/".length());
+        }
+        prefix = prefix.replaceAll("^/+", "");
+        if (StrUtil.isNotBlank(prefix) && !prefix.endsWith("/")) {
+            prefix = prefix + "/";
+        }
+        String name = fileName.replaceAll("^/+", "");
+        return prefix + name;
+    }
+
+    private void saveStorageFile(String configId, String fileName, String path, String url,
+                                 String mimeType, Integer fileType, long size) {
+        com.skyeye.upload.entity.File file = new com.skyeye.upload.entity.File();
+        file.setConfigId(configId);
+        file.setName(fileName);
+        file.setPath(path);
+        file.setUrl(url);
+        file.setType(mimeType);
+        file.setFileType(fileType);
+        file.setSize(size);
+
+        String userId = StrUtil.EMPTY;
+        String userToken = GetUserToken.getUserToken(InputObject.getRequest());
+        if (StrUtil.isNotEmpty(userToken)) {
+            String userTokenUserId = GetUserToken.getUserTokenUserId(InputObject.getRequest());
+            Boolean aBoolean = SysUserAuthConstants.exitUserLoginRedisCache(userTokenUserId);
+            if (aBoolean) {
+                userId = InputObject.getLogParamsStatic().get("id").toString();
+            }
+        }
+        if (tenantEnable) {
+            String tenantId = TenantContext.getTenantId();
+            if (StrUtil.isNotEmpty(tenantId)) {
+                fileService.createEntity(file, userId);
+            }
+        } else {
+            fileService.createEntity(file, userId);
         }
     }
 
