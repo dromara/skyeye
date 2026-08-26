@@ -117,10 +117,10 @@ public class DouBaoChatClient {
                         String reasoning = readDeltaReasoning(choice);
                         String piece = readDeltaContent(choice);
                         boolean end = StrUtil.isNotBlank(choice.getStr("finish_reason"));
-                        if (StrUtil.isNotBlank(reasoning)) {
+                        if (!StrUtil.isEmpty(reasoning)) {
                             listener.onReasoningDelta(reasoning, false);
                         }
-                        if (StrUtil.isNotBlank(piece) || end) {
+                        if (!StrUtil.isEmpty(piece) || end) {
                             listener.onDelta(piece, end);
                         }
                         if (end) {

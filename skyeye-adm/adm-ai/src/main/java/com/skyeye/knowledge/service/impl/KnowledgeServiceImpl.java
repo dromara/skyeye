@@ -455,6 +455,12 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             sync.getTableName(), columnSet);
 
         List<String> columns = new ArrayList<>(columnSet);
+        String tableRemark = KnowledgeJdbcHelper.loadTableComment(
+            knowledge.getDriverClass(), knowledge.getJdbcUrl(), knowledge.getJdbcUser(), knowledge.getJdbcPassword(),
+            sync.getTableName());
+        Map<String, String> fieldRemarks = KnowledgeJdbcHelper.loadColumnCommentMap(
+            knowledge.getDriverClass(), knowledge.getJdbcUrl(), knowledge.getJdbcUser(), knowledge.getJdbcPassword(),
+            sync.getTableName());
         String lastId = StrUtil.EMPTY;
         String cursorWatermark = lastWatermark;
         int total = 0;
@@ -469,7 +475,8 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             for (Map<String, Object> row : rows) {
                 uploadContext.ensureTableHeader(sync.getTableName());
                 uploadContext.appendRow(AiKnowledgeUploadHelper.buildRowBlock(
-                    sync.getTableName(), sync.getIdField(), sync.getTitleField(), row, contentFields));
+                    sync.getTableName(), tableRemark, sync.getIdField(), sync.getTitleField(), row, contentFields,
+                    fieldRemarks));
                 total++;
                 flushUploadIfNeeded(knowledge, apiKey, uploadContext, false);
             }
