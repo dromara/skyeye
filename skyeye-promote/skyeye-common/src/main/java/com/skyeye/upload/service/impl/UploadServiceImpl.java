@@ -427,7 +427,7 @@ public class UploadServiceImpl implements UploadService {
     @Override
     public void skyeyeUploadToFileStorage(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
-        String configId = params.get("configId") == null ? StrUtil.EMPTY : params.get("configId").toString().trim();
+        String configId = params.get("configId").toString().trim();
         Integer storage = null;
         Object storageObj = params.get("storage");
         if (storageObj != null && StrUtil.isNotBlank(storageObj.toString())) {
@@ -436,15 +436,8 @@ public class UploadServiceImpl implements UploadService {
                 throw new CustomException("非法的文件存储器类型: " + storage);
             }
         }
-        Object typeObj = params.get("type");
-        if (typeObj == null || StrUtil.isBlank(typeObj.toString())) {
-            throw new CustomException("文件目录类型 type 不能为空");
-        }
-        int type = Integer.parseInt(typeObj.toString());
-        String fileName = params.get("fileName") == null ? StrUtil.EMPTY : params.get("fileName").toString();
-        if (StrUtil.isBlank(fileName)) {
-            throw new CustomException("fileName 不能为空");
-        }
+        int type = Integer.parseInt(params.get("type").toString());
+        String fileName = params.get("fileName").toString();
         String objectDir = params.get("objectDir") == null ? StrUtil.EMPTY : params.get("objectDir").toString();
         String contentBase64 = params.get("contentBase64") == null ? StrUtil.EMPTY : params.get("contentBase64").toString();
         String localPath = params.get("localPath") == null ? StrUtil.EMPTY : params.get("localPath").toString();
@@ -520,14 +513,8 @@ public class UploadServiceImpl implements UploadService {
     @Override
     public void skyeyeDeleteFromFileStorage(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
-        String configId = params.get("configId") == null ? StrUtil.EMPTY : params.get("configId").toString().trim();
-        String path = params.get("path") == null ? StrUtil.EMPTY : params.get("path").toString().trim();
-        if (StrUtil.isBlank(configId)) {
-            throw new CustomException("configId 不能为空");
-        }
-        if (StrUtil.isBlank(path)) {
-            throw new CustomException("path 不能为空");
-        }
+        String configId = params.get("configId").toString().trim();
+        String path = params.get("path").toString().trim();
         FileClient client = fileConfigService.getFileClient(configId);
         if (client == null) {
             throw new CustomException("文件存储配置不存在");
@@ -541,7 +528,6 @@ public class UploadServiceImpl implements UploadService {
         if (file != null && StrUtil.isNotBlank(file.getId())) {
             fileService.deleteById(file.getId());
         }
-        outputObject.setreturnMessage("删除成功");
     }
 
     private byte[] resolveUploadBytes(String contentBase64, String localPath) {
