@@ -5,6 +5,7 @@
 package com.skyeye.ai.core.factory;
 
 import com.skyeye.ai.core.enums.AiPlatformEnum;
+import com.skyeye.ai.core.knowledge.AiKnowledgeClient;
 import com.skyeye.key.entity.AiApiKey;
 
 /**
@@ -40,6 +41,11 @@ public interface AiFactory {
      * @return ChatModel 对象
      */
     Object getDefaultChatModel(AiPlatformEnum platform, AiApiKey aiApiKey);
+
+    /**
+     * 获得平台知识库客户端（上传/检索）
+     */
+    AiKnowledgeClient getKnowledgeClient(AiPlatformEnum platform);
 
     /**
      * 基于默认配置，获得 ImageModel 对象

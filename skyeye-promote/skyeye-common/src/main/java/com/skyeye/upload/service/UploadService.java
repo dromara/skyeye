@@ -37,4 +37,9 @@ public interface UploadService {
     void getFilePresignedUrl(InputObject inputObject, OutputObject outputObject);
 
     void markdownZipUploadAndParse(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 按指定文件存储器类型上传（storage 为空用默认；对应类型配置不存在则不上传）
+     */
+    void uploadToFileStorage(InputObject inputObject, OutputObject outputObject);
 }

@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.skyeye.ai.core.enums.AiPlatformEnum;
+import com.skyeye.ai.core.knowledge.AiKnowledgeConfig;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
@@ -47,11 +48,11 @@ public class AiApiKey extends OperatorUserInfo {
     private String apiAppId;
 
     @TableField(value = "`api_key`")
-    @ApiModelProperty(value = "密钥")
+    @ApiModelProperty(value = "密钥（豆包：方舟对话 ark- Key；通义：AccessKeyId）")
     private String apiKey;
 
     @TableField(value = "`secret_key`")
-    @ApiModelProperty(value = "secretKey")
+    @ApiModelProperty(value = "secretKey（豆包：知识库 VIKING_API_KEY；通义：AccessKeySecret）")
     private String secretKey;
 
     @TableField(value = "`enabled`")
@@ -66,6 +67,18 @@ public class AiApiKey extends OperatorUserInfo {
     @ApiModelProperty(value = "API 地址")
     private String url;
 
+    @TableField(value = "platform_knowledge_id")
+    @ApiModelProperty(value = "平台知识库ID（百炼IndexId/千帆KB/豆包resource_id/讯飞repo）")
+    private String platformKnowledgeId;
+
+    @TableField(value = "platform_workspace_id")
+    @ApiModelProperty(value = "通义业务空间ID（仅通义需要）")
+    private String platformWorkspaceId;
+
+    @TableField(value = "platform_category_id")
+    @ApiModelProperty(value = "通义类目ID（仅通义需要）")
+    private String platformCategoryId;
+
     @TableField(value = "`role_id`")
     @ApiModelProperty(value = "角色id")
     private String roleId;
@@ -73,4 +86,16 @@ public class AiApiKey extends OperatorUserInfo {
     @TableField(exist = false)
     @Property("AI角色")
     private Role roleMation;
+
+    /** 组装平台知识库调用参数 */
+    public AiKnowledgeConfig toAiKnowledgeConfig() {
+        return AiKnowledgeConfig.builder()
+            .knowledgeId(platformKnowledgeId)
+            .apiKey(apiKey)
+            .secretKey(secretKey)
+            .appId(apiAppId)
+            .workspaceId(platformWorkspaceId)
+            .categoryId(platformCategoryId)
+            .build();
+    }
 }

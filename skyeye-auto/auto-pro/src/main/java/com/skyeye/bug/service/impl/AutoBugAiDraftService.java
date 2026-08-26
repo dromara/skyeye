@@ -130,13 +130,19 @@ public class AutoBugAiDraftService {
         sb.append("请输出 JSON：\n");
         sb.append("{\n");
         sb.append("  \"name\": \"简洁的 Bug 标题\",\n");
-        sb.append("  \"contentHtml\": \"问题描述 HTML，必须包含：bug描述、复现步骤、预期结果、实际结果、改进需求\",\n");
+        sb.append("  \"contentHtml\": \"问题描述 HTML\",\n");
         sb.append("  \"remark\": \"简要备注\",\n");
         sb.append("  \"severity\": \"从可选严重性中选一个原文\",\n");
         sb.append("  \"necessaryToPresent\": \"必现 或 非必现\",\n");
         sb.append("  \"terminalOccurrence\": \"从可选终端中选一个原文\",\n");
         sb.append("  \"moduleName\": \"截图中看到的模块或菜单名称，看不清则留空\"\n");
         sb.append("}\n");
+        sb.append("contentHtml 必须严格按以下 HTML 结构输出（标题用 strong 加粗，不要纯文本标题）：\n");
+        sb.append("<p><strong>bug描述：</strong>现象说明</p>");
+        sb.append("<p><strong>复现步骤：</strong><br/>1. …<br/>2. …</p>");
+        sb.append("<p><strong>预期结果：</strong>…</p>");
+        sb.append("<p><strong>实际结果：</strong>…</p>");
+        sb.append("<p><strong>改进需求：</strong>…</p>\n");
         sb.append("要求：contentHtml 为可直接放入富文本的 HTML；分类字段必须从可选值中选，不要自造。moduleName 只能来自截图可见文字，不要编造。");
         return sb.toString();
     }
@@ -154,7 +160,7 @@ public class AutoBugAiDraftService {
         Map<String, Object> bean = new HashMap<>();
         if (json == null) {
             bean.put("name", "");
-            bean.put("content", wrapAsHtml(answer));
+            bean.put("content", ensureBugSectionBold(wrapAsHtml(answer)));
             bean.put("remark", "");
             return bean;
         }
@@ -163,13 +169,41 @@ public class AutoBugAiDraftService {
         if (StrUtil.isBlank(contentHtml)) {
             contentHtml = wrapAsHtml(answer);
         }
-        bean.put("content", contentHtml);
+        bean.put("content", ensureBugSectionBold(contentHtml));
         bean.put("remark", json.getStr("remark") == null ? "" : json.getStr("remark"));
         bean.put("severity", json.getStr("severity"));
         bean.put("necessaryToPresent", json.getStr("necessaryToPresent"));
         bean.put("terminalOccurrence", json.getStr("terminalOccurrence"));
         bean.put("moduleName", json.getStr("moduleName"));
         return bean;
+    }
+
+    /**
+     * 兜底：模型常输出纯文本小节，补上 &lt;strong&gt; 以匹配页面默认模板样式。
+     */
+    private String ensureBugSectionBold(String html) {
+        if (StrUtil.isBlank(html)) {
+            return html;
+        }
+        String result = html;
+        String[] labels = {"bug描述", "复现步骤", "预期结果", "实际结果", "改进需求", "效果截图"};
+        for (String label : labels) {
+            if (result.contains("<strong>" + label) || result.contains("<b>" + label)) {
+                continue;
+            }
+            // 优先带冒号的标题
+            String withCnColon = label + "：";
+            String withEnColon = label + ":";
+            if (result.contains(withCnColon)) {
+                result = result.replace(withCnColon, "<strong>" + withCnColon + "</strong>");
+            } else if (result.contains(withEnColon)) {
+                result = result.replace(withEnColon, "<strong>" + withEnColon + "</strong>");
+            } else if (result.contains(label)) {
+                result = result.replaceFirst(java.util.regex.Pattern.quote(label),
+                    "<strong>" + label + "</strong>");
+            }
+        }
+        return result;
     }
 
     private JSONObject parseJson(String jsonText) {

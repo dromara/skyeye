@@ -9,40 +9,57 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.skyeye.ai.core.enums.AiPlatformEnum;
+import com.skyeye.ai.core.factory.AiFactory;
+import com.skyeye.ai.core.knowledge.AiKnowledgeClient;
+import com.skyeye.ai.core.knowledge.AiKnowledgeUploadHelper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
+import com.skyeye.common.constans.FileConstants;
 import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.enumeration.ScheduleFrequency;
+import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.DateUtil;
+import com.skyeye.common.util.FileUtil;
 import com.skyeye.common.util.QuartzCronUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.eve.rest.quartz.SysQuartzMation;
 import com.skyeye.eve.service.IQuartzService;
+import com.skyeye.eve.service.IUploadService;
 import com.skyeye.exception.CustomException;
+import com.skyeye.key.entity.AiApiKey;
+import com.skyeye.key.service.AiApiKeyService;
 import com.skyeye.knowledge.classenum.KnowledgeSyncResultEnum;
 import com.skyeye.knowledge.classenum.KnowledgeSyncTriggerEnum;
 import com.skyeye.knowledge.classenum.KnowledgeSyncTypeEnum;
 import com.skyeye.knowledge.dao.KnowledgeDao;
 import com.skyeye.knowledge.entity.Knowledge;
 import com.skyeye.knowledge.entity.KnowledgeSync;
-import com.skyeye.knowledge.service.*;
+import com.skyeye.knowledge.service.KnowledgeService;
+import com.skyeye.knowledge.service.KnowledgeSyncHistoryService;
+import com.skyeye.knowledge.service.KnowledgeSyncService;
 import com.skyeye.knowledge.util.KnowledgeJdbcHelper;
 import com.skyeye.role.entity.Role;
 import com.skyeye.role.service.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.Executor;
 
 @Service
 @SkyeyeService(name = "AI知识库", groupName = "AI知识库", allowDynamicAttrKey = false)
@@ -50,24 +67,44 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeServiceImpl.class);
 
+    /**
+     * 累计多少行后刷一次上传，避免单文件过大
+     */
+    private static final int FLUSH_ROWS = 200;
+
+    /**
+     * 与 skyeye-pro FileStorageEnum.S3 一致，豆包知识库走 S3/TOS
+     */
+    private static final int FILE_STORAGE_S3 = 20;
+
     @Autowired
     private KnowledgeSyncService knowledgeSyncService;
-
-    @Autowired
-    private KnowledgeDocService knowledgeDocService;
-
-    @Autowired
-    private KnowledgeSegmentService knowledgeSegmentService;
 
     @Autowired
     private KnowledgeSyncHistoryService knowledgeSyncHistoryService;
 
     @Autowired
+    private AiFactory aiFactory;
+
+    @Autowired
+    private AiApiKeyService aiApiKeyService;
+
+    @Autowired
     private IQuartzService iQuartzService;
+
+    @Autowired
+    private IUploadService iUploadService;
+
+    @Autowired
+    @Qualifier("knowledgeSyncExecutor")
+    private Executor knowledgeSyncExecutor;
 
     @Autowired
     @Lazy
     private RoleService roleService;
+
+    @Value("${IMAGES_PATH}")
+    private String tPath;
 
     @Override
     public void validatorEntity(Knowledge entity) {
@@ -157,9 +194,6 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
-    /**
-     * 解析前端传入的同步表配置（JSON 字符串或 List）
-     */
     private List<KnowledgeSync> parseSyncList(Object syncListObj) {
         if (syncListObj == null) {
             return new ArrayList<>();
@@ -189,8 +223,6 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
     @Override
     public void deletePostpose(String id) {
         knowledgeSyncService.deleteByKnowledgeId(id);
-        knowledgeDocService.deleteByKnowledgeId(id);
-        knowledgeSegmentService.deleteByKnowledgeId(id);
         knowledgeSyncHistoryService.deleteByKnowledgeId(id);
         iQuartzService.stopAndDeleteTaskQuartz(id);
     }
@@ -259,12 +291,38 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
     public void syncNow(InputObject inputObject, OutputObject outputObject) {
         String id = inputObject.getParams().get("id").toString();
         Knowledge knowledge = selectByIdForSync(id);
-        int count = syncKnowledge(knowledge, KnowledgeSyncTriggerEnum.MANUAL.getKey());
+        if (knowledgeSyncHistoryService.hasRunning(knowledge.getId())) {
+            throw new CustomException("该知识库正在同步中，请稍后再试");
+        }
+        // 预先校验，避免异步后才发现配置问题
+        prepareSync(knowledge);
+        Integer trigger = KnowledgeSyncTriggerEnum.MANUAL.getKey();
+        String startTime = DateUtil.getTimeAndToString();
+        String historyId = knowledgeSyncHistoryService.createRunningHistory(knowledge.getId(), trigger, startTime);
+        String tenantId = TenantContext.getTenantId();
+        TenantEnum isolationType = TenantContext.getIsolationType();
+        knowledgeSyncExecutor.execute(() -> {
+            try {
+                if (StrUtil.isNotBlank(tenantId)) {
+                    TenantContext.setTenantId(tenantId);
+                }
+                if (isolationType != null) {
+                    TenantContext.setIsolationType(isolationType);
+                }
+                doSyncKnowledge(knowledge, trigger, historyId, startTime);
+            } catch (Throwable t) {
+                // doSyncKnowledge 的 finally 已写入历史；此处仅兜底未写入的异常
+                LOGGER.warn("知识库[{}]异步同步失败: {}", knowledge.getId(), t.getMessage());
+            } finally {
+                TenantContext.clear();
+            }
+        });
         Map<String, Object> bean = new HashMap<>();
         bean.put("id", knowledge.getId());
-        bean.put("syncCount", count);
-        bean.put("lastSyncTime", knowledge.getLastSyncTime());
+        bean.put("historyId", historyId);
+        bean.put("async", true);
         outputObject.setBean(bean);
+        outputObject.setreturnMessage("已提交同步任务，请在同步历史查看进度");
     }
 
     @Override
@@ -283,28 +341,50 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         if (knowledge == null || StrUtil.isBlank(knowledge.getId())) {
             throw new CustomException("知识库不存在");
         }
+        if (knowledgeSyncHistoryService.hasRunning(knowledge.getId())) {
+            throw new CustomException("该知识库正在同步中，请稍后再试");
+        }
+        prepareSync(knowledge);
+        Integer trigger = triggerType == null ? KnowledgeSyncTriggerEnum.MANUAL.getKey() : triggerType;
+        String startTime = DateUtil.getTimeAndToString();
+        String historyId = knowledgeSyncHistoryService.createRunningHistory(knowledge.getId(), trigger, startTime);
+        return doSyncKnowledge(knowledge, trigger, historyId, startTime);
+    }
+
+    private void prepareSync(Knowledge knowledge) {
         if (!EnableEnum.ENABLE_USING.getKey().equals(knowledge.getEnabled())) {
             throw new CustomException("知识库已禁用，无法同步");
         }
         if (StrUtil.isBlank(knowledge.getJdbcUrl())) {
             throw new CustomException("请先配置同步数据库");
         }
+        AiApiKey apiKey = aiApiKeyService.selectEnabledKeyByKnowledgeId(knowledge.getId());
+        if (StrUtil.isBlank(apiKey.getPlatformKnowledgeId())) {
+            throw new CustomException("请先在 AI 配置中填写平台知识库 ID");
+        }
         List<KnowledgeSync> syncList = knowledge.getSyncList();
         if (CollectionUtil.isEmpty(syncList)) {
             syncList = knowledgeSyncService.selectByKnowledgeId(knowledge.getId());
+            knowledge.setSyncList(syncList);
         }
         if (CollectionUtil.isEmpty(syncList)) {
             throw new CustomException("请先配置同步表");
         }
-        Integer trigger = triggerType == null ? KnowledgeSyncTriggerEnum.MANUAL.getKey() : triggerType;
-        String startTime = DateUtil.getTimeAndToString();
+    }
+
+    private int doSyncKnowledge(Knowledge knowledge, Integer trigger, String historyId, String startTime) {
         int total = 0;
         Integer status = KnowledgeSyncResultEnum.SUCCESS.getKey();
         String errorMsg = StrUtil.EMPTY;
         try {
+            AiApiKey apiKey = aiApiKeyService.selectEnabledKeyByKnowledgeId(knowledge.getId());
+            List<KnowledgeSync> syncList = knowledge.getSyncList();
+            if (CollectionUtil.isEmpty(syncList)) {
+                syncList = knowledgeSyncService.selectByKnowledgeId(knowledge.getId());
+            }
             String tenantId = StrUtil.blankToDefault(TenantContext.getTenantId(), knowledge.getTenantId());
             for (KnowledgeSync sync : syncList) {
-                total += syncOneTable(knowledge, sync, tenantId);
+                total += syncOneTable(knowledge, sync, tenantId, apiKey);
             }
             UpdateWrapper<Knowledge> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq(CommonConstants.ID, knowledge.getId());
@@ -321,15 +401,15 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             throw new CustomException(StrUtil.blankToDefault(e.getMessage(), "同步失败"));
         } finally {
             try {
-                knowledgeSyncHistoryService.saveHistory(knowledge.getId(), trigger, status, total,
-                    startTime, DateUtil.getTimeAndToString(), errorMsg);
+                knowledgeSyncHistoryService.finishHistory(historyId, status, total,
+                    DateUtil.getTimeAndToString(), errorMsg);
             } catch (Exception ex) {
                 LOGGER.warn("知识库[{}]保存同步历史失败: {}", knowledge.getName(), ex.getMessage());
             }
         }
     }
 
-    private int syncOneTable(Knowledge knowledge, KnowledgeSync sync, String tenantId) {
+    private int syncOneTable(Knowledge knowledge, KnowledgeSync sync, String tenantId, AiApiKey apiKey) {
         KnowledgeJdbcHelper.checkIdentifier(sync.getTableName(), "表名");
         KnowledgeJdbcHelper.checkIdentifier(sync.getIdField(), "主键字段");
         Set<String> columnSet = new LinkedHashSet<>();
@@ -356,20 +436,17 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             columnSet.add(tenantField);
         }
 
-        // 同步前校验表与字段是否存在
         KnowledgeJdbcHelper.validateTableAndColumns(
             knowledge.getDriverClass(), knowledge.getJdbcUrl(), knowledge.getJdbcUser(), knowledge.getJdbcPassword(),
             sync.getTableName(), columnSet);
-
-        // 全量：先清空再分批写入（源表为空时也要清掉旧文档）
-        if (fullSync) {
-            knowledgeDocService.deleteByKnowledgeAndTable(knowledge.getId(), sync.getTableName());
-        }
 
         List<String> columns = new ArrayList<>(columnSet);
         String lastId = StrUtil.EMPTY;
         String cursorWatermark = lastWatermark;
         int total = 0;
+        StringBuilder uploadBuffer = new StringBuilder();
+        uploadBuffer.append("知识库同步表: ").append(sync.getTableName()).append('\n');
+        int bufferRows = 0;
         while (true) {
             List<Map<String, Object>> rows = KnowledgeJdbcHelper.queryRowsBatch(
                 knowledge.getDriverClass(), knowledge.getJdbcUrl(), knowledge.getJdbcUser(), knowledge.getJdbcPassword(),
@@ -378,8 +455,16 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             if (CollectionUtil.isEmpty(rows)) {
                 break;
             }
-            total += knowledgeDocService.saveSyncedRows(knowledge.getId(), sync.getTableName(), rows,
-                sync.getIdField(), sync.getTitleField(), contentFields, fullSync, false);
+            for (Map<String, Object> row : rows) {
+                uploadBuffer.append(AiKnowledgeUploadHelper.buildRowBlock(
+                    sync.getTableName(), sync.getIdField(), sync.getTitleField(), row, contentFields));
+                bufferRows++;
+                total++;
+                if (bufferRows >= FLUSH_ROWS) {
+                    flushUpload(apiKey, tenantId, uploadBuffer);
+                    bufferRows = 0;
+                }
+            }
 
             Map<String, Object> lastRow = rows.get(rows.size() - 1);
             lastId = valueOf(lastRow.get(sync.getIdField()));
@@ -398,7 +483,77 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                 break;
             }
         }
+        if (bufferRows > 0) {
+            flushUpload(apiKey, tenantId, uploadBuffer);
+        }
         return total;
+    }
+
+    private void flushUpload(AiApiKey apiKey, String tenantId, StringBuilder uploadBuffer) {
+        String content = uploadBuffer.toString();
+        uploadBuffer.setLength(0);
+        if (StrUtil.isBlank(content)) {
+            return;
+        }
+        String fileName = AiKnowledgeUploadHelper.buildFileName(tenantId);
+        String localPath = writeLocalTempFile(fileName, content);
+        try {
+            String contentBase64 = Base64.getEncoder().encodeToString(content.getBytes(StandardCharsets.UTF_8));
+            int type = FileConstants.FileUploadPath.KNOWLG_CONTENT.getType()[0];
+            AiPlatformEnum platform = AiPlatformEnum.getName(apiKey.getPlatform());
+            // 豆包指定 S3；其它平台不传 storage，走默认存储器
+            Integer storage = AiPlatformEnum.DOU_BAO == platform ? FILE_STORAGE_S3 : null;
+            Map<String, Object> storageResult = iUploadService.uploadToFileStorage(
+                storage, type, fileName, contentBase64, localPath);
+            boolean uploaded = isUploaded(storageResult);
+            String fileUrl = uploaded ? str(storageResult.get("url")) : StrUtil.EMPTY;
+            String tosPath = uploaded ? str(storageResult.get("tosPath")) : StrUtil.EMPTY;
+
+            AiKnowledgeClient client = aiFactory.getKnowledgeClient(platform);
+            if (AiPlatformEnum.DOU_BAO == platform) {
+                if (!uploaded || (StrUtil.isBlank(fileUrl) && StrUtil.isBlank(tosPath))) {
+                    throw new CustomException("豆包知识库同步需要可用的 S3 文件存储器（请在基础模块配置 FileStorageEnum.S3）");
+                }
+            }
+            client.uploadText(apiKey.toAiKnowledgeConfig(), fileName, content, fileUrl, tosPath);
+        } finally {
+            if (StrUtil.isNotBlank(localPath)) {
+                FileUtil.deleteFile(localPath);
+            }
+        }
+    }
+
+    /**
+     * 先落到 IMAGES_PATH 临时目录，上传完成后删除
+     */
+    private String writeLocalTempFile(String fileName, String content) {
+        try {
+            int type = FileConstants.FileUploadPath.KNOWLG_CONTENT.getType()[0];
+            String savePath = FileConstants.FileUploadPath.getSavePath(type);
+            String dirPath = tPath + savePath;
+            File dir = new File(dirPath);
+            if (!dir.exists() && !dir.mkdirs()) {
+                LOGGER.warn("创建知识库临时目录失败: {}", dirPath);
+                return StrUtil.EMPTY;
+            }
+            String absolutePath = new File(dir, fileName).getAbsolutePath();
+            FileUtil.writeByteToPointPath(content.getBytes(StandardCharsets.UTF_8), absolutePath);
+            return absolutePath;
+        } catch (Exception e) {
+            LOGGER.warn("写入知识库临时文件失败: {}", e.getMessage());
+            return StrUtil.EMPTY;
+        }
+    }
+
+    private boolean isUploaded(Map<String, Object> storageResult) {
+        if (storageResult == null) {
+            return false;
+        }
+        Object uploaded = storageResult.get("uploaded");
+        if (uploaded instanceof Boolean) {
+            return (Boolean) uploaded;
+        }
+        return "true".equalsIgnoreCase(String.valueOf(uploaded));
     }
 
     private Knowledge selectByIdForSync(String id) {

@@ -106,15 +106,25 @@ public class AiMessageWebSocket {
     }
 
     /**
-     * 发送给指定用户消息
+     * 发送给指定用户消息（同一 Session 串行发送，避免 TEXT_FULL_WRITING）
      *
      * @param message
      * @param userId
      */
     public void sendMessageTo(String message, String userId) {
         AiMessageWebSocket item = clients.get(userId);
-        if (item != null) {
-            item.session.getAsyncRemote().sendText(message);
+        if (item == null || item.session == null || !item.session.isOpen()) {
+            return;
+        }
+        // AsyncRemote 并发 sendText 会触发 TEXT_FULL_WRITING，必须按 session 串行
+        synchronized (item.session) {
+            try {
+                if (item.session.isOpen()) {
+                    item.session.getBasicRemote().sendText(message);
+                }
+            } catch (Exception e) {
+                LOGGER.warn("AI WebSocket 推送失败 userId={}: {}", userId, e.getMessage());
+            }
         }
     }
 

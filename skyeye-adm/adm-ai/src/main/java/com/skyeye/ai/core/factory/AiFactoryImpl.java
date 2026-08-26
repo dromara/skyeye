@@ -9,10 +9,15 @@ import cn.hutool.core.lang.func.Func0;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.skyeye.ai.core.doubao.DouBaoChatClient;
+import com.skyeye.ai.core.doubao.DouBaoKnowledgeClient;
 import com.skyeye.ai.core.enums.AiPlatformEnum;
+import com.skyeye.ai.core.knowledge.AiKnowledgeClient;
 import com.skyeye.ai.core.qianfan.QianfanChatClient;
+import com.skyeye.ai.core.qianfan.QianfanKnowledgeClient;
 import com.skyeye.ai.core.tongyi.TongYiChatClient;
+import com.skyeye.ai.core.tongyi.TongYiKnowledgeClient;
 import com.skyeye.ai.core.xunfei.XunFeiChatClient;
+import com.skyeye.ai.core.xunfei.XunFeiKnowledgeClient;
 import com.skyeye.exception.CustomException;
 import com.skyeye.key.entity.AiApiKey;
 
@@ -53,6 +58,25 @@ public class AiFactoryImpl implements AiFactory {
             aiApiKey.getApiKey(),
             aiApiKey.getSecretKey(),
             aiApiKey.getUrl());
+    }
+
+    @Override
+    public AiKnowledgeClient getKnowledgeClient(AiPlatformEnum platform) {
+        String cacheKey = "knowledge_" + platform.getKey();
+        return Singleton.get(cacheKey, (Func0<AiKnowledgeClient>) () -> {
+            switch (platform) {
+                case YI_YAN:
+                    return new QianfanKnowledgeClient();
+                case TONG_YI:
+                    return new TongYiKnowledgeClient();
+                case DOU_BAO:
+                    return new DouBaoKnowledgeClient();
+                case XUN_FEI:
+                    return new XunFeiKnowledgeClient();
+                default:
+                    throw new IllegalArgumentException(StrUtil.format("未知平台({})", platform));
+            }
+        });
     }
 
     @Override
