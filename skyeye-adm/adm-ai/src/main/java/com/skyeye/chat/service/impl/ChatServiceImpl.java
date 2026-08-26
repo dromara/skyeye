@@ -48,6 +48,10 @@ import java.util.concurrent.Executor;
  */
 @Service
 public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> implements ChatService {
+
+    private static final String STREAM_TYPE_CONTENT = "content";
+    private static final String STREAM_TYPE_REASONING = "reasoning";
+    private static final String STREAM_TYPE_STATUS = "status";
     @Autowired
     private AiFactory aiFactory;
 
@@ -140,6 +144,9 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         } else {
             id = ToolUtil.getSurFaceId();
         }
+        if ("chat".equals(bizType) && role != null && StrUtil.isNotBlank(role.getKnowledgeId())) {
+            sendStreamChunk(userId, id, bizType, "正在检索知识库...", false, 0, STREAM_TYPE_STATUS);
+        }
         content = appendRoleKnowledge(bizType, role, content);
         Map<String, Object> bean = new HashMap<>();
         bean.put("id", id);
@@ -210,12 +217,18 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     }
 
     private void sendStreamChunk(String userId, String chatId, String bizType, String chunk, boolean end, Object orderBy) {
+        sendStreamChunk(userId, chatId, bizType, chunk, end, orderBy, STREAM_TYPE_CONTENT);
+    }
+
+    private void sendStreamChunk(String userId, String chatId, String bizType, String chunk, boolean end,
+                                 Object orderBy, String streamType) {
         Map<String, Object> messageMap = new HashMap<>();
         messageMap.put("message", chunk);
         messageMap.put("end", end);
         messageMap.put("orderBy", orderBy);
         messageMap.put("chatId", chatId);
         messageMap.put("bizType", bizType);
+        messageMap.put("streamType", streamType);
         aiMessageWebSocket.sendMessageTo(JSONUtil.toJsonStr(messageMap), userId);
     }
 
@@ -369,6 +382,11 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
                 }
 
                 @Override
+                public void onReasoningDelta(String piece, boolean end) {
+                    handleStreamReasoningDelta(userId, chatId, bizType, piece);
+                }
+
+                @Override
                 public void onError(String message) {
                     handleStreamError(tenantId, isolationType, userId, chatId, bizType, message, finished);
                 }
@@ -391,6 +409,11 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
                 }
 
                 @Override
+                public void onReasoningDelta(String piece, boolean end) {
+                    handleStreamReasoningDelta(userId, chatId, bizType, piece);
+                }
+
+                @Override
                 public void onError(String message) {
                     handleStreamError(tenantId, isolationType, userId, chatId, bizType, message, finished);
                 }
@@ -409,6 +432,11 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
                 }
 
                 @Override
+                public void onReasoningDelta(String piece, boolean end) {
+                    handleStreamReasoningDelta(userId, chatId, bizType, piece);
+                }
+
+                @Override
                 public void onError(String message) {
                     handleStreamError(tenantId, isolationType, userId, chatId, bizType, message, finished);
                 }
@@ -423,6 +451,11 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
                 @Override
                 public void onDelta(String piece, boolean end) {
                     handleStreamDelta(tenantId, isolationType, userId, chatId, bizType, piece, end, finished);
+                }
+
+                @Override
+                public void onReasoningDelta(String piece, boolean end) {
+                    handleStreamReasoningDelta(userId, chatId, bizType, piece);
                 }
 
                 @Override
@@ -465,6 +498,23 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
             finished[0] = appendYiYanChunk(userId, chatId, bizType, piece, end) || finished[0];
         } finally {
             TenantContext.clear();
+        }
+    }
+
+    private void handleStreamReasoningDelta(String userId, String chatId, String bizType, String piece) {
+        if (StrUtil.isBlank(piece) || StrUtil.isBlank(userId)) {
+            return;
+        }
+        if (bizType == null) {
+            Map<String, Object> messageMap = new HashMap<>();
+            messageMap.put("message", piece);
+            messageMap.put("end", false);
+            messageMap.put("orderBy", -2);
+            messageMap.put("chatId", chatId);
+            messageMap.put("streamType", STREAM_TYPE_REASONING);
+            aiMessageWebSocket.sendMessageTo(JSONUtil.toJsonStr(messageMap), userId);
+        } else {
+            sendStreamChunk(userId, chatId, bizType, piece, false, -2, STREAM_TYPE_REASONING);
         }
     }
 
@@ -526,6 +576,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
             messageMap.put("message", piece);
             messageMap.put("end", end);
             messageMap.put("orderBy", orderBy);
+            messageMap.put("streamType", STREAM_TYPE_CONTENT);
             aiMessageWebSocket.sendMessageTo(JSONUtil.toJsonStr(messageMap), userId);
         } else {
             sendStreamChunk(userId, chatId, bizType, piece, end, orderBy);

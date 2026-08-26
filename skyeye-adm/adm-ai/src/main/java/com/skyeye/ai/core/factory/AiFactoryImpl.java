@@ -40,7 +40,7 @@ public class AiFactoryImpl implements AiFactory {
                     // 文心走千帆 V2 HTTP/SSE，只需要 API Key，不再传 Secret Key
                     return buildYiYanChatModel(apiKey, url);
                 case XUN_FEI:
-                    return buildXunFeiClient(appId, apiKey, secretKey);
+                    return buildXunFeiClient(appId, apiKey, secretKey, url);
                 case TONG_YI:
                     return buildTongYiChatClient(appId, apiKey);
                 case DOU_BAO:
@@ -120,8 +120,8 @@ public class AiFactoryImpl implements AiFactory {
         return new QianfanChatClient(apiKey, url);
     }
 
-    private static XunFeiChatClient buildXunFeiClient(String appId, String apiKey, String secretKey) {
-        return new XunFeiChatClient(appId, apiKey, secretKey);
+    private static XunFeiChatClient buildXunFeiClient(String appId, String apiKey, String secretKey, String url) {
+        return new XunFeiChatClient(appId, apiKey, secretKey, url);
     }
 
     /**

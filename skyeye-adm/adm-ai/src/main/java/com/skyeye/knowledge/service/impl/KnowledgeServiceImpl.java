@@ -398,6 +398,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             for (KnowledgeSync sync : syncList) {
                 total += syncOneTable(knowledge, sync, tenantId, apiKey, uploadContext);
             }
+            flushUploadIfNeeded(knowledge, apiKey, uploadContext, true);
             UpdateWrapper<Knowledge> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq(CommonConstants.ID, knowledge.getId());
             updateWrapper.set(MybatisPlusUtil.toColumns(Knowledge::getLastSyncTime), DateUtil.getTimeAndToString());
@@ -457,9 +458,6 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         String lastId = StrUtil.EMPTY;
         String cursorWatermark = lastWatermark;
         int total = 0;
-        StringBuilder uploadBuffer = new StringBuilder();
-        uploadBuffer.append("知识库同步表: ").append(sync.getTableName()).append('\n');
-        int bufferRows = 0;
         while (true) {
             List<Map<String, Object>> rows = KnowledgeJdbcHelper.queryRowsBatch(
                 knowledge.getDriverClass(), knowledge.getJdbcUrl(), knowledge.getJdbcUser(), knowledge.getJdbcPassword(),
@@ -469,14 +467,11 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                 break;
             }
             for (Map<String, Object> row : rows) {
-                uploadBuffer.append(AiKnowledgeUploadHelper.buildRowBlock(
+                uploadContext.ensureTableHeader(sync.getTableName());
+                uploadContext.appendRow(AiKnowledgeUploadHelper.buildRowBlock(
                     sync.getTableName(), sync.getIdField(), sync.getTitleField(), row, contentFields));
-                bufferRows++;
                 total++;
-                if (bufferRows >= flushRows || uploadBuffer.length() >= flushMaxBytes) {
-                    flushUpload(knowledge, apiKey, uploadContext, uploadBuffer);
-                    bufferRows = 0;
-                }
+                flushUploadIfNeeded(knowledge, apiKey, uploadContext, false);
             }
 
             Map<String, Object> lastRow = rows.get(rows.size() - 1);
@@ -496,16 +491,22 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                 break;
             }
         }
-        if (bufferRows > 0) {
-            flushUpload(knowledge, apiKey, uploadContext, uploadBuffer);
-        }
         return total;
     }
 
-    private void flushUpload(Knowledge knowledge, AiApiKey apiKey, SyncUploadContext uploadContext,
-                             StringBuilder uploadBuffer) {
-        String content = uploadBuffer.toString();
-        uploadBuffer.setLength(0);
+    /** force=true 时刷掉剩余缓冲（整次同步结束）；否则按行数/体积阈值刷盘 */
+    private void flushUploadIfNeeded(Knowledge knowledge, AiApiKey apiKey, SyncUploadContext uploadContext,
+                                     boolean force) {
+        if (!uploadContext.hasPendingContent()) {
+            return;
+        }
+        if (force || uploadContext.shouldFlush(flushRows, flushMaxBytes)) {
+            flushUpload(knowledge, apiKey, uploadContext);
+        }
+    }
+
+    private void flushUpload(Knowledge knowledge, AiApiKey apiKey, SyncUploadContext uploadContext) {
+        String content = uploadContext.drainUploadBuffer();
         if (StrUtil.isBlank(content)) {
             return;
         }
@@ -590,10 +591,13 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         }
     }
 
-    /** 单次同步的上传上下文：统一目录 + 分片序号 */
+    /** 单次同步的上传上下文：跨表共享缓冲，仅在达到阈值或整次同步结束时刷盘 */
     private static final class SyncUploadContext {
         private final String objectDir;
+        private final StringBuilder uploadBuffer = new StringBuilder();
         private int partSeq;
+        private int bufferRows;
+        private String currentTable;
 
         SyncUploadContext(String knowledgeId) {
             this.objectDir = AiKnowledgeUploadHelper.buildObjectDir(knowledgeId);
@@ -605,6 +609,41 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
 
         int nextPart() {
             return ++partSeq;
+        }
+
+        void ensureTableHeader(String tableName) {
+            if (StrUtil.equals(currentTable, tableName)) {
+                return;
+            }
+            currentTable = tableName;
+            if (uploadBuffer.length() > 0) {
+                uploadBuffer.append('\n');
+            }
+            uploadBuffer.append("知识库同步表: ").append(tableName).append('\n');
+        }
+
+        void appendRow(String rowBlock) {
+            uploadBuffer.append(rowBlock);
+            bufferRows++;
+        }
+
+        boolean hasPendingContent() {
+            return uploadBuffer.length() > 0;
+        }
+
+        boolean shouldFlush(int flushRows, int flushMaxBytes) {
+            return bufferRows >= flushRows || uploadBuffer.length() >= flushMaxBytes;
+        }
+
+        String drainUploadBuffer() {
+            if (uploadBuffer.length() <= 0) {
+                return StrUtil.EMPTY;
+            }
+            String content = uploadBuffer.toString();
+            uploadBuffer.setLength(0);
+            bufferRows = 0;
+            currentTable = null;
+            return content;
         }
     }
 

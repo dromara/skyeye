@@ -5,6 +5,9 @@
 package com.skyeye.ai.core.tongyi;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.dashscope.app.Application;
 import com.alibaba.dashscope.app.ApplicationParam;
 import com.alibaba.dashscope.app.ApplicationResult;
@@ -69,22 +72,15 @@ public class TongYiChatClient {
         AtomicBoolean ended = new AtomicBoolean(false);
         try {
             Flowable<ApplicationResult> result = application.streamCall(param);
-            final String[] last = {StrUtil.EMPTY};
+            final String[] lastText = {StrUtil.EMPTY};
+            final String[] lastReasoning = {StrUtil.EMPTY};
             result.blockingForEach(chunk -> {
-                String text = StrUtil.EMPTY;
-                if (chunk.getOutput() != null && chunk.getOutput().getText() != null) {
-                    text = chunk.getOutput().getText();
-                }
-                if (StrUtil.isEmpty(text)) {
+                JSONObject output = readOutputJson(chunk);
+                if (output == null) {
                     return;
                 }
-                // 2.14.4 默认累积输出，按增量切片后再回调
-                String delta = text.startsWith(last[0]) ? text.substring(last[0].length()) : text;
-                last[0] = text;
-                if (StrUtil.isEmpty(delta)) {
-                    return;
-                }
-                listener.onDelta(delta, false);
+                emitReasoningDelta(output, lastReasoning, listener);
+                emitTextDelta(output, lastText, listener);
             });
             if (ended.compareAndSet(false, true)) {
                 listener.onDelta(StrUtil.EMPTY, true);
@@ -106,6 +102,8 @@ public class TongYiChatClient {
             .appId(appId)
             .prompt(prompt)
             .parameter("incremental_output", true)
+            .parameter("has_thoughts", true)
+            .parameter("enable_thinking", true)
             .imageList(filterImages(images));
         List<History> items = toHistory(history);
         if (!items.isEmpty()) {
@@ -154,10 +152,90 @@ public class TongYiChatClient {
         return items;
     }
 
+    private JSONObject readOutputJson(ApplicationResult chunk) {
+        if (chunk == null) {
+            return null;
+        }
+        try {
+            JSONObject root = JSONUtil.parseObj(JSONUtil.toJsonStr(chunk));
+            return root.getJSONObject("output");
+        } catch (Exception ignored) {
+            if (chunk.getOutput() == null) {
+                return null;
+            }
+            JSONObject output = new JSONObject();
+            if (chunk.getOutput().getText() != null) {
+                output.set("text", chunk.getOutput().getText());
+            }
+            return output;
+        }
+    }
+
+    private void emitReasoningDelta(JSONObject output, String[] lastReasoning, StreamListener listener) {
+        String reasoningFull = output.getStr("reasoning_content");
+        if (StrUtil.isBlank(reasoningFull)) {
+            reasoningFull = extractReasoningThought(output);
+        }
+        if (StrUtil.isBlank(reasoningFull)) {
+            return;
+        }
+        String delta = sliceIncremental(lastReasoning[0], reasoningFull);
+        lastReasoning[0] = reasoningFull;
+        if (StrUtil.isNotBlank(delta)) {
+            listener.onReasoningDelta(delta, false);
+        }
+    }
+
+    private void emitTextDelta(JSONObject output, String[] lastText, StreamListener listener) {
+        String text = output.getStr("text");
+        if (StrUtil.isEmpty(text)) {
+            return;
+        }
+        String delta = sliceIncremental(lastText[0], text);
+        lastText[0] = text;
+        if (StrUtil.isEmpty(delta)) {
+            return;
+        }
+        listener.onDelta(delta, false);
+    }
+
+    private String sliceIncremental(String previous, String current) {
+        if (StrUtil.isEmpty(previous)) {
+            return current;
+        }
+        return current.startsWith(previous) ? current.substring(previous.length()) : current;
+    }
+
+    private String extractReasoningThought(JSONObject output) {
+        JSONArray thoughts = output.getJSONArray("thoughts");
+        if (thoughts == null || thoughts.isEmpty()) {
+            return StrUtil.EMPTY;
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < thoughts.size(); i++) {
+            JSONObject item = thoughts.getJSONObject(i);
+            if (item == null) {
+                continue;
+            }
+            String actionType = item.getStr("action_type");
+            if (StrUtil.isNotBlank(actionType) && !"reasoning".equals(actionType)) {
+                continue;
+            }
+            String thought = item.getStr("thought");
+            if (StrUtil.isNotBlank(thought)) {
+                builder.append(thought);
+            }
+        }
+        return builder.toString();
+    }
+
     public interface StreamListener {
         void onDelta(String content, boolean end);
 
         void onError(String message);
+
+        default void onReasoningDelta(String content, boolean end) {
+        }
     }
 
     /**
