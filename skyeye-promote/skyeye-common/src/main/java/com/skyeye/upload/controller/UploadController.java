@@ -123,6 +123,7 @@ public class UploadController {
         @ApiImplicitParam(id = "storage", name = "storage", value = "存储器类型，见 FileStorageEnum（如 20=S3）；configId 为空时生效；都空则用默认", enumClass = FileStorageEnum.class),
         @ApiImplicitParam(id = "type", name = "type", value = "文件目录类型", required = "required,num"),
         @ApiImplicitParam(id = "fileName", name = "fileName", value = "文件名（含后缀）", required = "required"),
+        @ApiImplicitParam(id = "objectDir", name = "objectDir", value = "对象存储子目录，如 knowledge/{知识库id}/{日期}/"),
         @ApiImplicitParam(id = "contentBase64", name = "contentBase64", value = "文件内容 Base64，与 localPath 二选一"),
         @ApiImplicitParam(id = "localPath", name = "localPath", value = "本机绝对路径（需在 IMAGES_PATH 下），与 contentBase64 二选一")})
     @RequestMapping("/post/UploadController/skyeyeUploadToFileStorage")

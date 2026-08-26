@@ -445,6 +445,7 @@ public class UploadServiceImpl implements UploadService {
         if (StrUtil.isBlank(fileName)) {
             throw new CustomException("fileName 不能为空");
         }
+        String objectDir = params.get("objectDir") == null ? StrUtil.EMPTY : params.get("objectDir").toString();
         String contentBase64 = params.get("contentBase64") == null ? StrUtil.EMPTY : params.get("contentBase64").toString();
         String localPath = params.get("localPath") == null ? StrUtil.EMPTY : params.get("localPath").toString();
 
@@ -485,7 +486,7 @@ public class UploadServiceImpl implements UploadService {
             throw new CustomException("上传内容为空，请传 contentBase64 或有效的 localPath");
         }
 
-        String objectKey = buildStorageObjectKey(type, fileName);
+        String objectKey = buildStorageObjectKey(type, objectDir, fileName);
         String mimeType = FileUtil.getMineType(fileName);
         try {
             String url = fileClient.upload(content, objectKey, mimeType);
@@ -545,7 +546,7 @@ public class UploadServiceImpl implements UploadService {
         }
     }
 
-    private String buildStorageObjectKey(int type, String fileName) {
+    private String buildStorageObjectKey(int type, String objectDir, String fileName) {
         String visit = FileConstants.FileUploadPath.getVisitPath(type);
         // /images/upload/wordfolder/ -> wordfolder/
         String prefix = visit;
@@ -557,8 +558,23 @@ public class UploadServiceImpl implements UploadService {
         if (StrUtil.isNotBlank(prefix) && !prefix.endsWith("/")) {
             prefix = prefix + "/";
         }
+        String dir = sanitizeObjectDir(objectDir);
         String name = fileName.replaceAll("^/+", "");
-        return prefix + name;
+        return prefix + dir + name;
+    }
+
+    private String sanitizeObjectDir(String objectDir) {
+        if (StrUtil.isBlank(objectDir)) {
+            return StrUtil.EMPTY;
+        }
+        String dir = objectDir.trim().replace('\\', '/');
+        dir = dir.replaceAll("\\.\\.", "");
+        dir = dir.replaceAll("[^A-Za-z0-9_\\-/]", "_");
+        dir = dir.replaceAll("^/+", "");
+        if (StrUtil.isNotBlank(dir) && !dir.endsWith("/")) {
+            dir = dir + "/";
+        }
+        return dir;
     }
 
     private void saveStorageFile(String configId, String fileName, String path, String url,

@@ -41,6 +41,7 @@ public class S3FileClientConfig implements FileClientConfig {
      * 3. 腾讯云：https://cloud.tencent.com/document/product/436/6224
      * 4. 七牛云：https://developer.qiniu.com/kodo/4088/s3-access-domainname
      * 5. 华为云：https://developer.huaweicloud.com/endpoint?OBS
+     * 6. 火山 TOS（S3 协议）：https://www.volcengine.com/docs/6349/74822 ，如 tos-s3-cn-beijing.volces.com
      */
     @NotBlank(message = "节点地址", groups = {Config.class})
     private String endpoint;

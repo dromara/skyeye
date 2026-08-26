@@ -35,6 +35,14 @@ logging:
   level:
     com.skyeye: debug
 
+# 知识库同步参数控制
+skyeye:
+  ai:
+    knowledge:
+      sync:
+        flush-rows: 5000        # 每批行数
+        flush-max-bytes: 5242880  # 每批最大字节（默认 5MB）
+
 webroot:
   # 考勤相关的服务
   skyeye-checkwork: skyeye-adm-${spring.profiles.active}
