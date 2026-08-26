@@ -7,16 +7,11 @@ package com.skyeye.bug.service.impl;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.skyeye.common.client.ExecuteFeignClient;
+import com.skyeye.ai.util.AutoAiChatHelper;
+import com.skyeye.ai.util.AutoAiHtmlHelper;
+import com.skyeye.ai.util.AutoAiJsonHelper;
+import com.skyeye.ai.util.AutoAiProjectContextHelper;
 import com.skyeye.exception.CustomException;
-import com.skyeye.module.entity.AutoModule;
-import com.skyeye.module.service.AutoModuleService;
-import com.skyeye.project.entity.AutoProject;
-import com.skyeye.project.service.AutoProjectService;
-import com.skyeye.rest.ai.IAiChatRest;
-import com.skyeye.rest.platform.IPlatformBaseSettingRest;
-import com.skyeye.version.entity.AutoVersion;
-import com.skyeye.version.service.AutoVersionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,25 +22,19 @@ import java.util.Map;
 
 /**
  * Bug 草稿 AI 生成编排（不落库）。
- * 支持一句话描述，或结合用户上传的截图生成标题、问题描述和分类。
  */
 @Service
 public class AutoBugAiDraftService {
 
-    @Autowired
-    private IAiChatRest iAiChatRest;
+    private static final String[] BUG_SECTION_LABELS = {
+        "bug描述", "复现步骤", "预期结果", "实际结果", "改进需求", "效果截图"
+    };
 
     @Autowired
-    private IPlatformBaseSettingRest iPlatformBaseSettingRest;
+    private AutoAiChatHelper autoAiChatHelper;
 
     @Autowired
-    private AutoProjectService autoProjectService;
-
-    @Autowired
-    private AutoModuleService autoModuleService;
-
-    @Autowired
-    private AutoVersionService autoVersionService;
+    private AutoAiProjectContextHelper autoAiProjectContextHelper;
 
     public Map<String, Object> generate(Map<String, Object> params) {
         String name = params.get("name").toString().trim();
@@ -53,43 +42,18 @@ public class AutoBugAiDraftService {
         if (StrUtil.isBlank(name) && images.isEmpty()) {
             throw new CustomException("请输入一句话描述，或先上传截图再生成");
         }
-        String roleId = loadPlatformAiRoleId();
-        Map<String, Object> chatParams = new HashMap<>();
-        chatParams.put("content", buildUserContent(params, name, images));
-        chatParams.put("bizType", "bugDraft");
-        chatParams.put("roleId", roleId);
-        chatParams.put("saveChat", 0);
+        Map<String, Object> extraParams = new HashMap<>();
         if (!images.isEmpty()) {
-            chatParams.put("images", JSONUtil.toJsonStr(images));
+            extraParams.put("images", JSONUtil.toJsonStr(images));
         }
-        Map<String, Object> chatBean = ExecuteFeignClient.get(() -> iAiChatRest.syncChatCompletion(chatParams)).getBean();
-        if (chatBean == null || chatBean.get("id") == null) {
-            throw new CustomException("启动AI生成失败");
-        }
-        Map<String, Object> bean = new HashMap<>();
-        bean.put("chatId", chatBean.get("id").toString());
-        bean.put("streaming", true);
-        return bean;
+        return autoAiChatHelper.startStreamingChat(
+            buildUserContent(params, name, images),
+            "bugDraft",
+            extraParams.isEmpty() ? null : extraParams);
     }
 
     public Map<String, Object> parseAnswer(Map<String, Object> params) {
-        if (params.get("answer") == null) {
-            throw new CustomException("生成结果不能为空");
-        }
-        String answer = params.get("answer").toString();
-        if (StrUtil.isBlank(answer)) {
-            throw new CustomException("生成结果不能为空");
-        }
-        return parseDraft(answer);
-    }
-
-    private String loadPlatformAiRoleId() {
-        Map<String, Object> bean = ExecuteFeignClient.get(() -> iPlatformBaseSettingRest.queryPlatformAiRole()).getBean();
-        String roleId = bean == null || bean.get("roleId") == null ? "" : bean.get("roleId").toString();
-        if (StrUtil.isBlank(roleId)) {
-            throw new CustomException("请先在平台信息设置中绑定AI角色");
-        }
-        return roleId;
+        return parseDraft(autoAiChatHelper.requireAnswer(params));
     }
 
     private List<String> readImages(String raw) {
@@ -113,13 +77,13 @@ public class AutoBugAiDraftService {
         } else {
             sb.append("用户一句话描述：无，请主要根据截图识别问题。\n");
         }
-        sb.append("项目：").append(nvlText(loadProjectName(objectId))).append("\n");
+        sb.append("项目：").append(AutoAiHtmlHelper.nvlText(autoAiProjectContextHelper.loadProjectName(objectId))).append("\n");
         if (StrUtil.isNotBlank(moduleId)) {
-            sb.append("用户已选模块：").append(nvlText(loadModuleName(moduleId))).append("\n");
+            sb.append("用户已选模块：").append(AutoAiHtmlHelper.nvlText(autoAiProjectContextHelper.loadModuleName(moduleId))).append("\n");
         }
-        sb.append("版本：").append(nvlText(loadVersionName(versionId))).append("\n");
-        sb.append("已有问题描述：").append(nvlText(plainText(content))).append("\n");
-        sb.append("已有备注：").append(nvlText(remark)).append("\n");
+        sb.append("版本：").append(AutoAiHtmlHelper.nvlText(autoAiProjectContextHelper.loadVersionName(versionId))).append("\n");
+        sb.append("已有问题描述：").append(AutoAiHtmlHelper.nvlText(AutoAiHtmlHelper.plainText(content))).append("\n");
+        sb.append("已有备注：").append(AutoAiHtmlHelper.nvlText(remark)).append("\n");
         if (!images.isEmpty()) {
             sb.append("用户上传了 ").append(images.size()).append(" 张截图，请结合截图里的界面、报错和文案分析问题。\n");
             sb.append("识别模块时：只看截图里实际出现的顶部导航、左侧菜单高亮、页面标题、弹窗标题，把看到的菜单或页面名称原样写入 moduleName。截图里没出现的名称一律不要填，禁止猜测。\n");
@@ -155,140 +119,25 @@ public class AutoBugAiDraftService {
     }
 
     private Map<String, Object> parseDraft(String answer) {
-        String jsonText = extractJson(answer);
-        JSONObject json = parseJson(jsonText);
+        JSONObject json = AutoAiJsonHelper.parseJsonObject(AutoAiJsonHelper.extractJson(answer));
         Map<String, Object> bean = new HashMap<>();
         if (json == null) {
             bean.put("name", "");
-            bean.put("content", ensureBugSectionBold(wrapAsHtml(answer)));
+            bean.put("content", AutoAiHtmlHelper.ensureSectionBold(AutoAiHtmlHelper.wrapAsHtml(answer), BUG_SECTION_LABELS));
             bean.put("remark", "");
             return bean;
         }
         bean.put("name", json.getStr("name") == null ? "" : json.getStr("name").trim());
         String contentHtml = json.getStr("contentHtml");
         if (StrUtil.isBlank(contentHtml)) {
-            contentHtml = wrapAsHtml(answer);
+            contentHtml = AutoAiHtmlHelper.wrapAsHtml(answer);
         }
-        bean.put("content", ensureBugSectionBold(contentHtml));
+        bean.put("content", AutoAiHtmlHelper.ensureSectionBold(contentHtml, BUG_SECTION_LABELS));
         bean.put("remark", json.getStr("remark") == null ? "" : json.getStr("remark"));
         bean.put("severity", json.getStr("severity"));
         bean.put("necessaryToPresent", json.getStr("necessaryToPresent"));
         bean.put("terminalOccurrence", json.getStr("terminalOccurrence"));
         bean.put("moduleName", json.getStr("moduleName"));
         return bean;
-    }
-
-    /**
-     * 兜底：模型常输出纯文本小节，补上 &lt;strong&gt; 以匹配页面默认模板样式。
-     */
-    private String ensureBugSectionBold(String html) {
-        if (StrUtil.isBlank(html)) {
-            return html;
-        }
-        String result = html;
-        String[] labels = {"bug描述", "复现步骤", "预期结果", "实际结果", "改进需求", "效果截图"};
-        for (String label : labels) {
-            if (result.contains("<strong>" + label) || result.contains("<b>" + label)) {
-                continue;
-            }
-            // 优先带冒号的标题
-            String withCnColon = label + "：";
-            String withEnColon = label + ":";
-            if (result.contains(withCnColon)) {
-                result = result.replace(withCnColon, "<strong>" + withCnColon + "</strong>");
-            } else if (result.contains(withEnColon)) {
-                result = result.replace(withEnColon, "<strong>" + withEnColon + "</strong>");
-            } else if (result.contains(label)) {
-                result = result.replaceFirst(java.util.regex.Pattern.quote(label),
-                    "<strong>" + label + "</strong>");
-            }
-        }
-        return result;
-    }
-
-    private JSONObject parseJson(String jsonText) {
-        if (StrUtil.isBlank(jsonText)) {
-            return null;
-        }
-        try {
-            return JSONUtil.parseObj(jsonText);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private String extractJson(String answer) {
-        if (StrUtil.isBlank(answer)) {
-            return "";
-        }
-        String text = answer.trim();
-        if (text.startsWith("```")) {
-            int firstNl = text.indexOf('\n');
-            if (firstNl > 0) {
-                text = text.substring(firstNl + 1);
-            }
-            int lastFence = text.lastIndexOf("```");
-            if (lastFence >= 0) {
-                text = text.substring(0, lastFence);
-            }
-            text = text.trim();
-        }
-        int start = text.indexOf('{');
-        int end = text.lastIndexOf('}');
-        if (start >= 0 && end > start) {
-            return text.substring(start, end + 1);
-        }
-        return text;
-    }
-
-    private String wrapAsHtml(String raw) {
-        if (StrUtil.isBlank(raw)) {
-            return "";
-        }
-        String text = raw.trim();
-        if (text.startsWith("<")) {
-            return text;
-        }
-        String escaped = escapeHtml(text);
-        return "<p>" + escaped.replace("\n", "</p><p>") + "</p>";
-    }
-
-    private String escapeHtml(String text) {
-        if (text == null) {
-            return "";
-        }
-        return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
-    }
-
-    private String plainText(String html) {
-        if (StrUtil.isBlank(html)) {
-            return "";
-        }
-        return html.replaceAll("<[^>]*>", " ").replace("&nbsp;", " ").trim();
-    }
-
-    private String loadProjectName(String objectId) {
-        AutoProject project = autoProjectService.selectById(objectId);
-        return project == null || project.getName() == null ? "" : project.getName().toString();
-    }
-
-    private String loadModuleName(String moduleId) {
-        if (StrUtil.isBlank(moduleId)) {
-            return "";
-        }
-        AutoModule module = autoModuleService.selectById(moduleId);
-        return module == null || module.getName() == null ? "" : module.getName().toString();
-    }
-
-    private String loadVersionName(String versionId) {
-        if (StrUtil.isBlank(versionId)) {
-            return "";
-        }
-        AutoVersion version = autoVersionService.selectById(versionId);
-        return version == null || version.getName() == null ? "" : version.getName().toString();
-    }
-
-    private String nvlText(String value) {
-        return StrUtil.isBlank(value) ? "无" : value;
     }
 }

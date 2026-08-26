@@ -112,4 +112,24 @@ public class AutoCaseController {
         autoCaseService.executeStep(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "aiGenerateStepAssert", value = "AI生成步骤断言建议", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "resultKey", name = "resultKey", value = "步骤编码", required = "required"),
+        @ApiImplicitParam(id = "stepName", name = "stepName", value = "步骤名称"),
+        @ApiImplicitParam(id = "output", name = "output", value = "试跑输出JSON", required = "required"),
+        @ApiImplicitParam(id = "existingAssertList", name = "existingAssertList", value = "已有断言JSON数组")})
+    @RequestMapping("/post/AutoCaseController/aiGenerateStepAssert")
+    public void aiGenerateStepAssert(InputObject inputObject, OutputObject outputObject) {
+        autoCaseService.aiGenerateStepAssert(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "aiParseStepAssert", value = "解析AI步骤断言建议", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "answer", name = "answer", value = "AI完整返回文本", required = "required"),
+        @ApiImplicitParam(id = "resultKey", name = "resultKey", value = "步骤编码", required = "required")})
+    @RequestMapping("/post/AutoCaseController/aiParseStepAssert")
+    public void aiParseStepAssert(InputObject inputObject, OutputObject outputObject) {
+        autoCaseService.aiParseStepAssert(inputObject, outputObject);
+    }
+
 }
