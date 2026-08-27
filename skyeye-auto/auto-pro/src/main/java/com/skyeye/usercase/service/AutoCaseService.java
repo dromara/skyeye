@@ -31,6 +31,10 @@ public interface AutoCaseService extends SkyeyeBusinessService<AutoCase> {
 
     void aiParseStepAssert(InputObject inputObject, OutputObject outputObject);
 
+    void aiGenerateStepInput(InputObject inputObject, OutputObject outputObject);
+
+    void aiParseStepInput(InputObject inputObject, OutputObject outputObject);
+
     void aiGenerateCaseDraft(InputObject inputObject, OutputObject outputObject);
 
     void aiParseCaseDraft(InputObject inputObject, OutputObject outputObject);

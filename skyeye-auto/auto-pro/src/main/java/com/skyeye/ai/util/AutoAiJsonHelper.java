@@ -162,9 +162,6 @@ public final class AutoAiJsonHelper {
         sb.append("断言 key 必须匹配输出中真实存在的路径；优先 returnCode、returnMessage，再断言 rows/bean/data 内关键字段。\n");
     }
 
-    /**
-     * 纠正常见误写：.code + 200 → .returnCode + 0。
-     */
     public static String[] normalizeSkyeyeAssertKeyValue(String key, String value) {
         if (StrUtil.isBlank(key)) {
             return new String[]{key, value};
@@ -180,4 +177,4 @@ public final class AutoAiJsonHelper {
         return new String[]{normalizedKey, normalizedValue};
     }
 }
-
+
