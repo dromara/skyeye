@@ -30,6 +30,10 @@ public interface AutoDemandService extends SkyeyeTeamAuthService<AutoDemand> {
 
     void aiParseDemandDraft(InputObject inputObject, OutputObject outputObject);
 
+    void aiGenerateCaseDraft(InputObject inputObject, OutputObject outputObject);
+
+    void aiParseCaseDraft(InputObject inputObject, OutputObject outputObject);
+
 }
 
 

@@ -123,5 +123,22 @@ public class AutoDemandController {
         autoDemandService.aiParseDemandDraft(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "aiGenerateCaseDraft", value = "AI根据需求生成冒烟用例草稿", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "demandId", name = "demandId", value = "需求id", required = "required")})
+    @RequestMapping("/post/AutoDemandController/aiGenerateCaseDraft")
+    public void aiGenerateCaseDraft(InputObject inputObject, OutputObject outputObject) {
+        autoDemandService.aiGenerateCaseDraft(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "aiParseCaseDraft", value = "解析AI冒烟用例草稿", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "answer", name = "answer", value = "AI完整返回文本", required = "required"),
+        @ApiImplicitParam(id = "demandId", name = "demandId", value = "需求id", required = "required")})
+    @RequestMapping("/post/AutoDemandController/aiParseCaseDraft")
+    public void aiParseCaseDraft(InputObject inputObject, OutputObject outputObject) {
+        autoDemandService.aiParseCaseDraft(inputObject, outputObject);
+    }
+
 }
 
