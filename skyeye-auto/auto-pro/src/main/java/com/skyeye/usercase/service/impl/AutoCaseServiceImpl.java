@@ -84,6 +84,9 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
     private AutoCaseAiAssertService autoCaseAiAssertService;
 
     @Autowired
+    private AutoCaseAiInputService autoCaseAiInputService;
+
+    @Autowired
     private AutoDemandCaseAiDraftService autoDemandCaseAiDraftService;
 
     @Override
@@ -179,6 +182,20 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
     @Override
     public void aiParseStepAssert(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> bean = autoCaseAiAssertService.parseAnswer(inputObject.getParams());
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void aiGenerateStepInput(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> bean = autoCaseAiInputService.generate(inputObject.getParams());
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void aiParseStepInput(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> bean = autoCaseAiInputService.parseAnswer(inputObject.getParams());
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
