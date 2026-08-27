@@ -98,12 +98,13 @@ public class AutoCaseAiAssertService {
         sb.append("步骤编码(resultKey)：").append(resultKey).append("\n");
         sb.append("试跑输出(JSON)：\n").append(outputJson).append("\n");
         sb.append("已有断言(JSON，可参考或优化)：\n").append(existingAssertJson).append("\n");
+        AutoAiJsonHelper.appendSkyeyeApiResponseRules(sb);
         sb.append("规则：\n");
-        sb.append("1. key 为 JsonPath 相对路径，必须以步骤编码开头，如 ").append(resultKey).append(".code、")
-            .append(resultKey).append(".returnCode\n");
+        sb.append("1. key 为 JsonPath 相对路径，必须以步骤编码开头，如 ").append(resultKey).append(".returnCode、")
+            .append(resultKey).append(".returnMessage、").append(resultKey).append(".rows[0].id\n");
         sb.append("2. operator 必须使用英文 key：equalTo、notEqual、lessThan、greaterThan、lessThanOrEqual、greaterThanOrEqual、contain（不要用 equal/==）\n");
         sb.append("3. valueFrom：1=自定义字面量；2=表达式(JsonPath 取期望值，一般优先用 1)\n");
-        sb.append("4. value：自定义时填期望字面量（如 200、0、success）；表达式时填另一条路径\n");
+        sb.append("4. value：自定义时填期望字面量（如 0、成功）；成功标志优先断言 returnCode=0，不要用 code=200\n");
         sb.append("5. 优先断言业务成功标志、状态码、关键 id/消息等，条数 3~8 条，不要重复\n");
         sb.append("6. 必须输出 {\"assertList\":[...]} 结构，不要只返回数组\n");
         AutoAiJsonHelper.appendMarkedJsonOutput(sb,
@@ -190,11 +191,12 @@ public class AutoCaseAiAssertService {
             valueObj = item.get("expect");
         }
         String value = valueObj == null ? "" : String.valueOf(valueObj);
+        String[] normalized = AutoAiJsonHelper.normalizeSkyeyeAssertKeyValue(key, value);
         Map<String, Object> row = new HashMap<>();
-        row.put("key", key);
+        row.put("key", normalized[0]);
         row.put("operator", operator);
         row.put("valueFrom", valueFrom);
-        row.put("value", value);
+        row.put("value", normalized[1]);
         return row;
     }
 

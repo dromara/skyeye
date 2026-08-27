@@ -78,10 +78,38 @@ public class AutoDemandCaseAiDraftService {
     public Map<String, Object> parseAnswer(Map<String, Object> params) {
         String demandId = params.get("demandId") == null ? "" : params.get("demandId").toString();
         AutoDemand demand = StrUtil.isBlank(demandId) ? null : autoDemandService.selectById(demandId);
-        List<AutoApi> apiList = demand == null
-            ? new ArrayList<>()
-            : loadApiCatalog(demand.getObjectId(), demand.getModuleId());
-        return parseDraft(autoAiChatHelper.requireAnswer(params), demand, apiList);
+        String objectId;
+        String moduleId;
+        if (demand != null) {
+            objectId = demand.getObjectId();
+            moduleId = demand.getModuleId();
+        } else {
+            objectId = params.get("objectId") == null ? "" : params.get("objectId").toString();
+            moduleId = params.get("moduleId") == null ? "" : params.get("moduleId").toString();
+            if (StrUtil.isBlank(objectId)) {
+                throw new CustomException("objectId不能为空");
+            }
+        }
+        List<AutoApi> apiList = loadApiCatalog(objectId, moduleId);
+        return parseDraft(autoAiChatHelper.requireAnswer(params), demand, apiList, moduleId);
+    }
+
+    /**
+     * 用例编辑页：按模块 API 目录 + 用户描述生成用例草稿（无需关联需求）。
+     */
+    public Map<String, Object> generateByModule(Map<String, Object> params) {
+        String objectId = params.get("objectId") == null ? "" : params.get("objectId").toString().trim();
+        if (StrUtil.isBlank(objectId)) {
+            throw new CustomException("objectId不能为空");
+        }
+        String moduleId = params.get("moduleId") == null ? "" : params.get("moduleId").toString();
+        List<AutoApi> apiList = loadApiCatalog(objectId, moduleId);
+        if (CollectionUtil.isEmpty(apiList)) {
+            throw new CustomException("当前模块下暂无接口，请先在接口管理中维护 API");
+        }
+        return autoAiChatHelper.startStreamingChat(
+            buildUserContentByModule(objectId, moduleId, params, apiList),
+            "caseDraft");
     }
 
     private AutoDemand loadDemand(Map<String, Object> params) {
@@ -120,13 +148,15 @@ public class AutoDemandCaseAiDraftService {
         sb.append("备注：").append(AutoAiHtmlHelper.nvlText(demand.getRemark())).append("\n");
         sb.append("可选接口目录（stepApi.apiId 必须从中选取真实 id，不要编造）：\n");
         sb.append(buildApiCatalogJson(apiList)).append("\n");
+        AutoAiJsonHelper.appendSkyeyeApiResponseRules(sb);
         sb.append("规则：\n");
         sb.append("1. 仅生成 type=1 的 API 步骤，不要嵌套用例/数据库/脚本步骤\n");
         sb.append("2. 每个步骤必须有 stepApi.apiId，且来自上面目录\n");
         sb.append("3. stepInputList 填常用入参示例，valueFrom：1=自定义；2=表达式\n");
-        sb.append("4. stepAssertList 的 key 使用占位符 {resultKey}.字段，如 {resultKey}.code\n");
+        sb.append("4. stepAssertList 的 key 使用占位符 {resultKey}.字段，如 {resultKey}.returnCode、{resultKey}.data.xxx\n");
         sb.append("5. operator 仅可取：equalTo、notEqual、lessThan、greaterThan、lessThanOrEqual、greaterThanOrEqual、contain\n");
-        sb.append("6. 用例名称建议以 [冒烟] 开头\n");
+        sb.append("6. 成功标志断言 returnCode=0，不要用 code=200\n");
+        sb.append("7. 用例名称建议以 [冒烟] 开头\n");
         AutoAiJsonHelper.appendMarkedJsonOutput(sb,
             "{\n"
                 + "  \"name\": \"[冒烟] 用例名称\",\n"
@@ -138,7 +168,48 @@ public class AutoDemandCaseAiDraftService {
                 + "      \"orderBy\": 1,\n"
                 + "      \"stepApi\": {\"apiId\": \"目录中的id\"},\n"
                 + "      \"stepInputList\": [{\"key\": \"username\", \"valueFrom\": 1, \"value\": \"admin\"}],\n"
-                + "      \"stepAssertList\": [{\"key\": \"{resultKey}.code\", \"operator\": \"equalTo\", \"valueFrom\": 1, \"value\": \"200\", \"orderBy\": 1}]\n"
+                + "      \"stepAssertList\": [{\"key\": \"{resultKey}.returnCode\", \"operator\": \"equalTo\", \"valueFrom\": 1, \"value\": \"0\", \"orderBy\": 1}]\n"
+                + "    }\n"
+                + "  ]\n"
+                + "}");
+        return sb.toString();
+    }
+
+    private String buildUserContentByModule(String objectId, String moduleId, Map<String, Object> params,
+                                            List<AutoApi> apiList) {
+        String moduleName = autoAiProjectContextHelper.loadModuleName(moduleId);
+        String caseName = params.get("caseName") == null ? "" : params.get("caseName").toString();
+        String description = params.get("description") == null ? "" : params.get("description").toString();
+        String projectName = autoAiProjectContextHelper.loadProjectName(objectId);
+        StringBuilder sb = new StringBuilder();
+        sb.append("你是自动化测试工程师，只输出 JSON，不要 markdown 代码块。\n");
+        sb.append("请根据用户描述与模块接口目录，生成可执行的 API 自动化用例草稿，步骤简洁，优先 3~8 个 API 步骤。\n");
+        sb.append("项目：").append(AutoAiHtmlHelper.nvlText(projectName)).append("\n");
+        sb.append("模块：").append(AutoAiHtmlHelper.nvlText(moduleName)).append("\n");
+        sb.append("用例名称建议：").append(StrUtil.blankToDefault(caseName, "无")).append("\n");
+        sb.append("场景描述：\n").append(AutoAiHtmlHelper.plainText(StrUtil.blankToDefault(description, "覆盖该模块主流程冒烟场景"))).append("\n");
+        sb.append("可选接口目录（stepApi.apiId 必须从中选取真实 id，不要编造）：\n");
+        sb.append(buildApiCatalogJson(apiList)).append("\n");
+        AutoAiJsonHelper.appendSkyeyeApiResponseRules(sb);
+        sb.append("规则：\n");
+        sb.append("1. 仅生成 type=1 的 API 步骤\n");
+        sb.append("2. 每个步骤必须有 stepApi.apiId，且来自上面目录\n");
+        sb.append("3. stepInputList 填常用入参示例，valueFrom：1=自定义；2=表达式\n");
+        sb.append("4. stepAssertList 的 key 使用占位符 {resultKey}.字段，如 {resultKey}.returnCode、{resultKey}.data.xxx\n");
+        sb.append("5. operator 仅可取：equalTo、notEqual、lessThan、greaterThan、lessThanOrEqual、greaterThanOrEqual、contain\n");
+        sb.append("6. 成功标志断言 returnCode=0，不要用 code=200\n");
+        AutoAiJsonHelper.appendMarkedJsonOutput(sb,
+            "{\n"
+                + "  \"name\": \"用例名称\",\n"
+                + "  \"remark\": \"AI 生成\",\n"
+                + "  \"stepList\": [\n"
+                + "    {\n"
+                + "      \"name\": \"步骤名\",\n"
+                + "      \"type\": 1,\n"
+                + "      \"orderBy\": 1,\n"
+                + "      \"stepApi\": {\"apiId\": \"目录中的id\"},\n"
+                + "      \"stepInputList\": [],\n"
+                + "      \"stepAssertList\": [{\"key\": \"{resultKey}.returnCode\", \"operator\": \"equalTo\", \"valueFrom\": 1, \"value\": \"0\", \"orderBy\": 1}]\n"
                 + "    }\n"
                 + "  ]\n"
                 + "}");
@@ -158,7 +229,7 @@ public class AutoDemandCaseAiDraftService {
         return array.toString();
     }
 
-    private Map<String, Object> parseDraft(String answer, AutoDemand demand, List<AutoApi> apiList) {
+    private Map<String, Object> parseDraft(String answer, AutoDemand demand, List<AutoApi> apiList, String moduleId) {
         JSONObject json = AutoAiJsonHelper.parseJsonObject(AutoAiJsonHelper.extractJsonBlock(answer));
         if (json == null) {
             throw new CustomException("未能解析出有效用例草稿，请重试");
@@ -201,6 +272,8 @@ public class AutoDemandCaseAiDraftService {
         if (demand != null) {
             bean.put("moduleId", demand.getModuleId());
             bean.put("demandId", demand.getId());
+        } else if (StrUtil.isNotBlank(moduleId)) {
+            bean.put("moduleId", moduleId);
         }
         bean.put("stepList", stepList);
         return bean;
@@ -305,10 +378,12 @@ public class AutoDemandCaseAiDraftService {
                 operator = AttrSymbols.EQUAL_TO.getKey();
             }
             Map<String, Object> row = new HashMap<>();
-            row.put("key", key.trim());
+            String[] normalized = AutoAiJsonHelper.normalizeSkyeyeAssertKeyValue(key.trim(),
+                json.get("value") == null ? "" : String.valueOf(json.get("value")));
+            row.put("key", normalized[0]);
             row.put("operator", operator);
             row.put("valueFrom", parseValueFrom(json.get("valueFrom")));
-            row.put("value", json.get("value") == null ? "" : String.valueOf(json.get("value")));
+            row.put("value", normalized[1]);
             row.put("orderBy", parseOrderBy(json.get("orderBy") == null ? order : json.get("orderBy")));
             list.add(row);
             order++;

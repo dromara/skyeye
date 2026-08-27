@@ -27,6 +27,7 @@ import com.skyeye.history.entity.AutoHistoryStepAssert;
 import com.skyeye.history.entity.AutoHistoryStepCase;
 import com.skyeye.history.service.AutoHistoryCaseService;
 import com.skyeye.module.service.AutoModuleService;
+import com.skyeye.demand.service.impl.AutoDemandCaseAiDraftService;
 import com.skyeye.usercase.classenum.AutoStepTypeEnum;
 import com.skyeye.usercase.classenum.AutoValueFromTypeEnum;
 import com.skyeye.usercase.util.AutoStepRandomHelper;
@@ -81,6 +82,9 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
 
     @Autowired
     private AutoCaseAiAssertService autoCaseAiAssertService;
+
+    @Autowired
+    private AutoDemandCaseAiDraftService autoDemandCaseAiDraftService;
 
     @Override
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
@@ -175,6 +179,20 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
     @Override
     public void aiParseStepAssert(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> bean = autoCaseAiAssertService.parseAnswer(inputObject.getParams());
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void aiGenerateCaseDraft(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> bean = autoDemandCaseAiDraftService.generateByModule(inputObject.getParams());
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void aiParseCaseDraft(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> bean = autoDemandCaseAiDraftService.parseAnswer(inputObject.getParams());
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
