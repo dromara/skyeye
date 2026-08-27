@@ -31,12 +31,6 @@ public class AutoHistoryCaseController {
     @Autowired
     private AutoHistoryCaseService autoHistoryCaseService;
 
-    /**
-     * 获取用例执行历史列表
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryAutoCaseHistoryList", value = "获取用例执行历史列表", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/AutoHistoryCaseController/queryAutoCaseHistoryList")
@@ -44,12 +38,6 @@ public class AutoHistoryCaseController {
         autoHistoryCaseService.queryPageList(inputObject, outputObject);
     }
 
-    /**
-     * 根据id查询执行历史详情信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryAutoCaseHistoryById", value = "根据id查询执行历史详情信息", method = "GET", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id。", required = "required")})
@@ -58,12 +46,6 @@ public class AutoHistoryCaseController {
         autoHistoryCaseService.selectById(inputObject, outputObject);
     }
 
-    /**
-     * 根据id强制结束执行信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "finishAutoCaseHistoryById", value = "根据id强制结束执行信息", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id。", required = "required")})
