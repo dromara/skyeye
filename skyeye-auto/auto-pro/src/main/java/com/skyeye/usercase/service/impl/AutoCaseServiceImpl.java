@@ -29,6 +29,7 @@ import com.skyeye.history.service.AutoHistoryCaseService;
 import com.skyeye.module.service.AutoModuleService;
 import com.skyeye.usercase.classenum.AutoStepTypeEnum;
 import com.skyeye.usercase.classenum.AutoValueFromTypeEnum;
+import com.skyeye.usercase.util.AutoStepRandomHelper;
 import com.skyeye.usercase.dao.AutoCaseDao;
 import com.skyeye.usercase.entity.*;
 import com.skyeye.usercase.service.AutoCaseService;
@@ -188,6 +189,7 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
         autoHistoryStep.setExecuteResult(AutoHistoryCaseExecuteResult.EXECUTION_SUCCESSFUL.getKey());
 
         Map<String, Object> inputParams = getInputParams(result, autoStep.getStepInputList());
+        attachStepInputSnapshot(result, autoStep.getResultKey(), inputParams);
         response.put("inputParams", inputParams);
         try {
             executeOneStep(autoStep, result, inputParams, autoHistoryStep);
@@ -346,6 +348,7 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
                 autoHistoryStep.setExecuteResult(AutoHistoryCaseExecuteResult.EXECUTION_SUCCESSFUL.getKey());
                 // 获取前置条件(入参)
                 Map<String, Object> inputParams = getInputParams(result, autoStep.getStepInputList());
+                attachStepInputSnapshot(result, autoStep.getResultKey(), inputParams);
                 try {
                     executeOneStep(autoStep, result, inputParams, autoHistoryStep);
                 } catch (Exception ex) {
@@ -416,12 +419,23 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
 
         stepInputList.forEach(stepInput -> {
             if (stepInput.getValueFrom() == AutoValueFromTypeEnum.CUSTOMIZE.getKey()) {
-                inputParams.put(stepInput.getKey(), stepInput.getValue());
+                inputParams.put(stepInput.getKey(), AutoStepRandomHelper.buildCustomValue(
+                    stepInput.getValue(), stepInput.getRandomCategory(), stepInput.getRandomPosition()));
             } else if (stepInput.getValueFrom() == AutoValueFromTypeEnum.EXPRESSION.getKey()) {
                 inputParams.put(stepInput.getKey(), String.valueOf(hasValParams.get(stepInput.getValue())));
             }
         });
         return inputParams;
+    }
+
+    /**
+     * 将本步组装好的入参写入结果集，供断言/表达式引用：{resultKey}_input.{参数名}。
+     */
+    private void attachStepInputSnapshot(Map<String, Object> result, String resultKey, Map<String, Object> inputParams) {
+        if (StrUtil.isBlank(resultKey) || CollectionUtil.isEmpty(inputParams)) {
+            return;
+        }
+        result.put(resultKey + "_input", inputParams);
     }
 
     /**

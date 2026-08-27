@@ -127,21 +127,21 @@ public class AutoDemandCaseAiDraftService {
         sb.append("4. stepAssertList 的 key 使用占位符 {resultKey}.字段，如 {resultKey}.code\n");
         sb.append("5. operator 仅可取：equalTo、notEqual、lessThan、greaterThan、lessThanOrEqual、greaterThanOrEqual、contain\n");
         sb.append("6. 用例名称建议以 [冒烟] 开头\n");
-        sb.append("请输出 JSON：\n");
-        sb.append("{\n");
-        sb.append("  \"name\": \"[冒烟] 用例名称\",\n");
-        sb.append("  \"remark\": \"来自需求 xxx\",\n");
-        sb.append("  \"stepList\": [\n");
-        sb.append("    {\n");
-        sb.append("      \"name\": \"步骤名\",\n");
-        sb.append("      \"type\": 1,\n");
-        sb.append("      \"orderBy\": 1,\n");
-        sb.append("      \"stepApi\": {\"apiId\": \"目录中的id\"},\n");
-        sb.append("      \"stepInputList\": [{\"key\": \"username\", \"valueFrom\": 1, \"value\": \"admin\"}],\n");
-        sb.append("      \"stepAssertList\": [{\"key\": \"{resultKey}.code\", \"operator\": \"equalTo\", \"valueFrom\": 1, \"value\": \"200\", \"orderBy\": 1}]\n");
-        sb.append("    }\n");
-        sb.append("  ]\n");
-        sb.append("}\n");
+        AutoAiJsonHelper.appendMarkedJsonOutput(sb,
+            "{\n"
+                + "  \"name\": \"[冒烟] 用例名称\",\n"
+                + "  \"remark\": \"来自需求 xxx\",\n"
+                + "  \"stepList\": [\n"
+                + "    {\n"
+                + "      \"name\": \"步骤名\",\n"
+                + "      \"type\": 1,\n"
+                + "      \"orderBy\": 1,\n"
+                + "      \"stepApi\": {\"apiId\": \"目录中的id\"},\n"
+                + "      \"stepInputList\": [{\"key\": \"username\", \"valueFrom\": 1, \"value\": \"admin\"}],\n"
+                + "      \"stepAssertList\": [{\"key\": \"{resultKey}.code\", \"operator\": \"equalTo\", \"valueFrom\": 1, \"value\": \"200\", \"orderBy\": 1}]\n"
+                + "    }\n"
+                + "  ]\n"
+                + "}");
         return sb.toString();
     }
 
@@ -159,7 +159,7 @@ public class AutoDemandCaseAiDraftService {
     }
 
     private Map<String, Object> parseDraft(String answer, AutoDemand demand, List<AutoApi> apiList) {
-        JSONObject json = AutoAiJsonHelper.parseJsonObject(AutoAiJsonHelper.extractJson(answer));
+        JSONObject json = AutoAiJsonHelper.parseJsonObject(AutoAiJsonHelper.extractJsonBlock(answer));
         if (json == null) {
             throw new CustomException("未能解析出有效用例草稿，请重试");
         }

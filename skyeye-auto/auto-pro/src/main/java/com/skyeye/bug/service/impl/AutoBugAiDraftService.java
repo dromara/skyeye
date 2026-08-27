@@ -91,16 +91,16 @@ public class AutoBugAiDraftService {
         appendOptions(sb, "可选严重性", params.get("severityOptions"));
         appendOptions(sb, "可选必现类型", params.get("necessaryOptions"));
         appendOptions(sb, "可选终端", params.get("terminalOptions"));
-        sb.append("请输出 JSON：\n");
-        sb.append("{\n");
-        sb.append("  \"name\": \"简洁的 Bug 标题\",\n");
-        sb.append("  \"contentHtml\": \"问题描述 HTML\",\n");
-        sb.append("  \"remark\": \"简要备注\",\n");
-        sb.append("  \"severity\": \"从可选严重性中选一个原文\",\n");
-        sb.append("  \"necessaryToPresent\": \"必现 或 非必现\",\n");
-        sb.append("  \"terminalOccurrence\": \"从可选终端中选一个原文\",\n");
-        sb.append("  \"moduleName\": \"截图中看到的模块或菜单名称，看不清则留空\"\n");
-        sb.append("}\n");
+        AutoAiJsonHelper.appendMarkedJsonOutput(sb,
+            "{\n"
+                + "  \"name\": \"简洁的 Bug 标题\",\n"
+                + "  \"contentHtml\": \"问题描述 HTML\",\n"
+                + "  \"remark\": \"简要备注\",\n"
+                + "  \"severity\": \"从可选严重性中选一个原文\",\n"
+                + "  \"necessaryToPresent\": \"必现 或 非必现\",\n"
+                + "  \"terminalOccurrence\": \"从可选终端中选一个原文\",\n"
+                + "  \"moduleName\": \"截图中看到的模块或菜单名称，看不清则留空\"\n"
+                + "}");
         sb.append("contentHtml 必须严格按以下 HTML 结构输出（标题用 strong 加粗，不要纯文本标题）：\n");
         sb.append("<p><strong>bug描述：</strong>现象说明</p>");
         sb.append("<p><strong>复现步骤：</strong><br/>1. …<br/>2. …</p>");
@@ -119,7 +119,7 @@ public class AutoBugAiDraftService {
     }
 
     private Map<String, Object> parseDraft(String answer) {
-        JSONObject json = AutoAiJsonHelper.parseJsonObject(AutoAiJsonHelper.extractJson(answer));
+        JSONObject json = AutoAiJsonHelper.parseJsonObject(AutoAiJsonHelper.extractJsonBlock(answer));
         Map<String, Object> bean = new HashMap<>();
         if (json == null) {
             bean.put("name", "");

@@ -59,6 +59,14 @@ public class AutoStepInput extends CommonInfo {
     @ApiModelProperty(value = "入参值：自定义填字面量；表达式填前序步骤JsonPath路径")
     private String value;
 
+    @TableField("random_category")
+    @ApiModelProperty(value = "随机数类别：date/datetime/code6/code8")
+    private String randomCategory;
+
+    @TableField("random_position")
+    @ApiModelProperty(value = "随机数位置：front/back")
+    private String randomPosition;
+
     @TableField("case_id")
     @Property(value = "所属用例")
     private String caseId;
