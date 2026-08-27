@@ -85,18 +85,18 @@ public class AutoDemandAiDraftService {
         sb.append("测试参与需求分析：").append(testJoin).append("\n");
         sb.append("已有内容：").append(AutoAiHtmlHelper.nvlText(content)).append("\n");
         sb.append("已有备注：").append(AutoAiHtmlHelper.nvlText(remark)).append("\n");
-        sb.append("请输出 JSON：\n");
-        sb.append("{\n");
-        sb.append("  \"contentHtml\": \"需求正文 HTML\",\n");
-        sb.append("  \"remark\": \"简要备注\",\n");
-        sb.append("  \"frontTasks\": [\"前端任务\"],\n");
-        sb.append("  \"backTasks\": [\"后端任务\"],\n");
-        sb.append("  \"testTasks\": [\"测试任务\"],\n");
-        sb.append("  \"totalScore\": 8.00,\n");
-        sb.append("  \"frontDays\": 2,\n");
-        sb.append("  \"backDays\": 3,\n");
-        sb.append("  \"testDays\": 1\n");
-        sb.append("}\n");
+        AutoAiJsonHelper.appendMarkedJsonOutput(sb,
+            "{\n"
+                + "  \"contentHtml\": \"需求正文 HTML\",\n"
+                + "  \"remark\": \"简要备注\",\n"
+                + "  \"frontTasks\": [\"前端任务\"],\n"
+                + "  \"backTasks\": [\"后端任务\"],\n"
+                + "  \"testTasks\": [\"测试任务\"],\n"
+                + "  \"totalScore\": 8.00,\n"
+                + "  \"frontDays\": 2,\n"
+                + "  \"backDays\": 3,\n"
+                + "  \"testDays\": 1\n"
+                + "}");
         sb.append("contentHtml 必须严格按以下 HTML 结构输出（小节标题用 strong 加粗，不要纯文本标题）：\n");
         sb.append("<p><strong>背景：</strong>…</p>");
         sb.append("<p><strong>范围：</strong>…</p>");
@@ -108,7 +108,7 @@ public class AutoDemandAiDraftService {
     }
 
     private Map<String, Object> parseDraft(String answer) {
-        JSONObject json = AutoAiJsonHelper.parseJsonObject(AutoAiJsonHelper.extractJson(answer));
+        JSONObject json = AutoAiJsonHelper.parseJsonObject(AutoAiJsonHelper.extractJsonBlock(answer));
         Map<String, Object> bean = new HashMap<>();
         if (json == null) {
             bean.put("content", AutoAiHtmlHelper.ensureSectionBold(AutoAiHtmlHelper.wrapAsHtml(answer), DEMAND_SECTION_LABELS));

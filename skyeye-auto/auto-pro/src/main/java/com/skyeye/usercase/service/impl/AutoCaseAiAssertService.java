@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,10 +35,34 @@ public class AutoCaseAiAssertService {
 
     private static final Set<String> VALID_OPERATORS = new HashSet<>();
 
+    private static final Map<String, String> OPERATOR_ALIASES = new LinkedHashMap<>();
+
     static {
         for (AttrSymbols symbol : AttrSymbols.values()) {
             VALID_OPERATORS.add(symbol.getKey());
         }
+        OPERATOR_ALIASES.put("equal", AttrSymbols.EQUAL_TO.getKey());
+        OPERATOR_ALIASES.put("equals", AttrSymbols.EQUAL_TO.getKey());
+        OPERATOR_ALIASES.put("==", AttrSymbols.EQUAL_TO.getKey());
+        OPERATOR_ALIASES.put("notequal", AttrSymbols.NOT_EQUAL.getKey());
+        OPERATOR_ALIASES.put("!=", AttrSymbols.NOT_EQUAL.getKey());
+        OPERATOR_ALIASES.put("lessthan", AttrSymbols.LESS_THAN.getKey());
+        OPERATOR_ALIASES.put("<", AttrSymbols.LESS_THAN.getKey());
+        OPERATOR_ALIASES.put("greaterthan", AttrSymbols.GREATER_THAN.getKey());
+        OPERATOR_ALIASES.put(">", AttrSymbols.GREATER_THAN.getKey());
+        OPERATOR_ALIASES.put("lessthanorequal", AttrSymbols.LESS_THAN_OR_EQUAL.getKey());
+        OPERATOR_ALIASES.put("<=", AttrSymbols.LESS_THAN_OR_EQUAL.getKey());
+        OPERATOR_ALIASES.put("greaterthanorequal", AttrSymbols.GREATER_THAN_OR_EQUAL.getKey());
+        OPERATOR_ALIASES.put(">=", AttrSymbols.GREATER_THAN_OR_EQUAL.getKey());
+        OPERATOR_ALIASES.put("contains", AttrSymbols.CONTAIN.getKey());
+        OPERATOR_ALIASES.put("include", AttrSymbols.CONTAIN.getKey());
+        OPERATOR_ALIASES.put("等于", AttrSymbols.EQUAL_TO.getKey());
+        OPERATOR_ALIASES.put("不等于", AttrSymbols.NOT_EQUAL.getKey());
+        OPERATOR_ALIASES.put("小于", AttrSymbols.LESS_THAN.getKey());
+        OPERATOR_ALIASES.put("大于", AttrSymbols.GREATER_THAN.getKey());
+        OPERATOR_ALIASES.put("小于等于", AttrSymbols.LESS_THAN_OR_EQUAL.getKey());
+        OPERATOR_ALIASES.put("大于等于", AttrSymbols.GREATER_THAN_OR_EQUAL.getKey());
+        OPERATOR_ALIASES.put("包含", AttrSymbols.CONTAIN.getKey());
     }
 
     @Autowired
@@ -67,31 +93,30 @@ public class AutoCaseAiAssertService {
 
     private String buildUserContent(String resultKey, String stepName, String outputJson, String existingAssertJson) {
         StringBuilder sb = new StringBuilder();
-        sb.append("你是自动化测试断言助手，只输出 JSON，不要 markdown 代码块。\n");
-        sb.append("根据步骤试跑输出，生成合理的断言配置，用于接口/数据库步骤结果校验。\n");
+        sb.append("你是自动化测试断言助手。根据步骤试跑输出，生成合理的断言配置，用于接口/数据库步骤结果校验。\n");
         sb.append("步骤名称：").append(StrUtil.blankToDefault(stepName, "无")).append("\n");
         sb.append("步骤编码(resultKey)：").append(resultKey).append("\n");
         sb.append("试跑输出(JSON)：\n").append(outputJson).append("\n");
         sb.append("已有断言(JSON，可参考或优化)：\n").append(existingAssertJson).append("\n");
         sb.append("规则：\n");
         sb.append("1. key 为 JsonPath 相对路径，必须以步骤编码开头，如 ").append(resultKey).append(".code、")
-            .append(resultKey).append(".data.id\n");
-        sb.append("2. operator 仅可取：equalTo、notEqual、lessThan、greaterThan、lessThanOrEqual、greaterThanOrEqual、contain\n");
+            .append(resultKey).append(".returnCode\n");
+        sb.append("2. operator 必须使用英文 key：equalTo、notEqual、lessThan、greaterThan、lessThanOrEqual、greaterThanOrEqual、contain（不要用 equal/==）\n");
         sb.append("3. valueFrom：1=自定义字面量；2=表达式(JsonPath 取期望值，一般优先用 1)\n");
-        sb.append("4. value：自定义时填期望字面量（如 200、success）；表达式时填另一条路径\n");
+        sb.append("4. value：自定义时填期望字面量（如 200、0、success）；表达式时填另一条路径\n");
         sb.append("5. 优先断言业务成功标志、状态码、关键 id/消息等，条数 3~8 条，不要重复\n");
-        sb.append("请输出 JSON：\n");
-        sb.append("{\n");
-        sb.append("  \"assertList\": [\n");
-        sb.append("    {\"key\": \"").append(resultKey).append(".code\", \"operator\": \"equalTo\", \"valueFrom\": 1, \"value\": \"200\"}\n");
-        sb.append("  ]\n");
-        sb.append("}\n");
+        sb.append("6. 必须输出 {\"assertList\":[...]} 结构，不要只返回数组\n");
+        AutoAiJsonHelper.appendMarkedJsonOutput(sb,
+            "{\n"
+                + "  \"assertList\": [\n"
+                + "    {\"key\": \"" + resultKey + ".returnCode\", \"operator\": \"equalTo\", \"valueFrom\": 1, \"value\": \"0\"}\n"
+                + "  ]\n"
+                + "}");
         return sb.toString();
     }
 
     private Map<String, Object> parseAssertAnswer(String answer, String resultKey) {
-        JSONObject json = AutoAiJsonHelper.parseJsonObject(AutoAiJsonHelper.extractJson(answer));
-        JSONArray assertArray = json == null ? null : json.getJSONArray("assertList");
+        JSONArray assertArray = resolveAssertArray(answer);
         List<Map<String, Object>> assertList = new ArrayList<>();
         if (assertArray != null) {
             for (Object item : assertArray) {
@@ -108,27 +133,62 @@ public class AutoCaseAiAssertService {
             }
         }
         if (assertList.isEmpty()) {
-            throw new CustomException("未能解析出有效断言，请重试");
+            throw new CustomException("未能解析出有效断言，请重试（请在 "
+                + AutoAiJsonHelper.JSON_BLOCK_BEGIN + " 与 "
+                + AutoAiJsonHelper.JSON_BLOCK_END + " 之间输出 assertList JSON）");
         }
         Map<String, Object> bean = new HashMap<>();
         bean.put("assertList", assertList);
         return bean;
     }
 
+    private JSONArray resolveAssertArray(String answer) {
+        String jsonText = AutoAiJsonHelper.extractJsonBlock(answer);
+        JSONObject json = AutoAiJsonHelper.parseJsonObject(jsonText);
+        if (json != null) {
+            JSONArray assertList = pickArray(json, "assertList", "asserts", "assertions", "list");
+            if (assertList != null && !assertList.isEmpty()) {
+                return assertList;
+            }
+            if (json.containsKey("key") && json.containsKey("operator")) {
+                JSONArray single = new JSONArray();
+                single.add(json);
+                return single;
+            }
+        }
+        return AutoAiJsonHelper.parseJsonArray(jsonText);
+    }
+
+    private JSONArray pickArray(JSONObject json, String... keys) {
+        for (String key : keys) {
+            try {
+                JSONArray array = json.getJSONArray(key);
+                if (array != null && !array.isEmpty()) {
+                    return array;
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        return null;
+    }
+
     private Map<String, Object> normalizeAssertRow(JSONObject item, String resultKey) {
         if (item == null) {
             return null;
         }
-        String key = normalizeKey(item.getStr("key"), resultKey);
+        String key = normalizeKey(firstNonBlank(item.getStr("key"), item.getStr("path"), item.getStr("field")), resultKey);
         if (StrUtil.isBlank(key)) {
             return null;
         }
-        String operator = item.getStr("operator");
-        if (StrUtil.isBlank(operator) || !VALID_OPERATORS.contains(operator)) {
-            operator = AttrSymbols.EQUAL_TO.getKey();
-        }
+        String operator = normalizeOperator(firstNonBlank(item.getStr("operator"), item.getStr("condition"), item.getStr("symbol")));
         Integer valueFrom = parseValueFrom(item.get("valueFrom"));
         Object valueObj = item.get("value");
+        if (valueObj == null) {
+            valueObj = item.get("expected");
+        }
+        if (valueObj == null) {
+            valueObj = item.get("expect");
+        }
         String value = valueObj == null ? "" : String.valueOf(valueObj);
         Map<String, Object> row = new HashMap<>();
         row.put("key", key);
@@ -136,6 +196,33 @@ public class AutoCaseAiAssertService {
         row.put("valueFrom", valueFrom);
         row.put("value", value);
         return row;
+    }
+
+    private String firstNonBlank(String... values) {
+        if (values == null) {
+            return "";
+        }
+        for (String value : values) {
+            if (StrUtil.isNotBlank(value)) {
+                return value.trim();
+            }
+        }
+        return "";
+    }
+
+    private String normalizeOperator(String operator) {
+        if (StrUtil.isBlank(operator)) {
+            return AttrSymbols.EQUAL_TO.getKey();
+        }
+        String text = operator.trim();
+        if (VALID_OPERATORS.contains(text)) {
+            return text;
+        }
+        String alias = OPERATOR_ALIASES.get(text.toLowerCase(Locale.ROOT));
+        if (alias != null) {
+            return alias;
+        }
+        return AttrSymbols.EQUAL_TO.getKey();
     }
 
     private Integer parseValueFrom(Object value) {
