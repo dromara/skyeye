@@ -45,6 +45,7 @@ public class AutoHistoryCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoHi
     protected QueryWrapper<AutoHistoryCase> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<AutoHistoryCase> queryWrapper = super.getQueryWrapper(commonPageInfo);
         queryWrapper.eq(MybatisPlusUtil.toColumns(AutoHistoryCase::getCaseId), commonPageInfo.getObjectId());
+        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(AutoHistoryCase::getExecuteStartTime));
         return queryWrapper;
     }
 

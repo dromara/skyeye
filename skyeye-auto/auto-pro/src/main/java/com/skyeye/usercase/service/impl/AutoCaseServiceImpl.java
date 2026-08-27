@@ -138,6 +138,7 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
         }
 
         Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> stepResultList = new ArrayList<>();
         // 可选：前序步骤，用于入参/断言表达式引用（同样按前端内存配置，无需已保存）
         Object preStepListObj = params.get("preStepList");
         if (ObjectUtil.isNotEmpty(preStepListObj) && StrUtil.isNotBlank(preStepListObj.toString())) {
@@ -145,17 +146,23 @@ public class AutoCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoCaseDao, 
             if (CollectionUtil.isNotEmpty(preSteps)) {
                 for (AutoStep preStep : preSteps) {
                     Map<String, Object> preResult = runStepOnce(preStep, result);
+                    stepResultList.add(preResult);
                     if (!Boolean.TRUE.equals(preResult.get("success"))) {
-                        preResult.put("message", "前序步骤失败：" + StrUtil.blankToDefault(String.valueOf(preResult.get("message")), "执行失败"));
-                        outputObject.setBean(preResult);
+                        Map<String, Object> output = new HashMap<>(preResult);
+                        output.put("message", "前序步骤失败：" + StrUtil.blankToDefault(String.valueOf(preResult.get("message")), "执行失败"));
+                        output.put("stepResultList", stepResultList);
+                        outputObject.setBean(output);
                         return;
                     }
                 }
             }
         }
 
-        Map<String, Object> bean = runStepOnce(targetStep, result);
-        outputObject.setBean(bean);
+        Map<String, Object> stepResult = runStepOnce(targetStep, result);
+        stepResultList.add(stepResult);
+        Map<String, Object> output = new HashMap<>(stepResult);
+        output.put("stepResultList", stepResultList);
+        outputObject.setBean(output);
     }
 
     @Override
