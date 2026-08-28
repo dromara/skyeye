@@ -146,6 +146,11 @@ public class AutoScheduleTaskHistoryServiceImpl extends SkyeyeBusinessServiceImp
                 failNum++;
             }
         }
+        if (successNum + failNum < totalNum) {
+            failNum = totalNum - successNum;
+        } else if (successNum + failNum > totalNum) {
+            totalNum = successNum + failNum;
+        }
         double successRate = calcSuccessRate(successNum, totalNum);
         Integer result = failNum > 0
             ? AutoScheduleExecuteResult.FAILED.getKey()
@@ -200,7 +205,9 @@ public class AutoScheduleTaskHistoryServiceImpl extends SkyeyeBusinessServiceImp
         update(updateWrapper);
     }
 
-    /** 成功率 0-1，保留四位小数 */
+    /**
+     * 成功率 0-1，保留四位小数
+     */
     private double calcSuccessRate(int successNum, int totalNum) {
         if (totalNum <= 0) {
             return 0D;
