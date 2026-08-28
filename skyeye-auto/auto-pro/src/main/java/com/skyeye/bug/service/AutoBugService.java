@@ -21,5 +21,7 @@ public interface AutoBugService extends SkyeyeTeamAuthService<AutoBug> {
 
     void aiGenerateBugDraft(InputObject inputObject, OutputObject outputObject);
 
+    void aiGenerateCaseFailureBugDraft(InputObject inputObject, OutputObject outputObject);
+
     void aiParseBugDraft(InputObject inputObject, OutputObject outputObject);
 }

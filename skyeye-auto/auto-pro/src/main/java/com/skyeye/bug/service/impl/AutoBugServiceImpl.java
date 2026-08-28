@@ -167,6 +167,13 @@ public class AutoBugServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoBugDao, Au
     }
 
     @Override
+    public void aiGenerateCaseFailureBugDraft(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> bean = autoBugAiDraftService.generateFromCaseFailure(inputObject.getParams());
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
     public void aiParseBugDraft(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> bean = autoBugAiDraftService.parseAnswer(inputObject.getParams());
         outputObject.setBean(bean);
