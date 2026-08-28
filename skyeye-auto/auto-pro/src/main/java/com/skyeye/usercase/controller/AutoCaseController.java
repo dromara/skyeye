@@ -132,4 +132,46 @@ public class AutoCaseController {
         autoCaseService.aiParseStepAssert(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "aiGenerateStepInput", value = "AI生成步骤入参建议", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "apiId", name = "apiId", value = "接口id", required = "required"),
+        @ApiImplicitParam(id = "resultKey", name = "resultKey", value = "步骤编码"),
+        @ApiImplicitParam(id = "stepName", name = "stepName", value = "步骤名称"),
+        @ApiImplicitParam(id = "hint", name = "hint", value = "补充说明"),
+        @ApiImplicitParam(id = "preStepList", name = "preStepList", value = "前序步骤JSON数组"),
+        @ApiImplicitParam(id = "existingInputList", name = "existingInputList", value = "已有入参JSON数组")})
+    @RequestMapping("/post/AutoCaseController/aiGenerateStepInput")
+    public void aiGenerateStepInput(InputObject inputObject, OutputObject outputObject) {
+        autoCaseService.aiGenerateStepInput(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "aiParseStepInput", value = "解析AI步骤入参建议", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "answer", name = "answer", value = "AI完整返回文本", required = "required")})
+    @RequestMapping("/post/AutoCaseController/aiParseStepInput")
+    public void aiParseStepInput(InputObject inputObject, OutputObject outputObject) {
+        autoCaseService.aiParseStepInput(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "aiGenerateCaseDraft", value = "AI根据模块接口生成用例草稿", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "objectId", name = "objectId", value = "项目id", required = "required"),
+        @ApiImplicitParam(id = "moduleId", name = "moduleId", value = "模块id"),
+        @ApiImplicitParam(id = "caseName", name = "caseName", value = "用例名称建议"),
+        @ApiImplicitParam(id = "description", name = "description", value = "场景描述")})
+    @RequestMapping("/post/AutoCaseController/aiGenerateCaseDraft")
+    public void aiGenerateCaseDraft(InputObject inputObject, OutputObject outputObject) {
+        autoCaseService.aiGenerateCaseDraft(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "aiParseCaseDraft", value = "解析AI用例草稿", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "answer", name = "answer", value = "AI完整返回文本", required = "required"),
+        @ApiImplicitParam(id = "objectId", name = "objectId", value = "项目id", required = "required"),
+        @ApiImplicitParam(id = "moduleId", name = "moduleId", value = "模块id")})
+    @RequestMapping("/post/AutoCaseController/aiParseCaseDraft")
+    public void aiParseCaseDraft(InputObject inputObject, OutputObject outputObject) {
+        autoCaseService.aiParseCaseDraft(inputObject, outputObject);
+    }
+
 }
