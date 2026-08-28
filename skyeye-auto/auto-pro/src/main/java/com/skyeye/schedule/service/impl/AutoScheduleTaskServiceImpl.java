@@ -45,11 +45,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
@@ -339,67 +335,136 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
     private void runScheduleTaskCases(String scheduleHistoryId, List<String> caseIds, String tenantId,
                                       TenantEnum isolationType) {
         int size = caseIds.size();
+        // 记录已产生执行历史的用例，汇总前对缺失项补失败记录，避免 成功+失败 < 总数
+        Set<String> recordedCaseIds = ConcurrentHashMap.newKeySet();
         CompletableFuture<?>[] futures = new CompletableFuture[size];
         for (int i = 0; i < size; i++) {
             final String caseId = caseIds.get(i);
             futures[i] = CompletableFuture.runAsync(
-                () -> runCaseWithContext(caseId, scheduleHistoryId, tenantId, isolationType),
+                () -> runCaseWithContext(caseId, scheduleHistoryId, tenantId, isolationType, recordedCaseIds),
                 scheduleCaseExecutor);
         }
         CompletableFuture.allOf(futures).join();
+        ensureMissingCasesRecorded(caseIds, scheduleHistoryId, recordedCaseIds, tenantId, isolationType);
         finishScheduleFromHistories(scheduleHistoryId, size);
     }
 
     /**
-     * 按批次关联的 auto_history_case 汇总成功/失败数（避免内存计数与补数不准）
+     * 对未落库的用例补一条「执行失败」历史，保证明细条数与汇总一致
      */
-    private void finishScheduleFromHistories(String scheduleHistoryId, int expectedTotal) {
-        int[] stats = countScheduleCaseResults(scheduleHistoryId);
-        int executed = stats[0] + stats[1];
-        if (executed < expectedTotal) {
-            log.warn("定时任务批次[{}]应有{}个用例，实际产生{}条执行记录", scheduleHistoryId, expectedTotal, executed);
+    private void ensureMissingCasesRecorded(List<String> caseIds, String scheduleHistoryId,
+                                            Set<String> recordedCaseIds, String tenantId,
+                                            TenantEnum isolationType) {
+        for (String caseId : caseIds) {
+            if (recordedCaseIds.contains(caseId)) {
+                continue;
+            }
+            try {
+                runWithTenantContext(tenantId, isolationType,
+                    () -> createFailedHistoryStub(caseId, scheduleHistoryId, recordedCaseIds));
+            } catch (Exception e) {
+                log.warn("定时任务补写失败用例记录异常，caseId={}, historyId={}", caseId, scheduleHistoryId, e);
+            }
         }
-        safeFinishScheduleHistory(scheduleHistoryId, expectedTotal, stats[0], stats[1]);
     }
 
+    /**
+     * 按库表汇总成功/失败。不强制结束「执行中」的用例（可能只是耗时长仍会成功）。
+     * 线程都返回后短暂等待事务落库；若仍有执行中则暂不结束批次，交由僵死恢复逻辑处理。
+     */
+    private void finishScheduleFromHistories(String scheduleHistoryId, int expectedTotal) {
+        int[] stats = waitForCaseResultsSettled(scheduleHistoryId);
+        int success = stats[0];
+        int fail = stats[1];
+        int inProgress = stats[2];
+        if (inProgress > 0) {
+            log.warn("定时任务批次[{}]仍有{}个用例执行中，暂不回写结束状态，等待其自行完成",
+                scheduleHistoryId, inProgress);
+            return;
+        }
+        int executed = success + fail;
+        if (executed < expectedTotal) {
+            log.warn("定时任务批次[{}]应有{}个用例，实际产生{}条执行记录，差额按失败计",
+                scheduleHistoryId, expectedTotal, executed);
+            fail = expectedTotal - success;
+        } else if (executed > expectedTotal) {
+            expectedTotal = executed;
+        }
+        safeFinishScheduleHistory(scheduleHistoryId, expectedTotal, success, fail);
+    }
+
+    /**
+     * 等待用例历史从「执行中」落成终态（仅等待，不改写结果）
+     *
+     * @return [success, fail, inProgress]
+     */
+    private int[] waitForCaseResultsSettled(String scheduleHistoryId) {
+        final int maxRetry = 15;
+        final long intervalMs = 200L;
+        int[] stats = countScheduleCaseResults(scheduleHistoryId);
+        for (int i = 0; i < maxRetry && stats[2] > 0; i++) {
+            try {
+                Thread.sleep(intervalMs);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+            stats = countScheduleCaseResults(scheduleHistoryId);
+        }
+        return stats;
+    }
+
+    /**
+     * @return [success, fail, inProgress]
+     */
     private int[] countScheduleCaseResults(String scheduleHistoryId) {
         QueryWrapper<AutoHistoryCase> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(AutoHistoryCase::getScheduleTaskHistoryId), scheduleHistoryId);
         List<AutoHistoryCase> histories = autoHistoryCaseService.list(queryWrapper);
         int success = 0;
         int fail = 0;
+        int inProgress = 0;
         for (AutoHistoryCase history : histories) {
             Integer executeResult = history.getExecuteResult();
             if (AutoHistoryCaseExecuteResult.EXECUTION_SUCCESSFUL.getKey().equals(executeResult)) {
                 success++;
+            } else if (AutoHistoryCaseExecuteResult.IN_PROGRESS.getKey().equals(executeResult)) {
+                inProgress++;
             } else {
                 fail++;
             }
         }
-        return new int[]{success, fail};
+        return new int[]{success, fail, inProgress};
     }
 
     /**
      * 子线程并行执行用例：复用用例已有 updateHistoryCase（与 MQ 消费者相同），不改用例模块
      */
     private void runCaseWithContext(String caseId, String scheduleTaskHistoryId, String tenantId,
-                                    TenantEnum isolationType) {
+                                    TenantEnum isolationType, Set<String> recordedCaseIds) {
         try {
-            runWithTenantContext(tenantId, isolationType, () -> executeCaseAndCollectResult(caseId, scheduleTaskHistoryId));
+            runWithTenantContext(tenantId, isolationType,
+                () -> executeCaseAndCollectResult(caseId, scheduleTaskHistoryId, recordedCaseIds));
         } catch (Exception e) {
             log.warn("定时任务用例[{}]执行异常，historyId={}", caseId, scheduleTaskHistoryId, e);
+            try {
+                runWithTenantContext(tenantId, isolationType,
+                    () -> createFailedHistoryStub(caseId, scheduleTaskHistoryId, recordedCaseIds));
+            } catch (Exception ex) {
+                log.warn("定时任务用例[{}]补写失败记录异常，historyId={}", caseId, scheduleTaskHistoryId, ex);
+            }
         }
     }
 
     /**
-     * 对齐 ExecuteCaseServiceImpl：建用例历史 + updateHistoryCase 同步跑完，按历史结果判定。
-     * 定时任务批次已在任务级防重，此处不再 checkUserCaseRuning，避免残留「执行中」拦截后续用例。
+     * 建用例历史 + updateHistoryCase；异常时尽量落一条失败历史，供汇总与明细展示
      */
-    private boolean executeCaseAndCollectResult(String caseId, String scheduleTaskHistoryId) {
+    private void executeCaseAndCollectResult(String caseId, String scheduleTaskHistoryId,
+                                             Set<String> recordedCaseIds) {
         AutoCase autoCase = autoCaseService.selectById(caseId);
         if (autoCase == null) {
-            log.warn("定时任务用例[{}]不存在，historyId={}", caseId, scheduleTaskHistoryId);
-            return false;
+            createFailedHistoryStub(caseId, scheduleTaskHistoryId, recordedCaseIds);
+            return;
         }
         AutoHistoryCase autoHistoryCase = new AutoHistoryCase();
         autoHistoryCase.setName(autoCase.getName());
@@ -407,11 +472,56 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
         autoHistoryCase.setResultKey(autoCase.getResultKey());
         autoHistoryCase.setCaseId(autoCase.getId());
         autoHistoryCase.setScheduleTaskHistoryId(scheduleTaskHistoryId);
+        try {
+            autoHistoryCaseService.createEntity(autoHistoryCase, StrUtil.EMPTY);
+            recordedCaseIds.add(caseId);
+            autoCaseService.updateHistoryCase(autoCase, true, autoHistoryCase);
+        } catch (Exception e) {
+            if (StrUtil.isNotEmpty(autoHistoryCase.getId())) {
+                recordedCaseIds.add(caseId);
+                try {
+                    // 仅在本用例执行抛异常时收尾为失败（线程已结束，不是打断耗时中的成功路径）
+                    autoHistoryCaseService.finishAutoCaseHistoryById(
+                        autoHistoryCase.getId(), AutoHistoryCaseExecuteResult.EXECUTION_FAILED.getKey());
+                } catch (Exception finishEx) {
+                    log.warn("用例历史收尾失败，caseHistoryId={}", autoHistoryCase.getId(), finishEx);
+                }
+            } else {
+                createFailedHistoryStub(caseId, scheduleTaskHistoryId, recordedCaseIds);
+            }
+            throw e;
+        }
+    }
+
+    /**
+     * 用例未正常落库时补写失败历史（同 caseId 已记录则跳过）
+     */
+    private void createFailedHistoryStub(String caseId, String scheduleTaskHistoryId,
+                                         Set<String> recordedCaseIds) {
+        if (recordedCaseIds.contains(caseId)) {
+            return;
+        }
+        AutoCase autoCase = null;
+        try {
+            autoCase = autoCaseService.selectById(caseId);
+        } catch (Exception ignored) {
+            // ignore
+        }
+        AutoHistoryCase autoHistoryCase = new AutoHistoryCase();
+        if (autoCase != null) {
+            autoHistoryCase.setName(autoCase.getName());
+            autoHistoryCase.setModuleId(autoCase.getModuleId());
+            autoHistoryCase.setResultKey(autoCase.getResultKey());
+        } else {
+            autoHistoryCase.setName("用例执行失败");
+            autoHistoryCase.setResultKey(StrUtil.EMPTY);
+        }
+        autoHistoryCase.setCaseId(caseId);
+        autoHistoryCase.setScheduleTaskHistoryId(scheduleTaskHistoryId);
         autoHistoryCaseService.createEntity(autoHistoryCase, StrUtil.EMPTY);
-        autoCaseService.updateHistoryCase(autoCase, true, autoHistoryCase);
-        AutoHistoryCase finished = autoHistoryCaseService.selectById(autoHistoryCase.getId());
-        return finished != null
-            && AutoHistoryCaseExecuteResult.EXECUTION_SUCCESSFUL.getKey().equals(finished.getExecuteResult());
+        recordedCaseIds.add(caseId);
+        autoHistoryCaseService.finishAutoCaseHistoryById(
+            autoHistoryCase.getId(), AutoHistoryCaseExecuteResult.EXECUTION_FAILED.getKey());
     }
 
     /**
@@ -447,7 +557,9 @@ public class AutoScheduleTaskServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoS
             .collect(Collectors.toList());
     }
 
-    /** 成功率 0-1，保留四位小数 */
+    /**
+     * 成功率 0-1，保留四位小数
+     */
     private double calcSuccessRate(int successNum, int totalNum) {
         if (totalNum <= 0) {
             return 0D;
