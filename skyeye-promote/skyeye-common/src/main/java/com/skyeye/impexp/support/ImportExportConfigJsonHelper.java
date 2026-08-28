@@ -107,6 +107,27 @@ public final class ImportExportConfigJsonHelper {
          * 仅 cellDataType=date 时有效。
          */
         private String cellDateFormat;
+        /**
+         * 是否跟随属性配置的数据来源；默认 true（null 视为 true）。
+         * 导入模板：控制 Excel 下拉选项来源。
+         */
+        private Boolean followAttrDataSource;
+        /**
+         * 列自定义数据来源（followAttrDataSource=false 时生效）。
+         */
+        private ColumnDataSourceOverride columnDataSource;
+        /**
+         * 导出值显示：label=显示名称，code=显示原始编号；默认 label。
+         */
+        private String exportValueMode;
+    }
+
+    @Data
+    public static class ColumnDataSourceOverride {
+        /** 1=JSON 2=枚举 3=字典 4=API */
+        private Integer dataType;
+        private String objectId;
+        private String defaultData;
     }
 
     @Data
@@ -198,6 +219,20 @@ public final class ImportExportConfigJsonHelper {
             if (isDateCellDataType(spec.getCellDataType())) {
                 spec.setCellDateFormat(normalizeCellDateFormat(row.getStr("cellDateFormat")));
             }
+            if (row.containsKey("followAttrDataSource")) {
+                spec.setFollowAttrDataSource(row.getBool("followAttrDataSource"));
+            }
+            JSONObject ds = row.getJSONObject("columnDataSource");
+            if (ds != null && !ds.isEmpty()) {
+                ColumnDataSourceOverride override = new ColumnDataSourceOverride();
+                if (ds.containsKey("dataType")) {
+                    override.setDataType(ds.getInt("dataType"));
+                }
+                override.setObjectId(StrUtil.blankToDefault(ds.getStr("objectId"), null));
+                override.setDefaultData(StrUtil.blankToDefault(ds.getStr("defaultData"), null));
+                spec.setColumnDataSource(override);
+            }
+            spec.setExportValueMode(StrUtil.blankToDefault(row.getStr("exportValueMode"), null));
             result.add(spec);
         }
         out.setItems(result);

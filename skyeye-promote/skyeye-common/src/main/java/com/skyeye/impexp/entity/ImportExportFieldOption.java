@@ -56,5 +56,23 @@ public class ImportExportFieldOption {
 
     @ApiModelProperty("属性描述")
     private String remark;
+
+    @ApiModelProperty("属性是否已配置数据来源（枚举/字典/JSON等）")
+    private Boolean hasAttrDataSource;
+
+    @ApiModelProperty("属性数据来源类型：1JSON 2枚举 3字典 4API")
+    private Integer attrDataSourceType;
+
+    @ApiModelProperty("属性数据来源类型名称")
+    private String attrDataSourceTypeName;
+
+    @ApiModelProperty("属性数据来源 objectId（枚举code或dictCode）")
+    private String attrDataSourceObjectId;
+
+    @ApiModelProperty("属性数据来源默认JSON")
+    private String attrDataSourceDefaultData;
+
+    @ApiModelProperty("属性级枚举 className")
+    private String attrEnumClassStr;
 }
 
