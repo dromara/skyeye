@@ -8,6 +8,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.schedule.entity.AutoScheduleTask;
 import com.skyeye.schedule.service.AutoScheduleTaskService;
@@ -51,6 +52,7 @@ public class AutoScheduleTaskExecuteService {
         String tenantId = tenantEnable ? paramMap.get("tenantId") : StrUtil.EMPTY;
         if (tenantEnable) {
             TenantContext.setTenantId(tenantId);
+            TenantContext.setIsolationType(TenantEnum.STRONG_ISOLATION);
         }
         try {
             AutoScheduleTask task = autoScheduleTaskService.selectById(taskId);

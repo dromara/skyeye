@@ -31,8 +31,23 @@ public class ExecutorConfig {
     public Executor getScheduleTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(6);
+        executor.setMaxPoolSize(12);
         executor.setQueueCapacity(10000);
         executor.setThreadNamePrefix("scheduleTaskExecutor-");
+        executor.initialize();
+        return executor;
+    }
+
+    /**
+     * 定时任务批次内用例并行执行线程池
+     */
+    @Bean(name = "scheduleCaseExecutor")
+    public Executor getScheduleCaseExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(4);
+        executor.setMaxPoolSize(8);
+        executor.setQueueCapacity(1000);
+        executor.setThreadNamePrefix("scheduleCaseExecutor-");
         executor.initialize();
         return executor;
     }

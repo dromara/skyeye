@@ -81,4 +81,12 @@ public class AutoHistoryCaseController {
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
+    @ApiOperation(id = "queryAutoScheduleTaskHistoryCaseList", value = "分页查询定时任务执行关联的用例历史", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = CommonPageInfo.class, value = {
+        @ApiImplicitParam(id = "type", name = "type", value = "类型", defaultValue = "scheduleTaskHistory")})
+    @RequestMapping("/post/AutoHistoryCaseController/queryAutoScheduleTaskHistoryCaseList")
+    public void queryAutoScheduleTaskHistoryCaseList(InputObject inputObject, OutputObject outputObject) {
+        autoHistoryCaseService.queryScheduleTaskHistoryCaseList(inputObject, outputObject);
+    }
+
 }
