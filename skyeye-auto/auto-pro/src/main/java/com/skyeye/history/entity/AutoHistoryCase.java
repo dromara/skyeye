@@ -50,6 +50,10 @@ public class AutoHistoryCase extends CommonInfo {
     @Property(value = "用例id")
     private String caseId;
 
+    @TableField("schedule_task_history_id")
+    @Property(value = "定时任务执行记录id，非定时触发为空")
+    private String scheduleTaskHistoryId;
+
     @TableField("execute_start_time")
     @Property(value = "执行开始时间")
     private String executeStartTime;

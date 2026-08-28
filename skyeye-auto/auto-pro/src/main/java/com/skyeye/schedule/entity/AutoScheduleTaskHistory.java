@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.CommonInfo;
+import com.skyeye.schedule.classenum.AutoScheduleExecuteResult;
 import lombok.Data;
 
 /**
@@ -50,7 +51,7 @@ public class AutoScheduleTaskHistory extends CommonInfo {
     private Integer executeType;
 
     @TableField("execute_result")
-    @Property(value = "执行结果")
+    @Property(value = "执行结果", enumClass = AutoScheduleExecuteResult.class)
     private Integer executeResult;
 
     @TableField("total_num")
@@ -66,7 +67,7 @@ public class AutoScheduleTaskHistory extends CommonInfo {
     private Integer failNum;
 
     @TableField("success_rate")
-    @Property(value = "成功率（0-1，保留两位小数）")
+    @Property(value = "成功率（0-1，保留四位小数）")
     private Double successRate;
 
     @TableField("execute_start_time")

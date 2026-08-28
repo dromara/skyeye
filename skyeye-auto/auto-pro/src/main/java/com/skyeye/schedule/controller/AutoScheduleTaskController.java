@@ -57,4 +57,12 @@ public class AutoScheduleTaskController {
         autoScheduleTaskService.deleteById(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "executeAutoScheduleTaskById", value = "手动执行定时任务", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
+    @RequestMapping("/post/AutoScheduleTaskController/executeAutoScheduleTaskById")
+    public void executeAutoScheduleTaskById(InputObject inputObject, OutputObject outputObject) {
+        autoScheduleTaskService.executeScheduleTaskById(inputObject, outputObject);
+    }
+
 }

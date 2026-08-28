@@ -5,6 +5,7 @@
 package com.skyeye.schedule.controller;
 
 import com.skyeye.annotation.api.Api;
+import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
@@ -37,6 +38,14 @@ public class AutoScheduleTaskHistoryController {
     @RequestMapping("/post/AutoScheduleTaskHistoryController/queryAutoScheduleTaskHistoryList")
     public void queryAutoScheduleTaskHistoryList(InputObject inputObject, OutputObject outputObject) {
         autoScheduleTaskHistoryService.queryPageList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryAutoScheduleTaskHistoryById", value = "根据id查询定时任务执行记录详情", method = "GET", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
+    @RequestMapping("/post/AutoScheduleTaskHistoryController/queryAutoScheduleTaskHistoryById")
+    public void queryAutoScheduleTaskHistoryById(InputObject inputObject, OutputObject outputObject) {
+        autoScheduleTaskHistoryService.selectById(inputObject, outputObject);
     }
 
 }

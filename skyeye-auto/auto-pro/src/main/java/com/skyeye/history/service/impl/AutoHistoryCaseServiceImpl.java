@@ -5,6 +5,7 @@
 package com.skyeye.history.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
@@ -21,10 +22,12 @@ import com.skyeye.history.entity.AutoHistoryCase;
 import com.skyeye.history.entity.AutoHistoryStep;
 import com.skyeye.history.service.AutoHistoryCaseService;
 import com.skyeye.history.service.AutoHistoryStepService;
+import com.skyeye.module.service.AutoModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: AutoHistoryCaseServiceImpl
@@ -41,12 +44,46 @@ public class AutoHistoryCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoHi
     @Autowired
     private AutoHistoryStepService autoHistoryStepService;
 
+    @Autowired
+    private AutoModuleService autoModuleService;
+
+    /**
+     * 定时任务执行详情：按批次 id 查关联用例历史（见 queryScheduleTaskHistoryCaseList）
+     */
+    private static final String QUERY_TYPE_SCHEDULE_TASK_HISTORY = "scheduleTaskHistory";
+
     @Override
     protected QueryWrapper<AutoHistoryCase> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<AutoHistoryCase> queryWrapper = super.getQueryWrapper(commonPageInfo);
-        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoHistoryCase::getCaseId), commonPageInfo.getObjectId());
+        if (QUERY_TYPE_SCHEDULE_TASK_HISTORY.equals(commonPageInfo.getType())) {
+            // objectId 传 auto_schedule_task_history.id
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoHistoryCase::getScheduleTaskHistoryId),
+                commonPageInfo.getObjectId());
+            // state：2 成功 / 3 失败（AutoHistoryCaseExecuteResult）
+            if (StrUtil.isNotBlank(commonPageInfo.getState())) {
+                queryWrapper.eq(MybatisPlusUtil.toColumns(AutoHistoryCase::getExecuteResult),
+                    Integer.parseInt(commonPageInfo.getState()));
+            }
+            if (StrUtil.isNotBlank(commonPageInfo.getKeyword())) {
+                queryWrapper.like(MybatisPlusUtil.toColumns(AutoHistoryCase::getName),
+                    commonPageInfo.getKeyword().trim());
+            }
+        } else {
+            // 默认：按用例 id 查该用例的全部执行历史
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoHistoryCase::getCaseId), commonPageInfo.getObjectId());
+        }
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(AutoHistoryCase::getExecuteStartTime));
         return queryWrapper;
+    }
+
+    @Override
+    public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
+        List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
+        CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
+        if (QUERY_TYPE_SCHEDULE_TASK_HISTORY.equals(pageInfo.getType())) {
+            autoModuleService.setMationForMap(beans, "moduleId", "moduleMation");
+        }
+        return beans;
     }
 
     @Override
@@ -105,5 +142,34 @@ public class AutoHistoryCaseServiceImpl extends SkyeyeBusinessServiceImpl<AutoHi
         updateWrapper.set(MybatisPlusUtil.toColumns(AutoHistoryCase::getExecuteTime), String.valueOf(DateUtil.getDistanceMillisecondHMS(autoHistoryCase.getExecuteStartTime(), endTime, DateUtil.YYYY_MM_DD_HH_MM_SS_SSS)));
         update(updateWrapper);
         refreshCache(id);
+    }
+
+    /**
+     * 定时任务执行详情-用例明细分页。
+     * 前端 objectId=批次 id，state=2/3 过滤成功/失败。
+     */
+    @Override
+    public void queryScheduleTaskHistoryCaseList(InputObject inputObject, OutputObject outputObject) {
+        inputObject.getParams().put("type", QUERY_TYPE_SCHEDULE_TASK_HISTORY);
+        queryPageList(inputObject, outputObject);
+    }
+
+    /**
+     * 删除批次时级联删除关联的 auto_history_case
+     */
+    @Override
+    public void deleteByScheduleTaskHistoryIds(List<String> scheduleTaskHistoryIds) {
+        if (CollectionUtil.isEmpty(scheduleTaskHistoryIds)) {
+            return;
+        }
+        QueryWrapper<AutoHistoryCase> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in(MybatisPlusUtil.toColumns(AutoHistoryCase::getScheduleTaskHistoryId), scheduleTaskHistoryIds);
+        List<AutoHistoryCase> historyCases = list(queryWrapper);
+        if (CollectionUtil.isEmpty(historyCases)) {
+            return;
+        }
+        for (AutoHistoryCase historyCase : historyCases) {
+            deleteById(historyCase.getId());
+        }
     }
 }
