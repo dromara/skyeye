@@ -69,6 +69,9 @@ public class ImportExportConfig extends BaseGeneralInfo {
      *     <li>headerFontColor：该列表头字体色（优先级高于默认字体色）</li>
      *     <li>cellDataType：列数据类型，text=文本（默认），date=日期</li>
      *     <li>cellDateFormat：日期格式，与枚举 dateTimeType 的 id 一致（year/month/date/time/datetime/timeminute）</li>
+     *     <li>followAttrDataSource：是否跟随属性数据来源，默认 true</li>
+     *     <li>columnDataSource：列自定义数据来源（followAttrDataSource=false 时），含 dataType/objectId/defaultData</li>
+     *     <li>exportValueMode：导出值显示 label=名称 / code=编号（仅导出配置）</li>
      * </ul>
      * <p>示例：</p>
      * <pre>

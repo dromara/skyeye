@@ -45,6 +45,8 @@ import com.skyeye.impexp.entity.ImportExportConfig;
 import com.skyeye.impexp.entity.ImportExportFieldOption;
 import com.skyeye.impexp.enums.ImportExportConfigTypeEnum;
 import com.skyeye.impexp.service.ImportExportConfigService;
+import com.skyeye.impexp.support.ImportExportColumnDataSourceHelper;
+import com.skyeye.impexp.support.ImportExportColumnDataSourceHelper.EffectiveDataSource;
 import com.skyeye.impexp.support.ImportExportConfigJsonHelper;
 import com.skyeye.impexp.support.ImportExportConfigJsonHelper.ColumnSpec;
 import com.skyeye.impexp.support.ImportExportConfigJsonHelper.HeaderGroupStyle;
@@ -174,9 +176,20 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             return;
         }
         List<String> attrKeyList = attrDefinitionList.stream().map(AttrDefinition::getAttrKey).collect(Collectors.toList());
-        Map<String, AttrDefinitionCustom> customMap = attrDefinitionCustomService.queryAttrDefinitionCustomMap(appId, className, attrKeyList);
         // 批量填充对象/集合子属性，避免循环内逐条 SQL
         attrDefinitionService.fillChildAttrDefinitions(appId, attrDefinitionList);
+        Set<String> allCustomKeys = new LinkedHashSet<>(attrKeyList);
+        for (AttrDefinition attrDefinition : attrDefinitionList) {
+            if (CollectionUtil.isNotEmpty(attrDefinition.getChildAttrDefinitions())) {
+                for (AttrDefinition child : attrDefinition.getChildAttrDefinitions()) {
+                    if (child != null && StrUtil.isNotBlank(child.getAttrKey())) {
+                        allCustomKeys.add(child.getAttrKey());
+                    }
+                }
+            }
+        }
+        Map<String, AttrDefinitionCustom> customMap = attrDefinitionCustomService.queryAttrDefinitionCustomMap(
+            appId, className, new ArrayList<>(allCustomKeys));
 
         List<ImportExportFieldOption> result = new ArrayList<>();
         for (AttrDefinition attrDefinition : attrDefinitionList) {
@@ -189,14 +202,15 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
                 if (CollectionUtil.isNotEmpty(children)) {
                     // 有子属性：只暴露拆列后的点路径字段，不再暴露整对象/整集合 JSON 列
                     for (AttrDefinition child : children) {
-                        result.add(buildChildFieldOption(attrDefinition, parentName, child, modelType));
+                        result.add(buildChildFieldOption(attrDefinition, parentName, child, modelType,
+                            customMap.get(child.getAttrKey())));
                     }
                     continue;
                 }
                 // 无子属性：整对象/集合一列（单元格 JSON）
             }
 
-            ImportExportFieldOption option = buildTopFieldOption(attrDefinition, parentName);
+            ImportExportFieldOption option = buildTopFieldOption(attrDefinition, parentName, customMap.get(attrDefinition.getAttrKey()));
             result.add(option);
         }
 
@@ -204,14 +218,33 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         outputObject.settotal(result.size());
     }
 
-    private String resolveAttrDisplayName(AttrDefinition attrDefinition, AttrDefinitionCustom custom) {
-        if (custom != null && StrUtil.isNotBlank(custom.getName())) {
-            return custom.getName();
+    private void fillAttrDataSourceSummary(ImportExportFieldOption option, AttrDefinition attr, AttrDefinitionCustom custom) {
+        if (attr != null && StrUtil.isNotBlank(attr.getEnumClassStr())) {
+            option.setHasAttrDataSource(true);
+            option.setAttrEnumClassStr(attr.getEnumClassStr());
+            option.setAttrDataSourceType(AttrKeyDataType.ENUM_DATA.getKey());
+            option.setAttrDataSourceTypeName(AttrKeyDataType.ENUM_DATA.getValue());
+            option.setAttrDataSourceObjectId(attr.getEnumClassStr());
+            return;
         }
-        return attrDefinition.getName();
+        if (custom == null || custom.getDataType() == null) {
+            option.setHasAttrDataSource(false);
+            return;
+        }
+        option.setHasAttrDataSource(true);
+        option.setAttrDataSourceType(custom.getDataType());
+        for (AttrKeyDataType type : AttrKeyDataType.values()) {
+            if (type.getKey().equals(custom.getDataType())) {
+                option.setAttrDataSourceTypeName(type.getValue());
+                break;
+            }
+        }
+        option.setAttrDataSourceObjectId(custom.getObjectId());
+        option.setAttrDataSourceDefaultData(custom.getDefaultData());
     }
 
-    private ImportExportFieldOption buildTopFieldOption(AttrDefinition attrDefinition, String displayName) {
+    private ImportExportFieldOption buildTopFieldOption(AttrDefinition attrDefinition, String displayName,
+                                                        AttrDefinitionCustom custom) {
         ImportExportFieldOption option = new ImportExportFieldOption();
         option.setAttrKey(attrDefinition.getAttrKey());
         option.setName(displayName);
@@ -224,15 +257,15 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         option.setWhetherInputParams(attrDefinition.getWhetherInputParams());
         option.setRemark(attrDefinition.getRemark());
         fillImportExportFlags(option, attrDefinition);
+        fillAttrDataSourceSummary(option, attrDefinition, custom);
         return option;
     }
 
     private ImportExportFieldOption buildChildFieldOption(AttrDefinition parent, String parentName, AttrDefinition child,
-                                                          Integer parentAttrModelType) {
+                                                          Integer parentAttrModelType, AttrDefinitionCustom childCustom) {
         ImportExportFieldOption option = new ImportExportFieldOption();
-        String childName = child.getAttrDefinitionCustom() != null
-            && StrUtil.isNotBlank(child.getAttrDefinitionCustom().getName())
-            ? child.getAttrDefinitionCustom().getName()
+        String childName = childCustom != null && StrUtil.isNotBlank(childCustom.getName())
+            ? childCustom.getName()
             : child.getName();
         option.setAttrKey(parent.getAttrKey() + "." + child.getAttrKey());
         option.setName(parentName + "." + childName);
@@ -249,7 +282,15 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         option.setWhetherInputParams(parentCanImport ? child.getWhetherInputParams() : WhetherEnum.DISABLE_USING.getKey());
         option.setRemark(child.getRemark());
         fillImportExportFlags(option, child, parentCanImport);
+        fillAttrDataSourceSummary(option, child, childCustom);
         return option;
+    }
+
+    private String resolveAttrDisplayName(AttrDefinition attrDefinition, AttrDefinitionCustom custom) {
+        if (custom != null && StrUtil.isNotBlank(custom.getName())) {
+            return custom.getName();
+        }
+        return attrDefinition.getName();
     }
 
     private void fillImportExportFlags(ImportExportFieldOption option, AttrDefinition attrDefinition) {
@@ -753,7 +794,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             List<ColumnSpec> masterSpecs = filterMasterSpecs(specs, collectionRoots);
             String[] masterKeys = buildKeysWithLink(masterSpecs);
             ExcelUtil.SheetExportStyle masterStyle = buildSheetExportStyleWithLink(masterSpecs, layout);
-            applyColumnDropdownOptions(masterStyle, masterKeys, index, labelCache);
+            applyColumnDropdownOptions(masterStyle, buildSpecsWithLink(masterSpecs), masterKeys, index, labelCache);
             json.put("collectionAttrKeys", collectionRoots);
             json.put("masterKeys", masterKeys);
             json.put("masterColumnNames", buildNamesWithLink(masterSpecs, titleMap));
@@ -766,7 +807,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
                 List<ColumnSpec> detailSpecs = filterDetailSpecs(specs, collectionRoot);
                 String[] detailKeys = buildKeysWithLink(detailSpecs);
                 ExcelUtil.SheetExportStyle detailStyle = buildSheetExportStyleWithLink(detailSpecs, layout);
-                applyColumnDropdownOptions(detailStyle, detailKeys, index, labelCache);
+                applyColumnDropdownOptions(detailStyle, buildSpecsWithLink(detailSpecs), detailKeys, index, labelCache);
                 Map<String, Object> one = new LinkedHashMap<>();
                 one.put("collectionAttrKey", collectionRoot);
                 one.put("sheetName", resolveDetailSheetName(collectionRoot, titleMap, usedSheetNames));
@@ -793,7 +834,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             }
             ExcelUtil.SheetExportStyle exportStyle = buildSheetExportStyle(specs, layout);
             applyHeaderGroupNames(keys, columnNames, exportStyle, titleMap, layout);
-            applyColumnDropdownOptions(exportStyle, keys, index, labelCache);
+            applyColumnDropdownOptions(exportStyle, specs, keys, index, labelCache);
             // 列类型只序列化在 exportStyleJson.columnDataTypes / columnDateFormats
             json.put("exportStyleJson", JSONUtil.toJsonStr(exportStyle));
         }
@@ -929,6 +970,14 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
          * 字典类型 dictCode → 字典项名称列表（dictName）
          */
         private final Map<String, String[]> dictLabels = new HashMap<>();
+        /**
+         * 枚举 ref → 编号/键 → 显示名（导出 label 模式用）
+         */
+        private final Map<String, Map<String, String>> enumCodeToLabel = new HashMap<>();
+        /**
+         * 字典 dictCode → 字典项 id/code → 显示名
+         */
+        private final Map<String, Map<String, String>> dictIdToLabel = new HashMap<>();
     }
 
     /**
@@ -947,7 +996,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
      * @param attrIndex  attrKey → 属性定义（含 AttrDefinitionCustom 数据来源）
      * @param labelCache 过程内共享的枚举/字典缓存；为 null 时临时新建，不与其它 Sheet 共享
      */
-    private void applyColumnDropdownOptions(ExcelUtil.SheetExportStyle style, String[] keys,
+    private void applyColumnDropdownOptions(ExcelUtil.SheetExportStyle style, List<ColumnSpec> specs, String[] keys,
                                             Map<String, AttrDefinition> attrIndex,
                                             DropdownLabelCache labelCache) {
         // 无样式或无列时无需处理
@@ -957,34 +1006,44 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         if (attrIndex == null) {
             attrIndex = Collections.emptyMap();
         }
-        // 兼容未传入缓存的调用方（例如单次调试）；正常路径由上层创建并跨 Sheet 复用
         if (labelCache == null) {
             labelCache = new DropdownLabelCache();
         }
+        Map<String, ColumnSpec> specMap = buildSpecByAttrKey(specs);
         try {
-            // ① 先批量把本 Sheet 用到的枚举/字典灌进缓存
-            preloadEnumAndDictLabels(keys, attrIndex, labelCache);
-            // ② 再按列解析；options[i] 与 keys[i] 对齐，null 表示该列无下拉
+            preloadEnumAndDictLabels(keys, specs, attrIndex, labelCache);
             String[][] options = new String[keys.length][];
             boolean any = false;
             for (int i = 0; i < keys.length; i++) {
                 try {
-                    String[] labels = resolveDropdownLabels(keys[i], attrIndex, labelCache);
+                    String[] labels = resolveDropdownLabels(keys[i], specMap.get(keys[i]), attrIndex, labelCache);
                     if (labels != null && labels.length > 0) {
                         options[i] = labels;
                         any = true;
                     }
                 } catch (Exception ignore) {
-                    // 单列失败不拖垮整表：该列不设下拉即可
+                    // 单列失败不拖垮整表
                 }
             }
-            // 全无下拉时不必写空二维数组，减少序列化体积
             if (any) {
                 style.columnDropdownOptions = options;
             }
         } catch (Exception ignore) {
-            // 下拉仅为辅助编辑能力，解析失败不影响模板下载 / 数据导出主体
+            // 下拉仅为辅助编辑能力
         }
+    }
+
+    private Map<String, ColumnSpec> buildSpecByAttrKey(List<ColumnSpec> specs) {
+        Map<String, ColumnSpec> map = new LinkedHashMap<>();
+        if (specs == null) {
+            return map;
+        }
+        for (ColumnSpec spec : specs) {
+            if (spec != null && StrUtil.isNotBlank(spec.getAttrKey())) {
+                map.put(spec.getAttrKey(), spec);
+            }
+        }
+        return map;
     }
 
     /**
@@ -996,68 +1055,30 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
      * @param attrIndex  属性索引
      * @param labelCache 共享缓存
      */
-    private void preloadEnumAndDictLabels(String[] keys, Map<String, AttrDefinition> attrIndex,
+    private void preloadEnumAndDictLabels(String[] keys, List<ColumnSpec> specs, Map<String, AttrDefinition> attrIndex,
                                           DropdownLabelCache labelCache) {
         if (keys == null || keys.length == 0 || attrIndex == null || labelCache == null) {
             return;
         }
-        // LinkedHashSet：去重且保持首次出现顺序，便于排查日志时对照列序
+        Map<String, ColumnSpec> specMap = buildSpecByAttrKey(specs);
         Set<String> enumRefs = new LinkedHashSet<>();
         Set<String> dictCodes = new LinkedHashSet<>();
         for (String attrKey : keys) {
-            collectEnumAndDictRefs(attrKey, attrIndex, enumRefs, dictCodes);
+            collectEnumAndDictRefs(attrKey, specMap.get(attrKey), attrIndex, enumRefs, dictCodes);
         }
-        // 分通道批量加载：枚举走枚举表，字典走类型+字典项两表
         preloadEnumLabels(enumRefs, labelCache);
         preloadDictLabels(dictCodes, labelCache);
     }
 
-    /**
-     * 从单个字段属性定义中收集「需要批量预加载」的枚举标识与字典编码。
-     * <p>
-     * 收集来源（与 {@link #resolveDropdownLabels} 解析顺序保持一致，避免解析用到未预加载的 key）：
-     * <ol>
-     *   <li>属性本身的 enumClassStr</li>
-     *   <li>自定义 dataType=枚举：objectId、enumClassStr</li>
-     *   <li>自定义 dataType=字典：objectId（dictCode）</li>
-     *   <li>名称/备注中「参考#XxxEnum」兼容写法</li>
-     * </ol>
-     * 自定义 JSON、自定义 API 不在此收集（按列解析）。
-     *
-     * @param attrKey   列字段 key；关联列 {@code LINK_ATTR_KEY} 跳过
-     * @param attrIndex 属性索引
-     * @param enumRefs  输出：待加载的枚举引用（写入时 trim）
-     * @param dictCodes 输出：待加载的字典 code
-     */
-    private void collectEnumAndDictRefs(String attrKey, Map<String, AttrDefinition> attrIndex,
+    private void collectEnumAndDictRefs(String attrKey, ColumnSpec spec, Map<String, AttrDefinition> attrIndex,
                                         Set<String> enumRefs, Set<String> dictCodes) {
-        // 主表序号等内部列、空 key：无属性元数据
         if (StrUtil.isBlank(attrKey) || ImportExportConfigJsonHelper.LINK_ATTR_KEY.equals(attrKey)
             || attrIndex == null) {
             return;
         }
         AttrDefinition attr = attrIndex.get(attrKey);
-        if (attr == null) {
-            return;
-        }
-        // 实体/模型上标注的枚举类路径
-        if (StrUtil.isNotBlank(attr.getEnumClassStr())) {
-            enumRefs.add(attr.getEnumClassStr().trim());
-        }
-        AttrDefinitionCustom custom = attr.getAttrDefinitionCustom();
-        if (custom != null && custom.getDataType() != null) {
-            Integer dataType = custom.getDataType();
-            if (AttrKeyDataType.ENUM_DATA.getKey().equals(dataType)) {
-                // 枚举类型：业务配置里 objectId 多为枚举 className，enumClassStr 为补充写法
-                if (StrUtil.isNotBlank(custom.getEnumClassStr())) {
-                    enumRefs.add(custom.getEnumClassStr().trim());
-                }
-            } else if (AttrKeyDataType.DICT_DATA.getKey().equals(dataType)
-                && StrUtil.isNotBlank(custom.getObjectId())) {
-                // 字典类型：objectId 存字典类型编码 dictCode
-                dictCodes.add(custom.getObjectId().trim());
-            }
-        }
+        EffectiveDataSource source = ImportExportColumnDataSourceHelper.resolveEffectiveSource(spec, attr);
+        ImportExportColumnDataSourceHelper.collectEnumAndDictRefs(source, enumRefs, dictCodes);
     }
 
     /**
@@ -1128,9 +1149,45 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         // 以配置侧原始 ref 为 cache key 回填，保证 resolve 时与 collect 使用同一 key
         for (String cacheKey : needLoad) {
             List<String> labels = extractEnumLabelsFromBatch(cacheKey, enumValueByClassName);
-            // 空数组也要 put，防止多 Sheet 重复 miss
             labelCache.enumLabels.put(cacheKey, labels.toArray(new String[0]));
+            List<Map<String, Object>> enumValues = enumValueByClassName.get(cacheKey);
+            if (enumValues == null) {
+                for (Map.Entry<String, List<Map<String, Object>>> entry : enumValueByClassName.entrySet()) {
+                    if (cacheKey.equals(entry.getKey()) || entry.getKey().endsWith("." + cacheKey)) {
+                        enumValues = entry.getValue();
+                        break;
+                    }
+                }
+            }
+            labelCache.enumCodeToLabel.put(cacheKey, buildEnumCodeToLabel(enumValues));
         }
+    }
+
+    private Map<String, String> buildEnumCodeToLabel(List<Map<String, Object>> enumValues) {
+        Map<String, String> map = new LinkedHashMap<>();
+        if (CollectionUtil.isEmpty(enumValues)) {
+            return map;
+        }
+        for (Map<String, Object> one : enumValues) {
+            if (one == null) {
+                continue;
+            }
+            Object id = one.get("id");
+            if (id == null) {
+                id = one.get("key");
+            }
+            Object name = one.get("name");
+            if (name == null) {
+                name = one.get("value");
+            }
+            if (id != null && name != null && StrUtil.isNotBlank(String.valueOf(name))) {
+                String idStr = String.valueOf(id).trim();
+                String label = String.valueOf(name).trim();
+                map.put(idStr, label);
+                map.putIfAbsent(label, label);
+            }
+        }
+        return map;
     }
 
     /**
@@ -1246,11 +1303,11 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             }
             // 阶段 2：按 typeId 批量取字典项，再按 code 聚合成 labels
             Map<String, List<String>> labelsByCode = new HashMap<>();
+            Map<String, Map<String, String>> idLabelByCode = new HashMap<>();
             if (CollectionUtil.isNotEmpty(typeIds)) {
                 QueryWrapper<SysDictData> queryWrapper = new QueryWrapper<>();
                 queryWrapper.in(MybatisPlusUtil.toColumns(SysDictData::getDictTypeId), typeIds);
                 queryWrapper.eq(MybatisPlusUtil.toColumns(SysDictData::getEnabled), EnableEnum.ENABLE_USING.getKey());
-                // 与业务侧字典列表排序保持一致
                 queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(SysDictData::getDictSort));
                 List<SysDictData> dictDataList = sysDictDataService.list(queryWrapper);
                 if (CollectionUtil.isNotEmpty(dictDataList)) {
@@ -1263,13 +1320,17 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
                             continue;
                         }
                         labelsByCode.computeIfAbsent(code, k -> new ArrayList<>()).add(data.getDictName().trim());
+                        idLabelByCode.computeIfAbsent(code, k -> new LinkedHashMap<>());
+                        if (StrUtil.isNotBlank(data.getId())) {
+                            idLabelByCode.get(code).put(data.getId().trim(), data.getDictName().trim());
+                        }
                     }
                 }
             }
-            // 阶段 3：needLoad 每个 code 都必须有 cache 条目
             for (String code : needLoad) {
                 List<String> labels = labelsByCode.getOrDefault(code, Collections.emptyList());
                 labelCache.dictLabels.put(code, labels.toArray(new String[0]));
+                labelCache.dictIdToLabel.put(code, idLabelByCode.getOrDefault(code, Collections.emptyMap()));
             }
         } catch (Exception e) {
             // 批量异常：对尚未写入的 code 打空，避免 resolve 阶段反复 miss 查库
@@ -1300,54 +1361,40 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
      * @param labelCache 枚举/字典缓存
      * @return 下拉选项数组；无可用数据返回 null（该列不设数据有效性）
      */
-    private String[] resolveDropdownLabels(String attrKey, Map<String, AttrDefinition> attrIndex,
+    private String[] resolveDropdownLabels(String attrKey, ColumnSpec spec, Map<String, AttrDefinition> attrIndex,
                                            DropdownLabelCache labelCache) {
-        // 内部关联列不生成用户可选下拉
         if (StrUtil.isBlank(attrKey) || ImportExportConfigJsonHelper.LINK_ATTR_KEY.equals(attrKey)) {
             return null;
         }
         AttrDefinition attr = attrIndex.get(attrKey);
-        if (attr == null) {
+        EffectiveDataSource source = ImportExportColumnDataSourceHelper.resolveEffectiveSource(spec, attr);
+        if (source == null || source.getDataType() == null) {
             return null;
         }
-        // ---------- 1. 属性级枚举 ----------
-        String[] fromEnum = getCachedEnumLabels(attr.getEnumClassStr(), labelCache);
-        if (fromEnum != null && fromEnum.length > 0) {
-            return fromEnum;
+        Integer dataType = source.getDataType();
+        if (AttrKeyDataType.ENUM_DATA.getKey().equals(dataType)) {
+            String[] labels = getCachedEnumLabels(source.getObjectId(), labelCache);
+            if (labels == null || labels.length == 0) {
+                labels = getCachedEnumLabels(source.getEnumClassStr(), labelCache);
+            }
+            if (labels != null && labels.length > 0) {
+                return labels;
+            }
         }
-        AttrDefinitionCustom custom = attr.getAttrDefinitionCustom();
-        if (custom != null && custom.getDataType() != null) {
-            Integer dataType = custom.getDataType();
-            // ---------- 2. 字段自定义：枚举 ----------
-            if (AttrKeyDataType.ENUM_DATA.getKey().equals(dataType)) {
-                // 先 objectId（常见配置），再枚举类字符串
-                String[] labels = getCachedEnumLabels(custom.getObjectId(), labelCache);
-                if (labels == null || labels.length == 0) {
-                    labels = getCachedEnumLabels(custom.getEnumClassStr(), labelCache);
-                }
-                if (labels != null && labels.length > 0) {
-                    return labels;
-                }
+        if (AttrKeyDataType.DICT_DATA.getKey().equals(dataType) && StrUtil.isNotBlank(source.getObjectId())) {
+            String[] labels = getCachedDictLabels(source.getObjectId(), labelCache);
+            if (labels != null && labels.length > 0) {
+                return labels;
             }
-            // ---------- 3. 字段自定义：数据字典 ----------
-            if (AttrKeyDataType.DICT_DATA.getKey().equals(dataType) && StrUtil.isNotBlank(custom.getObjectId())) {
-                String[] labels = getCachedDictLabels(custom.getObjectId(), labelCache);
-                if (labels != null && labels.length > 0) {
-                    return labels;
-                }
+        }
+        if (AttrKeyDataType.CUSTOM.getKey().equals(dataType) && StrUtil.isNotBlank(source.getDefaultData())) {
+            List<String> labels = ImportExportColumnDataSourceHelper.loadCustomJsonLabels(source.getDefaultData());
+            if (CollectionUtil.isNotEmpty(labels)) {
+                return labels.toArray(new String[0]);
             }
-            // ---------- 4. 自定义 JSON：体积小、与字段绑定，循环内解析足够 ----------
-            if (AttrKeyDataType.CUSTOM.getKey().equals(dataType) && StrUtil.isNotBlank(custom.getDefaultData())) {
-                List<String> labels = loadCustomJsonLabels(custom.getDefaultData());
-                if (CollectionUtil.isNotEmpty(labels)) {
-                    return labels.toArray(new String[0]);
-                }
-            }
-            // ---------- 5. 自定义 API：导入/导出模板生成不应强依赖外部服务 ----------
-            if (AttrKeyDataType.CUSTOM_API.getKey().equals(dataType)) {
-                // 预留：若以后需支持「生成时拉接口」，可在此循环调用 businessApi
-                return null;
-            }
+        }
+        if (AttrKeyDataType.CUSTOM_API.getKey().equals(dataType)) {
+            return null;
         }
         return null;
     }
@@ -1382,6 +1429,108 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             return null;
         }
         return labelCache.dictLabels.get(dictTypeCode.trim());
+    }
+
+    /**
+     * 导出时将编号/键转为显示名称（按列 exportValueMode=label）。
+     */
+    private void applyExportDisplayValues(List<Map<String, Object>> rows, List<ColumnSpec> specs,
+                                          Map<String, AttrDefinition> attrIndex, DropdownLabelCache labelCache) {
+        if (CollectionUtil.isEmpty(rows) || CollectionUtil.isEmpty(specs) || attrIndex == null) {
+            return;
+        }
+        if (labelCache == null) {
+            labelCache = new DropdownLabelCache();
+        }
+        String[] keys = specs.stream().map(ColumnSpec::getAttrKey).filter(StrUtil::isNotBlank).toArray(String[]::new);
+        preloadEnumAndDictLabels(keys, specs, attrIndex, labelCache);
+        for (Map<String, Object> row : rows) {
+            if (row == null) {
+                continue;
+            }
+            for (ColumnSpec spec : specs) {
+                if (spec == null || StrUtil.isBlank(spec.getAttrKey())) {
+                    continue;
+                }
+                if (!ImportExportColumnDataSourceHelper.shouldExportAsLabel(spec)) {
+                    continue;
+                }
+                Object raw = ExcelUtil.getValueByAttrPath(row, spec.getAttrKey());
+                Object display = resolveExportDisplayValue(raw, spec, attrIndex.get(spec.getAttrKey()), labelCache);
+                if (display != null && !Objects.equals(String.valueOf(display), String.valueOf(raw))) {
+                    putImportCellValue(row, spec.getAttrKey(), String.valueOf(display), null);
+                }
+            }
+        }
+    }
+
+    private Object resolveExportDisplayValue(Object raw, ColumnSpec spec, AttrDefinition attr,
+                                             DropdownLabelCache labelCache) {
+        if (raw == null) {
+            return null;
+        }
+        String code = String.valueOf(raw).trim();
+        if (code.isEmpty()) {
+            return raw;
+        }
+        EffectiveDataSource source = ImportExportColumnDataSourceHelper.resolveEffectiveSource(spec, attr);
+        if (source == null || source.getDataType() == null) {
+            return raw;
+        }
+        Integer dataType = source.getDataType();
+        if (AttrKeyDataType.ENUM_DATA.getKey().equals(dataType)) {
+            Map<String, String> map = getEnumCodeToLabelMap(source, labelCache);
+            if (map.containsKey(code)) {
+                return map.get(code);
+            }
+            return raw;
+        }
+        if (AttrKeyDataType.DICT_DATA.getKey().equals(dataType) && StrUtil.isNotBlank(source.getObjectId())) {
+            Map<String, String> map = labelCache.dictIdToLabel.get(source.getObjectId().trim());
+            if (map != null && map.containsKey(code)) {
+                return map.get(code);
+            }
+            return raw;
+        }
+        if (AttrKeyDataType.CUSTOM.getKey().equals(dataType) && StrUtil.isNotBlank(source.getDefaultData())) {
+            Map<String, String> map = ImportExportColumnDataSourceHelper.buildCustomJsonIdToLabel(source.getDefaultData());
+            if (map.containsKey(code)) {
+                return map.get(code);
+            }
+            return raw;
+        }
+        return raw;
+    }
+
+    private Map<String, String> getEnumCodeToLabelMap(EffectiveDataSource source, DropdownLabelCache labelCache) {
+        if (source == null || labelCache == null) {
+            return Collections.emptyMap();
+        }
+        if (StrUtil.isNotBlank(source.getObjectId())) {
+            Map<String, String> map = labelCache.enumCodeToLabel.get(source.getObjectId().trim());
+            if (map != null && !map.isEmpty()) {
+                return map;
+            }
+        }
+        if (StrUtil.isNotBlank(source.getEnumClassStr())) {
+            Map<String, String> map = labelCache.enumCodeToLabel.get(source.getEnumClassStr().trim());
+            if (map != null) {
+                return map;
+            }
+        }
+        return Collections.emptyMap();
+    }
+
+    private List<ColumnSpec> buildSpecsWithLink(List<ColumnSpec> specs) {
+        List<ColumnSpec> withLink = new ArrayList<>();
+        ColumnSpec link = new ColumnSpec();
+        link.setAttrKey(ImportExportConfigJsonHelper.LINK_ATTR_KEY);
+        link.setColumnTitle(ImportExportConfigJsonHelper.LINK_COLUMN_TITLE);
+        withLink.add(link);
+        if (specs != null) {
+            withLink.addAll(specs);
+        }
+        return withLink;
     }
 
     /**
@@ -1583,12 +1732,14 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             keys[i] = specs.get(i).getAttrKey();
             columnNames[i] = resolveColumnTitle(specs.get(i), titleMap);
         }
+        if (outRows != null) {
+            applyExportDisplayValues(outRows, specs, index, labelCache);
+        }
         String[] dataTypes = ImportExportConfigJsonHelper.toExcelDataTypes(specs);
         // ⑤ 样式：隐藏键行 + 一级组标题 + 下拉 + 列类型；dataTypes 与 style.columnDataTypes 一致
         ExcelUtil.SheetExportStyle exportStyle = buildSheetExportStyle(specs, layout);
         applyHeaderGroupNames(keys, columnNames, exportStyle, titleMap, layout);
-        // 按属性「数据来源」为 Excel 各列附加数据有效性下拉
-        applyColumnDropdownOptions(exportStyle, keys, index, labelCache);
+        applyColumnDropdownOptions(exportStyle, specs, keys, index, labelCache);
         ExcelUtil.createWorkBook(safeName, fileSuffix, outRows, keys, columnNames, dataTypes,
             PutObject.getResponse(), exportStyle);
     }
@@ -1623,11 +1774,22 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         ImportExportRowUtil.MultiSheetRows split = rows == null
             ? ImportExportRowUtil.splitToMultiSheets(null, collectionRoots)
             : ImportExportRowUtil.splitToMultiSheets(rows, collectionRoots);
+        if (rows != null) {
+            applyExportDisplayValues(split.getMasterRows(), masterSpecs, attrIndex, labelCache);
+            for (String collectionRoot : collectionRoots) {
+                List<ColumnSpec> detailSpecs = filterDetailSpecs(specs, collectionRoot);
+                if (CollectionUtil.isEmpty(detailSpecs)) {
+                    continue;
+                }
+                applyExportDisplayValues(split.getDetailRowsByCollection().getOrDefault(collectionRoot, new ArrayList<>()),
+                    detailSpecs, attrIndex, labelCache);
+            }
+        }
         List<Map<String, Object>> sheetDefs = new ArrayList<>();
         // 主表页：首列主表序号
         String[] masterKeys = buildKeysWithLink(masterSpecs);
         ExcelUtil.SheetExportStyle masterStyle = buildSheetExportStyleWithLink(masterSpecs, layout);
-        applyColumnDropdownOptions(masterStyle, masterKeys, attrIndex, labelCache);
+        applyColumnDropdownOptions(masterStyle, buildSpecsWithLink(masterSpecs), masterKeys, attrIndex, labelCache);
         sheetDefs.add(buildSheetDef(ImportExportConfigJsonHelper.MAIN_SHEET_NAME,
             masterKeys, buildNamesWithLink(masterSpecs, titleMap),
             masterStyle.columnDataTypes, split.getMasterRows(), masterStyle));
@@ -1643,7 +1805,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
                 .getOrDefault(collectionRoot, new ArrayList<>());
             String[] detailKeys = buildKeysWithLink(detailSpecs);
             ExcelUtil.SheetExportStyle detailStyle = buildSheetExportStyleWithLink(detailSpecs, layout);
-            applyColumnDropdownOptions(detailStyle, detailKeys, attrIndex, labelCache);
+            applyColumnDropdownOptions(detailStyle, buildSpecsWithLink(detailSpecs), detailKeys, attrIndex, labelCache);
             sheetDefs.add(buildSheetDef(resolveDetailSheetName(collectionRoot, titleMap, usedSheetNames),
                 detailKeys, buildNamesWithLink(detailSpecs, titleMap),
                 detailStyle.columnDataTypes, detailRows, detailStyle));
@@ -1754,13 +1916,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
     }
 
     private ExcelUtil.SheetExportStyle buildSheetExportStyleWithLink(List<ColumnSpec> specs, SheetLayoutOptions layout) {
-        List<ColumnSpec> withLink = new ArrayList<>();
-        ColumnSpec link = new ColumnSpec();
-        link.setAttrKey(ImportExportConfigJsonHelper.LINK_ATTR_KEY);
-        link.setColumnTitle(ImportExportConfigJsonHelper.LINK_COLUMN_TITLE);
-        withLink.add(link);
-        withLink.addAll(specs);
-        return buildSheetExportStyle(withLink, layout);
+        return buildSheetExportStyle(buildSpecsWithLink(specs), layout);
     }
 
     private List<Map<String, Object>> convertColumnSpec(List<ColumnSpec> specs, Map<String, String> titleMap) {
