@@ -149,6 +149,7 @@ public class AutoBugAiDraftService {
         sb.append("步骤输出(JSON)：\n").append(output).append("\n");
         sb.append("断言结果(JSON)：\n").append(assertList).append("\n");
         sb.append("API 请求详情(JSON，含 url/method/inputValue/outputValue 等)：\n").append(apiDetail).append("\n");
+        appendHistoryAnalysisSection(sb, params);
         appendOptions(sb, "可选严重性", params.get("severityOptions"));
         appendOptions(sb, "可选必现类型", params.get("necessaryOptions"));
         appendOptions(sb, "可选终端", params.get("terminalOptions"));
@@ -178,6 +179,39 @@ public class AutoBugAiDraftService {
             return;
         }
         sb.append(title).append("：").append(value.toString()).append("\n");
+    }
+
+    private void appendHistoryAnalysisSection(StringBuilder sb, Map<String, Object> params) {
+        Object summary = params.get("historyAnalysisSummary");
+        if (summary == null || StrUtil.isBlank(summary.toString())) {
+            return;
+        }
+        sb.append("\n【本次执行 AI 分析结论（请优先参考）】\n");
+        sb.append("分析摘要：").append(summary.toString().trim()).append("\n");
+        Object rootCause = params.get("historyAnalysisRootCause");
+        if (rootCause != null && StrUtil.isNotBlank(rootCause.toString())) {
+            sb.append("根因：").append(rootCause.toString().trim()).append("\n");
+        }
+        appendJsonListSection(sb, "失败步骤", params.get("historyAnalysisFailedSteps"));
+        appendJsonListSection(sb, "改进建议", params.get("historyAnalysisSuggestions"));
+    }
+
+    private void appendJsonListSection(StringBuilder sb, String title, Object raw) {
+        if (raw == null || StrUtil.isBlank(raw.toString())) {
+            return;
+        }
+        try {
+            List<String> items = JSONUtil.toList(raw.toString(), null);
+            if (items == null || items.isEmpty()) {
+                return;
+            }
+            sb.append(title).append("：\n");
+            for (int i = 0; i < items.size(); i++) {
+                sb.append(i + 1).append(". ").append(items.get(i)).append("\n");
+            }
+        } catch (Exception ignored) {
+            sb.append(title).append("：").append(raw.toString()).append("\n");
+        }
     }
 
     private Map<String, Object> parseDraft(String answer) {
