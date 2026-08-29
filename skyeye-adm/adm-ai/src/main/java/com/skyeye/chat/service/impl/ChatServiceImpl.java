@@ -9,6 +9,7 @@ import com.google.common.base.Joiner;
 import com.skyeye.ai.core.doubao.DouBaoChatClient;
 import com.skyeye.ai.core.enums.AiPlatformEnum;
 import com.skyeye.ai.core.factory.AiFactory;
+import com.skyeye.ai.core.knowledge.AiKnowledgeClient;
 import com.skyeye.ai.core.qianfan.QianfanChatClient;
 import com.skyeye.ai.core.tongyi.TongYiChatClient;
 import com.skyeye.ai.core.xunfei.XunFeiChatClient;
@@ -26,13 +27,14 @@ import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
-import com.skyeye.ai.core.knowledge.AiKnowledgeClient;
 import com.skyeye.key.entity.AiApiKey;
 import com.skyeye.key.service.AiApiKeyService;
+import com.skyeye.knowledge.util.KnowledgeTenantFilterHelper;
 import com.skyeye.role.entity.Role;
 import com.skyeye.role.service.RoleService;
 import com.skyeye.websocket.AiMessageWebSocket;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,6 +72,9 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
 
     @Autowired
     private AiMessageWebSocket aiMessageWebSocket;
+
+    @Value("${skyeye.tenant.enable:false}")
+    private boolean tenantEnable;
 
     @Override
     @Transactional
@@ -119,9 +124,9 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     public void syncChatCompletion(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String content = params.get("content").toString();
-        String roleId = params.get("roleId") == null ? "" : params.get("roleId").toString();
-        String apiKeyId = params.get("apiKeyId") == null ? "" : params.get("apiKeyId").toString();
-        String bizType = params.get("bizType") == null ? "demandDraft" : params.get("bizType").toString();
+        String roleId = params.get("roleId").toString();
+        String apiKeyId = params.get("apiKeyId").toString();
+        String bizType = params.get("bizType").toString();
         boolean saveChat = isSaveChat(params.get("saveChat"));
         Object imagesObj = params.get("images");
         List<String> images = readImages(imagesObj == null ? "" : imagesObj.toString());
@@ -180,6 +185,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
 
     /**
      * 闲聊时绑定角色知识库。检索词优先用用户原问题，不要拿整段提示词去搜。
+     * 开启租户时：检索后按正文中的租户标记过滤，并提示模型按当前租户作答。
      */
     private String appendRoleKnowledge(String bizType, com.skyeye.role.entity.Role role, String content,
                                        String knowledgeQuery) {
@@ -200,13 +206,28 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         if (client.useNativeAppKnowledge()) {
             return content;
         }
+        String currentTenantId = TenantContext.getTenantId();
         String query = StrUtil.blankToDefault(knowledgeQuery, content);
-        String knowledgeText = client.search(apiKey.toAiKnowledgeConfig(), query, 8);
+        if (tenantEnable && StrUtil.isNotBlank(currentTenantId)) {
+            // 提高与当前租户相关片段的召回
+            query = query + " 租户ID " + currentTenantId;
+        }
+        int topN = tenantEnable && StrUtil.isNotBlank(currentTenantId) ? 16 : 8;
+        String knowledgeText = client.search(apiKey.toAiKnowledgeConfig(), query, topN);
+        knowledgeText = KnowledgeTenantFilterHelper.filterKnowledgeText(knowledgeText, tenantEnable, currentTenantId);
         if (StrUtil.isBlank(knowledgeText)) {
             return content;
         }
-        return "以下是知识库检索到的相关资料，请据此回答；可归纳列表。资料不足时说明缺少什么，不要编造。\n【知识库】\n"
-            + knowledgeText + "\n【用户问题】\n" + content;
+        StringBuilder sb = new StringBuilder();
+        sb.append("以下是知识库检索到的相关资料，请据此回答；可归纳列表。资料不足时说明缺少什么，不要编造。\n");
+        if (tenantEnable && StrUtil.isNotBlank(currentTenantId)) {
+            sb.append("当前租户ID=").append(currentTenantId)
+                .append("。资料块含 [skyeye_tenant=…][skyeye_isolation=…] 标记，请严格按隔离类型使用：")
+                .append("strongIsolation 仅当前租户；weakIsolation 当前租户或平台；")
+                .append("noIsolation 不限；plate 仅平台账号可见。不要使用其他租户的私有数据。\n");
+        }
+        sb.append("【知识库】\n").append(knowledgeText).append("\n【用户问题】\n").append(content);
+        return sb.toString();
     }
 
     /**

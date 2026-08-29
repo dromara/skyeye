@@ -7,6 +7,7 @@ package com.skyeye.ai.core.knowledge;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.skyeye.common.util.DateUtil;
+import com.skyeye.knowledge.util.KnowledgeTenantFilterHelper;
 
 import java.util.List;
 import java.util.Map;
@@ -74,18 +75,39 @@ public final class AiKnowledgeUploadHelper {
     public static String buildRowBlock(String tableName, String tableRemark, String idField, String titleField,
                                       Map<String, Object> row, List<String> contentFields,
                                       Map<String, String> fieldRemarks) {
+        return buildRowBlock(tableName, tableRemark, idField, titleField, row, contentFields, fieldRemarks,
+            null, null);
+    }
+
+    /**
+     * @param tenantField      源表租户字段名，写入正文便于问答按租户过滤
+     * @param tenantIsolation  表数据隔离类型（TenantEnum.key）
+     */
+    public static String buildRowBlock(String tableName, String tableRemark, String idField, String titleField,
+                                      Map<String, Object> row, List<String> contentFields,
+                                      Map<String, String> fieldRemarks, String tenantField, String tenantIsolation) {
         StringBuilder sb = new StringBuilder();
         sb.append("表: ").append(tableName);
         if (StrUtil.isNotBlank(tableRemark)) {
             sb.append(" (").append(tableRemark).append(')');
         }
         sb.append('\n');
-        appendFieldLine(sb, "主键", idField, row.get(idField), fieldRemarks);
-        if (StrUtil.isNotBlank(titleField) && row.get(titleField) != null) {
+        String rowTenantId = StrUtil.EMPTY;
+        if (StrUtil.isNotBlank(tenantField) && row != null && row.get(tenantField) != null) {
+            rowTenantId = String.valueOf(row.get(tenantField));
+        }
+        String isolationKey = StrUtil.blankToDefault(tenantIsolation, "strongIsolation");
+        sb.append(KnowledgeTenantFilterHelper.buildMarkers(rowTenantId, isolationKey)).append('\n');
+        if (StrUtil.isNotBlank(tenantField)) {
+            appendFieldLine(sb, "租户ID", tenantField, rowTenantId, fieldRemarks);
+        }
+        appendFieldLine(sb, "数据隔离", "tenant_isolation", isolationKey, fieldRemarks);
+        appendFieldLine(sb, "主键", idField, row == null ? null : row.get(idField), fieldRemarks);
+        if (StrUtil.isNotBlank(titleField) && row != null && row.get(titleField) != null) {
             appendFieldLine(sb, "标题", titleField, row.get(titleField), fieldRemarks);
         }
         for (String field : contentFields) {
-            Object val = row.get(field);
+            Object val = row == null ? null : row.get(field);
             if (val == null || StrUtil.isBlank(String.valueOf(val))) {
                 continue;
             }

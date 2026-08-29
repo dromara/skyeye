@@ -42,9 +42,10 @@ public class ChatController {
         @ApiImplicitParam(id = "content", name = "content", value = "用户消息", required = "required"),
         @ApiImplicitParam(id = "roleId", name = "roleId", value = "AI角色id，优先按角色取唯一启用配置"),
         @ApiImplicitParam(id = "apiKeyId", name = "apiKeyId", value = "AI配置id，roleId为空时使用"),
-        @ApiImplicitParam(id = "bizType", name = "bizType", value = "业务类型，如 demandDraft、bugDraft、chat"),
+        @ApiImplicitParam(id = "bizType", name = "bizType", value = "业务类型，如 demandDraft、bugDraft、chat", defaultValue = "demandDraft"),
         @ApiImplicitParam(id = "saveChat", name = "saveChat", value = "是否记录聊天，1是 0否，默认是。需求/Bug草稿传0", enumClass = WhetherEnum.class),
-        @ApiImplicitParam(id = "images", name = "images", value = "截图地址列表，看图提 Bug 时传入")})
+        @ApiImplicitParam(id = "images", name = "images", value = "截图地址列表，看图提 Bug 时传入"),
+        @ApiImplicitParam(id = "knowledgeQuery", name = "knowledgeQuery", value = "知识库检索词；闲聊绑知识库时优先用此字段检索，不传则用 content")})
     @RequestMapping("/post/ChatController/syncChatCompletion")
     public void syncChatCompletion(InputObject inputObject, OutputObject outputObject) {
         chatService.syncChatCompletion(inputObject, outputObject);
