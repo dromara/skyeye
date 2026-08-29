@@ -29,6 +29,7 @@ import com.skyeye.exception.CustomException;
 import com.skyeye.ai.core.knowledge.AiKnowledgeClient;
 import com.skyeye.key.entity.AiApiKey;
 import com.skyeye.key.service.AiApiKeyService;
+import com.skyeye.role.entity.Role;
 import com.skyeye.role.service.RoleService;
 import com.skyeye.websocket.AiMessageWebSocket;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,11 +129,14 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         AiApiKey aiApiKey = StrUtil.isNotBlank(roleId)
             ? aiApiKeyService.selectEnabledKeyByRoleId(roleId)
             : aiApiKeyService.selectEnabledKey(apiKeyId);
-        com.skyeye.role.entity.Role role = aiApiKey.getRoleMation();
+        Role role = aiApiKey.getRoleMation();
         if (role == null && StrUtil.isNotBlank(aiApiKey.getRoleId())) {
             role = roleService.selectById(aiApiKey.getRoleId());
         }
-        String systemPrompt = "chat".equals(bizType) && role != null ? role.getPrompt() : null;
+        String systemPrompt = null;
+        if ("chat".equals(bizType) && role != null) {
+            systemPrompt = StrUtil.blankToDefault(role.getPrompt(), Role.DEFAULT_PROMPT);
+        }
         AiPlatformEnum aiModel = AiPlatformEnum.getName(aiApiKey.getPlatform());
         String id;
         if (saveChat) {
@@ -147,7 +151,8 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         if ("chat".equals(bizType) && role != null && StrUtil.isNotBlank(role.getKnowledgeId())) {
             sendStreamChunk(userId, id, bizType, "正在检索知识库...", false, 0, STREAM_TYPE_STATUS);
         }
-        content = appendRoleKnowledge(bizType, role, content);
+        String knowledgeQuery = params.get("knowledgeQuery") == null ? "" : params.get("knowledgeQuery").toString();
+        content = appendRoleKnowledge(bizType, role, content, knowledgeQuery);
         Map<String, Object> bean = new HashMap<>();
         bean.put("id", id);
         bean.put("chatId", id);
@@ -174,9 +179,10 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     }
 
     /**
-     * 闲聊时绑定角色知识库：平台知识库 ID/密钥均取自该角色已启用的 AI 配置；通义等应用侧已绑库则不再本地拼装。
+     * 闲聊时绑定角色知识库。检索词优先用用户原问题，不要拿整段提示词去搜。
      */
-    private String appendRoleKnowledge(String bizType, com.skyeye.role.entity.Role role, String content) {
+    private String appendRoleKnowledge(String bizType, com.skyeye.role.entity.Role role, String content,
+                                       String knowledgeQuery) {
         if (!"chat".equals(bizType) || role == null || StrUtil.isBlank(role.getKnowledgeId()) || StrUtil.isBlank(content)) {
             return content;
         }
@@ -194,11 +200,12 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         if (client.useNativeAppKnowledge()) {
             return content;
         }
-        String knowledgeText = client.search(apiKey.toAiKnowledgeConfig(), content, 8);
+        String query = StrUtil.blankToDefault(knowledgeQuery, content);
+        String knowledgeText = client.search(apiKey.toAiKnowledgeConfig(), query, 8);
         if (StrUtil.isBlank(knowledgeText)) {
             return content;
         }
-        return "以下是知识库检索到的相关资料，请据此回答用户问题；可归纳列表。资料不足时说明缺少什么，不要编造。\n【知识库】\n"
+        return "以下是知识库检索到的相关资料，请据此回答；可归纳列表。资料不足时说明缺少什么，不要编造。\n【知识库】\n"
             + knowledgeText + "\n【用户问题】\n" + content;
     }
 

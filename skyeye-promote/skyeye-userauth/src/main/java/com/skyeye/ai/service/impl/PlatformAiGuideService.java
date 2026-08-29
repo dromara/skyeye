@@ -5,21 +5,18 @@
 package com.skyeye.ai.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.skyeye.ai.util.PlatformAiChatHelper;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * 平台全量引导 AI 编排（提示词在后端组装，不落业务库）。
+ * 平台办公 AI 编排。角色提示词负责人设，本类补充当前页上下文、办事能力与输出格式。
  */
 @Service
 public class PlatformAiGuideService {
@@ -29,8 +26,6 @@ public class PlatformAiGuideService {
     private static final String JSON_BLOCK_END = "@@SKYEYE_JSON_END@@";
 
     private static final String BIZ_TYPE_CHAT = "chat";
-
-    private static final int MENU_PROMPT_LIMIT = 100;
 
     @Autowired
     private PlatformAiChatHelper platformAiChatHelper;
@@ -43,20 +38,18 @@ public class PlatformAiGuideService {
 
     public Map<String, Object> generate(Map<String, Object> params) {
         String question = params.get("question").toString().trim();
-        String pageTitle = params.get("pageTitle").toString();
-        String pagePath = params.get("pagePath").toString();
-        List<Map<String, Object>> menus = parseMenus(params.get("menus"));
+        String pageTitle = params.get("pageTitle") == null ? "" : params.get("pageTitle").toString();
+        String pagePath = params.get("pagePath") == null ? "" : params.get("pagePath").toString();
         Map<String, Object> extraParams = new HashMap<>();
         extraParams.put("saveChat", 1);
+        extraParams.put("knowledgeQuery", question);
         return platformAiChatHelper.startStreamingChat(
-            buildUserContent(question, pageTitle, pagePath, menus),
+            buildUserContent(question, pageTitle, pagePath),
             BIZ_TYPE_CHAT,
             extraParams);
     }
 
-    private String buildUserContent(String question, String pageTitle, String pagePath,
-                                    List<Map<String, Object>> menus) {
-        List<Map<String, Object>> catalog = pickMenusForPrompt(menus, question);
+    private String buildUserContent(String question, String pageTitle, String pagePath) {
         StringBuilder sb = new StringBuilder();
         sb.append("用户问题：").append(question).append("\n\n");
         sb.append("当前页面：").append(StrUtil.blankToDefault(pageTitle, "未知"));
@@ -64,28 +57,23 @@ public class PlatformAiGuideService {
             sb.append("（").append(pagePath).append("）");
         }
         sb.append("\n\n");
-        sb.append("用户有权限访问的菜单（id | 路径，只能从这里选跳转目标）：\n");
-        if (catalog.isEmpty()) {
-            sb.append("（暂无菜单）\n");
-        } else {
-            for (int i = 0; i < catalog.size(); i++) {
-                Map<String, Object> item = catalog.get(i);
-                String id = firstText(item, "id", "key");
-                String path = firstText(item, "routerPath", "name");
-                sb.append(i + 1).append(". ").append(id).append(" | ").append(path).append("\n");
-            }
-        }
-        sb.append("\n");
-        sb.append("你是 SkyEye 云平台使用向导。根据当前页面和菜单回答如何操作。\n");
-        sb.append("规则：\n");
-        sb.append("1. 先用中文简洁说明，不要编造没有出现在菜单列表里的功能\n");
-        sb.append("2. 需要跳转时给出 actions，menuId 必须是上面的 id\n");
-        sb.append("3. 找不到对应菜单时 actions 为空数组\n");
-        sb.append("4. 一次最多 3 个动作\n");
+        sb.append("你是 SkyEye 云平台的办公 AI，覆盖 OA、ERP、CRM、项目协同，以及知识库、AI角色、AI配置等平台内全部 AI 能力。\n");
+        sb.append("主任务是帮用户把事情办成：讲清楚怎么做、填什么、卡在哪、下一步是什么。不要把问题默认理解成「帮我找菜单」。\n\n");
+        sb.append("按问题类型回答：\n");
+        sb.append("1. 办事：请假、审批、考勤、采购、合同、库存、客户、项目等业务流程、必填项、状态流转、常见卡点\n");
+        sb.append("2. 当前页：本页用途、关键字段、可做操作、易错点；用户在某页提问时优先结合本页\n");
+        sb.append("3. 业务数据：按知识库解释单据、表、字段、关联关系；资料不足时说明缺什么，不要编造\n");
+        sb.append("4. AI 管理：知识库与文件/库表同步、AI角色与提示词、AI配置启用与绑定，如何设置和排查\n");
+        sb.append("5. 办公协助：归纳要点、对比方案、起草说明、列出检查清单\n");
+        sb.append("6. 打开页面：仅当用户明确要去某功能，或把事办完必须进入某菜单时，才给跳转；否则 actions 为空数组\n\n");
+        sb.append("回答要求：\n");
+        sb.append("1. reply 用中文写完整、可执行的说明，步骤分点；不要只丢一个菜单名\n");
+        sb.append("2. 以当前页面和知识库为准，没有依据的功能、字段、配置不要编造\n");
+        sb.append("3. 跳转是辅助能力：navigate 的 menuId 必须来自知识库，一次最多 3 个；不需要打开页面时 actions 必须为 []\n");
         appendMarkedJsonOutput(sb,
             "{\n"
-                + "  \"reply\": \"给用户看的说明\",\n"
-                + "  \"actions\": [{\"type\": \"navigate\", \"menuId\": \"菜单id\", \"label\": \"打开xxx\"}]\n"
+                + "  \"reply\": \"给用户看的完整说明：怎么办理、填什么、注意什么；资料不足时说明缺什么\",\n"
+                + "  \"actions\": []\n"
                 + "}");
         return sb.toString();
     }
@@ -100,112 +88,5 @@ public class PlatformAiGuideService {
         sb.append(JSON_BLOCK_BEGIN).append("\n");
         sb.append(exampleJson.trim()).append("\n");
         sb.append(JSON_BLOCK_END).append("\n");
-    }
-
-    private List<Map<String, Object>> pickMenusForPrompt(List<Map<String, Object>> menus, String question) {
-        if (menus == null || menus.isEmpty()) {
-            return Collections.emptyList();
-        }
-        if (menus.size() <= MENU_PROMPT_LIMIT) {
-            return menus;
-        }
-        List<String> keywords = tokenize(question);
-        if (keywords.isEmpty()) {
-            return new ArrayList<>(menus.subList(0, MENU_PROMPT_LIMIT));
-        }
-        List<Map<String, Object>> scored = new ArrayList<>(menus);
-        scored.sort(Comparator.comparingInt((Map<String, Object> item) -> scoreMenu(item, keywords)).reversed());
-        List<Map<String, Object>> matched = new ArrayList<>();
-        for (Map<String, Object> item : scored) {
-            if (scoreMenu(item, keywords) <= 0) {
-                break;
-            }
-            matched.add(item);
-            if (matched.size() >= MENU_PROMPT_LIMIT) {
-                break;
-            }
-        }
-        if (matched.size() >= 12) {
-            return matched;
-        }
-        return new ArrayList<>(menus.subList(0, MENU_PROMPT_LIMIT));
-    }
-
-    private int scoreMenu(Map<String, Object> item, List<String> keywords) {
-        String hay = (firstText(item, "name") + " " + firstText(item, "routerPath")).toLowerCase();
-        int score = 0;
-        for (String word : keywords) {
-            String needle = word.toLowerCase();
-            if (hay.contains(needle)) {
-                score += needle.length();
-            }
-        }
-        return score;
-    }
-
-    private List<String> tokenize(String question) {
-        List<String> result = new ArrayList<>();
-        if (StrUtil.isBlank(question)) {
-            return result;
-        }
-        String[] parts = question.split("[\\s,，。？?、/]+");
-        for (String part : parts) {
-            String word = part.trim();
-            if (word.length() >= 2) {
-                result.add(word);
-            }
-        }
-        return result;
-    }
-
-    private List<Map<String, Object>> parseMenus(Object raw) {
-        if (raw == null) {
-            return Collections.emptyList();
-        }
-        if (raw instanceof List) {
-            List<Map<String, Object>> result = new ArrayList<>();
-            for (Object item : (List<?>) raw) {
-                if (item instanceof Map) {
-                    result.add(castMap(item));
-                }
-            }
-            return result;
-        }
-        String text = raw.toString().trim();
-        if (StrUtil.isBlank(text) || "[]".equals(text)) {
-            return Collections.emptyList();
-        }
-        try {
-            JSONArray array = JSONUtil.parseArray(text);
-            List<Map<String, Object>> result = new ArrayList<>();
-            for (Object item : array) {
-                if (item == null) {
-                    continue;
-                }
-                JSONObject json = JSONUtil.parseObj(item);
-                result.add(new HashMap<>(json));
-            }
-            return result;
-        } catch (Exception e) {
-            throw new CustomException("菜单数据格式不正确");
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private Map<String, Object> castMap(Object item) {
-        return (Map<String, Object>) item;
-    }
-
-    private String firstText(Map<String, Object> item, String... keys) {
-        if (item == null || keys == null) {
-            return "";
-        }
-        for (String key : keys) {
-            Object value = item.get(key);
-            if (value != null && StrUtil.isNotBlank(value.toString())) {
-                return value.toString().trim();
-            }
-        }
-        return "";
     }
 }

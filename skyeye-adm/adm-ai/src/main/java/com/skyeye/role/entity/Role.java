@@ -29,6 +29,14 @@ import lombok.Data;
 @ApiModel("AI角色")
 public class Role extends OperatorUserInfo {
 
+    /**
+     * 办公OA 默认角色提示词。未填写时作为系统提示词使用，长度需适配表单输入。
+     */
+    public static final String DEFAULT_PROMPT = "你是SkyEye云平台办公AI，系统级办公助手。"
+        + "帮用户办理OA/ERP等业务、解释当前页与单据数据、协助知识库/AI角色/AI配置。"
+        + "先把事情说清楚、步骤可执行；不要默认去找菜单，只有明确要打开功能页时才给menuId。"
+        + "以知识库与当前页面为准，不编造。";
+
     @TableId("id")
     @ApiModelProperty(value = "主键id。为空时新增，不为空时编辑")
     private String id;
@@ -46,7 +54,7 @@ public class Role extends OperatorUserInfo {
     private String logo;
 
     @TableField(value = "prompt")
-    @ApiModelProperty(value = "提示词")
+    @ApiModelProperty(value = "角色定位与能力提示词", defaultValue = Role.DEFAULT_PROMPT)
     private String prompt;
 
     @TableField(value = "knowledge_id")
