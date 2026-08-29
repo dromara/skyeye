@@ -134,7 +134,7 @@ public class GroupServiceImpl extends SkyeyeBusinessServiceImpl<GroupsDao, Group
         Groups entity = new Groups();
         entity.setGroupName("第" + i + "组");
         entity.setGroupsInformationId(groupsInformation.getId());
-        String imgPath = tPath.replace("images", StrUtil.EMPTY + entity.getGroupBarcode());
+        String imgPath = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY + entity.getGroupBarcode());
         // 生成分组编码
         String code = ToolUtil.getFourWord();
         entity.setGroupBarcode(code);
@@ -155,7 +155,7 @@ public class GroupServiceImpl extends SkyeyeBusinessServiceImpl<GroupsDao, Group
         }
         list.forEach(item -> {
             // 删除分组的二维码
-            FileUtil.deleteFile(tPath.replace("images", StrUtil.EMPTY) + item.getGrCodeUrl());
+            FileUtil.deleteFile(tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + item.getGrCodeUrl());
         });
         List<String> ids = list.stream().map(Groups::getId).collect(Collectors.toList());
         // 删除分组下的学生信息

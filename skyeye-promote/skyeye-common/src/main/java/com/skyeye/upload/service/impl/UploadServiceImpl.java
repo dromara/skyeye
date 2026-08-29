@@ -155,7 +155,7 @@ public class UploadServiceImpl implements UploadService {
         List<Upload> beans = redisCache.getList(cacheKey, key -> new ArrayList<>(), RedisConstants.ONE_DAY_SECONDS, Upload.class);
         List<File> fileList = new ArrayList<>();
         for (Upload bean : beans) {
-            File f = new File(tPath.replace("images", "") + bean.getFileAddress());
+            File f = new File(tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + bean.getFileAddress());
             fileList.add(f);
         }
         String userId = inputObject.getLogParams().get("id").toString();
@@ -221,7 +221,7 @@ public class UploadServiceImpl implements UploadService {
             }
         }
         if (bean != null) {
-            String fileAddress = tPath.replace("images", "") + bean.getFileAddress();
+            String fileAddress = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + bean.getFileAddress();
             File checkFile = new File(fileAddress);
             String chunkSize = map.get("chunkSize").toString();
             if (checkFile.exists() && checkFile.length() == Integer.parseInt(chunkSize)) {
@@ -537,7 +537,7 @@ public class UploadServiceImpl implements UploadService {
         if (StrUtil.isBlank(localPath)) {
             return null;
         }
-        File file = new File(tPath.replace("images", StrUtil.EMPTY) + localPath);
+        File file = new File(tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + localPath);
         if (!file.exists() || !file.isFile()) {
             throw new CustomException("本地文件不存在: " + localPath);
         }

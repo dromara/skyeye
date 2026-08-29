@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
+import com.skyeye.common.constans.FileConstants;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -65,7 +66,7 @@ public class ReportWordModelServiceImpl extends SkyeyeBusinessServiceImpl<Report
 
     @Override
     public void deletePostpose(WordModel entity) {
-        String basePath = tPath.replace("images", StrUtil.EMPTY);
+        String basePath = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY);
         FileUtil.deleteFile(basePath + entity.getImgPath());
         // 删除属性
         reportWordModelAttrService.deleteByWordId(entity.getId());

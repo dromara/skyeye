@@ -8,6 +8,7 @@ import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.skyeye.annotation.service.SkyeyeService;
+import com.skyeye.common.constans.FileConstants;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -192,7 +193,7 @@ public class SysDataSqlServiceImpl implements SysDataSqlService {
         map.put("tenantId", tenantId);
         Map<String, Object> bean = sysDataSqlDao.queryDataSqlVersionById(map);
         if (bean != null && !bean.isEmpty()) {
-            String basePath = tPath.replace("images", "");
+            String basePath = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY);
             String filePath = bean.get("filePath").toString();
             File file = new File(basePath + filePath);
             // 数据库备份文件存在

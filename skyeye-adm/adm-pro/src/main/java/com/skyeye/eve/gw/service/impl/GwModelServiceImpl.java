@@ -8,6 +8,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.common.constans.FileConstants;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -50,7 +51,7 @@ public class GwModelServiceImpl extends SkyeyeBusinessServiceImpl<GwModelDao, Gw
         GwModel oldModel = selectById(entity.getId());
         if (!StrUtil.equals(entity.getPath(), oldModel.getPath())) {
             // 如果文件有修改，则需要删除之前的文件
-            FileUtil.deleteFile(tPath.replace("images", StrUtil.EMPTY) + oldModel.getPath());
+            FileUtil.deleteFile(tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + oldModel.getPath());
         }
     }
 

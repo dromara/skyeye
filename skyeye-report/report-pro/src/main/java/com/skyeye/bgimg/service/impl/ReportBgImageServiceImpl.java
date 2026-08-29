@@ -11,6 +11,7 @@ import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.bgimg.dao.ReportBgImageDao;
 import com.skyeye.bgimg.entity.BgImage;
 import com.skyeye.bgimg.service.ReportBgImageService;
+import com.skyeye.common.constans.FileConstants;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -46,7 +47,7 @@ public class ReportBgImageServiceImpl extends SkyeyeBusinessServiceImpl<ReportBg
 
     @Override
     public void deletePostpose(BgImage entity) {
-        String basePath = tPath.replace("images", StrUtil.EMPTY);
+        String basePath = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY);
         FileUtil.deleteFile(basePath + entity.getImgPath());
     }
 

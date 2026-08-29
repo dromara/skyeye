@@ -6,6 +6,7 @@ package com.skyeye.mq.job.impl;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.skyeye.common.constans.FileConstants;
 import com.skyeye.common.constans.MqConstants;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.MailUtil;
@@ -69,7 +70,7 @@ public class MailDraftsEditServiceImpl implements RocketMQListener<String> {
                 TenantContext.setTenantId(tenantId);
             }
             // 任务开始
-            MqSendUtil.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_PROCESSING, "");
+            MqSendUtil.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_PROCESSING, StrUtil.EMPTY);
             //获取服务器信息
             Map<String, Object> emailServer = iSystemFoundationSettingsService.querySystemFoundationSettingsList();
             String title = map.get("title").toString();//标题
@@ -98,7 +99,7 @@ public class MailDraftsEditServiceImpl implements RocketMQListener<String> {
                 .deleteEmail(username, title, message.getMessageId());
             //保存邮件为草稿
             String messageId = new MailUtil(username, password, emailServer.get("emailReceiptServer").toString())
-                .saveDraftsEmail(toPeople, toCc, toBCc, title, content, tPath.replace("images", ""), beans);
+                .saveDraftsEmail(toPeople, toCc, toBCc, title, content, tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY), beans);
             if (!ToolUtil.isBlank(messageId)) {
                 Map<String, Object> emailEditMessageId = new HashMap<>();
                 emailEditMessageId.put("id", emailId);
@@ -109,11 +110,11 @@ public class MailDraftsEditServiceImpl implements RocketMQListener<String> {
                 emailDao.editEmailMessageIdByEmailId(emailEditMessageId);
             }
             // 任务完成
-            MqSendUtil.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_SUCCESS, "");
+            MqSendUtil.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_SUCCESS, StrUtil.EMPTY);
         } catch (Exception e) {
             LOGGER.warn("Draft edit synchronization failed, reason is {}.", e);
             // 任务失败
-            MqSendUtil.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_FAIL, "");
+            MqSendUtil.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_FAIL, StrUtil.EMPTY);
         }
     }
 

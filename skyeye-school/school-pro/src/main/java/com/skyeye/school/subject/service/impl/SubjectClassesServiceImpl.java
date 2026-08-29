@@ -161,7 +161,7 @@ public class SubjectClassesServiceImpl extends SkyeyeBusinessServiceImpl<Subject
     public void createPrepose(SubjectClasses entity) {
         Subject subject = subjectService.selectById(entity.getObjectId());
         log.info("subject is {}", JSONUtil.toJsonStr(subject));
-        String imgPath = tPath.replace("images", StrUtil.EMPTY) + subject.getImg();
+        String imgPath = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + subject.getImg();
         log.info("imgPath is {}", imgPath);
         // 生成加课码编码
         String code = ToolUtil.getFourWord();
@@ -182,7 +182,7 @@ public class SubjectClassesServiceImpl extends SkyeyeBusinessServiceImpl<Subject
 
     @Override
     public void deletePostpose(SubjectClasses entity) {
-        FileUtil.deleteFile(tPath.replace("images", StrUtil.EMPTY) + entity.getSourceCode());
+        FileUtil.deleteFile(tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + entity.getSourceCode());
         // 删除班级学生关联表
         subjectClassesStuService.deleteBySubClassLinkId(Arrays.asList(entity.getId()));
         // 删除班级学生置顶课程

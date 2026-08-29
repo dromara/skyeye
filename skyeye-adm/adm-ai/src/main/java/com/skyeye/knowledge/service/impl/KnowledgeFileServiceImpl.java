@@ -18,8 +18,10 @@ import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.FileConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.FileUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
@@ -38,13 +40,16 @@ import com.skyeye.knowledge.service.KnowledgeService;
 import com.skyeye.knowledge.service.KnowledgeSyncHistoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 @Slf4j
 @Service
@@ -73,6 +78,10 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
 
     @Autowired
     private KnowledgeSyncHistoryService knowledgeSyncHistoryService;
+
+    @Autowired
+    @Qualifier("knowledgeSyncExecutor")
+    private Executor knowledgeSyncExecutor;
 
     @Override
     public void validatorEntity(KnowledgeFile entity) {
@@ -166,32 +175,51 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
         String startTime = DateUtil.getTimeAndToString();
         String historyId = knowledgeSyncHistoryService.createRunningHistory(
             knowledge.getId(), KnowledgeSyncTriggerEnum.FILE.getKey(), startTime);
-        Integer status = KnowledgeSyncResultEnum.SUCCESS.getKey();
-        String errorMsg = StrUtil.EMPTY;
-        int syncCount = 0;
-        try {
-            syncOneFile(knowledge, apiKey, file);
-            syncCount = 1;
-        } catch (Exception e) {
-            status = KnowledgeSyncResultEnum.FAIL.getKey();
-            errorMsg = StrUtil.blankToDefault(e.getMessage(), "同步失败");
-            markFail(file, errorMsg);
-            log.warn("知识库[{}]单文件[{}]同步失败: {}", knowledge.getId(), file.getName(), errorMsg);
-            throw e instanceof CustomException ? (CustomException) e
-                : new CustomException("文件「" + file.getName() + "」同步失败: " + errorMsg);
-        } finally {
-            knowledgeSyncHistoryService.finishHistory(historyId, status, syncCount,
-                DateUtil.getTimeAndToString(), errorMsg);
-        }
-        try {
-            UpdateWrapper<Knowledge> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.eq(CommonConstants.ID, knowledge.getId());
-            updateWrapper.set(MybatisPlusUtil.toColumns(Knowledge::getLastSyncTime), DateUtil.getTimeAndToString());
-            knowledgeService.update(updateWrapper);
-        } catch (Exception e) {
-            log.warn("更新知识库最近同步时间失败 knowledgeId={}: {}", knowledge.getId(), e.getMessage());
-        }
-        outputObject.setBean(super.selectById(id));
+        String tenantId = TenantContext.getTenantId();
+        TenantEnum isolationType = TenantContext.getIsolationType();
+        knowledgeSyncExecutor.execute(() -> {
+            Integer status = KnowledgeSyncResultEnum.SUCCESS.getKey();
+            String errorMsg = StrUtil.EMPTY;
+            int syncCount = 0;
+            try {
+                if (StrUtil.isNotBlank(tenantId)) {
+                    TenantContext.setTenantId(tenantId);
+                }
+                if (isolationType != null) {
+                    TenantContext.setIsolationType(isolationType);
+                }
+                syncOneFile(knowledge, apiKey, file);
+                syncCount = 1;
+                try {
+                    UpdateWrapper<Knowledge> updateWrapper = new UpdateWrapper<>();
+                    updateWrapper.eq(CommonConstants.ID, knowledge.getId());
+                    updateWrapper.set(MybatisPlusUtil.toColumns(Knowledge::getLastSyncTime), DateUtil.getTimeAndToString());
+                    knowledgeService.update(updateWrapper);
+                } catch (Exception ex) {
+                    log.warn("更新知识库最近同步时间失败 knowledgeId={}: {}", knowledge.getId(), ex.getMessage());
+                }
+            } catch (Exception e) {
+                status = KnowledgeSyncResultEnum.FAIL.getKey();
+                errorMsg = StrUtil.blankToDefault(e.getMessage(), "同步失败");
+                markFail(file, errorMsg);
+                log.warn("知识库[{}]单文件[{}]异步同步失败: {}", knowledge.getId(), file.getName(), errorMsg);
+            } finally {
+                try {
+                    knowledgeSyncHistoryService.finishHistory(historyId, status, syncCount,
+                        DateUtil.getTimeAndToString(), errorMsg);
+                } catch (Exception ex) {
+                    log.warn("单文件同步写历史失败 historyId={}: {}", historyId, ex.getMessage());
+                }
+                TenantContext.clear();
+            }
+        });
+
+        Map<String, Object> bean = new HashMap<>();
+        bean.put("id", file.getId());
+        bean.put("knowledgeId", knowledge.getId());
+        bean.put("historyId", historyId);
+        bean.put("async", true);
+        outputObject.setBean(bean);
         outputObject.settotal(1);
     }
 

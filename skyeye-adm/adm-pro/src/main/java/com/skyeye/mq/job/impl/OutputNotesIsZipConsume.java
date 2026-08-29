@@ -171,13 +171,13 @@ public class OutputNotesIsZipConsume implements RocketMQListener<String> {
         ZipOutputStream out = null;
         try {
             out = new ZipOutputStream(new FileOutputStream(strZipPath));
-            ToolUtil.recursionZip(out, folderList, "", tPath.replace("images", ""), 2);
+            ToolUtil.recursionZip(out, folderList, "", tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY), 2);
         } catch (Exception ee) {
             throw new CustomException(ee);
         } finally {
             // 删除临时文件
             for (Map<String, Object> bean : files) {
-                FileUtil.deleteFile(tPath.replace("images", "") + bean.get("fileAddress").toString());
+                FileUtil.deleteFile(tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + bean.get("fileAddress").toString());
             }
             FileUtil.close(out);
         }
