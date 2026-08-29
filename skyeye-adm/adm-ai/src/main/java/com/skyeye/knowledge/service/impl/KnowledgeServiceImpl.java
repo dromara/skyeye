@@ -41,6 +41,7 @@ import com.skyeye.knowledge.classenum.KnowledgeSyncTypeEnum;
 import com.skyeye.knowledge.dao.KnowledgeDao;
 import com.skyeye.knowledge.entity.Knowledge;
 import com.skyeye.knowledge.entity.KnowledgeSync;
+import com.skyeye.knowledge.service.KnowledgeFileService;
 import com.skyeye.knowledge.service.KnowledgeService;
 import com.skyeye.knowledge.service.KnowledgeSyncHistoryService;
 import com.skyeye.knowledge.service.KnowledgeSyncService;
@@ -67,7 +68,9 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeServiceImpl.class);
 
-    /** 单文件最大约 5MB，与行数阈值取先到者 */
+    /**
+     * 单文件最大约 5MB，与行数阈值取先到者
+     */
     private static final int DEFAULT_FLUSH_MAX_BYTES = 5 * 1024 * 1024;
 
     /**
@@ -79,7 +82,9 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
     @Value("${skyeye.ai.knowledge.sync.flush-max-bytes:" + DEFAULT_FLUSH_MAX_BYTES + "}")
     private int flushMaxBytes;
 
-    /** 导入平台知识库成功后删除 S3/TOS 临时文件 */
+    /**
+     * 导入平台知识库成功后删除 S3/TOS 临时文件
+     */
     @Value("${skyeye.ai.knowledge.sync.delete-storage-after-import:true}")
     private boolean deleteStorageAfterImport;
 
@@ -113,6 +118,10 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
     @Autowired
     @Lazy
     private RoleService roleService;
+
+    @Autowired
+    @Lazy
+    private KnowledgeFileService knowledgeFileService;
 
     @Value("${IMAGES_PATH}")
     private String tPath;
@@ -229,6 +238,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         if (roleService.count(queryWrapper) > 0) {
             throw new CustomException("该知识库已绑定 AI 角色，请先解除绑定再删除");
         }
+        knowledgeFileService.deleteByKnowledgeId(id);
     }
 
     @Override
@@ -366,9 +376,6 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         if (!EnableEnum.ENABLE_USING.getKey().equals(knowledge.getEnabled())) {
             throw new CustomException("知识库已禁用，无法同步");
         }
-        if (StrUtil.isBlank(knowledge.getJdbcUrl())) {
-            throw new CustomException("请先配置同步数据库");
-        }
         AiApiKey apiKey = aiApiKeyService.selectEnabledKeyByKnowledgeId(knowledge.getId());
         if (StrUtil.isBlank(apiKey.getPlatformKnowledgeId())) {
             throw new CustomException("请先在 AI 配置中填写平台知识库 ID");
@@ -377,9 +384,6 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         if (CollectionUtil.isEmpty(syncList)) {
             syncList = knowledgeSyncService.selectByKnowledgeId(knowledge.getId());
             knowledge.setSyncList(syncList);
-        }
-        if (CollectionUtil.isEmpty(syncList)) {
-            throw new CustomException("请先配置同步表");
         }
     }
 
@@ -393,12 +397,20 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             if (CollectionUtil.isEmpty(syncList)) {
                 syncList = knowledgeSyncService.selectByKnowledgeId(knowledge.getId());
             }
+            if (syncList == null) {
+                syncList = Collections.emptyList();
+            }
             String tenantId = StrUtil.blankToDefault(TenantContext.getTenantId(), knowledge.getTenantId());
             SyncUploadContext uploadContext = new SyncUploadContext(knowledge.getId());
-            for (KnowledgeSync sync : syncList) {
-                total += syncOneTable(knowledge, sync, tenantId, apiKey, uploadContext);
+            // ① 有 JDBC + 同步表：抽表数据上传（没有表配置则跳过，不报错）
+            if (CollectionUtil.isNotEmpty(syncList) && StrUtil.isNotBlank(knowledge.getJdbcUrl())) {
+                for (KnowledgeSync sync : syncList) {
+                    total += syncOneTable(knowledge, sync, tenantId, apiKey, uploadContext);
+                }
+                flushUploadIfNeeded(knowledge, apiKey, uploadContext, true);
             }
-            flushUploadIfNeeded(knowledge, apiKey, uploadContext, true);
+            // ② 待同步/失败文件：本地 → S3 → 平台知识库
+            total += knowledgeFileService.syncPendingFiles(knowledge, apiKey);
             UpdateWrapper<Knowledge> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq(CommonConstants.ID, knowledge.getId());
             updateWrapper.set(MybatisPlusUtil.toColumns(Knowledge::getLastSyncTime), DateUtil.getTimeAndToString());
@@ -501,7 +513,9 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         return total;
     }
 
-    /** force=true 时刷掉剩余缓冲（整次同步结束）；否则按行数/体积阈值刷盘 */
+    /**
+     * force=true 时刷掉剩余缓冲（整次同步结束）；否则按行数/体积阈值刷盘
+     */
     private void flushUploadIfNeeded(Knowledge knowledge, AiApiKey apiKey, SyncUploadContext uploadContext,
                                      boolean force) {
         if (!uploadContext.hasPendingContent()) {
@@ -557,7 +571,9 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         }
     }
 
-    /** 平台导入成功后清理 S3/TOS 临时对象（失败仅打日志，不影响同步结果） */
+    /**
+     * 平台导入成功后清理 S3/TOS 临时对象（失败仅打日志，不影响同步结果）
+     */
     private void deleteStorageObjectIfNeeded(String configId, String objectPath) {
         if (!deleteStorageAfterImport || StrUtil.isBlank(configId) || StrUtil.isBlank(objectPath)) {
             return;
@@ -598,7 +614,9 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         }
     }
 
-    /** 单次同步的上传上下文：跨表共享缓冲，仅在达到阈值或整次同步结束时刷盘 */
+    /**
+     * 单次同步的上传上下文：跨表共享缓冲，仅在达到阈值或整次同步结束时刷盘
+     */
     private static final class SyncUploadContext {
         private final String objectDir;
         private final StringBuilder uploadBuffer = new StringBuilder();

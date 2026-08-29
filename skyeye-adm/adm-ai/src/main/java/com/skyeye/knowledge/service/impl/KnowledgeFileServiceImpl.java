@@ -1,0 +1,338 @@
+/*******************************************************************************
+ * Copyright 卫志强 QQ：598748873@qq.com Inc. All rights reserved. 开源地址：https://gitee.com/doc_wei01/skyeye
+ ******************************************************************************/
+
+package com.skyeye.knowledge.service.impl;
+
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.skyeye.ai.core.enums.AiPlatformEnum;
+import com.skyeye.ai.core.factory.AiFactory;
+import com.skyeye.ai.core.knowledge.AiKnowledgeClient;
+import com.skyeye.ai.core.knowledge.AiKnowledgeUploadHelper;
+import com.skyeye.annotation.service.SkyeyeService;
+import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.common.constans.CommonConstants;
+import com.skyeye.common.constans.FileConstants;
+import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.util.DateUtil;
+import com.skyeye.common.util.FileUtil;
+import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.eve.service.IUploadService;
+import com.skyeye.exception.CustomException;
+import com.skyeye.key.entity.AiApiKey;
+import com.skyeye.key.service.AiApiKeyService;
+import com.skyeye.knowledge.classenum.KnowledgeFileSyncStatusEnum;
+import com.skyeye.knowledge.dao.KnowledgeFileDao;
+import com.skyeye.knowledge.entity.Knowledge;
+import com.skyeye.knowledge.entity.KnowledgeFile;
+import com.skyeye.knowledge.service.KnowledgeFileService;
+import com.skyeye.knowledge.service.KnowledgeService;
+import com.skyeye.knowledge.service.KnowledgeSyncHistoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+@Service
+@SkyeyeService(name = "AI知识库文件", groupName = "AI知识库", allowDynamicAttrKey = false)
+public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeFileDao, KnowledgeFile>
+    implements KnowledgeFileService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeFileServiceImpl.class);
+
+    private static final int FILE_STORAGE_S3 = 20;
+
+    private static final int ERROR_MSG_LIMIT = 1000;
+
+    @Value("${IMAGES_PATH}")
+    private String tPath;
+
+    @Autowired
+    @Lazy
+    private KnowledgeService knowledgeService;
+
+    @Autowired
+    private IUploadService iUploadService;
+
+    @Autowired
+    private AiFactory aiFactory;
+
+    @Autowired
+    private AiApiKeyService aiApiKeyService;
+
+    @Autowired
+    private KnowledgeSyncHistoryService knowledgeSyncHistoryService;
+
+    @Override
+    public void validatorEntity(KnowledgeFile entity) {
+        super.validatorEntity(entity);
+        if (StrUtil.isBlank(entity.getKnowledgeId())) {
+            throw new CustomException("请选择知识库");
+        }
+        Knowledge knowledge = knowledgeService.selectById(entity.getKnowledgeId());
+        if (knowledge == null || StrUtil.isBlank(knowledge.getId())) {
+            throw new CustomException("知识库不存在");
+        }
+        if (StrUtil.isBlank(entity.getName())) {
+            throw new CustomException("文件名不能为空");
+        }
+        if (StrUtil.isBlank(entity.getPath())) {
+            throw new CustomException("文件路径不能为空");
+        }
+        if (entity.getFileSize() == null || entity.getFileSize() < 0) {
+            entity.setFileSize(0L);
+        }
+        if (StrUtil.isBlank(entity.getFileExt()) && entity.getName().contains(".")) {
+            entity.setFileExt(StrUtil.subAfter(entity.getName(), ".", true));
+        }
+        if (entity.getSyncStatus() == null) {
+            entity.setSyncStatus(KnowledgeFileSyncStatusEnum.WAIT.getKey());
+        }
+    }
+
+    @Override
+    protected QueryWrapper<KnowledgeFile> getQueryWrapper(CommonPageInfo commonPageInfo) {
+        QueryWrapper<KnowledgeFile> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        if (StrUtil.isEmpty(commonPageInfo.getObjectId())) {
+            queryWrapper.apply("1 = 0");
+            return queryWrapper;
+        }
+        queryWrapper.eq(MybatisPlusUtil.toColumns(KnowledgeFile::getKnowledgeId), commonPageInfo.getObjectId());
+        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(KnowledgeFile::getCreateTime));
+        return queryWrapper;
+    }
+
+    @Override
+    public List<KnowledgeFile> selectByKnowledgeId(String knowledgeId) {
+        QueryWrapper<KnowledgeFile> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(KnowledgeFile::getKnowledgeId), knowledgeId);
+        queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(KnowledgeFile::getCreateTime));
+        return list(queryWrapper);
+    }
+
+    @Override
+    public List<KnowledgeFile> selectNeedSync(String knowledgeId) {
+        QueryWrapper<KnowledgeFile> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(KnowledgeFile::getKnowledgeId), knowledgeId);
+        queryWrapper.in(MybatisPlusUtil.toColumns(KnowledgeFile::getSyncStatus),
+            Arrays.asList(KnowledgeFileSyncStatusEnum.WAIT.getKey(), KnowledgeFileSyncStatusEnum.FAIL.getKey()));
+        queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(KnowledgeFile::getCreateTime));
+        return list(queryWrapper);
+    }
+
+    @Override
+    public int syncPendingFiles(Knowledge knowledge, AiApiKey apiKey) {
+        List<KnowledgeFile> files = selectNeedSync(knowledge.getId());
+        if (CollectionUtil.isEmpty(files)) {
+            return 0;
+        }
+        int success = 0;
+        for (KnowledgeFile file : files) {
+            try {
+                syncOneFile(knowledge, apiKey, file);
+                success++;
+            } catch (Exception e) {
+                markFail(file, e.getMessage());
+                LOGGER.warn("知识库[{}]文件[{}]同步失败: {}", knowledge.getId(), file.getName(), e.getMessage());
+                throw e instanceof CustomException ? (CustomException) e
+                    : new CustomException("文件「" + file.getName() + "」同步失败: " + e.getMessage());
+            }
+        }
+        return success;
+    }
+
+    @Override
+    public void deletePreExecution(String id) {
+        KnowledgeFile file = super.selectById(id);
+        if (file == null || StrUtil.isBlank(file.getId())) {
+            return;
+        }
+        // ① 同步进行中禁止删除，避免半截上传后对象对不上
+        if (knowledgeSyncHistoryService.hasRunning(file.getKnowledgeId())) {
+            throw new CustomException("该知识库正在同步中，请稍后再试");
+        }
+        AiApiKey apiKey = null;
+        try {
+            apiKey = aiApiKeyService.selectEnabledKeyByKnowledgeId(file.getKnowledgeId());
+        } catch (Exception e) {
+            LOGGER.warn("删除知识库文件时未找到可用 AI 配置 knowledgeId={}: {}", file.getKnowledgeId(), e.getMessage());
+        }
+        // ② 先清 S3 + 平台文档，再删本地，最后由框架删库记录
+        deleteRemote(file, apiKey);
+        deleteLocalFile(file.getPath());
+    }
+
+    @Override
+    public void deleteByKnowledgeId(String knowledgeId) {
+        // ① 查出该知识库下全部上传文件
+        List<KnowledgeFile> files = selectByKnowledgeId(knowledgeId);
+        if (CollectionUtil.isEmpty(files)) {
+            return;
+        }
+        AiApiKey apiKey = null;
+        try {
+            apiKey = aiApiKeyService.selectEnabledKeyByKnowledgeId(knowledgeId);
+        } catch (Exception e) {
+            LOGGER.warn("删除知识库文件时未找到可用 AI 配置 knowledgeId={}: {}", knowledgeId, e.getMessage());
+        }
+        // ② 逐个清远端 + 本地
+        for (KnowledgeFile file : files) {
+            deleteRemote(file, apiKey);
+            deleteLocalFile(file.getPath());
+        }
+        // ③ 再删库记录
+        QueryWrapper<KnowledgeFile> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(KnowledgeFile::getKnowledgeId), knowledgeId);
+        remove(queryWrapper);
+    }
+
+    private void syncOneFile(Knowledge knowledge, AiApiKey apiKey, KnowledgeFile file) {
+        // ① 解析本地绝对路径，文件必须还在磁盘上
+        String localAbsPath = resolveLocalAbsPath(file.getPath());
+        if (StrUtil.isBlank(localAbsPath) || !new File(localAbsPath).isFile()) {
+            throw new CustomException("本地文件不存在: " + file.getName());
+        }
+        // ② 失败重同步：先删旧 S3 对象，避免残留
+        if (StrUtil.isNotBlank(file.getS3ObjectId()) && StrUtil.isNotBlank(file.getStorageConfigId())) {
+            try {
+                iUploadService.deleteFromFileStorage(file.getStorageConfigId(), file.getS3ObjectId());
+            } catch (Exception e) {
+                LOGGER.warn("覆盖同步前删除旧 S3 对象失败 path={}: {}", file.getS3ObjectId(), e.getMessage());
+            }
+        }
+        // ③ 上传到文件存储器（S3/TOS），得到 url / tosPath / 对象路径
+        String objectDir = AiKnowledgeUploadHelper.buildObjectDir(knowledge.getId());
+        String storageFileName = StrUtil.blankToDefault(file.getName(), "file.bin");
+        AiPlatformEnum platform = AiPlatformEnum.getName(apiKey.getPlatform());
+        String configId = StrUtil.blankToDefault(knowledge.getFileConfigId(), StrUtil.EMPTY);
+        Integer storage = null;
+        if (StrUtil.isBlank(configId) && AiPlatformEnum.DOU_BAO == platform) {
+            storage = FILE_STORAGE_S3;
+        }
+        Map<String, Object> storageResult = iUploadService.uploadToFileStorage(
+            configId, storage, FileConstants.FileUploadPath.KNOWLG_CONTENT.getType()[0],
+            storageFileName, StrUtil.EMPTY, localAbsPath, objectDir);
+        boolean uploaded = isUploaded(storageResult);
+        String fileUrl = uploaded ? str(storageResult.get("url")) : StrUtil.EMPTY;
+        String tosPath = uploaded ? str(storageResult.get("tosPath")) : StrUtil.EMPTY;
+        String storageConfigId = uploaded ? str(storageResult.get("configId")) : StrUtil.EMPTY;
+        String s3ObjectId = uploaded ? str(storageResult.get("path")) : StrUtil.EMPTY;
+        // ④ 豆包必须有公网 URL 或 TOS 路径，否则无法 doc/add
+        if (AiPlatformEnum.DOU_BAO == platform) {
+            if (!uploaded || (StrUtil.isBlank(fileUrl) && StrUtil.isBlank(tosPath))) {
+                throw new CustomException("豆包知识库同步需要可用的文件存储器（请在知识库配置中指定文件配置，或配置 S3/TOS）");
+            }
+        }
+        // ⑤ 按平台导入知识库文档，拿到 platformDocId（删除时用）
+        AiKnowledgeClient client = aiFactory.getKnowledgeClient(platform);
+        String platformDocId = client.uploadFile(apiKey.toAiKnowledgeConfig(), storageFileName, fileUrl, tosPath);
+        // ⑥ 回写同步成功：状态、S3 对象 ID、存储配置、平台文档 ID
+        UpdateWrapper<KnowledgeFile> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, file.getId());
+        updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeFile::getSyncStatus),
+            KnowledgeFileSyncStatusEnum.SUCCESS.getKey());
+        updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeFile::getS3ObjectId), s3ObjectId);
+        updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeFile::getStorageConfigId), storageConfigId);
+        updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeFile::getPlatformDocId),
+            StrUtil.blankToDefault(platformDocId, StrUtil.EMPTY));
+        updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeFile::getSyncTime), DateUtil.getTimeAndToString());
+        updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeFile::getErrorMsg), StrUtil.EMPTY);
+        update(updateWrapper);
+        file.setSyncStatus(KnowledgeFileSyncStatusEnum.SUCCESS.getKey());
+        file.setS3ObjectId(s3ObjectId);
+        file.setStorageConfigId(storageConfigId);
+        file.setPlatformDocId(platformDocId);
+    }
+
+    private void markFail(KnowledgeFile file, String errorMsg) {
+        UpdateWrapper<KnowledgeFile> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, file.getId());
+        updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeFile::getSyncStatus),
+            KnowledgeFileSyncStatusEnum.FAIL.getKey());
+        if (StrUtil.isNotBlank(errorMsg)) {
+            String msg = errorMsg.length() > ERROR_MSG_LIMIT ? errorMsg.substring(0, ERROR_MSG_LIMIT) : errorMsg;
+            updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeFile::getErrorMsg), msg);
+        }
+        update(updateWrapper);
+    }
+
+    private void deleteRemote(KnowledgeFile file, AiApiKey apiKey) {
+        // ① 按存储配置 + 对象路径删 S3/TOS
+        if (StrUtil.isNotBlank(file.getStorageConfigId()) && StrUtil.isNotBlank(file.getS3ObjectId())) {
+            try {
+                iUploadService.deleteFromFileStorage(file.getStorageConfigId(), file.getS3ObjectId());
+            } catch (Exception e) {
+                LOGGER.warn("删除知识库 S3 文件失败 configId={} path={}: {}",
+                    file.getStorageConfigId(), file.getS3ObjectId(), e.getMessage());
+            }
+        }
+        // ② 按平台文档 ID 删知识库侧文档
+        if (apiKey != null && StrUtil.isNotBlank(file.getPlatformDocId())) {
+            try {
+                AiPlatformEnum platform = AiPlatformEnum.getName(apiKey.getPlatform());
+                aiFactory.getKnowledgeClient(platform).deleteDoc(apiKey.toAiKnowledgeConfig(), file.getPlatformDocId());
+            } catch (Exception e) {
+                LOGGER.warn("删除平台知识库文档失败 docId={}: {}", file.getPlatformDocId(), e.getMessage());
+            }
+        }
+    }
+
+    private void deleteLocalFile(String visitPath) {
+        String abs = resolveLocalAbsPath(visitPath);
+        if (StrUtil.isBlank(abs)) {
+            return;
+        }
+        try {
+            FileUtil.deleteFile(abs);
+        } catch (Exception e) {
+            LOGGER.warn("删除知识库本地文件失败 path={}: {}", abs, e.getMessage());
+        }
+    }
+
+    private String resolveLocalAbsPath(String visitPath) {
+        if (StrUtil.isBlank(visitPath)) {
+            return StrUtil.EMPTY;
+        }
+        String path = visitPath.replace('\\', '/');
+        if (path.startsWith(tPath)) {
+            return path;
+        }
+        int type = FileConstants.FileUploadPath.KNOWLG_CONTENT.getType()[0];
+        String visitPrefix = FileConstants.FileUploadPath.getVisitPath(type);
+        String savePrefix = FileConstants.FileUploadPath.getSavePath(type);
+        if (path.contains(visitPrefix)) {
+            String name = path.substring(path.indexOf(visitPrefix) + visitPrefix.length());
+            return tPath + savePrefix + "/" + name;
+        }
+        if (path.startsWith("/")) {
+            return tPath + path;
+        }
+        return tPath + "/" + path;
+    }
+
+    private boolean isUploaded(Map<String, Object> storageResult) {
+        if (storageResult == null) {
+            return false;
+        }
+        Object uploaded = storageResult.get("uploaded");
+        if (uploaded instanceof Boolean) {
+            return (Boolean) uploaded;
+        }
+        return "true".equalsIgnoreCase(String.valueOf(uploaded));
+    }
+
+    private String str(Object value) {
+        return value == null ? StrUtil.EMPTY : value.toString();
+    }
+
+}

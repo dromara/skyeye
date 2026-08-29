@@ -35,6 +35,19 @@ public interface AiKnowledgeClient {
     }
 
     /**
+     * 上传原始文件（PDF/Word 等）到平台知识库。默认按 URL/TOS 走 uploadText。
+     */
+    default String uploadFile(AiKnowledgeConfig config, String fileName, String fileUrl, String tosPath) {
+        return uploadText(config, fileName, StrUtil.EMPTY, fileUrl, tosPath, fileName);
+    }
+
+    /**
+     * 按平台文档 ID 删除。不支持时忽略。
+     */
+    default void deleteDoc(AiKnowledgeConfig config, String docId) {
+    }
+
+    /**
      * 平台侧检索，返回可拼进 prompt 的文本；不支持时返回空。
      */
     String search(AiKnowledgeConfig config, String query, int topN);

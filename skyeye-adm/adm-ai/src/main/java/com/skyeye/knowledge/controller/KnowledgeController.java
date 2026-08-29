@@ -12,6 +12,8 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.knowledge.entity.Knowledge;
+import com.skyeye.knowledge.entity.KnowledgeFile;
+import com.skyeye.knowledge.service.KnowledgeFileService;
 import com.skyeye.knowledge.service.KnowledgeService;
 import com.skyeye.knowledge.service.KnowledgeSyncHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class KnowledgeController {
 
     @Autowired
     private KnowledgeSyncHistoryService knowledgeSyncHistoryService;
+
+    @Autowired
+    private KnowledgeFileService knowledgeFileService;
 
     @ApiOperation(id = "writeAiKnowledge", value = "新增/编辑AI知识库", method = "POST", allUse = "1")
     @ApiImplicitParams(classBean = Knowledge.class)
@@ -123,6 +128,28 @@ public class KnowledgeController {
     @RequestMapping("/post/knowledgeController/queryAiKnowledgeSyncHistory")
     public void queryAiKnowledgeSyncHistory(InputObject inputObject, OutputObject outputObject) {
         knowledgeSyncHistoryService.queryPageList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "writeAiKnowledgeFile", value = "新增AI知识库文件", method = "POST", allUse = "1")
+    @ApiImplicitParams(classBean = KnowledgeFile.class)
+    @RequestMapping("/post/knowledgeController/writeAiKnowledgeFile")
+    public void writeAiKnowledgeFile(InputObject inputObject, OutputObject outputObject) {
+        knowledgeFileService.saveOrUpdateEntity(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryAiKnowledgeFile", value = "分页查询AI知识库文件", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
+    @RequestMapping("/post/knowledgeController/queryAiKnowledgeFile")
+    public void queryAiKnowledgeFile(InputObject inputObject, OutputObject outputObject) {
+        knowledgeFileService.queryPageList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "deleteAiKnowledgeFileById", value = "删除AI知识库文件", method = "DELETE", allUse = "1")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
+    @RequestMapping("/post/knowledgeController/deleteAiKnowledgeFileById")
+    public void deleteAiKnowledgeFileById(InputObject inputObject, OutputObject outputObject) {
+        knowledgeFileService.deleteById(inputObject, outputObject);
     }
 
 }

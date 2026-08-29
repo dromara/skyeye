@@ -4,12 +4,14 @@
 
 package com.skyeye.ai.core.doubao;
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.ai.core.knowledge.AiKnowledgeClient;
 import com.skyeye.ai.core.knowledge.AiKnowledgeConfig;
+import com.skyeye.ai.core.knowledge.AiKnowledgeUploadHelper;
 import com.skyeye.exception.CustomException;
 import okhttp3.*;
 
@@ -43,32 +45,74 @@ public class DouBaoKnowledgeClient implements AiKnowledgeClient {
     @Override
     public String uploadText(AiKnowledgeConfig config, String fileName, String content,
                              String fileUrl, String tosPath, String platformDocName) {
+        return addDoc(config, fileName, fileUrl, tosPath, platformDocName, true);
+    }
+
+    @Override
+    public String uploadFile(AiKnowledgeConfig config, String fileName, String fileUrl, String tosPath) {
+        return addDoc(config, fileName, fileUrl, tosPath, fileName, false);
+    }
+
+    @Override
+    public void deleteDoc(AiKnowledgeConfig config, String docId) {
+        if (StrUtil.isBlank(docId)) {
+            return;
+        }
+        check(config);
+        JSONArray ids = JSONUtil.createArray();
+        ids.add(docId);
+        JSONObject body = JSONUtil.createObj().set("doc_ids", ids);
+        fillKnowledgeId(body, config.getKnowledgeId());
+        try {
+            postJson(resolveVikingKey(config), "/api/knowledge/doc/delete", body);
+        } catch (CustomException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new CustomException("豆包知识库删除文档失败: " + e.getMessage());
+        }
+    }
+
+    private String addDoc(AiKnowledgeConfig config, String fileName, String fileUrl, String tosPath,
+                          String platformDocName, boolean forceTxt) {
         check(config);
         String vikingKey = resolveVikingKey(config);
         String knowledgeId = config.getKnowledgeId();
         String displayName = StrUtil.blankToDefault(platformDocName, fileName);
         String docId = sanitizeDocId(displayName);
-        String docName = StrUtil.blankToDefault(displayName, docId + ".txt");
-        if (!StrUtil.endWithIgnoreCase(docName, ".txt")) {
+        if (!forceTxt) {
+            docId = docId + "_" + IdUtil.fastSimpleUUID().substring(0, 8);
+        }
+        String docName = StrUtil.blankToDefault(displayName, docId + (forceTxt ? ".txt" : ""));
+        if (forceTxt && !StrUtil.endWithIgnoreCase(docName, ".txt")) {
             docName = docName + ".txt";
         }
         try {
+            // ① 组装 doc/add：优先 TOS，否则公网 URL
             JSONObject body = JSONUtil.createObj();
             fillKnowledgeId(body, knowledgeId);
+            String docType = AiKnowledgeUploadHelper.resolveDocType(docName);
+            if (forceTxt) {
+                docType = "txt";
+            }
             if (StrUtil.isNotBlank(tosPath)) {
-                // tos_path = bucket/objectKey，不要 tos:// 前缀；需在控制台完成 TOS 授权
-                body.set("add_type", "tos").set("tos_path", StrUtil.removePrefix(tosPath.trim(), "tos://"));
+                body.set("add_type", "tos")
+                    .set("tos_path", StrUtil.removePrefix(tosPath.trim(), "tos://"))
+                    .set("doc_id", docId)
+                    .set("doc_name", docName)
+                    .set("doc_type", docType);
             } else if (StrUtil.isNotBlank(fileUrl)) {
                 body.set("add_type", "url")
                     .set("doc_id", docId)
                     .set("doc_name", docName)
-                    .set("doc_type", "txt")
+                    .set("doc_type", docType)
                     .set("url", fileUrl);
             } else {
                 throw new CustomException("豆包知识库需要文件存储器返回的 url 或 tosPath（请配置默认 S3/TOS 存储器）");
             }
+            // ② 调用平台导入
             JSONObject json = postJson(vikingKey, "/api/knowledge/doc/add", body);
             String returnedDocId = resolveReturnedDocId(json, docId);
+            // ③ 轮询直到文档处理完成（失败/超时直接抛错）
             waitDocReady(vikingKey, knowledgeId, returnedDocId);
             return returnedDocId;
         } catch (CustomException e) {

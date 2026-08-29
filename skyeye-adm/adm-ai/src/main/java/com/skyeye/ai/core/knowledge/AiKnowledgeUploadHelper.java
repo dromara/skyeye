@@ -39,6 +39,24 @@ public final class AiKnowledgeUploadHelper {
     }
 
     /**
+     * 按文件名推断平台文档类型（豆包 doc_type）。
+     */
+    public static String resolveDocType(String fileName) {
+        String ext = StrUtil.subAfter(StrUtil.blankToDefault(fileName, ""), ".", true);
+        if (StrUtil.isBlank(ext)) {
+            return "txt";
+        }
+        ext = ext.toLowerCase();
+        if ("md".equals(ext) || "markdown".equals(ext)) {
+            return "markdown";
+        }
+        if ("htm".equals(ext)) {
+            return "html";
+        }
+        return ext;
+    }
+
+    /**
      * 平台知识库展示用文档名：{知识库id}_{日期}_part_{序号}.txt
      * （豆包 doc_name 不允许含 /，目录信息用下划线表达）
      */
