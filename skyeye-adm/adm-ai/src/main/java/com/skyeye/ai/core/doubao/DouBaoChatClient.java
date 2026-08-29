@@ -79,6 +79,8 @@ public class DouBaoChatClient {
         JSONObject body = new JSONObject();
         body.set("model", resolveModel(vision));
         body.set("stream", true);
+        // ① Seed 系列需显式开启思考，SSE 才会推 reasoning_content
+        body.set("thinking", JSONUtil.createObj().set("type", "enabled"));
         body.set("messages", vision ? buildVisionMessages(messages, sendableImages) : messages);
 
         Request request = new Request.Builder()
