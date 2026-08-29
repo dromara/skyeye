@@ -16,21 +16,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 平台 AI 引导控制层。
+ * 平台办公 AI 控制层。
  */
 @RestController
-@Api(value = "平台AI引导", tags = "平台AI引导", modelName = "平台AI引导")
+@Api(value = "平台办公AI", tags = "平台办公AI", modelName = "平台办公AI")
 public class PlatformAiGuideController {
 
     @Autowired
     private PlatformAiGuideService platformAiGuideService;
 
-    @ApiOperation(id = "aiGeneratePlatformGuide", value = "AI平台全量引导", method = "POST", allUse = "2")
+    @ApiOperation(id = "aiGeneratePlatformGuide", value = "平台办公AI对话", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "question", name = "question", value = "用户问题", required = "required"),
         @ApiImplicitParam(id = "pageTitle", name = "pageTitle", value = "当前页面标题"),
-        @ApiImplicitParam(id = "pagePath", name = "pagePath", value = "当前页面路径"),
-        @ApiImplicitParam(id = "menus", name = "menus", value = "当前用户有权限的菜单JSON")})
+        @ApiImplicitParam(id = "pagePath", name = "pagePath", value = "当前页面路径")})
     @RequestMapping("/post/PlatformAiGuideController/aiGeneratePlatformGuide")
     public void aiGeneratePlatformGuide(InputObject inputObject, OutputObject outputObject) {
         platformAiGuideService.generate(inputObject, outputObject);

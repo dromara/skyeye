@@ -33,6 +33,9 @@ public class RoleServiceImpl extends SkyeyeBusinessServiceImpl<RoleDao, Role> im
     @Override
     public void validatorEntity(Role entity) {
         super.validatorEntity(entity);
+        if (StrUtil.isBlank(entity.getPrompt())) {
+            entity.setPrompt(Role.DEFAULT_PROMPT);
+        }
         if (StrUtil.isNotBlank(entity.getKnowledgeId())) {
             Knowledge knowledge = knowledgeService.selectById(entity.getKnowledgeId());
             if (knowledge == null || StrUtil.isBlank(knowledge.getId())) {
