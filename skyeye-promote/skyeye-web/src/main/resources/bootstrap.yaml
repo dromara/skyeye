@@ -48,6 +48,8 @@ webroot:
   skyeye-checkwork: skyeye-adm-${spring.profiles.active}
   # 薪资
   skyeye-wages: skyeye-adm-${spring.profiles.active}
+  # 行政/AI
+  skyeye-adm: skyeye-adm-${spring.profiles.active}
   # xxl-job
   xxl-job: xxl-job-${spring.profiles.active}
 

@@ -11,7 +11,7 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 172.18.92.41:8848
+        server-addr: 127.0.0.1:9000
         file-extension: yml
         namespace: ${spring.profiles.active}
         # 与 skyeye 体系一致，拉取公共 jdbc 等
@@ -20,7 +20,7 @@ spring:
             group: DEFAULT_GROUP
             refresh: false
       discovery:
-        server-addr: 172.18.92.41:8848
+        server-addr: 127.0.0.1:9000
         namespace: ${spring.profiles.active}
         service: ${spring.application.name}
         group: DEFAULT_GROUP

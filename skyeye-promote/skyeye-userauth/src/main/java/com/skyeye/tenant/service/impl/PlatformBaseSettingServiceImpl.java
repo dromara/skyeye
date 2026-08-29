@@ -236,9 +236,22 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
     @Override
     @IgnoreTenant
     public String getAiRoleId() {
-        Map<String, Object> aiGroup = getAiGroupSetting();
-        Object roleId = aiGroup.get(PlatformBaseSettingConst.KEY_AI_ROLE_ID);
-        return ObjectUtil.isEmpty(roleId) ? StrUtil.EMPTY : roleId.toString();
+        return getAiGroupString(PlatformBaseSettingConst.KEY_AI_ROLE_ID);
+    }
+
+    @Override
+    @IgnoreTenant
+    public void queryPlatformOaAiRole(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> data = new HashMap<>();
+        data.put(PlatformBaseSettingConst.KEY_OA_AI_ROLE_ID, getOaAiRoleId());
+        outputObject.setBean(data);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    @IgnoreTenant
+    public String getOaAiRoleId() {
+        return getAiGroupString(PlatformBaseSettingConst.KEY_OA_AI_ROLE_ID);
     }
 
     @Override
@@ -278,6 +291,7 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         settingData.put(PlatformBaseSettingGroup.TENANT.getKey(), tenantGroup);
         Map<String, Object> aiGroup = new HashMap<>();
         aiGroup.put(PlatformBaseSettingConst.KEY_AI_ROLE_ID, StrUtil.EMPTY);
+        aiGroup.put(PlatformBaseSettingConst.KEY_OA_AI_ROLE_ID, StrUtil.EMPTY);
         settingData.put(PlatformBaseSettingGroup.AI.getKey(), aiGroup);
         return settingData;
     }
@@ -407,7 +421,6 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
     /**
      * 按分组校验设置项；新增分组时在此扩展校验规则
      */
-    @SuppressWarnings("unchecked")
     private void validateSettingData(Map<String, Map<String, Object>> settingData) {
         if (MapUtil.isEmpty(settingData)) {
             return;
@@ -417,11 +430,25 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
             validateTenantGroup(tenantGroup);
         }
         Map<String, Object> aiGroup = settingData.get(PlatformBaseSettingGroup.AI.getKey());
-        if (MapUtil.isNotEmpty(aiGroup) && aiGroup.containsKey(PlatformBaseSettingConst.KEY_AI_ROLE_ID)) {
-            Object roleId = aiGroup.get(PlatformBaseSettingConst.KEY_AI_ROLE_ID);
-            if (ObjectUtil.isNotEmpty(roleId) && StrUtil.isBlank(roleId.toString().trim())) {
-                aiGroup.put(PlatformBaseSettingConst.KEY_AI_ROLE_ID, StrUtil.EMPTY);
-            }
+        if (MapUtil.isNotEmpty(aiGroup)) {
+            normalizeOptionalString(aiGroup, PlatformBaseSettingConst.KEY_AI_ROLE_ID);
+            normalizeOptionalString(aiGroup, PlatformBaseSettingConst.KEY_OA_AI_ROLE_ID);
+        }
+    }
+
+    private String getAiGroupString(String key) {
+        Map<String, Object> aiGroup = getAiGroupSetting();
+        Object value = aiGroup.get(key);
+        return ObjectUtil.isEmpty(value) ? StrUtil.EMPTY : value.toString();
+    }
+
+    private void normalizeOptionalString(Map<String, Object> group, String key) {
+        if (!group.containsKey(key)) {
+            return;
+        }
+        Object value = group.get(key);
+        if (ObjectUtil.isNotEmpty(value) && StrUtil.isBlank(value.toString().trim())) {
+            group.put(key, StrUtil.EMPTY);
         }
     }
 

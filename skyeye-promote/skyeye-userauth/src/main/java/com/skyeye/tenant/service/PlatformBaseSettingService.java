@@ -71,13 +71,23 @@ public interface PlatformBaseSettingService extends SkyeyeBusinessService<Platfo
     void queryPlatformTenantCreateConfig(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 查询平台绑定的 AI 角色 id（所有租户可读）
+     * 查询平台绑定的研发/需求 AI 角色 id（所有租户可读）
      */
     void queryPlatformAiRole(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 获取平台绑定的 AI 角色 id，未配置时返回空字符串
+     * 获取平台绑定的研发/需求 AI 角色 id，未配置时返回空字符串
      */
     String getAiRoleId();
+
+    /**
+     * 查询平台绑定的办公OA AI 角色 id（所有租户可读）
+     */
+    void queryPlatformOaAiRole(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 获取平台绑定的办公OA AI 角色 id，未配置时返回空字符串
+     */
+    String getOaAiRoleId();
 
 }

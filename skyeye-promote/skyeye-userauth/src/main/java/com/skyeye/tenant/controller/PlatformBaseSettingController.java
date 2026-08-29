@@ -66,4 +66,10 @@ public class PlatformBaseSettingController {
         platformBaseSettingService.queryPlatformAiRole(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryPlatformOaAiRole", value = "获取平台绑定的办公OA AI角色", method = "GET", allUse = "2")
+    @RequestMapping("/post/PlatformBaseSettingController/queryPlatformOaAiRole")
+    public void queryPlatformOaAiRole(InputObject inputObject, OutputObject outputObject) {
+        platformBaseSettingService.queryPlatformOaAiRole(inputObject, outputObject);
+    }
+
 }
