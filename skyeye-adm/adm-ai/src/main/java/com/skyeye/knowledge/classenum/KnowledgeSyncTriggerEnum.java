@@ -18,7 +18,8 @@ import lombok.NoArgsConstructor;
 public enum KnowledgeSyncTriggerEnum implements SkyeyeEnumClass {
 
     MANUAL(1, "手动同步", true, true),
-    SCHEDULE(2, "定时同步", true, false);
+    SCHEDULE(2, "定时同步", true, false),
+    FILE(3, "单文件同步", true, false);
 
     private Integer key;
 

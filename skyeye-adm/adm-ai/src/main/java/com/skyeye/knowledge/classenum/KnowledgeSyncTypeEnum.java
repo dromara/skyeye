@@ -17,12 +17,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public enum KnowledgeSyncTypeEnum implements SkyeyeEnumClass {
 
-    FULL(1, "全量同步", true, true),
-    INCREMENTAL(2, "增量同步", true, false);
+    FULL(1, "全量同步", "green", true, true),
+    INCREMENTAL(2, "增量同步", "blue", true, false);
 
     private Integer key;
 
     private String value;
+
+    private String color;
 
     private Boolean show;
 

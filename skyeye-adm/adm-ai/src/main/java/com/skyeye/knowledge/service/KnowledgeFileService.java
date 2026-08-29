@@ -5,6 +5,8 @@
 package com.skyeye.knowledge.service;
 
 import com.skyeye.base.business.service.SkyeyeBusinessService;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.key.entity.AiApiKey;
 import com.skyeye.knowledge.entity.Knowledge;
 import com.skyeye.knowledge.entity.KnowledgeFile;
@@ -18,6 +20,11 @@ public interface KnowledgeFileService extends SkyeyeBusinessService<KnowledgeFil
     List<KnowledgeFile> selectNeedSync(String knowledgeId);
 
     int syncPendingFiles(Knowledge knowledge, AiApiKey apiKey);
+
+    /**
+     * 单独同步一个上传文件（写入同步历史）
+     */
+    void syncFileById(InputObject inputObject, OutputObject outputObject);
 
     void deleteByKnowledgeId(String knowledgeId);
 

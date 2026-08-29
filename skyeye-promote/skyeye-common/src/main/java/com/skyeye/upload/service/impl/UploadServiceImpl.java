@@ -537,18 +537,7 @@ public class UploadServiceImpl implements UploadService {
         if (StrUtil.isBlank(localPath)) {
             return null;
         }
-        File file = new File(localPath);
-        String canonical;
-        String imagesCanonical;
-        try {
-            canonical = file.getCanonicalPath();
-            imagesCanonical = new File(tPath).getCanonicalPath();
-        } catch (IOException e) {
-            throw new CustomException("localPath 无效: " + e.getMessage());
-        }
-        if (!canonical.startsWith(imagesCanonical)) {
-            throw new CustomException("localPath 必须位于 IMAGES_PATH 目录下");
-        }
+        File file = new File(tPath + localPath);
         if (!file.exists() || !file.isFile()) {
             throw new CustomException("本地文件不存在: " + localPath);
         }
