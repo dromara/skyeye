@@ -22,9 +22,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public enum AutoScoreTypeEnum implements SkyeyeEnumClass {
 
+    /** 角色完成并发放初始积分 */
     FRONT_GRANT("frontGrant", "前端需求积分", true, true),
     BACK_GRANT("backGrant", "后端需求积分", true, false),
     TEST_GRANT("testGrant", "测试需求积分", true, false),
+    /** 实际完成晚于预计结束时间：晚一天扣 2 分（流水为负数） */
+    FRONT_LATE_PENALTY("frontLatePenalty", "前端延期扣分", true, false),
+    BACK_LATE_PENALTY("backLatePenalty", "后端延期扣分", true, false),
+    TEST_LATE_PENALTY("testLatePenalty", "测试延期扣分", true, false),
+    /** Bug 相关扣分 */
     BUG_PENALTY("bugPenalty", "Bug扣分", true, false),
     BUG_NON_ISSUE("bugNonIssue", "非问题扣分", true, false);
 

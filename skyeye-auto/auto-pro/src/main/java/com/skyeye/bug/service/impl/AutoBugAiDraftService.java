@@ -56,6 +56,16 @@ public class AutoBugAiDraftService {
         return parseDraft(autoAiChatHelper.requireAnswer(params));
     }
 
+    /**
+     * 自动化用例/步骤执行失败上下文 → Bug 草稿。
+     */
+    public Map<String, Object> generateFromCaseFailure(Map<String, Object> params) {
+        if (params.get("objectId") == null || StrUtil.isBlank(params.get("objectId").toString())) {
+            throw new CustomException("objectId不能为空");
+        }
+        return autoAiChatHelper.startStreamingChat(buildCaseFailureContent(params), "bugDraft");
+    }
+
     private List<String> readImages(String raw) {
         if (StrUtil.isEmpty(raw)) {
             return new ArrayList<>();
@@ -111,11 +121,97 @@ public class AutoBugAiDraftService {
         return sb.toString();
     }
 
+    private String buildCaseFailureContent(Map<String, Object> params) {
+        String objectId = params.get("objectId").toString();
+        String moduleId = params.get("moduleId") == null ? "" : params.get("moduleId").toString();
+        String caseName = params.get("caseName") == null ? "" : params.get("caseName").toString();
+        String stepName = params.get("stepName") == null ? "" : params.get("stepName").toString();
+        String resultKey = params.get("resultKey") == null ? "" : params.get("resultKey").toString();
+        String failMessage = params.get("failMessage") == null ? "" : params.get("failMessage").toString();
+        String inputParams = AutoAiJsonHelper.normalizeJsonText(params.get("inputParams"));
+        String output = AutoAiJsonHelper.normalizeJsonText(params.get("output"));
+        String assertList = params.get("assertList") == null
+            ? "[]" : AutoAiJsonHelper.normalizeJsonText(params.get("assertList"));
+        String apiDetail = params.get("apiDetail") == null
+            ? "{}" : AutoAiJsonHelper.normalizeJsonText(params.get("apiDetail"));
+        StringBuilder sb = new StringBuilder();
+        sb.append("你是软件测试工程师。根据自动化用例执行失败信息，生成 Bug 草稿，只输出 JSON，不要 markdown 代码块。\n");
+        sb.append("请写清：失败现象、复现步骤（结合用例与步骤名）、预期结果、实际结果（引用失败输出/断言）。\n");
+        sb.append("项目：").append(AutoAiHtmlHelper.nvlText(autoAiProjectContextHelper.loadProjectName(objectId))).append("\n");
+        if (StrUtil.isNotBlank(moduleId)) {
+            sb.append("用例模块：").append(AutoAiHtmlHelper.nvlText(autoAiProjectContextHelper.loadModuleName(moduleId))).append("\n");
+        }
+        sb.append("用例名称：").append(StrUtil.blankToDefault(caseName, "无")).append("\n");
+        sb.append("失败步骤：").append(StrUtil.blankToDefault(stepName, "无")).append("\n");
+        sb.append("步骤编码(resultKey)：").append(StrUtil.blankToDefault(resultKey, "无")).append("\n");
+        sb.append("失败摘要：").append(StrUtil.blankToDefault(failMessage, "无")).append("\n");
+        sb.append("步骤入参(JSON)：\n").append(inputParams).append("\n");
+        sb.append("步骤输出(JSON)：\n").append(output).append("\n");
+        sb.append("断言结果(JSON)：\n").append(assertList).append("\n");
+        sb.append("API 请求详情(JSON，含 url/method/inputValue/outputValue 等)：\n").append(apiDetail).append("\n");
+        appendHistoryAnalysisSection(sb, params);
+        appendOptions(sb, "可选严重性", params.get("severityOptions"));
+        appendOptions(sb, "可选必现类型", params.get("necessaryOptions"));
+        appendOptions(sb, "可选终端", params.get("terminalOptions"));
+        AutoAiJsonHelper.appendSkyeyeApiResponseRules(sb);
+        AutoAiJsonHelper.appendMarkedJsonOutput(sb,
+            "{\n"
+                + "  \"name\": \"[自动化] 步骤失败简述\",\n"
+                + "  \"contentHtml\": \"问题描述 HTML\",\n"
+                + "  \"remark\": \"来自用例执行失败\",\n"
+                + "  \"severity\": \"从可选严重性中选一个原文\",\n"
+                + "  \"necessaryToPresent\": \"必现\",\n"
+                + "  \"terminalOccurrence\": \"从可选终端中选一个原文\",\n"
+                + "  \"moduleName\": \"\"\n"
+                + "}");
+        sb.append("contentHtml 必须严格按以下 HTML 结构输出：\n");
+        sb.append("<p><strong>bug描述：</strong>…</p>");
+        sb.append("<p><strong>复现步骤：</strong><br/>1. 执行用例 …<br/>2. …</p>");
+        sb.append("<p><strong>预期结果：</strong>…</p>");
+        sb.append("<p><strong>实际结果：</strong>…（引用 returnCode/断言失败信息）</p>");
+        sb.append("<p><strong>改进需求：</strong>…</p>\n");
+        sb.append("标题建议以 [自动化] 开头；moduleName 留空除非能从上下文明确判断模块名。");
+        return sb.toString();
+    }
+
     private void appendOptions(StringBuilder sb, String title, Object value) {
         if (value == null || StrUtil.isBlank(value.toString())) {
             return;
         }
         sb.append(title).append("：").append(value.toString()).append("\n");
+    }
+
+    private void appendHistoryAnalysisSection(StringBuilder sb, Map<String, Object> params) {
+        Object summary = params.get("historyAnalysisSummary");
+        if (summary == null || StrUtil.isBlank(summary.toString())) {
+            return;
+        }
+        sb.append("\n【本次执行 AI 分析结论（请优先参考）】\n");
+        sb.append("分析摘要：").append(summary.toString().trim()).append("\n");
+        Object rootCause = params.get("historyAnalysisRootCause");
+        if (rootCause != null && StrUtil.isNotBlank(rootCause.toString())) {
+            sb.append("根因：").append(rootCause.toString().trim()).append("\n");
+        }
+        appendJsonListSection(sb, "失败步骤", params.get("historyAnalysisFailedSteps"));
+        appendJsonListSection(sb, "改进建议", params.get("historyAnalysisSuggestions"));
+    }
+
+    private void appendJsonListSection(StringBuilder sb, String title, Object raw) {
+        if (raw == null || StrUtil.isBlank(raw.toString())) {
+            return;
+        }
+        try {
+            List<String> items = JSONUtil.toList(raw.toString(), null);
+            if (items == null || items.isEmpty()) {
+                return;
+            }
+            sb.append(title).append("：\n");
+            for (int i = 0; i < items.size(); i++) {
+                sb.append(i + 1).append(". ").append(items.get(i)).append("\n");
+            }
+        } catch (Exception ignored) {
+            sb.append(title).append("：").append(raw.toString()).append("\n");
+        }
     }
 
     private Map<String, Object> parseDraft(String answer) {

@@ -7,6 +7,7 @@ package com.skyeye.portal.controller;
 import com.skyeye.annotation.api.Api;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
+import com.skyeye.annotation.operationlog.IgnoreOperationLog;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.object.InputObject;
@@ -30,6 +31,7 @@ public class PortalPageVisitLogController {
     @Autowired
     private PortalPageVisitLogService portalPageVisitLogService;
 
+    @IgnoreOperationLog
     @ApiOperation(id = "recordPortalPageVisit", value = "官网路由埋点上报", method = "POST", allUse = "0")
     @ApiImplicitParams(classBean = PortalPageVisitLog.class)
     @RequestMapping("/post/PortalPageVisitLogController/recordPortalPageVisit")

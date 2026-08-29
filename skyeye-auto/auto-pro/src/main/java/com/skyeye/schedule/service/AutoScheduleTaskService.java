@@ -5,6 +5,8 @@
 package com.skyeye.schedule.service;
 
 import com.skyeye.base.business.service.SkyeyeBusinessService;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.schedule.entity.AutoScheduleTask;
 
 /**
@@ -21,5 +23,10 @@ public interface AutoScheduleTaskService extends SkyeyeBusinessService<AutoSched
      * 按任务id执行（供 XXL 定时触发）
      */
     void executeScheduleTask(String id);
+
+    /**
+     * 手动执行定时任务
+     */
+    void executeScheduleTaskById(InputObject inputObject, OutputObject outputObject);
 
 }

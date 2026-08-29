@@ -90,6 +90,27 @@ public class AutoBugController {
         autoBugService.aiGenerateBugDraft(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "aiGenerateCaseFailureBugDraft", value = "AI根据用例执行失败生成Bug草稿", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "objectId", name = "objectId", value = "项目id", required = "required"),
+        @ApiImplicitParam(id = "objectKey", name = "objectKey", value = "项目objectKey"),
+        @ApiImplicitParam(id = "moduleId", name = "moduleId", value = "模块id"),
+        @ApiImplicitParam(id = "caseName", name = "caseName", value = "用例名称"),
+        @ApiImplicitParam(id = "stepName", name = "stepName", value = "步骤名称"),
+        @ApiImplicitParam(id = "resultKey", name = "resultKey", value = "步骤编码"),
+        @ApiImplicitParam(id = "failMessage", name = "failMessage", value = "失败摘要"),
+        @ApiImplicitParam(id = "inputParams", name = "inputParams", value = "步骤入参JSON"),
+        @ApiImplicitParam(id = "output", name = "output", value = "步骤输出JSON"),
+        @ApiImplicitParam(id = "assertList", name = "assertList", value = "断言结果JSON"),
+        @ApiImplicitParam(id = "apiDetail", name = "apiDetail", value = "API详情JSON"),
+        @ApiImplicitParam(id = "severityOptions", name = "severityOptions", value = "可选严重性"),
+        @ApiImplicitParam(id = "necessaryOptions", name = "necessaryOptions", value = "可选必现类型"),
+        @ApiImplicitParam(id = "terminalOptions", name = "terminalOptions", value = "可选终端")})
+    @RequestMapping("/post/AutoBugController/aiGenerateCaseFailureBugDraft")
+    public void aiGenerateCaseFailureBugDraft(InputObject inputObject, OutputObject outputObject) {
+        autoBugService.aiGenerateCaseFailureBugDraft(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "aiParseBugDraft", value = "解析AI Bug草稿", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "answer", name = "answer", value = "AI完整返回文本", required = "required")})

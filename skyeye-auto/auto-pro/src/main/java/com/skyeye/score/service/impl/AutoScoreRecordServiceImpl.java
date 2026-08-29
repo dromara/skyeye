@@ -57,6 +57,8 @@ import java.util.stream.Collectors;
 public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoScoreRecordDao, AutoScoreRecord> implements AutoScoreRecordService {
 
     private static final String BUG_SCORE = "2.00";
+    /** 延期扣分：实际完成日晚于预计完成日，每自然日扣 2 分 */
+    private static final String LATE_PENALTY_PER_DAY = "2.00";
 
     @Autowired
     private AutoDemandDao autoDemandDao;
@@ -75,6 +77,12 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         grantDemandScoreByStateInternal(demand);
     }
 
+    /**
+     * 按需求主状态发放角色积分：
+     * - 待测试 / 已完成：发放前端、后端初始积分（幂等，已发放则跳过）
+     * - 已完成：发放测试初始积分
+     * 发放成功后会按预计/实际结束时间尝试延期扣分。
+     */
     private int grantDemandScoreByStateInternal(AutoDemand demand) {
         if (demand == null || StrUtil.isEmpty(demand.getState())) {
             return 0;
@@ -82,8 +90,10 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         if (StrUtil.equals(demand.getState(), AutoDemandStateEnum.INVALID.getKey())) {
             return 0;
         }
+        // 研发侧：需求进入待测试或已完成时，前端/后端可领初始积分
         boolean grantDev = StrUtil.equals(demand.getState(), AutoDemandStateEnum.WAIT_TEST.getKey())
             || StrUtil.equals(demand.getState(), AutoDemandStateEnum.FINISH.getKey());
+        // 测试侧：需求整体完成时才发放测试积分
         boolean grantTest = StrUtil.equals(demand.getState(), AutoDemandStateEnum.FINISH.getKey());
         int count = 0;
         if (grantDev) {
@@ -96,59 +106,138 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         return count;
     }
 
+    /**
+     * 为单个角色写入初始积分流水，并回写角色「已完成」与已获得积分。
+     * 已获得积分 = 初始积分 + 延期扣分（扣分为负数，未延期则为 0）。
+     */
     private int grantRoleScore(AutoDemand demand, String roleKey, AutoScoreTypeEnum scoreType) {
         String handleId;
         String initScore;
+        String estimateEndTime;
+        String actualEndTime;
         if ("front".equals(roleKey)) {
             handleId = demand.getFrontHandleId();
             initScore = nvlScore(demand.getFrontInitScore());
+            estimateEndTime = demand.getFrontEstimateEndTime();
+            actualEndTime = demand.getFrontActualEndTime();
         } else if ("back".equals(roleKey)) {
             handleId = demand.getBackHandleId();
             initScore = nvlScore(demand.getBackInitScore());
+            estimateEndTime = demand.getBackEstimateEndTime();
+            actualEndTime = demand.getBackActualEndTime();
         } else {
             handleId = demand.getTestHandleId();
             initScore = nvlScore(demand.getTestInitScore());
+            estimateEndTime = demand.getTestEstimateEndTime();
+            actualEndTime = demand.getTestActualEndTime();
         }
+        // 无负责人或初始积分为 0，不发分
         if (StrUtil.isEmpty(handleId) || CalculationUtil.compareTo(initScore, "0", 2, RoundingMode.HALF_UP) <= 0) {
             return 0;
         }
+        // 同需求+用户+类型已发过则跳过（避免重复发放）
         boolean created = createIfAbsent(buildDemandRecord(demand, handleId, scoreType.getKey(), roleKey, initScore,
             "需求开发完成，获得" + roleName(roleKey) + "初始积分"));
         if (!created) {
             return 0;
         }
+        String now = DateUtil.getTimeAndToString();
+        // 角色推进完成时一般已有实际结束时间；兜底用当前时间参与延期对比
+        if (StrUtil.isEmpty(actualEndTime)) {
+            actualEndTime = now;
+        }
+        // 延期扣分流水（幂等）；返回负分或 0
+        String lateScore = applyLatePenalty(demand, roleKey, handleId, estimateEndTime, actualEndTime);
+        String earnedScore = CalculationUtil.add(initScore, lateScore, 2);
         UpdateWrapper<AutoDemand> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, demand.getId());
         if ("front".equals(roleKey)) {
-            updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getFrontEarnedScore), initScore);
+            updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getFrontEarnedScore), earnedScore);
             updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getFrontState), AutoDemandRoleStateEnum.FINISH.getKey());
             if (StrUtil.isEmpty(demand.getFrontActualEndTime())) {
-                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getFrontActualEndTime), DateUtil.getTimeAndToString());
+                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getFrontActualEndTime), actualEndTime);
             }
             if (StrUtil.isEmpty(demand.getFrontActualStartTime())) {
-                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getFrontActualStartTime), DateUtil.getTimeAndToString());
+                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getFrontActualStartTime), now);
             }
         } else if ("back".equals(roleKey)) {
-            updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getBackEarnedScore), initScore);
+            updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getBackEarnedScore), earnedScore);
             updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getBackState), AutoDemandRoleStateEnum.FINISH.getKey());
             if (StrUtil.isEmpty(demand.getBackActualEndTime())) {
-                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getBackActualEndTime), DateUtil.getTimeAndToString());
+                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getBackActualEndTime), actualEndTime);
             }
             if (StrUtil.isEmpty(demand.getBackActualStartTime())) {
-                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getBackActualStartTime), DateUtil.getTimeAndToString());
+                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getBackActualStartTime), now);
             }
         } else {
-            updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getTestEarnedScore), initScore);
+            updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getTestEarnedScore), earnedScore);
             updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getTestState), AutoDemandRoleStateEnum.FINISH.getKey());
             if (StrUtil.isEmpty(demand.getTestActualEndTime())) {
-                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getTestActualEndTime), DateUtil.getTimeAndToString());
+                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getTestActualEndTime), actualEndTime);
             }
             if (StrUtil.isEmpty(demand.getTestActualStartTime())) {
-                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getTestActualStartTime), DateUtil.getTimeAndToString());
+                updateWrapper.set(MybatisPlusUtil.toColumns(AutoDemand::getTestActualStartTime), now);
             }
         }
         autoDemandDao.update(null, updateWrapper);
         return 1;
+    }
+
+    /**
+     * 延期扣分：实际完成日与预计完成日按自然日比较。
+     * 晚天数 = getDistanceDay(预计结束, 实际结束)；晚天数大于 0 时扣分 = 晚天数 × {@link #LATE_PENALTY_PER_DAY}。
+     * 未填预计时间、日期解析失败、或未延期（含提前完成）均不扣分。
+     *
+     * @return 扣分流水分值（负数）；未扣则返回 "0"
+     */
+    private String applyLatePenalty(AutoDemand demand, String roleKey, String handleId,
+                                    String estimateEndTime, String actualEndTime) {
+        if (StrUtil.isBlank(estimateEndTime) || StrUtil.isBlank(actualEndTime) || StrUtil.isEmpty(handleId)) {
+            return "0";
+        }
+        int lateDays;
+        try {
+            // 只比日期，同一天内晚几小时不算延期
+            lateDays = DateUtil.getDistanceDay(estimateEndTime, actualEndTime);
+        } catch (Exception e) {
+            return "0";
+        }
+        if (lateDays <= 0) {
+            return "0";
+        }
+        String deduct = CalculationUtil.multiply(String.valueOf(lateDays), LATE_PENALTY_PER_DAY, 2);
+        String score = CalculationUtil.subtract("0", deduct, 2);
+        AutoScoreTypeEnum lateType = lateScoreType(roleKey);
+        String remark = String.format("晚于预计完成时间%d天，扣除%s分", lateDays, deduct);
+        boolean created = createIfAbsent(buildDemandRecord(demand, handleId, lateType.getKey(), roleKey, score, remark));
+        return created ? score : "0";
+    }
+
+    /** 角色 → 对应延期扣分流水类型 */
+    private AutoScoreTypeEnum lateScoreType(String roleKey) {
+        if ("front".equals(roleKey)) {
+            return AutoScoreTypeEnum.FRONT_LATE_PENALTY;
+        }
+        if ("back".equals(roleKey)) {
+            return AutoScoreTypeEnum.BACK_LATE_PENALTY;
+        }
+        return AutoScoreTypeEnum.TEST_LATE_PENALTY;
+    }
+
+    /** 是否计入「扣分合计」的流水类型（Bug / 非问题 / 延期） */
+    private boolean isDeductScoreType(String scoreType) {
+        return StrUtil.equals(scoreType, AutoScoreTypeEnum.BUG_PENALTY.getKey())
+            || StrUtil.equals(scoreType, AutoScoreTypeEnum.BUG_NON_ISSUE.getKey())
+            || StrUtil.equals(scoreType, AutoScoreTypeEnum.FRONT_LATE_PENALTY.getKey())
+            || StrUtil.equals(scoreType, AutoScoreTypeEnum.BACK_LATE_PENALTY.getKey())
+            || StrUtil.equals(scoreType, AutoScoreTypeEnum.TEST_LATE_PENALTY.getKey());
+    }
+
+    /** 是否为需求延期扣分类型（明细里用需求编号/标题展示） */
+    private boolean isLatePenaltyType(String scoreType) {
+        return StrUtil.equals(scoreType, AutoScoreTypeEnum.FRONT_LATE_PENALTY.getKey())
+            || StrUtil.equals(scoreType, AutoScoreTypeEnum.BACK_LATE_PENALTY.getKey())
+            || StrUtil.equals(scoreType, AutoScoreTypeEnum.TEST_LATE_PENALTY.getKey());
     }
 
     @Override
@@ -264,6 +353,7 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         }
 
         String earnedScore = "0";
+        // 字段名沿用 bugDeductScore，实际汇总 Bug 扣分 + 延期扣分
         String bugDeductScore = "0";
         List<String> bugIds = myRecords.stream()
             .map(AutoScoreRecord::getBugId)
@@ -275,25 +365,45 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
             List<AutoBug> bugs = autoBugDao.selectBatchIds(bugIds);
             bugMap = bugs.stream().collect(Collectors.toMap(AutoBug::getId, item -> item, (a, b) -> a));
         }
+        // 延期扣分关联需求，用于明细展示编号/标题
+        List<String> lateDemandIds = myRecords.stream()
+            .filter(item -> isLatePenaltyType(item.getScoreType()))
+            .map(AutoScoreRecord::getDemandId)
+            .filter(StrUtil::isNotEmpty)
+            .distinct()
+            .collect(Collectors.toList());
+        Map<String, AutoDemand> lateDemandMap = new HashMap<>();
+        if (!lateDemandIds.isEmpty()) {
+            List<AutoDemand> demands = autoDemandDao.selectBatchIds(lateDemandIds);
+            lateDemandMap = demands.stream().collect(Collectors.toMap(AutoDemand::getId, item -> item, (a, b) -> a));
+        }
         List<Map<String, Object>> bugRows = new ArrayList<>();
         for (AutoScoreRecord record : myRecords) {
             String score = nvlScore(record.getScore());
             earnedScore = CalculationUtil.add(earnedScore, score, 2);
-            if (StrUtil.equals(record.getScoreType(), AutoScoreTypeEnum.BUG_PENALTY.getKey())
-                || StrUtil.equals(record.getScoreType(), AutoScoreTypeEnum.BUG_NON_ISSUE.getKey())) {
-                bugDeductScore = CalculationUtil.add(bugDeductScore, score, 2);
+            if (!isDeductScoreType(record.getScoreType())) {
+                continue;
+            }
+            bugDeductScore = CalculationUtil.add(bugDeductScore, score, 2);
+            Map<String, Object> row = new HashMap<>();
+            row.put("scoreType", record.getScoreType());
+            row.put("scoreTypeName", scoreTypeName(record.getScoreType()));
+            row.put("score", score);
+            row.put("createTime", record.getCreateTime());
+            row.put("remark", record.getRemark());
+            if (isLatePenaltyType(record.getScoreType())) {
+                // 延期扣分：明细「编号/标题」展示需求信息
+                AutoDemand demand = lateDemandMap.get(record.getDemandId());
+                row.put("bugId", "");
+                row.put("bugNo", demand == null ? "" : demand.getNo());
+                row.put("bugName", demand == null ? "" : demand.getName());
+            } else {
                 AutoBug bug = bugMap.get(record.getBugId());
-                Map<String, Object> row = new HashMap<>();
                 row.put("bugId", record.getBugId());
                 row.put("bugNo", bug == null ? "" : bug.getNo());
                 row.put("bugName", bug == null ? "" : bug.getName());
-                row.put("scoreType", record.getScoreType());
-                row.put("scoreTypeName", scoreTypeName(record.getScoreType()));
-                row.put("score", score);
-                row.put("createTime", record.getCreateTime());
-                row.put("remark", record.getRemark());
-                bugRows.add(row);
             }
+            bugRows.add(row);
         }
         String settledScore = nvlScore(sumSettledByUser(objectId, objectKey).get(userId));
         String projectEarnedScore = sumUserEarnedScore(listScoreRecords(objectId, null, userId));
@@ -367,8 +477,7 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
             for (AutoScoreRecord record : recordGroup.getOrDefault(userId, new ArrayList<>())) {
                 String score = nvlScore(record.getScore());
                 earnedScore = CalculationUtil.add(earnedScore, score, 2);
-                if (StrUtil.equals(record.getScoreType(), AutoScoreTypeEnum.BUG_PENALTY.getKey())
-                    || StrUtil.equals(record.getScoreType(), AutoScoreTypeEnum.BUG_NON_ISSUE.getKey())) {
+                if (isDeductScoreType(record.getScoreType())) {
                     bugDeductScore = CalculationUtil.add(bugDeductScore, score, 2);
                 }
             }
@@ -603,6 +712,10 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         return record;
     }
 
+    /**
+     * 按业务唯一键幂等写入流水：存在则跳过。
+     * Bug：scoreType + bugId；需求：scoreType + demandId + userId + roleKey（同一人兼多角色时可分别发/扣分）。
+     */
     private boolean createIfAbsent(AutoScoreRecord record) {
         QueryWrapper<AutoScoreRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(AutoScoreRecord::getScoreType), record.getScoreType());
@@ -611,6 +724,10 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         } else {
             queryWrapper.eq(MybatisPlusUtil.toColumns(AutoScoreRecord::getDemandId), record.getDemandId());
             queryWrapper.eq(MybatisPlusUtil.toColumns(AutoScoreRecord::getUserId), record.getUserId());
+            // 同一用户兼前端/后端时，按 roleKey 区分流水，避免互相挡住
+            if (StrUtil.isNotEmpty(record.getRoleKey())) {
+                queryWrapper.eq(MybatisPlusUtil.toColumns(AutoScoreRecord::getRoleKey), record.getRoleKey());
+            }
         }
         if (count(queryWrapper) > 0) {
             return false;

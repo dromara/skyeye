@@ -9,6 +9,8 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.history.entity.AutoHistoryCase;
 
+import java.util.List;
+
 /**
  * @ClassName: AutoHistoryCaseService
  * @Description: 用例执行历史服务接口层
@@ -30,4 +32,14 @@ public interface AutoHistoryCaseService extends SkyeyeBusinessService<AutoHistor
     void finishAutoCaseHistoryById(InputObject inputObject, OutputObject outputObject);
 
     void finishAutoCaseHistoryById(String id, Integer result);
+
+    /**
+     * 定时任务执行详情：分页查询关联的用例执行历史
+     */
+    void queryScheduleTaskHistoryCaseList(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 删除定时任务执行记录下关联的用例执行历史
+     */
+    void deleteByScheduleTaskHistoryIds(List<String> scheduleTaskHistoryIds);
 }
