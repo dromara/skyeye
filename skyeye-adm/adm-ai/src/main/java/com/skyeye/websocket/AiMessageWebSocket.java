@@ -57,18 +57,23 @@ public class AiMessageWebSocket {
      */
     @OnOpen
     public void onOpen(@PathParam("userId") String userId, Session session) {
-        if (clients.containsKey(userId)) {
-            return;
-        }
-        onlineNumber++;
-        LOGGER.info("现在来连接的客户id: {}, 用户名: {}", session.getId(), userId);
         this.userId = userId;
         this.session = session;
-        LOGGER.info("有新连接加入！ 当前在线人数: {}", onlineNumber);
-
-
-        // 把自己的信息加入到map当中去
-        clients.put(userId, this);
+        AiMessageWebSocket old = clients.put(userId, this);
+        if (old == null) {
+            onlineNumber++;
+            LOGGER.info("AI WebSocket 接入 userId={}, session={}, 在线人数={}", userId, session.getId(), onlineNumber);
+            return;
+        }
+        // ② 同用户重连时替换旧 session，否则推送还打到已断开的连接，前端一直「正在思考」
+        if (old != this && old.session != null && old.session.isOpen() && old.session != session) {
+            try {
+                old.session.close();
+            } catch (Exception e) {
+                LOGGER.warn("关闭旧 AI WebSocket 失败 userId={}: {}", userId, e.getMessage());
+            }
+        }
+        LOGGER.info("AI WebSocket 重连替换 session userId={}, session={}", userId, session.getId());
     }
 
     @OnError
