@@ -438,9 +438,9 @@ public class UploadServiceImpl implements UploadService {
         }
         int type = Integer.parseInt(params.get("type").toString());
         String fileName = params.get("fileName").toString();
-        String objectDir = params.get("objectDir") == null ? StrUtil.EMPTY : params.get("objectDir").toString();
-        String contentBase64 = params.get("contentBase64") == null ? StrUtil.EMPTY : params.get("contentBase64").toString();
-        String localPath = params.get("localPath") == null ? StrUtil.EMPTY : params.get("localPath").toString();
+        String objectDir = params.get("objectDir").toString();
+        String contentBase64 = params.get("contentBase64").toString();
+        String localPath = params.get("localPath").toString();
 
         Map<String, Object> result = new HashMap<>();
         result.put("uploaded", false);
