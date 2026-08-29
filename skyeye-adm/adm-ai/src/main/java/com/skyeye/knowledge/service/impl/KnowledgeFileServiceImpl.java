@@ -31,8 +31,7 @@ import com.skyeye.knowledge.entity.KnowledgeFile;
 import com.skyeye.knowledge.service.KnowledgeFileService;
 import com.skyeye.knowledge.service.KnowledgeService;
 import com.skyeye.knowledge.service.KnowledgeSyncHistoryService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -43,12 +42,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 @SkyeyeService(name = "AI知识库文件", groupName = "AI知识库", allowDynamicAttrKey = false)
-public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeFileDao, KnowledgeFile>
-    implements KnowledgeFileService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeFileServiceImpl.class);
+public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeFileDao, KnowledgeFile> implements KnowledgeFileService {
 
     private static final int FILE_STORAGE_S3 = 20;
 
@@ -76,18 +73,9 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
     @Override
     public void validatorEntity(KnowledgeFile entity) {
         super.validatorEntity(entity);
-        if (StrUtil.isBlank(entity.getKnowledgeId())) {
-            throw new CustomException("请选择知识库");
-        }
         Knowledge knowledge = knowledgeService.selectById(entity.getKnowledgeId());
         if (knowledge == null || StrUtil.isBlank(knowledge.getId())) {
             throw new CustomException("知识库不存在");
-        }
-        if (StrUtil.isBlank(entity.getName())) {
-            throw new CustomException("文件名不能为空");
-        }
-        if (StrUtil.isBlank(entity.getPath())) {
-            throw new CustomException("文件路径不能为空");
         }
         if (entity.getFileSize() == null || entity.getFileSize() < 0) {
             entity.setFileSize(0L);
@@ -104,11 +92,9 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
     protected QueryWrapper<KnowledgeFile> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<KnowledgeFile> queryWrapper = super.getQueryWrapper(commonPageInfo);
         if (StrUtil.isEmpty(commonPageInfo.getObjectId())) {
-            queryWrapper.apply("1 = 0");
-            return queryWrapper;
+            throw new CustomException("请传入知识库id");
         }
         queryWrapper.eq(MybatisPlusUtil.toColumns(KnowledgeFile::getKnowledgeId), commonPageInfo.getObjectId());
-        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(KnowledgeFile::getCreateTime));
         return queryWrapper;
     }
 
@@ -143,7 +129,7 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
                 success++;
             } catch (Exception e) {
                 markFail(file, e.getMessage());
-                LOGGER.warn("知识库[{}]文件[{}]同步失败: {}", knowledge.getId(), file.getName(), e.getMessage());
+                log.warn("知识库[{}]文件[{}]同步失败: {}", knowledge.getId(), file.getName(), e.getMessage());
                 throw e instanceof CustomException ? (CustomException) e
                     : new CustomException("文件「" + file.getName() + "」同步失败: " + e.getMessage());
             }
@@ -165,7 +151,7 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
         try {
             apiKey = aiApiKeyService.selectEnabledKeyByKnowledgeId(file.getKnowledgeId());
         } catch (Exception e) {
-            LOGGER.warn("删除知识库文件时未找到可用 AI 配置 knowledgeId={}: {}", file.getKnowledgeId(), e.getMessage());
+            log.warn("删除知识库文件时未找到可用 AI 配置 knowledgeId={}: {}", file.getKnowledgeId(), e.getMessage());
         }
         // ② 先清 S3 + 平台文档，再删本地，最后由框架删库记录
         deleteRemote(file, apiKey);
@@ -183,7 +169,7 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
         try {
             apiKey = aiApiKeyService.selectEnabledKeyByKnowledgeId(knowledgeId);
         } catch (Exception e) {
-            LOGGER.warn("删除知识库文件时未找到可用 AI 配置 knowledgeId={}: {}", knowledgeId, e.getMessage());
+            log.warn("删除知识库文件时未找到可用 AI 配置 knowledgeId={}: {}", knowledgeId, e.getMessage());
         }
         // ② 逐个清远端 + 本地
         for (KnowledgeFile file : files) {
@@ -207,7 +193,7 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
             try {
                 iUploadService.deleteFromFileStorage(file.getStorageConfigId(), file.getS3ObjectId());
             } catch (Exception e) {
-                LOGGER.warn("覆盖同步前删除旧 S3 对象失败 path={}: {}", file.getS3ObjectId(), e.getMessage());
+                log.warn("覆盖同步前删除旧 S3 对象失败 path={}: {}", file.getS3ObjectId(), e.getMessage());
             }
         }
         // ③ 上传到文件存储器（S3/TOS），得到 url / tosPath / 对象路径
@@ -272,7 +258,7 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
             try {
                 iUploadService.deleteFromFileStorage(file.getStorageConfigId(), file.getS3ObjectId());
             } catch (Exception e) {
-                LOGGER.warn("删除知识库 S3 文件失败 configId={} path={}: {}",
+                log.warn("删除知识库 S3 文件失败 configId={} path={}: {}",
                     file.getStorageConfigId(), file.getS3ObjectId(), e.getMessage());
             }
         }
@@ -282,7 +268,7 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
                 AiPlatformEnum platform = AiPlatformEnum.getName(apiKey.getPlatform());
                 aiFactory.getKnowledgeClient(platform).deleteDoc(apiKey.toAiKnowledgeConfig(), file.getPlatformDocId());
             } catch (Exception e) {
-                LOGGER.warn("删除平台知识库文档失败 docId={}: {}", file.getPlatformDocId(), e.getMessage());
+                log.warn("删除平台知识库文档失败 docId={}: {}", file.getPlatformDocId(), e.getMessage());
             }
         }
     }
@@ -295,7 +281,7 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
         try {
             FileUtil.deleteFile(abs);
         } catch (Exception e) {
-            LOGGER.warn("删除知识库本地文件失败 path={}: {}", abs, e.getMessage());
+            log.warn("删除知识库本地文件失败 path={}: {}", abs, e.getMessage());
         }
     }
 
