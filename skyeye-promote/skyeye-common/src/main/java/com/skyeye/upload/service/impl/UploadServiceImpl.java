@@ -537,7 +537,7 @@ public class UploadServiceImpl implements UploadService {
         if (StrUtil.isBlank(localPath)) {
             return null;
         }
-        File file = new File(tPath + localPath);
+        File file = new File(tPath.replace("images", StrUtil.EMPTY) + localPath);
         if (!file.exists() || !file.isFile()) {
             throw new CustomException("本地文件不存在: " + localPath);
         }
@@ -549,34 +549,9 @@ public class UploadServiceImpl implements UploadService {
     }
 
     private String buildStorageObjectKey(int type, String objectDir, String fileName) {
-        String visit = FileConstants.FileUploadPath.getVisitPath(type);
-        // /images/upload/wordfolder/ -> wordfolder/
-        String prefix = visit;
-        int idx = prefix.indexOf("/upload/");
-        if (idx >= 0) {
-            prefix = prefix.substring(idx + "/upload/".length());
-        }
-        prefix = prefix.replaceAll("^/+", "");
-        if (StrUtil.isNotBlank(prefix) && !prefix.endsWith("/")) {
-            prefix = prefix + "/";
-        }
-        String dir = sanitizeObjectDir(objectDir);
-        String name = fileName.replaceAll("^/+", "");
-        return prefix + dir + name;
-    }
-
-    private String sanitizeObjectDir(String objectDir) {
-        if (StrUtil.isBlank(objectDir)) {
-            return StrUtil.EMPTY;
-        }
-        String dir = objectDir.trim().replace('\\', '/');
-        dir = dir.replaceAll("\\.\\.", "");
-        dir = dir.replaceAll("[^A-Za-z0-9_\\-/]", "_");
-        dir = dir.replaceAll("^/+", "");
-        if (StrUtil.isNotBlank(dir) && !dir.endsWith("/")) {
-            dir = dir + "/";
-        }
-        return dir;
+        // wordfolder/
+        String prefix = FileConstants.FileUploadPath.getBaseVisitPath(type);
+        return prefix + objectDir + fileName;
     }
 
     private void saveStorageFile(String configId, String fileName, String path, String url,
