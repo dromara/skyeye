@@ -9,10 +9,12 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.knowledge.dao.KnowledgeSyncDao;
 import com.skyeye.knowledge.entity.KnowledgeSync;
 import com.skyeye.knowledge.service.KnowledgeSyncService;
+import com.skyeye.knowledge.util.KnowledgeTenantFilterHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -42,8 +44,15 @@ public class KnowledgeSyncServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
         for (KnowledgeSync sync : syncList) {
             sync.setId(null);
             sync.setKnowledgeId(knowledgeId);
-            if (StrUtil.isBlank(sync.getTenantField())) {
-                sync.setTenantField("tenant_id");
+            if (StrUtil.isBlank(sync.getTenantIsolation())) {
+                sync.setTenantIsolation(TenantEnum.STRONG_ISOLATION.getKey());
+            }
+            if (KnowledgeTenantFilterHelper.needTenantColumn(sync.getTenantIsolation())) {
+                if (StrUtil.isBlank(sync.getTenantField())) {
+                    sync.setTenantField("tenant_id");
+                }
+            } else if (sync.getTenantField() == null) {
+                sync.setTenantField(StrUtil.EMPTY);
             }
             if (StrUtil.isBlank(sync.getLastWatermark()) && oldWatermarkMap.containsKey(sync.getTableName())) {
                 sync.setLastWatermark(oldWatermarkMap.get(sync.getTableName()));

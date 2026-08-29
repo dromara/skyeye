@@ -38,8 +38,8 @@ public class PlatformAiGuideService {
 
     public Map<String, Object> generate(Map<String, Object> params) {
         String question = params.get("question").toString().trim();
-        String pageTitle = params.get("pageTitle") == null ? "" : params.get("pageTitle").toString();
-        String pagePath = params.get("pagePath") == null ? "" : params.get("pagePath").toString();
+        String pageTitle = params.get("pageTitle").toString();
+        String pagePath = params.get("pagePath").toString();
         Map<String, Object> extraParams = new HashMap<>();
         extraParams.put("saveChat", 1);
         extraParams.put("knowledgeQuery", question);

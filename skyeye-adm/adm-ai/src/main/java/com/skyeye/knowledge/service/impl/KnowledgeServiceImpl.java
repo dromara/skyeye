@@ -46,6 +46,7 @@ import com.skyeye.knowledge.service.KnowledgeService;
 import com.skyeye.knowledge.service.KnowledgeSyncHistoryService;
 import com.skyeye.knowledge.service.KnowledgeSyncService;
 import com.skyeye.knowledge.util.KnowledgeJdbcHelper;
+import com.skyeye.knowledge.util.KnowledgeTenantFilterHelper;
 import com.skyeye.role.entity.Role;
 import com.skyeye.role.service.RoleService;
 import org.slf4j.Logger;
@@ -205,6 +206,19 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                 && StrUtil.isBlank(sync.getWatermarkField())) {
                 throw new CustomException("增量同步必须指定水位字段");
             }
+            if (StrUtil.isBlank(sync.getTenantIsolation())) {
+                sync.setTenantIsolation(TenantEnum.STRONG_ISOLATION.getKey());
+            } else {
+                sync.setTenantIsolation(KnowledgeTenantFilterHelper.resolveIsolationKey(sync.getTenantIsolation()));
+            }
+            if (KnowledgeTenantFilterHelper.needTenantColumn(sync.getTenantIsolation())) {
+                if (StrUtil.isBlank(sync.getTenantField())) {
+                    sync.setTenantField("tenant_id");
+                }
+            } else {
+                // 不做隔离 / 仅平台：不强制租户字段，避免校验无 tenant_id 的表
+                sync.setTenantField(StrUtil.blankToDefault(sync.getTenantField(), StrUtil.EMPTY));
+            }
         }
         knowledgeSyncService.saveList(knowledgeId, syncList);
         Map<String, Object> bean = new HashMap<>();
@@ -330,7 +344,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                 if (isolationType != null) {
                     TenantContext.setIsolationType(isolationType);
                 }
-                doSyncKnowledge(knowledge, trigger, historyId, startTime);
+                doSyncKnowledge(knowledge, historyId);
             } catch (Throwable t) {
                 // doSyncKnowledge 的 finally 已写入历史；此处仅兜底未写入的异常
                 LOGGER.warn("知识库[{}]异步同步失败: {}", knowledge.getId(), t.getMessage());
@@ -369,7 +383,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         Integer trigger = triggerType == null ? KnowledgeSyncTriggerEnum.MANUAL.getKey() : triggerType;
         String startTime = DateUtil.getTimeAndToString();
         String historyId = knowledgeSyncHistoryService.createRunningHistory(knowledge.getId(), trigger, startTime);
-        return doSyncKnowledge(knowledge, trigger, historyId, startTime);
+        return doSyncKnowledge(knowledge, historyId);
     }
 
     private void prepareSync(Knowledge knowledge) {
@@ -387,7 +401,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         }
     }
 
-    private int doSyncKnowledge(Knowledge knowledge, Integer trigger, String historyId, String startTime) {
+    private int doSyncKnowledge(Knowledge knowledge, String historyId) {
         int total = 0;
         Integer status = KnowledgeSyncResultEnum.SUCCESS.getKey();
         String errorMsg = StrUtil.EMPTY;
@@ -400,12 +414,11 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             if (syncList == null) {
                 syncList = Collections.emptyList();
             }
-            String tenantId = StrUtil.blankToDefault(TenantContext.getTenantId(), knowledge.getTenantId());
             SyncUploadContext uploadContext = new SyncUploadContext(knowledge.getId());
-            // ① 有 JDBC + 同步表：抽表数据上传（没有表配置则跳过，不报错）
+            // ① 有 JDBC + 同步表：抽表数据上传（没有表配置则跳过，不报错）；源表按全租户拉取，不按当前租户过滤
             if (CollectionUtil.isNotEmpty(syncList) && StrUtil.isNotBlank(knowledge.getJdbcUrl())) {
                 for (KnowledgeSync sync : syncList) {
-                    total += syncOneTable(knowledge, sync, tenantId, apiKey, uploadContext);
+                    total += syncOneTable(knowledge, sync, apiKey, uploadContext);
                 }
                 flushUploadIfNeeded(knowledge, apiKey, uploadContext, true);
             }
@@ -434,7 +447,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         }
     }
 
-    private int syncOneTable(Knowledge knowledge, KnowledgeSync sync, String tenantId, AiApiKey apiKey,
+    private int syncOneTable(Knowledge knowledge, KnowledgeSync sync, AiApiKey apiKey,
                              SyncUploadContext uploadContext) {
         KnowledgeJdbcHelper.checkIdentifier(sync.getTableName(), "表名");
         KnowledgeJdbcHelper.checkIdentifier(sync.getIdField(), "主键字段");
@@ -456,8 +469,11 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             KnowledgeJdbcHelper.checkIdentifier(watermarkField, "水位字段");
             columnSet.add(watermarkField);
         }
-        String tenantField = StrUtil.blankToDefault(sync.getTenantField(), "tenant_id");
-        if (StrUtil.isNotBlank(tenantField) && StrUtil.isNotBlank(tenantId)) {
+        // 租户字段：仅强制隔离/弱隔离时加入查询与校验；不做隔离、仅平台的表通常无 tenant_id
+        String tenantIsolation = KnowledgeTenantFilterHelper.resolveIsolationKey(sync.getTenantIsolation());
+        String tenantField = StrUtil.EMPTY;
+        if (KnowledgeTenantFilterHelper.needTenantColumn(tenantIsolation)) {
+            tenantField = StrUtil.blankToDefault(sync.getTenantField(), "tenant_id");
             KnowledgeJdbcHelper.checkIdentifier(tenantField, "租户字段");
             columnSet.add(tenantField);
         }
@@ -479,7 +495,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         while (true) {
             List<Map<String, Object>> rows = KnowledgeJdbcHelper.queryRowsBatch(
                 knowledge.getDriverClass(), knowledge.getJdbcUrl(), knowledge.getJdbcUser(), knowledge.getJdbcPassword(),
-                sync.getTableName(), columns, tenantField, tenantId,
+                sync.getTableName(), columns,
                 sync.getIdField(), lastId, watermarkField, cursorWatermark, KnowledgeJdbcHelper.BATCH_SIZE);
             if (CollectionUtil.isEmpty(rows)) {
                 break;
@@ -488,7 +504,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                 uploadContext.ensureTableHeader(sync.getTableName());
                 uploadContext.appendRow(AiKnowledgeUploadHelper.buildRowBlock(
                     sync.getTableName(), tableRemark, sync.getIdField(), sync.getTitleField(), row, contentFields,
-                    fieldRemarks));
+                    fieldRemarks, tenantField, tenantIsolation));
                 total++;
                 flushUploadIfNeeded(knowledge, apiKey, uploadContext, false);
             }

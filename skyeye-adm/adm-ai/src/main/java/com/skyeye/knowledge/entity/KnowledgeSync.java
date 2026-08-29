@@ -12,6 +12,7 @@ import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.features.OperatorUserInfo;
+import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.knowledge.classenum.KnowledgeSyncTypeEnum;
 import lombok.Data;
 
@@ -50,6 +51,10 @@ public class KnowledgeSync extends OperatorUserInfo {
     @TableField(value = "tenant_field")
     @ApiModelProperty(value = "源表租户字段名，默认 tenant_id")
     private String tenantField;
+
+    @TableField(value = "tenant_isolation")
+    @ApiModelProperty(value = "表数据隔离类型", enumClass = TenantEnum.class)
+    private String tenantIsolation;
 
     @TableField(value = "sync_type")
     @ApiModelProperty(value = "同步类型", enumClass = KnowledgeSyncTypeEnum.class, required = "required,num")

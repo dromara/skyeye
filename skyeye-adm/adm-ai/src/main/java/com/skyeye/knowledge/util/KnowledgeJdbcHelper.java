@@ -33,7 +33,7 @@ public final class KnowledgeJdbcHelper {
     public static final String DEFAULT_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     /** 单批拉取行数，避免大表一次加载导致 OOM */
-    public static final int BATCH_SIZE = 500;
+    public static final int BATCH_SIZE = 2000;
 
     private static final Pattern IDENTIFIER = Pattern.compile("^[A-Za-z_][A-Za-z0-9_]*$");
 
@@ -399,6 +399,7 @@ public final class KnowledgeJdbcHelper {
 
     /**
      * 按主键/水位游标分批查询，避免大表一次全量加载。
+     * 不按租户过滤：同步时拉取源表全部租户数据。
      *
      * @param idField         主键字段（用于 keyset 翻页）
      * @param lastId          上一批最后一条主键，空表示从起点
@@ -407,8 +408,8 @@ public final class KnowledgeJdbcHelper {
      * @param limit           本批条数
      */
     public static List<Map<String, Object>> queryRowsBatch(String driverClass, String jdbcUrl, String user, String password,
-                                                           String tableName, List<String> columns, String tenantField,
-                                                           String tenantId, String idField, String lastId,
+                                                           String tableName, List<String> columns,
+                                                           String idField, String lastId,
                                                            String watermarkField, String lastWatermark, int limit) {
         checkIdentifier(tableName, "表名");
         checkIdentifier(idField, "主键字段");
@@ -417,9 +418,6 @@ public final class KnowledgeJdbcHelper {
         }
         for (String column : columns) {
             checkIdentifier(column, "字段名");
-        }
-        if (StrUtil.isNotBlank(tenantField)) {
-            checkIdentifier(tenantField, "租户字段");
         }
         if (StrUtil.isNotBlank(watermarkField)) {
             checkIdentifier(watermarkField, "水位字段");
@@ -437,10 +435,7 @@ public final class KnowledgeJdbcHelper {
 
         List<Object> params = new ArrayList<>();
         List<String> where = new ArrayList<>();
-        if (StrUtil.isNotBlank(tenantField) && StrUtil.isNotBlank(tenantId)) {
-            where.add("`".concat(tenantField).concat("` = ?"));
-            params.add(tenantId);
-        }
+        // 同步拉取全量租户数据，不再按 tenantField/tenantId 过滤
 
         boolean useWatermark = StrUtil.isNotBlank(watermarkField);
         if (useWatermark) {
