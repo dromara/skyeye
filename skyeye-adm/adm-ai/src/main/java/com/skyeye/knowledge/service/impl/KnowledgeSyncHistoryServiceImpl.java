@@ -34,6 +34,10 @@ public class KnowledgeSyncHistoryServiceImpl
             return queryWrapper;
         }
         queryWrapper.eq(MybatisPlusUtil.toColumns(KnowledgeSyncHistory::getKnowledgeId), commonPageInfo.getObjectId());
+        if (StrUtil.isNotBlank(commonPageInfo.getType())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(KnowledgeSyncHistory::getStatus), commonPageInfo.getType());
+        }
+        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(KnowledgeSyncHistory::getCreateTime));
         return queryWrapper;
     }
 

@@ -17,6 +17,9 @@ import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.FileConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.FileUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
@@ -25,6 +28,8 @@ import com.skyeye.exception.CustomException;
 import com.skyeye.key.entity.AiApiKey;
 import com.skyeye.key.service.AiApiKeyService;
 import com.skyeye.knowledge.classenum.KnowledgeFileSyncStatusEnum;
+import com.skyeye.knowledge.classenum.KnowledgeSyncResultEnum;
+import com.skyeye.knowledge.classenum.KnowledgeSyncTriggerEnum;
 import com.skyeye.knowledge.dao.KnowledgeFileDao;
 import com.skyeye.knowledge.entity.Knowledge;
 import com.skyeye.knowledge.entity.KnowledgeFile;
@@ -37,7 +42,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -138,6 +142,60 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
     }
 
     @Override
+    public void syncFileById(InputObject inputObject, OutputObject outputObject) {
+        String id = inputObject.getParams().get("id").toString();
+        KnowledgeFile file = super.selectById(id);
+        if (file == null || StrUtil.isBlank(file.getId())) {
+            throw new CustomException("文件不存在");
+        }
+        if (knowledgeSyncHistoryService.hasRunning(file.getKnowledgeId())) {
+            throw new CustomException("该知识库正在同步中，请稍后再试");
+        }
+        Knowledge knowledge = knowledgeService.selectById(file.getKnowledgeId());
+        if (knowledge == null || StrUtil.isBlank(knowledge.getId())) {
+            throw new CustomException("知识库不存在");
+        }
+        if (!EnableEnum.ENABLE_USING.getKey().equals(knowledge.getEnabled())) {
+            throw new CustomException("知识库已禁用，无法同步");
+        }
+        AiApiKey apiKey = aiApiKeyService.selectEnabledKeyByKnowledgeId(knowledge.getId());
+        if (StrUtil.isBlank(apiKey.getPlatformKnowledgeId())) {
+            throw new CustomException("请先在 AI 配置中填写平台知识库 ID");
+        }
+
+        String startTime = DateUtil.getTimeAndToString();
+        String historyId = knowledgeSyncHistoryService.createRunningHistory(
+            knowledge.getId(), KnowledgeSyncTriggerEnum.FILE.getKey(), startTime);
+        Integer status = KnowledgeSyncResultEnum.SUCCESS.getKey();
+        String errorMsg = StrUtil.EMPTY;
+        int syncCount = 0;
+        try {
+            syncOneFile(knowledge, apiKey, file);
+            syncCount = 1;
+        } catch (Exception e) {
+            status = KnowledgeSyncResultEnum.FAIL.getKey();
+            errorMsg = StrUtil.blankToDefault(e.getMessage(), "同步失败");
+            markFail(file, errorMsg);
+            log.warn("知识库[{}]单文件[{}]同步失败: {}", knowledge.getId(), file.getName(), errorMsg);
+            throw e instanceof CustomException ? (CustomException) e
+                : new CustomException("文件「" + file.getName() + "」同步失败: " + errorMsg);
+        } finally {
+            knowledgeSyncHistoryService.finishHistory(historyId, status, syncCount,
+                DateUtil.getTimeAndToString(), errorMsg);
+        }
+        try {
+            UpdateWrapper<Knowledge> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq(CommonConstants.ID, knowledge.getId());
+            updateWrapper.set(MybatisPlusUtil.toColumns(Knowledge::getLastSyncTime), DateUtil.getTimeAndToString());
+            knowledgeService.update(updateWrapper);
+        } catch (Exception e) {
+            log.warn("更新知识库最近同步时间失败 knowledgeId={}: {}", knowledge.getId(), e.getMessage());
+        }
+        outputObject.setBean(super.selectById(id));
+        outputObject.settotal(1);
+    }
+
+    @Override
     public void deletePreExecution(String id) {
         KnowledgeFile file = super.selectById(id);
         if (file == null || StrUtil.isBlank(file.getId())) {
@@ -183,10 +241,9 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
     }
 
     private void syncOneFile(Knowledge knowledge, AiApiKey apiKey, KnowledgeFile file) {
-        // ① 解析本地绝对路径，文件必须还在磁盘上
-        String localAbsPath = resolveLocalAbsPath(file.getPath());
-        if (StrUtil.isBlank(localAbsPath) || !new File(localAbsPath).isFile()) {
-            throw new CustomException("本地文件不存在: " + file.getName());
+        // ① 库表 path 已是相对地址，直接传给上传接口
+        if (StrUtil.isBlank(file.getPath())) {
+            throw new CustomException("文件路径为空: " + file.getName());
         }
         // ② 失败重同步：先删旧 S3 对象，避免残留
         if (StrUtil.isNotBlank(file.getS3ObjectId()) && StrUtil.isNotBlank(file.getStorageConfigId())) {
@@ -207,7 +264,7 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
         }
         Map<String, Object> storageResult = iUploadService.uploadToFileStorage(
             configId, storage, FileConstants.FileUploadPath.KNOWLG_CONTENT.getType()[0],
-            storageFileName, StrUtil.EMPTY, localAbsPath, objectDir);
+            storageFileName, StrUtil.EMPTY, file.getPath(), objectDir);
         boolean uploaded = isUploaded(storageResult);
         String fileUrl = uploaded ? str(storageResult.get("url")) : StrUtil.EMPTY;
         String tosPath = uploaded ? str(storageResult.get("tosPath")) : StrUtil.EMPTY;

@@ -152,4 +152,12 @@ public class KnowledgeController {
         knowledgeFileService.deleteById(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "syncAiKnowledgeFileById", value = "单独同步AI知识库文件", method = "POST", allUse = "1")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "文件主键id", required = "required")})
+    @RequestMapping("/post/knowledgeController/syncAiKnowledgeFileById")
+    public void syncAiKnowledgeFileById(InputObject inputObject, OutputObject outputObject) {
+        knowledgeFileService.syncFileById(inputObject, outputObject);
+    }
+
 }

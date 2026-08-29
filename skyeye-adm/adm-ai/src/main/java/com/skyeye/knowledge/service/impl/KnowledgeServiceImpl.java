@@ -58,7 +58,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.Executor;
@@ -551,9 +550,10 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         String fileName = AiKnowledgeUploadHelper.buildFileName(partIndex);
         String platformDocName = AiKnowledgeUploadHelper.buildPlatformDocName(knowledge.getId(), partIndex);
         String objectDir = uploadContext.getObjectDir();
-        String localPath = writeLocalTempFile(objectDir, fileName, content);
-        String storageConfigId = StrUtil.EMPTY;
-        String storageObjectPath = StrUtil.EMPTY;
+        // 落盘后拿到与库表一致的相对路径（/images/...），上传接口自行拼 IMAGES_PATH
+        String relativePath = writeLocalTempFile(fileName, content);
+        String storageConfigId;
+        String storageObjectPath;
         try {
             String contentBase64 = Base64.getEncoder().encodeToString(content.getBytes(StandardCharsets.UTF_8));
             int type = FileConstants.FileUploadPath.KNOWLG_CONTENT.getType()[0];
@@ -565,7 +565,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                 storage = FILE_STORAGE_S3;
             }
             Map<String, Object> storageResult = iUploadService.uploadToFileStorage(
-                configId, storage, type, fileName, contentBase64, localPath, objectDir);
+                configId, storage, type, fileName, contentBase64, relativePath, objectDir);
             boolean uploaded = isUploaded(storageResult);
             String fileUrl = uploaded ? str(storageResult.get("url")) : StrUtil.EMPTY;
             String tosPath = uploaded ? str(storageResult.get("tosPath")) : StrUtil.EMPTY;
@@ -581,8 +581,8 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             client.uploadText(apiKey.toAiKnowledgeConfig(), fileName, content, fileUrl, tosPath, platformDocName);
             deleteStorageObjectIfNeeded(storageConfigId, storageObjectPath);
         } finally {
-            if (StrUtil.isNotBlank(localPath)) {
-                FileUtil.deleteFile(localPath);
+            if (StrUtil.isNotBlank(relativePath)) {
+                FileUtil.deleteFile(tPath.replace("images", StrUtil.EMPTY) + relativePath);
             }
         }
     }
@@ -603,27 +603,15 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
     }
 
     /**
-     * 先落到 IMAGES_PATH 临时目录，上传完成后删除
+     * 写入临时文件，返回相对访问路径（/images/upload/...），与知识库文件表 path 格式一致
      */
-    private String writeLocalTempFile(String objectDir, String fileName, String content) {
+    private String writeLocalTempFile(String fileName, String content) {
         try {
             int type = FileConstants.FileUploadPath.KNOWLG_CONTENT.getType()[0];
-            String savePath = FileConstants.FileUploadPath.getSavePath(type);
-            String dirPath = tPath + savePath;
-            if (StrUtil.isNotBlank(objectDir)) {
-                dirPath = dirPath + objectDir.replace('\\', '/');
-                if (!dirPath.endsWith("/")) {
-                    dirPath = dirPath + "/";
-                }
-            }
-            File dir = new File(dirPath);
-            if (!dir.exists() && !dir.mkdirs()) {
-                LOGGER.warn("创建知识库临时目录失败: {}", dirPath);
-                return StrUtil.EMPTY;
-            }
-            String absolutePath = new File(dir, fileName).getAbsolutePath();
-            FileUtil.writeByteToPointPath(content.getBytes(StandardCharsets.UTF_8), absolutePath);
-            return absolutePath;
+            String savePath = tPath + FileConstants.FileUploadPath.getSavePath(type);
+            FileUtil.createDirs(savePath);
+            FileUtil.writeByteToPointPath(content.getBytes(StandardCharsets.UTF_8), savePath + "/" + fileName);
+            return FileConstants.FileUploadPath.getVisitPath(type) + fileName;
         } catch (Exception e) {
             LOGGER.warn("写入知识库临时文件失败: {}", e.getMessage());
             return StrUtil.EMPTY;
