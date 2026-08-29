@@ -19,6 +19,7 @@ import com.skyeye.app.service.AppStoreService;
 import com.skyeye.app.service.AppVersionService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
+import com.skyeye.common.constans.FileConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
@@ -80,7 +81,7 @@ public class AppVersionServiceImpl extends SkyeyeBusinessServiceImpl<AppVersionD
         if (ObjectUtil.isNotEmpty(appVersion)) {
             throw new CustomException("该版本名称或版本号已存在，请重新输入！");
         }
-        String appFilePath = tPath.replace("images", StrUtil.EMPTY) + entity.getFilePath();
+        String appFilePath = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + entity.getFilePath();
         File appFile = new File(appFilePath);
         entity.setFileSize(String.valueOf(appFile.length()));
     }

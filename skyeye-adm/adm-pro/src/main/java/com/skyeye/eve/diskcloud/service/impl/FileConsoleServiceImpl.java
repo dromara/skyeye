@@ -230,7 +230,7 @@ public class FileConsoleServiceImpl extends SkyeyeBusinessServiceImpl<FileConsol
         String fileList = map.get("fileList").toString();
         List<Map<String, Object>> array = JSONUtil.toList(fileList, null);
         // 文件访问基础路径
-        String basePath = tPath.replace("images", "");
+        String basePath = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY);
         for (int i = 0; i < array.size(); i++) {
             // 获取id和fileType
             String id = array.get(i).get("id").toString();
@@ -475,7 +475,7 @@ public class FileConsoleServiceImpl extends SkyeyeBusinessServiceImpl<FileConsol
     private List<File> getFileList(List<FileConsole> fileConsoles) {
         List<File> fileList = new ArrayList<>();
         for (FileConsole bean : fileConsoles) {
-            File f = new File(tPath.replace("images", StrUtil.EMPTY) + bean.getAddress());
+            File f = new File(tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + bean.getAddress());
             fileList.add(f);
         }
         return fileList;
@@ -505,7 +505,7 @@ public class FileConsoleServiceImpl extends SkyeyeBusinessServiceImpl<FileConsol
         queryWrapper.eq(MybatisPlusUtil.toColumns(FileConsole::getChunk), chunk);
         FileConsole fileConsole = getOne(queryWrapper, false);
         if (ObjectUtil.isNotEmpty(fileConsole) && StrUtil.isNotEmpty(fileConsole.getId())) {
-            String fileAddress = tPath.replace("images", StrUtil.EMPTY) + fileConsole.getAddress();
+            String fileAddress = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + fileConsole.getAddress();
             File checkFile = new File(fileAddress);
             String chunkSize = map.get("chunkSize").toString();
             if (checkFile.exists() && checkFile.length() == Integer.parseInt(chunkSize)) {
@@ -547,7 +547,7 @@ public class FileConsoleServiceImpl extends SkyeyeBusinessServiceImpl<FileConsol
                 }
                 // 从请求中获取要覆盖的文件参数定义"path"
                 FileConsole fileConsole = selectById(id);
-                String fileAddress = tPath.replace("images", StrUtil.EMPTY) + fileConsole.getAddress();
+                String fileAddress = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + fileConsole.getAddress();
                 File savedFile = new File(fileAddress);
                 try (FileOutputStream out = new FileOutputStream(savedFile)) {
                     int read;
@@ -686,19 +686,19 @@ public class FileConsoleServiceImpl extends SkyeyeBusinessServiceImpl<FileConsol
         String fileExtName = file.get("type").toString().toLowerCase();
         String newFileName = System.currentTimeMillis() + "." + fileExtName;//新文件名
         String path = basePath + "/" + newFileName;//文件新路径
-        String oldPath = tPath.replace("images", "") + file.get("address").toString();//原始路径
+        String oldPath = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + file.get("address").toString();//原始路径
         String trueFileName = visitPath + "/" + newFileName;//数据库存储路径
         file.put("address", trueFileName);
         if (FileType.judgeIsAllowedFileType(fileExtName, 1)) {//图片
             file.put("thumbnail", trueFileName);//缩略图
         } else if (FileType.judgeIsAllowedFileType(fileExtName, 6)) {//电子书
-            String oldFileThumbnail = tPath.replace("images", "") + file.get("thumbnail").toString();
+            String oldFileThumbnail = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + file.get("thumbnail").toString();
             String fileThunbnailName = String.valueOf(System.currentTimeMillis());
             String fileThumbnailpath = basePath + "/" + fileThunbnailName + ".png";
             file.put("thumbnail", visitPath + "/" + fileThunbnailName + ".png");//缩略图
             ToolUtil.NIOCopyFile(oldFileThumbnail, fileThumbnailpath);
         } else if (FileType.judgeIsAllowedFileType(fileExtName, 3)) {//视频
-            String oldFileThumbnail = tPath.replace("images", "") + file.get("thumbnail").toString();
+            String oldFileThumbnail = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + file.get("thumbnail").toString();
             String fileThunbnailName = String.valueOf(System.currentTimeMillis());
             String fileThumbnailpath = basePath + "/ffmpeg/" + fileThunbnailName + ".png";//缩略图新路径
             file.put("thumbnail", visitPath + "/ffmpeg/" + fileThunbnailName + ".png");//缩略图
@@ -719,7 +719,7 @@ public class FileConsoleServiceImpl extends SkyeyeBusinessServiceImpl<FileConsol
         String id = map.get("id").toString();
         FileConsole fileConsole = selectById(id);
         String fileType = fileConsole.getType();
-        String filePath = tPath.replace("images", "") + fileConsole.getAddress();//文件路径
+        String filePath = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + fileConsole.getAddress();//文件路径
 
         if ("txt".equals(fileType)) {//ace文件
             File docFile = new File(filePath);
@@ -958,7 +958,7 @@ public class FileConsoleServiceImpl extends SkyeyeBusinessServiceImpl<FileConsol
                 ZipOutputStream out = null;
                 try {
                     out = new ZipOutputStream(new FileOutputStream(strZipPath));
-                    ToolUtil.recursionZip(out, dowlLoadFile, StrUtil.EMPTY, tPath.replace("images", StrUtil.EMPTY), 2);
+                    ToolUtil.recursionZip(out, dowlLoadFile, StrUtil.EMPTY, tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY), 2);
                 } catch (Exception ee) {
                     throw new CustomException(ee);
                 } finally {
@@ -999,7 +999,7 @@ public class FileConsoleServiceImpl extends SkyeyeBusinessServiceImpl<FileConsol
             String userId = inputObject.getLogParams().get("id").toString();
             String basePath = tPath + FileConstants.FileUploadPath.getSavePath(FILE_PATH_TYPE) + "/" + userId + "/";
             String visitPath = FileConstants.FileUploadPath.getVisitPath(FILE_PATH_TYPE) + userId;
-            String zipfile = tPath.replace("images", StrUtil.EMPTY) + fileConsole.getAddress();//压缩包文件
+            String zipfile = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + fileConsole.getAddress();//压缩包文件
             if (new File(zipfile).exists()) {
                 ZipEntry entry;
                 ZipFile zip = null;
@@ -1082,7 +1082,7 @@ public class FileConsoleServiceImpl extends SkyeyeBusinessServiceImpl<FileConsol
                 if (!folderList.isEmpty()) {
                     fileConsoleDao.insertFolderList(folderList, tenantId);
                 }
-                String baseShowPath = tPath.replace("images", StrUtil.EMPTY);
+                String baseShowPath = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY);
                 for (Map<String, Object> item : fileList) {//文件
                     File f = new File(baseShowPath + item.get("address").toString());
                     item.put("sizeType", "bytes");//文件大小单位
@@ -1356,7 +1356,7 @@ public class FileConsoleServiceImpl extends SkyeyeBusinessServiceImpl<FileConsol
                 ZipOutputStream out = null;
                 try {
                     out = new ZipOutputStream(new FileOutputStream(strZipPath));
-                    ToolUtil.recursionZip(out, dowlLoadFile, "", tPath.replace("images", ""), 2);
+                    ToolUtil.recursionZip(out, dowlLoadFile, "", tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY), 2);
                 } catch (Exception ee) {
                     throw new CustomException(ee);
                 } finally {

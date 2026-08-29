@@ -106,7 +106,7 @@ public class CheckworkServiceImpl extends SkyeyeBusinessServiceImpl<CheckworkDao
             if (ObjectUtil.isEmpty(subjectClasses.getObjectMation())) {
                 throw new CustomException("该科目信息不存在.");
             }
-            String imgPath = tPath.replace("images", StrUtil.EMPTY) + subjectClasses.getObjectMation().getImg();
+            String imgPath = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + subjectClasses.getObjectMation().getImg();
             // 生成考勤码编码
             String code = ToolUtil.getFourWord();
             entity.setSourceCode(code);

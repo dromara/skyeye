@@ -11,6 +11,7 @@ import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.WallConstants;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
+import com.skyeye.common.constans.FileConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.GetUserToken;
 import com.skyeye.common.object.InputObject;
@@ -136,7 +137,7 @@ public class VideoServiceImpl extends SkyeyeBusinessServiceImpl<VideoDao, Video>
     public void createPrepose(Video entity) {
         String userIdentity = PutObject.getRequest().getHeader(WallConstants.USER_IDENTITY_KEY);
         entity.setLoginIdentity(userIdentity);
-        String localVideoPath = tPath.replace("images", StrUtil.EMPTY) + entity.getVideoSrc();
+        String localVideoPath = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + entity.getVideoSrc();
         // 获取视频时长
         int duration = getVideoDuration(localVideoPath);
         log.info(String.format(Locale.ROOT, "video id is %s, duration is %s", entity.getId(), duration));

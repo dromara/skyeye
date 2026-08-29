@@ -11,6 +11,7 @@ import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
+import com.skyeye.common.constans.FileConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
@@ -111,7 +112,7 @@ public class SysEveModelServiceImpl extends SkyeyeBusinessServiceImpl<SysEveMode
 
     @Override
     public void deletePostpose(SysEveModel entity) {
-        FileUtil.deleteFile(tPath.replace("images", StrUtil.EMPTY) + entity.getLogo());
+        FileUtil.deleteFile(tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + entity.getLogo());
     }
 
     @Override

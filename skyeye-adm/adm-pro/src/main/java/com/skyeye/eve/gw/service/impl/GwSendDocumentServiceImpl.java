@@ -100,7 +100,7 @@ public class GwSendDocumentServiceImpl extends SkyeyeBusinessServiceImpl<GwSendD
     @Override
     protected void updatePrepose(GwSendDocument entity) {
         GwSendDocument oldMation = selectById(entity.getId());
-        FileUtil.deleteFile(tPath.replace("images", StrUtil.EMPTY) + oldMation.getPath());
+        FileUtil.deleteFile(tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + oldMation.getPath());
         entity.setOddNumber(oldMation.getOddNumber());
         saveGwFile(entity);
     }
@@ -112,7 +112,7 @@ public class GwSendDocumentServiceImpl extends SkyeyeBusinessServiceImpl<GwSendD
         }
         Map<String, Object> params = resetGwParams(entity);
         // 模版信息，参考：https://deepoove.com/poi-tl/#_maven
-        String basePath = tPath.replace("images", StrUtil.EMPTY) + gwModel.getPath();
+        String basePath = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + gwModel.getPath();
 
         // html渲染插件
         HtmlRenderPolicy htmlRenderPolicy = new HtmlRenderPolicy();
@@ -198,7 +198,7 @@ public class GwSendDocumentServiceImpl extends SkyeyeBusinessServiceImpl<GwSendD
         if (ObjectUtil.isNotEmpty(gwTemplates) && StrUtil.isNotEmpty(gwTemplates.getId())) {
             params.put("红头标题", gwTemplates.getRedHead());
             if (ObjectUtil.isNotEmpty(gwTemplates.getSealMation())) {
-                String logoPath = tPath.replace("images", StrUtil.EMPTY) + gwTemplates.getSealMation().getLogo();
+                String logoPath = tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + gwTemplates.getSealMation().getLogo();
                 params.put("印章", Pictures.ofLocal(logoPath).size(120, 120).create());
                 params.put("企业", gwTemplates.getSealMation().getCompanyName());
             }

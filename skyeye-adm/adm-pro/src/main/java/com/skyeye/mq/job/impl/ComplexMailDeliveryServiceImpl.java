@@ -6,6 +6,7 @@ package com.skyeye.mq.job.impl;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.skyeye.common.constans.FileConstants;
 import com.skyeye.common.constans.MqConstants;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.MailUtil;
@@ -89,7 +90,7 @@ public class ComplexMailDeliveryServiceImpl implements RocketMQListener<String> 
             }
             // 发送邮件
             String messageId = new MailUtil(username, password, emailServer.get("emailSendServer").toString())
-                .send(toPeople, toCc, toBCc, title, content, tPath.replace("images", StrUtil.EMPTY), beans);
+                .send(toPeople, toCc, toBCc, title, content, tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY), beans);
             if (!ToolUtil.isBlank(messageId)) {
                 Map<String, Object> emailEditMessageId = new HashMap<>();
                 emailEditMessageId.put("id", emailId);

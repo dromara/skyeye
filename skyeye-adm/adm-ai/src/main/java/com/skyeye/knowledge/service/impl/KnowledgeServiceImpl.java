@@ -582,7 +582,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             deleteStorageObjectIfNeeded(storageConfigId, storageObjectPath);
         } finally {
             if (StrUtil.isNotBlank(relativePath)) {
-                FileUtil.deleteFile(tPath.replace("images", StrUtil.EMPTY) + relativePath);
+                FileUtil.deleteFile(tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + relativePath);
             }
         }
     }

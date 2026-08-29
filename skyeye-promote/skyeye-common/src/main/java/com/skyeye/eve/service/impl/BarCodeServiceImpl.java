@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonNumConstants;
+import com.skyeye.common.constans.FileConstants;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -118,7 +119,7 @@ public class BarCodeServiceImpl extends SkyeyeBusinessServiceImpl<BarCodeDao, Ba
         queryWrapper.eq(MybatisPlusUtil.toColumns(BarCodeMation::getObjectId), objectId);
         BarCodeMation barCodeMation = getOne(queryWrapper, false);
         // 删除图片路径
-        String basePath = tPath + barCodeMation.getImagePath().replace("/images/", "");
+        String basePath = tPath + barCodeMation.getImagePath().replace("/images/", StrUtil.EMPTY);
         FileUtil.deleteFile(basePath);
         // 删除数据
         deleteById(barCodeMation.getId());
@@ -138,7 +139,7 @@ public class BarCodeServiceImpl extends SkyeyeBusinessServiceImpl<BarCodeDao, Ba
         }
         BufferedImage image = BarCodeUtil.insertWords(barCodeMation.getCodeNum());
         try {
-            ImageIO.write(image, "jpg", new File(tPath.replace("images", StrUtil.EMPTY) + barCodeMation.getImagePath()));
+            ImageIO.write(image, "jpg", new File(tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY) + barCodeMation.getImagePath()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
