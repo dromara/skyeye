@@ -25,4 +25,6 @@ public interface ErpPageService {
 
     void queryTwelveMonthProfitMoneyList(InputObject inputObject, OutputObject outputObject);
 
+    void queryProcessFlowCount(InputObject inputObject, OutputObject outputObject);
+
 }
