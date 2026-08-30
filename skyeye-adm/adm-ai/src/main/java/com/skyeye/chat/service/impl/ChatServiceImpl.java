@@ -17,6 +17,7 @@ import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.chat.dao.ChatDao;
 import com.skyeye.chat.entity.Chat;
 import com.skyeye.chat.service.ChatService;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.TenantEnum;
@@ -697,6 +698,10 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         queryWrapper.eq(MybatisPlusUtil.toColumns(Chat::getCreateId), userId);
         queryWrapper.eq(MybatisPlusUtil.toColumns(Chat::getApiKeyId), apiKeyId);
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(Chat::getCreateTime));
+        if (tenantEnable) {
+            String tenantId = TenantContext.getTenantId();
+            queryWrapper.eq(CommonConstants.TENANT_ID_FIELD, tenantId);
+        }
         List<Chat> chatList = list(queryWrapper);
 
         for (Chat chat : chatList) {

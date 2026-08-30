@@ -16,6 +16,7 @@ import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
@@ -40,7 +41,7 @@ import java.util.Map;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
-@SkyeyeService(name = "AI配置", groupName = "AI配置")
+@SkyeyeService(name = "AI配置", groupName = "AI配置", tenant = TenantEnum.WEAK_ISOLATION)
 public class AiApiKeyServiceImpl extends SkyeyeBusinessServiceImpl<AiApiKeyDao, AiApiKey> implements AiApiKeyService {
 
     @Autowired
@@ -76,6 +77,10 @@ public class AiApiKeyServiceImpl extends SkyeyeBusinessServiceImpl<AiApiKeyDao, 
     public QueryWrapper<AiApiKey> getQueryWrapper(TableSelectInfo tableSelectInfo) {
         QueryWrapper<AiApiKey> queryWrapper = super.getQueryWrapper(tableSelectInfo);
         queryWrapper.eq(MybatisPlusUtil.toColumns(AiApiKey::getEnabled), EnableEnum.ENABLE_USING.getKey());
+        if (StrUtil.isNotEmpty(tableSelectInfo.getCustomParamsMapStr("roleId"))) {
+            // 根据角色id查询
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AiApiKey::getRoleId), tableSelectInfo.getCustomParamsMapStr("roleId"));
+        }
         return queryWrapper;
     }
 
