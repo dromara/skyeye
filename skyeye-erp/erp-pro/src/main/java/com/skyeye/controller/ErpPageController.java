@@ -52,4 +52,15 @@ public class ErpPageController {
         erpPageService.queryTwelveMonthProfitMoneyList(inputObject, outputObject);
     }
 
+    /**
+     * 一次性返回 ERP 业务流程各节点数量，key 为节点 code（A01~I06），value 为笔数。
+     * 默认均为对应单据类型的总笔数（当前租户、不限审批状态、不含搜索条件）；
+     * E01 为待出库单据笔数，E03 为待入库单据笔数。
+     */
+    @ApiOperation(id = "erppage005", value = "获取ERP业务流程各节点单据数量（单据总笔数；出库管理/入库管理为待出入库笔数）", method = "POST", allUse = "2")
+    @RequestMapping("/post/ErpPageController/queryProcessFlowCount")
+    public void queryProcessFlowCount(InputObject inputObject, OutputObject outputObject) {
+        erpPageService.queryProcessFlowCount(inputObject, outputObject);
+    }
+
 }

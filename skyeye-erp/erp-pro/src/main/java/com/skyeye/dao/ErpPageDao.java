@@ -35,4 +35,7 @@ public interface ErpPageDao {
                                                               @Param("states") List<String> states,
                                                               @Param("tenantId") String tenantId);
 
+    @IgnoreTenant
+    List<Map<String, Object>> queryProcessFlowCount(@Param("params") Map<String, Object> params);
+
 }
