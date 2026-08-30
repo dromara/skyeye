@@ -4,6 +4,7 @@
 
 package com.skyeye.knowledge.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -11,12 +12,20 @@ import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.object.InputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.knowledge.classenum.KnowledgeSyncResultEnum;
 import com.skyeye.knowledge.dao.KnowledgeSyncHistoryDao;
 import com.skyeye.knowledge.entity.KnowledgeSyncHistory;
+import com.skyeye.knowledge.entity.KnowledgeSyncHistoryItem;
+import com.skyeye.knowledge.service.KnowledgeSyncHistoryItemService;
 import com.skyeye.knowledge.service.KnowledgeSyncHistoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @SkyeyeService(name = "AI知识库同步历史", groupName = "AI知识库", allowDynamicAttrKey = false)
@@ -25,6 +34,16 @@ public class KnowledgeSyncHistoryServiceImpl
     implements KnowledgeSyncHistoryService {
 
     private static final int ERROR_MSG_LIMIT = 1000;
+
+    @Autowired
+    private KnowledgeSyncHistoryItemService knowledgeSyncHistoryItemService;
+
+    @Override
+    public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
+        List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
+        knowledgeSyncHistoryItemService.setItemSummaryForMap(beans);
+        return beans;
+    }
 
     @Override
     protected QueryWrapper<KnowledgeSyncHistory> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -79,6 +98,12 @@ public class KnowledgeSyncHistoryServiceImpl
 
     @Override
     public void finishHistory(String historyId, Integer status, Integer syncCount, String endTime, String errorMsg) {
+        finishHistory(historyId, status, syncCount, endTime, errorMsg, null);
+    }
+
+    @Override
+    public void finishHistory(String historyId, Integer status, Integer syncCount, String endTime, String errorMsg,
+                              List<KnowledgeSyncHistoryItem> items) {
         if (StrUtil.isBlank(historyId)) {
             return;
         }
@@ -92,6 +117,7 @@ public class KnowledgeSyncHistoryServiceImpl
             updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeSyncHistory::getErrorMsg), msg);
         }
         update(updateWrapper);
+        knowledgeSyncHistoryItemService.saveItems(historyId, items);
     }
 
     @Override
@@ -109,6 +135,11 @@ public class KnowledgeSyncHistoryServiceImpl
     public void deleteByKnowledgeId(String knowledgeId) {
         QueryWrapper<KnowledgeSyncHistory> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(KnowledgeSyncHistory::getKnowledgeId), knowledgeId);
+        List<KnowledgeSyncHistory> historyList = list(queryWrapper);
+        if (CollectionUtil.isNotEmpty(historyList)) {
+            List<String> historyIds = historyList.stream().map(KnowledgeSyncHistory::getId).collect(Collectors.toList());
+            knowledgeSyncHistoryItemService.deleteByHistoryIds(historyIds);
+        }
         remove(queryWrapper);
     }
 

@@ -30,11 +30,13 @@ import com.skyeye.exception.CustomException;
 import com.skyeye.key.entity.AiApiKey;
 import com.skyeye.key.service.AiApiKeyService;
 import com.skyeye.knowledge.classenum.KnowledgeFileSyncStatusEnum;
+import com.skyeye.knowledge.classenum.KnowledgeSyncItemTypeEnum;
 import com.skyeye.knowledge.classenum.KnowledgeSyncResultEnum;
 import com.skyeye.knowledge.classenum.KnowledgeSyncTriggerEnum;
 import com.skyeye.knowledge.dao.KnowledgeFileDao;
 import com.skyeye.knowledge.entity.Knowledge;
 import com.skyeye.knowledge.entity.KnowledgeFile;
+import com.skyeye.knowledge.entity.KnowledgeSyncHistoryItem;
 import com.skyeye.knowledge.service.KnowledgeFileService;
 import com.skyeye.knowledge.service.KnowledgeService;
 import com.skyeye.knowledge.service.KnowledgeSyncHistoryService;
@@ -45,7 +47,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,33 +123,42 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
 
     @Override
     public List<KnowledgeFile> selectNeedSync(String knowledgeId) {
-        QueryWrapper<KnowledgeFile> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(KnowledgeFile::getKnowledgeId), knowledgeId);
-        queryWrapper.in(MybatisPlusUtil.toColumns(KnowledgeFile::getSyncStatus),
-            Arrays.asList(KnowledgeFileSyncStatusEnum.WAIT.getKey(), KnowledgeFileSyncStatusEnum.FAIL.getKey()));
-        queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(KnowledgeFile::getCreateTime));
-        return list(queryWrapper);
+        return selectByKnowledgeId(knowledgeId);
     }
 
     @Override
     public int syncPendingFiles(Knowledge knowledge, AiApiKey apiKey) {
-        List<KnowledgeFile> files = selectNeedSync(knowledge.getId());
-        if (CollectionUtil.isEmpty(files)) {
-            return 0;
-        }
+        List<KnowledgeSyncHistoryItem> items = syncPendingFileItems(knowledge, apiKey);
         int success = 0;
-        for (KnowledgeFile file : files) {
-            try {
-                syncOneFile(knowledge, apiKey, file);
-                success++;
-            } catch (Exception e) {
-                markFail(file, e.getMessage());
-                log.warn("知识库[{}]文件[{}]同步失败: {}", knowledge.getId(), file.getName(), e.getMessage());
-                throw e instanceof CustomException ? (CustomException) e
-                    : new CustomException("文件「" + file.getName() + "」同步失败: " + e.getMessage());
+        for (KnowledgeSyncHistoryItem item : items) {
+            if (item.getSyncCount() != null) {
+                success += item.getSyncCount();
             }
         }
         return success;
+    }
+
+    @Override
+    public List<KnowledgeSyncHistoryItem> syncPendingFileItems(Knowledge knowledge, AiApiKey apiKey) {
+        List<KnowledgeFile> files = selectNeedSync(knowledge.getId());
+        List<KnowledgeSyncHistoryItem> items = new ArrayList<>();
+        if (CollectionUtil.isEmpty(files)) {
+            return items;
+        }
+        for (KnowledgeFile file : files) {
+            try {
+                syncOneFile(knowledge, apiKey, file);
+                items.add(KnowledgeSyncHistoryItem.of(KnowledgeSyncItemTypeEnum.FILE.getKey(),
+                    file.getId(), file.getName(), 1, KnowledgeSyncResultEnum.SUCCESS.getKey(), null));
+            } catch (Exception e) {
+                String msg = StrUtil.blankToDefault(e.getMessage(), "同步失败");
+                markFail(file, msg);
+                log.warn("知识库[{}]文件[{}]同步失败: {}", knowledge.getId(), file.getName(), msg);
+                items.add(KnowledgeSyncHistoryItem.of(KnowledgeSyncItemTypeEnum.FILE.getKey(),
+                    file.getId(), file.getName(), 0, KnowledgeSyncResultEnum.FAIL.getKey(), msg));
+            }
+        }
+        return items;
     }
 
     @Override
@@ -181,6 +192,7 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
             Integer status = KnowledgeSyncResultEnum.SUCCESS.getKey();
             String errorMsg = StrUtil.EMPTY;
             int syncCount = 0;
+            List<KnowledgeSyncHistoryItem> items = new ArrayList<>();
             try {
                 if (StrUtil.isNotBlank(tenantId)) {
                     TenantContext.setTenantId(tenantId);
@@ -190,6 +202,8 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
                 }
                 syncOneFile(knowledge, apiKey, file);
                 syncCount = 1;
+                items.add(KnowledgeSyncHistoryItem.of(KnowledgeSyncItemTypeEnum.FILE.getKey(),
+                    file.getId(), file.getName(), 1, KnowledgeSyncResultEnum.SUCCESS.getKey(), null));
                 try {
                     UpdateWrapper<Knowledge> updateWrapper = new UpdateWrapper<>();
                     updateWrapper.eq(CommonConstants.ID, knowledge.getId());
@@ -202,11 +216,13 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
                 status = KnowledgeSyncResultEnum.FAIL.getKey();
                 errorMsg = StrUtil.blankToDefault(e.getMessage(), "同步失败");
                 markFail(file, errorMsg);
+                items.add(KnowledgeSyncHistoryItem.of(KnowledgeSyncItemTypeEnum.FILE.getKey(),
+                    file.getId(), file.getName(), 0, KnowledgeSyncResultEnum.FAIL.getKey(), errorMsg));
                 log.warn("知识库[{}]单文件[{}]异步同步失败: {}", knowledge.getId(), file.getName(), errorMsg);
             } finally {
                 try {
                     knowledgeSyncHistoryService.finishHistory(historyId, status, syncCount,
-                        DateUtil.getTimeAndToString(), errorMsg);
+                        DateUtil.getTimeAndToString(), errorMsg, items);
                 } catch (Exception ex) {
                     log.warn("单文件同步写历史失败 historyId={}: {}", historyId, ex.getMessage());
                 }
@@ -304,8 +320,15 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
                 throw new CustomException("豆包知识库同步需要可用的文件存储器（请在知识库配置中指定文件配置，或配置 S3/TOS）");
             }
         }
-        // ⑤ 按平台导入知识库文档，拿到 platformDocId（删除时用）
+        // ⑤ 覆盖同步：先删平台旧文档，再导入新文档
         AiKnowledgeClient client = aiFactory.getKnowledgeClient(platform);
+        if (StrUtil.isNotBlank(file.getPlatformDocId())) {
+            try {
+                client.deleteDoc(apiKey.toAiKnowledgeConfig(), file.getPlatformDocId());
+            } catch (Exception e) {
+                log.warn("覆盖同步前删除平台文档失败 docId={}: {}", file.getPlatformDocId(), e.getMessage());
+            }
+        }
         String platformDocId = client.uploadFile(apiKey.toAiKnowledgeConfig(), storageFileName, fileUrl, tosPath);
         // ⑥ 回写同步成功：状态、S3 对象 ID、存储配置、平台文档 ID
         UpdateWrapper<KnowledgeFile> updateWrapper = new UpdateWrapper<>();

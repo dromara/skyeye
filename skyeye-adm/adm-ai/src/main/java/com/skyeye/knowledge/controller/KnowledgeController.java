@@ -15,6 +15,7 @@ import com.skyeye.knowledge.entity.Knowledge;
 import com.skyeye.knowledge.entity.KnowledgeFile;
 import com.skyeye.knowledge.service.KnowledgeFileService;
 import com.skyeye.knowledge.service.KnowledgeService;
+import com.skyeye.knowledge.service.KnowledgeSyncHistoryItemService;
 import com.skyeye.knowledge.service.KnowledgeSyncHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,9 @@ public class KnowledgeController {
 
     @Autowired
     private KnowledgeSyncHistoryService knowledgeSyncHistoryService;
+
+    @Autowired
+    private KnowledgeSyncHistoryItemService knowledgeSyncHistoryItemService;
 
     @Autowired
     private KnowledgeFileService knowledgeFileService;
@@ -128,6 +132,13 @@ public class KnowledgeController {
     @RequestMapping("/post/knowledgeController/queryAiKnowledgeSyncHistory")
     public void queryAiKnowledgeSyncHistory(InputObject inputObject, OutputObject outputObject) {
         knowledgeSyncHistoryService.queryPageList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryAiKnowledgeSyncHistoryItem", value = "分页查询知识库同步历史明细", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
+    @RequestMapping("/post/knowledgeController/queryAiKnowledgeSyncHistoryItem")
+    public void queryAiKnowledgeSyncHistoryItem(InputObject inputObject, OutputObject outputObject) {
+        knowledgeSyncHistoryItemService.queryPageList(inputObject, outputObject);
     }
 
     @ApiOperation(id = "writeAiKnowledgeFile", value = "新增AI知识库文件", method = "POST", allUse = "1")

@@ -16,6 +16,8 @@ import com.skyeye.knowledge.classenum.KnowledgeSyncResultEnum;
 import com.skyeye.knowledge.classenum.KnowledgeSyncTriggerEnum;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 知识库同步执行历史（每次手动/定时同步一条记录）
  */
@@ -59,5 +61,9 @@ public class KnowledgeSyncHistory extends OperatorUserInfo {
     @TableField(value = "tenant_id", updateStrategy = FieldStrategy.NEVER)
     @Property("租户id")
     private String tenantId;
+
+    @TableField(exist = false)
+    @Property("本次同步的表/文件明细")
+    private List<KnowledgeSyncHistoryItem> itemList;
 
 }
