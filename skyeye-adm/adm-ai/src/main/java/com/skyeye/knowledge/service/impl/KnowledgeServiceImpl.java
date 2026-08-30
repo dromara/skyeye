@@ -35,12 +35,14 @@ import com.skyeye.eve.service.IUploadService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.key.entity.AiApiKey;
 import com.skyeye.key.service.AiApiKeyService;
+import com.skyeye.knowledge.classenum.KnowledgeSyncItemTypeEnum;
 import com.skyeye.knowledge.classenum.KnowledgeSyncResultEnum;
 import com.skyeye.knowledge.classenum.KnowledgeSyncTriggerEnum;
 import com.skyeye.knowledge.classenum.KnowledgeSyncTypeEnum;
 import com.skyeye.knowledge.dao.KnowledgeDao;
 import com.skyeye.knowledge.entity.Knowledge;
 import com.skyeye.knowledge.entity.KnowledgeSync;
+import com.skyeye.knowledge.entity.KnowledgeSyncHistoryItem;
 import com.skyeye.knowledge.service.KnowledgeFileService;
 import com.skyeye.knowledge.service.KnowledgeService;
 import com.skyeye.knowledge.service.KnowledgeSyncHistoryService;
@@ -404,6 +406,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         int total = 0;
         Integer status = KnowledgeSyncResultEnum.SUCCESS.getKey();
         String errorMsg = StrUtil.EMPTY;
+        List<KnowledgeSyncHistoryItem> items = new ArrayList<>();
         try {
             AiApiKey apiKey = aiApiKeyService.selectEnabledKeyByKnowledgeId(knowledge.getId());
             List<KnowledgeSync> syncList = knowledge.getSyncList();
@@ -417,12 +420,35 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             // ① 有 JDBC + 同步表：抽表数据上传（没有表配置则跳过，不报错）；源表按全租户拉取，不按当前租户过滤
             if (CollectionUtil.isNotEmpty(syncList) && StrUtil.isNotBlank(knowledge.getJdbcUrl())) {
                 for (KnowledgeSync sync : syncList) {
-                    total += syncOneTable(knowledge, sync, apiKey, uploadContext);
+                    try {
+                        int count = syncOneTable(knowledge, sync, apiKey, uploadContext);
+                        total += count;
+                        items.add(KnowledgeSyncHistoryItem.of(KnowledgeSyncItemTypeEnum.TABLE.getKey(),
+                            sync.getId(), sync.getTableName(), count, KnowledgeSyncResultEnum.SUCCESS.getKey(), null));
+                    } catch (Exception e) {
+                        status = KnowledgeSyncResultEnum.FAIL.getKey();
+                        String msg = StrUtil.blankToDefault(e.getMessage(), "同步失败");
+                        items.add(KnowledgeSyncHistoryItem.of(KnowledgeSyncItemTypeEnum.TABLE.getKey(),
+                            sync.getId(), sync.getTableName(), 0, KnowledgeSyncResultEnum.FAIL.getKey(), msg));
+                        LOGGER.warn("知识库[{}]表[{}]同步失败: {}", knowledge.getId(), sync.getTableName(), msg);
+                    }
                 }
                 flushUploadIfNeeded(knowledge, apiKey, uploadContext, true);
             }
             // ② 待同步/失败文件：本地 → S3 → 平台知识库
-            total += knowledgeFileService.syncPendingFiles(knowledge, apiKey);
+            List<KnowledgeSyncHistoryItem> fileItems = knowledgeFileService.syncPendingFileItems(knowledge, apiKey);
+            if (CollectionUtil.isNotEmpty(fileItems)) {
+                items.addAll(fileItems);
+                for (KnowledgeSyncHistoryItem fileItem : fileItems) {
+                    total += fileItem.getSyncCount() == null ? 0 : fileItem.getSyncCount();
+                    if (KnowledgeSyncResultEnum.FAIL.getKey().equals(fileItem.getStatus())) {
+                        status = KnowledgeSyncResultEnum.FAIL.getKey();
+                    }
+                }
+            }
+            if (KnowledgeSyncResultEnum.FAIL.getKey().equals(status)) {
+                errorMsg = joinItemErrors(items);
+            }
             UpdateWrapper<Knowledge> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq(CommonConstants.ID, knowledge.getId());
             updateWrapper.set(MybatisPlusUtil.toColumns(Knowledge::getLastSyncTime), DateUtil.getTimeAndToString());
@@ -439,11 +465,29 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         } finally {
             try {
                 knowledgeSyncHistoryService.finishHistory(historyId, status, total,
-                    DateUtil.getTimeAndToString(), errorMsg);
+                    DateUtil.getTimeAndToString(), errorMsg, items);
             } catch (Exception ex) {
                 LOGGER.warn("知识库[{}]保存同步历史失败: {}", knowledge.getName(), ex.getMessage());
             }
         }
+    }
+
+    private String joinItemErrors(List<KnowledgeSyncHistoryItem> items) {
+        if (CollectionUtil.isEmpty(items)) {
+            return StrUtil.EMPTY;
+        }
+        List<String> messages = new ArrayList<>();
+        for (KnowledgeSyncHistoryItem item : items) {
+            if (!KnowledgeSyncResultEnum.FAIL.getKey().equals(item.getStatus()) || StrUtil.isBlank(item.getErrorMsg())) {
+                continue;
+            }
+            messages.add(item.getItemName() + "：" + item.getErrorMsg());
+        }
+        if (messages.isEmpty()) {
+            return StrUtil.EMPTY;
+        }
+        String text = String.join("；", messages);
+        return text.length() > 1000 ? text.substring(0, 1000) : text;
     }
 
     private int syncOneTable(Knowledge knowledge, KnowledgeSync sync, AiApiKey apiKey,

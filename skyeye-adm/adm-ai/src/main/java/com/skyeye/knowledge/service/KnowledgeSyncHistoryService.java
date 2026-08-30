@@ -6,6 +6,9 @@ package com.skyeye.knowledge.service;
 
 import com.skyeye.base.business.service.SkyeyeBusinessService;
 import com.skyeye.knowledge.entity.KnowledgeSyncHistory;
+import com.skyeye.knowledge.entity.KnowledgeSyncHistoryItem;
+
+import java.util.List;
 
 public interface KnowledgeSyncHistoryService extends SkyeyeBusinessService<KnowledgeSyncHistory> {
 
@@ -17,6 +20,10 @@ public interface KnowledgeSyncHistoryService extends SkyeyeBusinessService<Knowl
 
     /** 更新同步结果（成功/失败） */
     void finishHistory(String historyId, Integer status, Integer syncCount, String endTime, String errorMsg);
+
+    /** 更新同步结果，并写入表/文件明细 */
+    void finishHistory(String historyId, Integer status, Integer syncCount, String endTime, String errorMsg,
+                       List<KnowledgeSyncHistoryItem> items);
 
     /** 同一知识库是否已有进行中的同步 */
     boolean hasRunning(String knowledgeId);

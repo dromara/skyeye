@@ -10,6 +10,7 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.key.entity.AiApiKey;
 import com.skyeye.knowledge.entity.Knowledge;
 import com.skyeye.knowledge.entity.KnowledgeFile;
+import com.skyeye.knowledge.entity.KnowledgeSyncHistoryItem;
 
 import java.util.List;
 
@@ -20,6 +21,11 @@ public interface KnowledgeFileService extends SkyeyeBusinessService<KnowledgeFil
     List<KnowledgeFile> selectNeedSync(String knowledgeId);
 
     int syncPendingFiles(Knowledge knowledge, AiApiKey apiKey);
+
+    /**
+     * 同步知识库下全部上传文件（含已同步，覆盖重新导入），并返回每个文件的明细
+     */
+    List<KnowledgeSyncHistoryItem> syncPendingFileItems(Knowledge knowledge, AiApiKey apiKey);
 
     /**
      * 单独同步一个上传文件（写入同步历史）
