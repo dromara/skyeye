@@ -42,6 +42,7 @@ public class PlatformAiGuideService {
         Map<String, Object> extraParams = new HashMap<>();
         extraParams.put("saveChat", 1);
         extraParams.put("knowledgeQuery", question);
+        extraParams.put("userMessage", question);
         return platformAiChatHelper.startStreamingChat(
             platformAiSkillPromptBuilder.build(question, pageTitle, pagePath),
             BIZ_TYPE_CHAT,

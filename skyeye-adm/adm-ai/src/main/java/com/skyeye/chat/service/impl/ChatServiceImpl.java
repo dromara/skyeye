@@ -129,6 +129,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         String apiKeyId = params.get("apiKeyId").toString();
         String bizType = params.get("bizType").toString();
         boolean saveChat = isSaveChat(params.get("saveChat"));
+        String userMessage = params.get("userMessage").toString().trim();
         Object imagesObj = params.get("images");
         List<String> images = readImages(imagesObj == null ? "" : imagesObj.toString());
         String userId = InputObject.getLogParamsStatic().get("id").toString();
@@ -147,7 +148,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         String id;
         if (saveChat) {
             Chat chat = new Chat();
-            chat.setMessage(content);
+            chat.setMessage(userMessage);
             chat.setPlatform(aiApiKey.getPlatform());
             chat.setApiKeyId(aiApiKey.getId());
             id = createEntity(chat, userId);
