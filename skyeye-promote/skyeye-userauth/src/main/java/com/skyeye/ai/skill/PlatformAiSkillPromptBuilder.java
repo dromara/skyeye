@@ -37,7 +37,11 @@ public class PlatformAiSkillPromptBuilder {
     private IAiSkillRest iAiSkillRest;
 
     public String build(String question, String pageTitle, String pagePath) {
-        MatchResult match = match(question, pageTitle, pagePath);
+        return build(question, pageTitle, pagePath, null, null);
+    }
+
+    public String build(String question, String pageTitle, String pagePath, String skillId, String suiteId) {
+        MatchResult match = match(question, pageTitle, pagePath, skillId, suiteId);
         StringBuilder sb = new StringBuilder();
         appendQuestionAndPage(sb, question, pageTitle, pagePath);
         if (match.suite != null) {
@@ -51,12 +55,27 @@ public class PlatformAiSkillPromptBuilder {
         return sb.toString();
     }
 
-    private MatchResult match(String question, String pageTitle, String pagePath) {
+    private MatchResult match(String question, String pageTitle, String pagePath, String skillId, String suiteId) {
         MatchResult result = new MatchResult();
         Map<String, Object> payload = loadMatchPayload();
         List<Map<String, Object>> skills = asMapList(payload.get("skillList"));
         List<Map<String, Object>> suites = asMapList(payload.get("suiteList"));
         if (CollectionUtil.isEmpty(skills) && CollectionUtil.isEmpty(suites)) {
+            return result;
+        }
+        if (StrUtil.isNotBlank(suiteId)) {
+            result.suite = findById(suites, suiteId);
+            if (result.suite != null) {
+                result.suiteSkills = skillsOfSuite(skills, str(result.suite, "id"), null);
+            }
+            return result;
+        }
+        if (StrUtil.isNotBlank(skillId)) {
+            result.skill = findById(skills, skillId);
+            if (result.skill != null && StrUtil.isNotBlank(str(result.skill, "suiteId"))) {
+                result.suite = findById(suites, str(result.skill, "suiteId"));
+                result.suiteSkills = skillsOfSuite(skills, str(result.skill, "suiteId"), null);
+            }
             return result;
         }
         String haystack = (StrUtil.nullToEmpty(question) + " "
