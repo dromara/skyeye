@@ -33,6 +33,10 @@ public class AiSkill extends OperatorUserInfo {
     @ApiModelProperty(value = "所属套件id")
     private String suiteId;
 
+    @TableField(value = "category_id", updateStrategy = FieldStrategy.IGNORED)
+    @ApiModelProperty(value = "所属分类id")
+    private String categoryId;
+
     @TableField(value = "odd_number")
     @ApiModelProperty(value = "技能编码")
     private String oddNumber;
@@ -84,4 +88,8 @@ public class AiSkill extends OperatorUserInfo {
     @TableField(exist = false)
     @Property("所属套件")
     private AiSkillSuite suiteMation;
+
+    @TableField(exist = false)
+    @Property("所属分类")
+    private AiSkillCategory categoryMation;
 }

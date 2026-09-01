@@ -54,7 +54,7 @@ public class AiSkillController {
         aiSkillService.deleteById(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryEnabledAiSkillMatchList", value = "办公AI匹配用：启用中的套件与技能", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryEnabledAiSkillMatchList", value = "办公AI匹配用：启用中的套件、技能与分类", method = "POST", allUse = "2")
     @RequestMapping("/post/AiSkillController/queryEnabledAiSkillMatchList")
     public void queryEnabledAiSkillMatchList(InputObject inputObject, OutputObject outputObject) {
         aiSkillService.queryMatchList(inputObject, outputObject);

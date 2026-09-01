@@ -5,13 +5,11 @@
 package com.skyeye.skill.service;
 
 import com.skyeye.base.business.service.SkyeyeBusinessService;
-import com.skyeye.skill.entity.AiSkillSuite;
+import com.skyeye.skill.entity.AiSkillCategory;
 
 import java.util.List;
 
-public interface AiSkillSuiteService extends SkyeyeBusinessService<AiSkillSuite> {
+public interface AiSkillCategoryService extends SkyeyeBusinessService<AiSkillCategory> {
 
-    List<AiSkillSuite> queryEnabledList();
-
-    List<AiSkillSuite> queryByCategoryId(String categoryId);
+    List<AiSkillCategory> queryEnabledList();
 }
