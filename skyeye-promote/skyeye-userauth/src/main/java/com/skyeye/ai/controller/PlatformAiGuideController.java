@@ -29,7 +29,9 @@ public class PlatformAiGuideController {
     @ApiImplicitParams({
         @ApiImplicitParam(id = "question", name = "question", value = "用户问题", required = "required"),
         @ApiImplicitParam(id = "pageTitle", name = "pageTitle", value = "当前页面标题"),
-        @ApiImplicitParam(id = "pagePath", name = "pagePath", value = "当前页面路径")})
+        @ApiImplicitParam(id = "pagePath", name = "pagePath", value = "当前页面路径"),
+        @ApiImplicitParam(id = "skillId", name = "skillId", value = "用户点选的技能id"),
+        @ApiImplicitParam(id = "suiteId", name = "suiteId", value = "用户点选的套件id")})
     @RequestMapping("/post/PlatformAiGuideController/aiGeneratePlatformGuide")
     public void aiGeneratePlatformGuide(InputObject inputObject, OutputObject outputObject) {
         platformAiGuideService.generate(inputObject, outputObject);

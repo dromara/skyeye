@@ -39,12 +39,14 @@ public class PlatformAiGuideService {
         String question = params.get("question").toString().trim();
         String pageTitle = params.get("pageTitle").toString();
         String pagePath = params.get("pagePath").toString();
+        String skillId = params.get("skillId").toString();
+        String suiteId = params.get("suiteId").toString();
         Map<String, Object> extraParams = new HashMap<>();
         extraParams.put("saveChat", 1);
         extraParams.put("knowledgeQuery", question);
         extraParams.put("userMessage", question);
         return platformAiChatHelper.startStreamingChat(
-            platformAiSkillPromptBuilder.build(question, pageTitle, pagePath),
+            platformAiSkillPromptBuilder.build(question, pageTitle, pagePath, skillId, suiteId),
             BIZ_TYPE_CHAT,
             extraParams);
     }
