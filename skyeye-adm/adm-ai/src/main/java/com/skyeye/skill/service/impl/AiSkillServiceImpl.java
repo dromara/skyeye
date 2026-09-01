@@ -7,8 +7,10 @@ package com.skyeye.skill.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
@@ -65,6 +67,25 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
                 throw new CustomException("所属套件不存在");
             }
         }
+        disableOtherEnabled(entity);
+    }
+
+    /**
+     * 同一业务对象只允许一条技能处于启用。启用当前技能时，自动禁用同对象下其它启用技能。
+     */
+    private void disableOtherEnabled(AiSkill entity) {
+        if (!EnableEnum.ENABLE_USING.getKey().equals(entity.getEnabled())) {
+            return;
+        }
+        UpdateWrapper<AiSkill> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getAppId), entity.getAppId());
+        updateWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getServiceClassName), entity.getServiceClassName());
+        updateWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getEnabled), EnableEnum.ENABLE_USING.getKey());
+        if (StrUtil.isNotBlank(entity.getId())) {
+            updateWrapper.ne(CommonConstants.ID, entity.getId());
+        }
+        updateWrapper.set(MybatisPlusUtil.toColumns(AiSkill::getEnabled), EnableEnum.DISABLE_USING.getKey());
+        update(updateWrapper);
     }
 
     @Override

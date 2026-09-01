@@ -25,14 +25,14 @@ public class AiSkillSuiteController {
     @Autowired
     private AiSkillSuiteService aiSkillSuiteService;
 
-    @ApiOperation(id = "writeAiSkillSuite", value = "新增/编辑AI技能套件", method = "POST", allUse = "1")
+    @ApiOperation(id = "writeAiSkillSuite", value = "新增/编辑AI技能套件", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = AiSkillSuite.class)
     @RequestMapping("/post/AiSkillSuiteController/writeAiSkillSuite")
     public void writeAiSkillSuite(InputObject inputObject, OutputObject outputObject) {
         aiSkillSuiteService.saveOrUpdateEntity(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryAiSkillSuitePageList", value = "分页查询AI技能套件", method = "POST", allUse = "1")
+    @ApiOperation(id = "queryAiSkillSuitePageList", value = "分页查询AI技能套件", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/AiSkillSuiteController/queryAiSkillSuitePageList")
     public void queryAiSkillSuitePageList(InputObject inputObject, OutputObject outputObject) {
@@ -53,7 +53,7 @@ public class AiSkillSuiteController {
         aiSkillSuiteService.selectById(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "deleteAiSkillSuiteById", value = "删除AI技能套件", method = "DELETE", allUse = "1")
+    @ApiOperation(id = "deleteAiSkillSuiteById", value = "删除AI技能套件", method = "DELETE", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
     @RequestMapping("/post/AiSkillSuiteController/deleteAiSkillSuiteById")
