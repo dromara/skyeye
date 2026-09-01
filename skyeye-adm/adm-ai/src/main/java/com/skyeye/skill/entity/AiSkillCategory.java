@@ -16,47 +16,33 @@ import com.skyeye.common.entity.features.OperatorUserInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import lombok.Data;
 
-import java.util.List;
-
 /**
- * AI 技能套件：把请假申请、销假申请等同类技能归到一组，对话时一次命中整套。
+ * AI 技能分类：技能、套件可挂到分类下，聊天里按分类筛选展示。
  */
 @Data
 @UniqueField(value = {"oddNumber"})
-@TableName(value = "skyeye_ai_skill_suite")
-@ApiModel("AI技能套件")
-public class AiSkillSuite extends OperatorUserInfo {
+@TableName(value = "skyeye_ai_skill_category")
+@ApiModel("AI技能分类")
+public class AiSkillCategory extends OperatorUserInfo {
 
     @TableId("id")
     @ApiModelProperty(value = "主键id。为空时新增，不为空时编辑")
     private String id;
 
     @TableField(value = "odd_number")
-    @ApiModelProperty(value = "套件编码")
+    @ApiModelProperty(value = "分类编码")
     private String oddNumber;
 
-    @TableField(value = "category_id", updateStrategy = FieldStrategy.IGNORED)
-    @ApiModelProperty(value = "所属分类id")
-    private String categoryId;
-
     @TableField(value = "`name`")
-    @ApiModelProperty(value = "套件名称", required = "required", fuzzyLike = true)
+    @ApiModelProperty(value = "分类名称", required = "required", fuzzyLike = true)
     private String name;
-
-    @TableField(value = "description")
-    @ApiModelProperty(value = "何时使用该套件")
-    private String description;
-
-    @TableField(value = "keywords")
-    @ApiModelProperty(value = "触发词，逗号分隔")
-    private String keywords;
 
     @TableField(value = "enabled")
     @ApiModelProperty(value = "状态", enumClass = EnableEnum.class, required = "required,num")
     private Integer enabled;
 
     @TableField(value = "order_by")
-    @ApiModelProperty(value = "排序，越小越优先", defaultValue = "100")
+    @ApiModelProperty(value = "排序，越小越靠前", defaultValue = "100")
     private Integer orderBy;
 
     @TableField(value = "remark")
@@ -66,12 +52,4 @@ public class AiSkillSuite extends OperatorUserInfo {
     @TableField(value = "tenant_id", updateStrategy = FieldStrategy.NEVER)
     @Property("租户id")
     private String tenantId;
-
-    @TableField(exist = false)
-    @Property("套件下的技能")
-    private List<AiSkill> skillList;
-
-    @TableField(exist = false)
-    @Property("所属分类")
-    private AiSkillCategory categoryMation;
 }

@@ -16,9 +16,12 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 办公 AI 用户消息：问题 + 当前页 + 命中的套件/技能。
@@ -41,41 +44,73 @@ public class PlatformAiSkillPromptBuilder {
     }
 
     public String build(String question, String pageTitle, String pagePath, String skillId, String suiteId) {
-        MatchResult match = match(question, pageTitle, pagePath, skillId, suiteId);
+        Map<String, Object> payload = loadMatchPayload();
+        List<Map<String, Object>> skills = asMapList(payload.get("skillList"));
+        List<Map<String, Object>> suites = asMapList(payload.get("suiteList"));
+        MatchResult match = match(question, pageTitle, pagePath, skillId, suiteId, skills, suites);
         StringBuilder sb = new StringBuilder();
         appendQuestionAndPage(sb, question, pageTitle, pagePath);
-        if (match.suite != null) {
-            LOGGER.info("platform ai suite matched, name={}", str(match.suite, "name"));
-            appendSuite(sb, match);
-        } else if (match.skill != null) {
-            LOGGER.info("platform ai skill matched, name={}", str(match.skill, "name"));
-            appendSkill(sb, match.skill);
-        }
+        appendMatched(sb, match, skills);
         appendMarkedJsonOutput(sb);
         return sb.toString();
     }
 
-    private MatchResult match(String question, String pageTitle, String pagePath, String skillId, String suiteId) {
+    private void appendMatched(StringBuilder sb, MatchResult match, List<Map<String, Object>> skills) {
+        Set<String> writtenSkillIds = new HashSet<>();
+        for (Map<String, Object> suite : match.suites) {
+            LOGGER.info("platform ai suite matched, name={}", str(suite, "name"));
+            MatchResult one = new MatchResult();
+            one.suite = suite;
+            one.suiteSkills = skillsOfSuite(skills, str(suite, "id"), null);
+            appendSuite(sb, one);
+            for (Map<String, Object> skill : one.suiteSkills) {
+                writtenSkillIds.add(str(skill, "id"));
+            }
+        }
+        for (Map<String, Object> skill : match.skills) {
+            if (writtenSkillIds.contains(str(skill, "id"))) {
+                continue;
+            }
+            LOGGER.info("platform ai skill matched, name={}", str(skill, "name"));
+            appendSkill(sb, skill);
+            writtenSkillIds.add(str(skill, "id"));
+        }
+    }
+
+    private MatchResult match(String question, String pageTitle, String pagePath, String skillId, String suiteId,
+                              List<Map<String, Object>> skills, List<Map<String, Object>> suites) {
         MatchResult result = new MatchResult();
-        Map<String, Object> payload = loadMatchPayload();
-        List<Map<String, Object>> skills = asMapList(payload.get("skillList"));
-        List<Map<String, Object>> suites = asMapList(payload.get("suiteList"));
         if (CollectionUtil.isEmpty(skills) && CollectionUtil.isEmpty(suites)) {
             return result;
         }
-        if (StrUtil.isNotBlank(suiteId)) {
-            result.suite = findById(suites, suiteId);
-            if (result.suite != null) {
-                result.suiteSkills = skillsOfSuite(skills, str(result.suite, "id"), null);
+        List<String> suiteIds = splitIds(suiteId);
+        List<String> skillIds = splitIds(skillId);
+        if (!suiteIds.isEmpty() || !skillIds.isEmpty()) {
+            Map<String, Map<String, Object>> suiteMap = new LinkedHashMap<>();
+            Map<String, Map<String, Object>> skillMap = new LinkedHashMap<>();
+            for (String id : suiteIds) {
+                Map<String, Object> suite = findById(suites, id);
+                if (suite != null) {
+                    suiteMap.put(str(suite, "id"), suite);
+                }
             }
-            return result;
-        }
-        if (StrUtil.isNotBlank(skillId)) {
-            result.skill = findById(skills, skillId);
-            if (result.skill != null && StrUtil.isNotBlank(str(result.skill, "suiteId"))) {
-                result.suite = findById(suites, str(result.skill, "suiteId"));
-                result.suiteSkills = skillsOfSuite(skills, str(result.skill, "suiteId"), null);
+            for (String id : skillIds) {
+                Map<String, Object> skill = findById(skills, id);
+                if (skill == null) {
+                    continue;
+                }
+                String parentSuiteId = str(skill, "suiteId");
+                if (StrUtil.isNotBlank(parentSuiteId)) {
+                    Map<String, Object> suite = findById(suites, parentSuiteId);
+                    if (suite != null) {
+                        suiteMap.put(str(suite, "id"), suite);
+                        continue;
+                    }
+                }
+                skillMap.put(str(skill, "id"), skill);
             }
+            result.suites.addAll(suiteMap.values());
+            result.skills.addAll(skillMap.values());
             return result;
         }
         String haystack = (StrUtil.nullToEmpty(question) + " "
@@ -105,12 +140,25 @@ public class PlatformAiSkillPromptBuilder {
         if (bestSkill != null && StrUtil.isNotBlank(str(bestSkill, "suiteId"))) {
             bestSuite = findById(suites, str(bestSkill, "suiteId"));
         }
-        result.suite = bestSuite;
-        result.skill = bestSkill;
         if (bestSuite != null) {
-            result.suiteSkills = skillsOfSuite(skills, str(bestSuite, "id"), null);
+            result.suites.add(bestSuite);
+        } else if (bestSkill != null) {
+            result.skills.add(bestSkill);
         }
         return result;
+    }
+
+    private List<String> splitIds(String raw) {
+        if (StrUtil.isBlank(raw)) {
+            return Collections.emptyList();
+        }
+        List<String> ids = new ArrayList<>();
+        for (String part : raw.split("[,，;；\\s]+")) {
+            if (StrUtil.isNotBlank(part)) {
+                ids.add(part.trim());
+            }
+        }
+        return ids;
     }
 
     private Map<String, Object> loadMatchPayload() {
@@ -255,8 +303,9 @@ public class PlatformAiSkillPromptBuilder {
     }
 
     private static class MatchResult {
-        private Map<String, Object> skill;
         private Map<String, Object> suite;
-        private List<Map<String, Object>> suiteSkills;
+        private List<Map<String, Object>> suiteSkills = new ArrayList<>();
+        private List<Map<String, Object>> suites = new ArrayList<>();
+        private List<Map<String, Object>> skills = new ArrayList<>();
     }
 }

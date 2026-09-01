@@ -21,7 +21,9 @@ import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.skill.dao.AiSkillDao;
 import com.skyeye.skill.entity.AiSkill;
+import com.skyeye.skill.entity.AiSkillCategory;
 import com.skyeye.skill.entity.AiSkillSuite;
+import com.skyeye.skill.service.AiSkillCategoryService;
 import com.skyeye.skill.service.AiSkillService;
 import com.skyeye.skill.service.AiSkillSuiteService;
 import com.skyeye.skill.util.AiSkillBlockCompiler;
@@ -41,6 +43,10 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
     @Autowired
     @Lazy
     private AiSkillSuiteService aiSkillSuiteService;
+
+    @Autowired
+    @Lazy
+    private AiSkillCategoryService aiSkillCategoryService;
 
     @Override
     public void validatorEntity(AiSkill entity) {
@@ -67,6 +73,12 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
                 throw new CustomException("所属套件不存在");
             }
         }
+        if (StrUtil.isNotBlank(entity.getCategoryId())) {
+            AiSkillCategory category = aiSkillCategoryService.selectById(entity.getCategoryId());
+            if (category == null || StrUtil.isBlank(category.getId())) {
+                throw new CustomException("所属分类不存在");
+            }
+        }
         disableOtherEnabled(entity);
     }
 
@@ -91,8 +103,13 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
     @Override
     public AiSkill selectById(String id) {
         AiSkill skill = super.selectById(id);
-        if (skill != null && StrUtil.isNotBlank(skill.getSuiteId())) {
-            aiSkillSuiteService.setDataMation(skill, AiSkill::getSuiteId);
+        if (skill != null) {
+            if (StrUtil.isNotBlank(skill.getSuiteId())) {
+                aiSkillSuiteService.setDataMation(skill, AiSkill::getSuiteId);
+            }
+            if (StrUtil.isNotBlank(skill.getCategoryId())) {
+                aiSkillCategoryService.setDataMation(skill, AiSkill::getCategoryId);
+            }
         }
         return skill;
     }
@@ -101,6 +118,7 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         aiSkillSuiteService.setMationForMap(beans, "suiteId", "suiteMation");
+        aiSkillCategoryService.setMationForMap(beans, "categoryId", "categoryMation");
         return beans;
     }
 
@@ -127,7 +145,7 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
         queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getServiceClassName), serviceClassName);
         queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(AiSkill::getOrderBy));
         List<AiSkill> list = list(queryWrapper);
-        fillSuite(list);
+        fillRefs(list);
         return list;
     }
 
@@ -137,7 +155,7 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
         queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getEnabled), EnableEnum.ENABLE_USING.getKey());
         queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(AiSkill::getOrderBy));
         List<AiSkill> list = list(queryWrapper);
-        fillSuite(list);
+        fillRefs(list);
         return list;
     }
 
@@ -153,12 +171,24 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
     }
 
     @Override
+    public List<AiSkill> queryByCategoryId(String categoryId) {
+        if (StrUtil.isBlank(categoryId)) {
+            return java.util.Collections.emptyList();
+        }
+        QueryWrapper<AiSkill> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getCategoryId), categoryId);
+        return list(queryWrapper);
+    }
+
+    @Override
     public void queryMatchList(InputObject inputObject, OutputObject outputObject) {
         List<AiSkill> skills = queryEnabledList();
         List<AiSkillSuite> suites = aiSkillSuiteService.queryEnabledList();
+        List<AiSkillCategory> categories = aiSkillCategoryService.queryEnabledList();
         Map<String, Object> bean = new HashMap<>();
         bean.put("skillList", skills);
         bean.put("suiteList", suites);
+        bean.put("categoryList", categories);
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
         if (CollectionUtil.isNotEmpty(skills)) {
@@ -172,10 +202,11 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
         }
     }
 
-    private void fillSuite(List<AiSkill> list) {
+    private void fillRefs(List<AiSkill> list) {
         if (CollectionUtil.isEmpty(list)) {
             return;
         }
         aiSkillSuiteService.setDataMation(list, AiSkill::getSuiteId);
+        aiSkillCategoryService.setDataMation(list, AiSkill::getCategoryId);
     }
 }

@@ -19,5 +19,7 @@ public interface AiSkillService extends SkyeyeBusinessService<AiSkill> {
 
     List<AiSkill> queryBySuiteId(String suiteId);
 
+    List<AiSkill> queryByCategoryId(String categoryId);
+
     void queryMatchList(InputObject inputObject, OutputObject outputObject);
 }
