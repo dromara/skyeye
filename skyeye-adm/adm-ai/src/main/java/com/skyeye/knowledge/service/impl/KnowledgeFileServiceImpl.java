@@ -320,16 +320,19 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
                 throw new CustomException("豆包知识库同步需要可用的文件存储器（请在知识库配置中指定文件配置，或配置 S3/TOS）");
             }
         }
-        // ⑤ 覆盖同步：先删平台旧文档，再导入新文档
+        // ⑤ 覆盖同步：稳定 doc_id（f_{文件记录id}）重复导入会覆盖；
+        //    若库里还是旧的平台 ID（与稳定 ID 不同），先删旧文档再导入
         AiKnowledgeClient client = aiFactory.getKnowledgeClient(platform);
-        if (StrUtil.isNotBlank(file.getPlatformDocId())) {
+        String stableDocId = AiKnowledgeUploadHelper.buildFileDocId(knowledge.getId(), file.getId());
+        if (StrUtil.isNotBlank(file.getPlatformDocId()) && !StrUtil.equals(file.getPlatformDocId(), stableDocId)) {
             try {
                 client.deleteDoc(apiKey.toAiKnowledgeConfig(), file.getPlatformDocId());
             } catch (Exception e) {
                 log.warn("覆盖同步前删除平台文档失败 docId={}: {}", file.getPlatformDocId(), e.getMessage());
             }
         }
-        String platformDocId = client.uploadFile(apiKey.toAiKnowledgeConfig(), storageFileName, fileUrl, tosPath);
+        String platformDocId = client.uploadFile(apiKey.toAiKnowledgeConfig(), storageFileName, fileUrl, tosPath,
+            stableDocId);
         // ⑥ 回写同步成功：状态、S3 对象 ID、存储配置、平台文档 ID
         UpdateWrapper<KnowledgeFile> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, file.getId());

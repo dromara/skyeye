@@ -28,12 +28,13 @@ public class KnowledgeSyncServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
 
     @Override
     public void saveList(String knowledgeId, List<KnowledgeSync> syncList) {
-        Map<String, String> oldWatermarkMap = new HashMap<>();
+        // 配置是先删后插，前端不会带回水位/分片字段，按表名从旧记录拷贝，避免保存配置后增量水位和分片 ID 丢失
+        Map<String, KnowledgeSync> oldByTable = new HashMap<>();
         List<KnowledgeSync> oldList = selectByKnowledgeId(knowledgeId);
         if (CollectionUtil.isNotEmpty(oldList)) {
             for (KnowledgeSync old : oldList) {
-                if (StrUtil.isNotBlank(old.getTableName()) && StrUtil.isNotBlank(old.getLastWatermark())) {
-                    oldWatermarkMap.put(old.getTableName(), old.getLastWatermark());
+                if (StrUtil.isNotBlank(old.getTableName())) {
+                    oldByTable.put(old.getTableName(), old);
                 }
             }
         }
@@ -54,8 +55,18 @@ public class KnowledgeSyncServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
             } else if (sync.getTenantField() == null) {
                 sync.setTenantField(StrUtil.EMPTY);
             }
-            if (StrUtil.isBlank(sync.getLastWatermark()) && oldWatermarkMap.containsKey(sync.getTableName())) {
-                sync.setLastWatermark(oldWatermarkMap.get(sync.getTableName()));
+            KnowledgeSync old = oldByTable.get(sync.getTableName());
+            if (old != null) {
+                // 保留增量水位、已上传分片数、平台文档 ID
+                if (StrUtil.isBlank(sync.getLastWatermark()) && StrUtil.isNotBlank(old.getLastWatermark())) {
+                    sync.setLastWatermark(old.getLastWatermark());
+                }
+                if (sync.getTablePartCount() == null) {
+                    sync.setTablePartCount(old.getTablePartCount());
+                }
+                if (StrUtil.isBlank(sync.getPartDocIds()) && StrUtil.isNotBlank(old.getPartDocIds())) {
+                    sync.setPartDocIds(old.getPartDocIds());
+                }
             }
         }
         createEntity(syncList, StrUtil.EMPTY);

@@ -4,16 +4,20 @@
 
 package com.skyeye.ai.core.knowledge;
 
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.knowledge.util.KnowledgeTenantFilterHelper;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 知识库上传文件命名与正文拼装。
+ * <p>
+ * 表分片 / 文件使用稳定 doc_id（不含日期、UUID），平台侧重复上传同一 ID 会覆盖，避免全量/增量反复同步产生重复文档。
  */
 public final class AiKnowledgeUploadHelper {
 
@@ -24,19 +28,92 @@ public final class AiKnowledgeUploadHelper {
 
     /**
      * 存储路径前缀：knowledge/{知识库id}/{yyyy-MM-dd}/
+     * （仅 TOS 临时对象路径，导入后可删除；平台文档 ID 不走这里）
      */
     public static String buildObjectDir(String knowledgeId) {
-        String kbId = StrUtil.blankToDefault(knowledgeId, "unknown");
-        kbId = kbId.replaceAll("[^A-Za-z0-9_-]", "_");
+        String kbId = sanitizeToken(knowledgeId, 64);
         String date = DateUtil.getYmdTimeAndToString();
         return OBJECT_DIR_PREFIX + kbId + "/" + date + "/";
     }
 
-    /** 分片文件名（含日期，便于 TOS/平台侧识别） */
-    public static String buildFileName(int partIndex) {
-        String date = DateUtil.getYmdTimeAndToString();
-        String seq = String.format("%04d", Math.max(partIndex, 1));
-        return date + "_part_" + seq + "_" + IdUtil.fastSimpleUUID().substring(0, 8) + ".txt";
+    /**
+     * 表分片 TOS/本地文件名，与平台 doc_id 一致，便于覆盖。
+     */
+    public static String buildTableFileName(String knowledgeId, String tableName, int partIndex) {
+        return buildTableDocId(knowledgeId, tableName, partIndex) + ".txt";
+    }
+
+    /**
+     * 平台展示名（豆包 doc_name 不允许含 /）。
+     */
+    public static String buildTableDocName(String knowledgeId, String tableName, int partIndex) {
+        return buildTableFileName(knowledgeId, tableName, partIndex);
+    }
+
+    /**
+     * 稳定文档 ID：t_{知识库}_{表}_p0001。同一表同一分片反复同步会覆盖。
+     */
+    public static String buildTableDocId(String knowledgeId, String tableName, int partIndex) {
+        return buildTableDocPrefix(knowledgeId, tableName) + String.format("%04d", Math.max(partIndex, 1));
+    }
+
+    public static String buildTableDocPrefix(String knowledgeId, String tableName) {
+        // 全量覆盖时按此前缀识别本表分片：t_{kb}_{table}_p
+        return "t_" + sanitizeToken(knowledgeId, 24) + "_" + sanitizeToken(tableName, 40) + "_p";
+    }
+
+    /**
+     * 知识库文件稳定文档 ID：f_{文件记录id}。同一文件反复同步覆盖，不再追加 UUID。
+     */
+    public static String buildFileDocId(String knowledgeId, String fileId) {
+        return "f_" + sanitizeToken(fileId, 80);
+    }
+
+    /**
+     * 解析库里保存的平台分片文档 ID（逗号分隔）。
+     */
+    public static List<String> splitDocIds(String raw) {
+        List<String> ids = new ArrayList<>();
+        if (StrUtil.isBlank(raw)) {
+            return ids;
+        }
+        for (String item : raw.split(",")) {
+            String id = item.trim();
+            if (StrUtil.isNotBlank(id)) {
+                ids.add(id);
+            }
+        }
+        return ids;
+    }
+
+    /**
+     * 去重后拼回逗号分隔，写入 part_doc_ids。
+     */
+    public static String joinDocIds(List<String> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return StrUtil.EMPTY;
+        }
+        Set<String> unique = new LinkedHashSet<>();
+        for (String id : ids) {
+            if (StrUtil.isNotBlank(id)) {
+                unique.add(id.trim());
+            }
+        }
+        return String.join(",", unique);
+    }
+
+    /**
+     * 平台 doc_id 只允许字母数字下划线，并截断到 max 长度。
+     */
+    public static String sanitizeToken(String raw, int max) {
+        String id = StrUtil.blankToDefault(raw, "x").replaceAll("[^A-Za-z0-9_]", "_");
+        if (StrUtil.isBlank(id)) {
+            id = "x";
+        }
+        if (id.length() > max) {
+            id = id.substring(0, max);
+        }
+        return id;
     }
 
     /**
@@ -55,21 +132,6 @@ public final class AiKnowledgeUploadHelper {
             return "html";
         }
         return ext;
-    }
-
-    /**
-     * 平台知识库展示用文档名：{知识库id}_{日期}_part_{序号}.txt
-     * （豆包 doc_name 不允许含 /，目录信息用下划线表达）
-     */
-    public static String buildPlatformDocName(String knowledgeId, int partIndex) {
-        String kbId = StrUtil.blankToDefault(knowledgeId, "unknown");
-        kbId = kbId.replaceAll("[^A-Za-z0-9_-]", "_");
-        if (kbId.length() > 32) {
-            kbId = kbId.substring(0, 32);
-        }
-        String date = DateUtil.getYmdTimeAndToString();
-        String seq = String.format("%04d", Math.max(partIndex, 1));
-        return kbId + "_" + date + "_part_" + seq + ".txt";
     }
 
     public static String buildRowBlock(String tableName, String tableRemark, String idField, String titleField,

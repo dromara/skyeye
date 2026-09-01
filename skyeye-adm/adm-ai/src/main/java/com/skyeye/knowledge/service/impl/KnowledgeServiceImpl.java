@@ -416,16 +416,39 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
             if (syncList == null) {
                 syncList = Collections.emptyList();
             }
-            SyncUploadContext uploadContext = new SyncUploadContext(knowledge.getId());
+            SyncUploadContext uploadContext = null;
             // ① 有 JDBC + 同步表：抽表数据上传（没有表配置则跳过，不报错）；源表按全租户拉取，不按当前租户过滤
+            // 每张表单独缓冲/分片，避免多表混在同一文档里无法按表覆盖
             if (CollectionUtil.isNotEmpty(syncList) && StrUtil.isNotBlank(knowledge.getJdbcUrl())) {
+                AiKnowledgeClient knowledgeClient = aiFactory.getKnowledgeClient(
+                    AiPlatformEnum.getName(apiKey.getPlatform()));
                 for (KnowledgeSync sync : syncList) {
+                    boolean fullSync = !KnowledgeSyncTypeEnum.INCREMENTAL.getKey().equals(sync.getSyncType());
+                    uploadContext = new SyncUploadContext(knowledge.getId(), sync.getTableName());
+                    if (fullSync) {
+                        // 全量：先删本表已记录的平台分片，再从 p0001 覆盖写入
+                        deleteTableParts(knowledgeClient, apiKey, sync);
+                        uploadContext.setPartSeq(0);
+                    } else {
+                        // 增量：不删旧分片，序号从上次 tablePartCount 继续追加
+                        uploadContext.setPartSeq(sync.getTablePartCount() == null ? 0 : sync.getTablePartCount());
+                    }
                     try {
                         int count = syncOneTable(knowledge, sync, apiKey, uploadContext);
+                        flushUploadIfNeeded(knowledge, apiKey, uploadContext, true);
+                        persistTableParts(sync, uploadContext, fullSync);
                         total += count;
                         items.add(KnowledgeSyncHistoryItem.of(KnowledgeSyncItemTypeEnum.TABLE.getKey(),
                             sync.getId(), sync.getTableName(), count, KnowledgeSyncResultEnum.SUCCESS.getKey(), null));
                     } catch (Exception e) {
+                        // 失败也尽量把已上传分片 ID 记下来，避免下次全量删不掉
+                        try {
+                            flushUploadIfNeeded(knowledge, apiKey, uploadContext, true);
+                            persistTableParts(sync, uploadContext, fullSync);
+                        } catch (Exception persistEx) {
+                            LOGGER.warn("知识库[{}]表[{}]失败后回写分片信息失败: {}",
+                                knowledge.getId(), sync.getTableName(), persistEx.getMessage());
+                        }
                         status = KnowledgeSyncResultEnum.FAIL.getKey();
                         String msg = StrUtil.blankToDefault(e.getMessage(), "同步失败");
                         items.add(KnowledgeSyncHistoryItem.of(KnowledgeSyncItemTypeEnum.TABLE.getKey(),
@@ -433,7 +456,6 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                         LOGGER.warn("知识库[{}]表[{}]同步失败: {}", knowledge.getId(), sync.getTableName(), msg);
                     }
                 }
-                flushUploadIfNeeded(knowledge, apiKey, uploadContext, true);
             }
             // ② 待同步/失败文件：本地 → S3 → 平台知识库
             List<KnowledgeSyncHistoryItem> fileItems = knowledgeFileService.syncPendingFileItems(knowledge, apiKey);
@@ -577,7 +599,7 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
      */
     private void flushUploadIfNeeded(Knowledge knowledge, AiApiKey apiKey, SyncUploadContext uploadContext,
                                      boolean force) {
-        if (!uploadContext.hasPendingContent()) {
+        if (uploadContext == null || !uploadContext.hasPendingContent()) {
             return;
         }
         if (force || uploadContext.shouldFlush(flushRows, flushMaxBytes)) {
@@ -585,14 +607,20 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         }
     }
 
+    /**
+     * 将缓冲内容上传为一个平台文档分片。
+     * 文件名/doc_id 用稳定规则 t_{知识库}_{表}_p0001，同一分片再次同步会覆盖而不是新增。
+     */
     private void flushUpload(Knowledge knowledge, AiApiKey apiKey, SyncUploadContext uploadContext) {
         String content = uploadContext.drainUploadBuffer();
         if (StrUtil.isBlank(content)) {
             return;
         }
         int partIndex = uploadContext.nextPart();
-        String fileName = AiKnowledgeUploadHelper.buildFileName(partIndex);
-        String platformDocName = AiKnowledgeUploadHelper.buildPlatformDocName(knowledge.getId(), partIndex);
+        String tableName = uploadContext.getTableName();
+        String fileName = AiKnowledgeUploadHelper.buildTableFileName(knowledge.getId(), tableName, partIndex);
+        String platformDocName = AiKnowledgeUploadHelper.buildTableDocName(knowledge.getId(), tableName, partIndex);
+        String expectedDocId = AiKnowledgeUploadHelper.buildTableDocId(knowledge.getId(), tableName, partIndex);
         String objectDir = uploadContext.getObjectDir();
         // 落盘后拿到与库表一致的相对路径（/images/...），上传接口自行拼 IMAGES_PATH
         String relativePath = writeLocalTempFile(fileName, content);
@@ -622,7 +650,10 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
                     throw new CustomException("豆包知识库同步需要可用的文件存储器（请在知识库配置中指定文件配置，或配置 S3/TOS）");
                 }
             }
-            client.uploadText(apiKey.toAiKnowledgeConfig(), fileName, content, fileUrl, tosPath, platformDocName);
+            // 记录返回的平台文档 ID，全量覆盖时据此删除
+            String returnedDocId = client.uploadText(apiKey.toAiKnowledgeConfig(), fileName, content,
+                fileUrl, tosPath, platformDocName);
+            uploadContext.addUploadedDocId(StrUtil.blankToDefault(returnedDocId, expectedDocId));
             deleteStorageObjectIfNeeded(storageConfigId, storageObjectPath);
         } finally {
             if (StrUtil.isNotBlank(relativePath)) {
@@ -647,6 +678,53 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
     }
 
     /**
+     * 全量同步前：只删除本表上次同步记下的平台分片，不扫描知识库里的其它文档。
+     */
+    private void deleteTableParts(AiKnowledgeClient client, AiApiKey apiKey, KnowledgeSync sync) {
+        List<String> ids = new ArrayList<>(AiKnowledgeUploadHelper.splitDocIds(sync.getPartDocIds()));
+        deleteDocsQuietly(client, apiKey, ids);
+        sync.setPartDocIds(StrUtil.EMPTY);
+        sync.setTablePartCount(0);
+    }
+
+    /**
+     * 把本次上传的分片 ID / 数量写回同步配置。
+     * 全量覆盖写入；增量在原 partDocIds 后追加。
+     */
+    private void persistTableParts(KnowledgeSync sync, SyncUploadContext uploadContext, boolean fullSync) {
+        if (sync == null || StrUtil.isBlank(sync.getId()) || uploadContext == null) {
+            return;
+        }
+        List<String> ids = fullSync ? new ArrayList<>() : AiKnowledgeUploadHelper.splitDocIds(sync.getPartDocIds());
+        ids.addAll(uploadContext.getUploadedDocIds());
+        String joined = AiKnowledgeUploadHelper.joinDocIds(ids);
+        int partCount = uploadContext.getPartSeq();
+        UpdateWrapper<KnowledgeSync> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, sync.getId());
+        updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeSync::getPartDocIds), joined);
+        updateWrapper.set(MybatisPlusUtil.toColumns(KnowledgeSync::getTablePartCount), partCount);
+        knowledgeSyncService.update(updateWrapper);
+        sync.setPartDocIds(joined);
+        sync.setTablePartCount(partCount);
+        uploadContext.getUploadedDocIds().clear();
+    }
+
+    /**
+     * 批量删除平台文档；失败只打日志，避免单批删不掉中断整表同步。
+     */
+    private void deleteDocsQuietly(AiKnowledgeClient client, AiApiKey apiKey, List<String> docIds) {
+        if (client == null || apiKey == null || CollectionUtil.isEmpty(docIds)) {
+            return;
+        }
+        List<String> unique = new ArrayList<>(new LinkedHashSet<>(docIds));
+        try {
+            client.deleteDocs(apiKey.toAiKnowledgeConfig(), unique);
+        } catch (Exception e) {
+            LOGGER.warn("批量删除平台文档失败 count={}: {}", unique.size(), e.getMessage());
+        }
+    }
+
+    /**
      * 写入临时文件，返回相对访问路径（/images/upload/...），与知识库文件表 path 格式一致
      */
     private String writeLocalTempFile(String fileName, String content) {
@@ -663,36 +741,61 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
     }
 
     /**
-     * 单次同步的上传上下文：跨表共享缓冲，仅在达到阈值或整次同步结束时刷盘
+     * 单次同步的上传上下文：按表隔离缓冲，全量从 part 1 覆盖，增量在已有分片后追加
      */
     private static final class SyncUploadContext {
         private final String objectDir;
+        private final String tableName;
         private final StringBuilder uploadBuffer = new StringBuilder();
+        private final List<String> uploadedDocIds = new ArrayList<>();
         private int partSeq;
         private int bufferRows;
         private String currentTable;
 
-        SyncUploadContext(String knowledgeId) {
+        SyncUploadContext(String knowledgeId, String tableName) {
             this.objectDir = AiKnowledgeUploadHelper.buildObjectDir(knowledgeId);
+            this.tableName = tableName;
         }
 
         String getObjectDir() {
             return objectDir;
         }
 
+        String getTableName() {
+            return tableName;
+        }
+
+        void setPartSeq(int partSeq) {
+            this.partSeq = Math.max(partSeq, 0);
+        }
+
+        int getPartSeq() {
+            return partSeq;
+        }
+
         int nextPart() {
             return ++partSeq;
         }
 
-        void ensureTableHeader(String tableName) {
-            if (StrUtil.equals(currentTable, tableName)) {
+        void addUploadedDocId(String docId) {
+            if (StrUtil.isNotBlank(docId)) {
+                uploadedDocIds.add(docId.trim());
+            }
+        }
+
+        List<String> getUploadedDocIds() {
+            return uploadedDocIds;
+        }
+
+        void ensureTableHeader(String headerTableName) {
+            if (StrUtil.equals(currentTable, headerTableName)) {
                 return;
             }
-            currentTable = tableName;
+            currentTable = headerTableName;
             if (uploadBuffer.length() > 0) {
                 uploadBuffer.append('\n');
             }
-            uploadBuffer.append("知识库同步表: ").append(tableName).append('\n');
+            uploadBuffer.append("知识库同步表: ").append(headerTableName).append('\n');
         }
 
         void appendRow(String rowBlock) {
