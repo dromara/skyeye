@@ -68,6 +68,14 @@ public class KnowledgeSync extends OperatorUserInfo {
     @Property("最近一次增量水位")
     private String lastWatermark;
 
+    @TableField(value = "table_part_count")
+    @Property("最近一次已上传分片数，全量从 0 覆盖，增量在此基础上追加")
+    private Integer tablePartCount;
+
+    @TableField(value = "part_doc_ids")
+    @Property("平台分片文档ID，逗号分隔，用于全量覆盖前删除旧文档")
+    private String partDocIds;
+
     @TableField(value = "tenant_id", updateStrategy = FieldStrategy.NEVER)
     @Property("租户id")
     private String tenantId;

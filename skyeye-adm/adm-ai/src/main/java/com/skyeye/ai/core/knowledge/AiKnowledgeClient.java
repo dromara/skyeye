@@ -6,6 +6,8 @@ package com.skyeye.ai.core.knowledge;
 
 import cn.hutool.core.util.StrUtil;
 
+import java.util.List;
+
 /**
  * 各 AI 平台知识库统一客户端：上传文档 + 检索。
  */
@@ -22,7 +24,7 @@ public interface AiKnowledgeClient {
 
     /**
      * 上传文本；若平台支持 URL/TOS 整文件导入，可传入 fileUrl / tosPath。
-     * platformDocName 为平台侧展示用文档名（如含日期目录信息），为空则用 fileName。
+     * platformDocName 为平台侧展示名，同时作为稳定 doc_id 来源（不含日期/UUID 时重复上传可覆盖）。
      */
     default String uploadText(AiKnowledgeConfig config, String fileName, String content,
                               String fileUrl, String tosPath, String platformDocName) {
@@ -38,13 +40,35 @@ public interface AiKnowledgeClient {
      * 上传原始文件（PDF/Word 等）到平台知识库。默认按 URL/TOS 走 uploadText。
      */
     default String uploadFile(AiKnowledgeConfig config, String fileName, String fileUrl, String tosPath) {
-        return uploadText(config, fileName, StrUtil.EMPTY, fileUrl, tosPath, fileName);
+        return uploadFile(config, fileName, fileUrl, tosPath, null);
+    }
+
+    /**
+     * @param docId 稳定文档 ID，为空则用 fileName；同一 ID 重复上传应覆盖
+     */
+    default String uploadFile(AiKnowledgeConfig config, String fileName, String fileUrl, String tosPath, String docId) {
+        return uploadText(config, fileName, StrUtil.EMPTY, fileUrl, tosPath,
+            StrUtil.blankToDefault(docId, fileName));
     }
 
     /**
      * 按平台文档 ID 删除。不支持时忽略。
      */
     default void deleteDoc(AiKnowledgeConfig config, String docId) {
+    }
+
+    /**
+     * 批量删除平台文档。不支持时逐个走 {@link #deleteDoc}。
+     */
+    default void deleteDocs(AiKnowledgeConfig config, List<String> docIds) {
+        if (docIds == null || docIds.isEmpty()) {
+            return;
+        }
+        for (String id : docIds) {
+            if (StrUtil.isNotBlank(id)) {
+                deleteDoc(config, id);
+            }
+        }
     }
 
     /**

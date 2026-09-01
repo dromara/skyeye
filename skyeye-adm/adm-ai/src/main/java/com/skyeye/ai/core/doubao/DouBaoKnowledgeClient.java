@@ -4,7 +4,6 @@
 
 package com.skyeye.ai.core.doubao;
 
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
@@ -16,13 +15,18 @@ import com.skyeye.exception.CustomException;
 import okhttp3.*;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
  * 豆包知识库客户端。
  * <p>
- * 官方 doc/add 支持 url / tos / lark。优先使用业务侧文件存储器上传结果：
- * 火山 TOS → add_type=tos；其它公网 URL → add_type=url。
+ * 官方 doc/add 支持 url / tos / lark。
+ * <p>
+ * 优先 add_type=url 并传入稳定 doc_id：同一 ID 重复上传会覆盖。
+ * add_type=tos 时请求体里的 doc_id 无效，系统读 TOS 元数据 x-tos-meta-doc_id，
+ * 不设元数据就会每导入一次产生一篇新文档。
  * <p>
  * AI 配置：apiKey=ark 对话 Key；secretKey=知识库 VIKING_API_KEY；platformKnowledgeId=resource_id。
  */
@@ -50,7 +54,12 @@ public class DouBaoKnowledgeClient implements AiKnowledgeClient {
 
     @Override
     public String uploadFile(AiKnowledgeConfig config, String fileName, String fileUrl, String tosPath) {
-        return addDoc(config, fileName, fileUrl, tosPath, fileName, false);
+        return uploadFile(config, fileName, fileUrl, tosPath, null);
+    }
+
+    @Override
+    public String uploadFile(AiKnowledgeConfig config, String fileName, String fileUrl, String tosPath, String docId) {
+        return addDoc(config, fileName, fileUrl, tosPath, fileName, false, docId);
     }
 
     @Override
@@ -58,9 +67,35 @@ public class DouBaoKnowledgeClient implements AiKnowledgeClient {
         if (StrUtil.isBlank(docId)) {
             return;
         }
-        check(config);
-        JSONArray ids = JSONUtil.createArray();
+        List<String> ids = new ArrayList<>();
         ids.add(docId);
+        deleteDocs(config, ids);
+    }
+
+    @Override
+    public void deleteDocs(AiKnowledgeConfig config, List<String> docIds) {
+        if (docIds == null || docIds.isEmpty()) {
+            return;
+        }
+        check(config);
+        // 接口一次最多删一批，超出则拆成多请求
+        JSONArray batch = JSONUtil.createArray();
+        for (String id : docIds) {
+            if (StrUtil.isBlank(id)) {
+                continue;
+            }
+            batch.add(id.trim());
+            if (batch.size() >= 50) {
+                postDeleteDocs(config, batch);
+                batch = JSONUtil.createArray();
+            }
+        }
+        if (!batch.isEmpty()) {
+            postDeleteDocs(config, batch);
+        }
+    }
+
+    private void postDeleteDocs(AiKnowledgeConfig config, JSONArray ids) {
         JSONObject body = JSONUtil.createObj().set("doc_ids", ids);
         fillKnowledgeId(body, config.getKnowledgeId());
         try {
@@ -74,45 +109,46 @@ public class DouBaoKnowledgeClient implements AiKnowledgeClient {
 
     private String addDoc(AiKnowledgeConfig config, String fileName, String fileUrl, String tosPath,
                           String platformDocName, boolean forceTxt) {
+        return addDoc(config, fileName, fileUrl, tosPath, platformDocName, forceTxt, null);
+    }
+
+    private String addDoc(AiKnowledgeConfig config, String fileName, String fileUrl, String tosPath,
+                          String platformDocName, boolean forceTxt, String explicitDocId) {
         check(config);
         String vikingKey = resolveVikingKey(config);
         String knowledgeId = config.getKnowledgeId();
         String displayName = StrUtil.blankToDefault(platformDocName, fileName);
-        String docId = sanitizeDocId(displayName);
-        if (!forceTxt) {
-            docId = docId + "_" + IdUtil.fastSimpleUUID().substring(0, 8);
-        }
+        // 稳定 ID：不拼 UUID，同一文档再次导入走覆盖
+        String docId = sanitizeDocId(StrUtil.blankToDefault(explicitDocId, displayName));
         String docName = StrUtil.blankToDefault(displayName, docId + (forceTxt ? ".txt" : ""));
         if (forceTxt && !StrUtil.endWithIgnoreCase(docName, ".txt")) {
             docName = docName + ".txt";
         }
         try {
-            // ① 组装 doc/add：优先 TOS，否则公网 URL
+            // 优先 URL：请求体 doc_id 生效，同一 ID 覆盖。TOS 方式会忽略 body 里的 doc_id。
             JSONObject body = JSONUtil.createObj();
             fillKnowledgeId(body, knowledgeId);
             String docType = AiKnowledgeUploadHelper.resolveDocType(docName);
             if (forceTxt) {
                 docType = "txt";
             }
-            if (StrUtil.isNotBlank(tosPath)) {
-                body.set("add_type", "tos")
-                    .set("tos_path", StrUtil.removePrefix(tosPath.trim(), "tos://"))
-                    .set("doc_id", docId)
-                    .set("doc_name", docName)
-                    .set("doc_type", docType);
-            } else if (StrUtil.isNotBlank(fileUrl)) {
+            if (StrUtil.isNotBlank(fileUrl)) {
                 body.set("add_type", "url")
                     .set("doc_id", docId)
                     .set("doc_name", docName)
                     .set("doc_type", docType)
                     .set("url", fileUrl);
+            } else if (StrUtil.isNotBlank(tosPath)) {
+                body.set("add_type", "tos")
+                    .set("tos_path", StrUtil.removePrefix(tosPath.trim(), "tos://"))
+                    .set("doc_id", docId)
+                    .set("doc_name", docName)
+                    .set("doc_type", docType);
             } else {
                 throw new CustomException("豆包知识库需要文件存储器返回的 url 或 tosPath（请配置默认 S3/TOS 存储器）");
             }
-            // ② 调用平台导入
             JSONObject json = postJson(vikingKey, "/api/knowledge/doc/add", body);
             String returnedDocId = resolveReturnedDocId(json, docId);
-            // ③ 轮询直到文档处理完成（失败/超时直接抛错）
             waitDocReady(vikingKey, knowledgeId, returnedDocId);
             return returnedDocId;
         } catch (CustomException e) {
