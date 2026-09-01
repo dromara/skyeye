@@ -13,4 +13,6 @@ public interface SysEveMenuService extends SkyeyeBusinessService<SysMenu> {
 
     void querySysMenuMationBySimpleLevel(InputObject inputObject, OutputObject outputObject);
 
+    void queryAllSysMenuTreeList(InputObject inputObject, OutputObject outputObject);
+
 }

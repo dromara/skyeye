@@ -70,4 +70,10 @@ public class SysEveMenuController {
         sysEveMenuService.deleteById(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryAllSysMenuTreeList", value = "获取全部系统菜单树（AI技能打开页面等选用）", method = "GET", allUse = "2")
+    @RequestMapping("/post/SysEveMenuController/queryAllSysMenuTreeList")
+    public void queryAllSysMenuTreeList(InputObject inputObject, OutputObject outputObject) {
+        sysEveMenuService.queryAllSysMenuTreeList(inputObject, outputObject);
+    }
+
 }

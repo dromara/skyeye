@@ -15,6 +15,7 @@ import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.dsform.entity.DsFormPage;
 import com.skyeye.dsform.service.DsFormPageService;
@@ -33,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -175,6 +177,30 @@ public class SysEveMenuServiceImpl extends SkyeyeBusinessServiceImpl<SysEveMenuD
         List<Map<String, Object>> beans = sysEveMenuDao.querySysMenuMationBySimpleLevel(map);
         // 桌面信息
         sysEveDesktopService.setMationForMap(beans, "desktopId", "desktopMation");
+        outputObject.setBeans(beans);
+        outputObject.settotal(beans.size());
+    }
+
+    /**
+     * 全部系统菜单树，供 AI 技能「打开页面」等下拉选用。
+     */
+    @Override
+    public void queryAllSysMenuTreeList(InputObject inputObject, OutputObject outputObject) {
+        QueryWrapper<SysMenu> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(SysMenu::getOrderNum));
+        List<SysMenu> menuList = list(queryWrapper);
+        List<Map<String, Object>> beans = menuList.stream().map(menu -> {
+            Map<String, Object> row = new HashMap<>();
+            row.put("id", menu.getId());
+            row.put("name", menu.getName());
+            row.put("parentId", StrUtil.blankToDefault(menu.getParentId(), "0"));
+            row.put("path", StrUtil.nullToEmpty(menu.getPath()));
+            row.put("pageUrl", StrUtil.nullToEmpty(menu.getPageUrl()));
+            row.put("orderNum", menu.getOrderNum() == null ? 0 : menu.getOrderNum());
+            row.put("level", menu.getLevel());
+            return row;
+        }).collect(Collectors.toList());
+        beans = ToolUtil.listToTree(beans, "id", "parentId", "children");
         outputObject.setBeans(beans);
         outputObject.settotal(beans.size());
     }

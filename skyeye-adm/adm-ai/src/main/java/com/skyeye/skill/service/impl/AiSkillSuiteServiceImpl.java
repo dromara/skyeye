@@ -8,6 +8,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
@@ -43,6 +44,14 @@ public class AiSkillSuiteServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillSu
         if (entity.getOrderBy() == null) {
             entity.setOrderBy(100);
         }
+    }
+
+    @Override
+    protected QueryWrapper<AiSkillSuite> getQueryWrapper(CommonPageInfo commonPageInfo) {
+        QueryWrapper<AiSkillSuite> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(AiSkillSuite::getOrderBy));
+        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(AiSkillSuite::getCreateTime));
+        return queryWrapper;
     }
 
     @Override
