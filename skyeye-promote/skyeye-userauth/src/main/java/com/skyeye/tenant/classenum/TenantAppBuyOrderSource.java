@@ -19,7 +19,8 @@ import lombok.NoArgsConstructor;
 public enum TenantAppBuyOrderSource implements SkyeyeEnumClass {
 
     PLATFORM(1, "后台添加", true, true),
-    TENANT(2, "租户自购", true, false);
+    TENANT(2, "租户自购", true, false),
+    TOKEN_BILL(3, "月结账单", true, false);
 
     private Integer key;
 

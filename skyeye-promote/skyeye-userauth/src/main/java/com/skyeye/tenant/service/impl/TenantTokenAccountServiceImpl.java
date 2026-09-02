@@ -129,6 +129,10 @@ public class TenantTokenAccountServiceImpl extends SkyeyeBusinessServiceImpl<Ten
     public void queryCurrentTenantTokenAccount(InputObject inputObject, OutputObject outputObject) {
         String tenantId = requireCurrentTenantId();
         TenantTokenAccount account = getOrCreateByTenantId(tenantId);
+        healPlatformAccount(account);
+        account = getOrCreateByTenantId(tenantId);
+        applyPlatformView(account);
+        fillUnpaidBillCount(account);
         tenantService.setDataMation(account, TenantTokenAccount::getTenantId);
         outputObject.setBean(account);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
@@ -139,6 +143,9 @@ public class TenantTokenAccountServiceImpl extends SkyeyeBusinessServiceImpl<Ten
     @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
     public void saveCurrentTenantTokenMode(InputObject inputObject, OutputObject outputObject) {
         String tenantId = requireCurrentTenantId();
+        if (skipBilling(tenantId)) {
+            throw new CustomException("平台租户无需设置 Token 计费方式");
+        }
         Integer billingMode = Integer.parseInt(inputObject.getParams().get("billingMode").toString());
         if (!TenantTokenBillingMode.PAYG.getKey().equals(billingMode)
             && !TenantTokenBillingMode.PREPAID.getKey().equals(billingMode)
@@ -234,6 +241,10 @@ public class TenantTokenAccountServiceImpl extends SkyeyeBusinessServiceImpl<Ten
         }
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(TenantTokenAccount::getLastUpdateTime));
         List<TenantTokenAccount> list = list(queryWrapper);
+        list.forEach(item -> {
+            applyPlatformView(item);
+            fillUnpaidBillCount(item);
+        });
         tenantService.setDataMation(list, TenantTokenAccount::getTenantId);
         outputObject.setBeans(list);
         outputObject.settotal(list.size());
@@ -303,8 +314,13 @@ public class TenantTokenAccountServiceImpl extends SkyeyeBusinessServiceImpl<Ten
             bill.setTotalTokens(totalTokens);
             bill.setTokensPerYuan(tokensPerYuan);
             bill.setAmount(calcAmount(totalTokens, tokensPerYuan));
-            bill.setState(TenantTokenBillState.SETTLED.getKey());
             bill.setSettleTime(DateUtil.getTimeAndToString());
+            if (new BigDecimal(bill.getAmount()).compareTo(BigDecimal.ZERO) <= 0) {
+                bill.setState(TenantTokenBillState.PAID.getKey());
+                bill.setPayTime(bill.getSettleTime());
+            } else {
+                bill.setState(TenantTokenBillState.SETTLED.getKey());
+            }
             tenantTokenBillService.createEntity(bill, StrUtil.EMPTY);
         }
     }
@@ -338,6 +354,9 @@ public class TenantTokenAccountServiceImpl extends SkyeyeBusinessServiceImpl<Ten
         if (skipBilling(tenantId)) {
             return;
         }
+        if (tenantTokenBillService.hasUnpaidBills(tenantId)) {
+            throw new CustomException("存在未结清的 Token 月结账单，请到组织信息管理 → Token用量 结清后再使用 AI");
+        }
         TenantTokenAccount account = getOrCreateByTenantId(tenantId);
         if (TenantTokenBillingMode.NONE.getKey().equals(account.getBillingMode())
             || TenantTokenBillingMode.PAYG.getKey().equals(account.getBillingMode())) {
@@ -347,6 +366,42 @@ public class TenantTokenAccountServiceImpl extends SkyeyeBusinessServiceImpl<Ten
             || account.getTokenBalance() == null || account.getTokenBalance() <= 0) {
             throw new CustomException("Token 余额已用完，请先购买后再使用 AI 功能");
         }
+    }
+
+    private void healPlatformAccount(TenantTokenAccount account) {
+        if (account == null || !skipBilling(account.getTenantId())) {
+            return;
+        }
+        boolean needHeal = !TenantTokenBillingMode.NONE.getKey().equals(account.getBillingMode())
+            || WhetherEnum.ENABLE_USING.getKey().equals(account.getStopped());
+        if (!needHeal) {
+            return;
+        }
+        UpdateWrapper<TenantTokenAccount> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, account.getId());
+        updateWrapper.set(MybatisPlusUtil.toColumns(TenantTokenAccount::getBillingMode), TenantTokenBillingMode.NONE.getKey());
+        updateWrapper.set(MybatisPlusUtil.toColumns(TenantTokenAccount::getStopped), WhetherEnum.DISABLE_USING.getKey());
+        update(updateWrapper);
+        refreshCache(account.getId());
+    }
+
+    private void applyPlatformView(TenantTokenAccount account) {
+        if (account == null || !skipBilling(account.getTenantId())) {
+            return;
+        }
+        account.setBillingMode(TenantTokenBillingMode.NONE.getKey());
+        account.setStopped(WhetherEnum.DISABLE_USING.getKey());
+        account.setUnpaidBillCount(0L);
+    }
+
+    private void fillUnpaidBillCount(TenantTokenAccount account) {
+        if (account == null || skipBilling(account.getTenantId())) {
+            if (account != null) {
+                account.setUnpaidBillCount(0L);
+            }
+            return;
+        }
+        account.setUnpaidBillCount(tenantTokenBillService.countUnpaidBills(account.getTenantId()));
     }
 
     private boolean skipBilling(String tenantId) {
