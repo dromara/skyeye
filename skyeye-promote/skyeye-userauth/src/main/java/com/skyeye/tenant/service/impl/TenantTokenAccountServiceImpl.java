@@ -10,6 +10,8 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
@@ -31,11 +33,7 @@ import com.skyeye.tenant.dao.TenantTokenAccountDao;
 import com.skyeye.tenant.entity.TenantTokenAccount;
 import com.skyeye.tenant.entity.TenantTokenBill;
 import com.skyeye.tenant.entity.TenantTokenDailyUsage;
-import com.skyeye.tenant.service.PlatformBaseSettingService;
-import com.skyeye.tenant.service.TenantService;
-import com.skyeye.tenant.service.TenantTokenAccountService;
-import com.skyeye.tenant.service.TenantTokenBillService;
-import com.skyeye.tenant.service.TenantTokenDailyUsageService;
+import com.skyeye.tenant.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -245,8 +243,9 @@ public class TenantTokenAccountServiceImpl extends SkyeyeBusinessServiceImpl<Ten
     @IgnoreTenant
     public void queryPlatformTenantTokenDailyUsage(InputObject inputObject, OutputObject outputObject) {
         assertPlatformTenant();
+        CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
         String tenantId = StrUtil.blankToDefault(inputObject.getParams().get("tenantId") == null ? "" : inputObject.getParams().get("tenantId").toString(),
-            inputObject.getParams(CommonPageInfo.class).getObjectId());
+            pageInfo.getObjectId());
         if (StrUtil.isBlank(tenantId)) {
             throw new CustomException("请选择租户");
         }
@@ -257,8 +256,9 @@ public class TenantTokenAccountServiceImpl extends SkyeyeBusinessServiceImpl<Ten
     @IgnoreTenant
     public void queryPlatformTenantTokenBillList(InputObject inputObject, OutputObject outputObject) {
         assertPlatformTenant();
+        CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
         String tenantId = StrUtil.blankToDefault(inputObject.getParams().get("tenantId") == null ? "" : inputObject.getParams().get("tenantId").toString(),
-            inputObject.getParams(CommonPageInfo.class).getObjectId());
+            pageInfo.getObjectId());
         fillBillOutput(inputObject, outputObject, tenantId);
     }
 
@@ -313,22 +313,25 @@ public class TenantTokenAccountServiceImpl extends SkyeyeBusinessServiceImpl<Ten
         CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
         String startDate = pageInfo.getStartTime();
         String endDate = pageInfo.getEndTime();
+        Page page = PageHelper.startPage(pageInfo.getPage(), pageInfo.getLimit());
         List<TenantTokenDailyUsage> list = tenantTokenDailyUsageService.queryByTenantAndDateRange(tenantId, startDate, endDate);
         tenantService.setDataMation(list, TenantTokenDailyUsage::getTenantId);
         outputObject.setBeans(list);
-        outputObject.settotal(list.size());
+        outputObject.settotal(page.getTotal());
     }
 
     private void fillBillOutput(InputObject inputObject, OutputObject outputObject, String tenantId) {
+        CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
         QueryWrapper<TenantTokenBill> queryWrapper = new QueryWrapper<>();
         if (StrUtil.isNotBlank(tenantId)) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(TenantTokenBill::getTenantId), tenantId);
         }
         queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(TenantTokenBill::getSettleTime));
+        Page page = PageHelper.startPage(pageInfo.getPage(), pageInfo.getLimit());
         List<TenantTokenBill> list = tenantTokenBillService.list(queryWrapper);
         tenantService.setDataMation(list, TenantTokenBill::getTenantId);
         outputObject.setBeans(list);
-        outputObject.settotal(list.size());
+        outputObject.settotal(page.getTotal());
     }
 
     private void assertAllowUse(String tenantId) {
