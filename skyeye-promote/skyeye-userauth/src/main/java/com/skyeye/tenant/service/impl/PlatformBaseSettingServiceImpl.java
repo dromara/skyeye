@@ -93,6 +93,16 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
     private static final int DEFAULT_MAX_ENTERPRISE_ORG_PER_USER = 1;
 
     /**
+     * 默认 1 元兑换 Token 数
+     */
+    private static final String DEFAULT_TOKENS_PER_YUAN = "10000";
+
+    /**
+     * 默认预付最低购买金额（元）
+     */
+    private static final String DEFAULT_MIN_BUY_TOKEN_AMOUNT = "10.00";
+
+    /**
      * 查询平台基础信息（管理端使用，需平台租户身份）
      */
     @Override
@@ -255,6 +265,30 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
     }
 
     @Override
+    @IgnoreTenant
+    public void queryPlatformTokenBilling(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> data = new HashMap<>();
+        data.put(PlatformBaseSettingConst.KEY_TOKENS_PER_YUAN, getTokensPerYuan());
+        data.put(PlatformBaseSettingConst.KEY_MIN_BUY_TOKEN_AMOUNT, getMinBuyTokenAmount());
+        outputObject.setBean(data);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    @IgnoreTenant
+    public String getTokensPerYuan() {
+        Object value = getTokenGroupSetting().get(PlatformBaseSettingConst.KEY_TOKENS_PER_YUAN);
+        return ObjectUtil.isEmpty(value) ? DEFAULT_TOKENS_PER_YUAN : value.toString();
+    }
+
+    @Override
+    @IgnoreTenant
+    public String getMinBuyTokenAmount() {
+        Object value = getTokenGroupSetting().get(PlatformBaseSettingConst.KEY_MIN_BUY_TOKEN_AMOUNT);
+        return ObjectUtil.isEmpty(value) ? DEFAULT_MIN_BUY_TOKEN_AMOUNT : value.toString();
+    }
+
+    @Override
     public void validatorEntity(PlatformBaseSetting entity) {
         validateSettingData(entity.getSettingData());
     }
@@ -293,6 +327,10 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         aiGroup.put(PlatformBaseSettingConst.KEY_AI_ROLE_ID, StrUtil.EMPTY);
         aiGroup.put(PlatformBaseSettingConst.KEY_OA_AI_ROLE_ID, StrUtil.EMPTY);
         settingData.put(PlatformBaseSettingGroup.AI.getKey(), aiGroup);
+        Map<String, Object> tokenGroup = new HashMap<>();
+        tokenGroup.put(PlatformBaseSettingConst.KEY_TOKENS_PER_YUAN, DEFAULT_TOKENS_PER_YUAN);
+        tokenGroup.put(PlatformBaseSettingConst.KEY_MIN_BUY_TOKEN_AMOUNT, DEFAULT_MIN_BUY_TOKEN_AMOUNT);
+        settingData.put(PlatformBaseSettingGroup.TOKEN.getKey(), tokenGroup);
         return settingData;
     }
 
@@ -345,6 +383,19 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
             return buildDefaultSettingData().get(PlatformBaseSettingGroup.AI.getKey());
         }
         return aiGroup;
+    }
+
+    private Map<String, Object> getTokenGroupSetting() {
+        PlatformBaseSetting setting = getOne(new QueryWrapper<>(), false);
+        if (ObjectUtil.isEmpty(setting) || MapUtil.isEmpty(setting.getSettingData())) {
+            return buildDefaultSettingData().get(PlatformBaseSettingGroup.TOKEN.getKey());
+        }
+        Map<String, Map<String, Object>> merged = mergeSettingData(buildDefaultSettingData(), setting.getSettingData());
+        Map<String, Object> tokenGroup = merged.get(PlatformBaseSettingGroup.TOKEN.getKey());
+        if (MapUtil.isEmpty(tokenGroup)) {
+            return buildDefaultSettingData().get(PlatformBaseSettingGroup.TOKEN.getKey());
+        }
+        return tokenGroup;
     }
 
     @SuppressWarnings("unchecked")
@@ -433,6 +484,26 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         if (MapUtil.isNotEmpty(aiGroup)) {
             normalizeOptionalString(aiGroup, PlatformBaseSettingConst.KEY_AI_ROLE_ID);
             normalizeOptionalString(aiGroup, PlatformBaseSettingConst.KEY_OA_AI_ROLE_ID);
+        }
+        Map<String, Object> tokenGroup = settingData.get(PlatformBaseSettingGroup.TOKEN.getKey());
+        if (MapUtil.isNotEmpty(tokenGroup)) {
+            validateTokenGroup(tokenGroup);
+        }
+    }
+
+    private void validateTokenGroup(Map<String, Object> tokenGroup) {
+        if (tokenGroup.containsKey(PlatformBaseSettingConst.KEY_TOKENS_PER_YUAN)) {
+            validatePositiveInteger(tokenGroup.get(PlatformBaseSettingConst.KEY_TOKENS_PER_YUAN), "1元兑换Token数");
+        }
+        if (tokenGroup.containsKey(PlatformBaseSettingConst.KEY_MIN_BUY_TOKEN_AMOUNT)) {
+            Object minBuyAmount = tokenGroup.get(PlatformBaseSettingConst.KEY_MIN_BUY_TOKEN_AMOUNT);
+            if (ObjectUtil.isEmpty(minBuyAmount) || StrUtil.isBlank(minBuyAmount.toString())) {
+                throw new CustomException("预付最低购买金额不能为空");
+            }
+            validatePrice(minBuyAmount.toString(), "预付最低购买金额");
+            if (NumberUtil.toBigDecimal(minBuyAmount.toString()).compareTo(BigDecimal.ZERO) <= 0) {
+                throw new CustomException("预付最低购买金额必须大于0");
+            }
         }
     }
 

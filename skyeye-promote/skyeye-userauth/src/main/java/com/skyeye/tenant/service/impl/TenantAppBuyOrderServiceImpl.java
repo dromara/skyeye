@@ -78,6 +78,12 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
     private TenantAppBuyOrderYearService tenantAppBuyOrderYearService;
 
     @Autowired
+    private TenantAppBuyOrderTokenService tenantAppBuyOrderTokenService;
+
+    @Autowired
+    private TenantTokenAccountService tenantTokenAccountService;
+
+    @Autowired
     private TenantAppLinkService tenantAppLinkService;
 
     @Autowired
@@ -105,11 +111,14 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
 
     @Override
     public void validatorEntity(TenantAppBuyOrder entity) {
-        if (CollectionUtil.isEmpty(entity.getTenantAppBuyOrderNumList()) && CollectionUtil.isEmpty(entity.getTenantAppBuyOrderYearList())) {
+        if (CollectionUtil.isEmpty(entity.getTenantAppBuyOrderNumList())
+            && CollectionUtil.isEmpty(entity.getTenantAppBuyOrderYearList())
+            && CollectionUtil.isEmpty(entity.getTenantAppBuyOrderTokenList())) {
             throw new CustomException("订单信息不能为空.");
         }
         validateBuyOrderSeatNum(entity);
         validateBuyOrderAppYear(entity);
+        validateBuyOrderToken(entity);
         String totalPrice = "0";
         if (CollectionUtil.isNotEmpty(entity.getTenantAppBuyOrderNumList())) {
             for (TenantAppBuyOrderNum tenantAppBuyOrderNum : entity.getTenantAppBuyOrderNumList()) {
@@ -123,6 +132,11 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
                 String allPrice = CalculationUtil.multiply(CommonNumConstants.NUM_TWO, String.valueOf(tenantAppBuyOrderYear.getAccountYear()), tenantAppBuyOrderYear.getUnitPrice());
                 tenantAppBuyOrderYear.setAllPrice(allPrice);
                 totalPrice = CalculationUtil.add(totalPrice, allPrice);
+            }
+        }
+        if (CollectionUtil.isNotEmpty(entity.getTenantAppBuyOrderTokenList())) {
+            for (TenantAppBuyOrderToken tokenItem : entity.getTenantAppBuyOrderTokenList()) {
+                totalPrice = CalculationUtil.add(totalPrice, tokenItem.getAllPrice());
             }
         }
         entity.setAllPrice(totalPrice);
@@ -174,6 +188,31 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
         }
     }
 
+    private void validateBuyOrderToken(TenantAppBuyOrder entity) {
+        if (CollectionUtil.isEmpty(entity.getTenantAppBuyOrderTokenList())) {
+            return;
+        }
+        String tokensPerYuan = platformBaseSettingService.getTokensPerYuan();
+        String minBuyAmount = platformBaseSettingService.getMinBuyTokenAmount();
+        BigDecimal minAmount = new BigDecimal(minBuyAmount);
+        for (TenantAppBuyOrderToken tokenItem : entity.getTenantAppBuyOrderTokenList()) {
+            if (StrUtil.isBlank(tokenItem.getBuyAmount())) {
+                throw new CustomException("Token 购买金额不能为空");
+            }
+            BigDecimal buyAmount = new BigDecimal(tokenItem.getBuyAmount());
+            if (buyAmount.compareTo(minAmount) < 0) {
+                throw new CustomException("Token 购买金额不能低于" + minBuyAmount + "元");
+            }
+            tokenItem.setTokensPerYuan(tokensPerYuan);
+            long tokenQty = buyAmount.multiply(new BigDecimal(tokensPerYuan)).setScale(0, java.math.RoundingMode.DOWN).longValue();
+            if (tokenQty <= 0) {
+                throw new CustomException("兑换 Token 数量必须大于0，请检查平台计费标准");
+            }
+            tokenItem.setTokenQty(tokenQty);
+            tokenItem.setAllPrice(tokenItem.getBuyAmount());
+        }
+    }
+
     @Override
     @IgnoreTenant
     @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
@@ -206,6 +245,7 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
     public void writePostpose(TenantAppBuyOrder entity, String userId) {
         tenantAppBuyOrderNumService.saveList(entity.getId(), entity.getTenantAppBuyOrderNumList());
         tenantAppBuyOrderYearService.saveList(entity.getId(), entity.getTenantAppBuyOrderYearList());
+        tenantAppBuyOrderTokenService.saveList(entity.getId(), entity.getTenantAppBuyOrderTokenList());
         super.writePostpose(entity, userId);
     }
 
@@ -213,6 +253,7 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
     protected void deletePostpose(String id) {
         tenantAppBuyOrderNumService.deleteByParentId(id);
         tenantAppBuyOrderYearService.deleteByParentId(id);
+        tenantAppBuyOrderTokenService.deleteByParentId(id);
         super.deletePostpose(id);
     }
 
@@ -221,6 +262,7 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
         if (entity != null && StrUtil.isNotBlank(entity.getId())) {
             tenantAppBuyOrderNumService.deleteByParentId(entity.getId());
             tenantAppBuyOrderYearService.deleteByParentId(entity.getId());
+            tenantAppBuyOrderTokenService.deleteByParentId(entity.getId());
         }
         super.deletePostpose(entity);
     }
@@ -230,6 +272,7 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
         TenantAppBuyOrder tenantAppBuyOrder = super.getDataFromDb(id);
         tenantAppBuyOrder.setTenantAppBuyOrderNumList(tenantAppBuyOrderNumService.selectByParentId(id));
         tenantAppBuyOrder.setTenantAppBuyOrderYearList(tenantAppBuyOrderYearService.selectByParentId(id));
+        tenantAppBuyOrder.setTenantAppBuyOrderTokenList(tenantAppBuyOrderTokenService.selectByParentId(id));
         return tenantAppBuyOrder;
     }
 
@@ -491,6 +534,12 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
         if (CollectionUtil.isNotEmpty(tenantAppBuyOrder.getTenantAppBuyOrderYearList())) {
             tenantAppBuyOrder.getTenantAppBuyOrderYearList().forEach(tenantAppBuyOrderYear -> {
                 tenantAppLinkService.saveTenantAppLink(tenantAppBuyOrder.getBuyTenantId(), tenantAppBuyOrderYear.getAppId(), tenantAppBuyOrderYear.getAccountYear());
+            });
+        }
+        if (CollectionUtil.isNotEmpty(tenantAppBuyOrder.getTenantAppBuyOrderTokenList())) {
+            tenantAppBuyOrder.getTenantAppBuyOrderTokenList().forEach(tokenItem -> {
+                long qty = tokenItem.getTokenQty() == null ? 0L : tokenItem.getTokenQty();
+                tenantTokenAccountService.creditTokens(tenantAppBuyOrder.getBuyTenantId(), qty);
             });
         }
         // 支付成功后才标记租户为「已购买」

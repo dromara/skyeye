@@ -61,4 +61,14 @@ public class PlatformBaseSettingConst {
      */
     public static final String KEY_OA_AI_ROLE_ID = "oaRoleId";
 
+    /**
+     * Token 计费分组 - 1 元兑换的 Token 数量
+     */
+    public static final String KEY_TOKENS_PER_YUAN = "tokensPerYuan";
+
+    /**
+     * Token 计费分组 - 预付最低购买金额（元）
+     */
+    public static final String KEY_MIN_BUY_TOKEN_AMOUNT = "minBuyTokenAmount";
+
 }

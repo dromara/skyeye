@@ -91,4 +91,8 @@ public class TenantAppBuyOrder extends SkyeyeFlowable {
     @ApiModelProperty(value = "租户应用信息", required = "json")
     private List<TenantAppBuyOrderYear> tenantAppBuyOrderYearList;
 
+    @TableField(exist = false)
+    @ApiModelProperty(value = "Token购买信息", required = "json")
+    private List<TenantAppBuyOrderToken> tenantAppBuyOrderTokenList;
+
 }
