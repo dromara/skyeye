@@ -72,4 +72,10 @@ public class PlatformBaseSettingController {
         platformBaseSettingService.queryPlatformOaAiRole(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryPlatformTokenBilling", value = "获取平台Token计费标准", method = "GET", allUse = "2")
+    @RequestMapping("/post/PlatformBaseSettingController/queryPlatformTokenBilling")
+    public void queryPlatformTokenBilling(InputObject inputObject, OutputObject outputObject) {
+        platformBaseSettingService.queryPlatformTokenBilling(inputObject, outputObject);
+    }
+
 }

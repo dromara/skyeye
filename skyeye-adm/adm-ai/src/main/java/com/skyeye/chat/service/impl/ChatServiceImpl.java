@@ -27,6 +27,7 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.eve.service.ITenantService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.key.entity.AiApiKey;
 import com.skyeye.key.service.AiApiKeyService;
@@ -40,6 +41,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
 /**
@@ -74,8 +76,13 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     @Autowired
     private AiMessageWebSocket aiMessageWebSocket;
 
+    @Autowired
+    private ITenantService iTenantService;
+
     @Value("${skyeye.tenant.enable:false}")
     private boolean tenantEnable;
+
+    private final Map<String, String> chatPromptCache = new ConcurrentHashMap<>();
 
     @Override
     @Transactional
@@ -84,6 +91,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         String content = params.get("content").toString();
         String apiKeyId = params.get("apiKeyId").toString();
         String userId = InputObject.getLogParamsStatic().get("id").toString();
+        checkTenantTokenAllowUse();
         Chat chat = new Chat();
         AiApiKey aiApiKey = aiApiKeyService.selectById(apiKeyId);
         String platform = aiApiKey.getPlatform();
@@ -97,6 +105,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         chat.setPlatform(platform);
         chat.setApiKeyId(apiKeyId);
         String id = createEntity(chat, userId);
+        rememberChatPrompt(id, content);
         switch (aiModel) {
             case YI_YAN:
                 QianFanResponse(content, systemPrompt, userId, id, aiApiKey);
@@ -133,6 +142,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         Object imagesObj = params.get("images");
         List<String> images = readImages(imagesObj == null ? "" : imagesObj.toString());
         String userId = InputObject.getLogParamsStatic().get("id").toString();
+        checkTenantTokenAllowUse();
         AiApiKey aiApiKey = StrUtil.isNotBlank(roleId)
             ? aiApiKeyService.selectEnabledKeyByRoleId(roleId)
             : aiApiKeyService.selectEnabledKey(apiKeyId);
@@ -160,6 +170,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         }
         String knowledgeQuery = params.get("knowledgeQuery") == null ? "" : params.get("knowledgeQuery").toString();
         content = appendRoleKnowledge(bizType, role, content, knowledgeQuery);
+        rememberChatPrompt(id, content);
         Map<String, Object> bean = new HashMap<>();
         bean.put("id", id);
         bean.put("chatId", id);
@@ -510,11 +521,21 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         try {
             invoker.invoke(tenantId, isolationType, finished);
             if (!finished[0]) {
-                appendYiYanChunk(userId, chatId, bizType, StrUtil.EMPTY, true);
+                try {
+                    bindTenantContext(tenantId, isolationType);
+                    appendYiYanChunk(userId, chatId, bizType, StrUtil.EMPTY, true);
+                } finally {
+                    TenantContext.clear();
+                }
             }
         } catch (Throwable e) {
-            persistYiYanPartial(userId, chatId);
-            sendYiYanError(userId, chatId, bizType, StrUtil.blankToDefault(e.getMessage(), e.getClass().getSimpleName()));
+            try {
+                bindTenantContext(tenantId, isolationType);
+                persistYiYanPartial(userId, chatId);
+                sendYiYanError(userId, chatId, bizType, StrUtil.blankToDefault(e.getMessage(), e.getClass().getSimpleName()));
+            } finally {
+                TenantContext.clear();
+            }
         }
     }
 
@@ -594,10 +615,12 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         if (end) {
             jedisClientService.del(key);
             Chat chat = findSavedChat(chatId);
+            String completion = Joiner.on("").join(chunkMessage);
             if (chat != null) {
-                chat.setContent(Joiner.on("").join(chunkMessage));
+                chat.setContent(completion);
                 chatService.updateEntity(chat, userId);
             }
+            recordChatTokenUsage(chatId, completion);
         } else {
             jedisClientService.set(key, JSONUtil.toJsonStr(chunkMessage));
         }
@@ -628,12 +651,13 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         }
         List<String> chunkMessage = JSONUtil.toList(jedisClientService.get(key), null);
         jedisClientService.del(key);
+        String completion = Joiner.on("").join(chunkMessage);
         Chat chat = findSavedChat(chatId);
-        if (chat == null) {
-            return;
+        if (chat != null) {
+            chat.setContent(completion);
+            chatService.updateEntity(chat, userId);
         }
-        chat.setContent(Joiner.on("").join(chunkMessage));
-        chatService.updateEntity(chat, userId);
+        recordChatTokenUsage(chatId, completion);
     }
 
     /**
@@ -721,6 +745,55 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         queryWrapper.eq(MybatisPlusUtil.toColumns(Chat::getApiKeyId), apiKeyId);
         queryWrapper.eq(MybatisPlusUtil.toColumns(Chat::getCreateId), userId);
         remove(queryWrapper);
+    }
+
+    private void checkTenantTokenAllowUse() {
+        if (!tenantEnable) {
+            return;
+        }
+        String tenantId = TenantContext.getTenantId();
+        if (StrUtil.isBlank(tenantId)) {
+            return;
+        }
+        iTenantService.checkTenantTokenAllowUse(tenantId);
+    }
+
+    private void rememberChatPrompt(String chatId, String prompt) {
+        if (StrUtil.isBlank(chatId)) {
+            return;
+        }
+        chatPromptCache.put(chatId, StrUtil.nullToEmpty(prompt));
+    }
+
+    private void recordChatTokenUsage(String chatId, String completion) {
+        if (!tenantEnable || StrUtil.isBlank(chatId)) {
+            return;
+        }
+        String prompt = chatPromptCache.remove(chatId);
+        if (prompt == null) {
+            return;
+        }
+        String tenantId = TenantContext.getTenantId();
+        if (StrUtil.isBlank(tenantId)) {
+            return;
+        }
+        try {
+            long promptTokens = estimateTokens(prompt);
+            long completionTokens = estimateTokens(completion);
+            if (promptTokens + completionTokens <= 0) {
+                return;
+            }
+            iTenantService.recordTenantTokenUsage(tenantId, promptTokens, completionTokens, promptTokens + completionTokens);
+        } catch (Exception ignored) {
+            // 计费失败不影响对话
+        }
+    }
+
+    private long estimateTokens(String text) {
+        if (StrUtil.isBlank(text)) {
+            return 0L;
+        }
+        return Math.max(1L, (text.length() + 1L) / 2L);
     }
 
 }

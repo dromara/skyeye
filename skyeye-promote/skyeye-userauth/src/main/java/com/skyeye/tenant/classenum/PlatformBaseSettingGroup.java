@@ -28,7 +28,12 @@ public enum PlatformBaseSettingGroup {
     /**
      * AI 角色绑定：研发需求/Bug 与办公OA 助手各自绑定的平台级 AI 角色
      */
-    AI("ai", "AI角色");
+    AI("ai", "AI角色"),
+
+    /**
+     * Token 计费标准：兑换比例与最低购买金额
+     */
+    TOKEN("token", "Token计费");
 
     /**
      * 分组标识，存入 settingData 的 key

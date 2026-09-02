@@ -90,4 +90,19 @@ public interface PlatformBaseSettingService extends SkyeyeBusinessService<Platfo
      */
     String getOaAiRoleId();
 
+    /**
+     * 查询 Token 计费标准（所有租户可读）
+     */
+    void queryPlatformTokenBilling(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 1 元兑换的 Token 数量
+     */
+    String getTokensPerYuan();
+
+    /**
+     * 预付最低购买金额（元）
+     */
+    String getMinBuyTokenAmount();
+
 }
