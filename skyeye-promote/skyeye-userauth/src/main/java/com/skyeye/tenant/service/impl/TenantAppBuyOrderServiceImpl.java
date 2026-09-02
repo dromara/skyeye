@@ -34,6 +34,7 @@ import com.skyeye.pay.service.PayChannelService;
 import com.skyeye.pay.service.PayService;
 import com.skyeye.tenant.classenum.TenantAppBuyOrderPayState;
 import com.skyeye.tenant.classenum.TenantAppBuyOrderSource;
+import com.skyeye.tenant.classenum.TenantTokenBillState;
 import com.skyeye.tenant.dao.TenantAppBuyOrderDao;
 import com.skyeye.tenant.entity.*;
 import com.skyeye.tenant.service.*;
@@ -84,6 +85,9 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
     private TenantTokenAccountService tenantTokenAccountService;
 
     @Autowired
+    private TenantTokenBillService tenantTokenBillService;
+
+    @Autowired
     private TenantAppLinkService tenantAppLinkService;
 
     @Autowired
@@ -111,6 +115,14 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
 
     @Override
     public void validatorEntity(TenantAppBuyOrder entity) {
+        if (isTokenBillOrder(entity)) {
+            if (StrUtil.isBlank(entity.getAllPrice())
+                || new BigDecimal(entity.getAllPrice()).compareTo(BigDecimal.ZERO) <= 0) {
+                throw new CustomException("账单金额无效");
+            }
+            entity.setPayState(TenantAppBuyOrderPayState.UNPAID.getKey());
+            return;
+        }
         if (CollectionUtil.isEmpty(entity.getTenantAppBuyOrderNumList())
             && CollectionUtil.isEmpty(entity.getTenantAppBuyOrderYearList())
             && CollectionUtil.isEmpty(entity.getTenantAppBuyOrderTokenList())) {
@@ -444,8 +456,13 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
         Map<String, Object> payData = new HashMap<>();
         payData.put("oddNumber", tenantAppBuyOrder.getOddNumber());
         payData.put("payPrice", yuanToFen(tenantAppBuyOrder.getAllPrice()));
-        payData.put("subject", "租户扩容购买");
-        payData.put("body", "租户席位/应用购买-" + tenantAppBuyOrder.getOddNumber());
+        if (isTokenBillOrder(tenantAppBuyOrder)) {
+            payData.put("subject", "Token月结账单");
+            payData.put("body", "Token月结账单-" + tenantAppBuyOrder.getOddNumber());
+        } else {
+            payData.put("subject", "租户扩容购买");
+            payData.put("body", "租户席位/应用购买-" + tenantAppBuyOrder.getOddNumber());
+        }
         return payData;
     }
 
@@ -526,6 +543,10 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
     }
 
     private void deliverOrderBenefits(TenantAppBuyOrder tenantAppBuyOrder) {
+        if (isTokenBillOrder(tenantAppBuyOrder)) {
+            tenantTokenBillService.markPaidByPayOrderId(tenantAppBuyOrder.getId());
+            return;
+        }
         if (CollectionUtil.isNotEmpty(tenantAppBuyOrder.getTenantAppBuyOrderNumList())) {
             tenantAppBuyOrder.getTenantAppBuyOrderNumList().forEach(tenantAppBuyOrderNum -> {
                 tenantService.editTenantAccountNumber(tenantAppBuyOrder.getBuyTenantId(), tenantAppBuyOrderNum.getAccountNum());
@@ -684,6 +705,89 @@ public class TenantAppBuyOrderServiceImpl extends SkyeyeBusinessServiceImpl<Tena
         }
         deleteById(id);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    @IgnoreTenant
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void createTenantTokenBillPayOrder(InputObject inputObject, OutputObject outputObject) {
+        String billId = inputObject.getParams().get("id").toString();
+        String tenantId = TenantContext.getTenantId();
+        if (StrUtil.isBlank(tenantId)) {
+            throw new CustomException("未获取到当前租户信息");
+        }
+        TenantTokenBill bill = tenantTokenBillService.selectById(billId);
+        if (bill == null || StrUtil.isBlank(bill.getId())) {
+            throw new CustomException("账单不存在");
+        }
+        if (!StrUtil.equals(tenantId, bill.getTenantId())) {
+            throw new CustomException("无权结清该账单");
+        }
+        if (TenantTokenBillState.PAID.getKey().equals(bill.getState())) {
+            throw new CustomException("该账单已结清");
+        }
+        if (!TenantTokenBillState.SETTLED.getKey().equals(bill.getState())
+            || !tenantTokenBillService.isPayableAmount(bill)) {
+            throw new CustomException("当前账单无需支付");
+        }
+        if (StrUtil.isNotBlank(bill.getPayOrderId())) {
+            TenantAppBuyOrder existOrder = selectById(bill.getPayOrderId());
+            if (existOrder != null && StrUtil.isNotBlank(existOrder.getId())
+                && TenantAppBuyOrderPayState.UNPAID.getKey().equals(existOrder.getPayState())
+                && isApprovedFlowableEntity(existOrder)) {
+                outputObject.setBean(existOrder);
+                outputObject.settotal(CommonNumConstants.NUM_ONE);
+                return;
+            }
+        }
+        TenantAppBuyOrder entity = new TenantAppBuyOrder();
+        entity.setBuyTenantId(tenantId);
+        entity.setOrderSource(TenantAppBuyOrderSource.TOKEN_BILL.getKey());
+        entity.setFormSubType(FormSubType.DRAFT.getKey());
+        entity.setAllPrice(bill.getAmount());
+        entity.setRemark("Token月结账单-" + bill.getBillPeriod());
+        entity.setOperTime(DateUtil.getTimeAndToString());
+        String userId = inputObject.getLogParams().get("id").toString();
+        TenantContext.setTenantId(TenantTypeEnum.PLATFORM.getCode());
+        String orderId = createEntity(entity, userId);
+        autoApprovalPass(orderId);
+        tenantTokenBillService.bindPayOrderId(bill.getId(), orderId);
+        outputObject.setBean(selectById(orderId));
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    @IgnoreTenant
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void markTenantTokenBillPaid(InputObject inputObject, OutputObject outputObject) {
+        if (!StrUtil.equals(TenantContext.getTenantId(), TenantTypeEnum.PLATFORM.getCode())) {
+            throw new CustomException("非平台租户不能线下结清");
+        }
+        String billId = inputObject.getParams().get("id").toString();
+        TenantTokenBill bill = tenantTokenBillService.selectById(billId);
+        if (bill == null || StrUtil.isBlank(bill.getId())) {
+            throw new CustomException("账单不存在");
+        }
+        if (TenantTokenBillState.PAID.getKey().equals(bill.getState())) {
+            outputObject.settotal(CommonNumConstants.NUM_ONE);
+            return;
+        }
+        if (!TenantTokenBillState.SETTLED.getKey().equals(bill.getState())) {
+            throw new CustomException("当前账单状态不可结清");
+        }
+        if (StrUtil.isNotBlank(bill.getPayOrderId())) {
+            TenantAppBuyOrder existOrder = selectById(bill.getPayOrderId());
+            if (existOrder != null && StrUtil.isNotBlank(existOrder.getId())
+                && TenantAppBuyOrderPayState.UNPAID.getKey().equals(existOrder.getPayState())) {
+                updatePayState(existOrder.getId(), TenantAppBuyOrderPayState.PAY_CANCELLED.getKey(), "账单已线下结清");
+            }
+        }
+        tenantTokenBillService.markPaid(bill.getId(), bill.getPayOrderId());
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    private boolean isTokenBillOrder(TenantAppBuyOrder order) {
+        return order != null && TenantAppBuyOrderSource.TOKEN_BILL.getKey().equals(order.getOrderSource());
     }
 
 }

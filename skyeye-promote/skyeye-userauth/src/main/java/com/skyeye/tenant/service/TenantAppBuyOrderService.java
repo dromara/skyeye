@@ -79,4 +79,14 @@ public interface TenantAppBuyOrderService extends SkyeyeBusinessService<TenantAp
      */
     void deleteCurrentTenantAppBuyOrder(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 租户为未结清月结账单生成待支付订单
+     */
+    void createTenantTokenBillPayOrder(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 平台线下结清月结账单
+     */
+    void markTenantTokenBillPaid(InputObject inputObject, OutputObject outputObject);
+
 }

@@ -63,4 +63,12 @@ public class TenantTokenBill extends OperatorUserInfo {
     @Property("出账时间")
     private String settleTime;
 
+    @TableField("pay_order_id")
+    @Property("结清对应的购买订单id")
+    private String payOrderId;
+
+    @TableField("pay_time")
+    @Property("结清时间")
+    private String payTime;
+
 }

@@ -48,4 +48,8 @@ public class TenantTokenAccount extends OperatorUserInfo {
     @ApiModelProperty(value = "预付用尽是否停用", enumClass = WhetherEnum.class)
     private Integer stopped;
 
+    @TableField(exist = false)
+    @Property("未结清月结账单数量")
+    private Long unpaidBillCount;
+
 }

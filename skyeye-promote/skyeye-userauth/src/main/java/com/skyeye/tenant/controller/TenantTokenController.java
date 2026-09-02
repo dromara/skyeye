@@ -11,6 +11,7 @@ import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.tenant.service.TenantAppBuyOrderService;
 import com.skyeye.tenant.service.TenantTokenAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,9 @@ public class TenantTokenController {
 
     @Autowired
     private TenantTokenAccountService tenantTokenAccountService;
+
+    @Autowired
+    private TenantAppBuyOrderService tenantAppBuyOrderService;
 
     @ApiOperation(id = "queryCurrentTenantTokenAccount", value = "查询当前租户Token账户", method = "GET", allUse = "2")
     @RequestMapping("/post/TenantTokenController/queryCurrentTenantTokenAccount")
@@ -89,6 +93,22 @@ public class TenantTokenController {
     @RequestMapping("/post/TenantTokenController/recordTenantTokenUsage")
     public void recordTenantTokenUsage(InputObject inputObject, OutputObject outputObject) {
         tenantTokenAccountService.recordTenantTokenUsage(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "createTenantTokenBillPayOrder", value = "为未结清月结账单生成支付订单", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "账单id", required = "required")})
+    @RequestMapping("/post/TenantTokenController/createTenantTokenBillPayOrder")
+    public void createTenantTokenBillPayOrder(InputObject inputObject, OutputObject outputObject) {
+        tenantAppBuyOrderService.createTenantTokenBillPayOrder(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "markTenantTokenBillPaid", value = "平台线下结清月结账单", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "账单id", required = "required")})
+    @RequestMapping("/post/TenantTokenController/markTenantTokenBillPaid")
+    public void markTenantTokenBillPaid(InputObject inputObject, OutputObject outputObject) {
+        tenantAppBuyOrderService.markTenantTokenBillPaid(inputObject, outputObject);
     }
 
 }

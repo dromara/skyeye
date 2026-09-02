@@ -11,4 +11,16 @@ public interface TenantTokenBillService extends SkyeyeBusinessService<TenantToke
 
     boolean existsByTenantAndPeriod(String tenantId, String billPeriod);
 
+    boolean hasUnpaidBills(String tenantId);
+
+    long countUnpaidBills(String tenantId);
+
+    void markPaid(String billId, String payOrderId);
+
+    void markPaidByPayOrderId(String payOrderId);
+
+    void bindPayOrderId(String billId, String payOrderId);
+
+    boolean isPayableAmount(TenantTokenBill bill);
+
 }
