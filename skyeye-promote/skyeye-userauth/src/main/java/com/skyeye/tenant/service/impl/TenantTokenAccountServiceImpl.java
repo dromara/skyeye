@@ -33,11 +33,7 @@ import com.skyeye.tenant.dao.TenantTokenAccountDao;
 import com.skyeye.tenant.entity.TenantTokenAccount;
 import com.skyeye.tenant.entity.TenantTokenBill;
 import com.skyeye.tenant.entity.TenantTokenDailyUsage;
-import com.skyeye.tenant.service.PlatformBaseSettingService;
-import com.skyeye.tenant.service.TenantService;
-import com.skyeye.tenant.service.TenantTokenAccountService;
-import com.skyeye.tenant.service.TenantTokenBillService;
-import com.skyeye.tenant.service.TenantTokenDailyUsageService;
+import com.skyeye.tenant.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -247,8 +243,9 @@ public class TenantTokenAccountServiceImpl extends SkyeyeBusinessServiceImpl<Ten
     @IgnoreTenant
     public void queryPlatformTenantTokenDailyUsage(InputObject inputObject, OutputObject outputObject) {
         assertPlatformTenant();
+        CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
         String tenantId = StrUtil.blankToDefault(inputObject.getParams().get("tenantId") == null ? "" : inputObject.getParams().get("tenantId").toString(),
-            inputObject.getParams(CommonPageInfo.class).getObjectId());
+            pageInfo.getObjectId());
         if (StrUtil.isBlank(tenantId)) {
             throw new CustomException("请选择租户");
         }
@@ -259,8 +256,9 @@ public class TenantTokenAccountServiceImpl extends SkyeyeBusinessServiceImpl<Ten
     @IgnoreTenant
     public void queryPlatformTenantTokenBillList(InputObject inputObject, OutputObject outputObject) {
         assertPlatformTenant();
+        CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
         String tenantId = StrUtil.blankToDefault(inputObject.getParams().get("tenantId") == null ? "" : inputObject.getParams().get("tenantId").toString(),
-            inputObject.getParams(CommonPageInfo.class).getObjectId());
+            pageInfo.getObjectId());
         fillBillOutput(inputObject, outputObject, tenantId);
     }
 
