@@ -34,6 +34,11 @@ spring:
 logging:
   level:
     com.skyeye: debug
+    # 关掉下面日志这个 Feign 的 HTTP 明细, IOperationLogCenterRest 的 INFO 会压过 com.skyeye 的 debug
+    com.skyeye.eve.operationlog.rest.IOperationLogCenterRest: INFO
+    com.skyeye.eve.rest.user.IAuthUserServiceRest: INFO
+    com.skyeye.eve.rest.lifecycle.ILifecycleTemplateRest: INFO
+    com.skyeye.common.base.handler.dynamic.rest.ISysDynamicAttrValueServiceRest: INFO
 
 webroot:
   # ERP相关的服务
