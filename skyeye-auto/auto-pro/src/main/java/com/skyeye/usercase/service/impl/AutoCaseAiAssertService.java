@@ -10,6 +10,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.ai.util.AutoAiChatHelper;
 import com.skyeye.ai.util.AutoAiJsonHelper;
+import com.skyeye.common.util.AiJsonHelper;
 import com.skyeye.attr.classenum.AttrSymbols;
 import com.skyeye.exception.CustomException;
 import com.skyeye.usercase.classenum.AutoValueFromTypeEnum;
@@ -78,9 +79,9 @@ public class AutoCaseAiAssertService {
         if (outputObj == null || StrUtil.isBlank(String.valueOf(outputObj))) {
             throw new CustomException("步骤输出不能为空");
         }
-        String outputJson = AutoAiJsonHelper.normalizeJsonText(outputObj);
+        String outputJson = AiJsonHelper.normalizeJsonText(outputObj);
         String existingAssertJson = params.get("existingAssertList") == null
-            ? "[]" : AutoAiJsonHelper.normalizeJsonText(params.get("existingAssertList"));
+            ? "[]" : AiJsonHelper.normalizeJsonText(params.get("existingAssertList"));
         return autoAiChatHelper.startStreamingChat(
             buildUserContent(resultKey, stepName, outputJson, existingAssertJson),
             "stepAssertSuggest");
@@ -107,7 +108,7 @@ public class AutoCaseAiAssertService {
         sb.append("4. value：自定义时填期望字面量（如 0、成功）；成功标志优先断言 returnCode=0，不要用 code=200\n");
         sb.append("5. 优先断言业务成功标志、状态码、关键 id/消息等，条数 3~8 条，不要重复\n");
         sb.append("6. 必须输出 {\"assertList\":[...]} 结构，不要只返回数组\n");
-        AutoAiJsonHelper.appendMarkedJsonOutput(sb,
+        AiJsonHelper.appendMarkedJsonOutput(sb,
             "{\n"
                 + "  \"assertList\": [\n"
                 + "    {\"key\": \"" + resultKey + ".returnCode\", \"operator\": \"equalTo\", \"valueFrom\": 1, \"value\": \"0\"}\n"
@@ -135,8 +136,8 @@ public class AutoCaseAiAssertService {
         }
         if (assertList.isEmpty()) {
             throw new CustomException("未能解析出有效断言，请重试（请在 "
-                + AutoAiJsonHelper.JSON_BLOCK_BEGIN + " 与 "
-                + AutoAiJsonHelper.JSON_BLOCK_END + " 之间输出 assertList JSON）");
+                + AiJsonHelper.JSON_BLOCK_BEGIN + " 与 "
+                + AiJsonHelper.JSON_BLOCK_END + " 之间输出 assertList JSON）");
         }
         Map<String, Object> bean = new HashMap<>();
         bean.put("assertList", assertList);
@@ -144,8 +145,8 @@ public class AutoCaseAiAssertService {
     }
 
     private JSONArray resolveAssertArray(String answer) {
-        String jsonText = AutoAiJsonHelper.extractJsonBlock(answer);
-        JSONObject json = AutoAiJsonHelper.parseJsonObject(jsonText);
+        String jsonText = AiJsonHelper.extractJsonBlock(answer);
+        JSONObject json = AiJsonHelper.parseJsonObject(jsonText);
         if (json != null) {
             JSONArray assertList = pickArray(json, "assertList", "asserts", "assertions", "list");
             if (assertList != null && !assertList.isEmpty()) {
@@ -157,7 +158,7 @@ public class AutoCaseAiAssertService {
                 return single;
             }
         }
-        return AutoAiJsonHelper.parseJsonArray(jsonText);
+        return AiJsonHelper.parseJsonArray(jsonText);
     }
 
     private JSONArray pickArray(JSONObject json, String... keys) {

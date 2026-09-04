@@ -41,12 +41,12 @@ public class DouBaoChatClient {
 
     /**
      * 未配置接入点时的默认模型。
-     * doubao-seed-1-6-251015 已官方标记即将下线，迁移到 Seed 2.0-lite（支持文本和看图）。
+     * Doubao-Seed-Evolving：持续进化模型，无需随版本号更换 modelId。
      * 正式环境请在 AI 配置的 appId 填方舟接入点 ID（ep-xxxx）。
      */
-    public static final String DEFAULT_MODEL = "doubao-seed-2-0-lite-260215";
+    public static final String DEFAULT_MODEL = "doubao-seed-evolving";
 
-    public static final String DEFAULT_VL_MODEL = "doubao-seed-2-0-lite-260215";
+    public static final String DEFAULT_VL_MODEL = "doubao-seed-evolving";
 
     private static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
 

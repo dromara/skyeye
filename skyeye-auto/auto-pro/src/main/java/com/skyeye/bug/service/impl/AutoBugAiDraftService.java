@@ -10,6 +10,7 @@ import cn.hutool.json.JSONUtil;
 import com.skyeye.ai.util.AutoAiChatHelper;
 import com.skyeye.ai.util.AutoAiHtmlHelper;
 import com.skyeye.ai.util.AutoAiJsonHelper;
+import com.skyeye.common.util.AiJsonHelper;
 import com.skyeye.ai.util.AutoAiProjectContextHelper;
 import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +102,7 @@ public class AutoBugAiDraftService {
         appendOptions(sb, "可选严重性", params.get("severityOptions"));
         appendOptions(sb, "可选必现类型", params.get("necessaryOptions"));
         appendOptions(sb, "可选终端", params.get("terminalOptions"));
-        AutoAiJsonHelper.appendMarkedJsonOutput(sb,
+        AiJsonHelper.appendMarkedJsonOutput(sb,
             "{\n"
                 + "  \"name\": \"简洁的 Bug 标题\",\n"
                 + "  \"contentHtml\": \"问题描述 HTML\",\n"
@@ -128,12 +129,12 @@ public class AutoBugAiDraftService {
         String stepName = params.get("stepName") == null ? "" : params.get("stepName").toString();
         String resultKey = params.get("resultKey") == null ? "" : params.get("resultKey").toString();
         String failMessage = params.get("failMessage") == null ? "" : params.get("failMessage").toString();
-        String inputParams = AutoAiJsonHelper.normalizeJsonText(params.get("inputParams"));
-        String output = AutoAiJsonHelper.normalizeJsonText(params.get("output"));
+        String inputParams = AiJsonHelper.normalizeJsonText(params.get("inputParams"));
+        String output = AiJsonHelper.normalizeJsonText(params.get("output"));
         String assertList = params.get("assertList") == null
-            ? "[]" : AutoAiJsonHelper.normalizeJsonText(params.get("assertList"));
+            ? "[]" : AiJsonHelper.normalizeJsonText(params.get("assertList"));
         String apiDetail = params.get("apiDetail") == null
-            ? "{}" : AutoAiJsonHelper.normalizeJsonText(params.get("apiDetail"));
+            ? "{}" : AiJsonHelper.normalizeJsonText(params.get("apiDetail"));
         StringBuilder sb = new StringBuilder();
         sb.append("你是软件测试工程师。根据自动化用例执行失败信息，生成 Bug 草稿，只输出 JSON，不要 markdown 代码块。\n");
         sb.append("请写清：失败现象、复现步骤（结合用例与步骤名）、预期结果、实际结果（引用失败输出/断言）。\n");
@@ -154,7 +155,7 @@ public class AutoBugAiDraftService {
         appendOptions(sb, "可选必现类型", params.get("necessaryOptions"));
         appendOptions(sb, "可选终端", params.get("terminalOptions"));
         AutoAiJsonHelper.appendSkyeyeApiResponseRules(sb);
-        AutoAiJsonHelper.appendMarkedJsonOutput(sb,
+        AiJsonHelper.appendMarkedJsonOutput(sb,
             "{\n"
                 + "  \"name\": \"[自动化] 步骤失败简述\",\n"
                 + "  \"contentHtml\": \"问题描述 HTML\",\n"
@@ -215,7 +216,7 @@ public class AutoBugAiDraftService {
     }
 
     private Map<String, Object> parseDraft(String answer) {
-        JSONObject json = AutoAiJsonHelper.parseJsonObject(AutoAiJsonHelper.extractJsonBlock(answer));
+        JSONObject json = AiJsonHelper.parseJsonObject(AiJsonHelper.extractJsonBlock(answer));
         Map<String, Object> bean = new HashMap<>();
         if (json == null) {
             bean.put("name", "");
