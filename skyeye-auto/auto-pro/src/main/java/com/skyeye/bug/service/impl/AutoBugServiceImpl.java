@@ -83,6 +83,11 @@ public class AutoBugServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoBugDao, Au
         if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("versionId"))) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getVersionId), commonPageInfo.getCustomParamsMapStr("versionId"));
         }
+        // 按团队成员筛选：处理人为该成员
+        String memberId = commonPageInfo.getCustomParamsMapStr("memberId");
+        if (StrUtil.isNotEmpty(memberId)) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getHandleId), memberId);
+        }
         String type = commonPageInfo.getType();
         if (StrUtil.isEmpty(type)) {
             throw new CustomException("类型不能为空");
