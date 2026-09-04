@@ -269,6 +269,14 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         if (StrUtil.isNotEmpty(commonPageInfo.getCustomParamsMapStr("versionId"))) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(AutoDemand::getVersionId), commonPageInfo.getCustomParamsMapStr("versionId"));
         }
+        // 按团队成员筛选：前端/后端/测试任一负责人为该成员
+        String memberId = commonPageInfo.getCustomParamsMapStr("memberId");
+        if (StrUtil.isNotEmpty(memberId)) {
+            queryWrapper.and(wrapper -> wrapper
+                .eq(MybatisPlusUtil.toColumns(AutoDemand::getFrontHandleId), memberId)
+                .or().eq(MybatisPlusUtil.toColumns(AutoDemand::getBackHandleId), memberId)
+                .or().eq(MybatisPlusUtil.toColumns(AutoDemand::getTestHandleId), memberId));
+        }
         applyListTypeFilter(queryWrapper, commonPageInfo.getType());
         return queryWrapper;
     }
