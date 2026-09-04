@@ -9,7 +9,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.ai.util.AutoAiChatHelper;
-import com.skyeye.ai.util.AutoAiJsonHelper;
+import com.skyeye.common.util.AiJsonHelper;
 import com.skyeye.api.entity.AutoApi;
 import com.skyeye.api.service.AutoApiService;
 import com.skyeye.exception.CustomException;
@@ -48,11 +48,11 @@ public class AutoCaseAiInputService {
         String stepName = params.get("stepName") == null ? "" : params.get("stepName").toString();
         String resultKey = params.get("resultKey") == null ? "" : params.get("resultKey").toString().trim();
         String hint = params.get("hint") == null ? "" : params.get("hint").toString().trim();
-        String inputExample = AutoAiJsonHelper.normalizeJsonText(autoApi.getInputExample());
+        String inputExample = AiJsonHelper.normalizeJsonText(autoApi.getInputExample());
         String preStepJson = params.get("preStepList") == null
-            ? "[]" : AutoAiJsonHelper.normalizeJsonText(params.get("preStepList"));
+            ? "[]" : AiJsonHelper.normalizeJsonText(params.get("preStepList"));
         String existingInputJson = params.get("existingInputList") == null
-            ? "[]" : AutoAiJsonHelper.normalizeJsonText(params.get("existingInputList"));
+            ? "[]" : AiJsonHelper.normalizeJsonText(params.get("existingInputList"));
         return autoAiChatHelper.startStreamingChat(
             buildUserContent(autoApi, stepName, resultKey, hint, inputExample, preStepJson, existingInputJson),
             "stepInputSuggest");
@@ -83,7 +83,7 @@ public class AutoCaseAiInputService {
         sb.append("3. 需要唯一名称时可加 randomCategory(date/datetime/code6/code8) 与 randomPosition(front/back)，一般不必加\n");
         sb.append("4. 若前序步骤已产出 id/token 等，优先用表达式引用，不要写死\n");
         sb.append("5. 必须输出 {\"inputList\":[...]} 结构，不要只返回数组\n");
-        AutoAiJsonHelper.appendMarkedJsonOutput(sb,
+        AiJsonHelper.appendMarkedJsonOutput(sb,
             "{\n"
                 + "  \"inputList\": [\n"
                 + "    {\"key\": \"name\", \"valueFrom\": 1, \"value\": \"测试名称\"},\n"
@@ -112,8 +112,8 @@ public class AutoCaseAiInputService {
         }
         if (inputList.isEmpty()) {
             throw new CustomException("未能解析出有效入参，请重试（请在 "
-                + AutoAiJsonHelper.JSON_BLOCK_BEGIN + " 与 "
-                + AutoAiJsonHelper.JSON_BLOCK_END + " 之间输出 inputList JSON）");
+                + AiJsonHelper.JSON_BLOCK_BEGIN + " 与 "
+                + AiJsonHelper.JSON_BLOCK_END + " 之间输出 inputList JSON）");
         }
         Map<String, Object> bean = new HashMap<>();
         bean.put("inputList", inputList);
@@ -121,8 +121,8 @@ public class AutoCaseAiInputService {
     }
 
     private JSONArray resolveInputArray(String answer) {
-        String jsonText = AutoAiJsonHelper.extractJsonBlock(answer);
-        JSONObject json = AutoAiJsonHelper.parseJsonObject(jsonText);
+        String jsonText = AiJsonHelper.extractJsonBlock(answer);
+        JSONObject json = AiJsonHelper.parseJsonObject(jsonText);
         if (json != null) {
             JSONArray inputList = pickArray(json, "inputList", "inputs", "stepInputList", "list");
             if (inputList != null && !inputList.isEmpty()) {
@@ -134,7 +134,7 @@ public class AutoCaseAiInputService {
                 return single;
             }
         }
-        return AutoAiJsonHelper.parseJsonArray(jsonText);
+        return AiJsonHelper.parseJsonArray(jsonText);
     }
 
     private JSONArray pickArray(JSONObject json, String... keys) {

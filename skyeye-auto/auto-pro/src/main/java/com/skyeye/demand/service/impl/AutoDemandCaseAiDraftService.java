@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.ai.util.AutoAiChatHelper;
 import com.skyeye.ai.util.AutoAiHtmlHelper;
 import com.skyeye.ai.util.AutoAiJsonHelper;
+import com.skyeye.common.util.AiJsonHelper;
 import com.skyeye.ai.util.AutoAiProjectContextHelper;
 import com.skyeye.api.dao.AutoApiDao;
 import com.skyeye.api.entity.AutoApi;
@@ -157,7 +158,7 @@ public class AutoDemandCaseAiDraftService {
         sb.append("5. operator 仅可取：equalTo、notEqual、lessThan、greaterThan、lessThanOrEqual、greaterThanOrEqual、contain\n");
         sb.append("6. 成功标志断言 returnCode=0，不要用 code=200\n");
         sb.append("7. 用例名称建议以 [冒烟] 开头\n");
-        AutoAiJsonHelper.appendMarkedJsonOutput(sb,
+        AiJsonHelper.appendMarkedJsonOutput(sb,
             "{\n"
                 + "  \"name\": \"[冒烟] 用例名称\",\n"
                 + "  \"remark\": \"来自需求 xxx\",\n"
@@ -198,7 +199,7 @@ public class AutoDemandCaseAiDraftService {
         sb.append("4. stepAssertList 的 key 使用占位符 {resultKey}.字段，如 {resultKey}.returnCode、{resultKey}.data.xxx\n");
         sb.append("5. operator 仅可取：equalTo、notEqual、lessThan、greaterThan、lessThanOrEqual、greaterThanOrEqual、contain\n");
         sb.append("6. 成功标志断言 returnCode=0，不要用 code=200\n");
-        AutoAiJsonHelper.appendMarkedJsonOutput(sb,
+        AiJsonHelper.appendMarkedJsonOutput(sb,
             "{\n"
                 + "  \"name\": \"用例名称\",\n"
                 + "  \"remark\": \"AI 生成\",\n"
@@ -230,7 +231,7 @@ public class AutoDemandCaseAiDraftService {
     }
 
     private Map<String, Object> parseDraft(String answer, AutoDemand demand, List<AutoApi> apiList, String moduleId) {
-        JSONObject json = AutoAiJsonHelper.parseJsonObject(AutoAiJsonHelper.extractJsonBlock(answer));
+        JSONObject json = AiJsonHelper.parseJsonObject(AiJsonHelper.extractJsonBlock(answer));
         if (json == null) {
             throw new CustomException("未能解析出有效用例草稿，请重试");
         }

@@ -10,6 +10,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import com.skyeye.ai.util.AutoAiChatHelper;
 import com.skyeye.ai.util.AutoAiJsonHelper;
+import com.skyeye.common.util.AiJsonHelper;
 import com.skyeye.exception.CustomException;
 import com.skyeye.history.classenum.AutoHistoryCaseExecuteResult;
 import com.skyeye.history.entity.AutoHistoryCase;
@@ -73,7 +74,7 @@ public class AutoCaseAiHistoryService {
         sb.append("1. 找出首个失败步骤及根因（断言失败/接口 returnCode/异常等）\n");
         sb.append("2. suggestions 给出 2~5 条可操作的修复或排查建议\n");
         sb.append("3. 必须输出 {\"summary\",\"rootCause\",\"failedSteps\",\"suggestions\"} 结构\n");
-        AutoAiJsonHelper.appendMarkedJsonOutput(sb,
+        AiJsonHelper.appendMarkedJsonOutput(sb,
             "{\n"
                 + "  \"summary\": \"整体结论一句话\",\n"
                 + "  \"rootCause\": \"根因说明\",\n"
@@ -156,7 +157,7 @@ public class AutoCaseAiHistoryService {
     }
 
     private Map<String, Object> parseAnalysisAnswer(String answer) {
-        JSONObject json = AutoAiJsonHelper.parseJsonObject(AutoAiJsonHelper.extractJsonBlock(answer));
+        JSONObject json = AiJsonHelper.parseJsonObject(AiJsonHelper.extractJsonBlock(answer));
         Map<String, Object> bean = new HashMap<>();
         if (json == null) {
             bean.put("summary", StrUtil.blankToDefault(answer, "").trim());

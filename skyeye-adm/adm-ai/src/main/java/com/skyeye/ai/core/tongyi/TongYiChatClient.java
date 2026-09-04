@@ -25,6 +25,7 @@ import lombok.experimental.SuperBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -74,21 +75,54 @@ public class TongYiChatClient {
             Flowable<ApplicationResult> result = application.streamCall(param);
             final String[] lastText = {StrUtil.EMPTY};
             final String[] lastReasoning = {StrUtil.EMPTY};
-            result.blockingForEach(chunk -> {
-                JSONObject output = readOutputJson(chunk);
-                if (output == null) {
-                    return;
-                }
-                emitReasoningDelta(output, lastReasoning, listener);
-                emitTextDelta(output, lastText, listener);
-            });
-            if (ended.compareAndSet(false, true)) {
-                listener.onDelta(StrUtil.EMPTY, true);
-            }
+            // blockingForEach 遇 SDK 异步 NPE（如 dashscope 连不上）可能永不结束；
+            // 用 subscribe + timeout，保证超时/失败都会走 onError，前端能结束「思考中」
+            result
+                .timeout(120, TimeUnit.SECONDS)
+                .blockingSubscribe(
+                    chunk -> {
+                        JSONObject output = readOutputJson(chunk);
+                        if (output == null) {
+                            return;
+                        }
+                        emitReasoningDelta(output, lastReasoning, listener);
+                        emitTextDelta(output, lastText, listener);
+                    },
+                    t -> {
+                        if (ended.compareAndSet(false, true)) {
+                            listener.onError(formatStreamError(t));
+                        }
+                    },
+                    () -> {
+                        if (ended.compareAndSet(false, true)) {
+                            listener.onDelta(StrUtil.EMPTY, true);
+                        }
+                    });
         } catch (Throwable t) {
-            ended.set(true);
-            listener.onError(StrUtil.blankToDefault(t.getMessage(), t.getClass().getSimpleName()));
+            if (ended.compareAndSet(false, true)) {
+                listener.onError(formatStreamError(t));
+            }
         }
+    }
+
+    private String formatStreamError(Throwable t) {
+        if (t == null) {
+            return "AI 调用失败";
+        }
+        Throwable cur = t;
+        while (cur != null) {
+            String name = cur.getClass().getName();
+            String msg = cur.getMessage();
+            if (name.contains("ConnectException")
+                || (msg != null && msg.contains("Failed to connect"))) {
+                return "无法连接通义百炼服务，请检查服务器网络或稍后重试";
+            }
+            if (name.contains("TimeoutException") || name.contains("SocketTimeoutException")) {
+                return "通义百炼响应超时，请稍后重试";
+            }
+            cur = cur.getCause();
+        }
+        return StrUtil.blankToDefault(t.getMessage(), t.getClass().getSimpleName());
     }
 
     private ApplicationParam buildParam(String systemPrompt, List<Map<String, String>> history,

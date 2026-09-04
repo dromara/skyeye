@@ -9,7 +9,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import com.skyeye.ai.util.AutoAiChatHelper;
 import com.skyeye.ai.util.AutoAiHtmlHelper;
-import com.skyeye.ai.util.AutoAiJsonHelper;
+import com.skyeye.common.util.AiJsonHelper;
 import com.skyeye.ai.util.AutoAiProjectContextHelper;
 import com.skyeye.common.enumeration.IsDefaultEnum;
 import com.skyeye.common.util.CalculationUtil;
@@ -85,7 +85,7 @@ public class AutoDemandAiDraftService {
         sb.append("测试参与需求分析：").append(testJoin).append("\n");
         sb.append("已有内容：").append(AutoAiHtmlHelper.nvlText(content)).append("\n");
         sb.append("已有备注：").append(AutoAiHtmlHelper.nvlText(remark)).append("\n");
-        AutoAiJsonHelper.appendMarkedJsonOutput(sb,
+        AiJsonHelper.appendMarkedJsonOutput(sb,
             "{\n"
                 + "  \"contentHtml\": \"需求正文 HTML\",\n"
                 + "  \"remark\": \"简要备注\",\n"
@@ -108,7 +108,7 @@ public class AutoDemandAiDraftService {
     }
 
     private Map<String, Object> parseDraft(String answer) {
-        JSONObject json = AutoAiJsonHelper.parseJsonObject(AutoAiJsonHelper.extractJsonBlock(answer));
+        JSONObject json = AiJsonHelper.parseJsonObject(AiJsonHelper.extractJsonBlock(answer));
         Map<String, Object> bean = new HashMap<>();
         if (json == null) {
             bean.put("content", AutoAiHtmlHelper.ensureSectionBold(AutoAiHtmlHelper.wrapAsHtml(answer), DEMAND_SECTION_LABELS));
