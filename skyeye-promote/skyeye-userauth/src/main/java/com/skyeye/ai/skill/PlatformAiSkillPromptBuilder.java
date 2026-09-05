@@ -37,7 +37,7 @@ public class PlatformAiSkillPromptBuilder {
 
     public String build(String question, String pageTitle, String pagePath, String skillId, String suiteId) {
         Map<String, Object> payload = loadMatchPayload();
-        List<Map<String, Object>> skills = asMapList(payload.get("skillList"));
+        List<Map<String, Object>> skills = filterByScene(asMapList(payload.get("skillList")), "1");
         List<Map<String, Object>> suites = asMapList(payload.get("suiteList"));
         MatchResult match = match(question, pageTitle, pagePath, skillId, suiteId, skills, suites);
         StringBuilder sb = new StringBuilder();
@@ -54,7 +54,7 @@ public class PlatformAiSkillPromptBuilder {
                                  String skillId, String suiteId, String formContextJson) {
         // 加载启用技能,套件,skill列表
         Map<String, Object> payload = loadMatchPayload();
-        List<Map<String, Object>> skills = asMapList(payload.get("skillList"));
+        List<Map<String, Object>> skills = filterByScene(asMapList(payload.get("skillList")), "2");
         List<Map<String, Object>> suites = asMapList(payload.get("suiteList"));
         String matchPath = StrUtil.blankToDefault(serviceClassName, pageTitle);
         MatchResult match = match(question, pageTitle, matchPath, skillId, suiteId, skills, suites);
@@ -71,6 +71,33 @@ public class PlatformAiSkillPromptBuilder {
         appendFormContext(sb, formContextJson);
         appendDsFormJsonOutput(sb, formContextJson);
         return sb.toString();
+    }
+
+    /**
+     * 按使用位置过滤技能。useScene 空视为兼容历史数据（全部可用）。
+     * sceneKey：1=聊天，2=表单AI辅助
+     */
+    private List<Map<String, Object>> filterByScene(List<Map<String, Object>> skills, String sceneKey) {
+        if (CollectionUtil.isEmpty(skills) || StrUtil.isBlank(sceneKey)) {
+            return skills;
+        }
+        List<Map<String, Object>> filtered = new ArrayList<>();
+        for (Map<String, Object> skill : skills) {
+            String useScene = str(skill, "useScene");
+            if (StrUtil.isBlank(useScene) || containsScene(useScene, sceneKey)) {
+                filtered.add(skill);
+            }
+        }
+        return filtered;
+    }
+
+    private boolean containsScene(String useScene, String sceneKey) {
+        for (String part : useScene.split(",")) {
+            if (sceneKey.equals(part.trim())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void appendMatched(StringBuilder sb, MatchResult match, List<Map<String, Object>> skills) {

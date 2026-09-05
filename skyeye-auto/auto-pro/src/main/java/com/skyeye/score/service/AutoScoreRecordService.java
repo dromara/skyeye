@@ -31,4 +31,9 @@ public interface AutoScoreRecordService extends SkyeyeBusinessService<AutoScoreR
 
     void settleAutoScore(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 项目经理手工额外加分 / 扣分（版本、需求可选）。
+     */
+    void writeExtraAutoScore(InputObject inputObject, OutputObject outputObject);
+
 }

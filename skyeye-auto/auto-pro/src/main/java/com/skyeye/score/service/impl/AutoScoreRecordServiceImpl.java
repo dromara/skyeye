@@ -224,13 +224,14 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         return AutoScoreTypeEnum.TEST_LATE_PENALTY;
     }
 
-    /** 是否计入「扣分合计」的流水类型（Bug / 非问题 / 延期） */
+    /** 是否计入「扣分合计」的流水类型（Bug / 非问题 / 延期 / 额外扣分） */
     private boolean isDeductScoreType(String scoreType) {
         return StrUtil.equals(scoreType, AutoScoreTypeEnum.BUG_PENALTY.getKey())
             || StrUtil.equals(scoreType, AutoScoreTypeEnum.BUG_NON_ISSUE.getKey())
             || StrUtil.equals(scoreType, AutoScoreTypeEnum.FRONT_LATE_PENALTY.getKey())
             || StrUtil.equals(scoreType, AutoScoreTypeEnum.BACK_LATE_PENALTY.getKey())
-            || StrUtil.equals(scoreType, AutoScoreTypeEnum.TEST_LATE_PENALTY.getKey());
+            || StrUtil.equals(scoreType, AutoScoreTypeEnum.TEST_LATE_PENALTY.getKey())
+            || StrUtil.equals(scoreType, AutoScoreTypeEnum.EXTRA_DEDUCT.getKey());
     }
 
     /** 是否为需求延期扣分类型（明细里用需求编号/标题展示） */
@@ -238,6 +239,10 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         return StrUtil.equals(scoreType, AutoScoreTypeEnum.FRONT_LATE_PENALTY.getKey())
             || StrUtil.equals(scoreType, AutoScoreTypeEnum.BACK_LATE_PENALTY.getKey())
             || StrUtil.equals(scoreType, AutoScoreTypeEnum.TEST_LATE_PENALTY.getKey());
+    }
+
+    private boolean isExtraDeductType(String scoreType) {
+        return StrUtil.equals(scoreType, AutoScoreTypeEnum.EXTRA_DEDUCT.getKey());
     }
 
     @Override
@@ -353,7 +358,7 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         }
 
         String earnedScore = "0";
-        // 字段名沿用 bugDeductScore，实际汇总 Bug 扣分 + 延期扣分
+        // 字段名沿用 bugDeductScore，实际汇总 Bug / 延期 / 额外扣分
         String bugDeductScore = "0";
         List<String> bugIds = myRecords.stream()
             .map(AutoScoreRecord::getBugId)
@@ -365,9 +370,9 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
             List<AutoBug> bugs = autoBugDao.selectBatchIds(bugIds);
             bugMap = bugs.stream().collect(Collectors.toMap(AutoBug::getId, item -> item, (a, b) -> a));
         }
-        // 延期扣分关联需求，用于明细展示编号/标题
+        // 延期扣分 / 额外扣分关联需求，用于明细展示编号/标题
         List<String> lateDemandIds = myRecords.stream()
-            .filter(item -> isLatePenaltyType(item.getScoreType()))
+            .filter(item -> isLatePenaltyType(item.getScoreType()) || isExtraDeductType(item.getScoreType()))
             .map(AutoScoreRecord::getDemandId)
             .filter(StrUtil::isNotEmpty)
             .distinct()
@@ -391,14 +396,16 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
             row.put("score", score);
             row.put("createTime", record.getCreateTime());
             row.put("remark", record.getRemark());
-            if (isLatePenaltyType(record.getScoreType())) {
-                // 延期扣分：明细「编号/标题」展示需求信息
+            if (isLatePenaltyType(record.getScoreType()) || isExtraDeductType(record.getScoreType())) {
+                // 延期/额外扣分：明细「编号/标题」优先展示需求信息
                 AutoDemand demand = lateDemandMap.get(record.getDemandId());
+                row.put("demandId", record.getDemandId());
                 row.put("bugId", "");
                 row.put("bugNo", demand == null ? "" : demand.getNo());
-                row.put("bugName", demand == null ? "" : demand.getName());
+                row.put("bugName", demand == null ? StrUtil.blankToDefault(record.getRemark(), "额外扣分") : demand.getName());
             } else {
                 AutoBug bug = bugMap.get(record.getBugId());
+                row.put("demandId", bug == null ? "" : bug.getDemandId());
                 row.put("bugId", record.getBugId());
                 row.put("bugNo", bug == null ? "" : bug.getNo());
                 row.put("bugName", bug == null ? "" : bug.getName());
@@ -419,6 +426,60 @@ public class AutoScoreRecordServiceImpl extends SkyeyeBusinessServiceImpl<AutoSc
         bean.put("bugDeductScore", bugDeductScore);
         bean.put("demandList", demandRows);
         bean.put("bugList", bugRows);
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void writeExtraAutoScore(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String objectId = String.valueOf(params.get("objectId"));
+        String objectKey = NumberParseUtil.toStr(params.get("objectKey"));
+        String userId = NumberParseUtil.toStr(params.get("userId"));
+        String scoreType = NumberParseUtil.toStr(params.get("scoreType"));
+        String score = nvlScore(params.get("score"));
+        String versionId = NumberParseUtil.toStr(params.get("versionId"));
+        String demandId = NumberParseUtil.toStr(params.get("demandId"));
+        String remark = NumberParseUtil.toStr(params.get("remark"));
+        checkObjectId(objectId);
+        String operatorId = InputObject.getLogParamsStatic().get("id").toString();
+        checkProjectManager(objectId, operatorId);
+        if (StrUtil.isBlank(userId)) {
+            throw new CustomException("请选择成员。");
+        }
+        boolean isGrant = StrUtil.equals(scoreType, AutoScoreTypeEnum.EXTRA_GRANT.getKey());
+        boolean isDeduct = StrUtil.equals(scoreType, AutoScoreTypeEnum.EXTRA_DEDUCT.getKey());
+        if (!isGrant && !isDeduct) {
+            throw new CustomException("积分类型仅支持额外加分或额外扣分。");
+        }
+        if (CalculationUtil.compareTo(score, "0", 2, RoundingMode.HALF_UP) <= 0) {
+            throw new CustomException("积分必须大于0。");
+        }
+        if (StrUtil.isNotBlank(demandId)) {
+            AutoDemand demand = autoDemandDao.selectById(demandId);
+            if (demand == null || !StrUtil.equals(demand.getObjectId(), objectId)) {
+                throw new CustomException("需求不存在或不属于当前项目。");
+            }
+            if (StrUtil.isBlank(versionId)) {
+                versionId = demand.getVersionId();
+            }
+        }
+        String finalScore = isDeduct ? CalculationUtil.subtract("0", score, 2) : score;
+        AutoScoreRecord record = new AutoScoreRecord();
+        record.setObjectId(objectId);
+        record.setObjectKey(objectKey);
+        record.setUserId(userId);
+        record.setScoreType(scoreType);
+        record.setScore(finalScore);
+        record.setVersionId(StrUtil.blankToDefault(versionId, null));
+        record.setDemandId(StrUtil.blankToDefault(demandId, null));
+        record.setRemark(StrUtil.blankToDefault(remark, isGrant ? "额外加分" : "额外扣分"));
+        createEntity(record, operatorId);
+        Map<String, Object> bean = new HashMap<>();
+        bean.put("id", record.getId());
+        bean.put("score", finalScore);
+        bean.put("scoreType", scoreType);
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
