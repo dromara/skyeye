@@ -11,6 +11,7 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.entity.ErpOrderHead;
+import com.skyeye.seal.classenum.SalesOrderPurchaseState;
 import lombok.Data;
 
 /**
@@ -34,5 +35,9 @@ public class SalesOrder extends ErpOrderHead {
     @TableField(exist = false)
     @Property(value = "树的父节点ID")
     private String pId;
+
+    @TableField("purchase_state")
+    @Property(value = "采购状态", enumClass = SalesOrderPurchaseState.class)
+    private Integer purchaseState;
 
 }
