@@ -26,7 +26,7 @@ public enum PlatformBaseSettingGroup {
     TENANT("tenant", "租户计费"),
 
     /**
-     * AI 角色绑定：研发需求/Bug 与办公OA 助手各自绑定的平台级 AI 角色
+     * AI 角色绑定与 AI 技能编码：研发需求/Bug、办公OA 助手角色，以及技能编码规则
      */
     AI("ai", "AI角色"),
 

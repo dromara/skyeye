@@ -72,6 +72,12 @@ public class PlatformBaseSettingController {
         platformBaseSettingService.queryPlatformOaAiRole(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryPlatformAiSkillCodeRule", value = "获取平台AI技能编码规则", method = "GET", allUse = "2")
+    @RequestMapping("/post/PlatformBaseSettingController/queryPlatformAiSkillCodeRule")
+    public void queryPlatformAiSkillCodeRule(InputObject inputObject, OutputObject outputObject) {
+        platformBaseSettingService.queryPlatformAiSkillCodeRule(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryPlatformTokenBilling", value = "获取平台Token计费标准", method = "GET", allUse = "2")
     @RequestMapping("/post/PlatformBaseSettingController/queryPlatformTokenBilling")
     public void queryPlatformTokenBilling(InputObject inputObject, OutputObject outputObject) {
