@@ -27,6 +27,7 @@ import com.skyeye.demand.entity.AutoDemand;
 import com.skyeye.demand.service.AutoDemandService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.module.service.AutoModuleService;
+import com.skyeye.projectconfig.service.AutoProjectConfigService;
 import com.skyeye.score.service.AutoScoreRecordService;
 import com.skyeye.version.service.AutoVersionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,9 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
 
     @Autowired
     private AutoDemandCaseAiDraftService autoDemandCaseAiDraftService;
+
+    @Autowired
+    private AutoProjectConfigService autoProjectConfigService;
 
     @Override
     public Class getAuthEnumClass() {
@@ -176,6 +180,8 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
     @Override
     public void validatorEntity(AutoDemand entity) {
         super.validatorEntity(entity);
+        AutoDemand oldDemand = StrUtil.isEmpty(entity.getId()) ? null : getById(entity.getId());
+        applyProjectConfigConstraints(entity, oldDemand);
         int frontRatio = NumberParseUtil.parseInt(entity.getFrontRatio(), 0, 0, 100);
         int backRatio = NumberParseUtil.parseInt(entity.getBackRatio(), 0, 0, 100);
         int testRatio = NumberParseUtil.parseInt(entity.getTestRatio(), 0, 0, 100);
@@ -190,12 +196,58 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
             throw new CustomException("总积分不能小于0。");
         }
         // 设置初始积分，已完成角色保持原积分
-        AutoDemand oldDemand = StrUtil.isEmpty(entity.getId()) ? null : getById(entity.getId());
         fillInitScoreByRatio(entity, oldDemand);
         // 校验预计开始时间和结束时间
         validateEstimateTime(entity.getFrontEstimateStartTime(), entity.getFrontEstimateEndTime(), "前端");
         validateEstimateTime(entity.getBackEstimateStartTime(), entity.getBackEstimateEndTime(), "后端");
         validateEstimateTime(entity.getTestEstimateStartTime(), entity.getTestEstimateEndTime(), "测试");
+    }
+
+    /**
+     * 按项目功能配置约束积分分配与预计时间字段。
+     */
+    private void applyProjectConfigConstraints(AutoDemand entity, AutoDemand oldDemand) {
+        String objectId = StrUtil.blankToDefault(entity.getObjectId(),
+            oldDemand == null ? "" : oldDemand.getObjectId());
+        boolean scoreEnabled = autoProjectConfigService.isScoreAllocateEnabled(objectId);
+        boolean estimateEnabled = autoProjectConfigService.isEstimateTimeEnabled(objectId);
+        if (!scoreEnabled) {
+            if (oldDemand != null) {
+                entity.setTotalScore(nvlScore(oldDemand.getTotalScore()));
+                entity.setFrontRatio(oldDemand.getFrontRatio());
+                entity.setBackRatio(oldDemand.getBackRatio());
+                entity.setTestRatio(oldDemand.getTestRatio());
+                entity.setFrontInitScore(nvlScore(oldDemand.getFrontInitScore()));
+                entity.setBackInitScore(nvlScore(oldDemand.getBackInitScore()));
+                entity.setTestInitScore(nvlScore(oldDemand.getTestInitScore()));
+                entity.setTestJoinAnalysis(oldDemand.getTestJoinAnalysis());
+            } else {
+                entity.setTotalScore("0");
+                entity.setFrontRatio(0);
+                entity.setBackRatio(0);
+                entity.setTestRatio(0);
+                entity.setFrontInitScore("0");
+                entity.setBackInitScore("0");
+                entity.setTestInitScore("0");
+            }
+        }
+        if (!estimateEnabled) {
+            if (oldDemand != null) {
+                entity.setFrontEstimateStartTime(oldDemand.getFrontEstimateStartTime());
+                entity.setFrontEstimateEndTime(oldDemand.getFrontEstimateEndTime());
+                entity.setBackEstimateStartTime(oldDemand.getBackEstimateStartTime());
+                entity.setBackEstimateEndTime(oldDemand.getBackEstimateEndTime());
+                entity.setTestEstimateStartTime(oldDemand.getTestEstimateStartTime());
+                entity.setTestEstimateEndTime(oldDemand.getTestEstimateEndTime());
+            } else {
+                entity.setFrontEstimateStartTime(null);
+                entity.setFrontEstimateEndTime(null);
+                entity.setBackEstimateStartTime(null);
+                entity.setBackEstimateEndTime(null);
+                entity.setTestEstimateStartTime(null);
+                entity.setTestEstimateEndTime(null);
+            }
+        }
     }
 
     private void fillInitScoreByRatio(AutoDemand entity, AutoDemand oldDemand) {
@@ -438,6 +490,9 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         AutoDemand autoDemand = getById(id);
         if (autoDemand == null) {
             throw new CustomException("需求不存在。");
+        }
+        if (!autoProjectConfigService.isEstimateTimeEnabled(autoDemand.getObjectId())) {
+            throw new CustomException("当前项目未开启需求预计时间设置。");
         }
         if (StrUtil.equals(autoDemand.getState(), AutoDemandStateEnum.INVALID.getKey())
             || StrUtil.equals(autoDemand.getState(), AutoDemandStateEnum.FINISH.getKey())) {
