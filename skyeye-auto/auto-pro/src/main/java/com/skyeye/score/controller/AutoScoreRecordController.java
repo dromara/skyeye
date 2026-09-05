@@ -65,6 +65,21 @@ public class AutoScoreRecordController {
         autoScoreRecordService.settleAutoScore(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "writeExtraAutoScore", value = "项目经理额外加分/扣分", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "objectId", name = "objectId", value = "项目id", required = "required"),
+        @ApiImplicitParam(id = "objectKey", name = "objectKey", value = "项目key"),
+        @ApiImplicitParam(id = "userId", name = "userId", value = "成员id", required = "required"),
+        @ApiImplicitParam(id = "scoreType", name = "scoreType", value = "类型：extraGrant 加分 / extraDeduct 扣分", required = "required"),
+        @ApiImplicitParam(id = "score", name = "score", value = "积分（正数）", required = "required"),
+        @ApiImplicitParam(id = "versionId", name = "versionId", value = "版本id"),
+        @ApiImplicitParam(id = "demandId", name = "demandId", value = "需求id"),
+        @ApiImplicitParam(id = "remark", name = "remark", value = "备注")})
+    @RequestMapping("/post/AutoScoreRecordController/writeExtraAutoScore")
+    public void writeExtraAutoScore(InputObject inputObject, OutputObject outputObject) {
+        autoScoreRecordService.writeExtraAutoScore(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryAutoScoreSettleList", value = "查询积分结算记录", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/AutoScoreRecordController/queryAutoScoreSettleList")
