@@ -73,6 +73,34 @@ public class PlatformAiSkillPromptBuilder {
         return sb.toString();
     }
 
+    /**
+     * 报表大屏 AI 辅助：注入技能说明书 + 报表页 content。
+     * 命中顺序与表单 AI 相同：点选 id → 关键词 → appId+className 兜底。无技能也能生成。
+     */
+    public String buildForReportPage(String question, String pageTitle, String appId, String serviceClassName,
+                                     String skillId, String suiteId, String contentJson) {
+        // 加载启用中的套件、技能
+        Map<String, Object> payload = loadMatchPayload();
+        List<Map<String, Object>> skills = asMapList(payload.get("skillList"));
+        List<Map<String, Object>> suites = asMapList(payload.get("suiteList"));
+        String matchPath = StrUtil.blankToDefault(serviceClassName, pageTitle);
+        MatchResult match = match(question, pageTitle, matchPath, skillId, suiteId, skills, suites);
+        // 关键词/点选都未命中时，按 appId + 全路径 className 兜底
+        if (match.skills.isEmpty() && match.suites.isEmpty()
+            && StrUtil.isNotBlank(appId) && StrUtil.isNotBlank(serviceClassName)) {
+            match = matchByServiceClassName(appId, serviceClassName, skills, suites);
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("你是企业业务系统里的报表大屏设计助手。用户正在「报表页面」设计器里生成或修改统计大屏。\n");
+        sb.append("请结合下方技能说明书与当前报表 content，理解用户指令后给出可落地的建议或草稿。\n");
+        sb.append("不要输出设计器内部完整 JSON（不要 attrMation），只按约定返回 ops。\n\n");
+        appendQuestionAndPage(sb, question, pageTitle, matchPath);
+        appendMatched(sb, match, skills);
+        appendReportContext(sb, contentJson);
+        appendReportJsonOutput(sb);
+        return sb.toString();
+    }
+
     private void appendMatched(StringBuilder sb, MatchResult match, List<Map<String, Object>> skills) {
         Set<String> writtenSkillIds = new HashSet<>();
         for (Map<String, Object> suite : match.suites) {
@@ -378,6 +406,103 @@ public class PlatformAiSkillPromptBuilder {
         sb.append("3. 子表/清单类字段（simpleTable、bomChildList 等）value 用 JSON 数组字符串\n");
         sb.append("4. 富文本字段用 HTML；枚举/下拉必须从字段可选值里选原文\n");
         sb.append("5. actions 留空，除非技能说明书明确要求导航\n");
+    }
+
+    /**
+     * 把设计器 content 摘要进 prompt：画布尺寸、背景、各组件 id/名称/宽高。
+     * 列表都空时写成「空画布」，解析失败则贴原文。
+     */
+    private void appendReportContext(StringBuilder sb, String contentJson) {
+        sb.append("【报表页面 content】\n");
+        if (StrUtil.isBlank(contentJson)) {
+            sb.append("（无）\n\n");
+            return;
+        }
+        try {
+            JSONObject ctx = JSONUtil.parseObj(contentJson);
+            if (ctx.get("contentWidth") != null && ctx.get("contentHeight") != null) {
+                sb.append("画布：").append(ctx.get("contentWidth")).append(" x ").append(ctx.get("contentHeight")).append("\n");
+            }
+            if (StrUtil.isNotBlank(ctx.getStr("bgImage"))) {
+                sb.append("背景：").append(ctx.getStr("bgImage")).append("\n");
+            }
+            sb.append("当前组件（id 用于 update/remove）：\n");
+            int count = 0;
+            count += appendContentItems(sb, ctx.getJSONArray("wordMationList"), "wordModel");
+            count += appendContentItems(sb, ctx.getJSONArray("modelList"), "echartsModel");
+            count += appendContentItems(sb, ctx.getJSONArray("imgMationList"), "imgModel");
+            count += appendContentItems(sb, ctx.getJSONArray("domMationList"), "domModel");
+            count += appendContentItems(sb, ctx.getJSONArray("tableMationList"), "tableModel");
+            count += appendContentItems(sb, ctx.getJSONArray("basicComponentList"), "basicComponent");
+            if (count == 0) {
+                sb.append("（空画布）\n");
+            }
+            sb.append("\n");
+        } catch (Exception e) {
+            sb.append(contentJson).append("\n\n");
+        }
+    }
+
+    /**
+     * 列出一类组件。名称优先取自身 name，否则取 attrMation.name/title。
+     */
+    private int appendContentItems(StringBuilder sb, JSONArray list, String type) {
+        if (list == null || list.isEmpty()) {
+            return 0;
+        }
+        int count = 0;
+        for (Object item : list) {
+            if (!(item instanceof JSONObject)) {
+                continue;
+            }
+            JSONObject src = (JSONObject) item;
+            JSONObject attrMation = src.getJSONObject("attrMation");
+            sb.append("- [").append(type).append("] id=").append(src.getStr("id"));
+            if (StrUtil.isNotBlank(src.getStr("modelId"))) {
+                sb.append(" modelId=").append(src.getStr("modelId"));
+            }
+            String name = src.getStr("name");
+            if (StrUtil.isBlank(name) && attrMation != null) {
+                name = StrUtil.blankToDefault(attrMation.getStr("name"), attrMation.getStr("title"));
+            }
+            if (StrUtil.isNotBlank(name)) {
+                sb.append(" 「").append(name).append("」");
+            }
+            if (src.get("width") != null && src.get("height") != null) {
+                sb.append(" ").append(src.get("width")).append("x").append(src.get("height"));
+            }
+            sb.append("\n");
+            count++;
+        }
+        return count;
+    }
+
+    /**
+     * 约定模型输出 reply + canvas + ops，不要吐设计器完整 JSON。
+     */
+    private void appendReportJsonOutput(StringBuilder sb) {
+        AiJsonHelper.appendMarkedJsonOutput(sb,
+            "{\n"
+                + "  \"reply\": \"给用户看的说明，解释你做了什么、还需要用户确认什么\",\n"
+                + "  \"canvas\": {\n"
+                + "    \"contentWidth\": 1920,\n"
+                + "    \"contentHeight\": 1080,\n"
+                + "    \"bgImage\": \"none\"\n"
+                + "  },\n"
+                + "  \"ops\": [\n"
+                + "    {\"op\": \"add\", \"type\": \"wordModel\", \"id\": \"w1\", \"modelId\": \"\", \"x\": 40, \"y\": 20, \"width\": 1840, \"height\": 80, \"props\": {\"text\": \"大屏标题\"}},\n"
+                + "    {\"op\": \"add\", \"type\": \"echartsModel\", \"id\": \"c1\", \"x\": 40, \"y\": 120, \"width\": 900, \"height\": 400, \"props\": {\"title\": \"月度销售额\"}},\n"
+                + "    {\"op\": \"update\", \"id\": \"已有组件id\", \"props\": {\"text\": \"新文案\"}},\n"
+                + "    {\"op\": \"remove\", \"id\": \"已有组件id\"}\n"
+                + "  ]\n"
+                + "}");
+        sb.append("要求：\n");
+        sb.append("1. 用户只是咨询时 ops 可为空数组；需要改画布时才给 ops\n");
+        sb.append("2. 整屏重新生成时第一条 op 用 {\"op\":\"clear\"}，后面再 add\n");
+        sb.append("3. update/remove 的 id 必须来自上方当前组件\n");
+        sb.append("4. type 只允许 wordModel、echartsModel、imgModel、domModel、tableModel、basicComponent\n");
+        sb.append("5. 不要返回设计器 attr/attrMation 结构；示意数据可按用户描述放在 props\n");
+        sb.append("6. canvas 仅在需要改尺寸或背景时给出\n");
     }
 
     private int scoreKeywords(String haystack, String keywords) {
