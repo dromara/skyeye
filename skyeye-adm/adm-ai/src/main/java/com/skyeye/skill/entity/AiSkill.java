@@ -14,6 +14,7 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.common.entity.features.OperatorUserInfo;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.skill.classenum.AiSkillUseSceneEnum;
 import lombok.Data;
 
 /**
@@ -40,6 +41,13 @@ public class AiSkill extends OperatorUserInfo {
     @TableField(value = "odd_number")
     @ApiModelProperty(value = "技能编码")
     private String oddNumber;
+
+    /**
+     * 使用位置，多选逗号分隔，见 {@link AiSkillUseSceneEnum}；空表示聊天+表单
+     */
+    @TableField(value = "use_scene")
+    @ApiModelProperty(value = "使用位置：1聊天 2表单 3仅编码调用", enumClass = AiSkillUseSceneEnum.class)
+    private String useScene;
 
     @TableField(value = "`name`")
     @ApiModelProperty(value = "技能名称", required = "required", fuzzyLike = true)

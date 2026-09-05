@@ -266,6 +266,21 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
 
     @Override
     @IgnoreTenant
+    public void queryPlatformAiSkillCodeRule(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> data = new HashMap<>();
+        data.put(PlatformBaseSettingConst.KEY_AI_SKILL_CODE_RULE_ID, getAiSkillCodeRuleId());
+        outputObject.setBean(data);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    @IgnoreTenant
+    public String getAiSkillCodeRuleId() {
+        return getAiGroupString(PlatformBaseSettingConst.KEY_AI_SKILL_CODE_RULE_ID);
+    }
+
+    @Override
+    @IgnoreTenant
     public void queryPlatformTokenBilling(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> data = new HashMap<>();
         data.put(PlatformBaseSettingConst.KEY_TOKENS_PER_YUAN, getTokensPerYuan());
@@ -326,6 +341,7 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         Map<String, Object> aiGroup = new HashMap<>();
         aiGroup.put(PlatformBaseSettingConst.KEY_AI_ROLE_ID, StrUtil.EMPTY);
         aiGroup.put(PlatformBaseSettingConst.KEY_OA_AI_ROLE_ID, StrUtil.EMPTY);
+        aiGroup.put(PlatformBaseSettingConst.KEY_AI_SKILL_CODE_RULE_ID, StrUtil.EMPTY);
         settingData.put(PlatformBaseSettingGroup.AI.getKey(), aiGroup);
         Map<String, Object> tokenGroup = new HashMap<>();
         tokenGroup.put(PlatformBaseSettingConst.KEY_TOKENS_PER_YUAN, DEFAULT_TOKENS_PER_YUAN);
@@ -484,6 +500,7 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         if (MapUtil.isNotEmpty(aiGroup)) {
             normalizeOptionalString(aiGroup, PlatformBaseSettingConst.KEY_AI_ROLE_ID);
             normalizeOptionalString(aiGroup, PlatformBaseSettingConst.KEY_OA_AI_ROLE_ID);
+            normalizeOptionalString(aiGroup, PlatformBaseSettingConst.KEY_AI_SKILL_CODE_RULE_ID);
         }
         Map<String, Object> tokenGroup = settingData.get(PlatformBaseSettingGroup.TOKEN.getKey());
         if (MapUtil.isNotEmpty(tokenGroup)) {

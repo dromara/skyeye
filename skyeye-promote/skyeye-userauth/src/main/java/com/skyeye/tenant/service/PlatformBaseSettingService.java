@@ -91,6 +91,16 @@ public interface PlatformBaseSettingService extends SkyeyeBusinessService<Platfo
     String getOaAiRoleId();
 
     /**
+     * 查询平台 AI 技能编码规则 id（所有租户可读）
+     */
+    void queryPlatformAiSkillCodeRule(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 获取平台 AI 技能编码规则 id，未配置时返回空字符串
+     */
+    String getAiSkillCodeRuleId();
+
+    /**
      * 查询 Token 计费标准（所有租户可读）
      */
     void queryPlatformTokenBilling(InputObject inputObject, OutputObject outputObject);

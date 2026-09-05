@@ -62,6 +62,11 @@ public class PlatformBaseSettingConst {
     public static final String KEY_OA_AI_ROLE_ID = "oaRoleId";
 
     /**
+     * AI 角色分组 - AI 技能编码规则 id（对应编码管理 CodeRule.id）
+     */
+    public static final String KEY_AI_SKILL_CODE_RULE_ID = "aiSkillCodeRuleId";
+
+    /**
      * Token 计费分组 - 1 元兑换的 Token 数量
      */
     public static final String KEY_TOKENS_PER_YUAN = "tokensPerYuan";
