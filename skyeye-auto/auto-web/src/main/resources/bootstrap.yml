@@ -39,6 +39,7 @@ logging:
     com.skyeye.eve.rest.user.IAuthUserServiceRest: INFO
     com.skyeye.eve.rest.lifecycle.ILifecycleTemplateRest: INFO
     com.skyeye.common.base.handler.dynamic.rest.ISysDynamicAttrValueServiceRest: INFO
+    com.skyeye.eve.servicebean.rest.ISkyeyeServiceBeanRest: INFO
 
 feign:
   client:

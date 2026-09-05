@@ -31,4 +31,9 @@ public interface AutoDemandStatisticsService {
      */
     void queryDemandStatsByState(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 版本统计大屏：积分、需求分布、Bug、成员负荷等
+     */
+    void queryVersionDashboard(InputObject inputObject, OutputObject outputObject);
+
 }

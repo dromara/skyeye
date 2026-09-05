@@ -50,4 +50,11 @@ public class AutoDemandStatisticsController {
         autoDemandStatisticsService.queryDemandStatsByState(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryVersionDashboard", value = "需求管理统计-版本统计大屏", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @RequestMapping("/post/AutoDemandStatisticsController/queryVersionDashboard")
+    public void queryVersionDashboard(InputObject inputObject, OutputObject outputObject) {
+        autoDemandStatisticsService.queryVersionDashboard(inputObject, outputObject);
+    }
+
 }
