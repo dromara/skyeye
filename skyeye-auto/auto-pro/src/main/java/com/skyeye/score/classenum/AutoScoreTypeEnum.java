@@ -32,7 +32,10 @@ public enum AutoScoreTypeEnum implements SkyeyeEnumClass {
     TEST_LATE_PENALTY("testLatePenalty", "测试延期扣分", true, false),
     /** Bug 相关扣分 */
     BUG_PENALTY("bugPenalty", "Bug扣分", true, false),
-    BUG_NON_ISSUE("bugNonIssue", "非问题扣分", true, false);
+    BUG_NON_ISSUE("bugNonIssue", "非问题扣分", true, false),
+    /** 项目经理手工额外加减分 */
+    EXTRA_GRANT("extraGrant", "额外加分", true, false),
+    EXTRA_DEDUCT("extraDeduct", "额外扣分", true, false);
 
     private String key;
 
