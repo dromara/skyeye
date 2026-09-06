@@ -12,6 +12,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.server.entity.AutoServer;
+import com.skyeye.server.service.AutoServerMetricHistoryService;
 import com.skyeye.server.service.AutoServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,9 @@ public class AutoServerController {
 
     @Autowired
     private AutoServerService autoServerService;
+
+    @Autowired
+    private AutoServerMetricHistoryService autoServerMetricHistoryService;
 
     /**
      * 获取服务器信息列表
@@ -85,4 +89,57 @@ public class AutoServerController {
     public void queryAutoServerListByEnvironmentId(InputObject inputObject, OutputObject outputObject) {
         autoServerService.queryAutoServerListByEnvironmentId(inputObject, outputObject);
     }
+
+    @ApiOperation(id = "queryServerMonitorDashboard", value = "查询服务器监控大屏", method = "GET", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "objectId", name = "objectId", value = "项目id", required = "required"),
+        @ApiImplicitParam(id = "objectKey", name = "objectKey", value = "项目key")})
+    @RequestMapping("/post/AutoServerController/queryServerMonitorDashboard")
+    public void queryServerMonitorDashboard(InputObject inputObject, OutputObject outputObject) {
+        autoServerService.queryServerMonitorDashboard(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "probeAutoServersByObjectId", value = "中心探测当前项目全部服务器", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "objectId", name = "objectId", value = "项目id", required = "required"),
+        @ApiImplicitParam(id = "objectKey", name = "objectKey", value = "项目key")})
+    @RequestMapping("/post/AutoServerController/probeAutoServersByObjectId")
+    public void probeAutoServersByObjectId(InputObject inputObject, OutputObject outputObject) {
+        autoServerService.probeAutoServersByObjectId(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "probeAutoServerById", value = "中心探测单台服务器", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "服务器id", required = "required")})
+    @RequestMapping("/post/AutoServerController/probeAutoServerById")
+    public void probeAutoServerById(InputObject inputObject, OutputObject outputObject) {
+        autoServerService.probeAutoServerById(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "collectServerMetricsByObjectId", value = "SSH采集当前项目服务器资源指标", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "objectId", name = "objectId", value = "项目id", required = "required"),
+        @ApiImplicitParam(id = "objectKey", name = "objectKey", value = "项目key")})
+    @RequestMapping("/post/AutoServerController/collectServerMetricsByObjectId")
+    public void collectServerMetricsByObjectId(InputObject inputObject, OutputObject outputObject) {
+        autoServerService.collectServerMetricsByObjectId(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "collectServerMetricsById", value = "SSH采集单台服务器资源指标", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "服务器id", required = "required")})
+    @RequestMapping("/post/AutoServerController/collectServerMetricsById")
+    public void collectServerMetricsById(InputObject inputObject, OutputObject outputObject) {
+        autoServerService.collectServerMetricsById(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryServerMetricHistory", value = "查询服务器资源采集历史（折线图）", method = "GET", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "serverId", name = "serverId", value = "服务器id", required = "required"),
+        @ApiImplicitParam(id = "hours", name = "hours", value = "最近小时数，默认24，最大168")})
+    @RequestMapping("/post/AutoServerController/queryServerMetricHistory")
+    public void queryServerMetricHistory(InputObject inputObject, OutputObject outputObject) {
+        autoServerMetricHistoryService.queryServerMetricHistory(inputObject, outputObject);
+    }
+
 }

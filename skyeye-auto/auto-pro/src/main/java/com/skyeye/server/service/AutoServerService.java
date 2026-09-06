@@ -21,4 +21,34 @@ public interface AutoServerService extends SkyeyeTeamAuthService<AutoServer> {
 
     void queryAutoServerListByEnvironmentId(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 查询服务器监控大屏（返回最近一次探测结果，不主动探测）。
+     */
+    void queryServerMonitorDashboard(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 中心探测：探测当前项目下全部服务器，并返回大屏数据。
+     */
+    void probeAutoServersByObjectId(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 中心探测：探测单台服务器。
+     */
+    void probeAutoServerById(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * SSH 资源采集：采集当前项目下已启用 SSH 的服务器，并返回大屏数据。
+     */
+    void collectServerMetricsByObjectId(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * SSH 资源采集：采集单台服务器 CPU/内存/磁盘/负载。
+     */
+    void collectServerMetricsById(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 定时/批量：采集全部已启用 SSH 的服务器，返回处理台数。
+     */
+    int collectAllEnabledServerMetrics();
+
 }
