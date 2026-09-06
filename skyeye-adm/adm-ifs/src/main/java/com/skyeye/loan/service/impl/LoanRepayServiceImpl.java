@@ -20,6 +20,7 @@ import com.skyeye.loan.entity.LoanRepay;
 import com.skyeye.loan.service.LoanBorrowService;
 import com.skyeye.loan.service.LoanRepayService;
 import com.skyeye.loan.service.UserLoanService;
+import com.skyeye.rest.project.service.IProProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,9 @@ public class LoanRepayServiceImpl extends SkyeyeBusinessServiceImpl<LoanRepayDao
     @Autowired
     private LoanBorrowService loanBorrowService;
 
+    @Autowired
+    private IProProjectService iProProjectService;
+
     @Override
     public void validatorEntity(LoanRepay entity) {
         super.validatorEntity(entity);
@@ -60,8 +64,12 @@ public class LoanRepayServiceImpl extends SkyeyeBusinessServiceImpl<LoanRepayDao
     @Override
     public QueryWrapper<LoanRepay> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<LoanRepay> queryWrapper = super.getQueryWrapper(commonPageInfo);
-        // 我创建的
-        queryWrapper.eq(MybatisPlusUtil.toColumns(LoanRepay::getCreateId), InputObject.getLogParamsStatic().get("id").toString());
+        if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(LoanRepay::getProjectId), commonPageInfo.getObjectId());
+        } else {
+            // 我创建的
+            queryWrapper.eq(MybatisPlusUtil.toColumns(LoanRepay::getCreateId), InputObject.getLogParamsStatic().get("id").toString());
+        }
         return queryWrapper;
     }
 
@@ -70,6 +78,7 @@ public class LoanRepayServiceImpl extends SkyeyeBusinessServiceImpl<LoanRepayDao
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         // 借款单信息
         loanBorrowService.setMationForMap(beans, "loanBorrowId", "loanBorrowMation");
+        iProProjectService.setMationForMap(beans, "projectId", "projectMation");
         return beans;
     }
 
@@ -78,6 +87,7 @@ public class LoanRepayServiceImpl extends SkyeyeBusinessServiceImpl<LoanRepayDao
         LoanRepay loanRepay = super.selectById(id);
         iSysDictDataService.setDataMation(loanRepay, LoanRepay::getPayTypeId);
         loanBorrowService.setDataMation(loanRepay, LoanRepay::getLoanBorrowId);
+        iProProjectService.setDataMation(loanRepay, LoanRepay::getProjectId);
         return loanRepay;
     }
 

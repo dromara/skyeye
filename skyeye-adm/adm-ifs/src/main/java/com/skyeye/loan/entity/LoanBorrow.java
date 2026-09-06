@@ -98,4 +98,12 @@ public class LoanBorrow extends SkyeyeFlowable {
     @ApiModelProperty(value = "申请时间", required = "required")
     private String applicationTime;
 
+    @TableField("project_id")
+    @ApiModelProperty(value = "关联项目id")
+    private String projectId;
+
+    @TableField(exist = false)
+    @Property(value = "关联项目信息")
+    private Map<String, Object> projectMation;
+
 }

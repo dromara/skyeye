@@ -67,6 +67,14 @@ public class Reimbursement extends SkyeyeFlowable {
     @Property(value = "部门信息")
     private Map<String, Object> departmentMation;
 
+    @TableField("project_id")
+    @ApiModelProperty(value = "关联项目id")
+    private String projectId;
+
+    @TableField(exist = false)
+    @Property(value = "关联项目信息")
+    private Map<String, Object> projectMation;
+
     @TableField(exist = false)
     @ApiModelProperty(value = "报销明细", required = "required,json")
     private List<ReimbursementChild> reimbursementChildList;

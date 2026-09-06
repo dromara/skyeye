@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonNumConstants;
+import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.FlowableStateEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -17,6 +18,7 @@ import com.skyeye.feeapplication.dao.FeeApplicationDao;
 import com.skyeye.feeapplication.entity.FeeApplication;
 import com.skyeye.feeapplication.service.FeeApplicationService;
 import com.skyeye.organization.service.IDepmentService;
+import com.skyeye.rest.project.service.IProProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +40,18 @@ public class FeeApplicationServiceImpl extends SkyeyeBusinessServiceImpl<FeeAppl
     @Autowired
     private IDepmentService iDepmentService;
 
+    @Autowired
+    private IProProjectService iProProjectService;
+
+    @Override
+    public QueryWrapper<FeeApplication> getQueryWrapper(CommonPageInfo commonPageInfo) {
+        QueryWrapper<FeeApplication> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(FeeApplication::getProjectId), commonPageInfo.getObjectId());
+        }
+        return queryWrapper;
+    }
+
     @Override
     protected void validatorEntity(FeeApplication entity) {
         super.validatorEntity(entity);
@@ -54,6 +68,7 @@ public class FeeApplicationServiceImpl extends SkyeyeBusinessServiceImpl<FeeAppl
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         iDepmentService.setMationForMap(beans, "departmentId", "departmentMation");
         iAuthUserService.setMationForMap(beans, "applicantId", "applicantMation");
+        iProProjectService.setMationForMap(beans, "projectId", "projectMation");
         return beans;
     }
 
@@ -62,6 +77,7 @@ public class FeeApplicationServiceImpl extends SkyeyeBusinessServiceImpl<FeeAppl
         FeeApplication feeApplication = super.selectById(id);
         iDepmentService.setDataMation(feeApplication, FeeApplication::getDepartmentId);
         iAuthUserService.setDataMation(feeApplication, FeeApplication::getApplicantId);
+        iProProjectService.setDataMation(feeApplication, FeeApplication::getProjectId);
         return feeApplication;
     }
 

@@ -27,6 +27,7 @@ import com.skyeye.loan.entity.LoanBorrow;
 import com.skyeye.loan.service.LoanBorrowService;
 import com.skyeye.loan.service.UserLoanService;
 import com.skyeye.organization.service.IDepmentService;
+import com.skyeye.rest.project.service.IProProjectService;
 import com.xingyuv.http.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,9 @@ public class LoanBorrowServiceImpl extends SkyeyeBusinessServiceImpl<LoanBorrowD
     @Autowired
     private IDepmentService iDepmentService;
 
+    @Autowired
+    private IProProjectService iProProjectService;
+
     @Override
     public void validatorEntity(LoanBorrow entity) {
         super.validatorEntity(entity);
@@ -66,8 +70,12 @@ public class LoanBorrowServiceImpl extends SkyeyeBusinessServiceImpl<LoanBorrowD
     @Override
     public QueryWrapper<LoanBorrow> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<LoanBorrow> queryWrapper = super.getQueryWrapper(commonPageInfo);
-        // 我创建的
-        queryWrapper.eq(MybatisPlusUtil.toColumns(LoanBorrow::getCreateId), InputObject.getLogParamsStatic().get("id").toString());
+        if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(LoanBorrow::getProjectId), commonPageInfo.getObjectId());
+        } else {
+            // 我创建的
+            queryWrapper.eq(MybatisPlusUtil.toColumns(LoanBorrow::getCreateId), InputObject.getLogParamsStatic().get("id").toString());
+        }
         return queryWrapper;
     }
 
@@ -76,6 +84,7 @@ public class LoanBorrowServiceImpl extends SkyeyeBusinessServiceImpl<LoanBorrowD
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         iDepmentService.setMationForMap(beans, "departmentId", "departmentMation");
         iAuthUserService.setMationForMap(beans, "applicantId", "applicantMation");
+        iProProjectService.setMationForMap(beans, "projectId", "projectMation");
         return beans;
     }
 
@@ -85,6 +94,7 @@ public class LoanBorrowServiceImpl extends SkyeyeBusinessServiceImpl<LoanBorrowD
         iSysDictDataService.setDataMation(loanBorrow, LoanBorrow::getPayTypeId);
         iDepmentService.setDataMation(loanBorrow, LoanBorrow::getDepartmentId);
         iAuthUserService.setDataMation(loanBorrow, LoanBorrow::getApplicantId);
+        iProProjectService.setDataMation(loanBorrow, LoanBorrow::getProjectId);
         loanBorrow.setName(loanBorrow.getOddNumber());
         return loanBorrow;
     }
