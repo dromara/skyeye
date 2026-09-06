@@ -12,6 +12,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.production.entity.ProductionPlan;
+import com.skyeye.purchase.entity.PurchaseOrder;
 import com.skyeye.seal.entity.SalesExchanges;
 import com.skyeye.seal.entity.SalesOrder;
 import com.skyeye.seal.entity.SalesOutLet;
@@ -133,6 +134,22 @@ public class SalesOrderController {
     @RequestMapping("/post/SalesOrderController/insertSealsOrderToProductionPlan")
     public void insertSealsOrderToProductionPlan(InputObject inputObject, OutputObject outputObject) {
         salesOrderService.insertSealsOrderToProductionPlan(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "querySealsOrderTransPurchaseOrderById", value = "转采购订单时，根据id查询销售订单信息（仅外购商品）", method = "GET", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
+    @RequestMapping("/post/SalesOrderController/querySealsOrderTransPurchaseOrderById")
+    public void querySealsOrderTransPurchaseOrderById(InputObject inputObject, OutputObject outputObject) {
+        salesOrderService.querySealsOrderTransPurchaseOrderById(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "insertSealsOrderToPurchaseOrder", value = "销售订单转采购订单（仅外购商品）", method = "POST", allUse = "1")
+    @ApiImplicitParams(classBean = PurchaseOrder.class, value = {
+        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
+    @RequestMapping("/post/SalesOrderController/insertSealsOrderToPurchaseOrder")
+    public void insertSealsOrderToPurchaseOrder(InputObject inputObject, OutputObject outputObject) {
+        salesOrderService.insertSealsOrderToPurchaseOrder(inputObject, outputObject);
     }
 
 }

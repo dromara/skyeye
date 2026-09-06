@@ -4,6 +4,7 @@
 
 package com.skyeye.skill.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -57,9 +58,6 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
     @Override
     public void validatorEntity(AiSkill entity) {
         super.validatorEntity(entity);
-        if (StrUtil.isBlank(entity.getAppId()) || StrUtil.isBlank(entity.getServiceClassName())) {
-            throw new CustomException("请绑定业务对象 appId 与 serviceClassName");
-        }
         entity.setUseScene(AiSkillUseSceneEnum.normalize(entity.getUseScene()));
         // 编码一律后端生成/保留：新增取号，编辑沿用库中原值，忽略前端传入
         if (StrUtil.isBlank(entity.getId())) {
@@ -97,6 +95,14 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
         disableOtherEnabled(entity);
     }
 
+    @Override
+    protected void createPrepose(AiSkill entity) {
+        super.createPrepose(entity);
+        if (StrUtil.isBlank(entity.getAppId()) || StrUtil.isBlank(entity.getServiceClassName())) {
+            throw new CustomException("请绑定业务对象 appId 与 serviceClassName");
+        }
+    }
+
     /**
      * 优先按平台「AI技能编码」规则取号；未配置时回退随机编码。
      */
@@ -106,10 +112,7 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
                 () -> iPlatformBaseSettingRest.queryPlatformAiSkillCodeRule()).getBean();
             Object ruleId = bean == null ? null : bean.get("aiSkillCodeRuleId");
             if (ruleId != null && StrUtil.isNotBlank(ruleId.toString())) {
-                Map<String, Object> business = new HashMap<>();
-                business.put("name", entity.getName());
-                business.put("appId", entity.getAppId());
-                business.put("serviceClassName", entity.getServiceClassName());
+                Map<String, Object> business = BeanUtil.beanToMap(entity);
                 String code = iCodeRuleService.getNextCode(ruleId.toString(), business);
                 if (StrUtil.isNotBlank(code)) {
                     return code;

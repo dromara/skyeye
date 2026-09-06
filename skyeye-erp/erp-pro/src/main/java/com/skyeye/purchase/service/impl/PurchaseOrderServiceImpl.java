@@ -44,6 +44,9 @@ import com.skyeye.purchase.dao.PurchaseOrderDao;
 import com.skyeye.purchase.entity.*;
 import com.skyeye.purchase.service.*;
 import com.skyeye.rest.project.service.IProProjectService;
+import com.skyeye.seal.classenum.SalesOrderPurchaseState;
+import com.skyeye.seal.entity.SalesOrder;
+import com.skyeye.seal.service.SalesOrderService;
 import com.skyeye.util.ErpOrderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,6 +85,9 @@ public class PurchaseOrderServiceImpl extends SkyeyeErpOrderServiceImpl<Purchase
 
     @Autowired
     private ProductionPlanService productionPlanService;
+
+    @Autowired
+    private SalesOrderService salesOrderService;
 
     @Autowired
     private IProProjectService iProProjectService;
@@ -129,6 +135,7 @@ public class PurchaseOrderServiceImpl extends SkyeyeErpOrderServiceImpl<Purchase
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         supplierContractService.setContractMationByFromId(beans, "fromId", "fromMation");
         productionPlanService.setOrderMationByFromId(beans, "fromId", "fromMation");
+        salesOrderService.setOrderMationByFromId(beans, "fromId", "fromMation");
         iProProjectService.setMationForMap(beans, "projectId", "projectMation");
         return beans;
     }
@@ -166,6 +173,9 @@ public class PurchaseOrderServiceImpl extends SkyeyeErpOrderServiceImpl<Purchase
         } else if (entity.getFromTypeId() == PurchaseOrderFromType.DELIVERY_PLAN.getKey()) {
             // 到货计划
             checkAndUpdateDeliveryPlanState(entity, setData, orderNormsNum, executeNum, inSqlNormsId);
+        } else if (entity.getFromTypeId() == PurchaseOrderFromType.SEAL_ORDER.getKey()) {
+            // 销售订单
+            checkAndUpdateSealOrderState(entity, setData, orderNormsNum, executeNum, inSqlNormsId);
         }
     }
 
@@ -235,6 +245,40 @@ public class PurchaseOrderServiceImpl extends SkyeyeErpOrderServiceImpl<Purchase
         }
     }
 
+    private void checkAndUpdateSealOrderState(PurchaseOrder entity, boolean setData, Map<String, String> orderNormsNum, Map<String, String> executeNum, List<String> inSqlNormsId) {
+        SalesOrder salesOrder = salesOrderService.selectById(entity.getFromId());
+        // 只校验外购商品
+        List<ErpOrderItem> erpOrderItemList = salesOrder.getErpOrderItemList().stream()
+            .filter(erpOrderItem -> erpOrderItem.getMaterialMation().getFromType() == MaterialFromType.OUTSOURCING.getKey())
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(erpOrderItemList)) {
+            throw new CustomException("该销售订单下未包含外购商品.");
+        }
+        List<String> fromNormsIds = erpOrderItemList.stream()
+            .map(ErpOrderItem::getNormsId).collect(Collectors.toList());
+
+        super.checkIdFromOrderMaterialNorms(fromNormsIds, inSqlNormsId);
+        erpOrderItemList.forEach(erpOrderItem -> {
+            // 销售订单数量 - 当前采购订单的数量 - 已经下达采购订单的数量
+            String surplusNum = ErpOrderUtil.checkOperNumber(erpOrderItem.getOperNumber(), erpOrderItem.getNormsId(),
+                orderNormsNum, executeNum);
+            if (setData) {
+                erpOrderItem.setOperNumber(surplusNum);
+            }
+        });
+        if (setData) {
+            // 过滤掉剩余数量为0的商品
+            erpOrderItemList = erpOrderItemList.stream()
+                .filter(erpOrderItem -> CalculationUtil.compareTo(erpOrderItem.getOperNumber(), CommonNumConstants.NUM_ZERO.toString(), ErpConstants.NUM_AFTER_DOT, RoundingMode.UP) > 0)
+                .collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(erpOrderItemList)) {
+                salesOrderService.editPurchaseState(salesOrder.getId(), SalesOrderPurchaseState.COMPLATE.getKey());
+            } else {
+                salesOrderService.editPurchaseState(salesOrder.getId(), SalesOrderPurchaseState.PARTIAL.getKey());
+            }
+        }
+    }
+
     @Override
     public Map<String, String> calcMaterialNormsNumByFromId(String fromId) {
         QueryWrapper<PurchaseOrder> queryWrapper = new QueryWrapper<>();
@@ -279,6 +323,9 @@ public class PurchaseOrderServiceImpl extends SkyeyeErpOrderServiceImpl<Purchase
         } else if (purchaseOrder.getFromTypeId() == PurchaseOrderFromType.DELIVERY_PLAN.getKey()) {
             // 到货计划
             productionPlanService.setDataMation(purchaseOrder, PurchaseOrder::getFromId);
+        } else if (purchaseOrder.getFromTypeId() == PurchaseOrderFromType.SEAL_ORDER.getKey()) {
+            // 销售订单
+            salesOrderService.setDataMation(purchaseOrder, PurchaseOrder::getFromId);
         }
         iProProjectService.setDataMation(purchaseOrder, PurchaseOrder::getProjectId);
         purchaseOrder.getErpOrderItemList().forEach(erpOrderItem -> {
