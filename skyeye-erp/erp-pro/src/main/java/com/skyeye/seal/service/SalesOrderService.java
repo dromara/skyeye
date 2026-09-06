@@ -38,4 +38,16 @@ public interface SalesOrderService extends SkyeyeErpOrderService<SalesOrder> {
     void insertSealsOrderToProductionPlan(InputObject inputObject, OutputObject outputObject);
 
     void insertSealsOrderToSealExchanges(InputObject inputObject, OutputObject outputObject);
+
+    void querySealsOrderTransPurchaseOrderById(InputObject inputObject, OutputObject outputObject);
+
+    void insertSealsOrderToPurchaseOrder(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 修改销售订单采购状态
+     *
+     * @param id            销售订单id
+     * @param purchaseState 采购状态 {@link com.skyeye.seal.classenum.SalesOrderPurchaseState}
+     */
+    void editPurchaseState(String id, Integer purchaseState);
 }

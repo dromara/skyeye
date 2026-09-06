@@ -9,9 +9,11 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.business.service.impl.SkyeyeErpOrderServiceImpl;
 import com.skyeye.classenum.ErpOrderStateEnum;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.FlowableStateEnum;
@@ -25,12 +27,18 @@ import com.skyeye.crm.service.IContractService;
 import com.skyeye.depot.classenum.DepotPutOutType;
 import com.skyeye.entity.ErpOrderItem;
 import com.skyeye.exception.CustomException;
+import com.skyeye.material.classenum.MaterialFromType;
 import com.skyeye.material.classenum.MaterialInOrderType;
 import com.skyeye.material.classenum.MaterialNormsStockType;
+import com.skyeye.material.entity.Material;
 import com.skyeye.production.classenum.ProductionPlanFromType;
 import com.skyeye.production.entity.ProductionPlan;
 import com.skyeye.production.service.ProductionPlanService;
+import com.skyeye.purchase.classenum.PurchaseOrderFromType;
+import com.skyeye.purchase.entity.PurchaseOrder;
+import com.skyeye.purchase.service.PurchaseOrderService;
 import com.skyeye.seal.classenum.SalesExchangesFromType;
+import com.skyeye.seal.classenum.SalesOrderPurchaseState;
 import com.skyeye.seal.classenum.SealOrderFromType;
 import com.skyeye.seal.classenum.SealOutLetFromType;
 import com.skyeye.seal.classenum.SealReturnFromType;
@@ -81,6 +89,9 @@ public class SalesOrderServiceImpl extends SkyeyeErpOrderServiceImpl<SalesOrderD
     @Autowired
     private SalesExchangesService salesExchangesService;
 
+    @Autowired
+    private PurchaseOrderService purchaseOrderService;
+
     @Override
     public QueryWrapper<SalesOrder> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<SalesOrder> queryWrapper = super.getQueryWrapper(commonPageInfo);
@@ -105,6 +116,41 @@ public class SalesOrderServiceImpl extends SkyeyeErpOrderServiceImpl<SalesOrderD
         entity.getErpOrderItemList().forEach(erpOrderItem -> {
             erpOrderItem.setMType(MaterialInOrderType.GENERAL.getKey());
         });
+        setPurchaseState(entity);
+    }
+
+    @Override
+    public void updatePrepose(SalesOrder entity) {
+        super.updatePrepose(entity);
+        setPurchaseState(entity);
+    }
+
+    /**
+     * 根据明细物料来源设置采购状态：含外购则为待采购，否则无需采购
+     */
+    private void setPurchaseState(SalesOrder entity) {
+        Integer purchaseState = SalesOrderPurchaseState.NOT_NEED.getKey();
+        List<String> materialIds = entity.getErpOrderItemList().stream()
+            .map(ErpOrderItem::getMaterialId).distinct().collect(Collectors.toList());
+        if (CollectionUtil.isNotEmpty(materialIds)) {
+            List<Material> materials = materialService.selectByIds(materialIds.toArray(new String[]{}));
+            for (Material material : materials) {
+                if (material.getFromType() == MaterialFromType.OUTSOURCING.getKey()) {
+                    purchaseState = SalesOrderPurchaseState.NEED.getKey();
+                    break;
+                }
+            }
+        }
+        entity.setPurchaseState(purchaseState);
+    }
+
+    @Override
+    public void editPurchaseState(String id, Integer purchaseState) {
+        UpdateWrapper<SalesOrder> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, id);
+        updateWrapper.set(MybatisPlusUtil.toColumns(SalesOrder::getPurchaseState), purchaseState);
+        update(updateWrapper);
+        refreshCache(id);
     }
 
     @Override
@@ -406,6 +452,53 @@ public class SalesOrderServiceImpl extends SkyeyeErpOrderServiceImpl<SalesOrderD
             productionPlanService.createEntity(productionPlan, userId);
         } else {
             outputObject.setreturnMessage("状态错误，无法出库.");
+        }
+    }
+
+    @Override
+    public void querySealsOrderTransPurchaseOrderById(InputObject inputObject, OutputObject outputObject) {
+        String id = inputObject.getParams().get("id").toString();
+        SalesOrder salesOrder = selectById(id);
+        // 只转外购商品
+        List<ErpOrderItem> erpOrderItemList = salesOrder.getErpOrderItemList().stream()
+            .filter(erpOrderItem -> erpOrderItem.getMaterialMation().getFromType() == MaterialFromType.OUTSOURCING.getKey())
+            .collect(Collectors.toList());
+        // 获取已经下达采购订单的数量
+        Map<String, String> normsNum = purchaseOrderService.calcMaterialNormsNumByFromId(id);
+        // 设置未下达采购订单的商品数量-----订单数量 - 已经下达采购订单的数量
+        super.setOrCheckOperNumber(erpOrderItemList, true, normsNum);
+        // 过滤掉数量为0的进行生成采购订单
+        salesOrder.setErpOrderItemList(erpOrderItemList.stream()
+            .filter(erpOrderItem -> {
+                String operNumber = StrUtil.isEmpty(erpOrderItem.getOperNumber())
+                    ? CommonNumConstants.NUM_ZERO.toString()
+                    : erpOrderItem.getOperNumber();
+                return CalculationUtil.compareTo(operNumber, CommonNumConstants.NUM_ZERO.toString(), ErpConstants.NUM_AFTER_DOT, RoundingMode.UP) > 0;
+            }).collect(Collectors.toList()));
+        outputObject.setBean(salesOrder);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void insertSealsOrderToPurchaseOrder(InputObject inputObject, OutputObject outputObject) {
+        PurchaseOrder purchaseOrder = inputObject.getParams(PurchaseOrder.class);
+        // 获取销售单状态
+        SalesOrder order = selectById(purchaseOrder.getId());
+        if (ObjectUtil.isEmpty(order)) {
+            throw new CustomException("该数据不存在.");
+        }
+        // 审核通过/部分完成 && 待采购/部分采购 的可以转采购订单
+        if ((FlowableStateEnum.PASS.getKey().equals(order.getState()) || ErpOrderStateEnum.PARTIALLY_COMPLETED.getKey().equals(order.getState()))
+            && (SalesOrderPurchaseState.NEED.getKey().equals(order.getPurchaseState())
+            || SalesOrderPurchaseState.PARTIAL.getKey().equals(order.getPurchaseState()))) {
+            String userId = inputObject.getLogParams().get("id").toString();
+            purchaseOrder.setFromId(purchaseOrder.getId());
+            purchaseOrder.setFromTypeId(PurchaseOrderFromType.SEAL_ORDER.getKey());
+            purchaseOrder.setId(StrUtil.EMPTY);
+            purchaseOrderService.createEntity(purchaseOrder, userId);
+        } else {
+            outputObject.setreturnMessage("状态错误，无法生成采购订单.");
         }
     }
 
