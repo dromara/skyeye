@@ -69,12 +69,12 @@ public class AiSkill extends OperatorUserInfo {
     @ApiModelProperty(value = "结构化积木 JSON")
     private String blocks;
 
-    @TableField(value = "app_id")
-    @ApiModelProperty(value = "业务应用 appId", required = "required")
+    @TableField(value = "app_id", updateStrategy = FieldStrategy.NEVER)
+    @ApiModelProperty(value = "业务应用 appId")
     private String appId;
 
-    @TableField(value = "service_class_name")
-    @ApiModelProperty(value = "业务对象 serviceClassName", required = "required")
+    @TableField(value = "service_class_name", updateStrategy = FieldStrategy.NEVER)
+    @ApiModelProperty(value = "业务对象 serviceClassName")
     private String serviceClassName;
 
     @TableField(value = "enabled")
