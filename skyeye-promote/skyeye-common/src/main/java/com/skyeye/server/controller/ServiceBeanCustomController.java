@@ -8,6 +8,7 @@ import com.skyeye.annotation.api.Api;
 import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.server.entity.ServiceBeanCustom;
@@ -38,6 +39,25 @@ public class ServiceBeanCustomController {
     @RequestMapping("/post/ServiceBeanCustomController/queryServiceBeanCustom")
     public void queryServiceBeanCustom(InputObject inputObject, OutputObject outputObject) {
         serviceBeanCustomService.queryServiceBeanCustom(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryServiceBeanCustomAiFormAssist", value = "查询业务对象是否开启表单AI辅助", method = "GET", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "className", name = "className", value = "service的className", required = "required"),
+        @ApiImplicitParam(id = "appId", name = "appId", value = "服务的appId", required = "required")})
+    @RequestMapping("/post/ServiceBeanCustomController/queryServiceBeanCustomAiFormAssist")
+    public void queryServiceBeanCustomAiFormAssist(InputObject inputObject, OutputObject outputObject) {
+        serviceBeanCustomService.queryServiceBeanCustomAiFormAssist(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "editServiceBeanCustomAiFormAssist", value = "编辑业务对象是否开启表单AI辅助", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "className", name = "className", value = "service的className", required = "required"),
+        @ApiImplicitParam(id = "appId", name = "appId", value = "服务的appId", required = "required"),
+        @ApiImplicitParam(id = "aiFormAssist", name = "aiFormAssist", value = "是否开启表单AI辅助", required = "required,num", enumClass = WhetherEnum.class)})
+    @RequestMapping("/post/ServiceBeanCustomController/editServiceBeanCustomAiFormAssist")
+    public void editServiceBeanCustomAiFormAssist(InputObject inputObject, OutputObject outputObject) {
+        serviceBeanCustomService.editServiceBeanCustomAiFormAssist(inputObject, outputObject);
     }
 
     @ApiOperation(id = "saveServiceBeanCustom", value = "保存自定义服务信息", method = "POST", allUse = "2")
