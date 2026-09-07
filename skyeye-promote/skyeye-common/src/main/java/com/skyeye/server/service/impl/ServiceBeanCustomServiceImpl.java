@@ -11,6 +11,7 @@ import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.coderule.entity.CodeRule;
 import com.skyeye.coderule.service.CodeRuleService;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.enumeration.WhetherEnum;
@@ -90,7 +91,7 @@ public class ServiceBeanCustomServiceImpl extends SkyeyeBusinessServiceImpl<Serv
             createEntity(bean, userId);
         } else {
             UpdateWrapper<ServiceBeanCustom> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.eq(MybatisPlusUtil.toColumns(ServiceBeanCustom::getId), existing.getId());
+            updateWrapper.eq(CommonConstants.ID, existing.getId());
             updateWrapper.set(MybatisPlusUtil.toColumns(ServiceBeanCustom::getAiFormAssist), aiFormAssist);
             update(updateWrapper);
         }
