@@ -64,12 +64,8 @@ public class LoanRepayServiceImpl extends SkyeyeBusinessServiceImpl<LoanRepayDao
     @Override
     public QueryWrapper<LoanRepay> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<LoanRepay> queryWrapper = super.getQueryWrapper(commonPageInfo);
-        if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(LoanRepay::getProjectId), commonPageInfo.getObjectId());
-        } else {
-            // 我创建的
-            queryWrapper.eq(MybatisPlusUtil.toColumns(LoanRepay::getCreateId), InputObject.getLogParamsStatic().get("id").toString());
-        }
+        // 我创建的
+        queryWrapper.eq(MybatisPlusUtil.toColumns(LoanRepay::getCreateId), InputObject.getLogParamsStatic().get("id").toString());
         return queryWrapper;
     }
 

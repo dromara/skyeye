@@ -4,12 +4,10 @@
 
 package com.skyeye.reimbursement.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
-import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.FlowableChildStateEnum;
@@ -28,7 +26,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @ClassName: ReimbursementServiceImpl
@@ -54,20 +51,6 @@ public class ReimbursementServiceImpl extends SkyeyeBusinessServiceImpl<Reimburs
     @Override
     public QueryWrapper<Reimbursement> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<Reimbursement> queryWrapper = super.getQueryWrapper(commonPageInfo);
-        if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
-            QueryWrapper<ReimbursementChild> childWrapper = new QueryWrapper<>();
-            childWrapper.eq(MybatisPlusUtil.toColumns(ReimbursementChild::getProjectId), commonPageInfo.getObjectId());
-            List<String> ids = reimbursementChildService.list(childWrapper).stream()
-                .map(ReimbursementChild::getParentId)
-                .filter(StrUtil::isNotEmpty)
-                .distinct()
-                .collect(Collectors.toList());
-            if (CollectionUtil.isEmpty(ids)) {
-                queryWrapper.eq(CommonConstants.ID, StrUtil.DASHED);
-            } else {
-                queryWrapper.in(CommonConstants.ID, ids);
-            }
-        }
         if (StrUtil.equals(commonPageInfo.getType(), "myCreate")) {
             // 我创建的
             queryWrapper.eq(MybatisPlusUtil.toColumns(Reimbursement::getCreateId), InputObject.getLogParamsStatic().get("id").toString());

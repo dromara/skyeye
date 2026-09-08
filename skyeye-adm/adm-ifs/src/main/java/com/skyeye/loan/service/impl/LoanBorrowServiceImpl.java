@@ -70,12 +70,8 @@ public class LoanBorrowServiceImpl extends SkyeyeBusinessServiceImpl<LoanBorrowD
     @Override
     public QueryWrapper<LoanBorrow> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<LoanBorrow> queryWrapper = super.getQueryWrapper(commonPageInfo);
-        if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(LoanBorrow::getProjectId), commonPageInfo.getObjectId());
-        } else {
-            // 我创建的
-            queryWrapper.eq(MybatisPlusUtil.toColumns(LoanBorrow::getCreateId), InputObject.getLogParamsStatic().get("id").toString());
-        }
+        // 我创建的
+        queryWrapper.eq(MybatisPlusUtil.toColumns(LoanBorrow::getCreateId), InputObject.getLogParamsStatic().get("id").toString());
         return queryWrapper;
     }
 

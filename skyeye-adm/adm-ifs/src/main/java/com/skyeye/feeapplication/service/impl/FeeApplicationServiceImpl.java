@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonNumConstants;
-import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.FlowableStateEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -42,15 +41,6 @@ public class FeeApplicationServiceImpl extends SkyeyeBusinessServiceImpl<FeeAppl
 
     @Autowired
     private IProProjectService iProProjectService;
-
-    @Override
-    public QueryWrapper<FeeApplication> getQueryWrapper(CommonPageInfo commonPageInfo) {
-        QueryWrapper<FeeApplication> queryWrapper = super.getQueryWrapper(commonPageInfo);
-        if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(FeeApplication::getProjectId), commonPageInfo.getObjectId());
-        }
-        return queryWrapper;
-    }
 
     @Override
     protected void validatorEntity(FeeApplication entity) {
