@@ -4,6 +4,7 @@
 
 package com.skyeye.server.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -13,6 +14,7 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.coderule.entity.CodeRule;
 import com.skyeye.common.entity.features.OperatorUserInfo;
+import com.skyeye.common.enumeration.WhetherEnum;
 import lombok.Data;
 
 /**
@@ -44,6 +46,10 @@ public class ServiceBeanCustom extends OperatorUserInfo {
     @TableField("code_rule_id")
     @ApiModelProperty(value = "编码规则id", required = "required")
     private String codeRuleId;
+
+    @TableField(value = "ai_form_assist", updateStrategy = FieldStrategy.NOT_NULL)
+    @ApiModelProperty(value = "是否开启表单AI辅助", enumClass = WhetherEnum.class, defaultValue = "1")
+    private Integer aiFormAssist;
 
     @TableField(exist = false)
     @Property(value = "编码规则信息")
