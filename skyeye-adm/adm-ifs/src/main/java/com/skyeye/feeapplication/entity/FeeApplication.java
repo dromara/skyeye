@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
-import com.skyeye.common.entity.features.OperatorUserInfo;
+import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.features.SkyeyeFlowable;
 import lombok.Data;
 
@@ -58,4 +58,12 @@ public class FeeApplication extends SkyeyeFlowable {
     @TableField("remark")
     @ApiModelProperty("备注")
     private String remark;
+
+    @TableField("project_id")
+    @ApiModelProperty(value = "关联项目id")
+    private String projectId;
+
+    @TableField(exist = false)
+    @Property(value = "关联项目信息")
+    private Map<String, Object> projectMation;
 }

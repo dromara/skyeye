@@ -43,6 +43,14 @@ public class ReimbursementChild extends SkyeyeLinkData {
     @ApiModelProperty(value = "报销金额", required = "required,double")
     private String price;
 
+    @TableField("project_id")
+    @ApiModelProperty(value = "关联项目id")
+    private String projectId;
+
+    @TableField(exist = false)
+    @Property(value = "关联项目信息")
+    private Map<String, Object> projectMation;
+
     @TableField(exist = false)
     @ApiModelProperty("部门id")
     private String departmentId;

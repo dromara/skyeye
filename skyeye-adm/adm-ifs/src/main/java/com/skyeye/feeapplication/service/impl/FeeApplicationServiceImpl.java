@@ -17,6 +17,7 @@ import com.skyeye.feeapplication.dao.FeeApplicationDao;
 import com.skyeye.feeapplication.entity.FeeApplication;
 import com.skyeye.feeapplication.service.FeeApplicationService;
 import com.skyeye.organization.service.IDepmentService;
+import com.skyeye.rest.project.service.IProProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,9 @@ public class FeeApplicationServiceImpl extends SkyeyeBusinessServiceImpl<FeeAppl
     @Autowired
     private IDepmentService iDepmentService;
 
+    @Autowired
+    private IProProjectService iProProjectService;
+
     @Override
     protected void validatorEntity(FeeApplication entity) {
         super.validatorEntity(entity);
@@ -54,6 +58,7 @@ public class FeeApplicationServiceImpl extends SkyeyeBusinessServiceImpl<FeeAppl
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         iDepmentService.setMationForMap(beans, "departmentId", "departmentMation");
         iAuthUserService.setMationForMap(beans, "applicantId", "applicantMation");
+        iProProjectService.setMationForMap(beans, "projectId", "projectMation");
         return beans;
     }
 
@@ -62,6 +67,7 @@ public class FeeApplicationServiceImpl extends SkyeyeBusinessServiceImpl<FeeAppl
         FeeApplication feeApplication = super.selectById(id);
         iDepmentService.setDataMation(feeApplication, FeeApplication::getDepartmentId);
         iAuthUserService.setDataMation(feeApplication, FeeApplication::getApplicantId);
+        iProProjectService.setDataMation(feeApplication, FeeApplication::getProjectId);
         return feeApplication;
     }
 

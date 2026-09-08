@@ -20,6 +20,7 @@ import com.skyeye.reimbursement.entity.Reimbursement;
 import com.skyeye.reimbursement.entity.ReimbursementChild;
 import com.skyeye.reimbursement.service.ReimbursementChildService;
 import com.skyeye.reimbursement.service.ReimbursementService;
+import com.skyeye.rest.project.service.IProProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +44,10 @@ public class ReimbursementServiceImpl extends SkyeyeBusinessServiceImpl<Reimburs
 
     @Autowired
     private IDepmentService iDepmentService;
+
+    @Autowired
+    private IProProjectService iProProjectService;
+
     @Override
     public QueryWrapper<Reimbursement> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<Reimbursement> queryWrapper = super.getQueryWrapper(commonPageInfo);
@@ -91,6 +96,7 @@ public class ReimbursementServiceImpl extends SkyeyeBusinessServiceImpl<Reimburs
         Reimbursement reimbursement = super.selectById(id);
         iSysDictDataService.setDataMation(reimbursement, Reimbursement::getPayTypeId);
         iSysDictDataService.setDataMation(reimbursement.getReimbursementChildList(), ReimbursementChild::getReimburseProId);
+        iProProjectService.setDataMation(reimbursement.getReimbursementChildList(), ReimbursementChild::getProjectId);
         return reimbursement;
     }
 

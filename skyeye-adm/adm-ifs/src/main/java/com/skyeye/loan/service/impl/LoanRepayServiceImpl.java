@@ -20,6 +20,7 @@ import com.skyeye.loan.entity.LoanRepay;
 import com.skyeye.loan.service.LoanBorrowService;
 import com.skyeye.loan.service.LoanRepayService;
 import com.skyeye.loan.service.UserLoanService;
+import com.skyeye.rest.project.service.IProProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +44,9 @@ public class LoanRepayServiceImpl extends SkyeyeBusinessServiceImpl<LoanRepayDao
 
     @Autowired
     private LoanBorrowService loanBorrowService;
+
+    @Autowired
+    private IProProjectService iProProjectService;
 
     @Override
     public void validatorEntity(LoanRepay entity) {
@@ -70,6 +74,7 @@ public class LoanRepayServiceImpl extends SkyeyeBusinessServiceImpl<LoanRepayDao
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         // 借款单信息
         loanBorrowService.setMationForMap(beans, "loanBorrowId", "loanBorrowMation");
+        iProProjectService.setMationForMap(beans, "projectId", "projectMation");
         return beans;
     }
 
@@ -78,6 +83,7 @@ public class LoanRepayServiceImpl extends SkyeyeBusinessServiceImpl<LoanRepayDao
         LoanRepay loanRepay = super.selectById(id);
         iSysDictDataService.setDataMation(loanRepay, LoanRepay::getPayTypeId);
         loanBorrowService.setDataMation(loanRepay, LoanRepay::getLoanBorrowId);
+        iProProjectService.setDataMation(loanRepay, LoanRepay::getProjectId);
         return loanRepay;
     }
 
