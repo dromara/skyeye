@@ -4,10 +4,12 @@
 
 package com.skyeye.reimbursement.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.FlowableChildStateEnum;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName: ReimbursementServiceImpl
@@ -52,7 +55,18 @@ public class ReimbursementServiceImpl extends SkyeyeBusinessServiceImpl<Reimburs
     public QueryWrapper<Reimbursement> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<Reimbursement> queryWrapper = super.getQueryWrapper(commonPageInfo);
         if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(Reimbursement::getProjectId), commonPageInfo.getObjectId());
+            QueryWrapper<ReimbursementChild> childWrapper = new QueryWrapper<>();
+            childWrapper.eq(MybatisPlusUtil.toColumns(ReimbursementChild::getProjectId), commonPageInfo.getObjectId());
+            List<String> ids = reimbursementChildService.list(childWrapper).stream()
+                .map(ReimbursementChild::getParentId)
+                .filter(StrUtil::isNotEmpty)
+                .distinct()
+                .collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(ids)) {
+                queryWrapper.eq(CommonConstants.ID, StrUtil.DASHED);
+            } else {
+                queryWrapper.in(CommonConstants.ID, ids);
+            }
         }
         if (StrUtil.equals(commonPageInfo.getType(), "myCreate")) {
             // 我创建的
@@ -65,7 +79,6 @@ public class ReimbursementServiceImpl extends SkyeyeBusinessServiceImpl<Reimburs
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
         iDepmentService.setMationForMap(beans, "departmentId", "departmentMation");
-        iProProjectService.setMationForMap(beans, "projectId", "projectMation");
         return beans;
     }
 
@@ -100,7 +113,7 @@ public class ReimbursementServiceImpl extends SkyeyeBusinessServiceImpl<Reimburs
         Reimbursement reimbursement = super.selectById(id);
         iSysDictDataService.setDataMation(reimbursement, Reimbursement::getPayTypeId);
         iSysDictDataService.setDataMation(reimbursement.getReimbursementChildList(), ReimbursementChild::getReimburseProId);
-        iProProjectService.setDataMation(reimbursement, Reimbursement::getProjectId);
+        iProProjectService.setDataMation(reimbursement.getReimbursementChildList(), ReimbursementChild::getProjectId);
         return reimbursement;
     }
 
