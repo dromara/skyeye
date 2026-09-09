@@ -47,4 +47,17 @@ public class PlatformDsFormAiController {
     public void aiParseDsFormAssist(InputObject inputObject, OutputObject outputObject) {
         platformDsFormAiDraftService.parseAnswer(inputObject, outputObject);
     }
+
+    @ApiOperation(id = "aiGenerateDsFormLayoutAssist", value = "布局设计器AI辅导（按技能编码）", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "question", name = "question", value = "用户问题或指令", required = "required"),
+        @ApiImplicitParam(id = "skillOddNumber", name = "skillOddNumber", value = "技能编码", required = "required"),
+        @ApiImplicitParam(id = "pageTitle", name = "pageTitle", value = "当前布局名称"),
+        @ApiImplicitParam(id = "appId", name = "appId", value = "业务应用 appId"),
+        @ApiImplicitParam(id = "serviceClassName", name = "serviceClassName", value = "业务对象 className 全路径"),
+        @ApiImplicitParam(id = "layoutContext", name = "layoutContext", value = "布局设计器画布上下文JSON", required = "json")})
+    @RequestMapping("/post/PlatformDsFormAiController/aiGenerateDsFormLayoutAssist")
+    public void aiGenerateDsFormLayoutAssist(InputObject inputObject, OutputObject outputObject) {
+        platformDsFormAiDraftService.generateLayoutAssist(inputObject, outputObject);
+    }
 }

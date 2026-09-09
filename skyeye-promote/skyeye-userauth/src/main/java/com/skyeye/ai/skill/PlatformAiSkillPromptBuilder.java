@@ -74,6 +74,149 @@ public class PlatformAiSkillPromptBuilder {
     }
 
     /**
+     * 布局设计器 AI 辅导：按技能编码强制注入说明书 + 画布上下文（不走场景过滤）。
+     */
+    public String buildForLayoutDesign(String question, String pageTitle, String appId, String serviceClassName,
+                                       String skillOddNumber, String layoutContextJson) {
+        Map<String, Object> skill = loadSkillByOddNumber(skillOddNumber);
+        StringBuilder sb = new StringBuilder();
+        sb.append("你是企业业务系统里的表单布局设计助手。用户正在「表单布局设计器」中配置页面控件与属性。\n");
+        sb.append("请结合下方技能说明书与当前画布上下文，给出说明，并在需要时输出可落地的 layoutPatches，系统会直接改画布。\n");
+        sb.append("只依据系统真实属性与允许的组件类型，不要编造 attrKey 或 type；不要输出业务单据 fieldValues。\n\n");
+        appendQuestionAndPage(sb, question, pageTitle, StrUtil.blankToDefault(serviceClassName, appId));
+        if (skill != null && !skill.isEmpty()) {
+            appendSkill(sb, skill);
+        }
+        appendLayoutContext(sb, layoutContextJson);
+        appendLayoutDesignJsonOutput(sb);
+        return sb.toString();
+    }
+
+    private Map<String, Object> loadSkillByOddNumber(String oddNumber) {
+        if (StrUtil.isBlank(oddNumber)) {
+            throw new IllegalArgumentException("技能编码不能为空");
+        }
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("oddNumber", oddNumber.trim());
+            Map<String, Object> bean = ExecuteFeignClient.get(() -> iAiSkillRest.queryAiSkillByOddNumber(params)).getBean();
+            if (bean == null || bean.isEmpty()) {
+                throw new IllegalArgumentException("技能编码不存在或未启用：" + oddNumber);
+            }
+            return bean;
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            LOGGER.warn("load ai skill by oddNumber failed, oddNumber={}, err={}", oddNumber, e.getMessage());
+            throw new IllegalArgumentException("按技能编码加载失败：" + oddNumber + "，" + e.getMessage());
+        }
+    }
+
+    private void appendLayoutContext(StringBuilder sb, String layoutContextJson) {
+        sb.append("【布局设计器上下文】\n");
+        if (StrUtil.isBlank(layoutContextJson)) {
+            sb.append("（无）\n\n");
+            return;
+        }
+        try {
+            JSONObject ctx = JSONUtil.parseObj(layoutContextJson);
+            if (StrUtil.isNotBlank(ctx.getStr("pageName"))) {
+                sb.append("布局名称：").append(ctx.getStr("pageName")).append("\n");
+            }
+            if (StrUtil.isNotBlank(ctx.getStr("pageType"))) {
+                sb.append("布局类型：").append(ctx.getStr("pageType")).append("\n");
+            }
+            if (StrUtil.isNotBlank(ctx.getStr("pageId"))) {
+                sb.append("布局ID：").append(ctx.getStr("pageId")).append("\n");
+            }
+            if (StrUtil.isNotBlank(ctx.getStr("appId"))) {
+                sb.append("应用：").append(ctx.getStr("appId")).append("\n");
+            }
+            if (StrUtil.isNotBlank(ctx.getStr("className"))) {
+                sb.append("业务对象：").append(ctx.getStr("className")).append("\n");
+            }
+            JSONObject selected = ctx.getJSONObject("selected");
+            if (selected != null && !selected.isEmpty()) {
+                sb.append("当前选中控件：")
+                    .append(StrUtil.blankToDefault(selected.getStr("title"), selected.getStr("type")))
+                    .append(" attrKey=")
+                    .append(StrUtil.blankToDefault(selected.getStr("attrKey"), "（无）"))
+                    .append("\n");
+            }
+            JSONArray components = ctx.getJSONArray("components");
+            if (components == null || components.isEmpty()) {
+                sb.append("画布控件：（空）\n\n");
+            } else {
+                sb.append("画布控件清单（共 ").append(components.size()).append(" 个）：\n");
+                int limit = Math.min(components.size(), 80);
+                for (int i = 0; i < limit; i++) {
+                    Object item = components.get(i);
+                    if (!(item instanceof JSONObject)) {
+                        continue;
+                    }
+                    JSONObject comp = (JSONObject) item;
+                    sb.append("- ").append(StrUtil.blankToDefault(comp.getStr("type"), "unknown"));
+                    if (StrUtil.isNotBlank(comp.getStr("title"))) {
+                        sb.append("（").append(comp.getStr("title")).append("）");
+                    }
+                    if (StrUtil.isNotBlank(comp.getStr("attrKey"))) {
+                        sb.append(" attrKey=").append(comp.getStr("attrKey"));
+                    }
+                    if (comp.get("required") != null && Boolean.TRUE.equals(comp.getBool("required"))) {
+                        sb.append(" *必填");
+                    }
+                    if (comp.get("width") != null) {
+                        sb.append(" width=").append(comp.get("width"));
+                    }
+                    sb.append("\n");
+                }
+                if (components.size() > limit) {
+                    sb.append("…其余 ").append(components.size() - limit).append(" 个已省略\n");
+                }
+                sb.append("\n");
+            }
+            JSONArray attrs = ctx.getJSONArray("attrList");
+            if (attrs != null && !attrs.isEmpty()) {
+                sb.append("业务对象属性（可绑定 attrKey）：\n");
+                int limit = Math.min(attrs.size(), 60);
+                for (int i = 0; i < limit; i++) {
+                    Object item = attrs.get(i);
+                    if (!(item instanceof JSONObject)) {
+                        continue;
+                    }
+                    JSONObject attr = (JSONObject) item;
+                    sb.append("- ").append(StrUtil.blankToDefault(attr.getStr("attrKey"), ""));
+                    if (StrUtil.isNotBlank(attr.getStr("name"))) {
+                        sb.append("（").append(attr.getStr("name")).append("）");
+                    }
+                    sb.append("\n");
+                }
+                if (attrs.size() > limit) {
+                    sb.append("…其余 ").append(attrs.size() - limit).append(" 个已省略\n");
+                }
+                sb.append("\n");
+            }
+            JSONArray allowedTypes = ctx.getJSONArray("allowedComponentTypes");
+            if (allowedTypes != null && !allowedTypes.isEmpty()) {
+                sb.append("允许的组件 type（layoutPatches.type 只能从这里选）：");
+                int limit = Math.min(allowedTypes.size(), 80);
+                for (int i = 0; i < limit; i++) {
+                    if (i > 0) {
+                        sb.append(", ");
+                    }
+                    sb.append(String.valueOf(allowedTypes.get(i)));
+                }
+                if (allowedTypes.size() > limit) {
+                    sb.append(" …");
+                }
+                sb.append("\n\n");
+            }
+        } catch (Exception e) {
+            sb.append(layoutContextJson).append("\n\n");
+        }
+    }
+
+    /**
      * 按使用位置过滤技能。useScene 空视为兼容历史数据（全部可用）。
      * sceneKey：1=聊天，2=表单AI辅助
      */
@@ -457,6 +600,27 @@ public class PlatformAiSkillPromptBuilder {
             sb.append(instruction).append("\n");
         }
         sb.append("\n");
+    }
+
+    private void appendLayoutDesignJsonOutput(StringBuilder sb) {
+        AiJsonHelper.appendMarkedJsonOutput(sb,
+            "{\n"
+                + "  \"reply\": \"给用户看的简短说明（已改了什么 / 还要注意什么）\",\n"
+                + "  \"actions\": [],\n"
+                + "  \"layoutPatches\": [\n"
+                + "    {\"op\":\"add\",\"type\":\"hrTitle\",\"label\":\"基本信息\"},\n"
+                + "    {\"op\":\"add\",\"type\":\"input\",\"attrKey\":\"name\",\"label\":\"名称\",\"require\":[\"required\"]},\n"
+                + "    {\"op\":\"update\",\"attrKey\":\"name\",\"require\":[\"required\"]},\n"
+                + "    {\"op\":\"remove\",\"attrKey\":\"uselessKey\"}\n"
+                + "  ]\n"
+                + "}");
+        sb.append("要求：\n");
+        sb.append("1. 用户要求生成/补齐/修正布局时，必须输出 layoutPatches，系统会直接改画布；不要只写操作步骤文字\n");
+        sb.append("2. op 仅支持 add/update/remove；type 必须来自「允许的组件 type」；attrKey 优先用「业务对象属性」里已有的\n");
+        sb.append("3. 画布已有相同 attrKey 时用 update，不要重复 add；仅咨询不改画布时 layoutPatches 可为 []\n");
+        sb.append("4. reply 简洁；actions 默认 []\n");
+        sb.append("5. 常见映射：文本→input，多行→textarea，下拉→select，日期→date，分隔标题→hrTitle\n");
+        sb.append("6. label 为控件标题：普通控件对应 props.label，hrTitle 对应 props.title；备注写 help\n");
     }
 
     private void appendMarkedJsonOutput(StringBuilder sb) {

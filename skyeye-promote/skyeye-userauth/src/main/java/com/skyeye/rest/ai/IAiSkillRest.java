@@ -18,4 +18,7 @@ public interface IAiSkillRest {
 
     @PostMapping("/queryEnabledAiSkillMatchList")
     String queryEnabledAiSkillMatchList(Map<String, Object> params);
+
+    @PostMapping("/queryAiSkillByOddNumber")
+    String queryAiSkillByOddNumber(Map<String, Object> params);
 }

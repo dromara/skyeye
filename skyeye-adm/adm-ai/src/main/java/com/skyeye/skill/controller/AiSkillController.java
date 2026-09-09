@@ -59,4 +59,12 @@ public class AiSkillController {
     public void queryEnabledAiSkillMatchList(InputObject inputObject, OutputObject outputObject) {
         aiSkillService.queryMatchList(inputObject, outputObject);
     }
+
+    @ApiOperation(id = "queryAiSkillByOddNumber", value = "按技能编码查询启用中的AI技能", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "oddNumber", name = "oddNumber", value = "技能编码", required = "required")})
+    @RequestMapping("/post/AiSkillController/queryAiSkillByOddNumber")
+    public void queryAiSkillByOddNumber(InputObject inputObject, OutputObject outputObject) {
+        aiSkillService.queryAiSkillByOddNumber(inputObject, outputObject);
+    }
 }
