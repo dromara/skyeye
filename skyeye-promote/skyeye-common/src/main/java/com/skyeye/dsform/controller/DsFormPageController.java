@@ -8,6 +8,7 @@ import com.skyeye.annotation.api.Api;
 import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
+import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.dsform.entity.DsFormPage;
@@ -40,6 +41,13 @@ public class DsFormPageController {
     @RequestMapping("/post/DsFormPageController/queryDsFormPageList")
     public void queryDsFormPageList(InputObject inputObject, OutputObject outputObject) {
         dsFormPageService.queryDsFormPageList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryDsFormPagePageList", value = "分页查询表单布局（可按业务对象过滤，不传则查全部）", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
+    @RequestMapping("/post/DsFormPageController/queryDsFormPagePageList")
+    public void queryDsFormPagePageList(InputObject inputObject, OutputObject outputObject) {
+        dsFormPageService.queryPageList(inputObject, outputObject);
     }
 
     @ApiOperation(id = "writeDsFormPage", value = "新增/编辑表单布局", method = "POST", allUse = "2")

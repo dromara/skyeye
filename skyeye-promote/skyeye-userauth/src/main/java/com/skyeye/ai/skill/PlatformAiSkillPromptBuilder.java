@@ -377,7 +377,7 @@ public class PlatformAiSkillPromptBuilder {
     private int scoreItem(String haystack, Map<String, Object> skill, String pagePath) {
         int score = scoreKeywords(haystack, str(skill, "keywords"));
         score += scoreKeywords(haystack, str(skill, "name"));
-        String className = str(skill, "serviceClassName");
+        String className = str(skill, "applyServiceClassName");
         if (StrUtil.isNotBlank(className) && StrUtil.isNotBlank(pagePath)) {
             String simple = simpleClassName(className);
             String hay = pagePath.toLowerCase(Locale.ROOT);
@@ -403,7 +403,7 @@ public class PlatformAiSkillPromptBuilder {
             if (!appId.equals(str(skill, "appId"))) {
                 continue;
             }
-            String skillClass = str(skill, "serviceClassName");
+            String skillClass = str(skill, "applyServiceClassName");
             if (StrUtil.isBlank(skillClass)) {
                 continue;
             }

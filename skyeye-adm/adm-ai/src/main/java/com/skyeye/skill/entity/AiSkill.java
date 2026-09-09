@@ -18,7 +18,7 @@ import com.skyeye.skill.classenum.AiSkillUseSceneEnum;
 import lombok.Data;
 
 /**
- * AI 技能：绑定业务对象 appId + serviceClassName，说明书由积木编译。
+ * AI 技能：绑定业务对象 appId + applyServiceClassName，说明书由积木编译。
  */
 @Data
 @UniqueField(value = {"oddNumber"})
@@ -74,8 +74,8 @@ public class AiSkill extends OperatorUserInfo {
     private String appId;
 
     @TableField(value = "service_class_name", updateStrategy = FieldStrategy.NEVER)
-    @ApiModelProperty(value = "业务对象 serviceClassName")
-    private String serviceClassName;
+    @ApiModelProperty(value = "业务对象 applyServiceClassName")
+    private String applyServiceClassName;
 
     @TableField(value = "enabled")
     @ApiModelProperty(value = "状态", enumClass = EnableEnum.class, required = "required,num")

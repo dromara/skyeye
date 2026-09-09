@@ -18,6 +18,7 @@ import com.skyeye.business.entity.BusinessApi;
 import com.skyeye.business.service.BusinessApiService;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
+import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -75,6 +76,19 @@ public class DsFormPageServiceImpl extends SkyeyeBusinessServiceImpl<DsFormPageD
 
     @Autowired
     private IDataService iDataService;
+
+    @Override
+    protected QueryWrapper<DsFormPage> getQueryWrapper(CommonPageInfo commonPageInfo) {
+        QueryWrapper<DsFormPage> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        // serviceAppId / serviceClassName 为空时查询全部，供业务对象资源总览使用
+        if (StrUtil.isNotBlank(commonPageInfo.getServiceAppId())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(DsFormPage::getAppId), commonPageInfo.getServiceAppId());
+        }
+        if (StrUtil.isNotBlank(commonPageInfo.getServiceClassName())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(DsFormPage::getClassName), commonPageInfo.getServiceClassName());
+        }
+        return queryWrapper;
+    }
 
     @Override
     public void queryDsFormPageList(InputObject inputObject, OutputObject outputObject) {

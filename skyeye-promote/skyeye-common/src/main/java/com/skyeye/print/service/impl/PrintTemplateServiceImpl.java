@@ -74,7 +74,10 @@ public class PrintTemplateServiceImpl extends SkyeyeBusinessServiceImpl<PrintTem
     @Override
     protected QueryWrapper<PrintTemplate> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<PrintTemplate> queryWrapper = super.getQueryWrapper(commonPageInfo);
-        queryWrapper.eq(MybatisPlusUtil.toColumns(PrintTemplate::getObjectKey), commonPageInfo.getObjectKey());
+        // objectKey 为空时查询全部，供业务对象资源总览使用
+        if (StrUtil.isNotBlank(commonPageInfo.getObjectKey())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(PrintTemplate::getObjectKey), commonPageInfo.getObjectKey());
+        }
         return queryWrapper;
     }
 
