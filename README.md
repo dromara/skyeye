@@ -712,7 +712,7 @@ SkyEye云 是面向**智能制造行业**的一站式SaaS化零代码全链路�
 |功能| 效果图 | 效果图 | 效果图 |
 |----|-------|-----|------|
 |组件管理|![输入图片说明](images/show/base/20240802001image.png)|![输入图片说明](images/show/base/2024080202image.png)||
-|布局/操作/属性管理|![输入图片说明](images/show/base/2024080203image.png)|![输入图片说明](images/show/base/2024080204image.png)|![输入图片说明](images/show/base/20240802005image.png)|
+|AI布局设计/操作/属性管理| ![输入图片说明](images/show/base/202609091411.gif) |![输入图片说明](images/show/base/2024080204image.png)|![输入图片说明](images/show/base/20240802005image.png)|
 |菜单/角色/编码管理|![输入图片说明](images/show/base/20240802010image.png)|![输入图片说明](images/show/base/20240802011image.png)|![输入图片说明](images/show/base/20240802012image.png)|
 
 ### CRM
