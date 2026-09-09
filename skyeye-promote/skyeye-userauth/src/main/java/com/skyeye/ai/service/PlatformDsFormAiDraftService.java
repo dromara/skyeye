@@ -15,4 +15,9 @@ public interface PlatformDsFormAiDraftService {
     void generate(InputObject inputObject, OutputObject outputObject);
 
     void parseAnswer(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 布局设计器 AI 辅导（按技能编码调用）
+     */
+    void generateLayoutAssist(InputObject inputObject, OutputObject outputObject);
 }

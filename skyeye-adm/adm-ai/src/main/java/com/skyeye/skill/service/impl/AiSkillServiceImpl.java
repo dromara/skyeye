@@ -275,6 +275,38 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
         }
     }
 
+    @Override
+    public AiSkill queryByOddNumber(String oddNumber) {
+        if (StrUtil.isBlank(oddNumber)) {
+            return null;
+        }
+        QueryWrapper<AiSkill> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getOddNumber), oddNumber.trim());
+        AiSkill skill = getOne(queryWrapper, false);
+        if (skill != null) {
+            return selectById(skill.getId());
+        }
+        return null;
+    }
+
+    @Override
+    public void queryAiSkillByOddNumber(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String oddNumber = params.get("oddNumber") == null ? StrUtil.EMPTY : params.get("oddNumber").toString();
+        if (StrUtil.isBlank(oddNumber)) {
+            throw new CustomException("技能编码不能为空");
+        }
+        AiSkill skill = queryByOddNumber(oddNumber);
+        if (skill == null) {
+            throw new CustomException("技能编码不存在：" + oddNumber);
+        }
+        if (!EnableEnum.ENABLE_USING.getKey().equals(skill.getEnabled())) {
+            throw new CustomException("技能未启用：" + oddNumber);
+        }
+        outputObject.setBean(skill);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
     private AiSkillUseSceneEnum parseScene(String useScene) {
         try {
             return AiSkillUseSceneEnum.getByKey(Integer.valueOf(useScene.trim()));

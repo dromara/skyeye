@@ -15,6 +15,7 @@ import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.AiJsonHelper;
+import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,8 @@ import java.util.*;
 public class PlatformDsFormAiDraftServiceImpl implements PlatformDsFormAiDraftService {
 
     private static final String BIZ_TYPE = "dsFormAssist";
+
+    private static final String LAYOUT_BIZ_TYPE = "dsFormLayoutAssist";
 
     @Autowired
     private PlatformAiChatHelper platformAiChatHelper;
@@ -49,6 +52,39 @@ public class PlatformDsFormAiDraftServiceImpl implements PlatformDsFormAiDraftSe
         Map<String, Object> bean = platformAiChatHelper.startStreamingChat(content, BIZ_TYPE);
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void generateLayoutAssist(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String question = strParam(params, "question");
+        String skillOddNumber = strParam(params, "skillOddNumber");
+        String layoutContext = AiJsonHelper.normalizeJsonText(params.get("layoutContext"));
+        String pageTitle = strParam(params, "pageTitle");
+        String appId = strParam(params, "appId");
+        String serviceClassName = strParam(params, "serviceClassName");
+        if (StrUtil.isBlank(question)) {
+            throw new CustomException("请输入问题");
+        }
+        if (StrUtil.isBlank(skillOddNumber)) {
+            throw new CustomException("技能编码不能为空");
+        }
+        try {
+            String content = platformAiSkillPromptBuilder.buildForLayoutDesign(
+                question, pageTitle, appId, serviceClassName, skillOddNumber, layoutContext);
+            Map<String, Object> bean = platformAiChatHelper.startStreamingChat(content, LAYOUT_BIZ_TYPE);
+            outputObject.setBean(bean);
+            outputObject.settotal(CommonNumConstants.NUM_ONE);
+        } catch (IllegalArgumentException e) {
+            throw new CustomException(e.getMessage());
+        }
+    }
+
+    private String strParam(Map<String, Object> params, String key) {
+        if (params == null || params.get(key) == null) {
+            return "";
+        }
+        return String.valueOf(params.get(key));
     }
 
     @Override

@@ -22,4 +22,14 @@ public interface AiSkillService extends SkyeyeBusinessService<AiSkill> {
     List<AiSkill> queryByCategoryId(String categoryId);
 
     void queryMatchList(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 按技能编码查询（启用校验在 Controller/调用方处理）
+     */
+    AiSkill queryByOddNumber(String oddNumber);
+
+    /**
+     * 按技能编码查询启用中的技能（供编码调用）
+     */
+    void queryAiSkillByOddNumber(InputObject inputObject, OutputObject outputObject);
 }
