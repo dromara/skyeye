@@ -98,8 +98,8 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
     @Override
     protected void createPrepose(AiSkill entity) {
         super.createPrepose(entity);
-        if (StrUtil.isBlank(entity.getAppId()) || StrUtil.isBlank(entity.getServiceClassName())) {
-            throw new CustomException("请绑定业务对象 appId 与 serviceClassName");
+        if (StrUtil.isBlank(entity.getAppId()) || StrUtil.isBlank(entity.getApplyServiceClassName())) {
+            throw new CustomException("请绑定业务对象 appId 与 applyServiceClassName");
         }
     }
 
@@ -137,7 +137,7 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
         }
         QueryWrapper<AiSkill> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getAppId), entity.getAppId());
-        queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getServiceClassName), entity.getServiceClassName());
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getApplyServiceClassName), entity.getApplyServiceClassName());
         queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getEnabled), EnableEnum.ENABLE_USING.getKey());
         if (StrUtil.isNotBlank(entity.getId())) {
             queryWrapper.ne(CommonConstants.ID, entity.getId());
@@ -190,7 +190,7 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
             queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getAppId), commonPageInfo.getServiceAppId());
         }
         if (StrUtil.isNotBlank(commonPageInfo.getServiceClassName())) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getServiceClassName), commonPageInfo.getServiceClassName());
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getApplyServiceClassName), commonPageInfo.getServiceClassName());
         }
         if (StrUtil.isNotBlank(commonPageInfo.getObjectId())) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getSuiteId), commonPageInfo.getObjectId());
@@ -203,7 +203,7 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
     public List<AiSkill> queryByBiz(String appId, String serviceClassName) {
         QueryWrapper<AiSkill> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getAppId), appId);
-        queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getServiceClassName), serviceClassName);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getApplyServiceClassName), serviceClassName);
         queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(AiSkill::getOrderBy));
         List<AiSkill> list = list(queryWrapper);
         fillRefs(list);

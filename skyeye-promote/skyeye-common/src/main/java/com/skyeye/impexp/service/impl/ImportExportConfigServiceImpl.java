@@ -107,6 +107,22 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
     private SysDictDataService sysDictDataService;
 
     @Override
+    protected QueryWrapper<ImportExportConfig> getQueryWrapper(CommonPageInfo commonPageInfo) {
+        QueryWrapper<ImportExportConfig> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        // serviceAppId / serviceClassName 为空时查询全部，供业务对象资源总览使用
+        if (StrUtil.isNotBlank(commonPageInfo.getServiceAppId())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(ImportExportConfig::getAppId), commonPageInfo.getServiceAppId());
+        }
+        if (StrUtil.isNotBlank(commonPageInfo.getServiceClassName())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(ImportExportConfig::getClassName), commonPageInfo.getServiceClassName());
+        }
+        if (StrUtil.isNotBlank(commonPageInfo.getType())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(ImportExportConfig::getConfigType), commonPageInfo.getType());
+        }
+        return queryWrapper;
+    }
+
+    @Override
     protected void validatorEntity(ImportExportConfig entity) {
         // 同一业务对象下配置名称唯一，避免用户选择配置时出现重名歧义。
         QueryWrapper<ImportExportConfig> queryWrapper = new QueryWrapper<>();
