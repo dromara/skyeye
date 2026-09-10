@@ -14,6 +14,8 @@ import com.skyeye.common.enumeration.IsDefaultEnum;
 import com.skyeye.impexp.enums.ImportExportConfigTypeEnum;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @ClassName: ImportExportConfig
  * @Description: 业务对象导入导出配置实体类
@@ -109,5 +111,9 @@ public class ImportExportConfig extends BaseGeneralInfo {
     @TableField("config_json")
     @ApiModelProperty(value = "导入导出配置JSON")
     private String configJson;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "适用对象（企业/部门/员工/角色）", required = "json")
+    private List<ImportExportApplicableObjects> applicableObjectsList;
 }
 

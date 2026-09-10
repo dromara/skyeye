@@ -26,6 +26,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.entity.search.DynamicCondition;
 import com.skyeye.common.enumeration.*;
 import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.ObjectConstant;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.object.PutObject;
 import com.skyeye.common.object.ResultEntity;
@@ -41,9 +42,11 @@ import com.skyeye.eve.service.SysDictDataService;
 import com.skyeye.eve.service.SysDictTypeService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.impexp.dao.ImportExportConfigDao;
+import com.skyeye.impexp.entity.ImportExportApplicableObjects;
 import com.skyeye.impexp.entity.ImportExportConfig;
 import com.skyeye.impexp.entity.ImportExportFieldOption;
 import com.skyeye.impexp.enums.ImportExportConfigTypeEnum;
+import com.skyeye.impexp.service.ImportExportApplicableObjectsService;
 import com.skyeye.impexp.service.ImportExportConfigService;
 import com.skyeye.impexp.support.ImportExportColumnDataSourceHelper;
 import com.skyeye.impexp.support.ImportExportColumnDataSourceHelper.EffectiveDataSource;
@@ -52,6 +55,9 @@ import com.skyeye.impexp.support.ImportExportConfigJsonHelper.ColumnSpec;
 import com.skyeye.impexp.support.ImportExportConfigJsonHelper.HeaderGroupStyle;
 import com.skyeye.impexp.support.ImportExportConfigJsonHelper.ParsedConfig;
 import com.skyeye.impexp.support.ImportExportConfigJsonHelper.SheetLayoutOptions;
+import com.skyeye.jedis.JedisClientService;
+import com.skyeye.organization.service.ICompanyService;
+import com.skyeye.organization.service.IDepmentService;
 import com.skyeye.sdk.data.service.IDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,7 +88,7 @@ import java.util.stream.Collectors;
  * @date 2026/4/8 22:10
  */
 @Service
-@SkyeyeService(name = "导入导出配置", groupName = "系统公共模块", tenant = TenantEnum.WEAK_ISOLATION)
+@SkyeyeService(name = "导入导出配置", groupName = "系统公共模块", tenant = TenantEnum.WEAK_ISOLATION, allowDynamicAttrKey = false)
 public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<ImportExportConfigDao, ImportExportConfig> implements ImportExportConfigService {
 
     @Autowired
@@ -96,6 +102,18 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
 
     @Autowired
     private IJobMateMationService iJobMateMationService;
+
+    @Autowired
+    private ImportExportApplicableObjectsService importExportApplicableObjectsService;
+
+    @Autowired
+    private ICompanyService iCompanyService;
+
+    @Autowired
+    private IDepmentService iDepmentService;
+
+    @Autowired
+    private JedisClientService jedisClientService;
 
     @Autowired
     private SkyeyeClassEnumService skyeyeClassEnumService;
@@ -152,6 +170,26 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             updateWrapper.set(MybatisPlusUtil.toColumns(ImportExportConfig::getIsDefault), IsDefaultEnum.NOT_DEFAULT.getKey());
             update(updateWrapper);
         }
+        importExportApplicableObjectsService.saveApplicableObjects(entity.getId(), entity.getApplicableObjectsList());
+    }
+
+    @Override
+    public void deletePostpose(String id) {
+        importExportApplicableObjectsService.deleteApplicableObjectsByConfigId(id);
+        super.deletePostpose(id);
+    }
+
+    @Override
+    public ImportExportConfig getDataFromDb(String id) {
+        ImportExportConfig config = super.getDataFromDb(id);
+        if (config == null) {
+            return null;
+        }
+        List<ImportExportApplicableObjects> applicableObjectsList =
+            importExportApplicableObjectsService.queryApplicableObjectsByConfigId(id);
+        fillApplicableObjectMation(applicableObjectsList);
+        config.setApplicableObjectsList(applicableObjectsList);
+        return config;
     }
 
     @Override
@@ -160,6 +198,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         String appId = params.get("appId").toString();
         String className = params.get("className").toString();
         Integer configType = Integer.parseInt(params.get("configType").toString());
+        boolean filterByUser = "1".equals(String.valueOf(params.getOrDefault("filterByUser", "")));
         // 列表按“默认优先 -> 排序号 -> 最近更新时间”排序，方便前端直接展示与选择。
         QueryWrapper<ImportExportConfig> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(ImportExportConfig::getAppId), appId);
@@ -172,10 +211,156 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
                 .thenComparing(item -> item.getLastUpdateTime(), Comparator.reverseOrder()))
             .collect(Collectors.toList());
 
+        if (filterByUser) {
+            configList = filterConfigsByCurrentUser(configList, inputObject.getLogParams());
+        } else {
+            fillApplicableObjectsForList(configList);
+        }
+
         iAuthUserService.setName(configList, "createId", "createName");
         iAuthUserService.setName(configList, "lastUpdateId", "lastUpdateName");
         outputObject.setBeans(configList);
         outputObject.settotal(configList.size());
+    }
+
+    private void fillApplicableObjectsForList(List<ImportExportConfig> configList) {
+        if (CollectionUtil.isEmpty(configList)) {
+            return;
+        }
+        List<String> ids = configList.stream().map(ImportExportConfig::getId).collect(Collectors.toList());
+        Map<String, List<ImportExportApplicableObjects>> map =
+            importExportApplicableObjectsService.queryApplicableObjectsByConfigIds(ids);
+        for (ImportExportConfig config : configList) {
+            List<ImportExportApplicableObjects> objects = map.getOrDefault(config.getId(), new ArrayList<>());
+            fillApplicableObjectMation(objects);
+            config.setApplicableObjectsList(objects);
+        }
+    }
+
+    /**
+     * 未配置适用对象 = 所有人可用；已配置则需命中企业/部门/员工/角色之一。
+     */
+    private List<ImportExportConfig> filterConfigsByCurrentUser(List<ImportExportConfig> configList,
+                                                                Map<String, Object> logParams) {
+        if (CollectionUtil.isEmpty(configList)) {
+            return configList;
+        }
+        fillApplicableObjectsForList(configList);
+        Set<String> userObjectIds = collectCurrentUserObjectIds(logParams);
+        return configList.stream().filter(config -> {
+            List<ImportExportApplicableObjects> objects = config.getApplicableObjectsList();
+            if (CollectionUtil.isEmpty(objects)) {
+                return true;
+            }
+            return objects.stream()
+                .map(ImportExportApplicableObjects::getObjectId)
+                .filter(StrUtil::isNotBlank)
+                .anyMatch(userObjectIds::contains);
+        }).collect(Collectors.toList());
+    }
+
+    private Set<String> collectCurrentUserObjectIds(Map<String, Object> logParams) {
+        Set<String> ids = new HashSet<>();
+        if (logParams == null) {
+            return ids;
+        }
+        addIfPresent(ids, logParams.get("companyId"));
+        addIfPresent(ids, logParams.get("departmentId"));
+        addIfPresent(ids, logParams.get("staffId"));
+        Object roleId = logParams.get("roleId");
+        if (roleId != null && StrUtil.isNotBlank(roleId.toString())) {
+            for (String one : roleId.toString().split(",")) {
+                if (StrUtil.isNotBlank(one)) {
+                    ids.add(one.trim());
+                }
+            }
+        } else {
+            // 登录缓存通常会移除 roleId，改从 redis 取当前用户角色
+            Object userId = logParams.get("id");
+            if (userId != null && StrUtil.isNotBlank(userId.toString())) {
+                try {
+                    String roleIds = jedisClientService.get(ObjectConstant.getUserHasRoleIds(userId.toString()));
+                    if (StrUtil.isNotBlank(roleIds)) {
+                        for (String one : roleIds.split(",")) {
+                            if (StrUtil.isNotBlank(one)) {
+                                ids.add(one.trim());
+                            }
+                        }
+                    }
+                } catch (Exception ignored) {
+                    // 角色缓存不可用时，仅按企业/部门/员工匹配
+                }
+            }
+        }
+        return ids;
+    }
+
+    private void addIfPresent(Set<String> ids, Object value) {
+        if (value != null && StrUtil.isNotBlank(value.toString())) {
+            ids.add(value.toString().trim());
+        }
+    }
+
+    private void fillApplicableObjectMation(List<ImportExportApplicableObjects> applicableObjectsList) {
+        if (CollectionUtil.isEmpty(applicableObjectsList)) {
+            return;
+        }
+        for (ImportExportApplicableObjects item : applicableObjectsList) {
+            if (StrUtil.isNotBlank(item.getObjectName())) {
+                Map<String, Object> mation = new HashMap<>();
+                mation.put("name", item.getObjectName());
+                mation.put("id", item.getObjectId());
+                item.setObjectMation(mation);
+                item.setName(item.getObjectName());
+            }
+        }
+        Map<Integer, List<ImportExportApplicableObjects>> listMap = applicableObjectsList.stream()
+            .collect(Collectors.groupingBy(ImportExportApplicableObjects::getObjectType));
+        listMap.forEach((key, value) -> {
+            List<String> ids = value.stream().map(ImportExportApplicableObjects::getObjectId)
+                .filter(StrUtil::isNotBlank).collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(ids)) {
+                return;
+            }
+            if (ApplicableObjectsType.STAFF.getKey().equals(key)) {
+                Map<String, Map<String, Object>> staffMaps = iAuthUserService.queryUserMationListByStaffIds(ids);
+                applyObjectMation(applicableObjectsList, staffMaps, key);
+            } else if (ApplicableObjectsType.DEPARTMENT.getKey().equals(key)) {
+                String departmentIdStr = String.join(",", ids);
+                Map<String, Map<String, Object>> departmentMap = iDepmentService.queryDataMationForMapByIds(departmentIdStr);
+                applyObjectMation(applicableObjectsList, departmentMap, key);
+            } else if (ApplicableObjectsType.COMPANY.getKey().equals(key)) {
+                String companyIdStr = String.join(",", ids);
+                Map<String, Map<String, Object>> companyMap = iCompanyService.queryDataMationForMapByIds(companyIdStr);
+                applyObjectMation(applicableObjectsList, companyMap, key);
+            }
+            // 角色依赖 objectName 缓存，无独立 Feign 服务
+        });
+    }
+
+    private void applyObjectMation(List<ImportExportApplicableObjects> applicableObjectsList,
+                                   Map<String, Map<String, Object>> dataMap, Integer objectType) {
+        if (CollectionUtil.isEmpty(dataMap)) {
+            return;
+        }
+        for (ImportExportApplicableObjects item : applicableObjectsList) {
+            if (!objectType.equals(item.getObjectType())) {
+                continue;
+            }
+            Map<String, Object> mation = dataMap.get(item.getObjectId());
+            if (mation == null) {
+                continue;
+            }
+            item.setObjectMation(mation);
+            Object name = mation.get("name");
+            if (name == null) {
+                name = mation.get("userName");
+            }
+            if (name != null) {
+                item.setObjectName(name.toString());
+                item.setName(name.toString());
+            }
+        }
     }
 
     @Override

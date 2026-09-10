@@ -60,6 +60,26 @@ public class ServiceBeanCustomController {
         serviceBeanCustomService.editServiceBeanCustomAiFormAssist(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryServiceBeanCustomImpExpAllow", value = "查询业务对象是否允许导入/导出", method = "GET", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "className", name = "className", value = "service的className", required = "required"),
+        @ApiImplicitParam(id = "appId", name = "appId", value = "服务的appId", required = "required")})
+    @RequestMapping("/post/ServiceBeanCustomController/queryServiceBeanCustomImpExpAllow")
+    public void queryServiceBeanCustomImpExpAllow(InputObject inputObject, OutputObject outputObject) {
+        serviceBeanCustomService.queryServiceBeanCustomImpExpAllow(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "editServiceBeanCustomImpExpAllow", value = "编辑业务对象是否允许导入/导出", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "className", name = "className", value = "service的className", required = "required"),
+        @ApiImplicitParam(id = "appId", name = "appId", value = "服务的appId", required = "required"),
+        @ApiImplicitParam(id = "allowImport", name = "allowImport", value = "是否允许导入", required = "required,num", enumClass = WhetherEnum.class),
+        @ApiImplicitParam(id = "allowExport", name = "allowExport", value = "是否允许导出", required = "required,num", enumClass = WhetherEnum.class)})
+    @RequestMapping("/post/ServiceBeanCustomController/editServiceBeanCustomImpExpAllow")
+    public void editServiceBeanCustomImpExpAllow(InputObject inputObject, OutputObject outputObject) {
+        serviceBeanCustomService.editServiceBeanCustomImpExpAllow(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "saveServiceBeanCustom", value = "保存自定义服务信息", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = ServiceBeanCustom.class)
     @RequestMapping("/post/ServiceBeanCustomController/saveServiceBeanCustom")

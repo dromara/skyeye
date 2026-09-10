@@ -104,6 +104,61 @@ public class ServiceBeanCustomServiceImpl extends SkyeyeBusinessServiceImpl<Serv
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
+    @Override
+    public void queryServiceBeanCustomImpExpAllow(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String className = params.get("className").toString();
+        String appId = params.get("appId").toString();
+        ServiceBeanCustom serviceBeanCustom = getServiceBeanCustomEntity(appId, className);
+        Integer allowImport = serviceBeanCustom == null || serviceBeanCustom.getAllowImport() == null
+            ? WhetherEnum.ENABLE_USING.getKey()
+            : serviceBeanCustom.getAllowImport();
+        Integer allowExport = serviceBeanCustom == null || serviceBeanCustom.getAllowExport() == null
+            ? WhetherEnum.ENABLE_USING.getKey()
+            : serviceBeanCustom.getAllowExport();
+        Map<String, Object> bean = new HashMap<>();
+        bean.put("appId", appId);
+        bean.put("className", className);
+        bean.put("allowImport", allowImport);
+        bean.put("allowExport", allowExport);
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void editServiceBeanCustomImpExpAllow(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String className = params.get("className").toString();
+        String appId = params.get("appId").toString();
+        Integer allowImport = Integer.parseInt(params.get("allowImport").toString());
+        Integer allowExport = Integer.parseInt(params.get("allowExport").toString());
+        String userId = inputObject.getLogParams().get("id").toString();
+
+        ServiceBeanCustom existing = getServiceBeanCustomEntity(appId, className);
+        if (existing == null) {
+            ServiceBeanCustom bean = new ServiceBeanCustom();
+            bean.setAppId(appId);
+            bean.setClassName(className);
+            bean.setAllowImport(allowImport);
+            bean.setAllowExport(allowExport);
+            createEntity(bean, userId);
+        } else {
+            UpdateWrapper<ServiceBeanCustom> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq(CommonConstants.ID, existing.getId());
+            updateWrapper.set(MybatisPlusUtil.toColumns(ServiceBeanCustom::getAllowImport), allowImport);
+            updateWrapper.set(MybatisPlusUtil.toColumns(ServiceBeanCustom::getAllowExport), allowExport);
+            update(updateWrapper);
+        }
+
+        Map<String, Object> bean = new HashMap<>();
+        bean.put("appId", appId);
+        bean.put("className", className);
+        bean.put("allowImport", allowImport);
+        bean.put("allowExport", allowExport);
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
     private ServiceBeanCustom getServiceBeanCustomEntity(String appId, String className) {
         QueryWrapper<ServiceBeanCustom> queryWrapper = new QueryWrapper<>();
         if (StrUtil.isNotEmpty(appId)) {

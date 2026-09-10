@@ -75,6 +75,16 @@ public class SysEveRoleServiceImpl extends SkyeyeBusinessServiceImpl<SysEveRoleD
     @Autowired
     private TenantService tenantService;
 
+    /**
+     * 查询全部角色列表（不分页），供适用对象等下拉选择使用。
+     */
+    @Override
+    public void queryAllSysRoleList(InputObject inputObject, OutputObject outputObject) {
+        List<Role> roleList = queryAllData();
+        outputObject.setBeans(roleList);
+        outputObject.settotal(roleList.size());
+    }
+
     @Override
     public Role getDataFromDb(String id) {
         Role role = super.getDataFromDb(id);

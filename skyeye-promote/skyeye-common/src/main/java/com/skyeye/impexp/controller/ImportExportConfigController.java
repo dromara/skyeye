@@ -44,7 +44,8 @@ public class ImportExportConfigController {
     @ApiImplicitParams({
         @ApiImplicitParam(id = "appId", name = "appId", value = "应用的appId", required = "required"),
         @ApiImplicitParam(id = "className", name = "className", value = "业务对象className", required = "required"),
-        @ApiImplicitParam(id = "configType", name = "configType", value = "配置类型", enumClass = ImportExportConfigTypeEnum.class, required = "required")})
+        @ApiImplicitParam(id = "configType", name = "configType", value = "配置类型", enumClass = ImportExportConfigTypeEnum.class, required = "required"),
+        @ApiImplicitParam(id = "filterByUser", name = "filterByUser", value = "是否按当前用户适用对象过滤：1是")})
     @RequestMapping("/post/ImportExportConfigController/queryImportExportConfigList")
     public void queryImportExportConfigList(InputObject inputObject, OutputObject outputObject) {
         importExportConfigService.queryImportExportConfigList(inputObject, outputObject);
