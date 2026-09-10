@@ -292,12 +292,14 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         option.setParentAttrKey(parent.getAttrKey());
         option.setParentAttrModelType(parentAttrModelType);
         option.setDepth(1);
-        // 子字段入参/必填：父可导入且子自身规则
+        // 子字段入参/必填：父可导入；仅当父也必填时，子必填才锁定不可取消
         boolean parentCanImport = parent.getWhetherInputParams() != null
             && parent.getWhetherInputParams().equals(WhetherEnum.ENABLE_USING.getKey());
+        boolean parentRequired = isAttrRequired(parent);
         option.setWhetherInputParams(parentCanImport ? child.getWhetherInputParams() : WhetherEnum.DISABLE_USING.getKey());
+        option.setParentImportRequired(parentCanImport && parentRequired);
         option.setRemark(child.getRemark());
-        fillImportExportFlags(option, child, parentCanImport);
+        fillImportExportFlags(option, child, parentCanImport, parentRequired);
         fillAttrDataSourceSummary(option, child, childCustom);
         return option;
     }
@@ -309,15 +311,26 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         return attrDefinition.getName();
     }
 
-    private void fillImportExportFlags(ImportExportFieldOption option, AttrDefinition attrDefinition) {
-        fillImportExportFlags(option, attrDefinition, true);
+    private boolean isAttrRequired(AttrDefinition attrDefinition) {
+        return attrDefinition != null
+            && StrUtil.containsIgnoreCase(attrDefinition.getRequired(), VerificationParamsEnum.REQUIRED.getKey());
     }
 
-    private void fillImportExportFlags(ImportExportFieldOption option, AttrDefinition attrDefinition, boolean parentCanImport) {
+    private void fillImportExportFlags(ImportExportFieldOption option, AttrDefinition attrDefinition) {
+        // 顶级字段无父级约束，按自身必填锁定
+        fillImportExportFlags(option, attrDefinition, true, true);
+    }
+
+    /**
+     * @param parentCanImport 父属性是否可作为入参；顶级传 true
+     * @param parentRequired  父属性是否必填；顶级传 true。父非必填时，子字段即使自身必填也可取消勾选
+     */
+    private void fillImportExportFlags(ImportExportFieldOption option, AttrDefinition attrDefinition,
+                                       boolean parentCanImport, boolean parentRequired) {
         boolean canImport = parentCanImport && attrDefinition.getWhetherInputParams() != null
             && attrDefinition.getWhetherInputParams().equals(WhetherEnum.ENABLE_USING.getKey());
-        boolean importRequiredFixed = canImport
-            && StrUtil.containsIgnoreCase(attrDefinition.getRequired(), VerificationParamsEnum.REQUIRED.getKey());
+        boolean childRequired = isAttrRequired(attrDefinition);
+        boolean importRequiredFixed = canImport && parentRequired && childRequired;
         option.setDefaultImportChecked(importRequiredFixed);
         option.setImportRequiredFixed(importRequiredFixed);
         option.setDefaultExportChecked(false);
