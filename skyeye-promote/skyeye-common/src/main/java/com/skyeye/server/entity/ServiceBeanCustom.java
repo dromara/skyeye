@@ -51,6 +51,14 @@ public class ServiceBeanCustom extends OperatorUserInfo {
     @ApiModelProperty(value = "是否开启表单AI辅助", enumClass = WhetherEnum.class, defaultValue = "1")
     private Integer aiFormAssist;
 
+    @TableField(value = "allow_import", updateStrategy = FieldStrategy.NOT_NULL)
+    @ApiModelProperty(value = "是否允许导入", enumClass = WhetherEnum.class, defaultValue = "1")
+    private Integer allowImport;
+
+    @TableField(value = "allow_export", updateStrategy = FieldStrategy.NOT_NULL)
+    @ApiModelProperty(value = "是否允许导出", enumClass = WhetherEnum.class, defaultValue = "1")
+    private Integer allowExport;
+
     @TableField(exist = false)
     @Property(value = "编码规则信息")
     private CodeRule codeRule;

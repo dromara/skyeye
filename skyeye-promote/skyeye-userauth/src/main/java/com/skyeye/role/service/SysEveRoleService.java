@@ -11,6 +11,11 @@ import com.skyeye.role.entity.Role;
 
 public interface SysEveRoleService extends SkyeyeBusinessService<Role> {
 
+    /**
+     * 查询全部角色（不分页，下拉选用）
+     */
+    void queryAllSysRoleList(InputObject inputObject, OutputObject outputObject);
+
     void querySysRoleBandMenuList(InputObject inputObject, OutputObject outputObject);
 
     void querySysRoleBandAppMenuList(InputObject inputObject, OutputObject outputObject);

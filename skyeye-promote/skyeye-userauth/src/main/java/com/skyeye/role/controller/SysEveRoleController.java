@@ -39,6 +39,12 @@ public class SysEveRoleController {
         sysEveRoleService.queryPageList(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryAllSysRoleList", value = "获取全部角色（不分页，下拉选用）", method = "GET", allUse = "2")
+    @RequestMapping("/post/SysEveRoleController/queryAllSysRoleList")
+    public void queryAllSysRoleList(InputObject inputObject, OutputObject outputObject) {
+        sysEveRoleService.queryAllSysRoleList(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "writeSysRole", value = "新增/编辑角色", method = "POST", allUse = "1")
     @ApiImplicitParams(classBean = Role.class)
     @RequestMapping("/post/SysEveRoleController/writeSysRole")
