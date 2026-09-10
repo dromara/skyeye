@@ -39,6 +39,9 @@ public class ImportExportFieldOption {
     @ApiModelProperty("父属性模型类型：2对象 3集合；子字段时有值")
     private Integer parentAttrModelType;
 
+    @ApiModelProperty("父属性是否导入必填（对象/集合拆列时子字段有值；父非必填则子字段均可取消勾选）")
+    private Boolean parentImportRequired;
+
     @ApiModelProperty("展示层级，0为顶级，1为对象/集合子字段")
     private Integer depth;
 
