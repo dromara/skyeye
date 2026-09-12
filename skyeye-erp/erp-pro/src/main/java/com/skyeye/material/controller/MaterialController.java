@@ -127,4 +127,10 @@ public class MaterialController {
         materialNormsService.queryNormsListByMaterialId(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryAllNormsList", value = "获取所有规格列表", method = "GET", allUse = "2")
+    @RequestMapping("/post/MaterialController/queryAllNormsList")
+    public void queryAllNormsList(InputObject inputObject, OutputObject outputObject) {
+        materialNormsService.queryAllNormsList(inputObject, outputObject);
+    }
+
 }

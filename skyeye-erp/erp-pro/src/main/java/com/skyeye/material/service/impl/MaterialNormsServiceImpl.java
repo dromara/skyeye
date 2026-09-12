@@ -8,15 +8,19 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.github.yulichang.toolkit.JoinWrappers;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
+import com.skyeye.common.enumeration.DeleteFlagEnum;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.constants.ErpConstants;
@@ -366,6 +370,28 @@ public class MaterialNormsServiceImpl extends SkyeyeBusinessServiceImpl<Material
         queryWrapper.eq(MybatisPlusUtil.toColumns(MaterialNorms::getEnabled), EnableEnum.ENABLE_USING.getKey());
         queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(MaterialNorms::getOrderBy));
         List<MaterialNorms> materialNormsList = list(queryWrapper);
+        outputObject.setBeans(materialNormsList);
+        outputObject.settotal(materialNormsList.size());
+    }
+
+    /**
+     * 获取所有启用规格（无入参）：规格启用，且所属商品启用、未删除；联表时显式带租户条件。
+     */
+    @Override
+    public void queryAllNormsList(InputObject inputObject, OutputObject outputObject) {
+        MPJLambdaWrapper<MaterialNorms> wrapper = JoinWrappers.lambda("norms", MaterialNorms.class)
+            .selectAll(MaterialNorms.class)
+            .innerJoin(Material.class, "ma", Material::getId, MaterialNorms::getMaterialId)
+            .eq(MaterialNorms::getEnabled, EnableEnum.ENABLE_USING.getKey())
+            .eq(Material::getEnabled, EnableEnum.ENABLE_USING.getKey())
+            .eq(Material::getDeleteFlag, DeleteFlagEnum.NOT_DELETE.getKey())
+            .orderByAsc(MaterialNorms::getOrderBy);
+        if (tenantEnable) {
+            String tenantId = TenantContext.getTenantId();
+            wrapper.eq("norms." + CommonConstants.TENANT_ID_FIELD, tenantId);
+            wrapper.eq("ma." + CommonConstants.TENANT_ID_FIELD, tenantId);
+        }
+        List<MaterialNorms> materialNormsList = skyeyeBaseMapper.selectJoinList(MaterialNorms.class, wrapper);
         outputObject.setBeans(materialNormsList);
         outputObject.settotal(materialNormsList.size());
     }
