@@ -74,6 +74,9 @@ public class ImportExportConfig extends BaseGeneralInfo {
      *     <li>followAttrDataSource：是否跟随属性数据来源，默认 true</li>
      *     <li>columnDataSource：列自定义数据来源（followAttrDataSource=false 时），含 dataType/objectId/defaultData</li>
      *     <li>exportValueMode：导出值显示 label=名称 / code=编号（仅导出配置）</li>
+     *     <li>dependAttrKey：依赖的父列 attrKey（仅导入；同 Sheet）</li>
+     *     <li>cascadeBind：数据来源级联绑定（仅导入）。linkField=本列数据来源中对应父值的字段；valueField=写入本列单元格的字段（默认 id）；下载模板时由服务端编译为级联树</li>
+     *     <li>cascadeItems：可选，手工/编译后的级联编码树；有 cascadeBind 时可省略</li>
      * </ul>
      * <p>示例：</p>
      * <pre>
@@ -84,18 +87,20 @@ public class ImportExportConfig extends BaseGeneralInfo {
      *   "defaultHeaderFontColor": "#FFFFFF",
      *   "items": [
      *     {
-     *       "attrKey": "name",
-     *       "columnTitle": "名称",
-     *       "columnWidth": 5000,
-     *       "headerBackgroundColor": "#E2EFDA",
-     *       "headerFontColor": "#000000",
+     *       "attrKey": "provinceCode",
+     *       "columnTitle": "省编码",
      *       "cellDataType": "text"
      *     },
      *     {
-     *       "attrKey": "code",
-     *       "columnTitle": "编码",
-     *       "columnWidth": 4200,
-     *       "cellDataType": "text"
+     *       "attrKey": "cityCode",
+     *       "columnTitle": "市编码",
+     *       "cellDataType": "text",
+     *       "dependAttrKey": "provinceCode",
+     *       "cascadeBind": {
+     *         "linkField": "parentId",
+     *         "valueField": "id",
+     *         "labelField": "name"
+     *       }
      *     },
      *     {
      *       "attrKey": "createTime",

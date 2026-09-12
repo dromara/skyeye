@@ -11,6 +11,8 @@ import cn.hutool.json.JSONUtil;
 import com.skyeye.attr.classenum.AttrKeyDataType;
 import com.skyeye.attr.entity.AttrDefinition;
 import com.skyeye.attr.entity.AttrDefinitionCustom;
+import com.skyeye.business.entity.BusinessApi;
+import com.skyeye.impexp.support.ImportExportConfigJsonHelper.BusinessApiConfig;
 import com.skyeye.impexp.support.ImportExportConfigJsonHelper.ColumnDataSourceOverride;
 import com.skyeye.impexp.support.ImportExportConfigJsonHelper.ColumnSpec;
 import lombok.Data;
@@ -77,6 +79,7 @@ public final class ImportExportColumnDataSourceHelper {
         out.setDataType(override.getDataType());
         out.setObjectId(StrUtil.blankToDefault(override.getObjectId(), null));
         out.setDefaultData(StrUtil.blankToDefault(override.getDefaultData(), null));
+        out.setBusinessApi(override.getBusinessApi());
         return out;
     }
 
@@ -105,7 +108,22 @@ public final class ImportExportColumnDataSourceHelper {
         if (StrUtil.isNotBlank(custom.getEnumClassStr())) {
             out.setEnumClassStr(custom.getEnumClassStr().trim());
         }
+        out.setBusinessApi(toBusinessApiConfig(custom.getBusinessApi()));
         return out;
+    }
+
+    public static BusinessApiConfig toBusinessApiConfig(BusinessApi api) {
+        if (api == null) {
+            return null;
+        }
+        BusinessApiConfig cfg = new BusinessApiConfig();
+        cfg.setServiceStr(StrUtil.blankToDefault(api.getServiceStr(), null));
+        cfg.setApi(StrUtil.blankToDefault(api.getApi(), null));
+        cfg.setMethod(StrUtil.blankToDefault(api.getMethod(), null));
+        if (api.getParams() != null && !api.getParams().isEmpty()) {
+            cfg.setParams(new LinkedHashMap<>(api.getParams()));
+        }
+        return cfg;
     }
 
     /**
@@ -204,5 +222,6 @@ public final class ImportExportColumnDataSourceHelper {
         private String objectId;
         private String defaultData;
         private String enumClassStr;
+        private BusinessApiConfig businessApi;
     }
 }
