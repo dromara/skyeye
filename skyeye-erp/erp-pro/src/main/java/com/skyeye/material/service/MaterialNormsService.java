@@ -54,4 +54,9 @@ public interface MaterialNormsService extends SkyeyeBusinessService<MaterialNorm
     void calcDepotStock(MaterialNorms materialNorms, String depotId);
 
     void queryNormsListByMaterialId(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 获取所有启用规格列表（所属商品须启用且未删除，无入参）
+     */
+    void queryAllNormsList(InputObject inputObject, OutputObject outputObject);
 }
