@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map;
 
 /**
  * 解析 config_json。
@@ -120,6 +121,48 @@ public final class ImportExportConfigJsonHelper {
          * 导出值显示：label=显示名称，code=显示原始编号；默认 label。
          */
         private String exportValueMode;
+        /**
+         * 级联依赖的父列 attrKey（同 Sheet）；空表示无级联。
+         * Excel 使用命名区域 + INDIRECT("cas_"&父单元格)，单元格内存编码/id 而非中文名。
+         */
+        private String dependAttrKey;
+        /**
+         * 级联编码树（可选）。优先使用；若为空则按 {@link #cascadeBind} 从数据来源编译。
+         */
+        private List<CascadeItem> cascadeItems;
+        /**
+         * 数据来源驱动的级联绑定：本列数据来源中 linkField = 依赖列单元格值 时，该行作为子选项。
+         */
+        private CascadeBind cascadeBind;
+    }
+
+    /**
+     * 级联节点：code 写入 Excel / 命名区域；name 仅设计器展示。
+     */
+    @Data
+    public static class CascadeItem {
+        private String code;
+        private String name;
+        private List<CascadeItem> children;
+    }
+
+    /**
+     * 从本列数据来源生成级联树的绑定规则。
+     */
+    @Data
+    public static class CascadeBind {
+        /**
+         * 本列数据来源中指向父值的字段，如 parentId、materialId。
+         */
+        private String linkField;
+        /**
+         * 写入本列单元格的字段，默认 id。
+         */
+        private String valueField;
+        /**
+         * 显示名字段（仅备注/辅助），默认 name。
+         */
+        private String labelField;
     }
 
     @Data
@@ -128,6 +171,19 @@ public final class ImportExportConfigJsonHelper {
         private Integer dataType;
         private String objectId;
         private String defaultData;
+        /** dataType=4 时：自定义 API */
+        private BusinessApiConfig businessApi;
+    }
+
+    /**
+     * 列自定义 API（与属性 BusinessApi 结构一致，存于 configJson）。
+     */
+    @Data
+    public static class BusinessApiConfig {
+        private String serviceStr;
+        private String api;
+        private String method;
+        private Map<String, Object> params;
     }
 
     @Data
@@ -230,12 +286,45 @@ public final class ImportExportConfigJsonHelper {
                 }
                 override.setObjectId(StrUtil.blankToDefault(ds.getStr("objectId"), null));
                 override.setDefaultData(StrUtil.blankToDefault(ds.getStr("defaultData"), null));
+                JSONObject ba = ds.getJSONObject("businessApi");
+                if (ba != null && !ba.isEmpty()) {
+                    BusinessApiConfig apiCfg = new BusinessApiConfig();
+                    apiCfg.setServiceStr(StrUtil.blankToDefault(ba.getStr("serviceStr"), null));
+                    apiCfg.setApi(StrUtil.blankToDefault(ba.getStr("api"), null));
+                    apiCfg.setMethod(StrUtil.blankToDefault(ba.getStr("method"), null));
+                    JSONObject paramsObj = ba.getJSONObject("params");
+                    if (paramsObj != null && !paramsObj.isEmpty()) {
+                        Map<String, Object> params = new LinkedHashMap<>();
+                        for (String pk : paramsObj.keySet()) {
+                            if (StrUtil.isBlank(pk)) {
+                                continue;
+                            }
+                            params.put(pk, paramsObj.get(pk));
+                        }
+                        apiCfg.setParams(params);
+                    }
+                    override.setBusinessApi(apiCfg);
+                }
                 spec.setColumnDataSource(override);
             }
             spec.setExportValueMode(StrUtil.blankToDefault(row.getStr("exportValueMode"), null));
+            String dependAttrKey = StrUtil.trim(row.getStr("dependAttrKey"));
+            if (StrUtil.isNotBlank(dependAttrKey)) {
+                spec.setDependAttrKey(dependAttrKey);
+                Object cascadeRaw = row.get("cascadeItems");
+                if (cascadeRaw == null) {
+                    cascadeRaw = row.getStr("cascadeItemsJson");
+                }
+                spec.setCascadeItems(ImportExportCascadeHelper.parseCascadeItems(cascadeRaw));
+                CascadeBind bind = parseCascadeBind(row);
+                if (bind != null) {
+                    spec.setCascadeBind(bind);
+                }
+            }
             result.add(spec);
         }
         out.setItems(result);
+        ImportExportCascadeHelper.validateCascadeConfig(result);
         return out;
     }
 
@@ -349,5 +438,37 @@ public final class ImportExportConfigJsonHelper {
         formats[0] = null;
         System.arraycopy(business, 0, formats, 1, business.length);
         return formats;
+    }
+
+    private static CascadeBind parseCascadeBind(JSONObject row) {
+        if (row == null) {
+            return null;
+        }
+        JSONObject bindObj = row.getJSONObject("cascadeBind");
+        String linkField = null;
+        String valueField = null;
+        String labelField = null;
+        if (bindObj != null && !bindObj.isEmpty()) {
+            linkField = StrUtil.trim(bindObj.getStr("linkField"));
+            valueField = StrUtil.trim(bindObj.getStr("valueField"));
+            labelField = StrUtil.trim(bindObj.getStr("labelField"));
+        }
+        if (StrUtil.isBlank(linkField)) {
+            linkField = StrUtil.trim(row.getStr("cascadeLinkField"));
+        }
+        if (StrUtil.isBlank(valueField)) {
+            valueField = StrUtil.trim(row.getStr("cascadeValueField"));
+        }
+        if (StrUtil.isBlank(labelField)) {
+            labelField = StrUtil.trim(row.getStr("cascadeLabelField"));
+        }
+        if (StrUtil.isBlank(linkField)) {
+            return null;
+        }
+        CascadeBind bind = new CascadeBind();
+        bind.setLinkField(linkField);
+        bind.setValueField(StrUtil.blankToDefault(valueField, "id"));
+        bind.setLabelField(StrUtil.blankToDefault(labelField, "name"));
+        return bind;
     }
 }
