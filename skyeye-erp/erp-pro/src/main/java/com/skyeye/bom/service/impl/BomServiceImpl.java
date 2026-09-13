@@ -28,6 +28,7 @@ import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
+import com.skyeye.common.util.DataCommonUtil;
 import com.skyeye.common.util.MapUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.constants.ErpConstants;
@@ -120,6 +121,35 @@ public class BomServiceImpl extends SkyeyeBusinessServiceImpl<BomDao, Bom> imple
     public String updateEntity(Bom entity, String userId) {
         entity.setStartSmallVersion(false);
         return super.updateEntity(entity, userId);
+    }
+
+    @Override
+    protected void createPrepose(Bom entity) {
+        if (StrUtil.isNotEmpty(entity.getFromId()) && StrUtil.isEmpty(entity.getCadContent())) {
+            Bom from = selectById(entity.getFromId());
+            if (ObjectUtil.isNotEmpty(from)) {
+                entity.setCadContent(from.getCadContent());
+            }
+        }
+    }
+
+    @Override
+    protected void updatePrepose(Bom entity) {
+        entity.setCadContent(selectById(entity.getId()).getCadContent());
+    }
+
+    @Override
+    public void editBomCadContentById(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String id = params.get("id").toString();
+        Bom bom = selectById(id);
+        if (ObjectUtil.isEmpty(bom)) {
+            throw new CustomException("BOM方案不存在");
+        }
+        bom.setCadContent(params.get("cadContent").toString());
+        DataCommonUtil.setCommonLastUpdateDataByGenericity(bom, InputObject.getLogParamsStatic().get("id").toString());
+        updateById(bom);
+        refreshCache(id);
     }
 
     @Override

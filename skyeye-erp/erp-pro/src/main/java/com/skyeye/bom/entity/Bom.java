@@ -41,6 +41,10 @@ public class Bom extends Version {
     @ApiModelProperty("相关描述")
     private String remark;
 
+    @TableField(value = "cad_content")
+    @ApiModelProperty(value = "CAD图纸json")
+    private String cadContent;
+
     @TableField(value = "material_id")
     @ApiModelProperty(value = "商品id", required = "required")
     private String materialId;

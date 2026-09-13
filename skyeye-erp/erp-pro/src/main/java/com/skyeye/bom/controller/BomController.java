@@ -101,4 +101,13 @@ public class BomController {
         bomService.publishVersionById(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "editBomCadContentById", value = "编辑BOM二维CAD图纸", method = "POST", allUse = "1")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "方案id", required = "required"),
+        @ApiImplicitParam(id = "cadContent", name = "cadContent", value = "二维CAD图纸JSON", required = "required,json")})
+    @RequestMapping("/post/BomController/editBomCadContentById")
+    public void editBomCadContentById(InputObject inputObject, OutputObject outputObject) {
+        bomService.editBomCadContentById(inputObject, outputObject);
+    }
+
 }
