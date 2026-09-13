@@ -5,6 +5,7 @@
 package com.skyeye.impexp.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
@@ -25,13 +26,10 @@ import com.skyeye.common.constans.MqConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.entity.search.DynamicCondition;
 import com.skyeye.common.enumeration.*;
-import com.skyeye.common.object.InputObject;
-import com.skyeye.common.object.ObjectConstant;
-import com.skyeye.common.object.OutputObject;
-import com.skyeye.common.object.PutObject;
-import com.skyeye.common.object.ResultEntity;
+import com.skyeye.common.object.*;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.ExcelUtil;
+import com.skyeye.common.util.HttpRequestUtil;
 import com.skyeye.common.util.ImportExportRowUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.eve.entity.dict.SysDictData;
@@ -48,25 +46,31 @@ import com.skyeye.impexp.entity.ImportExportFieldOption;
 import com.skyeye.impexp.enums.ImportExportConfigTypeEnum;
 import com.skyeye.impexp.service.ImportExportApplicableObjectsService;
 import com.skyeye.impexp.service.ImportExportConfigService;
+import com.skyeye.impexp.support.ImportExportCascadeBindCompiler;
+import com.skyeye.impexp.support.ImportExportCascadeHelper;
 import com.skyeye.impexp.support.ImportExportColumnDataSourceHelper;
 import com.skyeye.impexp.support.ImportExportColumnDataSourceHelper.EffectiveDataSource;
 import com.skyeye.impexp.support.ImportExportConfigJsonHelper;
-import com.skyeye.impexp.support.ImportExportConfigJsonHelper.ColumnSpec;
-import com.skyeye.impexp.support.ImportExportConfigJsonHelper.HeaderGroupStyle;
-import com.skyeye.impexp.support.ImportExportConfigJsonHelper.ParsedConfig;
-import com.skyeye.impexp.support.ImportExportConfigJsonHelper.SheetLayoutOptions;
+import com.skyeye.impexp.support.ImportExportConfigJsonHelper.*;
 import com.skyeye.jedis.JedisClientService;
 import com.skyeye.organization.service.ICompanyService;
 import com.skyeye.organization.service.IDepmentService;
 import com.skyeye.sdk.data.service.IDataService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -87,6 +91,7 @@ import java.util.stream.Collectors;
  * @author skyeye云系列--卫志强
  * @date 2026/4/8 22:10
  */
+@Slf4j
 @Service
 @SkyeyeService(name = "导入导出配置", groupName = "系统公共模块", tenant = TenantEnum.WEAK_ISOLATION, allowDynamicAttrKey = false)
 public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<ImportExportConfigDao, ImportExportConfig> implements ImportExportConfigService {
@@ -123,6 +128,20 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
 
     @Autowired
     private SysDictDataService sysDictDataService;
+
+    @Autowired
+    private DiscoveryClient discoveryClient;
+
+    @Value("${spring.profiles.active}")
+    private String env;
+
+    @Value("${spring.application.name}")
+    private String springApplicationName;
+
+    /**
+     * 配置中心路径缓存（与报表 REST 同源），重启失效
+     */
+    private final Map<String, Map<String, Object>> configCache = new ConcurrentHashMap<>();
 
     @Override
     protected QueryWrapper<ImportExportConfig> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -649,9 +668,12 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         }
 
         // ② 属性类型（点路径叶子）+ 明细集合根 + Sheet 模式
+        AttrMetaBundle attrMeta = loadAttrMetaBundle(appId, className);
         Map<String, Integer> attrModelTypeMap = buildAttrModelTypeMap(appId, className);
         List<String> collectionRoots = resolveCollectionRootsForSpecs(appId, className, specs);
         boolean useMulti = shouldUseMultiSheet(parsed, collectionRoots);
+        // 级联：按数据来源绑定编译编码树（导入校验依赖）
+        ensureCascadeItemsFromBind(specs, attrMeta.attrIndex, new DropdownLabelCache());
         // ③ 读 Excel → 扁平行 / 多 Sheet 行，再组装为主表+明细列表
         List<Map<String, Object>> dataRows;
         if (useMulti) {
@@ -848,12 +870,23 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
                 }
             }
             // 配置列：点路径写入嵌套 Map（如 purchaseChild.materialId）
+            Map<String, String> flatCells = new LinkedHashMap<>();
             for (int i = 0; i < specs.size(); i++) {
                 ColumnSpec spec = specs.get(i);
                 // 旧模板无键行时：多 Sheet 数据列从第 1 列开始（0 是序号）
                 int fallbackCol = withLink ? i + 1 : i;
                 String cell = resolveImportCell(excelRow, colByKey, spec.getAttrKey(), fallbackCol);
-                putImportCellValue(row, spec.getAttrKey(), cell, attrModelTypeMap.get(spec.getAttrKey()));
+                flatCells.put(spec.getAttrKey(), cell);
+            }
+            // 级联编码校验（父/子必须匹配 cascadeItems 树）
+            int excelRowNo = rows.size() + 1;
+            List<String> cascadeErrors = ImportExportCascadeHelper.validateImportRow(flatCells, specs, excelRowNo);
+            if (CollectionUtil.isNotEmpty(cascadeErrors)) {
+                throw new CustomException(String.join("；", cascadeErrors));
+            }
+            for (ColumnSpec spec : specs) {
+                putImportCellValue(row, spec.getAttrKey(), flatCells.get(spec.getAttrKey()),
+                    attrModelTypeMap.get(spec.getAttrKey()));
             }
             if (!row.isEmpty()) {
                 rows.add(row);
@@ -1192,6 +1225,14 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
          * 字典 dictCode → 字典项 id/code → 显示名
          */
         private final Map<String, Map<String, String>> dictIdToLabel = new HashMap<>();
+        /**
+         * 字典 dictCode → 原始行（id/parentId/name），供级联编译
+         */
+        private final Map<String, List<Map<String, Object>>> dictRows = new HashMap<>();
+        /**
+         * 自定义 API 缓存 key → 行数据
+         */
+        private final Map<String, List<Map<String, Object>>> apiRows = new HashMap<>();
     }
 
     /**
@@ -1243,8 +1284,243 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
                 style.columnDropdownOptions = options;
             }
         } catch (Exception ignore) {
-            // 下拉仅为辅助编辑能力
+            // 普通下拉失败不影响模板
         }
+        // 级联必须生效：数据来源绑定编译失败应抛出给用户
+        ensureCascadeItemsFromBind(specs, attrIndex, labelCache);
+        ImportExportCascadeHelper.applyToExportStyle(style, specs, keys);
+    }
+
+    /**
+     * 若列仅配置了 cascadeBind（关联父值字段），则从本列数据来源编译 cascadeItems。
+     */
+    private void ensureCascadeItemsFromBind(List<ColumnSpec> specs, Map<String, AttrDefinition> attrIndex,
+                                            DropdownLabelCache labelCache) {
+        if (CollectionUtil.isEmpty(specs) || attrIndex == null) {
+            return;
+        }
+        if (labelCache == null) {
+            labelCache = new DropdownLabelCache();
+        }
+        for (ColumnSpec spec : specs) {
+            if (spec == null || StrUtil.isBlank(spec.getDependAttrKey())) {
+                continue;
+            }
+            if (CollectionUtil.isNotEmpty(spec.getCascadeItems())) {
+                continue;
+            }
+            if (!ImportExportCascadeHelper.hasCascadeBind(spec)) {
+                continue;
+            }
+            AttrDefinition attr = attrIndex.get(spec.getAttrKey());
+            List<Map<String, Object>> rows = loadDataSourceRowsForCascade(spec, attr, labelCache);
+            List<CascadeItem> items = ImportExportCascadeBindCompiler.buildFromRows(rows, spec.getCascadeBind());
+            if (CollectionUtil.isEmpty(items)) {
+                String title = StrUtil.blankToDefault(spec.getColumnTitle(), spec.getAttrKey());
+                throw new CustomException("列【" + title + "】无法从数据来源生成级联选项。"
+                    + "请确认本列已配置 JSON/字典/自定义 API 数据来源，且「关联父值字段」在数据中有值（如 parentId、materialId）。");
+            }
+            spec.setCascadeItems(items);
+        }
+    }
+
+    private List<Map<String, Object>> loadDataSourceRowsForCascade(ColumnSpec spec, AttrDefinition attr,
+                                                                   DropdownLabelCache labelCache) {
+        EffectiveDataSource source = ImportExportColumnDataSourceHelper.resolveEffectiveSource(spec, attr);
+        if (source == null || source.getDataType() == null) {
+            return Collections.emptyList();
+        }
+        Integer dataType = source.getDataType();
+        if (AttrKeyDataType.CUSTOM.getKey().equals(dataType)) {
+            return ImportExportCascadeBindCompiler.parseJsonRows(source.getDefaultData());
+        }
+        if (AttrKeyDataType.DICT_DATA.getKey().equals(dataType) && StrUtil.isNotBlank(source.getObjectId())) {
+            String dictCode = source.getObjectId().trim();
+            if (!labelCache.dictRows.containsKey(dictCode)) {
+                Set<String> one = new HashSet<>();
+                one.add(dictCode);
+                preloadDictLabels(one, labelCache);
+            }
+            List<Map<String, Object>> rows = labelCache.dictRows.get(dictCode);
+            return rows != null ? rows : Collections.emptyList();
+        }
+        if (AttrKeyDataType.CUSTOM_API.getKey().equals(dataType)) {
+            return loadCustomApiRows(source.getBusinessApi(), labelCache);
+        }
+        return Collections.emptyList();
+    }
+
+    private List<Map<String, Object>> loadCustomApiRows(
+        com.skyeye.impexp.support.ImportExportConfigJsonHelper.BusinessApiConfig apiCfg,
+        DropdownLabelCache labelCache) {
+        if (apiCfg == null || StrUtil.isBlank(apiCfg.getApi())) {
+            return Collections.emptyList();
+        }
+        String cacheKey = buildCustomApiCacheKey(apiCfg);
+        if (labelCache != null && labelCache.apiRows.containsKey(cacheKey)) {
+            return labelCache.apiRows.get(cacheKey);
+        }
+        List<Map<String, Object>> rows = fetchCustomApiRows(apiCfg);
+        if (labelCache != null) {
+            labelCache.apiRows.put(cacheKey, rows);
+        }
+        return rows;
+    }
+
+    private String buildCustomApiCacheKey(com.skyeye.impexp.support.ImportExportConfigJsonHelper.BusinessApiConfig apiCfg) {
+        return StrUtil.blankToDefault(apiCfg.getServiceStr(), "")
+            + "|" + StrUtil.blankToDefault(apiCfg.getApi(), "")
+            + "|" + StrUtil.blankToDefault(apiCfg.getMethod(), "")
+            + "|" + JSONUtil.toJsonStr(apiCfg.getParams() == null ? Collections.emptyMap() : apiCfg.getParams());
+    }
+
+    /**
+     * 调用自定义 API 拉取下拉/级联数据（对齐报表 {@code getJsonStrByFromId} REST 调用方式）。
+     * <p>请求头带 userToken / tenantId；相对路径通过配置中心 configRation.json 拼 baseUrl。
+     */
+    private List<Map<String, Object>> fetchCustomApiRows(BusinessApiConfig apiCfg) {
+        String api = StrUtil.trim(apiCfg.getApi());
+        if (StrUtil.isBlank(api)) {
+            return Collections.emptyList();
+        }
+        Map<String, Object> params = new LinkedHashMap<>();
+        if (apiCfg.getParams() != null) {
+            for (Map.Entry<String, Object> e : apiCfg.getParams().entrySet()) {
+                if (e.getKey() == null || StrUtil.isBlank(e.getKey())) {
+                    continue;
+                }
+                String val = e.getValue() == null ? "" : String.valueOf(e.getValue()).trim();
+                // 模板场景无法解析表单占位符
+                if (val.startsWith("${") && val.endsWith("}")) {
+                    continue;
+                }
+                params.put(e.getKey().trim(), val);
+            }
+        }
+        String method = StrUtil.blankToDefault(apiCfg.getMethod(), HttpMethodEnum.POST_REQUEST.getKey());
+        String fullUrl = resolveCustomApiUrl(apiCfg.getServiceStr(), api);
+
+        Map<String, String> headers = new HashMap<>();
+        String userToken = InputObject.getRequest() != null
+            ? GetUserToken.getUserToken(InputObject.getRequest()) : null;
+        if (userToken != null) {
+            headers.put("userToken", userToken);
+        }
+        if (tenantEnable) {
+            String tenantId = TenantContext.getTenantId();
+            if (StrUtil.isNotBlank(tenantId)) {
+                headers.put("tenantId", tenantId);
+            }
+        }
+
+        String requestBody = JSONUtil.toJsonStr(params);
+        log.info("导入导出自定义API请求 - serviceStr: {}, api: {}, fullUrl: {}, method: {}, headers: {}, body: {}",
+            apiCfg.getServiceStr(), api, fullUrl, method, headers, requestBody);
+
+        String responseData = HttpRequestUtil.getDataByRequest(fullUrl, method, headers, requestBody);
+
+        log.info("导入导出自定义API响应 - fullUrl: {}, response: {}", fullUrl, responseData);
+
+        Map<String, Object> responseMap = JSONUtil.toBean(responseData, Map.class);
+        if (responseMap != null && responseMap.containsKey("returnCode")) {
+            Object codeObj = responseMap.get("returnCode");
+            int returnCode;
+            if (codeObj instanceof Number) {
+                returnCode = ((Number) codeObj).intValue();
+            } else {
+                returnCode = Integer.parseInt(String.valueOf(codeObj));
+            }
+            if (returnCode != 0) {
+                String message = String.valueOf(responseMap.getOrDefault("returnMessage", "外部服务调用异常"));
+                log.error("导入导出自定义API调用失败 - serviceStr: {}, api: {}, fullUrl: {}, method: {}, returnCode: {}, returnMessage: {}, response: {}",
+                    apiCfg.getServiceStr(), api, fullUrl, method, returnCode, message, responseData);
+                throw new CustomException("外部服务调用异常：" + message);
+            }
+        }
+        return parseCustomApiResponseRows(responseData);
+    }
+
+    /**
+     * 解析自定义 API 地址：绝对路径直接使用；相对路径从配置中心取 baseUrl 拼接（同报表 resolveRestUrl）。
+     */
+    private String resolveCustomApiUrl(String serviceStr, String api) {
+        if (StrUtil.isBlank(api)) {
+            return api;
+        }
+        String restUrl = api.trim();
+        if (restUrl.startsWith("http://") || restUrl.startsWith("https://")) {
+            return restUrl;
+        }
+        if (StrUtil.isBlank(serviceStr)) {
+            return restUrl;
+        }
+        String configKey = serviceStr.contains(".")
+            ? serviceStr.substring(serviceStr.indexOf('.') + 1)
+            : serviceStr.trim();
+        Map<String, Object> config = getConfigWithCache(env);
+        if (config == null || !config.containsKey(configKey)) {
+            throw new CustomException("未找到服务地址配置：" + configKey);
+        }
+        String baseUrl = config.get(configKey) == null ? null : config.get(configKey).toString();
+        if (StrUtil.isBlank(baseUrl)) {
+            throw new CustomException("服务地址配置为空：" + configKey);
+        }
+        baseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
+        restUrl = restUrl.startsWith("/") ? restUrl : "/" + restUrl;
+        return baseUrl + restUrl;
+    }
+
+    /**
+     * 带本地缓存的配置获取（configRation.json），永久缓存，重启失效。
+     */
+    private Map<String, Object> getConfigWithCache(String envKey) {
+        return configCache.computeIfAbsent(envKey, k -> {
+            URI uri = getServiceUri(springApplicationName);
+            String responseData = HttpRequestUtil.getDataByRequest(
+                uri.toString() + "/configRation.json?env=",
+                HttpMethodEnum.GET_REQUEST.getKey(), null, null);
+            return JSONUtil.toBean(responseData, null);
+        });
+    }
+
+    private URI getServiceUri(String applicationName) {
+        List<ServiceInstance> allInstances = discoveryClient.getInstances(applicationName);
+        if (CollectionUtils.isEmpty(allInstances)) {
+            throw new CustomException(String.format(Locale.ROOT, "this service[%s] has no instance.", applicationName));
+        }
+        return RandomUtil.randomEle(allInstances).getUri();
+    }
+
+    private List<Map<String, Object>> parseCustomApiResponseRows(String response) {
+        List<Map<String, Object>> rows = new ArrayList<>();
+        if (StrUtil.isBlank(response)) {
+            return rows;
+        }
+        try {
+            JSONObject root = JSONUtil.parseObj(response);
+            Object rowsObj = root.get("rows");
+            if (rowsObj == null) {
+                rowsObj = root.get("bean");
+            }
+            if (rowsObj instanceof JSONArray) {
+                JSONArray arr = (JSONArray) rowsObj;
+                for (int i = 0; i < arr.size(); i++) {
+                    Object item = arr.get(i);
+                    if (item instanceof JSONObject) {
+                        rows.add(new LinkedHashMap<>((JSONObject) item));
+                    } else if (item instanceof Map) {
+                        @SuppressWarnings("unchecked")
+                        Map<String, Object> map = (Map<String, Object>) item;
+                        rows.add(new LinkedHashMap<>(map));
+                    }
+                }
+            } else if (rowsObj instanceof JSONObject) {
+                rows.add(new LinkedHashMap<>((JSONObject) rowsObj));
+            }
+        } catch (Exception ignore) {
+            // ignore
+        }
+        return rows;
     }
 
     private Map<String, ColumnSpec> buildSpecByAttrKey(List<ColumnSpec> specs) {
@@ -1518,6 +1794,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             // 阶段 2：按 typeId 批量取字典项，再按 code 聚合成 labels
             Map<String, List<String>> labelsByCode = new HashMap<>();
             Map<String, Map<String, String>> idLabelByCode = new HashMap<>();
+            Map<String, List<Map<String, Object>>> rowsByCode = new HashMap<>();
             if (CollectionUtil.isNotEmpty(typeIds)) {
                 QueryWrapper<SysDictData> queryWrapper = new QueryWrapper<>();
                 queryWrapper.in(MybatisPlusUtil.toColumns(SysDictData::getDictTypeId), typeIds);
@@ -1538,6 +1815,12 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
                         if (StrUtil.isNotBlank(data.getId())) {
                             idLabelByCode.get(code).put(data.getId().trim(), data.getDictName().trim());
                         }
+                        Map<String, Object> row = new LinkedHashMap<>();
+                        row.put("id", data.getId());
+                        row.put("parentId", data.getParentId());
+                        row.put("name", data.getDictName());
+                        row.put("dictName", data.getDictName());
+                        rowsByCode.computeIfAbsent(code, k -> new ArrayList<>()).add(row);
                     }
                 }
             }
@@ -1545,6 +1828,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
                 List<String> labels = labelsByCode.getOrDefault(code, Collections.emptyList());
                 labelCache.dictLabels.put(code, labels.toArray(new String[0]));
                 labelCache.dictIdToLabel.put(code, idLabelByCode.getOrDefault(code, Collections.emptyMap()));
+                labelCache.dictRows.put(code, rowsByCode.getOrDefault(code, Collections.emptyList()));
             }
         } catch (Exception e) {
             // 批量异常：对尚未写入的 code 打空，避免 resolve 阶段反复 miss 查库
@@ -1608,7 +1892,30 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             }
         }
         if (AttrKeyDataType.CUSTOM_API.getKey().equals(dataType)) {
-            return null;
+            List<Map<String, Object>> rows = loadCustomApiRows(source.getBusinessApi(), labelCache);
+            if (CollectionUtil.isEmpty(rows)) {
+                return null;
+            }
+            List<String> labels = new ArrayList<>();
+            for (Map<String, Object> row : rows) {
+                if (row == null) {
+                    continue;
+                }
+                Object name = row.get("name");
+                if (name == null) {
+                    name = row.get("label");
+                }
+                if (name == null) {
+                    name = row.get("title");
+                }
+                if (name == null) {
+                    name = row.get("id");
+                }
+                if (name != null && StrUtil.isNotBlank(String.valueOf(name))) {
+                    labels.add(String.valueOf(name).trim());
+                }
+            }
+            return labels.isEmpty() ? null : labels.toArray(new String[0]);
         }
         return null;
     }

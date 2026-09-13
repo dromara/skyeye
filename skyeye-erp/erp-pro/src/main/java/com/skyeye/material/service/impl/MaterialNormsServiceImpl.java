@@ -248,7 +248,7 @@ public class MaterialNormsServiceImpl extends SkyeyeBusinessServiceImpl<Material
             // 总库存
             String allStock = allNormsStock.stream()
                 .map(MaterialNormsStock::getStock)
-                .reduce(CommonNumConstants.NUM_ZERO.toString(), 
+                .reduce(CommonNumConstants.NUM_ZERO.toString(),
                     (sum, stock) -> {
                         String stockValue = StrUtil.isEmpty(stock) ? CommonNumConstants.NUM_ZERO.toString() : stock;
                         String sumValue = StrUtil.isEmpty(sum) ? CommonNumConstants.NUM_ZERO.toString() : sum;
@@ -258,7 +258,7 @@ public class MaterialNormsServiceImpl extends SkyeyeBusinessServiceImpl<Material
             String initialTock = allNormsStock.stream()
                 .filter(bean -> bean.getType().equals(MaterialNormsStockType.INIT_STOCK.getKey()))
                 .map(MaterialNormsStock::getStock)
-                .reduce(CommonNumConstants.NUM_ZERO.toString(), 
+                .reduce(CommonNumConstants.NUM_ZERO.toString(),
                     (sum, stock) -> {
                         String stockValue = StrUtil.isEmpty(stock) ? CommonNumConstants.NUM_ZERO.toString() : stock;
                         String sumValue = StrUtil.isEmpty(sum) ? CommonNumConstants.NUM_ZERO.toString() : sum;
@@ -330,7 +330,7 @@ public class MaterialNormsServiceImpl extends SkyeyeBusinessServiceImpl<Material
             String allStock = allNormsStock.stream()
                 .filter(bean -> StrUtil.equals(bean.getDepotId(), depotId))
                 .map(MaterialNormsStock::getStock)
-                .reduce(CommonNumConstants.NUM_ZERO.toString(), 
+                .reduce(CommonNumConstants.NUM_ZERO.toString(),
                     (sum, stock) -> {
                         String stockValue = StrUtil.isEmpty(stock) ? CommonNumConstants.NUM_ZERO.toString() : stock;
                         String sumValue = StrUtil.isEmpty(sum) ? CommonNumConstants.NUM_ZERO.toString() : sum;
@@ -340,7 +340,7 @@ public class MaterialNormsServiceImpl extends SkyeyeBusinessServiceImpl<Material
             String initialTock = allNormsStock.stream()
                 .filter(bean -> bean.getType().equals(MaterialNormsStockType.INIT_STOCK.getKey()) && StrUtil.equals(bean.getDepotId(), depotId))
                 .map(MaterialNormsStock::getStock)
-                .reduce(CommonNumConstants.NUM_ZERO.toString(), 
+                .reduce(CommonNumConstants.NUM_ZERO.toString(),
                     (sum, stock) -> {
                         String stockValue = StrUtil.isEmpty(stock) ? CommonNumConstants.NUM_ZERO.toString() : stock;
                         String sumValue = StrUtil.isEmpty(sum) ? CommonNumConstants.NUM_ZERO.toString() : sum;
@@ -378,6 +378,7 @@ public class MaterialNormsServiceImpl extends SkyeyeBusinessServiceImpl<Material
      * 获取所有启用规格（无入参）：规格启用，且所属商品启用、未删除；联表时显式带租户条件。
      */
     @Override
+    @IgnoreTenant
     public void queryAllNormsList(InputObject inputObject, OutputObject outputObject) {
         MPJLambdaWrapper<MaterialNorms> wrapper = JoinWrappers.lambda("norms", MaterialNorms.class)
             .selectAll(MaterialNorms.class)

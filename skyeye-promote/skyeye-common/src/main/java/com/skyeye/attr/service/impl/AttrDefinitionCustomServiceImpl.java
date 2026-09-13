@@ -120,10 +120,12 @@ public class AttrDefinitionCustomServiceImpl extends SkyeyeBusinessServiceImpl<A
         wrapper.eq(MybatisPlusUtil.toColumns(AttrDefinitionCustom::getClassName), className);
         wrapper.eq(MybatisPlusUtil.toColumns(AttrDefinitionCustom::getAttrKey), attrKey);
         AttrDefinitionCustom attrDefinitionCustom = getOne(wrapper);
-        if (ObjectUtil.isNotEmpty(attrDefinitionCustom) && StrUtil.isNotEmpty(attrDefinitionCustom.getComponentId())) {
-            // 查询组件信息
-            DsFormComponent dsFormComponent = dsFormComponentService.selectById(attrDefinitionCustom.getComponentId());
-            attrDefinitionCustom.setDsFormComponent(dsFormComponent);
+        if (ObjectUtil.isNotEmpty(attrDefinitionCustom)) {
+            if (StrUtil.isNotEmpty(attrDefinitionCustom.getComponentId())) {
+                // 查询组件信息
+                DsFormComponent dsFormComponent = dsFormComponentService.selectById(attrDefinitionCustom.getComponentId());
+                attrDefinitionCustom.setDsFormComponent(dsFormComponent);
+            }
             // 查询属性关联的自定义的api接口
             if (attrDefinitionCustom.getDataType() != null && attrDefinitionCustom.getDataType().equals(AttrKeyDataType.CUSTOM_API.getKey())) {
                 attrDefinitionCustom.setBusinessApi(businessApiService.selectByObjectId(attrDefinitionCustom.getId()));
