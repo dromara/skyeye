@@ -26,18 +26,21 @@ public class SalesOrderStatisticsController {
     private SalesOrderStatisticsService salesOrderStatisticsService;
 
     @ApiOperation(id = "querySalesOrderTotalPrice", value = "销售订单总金额", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
     @RequestMapping("/post/SalesOrderStatisticsController/querySalesOrderTotalPrice")
     public void querySalesOrderTotalPrice(InputObject inputObject, OutputObject outputObject) {
         salesOrderStatisticsService.querySalesOrderTotalPrice(inputObject, outputObject);
     }
 
     @ApiOperation(id = "querySalesOrderCustomerCount", value = "签单客户数", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
     @RequestMapping("/post/SalesOrderStatisticsController/querySalesOrderCustomerCount")
     public void querySalesOrderCustomerCount(InputObject inputObject, OutputObject outputObject) {
         salesOrderStatisticsService.querySalesOrderCustomerCount(inputObject, outputObject);
     }
 
     @ApiOperation(id = "querySalesOrderSignCount", value = "销售订单签署数量", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
     @RequestMapping("/post/SalesOrderStatisticsController/querySalesOrderSignCount")
     public void querySalesOrderSignCount(InputObject inputObject, OutputObject outputObject) {
         salesOrderStatisticsService.querySalesOrderSignCount(inputObject, outputObject);

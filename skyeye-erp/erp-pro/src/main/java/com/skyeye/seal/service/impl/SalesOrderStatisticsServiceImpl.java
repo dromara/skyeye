@@ -15,6 +15,7 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
+import com.skyeye.common.util.StatQueryUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.seal.entity.SalesOrder;
 import com.skyeye.seal.service.SalesOrderService;
@@ -32,20 +33,21 @@ import java.util.stream.Collectors;
 
 /**
  * 「已签署」= 审核通过及之后的履约状态；草稿/审批中/驳回/撤销不计入。
- * 总金额、签单客户数、签署数量为全量，不按时间筛选；日度趋势按单据日期 operTime。
  */
 @Service
 public class SalesOrderStatisticsServiceImpl implements SalesOrderStatisticsService {
+
+    private static final int DEFAULT_STAT_DAYS = 30;
 
     @Autowired
     private SalesOrderService salesOrderService;
 
     /**
-     * 已签署订单 totalPrice 合计（保留两位小数）。无时间条件。
+     * 时间范围内已签署订单 totalPrice 合计（保留两位小数）。
      */
     @Override
     public void querySalesOrderTotalPrice(InputObject inputObject, OutputObject outputObject) {
-        List<SalesOrder> orderList = querySignedSalesOrderList();
+        List<SalesOrder> orderList = querySignedSalesOrderList(inputObject.getParams(TableSelectInfo.class));
         Map<String, Object> result = new HashMap<>();
         result.put("totalPrice", sumTotalPrice(orderList));
         outputObject.setBean(result);
@@ -53,11 +55,11 @@ public class SalesOrderStatisticsServiceImpl implements SalesOrderStatisticsServ
     }
 
     /**
-     * 签单客户数 = 已签署订单中 holderId（客户）去重个数，空客户不计入。同一客户多张单只算 1。无时间条件。
+     * 签单客户数 = 时间范围内已签署订单中 holderId 去重个数，空客户不计入。同一客户多张单只算 1。
      */
     @Override
     public void querySalesOrderCustomerCount(InputObject inputObject, OutputObject outputObject) {
-        List<SalesOrder> orderList = querySignedSalesOrderList();
+        List<SalesOrder> orderList = querySignedSalesOrderList(inputObject.getParams(TableSelectInfo.class));
         Map<String, Object> result = new HashMap<>();
         result.put("customerCount", countSignedCustomer(orderList));
         outputObject.setBean(result);
@@ -65,11 +67,11 @@ public class SalesOrderStatisticsServiceImpl implements SalesOrderStatisticsServ
     }
 
     /**
-     * 签署数量 = 已签署订单张数，不去重客户。无时间条件。
+     * 签署数量 = 时间范围内已签署订单张数，不去重客户。
      */
     @Override
     public void querySalesOrderSignCount(InputObject inputObject, OutputObject outputObject) {
-        List<SalesOrder> orderList = querySignedSalesOrderList();
+        List<SalesOrder> orderList = querySignedSalesOrderList(inputObject.getParams(TableSelectInfo.class));
         Map<String, Object> result = new HashMap<>();
         result.put("orderCount", orderList.size());
         outputObject.setBean(result);
@@ -77,15 +79,15 @@ public class SalesOrderStatisticsServiceImpl implements SalesOrderStatisticsServ
     }
 
     /**
-     * 按天输出已签署订单数量和金额。未传起止日期时默认近 30 天。
+     * 按天输出已签署订单数量和金额。
      * 先铺满日期轴，当天无单则数量 0、金额 "0"，保证趋势图连续。
      */
     @Override
     public void querySalesOrderTrend(InputObject inputObject, OutputObject outputObject) {
         TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
-        fillDefaultTrendTime(tableSelectInfo);
-        List<String> dayList = DateUtil.getDays(tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
-        Map<String, List<SalesOrder>> groupByDay = querySignedSalesOrderGroupByDay(tableSelectInfo);
+        String[] range = resolveOperTimeRange(tableSelectInfo);
+        List<String> dayList = DateUtil.getDays(range[0].substring(0, 10), range[1].substring(0, 10));
+        Map<String, List<SalesOrder>> groupByDay = querySignedSalesOrderGroupByDay(range);
         List<Long> orderCountList = new ArrayList<>();
         List<String> moneyList = new ArrayList<>();
         Long defaultValue = Long.valueOf(CommonNumConstants.NUM_ZERO);
@@ -108,31 +110,17 @@ public class SalesOrderStatisticsServiceImpl implements SalesOrderStatisticsServ
     }
 
     /**
-     * 未传起止日期时，默认近 30 天（含今天），对齐设备巡检日度趋势。
+     * 解析统计时间窗
      */
-    private void fillDefaultTrendTime(TableSelectInfo tableSelectInfo) {
-        if (StrUtil.isEmpty(tableSelectInfo.getStartTime()) || StrUtil.isEmpty(tableSelectInfo.getEndTime())) {
-            tableSelectInfo.setStartTime(DateUtil.formatDate2Str(
-                DateUtil.getAfDate(DateUtil.getPointTime(DateUtil.getYmdTimeAndToString(), DateUtil.YYYY_MM_DD), -30, "d"),
-                DateUtil.YYYY_MM_DD));
-            tableSelectInfo.setEndTime(DateUtil.getYmdTimeAndToString());
-        }
+    private String[] resolveOperTimeRange(TableSelectInfo tableSelectInfo) {
+        return StatQueryUtil.resolveStatTimeRange(tableSelectInfo, DEFAULT_STAT_DAYS);
     }
 
     /**
-     * 已签署订单按 operTime 截到天分组。结束日若只到 yyyy-MM-dd，补 23:59:59 以免漏当天。
+     * 已签署订单按 operTime 截到天分组。
      */
-    private Map<String, List<SalesOrder>> querySignedSalesOrderGroupByDay(TableSelectInfo tableSelectInfo) {
-        QueryWrapper<SalesOrder> queryWrapper = buildSignedQueryWrapper();
-        String operTime = MybatisPlusUtil.toColumns(SalesOrder::getOperTime);
-        if (StrUtil.isNotEmpty(tableSelectInfo.getStartTime())) {
-            queryWrapper.ge(operTime, tableSelectInfo.getStartTime());
-        }
-        if (StrUtil.isNotEmpty(tableSelectInfo.getEndTime())) {
-            String endTime = tableSelectInfo.getEndTime();
-            queryWrapper.le(operTime, endTime.length() == CommonNumConstants.NUM_TEN ? endTime + " 23:59:59" : endTime);
-        }
-        List<SalesOrder> orderList = salesOrderService.list(queryWrapper);
+    private Map<String, List<SalesOrder>> querySignedSalesOrderGroupByDay(String[] range) {
+        List<SalesOrder> orderList = salesOrderService.list(buildSignedQueryWrapper(range));
         if (CollectionUtil.isEmpty(orderList)) {
             return new HashMap<>();
         }
@@ -159,20 +147,23 @@ public class SalesOrderStatisticsServiceImpl implements SalesOrderStatisticsServ
     }
 
     /**
-     * 销售订单与出库/退货等同表 erp_depothead，必须用 id_key 限定本服务，再筛已签署状态。
+     * 销售订单与出库/退货等同表 erp_depothead，必须用 id_key 限定本服务，再筛已签署状态和单据日期。
      */
-    private QueryWrapper<SalesOrder> buildSignedQueryWrapper() {
+    private QueryWrapper<SalesOrder> buildSignedQueryWrapper(String[] range) {
         QueryWrapper<SalesOrder> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(SalesOrder::getIdKey), salesOrderService.getServiceClassName());
         queryWrapper.in(MybatisPlusUtil.toColumns(SalesOrder::getState), getSignedStateList());
+        String operTime = MybatisPlusUtil.toColumns(SalesOrder::getOperTime);
+        queryWrapper.ge(operTime, range[0]);
+        queryWrapper.le(operTime, range[1]);
         return queryWrapper;
     }
 
     /**
-     * 全量已签署销售订单，卡片指标共用这一批数据。
+     * 时间范围内已签署销售订单，卡片指标共用这一批数据。
      */
-    private List<SalesOrder> querySignedSalesOrderList() {
-        List<SalesOrder> orderList = salesOrderService.list(buildSignedQueryWrapper());
+    private List<SalesOrder> querySignedSalesOrderList(TableSelectInfo tableSelectInfo) {
+        List<SalesOrder> orderList = salesOrderService.list(buildSignedQueryWrapper(resolveOperTimeRange(tableSelectInfo)));
         if (CollectionUtil.isEmpty(orderList)) {
             return new ArrayList<>();
         }

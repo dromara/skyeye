@@ -9,26 +9,27 @@ import com.skyeye.common.object.OutputObject;
 
 /**
  * 销售订单统计：现查现算，不落统计表。口径均为「已签署」订单（审核通过及之后）。
+ * 入参 startTime/endTime（单据日期），缺一则默认近 30 天。
  */
 public interface SalesOrderStatisticsService {
 
     /**
-     * 已签署订单金额合计。全量，不按时间筛选。
+     * 已签署订单金额合计。按单据日期 operTime 筛选。
      */
     void querySalesOrderTotalPrice(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 签单客户数：已签署订单的客户 id 去重。同一客户多单只算 1。全量，不按时间筛选。
+     * 签单客户数：已签署订单的客户 id 去重。同一客户多单只算 1。按 operTime 筛选。
      */
     void querySalesOrderCustomerCount(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 签署数量：已签署订单张数。全量，不按时间筛选。
+     * 签署数量：已签署订单张数。按 operTime 筛选。
      */
     void querySalesOrderSignCount(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 按单据日期的日度趋势（当天单量 + 当天金额）。未传日期默认近 30 天。
+     * 按单据日期的日度趋势（当天单量 + 当天金额）。
      */
     void querySalesOrderTrend(InputObject inputObject, OutputObject outputObject);
 }
