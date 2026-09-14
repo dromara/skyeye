@@ -28,6 +28,14 @@ public final class ImportExportCascadeBindCompiler {
     }
 
     public static List<CascadeItem> buildFromRows(List<Map<String, Object>> rows, CascadeBind bind) {
+        return buildFromRows(rows, bind, null);
+    }
+
+    /**
+     * @param parentIdToLabel 父编码 → 展示名（来自父列数据源）；为空时根节点 name 暂用编码，后续再 enrich
+     */
+    public static List<CascadeItem> buildFromRows(List<Map<String, Object>> rows, CascadeBind bind,
+                                                  Map<String, String> parentIdToLabel) {
         if (CollectionUtil.isEmpty(rows) || bind == null || StrUtil.isBlank(bind.getLinkField())) {
             return Collections.emptyList();
         }
@@ -53,7 +61,12 @@ public final class ImportExportCascadeBindCompiler {
             CascadeItem root = roots.computeIfAbsent(parentVal, k -> {
                 CascadeItem item = new CascadeItem();
                 item.setCode(k);
-                item.setName(k);
+                // 父展示名来自父列数据源，不能用子表行上的 name（规格名）
+                String parentName = null;
+                if (parentIdToLabel != null && !parentIdToLabel.isEmpty()) {
+                    parentName = parentIdToLabel.get(k);
+                }
+                item.setName(StrUtil.blankToDefault(StrUtil.trim(parentName), k));
                 item.setChildren(new ArrayList<>());
                 return item;
             });

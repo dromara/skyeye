@@ -1288,7 +1288,85 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         }
         // 级联必须生效：数据来源绑定编译失败应抛出给用户
         ensureCascadeItemsFromBind(specs, attrIndex, labelCache);
+        enrichCascadeParentLabels(specs, attrIndex, labelCache);
         ImportExportCascadeHelper.applyToExportStyle(style, specs, keys);
+    }
+
+    /**
+     * 用父列数据来源的展示字段填充级联根节点 name（否则根 name=id，父列下拉仍是 id）。
+     */
+    private void enrichCascadeParentLabels(List<ColumnSpec> specs, Map<String, AttrDefinition> attrIndex,
+                                           DropdownLabelCache labelCache) {
+        if (CollectionUtil.isEmpty(specs) || attrIndex == null) {
+            return;
+        }
+        Map<String, ColumnSpec> specMap = buildSpecByAttrKey(specs);
+        Map<String, Map<String, String>> parentIdToLabelCache = new HashMap<>();
+        for (ColumnSpec spec : specs) {
+            if (spec == null || StrUtil.isBlank(spec.getDependAttrKey()) || CollectionUtil.isEmpty(spec.getCascadeItems())) {
+                continue;
+            }
+            String parentKey = spec.getDependAttrKey().trim();
+            Map<String, String> idToLabel = parentIdToLabelCache.computeIfAbsent(parentKey, pk -> {
+                ColumnSpec parentSpec = specMap.get(pk);
+                AttrDefinition parentAttr = attrIndex.get(pk);
+                return buildIdToLabelMap(parentSpec, parentAttr, labelCache);
+            });
+            if (idToLabel.isEmpty()) {
+                continue;
+            }
+            for (CascadeItem root : spec.getCascadeItems()) {
+                if (root == null || !ImportExportCascadeHelper.isValidCode(root.getCode())) {
+                    continue;
+                }
+                String code = root.getCode().trim();
+                String label = idToLabel.get(code);
+                if (StrUtil.isNotBlank(label)) {
+                    root.setName(label.trim());
+                }
+            }
+        }
+    }
+
+    private Map<String, String> buildIdToLabelMap(ColumnSpec spec, AttrDefinition attr, DropdownLabelCache labelCache) {
+        Map<String, String> map = new LinkedHashMap<>();
+        EffectiveDataSource source = ImportExportColumnDataSourceHelper.resolveEffectiveSource(spec, attr);
+        if (source == null || source.getDataType() == null) {
+            return map;
+        }
+        Integer dataType = source.getDataType();
+        String valueField = StrUtil.blankToDefault(source.getValueField(), "id");
+        String labelField = source.getLabelField();
+        if (AttrKeyDataType.CUSTOM.getKey().equals(dataType) && StrUtil.isNotBlank(source.getDefaultData())) {
+            return ImportExportColumnDataSourceHelper.buildCustomJsonIdToLabel(
+                source.getDefaultData(), valueField, labelField);
+        }
+        if (AttrKeyDataType.CUSTOM_API.getKey().equals(dataType)) {
+            List<Map<String, Object>> rows = loadCustomApiRows(source.getBusinessApi(), labelCache);
+            for (Map<String, Object> row : rows) {
+                String id = ImportExportColumnDataSourceHelper.pickValueFromRow(row, valueField);
+                String label = ImportExportColumnDataSourceHelper.pickLabelFromRow(row, labelField);
+                if (StrUtil.isNotBlank(id) && StrUtil.isNotBlank(label)) {
+                    map.put(id.trim(), label.trim());
+                }
+            }
+            return map;
+        }
+        if (AttrKeyDataType.DICT_DATA.getKey().equals(dataType) && StrUtil.isNotBlank(source.getObjectId())) {
+            Map<String, String> dict = labelCache != null
+                ? labelCache.dictIdToLabel.get(source.getObjectId().trim()) : null;
+            if (dict != null) {
+                map.putAll(dict);
+            }
+            return map;
+        }
+        if (AttrKeyDataType.ENUM_DATA.getKey().equals(dataType)) {
+            Map<String, String> enumMap = getEnumCodeToLabelMap(source, labelCache);
+            if (enumMap != null) {
+                map.putAll(enumMap);
+            }
+        }
+        return map;
     }
 
     /**
@@ -1312,13 +1390,41 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             if (!ImportExportCascadeHelper.hasCascadeBind(spec)) {
                 continue;
             }
+            // 级联取值/展示字段优先用 cascadeBind；未配则继承列数据源
+            CascadeBind bind = spec.getCascadeBind();
+            EffectiveDataSource dsForBind = ImportExportColumnDataSourceHelper.resolveEffectiveSource(spec, attrIndex.get(spec.getAttrKey()));
+            if (bind != null && dsForBind != null) {
+                if (StrUtil.isBlank(bind.getValueField()) && StrUtil.isNotBlank(dsForBind.getValueField())) {
+                    bind.setValueField(dsForBind.getValueField().trim());
+                }
+                if (StrUtil.isBlank(bind.getLabelField()) && StrUtil.isNotBlank(dsForBind.getLabelField())) {
+                    bind.setLabelField(dsForBind.getLabelField().trim());
+                }
+            }
             AttrDefinition attr = attrIndex.get(spec.getAttrKey());
             List<Map<String, Object>> rows = loadDataSourceRowsForCascade(spec, attr, labelCache);
-            List<CascadeItem> items = ImportExportCascadeBindCompiler.buildFromRows(rows, spec.getCascadeBind());
+            // 父列展示名必须来自父列数据源（产品 name），不能用子表规格 name
+            String parentKey = spec.getDependAttrKey().trim();
+            ColumnSpec parentSpec = null;
+            for (ColumnSpec s : specs) {
+                if (s != null && StrUtil.equals(parentKey, s.getAttrKey())) {
+                    parentSpec = s;
+                    break;
+                }
+            }
+            Map<String, String> parentIdToLabel = buildIdToLabelMap(parentSpec, attrIndex.get(parentKey), labelCache);
+            List<CascadeItem> items = ImportExportCascadeBindCompiler.buildFromRows(rows, bind, parentIdToLabel);
             if (CollectionUtil.isEmpty(items)) {
                 String title = StrUtil.blankToDefault(spec.getColumnTitle(), spec.getAttrKey());
                 throw new CustomException("列【" + title + "】无法从数据来源生成级联选项。"
                     + "请确认本列已配置 JSON/字典/自定义 API 数据来源，且「关联父值字段」在数据中有值（如 parentId、materialId）。");
+            }
+            if (parentIdToLabel.isEmpty()) {
+                String title = StrUtil.blankToDefault(spec.getColumnTitle(), spec.getAttrKey());
+                String parentTitle = parentSpec != null
+                    ? StrUtil.blankToDefault(parentSpec.getColumnTitle(), parentKey) : parentKey;
+                throw new CustomException("列【" + title + "】依赖的父列【" + parentTitle
+                    + "】未能解析出「编码→名称」映射。请为父列配置自定义 API/JSON，并填写取值字段(id)、展示字段(name)。");
             }
             spec.setCascadeItems(items);
         }
@@ -1886,7 +1992,8 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             }
         }
         if (AttrKeyDataType.CUSTOM.getKey().equals(dataType) && StrUtil.isNotBlank(source.getDefaultData())) {
-            List<String> labels = ImportExportColumnDataSourceHelper.loadCustomJsonLabels(source.getDefaultData());
+            List<String> labels = ImportExportColumnDataSourceHelper.loadCustomJsonLabels(
+                source.getDefaultData(), source.getLabelField());
             if (CollectionUtil.isNotEmpty(labels)) {
                 return labels.toArray(new String[0]);
             }
@@ -1898,21 +2005,9 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             }
             List<String> labels = new ArrayList<>();
             for (Map<String, Object> row : rows) {
-                if (row == null) {
-                    continue;
-                }
-                Object name = row.get("name");
-                if (name == null) {
-                    name = row.get("label");
-                }
-                if (name == null) {
-                    name = row.get("title");
-                }
-                if (name == null) {
-                    name = row.get("id");
-                }
-                if (name != null && StrUtil.isNotBlank(String.valueOf(name))) {
-                    labels.add(String.valueOf(name).trim());
+                String label = ImportExportColumnDataSourceHelper.pickLabelFromRow(row, source.getLabelField());
+                if (StrUtil.isNotBlank(label)) {
+                    labels.add(label.trim());
                 }
             }
             return labels.isEmpty() ? null : labels.toArray(new String[0]);
@@ -1954,6 +2049,7 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
 
     /**
      * 导出时将编号/键转为显示名称（按列 exportValueMode=label）。
+     * <p>级联父/子列也转为展示名；导入时会通过级联树还原为编码。
      */
     private void applyExportDisplayValues(List<Map<String, Object>> rows, List<ColumnSpec> specs,
                                           Map<String, AttrDefinition> attrIndex, DropdownLabelCache labelCache) {
@@ -1963,6 +2059,8 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
         if (labelCache == null) {
             labelCache = new DropdownLabelCache();
         }
+        ensureCascadeItemsFromBind(specs, attrIndex, labelCache);
+        enrichCascadeParentLabels(specs, attrIndex, labelCache);
         String[] keys = specs.stream().map(ColumnSpec::getAttrKey).filter(StrUtil::isNotBlank).toArray(String[]::new);
         preloadEnumAndDictLabels(keys, specs, attrIndex, labelCache);
         for (Map<String, Object> row : rows) {
@@ -1978,11 +2076,36 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
                 }
                 Object raw = ExcelUtil.getValueByAttrPath(row, spec.getAttrKey());
                 Object display = resolveExportDisplayValue(raw, spec, attrIndex.get(spec.getAttrKey()), labelCache);
+                if (display == null || Objects.equals(String.valueOf(display), String.valueOf(raw))) {
+                    display = resolveCascadeItemDisplay(raw, spec);
+                }
                 if (display != null && !Objects.equals(String.valueOf(display), String.valueOf(raw))) {
                     putImportCellValue(row, spec.getAttrKey(), String.valueOf(display), null);
                 }
             }
         }
+    }
+
+    /** 从级联树取子项展示名。 */
+    private Object resolveCascadeItemDisplay(Object raw, ColumnSpec spec) {
+        if (raw == null || spec == null || StrUtil.isBlank(spec.getDependAttrKey())) {
+            return raw;
+        }
+        String code = String.valueOf(raw).trim();
+        if (code.isEmpty() || CollectionUtil.isEmpty(spec.getCascadeItems())) {
+            return raw;
+        }
+        for (CascadeItem root : spec.getCascadeItems()) {
+            if (root == null || CollectionUtil.isEmpty(root.getChildren())) {
+                continue;
+            }
+            for (CascadeItem child : root.getChildren()) {
+                if (child != null && StrUtil.equals(code, StrUtil.trim(child.getCode()))) {
+                    return StrUtil.blankToDefault(StrUtil.trim(child.getName()), code);
+                }
+            }
+        }
+        return raw;
     }
 
     private Object resolveExportDisplayValue(Object raw, ColumnSpec spec, AttrDefinition attr,
@@ -2014,9 +2137,25 @@ public class ImportExportConfigServiceImpl extends SkyeyeBusinessServiceImpl<Imp
             return raw;
         }
         if (AttrKeyDataType.CUSTOM.getKey().equals(dataType) && StrUtil.isNotBlank(source.getDefaultData())) {
-            Map<String, String> map = ImportExportColumnDataSourceHelper.buildCustomJsonIdToLabel(source.getDefaultData());
+            Map<String, String> map = ImportExportColumnDataSourceHelper.buildCustomJsonIdToLabel(
+                source.getDefaultData(), source.getValueField(), source.getLabelField());
             if (map.containsKey(code)) {
                 return map.get(code);
+            }
+            return raw;
+        }
+        if (AttrKeyDataType.CUSTOM_API.getKey().equals(dataType)) {
+            List<Map<String, Object>> apiRows = loadCustomApiRows(source.getBusinessApi(), labelCache);
+            if (CollectionUtil.isEmpty(apiRows)) {
+                return raw;
+            }
+            String valueField = StrUtil.blankToDefault(source.getValueField(), "id");
+            for (Map<String, Object> apiRow : apiRows) {
+                String id = ImportExportColumnDataSourceHelper.pickValueFromRow(apiRow, valueField);
+                if (StrUtil.equals(code, id)) {
+                    String label = ImportExportColumnDataSourceHelper.pickLabelFromRow(apiRow, source.getLabelField());
+                    return StrUtil.isNotBlank(label) ? label : raw;
+                }
             }
             return raw;
         }

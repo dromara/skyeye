@@ -80,6 +80,8 @@ public final class ImportExportColumnDataSourceHelper {
         out.setObjectId(StrUtil.blankToDefault(override.getObjectId(), null));
         out.setDefaultData(StrUtil.blankToDefault(override.getDefaultData(), null));
         out.setBusinessApi(override.getBusinessApi());
+        out.setValueField(StrUtil.blankToDefault(override.getValueField(), null));
+        out.setLabelField(StrUtil.blankToDefault(override.getLabelField(), null));
         return out;
     }
 
@@ -151,6 +153,13 @@ public final class ImportExportColumnDataSourceHelper {
      * 解析 JSON 自定义数据来源的下拉文案。
      */
     public static List<String> loadCustomJsonLabels(String defaultData) {
+        return loadCustomJsonLabels(defaultData, null);
+    }
+
+    /**
+     * @param labelField 优先展示字段，空则回退 name/label/title/id
+     */
+    public static List<String> loadCustomJsonLabels(String defaultData, String labelField) {
         List<String> labels = new ArrayList<>();
         if (StrUtil.isBlank(defaultData)) {
             return labels;
@@ -161,7 +170,7 @@ public final class ImportExportColumnDataSourceHelper {
                 Object item = arr.get(i);
                 if (item instanceof JSONObject) {
                     JSONObject o = (JSONObject) item;
-                    String label = firstNonBlank(o.getStr("name"), o.getStr("label"), o.getStr("title"), o.getStr("id"));
+                    String label = pickLabel(o, labelField);
                     if (StrUtil.isNotBlank(label)) {
                         labels.add(label.trim());
                     }
@@ -179,10 +188,15 @@ public final class ImportExportColumnDataSourceHelper {
      * 构建 JSON 自定义 id → 显示名。
      */
     public static Map<String, String> buildCustomJsonIdToLabel(String defaultData) {
+        return buildCustomJsonIdToLabel(defaultData, null, null);
+    }
+
+    public static Map<String, String> buildCustomJsonIdToLabel(String defaultData, String valueField, String labelField) {
         Map<String, String> map = new LinkedHashMap<>();
         if (StrUtil.isBlank(defaultData)) {
             return map;
         }
+        String vf = StrUtil.blankToDefault(StrUtil.trim(valueField), "id");
         try {
             JSONArray arr = JSONUtil.parseArray(defaultData);
             for (int i = 0; i < arr.size(); i++) {
@@ -191,8 +205,8 @@ public final class ImportExportColumnDataSourceHelper {
                     continue;
                 }
                 JSONObject o = (JSONObject) item;
-                String id = firstNonBlank(o.getStr("id"), o.getStr("key"), o.getStr("value"));
-                String label = firstNonBlank(o.getStr("name"), o.getStr("label"), o.getStr("title"), id);
+                String id = firstNonBlank(o.getStr(vf), o.getStr("id"), o.getStr("key"), o.getStr("value"));
+                String label = pickLabel(o, labelField);
                 if (StrUtil.isNotBlank(id) && StrUtil.isNotBlank(label)) {
                     map.put(id.trim(), label.trim());
                     map.putIfAbsent(label.trim(), label.trim());
@@ -202,6 +216,50 @@ public final class ImportExportColumnDataSourceHelper {
             // ignore
         }
         return map;
+    }
+
+    /**
+     * 从行 Map 取展示文案。
+     */
+    public static String pickLabelFromRow(Map<String, Object> row, String labelField) {
+        if (row == null || row.isEmpty()) {
+            return null;
+        }
+        if (StrUtil.isNotBlank(labelField) && row.get(labelField.trim()) != null
+            && StrUtil.isNotBlank(String.valueOf(row.get(labelField.trim())))) {
+            return String.valueOf(row.get(labelField.trim())).trim();
+        }
+        return firstNonBlank(
+            strOf(row.get("name")),
+            strOf(row.get("label")),
+            strOf(row.get("title")),
+            strOf(row.get("dictName")),
+            strOf(row.get("id")));
+    }
+
+    public static String pickValueFromRow(Map<String, Object> row, String valueField) {
+        if (row == null || row.isEmpty()) {
+            return null;
+        }
+        String vf = StrUtil.blankToDefault(StrUtil.trim(valueField), "id");
+        if (row.get(vf) != null && StrUtil.isNotBlank(String.valueOf(row.get(vf)))) {
+            return String.valueOf(row.get(vf)).trim();
+        }
+        return firstNonBlank(strOf(row.get("id")), strOf(row.get("dictId")), strOf(row.get("value")));
+    }
+
+    private static String pickLabel(JSONObject o, String labelField) {
+        if (o == null) {
+            return null;
+        }
+        if (StrUtil.isNotBlank(labelField) && StrUtil.isNotBlank(o.getStr(labelField.trim()))) {
+            return o.getStr(labelField.trim()).trim();
+        }
+        return firstNonBlank(o.getStr("name"), o.getStr("label"), o.getStr("title"), o.getStr("dictName"), o.getStr("id"));
+    }
+
+    private static String strOf(Object v) {
+        return v == null ? null : String.valueOf(v);
     }
 
     private static String firstNonBlank(String... values) {
@@ -223,5 +281,7 @@ public final class ImportExportColumnDataSourceHelper {
         private String defaultData;
         private String enumClassStr;
         private BusinessApiConfig businessApi;
+        private String valueField;
+        private String labelField;
     }
 }

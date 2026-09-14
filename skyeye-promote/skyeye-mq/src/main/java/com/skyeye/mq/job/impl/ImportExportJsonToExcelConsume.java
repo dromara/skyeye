@@ -300,6 +300,68 @@ public class ImportExportJsonToExcelConsume implements RocketMQListener<String> 
                     s.columnDateFormats = formats;
                 }
             }
+            JSONArray cascadeParents = o.getJSONArray("columnCascadeParentColumns");
+            if (cascadeParents != null && !cascadeParents.isEmpty()) {
+                s.columnCascadeParentColumns = new int[cascadeParents.size()];
+                for (int i = 0; i < cascadeParents.size(); i++) {
+                    Object v = cascadeParents.get(i);
+                    if (v instanceof Number) {
+                        s.columnCascadeParentColumns[i] = ((Number) v).intValue();
+                    } else {
+                        s.columnCascadeParentColumns[i] = -1;
+                    }
+                }
+            }
+            JSONArray cascadeLists = o.getJSONArray("cascadeNamedLists");
+            if (cascadeLists != null && !cascadeLists.isEmpty()) {
+                List<ExcelUtil.CascadeNamedList> namedLists = new ArrayList<>();
+                for (int i = 0; i < cascadeLists.size(); i++) {
+                    Object cell = cascadeLists.get(i);
+                    JSONObject one = cell instanceof JSONObject ? (JSONObject) cell
+                        : (cell instanceof Map ? JSONUtil.parseObj(JSONUtil.toJsonStr(cell)) : null);
+                    if (one == null) {
+                        continue;
+                    }
+                    ExcelUtil.CascadeNamedList named = new ExcelUtil.CascadeNamedList();
+                    named.rangeName = one.getStr("rangeName");
+                    JSONArray vals = one.getJSONArray("values");
+                    if (vals != null && !vals.isEmpty()) {
+                        String[] arr = new String[vals.size()];
+                        for (int j = 0; j < vals.size(); j++) {
+                            Object v = vals.get(j);
+                            arr[j] = v == null ? null : String.valueOf(v);
+                        }
+                        named.values = arr;
+                    }
+                    if (StrUtil.isNotBlank(named.rangeName) && named.values != null && named.values.length > 0) {
+                        namedLists.add(named);
+                    }
+                }
+                if (!namedLists.isEmpty()) {
+                    s.cascadeNamedLists = namedLists;
+                }
+            }
+            JSONArray labelMaps = o.getJSONArray("cascadeParentLabelMaps");
+            if (labelMaps != null && !labelMaps.isEmpty()) {
+                List<ExcelUtil.CascadeLabelMapRow> rows = new ArrayList<>();
+                for (int i = 0; i < labelMaps.size(); i++) {
+                    Object cell = labelMaps.get(i);
+                    JSONObject one = cell instanceof JSONObject ? (JSONObject) cell
+                        : (cell instanceof Map ? JSONUtil.parseObj(JSONUtil.toJsonStr(cell)) : null);
+                    if (one == null) {
+                        continue;
+                    }
+                    ExcelUtil.CascadeLabelMapRow row = new ExcelUtil.CascadeLabelMapRow();
+                    row.label = one.getStr("label");
+                    row.code = one.getStr("code");
+                    if (StrUtil.isNotBlank(row.code)) {
+                        rows.add(row);
+                    }
+                }
+                if (!rows.isEmpty()) {
+                    s.cascadeParentLabelMaps = rows;
+                }
+            }
             return s;
         } catch (Exception e) {
             return null;

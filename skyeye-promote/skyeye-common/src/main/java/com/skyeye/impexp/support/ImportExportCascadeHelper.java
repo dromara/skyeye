@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 /**
  * 导入导出列级联（企业版约定）：
  * <ul>
- *   <li>Excel 单元格与命名区域一律使用稳定编码 {@code code}，禁止用中文展示名做 INDIRECT 匹配；</li>
- *   <li>命名区域名 = {@link #NAME_PREFIX} + code（如 cas_GD），公式：{@code INDIRECT("cas_"&$父列行)}；</li>
- *   <li>{@code name} 仅用于设计器展示/备注，不参与 Excel 联动。</li>
+ *   <li>命名区域仍按稳定编码 {@code code}（{@code cas_} + code）；</li>
+ *   <li>父列下拉/单元格可显示 {@code name}，子列通过 VLOOKUP(_sky_pmap) 还原编码后再 INDIRECT；</li>
+ *   <li>子列命名区域列表优先写展示名，导入时再还原为编码。</li>
  * </ul>
  */
 public final class ImportExportCascadeHelper {
@@ -207,6 +207,7 @@ public final class ImportExportCascadeHelper {
 
     /**
      * 将本 Sheet 列的级联配置写入 {@link ExcelUtil.SheetExportStyle}。
+     * <p>父列下拉使用展示名；命名区域仍按编码；写入 label→code 映射供 VLOOKUP。
      */
     public static void applyToExportStyle(ExcelUtil.SheetExportStyle style, List<ColumnSpec> specs, String[] keys) {
         if (style == null || keys == null || keys.length == 0 || CollectionUtil.isEmpty(specs)) {
@@ -218,17 +219,13 @@ public final class ImportExportCascadeHelper {
                 keyIndex.put(keys[i], i);
             }
         }
-        Map<String, ColumnSpec> specMap = new HashMap<>();
-        for (ColumnSpec spec : specs) {
-            if (spec != null && StrUtil.isNotBlank(spec.getAttrKey())) {
-                specMap.put(spec.getAttrKey(), spec);
-            }
-        }
 
         // rangeName -> values（合并同名时必须一致，否则报错）
         Map<String, String[]> namedLists = new LinkedHashMap<>();
-        // 父列 attrKey -> 作为级联根的 code 列表（有序去重）
-        Map<String, LinkedHashSet<String>> parentRootCodes = new LinkedHashMap<>();
+        // 父列 attrKey -> 展示名列表（有序去重）
+        Map<String, LinkedHashSet<String>> parentRootLabels = new LinkedHashMap<>();
+        // 展示名/编码 -> 编码（写入 _sky_pmap）
+        Map<String, String> labelToCode = new LinkedHashMap<>();
         int[] cascadeParent = new int[keys.length];
         Arrays.fill(cascadeParent, -1);
 
@@ -242,12 +239,17 @@ public final class ImportExportCascadeHelper {
                 continue;
             }
             cascadeParent[childIdx] = parentIdx;
-            LinkedHashSet<String> roots = parentRootCodes.computeIfAbsent(spec.getDependAttrKey().trim(),
+            LinkedHashSet<String> labels = parentRootLabels.computeIfAbsent(spec.getDependAttrKey().trim(),
                 k -> new LinkedHashSet<>());
             for (CascadeItem root : spec.getCascadeItems()) {
-                if (root != null && isValidCode(root.getCode())) {
-                    roots.add(root.getCode().trim());
+                if (root == null || !isValidCode(root.getCode())) {
+                    continue;
                 }
+                String code = root.getCode().trim();
+                String label = uniqueParentLabel(root, labelToCode).replace(',', '，').trim();
+                labels.add(label);
+                labelToCode.put(label, code);
+                labelToCode.putIfAbsent(code, code);
             }
             collectNamedLists(spec.getCascadeItems(), namedLists, spec.getAttrKey());
         }
@@ -266,11 +268,28 @@ public final class ImportExportCascadeHelper {
         style.cascadeNamedLists = list;
         style.columnCascadeParentColumns = cascadeParent;
 
-        // 父列下拉改为根编码（覆盖中文枚举等，保证与 cas_ 编码一致）
+        List<ExcelUtil.CascadeLabelMapRow> mapRows = new ArrayList<>();
+        Set<String> emitted = new HashSet<>();
+        for (Map.Entry<String, String> e : labelToCode.entrySet()) {
+            if (e.getKey() == null || e.getValue() == null) {
+                continue;
+            }
+            String key = e.getKey().trim();
+            if (!emitted.add(key)) {
+                continue;
+            }
+            ExcelUtil.CascadeLabelMapRow row = new ExcelUtil.CascadeLabelMapRow();
+            row.label = key;
+            row.code = e.getValue().trim();
+            mapRows.add(row);
+        }
+        style.cascadeParentLabelMaps = mapRows;
+
+        // 父列下拉改为展示名（覆盖中文枚举等）
         if (style.columnDropdownOptions == null || style.columnDropdownOptions.length != keys.length) {
             style.columnDropdownOptions = new String[keys.length][];
         }
-        for (Map.Entry<String, LinkedHashSet<String>> e : parentRootCodes.entrySet()) {
+        for (Map.Entry<String, LinkedHashSet<String>> e : parentRootLabels.entrySet()) {
             Integer idx = keyIndex.get(e.getKey());
             if (idx == null) {
                 continue;
@@ -283,6 +302,19 @@ public final class ImportExportCascadeHelper {
                 style.columnDropdownOptions[i] = null;
             }
         }
+    }
+
+    /**
+     * 父根节点展示名：优先 name；与其它编码重名时追加 (code) 消歧。
+     */
+    private static String uniqueParentLabel(CascadeItem root, Map<String, String> labelToCode) {
+        String code = root.getCode().trim();
+        String label = StrUtil.blankToDefault(StrUtil.trim(root.getName()), code);
+        String existed = labelToCode.get(label);
+        if (existed != null && !StrUtil.equals(existed, code)) {
+            label = label + "(" + code + ")";
+        }
+        return label;
     }
 
     private static void collectNamedLists(List<CascadeItem> items, Map<String, String[]> namedLists, String ownerAttrKey) {
@@ -298,11 +330,23 @@ public final class ImportExportCascadeHelper {
                 continue;
             }
             String rangeName = toRangeName(item.getCode());
-            String[] childCodes = children.stream()
-                .filter(c -> c != null && isValidCode(c.getCode()))
-                .map(c -> c.getCode().trim())
-                .distinct()
-                .toArray(String[]::new);
+            // 子项下拉优先展示名，导入时再还原编码
+            LinkedHashSet<String> childLabels = new LinkedHashSet<>();
+            Map<String, String> localLabelToCode = new HashMap<>();
+            for (CascadeItem c : children) {
+                if (c == null || !isValidCode(c.getCode())) {
+                    continue;
+                }
+                String childCode = c.getCode().trim();
+                String childLabel = StrUtil.blankToDefault(StrUtil.trim(c.getName()), childCode);
+                String existed = localLabelToCode.get(childLabel);
+                if (existed != null && !StrUtil.equals(existed, childCode)) {
+                    childLabel = childLabel + "(" + childCode + ")";
+                }
+                localLabelToCode.put(childLabel, childCode);
+                childLabels.add(childLabel);
+            }
+            String[] childCodes = childLabels.toArray(new String[0]);
             if (childCodes.length == 0) {
                 continue;
             }
@@ -320,6 +364,98 @@ public final class ImportExportCascadeHelper {
     }
 
     /**
+     * 导入前：将父/子单元格中的展示名还原为编码（支持直接填编码）。
+     */
+    public static void resolveImportLabelsToCodes(Map<String, String> cellByAttrKey, List<ColumnSpec> specs) {
+        if (cellByAttrKey == null || CollectionUtil.isEmpty(specs)) {
+            return;
+        }
+        for (ColumnSpec spec : specs) {
+            if (spec == null || StrUtil.isBlank(spec.getDependAttrKey()) || CollectionUtil.isEmpty(spec.getCascadeItems())) {
+                continue;
+            }
+            String parentKey = spec.getDependAttrKey().trim();
+            String parentRaw = StrUtil.trim(cellByAttrKey.get(parentKey));
+            String parentCode = resolveNodeToCode(spec.getCascadeItems(), parentRaw, true);
+            if (StrUtil.isNotBlank(parentCode)) {
+                cellByAttrKey.put(parentKey, parentCode);
+            }
+            String childRaw = StrUtil.trim(cellByAttrKey.get(spec.getAttrKey()));
+            if (StrUtil.isBlank(childRaw)) {
+                continue;
+            }
+            String effectiveParent = StrUtil.blankToDefault(parentCode, parentRaw);
+            String childCode = resolveChildToCode(spec.getCascadeItems(), effectiveParent, childRaw);
+            if (StrUtil.isNotBlank(childCode)) {
+                cellByAttrKey.put(spec.getAttrKey(), childCode);
+            }
+        }
+    }
+
+    /** 在根（或整树）中按 code/name 匹配节点编码。 */
+    private static String resolveNodeToCode(List<CascadeItem> items, String raw, boolean rootsOnly) {
+        if (StrUtil.isBlank(raw) || CollectionUtil.isEmpty(items)) {
+            return null;
+        }
+        String val = raw.trim();
+        for (CascadeItem item : items) {
+            if (item == null) {
+                continue;
+            }
+            if (StrUtil.equals(val, StrUtil.trim(item.getCode()))
+                || StrUtil.equals(val, StrUtil.trim(item.getName()))
+                || StrUtil.equals(val, uniqueDisplay(item))) {
+                return StrUtil.trim(item.getCode());
+            }
+            if (!rootsOnly) {
+                String deeper = resolveNodeToCode(item.getChildren(), val, false);
+                if (StrUtil.isNotBlank(deeper)) {
+                    return deeper;
+                }
+            }
+        }
+        return isValidCode(val) ? val : null;
+    }
+
+    private static String resolveChildToCode(List<CascadeItem> roots, String parentCodeOrLabel, String childRaw) {
+        if (StrUtil.isBlank(childRaw) || CollectionUtil.isEmpty(roots)) {
+            return null;
+        }
+        String parentCode = resolveNodeToCode(roots, parentCodeOrLabel, true);
+        if (StrUtil.isBlank(parentCode)) {
+            return isValidCode(childRaw) ? childRaw.trim() : null;
+        }
+        for (CascadeItem root : roots) {
+            if (root == null || !StrUtil.equals(parentCode, StrUtil.trim(root.getCode()))) {
+                continue;
+            }
+            if (CollectionUtil.isEmpty(root.getChildren())) {
+                return isValidCode(childRaw) ? childRaw.trim() : null;
+            }
+            for (CascadeItem child : root.getChildren()) {
+                if (child == null) {
+                    continue;
+                }
+                if (StrUtil.equals(childRaw, StrUtil.trim(child.getCode()))
+                    || StrUtil.equals(childRaw, StrUtil.trim(child.getName()))
+                    || StrUtil.equals(childRaw, uniqueDisplay(child))) {
+                    return StrUtil.trim(child.getCode());
+                }
+            }
+        }
+        return isValidCode(childRaw) ? childRaw.trim() : null;
+    }
+
+    private static String uniqueDisplay(CascadeItem item) {
+        if (item == null || !isValidCode(item.getCode())) {
+            return null;
+        }
+        String code = item.getCode().trim();
+        String name = StrUtil.blankToDefault(StrUtil.trim(item.getName()), code);
+        return name;
+    }
+
+    /**
      * 导入行校验：子编码必须属于父编码对应的子项。
      *
      * @return 错误信息列表（空表示通过）
@@ -329,6 +465,8 @@ public final class ImportExportCascadeHelper {
         if (cellByAttrKey == null || CollectionUtil.isEmpty(specs)) {
             return errors;
         }
+        // 先把展示名还原为编码，再校验
+        resolveImportLabelsToCodes(cellByAttrKey, specs);
         for (ColumnSpec spec : specs) {
             if (spec == null || StrUtil.isBlank(spec.getDependAttrKey()) || CollectionUtil.isEmpty(spec.getCascadeItems())) {
                 continue;
@@ -344,16 +482,16 @@ public final class ImportExportCascadeHelper {
                 continue;
             }
             if (!isValidCode(parentVal) || !isValidCode(childVal)) {
-                errors.add("第" + excelRowNo + "行：级联列只允许编码/编号（字母数字下划线，禁止中文），当前父="
+                errors.add("第" + excelRowNo + "行：级联列无法识别父/子值（请从下拉选择），当前父="
                     + parentVal + " 子=" + childVal);
                 continue;
             }
             Set<String> allowed = findChildCodes(spec.getCascadeItems(), parentVal);
             if (allowed == null) {
-                errors.add("第" + excelRowNo + "行：父编码【" + parentVal + "】不在【"
+                errors.add("第" + excelRowNo + "行：父值【" + parentVal + "】不在【"
                     + displayTitle(spec) + "】的级联树中。");
             } else if (!allowed.contains(childVal)) {
-                errors.add("第" + excelRowNo + "行：子编码【" + childVal + "】不属于父编码【"
+                errors.add("第" + excelRowNo + "行：子值【" + childVal + "】不属于父【"
                     + parentVal + "】（列 " + displayTitle(spec) + "）。");
             }
         }
