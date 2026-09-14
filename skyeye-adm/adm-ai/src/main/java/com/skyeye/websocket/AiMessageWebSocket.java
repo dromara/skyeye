@@ -44,6 +44,14 @@ public class AiMessageWebSocket {
 
     private static final int HIGH_WATER_MARK = 30;
 
+    /**
+     * 同一 userId 允许的最大并存连接数（多端场景保留若干条，防止无限堆积）。
+     * JVM：-Dai.ws.max.connections.per.user=5
+     * 环境变量：AI_WS_MAX_CONNECTIONS_PER_USER=5
+     */
+    private static final int MAX_CONNECTIONS_PER_USER = resolveIntConfig(
+        "ai.ws.max.connections.per.user", "AI_WS_MAX_CONNECTIONS_PER_USER", 5);
+
     private static final long HIGH_WARN_INTERVAL_MS = 5 * 60 * 1000L;
 
     private static final AtomicLong LAST_HIGH_WARN_MS = new AtomicLong(0);
@@ -74,7 +82,8 @@ public class AiMessageWebSocket {
     private String userId;
 
     static {
-        LOGGER.info("AI WebSocket 跨节点分发频道 -> {}, nodeId={}", WS_CLUSTER_CHANNEL, NODE_ID);
+        LOGGER.info("AI WebSocket 跨节点分发频道 -> {}, nodeId={}, maxConnPerUser={}",
+            WS_CLUSTER_CHANNEL, NODE_ID, MAX_CONNECTIONS_PER_USER);
     }
 
     @OnOpen
@@ -83,11 +92,44 @@ public class AiMessageWebSocket {
         this.session = session;
         CopyOnWriteArraySet<AiMessageWebSocket> set =
             clients.computeIfAbsent(userId, key -> new CopyOnWriteArraySet<>());
+        evictExcessConnections(userId, set);
         set.add(this);
         syncOnlineNumber();
         LOGGER.info("AI WebSocket 接入 userId={}, session={}, userConn={}, userCount={}, totalConn={}, nodeId={}",
             userId, sessionId(session), set.size(), clients.size(), totalConnectionCount(), NODE_ID);
         maybeWarnHighWater("open");
+    }
+
+    /**
+     * 超出单用户连接上限时关闭最旧连接（保留多端，但封顶防堆积）。
+     */
+    private static void evictExcessConnections(String userId, CopyOnWriteArraySet<AiMessageWebSocket> set) {
+        if (MAX_CONNECTIONS_PER_USER <= 0) {
+            return;
+        }
+        while (set.size() >= MAX_CONNECTIONS_PER_USER) {
+            AiMessageWebSocket oldest = null;
+            for (AiMessageWebSocket item : set) {
+                oldest = item;
+                break;
+            }
+            if (oldest == null) {
+                break;
+            }
+            set.remove(oldest);
+            try {
+                if (oldest.session != null && oldest.session.isOpen()) {
+                    oldest.session.close(new CloseReason(
+                        CloseReason.CloseCodes.TRY_AGAIN_LATER,
+                        "exceed max connections per user: " + MAX_CONNECTIONS_PER_USER));
+                }
+            } catch (Exception e) {
+                LOGGER.warn("关闭超额 AI WebSocket 失败 userId={}, session={}: {}",
+                    userId, sessionId(oldest.session), e.getMessage());
+            }
+            LOGGER.info("AI WebSocket 超额淘汰 userId={}, closedSession={}, remain={}, limit={}",
+                userId, sessionId(oldest.session), set.size(), MAX_CONNECTIONS_PER_USER);
+        }
     }
 
     @OnError
@@ -327,6 +369,21 @@ public class AiMessageWebSocket {
                 return defaultValue;
             }
             return value.trim();
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
+
+    private static int resolveIntConfig(String systemPropertyKey, String envKey, int defaultValue) {
+        try {
+            String value = System.getProperty(systemPropertyKey);
+            if (ToolUtil.isBlank(value)) {
+                value = System.getenv(envKey);
+            }
+            if (ToolUtil.isBlank(value)) {
+                return defaultValue;
+            }
+            return Integer.parseInt(value.trim());
         } catch (Exception e) {
             return defaultValue;
         }
