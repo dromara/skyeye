@@ -22,6 +22,10 @@ public class ConferenceWebSocketHandler extends TextWebSocketHandler {
         String conferenceNo = getConferenceNo(session);
         String userId = getUserId(session);
 
+        // WebRTC 信令 / 聊天体积远小于该上限；与全局容器缓冲保持一致
+        session.setTextMessageSizeLimit(256 * 1024);
+        session.setBinaryMessageSizeLimit(256 * 1024);
+
         // 将用户加入会议室
         conferenceRooms.computeIfAbsent(conferenceNo, k -> new ConcurrentHashMap<>())
             .put(userId, session);
