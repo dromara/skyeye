@@ -173,6 +173,10 @@ public final class ImportExportConfigJsonHelper {
         private String defaultData;
         /** dataType=4 时：自定义 API */
         private BusinessApiConfig businessApi;
+        /** 写入 Excel / 业务主键字段，默认 id */
+        private String valueField;
+        /** 下拉/导出展示字段，默认 name */
+        private String labelField;
     }
 
     /**
@@ -286,6 +290,8 @@ public final class ImportExportConfigJsonHelper {
                 }
                 override.setObjectId(StrUtil.blankToDefault(ds.getStr("objectId"), null));
                 override.setDefaultData(StrUtil.blankToDefault(ds.getStr("defaultData"), null));
+                override.setValueField(StrUtil.blankToDefault(ds.getStr("valueField"), null));
+                override.setLabelField(StrUtil.blankToDefault(ds.getStr("labelField"), null));
                 JSONObject ba = ds.getJSONObject("businessApi");
                 if (ba != null && !ba.isEmpty()) {
                     BusinessApiConfig apiCfg = new BusinessApiConfig();
