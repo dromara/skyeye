@@ -8,11 +8,13 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.bug.service.AutoBugService;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.object.ResultEntity;
 import com.skyeye.common.tenant.context.TenantContext;
+import com.skyeye.demand.service.AutoDemandService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.product.service.AutoProductService;
 import com.skyeye.project.dao.AutoProjectDao;
@@ -44,6 +46,12 @@ public class AutoProjectServiceImpl extends SkyeyeBusinessServiceImpl<AutoProjec
 
     @Autowired
     private AutoProductService autoProductService;
+
+    @Autowired
+    private AutoDemandService autoDemandService;
+
+    @Autowired
+    private AutoBugService autoBugService;
 
     @Override
     public void queryAutoProjectList(InputObject inputObject, OutputObject outputObject) {
@@ -96,6 +104,18 @@ public class AutoProjectServiceImpl extends SkyeyeBusinessServiceImpl<AutoProjec
     @Override
     public void deletePostpose(String id) {
         iTeamBusinessService.deleteTeamBusiness(id, getServiceClassName());
+    }
+
+    /**
+     * 移出团队成员后：将该成员负责的需求/Bug 默认转给项目经理
+     */
+    @Override
+    public void teamMemberRemovePostpose(String objectId, List<String> removeUserIds, String chargeUserId) {
+        if (StrUtil.isBlank(objectId) || CollectionUtil.isEmpty(removeUserIds) || StrUtil.isBlank(chargeUserId)) {
+            return;
+        }
+        autoDemandService.reassignHandlerToChargeUser(objectId, removeUserIds, chargeUserId);
+        autoBugService.reassignHandlerToChargeUser(objectId, removeUserIds, chargeUserId);
     }
 
     @Override

@@ -9,6 +9,8 @@ import com.skyeye.bug.entity.AutoBug;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 
+import java.util.List;
+
 /**
  * @ClassName: AutoBugService
  * @Description: bug管理服务接口层
@@ -24,4 +26,13 @@ public interface AutoBugService extends SkyeyeTeamAuthService<AutoBug> {
     void aiGenerateCaseFailureBugDraft(InputObject inputObject, OutputObject outputObject);
 
     void aiParseBugDraft(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 将被移出成员负责的 Bug 转交给项目经理
+     *
+     * @param projectId     项目id
+     * @param removeUserIds 被移出成员
+     * @param chargeUserId  项目经理
+     */
+    void reassignHandlerToChargeUser(String projectId, List<String> removeUserIds, String chargeUserId);
 }

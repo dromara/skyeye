@@ -24,6 +24,8 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
+import com.skyeye.sdk.data.entity.TeamMemberRemove;
+import com.skyeye.sdk.data.service.IDataService;
 import com.skyeye.team.dao.TeamBusinessDao;
 import com.skyeye.team.entity.TeamBusiness;
 import com.skyeye.team.entity.TeamRoleUser;
@@ -63,6 +65,29 @@ public class TeamBusinessServiceImpl extends AbstractTeamServiceImpl<TeamBusines
 
     @Autowired
     private SkyeyeClassEnumService skyeyeClassEnumService;
+
+    @Autowired
+    private IDataService iDataService;
+
+    /**
+     * 业务团队移出成员后，回调关联业务对象（如自动化项目）做后续处理
+     */
+    @Override
+    protected void teamMemberRemovePostpose(TeamBusiness entity, List<String> removeUserIds) {
+        if (entity == null || CollectionUtil.isEmpty(removeUserIds)) {
+            return;
+        }
+        if (StrUtil.isBlank(entity.getObjectId()) || StrUtil.isBlank(entity.getObjectKey())) {
+            return;
+        }
+        TeamMemberRemove teamMemberRemove = new TeamMemberRemove();
+        teamMemberRemove.setObjectId(entity.getObjectId());
+        teamMemberRemove.setServiceClassName(entity.getObjectKey());
+        teamMemberRemove.setChargeUserId(entity.getChargeUser());
+        teamMemberRemove.setRemoveUserIds(StrUtil.join(StrUtil.COMMA, removeUserIds));
+        teamMemberRemove.setAppId(StrUtil.EMPTY);
+        iDataService.teamMemberRemovePostpose(teamMemberRemove);
+    }
 
     /**
      * 根据团队模板生成团队信息

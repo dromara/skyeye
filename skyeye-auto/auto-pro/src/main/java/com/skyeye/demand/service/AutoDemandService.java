@@ -9,6 +9,8 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.demand.entity.AutoDemand;
 
+import java.util.List;
+
 /**
  * @ClassName: AutoDemandService
  * @Description: 需求类服务接口层
@@ -33,6 +35,15 @@ public interface AutoDemandService extends SkyeyeTeamAuthService<AutoDemand> {
     void aiGenerateCaseDraft(InputObject inputObject, OutputObject outputObject);
 
     void aiParseCaseDraft(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 将被移出成员负责的需求转交给项目经理
+     *
+     * @param projectId     项目id
+     * @param removeUserIds 被移出成员
+     * @param chargeUserId  项目经理
+     */
+    void reassignHandlerToChargeUser(String projectId, List<String> removeUserIds, String chargeUserId);
 
 }
 

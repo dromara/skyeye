@@ -658,4 +658,51 @@ public class AutoDemandServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoDemandD
         }
     }
 
+    @Override
+    public void reassignHandlerToChargeUser(String projectId, List<String> removeUserIds, String chargeUserId) {
+        if (StrUtil.isBlank(projectId) || StrUtil.isBlank(chargeUserId)
+            || removeUserIds == null || removeUserIds.isEmpty()) {
+            return;
+        }
+        List<String> userIds = removeUserIds.stream()
+            .filter(StrUtil::isNotBlank)
+            .filter(id -> !StrUtil.equals(id, chargeUserId))
+            .distinct()
+            .collect(java.util.stream.Collectors.toList());
+        if (userIds.isEmpty()) {
+            return;
+        }
+        QueryWrapper<AutoDemand> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoDemand::getObjectId), projectId)
+            .and(w -> w.in(MybatisPlusUtil.toColumns(AutoDemand::getFrontHandleId), userIds)
+                .or().in(MybatisPlusUtil.toColumns(AutoDemand::getBackHandleId), userIds)
+                .or().in(MybatisPlusUtil.toColumns(AutoDemand::getTestHandleId), userIds));
+        queryWrapper.select(CommonConstants.ID);
+        List<AutoDemand> list = list(queryWrapper);
+        if (list == null || list.isEmpty()) {
+            return;
+        }
+
+        UpdateWrapper<AutoDemand> frontUw = new UpdateWrapper<>();
+        frontUw.eq(MybatisPlusUtil.toColumns(AutoDemand::getObjectId), projectId)
+            .in(MybatisPlusUtil.toColumns(AutoDemand::getFrontHandleId), userIds)
+            .set(MybatisPlusUtil.toColumns(AutoDemand::getFrontHandleId), chargeUserId);
+        update(frontUw);
+
+        UpdateWrapper<AutoDemand> backUw = new UpdateWrapper<>();
+        backUw.eq(MybatisPlusUtil.toColumns(AutoDemand::getObjectId), projectId)
+            .in(MybatisPlusUtil.toColumns(AutoDemand::getBackHandleId), userIds)
+            .set(MybatisPlusUtil.toColumns(AutoDemand::getBackHandleId), chargeUserId);
+        update(backUw);
+
+        UpdateWrapper<AutoDemand> testUw = new UpdateWrapper<>();
+        testUw.eq(MybatisPlusUtil.toColumns(AutoDemand::getObjectId), projectId)
+            .in(MybatisPlusUtil.toColumns(AutoDemand::getTestHandleId), userIds)
+            .set(MybatisPlusUtil.toColumns(AutoDemand::getTestHandleId), chargeUserId);
+        update(testUw);
+
+        List<String> ids = list.stream().map(AutoDemand::getId).collect(java.util.stream.Collectors.toList());
+        refreshCache(ids);
+    }
+
 }

@@ -7,6 +7,7 @@ package com.skyeye.bug.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeTeamAuthServiceImpl;
 import com.skyeye.bug.classenum.BugAuthEnum;
@@ -183,5 +184,38 @@ public class AutoBugServiceImpl extends SkyeyeTeamAuthServiceImpl<AutoBugDao, Au
         Map<String, Object> bean = autoBugAiDraftService.parseAnswer(inputObject.getParams());
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void reassignHandlerToChargeUser(String projectId, List<String> removeUserIds, String chargeUserId) {
+        if (StrUtil.isBlank(projectId) || StrUtil.isBlank(chargeUserId)
+            || removeUserIds == null || removeUserIds.isEmpty()) {
+            return;
+        }
+        List<String> userIds = removeUserIds.stream()
+            .filter(StrUtil::isNotBlank)
+            .filter(id -> !StrUtil.equals(id, chargeUserId))
+            .distinct()
+            .collect(java.util.stream.Collectors.toList());
+        if (userIds.isEmpty()) {
+            return;
+        }
+        QueryWrapper<AutoBug> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getObjectId), projectId)
+            .in(MybatisPlusUtil.toColumns(AutoBug::getHandleId), userIds);
+        queryWrapper.select(com.skyeye.common.constans.CommonConstants.ID);
+        List<AutoBug> list = list(queryWrapper);
+        if (list == null || list.isEmpty()) {
+            return;
+        }
+
+        UpdateWrapper<AutoBug> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(MybatisPlusUtil.toColumns(AutoBug::getObjectId), projectId)
+            .in(MybatisPlusUtil.toColumns(AutoBug::getHandleId), userIds)
+            .set(MybatisPlusUtil.toColumns(AutoBug::getHandleId), chargeUserId);
+        update(updateWrapper);
+
+        List<String> ids = list.stream().map(AutoBug::getId).collect(java.util.stream.Collectors.toList());
+        refreshCache(ids);
     }
 }

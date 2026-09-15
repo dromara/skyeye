@@ -5,6 +5,7 @@
 package com.skyeye.team.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.object.InputObject;
@@ -53,7 +54,7 @@ public class AbstractTeamServiceImpl<D extends SkyeyeBaseMapper<T>, T extends Ab
             saveRole(userId, teamId, teamRoleList, serviceClassName);
         }
         // 修改团队用户信息
-        updateRoleUser(userId, teamId, teamRoleList, serviceClassName, new ArrayList<>());
+        updateRoleUser(userId, teamId, teamRoleList, serviceClassName, new ArrayList<>(), entity);
 
         if (CollectionUtil.isNotEmpty(entity.getTeamObjectPermissionList())) {
             saveTeamOwnerPermission(teamId, serviceClassName, userId, entity.getTeamObjectPermissionList());
@@ -73,18 +74,23 @@ public class AbstractTeamServiceImpl<D extends SkyeyeBaseMapper<T>, T extends Ab
             updateRole(userId, teamId, newTeamRoleList, serviceClassName, oldTeamRoleList, oldRoleKeys);
 
             // 修改团队用户信息
-            updateRoleUser(userId, teamId, newTeamRoleList, serviceClassName, oldTeamRoleList);
+            updateRoleUser(userId, teamId, newTeamRoleList, serviceClassName, oldTeamRoleList, entity);
 
             // 修改权限信息
             updatePermission(entity.getTeamObjectPermissionList(), oldTeam.getTeamObjectPermissionList(), teamId, serviceClassName, userId);
         } else {
             // 如果团队角色集合为空,则删除旧的团队角色和用户数据
+            T oldTeam = selectById(teamId);
+            List<String> removeUserIds = getTeamRoleUserList(
+                CollectionUtil.isEmpty(oldTeam.getTeamRoleList()) ? new ArrayList<>() : oldTeam.getTeamRoleList())
+                .stream().map(TeamRoleUser::getUserId).filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
             // 1. 删除团队模板与角色的关系
             teamRoleService.deleteRoleByTeamIds(teamId);
             // 2. 删除角色下的用户
             teamRoleUserService.deleteRoleUserByTeamIds(teamId);
             // 3. 删除团队下的权限信息
             teamObjectPermissionService.deletePermissionByTeamIds(teamId);
+            teamMemberRemovePostpose(entity, removeUserIds);
         }
     }
 
@@ -108,7 +114,8 @@ public class AbstractTeamServiceImpl<D extends SkyeyeBaseMapper<T>, T extends Ab
         }
     }
 
-    private void updateRoleUser(String userId, String teamId, List<TeamRole> newTeamRoleList, String serviceClassName, List<TeamRole> oldTeamRole) {
+    private void updateRoleUser(String userId, String teamId, List<TeamRole> newTeamRoleList, String serviceClassName,
+                                List<TeamRole> oldTeamRole, T entity) {
         List<TeamRoleUser> newRoleUser = getTeamRoleUserList(newTeamRoleList);
         List<TeamRoleUser> oldRoleUser = getTeamRoleUserList(oldTeamRole);
         // 同一团队下，一个人只能属于一个角色，比较键使用 teamId + userId
@@ -133,6 +140,9 @@ public class AbstractTeamServiceImpl<D extends SkyeyeBaseMapper<T>, T extends Ab
         if (CollectionUtil.isNotEmpty(deleteRoleUser)) {
             List<String> deleteRoleUserLinkIds = deleteRoleUser.stream().map(TeamRoleUser::getId).collect(Collectors.toList());
             teamRoleUserService.deleteById(deleteRoleUserLinkIds);
+            List<String> removeUserIds = deleteRoleUser.stream().map(TeamRoleUser::getUserId)
+                .filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+            teamMemberRemovePostpose(entity, removeUserIds);
         }
 
         List<TeamRoleUser> updateTeamRoleUser = new ArrayList<>();
@@ -146,6 +156,15 @@ public class AbstractTeamServiceImpl<D extends SkyeyeBaseMapper<T>, T extends Ab
         if (CollectionUtil.isNotEmpty(updateTeamRoleUser)) {
             teamRoleUserService.updateEntity(updateTeamRoleUser, userId);
         }
+    }
+
+    /**
+     * 团队移出成员后置钩子。业务团队可重写并回调关联业务对象。
+     *
+     * @param entity        团队实体
+     * @param removeUserIds 被移出的成员id
+     */
+    protected void teamMemberRemovePostpose(T entity, List<String> removeUserIds) {
     }
 
     private void updatePermission(List<TeamObjectPermission> newPermissionList, List<TeamObjectPermission> oldPermissionList, String teamId,
