@@ -92,7 +92,7 @@ import java.util.stream.Collectors;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
-@SkyeyeService(name = "仓库出库单", groupName = "仓库出入库", flowable = true)
+@SkyeyeService(name = "仓库出库单", groupName = "仓库出入库", flowable = true, orderApproval = true)
 public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, DepotOut> implements DepotOutService {
 
     private static final List<String> OUT_ORDER_TYPE = DepotOutFromType.getAllIdKeys();

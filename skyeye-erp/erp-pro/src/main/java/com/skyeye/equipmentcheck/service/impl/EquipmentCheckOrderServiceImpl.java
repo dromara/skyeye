@@ -41,7 +41,7 @@ import java.util.Map;
  * @Description: 设备点检单服务实现层
  */
 @Service
-@SkyeyeService(name = "设备点检单", groupName = "设备点检", flowable = true)
+@SkyeyeService(name = "设备点检单", groupName = "设备点检", flowable = true, orderApproval = true)
 public class EquipmentCheckOrderServiceImpl extends SkyeyeBusinessServiceImpl<EquipmentCheckOrderDao, EquipmentCheckOrder>
     implements EquipmentCheckOrderService {
 

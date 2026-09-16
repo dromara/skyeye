@@ -65,7 +65,7 @@ import java.util.stream.Collectors;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
-@SkyeyeService(name = "采购订单", groupName = "采购模块", flowable = true)
+@SkyeyeService(name = "采购订单", groupName = "采购模块", flowable = true, orderApproval = true)
 public class PurchaseOrderServiceImpl extends SkyeyeErpOrderServiceImpl<PurchaseOrderDao, PurchaseOrder> implements PurchaseOrderService {
 
     @Autowired

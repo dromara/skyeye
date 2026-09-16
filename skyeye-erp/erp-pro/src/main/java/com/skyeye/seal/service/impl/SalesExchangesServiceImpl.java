@@ -45,7 +45,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@SkyeyeService(name = "销售换货单", groupName = "销售模块", flowable = true)
+@SkyeyeService(name = "销售换货单", groupName = "销售模块", flowable = true, orderApproval = true)
 public class SalesExchangesServiceImpl extends SkyeyeErpOrderServiceImpl<SalesExchangesDao, SalesExchanges> implements SalesExchangesService {
 
     @Autowired

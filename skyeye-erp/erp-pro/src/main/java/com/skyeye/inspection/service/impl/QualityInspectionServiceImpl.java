@@ -71,7 +71,7 @@ import java.util.stream.Collectors;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
-@SkyeyeService(name = "质检单", groupName = "质检单", flowable = true)
+@SkyeyeService(name = "质检单", groupName = "质检单", flowable = true, orderApproval = true)
 public class QualityInspectionServiceImpl extends SkyeyeBusinessServiceImpl<QualityInspectionDao, QualityInspection> implements QualityInspectionService {
 
     @Autowired

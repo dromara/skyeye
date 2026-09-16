@@ -62,7 +62,7 @@ import java.util.stream.Collectors;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
-@SkyeyeService(name = "生产计划单管理", groupName = "生产计划单管理", flowable = true, allowDynamicAttrKey = false)
+@SkyeyeService(name = "生产计划单管理", groupName = "生产计划单管理", flowable = true, orderApproval = true, allowDynamicAttrKey = false)
 public class ProductionServiceImpl extends SkyeyeBusinessServiceImpl<ProductionDao, Production> implements ProductionService {
 
     @Autowired

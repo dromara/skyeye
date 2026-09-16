@@ -42,7 +42,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@SkyeyeService(name = "借出出库", groupName = "借出出库", flowable = true)
+@SkyeyeService(name = "借出出库", groupName = "借出出库", flowable = true, orderApproval = true)
 public class ProductLeadOutStockServiceImpl extends SkyeyeBusinessServiceImpl<ProductLeadOutStockDao, ProductLeadOutStock> implements ProductLeadOutStockService {
 
     @Autowired

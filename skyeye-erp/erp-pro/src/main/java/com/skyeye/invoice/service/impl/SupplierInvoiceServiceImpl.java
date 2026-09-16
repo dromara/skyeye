@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
-@SkyeyeService(name = "发票管理", groupName = "发票管理", teamAuth = true, flowable = true)
+@SkyeyeService(name = "发票管理", groupName = "发票管理", teamAuth = true, flowable = true, orderApproval = true)
 public class SupplierInvoiceServiceImpl extends SkyeyeBusinessServiceImpl<SupplierInvoiceDao, SupplierInvoice> implements SupplierInvoiceService {
 
     @Autowired

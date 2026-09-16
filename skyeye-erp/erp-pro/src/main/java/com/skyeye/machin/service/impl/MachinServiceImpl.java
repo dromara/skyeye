@@ -94,7 +94,7 @@ import java.util.stream.Collectors;
  */
 
 @Service
-@SkyeyeService(name = "加工单管理", groupName = "加工单管理", flowable = true)
+@SkyeyeService(name = "加工单管理", groupName = "加工单管理", flowable = true, orderApproval = true)
 public class MachinServiceImpl extends SkyeyeBusinessServiceImpl<MachinDao, Machin> implements MachinService {
 
     @Autowired

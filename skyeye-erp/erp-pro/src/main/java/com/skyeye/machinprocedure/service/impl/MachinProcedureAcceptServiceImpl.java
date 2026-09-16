@@ -59,7 +59,7 @@ import java.util.stream.Collectors;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
-@SkyeyeService(name = "工序验收", groupName = "工序验收", flowable = true)
+@SkyeyeService(name = "工序验收", groupName = "工序验收", flowable = true, orderApproval = true)
 public class MachinProcedureAcceptServiceImpl extends SkyeyeBusinessServiceImpl<MachinProcedureAcceptDao, MachinProcedureAccept> implements MachinProcedureAcceptService {
 
     @Autowired

@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@SkyeyeService(name = "归还申请", groupName = "归还申请", flowable = true)
+@SkyeyeService(name = "归还申请", groupName = "归还申请", flowable = true, orderApproval = true)
 public class ProductReturnServiceImpl extends SkyeyeBusinessServiceImpl<ProductReturnDao, ProductReturn> implements ProductReturnService {
 
     @Autowired

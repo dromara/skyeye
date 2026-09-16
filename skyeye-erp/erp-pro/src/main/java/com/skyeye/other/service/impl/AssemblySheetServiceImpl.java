@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
-@SkyeyeService(name = "组装单", groupName = "组装单模块", flowable = true)
+@SkyeyeService(name = "组装单", groupName = "组装单模块", flowable = true, orderApproval = true)
 public class AssemblySheetServiceImpl extends SkyeyeErpOrderServiceImpl<AssemblySheetDao, AssemblySheet> implements AssemblySheetService {
 
     @Override

@@ -43,7 +43,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@SkyeyeService(name = "归还入库", groupName = "归还入库", flowable = true)
+@SkyeyeService(name = "归还入库", groupName = "归还入库", flowable = true, orderApproval = true)
 public class ProductReturnInStockServiceImpl extends SkyeyeBusinessServiceImpl<ProductReturnInStockDao, ProductReturnInStock> implements ProductReturnInStockService {
 
     @Autowired

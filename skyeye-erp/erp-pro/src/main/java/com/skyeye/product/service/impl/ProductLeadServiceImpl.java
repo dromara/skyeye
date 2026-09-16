@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@SkyeyeService(name = "借出申请", groupName = "借出申请", flowable = true)
+@SkyeyeService(name = "借出申请", groupName = "借出申请", flowable = true, orderApproval = true)
 public class ProductLeadServiceImpl extends SkyeyeBusinessServiceImpl<ProductLeadDao, ProductLead> implements ProductLeadService {
 
     @Autowired
