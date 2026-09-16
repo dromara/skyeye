@@ -77,7 +77,7 @@ public class SystemFoundationSettings extends CommonInfo {
     private List<Map<String, Object>> abnormalMation;
 
     @TableField(value = "sys_order_basic_design", typeHandler = JacksonTypeHandler.class)
-    @ApiModelProperty(value = "系统单据是否需要审核的设置--暂时没用", required = "json")
+    @ApiModelProperty(value = "单据审批配置（key/title/serviceClassName/examineSwitch）", required = "json")
     private List<Map<String, Object>> sysOrderBasicDesign;
 
     @TableField("diary_day_revoke_minute")

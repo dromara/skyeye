@@ -69,7 +69,7 @@ import java.util.stream.Collectors;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
-@SkyeyeService(name = "采购申请", groupName = "采购申请", flowable = true)
+@SkyeyeService(name = "采购申请", groupName = "采购申请", flowable = true, orderApproval = true)
 public class PurchaseRequestServiceImpl extends SkyeyeBusinessServiceImpl<PurchaseRequestDao, PurchaseRequest> implements PurchaseRequestService {
 
     @Autowired
