@@ -22,6 +22,7 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+import com.skyeye.store.classenum.StoreNature;
 import com.skyeye.store.classenum.StoreOnlineBookType;
 
 /**
@@ -70,6 +71,10 @@ public class ShopStore extends AreaInfo {
     @TableField(value = "enabled")
     @ApiModelProperty(value = "启用状态", enumClass = EnableEnum.class, required = "required,num")
     private Integer enabled;
+
+    @TableField(value = "store_nature")
+    @ApiModelProperty(value = "门店性质", enumClass = StoreNature.class, required = "num")
+    private Integer storeNature;
 
     @TableField(value = "longitude")
     @ApiModelProperty(value = "经度")

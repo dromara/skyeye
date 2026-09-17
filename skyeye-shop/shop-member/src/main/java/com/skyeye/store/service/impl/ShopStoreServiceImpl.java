@@ -21,6 +21,7 @@ import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.rest.shopmaterialnorms.rest.IShopMaterialNormsRest;
+import com.skyeye.store.classenum.StoreNature;
 import com.skyeye.store.dao.ShopStoreDao;
 import com.skyeye.store.entity.ShopStore;
 import com.skyeye.store.entity.ShopStoreStaff;
@@ -54,6 +55,13 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
 
     @Autowired
     private IShopMaterialNormsRest iShopMaterialNormsRest;
+
+    @Override
+    protected void createPrepose(ShopStore entity) {
+        if (entity.getStoreNature() == null) {
+            entity.setStoreNature(StoreNature.FRANCHISE.getKey());
+        }
+    }
 
     @Override
     public QueryWrapper<ShopStore> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -120,6 +128,10 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
     @Override
     protected void writePostpose(ShopStore entity, String userId) {
         super.writePostpose(entity, userId);
+        // 个人门店商品由店主自建/选品，不自动同步平台全量商品
+        if (StoreNature.PERSONAL.getKey().equals(entity.getStoreNature())) {
+            return;
+        }
         if (WhetherEnum.DISABLE_USING.getKey().equals(entity.getEnabled())) {
             // 禁用状态
             ExecuteFeignClient.get(() -> iShopMaterialNormsRest.deleteShopMaterialStoreByStoreIds(entity.getId()));
@@ -127,6 +139,20 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
             // 启用状态，新增门店商品
             ExecuteFeignClient.get(() -> iShopMaterialNormsRest.saveShopMaterialStore(entity.getId()));
         }
+    }
+
+    @Override
+    @IgnoreTenant
+    public void queryMyPersonalStoreList(InputObject inputObject, OutputObject outputObject) {
+        String memberId = inputObject.getLogParams().get("id").toString();
+        QueryWrapper<ShopStore> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getCreateId), memberId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getStoreNature), StoreNature.PERSONAL.getKey());
+        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(ShopStore::getCreateTime));
+        List<ShopStore> list = list(queryWrapper);
+        shopAreaService.setDataMation(list, ShopStore::getShopAreaId);
+        outputObject.setBeans(list);
+        outputObject.settotal(list.size());
     }
 
     @Override

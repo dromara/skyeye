@@ -103,6 +103,11 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
     private static final String DEFAULT_MIN_BUY_TOKEN_AMOUNT = "10.00";
 
     /**
+     * 默认单个会员最多可开个人门店数量（0 表示不限制）
+     */
+    private static final int DEFAULT_MAX_PERSONAL_STORE_PER_MEMBER = 3;
+
+    /**
      * 查询平台基础信息（管理端使用，需平台租户身份）
      */
     @Override
@@ -304,6 +309,22 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
     }
 
     @Override
+    @IgnoreTenant
+    public Integer getMaxPersonalStorePerMember() {
+        return getShopGroupInt(PlatformBaseSettingConst.KEY_MAX_PERSONAL_STORE_PER_MEMBER,
+            DEFAULT_MAX_PERSONAL_STORE_PER_MEMBER);
+    }
+
+    @Override
+    @IgnoreTenant
+    public void queryPlatformPersonalStoreConfig(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> data = new HashMap<>();
+        data.put(PlatformBaseSettingConst.KEY_MAX_PERSONAL_STORE_PER_MEMBER, getMaxPersonalStorePerMember());
+        outputObject.setBean(data);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
     public void validatorEntity(PlatformBaseSetting entity) {
         validateSettingData(entity.getSettingData());
     }
@@ -347,6 +368,9 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         tokenGroup.put(PlatformBaseSettingConst.KEY_TOKENS_PER_YUAN, DEFAULT_TOKENS_PER_YUAN);
         tokenGroup.put(PlatformBaseSettingConst.KEY_MIN_BUY_TOKEN_AMOUNT, DEFAULT_MIN_BUY_TOKEN_AMOUNT);
         settingData.put(PlatformBaseSettingGroup.TOKEN.getKey(), tokenGroup);
+        Map<String, Object> shopGroup = new HashMap<>();
+        shopGroup.put(PlatformBaseSettingConst.KEY_MAX_PERSONAL_STORE_PER_MEMBER, DEFAULT_MAX_PERSONAL_STORE_PER_MEMBER);
+        settingData.put(PlatformBaseSettingGroup.SHOP.getKey(), shopGroup);
         return settingData;
     }
 
@@ -412,6 +436,19 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
             return buildDefaultSettingData().get(PlatformBaseSettingGroup.TOKEN.getKey());
         }
         return tokenGroup;
+    }
+
+    private Map<String, Object> getShopGroupSetting() {
+        PlatformBaseSetting setting = getOne(new QueryWrapper<>(), false);
+        if (ObjectUtil.isEmpty(setting) || MapUtil.isEmpty(setting.getSettingData())) {
+            return buildDefaultSettingData().get(PlatformBaseSettingGroup.SHOP.getKey());
+        }
+        Map<String, Map<String, Object>> merged = mergeSettingData(buildDefaultSettingData(), setting.getSettingData());
+        Map<String, Object> shopGroup = merged.get(PlatformBaseSettingGroup.SHOP.getKey());
+        if (MapUtil.isEmpty(shopGroup)) {
+            return buildDefaultSettingData().get(PlatformBaseSettingGroup.SHOP.getKey());
+        }
+        return shopGroup;
     }
 
     @SuppressWarnings("unchecked")
@@ -506,6 +543,10 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         if (MapUtil.isNotEmpty(tokenGroup)) {
             validateTokenGroup(tokenGroup);
         }
+        Map<String, Object> shopGroup = settingData.get(PlatformBaseSettingGroup.SHOP.getKey());
+        if (MapUtil.isNotEmpty(shopGroup)) {
+            validateShopGroup(shopGroup);
+        }
     }
 
     private void validateTokenGroup(Map<String, Object> tokenGroup) {
@@ -589,6 +630,31 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
             return defaultValue;
         }
         return NumberUtil.parseInt(value.toString());
+    }
+
+    private Integer getShopGroupInt(String configKey, int defaultValue) {
+        Map<String, Object> shopGroup = getShopGroupSetting();
+        Object value = shopGroup.get(configKey);
+        if (ObjectUtil.isEmpty(value) || StrUtil.isBlank(value.toString())) {
+            return defaultValue;
+        }
+        return NumberUtil.parseInt(value.toString());
+    }
+
+    private void validateShopGroup(Map<String, Object> shopGroup) {
+        if (shopGroup.containsKey(PlatformBaseSettingConst.KEY_MAX_PERSONAL_STORE_PER_MEMBER)) {
+            validateNonNegativeInteger(shopGroup.get(PlatformBaseSettingConst.KEY_MAX_PERSONAL_STORE_PER_MEMBER),
+                "个人门店数量上限");
+        }
+    }
+
+    private void validateNonNegativeInteger(Object value, String label) {
+        if (ObjectUtil.isEmpty(value) || StrUtil.isBlank(value.toString())) {
+            throw new CustomException(label + "不能为空");
+        }
+        if (!value.toString().matches("^\\d+$")) {
+            throw new CustomException(label + "必须为非负整数");
+        }
     }
 
     private boolean canCreateMore(int currentCount, Integer maxCount) {

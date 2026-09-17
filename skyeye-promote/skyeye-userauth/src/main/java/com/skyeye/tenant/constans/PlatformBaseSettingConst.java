@@ -52,6 +52,11 @@ public class PlatformBaseSettingConst {
     public static final String KEY_MAX_ENTERPRISE_ORG_PER_USER = "maxEnterpriseOrgPerUser";
 
     /**
+     * 单个会员最多可开个人门店数量（0 表示不限制）
+     */
+    public static final String KEY_MAX_PERSONAL_STORE_PER_MEMBER = "maxPersonalStorePerMember";
+
+    /**
      * AI 角色分组 - 研发/需求侧绑定的 AI 角色 id
      */
     public static final String KEY_AI_ROLE_ID = "roleId";

@@ -115,4 +115,14 @@ public interface PlatformBaseSettingService extends SkyeyeBusinessService<Platfo
      */
     String getMinBuyTokenAmount();
 
+    /**
+     * 单个会员最多可开个人门店数（0 表示不限制）
+     */
+    Integer getMaxPersonalStorePerMember();
+
+    /**
+     * 查询个人门店配额配置（所有服务/前端可读）
+     */
+    void queryPlatformPersonalStoreConfig(InputObject inputObject, OutputObject outputObject);
+
 }

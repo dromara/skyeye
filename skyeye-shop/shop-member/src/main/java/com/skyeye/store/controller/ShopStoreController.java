@@ -118,4 +118,10 @@ public class ShopStoreController {
         shopStoreService.queryStoreOnlineMationPointDay(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryMyPersonalStoreList", value = "查询当前会员的个人门店列表", method = "GET", allUse = "2")
+    @RequestMapping("/post/ShopStoreController/queryMyPersonalStoreList")
+    public void queryMyPersonalStoreList(InputObject inputObject, OutputObject outputObject) {
+        shopStoreService.queryMyPersonalStoreList(inputObject, outputObject);
+    }
+
 }

@@ -28,4 +28,9 @@ public interface ShopStoreService extends SkyeyeBusinessService<ShopStore> {
     void queryStoreOnlineMationPointDay(InputObject inputObject, OutputObject outputObject);
 
     void queryStoreListFoServer(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 查询当前会员的个人门店列表（tenant=shop + createId=会员id）
+     */
+    void queryMyPersonalStoreList(InputObject inputObject, OutputObject outputObject);
 }

@@ -84,4 +84,10 @@ public class PlatformBaseSettingController {
         platformBaseSettingService.queryPlatformTokenBilling(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryPlatformPersonalStoreConfig", value = "获取个人门店配额配置", method = "GET", allUse = "0")
+    @RequestMapping("/post/PlatformBaseSettingController/queryPlatformPersonalStoreConfig")
+    public void queryPlatformPersonalStoreConfig(InputObject inputObject, OutputObject outputObject) {
+        platformBaseSettingService.queryPlatformPersonalStoreConfig(inputObject, outputObject);
+    }
+
 }

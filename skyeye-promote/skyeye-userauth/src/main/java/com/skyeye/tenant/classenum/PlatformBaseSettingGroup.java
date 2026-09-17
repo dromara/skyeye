@@ -33,7 +33,12 @@ public enum PlatformBaseSettingGroup {
     /**
      * Token 计费标准：兑换比例与最低购买金额
      */
-    TOKEN("token", "Token计费");
+    TOKEN("token", "Token计费"),
+
+    /**
+     * 商城/个人门店相关配置
+     */
+    SHOP("shop", "商城门店");
 
     /**
      * 分组标识，存入 settingData 的 key
