@@ -132,7 +132,7 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             throw new CustomException("优惠券总使用次数不能为零");
         }
     }
- 
+
     @Override
     public void createPrepose(Coupon entity) {
         entity.setTakeCount(CommonNumConstants.NUM_ZERO);
@@ -236,35 +236,61 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     }
 
     @Override
+    @IgnoreTenant
     public void queryCouponListByState(InputObject inputObject, OutputObject outputObject) {
-        Map<String, Object> params = inputObject.getParams();
-        QueryWrapper<Coupon> queryWrapper = new QueryWrapper<>();
-        String storeId = params.get("storeId").toString();
-        String type = params.get("type").toString();
-        /*
-         * todo 优惠券是由厂商发布的，门店无法发放优惠券
-         *  需要线判断type，再考虑storeId
-         *  模板通用、查模板时不需要storeId，先判断type
-         */
+        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        // 门店id
+        String storeId = commonPageInfo.getCustomParamsMapStr("storeId");
+        // 类型：优惠券：1，优惠券模板：0，全部：为空
+        String type = commonPageInfo.getType();
+        // 折扣类型（可选）：1 满减，2 折扣
+        String discountType = commonPageInfo.getCustomParamsMapStr("discountType");
+
         String typeKey = MybatisPlusUtil.toColumns(Coupon::getTemplateId);
+        Page pages = null;
+        if (commonPageInfo.getIsPaging()) {
+            pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
+        }
+
+        MPJLambdaWrapper<Coupon> wrapper = new MPJLambdaWrapper<Coupon>()
+            .eq(MybatisPlusUtil.toColumns(Coupon::getEnabled), EnableEnum.ENABLE_USING.getKey());
         if (StrUtil.equals(type, CommonNumConstants.NUM_ZERO.toString())) {
-            queryWrapper.and(wrapper -> {
-                wrapper.isNull(typeKey).or().eq(typeKey, StrUtil.EMPTY);
-            });
+            // 模板：templateId 为空
+            wrapper.and(w -> w.isNull(typeKey).or().eq(typeKey, StrUtil.EMPTY));
         }
         if (StrUtil.equals(type, CommonNumConstants.NUM_ONE.toString())) {
-            queryWrapper.and(Wrapper -> {
-                Wrapper.isNotNull(typeKey).ne(typeKey, StrUtil.EMPTY);
-            });
+            // 优惠券：有模板，且仍有剩余可领数量
+            wrapper.isNotNull(typeKey).ne(typeKey, StrUtil.EMPTY);
             String totalCountKey = MybatisPlusUtil.toColumns(Coupon::getTotalCount);
             String takeCountKey = MybatisPlusUtil.toColumns(Coupon::getTakeCount);
-            queryWrapper.and(w -> w.eq(totalCountKey, -1).or().apply(takeCountKey + " < " + totalCountKey));
+            wrapper.and(w -> w.eq(totalCountKey, -1).or().apply(takeCountKey + " < " + totalCountKey));
         }
-        queryWrapper.eq(MybatisPlusUtil.toColumns(Coupon::getEnabled), EnableEnum.ENABLE_USING.getKey());
-        List<Coupon> list = list(queryWrapper);
-        setDrawState(list);// 设置是否可以领取状态
+        if (StrUtil.isNotEmpty(discountType)) {
+            wrapper.eq(Coupon::getDiscountType, Integer.valueOf(discountType));
+        }
+        // 有效期过滤：固定日期类型且已过结束时间的不返回；领取后生效类型无固定截止时间，不过滤
+        String now = DateUtil.getTimeAndToString();
+        wrapper.and(w -> w.ne(Coupon::getValidityType, CouponValidityType.DATE.getKey())
+            .or(w2 -> w2.eq(Coupon::getValidityType, CouponValidityType.DATE.getKey())
+                .ge(Coupon::getValidEndTime, now)));
+        // 按门店过滤：全部门店 或 指定门店且关联该 storeId
+        if (StrUtil.isNotEmpty(storeId)) {
+            wrapper.leftJoin(CouponStore.class, CouponStore::getCouponId, Coupon::getId)
+                .and(w -> w.eq(Coupon::getStoreCoverage, CouponStoreCoverage.ALL_STORE.getKey())
+                    .or(w2 -> w2.eq(Coupon::getStoreCoverage, CouponStoreCoverage.SPECIFIED_STORE.getKey())
+                        .eq(CouponStore::getStoreId, storeId)))
+                .groupBy(Coupon::getId);
+        }
+        wrapper.orderByDesc(Coupon::getCreateTime);
+
+        List<Coupon> list = skyeyeBaseMapper.selectJoinList(Coupon.class, wrapper);
+        setDrawState(list);
         outputObject.setBeans(list);
-        outputObject.settotal(list.size());
+        if (commonPageInfo.getIsPaging()) {
+            outputObject.settotal(pages.getTotal());
+        } else {
+            outputObject.settotal(list.size());
+        }
     }
 
     @Override
@@ -300,13 +326,14 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         List<String> termCouponIds = list.stream().filter(coupon -> Objects.equals(coupon.getValidityType(), CouponValidityType.TERM.getKey())).map(Coupon::getId).collect(Collectors.toList());
         List<CouponUse> couponUseList = couponUseService.queryUnUseByCouponIdList(termCouponIds);
         if (CollectionUtil.isNotEmpty(couponUseList)) {
-                deleteObjectIds.addAll(couponUseList.stream().map(CouponUse::getId).collect(Collectors.toList()));
+            deleteObjectIds.addAll(couponUseList.stream().map(CouponUse::getId).collect(Collectors.toList()));
         }
         // 删除定时任务
         log.info("批量删除优惠券：" + couponIdList.toString() + "-- 开始");
         iQuartzService.batchStopAndDeleteTaskQuartz(deleteObjectIds);
         log.info("批量删除优惠券：------- 结束");
     }
+
     @Override
     public Coupon getDataFromDb(String id) {
         Coupon coupon = super.getDataFromDb(id);

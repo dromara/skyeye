@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright 卫志强 QQ：598748873@qq.com Inc. All rights reserved. 开源地址：https://gitee.com/doc_wei01/skyeye
  ******************************************************************************/
 
@@ -151,7 +151,6 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
 
         ShopStoreApply apply = selectById(id);
         validatePendingApply(apply);
-
         checkQuotaOrThrow(apply.getMemberId());
 
         UpdateWrapper<ShopStoreApply> updateWrapper = new UpdateWrapper<>();
@@ -246,12 +245,6 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         data.put("canApply", canApplyMore(approvedCount + pendingCount, max));
         outputObject.setBean(data);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
-    }
-
-    @Override
-    @IgnoreTenant
-    public ShopStoreApply selectById(String id) {
-        return super.selectById(id);
     }
 
     private String createPersonalStoreFromApply(ShopStoreApply apply) {
