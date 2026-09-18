@@ -13,6 +13,7 @@ import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.annotation.unique.UniqueField;
+import com.skyeye.classenum.MemberAuthStatus;
 import com.skyeye.common.base.handler.enclosure.bean.Enclosure;
 import com.skyeye.common.base.handler.enclosure.bean.EnclosureFace;
 import com.skyeye.common.constans.CacheConstants;
@@ -49,6 +50,10 @@ public class Member extends AreaInfo implements EnclosureFace {
     @ApiModelProperty(value = "名称", required = "required")
     private String name;
 
+    @TableField(value = "real_name")
+    @ApiModelProperty(value = "实名姓名")
+    private String realName;
+
     @TableField(value = "avatar")
     @ApiModelProperty(value = "头像")
     private String avatar;
@@ -60,6 +65,26 @@ public class Member extends AreaInfo implements EnclosureFace {
     @TableField(value = "phone")
     @ApiModelProperty(value = "联系电话", required = "required,phone")
     private String phone;
+
+    @TableField(value = "id_card")
+    @ApiModelProperty(value = "身份证号")
+    private String idCard;
+
+    @TableField(value = "id_card_front")
+    @ApiModelProperty(value = "身份证正面（人像面）")
+    private String idCardFront;
+
+    @TableField(value = "id_card_back")
+    @ApiModelProperty(value = "身份证反面（国徽面）")
+    private String idCardBack;
+
+    @TableField(value = "auth_status")
+    @ApiModelProperty(value = "实名认证状态", enumClass = MemberAuthStatus.class)
+    private Integer authStatus;
+
+    @TableField(value = "auth_time")
+    @Property(value = "实名认证时间")
+    private String authTime;
 
     @TableField("password")
     @ApiModelProperty(value = "密码")

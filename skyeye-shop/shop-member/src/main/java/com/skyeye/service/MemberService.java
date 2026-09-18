@@ -30,4 +30,6 @@ public interface MemberService extends SkyeyeBusinessService<Member> {
     void updateCurrentLoginMemberAvatar(InputObject inputObject, OutputObject outputObject);
 
     void queryCurrentLoginMember(InputObject inputObject, OutputObject outputObject);
+
+    void submitMemberRealNameAuth(InputObject inputObject, OutputObject outputObject);
 }

@@ -74,6 +74,16 @@ alwaysApply: true
 - 在Service层进行数据校验
 - 避免在Controller层处理业务逻辑
 
+## 入参取值
+
+`inputObject.getParams()` 得到的 `Map`，字段一律直接取，不要再包 `getStr`、`MapUtilGet` 这类私有方法。
+
+```java
+Map<String, Object> params = inputObject.getParams();
+String storeName = params.get("storeName").toString();
+String id = inputObject.getLogParams().get("id").toString();
+```
+
 ## 工具类使用
 
 - 使用 `CalculationUtil` 进行金额计算

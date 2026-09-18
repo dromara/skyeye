@@ -96,6 +96,15 @@ protected void writePostpose(ProScheme entity, String userId) {
 - 避免循环依赖
 - 子表Service通常注入到主表Service中
 
+## 入参取值
+
+从 `inputObject.getParams()` 取字段时，直接 `params.get("字段名").toString()`，禁止再封装 `getStr`、`MapUtilGet` 等取值方法。
+
+```java
+Map<String, Object> params = inputObject.getParams();
+String name = params.get("name").toString();
+```
+
 ## 异常处理
 
 - 使用 `CustomException` 抛出业务异常

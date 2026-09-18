@@ -25,18 +25,22 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CharUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.classenum.MemberAuthStatus;
 import com.skyeye.dao.MemberDao;
 import com.skyeye.entity.Member;
 import com.skyeye.eve.service.IAreaService;
+import com.skyeye.exception.CustomException;
 import com.skyeye.level.entity.ShopMemberLevel;
 import com.skyeye.level.service.ShopMemberLevelService;
 import com.skyeye.service.MemberService;
 import com.skyeye.store.service.ShopStoreService;
+import com.skyeye.common.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @ClassName: MemberServiceImpl
@@ -204,10 +208,46 @@ public class MemberServiceImpl extends SkyeyeBusinessServiceImpl<MemberDao, Memb
         member.setWhetherPassword(StrUtil.isEmpty(member.getPassword())
             ? WhetherEnum.DISABLE_USING.getKey()
             : WhetherEnum.ENABLE_USING.getKey());
+        if (member.getAuthStatus() == null) {
+            member.setAuthStatus(MemberAuthStatus.NOT_AUTH.getKey());
+        }
         member.setPassword(null);
         member.setPwdNumEnc(null);
         outputObject.setBean(member);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void submitMemberRealNameAuth(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String userId = inputObject.getLogParams().get("id").toString();
+        String realName = params.get("realName").toString();
+        String idCard = params.get("idCard").toString();
+        String idCardFront = params.get("idCardFront").toString();
+        String idCardBack = params.get("idCardBack").toString();
+        if (StrUtil.isBlank(realName)) {
+            throw new CustomException("请填写真实姓名");
+        }
+        if (StrUtil.isBlank(idCard) || idCard.length() < 15) {
+            throw new CustomException("请填写正确的身份证号");
+        }
+        if (StrUtil.isBlank(idCardFront) || StrUtil.isBlank(idCardBack)) {
+            throw new CustomException("请上传身份证正反面照片");
+        }
+        Member member = selectById(userId);
+        if (member != null && Objects.equals(member.getAuthStatus(), MemberAuthStatus.AUTHED.getKey())) {
+            throw new CustomException("您已完成实名认证，无需重复提交");
+        }
+        UpdateWrapper<Member> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, userId);
+        updateWrapper.set(MybatisPlusUtil.toColumns(Member::getRealName), realName.trim());
+        updateWrapper.set(MybatisPlusUtil.toColumns(Member::getIdCard), idCard.trim());
+        updateWrapper.set(MybatisPlusUtil.toColumns(Member::getIdCardFront), idCardFront);
+        updateWrapper.set(MybatisPlusUtil.toColumns(Member::getIdCardBack), idCardBack);
+        updateWrapper.set(MybatisPlusUtil.toColumns(Member::getAuthStatus), MemberAuthStatus.AUTHED.getKey());
+        updateWrapper.set(MybatisPlusUtil.toColumns(Member::getAuthTime), DateUtil.getTimeAndToString());
+        update(updateWrapper);
+        editCache(outputObject, userId);
     }
 
 }

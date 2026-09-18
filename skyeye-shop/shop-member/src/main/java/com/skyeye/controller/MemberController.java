@@ -99,4 +99,16 @@ public class MemberController {
         memberService.queryCurrentLoginMember(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "submitMemberRealNameAuth", value = "提交会员实名认证", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "realName", name = "realName", value = "真实姓名", required = "required"),
+        @ApiImplicitParam(id = "idCard", name = "idCard", value = "身份证号", required = "required"),
+        @ApiImplicitParam(id = "idCardFront", name = "idCardFront", value = "身份证正面（人像面）", required = "required"),
+        @ApiImplicitParam(id = "idCardBack", name = "idCardBack", value = "身份证反面（国徽面）", required = "required")
+    })
+    @RequestMapping("/post/MemberController/submitMemberRealNameAuth")
+    public void submitMemberRealNameAuth(InputObject inputObject, OutputObject outputObject) {
+        memberService.submitMemberRealNameAuth(inputObject, outputObject);
+    }
+
 }

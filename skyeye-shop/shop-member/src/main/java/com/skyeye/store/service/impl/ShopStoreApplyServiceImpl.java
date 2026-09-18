@@ -13,6 +13,7 @@ import com.github.pagehelper.PageHelper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.classenum.MemberAuthStatus;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
@@ -80,6 +81,11 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
             throw new CustomException("店铺名称不能为空");
         }
 
+        Member member = memberService.selectById(memberId);
+        if (member == null || !java.util.Objects.equals(member.getAuthStatus(), MemberAuthStatus.AUTHED.getKey())) {
+            throw new CustomException("请先完成实名认证后再申请开店");
+        }
+
         checkQuotaOrThrow(memberId);
 
         ShopStoreApply pending = queryPendingApply(memberId);
@@ -91,15 +97,15 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         apply.setTenantId(TenantTypeEnum.SHOP.getCode());
         apply.setMemberId(memberId);
         apply.setStoreName(storeName);
-        apply.setLogo(getStr(params, "logo"));
-        apply.setRemark(getStr(params, "remark"));
-        apply.setContactName(getStr(params, "contactName"));
-        apply.setContactPhone(getStr(params, "contactPhone"));
-        apply.setProvinceId(getStr(params, "provinceId"));
-        apply.setCityId(getStr(params, "cityId"));
-        apply.setAreaId(getStr(params, "areaId"));
-        apply.setTownshipId(getStr(params, "townshipId"));
-        apply.setAbsoluteAddress(getStr(params, "absoluteAddress"));
+        apply.setLogo(params.get("logo").toString());
+        apply.setRemark(params.get("remark").toString());
+        apply.setContactName(params.get("contactName").toString());
+        apply.setContactPhone(params.get("contactPhone").toString());
+        apply.setProvinceId(params.get("provinceId").toString());
+        apply.setCityId(params.get("cityId").toString());
+        apply.setAreaId(params.get("areaId").toString());
+        apply.setTownshipId(params.get("townshipId").toString());
+        apply.setAbsoluteAddress(params.get("absoluteAddress").toString());
         apply.setState(ShopStoreApplyStatus.PENDING.getKey());
 
         try {
@@ -146,7 +152,7 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
     public void approvePersonalStoreApply(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String id = params.get("id").toString();
-        String auditRemark = getStr(params, "auditRemark");
+        String auditRemark = params.get("auditRemark").toString();
         String auditUserId = inputObject.getLogParams().get("id").toString();
 
         ShopStoreApply apply = selectById(id);
@@ -181,7 +187,7 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
     public void rejectPersonalStoreApply(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String id = params.get("id").toString();
-        String auditRemark = getStr(params, "auditRemark");
+        String auditRemark = params.get("auditRemark").toString();
         String auditUserId = inputObject.getLogParams().get("id").toString();
         ShopStoreApply apply = selectById(id);
         validatePendingApply(apply);
@@ -375,13 +381,6 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
             memberMation.put("avatar", member.getAvatar());
             apply.setMemberMation(memberMation);
         });
-    }
-
-    private String getStr(Map<String, Object> params, String key) {
-        if (!params.containsKey(key) || params.get(key) == null) {
-            return StrUtil.EMPTY;
-        }
-        return params.get(key).toString();
     }
 
 }

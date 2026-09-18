@@ -265,6 +265,8 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         MPJLambdaWrapper<ShopMaterialStore> wrapper = JoinWrappers.lambda("sms", ShopMaterialStore.class);
         wrapper.innerJoin(Material.class, "m", Material::getId, ShopMaterialStore::getMaterialId)
             .innerJoin(ShopMaterial.class, "sm", ShopMaterial::getMaterialId, ShopMaterialStore::getMaterialId);
+        // 门店已删除或不存在时不返回商品。条件写进分页 SQL，避免查出后再过滤把某一页挤空
+        wrapper.innerJoin("shop_store ss ON ss.id = sms.store_id");
         if (couponScopeFilter != null) {
             applyCouponScopeFilter(wrapper, couponScopeFilter);
         }
