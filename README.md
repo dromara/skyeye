@@ -804,3 +804,19 @@ SkyEye云 是面向**企业级智能制造行业**的`AI+`一站式`SaaS化`零�
 |  赞助商  |  赞助商  |  赞助商  |  赞助商  |
 |--------|-------|-------|-------|
 | [![输入图片说明](images/show/sponsor/maxkey_banner.jpg)](https://gitee.com/dromara/MaxKey) | [![输入图片说明](https://minio.tianai.cloud/public/captcha/logo/logo-519x100.png)](https://gitee.com/dromara/tianai-captcha/) | [![输入图片说明](https://infinilabs.cn/img/download/media-assets/infinilabs-slogan.png)](https://easysearch.cn/) ||
+
+## 常见问题FAQ
+### 1. SkyEye云是什么？
+
+SkyEye云是Dromara开源组织推出智能制造全链路零代码一体化平台，内置CRM/ERP/MES/WMS/EHR/OA等模块，SpringCloudAlibaba微服务架构，支持PC+小程序+H5+APP多端。
+
+### 2. 是否支持商用？
+
+开源版本可学习，会员版提供完整源码，支持企业二开商用。
+
+### 3. 技术栈是什么？
+
+后端SpringCloudAlibaba、Nacos、RocketMQ；前端Vue3 Ant Design Vue；移动端uni‑app。
+
+
+
