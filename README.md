@@ -1,4 +1,3 @@
-<meta name="baidu-site-verification" content="codeva-4sGg9loynY" />
 
 # 🌌 SkyEye云 - 企业级智能制造全链路AI+零代码一体化平台
 <p align="center">
