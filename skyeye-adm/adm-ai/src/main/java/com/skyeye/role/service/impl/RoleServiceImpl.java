@@ -8,6 +8,7 @@ import cn.hutool.core.util.StrUtil;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.exception.CustomException;
 import com.skyeye.knowledge.entity.Knowledge;
@@ -47,7 +48,7 @@ public class RoleServiceImpl extends SkyeyeBusinessServiceImpl<RoleDao, Role> im
     @Override
     @IgnoreTenant
     public Role selectById(String id) {
-        Role role = super.selectById(id);
+        Role role = runWithTenant(TenantEnum.NO_ISOLATION, () -> super.selectById(id));
         knowledgeService.setDataMation(role, Role::getKnowledgeId);
         return role;
     }

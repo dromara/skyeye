@@ -8,6 +8,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
+import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
@@ -73,6 +74,7 @@ public class KnowledgeSyncServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
     }
 
     @Override
+    @IgnoreTenant
     public List<KnowledgeSync> selectByKnowledgeId(String knowledgeId) {
         QueryWrapper<KnowledgeSync> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(KnowledgeSync::getKnowledgeId), knowledgeId);

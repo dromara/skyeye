@@ -14,6 +14,7 @@ import com.skyeye.ai.core.factory.AiFactory;
 import com.skyeye.ai.core.knowledge.AiKnowledgeClient;
 import com.skyeye.ai.core.knowledge.AiKnowledgeUploadHelper;
 import com.skyeye.annotation.service.SkyeyeService;
+import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
@@ -264,14 +265,17 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
     }
 
     @Override
+    @IgnoreTenant
     public Knowledge selectById(String id) {
-        Knowledge knowledge = super.selectById(id);
-        if (knowledge != null) {
-            knowledge.setSyncList(knowledgeSyncService.selectByKnowledgeId(id));
-            knowledge.setHasJdbcPassword(StrUtil.isNotBlank(knowledge.getJdbcPassword()));
-            knowledge.setJdbcPassword(StrUtil.EMPTY);
-        }
-        return knowledge;
+        return runWithTenant(TenantEnum.NO_ISOLATION, () -> {
+            Knowledge knowledge = super.selectById(id);
+            if (knowledge != null) {
+                knowledge.setSyncList(knowledgeSyncService.selectByKnowledgeId(id));
+                knowledge.setHasJdbcPassword(StrUtil.isNotBlank(knowledge.getJdbcPassword()));
+                knowledge.setJdbcPassword(StrUtil.EMPTY);
+            }
+            return knowledge;
+        });
     }
 
     @Override

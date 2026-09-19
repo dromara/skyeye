@@ -14,6 +14,7 @@ import com.skyeye.common.client.ExecuteFeignClient;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -158,14 +159,15 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
     @Override
     @IgnoreTenant
     public ShopStore selectById(String id) {
-        ShopStore shopStore = super.selectById(id);
+        ShopStore shopStore = runWithTenant(TenantEnum.NO_ISOLATION, () -> super.selectById(id));
         shopAreaService.setDataMation(shopStore, ShopStore::getShopAreaId);
         return shopStore;
     }
 
     @Override
+    @IgnoreTenant
     public List<ShopStore> selectByIds(String... ids) {
-        List<ShopStore> shopStores = super.selectByIds(ids);
+        List<ShopStore> shopStores = runWithTenant(TenantEnum.NO_ISOLATION, () -> super.selectByIds(ids));
         shopAreaService.setDataMation(shopStores, ShopStore::getShopAreaId);
         return shopStores;
     }
