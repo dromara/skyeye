@@ -38,10 +38,28 @@ public class ShopStoreApplyController {
         @ApiImplicitParam(id = "cityId", name = "cityId", value = "市ID"),
         @ApiImplicitParam(id = "areaId", name = "areaId", value = "区县ID"),
         @ApiImplicitParam(id = "townshipId", name = "townshipId", value = "乡镇ID"),
-        @ApiImplicitParam(id = "absoluteAddress", name = "absoluteAddress", value = "详细地址")})
+        @ApiImplicitParam(id = "absoluteAddress", name = "absoluteAddress", value = "详细地址"),
+        @ApiImplicitParam(id = "onlineOpen", name = "onlineOpen", value = "线上门店是否开启", enumClass = com.skyeye.common.enumeration.WhetherEnum.class, required = "required,num"),
+        @ApiImplicitParam(id = "offlineOpen", name = "offlineOpen", value = "线下门店是否开启", enumClass = com.skyeye.common.enumeration.WhetherEnum.class, required = "required,num")})
     @RequestMapping("/post/ShopStoreApplyController/applyPersonalStore")
     public void applyPersonalStore(InputObject inputObject, OutputObject outputObject) {
         shopStoreApplyService.applyPersonalStore(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "applyPersonalStoreChange", value = "提交个人门店经营方式变更申请", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required"),
+        @ApiImplicitParam(id = "onlineOpen", name = "onlineOpen", value = "线上门店是否开启", enumClass = com.skyeye.common.enumeration.WhetherEnum.class, required = "required,num"),
+        @ApiImplicitParam(id = "offlineOpen", name = "offlineOpen", value = "线下门店是否开启", enumClass = com.skyeye.common.enumeration.WhetherEnum.class, required = "required,num"),
+        @ApiImplicitParam(id = "provinceId", name = "provinceId", value = "省ID"),
+        @ApiImplicitParam(id = "cityId", name = "cityId", value = "市ID"),
+        @ApiImplicitParam(id = "areaId", name = "areaId", value = "区县ID"),
+        @ApiImplicitParam(id = "townshipId", name = "townshipId", value = "乡镇ID"),
+        @ApiImplicitParam(id = "absoluteAddress", name = "absoluteAddress", value = "详细地址"),
+        @ApiImplicitParam(id = "remark", name = "remark", value = "变更说明")})
+    @RequestMapping("/post/ShopStoreApplyController/applyPersonalStoreChange")
+    public void applyPersonalStoreChange(InputObject inputObject, OutputObject outputObject) {
+        shopStoreApplyService.applyPersonalStoreChange(inputObject, outputObject);
     }
 
     @ApiOperation(id = "cancelMyPersonalStoreApply", value = "取消我的个人开店申请", method = "POST", allUse = "2")

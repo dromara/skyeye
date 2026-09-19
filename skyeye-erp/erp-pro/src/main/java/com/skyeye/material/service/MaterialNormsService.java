@@ -51,6 +51,11 @@ public interface MaterialNormsService extends SkyeyeBusinessService<MaterialNorm
      */
     List<MaterialNorms> queryNormsUnitListByMaterialId(String materialId);
 
+    /**
+     * 单规格保存时规格名会被写成计量单位，多规格销售名在这之后改回来。
+     */
+    void updateNormsName(String normsId, String name);
+
     void calcDepotStock(MaterialNorms materialNorms, String depotId);
 
     void queryNormsListByMaterialId(InputObject inputObject, OutputObject outputObject);

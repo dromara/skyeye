@@ -7,6 +7,7 @@ package com.skyeye.material.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.github.yulichang.toolkit.JoinWrappers;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
@@ -171,6 +172,15 @@ public class MaterialNormsServiceImpl extends SkyeyeBusinessServiceImpl<Material
         deleteById(ids);
         // 根据商品id删除规格库存信息
         materialNormsStockService.deleteNormsInitStockByMaterialId(materialId);
+    }
+
+    @Override
+    public void updateNormsName(String normsId, String name) {
+        UpdateWrapper<MaterialNorms> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, normsId);
+        updateWrapper.set(MybatisPlusUtil.toColumns(MaterialNorms::getName), name);
+        update(updateWrapper);
+        refreshCache(normsId);
     }
 
     @Override

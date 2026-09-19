@@ -80,9 +80,14 @@ alwaysApply: true
 
 ```java
 Map<String, Object> params = inputObject.getParams();
-String storeName = params.get("storeName").toString();
-String id = inputObject.getLogParams().get("id").toString();
+String name = params.get("name").toString();
 ```
+
+## 接口必填
+
+`@ApiImplicitParam` 上 `required` 含 `required` 的字段（`required`、`required,num`、`required,json`），接口层已经拦过空值。Service 里不要再对同一个字段做 `StrUtil.isEmpty`、`== null` 这类非空判断，直接 `params.get("字段").toString()`。
+
+没标必填的才自己处理缺省。售价要大于 0、状态能不能改，这种业务校验可以留，那不是在补必填。
 
 ## 工具类使用
 

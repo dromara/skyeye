@@ -61,6 +61,20 @@ public class OrderController {
         orderService.queryOrderPageList(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryPersonalStoreOrderPageList", value = "分页获取个人门店订单", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
+    @RequestMapping("/post/OrderController/queryPersonalStoreOrderPageList")
+    public void queryPersonalStoreOrderPageList(InputObject inputObject, OutputObject outputObject) {
+        orderService.queryPersonalStoreOrderPageList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryPersonalStoreOrderStat", value = "个人门店订单待办统计", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
+    @RequestMapping("/post/OrderController/queryPersonalStoreOrderStat")
+    public void queryPersonalStoreOrderStat(InputObject inputObject, OutputObject outputObject) {
+        orderService.queryPersonalStoreOrderStat(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "deleteOrderByIds", value = "批量删除商品订单信息", method = "DELETE", allUse = "2")
     @ApiImplicitParams({@ApiImplicitParam(id = "ids", name = "ids", value = "主键id,多个id用逗号分隔", required = "required")})
     @RequestMapping("/post/OrderController/deleteOrderByIds")

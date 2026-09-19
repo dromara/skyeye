@@ -18,6 +18,7 @@ import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.TenantTypeEnum;
@@ -55,8 +56,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @SkyeyeService(name = "个人开店申请", groupName = "门店管理")
-public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreApplyDao, ShopStoreApply>
-    implements ShopStoreApplyService {
+public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreApplyDao, ShopStoreApply> implements ShopStoreApplyService {
 
     @Autowired
     private ShopStoreService shopStoreService;
@@ -106,6 +106,15 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         apply.setAreaId(params.get("areaId").toString());
         apply.setTownshipId(params.get("townshipId").toString());
         apply.setAbsoluteAddress(params.get("absoluteAddress").toString());
+        Integer onlineOpen = Integer.parseInt(params.get("onlineOpen").toString());
+        Integer offlineOpen = Integer.parseInt(params.get("offlineOpen").toString());
+        if (WhetherEnum.ENABLE_USING.getKey().equals(offlineOpen)
+            && (StrUtil.isBlank(apply.getProvinceId()) || StrUtil.isBlank(apply.getAbsoluteAddress()))) {
+            throw new CustomException("开启线下门店要填写经营地址");
+        }
+        apply.setOnlineOpen(onlineOpen);
+        apply.setOfflineOpen(offlineOpen);
+        apply.setApplyType(1);
         apply.setState(ShopStoreApplyStatus.PENDING.getKey());
 
         try {
@@ -170,7 +179,20 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
             throw new CustomException("申请状态已变更，请刷新后重试");
         }
 
-        String storeId = createPersonalStoreFromApply(apply);
+        String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
+
+        String storeId;
+        if (Integer.valueOf(2).equals(apply.getApplyType())) {
+            applyStoreChange(apply);
+            storeId = apply.getStoreId();
+        } else {
+            storeId = createPersonalStoreFromApply(apply);
+        }
+
+        if (tenantEnable) {
+            // 因为上面创建个人门店，清空了租户id，所以这里要重新设置回去
+            TenantContext.setTenantId(tenantId);
+        }
         UpdateWrapper<ShopStoreApply> storeIdWrapper = new UpdateWrapper<>();
         storeIdWrapper.eq(CommonConstants.ID, id);
         storeIdWrapper.set(MybatisPlusUtil.toColumns(ShopStoreApply::getStoreId), storeId);
@@ -264,6 +286,8 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
             store.setShopAreaId(areaId);
             store.setEnabled(EnableEnum.ENABLE_USING.getKey());
             store.setStoreNature(StoreNature.PERSONAL.getKey());
+            store.setOnlineOpen(apply.getOnlineOpen() == null ? WhetherEnum.ENABLE_USING.getKey() : apply.getOnlineOpen());
+            store.setOfflineOpen(apply.getOfflineOpen() == null ? WhetherEnum.DISABLE_USING.getKey() : apply.getOfflineOpen());
             store.setProvinceId(apply.getProvinceId());
             store.setCityId(apply.getCityId());
             store.setAreaId(apply.getAreaId());
@@ -331,6 +355,77 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStoreApply::getMemberId), memberId);
         queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStoreApply::getState), ShopStoreApplyStatus.PENDING.getKey());
         return (int) count(queryWrapper);
+    }
+
+    @Override
+    @IgnoreTenant
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void applyPersonalStoreChange(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String memberId = inputObject.getLogParams().get("id").toString();
+        String storeId = params.get("storeId").toString();
+        ShopStore store = shopStoreService.selectById(storeId);
+        if (store == null || StrUtil.isEmpty(store.getId())) {
+            throw new CustomException("门店不存在");
+        }
+        if (!memberId.equals(store.getCreateId()) || !StoreNature.PERSONAL.getKey().equals(store.getStoreNature())) {
+            throw new CustomException("只能变更自己的个人门店");
+        }
+        if (queryPendingApply(memberId) != null) {
+            throw new CustomException("您已有待审核的申请，请等待审核后再提交");
+        }
+        Integer onlineOpen = Integer.parseInt(params.get("onlineOpen").toString());
+        Integer offlineOpen = Integer.parseInt(params.get("offlineOpen").toString());
+        String provinceId = params.get("provinceId") == null ? "" : params.get("provinceId").toString();
+        String absoluteAddress = params.get("absoluteAddress") == null ? "" : params.get("absoluteAddress").toString();
+        if (WhetherEnum.ENABLE_USING.getKey().equals(offlineOpen) && (StrUtil.isBlank(provinceId) || StrUtil.isBlank(absoluteAddress))) {
+            throw new CustomException("开启线下门店要填写经营地址");
+        }
+        ShopStoreApply apply = new ShopStoreApply();
+        apply.setTenantId(TenantTypeEnum.SHOP.getCode());
+        apply.setMemberId(memberId);
+        apply.setStoreName(store.getName());
+        apply.setLogo(store.getLogo());
+        apply.setRemark(params.get("remark") == null ? "" : params.get("remark").toString());
+        apply.setContactName("");
+        apply.setContactPhone("");
+        apply.setProvinceId(provinceId);
+        apply.setCityId(params.get("cityId") == null ? "" : params.get("cityId").toString());
+        apply.setAreaId(params.get("areaId") == null ? "" : params.get("areaId").toString());
+        apply.setTownshipId(params.get("townshipId") == null ? "" : params.get("townshipId").toString());
+        apply.setAbsoluteAddress(absoluteAddress);
+        apply.setOnlineOpen(onlineOpen);
+        apply.setOfflineOpen(offlineOpen);
+        apply.setApplyType(2);
+        apply.setStoreId(storeId);
+        apply.setState(ShopStoreApplyStatus.PENDING.getKey());
+        try {
+            TenantContext.setTenantId(TenantTypeEnum.SHOP.getCode());
+            createEntity(apply, memberId);
+        } finally {
+            TenantContext.clear();
+        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", apply.getId());
+        result.put("message", "变更申请已提交，审核通过后才会改线上线下和经营地址");
+        outputObject.setBean(result);
+    }
+
+    private void applyStoreChange(ShopStoreApply apply) {
+        UpdateWrapper<ShopStore> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, apply.getStoreId());
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineOpen), apply.getOnlineOpen());
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOfflineOpen), apply.getOfflineOpen());
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getProvinceId), apply.getProvinceId());
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getCityId), apply.getCityId());
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getAreaId), apply.getAreaId());
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getTownshipId), apply.getTownshipId());
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getAbsoluteAddress), apply.getAbsoluteAddress());
+        if (!WhetherEnum.ENABLE_USING.getKey().equals(apply.getOfflineOpen())) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineBookAppoint), WhetherEnum.DISABLE_USING.getKey());
+        }
+        shopStoreService.update(updateWrapper);
+        shopStoreService.refreshCache(apply.getStoreId());
     }
 
     private ShopStoreApply queryPendingApply(String memberId) {

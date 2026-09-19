@@ -80,4 +80,20 @@ public interface ShopMaterialStoreService extends SkyeyeBusinessService<ShopMate
     void getAddedShopMaterialList(InputObject inputObject, OutputObject outputObject);
 
     void getLaunchedShopMaterialList(InputObject inputObject, OutputObject outputObject);
+
+    void queryPersonalStoreMaterialList(InputObject inputObject, OutputObject outputObject);
+
+    void queryPlatformMaterialForPersonalStore(InputObject inputObject, OutputObject outputObject);
+
+    void choosePlatformMaterialForPersonalStore(InputObject inputObject, OutputObject outputObject);
+
+    void launchPersonalStoreMaterial(InputObject inputObject, OutputObject outputObject);
+
+    void unlaunchPersonalStoreMaterial(InputObject inputObject, OutputObject outputObject);
+
+    void removePersonalStoreMaterial(InputObject inputObject, OutputObject outputObject);
+
+    void queryPersonalStoreMaterialCategory(InputObject inputObject, OutputObject outputObject);
+
+    void createPersonalStoreMaterial(InputObject inputObject, OutputObject outputObject);
 }

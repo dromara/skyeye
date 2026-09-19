@@ -9,6 +9,7 @@ import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.store.entity.ShopStore;
@@ -103,7 +104,9 @@ public class ShopStoreController {
         @ApiImplicitParam(id = "onlineBookAppoint", name = "onlineBookAppoint", value = "是否开启线上预约", required = "required,num"),
         @ApiImplicitParam(id = "onlineBookRadix", name = "onlineBookRadix", value = "线上预约基数，以分钟为单位，如果设置为30，则会自动计算在营业时间段内的可预约时间段", required = "num"),
         @ApiImplicitParam(id = "onlineBookType", name = "onlineBookType", value = "线上预约类型的设定", required = "num"),
-        @ApiImplicitParam(id = "onlineBookJson", name = "onlineBookJson", value = "设置线上预约时需要存储各个时间段内的信息", required = "json")})
+        @ApiImplicitParam(id = "onlineBookJson", name = "onlineBookJson", value = "设置线上预约时需要存储各个时间段内的信息", required = "json"),
+        @ApiImplicitParam(id = "onlineOpen", name = "onlineOpen", value = "线上门店是否开启", enumClass = WhetherEnum.class, required = "num"),
+        @ApiImplicitParam(id = "offlineOpen", name = "offlineOpen", value = "线下门店是否开启", enumClass = WhetherEnum.class, required = "num")})
     @RequestMapping("/post/ShopStoreController/saveStoreOnlineMation")
     public void saveStoreOnlineMation(InputObject inputObject, OutputObject outputObject) {
         shopStoreService.saveStoreOnlineMation(inputObject, outputObject);
@@ -122,6 +125,24 @@ public class ShopStoreController {
     @RequestMapping("/post/ShopStoreController/queryMyPersonalStoreList")
     public void queryMyPersonalStoreList(InputObject inputObject, OutputObject outputObject) {
         shopStoreService.queryMyPersonalStoreList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "savePersonalStoreSetting", value = "保存个人门店经营设置", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "门店id", required = "required"),
+        @ApiImplicitParam(id = "onlineOpen", name = "onlineOpen", value = "线上门店是否开启", enumClass = WhetherEnum.class, required = "required,num"),
+        @ApiImplicitParam(id = "offlineOpen", name = "offlineOpen", value = "线下门店是否开启", enumClass = WhetherEnum.class, required = "required,num"),
+        @ApiImplicitParam(id = "startTime", name = "startTime", value = "营业开始时间"),
+        @ApiImplicitParam(id = "endTime", name = "endTime", value = "营业结束时间"),
+        @ApiImplicitParam(id = "absoluteAddress", name = "absoluteAddress", value = "线下门店地址"),
+        @ApiImplicitParam(id = "remark", name = "remark", value = "店铺简介"),
+        @ApiImplicitParam(id = "onlineBookAppoint", name = "onlineBookAppoint", value = "是否开启线上预约", required = "num"),
+        @ApiImplicitParam(id = "onlineBookRadix", name = "onlineBookRadix", value = "单场基础时间，分钟", required = "num"),
+        @ApiImplicitParam(id = "onlineBookType", name = "onlineBookType", value = "预约类型", required = "num"),
+        @ApiImplicitParam(id = "onlineBookJson", name = "onlineBookJson", value = "预约时间段", required = "json")})
+    @RequestMapping("/post/ShopStoreController/savePersonalStoreSetting")
+    public void savePersonalStoreSetting(InputObject inputObject, OutputObject outputObject) {
+        shopStoreService.savePersonalStoreSetting(inputObject, outputObject);
     }
 
 }

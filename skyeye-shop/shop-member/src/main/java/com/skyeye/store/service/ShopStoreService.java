@@ -33,4 +33,9 @@ public interface ShopStoreService extends SkyeyeBusinessService<ShopStore> {
      * 查询当前会员的个人门店列表（tenant=shop + createId=会员id）
      */
     void queryMyPersonalStoreList(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 个人门店资料：营业时间、线上/线下开关、线下地址和预约
+     */
+    void savePersonalStoreSetting(InputObject inputObject, OutputObject outputObject);
 }

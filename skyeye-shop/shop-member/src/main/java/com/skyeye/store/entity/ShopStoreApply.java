@@ -4,6 +4,7 @@
 
 package com.skyeye.store.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -27,7 +28,7 @@ public class ShopStoreApply extends AreaInfo {
     @ApiModelProperty(value = "主键id。为空时新增，不为空时编辑")
     private String id;
 
-    @TableField("tenant_id")
+    @TableField(value = "tenant_id", updateStrategy = FieldStrategy.NEVER)
     @Property(value = "租户id，个人店固定为 TenantTypeEnum.SHOP")
     private String tenantId;
 
@@ -80,7 +81,19 @@ public class ShopStoreApply extends AreaInfo {
     private String auditRemark;
 
     @TableField("store_id")
-    @Property(value = "审核通过后生成的门店id")
+    @Property(value = "审核通过后生成的门店id；变更申请提交时即为要改的门店")
     private String storeId;
+
+    @TableField("online_open")
+    @ApiModelProperty(value = "线上门店是否开启", enumClass = com.skyeye.common.enumeration.WhetherEnum.class, required = "num")
+    private Integer onlineOpen;
+
+    @TableField("offline_open")
+    @ApiModelProperty(value = "线下门店是否开启", enumClass = com.skyeye.common.enumeration.WhetherEnum.class, required = "num")
+    private Integer offlineOpen;
+
+    @TableField("apply_type")
+    @Property(value = "申请类型：1开店 2变更线上线下或经营地址")
+    private Integer applyType;
 
 }

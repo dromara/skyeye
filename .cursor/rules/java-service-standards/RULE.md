@@ -105,6 +105,12 @@ Map<String, Object> params = inputObject.getParams();
 String name = params.get("name").toString();
 ```
 
+## 接口必填
+
+`@ApiImplicitParam` 的 `required` 含 `required` 时（`required`、`required,num`、`required,json`），空值在接口层已经校验。Service 不要再对这个字段做非空判断，直接取值。
+
+没标必填的字段才处理缺省。数值范围、业务状态这类校验照常写。
+
 ## 异常处理
 
 - 使用 `CustomException` 抛出业务异常

@@ -29,4 +29,6 @@ public interface ShopStoreApplyService extends SkyeyeBusinessService<ShopStoreAp
 
     void queryMyPersonalStoreQuota(InputObject inputObject, OutputObject outputObject);
 
+    void applyPersonalStoreChange(InputObject inputObject, OutputObject outputObject);
+
 }

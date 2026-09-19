@@ -78,4 +78,8 @@ public class ShopMaterialStore extends OperatorUserInfo {
     @ApiModelProperty(value = "配送方式，给门店选择的配送方式", enumClass = ShopMaterialDeliveryMethod.class, required = "json")
     private List<String> deliveryMethod;
 
+    @TableField(value = "sale_channel", typeHandler = JacksonTypeHandler.class)
+    @ApiModelProperty(value = "上架经营方式，1线上 2线下，用于同城只出线下商品")
+    private List<String> saleChannel;
+
 }

@@ -35,11 +35,7 @@ import com.skyeye.coupon.entity.Coupon;
 import com.skyeye.coupon.entity.CouponStore;
 import com.skyeye.coupon.entity.CouponUse;
 import com.skyeye.coupon.entity.CouponUseMaterial;
-import com.skyeye.coupon.enums.CouponStoreCoverage;
-import com.skyeye.coupon.enums.CouponUseState;
-import com.skyeye.coupon.enums.CouponValidityType;
-import com.skyeye.coupon.enums.PromotionDiscountType;
-import com.skyeye.coupon.enums.PromotionMaterialScope;
+import com.skyeye.coupon.enums.*;
 import com.skyeye.coupon.service.CouponService;
 import com.skyeye.coupon.service.CouponStoreService;
 import com.skyeye.coupon.service.CouponUseMaterialService;
@@ -49,6 +45,7 @@ import com.skyeye.eve.service.IAreaService;
 import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.order.dao.OrderDao;
+import com.skyeye.order.dao.OrderItemDao;
 import com.skyeye.order.entity.Order;
 import com.skyeye.order.entity.OrderItem;
 import com.skyeye.order.enums.*;
@@ -56,10 +53,13 @@ import com.skyeye.order.service.OrderItemService;
 import com.skyeye.order.service.OrderService;
 import com.skyeye.rest.pay.service.IPayService;
 import com.skyeye.rest.shopmaterialnorms.sevice.IShopMaterialNormsService;
+import com.skyeye.store.classenum.StoreNature;
 import com.skyeye.store.entity.ShopAddress;
 import com.skyeye.store.entity.ShopAddressHistory;
+import com.skyeye.store.entity.ShopStore;
 import com.skyeye.store.service.ShopAddressHistoryService;
 import com.skyeye.store.service.ShopAddressService;
+import com.skyeye.store.service.ShopStoreService;
 import com.skyeye.store.service.ShopTradeCartService;
 import com.xxl.job.core.util.IpUtil;
 import org.slf4j.Logger;
@@ -96,6 +96,12 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
 
     @Autowired
     private OrderItemService orderItemService;
+
+    @Autowired
+    private OrderItemDao orderItemDao;
+
+    @Autowired
+    private ShopStoreService shopStoreService;
 
     @Autowired
     private IAreaService iAreaService;
@@ -1080,5 +1086,119 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         wrapper.set(MybatisPlusUtil.toColumns(Order::getAdjustPrice), interpolation);
         update(wrapper);
         refreshCache(id);
+    }
+
+    private ShopStore assertPersonalStore(String storeId) {
+        if (StrUtil.isEmpty(storeId)) {
+            throw new CustomException("请选择门店");
+        }
+        ShopStore store = shopStoreService.selectById(storeId);
+        if (store == null || StrUtil.isEmpty(store.getId())) {
+            throw new CustomException("门店不存在");
+        }
+        String memberId = InputObject.getLogParamsStatic().get("id").toString();
+        if (!memberId.equals(store.getCreateId())) {
+            throw new CustomException("无权操作该门店");
+        }
+        if (!StoreNature.PERSONAL.getKey().equals(store.getStoreNature())) {
+            throw new CustomException("只能操作个人门店");
+        }
+        return store;
+    }
+
+    private List<Integer> resolveOrderItemStateList(String type) {
+        switch (StrUtil.isEmpty(type) ? CommonNumConstants.NUM_ZERO.toString() : type) {
+            case "1":
+                return Arrays.asList(ShopOrderItemOtherState.WAIT_PAY.getKey());
+            case "2":
+                return Arrays.asList(ShopOrderItemOtherState.WAIT_DELIVER.getKey());
+            case "3":
+                return Arrays.asList(ShopOrderItemOtherState.ALL_DELIVERED.getKey(), ShopOrderItemOtherState.TRANSPORTING.getKey());
+            case "4":
+                return Arrays.asList(ShopOrderItemOtherState.UNEVALUATE.getKey(), ShopOrderItemOtherState.EVALUATED.getKey(),
+                    ShopOrderItemOtherState.PARTIALEVALUATION.getKey(), ShopOrderItemOtherState.SIGN.getKey(),
+                    ShopOrderItemOtherState.COMPLETED.getKey(), ShopOrderItemOtherState.PARTIALLYDONE.getKey());
+            case "5":
+                return Arrays.asList(ShopOrderItemOtherState.CANCELED.getKey());
+            case "6":
+                return Arrays.asList(ShopOrderItemOtherState.REFUNDING.getKey(), ShopOrderItemOtherState.SALESRETURNING.getKey(),
+                    ShopOrderItemOtherState.EXCHANGEING.getKey());
+            case "7":
+                return Arrays.asList(ShopOrderItemOtherState.REFUND.getKey(), ShopOrderItemOtherState.SALESRETURNED.getKey(),
+                    ShopOrderItemOtherState.EXCHANGED.getKey());
+            default:
+                return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public void queryPersonalStoreOrderPageList(InputObject inputObject, OutputObject outputObject) {
+        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        assertPersonalStore(commonPageInfo.getObjectId());
+        List<Integer> stateList = resolveOrderItemStateList(commonPageInfo.getType());
+        Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
+        QueryWrapper<OrderItem> wrapper = new QueryWrapper<>();
+        wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getStoreId), commonPageInfo.getObjectId());
+        if (CollectionUtil.isNotEmpty(stateList)) {
+            wrapper.in(MybatisPlusUtil.toColumns(OrderItem::getState), stateList);
+        }
+        if (StrUtil.isNotBlank(commonPageInfo.getKeyword())) {
+            wrapper.like(MybatisPlusUtil.toColumns(OrderItem::getOddNumber), commonPageInfo.getKeyword());
+        }
+        wrapper.orderByDesc(MybatisPlusUtil.toColumns(OrderItem::getCreateTime));
+        List<OrderItem> orderItemList = orderItemService.list(wrapper);
+        if (CollectionUtil.isEmpty(orderItemList)) {
+            return;
+        }
+        orderItemList = orderItemService.setDateForItemLIst(orderItemList);
+        outputObject.setBeans(orderItemList);
+        outputObject.settotal(pages.getTotal());
+    }
+
+    @Override
+    public void queryPersonalStoreOrderStat(InputObject inputObject, OutputObject outputObject) {
+        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        String storeId = commonPageInfo.getObjectId();
+        assertPersonalStore(storeId);
+        Map<String, Object> bean = new HashMap<>();
+        bean.put("waitPay", countStoreOrder(storeId, Arrays.asList(ShopOrderItemOtherState.WAIT_PAY.getKey())));
+        bean.put("waitDeliver", countStoreOrder(storeId, Arrays.asList(ShopOrderItemOtherState.WAIT_DELIVER.getKey())));
+        bean.put("afterSale", countStoreOrder(storeId, Arrays.asList(ShopOrderItemOtherState.REFUNDING.getKey(),
+            ShopOrderItemOtherState.SALESRETURNING.getKey(), ShopOrderItemOtherState.EXCHANGEING.getKey())));
+        String todayStart = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + " 00:00:00";
+        QueryWrapper<OrderItem> todayWrapper = new QueryWrapper<>();
+        todayWrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getStoreId), storeId);
+        todayWrapper.ge(MybatisPlusUtil.toColumns(OrderItem::getCreateTime), todayStart);
+        todayWrapper.notIn(MybatisPlusUtil.toColumns(OrderItem::getState), Arrays.asList(
+            ShopOrderItemOtherState.WAIT_PAY.getKey(), ShopOrderItemOtherState.FAIRPAID.getKey(), ShopOrderItemOtherState.CANCELED.getKey()));
+        todayWrapper.select("IFNULL(SUM(pay_price),0) AS todayAmount", "COUNT(1) AS todayOrder");
+        List<Map<String, Object>> todayList = orderItemDao.selectMaps(todayWrapper);
+        Map<String, Object> today = CollectionUtil.isEmpty(todayList) || todayList.get(0) == null ? new HashMap<>() : todayList.get(0);
+        Object todayOrder = mapIgnoreCase(today, "todayOrder");
+        Object todayAmount = mapIgnoreCase(today, "todayAmount");
+        bean.put("todayOrder", todayOrder == null ? 0 : todayOrder);
+        bean.put("todayAmount", todayAmount == null ? "0" : todayAmount.toString());
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    private long countStoreOrder(String storeId, List<Integer> stateList) {
+        QueryWrapper<OrderItem> wrapper = new QueryWrapper<>();
+        wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getStoreId), storeId);
+        wrapper.in(MybatisPlusUtil.toColumns(OrderItem::getState), stateList);
+        Long count = orderItemDao.selectCount(wrapper);
+        return count == null ? 0L : count;
+    }
+
+    private Object mapIgnoreCase(Map<String, Object> map, String key) {
+        if (map.containsKey(key)) {
+            return map.get(key);
+        }
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            if (entry.getKey() != null && entry.getKey().equalsIgnoreCase(key)) {
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 }

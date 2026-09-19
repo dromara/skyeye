@@ -122,6 +122,14 @@ public class ShopMaterial extends OperatorUserInfo {
     @ApiModelProperty(value = "门店自制", enumClass = WhetherEnum.class, required = "required,num")
     private Integer storeSelfMade;
 
+    @TableField(value = "sale_channel", typeHandler = JacksonTypeHandler.class)
+    @ApiModelProperty(value = "可售经营方式，1线上 2线下", required = "required,json")
+    private List<String> saleChannel;
+
+    @TableField(value = "allow_platform_source")
+    @ApiModelProperty(value = "是否允许别人作为平台货源使用", enumClass = WhetherEnum.class, required = "required,num")
+    private Integer allowPlatformSource;
+
     @TableField(exist = false)
     @Property(value = "提示编码")
     private Integer returnCode;

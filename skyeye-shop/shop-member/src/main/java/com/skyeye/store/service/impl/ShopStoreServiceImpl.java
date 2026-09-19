@@ -16,6 +16,7 @@ import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.enumeration.WhetherEnum;
+import com.skyeye.exception.CustomException;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
@@ -62,6 +63,12 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
         if (entity.getStoreNature() == null) {
             entity.setStoreNature(StoreNature.FRANCHISE.getKey());
         }
+        if (entity.getOnlineOpen() == null) {
+            entity.setOnlineOpen(WhetherEnum.ENABLE_USING.getKey());
+        }
+        if (entity.getOfflineOpen() == null) {
+            entity.setOfflineOpen(WhetherEnum.ENABLE_USING.getKey());
+        }
     }
 
     @Override
@@ -69,6 +76,12 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
         QueryWrapper<ShopStore> queryWrapper = super.getQueryWrapper(commonPageInfo);
         if (commonPageInfo.getEnabled() != null) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), commonPageInfo.getEnabled());
+        }
+        // 同城门店列表只出已开启线下门店、且门店启用的记录。定位未完成时也要带上这个条件
+        if ("offlineStore".equals(commonPageInfo.getHolderId())
+            || (StrUtil.isNotEmpty(commonPageInfo.getLatitude()) && StrUtil.isNotEmpty(commonPageInfo.getLongitude()))) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getOfflineOpen), WhetherEnum.ENABLE_USING.getKey());
+            queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), com.skyeye.common.enumeration.EnableEnum.ENABLE_USING.getKey());
         }
         return queryWrapper;
     }
@@ -112,6 +125,7 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
     @Override
     @IgnoreTenant
     public void queryStoreListFoServer(InputObject inputObject, OutputObject outputObject) {
+        inputObject.getParams().put("holderId", "offlineStore");
         queryPageList(inputObject, outputObject);
     }
 
@@ -235,8 +249,23 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
     @Override
     public void saveStoreOnlineMation(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
+        String id = params.get("id").toString();
+        ShopStore store = selectById(id);
+        boolean personal = store != null && StoreNature.PERSONAL.getKey().equals(store.getStoreNature());
+        Integer offlineOpen = store == null ? null : store.getOfflineOpen();
+        if (!personal && params.get("offlineOpen") != null && StrUtil.isNotEmpty(params.get("offlineOpen").toString())) {
+            offlineOpen = Integer.parseInt(params.get("offlineOpen").toString());
+        }
+        // 没开线下门店，预约时段不能生效
+        if (!WhetherEnum.ENABLE_USING.getKey().equals(offlineOpen)) {
+            params.put("onlineBookAppoint", WhetherEnum.DISABLE_USING.getKey().toString());
+        }
         UpdateWrapper<ShopStore> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq(CommonConstants.ID, params.get("id").toString());
+        updateWrapper.eq(CommonConstants.ID, id);
+        if (!personal && params.get("onlineOpen") != null && StrUtil.isNotEmpty(params.get("onlineOpen").toString())) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineOpen), params.get("onlineOpen").toString());
+            updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOfflineOpen), offlineOpen);
+        }
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getStartTime), params.get("startTime").toString());
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getEndTime), params.get("endTime").toString());
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineBookAppoint), params.get("onlineBookAppoint").toString());
@@ -284,6 +313,53 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
         }
         outputObject.setBean(shopStore);
         outputObject.settotal(1);
+    }
+
+    @Override
+    @IgnoreTenant
+    public void savePersonalStoreSetting(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String id = params.get("id").toString();
+        ShopStore store = selectById(id);
+        if (store == null || StrUtil.isEmpty(store.getId())) {
+            throw new CustomException("门店不存在");
+        }
+        String memberId = InputObject.getLogParamsStatic().get("id").toString();
+        if (!memberId.equals(store.getCreateId()) || !StoreNature.PERSONAL.getKey().equals(store.getStoreNature())) {
+            throw new CustomException("只能改自己的个人门店");
+        }
+        // 线上线下和经营地址以开店申请为准，日常保存不能改，要走变更申请
+        boolean offline = WhetherEnum.ENABLE_USING.getKey().equals(store.getOfflineOpen());
+        String startTime = params.get("startTime") == null ? "" : params.get("startTime").toString();
+        String endTime = params.get("endTime") == null ? "" : params.get("endTime").toString();
+        Integer onlineBookAppoint = WhetherEnum.DISABLE_USING.getKey();
+        if (offline) {
+            if (StrUtil.isBlank(startTime) || StrUtil.isBlank(endTime)) {
+                throw new CustomException("线下门店要填写营业时间");
+            }
+            if (params.get("onlineBookAppoint") != null && StrUtil.isNotEmpty(params.get("onlineBookAppoint").toString())) {
+                onlineBookAppoint = Integer.parseInt(params.get("onlineBookAppoint").toString());
+            }
+        }
+        UpdateWrapper<ShopStore> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, id);
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getStartTime), startTime);
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getEndTime), endTime);
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineBookAppoint), onlineBookAppoint);
+        if (params.get("remark") != null) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getRemark), params.get("remark").toString());
+        }
+        if (WhetherEnum.ENABLE_USING.getKey().equals(onlineBookAppoint)) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineBookRadix), params.get("onlineBookRadix").toString());
+            updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineBookType), params.get("onlineBookType").toString());
+            updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineBookJson), params.get("onlineBookJson").toString());
+        } else {
+            updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineBookRadix), null);
+            updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineBookType), null);
+            updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineBookJson), null);
+        }
+        update(updateWrapper);
+        refreshCache(id);
     }
 
 }

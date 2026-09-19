@@ -76,6 +76,14 @@ public class ShopStore extends AreaInfo {
     @ApiModelProperty(value = "门店性质", enumClass = StoreNature.class, required = "num")
     private Integer storeNature;
 
+    @TableField(value = "online_open")
+    @ApiModelProperty(value = "线上门店是否开启，开启后可在商城售卖", enumClass = WhetherEnum.class, required = "num")
+    private Integer onlineOpen;
+
+    @TableField(value = "offline_open")
+    @ApiModelProperty(value = "线下门店是否开启，开启后出现在同城，并可预约、自提、同城配送", enumClass = WhetherEnum.class, required = "num")
+    private Integer offlineOpen;
+
     @TableField(value = "longitude")
     @ApiModelProperty(value = "经度")
     private String longitude;
