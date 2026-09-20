@@ -4,6 +4,7 @@
 
 package com.skyeye.material.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.enumeration.WhetherEnum;
@@ -17,9 +18,7 @@ import com.skyeye.material.service.MaterialUnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -90,8 +89,48 @@ public class MaterialUnitGroupServiceImpl extends SkyeyeBusinessServiceImpl<Mate
     @Override
     public void queryAllMaterialUnitList(InputObject inputObject, OutputObject outputObject) {
         List<MaterialUnitGroup> materialUnitGroups = queryAllData();
+        if (CollectionUtil.isNotEmpty(materialUnitGroups)) {
+            List<String> ids = materialUnitGroups.stream().map(MaterialUnitGroup::getId).collect(Collectors.toList());
+            Map<String, List<MaterialUnit>> groupUnitMap = materialUnitService.queryUnitListByGroupId(ids);
+            materialUnitGroups.forEach(group ->
+                group.setUnitList(groupUnitMap.getOrDefault(group.getId(), new ArrayList<>())));
+        }
         outputObject.setBeans(materialUnitGroups);
         outputObject.settotal(materialUnitGroups.size());
+    }
+
+    @Override
+    public MaterialUnitGroup ensureDefaultPieceGroup(String userId) {
+        List<MaterialUnitGroup> groups = queryAllData();
+        if (CollectionUtil.isNotEmpty(groups)) {
+            List<String> ids = groups.stream().map(MaterialUnitGroup::getId).collect(Collectors.toList());
+            Map<String, List<MaterialUnit>> groupUnitMap = materialUnitService.queryUnitListByGroupId(ids);
+            for (MaterialUnitGroup group : groups) {
+                List<MaterialUnit> unitList = groupUnitMap.getOrDefault(group.getId(), new ArrayList<>());
+                if (CollectionUtil.isNotEmpty(unitList)) {
+                    group.setUnitList(unitList);
+                    return group;
+                }
+            }
+            // 有分组但没有单位：补一条「件」
+            MaterialUnitGroup first = groups.get(0);
+            MaterialUnit unit = new MaterialUnit();
+            unit.setName("件");
+            unit.setNumber(1);
+            unit.setBaseUnit(WhetherEnum.ENABLE_USING.getKey());
+            first.setUnitList(Collections.singletonList(unit));
+            updateEntity(first, userId);
+            return selectById(first.getId());
+        }
+        MaterialUnitGroup group = new MaterialUnitGroup();
+        group.setName("商城默认单位");
+        MaterialUnit unit = new MaterialUnit();
+        unit.setName("件");
+        unit.setNumber(1);
+        unit.setBaseUnit(WhetherEnum.ENABLE_USING.getKey());
+        group.setUnitList(Collections.singletonList(unit));
+        String id = createEntity(group, userId);
+        return selectById(id);
     }
 
 }

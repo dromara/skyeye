@@ -78,7 +78,7 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
             queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), commonPageInfo.getEnabled());
         }
         // 同城门店列表只出已开启线下门店、且门店启用的记录。定位未完成时也要带上这个条件
-        if ("offlineStore".equals(commonPageInfo.getHolderId())
+        if ("offlineStore".equals(commonPageInfo.getCustomParamsMapStr("holderId"))
             || (StrUtil.isNotEmpty(commonPageInfo.getLatitude()) && StrUtil.isNotEmpty(commonPageInfo.getLongitude()))) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getOfflineOpen), WhetherEnum.ENABLE_USING.getKey());
             queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), com.skyeye.common.enumeration.EnableEnum.ENABLE_USING.getKey());
@@ -125,7 +125,6 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
     @Override
     @IgnoreTenant
     public void queryStoreListFoServer(InputObject inputObject, OutputObject outputObject) {
-        inputObject.getParams().put("holderId", "offlineStore");
         queryPageList(inputObject, outputObject);
     }
 

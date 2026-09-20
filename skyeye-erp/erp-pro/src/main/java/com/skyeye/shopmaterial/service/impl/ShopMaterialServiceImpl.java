@@ -256,6 +256,9 @@ public class ShopMaterialServiceImpl extends SkyeyeBusinessServiceImpl<ShopMater
     @IgnoreTenant
     public void queryShopMaterialListForStore(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        Map<String, Object> customParamsMap = new HashMap<>();
+        customParamsMap.put("holderId", "offlineStore");
+        commonPageInfo.setCustomParamsMap(customParamsMap);
         ResultEntity resultEntity = iShopStoreService.queryStoreListFoServer(commonPageInfo);
         // 分页查询门店信息
         List<Map<String, Object>> storeList = resultEntity.getRows();

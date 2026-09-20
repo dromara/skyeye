@@ -216,7 +216,8 @@ public class ShopMaterialStoreController {
         @ApiImplicitParam(id = "model", name = "model", value = "型号", required = "required"),
         @ApiImplicitParam(id = "categoryId", name = "categoryId", value = "商品分类id", required = "required"),
         @ApiImplicitParam(id = "content", name = "content", value = "商品详情", required = "required"),
-        @ApiImplicitParam(id = "skuData", name = "skuData", value = "规格数据，与ERP商品规格组件一致：单规格含unit、unitName、materialNorms；多规格含unit、unitGroupId、firstInUnit、firstOutUnit、normsSpec、materialNorms", required = "required,json")})
+        @ApiImplicitParam(id = "carouselImg", name = "carouselImg", value = "轮播图，多个逗号隔开"),
+        @ApiImplicitParam(id = "skuData", name = "skuData", value = "规格数据：单/多规格均含unit、unitName、materialNorms；多规格另含normsSpec。单位组由后台兜底", required = "required,json")})
     @RequestMapping("/post/ShopMaterialStoreController/createPersonalStoreMaterial")
     public void createPersonalStoreMaterial(InputObject inputObject, OutputObject outputObject) {
         shopMaterialStoreService.createPersonalStoreMaterial(inputObject, outputObject);

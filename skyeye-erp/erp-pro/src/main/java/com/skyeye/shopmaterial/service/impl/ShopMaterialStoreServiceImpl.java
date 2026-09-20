@@ -42,8 +42,10 @@ import com.skyeye.material.classenum.MaterialType;
 import com.skyeye.material.classenum.MaterialUnit;
 import com.skyeye.material.entity.Material;
 import com.skyeye.material.entity.MaterialNorms;
+import com.skyeye.material.entity.unit.MaterialUnitGroup;
 import com.skyeye.material.service.MaterialNormsService;
 import com.skyeye.material.service.MaterialService;
+import com.skyeye.material.service.MaterialUnitGroupService;
 import com.skyeye.rest.shop.service.IShopStoreService;
 import com.skyeye.shopmaterial.dao.ShopMaterialDao;
 import com.skyeye.shopmaterial.dao.ShopMaterialStoreDao;
@@ -51,7 +53,6 @@ import com.skyeye.shopmaterial.entity.ShopMaterial;
 import com.skyeye.shopmaterial.entity.ShopMaterialNorms;
 import com.skyeye.shopmaterial.entity.ShopMaterialStore;
 import com.skyeye.shopmaterial.enums.ShopMaterialDistributionType;
-import com.skyeye.shopmaterial.enums.ShopMaterialNormsLogoType;
 import com.skyeye.shopmaterial.enums.ShopMaterialStoreCoverage;
 import com.skyeye.shopmaterial.service.ShopMaterialService;
 import com.skyeye.shopmaterial.service.ShopMaterialStoreService;
@@ -86,6 +87,9 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
 
     @Autowired
     private MaterialService materialService;
+
+    @Autowired
+    private MaterialUnitGroupService materialUnitGroupService;
 
     @Autowired
     private ShopMaterialDao shopMaterialDao;
@@ -1005,7 +1009,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
 
     /**
      * 个人店自建商品。店主只填一次，后台按 ERP 商品、商城商品、本店货架这个顺序一次写完。
-     * 规格数据跟 ERP 商品规格组件同一套：单规格写计量单位，多规格写单位组、出入库单位和规格行。
+     * 单/多规格都只传计量单位名称；多规格另传 normsSpec，单位组由后台兜底。
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -1017,6 +1021,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         String salePrice = params.get("salePrice").toString();
         String model = params.get("model").toString();
         String content = params.get("content").toString();
+        String carouselImg = params.get("carouselImg").toString();
         String categoryId = params.get("categoryId").toString();
         Map<String, Object> storeMation = assertPersonalStoreOwner(storeId);
         checkSalePrice(salePrice);
@@ -1045,7 +1050,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         }
         String userId = InputObject.getLogParamsStatic().get("id").toString();
         String materialId = createErpMaterial(userId, name, model, categoryId, logo, sku, multiSpec, normsRows);
-        createShopMaterial(userId, materialId, storeId, logo, content, deliveryMethod, normsRows);
+        createShopMaterial(userId, materialId, storeId, logo, carouselImg, content, deliveryMethod, normsRows);
         hangOnPersonalStore(userId, storeId, materialId, deliveryMethod, storeMation);
     }
 
@@ -1081,10 +1086,29 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         material.setType(MaterialType.FINISHED_PRODUCT.getKey());
         material.setItemCode(MaterialItemCode.DISABLE.getKey());
         if (multiSpec) {
+            // 个人门店多规格：只收计量单位名称，单位组/出入库单位后台兜底
+            String unitName = sku.getStr("unitName");
+            if (StrUtil.isBlank(unitName)) {
+                throw new CustomException("请填写计量单位");
+            }
             material.setUnit(MaterialUnit.MULTI_SPECIFICATION.getKey());
-            material.setUnitGroupId(sku.getStr("unitGroupId"));
-            material.setFirstInUnit(sku.getStr("firstInUnit"));
-            material.setFirstOutUnit(sku.getStr("firstOutUnit"));
+            MaterialUnitGroup unitGroup = materialUnitGroupService.ensureDefaultPieceGroup(userId);
+            if (unitGroup == null || StrUtil.isBlank(unitGroup.getId()) || CollectionUtil.isEmpty(unitGroup.getUnitList())) {
+                throw new CustomException("计量单位初始化失败");
+            }
+            String unitId = unitGroup.getUnitList().get(0).getId();
+            material.setUnitGroupId(unitGroup.getId());
+            material.setFirstInUnit(unitId);
+            material.setFirstOutUnit(unitId);
+            // 前端 tableNum 首段用占位单位，换成真实单位 id
+            for (JSONObject row : normsRows) {
+                String tableNum = row.getStr("tableNum");
+                if (StrUtil.isBlank(tableNum) || !tableNum.contains("-")) {
+                    row.set("tableNum", unitId);
+                    continue;
+                }
+                row.set("tableNum", unitId + tableNum.substring(tableNum.indexOf('-')));
+            }
             JSONArray specArray = sku.getJSONArray("normsSpec");
             material.setNormsSpec(specArray == null ? new ArrayList<>() : parseNormsSpec(specArray.toString()));
         } else {
@@ -1130,7 +1154,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         return StrUtil.isBlank(value) ? fallback : value;
     }
 
-    private void createShopMaterial(String userId, String materialId, String storeId, String logo, String content,
+    private void createShopMaterial(String userId, String materialId, String storeId, String logo, String carouselImg, String content,
                                     List<String> deliveryMethod, List<JSONObject> normsRows) {
         List<MaterialNorms> normsList = materialNormsService.queryNormsUnitListByMaterialId(materialId);
         if (CollectionUtil.isEmpty(normsList)) {
@@ -1154,21 +1178,34 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
             ShopMaterialNorms shopNorms = new ShopMaterialNorms();
             shopNorms.setNormsId(saved.getId());
             shopNorms.setIsDefault(row.getStr("tableNum").equals(defaultTableNum) ? IsDefaultEnum.IS_DEFAULT.getKey() : IsDefaultEnum.NOT_DEFAULT.getKey());
-            shopNorms.setEstimatePurchasePrice(rowPrice);
+            shopNorms.setEstimatePurchasePrice(priceOr(row, "estimatePurchasePrice", rowPrice));
             shopNorms.setSalePrice(rowPrice);
-            shopNorms.setLogoType(StrUtil.isEmpty(row.getStr("logo")) ? ShopMaterialNormsLogoType.FOLLOW_GOODS.getKey() : ShopMaterialNormsLogoType.SINGLE_SET.getKey());
-            if (StrUtil.isNotEmpty(row.getStr("logo"))) {
-                shopNorms.setLogo(row.getStr("logo"));
-            }
+            Integer logoType = Integer.parseInt(row.get("logoType").toString());
+            shopNorms.setLogoType(logoType);
+            shopNorms.setLogo(row.getStr("logo"));
+            shopNorms.setCarouselImg(row.getStr("carouselImg"));
             shopNormsList.add(shopNorms);
         }
         ShopMaterial shopMaterial = new ShopMaterial();
         shopMaterial.setMaterialId(materialId);
         shopMaterial.setContent(content);
         shopMaterial.setLogo(logo);
-        shopMaterial.setCarouselImg(logo);
+        shopMaterial.setCarouselImg(StrUtil.isBlank(carouselImg) ? logo : carouselImg);
         shopMaterial.setDistributionType(ShopMaterialDistributionType.DEFAULT_SET.getKey());
         shopMaterial.setDeliveryMethod(deliveryMethod);
+        List<String> saleChannel = new ArrayList<>();
+        if (deliveryMethod.contains(ShopMaterialDeliveryMethod.EXPRESS_DELIVERY.getKey().toString())) {
+            saleChannel.add("1");
+        }
+        if (deliveryMethod.contains(ShopMaterialDeliveryMethod.USER_TAKE_SELF.getKey().toString())
+            || deliveryMethod.contains(ShopMaterialDeliveryMethod.LOCAL_DELIVERY.getKey().toString())) {
+            saleChannel.add("2");
+        }
+        if (saleChannel.isEmpty()) {
+            saleChannel.add("1");
+        }
+        shopMaterial.setSaleChannel(saleChannel);
+        shopMaterial.setAllowPlatformSource(WhetherEnum.DISABLE_USING.getKey());
         shopMaterial.setOrderBy(1);
         shopMaterial.setGiftPoint(0);
         shopMaterial.setVirtualSales("0");

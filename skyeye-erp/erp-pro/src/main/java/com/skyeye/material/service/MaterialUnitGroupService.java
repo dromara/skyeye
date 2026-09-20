@@ -21,4 +21,9 @@ public interface MaterialUnitGroupService extends SkyeyeBusinessService<Material
 
     void queryAllMaterialUnitList(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 商城个人门店：确保有可用的默认计量单位组（件）
+     */
+    MaterialUnitGroup ensureDefaultPieceGroup(String userId);
+
 }
