@@ -54,6 +54,7 @@ import com.skyeye.shopmaterial.entity.ShopMaterialNorms;
 import com.skyeye.shopmaterial.entity.ShopMaterialStore;
 import com.skyeye.shopmaterial.enums.ShopMaterialDistributionType;
 import com.skyeye.shopmaterial.enums.ShopMaterialNormsLogoType;
+import com.skyeye.shopmaterial.enums.ShopMaterialStockMode;
 import com.skyeye.shopmaterial.enums.ShopMaterialStoreCoverage;
 import com.skyeye.shopmaterial.enums.ShopMaterialStoreSourceType;
 import com.skyeye.shopmaterial.service.ShopMaterialNormsService;
@@ -965,6 +966,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
             shopMaterialStore.setStoreEnabled(storeEnabled);
             shopMaterialStore.setDeliveryMethod(deliveryMethod);
             shopMaterialStore.setSourceType(ShopMaterialStoreSourceType.PLATFORM.getKey());
+            shopMaterialStore.setStockMode(ShopMaterialStockMode.NORMAL.getKey());
             createEntity(shopMaterialStore, userId);
             return;
         }
@@ -1416,6 +1418,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
             row.setDeliveryMethod(deliveryMethod);
             row.setBigTypeId(bigTypeId);
             row.setSourceType(ShopMaterialStoreSourceType.PERSONAL_SELF.getKey());
+            row.setStockMode(ShopMaterialStockMode.NORMAL.getKey());
             createEntity(row, userId);
             return;
         }

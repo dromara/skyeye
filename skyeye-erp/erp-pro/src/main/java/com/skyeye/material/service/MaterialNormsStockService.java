@@ -35,7 +35,7 @@ public interface MaterialNormsStockService extends SkyeyeBusinessService<Materia
      * @param depotId  仓库id
      * @return
      */
-    Map<String, Integer> queryMaterialNormsStock(List<String> normsIds, String depotId);
+    Map<String, String> queryMaterialNormsStock(List<String> normsIds, String depotId);
 
     /**
      * 批量获取指定规格的初始化库存信息

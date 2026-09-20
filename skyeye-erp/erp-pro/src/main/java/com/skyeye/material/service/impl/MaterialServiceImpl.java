@@ -302,7 +302,7 @@ public class MaterialServiceImpl extends SkyeyeBusinessServiceImpl<MaterialDao, 
         // 仓库id
         String depotId = params.get("depotId").toString();
         // 获取所有库存信息
-        Map<String, Integer> bean = materialNormsStockService.queryMaterialNormsStock(normsIds, depotId);
+        Map<String, String> bean = materialNormsStockService.queryMaterialNormsStock(normsIds, depotId);
         outputObject.setBean(bean);
     }
 

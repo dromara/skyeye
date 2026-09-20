@@ -63,17 +63,18 @@ public class MaterialNormsStockServiceImpl extends SkyeyeBusinessServiceImpl<Mat
      * @return
      */
     @Override
-    public Map<String, Integer> queryMaterialNormsStock(List<String> normsIds, String depotId) {
+    public Map<String, String> queryMaterialNormsStock(List<String> normsIds, String depotId) {
         // 查询规格信息
         List<Map<String, Object>> normStockList = materialNormsStockDao.queryMaterialStockByNormsId(normsIds, depotId);
         if (CollectionUtil.isEmpty(normStockList)) {
             normStockList = new ArrayList<>();
         }
-        Map<String, Integer> normStockMap = normStockList.stream()
-            .collect(Collectors.toMap(item -> item.get("normsId").toString(), item -> Integer.parseInt(item.get("stock").toString())));
+        Map<String, String> normStockMap = normStockList.stream()
+            .collect(Collectors.toMap(item -> item.get("normsId").toString(),
+                item -> item.get("stock") == null ? CommonNumConstants.NUM_ZERO.toString() : item.get("stock").toString()));
         normsIds.forEach(normsId -> {
-            if (normStockMap.get(normsId) == null) {
-                normStockMap.put(normsId, CommonNumConstants.NUM_ZERO);
+            if (!normStockMap.containsKey(normsId)) {
+                normStockMap.put(normsId, CommonNumConstants.NUM_ZERO.toString());
             }
         });
         return normStockMap;

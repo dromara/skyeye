@@ -67,4 +67,8 @@ public class Depot extends BaseGeneralInfo {
     @ApiModelProperty(value = "启用状态", enumClass = EnableEnum.class, required = "required,num")
     private Integer enabled;
 
+    @TableField(value = "store_id")
+    @ApiModelProperty(value = "个人门店id，空表示企业仓")
+    private String storeId;
+
 }

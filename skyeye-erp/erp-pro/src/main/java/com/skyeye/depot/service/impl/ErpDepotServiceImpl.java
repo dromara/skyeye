@@ -13,6 +13,7 @@ import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonConstants;
+import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.DeleteFlagEnum;
 import com.skyeye.common.enumeration.IsDefaultEnum;
 import com.skyeye.common.object.InputObject;
@@ -40,6 +41,17 @@ import java.util.stream.Collectors;
 @SkyeyeService(name = "仓库管理", groupName = "仓库管理", allowDynamicAttrKey = false)
 public class ErpDepotServiceImpl extends SkyeyeBusinessServiceImpl<ErpDepotDao, Depot> implements ErpDepotService {
 
+    /**
+     * 企业仓列表：排除个人门店商家仓（store_id 有值）
+     */
+    @Override
+    public QueryWrapper<Depot> getQueryWrapper(CommonPageInfo commonPageInfo) {
+        QueryWrapper<Depot> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        queryWrapper.and(w -> w.isNull(MybatisPlusUtil.toColumns(Depot::getStoreId))
+            .or().eq(MybatisPlusUtil.toColumns(Depot::getStoreId), StrUtil.EMPTY));
+        return queryWrapper;
+    }
+
     @Override
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
@@ -49,23 +61,24 @@ public class ErpDepotServiceImpl extends SkyeyeBusinessServiceImpl<ErpDepotDao, 
 
     @Override
     protected void writePostpose(Depot entity, String userId) {
-        if (entity.getIsDefault().equals(IsDefaultEnum.IS_DEFAULT.getKey())) {
-            // 如果将当前数据修改为默认数据，则需要修改之前的数据为非默认
-            // 1. 先查询默认的仓库信息
+        if (entity.getIsDefault() != null && entity.getIsDefault().equals(IsDefaultEnum.IS_DEFAULT.getKey())) {
+            // 企业仓设默认时，只清其他企业仓的默认标记（不含个人门店商家仓）
             QueryWrapper<Depot> queryWrapper = new QueryWrapper<>();
             queryWrapper.ne(CommonConstants.ID, entity.getId());
             queryWrapper.eq(MybatisPlusUtil.toColumns(Depot::getIsDefault), IsDefaultEnum.IS_DEFAULT.getKey());
             queryWrapper.eq(MybatisPlusUtil.toColumns(Depot::getDeleteFlag), DeleteFlagEnum.NOT_DELETE.getKey());
+            queryWrapper.and(w -> w.isNull(MybatisPlusUtil.toColumns(Depot::getStoreId))
+                .or().eq(MybatisPlusUtil.toColumns(Depot::getStoreId), StrUtil.EMPTY));
             Depot defaultDepot = getOne(queryWrapper, false);
 
-            // 2. 修改之前的默认仓库信息
             UpdateWrapper<Depot> updateWrapper = new UpdateWrapper<>();
             updateWrapper.ne(CommonConstants.ID, entity.getId());
             updateWrapper.eq(MybatisPlusUtil.toColumns(Depot::getDeleteFlag), DeleteFlagEnum.NOT_DELETE.getKey());
+            updateWrapper.and(w -> w.isNull(MybatisPlusUtil.toColumns(Depot::getStoreId))
+                .or().eq(MybatisPlusUtil.toColumns(Depot::getStoreId), StrUtil.EMPTY));
             updateWrapper.set(MybatisPlusUtil.toColumns(Depot::getIsDefault), IsDefaultEnum.NOT_DEFAULT.getKey());
             update(updateWrapper);
 
-            // 3. 如果不为空，则刷新缓存
             if (defaultDepot != null) {
                 refreshCache(defaultDepot.getId());
             }
@@ -75,7 +88,10 @@ public class ErpDepotServiceImpl extends SkyeyeBusinessServiceImpl<ErpDepotDao, 
     @Override
     public Depot selectById(String id) {
         Depot depot = super.selectById(id);
-        depot.setPrincipalMation(iAuthUserService.queryDataMationByIds(Joiner.on(CommonCharConstants.COMMA_MARK).join(depot.getPrincipal())));
+        if (depot != null && CollectionUtil.isNotEmpty(depot.getPrincipal())) {
+            depot.setPrincipalMation(iAuthUserService.queryDataMationByIds(
+                Joiner.on(CommonCharConstants.COMMA_MARK).join(depot.getPrincipal())));
+        }
         return depot;
     }
 
@@ -108,6 +124,8 @@ public class ErpDepotServiceImpl extends SkyeyeBusinessServiceImpl<ErpDepotDao, 
         String enabled = params.get("enabled").toString();
         QueryWrapper<Depot> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(Depot::getDeleteFlag), DeleteFlagEnum.NOT_DELETE.getKey());
+        queryWrapper.and(w -> w.isNull(MybatisPlusUtil.toColumns(Depot::getStoreId))
+            .or().eq(MybatisPlusUtil.toColumns(Depot::getStoreId), StrUtil.EMPTY));
         if (StrUtil.isNotBlank(enabled)) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(Depot::getEnabled), enabled);
         }
@@ -132,6 +150,8 @@ public class ErpDepotServiceImpl extends SkyeyeBusinessServiceImpl<ErpDepotDao, 
         QueryWrapper<Depot> queryWrapper = new QueryWrapper<>();
         queryWrapper.apply("INSTR(CONCAT(',', REPLACE(REPLACE(" + MybatisPlusUtil.toColumns(Depot::getPrincipal) + ", '[', ''), ']', ''), ','), CONCAT(',\"', {0}, '\",'))", userId);
         queryWrapper.eq(MybatisPlusUtil.toColumns(Depot::getDeleteFlag), DeleteFlagEnum.NOT_DELETE.getKey());
+        queryWrapper.and(w -> w.isNull(MybatisPlusUtil.toColumns(Depot::getStoreId))
+            .or().eq(MybatisPlusUtil.toColumns(Depot::getStoreId), StrUtil.EMPTY));
         if (StrUtil.isNotBlank(enabled)) {
             queryWrapper.eq(MybatisPlusUtil.toColumns(Depot::getEnabled), enabled);
         }
