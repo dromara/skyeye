@@ -53,7 +53,10 @@ import com.skyeye.shopmaterial.entity.ShopMaterial;
 import com.skyeye.shopmaterial.entity.ShopMaterialNorms;
 import com.skyeye.shopmaterial.entity.ShopMaterialStore;
 import com.skyeye.shopmaterial.enums.ShopMaterialDistributionType;
+import com.skyeye.shopmaterial.enums.ShopMaterialNormsLogoType;
 import com.skyeye.shopmaterial.enums.ShopMaterialStoreCoverage;
+import com.skyeye.shopmaterial.enums.ShopMaterialStoreSourceType;
+import com.skyeye.shopmaterial.service.ShopMaterialNormsService;
 import com.skyeye.shopmaterial.service.ShopMaterialService;
 import com.skyeye.shopmaterial.service.ShopMaterialStoreService;
 import org.jetbrains.annotations.NotNull;
@@ -93,6 +96,9 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
 
     @Autowired
     private ShopMaterialDao shopMaterialDao;
+
+    @Autowired
+    private ShopMaterialNormsService shopMaterialNormsService;
 
     @Override
     public void deleteByMaterialId(String materialId) {
@@ -895,9 +901,6 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         wrapper.eq(ShopMaterialStore::getStoreEnabled, EnableEnum.ENABLE_USING.getKey());
         wrapper.and(wra -> wra.isNull(ShopMaterial::getAllowPlatformSource)
             .or().eq(ShopMaterial::getAllowPlatformSource, WhetherEnum.ENABLE_USING.getKey()));
-        wrapper.and(wra -> wra.eq(ShopMaterial::getAllowPlatformSource, WhetherEnum.ENABLE_USING.getKey())
-            .or().isNull(ShopMaterial::getStoreSelfMade)
-            .or().ne(ShopMaterial::getStoreSelfMade, WhetherEnum.ENABLE_USING.getKey()));
         if (CollectionUtil.isNotEmpty(addedMaterialIds)) {
             wrapper.notIn(ShopMaterialStore::getMaterialId, addedMaterialIds);
         }
@@ -961,12 +964,16 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
             shopMaterialStore.setIsLaunchShop(WhetherEnum.DISABLE_USING.getKey());
             shopMaterialStore.setStoreEnabled(storeEnabled);
             shopMaterialStore.setDeliveryMethod(deliveryMethod);
+            shopMaterialStore.setSourceType(ShopMaterialStoreSourceType.PLATFORM.getKey());
             createEntity(shopMaterialStore, userId);
             return;
         }
         old.setIsLaunchStore(WhetherEnum.ENABLE_USING.getKey());
         old.setStoreEnabled(storeEnabled);
         old.setBigTypeId(shopMaterial.getBigTypeId());
+        if (old.getSourceType() == null) {
+            old.setSourceType(ShopMaterialStoreSourceType.PLATFORM.getKey());
+        }
         if (CollectionUtil.isEmpty(old.getDeliveryMethod())) {
             old.setDeliveryMethod(deliveryMethod);
         }
@@ -975,8 +982,31 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
 
     @Override
     public void launchPersonalStoreMaterial(InputObject inputObject, OutputObject outputObject) {
-        assertPersonalStoreOwner(inputObject.getParams().get("storeId").toString());
-        launchShopMaterialStore(inputObject, outputObject);
+        Map<String, Object> params = inputObject.getParams();
+        String storeId = params.get("storeId").toString();
+        assertPersonalStoreOwner(storeId);
+        List<String> materialIds = Arrays.asList(params.get("materialIds").toString()
+                .split(CommonCharConstants.COMMA_MARK))
+            .stream().filter(StrUtil::isNotEmpty).distinct().collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(materialIds)) {
+            return;
+        }
+        List<String> deliveryMethod = JSONUtil.toList(params.get("deliveryMethod").toString(), String.class);
+        if (CollectionUtil.isEmpty(deliveryMethod)) {
+            throw new CustomException("请选择配送方式");
+        }
+        Map<String, Object> storeMation = iShopStoreService.queryDataMationById(storeId);
+        if (storeMation == null) {
+            throw new CustomException("门店不存在");
+        }
+        // 个人店上架只写配送方式，不写经营方式（无线上/线下概念）
+        UpdateWrapper<ShopMaterialStore> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreId), storeId)
+            .in(MybatisPlusUtil.toColumns(ShopMaterialStore::getMaterialId), materialIds);
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getIsLaunchShop), WhetherEnum.ENABLE_USING.getKey());
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreEnabled), storeMation.get("enabled"));
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getDeliveryMethod), JSONUtil.toJsonStr(deliveryMethod));
+        update(updateWrapper);
     }
 
     @Override
@@ -992,24 +1022,172 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
     }
 
     @Override
-    public void queryPersonalStoreMaterialCategory(InputObject inputObject, OutputObject outputObject) {
-        List<Map<String, Object>> dictList = iSysDictDataService.queryDictDataListByDictTypeCode("ERP_MATERIAL_CATEGORY");
-        List<Map<String, Object>> result = new ArrayList<>();
-        if (CollectionUtil.isNotEmpty(dictList)) {
-            dictList.forEach(row -> {
-                Map<String, Object> item = new HashMap<>();
-                item.put("id", row.get("id"));
-                item.put("name", row.get("dictName"));
-                result.add(item);
-            });
+    @IgnoreTenant
+    public void queryPersonalStoreMaterialDetail(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String storeId = params.get("storeId").toString();
+        String materialId = params.get("materialId").toString();
+        assertPersonalStoreOwner(storeId);
+        QueryWrapper<ShopMaterialStore> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreId), storeId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getMaterialId), materialId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getIsLaunchStore), WhetherEnum.ENABLE_USING.getKey());
+        ShopMaterialStore relation = getOne(queryWrapper, false);
+        if (relation == null) {
+            throw new CustomException("本店没有该商品");
         }
-        outputObject.setBeans(result);
-        outputObject.settotal(result.size());
+        ShopMaterial shopMaterial = shopMaterialService.queryShopMaterialByMaterialId(materialId);
+        if (shopMaterial == null || StrUtil.isEmpty(shopMaterial.getId())) {
+            throw new CustomException("商品不存在");
+        }
+        Material material = materialService.selectById(materialId);
+        shopMaterial.setMaterialMation(material);
+        shopMaterial.setShopMaterialStore(relation);
+        outputObject.setBean(shopMaterial);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updatePersonalStoreMaterial(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String storeId = params.get("storeId").toString();
+        String materialId = params.get("materialId").toString();
+        String name = params.get("name").toString();
+        String logo = params.get("logo").toString();
+        String salePrice = params.get("salePrice").toString();
+        String model = params.get("model").toString();
+        String content = params.get("content").toString();
+        String carouselImg = params.get("carouselImg").toString();
+        String bigTypeId = params.get("bigTypeId").toString();
+        if (StrUtil.isBlank(bigTypeId)) {
+            throw new CustomException("请选择商城分类");
+        }
+        Map<String, Object> storeMation = assertPersonalStoreOwner(storeId);
+        checkSalePrice(salePrice);
+        QueryWrapper<ShopMaterialStore> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreId), storeId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getMaterialId), materialId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getIsLaunchStore), WhetherEnum.ENABLE_USING.getKey());
+        ShopMaterialStore relation = getOne(queryWrapper, false);
+        if (relation == null) {
+            throw new CustomException("本店没有该商品");
+        }
+        ShopMaterial shopMaterial = shopMaterialService.queryShopMaterialByMaterialId(materialId);
+        if (shopMaterial == null || StrUtil.isEmpty(shopMaterial.getId())) {
+            throw new CustomException("商品不存在");
+        }
+        if (!ShopMaterialStoreSourceType.PERSONAL_SELF.getKey().equals(relation.getSourceType())) {
+            throw new CustomException("平台货源不能在个人店编辑");
+        }
+        List<String> deliveryMethod = JSONUtil.toList(params.get("deliveryMethod").toString(), String.class);
+        JSONObject sku = JSONUtil.parseObj(params.get("skuData").toString());
+        JSONArray normsArray = sku.getJSONArray("materialNorms");
+        List<JSONObject> normsRows = new ArrayList<>();
+        if (normsArray != null) {
+            for (int i = 0; i < normsArray.size(); i++) {
+                normsRows.add(normsArray.getJSONObject(i));
+            }
+        }
+        if (normsRows.isEmpty()) {
+            throw new CustomException("请填写销售规格");
+        }
+
+        Material material = materialService.selectById(materialId);
+        if (material == null || StrUtil.isBlank(material.getId())) {
+            throw new CustomException("ERP商品不存在");
+        }
+        UpdateWrapper<Material> materialUpdate = new UpdateWrapper<>();
+        materialUpdate.eq(CommonConstants.ID, materialId);
+        materialUpdate.set(MybatisPlusUtil.toColumns(Material::getName), name);
+        materialUpdate.set(MybatisPlusUtil.toColumns(Material::getModel), model);
+        if (StrUtil.isNotBlank(sku.getStr("unitName")) && MaterialUnit.SINGLE_SPECIFICATION.getKey().equals(material.getUnit())) {
+            materialUpdate.set(MybatisPlusUtil.toColumns(Material::getUnitName), sku.getStr("unitName"));
+        }
+        materialService.update(materialUpdate);
+        materialService.refreshCache(materialId);
+
+        List<MaterialNorms> materialNormsList = materialNormsService.queryNormsUnitListByMaterialId(materialId);
+        Map<String, MaterialNorms> materialNormsMap = materialNormsList.stream()
+            .collect(Collectors.toMap(MaterialNorms::getId, item -> item, (a, b) -> a));
+        List<ShopMaterialNorms> shopNormsList = shopMaterialNormsService.selectByMaterialId(materialId);
+        Map<String, ShopMaterialNorms> shopNormsMap = shopNormsList.stream()
+            .collect(Collectors.toMap(ShopMaterialNorms::getNormsId, item -> item, (a, b) -> a));
+
+        for (JSONObject row : normsRows) {
+            String normsId = row.getStr("normsId");
+            if (StrUtil.isBlank(normsId)) {
+                throw new CustomException("规格数据不完整");
+            }
+            String rowPrice = row.getStr("salePrice");
+            checkSalePrice(rowPrice);
+            MaterialNorms materialNorms = materialNormsMap.get(normsId);
+            if (materialNorms == null) {
+                throw new CustomException("规格不存在");
+            }
+            UpdateWrapper<MaterialNorms> normsUpdate = new UpdateWrapper<>();
+            normsUpdate.eq(CommonConstants.ID, normsId);
+            normsUpdate.set(MybatisPlusUtil.toColumns(MaterialNorms::getSalePrice), rowPrice);
+            normsUpdate.set(MybatisPlusUtil.toColumns(MaterialNorms::getRetailPrice), priceOr(row, "retailPrice", rowPrice));
+            normsUpdate.set(MybatisPlusUtil.toColumns(MaterialNorms::getLowPrice), priceOr(row, "lowPrice", rowPrice));
+            normsUpdate.set(MybatisPlusUtil.toColumns(MaterialNorms::getEstimatePurchasePrice), priceOr(row, "estimatePurchasePrice", rowPrice));
+            normsUpdate.set(MybatisPlusUtil.toColumns(MaterialNorms::getEnabled), Convert.toInt(row.get("enabled"), EnableEnum.ENABLE_USING.getKey()));
+            if (StrUtil.isNotEmpty(row.getStr("logo"))) {
+                normsUpdate.set(MybatisPlusUtil.toColumns(MaterialNorms::getLogo), row.getStr("logo"));
+            }
+            materialNormsService.update(normsUpdate);
+            materialNormsService.refreshCache(normsId);
+
+            ShopMaterialNorms shopNorms = shopNormsMap.get(normsId);
+            if (shopNorms == null) {
+                continue;
+            }
+            Integer logoType = Convert.toInt(row.get("logoType"), ShopMaterialNormsLogoType.FOLLOW_GOODS.getKey());
+            if (!ShopMaterialNormsLogoType.SINGLE_SET.getKey().equals(logoType)) {
+                logoType = ShopMaterialNormsLogoType.FOLLOW_GOODS.getKey();
+            }
+            UpdateWrapper<ShopMaterialNorms> shopNormsUpdate = new UpdateWrapper<>();
+            shopNormsUpdate.eq(CommonConstants.ID, shopNorms.getId());
+            shopNormsUpdate.set(MybatisPlusUtil.toColumns(ShopMaterialNorms::getSalePrice), rowPrice);
+            shopNormsUpdate.set(MybatisPlusUtil.toColumns(ShopMaterialNorms::getEstimatePurchasePrice), priceOr(row, "estimatePurchasePrice", rowPrice));
+            shopNormsUpdate.set(MybatisPlusUtil.toColumns(ShopMaterialNorms::getIsDefault),
+                "1".equals(row.getStr("isDefault")) ? IsDefaultEnum.IS_DEFAULT.getKey() : IsDefaultEnum.NOT_DEFAULT.getKey());
+            shopNormsUpdate.set(MybatisPlusUtil.toColumns(ShopMaterialNorms::getLogoType), logoType);
+            if (ShopMaterialNormsLogoType.SINGLE_SET.getKey().equals(logoType)) {
+                shopNormsUpdate.set(MybatisPlusUtil.toColumns(ShopMaterialNorms::getLogo), row.getStr("logo"));
+                shopNormsUpdate.set(MybatisPlusUtil.toColumns(ShopMaterialNorms::getCarouselImg), row.getStr("carouselImg"));
+            } else {
+                shopNormsUpdate.set(MybatisPlusUtil.toColumns(ShopMaterialNorms::getLogo), null);
+                shopNormsUpdate.set(MybatisPlusUtil.toColumns(ShopMaterialNorms::getCarouselImg), null);
+            }
+            shopMaterialNormsService.update(shopNormsUpdate);
+            shopMaterialNormsService.refreshCache(shopNorms.getId());
+        }
+
+        UpdateWrapper<ShopMaterial> shopUpdate = new UpdateWrapper<>();
+        shopUpdate.eq(CommonConstants.ID, shopMaterial.getId());
+        shopUpdate.set(MybatisPlusUtil.toColumns(ShopMaterial::getLogo), logo);
+        shopUpdate.set(MybatisPlusUtil.toColumns(ShopMaterial::getCarouselImg), StrUtil.isBlank(carouselImg) ? logo : carouselImg);
+        shopUpdate.set(MybatisPlusUtil.toColumns(ShopMaterial::getContent), content);
+        shopUpdate.set(MybatisPlusUtil.toColumns(ShopMaterial::getBigTypeId), bigTypeId);
+        shopUpdate.set(MybatisPlusUtil.toColumns(ShopMaterial::getDeliveryMethod), JSONUtil.toJsonStr(deliveryMethod));
+        shopMaterialService.update(shopUpdate);
+        shopMaterialService.refreshCache(shopMaterial.getId());
+
+        Integer storeEnabled = Convert.toInt(storeMation.get("enabled"), EnableEnum.ENABLE_USING.getKey());
+        UpdateWrapper<ShopMaterialStore> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, relation.getId());
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getDeliveryMethod), JSONUtil.toJsonStr(deliveryMethod));
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getBigTypeId), bigTypeId);
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreEnabled), storeEnabled);
+        update(updateWrapper);
+        refreshCache(relation.getId());
     }
 
     /**
      * 个人店自建商品。店主只填一次，后台按 ERP 商品、商城商品、本店货架这个顺序一次写完。
      * 单/多规格都只传计量单位名称；多规格另传 normsSpec，单位组由后台兜底。
+     * 分类用商城商品分类（bigTypeId）；ERP 物料分类个人店可为空。
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -1022,7 +1200,10 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         String model = params.get("model").toString();
         String content = params.get("content").toString();
         String carouselImg = params.get("carouselImg").toString();
-        String categoryId = params.get("categoryId").toString();
+        String bigTypeId = params.get("bigTypeId").toString();
+        if (StrUtil.isBlank(bigTypeId)) {
+            throw new CustomException("请选择商城分类");
+        }
         Map<String, Object> storeMation = assertPersonalStoreOwner(storeId);
         checkSalePrice(salePrice);
         List<String> deliveryMethod = JSONUtil.toList(params.get("deliveryMethod").toString(), String.class);
@@ -1049,9 +1230,9 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
             throw new CustomException("多规格至少要两种售卖规格");
         }
         String userId = InputObject.getLogParamsStatic().get("id").toString();
-        String materialId = createErpMaterial(userId, name, model, categoryId, logo, sku, multiSpec, normsRows);
-        createShopMaterial(userId, materialId, storeId, logo, carouselImg, content, deliveryMethod, normsRows);
-        hangOnPersonalStore(userId, storeId, materialId, deliveryMethod, storeMation);
+        String materialId = createErpMaterial(userId, name, model, null, logo, sku, multiSpec, normsRows);
+        createShopMaterial(userId, materialId, storeId, logo, carouselImg, content, deliveryMethod, normsRows, bigTypeId);
+        hangOnPersonalStore(userId, storeId, materialId, deliveryMethod, storeMation, bigTypeId);
     }
 
     private void checkSalePrice(String salePrice) {
@@ -1080,7 +1261,9 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         Material material = new Material();
         material.setName(name);
         material.setModel(model);
-        material.setCategoryId(categoryId);
+        if (StrUtil.isNotBlank(categoryId)) {
+            material.setCategoryId(categoryId);
+        }
         material.setEnabled(EnableEnum.ENABLE_USING.getKey());
         material.setFromType(MaterialFromType.SELF_PRODUCED.getKey());
         material.setType(MaterialType.FINISHED_PRODUCT.getKey());
@@ -1155,7 +1338,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
     }
 
     private void createShopMaterial(String userId, String materialId, String storeId, String logo, String carouselImg, String content,
-                                    List<String> deliveryMethod, List<JSONObject> normsRows) {
+                                    List<String> deliveryMethod, List<JSONObject> normsRows, String bigTypeId) {
         List<MaterialNorms> normsList = materialNormsService.queryNormsUnitListByMaterialId(materialId);
         if (CollectionUtil.isEmpty(normsList)) {
             throw new CustomException("ERP规格没有生成，商品建不下去");
@@ -1180,10 +1363,19 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
             shopNorms.setIsDefault(row.getStr("tableNum").equals(defaultTableNum) ? IsDefaultEnum.IS_DEFAULT.getKey() : IsDefaultEnum.NOT_DEFAULT.getKey());
             shopNorms.setEstimatePurchasePrice(priceOr(row, "estimatePurchasePrice", rowPrice));
             shopNorms.setSalePrice(rowPrice);
-            Integer logoType = Integer.parseInt(row.get("logoType").toString());
+            Integer logoType = Convert.toInt(row.get("logoType"), ShopMaterialNormsLogoType.FOLLOW_GOODS.getKey());
+            if (!ShopMaterialNormsLogoType.SINGLE_SET.getKey().equals(logoType)) {
+                logoType = ShopMaterialNormsLogoType.FOLLOW_GOODS.getKey();
+            }
             shopNorms.setLogoType(logoType);
-            shopNorms.setLogo(row.getStr("logo"));
-            shopNorms.setCarouselImg(row.getStr("carouselImg"));
+            if (ShopMaterialNormsLogoType.SINGLE_SET.getKey().equals(logoType)) {
+                if (StrUtil.isNotEmpty(row.getStr("logo"))) {
+                    shopNorms.setLogo(row.getStr("logo"));
+                }
+                if (StrUtil.isNotEmpty(row.getStr("carouselImg"))) {
+                    shopNorms.setCarouselImg(row.getStr("carouselImg"));
+                }
+            }
             shopNormsList.add(shopNorms);
         }
         ShopMaterial shopMaterial = new ShopMaterial();
@@ -1193,31 +1385,21 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         shopMaterial.setCarouselImg(StrUtil.isBlank(carouselImg) ? logo : carouselImg);
         shopMaterial.setDistributionType(ShopMaterialDistributionType.DEFAULT_SET.getKey());
         shopMaterial.setDeliveryMethod(deliveryMethod);
-        List<String> saleChannel = new ArrayList<>();
-        if (deliveryMethod.contains(ShopMaterialDeliveryMethod.EXPRESS_DELIVERY.getKey().toString())) {
-            saleChannel.add("1");
-        }
-        if (deliveryMethod.contains(ShopMaterialDeliveryMethod.USER_TAKE_SELF.getKey().toString())
-            || deliveryMethod.contains(ShopMaterialDeliveryMethod.LOCAL_DELIVERY.getKey().toString())) {
-            saleChannel.add("2");
-        }
-        if (saleChannel.isEmpty()) {
-            saleChannel.add("1");
-        }
-        shopMaterial.setSaleChannel(saleChannel);
+        shopMaterial.setBigTypeId(bigTypeId);
         shopMaterial.setAllowPlatformSource(WhetherEnum.DISABLE_USING.getKey());
         shopMaterial.setOrderBy(1);
         shopMaterial.setGiftPoint(0);
         shopMaterial.setVirtualSales("0");
         shopMaterial.setStoreCoverage(ShopMaterialStoreCoverage.SPECIFIED_STORE.getKey());
         shopMaterial.setStoreIds(Collections.singletonList(storeId));
-        // 门店自制。选平台货源时排除，避免串到别的店
-        shopMaterial.setStoreSelfMade(WhetherEnum.ENABLE_USING.getKey());
+        // 企业门店「自制」标识，个人店自建不要占用
+        shopMaterial.setStoreSelfMade(WhetherEnum.DISABLE_USING.getKey());
         shopMaterial.setShopMaterialNormsList(shopNormsList);
         shopMaterialService.createEntity(shopMaterial, userId);
     }
 
-    private void hangOnPersonalStore(String userId, String storeId, String materialId, List<String> deliveryMethod, Map<String, Object> storeMation) {
+    private void hangOnPersonalStore(String userId, String storeId, String materialId, List<String> deliveryMethod,
+                                     Map<String, Object> storeMation, String bigTypeId) {
         Integer storeEnabled = Convert.toInt(storeMation.get("enabled"), EnableEnum.ENABLE_USING.getKey());
         QueryWrapper<ShopMaterialStore> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreId), storeId);
@@ -1228,18 +1410,22 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
             row.setStoreId(storeId);
             row.setMaterialId(materialId);
             row.setIsLaunchStore(WhetherEnum.ENABLE_USING.getKey());
-            row.setIsLaunchShop(WhetherEnum.ENABLE_USING.getKey());
+            // 自建进本店货架，上架到商城仍走「上架」动作
+            row.setIsLaunchShop(WhetherEnum.DISABLE_USING.getKey());
             row.setStoreEnabled(storeEnabled);
             row.setDeliveryMethod(deliveryMethod);
+            row.setBigTypeId(bigTypeId);
+            row.setSourceType(ShopMaterialStoreSourceType.PERSONAL_SELF.getKey());
             createEntity(row, userId);
             return;
         }
         UpdateWrapper<ShopMaterialStore> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getId), relation.getId());
+        updateWrapper.eq(CommonConstants.ID, relation.getId());
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getIsLaunchStore), WhetherEnum.ENABLE_USING.getKey());
-        updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getIsLaunchShop), WhetherEnum.ENABLE_USING.getKey());
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreEnabled), storeEnabled);
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getDeliveryMethod), JSONUtil.toJsonStr(deliveryMethod));
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getBigTypeId), bigTypeId);
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getSourceType), ShopMaterialStoreSourceType.PERSONAL_SELF.getKey());
         update(updateWrapper);
     }
 

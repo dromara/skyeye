@@ -200,12 +200,6 @@ public class ShopMaterialStoreController {
         shopMaterialStoreService.removePersonalStoreMaterial(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryPersonalStoreMaterialCategory", value = "个人门店自建商品可选分类", method = "GET", allUse = "2")
-    @RequestMapping("/post/ShopMaterialStoreController/queryPersonalStoreMaterialCategory")
-    public void queryPersonalStoreMaterialCategory(InputObject inputObject, OutputObject outputObject) {
-        shopMaterialStoreService.queryPersonalStoreMaterialCategory(inputObject, outputObject);
-    }
-
     @ApiOperation(id = "createPersonalStoreMaterial", value = "个人门店自建商品", method = "POST", allUse = "2")
     @ApiImplicitParams(value = {
         @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required"),
@@ -214,12 +208,39 @@ public class ShopMaterialStoreController {
         @ApiImplicitParam(id = "salePrice", name = "salePrice", value = "售价，多规格时传默认规格销售价", required = "required"),
         @ApiImplicitParam(id = "deliveryMethod", name = "deliveryMethod", value = "配送方式", required = "required,json"),
         @ApiImplicitParam(id = "model", name = "model", value = "型号", required = "required"),
-        @ApiImplicitParam(id = "categoryId", name = "categoryId", value = "商品分类id", required = "required"),
+        @ApiImplicitParam(id = "bigTypeId", name = "bigTypeId", value = "商城商品分类id", required = "required"),
         @ApiImplicitParam(id = "content", name = "content", value = "商品详情", required = "required"),
         @ApiImplicitParam(id = "carouselImg", name = "carouselImg", value = "轮播图，多个逗号隔开"),
         @ApiImplicitParam(id = "skuData", name = "skuData", value = "规格数据：单/多规格均含unit、unitName、materialNorms；多规格另含normsSpec。单位组由后台兜底", required = "required,json")})
     @RequestMapping("/post/ShopMaterialStoreController/createPersonalStoreMaterial")
     public void createPersonalStoreMaterial(InputObject inputObject, OutputObject outputObject) {
         shopMaterialStoreService.createPersonalStoreMaterial(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryPersonalStoreMaterialDetail", value = "个人门店商品详情", method = "GET", allUse = "2")
+    @ApiImplicitParams(value = {
+        @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required"),
+        @ApiImplicitParam(id = "materialId", name = "materialId", value = "商品id", required = "required")})
+    @RequestMapping("/post/ShopMaterialStoreController/queryPersonalStoreMaterialDetail")
+    public void queryPersonalStoreMaterialDetail(InputObject inputObject, OutputObject outputObject) {
+        shopMaterialStoreService.queryPersonalStoreMaterialDetail(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "updatePersonalStoreMaterial", value = "个人门店编辑自建商品", method = "POST", allUse = "2")
+    @ApiImplicitParams(value = {
+        @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required"),
+        @ApiImplicitParam(id = "materialId", name = "materialId", value = "商品id", required = "required"),
+        @ApiImplicitParam(id = "name", name = "name", value = "商品名称", required = "required"),
+        @ApiImplicitParam(id = "logo", name = "logo", value = "商品图片", required = "required"),
+        @ApiImplicitParam(id = "salePrice", name = "salePrice", value = "售价，多规格时传默认规格销售价", required = "required"),
+        @ApiImplicitParam(id = "deliveryMethod", name = "deliveryMethod", value = "配送方式", required = "required,json"),
+        @ApiImplicitParam(id = "model", name = "model", value = "型号", required = "required"),
+        @ApiImplicitParam(id = "bigTypeId", name = "bigTypeId", value = "商城商品分类id", required = "required"),
+        @ApiImplicitParam(id = "content", name = "content", value = "商品详情", required = "required"),
+        @ApiImplicitParam(id = "carouselImg", name = "carouselImg", value = "轮播图，多个逗号隔开"),
+        @ApiImplicitParam(id = "skuData", name = "skuData", value = "规格数据，编辑时 materialNorms 需带 normsId", required = "required,json")})
+    @RequestMapping("/post/ShopMaterialStoreController/updatePersonalStoreMaterial")
+    public void updatePersonalStoreMaterial(InputObject inputObject, OutputObject outputObject) {
+        shopMaterialStoreService.updatePersonalStoreMaterial(inputObject, outputObject);
     }
 }

@@ -16,6 +16,7 @@ import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.enumeration.ShopMaterialDeliveryMethod;
 import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.material.entity.Material;
+import com.skyeye.shopmaterial.enums.ShopMaterialStoreSourceType;
 import lombok.Data;
 
 import java.util.List;
@@ -81,5 +82,9 @@ public class ShopMaterialStore extends OperatorUserInfo {
     @TableField(value = "sale_channel", typeHandler = JacksonTypeHandler.class)
     @ApiModelProperty(value = "上架经营方式，1线上 2线下，用于同城只出线下商品")
     private List<String> saleChannel;
+
+    @TableField(value = "source_type")
+    @ApiModelProperty(value = "个人门店商品来源", enumClass = ShopMaterialStoreSourceType.class)
+    private Integer sourceType;
 
 }
