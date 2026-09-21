@@ -120,6 +120,22 @@ public class ShopStoreDepotController {
         shopStoreDepotService.adjustPersonalStoreInventory(inputObject, outputObject);
     }
 
+    /**
+     * 发货扣减门店库存。
+     * <p>由商城订单发货流程调用；按门店商品 stockMode 决定扣 shop_stock 还是按仓优先级扣 ERP 规格库存。</p>
+     */
+    @ApiOperation(id = "deductShopStockOnShip", value = "发货扣减门店库存", method = "POST", allUse = "2")
+    @ApiImplicitParams(value = {
+        @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required"),
+        @ApiImplicitParam(id = "materialStoreId", name = "materialStoreId", value = "门店商品关系id（用于识别库存模式）"),
+        @ApiImplicitParam(id = "materialId", name = "materialId", value = "商品id", required = "required"),
+        @ApiImplicitParam(id = "normsId", name = "normsId", value = "规格id", required = "required"),
+        @ApiImplicitParam(id = "count", name = "count", value = "扣减数量", required = "required")})
+    @RequestMapping("/post/ShopStoreDepotController/deductShopStockOnShip")
+    public void deductShopStockOnShip(InputObject inputObject, OutputObject outputObject) {
+        shopStoreDepotService.deductShopStockOnShip(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "switchPersonalStoreStockMode", value = "切换商品库存模式", method = "POST", allUse = "2")
     @ApiImplicitParams(value = {
         @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required"),

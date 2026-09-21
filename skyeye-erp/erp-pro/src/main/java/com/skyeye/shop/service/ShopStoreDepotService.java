@@ -33,6 +33,16 @@ public interface ShopStoreDepotService extends SkyeyeBusinessService<ShopStoreDe
 
     void adjustPersonalStoreInventory(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 发货扣库存（供 Shop 侧 deliverGoodsById 经 Feign 调用）。
+     * <p>
+     * stockMode=1（普通）：扣减 shop_stock；库存不足直接抛错。<br>
+     * stockMode=2（关联仓）：按商家仓 priority 升序依次扣减 ERP 规格库存，可跨仓；总量不足抛错。<br>
+     * 未传 materialStoreId 或关系不存在时，默认按普通模式处理。
+     * </p>
+     */
+    void deductShopStockOnShip(InputObject inputObject, OutputObject outputObject);
+
     void switchPersonalStoreStockMode(InputObject inputObject, OutputObject outputObject);
 
     void queryPersonalStoreInventoryDiagnosis(InputObject inputObject, OutputObject outputObject);

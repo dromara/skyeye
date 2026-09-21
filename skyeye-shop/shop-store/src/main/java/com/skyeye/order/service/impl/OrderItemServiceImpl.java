@@ -37,6 +37,9 @@ import com.skyeye.order.service.OrderCommentService;
 import com.skyeye.order.service.OrderItemService;
 import com.skyeye.order.service.OrderService;
 import com.skyeye.rest.shopmaterialnorms.sevice.IShopMaterialNormsService;
+import com.skyeye.rest.shopstock.service.IShopStockService;
+import com.skyeye.store.classenum.StoreNature;
+import com.skyeye.store.entity.ShopStore;
 import com.skyeye.store.service.ShopStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,6 +77,9 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
 
     @Autowired
     private ItemDeliverHistoryService itemDeliverHistoryService;
+
+    @Autowired
+    private IShopStockService iShopStockService;
 
     @Override
     public void deleteByPerentIds(List<String> ids) {
@@ -125,10 +131,10 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         List<String> materialStoreIds = list.stream().map(OrderItem::getMaterialStoreId).distinct().collect(Collectors.toList());
         List<Map<String, Object>> materialByIds = iShopMaterialNormsService.queryShopMaterialByIds(materialStoreIds);// erp-shop-material 拿价钱logo
         Map<String, Map<String, Object>> materialStoreMap = materialByIds.stream()
-                .distinct().collect(Collectors.toMap(map -> {
-                    Map<String, Object> shopMaterialStore = JSONUtil.toBean(map.get("shopMaterialStore").toString(), null);
-                    return shopMaterialStore.get("id").toString();
-                }, map -> map));
+            .distinct().collect(Collectors.toMap(map -> {
+                Map<String, Object> shopMaterialStore = JSONUtil.toBean(map.get("shopMaterialStore").toString(), null);
+                return shopMaterialStore.get("id").toString();
+            }, map -> map));
         list.forEach(map -> {
             map.setShopMaterial(materialStoreMap.containsKey(map.getMaterialStoreId()) ? materialStoreMap.get(map.getMaterialStoreId()) : new HashMap<>());
         });
@@ -138,7 +144,7 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         if (CollectionUtil.isNotEmpty(itemDeliverHistories)) {
             // 只收集快递单号
             deliverMap = itemDeliverHistories.stream().filter(bean -> StrUtil.isNotEmpty(bean.getDeliverNumber()))
-                    .collect(Collectors.groupingBy(ItemDeliverHistory::getOrderItemId, Collectors.mapping(ItemDeliverHistory::getDeliverNumber, Collectors.toList())));
+                .collect(Collectors.groupingBy(ItemDeliverHistory::getOrderItemId, Collectors.mapping(ItemDeliverHistory::getDeliverNumber, Collectors.toList())));
         }
         for (OrderItem orderItem : list) {
             orderItem.setDeliverNumberList(deliverMap.getOrDefault(orderItem.getId(), new ArrayList<>()));
@@ -156,13 +162,13 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         // shopMaterial -> shopMaterialStore -> storeId
         List<Map<String, Object>> materialByIds = iShopMaterialNormsService.queryShopMaterialByIds(materialStoreIds);// erp-shop-material
         Map<String, String> materialStoreMap = materialByIds.stream()
-                .distinct().collect(Collectors.toMap(map -> {
-                    Map<String, Object> shopMaterialStore = JSONUtil.toBean(map.get("shopMaterialStore").toString(), null);
-                    return shopMaterialStore.get("id").toString();
-                }, map -> {
-                    Map<String, Object> shopMaterialStore = JSONUtil.toBean(map.get("shopMaterialStore").toString(), null);
-                    return shopMaterialStore.get("storeId").toString();
-                }));
+            .distinct().collect(Collectors.toMap(map -> {
+                Map<String, Object> shopMaterialStore = JSONUtil.toBean(map.get("shopMaterialStore").toString(), null);
+                return shopMaterialStore.get("id").toString();
+            }, map -> {
+                Map<String, Object> shopMaterialStore = JSONUtil.toBean(map.get("shopMaterialStore").toString(), null);
+                return shopMaterialStore.get("storeId").toString();
+            }));
         for (int i = 0; i < orderItemList.size(); i++) {
             orderItemList.get(i).setCommentState(WhetherEnum.DISABLE_USING.getKey());
             orderItemList.get(i).setState(ShopOrderItemOtherState.WAIT_PAY.getKey());
@@ -177,8 +183,8 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
     public void updateCommentStateById(String id) {
         UpdateWrapper<OrderItem> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, id)
-                .set(MybatisPlusUtil.toColumns(OrderItem::getCommentState), WhetherEnum.ENABLE_USING.getKey())
-                .set(MybatisPlusUtil.toColumns(OrderItem::getState), ShopOrderItemOtherState.EVALUATED.getKey());
+            .set(MybatisPlusUtil.toColumns(OrderItem::getCommentState), WhetherEnum.ENABLE_USING.getKey())
+            .set(MybatisPlusUtil.toColumns(OrderItem::getState), ShopOrderItemOtherState.EVALUATED.getKey());
         update(updateWrapper);
         refreshCache(id);
     }
@@ -209,10 +215,15 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
     }
 
     /**
-     * 快递计费方式有数量、重量、体积三种，当前只考虑数量
+     * 订单子单发货。
+     * <p>
+     * 个人门店：发货前经 Feign 按 stockMode 扣库存，库存不足则整单失败。<br>
+     * 加盟门店：保持原逻辑，不在此扣库存。<br>
+     * 物流字段（快递公司/运费配置/单号）均为可选；三者齐全时才写入发货历史。
+     * </p>
      *
-     * @param inputObject
-     * @param outputObject
+     * @param inputObject  入参：id、orderId、num 必填；deliverNumber、deliveryCompanyId、deliveryTemplateChargeId 可选
+     * @param outputObject 出参
      */
     @Override
     @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
@@ -220,6 +231,7 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         Map<String, Object> params = inputObject.getParams();
         String id = params.get("id").toString();
         String orderId = params.get("orderId").toString();
+        // 物流信息可选：个人店未配置快递模板时允许仅发货扣库存
         String deliverNumber = params.get("deliverNumber").toString();
         String deliveryTemplateChargeId = params.get("deliveryTemplateChargeId").toString();
         String deliveryCompanyId = params.get("deliveryCompanyId").toString();
@@ -231,31 +243,44 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         if (CollectionUtil.isEmpty(orderItemList)) {
             throw new CustomException("该订单不存在");
         }
-        OrderItem targetItem = orderItemList.stream().filter(item -> item.getId().equals(id)).findFirst().orElseGet(null);
+        OrderItem targetItem = orderItemList.stream().filter(item -> item.getId().equals(id)).findFirst().orElse(null);
         if (ObjectUtil.isEmpty(targetItem)) {
             throw new CustomException("该订单子单不存在");
         }
         if (targetItem.getState() == ShopOrderItemOtherState.WAIT_PAY.getKey() ||
-                targetItem.getState() == ShopOrderItemOtherState.ALL_DELIVERED.getKey()) {
+            targetItem.getState() == ShopOrderItemOtherState.ALL_DELIVERED.getKey()) {
             throw new CustomException("该订单未支付或已全部发货");
         }
-        int remainingNum = targetItem.getCount() - targetItem.getDeliverNum() - num;
+        int delivered = targetItem.getDeliverNum() == null ? CommonNumConstants.NUM_ZERO : targetItem.getDeliverNum();
+        int remainingNum = targetItem.getCount() - delivered - num;
         if (remainingNum < CommonNumConstants.NUM_ZERO) {
             throw new CustomException("该订单子单可发货数量不足");
         }
-        // 设置数据
-        targetItem.setDeliverNum(targetItem.getDeliverNum() + num);
+        // 个人门店发货前按库存模式扣减（加盟店保持原逻辑，不在此扣库存）
+        ShopStore store = shopStoreService.selectById(targetItem.getStoreId());
+        if (store != null && StoreNature.PERSONAL.getKey().equals(store.getStoreNature())) {
+            Map<String, Object> stockParams = new HashMap<>();
+            stockParams.put("storeId", targetItem.getStoreId());
+            stockParams.put("materialStoreId", targetItem.getMaterialStoreId());
+            stockParams.put("materialId", targetItem.getMaterialId());
+            stockParams.put("normsId", targetItem.getNormsId());
+            stockParams.put("count", String.valueOf(num));
+            iShopStockService.deductShopStockOnShip(stockParams);
+        }
+
+        // 更新已发数量与履约状态：还有剩余 → 部分发货；否则 → 全部发货
+        targetItem.setDeliverNum(delivered + num);
         if (remainingNum > CommonNumConstants.NUM_ZERO) {
-            // 还剩
             targetItem.setState(ShopOrderItemOtherState.PART_DELIVERED.getKey());
         } else {
-            // 剩余为0
             targetItem.setState(ShopOrderItemOtherState.ALL_DELIVERED.getKey());
         }
-        // 更新数据
         super.updateEntity(targetItem, inputObject.getLogParams().get("id").toString());
-        // 创建快递信息
-        itemDeliverHistoryService.insertEntity(targetItem, deliverNumber, deliveryTemplateChargeId, deliveryCompanyId, num);
+        // 有完整物流信息时再写快递单历史
+        if (StrUtil.isNotBlank(deliveryTemplateChargeId) && StrUtil.isNotBlank(deliveryCompanyId)
+            && StrUtil.isNotBlank(deliverNumber)) {
+            itemDeliverHistoryService.insertEntity(targetItem, deliverNumber, deliveryTemplateChargeId, deliveryCompanyId, num);
+        }
     }
 
     @Override
@@ -284,7 +309,7 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         adjustPrice = CalculationUtil.multiply(adjustPrice, "100", CommonNumConstants.NUM_SIX);
         UpdateWrapper<OrderItem> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, id)
-                .set(MybatisPlusUtil.toColumns(OrderItem::getAdjustPrice), adjustPrice);
+            .set(MybatisPlusUtil.toColumns(OrderItem::getAdjustPrice), adjustPrice);
         OrderItem oldItem = getOne(updateWrapper);
         if (oldItem.getState() != ShopOrderItemOtherState.WAIT_PAY.getKey()) {
             throw new CustomException("该不处于待发货状态，不可修改调价.");

@@ -54,11 +54,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -402,14 +398,17 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         return store.getStockMode() == null ? ShopMaterialStockMode.NORMAL.getKey() : store.getStockMode();
     }
 
-    private int sumDepotStock(List<String> depotIds, String normsId) {
-        if (CollectionUtil.isEmpty(depotIds) || StrUtil.isBlank(normsId)) {
+    private int sumDepotStock(List<String> depotIds, String normsId,
+                              Map<String, Map<String, String>> depotNormsStockMap) {
+        if (CollectionUtil.isEmpty(depotIds) || StrUtil.isBlank(normsId) || MapUtil.isEmpty(depotNormsStockMap)) {
             return 0;
         }
         int total = 0;
         for (String depotId : depotIds) {
-            Map<String, String> stockMap = materialNormsStockService.queryMaterialNormsStock(
-                java.util.Collections.singletonList(normsId), depotId);
+            Map<String, String> stockMap = depotNormsStockMap.get(depotId);
+            if (MapUtil.isEmpty(stockMap)) {
+                continue;
+            }
             total += Convert.toInt(stockMap.get(normsId), 0);
         }
         return total;
@@ -422,10 +421,14 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         }
         Integer mode = resolveStockMode(relation);
         if (ShopMaterialStockMode.DEPOT_LINK.getKey().equals(mode)) {
-            List<String> depotIds = enabledDepots.stream().map(ShopStoreDepot::getDepotId).collect(Collectors.toList());
+            List<String> depotIds = enabledDepots.stream().map(ShopStoreDepot::getDepotId)
+                .filter(StrUtil::isNotEmpty).distinct().collect(Collectors.toList());
+            // 一次查出全部仓×规格库存，内存汇总
+            Map<String, Map<String, String>> depotNormsStockMap =
+                materialNormsStockService.queryMaterialNormsStockByDepotIds(normsIds, depotIds);
             int total = 0;
             for (String normsId : normsIds) {
-                total += sumDepotStock(depotIds, normsId);
+                total += sumDepotStock(depotIds, normsId, depotNormsStockMap);
             }
             return total;
         }
@@ -555,6 +558,102 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         } else {
             shopStockService.updateShopStock(storeId, relation.getMaterialId(), normsId, count, putOutType);
         }
+    }
+
+    /**
+     * 发货扣减门店库存。
+     * <ul>
+     *   <li>普通模式(stockMode=1)：校验 shop_stock 后出库</li>
+     *   <li>关联仓模式(stockMode=2)：按商家仓 priority 从高到低（数值越小越优先）逐仓扣减</li>
+     * </ul>
+     */
+    @Override
+    @IgnoreTenant
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void deductShopStockOnShip(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String storeId = MapUtil.getStr(params, "storeId");
+        String materialStoreId = MapUtil.getStr(params, "materialStoreId");
+        String materialId = MapUtil.getStr(params, "materialId");
+        String normsId = MapUtil.getStr(params, "normsId");
+        String count = MapUtil.getStr(params, "count");
+        if (CalculationUtil.compareTo(count, CommonNumConstants.NUM_ZERO.toString(), ErpConstants.NUM_AFTER_DOT, RoundingMode.UP) <= 0) {
+            throw new CustomException("发货数量必须大于0");
+        }
+        // 通过门店商品关系识别库存模式；无关系时兜底按普通模式
+        ShopMaterialStore relation = null;
+        if (StrUtil.isNotBlank(materialStoreId)) {
+            relation = shopMaterialStoreService.selectById(materialStoreId);
+            if (relation != null && !storeId.equals(relation.getStoreId())) {
+                throw new CustomException("门店商品关系与门店不匹配");
+            }
+        }
+        Integer mode = relation == null ? ShopMaterialStockMode.NORMAL.getKey() : resolveStockMode(relation);
+        String useMaterialId = relation != null && StrUtil.isNotBlank(relation.getMaterialId())
+            ? relation.getMaterialId() : materialId;
+        if (ShopMaterialStockMode.DEPOT_LINK.getKey().equals(mode)) {
+            // 关联仓：按优先级跨仓扣减
+            deductDepotLinkStockOnShip(storeId, useMaterialId, normsId, Convert.toInt(count, 0));
+        } else {
+            // 普通：扣减门店 shop_stock
+            Map<String, String> stockMap = shopStockService.queryNormsShopStock(storeId,
+                java.util.Collections.singletonList(normsId));
+            int current = Convert.toInt(stockMap.get(normsId), 0);
+            int need = Convert.toInt(count, 0);
+            if (current < need) {
+                throw new CustomException("门店库存不足，当前可售 " + current + "，需要 " + need);
+            }
+            shopStockService.updateShopStock(storeId, useMaterialId, normsId, count, DepotPutOutType.OUT.getKey());
+        }
+    }
+
+    /**
+     * 关联仓模式发货扣库存：一次查出各仓库存，内存按 priority 计算扣减，再批量写回。
+     *
+     * @param storeId    门店 id
+     * @param materialId 商品 id
+     * @param normsId    规格 id
+     * @param need       本次需要扣减的数量
+     */
+    private void deductDepotLinkStockOnShip(String storeId, String materialId, String normsId, int need) {
+        List<ShopStoreDepot> enabled = listEnabledByStoreId(storeId);
+        if (CollectionUtil.isEmpty(enabled)) {
+            throw new CustomException("关联仓模式下请先启用至少一个商家仓");
+        }
+        List<String> depotIds = enabled.stream().map(ShopStoreDepot::getDepotId)
+            .filter(StrUtil::isNotEmpty).distinct().collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(depotIds)) {
+            throw new CustomException("关联仓模式下请先启用至少一个商家仓");
+        }
+        // 一次查出全部启用仓的该规格库存
+        Map<String, Map<String, String>> depotNormsStockMap = materialNormsStockService
+            .queryMaterialNormsStockByDepotIds(java.util.Collections.singletonList(normsId), depotIds);
+        int remain = need;
+        // depotId -> 扣减后的目标库存
+        Map<String, String> deductResult = new HashMap<>();
+        for (ShopStoreDepot depot : enabled) {
+            if (remain <= 0) {
+                break;
+            }
+            String depotId = depot.getDepotId();
+            if (StrUtil.isBlank(depotId)) {
+                continue;
+            }
+            Map<String, String> stockMap = depotNormsStockMap.get(depotId);
+            int current = Convert.toInt(MapUtil.isEmpty(stockMap) ? null : stockMap.get(normsId), 0);
+            if (current <= 0) {
+                continue;
+            }
+            int take = Math.min(current, remain);
+            deductResult.put(depotId, String.valueOf(current - take));
+            remain -= take;
+        }
+        if (remain > 0) {
+            throw new CustomException("仓库库存不足，仍缺 " + remain);
+        }
+        // 批量写回（一次查已有行 + 一条 CASE 更新 / saveBatch 新增）
+        materialNormsStockService.batchSaveMaterialNormsStock(materialId, normsId, deductResult,
+            MaterialNormsStockType.ORDER_STOCK.getKey());
     }
 
     @Override
@@ -734,6 +833,14 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
             ? shopStockService.queryNormsShopStock(storeId, normsIds)
             : new HashMap<>();
 
+        // 关联仓：一次查出全部仓×规格库存，避免循环内逐条 SQL
+        Map<String, Map<String, String>> depotNormsStockMap = ShopMaterialStockMode.DEPOT_LINK.getKey().equals(mode)
+            ? materialNormsStockService.queryMaterialNormsStockByDepotIds(normsIds, depotIds)
+            : new HashMap<>();
+        Map<String, String> defaultDepotStockMap = StrUtil.isBlank(defaultDepotId)
+            ? new HashMap<>()
+            : depotNormsStockMap.getOrDefault(defaultDepotId, new HashMap<>());
+
         List<Map<String, Object>> skuRows = new ArrayList<>();
         int idx = 0;
         for (String normsId : normsIds) {
@@ -743,10 +850,7 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
                 : (normsIds.size() == 1 ? "默认规格" : "规格" + (++idx));
             int stock;
             if (ShopMaterialStockMode.DEPOT_LINK.getKey().equals(mode)) {
-                stock = StrUtil.isBlank(defaultDepotId) ? 0
-                    : Convert.toInt(materialNormsStockService
-                    .queryMaterialNormsStock(java.util.Collections.singletonList(normsId), defaultDepotId)
-                    .get(normsId), 0);
+                stock = Convert.toInt(defaultDepotStockMap.get(normsId), 0);
             } else {
                 stock = Convert.toInt(shopStockMap.get(normsId), 0);
             }
@@ -763,12 +867,10 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         Map<String, String> depotStockMap = new HashMap<>();
         if (ShopMaterialStockMode.DEPOT_LINK.getKey().equals(mode)) {
             for (ShopStoreDepot depot : enabledDepots) {
+                Map<String, String> normsStock = depotNormsStockMap.getOrDefault(depot.getDepotId(), new HashMap<>());
                 for (String normsId : normsIds) {
-                    String s = materialNormsStockService
-                        .queryMaterialNormsStock(java.util.Collections.singletonList(normsId), depot.getDepotId())
-                        .get(normsId);
                     depotStockMap.put(depot.getDepotId() + "_" + normsId,
-                        StrUtil.blankToDefault(s, CommonNumConstants.NUM_ZERO.toString()));
+                        StrUtil.blankToDefault(normsStock.get(normsId), CommonNumConstants.NUM_ZERO.toString()));
                 }
             }
         }

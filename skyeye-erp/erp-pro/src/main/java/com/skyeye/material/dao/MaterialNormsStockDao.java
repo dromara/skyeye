@@ -31,6 +31,24 @@ public interface MaterialNormsStockDao extends SkyeyeBaseMapper<MaterialNormsSto
     List<Map<String, Object>> queryMaterialStockByNormsId(@Param("normsIds") List<String> normsIds, @Param("depotId") String depotId);
 
     /**
+     * 批量查询多仓库、多规格库存（按仓库+规格汇总）
+     *
+     * @param normsIds 规格id集合
+     * @param depotIds 仓库id集合
+     * @return 每行含 stock、normsId、depotId
+     */
+    List<Map<String, Object>> queryMaterialStockByNormsIdAndDepotIds(@Param("normsIds") List<String> normsIds,
+                                                                    @Param("depotIds") List<String> depotIds);
+
+    /**
+     * 按业务键批量更新库存数量
+     *
+     * @param items 每项需含 normsId、depotId、stock
+     * @param type  库存类型
+     */
+    void batchUpdateStockByNormsAndDepot(@Param("items") List<Map<String, Object>> items, @Param("type") Integer type);
+
+    /**
      * 根据规格id获取初始化库存信息
      *
      * @param normsIds 规格id集合

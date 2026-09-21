@@ -19,6 +19,41 @@
         GROUP BY a.norms_id
     </select>
 
+    <select id="queryMaterialStockByNormsIdAndDepotIds" resultType="java.util.Map">
+        SELECT
+            SUM(IFNULL(a.stock, 0)) stock,
+            a.norms_id normsId,
+            a.depot_id depotId
+        FROM
+            erp_material_norms_stock a
+        <where>
+            <foreach collection="normsIds" item="normsId" separator="," open=" AND a.norms_id in(" close=")">
+                #{normsId}
+            </foreach>
+            <foreach collection="depotIds" item="depotId" separator="," open=" AND a.depot_id in(" close=")">
+                #{depotId}
+            </foreach>
+        </where>
+        GROUP BY a.norms_id, a.depot_id
+    </select>
+
+    <!-- 一次 UPDATE 覆盖多仓库存，避免循环内逐条 update -->
+    <update id="batchUpdateStockByNormsAndDepot">
+        UPDATE erp_material_norms_stock
+        SET stock = CASE
+            <foreach collection="items" item="item">
+                WHEN norms_id = #{item.normsId} AND depot_id = #{item.depotId} THEN #{item.stock}
+            </foreach>
+            ELSE stock
+        END
+        WHERE type = #{type}
+        AND (
+            <foreach collection="items" item="item" separator=" OR ">
+                (norms_id = #{item.normsId} AND depot_id = #{item.depotId})
+            </foreach>
+        )
+    </update>
+
     <select id="queryNormsStockByNormsId" resultType="com.skyeye.material.entity.MaterialNormsStock">
         SELECT
             a.depot_id depotId,

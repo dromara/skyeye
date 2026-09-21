@@ -81,6 +81,40 @@ public class MaterialNormsStockServiceImpl extends SkyeyeBusinessServiceImpl<Mat
     }
 
     /**
+     * 批量查询多仓库、多规格库存：depotId -> (normsId -> stock)
+     */
+    @Override
+    public Map<String, Map<String, String>> queryMaterialNormsStockByDepotIds(List<String> normsIds, List<String> depotIds) {
+        Map<String, Map<String, String>> result = new HashMap<>();
+        if (CollectionUtil.isEmpty(normsIds) || CollectionUtil.isEmpty(depotIds)) {
+            return result;
+        }
+        // 先铺零，保证调用方拿任意仓/规格都有值
+        for (String depotId : depotIds) {
+            Map<String, String> normsMap = new HashMap<>();
+            for (String normsId : normsIds) {
+                normsMap.put(normsId, CommonNumConstants.NUM_ZERO.toString());
+            }
+            result.put(depotId, normsMap);
+        }
+        List<Map<String, Object>> rows = materialNormsStockDao.queryMaterialStockByNormsIdAndDepotIds(normsIds, depotIds);
+        if (CollectionUtil.isEmpty(rows)) {
+            return result;
+        }
+        for (Map<String, Object> row : rows) {
+            if (row.get("depotId") == null || row.get("normsId") == null) {
+                continue;
+            }
+            String depotId = row.get("depotId").toString();
+            String normsId = row.get("normsId").toString();
+            String stock = row.get("stock") == null ? CommonNumConstants.NUM_ZERO.toString() : row.get("stock").toString();
+            Map<String, String> normsMap = result.computeIfAbsent(depotId, k -> new HashMap<>());
+            normsMap.put(normsId, stock);
+        }
+        return result;
+    }
+
+    /**
      * 批量获取指定类型的规格库存信息
      *
      * @param normsIds 规格id集合
@@ -134,6 +168,54 @@ public class MaterialNormsStockServiceImpl extends SkyeyeBusinessServiceImpl<Mat
             updateWrapper.set(MybatisPlusUtil.toColumns(MaterialNormsStock::getStock), stock);
             update(updateWrapper);
             return normsStock.getStock();
+        }
+    }
+
+    /**
+     * 批量覆盖写入：一次查出已有行，更新走单条 CASE SQL，新增走 saveBatch。
+     */
+    @Override
+    public void batchSaveMaterialNormsStock(String materialId, String normsId, Map<String, String> depotStockMap, int stockType) {
+        if (CollectionUtil.isEmpty(depotStockMap) || StringUtils.isBlank(normsId)) {
+            return;
+        }
+        List<String> depotIds = new ArrayList<>(depotStockMap.keySet());
+        QueryWrapper<MaterialNormsStock> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(MaterialNormsStock::getNormsId), normsId);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(MaterialNormsStock::getType), stockType);
+        queryWrapper.in(MybatisPlusUtil.toColumns(MaterialNormsStock::getDepotId), depotIds);
+        List<MaterialNormsStock> existingList = list(queryWrapper);
+        java.util.Set<String> existingDepotIds = existingList.stream()
+            .map(MaterialNormsStock::getDepotId)
+            .filter(StringUtils::isNotBlank)
+            .collect(Collectors.toSet());
+
+        List<Map<String, Object>> toUpdate = new ArrayList<>();
+        List<MaterialNormsStock> toInsert = new ArrayList<>();
+        for (Map.Entry<String, String> entry : depotStockMap.entrySet()) {
+            String depotId = entry.getKey();
+            String stock = entry.getValue();
+            if (existingDepotIds.contains(depotId)) {
+                Map<String, Object> item = new HashMap<>();
+                item.put("normsId", normsId);
+                item.put("depotId", depotId);
+                item.put("stock", stock);
+                toUpdate.add(item);
+            } else {
+                MaterialNormsStock create = new MaterialNormsStock();
+                create.setMaterialId(materialId);
+                create.setNormsId(normsId);
+                create.setDepotId(depotId);
+                create.setStock(stock);
+                create.setType(stockType);
+                toInsert.add(create);
+            }
+        }
+        if (CollectionUtil.isNotEmpty(toUpdate)) {
+            materialNormsStockDao.batchUpdateStockByNormsAndDepot(toUpdate, stockType);
+        }
+        if (CollectionUtil.isNotEmpty(toInsert)) {
+            saveBatch(toInsert);
         }
     }
 

@@ -25,4 +25,13 @@ public interface IShopStockRest {
     @PostMapping("/executeStoreProductTransfer")
     String executeStoreProductTransfer(Map<String, Object> params);
 
+    /**
+     * 发货扣减门店库存（对应 ERP ShopStoreDepotController.deductShopStockOnShip）。
+     * <p>个人店发货时调用：按 stockMode 扣 shop_stock 或按商家仓优先级扣 ERP 规格库存。</p>
+     *
+     * @param params 需包含 storeId、materialId、normsId、count，可选 materialStoreId
+     */
+    @PostMapping("/deductShopStockOnShip")
+    String deductShopStockOnShip(Map<String, Object> params);
+
 }

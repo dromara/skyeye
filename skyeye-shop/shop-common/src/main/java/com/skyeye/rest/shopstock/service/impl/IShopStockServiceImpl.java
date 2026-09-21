@@ -28,4 +28,10 @@ public class IShopStockServiceImpl extends IServiceImpl implements IShopStockSer
         ExecuteFeignClient.get(() -> iShopStockRest.executeStoreProductTransfer(params));
     }
 
+    @Override
+    public void deductShopStockOnShip(Map<String, Object> params) {
+        // 转发至 ERP：按 stockMode 扣门店库存 / 商家仓规格库存
+        ExecuteFeignClient.get(() -> iShopStockRest.deductShopStockOnShip(params));
+    }
+
 }

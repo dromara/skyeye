@@ -21,4 +21,11 @@ public interface IShopStockService extends IService {
      */
     void executeStoreProductTransfer(Map<String, Object> params);
 
+    /**
+     * 发货扣减门店库存（Feign 转发至 ERP deductShopStockOnShip）。
+     *
+     * @param params 需包含 storeId、materialId、normsId、count，可选 materialStoreId
+     */
+    void deductShopStockOnShip(Map<String, Object> params);
+
 }

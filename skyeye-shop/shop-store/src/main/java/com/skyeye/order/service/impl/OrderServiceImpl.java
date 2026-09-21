@@ -411,7 +411,9 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
                 stateList = Arrays.asList(new Integer[]{ShopOrderItemOtherState.WAIT_PAY.getKey()}); // 待支付
                 break;
             case "2": // 待发货
-                stateList = Arrays.asList(new Integer[]{ShopOrderItemOtherState.WAIT_DELIVER.getKey()}); // 待发货
+                stateList = Arrays.asList(new Integer[]{
+                    ShopOrderItemOtherState.WAIT_DELIVER.getKey(),
+                    ShopOrderItemOtherState.PART_DELIVERED.getKey()}); // 待发货/部分发货
                 break;
             case "3": // 待收货
                 stateList = Arrays.asList(new Integer[]{
@@ -480,7 +482,8 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
                 stateList = Arrays.asList(ShopOrderItemOtherState.WAIT_PAY.getKey()); // 待支付
                 break;
             case "2": // 待发货
-                stateList = Arrays.asList(ShopOrderItemOtherState.WAIT_DELIVER.getKey()); // 待发货
+                stateList = Arrays.asList(ShopOrderItemOtherState.WAIT_DELIVER.getKey(),
+                    ShopOrderItemOtherState.PART_DELIVERED.getKey()); // 待发货/部分发货
                 break;
             case "3": // 待收货
                 stateList = Arrays.asList(ShopOrderItemOtherState.ALL_DELIVERED.getKey(), // 全部发货
@@ -1111,7 +1114,9 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
             case "1":
                 return Arrays.asList(ShopOrderItemOtherState.WAIT_PAY.getKey());
             case "2":
-                return Arrays.asList(ShopOrderItemOtherState.WAIT_DELIVER.getKey());
+                // 待发货含「部分发货」，避免拆批发货后从待发货列表消失
+                return Arrays.asList(ShopOrderItemOtherState.WAIT_DELIVER.getKey(),
+                    ShopOrderItemOtherState.PART_DELIVERED.getKey());
             case "3":
                 return Arrays.asList(ShopOrderItemOtherState.ALL_DELIVERED.getKey(), ShopOrderItemOtherState.TRANSPORTING.getKey());
             case "4":
@@ -1162,7 +1167,9 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         assertPersonalStore(storeId);
         Map<String, Object> bean = new HashMap<>();
         bean.put("waitPay", countStoreOrder(storeId, Arrays.asList(ShopOrderItemOtherState.WAIT_PAY.getKey())));
-        bean.put("waitDeliver", countStoreOrder(storeId, Arrays.asList(ShopOrderItemOtherState.WAIT_DELIVER.getKey())));
+        // 首页「待发货」待办：含待发货 + 部分发货
+        bean.put("waitDeliver", countStoreOrder(storeId, Arrays.asList(
+            ShopOrderItemOtherState.WAIT_DELIVER.getKey(), ShopOrderItemOtherState.PART_DELIVERED.getKey())));
         bean.put("afterSale", countStoreOrder(storeId, Arrays.asList(ShopOrderItemOtherState.REFUNDING.getKey(),
             ShopOrderItemOtherState.SALESRETURNING.getKey(), ShopOrderItemOtherState.EXCHANGEING.getKey())));
         String todayStart = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + " 00:00:00";
