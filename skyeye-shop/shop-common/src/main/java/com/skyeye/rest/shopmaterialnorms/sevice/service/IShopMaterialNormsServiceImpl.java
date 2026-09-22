@@ -67,6 +67,22 @@ public class IShopMaterialNormsServiceImpl extends IServiceImpl implements IShop
     }
 
     @Override
+    public Map<String, Object> queryShopMaterialPreviewByStoreIds(List<String> storeIds, Integer limitPerStore) {
+        if (CollectionUtil.isEmpty(storeIds)) {
+            return new HashMap<>();
+        }
+        List<String> ids = storeIds.stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(ids)) {
+            return new HashMap<>();
+        }
+        String joinIds = Joiner.on(CommonCharConstants.COMMA_MARK).join(ids);
+        Integer limit = limitPerStore == null || limitPerStore <= 0 ? 5 : limitPerStore;
+        Map<String, Object> bean = ExecuteFeignClient.get(() ->
+            iShopMaterialNormsRest.queryShopMaterialPreviewByStoreIds(joinIds, limit)).getBean();
+        return bean == null ? new HashMap<>() : bean;
+    }
+
+    @Override
     public Map<String, Object> queryShopMaterialMapByMaterialIdAndStoreId(List<String> materialIdList, List<String> storeIdList) {
         Map<String, Object> params = new HashMap<>();
         params.put("materialId", JSONUtil.toJsonStr(materialIdList));

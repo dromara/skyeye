@@ -52,11 +52,7 @@ import com.skyeye.shopmaterial.dao.ShopMaterialStoreDao;
 import com.skyeye.shopmaterial.entity.ShopMaterial;
 import com.skyeye.shopmaterial.entity.ShopMaterialNorms;
 import com.skyeye.shopmaterial.entity.ShopMaterialStore;
-import com.skyeye.shopmaterial.enums.ShopMaterialDistributionType;
-import com.skyeye.shopmaterial.enums.ShopMaterialNormsLogoType;
-import com.skyeye.shopmaterial.enums.ShopMaterialStockMode;
-import com.skyeye.shopmaterial.enums.ShopMaterialStoreCoverage;
-import com.skyeye.shopmaterial.enums.ShopMaterialStoreSourceType;
+import com.skyeye.shopmaterial.enums.*;
 import com.skyeye.shopmaterial.service.ShopMaterialNormsService;
 import com.skyeye.shopmaterial.service.ShopMaterialService;
 import com.skyeye.shopmaterial.service.ShopMaterialStoreService;
@@ -583,6 +579,74 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
 
     @Override
     @IgnoreTenant
+    public void queryShopMaterialPreviewByStoreIds(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        List<String> storeIds = Arrays.asList(params.get("storeIds").toString().split(CommonCharConstants.COMMA_MARK))
+            .stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(storeIds)) {
+            outputObject.setBean(new HashMap<>());
+            outputObject.settotal(CommonNumConstants.NUM_ZERO);
+            return;
+        }
+        int limitPerStore = Convert.toInt(params.get("limit"), CommonNumConstants.NUM_FIVE);
+        if (limitPerStore <= 0) {
+            limitPerStore = CommonNumConstants.NUM_FIVE;
+        }
+        QueryWrapper<ShopMaterialStore> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreId), storeIds);
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getIsLaunchStore), WhetherEnum.ENABLE_USING.getKey());
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getIsLaunchShop), WhetherEnum.ENABLE_USING.getKey());
+        queryWrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreEnabled), EnableEnum.ENABLE_USING.getKey());
+        // 线上商城预览：经营方式含线上，或未写经营方式的旧数据
+        Integer onlineChannel = ShopMaterialDeliveryMethod.EXPRESS_DELIVERY.getKey();
+        queryWrapper.and(wra -> wra.isNull(MybatisPlusUtil.toColumns(ShopMaterialStore::getSaleChannel))
+            .or().apply("JSON_CONTAINS(" + MybatisPlusUtil.toColumns(ShopMaterialStore::getSaleChannel) + ", {0})",
+                "\"" + onlineChannel + "\""));
+        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(ShopMaterialStore::getCreateTime));
+        List<ShopMaterialStore> shopMaterialStoreList = list(queryWrapper);
+        Map<String, List<Map<String, Object>>> result = new HashMap<>();
+        storeIds.forEach(storeId -> result.put(storeId, new ArrayList<>()));
+        if (CollectionUtil.isEmpty(shopMaterialStoreList)) {
+            outputObject.setBean(result);
+            outputObject.settotal(CommonNumConstants.NUM_ZERO);
+            return;
+        }
+        List<String> materialIds = shopMaterialStoreList.stream()
+            .map(ShopMaterialStore::getMaterialId).filter(StrUtil::isNotEmpty).distinct().collect(Collectors.toList());
+        Map<String, ShopMaterial> shopMaterialMap = shopMaterialService.queryShopMaterialByMaterialId(materialIds);
+        int finalLimit = limitPerStore;
+        shopMaterialStoreList.forEach(storeRel -> {
+            List<Map<String, Object>> goodsList = result.get(storeRel.getStoreId());
+            if (goodsList == null || goodsList.size() >= finalLimit) {
+                return;
+            }
+            ShopMaterial shopMaterial = shopMaterialMap.get(storeRel.getMaterialId());
+            if (ObjectUtil.isEmpty(shopMaterial)) {
+                return;
+            }
+            Map<String, Object> preview = new HashMap<>();
+            preview.put("id", storeRel.getId());
+            preview.put("logo", shopMaterial.getLogo());
+            String name = ObjectUtil.isNotEmpty(shopMaterial.getMaterialMation())
+                ? shopMaterial.getMaterialMation().getName() : StrUtil.EMPTY;
+            preview.put("name", name);
+            String salePrice = StrUtil.EMPTY;
+            if (CollectionUtil.isNotEmpty(shopMaterial.getShopMaterialNormsList())) {
+                ShopMaterialNorms defaultNorms = shopMaterial.getShopMaterialNormsList().stream()
+                    .filter(item -> IsDefaultEnum.IS_DEFAULT.getKey().equals(item.getIsDefault()))
+                    .findFirst()
+                    .orElse(shopMaterial.getShopMaterialNormsList().get(0));
+                salePrice = defaultNorms.getSalePrice();
+            }
+            preview.put("salePrice", salePrice);
+            goodsList.add(preview);
+        });
+        outputObject.setBean(result);
+        outputObject.settotal(result.values().stream().mapToInt(List::size).sum());
+    }
+
+    @Override
+    @IgnoreTenant
     public void queryShopMaterialByMaterialIdAndStoreId(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String materialId = params.get("materialId").toString();
@@ -952,7 +1016,22 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         }
         List<String> deliveryMethod = shopMaterial.getDeliveryMethod();
         if (CollectionUtil.isEmpty(deliveryMethod)) {
-            deliveryMethod = Collections.singletonList(String.valueOf(ShopMaterialDeliveryMethod.EXPRESS_DELIVERY.getKey()));
+            throw new CustomException("平台货源未配置配送方式");
+        }
+        List<String> saleChannel = shopMaterial.getSaleChannel();
+        if (CollectionUtil.isEmpty(saleChannel)) {
+            throw new CustomException("平台货源未配置经营方式");
+        }
+        boolean storeOnline = WhetherEnum.ENABLE_USING.getKey().equals(Convert.toInt(storeMation.get("onlineOpen")));
+        boolean storeOffline = WhetherEnum.ENABLE_USING.getKey().equals(Convert.toInt(storeMation.get("offlineOpen")));
+        for (String channel : saleChannel) {
+            Integer channelVal = Convert.toInt(channel);
+            if (ShopMaterialDeliveryMethod.EXPRESS_DELIVERY.getKey().equals(channelVal) && !storeOnline) {
+                throw new CustomException("本店未开通线上，无法引入需线上经营的平台货源");
+            }
+            if (ShopMaterialDeliveryMethod.USER_TAKE_SELF.getKey().equals(channelVal) && !storeOffline) {
+                throw new CustomException("本店未开通线下，无法引入需线下经营的平台货源");
+            }
         }
         String userId = InputObject.getLogParamsStatic().get("id").toString();
         Integer storeEnabled = Convert.toInt(storeMation.get("enabled"), EnableEnum.ENABLE_USING.getKey());
@@ -965,6 +1044,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
             shopMaterialStore.setIsLaunchShop(WhetherEnum.DISABLE_USING.getKey());
             shopMaterialStore.setStoreEnabled(storeEnabled);
             shopMaterialStore.setDeliveryMethod(deliveryMethod);
+            shopMaterialStore.setSaleChannel(saleChannel);
             shopMaterialStore.setSourceType(ShopMaterialStoreSourceType.PLATFORM.getKey());
             shopMaterialStore.setStockMode(ShopMaterialStockMode.NORMAL.getKey());
             createEntity(shopMaterialStore, userId);
@@ -973,11 +1053,10 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         old.setIsLaunchStore(WhetherEnum.ENABLE_USING.getKey());
         old.setStoreEnabled(storeEnabled);
         old.setBigTypeId(shopMaterial.getBigTypeId());
+        old.setDeliveryMethod(deliveryMethod);
+        old.setSaleChannel(saleChannel);
         if (old.getSourceType() == null) {
             old.setSourceType(ShopMaterialStoreSourceType.PLATFORM.getKey());
-        }
-        if (CollectionUtil.isEmpty(old.getDeliveryMethod())) {
-            old.setDeliveryMethod(deliveryMethod);
         }
         updateById(old);
     }
@@ -1083,6 +1162,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
             throw new CustomException("平台货源不能在个人店编辑");
         }
         List<String> deliveryMethod = JSONUtil.toList(params.get("deliveryMethod").toString(), String.class);
+        List<String> saleChannel = JSONUtil.toList(params.get("saleChannel").toString(), String.class);
         JSONObject sku = JSONUtil.parseObj(params.get("skuData").toString());
         JSONArray normsArray = sku.getJSONArray("materialNorms");
         List<JSONObject> normsRows = new ArrayList<>();
@@ -1180,6 +1260,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         UpdateWrapper<ShopMaterialStore> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, relation.getId());
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getDeliveryMethod), JSONUtil.toJsonStr(deliveryMethod));
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getSaleChannel), JSONUtil.toJsonStr(saleChannel));
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getBigTypeId), bigTypeId);
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreEnabled), storeEnabled);
         update(updateWrapper);
@@ -1209,6 +1290,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         Map<String, Object> storeMation = assertPersonalStoreOwner(storeId);
         checkSalePrice(salePrice);
         List<String> deliveryMethod = JSONUtil.toList(params.get("deliveryMethod").toString(), String.class);
+        List<String> saleChannel = JSONUtil.toList(params.get("saleChannel").toString(), String.class);
         JSONObject sku = JSONUtil.parseObj(params.get("skuData").toString());
         Integer unit = Convert.toInt(sku.get("unit"));
         if (unit == null) {
@@ -1234,7 +1316,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         String userId = InputObject.getLogParamsStatic().get("id").toString();
         String materialId = createErpMaterial(userId, name, model, null, logo, sku, multiSpec, normsRows);
         createShopMaterial(userId, materialId, storeId, logo, carouselImg, content, deliveryMethod, normsRows, bigTypeId);
-        hangOnPersonalStore(userId, storeId, materialId, deliveryMethod, storeMation, bigTypeId);
+        hangOnPersonalStore(userId, storeId, materialId, deliveryMethod, saleChannel, storeMation, bigTypeId);
     }
 
     private void checkSalePrice(String salePrice) {
@@ -1401,7 +1483,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
     }
 
     private void hangOnPersonalStore(String userId, String storeId, String materialId, List<String> deliveryMethod,
-                                     Map<String, Object> storeMation, String bigTypeId) {
+                                     List<String> saleChannel, Map<String, Object> storeMation, String bigTypeId) {
         Integer storeEnabled = Convert.toInt(storeMation.get("enabled"), EnableEnum.ENABLE_USING.getKey());
         QueryWrapper<ShopMaterialStore> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreId), storeId);
@@ -1416,6 +1498,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
             row.setIsLaunchShop(WhetherEnum.DISABLE_USING.getKey());
             row.setStoreEnabled(storeEnabled);
             row.setDeliveryMethod(deliveryMethod);
+            row.setSaleChannel(saleChannel);
             row.setBigTypeId(bigTypeId);
             row.setSourceType(ShopMaterialStoreSourceType.PERSONAL_SELF.getKey());
             row.setStockMode(ShopMaterialStockMode.NORMAL.getKey());
@@ -1427,6 +1510,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getIsLaunchStore), WhetherEnum.ENABLE_USING.getKey());
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreEnabled), storeEnabled);
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getDeliveryMethod), JSONUtil.toJsonStr(deliveryMethod));
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getSaleChannel), JSONUtil.toJsonStr(saleChannel));
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getBigTypeId), bigTypeId);
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopMaterialStore::getSourceType), ShopMaterialStoreSourceType.PERSONAL_SELF.getKey());
         update(updateWrapper);

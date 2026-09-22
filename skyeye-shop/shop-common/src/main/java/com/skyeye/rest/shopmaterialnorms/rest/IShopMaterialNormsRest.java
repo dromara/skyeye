@@ -39,6 +39,17 @@ public interface IShopMaterialNormsRest {
     String queryShopMaterialByIds(@RequestParam("ids") String ids);
 
     /**
+     * 按门店批量预览已上架商城商品
+     *
+     * @param storeIds 门店id，多个逗号隔开
+     * @param limit    每个门店返回条数
+     * @return
+     */
+    @PostMapping("/queryShopMaterialPreviewByStoreIds")
+    String queryShopMaterialPreviewByStoreIds(@RequestParam("storeIds") String storeIds,
+                                              @RequestParam(value = "limit", required = false) Integer limit);
+
+    /**
      * 根据商品id和门店id批量获取商城商品关系id
      *
      * @param params materialId、storeId（json数组，一一对应）

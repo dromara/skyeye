@@ -29,6 +29,15 @@ public interface IShopMaterialNormsService {
     List<Map<String, Object>> queryShopMaterialByIds(List<String> ids);
 
     /**
+     * 按门店批量预览已上架商城商品（key=storeId, value=预览商品列表）
+     *
+     * @param storeIds     门店id列表
+     * @param limitPerStore 每个门店条数
+     * @return
+     */
+    Map<String, Object> queryShopMaterialPreviewByStoreIds(List<String> storeIds, Integer limitPerStore);
+
+    /**
      * 根据商品id和门店id批量获取关系id（key: materialId_storeId, value: 关系id）
      *
      * @param materialIdList 商品id列表

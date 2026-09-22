@@ -55,6 +55,15 @@ public class ShopMaterialStoreController {
         shopMaterialStoreService.queryShopMaterialByIds(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryShopMaterialPreviewByStoreIds", value = "按门店批量预览已上架商城商品", method = "POST", allUse = "0")
+    @ApiImplicitParams(value = {
+        @ApiImplicitParam(id = "storeIds", name = "storeIds", value = "门店id，多个逗号隔开", required = "required"),
+        @ApiImplicitParam(id = "limit", name = "limit", value = "每个门店返回条数，默认5")})
+    @RequestMapping("/post/ShopMaterialStoreController/queryShopMaterialPreviewByStoreIds")
+    public void queryShopMaterialPreviewByStoreIds(InputObject inputObject, OutputObject outputObject) {
+        shopMaterialStoreService.queryShopMaterialPreviewByStoreIds(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryShopMaterialByMaterialIdAndStoreId", value = "根据商品id和门店id获取商城商品信息", method = "GET", allUse = "0")
     @ApiImplicitParams(value = {
         @ApiImplicitParam(id = "materialId", name = "materialId", value = "商品id", required = "required"),
@@ -207,6 +216,7 @@ public class ShopMaterialStoreController {
         @ApiImplicitParam(id = "logo", name = "logo", value = "商品图片", required = "required"),
         @ApiImplicitParam(id = "salePrice", name = "salePrice", value = "售价，多规格时传默认规格销售价", required = "required"),
         @ApiImplicitParam(id = "deliveryMethod", name = "deliveryMethod", value = "配送方式", required = "required,json"),
+        @ApiImplicitParam(id = "saleChannel", name = "saleChannel", value = "经营方式，1线上 2线下", required = "required,json"),
         @ApiImplicitParam(id = "model", name = "model", value = "型号", required = "required"),
         @ApiImplicitParam(id = "bigTypeId", name = "bigTypeId", value = "商城商品分类id", required = "required"),
         @ApiImplicitParam(id = "content", name = "content", value = "商品详情", required = "required"),
@@ -234,6 +244,7 @@ public class ShopMaterialStoreController {
         @ApiImplicitParam(id = "logo", name = "logo", value = "商品图片", required = "required"),
         @ApiImplicitParam(id = "salePrice", name = "salePrice", value = "售价，多规格时传默认规格销售价", required = "required"),
         @ApiImplicitParam(id = "deliveryMethod", name = "deliveryMethod", value = "配送方式", required = "required,json"),
+        @ApiImplicitParam(id = "saleChannel", name = "saleChannel", value = "经营方式，1线上 2线下", required = "required,json"),
         @ApiImplicitParam(id = "model", name = "model", value = "型号", required = "required"),
         @ApiImplicitParam(id = "bigTypeId", name = "bigTypeId", value = "商城商品分类id", required = "required"),
         @ApiImplicitParam(id = "content", name = "content", value = "商品详情", required = "required"),

@@ -15,7 +15,6 @@ import com.skyeye.app.entity.AppRelease;
 import com.skyeye.app.entity.AppVersion;
 import com.skyeye.app.enums.AppReleaseStatusEnum;
 import com.skyeye.app.service.AppReleaseService;
-import com.skyeye.app.service.AppStoreService;
 import com.skyeye.app.service.AppVersionService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
@@ -53,9 +52,6 @@ public class AppVersionServiceImpl extends SkyeyeBusinessServiceImpl<AppVersionD
 
     @Autowired
     private AppReleaseService appReleaseService;
-
-    @Autowired
-    private AppStoreService appStoreService;
 
     @Override
     protected QueryWrapper<AppVersion> getQueryWrapper(CommonPageInfo commonPageInfo) {

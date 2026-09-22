@@ -6,7 +6,6 @@ package com.skyeye.delivery.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
@@ -70,13 +69,6 @@ public class ShopDeliveryTemplateChargeServiceImpl extends SkyeyeBusinessService
         shopDeliveryTemplateService.setMationForMap(beans, "templateId", "templateMation");
         // 分页查询时获取数据
         return beans;
-    }
-
-    @Override
-    public List<Map<String, Object>> queryDataList(InputObject inputObject) {
-        QueryWrapper<ShopDeliveryTemplateCharge> queryWrapper = new QueryWrapper<>();
-        List<ShopDeliveryTemplateCharge> beans = list(queryWrapper);
-        return JSONUtil.toList(JSONUtil.toJsonStr(beans), null);
     }
 
     @Override
