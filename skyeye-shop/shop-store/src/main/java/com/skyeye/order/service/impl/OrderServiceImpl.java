@@ -1161,6 +1161,34 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     }
 
     @Override
+    public void queryMyOrderStat(InputObject inputObject, OutputObject outputObject) {
+        String userId = InputObject.getLogParamsStatic().get(CommonConstants.ID).toString();
+        Map<String, Object> bean = new HashMap<>();
+        // 与 queryOrderPageList type=1/3/4/6 口径对齐；评价仅统计待评价类，便于角标展示
+        bean.put("waitPay", countMyOrder(userId, Arrays.asList(ShopOrderItemOtherState.WAIT_PAY.getKey())));
+        bean.put("waitReceive", countMyOrder(userId, Arrays.asList(
+            ShopOrderItemOtherState.ALL_DELIVERED.getKey(),
+            ShopOrderItemOtherState.TRANSPORTING.getKey())));
+        bean.put("waitReview", countMyOrder(userId, Arrays.asList(
+            ShopOrderItemOtherState.UNEVALUATE.getKey(),
+            ShopOrderItemOtherState.PARTIALEVALUATION.getKey())));
+        bean.put("afterSale", countMyOrder(userId, Arrays.asList(
+            ShopOrderItemOtherState.REFUNDING.getKey(),
+            ShopOrderItemOtherState.SALESRETURNING.getKey(),
+            ShopOrderItemOtherState.EXCHANGEING.getKey())));
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    private long countMyOrder(String userId, List<Integer> stateList) {
+        QueryWrapper<OrderItem> wrapper = new QueryWrapper<>();
+        wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getCreateId), userId);
+        wrapper.in(MybatisPlusUtil.toColumns(OrderItem::getState), stateList);
+        Long count = orderItemDao.selectCount(wrapper);
+        return count == null ? 0L : count;
+    }
+
+    @Override
     public void queryPersonalStoreOrderStat(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
         String storeId = commonPageInfo.getObjectId();

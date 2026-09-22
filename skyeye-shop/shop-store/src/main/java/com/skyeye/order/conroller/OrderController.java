@@ -68,6 +68,12 @@ public class OrderController {
         orderService.queryPersonalStoreOrderPageList(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryMyOrderStat", value = "我的订单待办数量统计", method = "POST", allUse = "2")
+    @RequestMapping("/post/OrderController/queryMyOrderStat")
+    public void queryMyOrderStat(InputObject inputObject, OutputObject outputObject) {
+        orderService.queryMyOrderStat(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryPersonalStoreOrderStat", value = "个人门店订单待办统计", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/OrderController/queryPersonalStoreOrderStat")
