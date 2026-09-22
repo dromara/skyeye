@@ -1163,29 +1163,51 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     @Override
     public void queryMyOrderStat(InputObject inputObject, OutputObject outputObject) {
         String userId = InputObject.getLogParamsStatic().get(CommonConstants.ID).toString();
-        Map<String, Object> bean = new HashMap<>();
         // 与 queryOrderPageList type=1/3/4/6 口径对齐；评价仅统计待评价类，便于角标展示
-        bean.put("waitPay", countMyOrder(userId, Arrays.asList(ShopOrderItemOtherState.WAIT_PAY.getKey())));
-        bean.put("waitReceive", countMyOrder(userId, Arrays.asList(
+        List<Integer> stateList = Arrays.asList(
+            ShopOrderItemOtherState.WAIT_PAY.getKey(),
             ShopOrderItemOtherState.ALL_DELIVERED.getKey(),
-            ShopOrderItemOtherState.TRANSPORTING.getKey())));
-        bean.put("waitReview", countMyOrder(userId, Arrays.asList(
+            ShopOrderItemOtherState.TRANSPORTING.getKey(),
             ShopOrderItemOtherState.UNEVALUATE.getKey(),
-            ShopOrderItemOtherState.PARTIALEVALUATION.getKey())));
-        bean.put("afterSale", countMyOrder(userId, Arrays.asList(
+            ShopOrderItemOtherState.PARTIALEVALUATION.getKey(),
             ShopOrderItemOtherState.REFUNDING.getKey(),
             ShopOrderItemOtherState.SALESRETURNING.getKey(),
-            ShopOrderItemOtherState.EXCHANGEING.getKey())));
+            ShopOrderItemOtherState.EXCHANGEING.getKey());
+        Map<Integer, Long> countMap = countMyOrderByState(userId, stateList);
+        Map<String, Object> bean = new HashMap<>();
+        // 待支付
+        bean.put("waitPay", sumStateCount(countMap, ShopOrderItemOtherState.WAIT_PAY.getKey()));
+        // 待收货
+        bean.put("waitReceive", sumStateCount(countMap,
+            ShopOrderItemOtherState.ALL_DELIVERED.getKey(),
+            ShopOrderItemOtherState.TRANSPORTING.getKey()));
+        // 待评价
+        bean.put("waitReview", sumStateCount(countMap,
+            ShopOrderItemOtherState.UNEVALUATE.getKey(),
+            ShopOrderItemOtherState.PARTIALEVALUATION.getKey()));
+        // 售后
+        bean.put("afterSale", sumStateCount(countMap,
+            ShopOrderItemOtherState.REFUNDING.getKey(),
+            ShopOrderItemOtherState.SALESRETURNING.getKey(),
+            ShopOrderItemOtherState.EXCHANGEING.getKey()));
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
-    private long countMyOrder(String userId, List<Integer> stateList) {
+    /**
+     * 按买家一次性查出所需状态的数量，再在内存中按状态分组使用
+     */
+    private Map<Integer, Long> countMyOrderByState(String userId, List<Integer> stateList) {
+        if (CollectionUtil.isEmpty(stateList)) {
+            return Collections.emptyMap();
+        }
+        String stateCol = MybatisPlusUtil.toColumns(OrderItem::getState);
         QueryWrapper<OrderItem> wrapper = new QueryWrapper<>();
+        wrapper.select(stateCol, "COUNT(1) AS cnt");
         wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getCreateId), userId);
-        wrapper.in(MybatisPlusUtil.toColumns(OrderItem::getState), stateList);
-        Long count = orderItemDao.selectCount(wrapper);
-        return count == null ? 0L : count;
+        wrapper.in(stateCol, stateList);
+        wrapper.groupBy(stateCol);
+        return toStateCountMap(orderItemDao.selectMaps(wrapper));
     }
 
     @Override
@@ -1193,13 +1215,32 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
         String storeId = commonPageInfo.getObjectId();
         assertPersonalStore(storeId);
+        List<Integer> stateList = Arrays.asList(
+            ShopOrderItemOtherState.WAIT_PAY.getKey(),
+            ShopOrderItemOtherState.WAIT_DELIVER.getKey(),
+            ShopOrderItemOtherState.PART_DELIVERED.getKey(),
+            ShopOrderItemOtherState.ALL_DELIVERED.getKey(),
+            ShopOrderItemOtherState.TRANSPORTING.getKey(),
+            ShopOrderItemOtherState.REFUNDING.getKey(),
+            ShopOrderItemOtherState.SALESRETURNING.getKey(),
+            ShopOrderItemOtherState.EXCHANGEING.getKey());
+        Map<Integer, Long> countMap = countStoreOrderByState(storeId, stateList);
         Map<String, Object> bean = new HashMap<>();
-        bean.put("waitPay", countStoreOrder(storeId, Arrays.asList(ShopOrderItemOtherState.WAIT_PAY.getKey())));
-        // 首页「待发货」待办：含待发货 + 部分发货
-        bean.put("waitDeliver", countStoreOrder(storeId, Arrays.asList(
-            ShopOrderItemOtherState.WAIT_DELIVER.getKey(), ShopOrderItemOtherState.PART_DELIVERED.getKey())));
-        bean.put("afterSale", countStoreOrder(storeId, Arrays.asList(ShopOrderItemOtherState.REFUNDING.getKey(),
-            ShopOrderItemOtherState.SALESRETURNING.getKey(), ShopOrderItemOtherState.EXCHANGEING.getKey())));
+        // 待支付
+        bean.put("waitPay", sumStateCount(countMap, ShopOrderItemOtherState.WAIT_PAY.getKey()));
+        // 待发货
+        bean.put("waitDeliver", sumStateCount(countMap,
+            ShopOrderItemOtherState.WAIT_DELIVER.getKey(),
+            ShopOrderItemOtherState.PART_DELIVERED.getKey()));
+        // 待收货
+        bean.put("waitReceive", sumStateCount(countMap,
+            ShopOrderItemOtherState.ALL_DELIVERED.getKey(),
+            ShopOrderItemOtherState.TRANSPORTING.getKey()));
+        // 售后
+        bean.put("afterSale", sumStateCount(countMap,
+            ShopOrderItemOtherState.REFUNDING.getKey(),
+            ShopOrderItemOtherState.SALESRETURNING.getKey(),
+            ShopOrderItemOtherState.EXCHANGEING.getKey()));
         String todayStart = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + " 00:00:00";
         QueryWrapper<OrderItem> todayWrapper = new QueryWrapper<>();
         todayWrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getStoreId), storeId);
@@ -1211,18 +1252,60 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         Map<String, Object> today = CollectionUtil.isEmpty(todayList) || todayList.get(0) == null ? new HashMap<>() : todayList.get(0);
         Object todayOrder = mapIgnoreCase(today, "todayOrder");
         Object todayAmount = mapIgnoreCase(today, "todayAmount");
+        // 今日订单数
         bean.put("todayOrder", todayOrder == null ? 0 : todayOrder);
+        // 今日订单金额
         bean.put("todayAmount", todayAmount == null ? "0" : todayAmount.toString());
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
-    private long countStoreOrder(String storeId, List<Integer> stateList) {
+    /**
+     * 按门店一次性查出所需状态的数量，再在内存中按状态分组使用
+     */
+    private Map<Integer, Long> countStoreOrderByState(String storeId, List<Integer> stateList) {
+        if (CollectionUtil.isEmpty(stateList)) {
+            return Collections.emptyMap();
+        }
+        String stateCol = MybatisPlusUtil.toColumns(OrderItem::getState);
         QueryWrapper<OrderItem> wrapper = new QueryWrapper<>();
+        wrapper.select(stateCol, "COUNT(1) AS cnt");
         wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getStoreId), storeId);
-        wrapper.in(MybatisPlusUtil.toColumns(OrderItem::getState), stateList);
-        Long count = orderItemDao.selectCount(wrapper);
-        return count == null ? 0L : count;
+        wrapper.in(stateCol, stateList);
+        wrapper.groupBy(stateCol);
+        return toStateCountMap(orderItemDao.selectMaps(wrapper));
+    }
+
+    private Map<Integer, Long> toStateCountMap(List<Map<String, Object>> rows) {
+        Map<Integer, Long> countMap = new HashMap<>();
+        if (CollectionUtil.isEmpty(rows)) {
+            return countMap;
+        }
+        for (Map<String, Object> row : rows) {
+            Object stateObj = mapIgnoreCase(row, "state");
+            Object cntObj = mapIgnoreCase(row, "cnt");
+            if (stateObj == null) {
+                continue;
+            }
+            Integer state = Integer.valueOf(stateObj.toString());
+            long cnt = cntObj == null ? 0L : Long.parseLong(cntObj.toString());
+            countMap.put(state, cnt);
+        }
+        return countMap;
+    }
+
+    private long sumStateCount(Map<Integer, Long> countMap, Integer... states) {
+        if (countMap == null || countMap.isEmpty() || states == null || states.length == 0) {
+            return 0L;
+        }
+        long sum = 0L;
+        for (Integer state : states) {
+            if (state == null) {
+                continue;
+            }
+            sum += countMap.getOrDefault(state, 0L);
+        }
+        return sum;
     }
 
     private Object mapIgnoreCase(Map<String, Object> map, String key) {

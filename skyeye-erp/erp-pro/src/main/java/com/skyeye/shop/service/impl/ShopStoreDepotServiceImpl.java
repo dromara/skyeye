@@ -460,6 +460,7 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         row.put("storeId", relation.getStoreId());
         row.put("materialId", relation.getMaterialId());
         row.put("stockMode", resolveStockMode(relation));
+        row.put("sourceType", relation.getSourceType());
         row.put("isLaunchShop", relation.getIsLaunchShop());
         row.put("saleableStock", saleable);
         row.put("shopMaterial", shopMaterial);
@@ -894,6 +895,7 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         bean.put("storeId", storeId);
         bean.put("materialId", relation.getMaterialId());
         bean.put("stockMode", mode);
+        bean.put("sourceType", relation.getSourceType());
         bean.put("saleableStock", saleable);
         bean.put("shopMaterial", shopMaterial);
         bean.put("skuRows", skuRows);
