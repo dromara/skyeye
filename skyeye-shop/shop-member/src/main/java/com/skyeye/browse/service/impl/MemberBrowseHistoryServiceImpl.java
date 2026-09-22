@@ -4,6 +4,7 @@
 
 package com.skyeye.browse.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
@@ -25,14 +26,13 @@ import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
 @SkyeyeService(name = "会员浏览足迹", groupName = "会员管理", tenant = TenantEnum.NO_ISOLATION)
-public class MemberBrowseHistoryServiceImpl
-    extends SkyeyeBusinessServiceImpl<MemberBrowseHistoryDao, MemberBrowseHistory>
-    implements MemberBrowseHistoryService {
+public class MemberBrowseHistoryServiceImpl extends SkyeyeBusinessServiceImpl<MemberBrowseHistoryDao, MemberBrowseHistory> implements MemberBrowseHistoryService {
 
     @Override
     @IgnoreTenant
@@ -112,6 +112,34 @@ public class MemberBrowseHistoryServiceImpl
             throw new CustomException("足迹不存在");
         }
         deleteById(id);
+    }
+
+    @Override
+    @IgnoreTenant
+    public Map<String, Object> queryStoreTodayBrowseStat(String storeId) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("todayVisitor", 0L);
+        result.put("todayPv", 0L);
+        if (StrUtil.isBlank(storeId)) {
+            return result;
+        }
+        // 与订单「今日」口径一致：自然日 00:00:00 起
+        String todayStart = DateUtil.getYmdTimeAndToString() + " 00:00:00";
+        String storeCol = MybatisPlusUtil.toColumns(MemberBrowseHistory::getStoreId);
+        String memberCol = MybatisPlusUtil.toColumns(MemberBrowseHistory::getMemberId);
+        String timeCol = MybatisPlusUtil.toColumns(MemberBrowseHistory::getLastViewTime);
+        QueryWrapper<MemberBrowseHistory> wrapper = new QueryWrapper<>();
+        wrapper.select("COUNT(DISTINCT " + memberCol + ") AS todayVisitor", "COUNT(1) AS todayPv");
+        wrapper.eq(storeCol, storeId);
+        wrapper.ge(timeCol, todayStart);
+        List<Map<String, Object>> rows = listMaps(wrapper);
+        if (CollectionUtil.isEmpty(rows)) {
+            return result;
+        }
+        Map<String, Object> row = rows.get(0);
+        result.put("todayVisitor", row.get("todayVisitor"));
+        result.put("todayPv", row.get("todayPv"));
+        return result;
     }
 
 }

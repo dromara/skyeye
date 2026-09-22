@@ -9,6 +9,7 @@ import com.skyeye.annotation.api.ApiImplicitParam;
 import com.skyeye.annotation.api.ApiImplicitParams;
 import com.skyeye.annotation.api.ApiOperation;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.order.entity.Order;
@@ -75,7 +76,7 @@ public class OrderController {
     }
 
     @ApiOperation(id = "queryPersonalStoreOrderStat", value = "个人门店订单待办统计", method = "POST", allUse = "2")
-    @ApiImplicitParams(classBean = CommonPageInfo.class)
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
     @RequestMapping("/post/OrderController/queryPersonalStoreOrderStat")
     public void queryPersonalStoreOrderStat(InputObject inputObject, OutputObject outputObject) {
         orderService.queryPersonalStoreOrderStat(inputObject, outputObject);

@@ -20,11 +20,13 @@ import com.google.common.base.Joiner;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.browse.service.MemberBrowseHistoryService;
 import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
+import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -132,6 +134,9 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
 
     @Autowired
     private ShopTradeCartService shopTradeCartService;
+
+    @Autowired
+    private MemberBrowseHistoryService memberBrowseHistoryService;
 
     @Override
     public void createPrepose(Order order) {
@@ -1212,8 +1217,8 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
 
     @Override
     public void queryPersonalStoreOrderStat(InputObject inputObject, OutputObject outputObject) {
-        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
-        String storeId = commonPageInfo.getObjectId();
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        String storeId = tableSelectInfo.getObjectId();
         assertPersonalStore(storeId);
         List<Integer> stateList = Arrays.asList(
             ShopOrderItemOtherState.WAIT_PAY.getKey(),
@@ -1256,6 +1261,10 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         bean.put("todayOrder", todayOrder == null ? 0 : todayOrder);
         // 今日订单金额
         bean.put("todayAmount", todayAmount == null ? "0" : todayAmount.toString());
+        // 今日访客 / 浏览（商品足迹）
+        Map<String, Object> browseStat = memberBrowseHistoryService.queryStoreTodayBrowseStat(storeId);
+        bean.put("todayVisitor", browseStat.getOrDefault("todayVisitor", 0L));
+        bean.put("todayPv", browseStat.getOrDefault("todayPv", 0L));
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }

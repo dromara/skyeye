@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement//启注解事务管理，等同于xml配置方式的 <tx:annotation-driven />
 @EnableDiscoveryClient
 @EnableFeignClients
+@EnableScheduling
 public class SkyShopApplication {
     
     public static void main(String[] args) {

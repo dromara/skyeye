@@ -31,8 +31,7 @@ public class MemberBrowseHistoryController {
         @ApiImplicitParam(id = "goodsName", name = "goodsName", value = "商品名称"),
         @ApiImplicitParam(id = "goodsLogo", name = "goodsLogo", value = "商品主图"),
         @ApiImplicitParam(id = "price", name = "price", value = "展示价格"),
-        @ApiImplicitParam(id = "storeName", name = "storeName", value = "门店名称")
-    })
+        @ApiImplicitParam(id = "storeName", name = "storeName", value = "门店名称")})
     @RequestMapping("/post/MemberBrowseHistoryController/recordBrowseHistory")
     public void recordBrowseHistory(InputObject inputObject, OutputObject outputObject) {
         memberBrowseHistoryService.recordBrowseHistory(inputObject, outputObject);
