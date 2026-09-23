@@ -43,7 +43,7 @@ public class OrderItemController {
         orderItemService.deliverGoodsById(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "changeOrderItemAdjustPrice", value = "订单子单调价", method = "POST", allUse = "1")
+    @ApiOperation(id = "changeOrderItemAdjustPrice", value = "订单子单调价", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),
         @ApiImplicitParam(id = "adjustPrice", name = "adjustPrice", value = "调整的价格，不可为负数(单位 元)", required = "required,num")})

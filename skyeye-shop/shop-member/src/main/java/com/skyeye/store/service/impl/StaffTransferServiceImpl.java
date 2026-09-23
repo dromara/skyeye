@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
  * @ClassName: StaffTransferServiceImpl
  * @Description: 员工调拨申请服务层
  * @author: skyeye云系列--卫志强
- * @date: 2025/01/XX XX:XX
  * @Copyright: 2025 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
@@ -49,6 +48,8 @@ public class StaffTransferServiceImpl extends SkyeyeBusinessServiceImpl<StaffTra
         QueryWrapper<StaffTransfer> queryWrapper = super.getQueryWrapper(commonPageInfo);
         String userId = InputObject.getLogParamsStatic().get("id").toString();
         queryWrapper.eq(MybatisPlusUtil.toColumns(StaffTransfer::getCreateId), userId);
+        String storeId = commonPageInfo.getCustomParamsMapStr("storeId");
+        queryWrapper.eq(MybatisPlusUtil.toColumns(StaffTransfer::getFromStoreId), storeId);
         return queryWrapper;
     }
 

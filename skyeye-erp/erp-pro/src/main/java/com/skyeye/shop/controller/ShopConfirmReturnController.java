@@ -33,7 +33,7 @@ public class ShopConfirmReturnController {
     @Autowired
     private ShopConfirmReturnService shopConfirmReturnService;
 
-    @ApiOperation(id = "queryShopConfirmReturnList", value = "获取物料退货单列表", method = "POST", allUse = "1")
+    @ApiOperation(id = "queryShopConfirmReturnList", value = "获取物料退货单列表", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class, value = {
         @ApiImplicitParam(id = "objectId", name = "objectId", value = "门店id")})
     @RequestMapping("/post/ShopConfirmReturnController/queryShopConfirmReturnList")
@@ -41,7 +41,7 @@ public class ShopConfirmReturnController {
         shopConfirmReturnService.queryPageList(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "writeShopConfirmReturn", value = "新增/编辑物料退货单", method = "POST", allUse = "1")
+    @ApiOperation(id = "writeShopConfirmReturn", value = "新增/编辑物料退货单", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = ShopConfirmReturn.class)
     @RequestMapping("/post/ShopConfirmReturnController/writeShopConfirmReturn")
     public void writeShopConfirmReturn(InputObject inputObject, OutputObject outputObject) {

@@ -33,38 +33,20 @@ public class ShopReturnsController {
     @Autowired
     private ShopReturnsService shopReturnsService;
 
-    /**
-     * 获取门店退货单列表
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
-    @ApiOperation(id = "queryShopReturnsList", value = "获取门店退货单列表", method = "POST", allUse = "1")
+    @ApiOperation(id = "queryShopReturnsList", value = "获取门店退货单列表", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/ShopReturnsController/queryShopReturnsList")
     public void queryShopReturnsList(InputObject inputObject, OutputObject outputObject) {
         shopReturnsService.queryPageList(inputObject, outputObject);
     }
 
-    /**
-     * 新增/编辑门店退货单
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
-    @ApiOperation(id = "writeShopReturns", value = "新增/编辑门店退货单", method = "POST", allUse = "1")
+    @ApiOperation(id = "writeShopReturns", value = "新增/编辑门店退货单", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = ShopReturns.class)
     @RequestMapping("/post/ShopReturnsController/writeShopReturns")
     public void writeShopReturns(InputObject inputObject, OutputObject outputObject) {
         shopReturnsService.saveOrUpdateEntity(inputObject, outputObject);
     }
 
-    /**
-     * 转仓库入库单时，根据id查询门店退货单信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryShopReturnsTransById", value = "转仓库入库单时，根据id查询门店退货单信息", method = "GET", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -73,12 +55,6 @@ public class ShopReturnsController {
         shopReturnsService.queryShopReturnsTransById(inputObject, outputObject);
     }
 
-    /**
-     * 门店退货单信息转仓库入库单
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "insertShopReturnsToTurnDepot", value = "门店退货单信息转仓库入库单", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = DepotPut.class, value = {
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})

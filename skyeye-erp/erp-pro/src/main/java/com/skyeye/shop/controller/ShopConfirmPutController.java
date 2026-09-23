@@ -32,7 +32,7 @@ public class ShopConfirmPutController {
     @Autowired
     private ShopConfirmPutService shopConfirmPutService;
 
-    @ApiOperation(id = "queryShopConfirmPutList", value = "获取物料接收单列表", method = "POST", allUse = "1")
+    @ApiOperation(id = "queryShopConfirmPutList", value = "获取物料接收单列表", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class, value = {
         @ApiImplicitParam(id = "objectId", name = "objectId", value = "门店id")})
     @RequestMapping("/post/ShopConfirmPutController/queryShopConfirmPutList")
@@ -40,7 +40,7 @@ public class ShopConfirmPutController {
         shopConfirmPutService.queryPageList(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "writeShopConfirmPut", value = "新增/编辑物料接收单", method = "POST", allUse = "1")
+    @ApiOperation(id = "writeShopConfirmPut", value = "新增/编辑物料接收单", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = ShopConfirmPut.class)
     @RequestMapping("/post/ShopConfirmPutController/writeShopConfirmPut")
     public void writeShopConfirmPut(InputObject inputObject, OutputObject outputObject) {
