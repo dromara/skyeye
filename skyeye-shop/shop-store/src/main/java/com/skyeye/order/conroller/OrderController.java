@@ -69,6 +69,13 @@ public class OrderController {
         orderService.queryPersonalStoreOrderPageList(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryPersonalStoreDropshipOrderPageList", value = "分页获取供货方代发订单", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
+    @RequestMapping("/post/OrderController/queryPersonalStoreDropshipOrderPageList")
+    public void queryPersonalStoreDropshipOrderPageList(InputObject inputObject, OutputObject outputObject) {
+        orderService.queryPersonalStoreDropshipOrderPageList(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryMyOrderStat", value = "我的订单待办数量统计", method = "POST", allUse = "2")
     @RequestMapping("/post/OrderController/queryMyOrderStat")
     public void queryMyOrderStat(InputObject inputObject, OutputObject outputObject) {
@@ -80,6 +87,13 @@ public class OrderController {
     @RequestMapping("/post/OrderController/queryPersonalStoreOrderStat")
     public void queryPersonalStoreOrderStat(InputObject inputObject, OutputObject outputObject) {
         orderService.queryPersonalStoreOrderStat(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryPersonalStoreDropshipOrderStat", value = "供货方代发订单待办统计", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @RequestMapping("/post/OrderController/queryPersonalStoreDropshipOrderStat")
+    public void queryPersonalStoreDropshipOrderStat(InputObject inputObject, OutputObject outputObject) {
+        orderService.queryPersonalStoreDropshipOrderStat(inputObject, outputObject);
     }
 
     @ApiOperation(id = "deleteOrderByIds", value = "批量删除商品订单信息", method = "DELETE", allUse = "2")

@@ -86,6 +86,11 @@ public interface ShopMaterialStoreService extends SkyeyeBusinessService<ShopMate
 
     void getLaunchedShopMaterialList(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 按商品查询已上架到商城的门店列表（商品上架商城-已上架门店 Tab）
+     */
+    void queryLaunchedStoreByMaterialId(InputObject inputObject, OutputObject outputObject);
+
     void queryPersonalStoreMaterialList(InputObject inputObject, OutputObject outputObject);
 
     void queryPlatformMaterialForPersonalStore(InputObject inputObject, OutputObject outputObject);

@@ -46,6 +46,7 @@ import com.skyeye.shopmaterial.entity.ShopMaterial;
 import com.skyeye.shopmaterial.entity.ShopMaterialNorms;
 import com.skyeye.shopmaterial.entity.ShopMaterialStore;
 import com.skyeye.shopmaterial.enums.ShopMaterialStockMode;
+import com.skyeye.shopmaterial.enums.ShopMaterialStoreSourceType;
 import com.skyeye.shopmaterial.service.ShopMaterialNormsService;
 import com.skyeye.shopmaterial.service.ShopMaterialService;
 import com.skyeye.shopmaterial.service.ShopMaterialStoreService;
@@ -419,11 +420,27 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         if (CollectionUtil.isEmpty(normsIds)) {
             return 0;
         }
-        Integer mode = resolveStockMode(relation);
+        // 平台货分销代销：可售库存读供货方门店
+        String stockStoreId = storeId;
+        ShopMaterialStore stockRelation = relation;
+        if (isPlatformDropship(relation)) {
+            stockStoreId = relation.getSourceStoreId();
+            stockRelation = findStoreMaterialRelation(stockStoreId, relation.getMaterialId());
+            if (stockRelation == null) {
+                // 供货方无挂靠记录时按普通门店库存汇总
+                Map<String, String> shopStock = shopStockService.queryNormsShopStock(stockStoreId, normsIds);
+                int total = 0;
+                for (String normsId : normsIds) {
+                    total += Convert.toInt(shopStock.get(normsId), 0);
+                }
+                return total;
+            }
+            enabledDepots = listEnabledByStoreId(stockStoreId);
+        }
+        Integer mode = resolveStockMode(stockRelation);
         if (ShopMaterialStockMode.DEPOT_LINK.getKey().equals(mode)) {
             List<String> depotIds = enabledDepots.stream().map(ShopStoreDepot::getDepotId)
                 .filter(StrUtil::isNotEmpty).distinct().collect(Collectors.toList());
-            // 一次查出全部仓×规格库存，内存汇总
             Map<String, Map<String, String>> depotNormsStockMap =
                 materialNormsStockService.queryMaterialNormsStockByDepotIds(normsIds, depotIds);
             int total = 0;
@@ -432,12 +449,35 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
             }
             return total;
         }
-        Map<String, String> shopStock = shopStockService.queryNormsShopStock(storeId, normsIds);
+        Map<String, String> shopStock = shopStockService.queryNormsShopStock(stockStoreId, normsIds);
         int total = 0;
         for (String normsId : normsIds) {
             total += Convert.toInt(shopStock.get(normsId), 0);
         }
         return total;
+    }
+
+    private boolean isPlatformDropship(ShopMaterialStore relation) {
+        return relation != null
+            && ShopMaterialStoreSourceType.PLATFORM.getKey().equals(relation.getSourceType())
+            && StrUtil.isNotBlank(relation.getSourceStoreId());
+    }
+
+    private void assertNotPlatformDropship(ShopMaterialStore relation) {
+        if (isPlatformDropship(relation)) {
+            throw new CustomException("平台货源由供货方维护库存，个人门店不可调整");
+        }
+    }
+
+    private ShopMaterialStore findStoreMaterialRelation(String storeId, String materialId) {
+        if (StrUtil.isBlank(storeId) || StrUtil.isBlank(materialId)) {
+            return null;
+        }
+        QueryWrapper<ShopMaterialStore> wrapper = new QueryWrapper<>();
+        wrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getStoreId), storeId);
+        wrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getMaterialId), materialId);
+        wrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getIsLaunchStore), WhetherEnum.ENABLE_USING.getKey());
+        return shopMaterialStoreService.getOne(wrapper, false);
     }
 
     private List<String> normsIdsOfMaterial(String materialId) {
@@ -461,6 +501,11 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         row.put("materialId", relation.getMaterialId());
         row.put("stockMode", resolveStockMode(relation));
         row.put("sourceType", relation.getSourceType());
+        row.put("sourceStoreId", relation.getSourceStoreId());
+        // 历史平台货未绑定供货方：前端提示需重新引入
+        boolean needReChoose = ShopMaterialStoreSourceType.PLATFORM.getKey().equals(relation.getSourceType())
+            && StrUtil.isBlank(relation.getSourceStoreId());
+        row.put("needReChoosePlatformSource", needReChoose);
         row.put("isLaunchShop", relation.getIsLaunchShop());
         row.put("saleableStock", saleable);
         row.put("shopMaterial", shopMaterial);
@@ -534,6 +579,7 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         if (relation == null || !storeId.equals(relation.getStoreId())) {
             throw new CustomException("商品不存在");
         }
+        assertNotPlatformDropship(relation);
         Integer mode = resolveStockMode(relation);
         int putOutType = DepotPutOutType.PUT.getKey().equals(adjustType)
             ? DepotPutOutType.PUT.getKey() : DepotPutOutType.OUT.getKey();
@@ -566,6 +612,7 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
      * <ul>
      *   <li>普通模式(stockMode=1)：校验 shop_stock 后出库</li>
      *   <li>关联仓模式(stockMode=2)：按商家仓 priority 从高到低（数值越小越优先）逐仓扣减</li>
+     *   <li>平台货分销代销：扣供货方门店库存（sourceStoreId）</li>
      * </ul>
      */
     @Override
@@ -581,31 +628,60 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         if (CalculationUtil.compareTo(count, CommonNumConstants.NUM_ZERO.toString(), ErpConstants.NUM_AFTER_DOT, RoundingMode.UP) <= 0) {
             throw new CustomException("发货数量必须大于0");
         }
-        // 通过门店商品关系识别库存模式；无关系时兜底按普通模式
         ShopMaterialStore relation = null;
         if (StrUtil.isNotBlank(materialStoreId)) {
             relation = shopMaterialStoreService.selectById(materialStoreId);
-            if (relation != null && !storeId.equals(relation.getStoreId())) {
-                throw new CustomException("门店商品关系与门店不匹配");
-            }
         }
-        Integer mode = relation == null ? ShopMaterialStockMode.NORMAL.getKey() : resolveStockMode(relation);
+        // 扣库存门店：平台货走供货方，否则走订单门店
+        String deductStoreId = storeId;
+        ShopMaterialStore stockRelation = relation;
+        if (isPlatformDropship(relation)) {
+            deductStoreId = relation.getSourceStoreId();
+            stockRelation = findStoreMaterialRelation(deductStoreId, relation.getMaterialId());
+        } else if (relation != null && !storeId.equals(relation.getStoreId())) {
+            throw new CustomException("门店商品关系与门店不匹配");
+        }
+        Integer mode = stockRelation == null ? ShopMaterialStockMode.NORMAL.getKey() : resolveStockMode(stockRelation);
         String useMaterialId = relation != null && StrUtil.isNotBlank(relation.getMaterialId())
             ? relation.getMaterialId() : materialId;
         if (ShopMaterialStockMode.DEPOT_LINK.getKey().equals(mode)) {
-            // 关联仓：按优先级跨仓扣减
-            deductDepotLinkStockOnShip(storeId, useMaterialId, normsId, Convert.toInt(count, 0));
+            deductDepotLinkStockOnShip(deductStoreId, useMaterialId, normsId, Convert.toInt(count, 0));
         } else {
-            // 普通：扣减门店 shop_stock
-            Map<String, String> stockMap = shopStockService.queryNormsShopStock(storeId,
+            Map<String, String> stockMap = shopStockService.queryNormsShopStock(deductStoreId,
                 java.util.Collections.singletonList(normsId));
             int current = Convert.toInt(stockMap.get(normsId), 0);
             int need = Convert.toInt(count, 0);
             if (current < need) {
                 throw new CustomException("门店库存不足，当前可售 " + current + "，需要 " + need);
             }
-            shopStockService.updateShopStock(storeId, useMaterialId, normsId, count, DepotPutOutType.OUT.getKey());
+            shopStockService.updateShopStock(deductStoreId, useMaterialId, normsId, count, DepotPutOutType.OUT.getKey());
         }
+    }
+
+    @Override
+    @IgnoreTenant
+    public void checkShopStockForSale(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String materialStoreId = MapUtil.getStr(params, "materialStoreId");
+        String normsId = MapUtil.getStr(params, "normsId");
+        int need = Convert.toInt(params.get("count"), 0);
+        if (StrUtil.isBlank(materialStoreId) || StrUtil.isBlank(normsId) || need <= 0) {
+            throw new CustomException("库存校验参数不完整");
+        }
+        ShopMaterialStore relation = shopMaterialStoreService.selectById(materialStoreId);
+        if (relation == null) {
+            throw new CustomException("门店商品不存在");
+        }
+        List<String> normsIds = Collections.singletonList(normsId);
+        List<ShopStoreDepot> enabled = listEnabledByStoreId(relation.getStoreId());
+        int saleable = calcSaleableStock(relation.getStoreId(), relation, normsIds, enabled);
+        if (saleable < need) {
+            throw new CustomException("库存不足，当前可售 " + saleable + "，需要 " + need);
+        }
+        Map<String, Object> bean = new HashMap<>();
+        bean.put("saleableStock", saleable);
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
     /**
@@ -674,6 +750,7 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         if (relation == null || !storeId.equals(relation.getStoreId())) {
             throw new CustomException("商品不存在");
         }
+        assertNotPlatformDropship(relation);
         if (ShopMaterialStockMode.DEPOT_LINK.getKey().equals(stockMode)) {
             List<ShopStoreDepot> enabled = listEnabledByStoreId(storeId);
             if (CollectionUtil.isEmpty(enabled)) {
@@ -802,6 +879,7 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         if (relation == null || !storeId.equals(relation.getStoreId())) {
             throw new CustomException("商品不存在");
         }
+        assertNotPlatformDropship(relation);
         ShopMaterial shopMaterial = shopMaterialService.queryShopMaterialByMaterialId(relation.getMaterialId());
         if (shopMaterial == null) {
             throw new CustomException("商品不存在");

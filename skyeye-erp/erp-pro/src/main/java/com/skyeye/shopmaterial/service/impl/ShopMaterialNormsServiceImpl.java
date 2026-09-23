@@ -42,6 +42,7 @@ public class ShopMaterialNormsServiceImpl extends SkyeyeBusinessServiceImpl<Shop
     }
 
     @Override
+    @IgnoreTenant
     public List<ShopMaterialNorms> selectByMaterialId(String materialId) {
         QueryWrapper<ShopMaterialNorms> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialNorms::getMaterialId), materialId);
@@ -50,6 +51,7 @@ public class ShopMaterialNormsServiceImpl extends SkyeyeBusinessServiceImpl<Shop
     }
 
     @Override
+    @IgnoreTenant
     public Map<String, List<ShopMaterialNorms>> selectByMaterialId(List<String> materialId) {
         if (CollectionUtil.isEmpty(materialId)) {
             return MapUtil.empty();

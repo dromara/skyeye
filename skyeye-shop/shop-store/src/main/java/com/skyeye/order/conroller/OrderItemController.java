@@ -67,4 +67,11 @@ public class OrderItemController {
     public void signOrderItem(InputObject inputObject, OutputObject outputObject) {
         orderItemService.signOrderItem(inputObject, outputObject);
     }
+
+    @ApiOperation(id = "queryMaterialStoreDailySales", value = "商品按门店日销量统计", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
+    @RequestMapping("/post/OrderItemController/queryMaterialStoreDailySales")
+    public void queryMaterialStoreDailySales(InputObject inputObject, OutputObject outputObject) {
+        orderItemService.queryMaterialStoreDailySales(inputObject, outputObject);
+    }
 }

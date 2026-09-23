@@ -47,4 +47,9 @@ public interface OrderItemService extends SkyeyeBusinessService<OrderItem> {
      * 补全子单展示信息
      */
     List<OrderItem> setDateForItemLIst(List<OrderItem> list);
+
+    /**
+     * 商品按门店日销量统计
+     */
+    void queryMaterialStoreDailySales(InputObject inputObject, OutputObject outputObject);
 }

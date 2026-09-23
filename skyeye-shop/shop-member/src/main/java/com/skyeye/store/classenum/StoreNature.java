@@ -18,12 +18,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public enum StoreNature implements SkyeyeEnumClass {
 
-    FRANCHISE(1, "加盟门店", true, true),
-    PERSONAL(2, "个人门店", true, false);
+    FRANCHISE(1, "加盟门店", "#FF8833", true, true),
+    PERSONAL(2, "个人门店", "#2176DD", true, false);
 
     private Integer key;
 
     private String value;
+
+    private String color;
 
     private Boolean show;
 

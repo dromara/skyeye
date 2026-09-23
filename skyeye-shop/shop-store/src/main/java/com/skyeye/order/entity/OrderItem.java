@@ -72,6 +72,10 @@ public class OrderItem extends OperatorUserInfo {
     @ApiModelProperty(value = "商品与门店的关系id", required = "required")
     private String materialStoreId;
 
+    @TableField("source_store_id")
+    @ApiModelProperty(value = "平台货供货方门店id（代发履约）")
+    private String sourceStoreId;
+
     @TableField(exist = false)
     @Property(value = "商品与门店的关系信息")
     private Map<String, Object> shopMaterial;

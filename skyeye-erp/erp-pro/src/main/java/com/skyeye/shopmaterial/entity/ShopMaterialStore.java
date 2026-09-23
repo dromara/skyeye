@@ -4,6 +4,7 @@
 
 package com.skyeye.shopmaterial.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -88,8 +89,20 @@ public class ShopMaterialStore extends OperatorUserInfo {
     @ApiModelProperty(value = "个人门店商品来源", enumClass = ShopMaterialStoreSourceType.class)
     private Integer sourceType;
 
+    @TableField(value = "source_store_id")
+    @ApiModelProperty(value = "平台货源供货方门店id（分销代销时库存与发货归属该门店）")
+    private String sourceStoreId;
+
+    @TableField(exist = false)
+    @Property(value = "供货方门店信息")
+    private Map<String, Object> sourceStoreMation;
+
     @TableField(value = "stock_mode")
     @ApiModelProperty(value = "库存模式", enumClass = ShopMaterialStockMode.class)
     private Integer stockMode;
+
+    @TableField(value = "tenant_id", updateStrategy = FieldStrategy.NEVER)
+    @Property("租户id")
+    private String tenantId;
 
 }

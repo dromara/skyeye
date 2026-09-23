@@ -293,6 +293,7 @@ public class MaterialNormsServiceImpl extends SkyeyeBusinessServiceImpl<Material
     }
 
     @Override
+    @IgnoreTenant
     public List<MaterialNorms> queryNormsUnitListByMaterialId(String materialId) {
         QueryWrapper<MaterialNorms> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(MaterialNorms::getMaterialId), materialId);
@@ -300,6 +301,9 @@ public class MaterialNormsServiceImpl extends SkyeyeBusinessServiceImpl<Material
         List<MaterialNorms> materialNormsList = list(queryWrapper);
         // 获取规格id
         List<String> normsIdList = materialNormsList.stream().map(MaterialNorms::getId).collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(normsIdList)) {
+            return new ArrayList<>();
+        }
         return selectByIds(normsIdList.toArray(new String[]{}));
     }
 
@@ -316,13 +320,20 @@ public class MaterialNormsServiceImpl extends SkyeyeBusinessServiceImpl<Material
         return materialNormsMap;
     }
 
+    @IgnoreTenant
     public Map<String, List<MaterialNorms>> queryNormsUnitListByMaterialId(List<String> materialIds) {
+        if (CollectionUtil.isEmpty(materialIds)) {
+            return new HashMap<>();
+        }
         QueryWrapper<MaterialNorms> queryWrapper = new QueryWrapper<>();
         queryWrapper.in(MybatisPlusUtil.toColumns(MaterialNorms::getMaterialId), materialIds);
         queryWrapper.select(CommonConstants.ID);
         List<MaterialNorms> materialNormsList = list(queryWrapper);
         // 获取规格id
         List<String> normsIdList = materialNormsList.stream().map(MaterialNorms::getId).collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(normsIdList)) {
+            return new HashMap<>();
+        }
         List<MaterialNorms> materialNorms = selectByIds(normsIdList.toArray(new String[]{}));
         return materialNorms.stream().collect(Collectors.groupingBy(MaterialNorms::getMaterialId));
     }

@@ -136,6 +136,16 @@ public class ShopStoreDepotController {
         shopStoreDepotService.deductShopStockOnShip(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "checkShopStockForSale", value = "校验门店商品可售库存", method = "POST", allUse = "2")
+    @ApiImplicitParams(value = {
+        @ApiImplicitParam(id = "materialStoreId", name = "materialStoreId", value = "门店商品关系id", required = "required"),
+        @ApiImplicitParam(id = "normsId", name = "normsId", value = "规格id", required = "required"),
+        @ApiImplicitParam(id = "count", name = "count", value = "购买数量", required = "required")})
+    @RequestMapping("/post/ShopStoreDepotController/checkShopStockForSale")
+    public void checkShopStockForSale(InputObject inputObject, OutputObject outputObject) {
+        shopStoreDepotService.checkShopStockForSale(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "switchPersonalStoreStockMode", value = "切换商品库存模式", method = "POST", allUse = "2")
     @ApiImplicitParams(value = {
         @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required"),

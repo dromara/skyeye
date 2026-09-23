@@ -4,6 +4,7 @@
 
 package com.skyeye.shop.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -40,6 +41,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -154,18 +156,22 @@ public class ShopStockServiceImpl extends SkyeyeBusinessServiceImpl<ShopStockDao
 
     @Override
     public Map<String, String> queryNormsShopStock(String storeId, List<String> normsIds) {
+        Map<String, String> stockMap = new HashMap<>();
+        if (CollectionUtil.isEmpty(normsIds)) {
+            return stockMap;
+        }
         QueryWrapper<ShopStock> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStock::getStoreId), storeId);
         queryWrapper.in(MybatisPlusUtil.toColumns(ShopStock::getNormsId), normsIds);
         List<ShopStock> departmentStockList = list(queryWrapper);
 
-        Map<String, String> stockMap = departmentStockList.stream()
+        stockMap = departmentStockList.stream()
             .collect(Collectors.toMap(ShopStock::getNormsId, ShopStock::getStock));
-        normsIds.forEach(normsId -> {
+        for (String normsId : normsIds) {
             if (!stockMap.containsKey(normsId)) {
                 stockMap.put(normsId, CommonNumConstants.NUM_ZERO.toString());
             }
-        });
+        }
         return stockMap;
     }
 

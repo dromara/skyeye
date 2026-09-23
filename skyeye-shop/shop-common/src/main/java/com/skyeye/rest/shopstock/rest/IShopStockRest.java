@@ -34,4 +34,10 @@ public interface IShopStockRest {
     @PostMapping("/deductShopStockOnShip")
     String deductShopStockOnShip(Map<String, Object> params);
 
+    /**
+     * 下单校验可售库存（对应 ERP checkShopStockForSale）
+     */
+    @PostMapping("/checkShopStockForSale")
+    String checkShopStockForSale(Map<String, Object> params);
+
 }

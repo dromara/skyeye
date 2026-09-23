@@ -6,11 +6,14 @@ package com.skyeye.order.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
@@ -159,22 +162,36 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         List<String> oddNumber = iCodeRuleService.getNextCodeByClassName(getClass().getName(), BeanUtil.beanToMap(orderItemList.get(CommonNumConstants.NUM_ZERO)), orderItemList.size());
 
         List<String> materialStoreIds = orderItemList.stream().map(OrderItem::getMaterialStoreId).distinct().collect(Collectors.toList());
-        // shopMaterial -> shopMaterialStore -> storeId
+        // shopMaterial -> shopMaterialStore -> storeId / sourceStoreId
         List<Map<String, Object>> materialByIds = iShopMaterialNormsService.queryShopMaterialByIds(materialStoreIds);// erp-shop-material
-        Map<String, String> materialStoreMap = materialByIds.stream()
+        Map<String, Map<String, Object>> materialStoreInfoMap = materialByIds.stream()
             .distinct().collect(Collectors.toMap(map -> {
                 Map<String, Object> shopMaterialStore = JSONUtil.toBean(map.get("shopMaterialStore").toString(), null);
                 return shopMaterialStore.get("id").toString();
             }, map -> {
                 Map<String, Object> shopMaterialStore = JSONUtil.toBean(map.get("shopMaterialStore").toString(), null);
-                return shopMaterialStore.get("storeId").toString();
-            }));
+                return shopMaterialStore;
+            }, (a, b) -> a));
         for (int i = 0; i < orderItemList.size(); i++) {
-            orderItemList.get(i).setCommentState(WhetherEnum.DISABLE_USING.getKey());
-            orderItemList.get(i).setState(ShopOrderItemOtherState.WAIT_PAY.getKey());
-            orderItemList.get(i).setParentId(order.getId());
-            orderItemList.get(i).setStoreId(materialStoreMap.containsKey(orderItemList.get(i).getMaterialStoreId()) ? materialStoreMap.get(orderItemList.get(i).getMaterialStoreId()) : "");
-            orderItemList.get(i).setOddNumber(oddNumber.get(i));
+            OrderItem orderItem = orderItemList.get(i);
+            Map<String, Object> storeInfo = materialStoreInfoMap.get(orderItem.getMaterialStoreId());
+            String sellStoreId = storeInfo != null && storeInfo.get("storeId") != null
+                ? storeInfo.get("storeId").toString() : "";
+            String sourceStoreId = storeInfo != null && storeInfo.get("sourceStoreId") != null
+                ? storeInfo.get("sourceStoreId").toString() : "";
+            // 下单前校验可售（平台货校验供货方库存）
+            Map<String, Object> checkParams = new HashMap<>();
+            checkParams.put("materialStoreId", orderItem.getMaterialStoreId());
+            checkParams.put("normsId", orderItem.getNormsId());
+            checkParams.put("count", orderItem.getCount());
+            iShopStockService.checkShopStockForSale(checkParams);
+
+            orderItem.setCommentState(WhetherEnum.DISABLE_USING.getKey());
+            orderItem.setState(ShopOrderItemOtherState.WAIT_PAY.getKey());
+            orderItem.setParentId(order.getId());
+            orderItem.setStoreId(sellStoreId);
+            orderItem.setSourceStoreId(StrUtil.isBlank(sourceStoreId) ? null : sourceStoreId);
+            orderItem.setOddNumber(oddNumber.get(i));
         }
         super.createEntity(orderItemList, userId);
     }
@@ -256,9 +273,31 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         if (remainingNum < CommonNumConstants.NUM_ZERO) {
             throw new CustomException("该订单子单可发货数量不足");
         }
-        // 个人门店发货前按库存模式扣减（加盟店保持原逻辑，不在此扣库存）
-        ShopStore store = shopStoreService.selectById(targetItem.getStoreId());
-        if (store != null && StoreNature.PERSONAL.getKey().equals(store.getStoreNature())) {
+        String memberId = inputObject.getLogParams().get("id").toString();
+        // 平台货分销代销：仅供货方门店主可发货；自建商品仍由卖货门店发货
+        if (StrUtil.isNotBlank(targetItem.getSourceStoreId())) {
+            ShopStore sourceStore = shopStoreService.selectById(targetItem.getSourceStoreId());
+            if (sourceStore == null || StrUtil.isEmpty(sourceStore.getId())) {
+                throw new CustomException("供货方门店不存在，无法发货");
+            }
+            if (!memberId.equals(sourceStore.getCreateId())) {
+                throw new CustomException("平台货源订单请由供货方发货");
+            }
+        } else {
+            ShopStore store = shopStoreService.selectById(targetItem.getStoreId());
+            if (store != null && StoreNature.PERSONAL.getKey().equals(store.getStoreNature())
+                && !memberId.equals(store.getCreateId())) {
+                throw new CustomException("无权发货该订单");
+            }
+        }
+        // 个人门店发货前按库存模式扣减（加盟店自营保持原逻辑；平台货扣供货方库存）
+        ShopStore sellStore = shopStoreService.selectById(targetItem.getStoreId());
+        boolean needDeduct = sellStore != null && StoreNature.PERSONAL.getKey().equals(sellStore.getStoreNature());
+        if (!needDeduct && StrUtil.isNotBlank(targetItem.getSourceStoreId())) {
+            // 供货方可能是企业店，平台货代发也要扣库存
+            needDeduct = true;
+        }
+        if (needDeduct) {
             Map<String, Object> stockParams = new HashMap<>();
             stockParams.put("storeId", targetItem.getStoreId());
             stockParams.put("materialStoreId", targetItem.getMaterialStoreId());
@@ -378,5 +417,45 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         OrderItem item = setDateForItemLIst(Arrays.asList(orderItem)).get(CommonNumConstants.NUM_ZERO);
         item.setCanDeliverNum(item.getCount() - item.getDeliverNum());
         return orderItem;
+    }
+
+    @Override
+    public void queryMaterialStoreDailySales(InputObject inputObject, OutputObject outputObject) {
+        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        String materialId = commonPageInfo.getCustomParamsMapStr("materialId");
+        String startDate = commonPageInfo.getStartTime();
+        String endDate = commonPageInfo.getEndTime();
+        // 补全当天结束时间，避免漏掉当天订单
+        String start = startDate.length() <= 10 ? startDate + " 00:00:00" : startDate;
+        String end = endDate.length() <= 10 ? endDate + " 23:59:59" : endDate;
+        Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
+        List<Map<String, Object>> rows = skyeyeBaseMapper.queryMaterialStoreDailySales(materialId, start, end);
+        if (CollectionUtil.isEmpty(rows)) {
+            outputObject.setBeans(new ArrayList<>());
+            outputObject.settotal(pages.getTotal());
+            return;
+        }
+        List<String> storeIds = rows.stream()
+            .map(r -> MapUtil.getStr(r, "storeId"))
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
+        Map<String, ShopStore> storeMap = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(storeIds)) {
+            List<ShopStore> stores = shopStoreService.selectByIds(storeIds.toArray(new String[0]));
+            if (CollectionUtil.isNotEmpty(stores)) {
+                storeMap = stores.stream().collect(Collectors.toMap(ShopStore::getId, s -> s, (a, b) -> a));
+            }
+        }
+        for (Map<String, Object> row : rows) {
+            String storeId = MapUtil.getStr(row, "storeId");
+            ShopStore store = storeMap.get(storeId);
+            row.put("storeName", store == null ? storeId : store.getName());
+            // 分转元展示
+            String fen = MapUtil.getStr(row, "saleAmountFen", "0");
+            row.put("saleAmount", CalculationUtil.divide(fen, "100", CommonNumConstants.NUM_TWO));
+        }
+        outputObject.setBeans(rows);
+        outputObject.settotal(pages.getTotal());
     }
 }

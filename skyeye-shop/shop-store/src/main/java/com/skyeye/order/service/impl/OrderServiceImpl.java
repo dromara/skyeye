@@ -1166,6 +1166,46 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     }
 
     @Override
+    public void queryPersonalStoreDropshipOrderPageList(InputObject inputObject, OutputObject outputObject) {
+        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        // 供货方可能是个人店或企业店，只校验门店主
+        assertStoreOwner(commonPageInfo.getObjectId());
+        List<Integer> stateList = resolveOrderItemStateList(commonPageInfo.getType());
+        Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
+        QueryWrapper<OrderItem> wrapper = new QueryWrapper<>();
+        wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getSourceStoreId), commonPageInfo.getObjectId());
+        if (CollectionUtil.isNotEmpty(stateList)) {
+            wrapper.in(MybatisPlusUtil.toColumns(OrderItem::getState), stateList);
+        }
+        if (StrUtil.isNotBlank(commonPageInfo.getKeyword())) {
+            wrapper.like(MybatisPlusUtil.toColumns(OrderItem::getOddNumber), commonPageInfo.getKeyword());
+        }
+        wrapper.orderByDesc(MybatisPlusUtil.toColumns(OrderItem::getCreateTime));
+        List<OrderItem> orderItemList = orderItemService.list(wrapper);
+        if (CollectionUtil.isEmpty(orderItemList)) {
+            return;
+        }
+        orderItemList = orderItemService.setDateForItemLIst(orderItemList);
+        outputObject.setBeans(orderItemList);
+        outputObject.settotal(pages.getTotal());
+    }
+
+    private ShopStore assertStoreOwner(String storeId) {
+        if (StrUtil.isEmpty(storeId)) {
+            throw new CustomException("请选择门店");
+        }
+        ShopStore store = shopStoreService.selectById(storeId);
+        if (store == null || StrUtil.isEmpty(store.getId())) {
+            throw new CustomException("门店不存在");
+        }
+        String memberId = InputObject.getLogParamsStatic().get("id").toString();
+        if (!memberId.equals(store.getCreateId())) {
+            throw new CustomException("无权操作该门店");
+        }
+        return store;
+    }
+
+    @Override
     public void queryMyOrderStat(InputObject inputObject, OutputObject outputObject) {
         String userId = InputObject.getLogParamsStatic().get(CommonConstants.ID).toString();
         // 与 queryOrderPageList type=1/3/4/6 口径对齐；评价仅统计待评价类，便于角标展示
@@ -1220,6 +1260,26 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
         String storeId = tableSelectInfo.getObjectId();
         assertPersonalStore(storeId);
+        Map<String, Object> bean = buildStoreOrderStatBean(storeId, false);
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryPersonalStoreDropshipOrderStat(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        String storeId = tableSelectInfo.getObjectId();
+        // 供货方可能是个人店或企业店，只校验门店主
+        assertStoreOwner(storeId);
+        Map<String, Object> bean = buildStoreOrderStatBean(storeId, true);
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    /**
+     * @param dropship true：按 sourceStoreId（代发）；false：按 storeId（本店卖出）
+     */
+    private Map<String, Object> buildStoreOrderStatBean(String storeId, boolean dropship) {
         List<Integer> stateList = Arrays.asList(
             ShopOrderItemOtherState.WAIT_PAY.getKey(),
             ShopOrderItemOtherState.WAIT_DELIVER.getKey(),
@@ -1229,44 +1289,40 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
             ShopOrderItemOtherState.REFUNDING.getKey(),
             ShopOrderItemOtherState.SALESRETURNING.getKey(),
             ShopOrderItemOtherState.EXCHANGEING.getKey());
-        Map<Integer, Long> countMap = countStoreOrderByState(storeId, stateList);
+        Map<Integer, Long> countMap = dropship
+            ? countDropshipOrderByState(storeId, stateList)
+            : countStoreOrderByState(storeId, stateList);
         Map<String, Object> bean = new HashMap<>();
-        // 待支付
         bean.put("waitPay", sumStateCount(countMap, ShopOrderItemOtherState.WAIT_PAY.getKey()));
-        // 待发货
         bean.put("waitDeliver", sumStateCount(countMap,
             ShopOrderItemOtherState.WAIT_DELIVER.getKey(),
             ShopOrderItemOtherState.PART_DELIVERED.getKey()));
-        // 待收货
         bean.put("waitReceive", sumStateCount(countMap,
             ShopOrderItemOtherState.ALL_DELIVERED.getKey(),
             ShopOrderItemOtherState.TRANSPORTING.getKey()));
-        // 售后
         bean.put("afterSale", sumStateCount(countMap,
             ShopOrderItemOtherState.REFUNDING.getKey(),
             ShopOrderItemOtherState.SALESRETURNING.getKey(),
             ShopOrderItemOtherState.EXCHANGEING.getKey()));
-        String todayStart = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + " 00:00:00";
-        QueryWrapper<OrderItem> todayWrapper = new QueryWrapper<>();
-        todayWrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getStoreId), storeId);
-        todayWrapper.ge(MybatisPlusUtil.toColumns(OrderItem::getCreateTime), todayStart);
-        todayWrapper.notIn(MybatisPlusUtil.toColumns(OrderItem::getState), Arrays.asList(
-            ShopOrderItemOtherState.WAIT_PAY.getKey(), ShopOrderItemOtherState.FAIRPAID.getKey(), ShopOrderItemOtherState.CANCELED.getKey()));
-        todayWrapper.select("IFNULL(SUM(pay_price),0) AS todayAmount", "COUNT(1) AS todayOrder");
-        List<Map<String, Object>> todayList = orderItemDao.selectMaps(todayWrapper);
-        Map<String, Object> today = CollectionUtil.isEmpty(todayList) || todayList.get(0) == null ? new HashMap<>() : todayList.get(0);
-        Object todayOrder = mapIgnoreCase(today, "todayOrder");
-        Object todayAmount = mapIgnoreCase(today, "todayAmount");
-        // 今日订单数
-        bean.put("todayOrder", todayOrder == null ? 0 : todayOrder);
-        // 今日订单金额
-        bean.put("todayAmount", todayAmount == null ? "0" : todayAmount.toString());
-        // 今日访客 / 浏览（商品足迹）
-        Map<String, Object> browseStat = memberBrowseHistoryService.queryStoreTodayBrowseStat(storeId);
-        bean.put("todayVisitor", browseStat.getOrDefault("todayVisitor", 0L));
-        bean.put("todayPv", browseStat.getOrDefault("todayPv", 0L));
-        outputObject.setBean(bean);
-        outputObject.settotal(CommonNumConstants.NUM_ONE);
+        if (!dropship) {
+            String todayStart = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + " 00:00:00";
+            QueryWrapper<OrderItem> todayWrapper = new QueryWrapper<>();
+            todayWrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getStoreId), storeId);
+            todayWrapper.ge(MybatisPlusUtil.toColumns(OrderItem::getCreateTime), todayStart);
+            todayWrapper.notIn(MybatisPlusUtil.toColumns(OrderItem::getState), Arrays.asList(
+                ShopOrderItemOtherState.WAIT_PAY.getKey(), ShopOrderItemOtherState.FAIRPAID.getKey(), ShopOrderItemOtherState.CANCELED.getKey()));
+            todayWrapper.select("IFNULL(SUM(pay_price),0) AS todayAmount", "COUNT(1) AS todayOrder");
+            List<Map<String, Object>> todayList = orderItemDao.selectMaps(todayWrapper);
+            Map<String, Object> today = CollectionUtil.isEmpty(todayList) || todayList.get(0) == null ? new HashMap<>() : todayList.get(0);
+            Object todayOrder = mapIgnoreCase(today, "todayOrder");
+            Object todayAmount = mapIgnoreCase(today, "todayAmount");
+            bean.put("todayOrder", todayOrder == null ? 0 : todayOrder);
+            bean.put("todayAmount", todayAmount == null ? "0" : todayAmount.toString());
+            Map<String, Object> browseStat = memberBrowseHistoryService.queryStoreTodayBrowseStat(storeId);
+            bean.put("todayVisitor", browseStat.getOrDefault("todayVisitor", 0L));
+            bean.put("todayPv", browseStat.getOrDefault("todayPv", 0L));
+        }
+        return bean;
     }
 
     /**
@@ -1280,6 +1336,22 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         QueryWrapper<OrderItem> wrapper = new QueryWrapper<>();
         wrapper.select(stateCol, "COUNT(1) AS cnt");
         wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getStoreId), storeId);
+        wrapper.in(stateCol, stateList);
+        wrapper.groupBy(stateCol);
+        return toStateCountMap(orderItemDao.selectMaps(wrapper));
+    }
+
+    /**
+     * 代发：按供货方门店（sourceStoreId）统计
+     */
+    private Map<Integer, Long> countDropshipOrderByState(String storeId, List<Integer> stateList) {
+        if (CollectionUtil.isEmpty(stateList)) {
+            return Collections.emptyMap();
+        }
+        String stateCol = MybatisPlusUtil.toColumns(OrderItem::getState);
+        QueryWrapper<OrderItem> wrapper = new QueryWrapper<>();
+        wrapper.select(stateCol, "COUNT(1) AS cnt");
+        wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getSourceStoreId), storeId);
         wrapper.in(stateCol, stateList);
         wrapper.groupBy(stateCol);
         return toStateCountMap(orderItemDao.selectMaps(wrapper));

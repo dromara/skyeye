@@ -158,6 +158,13 @@ public class ShopMaterialStoreController {
         shopMaterialStoreService.getLaunchedShopMaterialList(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryLaunchedStoreByMaterialId", value = "按商品查询已上架门店列表", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
+    @RequestMapping("/post/ShopMaterialStoreController/queryLaunchedStoreByMaterialId")
+    public void queryLaunchedStoreByMaterialId(InputObject inputObject, OutputObject outputObject) {
+        shopMaterialStoreService.queryLaunchedStoreByMaterialId(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryPersonalStoreMaterialList", value = "获取当前会员个人门店已加入的商品", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/ShopMaterialStoreController/queryPersonalStoreMaterialList")
@@ -165,7 +172,7 @@ public class ShopMaterialStoreController {
         shopMaterialStoreService.queryPersonalStoreMaterialList(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryPlatformMaterialForPersonalStore", value = "获取可加入个人门店的平台货源", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryPlatformMaterialForPersonalStore", value = "获取可加入个人门店的平台货源（企业/加盟门店商品+门店）", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/ShopMaterialStoreController/queryPlatformMaterialForPersonalStore")
     public void queryPlatformMaterialForPersonalStore(InputObject inputObject, OutputObject outputObject) {
@@ -175,7 +182,8 @@ public class ShopMaterialStoreController {
     @ApiOperation(id = "choosePlatformMaterialForPersonalStore", value = "个人门店选入平台货源", method = "POST", allUse = "2")
     @ApiImplicitParams(value = {
         @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required"),
-        @ApiImplicitParam(id = "materialId", name = "materialId", value = "商品id", required = "required")})
+        @ApiImplicitParam(id = "materialId", name = "materialId", value = "商品id", required = "required"),
+        @ApiImplicitParam(id = "sourceStoreId", name = "sourceStoreId", value = "供货方门店id（企业/加盟门店）", required = "required")})
     @RequestMapping("/post/ShopMaterialStoreController/choosePlatformMaterialForPersonalStore")
     public void choosePlatformMaterialForPersonalStore(InputObject inputObject, OutputObject outputObject) {
         shopMaterialStoreService.choosePlatformMaterialForPersonalStore(inputObject, outputObject);
@@ -183,9 +191,9 @@ public class ShopMaterialStoreController {
 
     @ApiOperation(id = "launchPersonalStoreMaterial", value = "个人门店上架商品", method = "POST", allUse = "2")
     @ApiImplicitParams(value = {
-        @ApiImplicitParam(id = "materialIds", name = "materialIds", value = "商品id，多个逗号隔开", required = "required"),
-        @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required"),
-        @ApiImplicitParam(id = "deliveryMethod", name = "deliveryMethod", value = "配送方式", required = "required,json")})
+        @ApiImplicitParam(id = "ids", name = "ids", value = "门店商品关系id，多个逗号隔开（同商品多供货门店时优先传这个）"),
+        @ApiImplicitParam(id = "materialIds", name = "materialIds", value = "商品id，多个逗号隔开（无ids时使用）"),
+        @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required")})
     @RequestMapping("/post/ShopMaterialStoreController/launchPersonalStoreMaterial")
     public void launchPersonalStoreMaterial(InputObject inputObject, OutputObject outputObject) {
         shopMaterialStoreService.launchPersonalStoreMaterial(inputObject, outputObject);
@@ -193,7 +201,8 @@ public class ShopMaterialStoreController {
 
     @ApiOperation(id = "unlaunchPersonalStoreMaterial", value = "个人门店下架商品", method = "POST", allUse = "2")
     @ApiImplicitParams(value = {
-        @ApiImplicitParam(id = "materialIds", name = "materialIds", value = "商品id，多个逗号隔开", required = "required"),
+        @ApiImplicitParam(id = "ids", name = "ids", value = "门店商品关系id，多个逗号隔开（同商品多供货门店时优先传这个）"),
+        @ApiImplicitParam(id = "materialIds", name = "materialIds", value = "商品id，多个逗号隔开（无ids时使用）"),
         @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required")})
     @RequestMapping("/post/ShopMaterialStoreController/unlaunchPersonalStoreMaterial")
     public void unlaunchPersonalStoreMaterial(InputObject inputObject, OutputObject outputObject) {
@@ -202,7 +211,8 @@ public class ShopMaterialStoreController {
 
     @ApiOperation(id = "removePersonalStoreMaterial", value = "个人门店移除商品", method = "POST", allUse = "2")
     @ApiImplicitParams(value = {
-        @ApiImplicitParam(id = "materialId", name = "materialId", value = "商品id", required = "required"),
+        @ApiImplicitParam(id = "ids", name = "ids", value = "门店商品关系id，多个逗号隔开（同商品多供货门店时优先传这个）"),
+        @ApiImplicitParam(id = "materialId", name = "materialId", value = "商品id（无ids时使用）"),
         @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required")})
     @RequestMapping("/post/ShopMaterialStoreController/removePersonalStoreMaterial")
     public void removePersonalStoreMaterial(InputObject inputObject, OutputObject outputObject) {

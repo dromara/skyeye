@@ -28,4 +28,9 @@ public interface IShopStockService extends IService {
      */
     void deductShopStockOnShip(Map<String, Object> params);
 
+    /**
+     * 下单校验可售库存（平台货校验供货方）
+     */
+    void checkShopStockForSale(Map<String, Object> params);
+
 }

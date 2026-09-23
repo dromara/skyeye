@@ -43,6 +43,11 @@ public interface ShopStoreDepotService extends SkyeyeBusinessService<ShopStoreDe
      */
     void deductShopStockOnShip(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 下单/支付前校验可售库存（平台货校验供货方库存）
+     */
+    void checkShopStockForSale(InputObject inputObject, OutputObject outputObject);
+
     void switchPersonalStoreStockMode(InputObject inputObject, OutputObject outputObject);
 
     void queryPersonalStoreInventoryDiagnosis(InputObject inputObject, OutputObject outputObject);

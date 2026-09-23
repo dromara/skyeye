@@ -34,4 +34,9 @@ public class IShopStockServiceImpl extends IServiceImpl implements IShopStockSer
         ExecuteFeignClient.get(() -> iShopStockRest.deductShopStockOnShip(params));
     }
 
+    @Override
+    public void checkShopStockForSale(Map<String, Object> params) {
+        ExecuteFeignClient.get(() -> iShopStockRest.checkShopStockForSale(params));
+    }
+
 }

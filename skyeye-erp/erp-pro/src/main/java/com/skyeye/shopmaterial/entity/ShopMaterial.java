@@ -131,6 +131,18 @@ public class ShopMaterial extends OperatorUserInfo {
     private Integer allowPlatformSource;
 
     @TableField(exist = false)
+    @Property(value = "平台货源供货方门店id（选平台货列表回传）")
+    private String sourceStoreId;
+
+    @TableField(exist = false)
+    @Property(value = "当前个人门店是否已从本行供货门店引入（选平台货列表用）")
+    private Boolean alreadyJoined;
+
+    @TableField(exist = false)
+    @Property(value = "该商品已从其他供货门店引入本店（本行供货店未选）")
+    private Boolean joinedOtherSource;
+
+    @TableField(exist = false)
     @Property(value = "提示编码")
     private Integer returnCode;
 }
