@@ -899,6 +899,16 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
             shopMaterial.setSourceStoreId(shopMaterialStore.getSourceStoreId());
             shopMaterialList.add(shopMaterial);
         });
+        // 规格名称批量回填，避免循环内多次查库
+        List<ShopMaterialNorms> allNorms = new ArrayList<>();
+        for (ShopMaterial shopMaterial : shopMaterialList) {
+            if (CollectionUtil.isNotEmpty(shopMaterial.getShopMaterialNormsList())) {
+                allNorms.addAll(shopMaterial.getShopMaterialNormsList());
+            }
+        }
+        if (CollectionUtil.isNotEmpty(allNorms)) {
+            materialNormsService.setDataMation(allNorms, ShopMaterialNorms::getNormsId);
+        }
         return shopMaterialList;
     }
 
@@ -1013,8 +1023,6 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         wrapper.orderByDesc(ShopMaterialStore::getCreateTime);
         List<ShopMaterialStore> pageList = skyeyeBaseMapper.selectJoinList(ShopMaterialStore.class, wrapper);
         if (CollectionUtil.isEmpty(pageList)) {
-            outputObject.setBeans(new ArrayList<>());
-            outputObject.settotal(pages.getTotal());
             return;
         }
         List<ShopMaterial> result = buildPlatformMaterialList(pageList);

@@ -50,7 +50,10 @@ public interface ShopStoreDepotService extends SkyeyeBusinessService<ShopStoreDe
 
     void switchPersonalStoreStockMode(InputObject inputObject, OutputObject outputObject);
 
-    void queryPersonalStoreInventoryDiagnosis(InputObject inputObject, OutputObject outputObject);
+    /**
+     * 门店库存诊断（管理端 / 个人门店共用，传 storeId）
+     */
+    void queryStoreInventoryDiagnosis(InputObject inputObject, OutputObject outputObject);
 
     void queryPersonalStoreInventoryHome(InputObject inputObject, OutputObject outputObject);
 

@@ -431,8 +431,6 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
         List<Map<String, Object>> rows = skyeyeBaseMapper.queryMaterialStoreDailySales(materialId, start, end);
         if (CollectionUtil.isEmpty(rows)) {
-            outputObject.setBeans(new ArrayList<>());
-            outputObject.settotal(pages.getTotal());
             return;
         }
         List<String> storeIds = rows.stream()

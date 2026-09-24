@@ -503,7 +503,6 @@ public class AfterSealServiceImpl extends SkyeyeBusinessServiceImpl<AfterSealDao
         allUserIds.addAll(useCount.keySet());
 
         if (CollectionUtil.isEmpty(allUserIds)) {
-            outputObject.setBeans(new ArrayList<>());
             return;
         }
 

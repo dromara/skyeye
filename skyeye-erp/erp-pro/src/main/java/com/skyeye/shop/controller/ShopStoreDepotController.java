@@ -156,12 +156,12 @@ public class ShopStoreDepotController {
         shopStoreDepotService.switchPersonalStoreStockMode(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryPersonalStoreInventoryDiagnosis", value = "个人门店库存诊断", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryStoreInventoryDiagnosis", value = "门店库存诊断", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class, value = {
         @ApiImplicitParam(id = "diagnoseType", name = "diagnoseType", value = "all/oos/low")})
-    @RequestMapping("/post/ShopStoreDepotController/queryPersonalStoreInventoryDiagnosis")
-    public void queryPersonalStoreInventoryDiagnosis(InputObject inputObject, OutputObject outputObject) {
-        shopStoreDepotService.queryPersonalStoreInventoryDiagnosis(inputObject, outputObject);
+    @RequestMapping("/post/ShopStoreDepotController/queryStoreInventoryDiagnosis")
+    public void queryStoreInventoryDiagnosis(InputObject inputObject, OutputObject outputObject) {
+        shopStoreDepotService.queryStoreInventoryDiagnosis(inputObject, outputObject);
     }
 
     @ApiOperation(id = "queryPersonalStoreMaterialStockEdit", value = "个人门店编辑库存详情", method = "POST", allUse = "2")

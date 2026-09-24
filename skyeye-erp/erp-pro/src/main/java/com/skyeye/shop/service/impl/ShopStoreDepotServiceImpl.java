@@ -495,10 +495,19 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
 
     private Map<String, Object> buildInventoryRow(ShopMaterial shopMaterial, ShopMaterialStore relation,
                                                   int saleable, String diagnoseType) {
+        return buildInventoryRow(shopMaterial, relation, null, saleable, diagnoseType);
+    }
+
+    private Map<String, Object> buildInventoryRow(ShopMaterial shopMaterial, ShopMaterialStore relation,
+                                                  MaterialNorms norms, int saleable, String diagnoseType) {
         Map<String, Object> row = new HashMap<>();
+        String normsId = norms == null ? StrUtil.EMPTY : norms.getId();
+        // id 保持门店商品关系 id，便于编辑库存；uniqueKey 区分规格行
         row.put("id", relation.getId());
+        row.put("uniqueKey", StrUtil.isBlank(normsId) ? relation.getId() : relation.getId() + "_" + normsId);
         row.put("storeId", relation.getStoreId());
         row.put("materialId", relation.getMaterialId());
+        row.put("normsId", normsId);
         row.put("stockMode", resolveStockMode(relation));
         row.put("sourceType", relation.getSourceType());
         row.put("sourceStoreId", relation.getSourceStoreId());
@@ -510,6 +519,15 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         row.put("saleableStock", saleable);
         row.put("shopMaterial", shopMaterial);
         row.put("shopMaterialStore", relation);
+        if (shopMaterial != null && shopMaterial.getMaterialMation() != null) {
+            row.put("materialMation", shopMaterial.getMaterialMation());
+            row.put("materialName", shopMaterial.getMaterialMation().getName());
+            row.put("itemCode", shopMaterial.getMaterialMation().getItemCode());
+        }
+        if (norms != null) {
+            row.put("normsMation", norms);
+            row.put("normsName", norms.getName());
+        }
         if (StrUtil.isNotBlank(diagnoseType)) {
             row.put("diagnoseType", diagnoseType);
         }
@@ -530,8 +548,6 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         List<ShopMaterialStore> relations = shopMaterialStoreService.selectByStoreId(storeId,
             WhetherEnum.ENABLE_USING.getKey(), launchFilter, pageInfo.getKeyword());
         if (CollectionUtil.isEmpty(relations)) {
-            outputObject.setBeans(new ArrayList<>());
-            outputObject.settotal(0);
             return;
         }
         if (stockModeFilter != null) {
@@ -543,15 +559,27 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         List<String> materialIds = relations.stream().map(ShopMaterialStore::getMaterialId).distinct()
             .collect(Collectors.toList());
         Map<String, ShopMaterial> materialMap = shopMaterialService.queryShopMaterialByMaterialId(materialIds);
+        Map<String, List<MaterialNorms>> normsMap = CollectionUtil.isEmpty(materialIds)
+            ? new HashMap<>()
+            : materialNormsService.queryMaterialNormsList(StrUtil.EMPTY, materialIds.toArray(new String[]{}));
         List<Map<String, Object>> rows = new ArrayList<>();
         for (ShopMaterialStore relation : relations) {
             ShopMaterial shopMaterial = materialMap.get(relation.getMaterialId());
             if (shopMaterial == null) {
                 continue;
             }
-            List<String> normsIds = normsIdsOfMaterial(relation.getMaterialId());
-            int saleable = calcSaleableStock(storeId, relation, normsIds, enabledDepots);
-            rows.add(buildInventoryRow(shopMaterial, relation, saleable, null));
+            List<MaterialNorms> normsList = normsMap.get(relation.getMaterialId());
+            if (CollectionUtil.isEmpty(normsList)) {
+                continue;
+            }
+            for (MaterialNorms norms : normsList) {
+                if (norms == null || StrUtil.isBlank(norms.getId())) {
+                    continue;
+                }
+                int saleable = calcSaleableStock(storeId, relation,
+                    Collections.singletonList(norms.getId()), enabledDepots);
+                rows.add(buildInventoryRow(shopMaterial, relation, norms, saleable, null));
+            }
         }
         outputObject.setBeans(rows);
         outputObject.settotal(pages.getTotal());
@@ -773,6 +801,14 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         return "ok";
     }
 
+    private int safetyOfNorms(MaterialNorms norms) {
+        if (norms == null) {
+            return DEFAULT_LOW_STOCK;
+        }
+        int safety = Convert.toInt(norms.getSafetyTock(), DEFAULT_LOW_STOCK);
+        return safety <= 0 ? DEFAULT_LOW_STOCK : safety;
+    }
+
     private int safetyOfMaterial(String materialId) {
         List<MaterialNorms> norms = materialNormsService.queryNormsUnitListByMaterialId(materialId);
         if (CollectionUtil.isEmpty(norms)) {
@@ -780,55 +816,67 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         }
         int minSafety = Integer.MAX_VALUE;
         for (MaterialNorms normsItem : norms) {
-            int safety = Convert.toInt(normsItem.getSafetyTock(), DEFAULT_LOW_STOCK);
-            if (safety <= 0) {
-                safety = DEFAULT_LOW_STOCK;
-            }
-            minSafety = Math.min(minSafety, safety);
+            minSafety = Math.min(minSafety, safetyOfNorms(normsItem));
         }
         return minSafety == Integer.MAX_VALUE ? DEFAULT_LOW_STOCK : minSafety;
     }
 
     @Override
     @IgnoreTenant
-    public void queryPersonalStoreInventoryDiagnosis(InputObject inputObject, OutputObject outputObject) {
+    public void queryStoreInventoryDiagnosis(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
-        String storeId = pageInfo.getObjectId();
-        assertPersonalStoreOwner(storeId);
+        String storeId = pageInfo.getCustomParamsMapStr("storeId");
+        if (StrUtil.isBlank(storeId)) {
+            storeId = pageInfo.getObjectId();
+        }
+        if (StrUtil.isBlank(storeId)) {
+            throw new CustomException("请选择门店");
+        }
         Map<String, Object> params = inputObject.getParams();
         String diagnoseFilter = MapUtil.getStr(params, "diagnoseType");
 
+        // 分页按门店商品，再展开规格诊断行
+        Page pages = PageHelper.startPage(pageInfo.getPage(), pageInfo.getLimit());
         List<ShopMaterialStore> relations = shopMaterialStoreService.selectByStoreId(storeId,
-            WhetherEnum.ENABLE_USING.getKey(), WhetherEnum.ENABLE_USING.getKey(), pageInfo.getKeyword());
+            WhetherEnum.ENABLE_USING.getKey(), null, pageInfo.getKeyword());
+        if (CollectionUtil.isEmpty(relations)) {
+            return;
+        }
         List<ShopStoreDepot> enabledDepots = listEnabledByStoreId(storeId);
         List<String> materialIds = relations.stream().map(ShopMaterialStore::getMaterialId).distinct()
             .collect(Collectors.toList());
-        Map<String, ShopMaterial> materialMap = CollectionUtil.isEmpty(materialIds)
-            ? new HashMap<>() : shopMaterialService.queryShopMaterialByMaterialId(materialIds);
+        Map<String, ShopMaterial> materialMap = shopMaterialService.queryShopMaterialByMaterialId(materialIds);
+        Map<String, List<MaterialNorms>> normsMap = materialNormsService.queryMaterialNormsList(
+            StrUtil.EMPTY, materialIds.toArray(new String[]{}));
         List<Map<String, Object>> rows = new ArrayList<>();
         for (ShopMaterialStore relation : relations) {
             ShopMaterial shopMaterial = materialMap.get(relation.getMaterialId());
             if (shopMaterial == null) {
                 continue;
             }
-            List<String> normsIds = normsIdsOfMaterial(relation.getMaterialId());
-            int saleable = calcSaleableStock(storeId, relation, normsIds, enabledDepots);
-            int safety = safetyOfMaterial(relation.getMaterialId());
-            String type = diagnoseTypeOf(saleable, safety);
-            if ("ok".equals(type)) {
+            List<MaterialNorms> normsList = normsMap.get(relation.getMaterialId());
+            if (CollectionUtil.isEmpty(normsList)) {
                 continue;
             }
-            if (StrUtil.isNotBlank(diagnoseFilter) && !"all".equals(diagnoseFilter) && !diagnoseFilter.equals(type)) {
-                continue;
+            for (MaterialNorms norms : normsList) {
+                if (norms == null || StrUtil.isBlank(norms.getId())) {
+                    continue;
+                }
+                int saleable = calcSaleableStock(storeId, relation,
+                    Collections.singletonList(norms.getId()), enabledDepots);
+                String type = diagnoseTypeOf(saleable, safetyOfNorms(norms));
+                if ("ok".equals(type)) {
+                    continue;
+                }
+                if (StrUtil.isNotBlank(diagnoseFilter) && !"all".equals(diagnoseFilter)
+                    && !diagnoseFilter.equals(type)) {
+                    continue;
+                }
+                rows.add(buildInventoryRow(shopMaterial, relation, norms, saleable, type));
             }
-            rows.add(buildInventoryRow(shopMaterial, relation, saleable, type));
         }
-        int page = pageInfo.getPage() <= 0 ? 1 : pageInfo.getPage();
-        int limit = pageInfo.getLimit() <= 0 ? 10 : pageInfo.getLimit();
-        int from = Math.min((page - 1) * limit, rows.size());
-        int to = Math.min(from + limit, rows.size());
-        outputObject.setBeans(rows.subList(from, to));
-        outputObject.settotal(rows.size());
+        outputObject.setBeans(rows);
+        outputObject.settotal(pages.getTotal());
     }
 
     @Override

@@ -40,7 +40,17 @@ public interface ShopStockService extends SkyeyeBusinessService<ShopStock> {
     void queryShopStockList(InputObject inputObject, OutputObject outputObject);
 
     /**
+     * 门店库存盘点列表：按门店已添加商品展开规格，无库存记录的账面为0
+     */
+    void queryStoreInventoryCheckList(InputObject inputObject, OutputObject outputObject);
+
+    /**
      * 执行门店产品库存调拨：原门店出库，目标门店入库（审批通过后调用，含库存校验）
      */
     void executeStoreProductTransfer(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 门店库存盘点确认：按实盘数量调整账面库存
+     */
+    void confirmStoreInventoryCheck(InputObject inputObject, OutputObject outputObject);
 }
