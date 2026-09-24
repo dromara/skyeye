@@ -100,6 +100,14 @@ SkyEye云 是面向**企业级智能制造行业**的`AI+`一站式`SaaS化`零�
 |:-------------------:|:-------------------:|:-------------------:|:-------------------:|
 |   ![](images/mindMap/微信公众号.jpg) | ![](images/mindMap/qq2.jpg) | ![](images/mindMap/微信.jpg) | ![](images/mindMap/wechatPay.jpg) |
 
+## 获奖证书
+
+> 之后会参加一些比赛，获奖证书陆续上传。
+
+|  证书 |  证书 |  证书 |  证书 |
+|---|---|---|---|
+| ![输入图片说明](images/%E8%AF%81%E4%B9%A6/G-star%E9%A1%B9%E7%9B%AE%E6%AF%95%E4%B8%9A%E8%AF%81%E4%B9%A6.png) | ![输入图片说明](images/%E8%AF%81%E4%B9%A6/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20260924162046_43_94.png) |  |  |
+
 ## Skyeye云整体图
 
 ![输入图片说明](images/mindMap/Skyeye%E4%BA%91%E7%9B%AE%E6%A0%87.jpeg)
