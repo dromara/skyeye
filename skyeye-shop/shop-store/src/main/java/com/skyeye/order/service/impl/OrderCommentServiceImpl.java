@@ -178,6 +178,7 @@ public class OrderCommentServiceImpl extends SkyeyeBusinessServiceImpl<OrderComm
         iMaterialNormsService.setDataMation(orderComment, OrderComment::getNormsId);
         memberService.setDataMation(orderComment, OrderComment::getCreateId);
         shopStoreService.setDataMation(orderComment, OrderComment::getStoreId);
+        orderItemService.setDataMation(orderComment, OrderComment::getOrderItemId);
         refreshCache(id);
         return orderComment;
     }
