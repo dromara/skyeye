@@ -131,4 +131,26 @@ public class ShopStoreBrowseStatDailyServiceImpl extends SkyeyeBusinessServiceIm
         result.put("pvCount", row.get("pvCount"));
         return result;
     }
+
+    @Override
+    @IgnoreTenant
+    public List<Map<String, Object>> listDailyByStoreAndDateRange(String storeId, String fromDate, String toDate) {
+        if (StrUtil.isBlank(storeId) || StrUtil.isBlank(fromDate) || StrUtil.isBlank(toDate)) {
+            return Collections.emptyList();
+        }
+        String storeCol = MybatisPlusUtil.toColumns(ShopStoreBrowseStatDaily::getStoreId);
+        String dateCol = MybatisPlusUtil.toColumns(ShopStoreBrowseStatDaily::getStatDate);
+        String visitorCol = MybatisPlusUtil.toColumns(ShopStoreBrowseStatDaily::getVisitorCount);
+        String pvCol = MybatisPlusUtil.toColumns(ShopStoreBrowseStatDaily::getPvCount);
+        QueryWrapper<ShopStoreBrowseStatDaily> wrapper = new QueryWrapper<>();
+        wrapper.select(dateCol + " AS statDate",
+            "IFNULL(" + visitorCol + ",0) AS visitorCount",
+            "IFNULL(" + pvCol + ",0) AS pvCount");
+        wrapper.eq(storeCol, storeId);
+        wrapper.ge(dateCol, fromDate);
+        wrapper.le(dateCol, toDate);
+        wrapper.orderByAsc(dateCol);
+        List<Map<String, Object>> rows = listMaps(wrapper);
+        return CollectionUtil.isEmpty(rows) ? Collections.emptyList() : rows;
+    }
 }

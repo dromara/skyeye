@@ -53,6 +53,16 @@ public interface OrderService extends SkyeyeBusinessService<Order> {
     void queryStoreOrderStat(InputObject inputObject, OutputObject outputObject);
 
     /**
+     * 管理端门店历史经营统计（区间汇总 + 按日趋势）
+     */
+    void queryStoreOrderHistoryStat(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 个人门店历史经营统计（区间汇总 + 按日趋势）
+     */
+    void queryPersonalStoreOrderHistoryStat(InputObject inputObject, OutputObject outputObject);
+
+    /**
      * 供货方代发订单待办统计（当前门店作为 sourceStoreId）
      */
     void queryPersonalStoreDropshipOrderStat(InputObject inputObject, OutputObject outputObject);

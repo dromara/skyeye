@@ -96,6 +96,20 @@ public class OrderController {
         orderService.queryStoreOrderStat(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryStoreOrderHistoryStat", value = "管理端门店历史经营统计", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @RequestMapping("/post/OrderController/queryStoreOrderHistoryStat")
+    public void queryStoreOrderHistoryStat(InputObject inputObject, OutputObject outputObject) {
+        orderService.queryStoreOrderHistoryStat(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryPersonalStoreOrderHistoryStat", value = "个人门店历史经营统计", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @RequestMapping("/post/OrderController/queryPersonalStoreOrderHistoryStat")
+    public void queryPersonalStoreOrderHistoryStat(InputObject inputObject, OutputObject outputObject) {
+        orderService.queryPersonalStoreOrderHistoryStat(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryPersonalStoreDropshipOrderStat", value = "供货方代发订单待办统计", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = TableSelectInfo.class)
     @RequestMapping("/post/OrderController/queryPersonalStoreDropshipOrderStat")

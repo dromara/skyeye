@@ -21,6 +21,7 @@ import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.browse.service.MemberBrowseHistoryService;
+import com.skyeye.browse.service.ShopStoreBrowseStatDailyService;
 import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
@@ -137,6 +138,9 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
 
     @Autowired
     private MemberBrowseHistoryService memberBrowseHistoryService;
+
+    @Autowired
+    private ShopStoreBrowseStatDailyService shopStoreBrowseStatDailyService;
 
     @Override
     public void createPrepose(Order order) {
@@ -1279,6 +1283,209 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         Map<String, Object> bean = buildStoreOrderStatBean(storeId, false);
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryStoreOrderHistoryStat(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        String storeId = tableSelectInfo.getObjectId();
+        if (StrUtil.isEmpty(storeId)) {
+            throw new CustomException("请选择门店");
+        }
+        ShopStore store = shopStoreService.selectById(storeId);
+        if (store == null || StrUtil.isEmpty(store.getId())) {
+            throw new CustomException("门店不存在");
+        }
+        Map<String, Object> bean = buildStoreOrderHistoryStatBean(storeId, tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryPersonalStoreOrderHistoryStat(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        String storeId = tableSelectInfo.getObjectId();
+        assertPersonalStore(storeId);
+        Map<String, Object> bean = buildStoreOrderHistoryStatBean(storeId, tableSelectInfo.getStartTime(), tableSelectInfo.getEndTime());
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    /**
+     * 历史经营：成交额/单量、退款、净成交额、客单价、访客/浏览 + 按日趋势。
+     * 净成交额 = 成交额 - 已退款额（暂无商品成本，作为店主「预估盈利」口径）。
+     */
+    private Map<String, Object> buildStoreOrderHistoryStatBean(String storeId, String startTime, String endTime) {
+        String startDate = normalizeStatDate(startTime);
+        String endDate = normalizeStatDate(endTime);
+        if (StrUtil.isBlank(startDate) || StrUtil.isBlank(endDate)) {
+            throw new CustomException("请选择统计日期范围");
+        }
+        if (DateUtil.getDistanceDay(startDate, endDate) < 0) {
+            throw new CustomException("开始日期不能晚于结束日期");
+        }
+        if (DateUtil.getDistanceDay(startDate, endDate) > 90) {
+            throw new CustomException("统计区间最长支持 90 天");
+        }
+
+        String createTimeCol = MybatisPlusUtil.toColumns(OrderItem::getCreateTime);
+        String storeCol = MybatisPlusUtil.toColumns(OrderItem::getStoreId);
+        String stateCol = MybatisPlusUtil.toColumns(OrderItem::getState);
+        String startDateTime = startDate + " 00:00:00";
+        String endDateTime = endDate + " 23:59:59";
+        List<Integer> unpaidStates = Arrays.asList(
+            ShopOrderItemOtherState.WAIT_PAY.getKey(),
+            ShopOrderItemOtherState.FAIRPAID.getKey(),
+            ShopOrderItemOtherState.CANCELED.getKey());
+        List<Integer> refundStates = Arrays.asList(
+            ShopOrderItemOtherState.REFUND.getKey(),
+            ShopOrderItemOtherState.SALESRETURNED.getKey());
+
+        QueryWrapper<OrderItem> payWrapper = new QueryWrapper<>();
+        payWrapper.eq(storeCol, storeId);
+        payWrapper.ge(createTimeCol, startDateTime);
+        payWrapper.le(createTimeCol, endDateTime);
+        payWrapper.notIn(stateCol, unpaidStates);
+        payWrapper.select("IFNULL(SUM(pay_price),0) AS payAmount", "COUNT(1) AS orderCount");
+        Map<String, Object> payRow = firstMap(orderItemDao.selectMaps(payWrapper));
+        long orderCount = toLong(mapIgnoreCase(payRow, "orderCount"));
+        long payAmount = toLong(mapIgnoreCase(payRow, "payAmount"));
+
+        QueryWrapper<OrderItem> refundWrapper = new QueryWrapper<>();
+        refundWrapper.eq(storeCol, storeId);
+        refundWrapper.ge(createTimeCol, startDateTime);
+        refundWrapper.le(createTimeCol, endDateTime);
+        refundWrapper.in(stateCol, refundStates);
+        refundWrapper.select("IFNULL(SUM(pay_price),0) AS refundAmount", "COUNT(1) AS refundCount");
+        Map<String, Object> refundRow = firstMap(orderItemDao.selectMaps(refundWrapper));
+        long refundCount = toLong(mapIgnoreCase(refundRow, "refundCount"));
+        long refundAmount = toLong(mapIgnoreCase(refundRow, "refundAmount"));
+        long netAmount = Math.max(payAmount - refundAmount, 0L);
+        String avgOrderAmount = orderCount > 0
+            ? CalculationUtil.divide(String.valueOf(payAmount), String.valueOf(orderCount), 0)
+            : "0";
+
+        Map<String, Object> browseSum = shopStoreBrowseStatDailyService.sumByStoreAndDateRange(storeId, startDate, endDate);
+        long visitorCount = toLong(browseSum.get("visitorCount"));
+        long pvCount = toLong(browseSum.get("pvCount"));
+        String today = DateUtil.getYmdTimeAndToString();
+        if (DateUtil.getDistanceDay(startDate, today) >= 0 && DateUtil.getDistanceDay(today, endDate) >= 0) {
+            Map<String, Object> todayBrowse = memberBrowseHistoryService.queryStoreTodayBrowseStat(storeId);
+            visitorCount += toLong(todayBrowse.get("todayVisitor"));
+            pvCount += toLong(todayBrowse.get("todayPv"));
+        }
+
+        Map<String, Map<String, Object>> payDayMap = queryDailyAmountMap(storeId, startDateTime, endDateTime, unpaidStates, false);
+        Map<String, Map<String, Object>> refundDayMap = queryDailyAmountMap(storeId, startDateTime, endDateTime, refundStates, true);
+        Map<String, Map<String, Object>> browseDayMap = new HashMap<>();
+        List<Map<String, Object>> browseDays = shopStoreBrowseStatDailyService.listDailyByStoreAndDateRange(storeId, startDate, endDate);
+        for (Map<String, Object> row : browseDays) {
+            String date = Objects.toString(mapIgnoreCase(row, "statDate"), "");
+            if (StrUtil.isBlank(date)) {
+                continue;
+            }
+            browseDayMap.put(date, row);
+        }
+        if (DateUtil.getDistanceDay(startDate, today) >= 0 && DateUtil.getDistanceDay(today, endDate) >= 0) {
+            Map<String, Object> todayBrowse = memberBrowseHistoryService.queryStoreTodayBrowseStat(storeId);
+            Map<String, Object> todayRow = new HashMap<>();
+            todayRow.put("visitorCount", todayBrowse.getOrDefault("todayVisitor", 0L));
+            todayRow.put("pvCount", todayBrowse.getOrDefault("todayPv", 0L));
+            browseDayMap.put(today, todayRow);
+        }
+
+        List<Map<String, Object>> dayList = new ArrayList<>();
+        for (String day : DateUtil.getDays(startDate, endDate)) {
+            Map<String, Object> payDay = payDayMap.getOrDefault(day, Collections.emptyMap());
+            Map<String, Object> refundDay = refundDayMap.getOrDefault(day, Collections.emptyMap());
+            Map<String, Object> browseDay = browseDayMap.getOrDefault(day, Collections.emptyMap());
+            long dayOrderCount = toLong(mapIgnoreCase(payDay, "orderCount"));
+            long dayPayAmount = toLong(mapIgnoreCase(payDay, "payAmount"));
+            long dayRefundCount = toLong(mapIgnoreCase(refundDay, "orderCount"));
+            long dayRefundAmount = toLong(mapIgnoreCase(refundDay, "payAmount"));
+            Map<String, Object> item = new HashMap<>();
+            item.put("date", day);
+            item.put("orderCount", dayOrderCount);
+            item.put("payAmount", String.valueOf(dayPayAmount));
+            item.put("refundCount", dayRefundCount);
+            item.put("refundAmount", String.valueOf(dayRefundAmount));
+            item.put("netAmount", String.valueOf(Math.max(dayPayAmount - dayRefundAmount, 0L)));
+            item.put("visitorCount", toLong(mapIgnoreCase(browseDay, "visitorCount")));
+            item.put("pvCount", toLong(mapIgnoreCase(browseDay, "pvCount")));
+            dayList.add(item);
+        }
+
+        Map<String, Object> bean = new HashMap<>();
+        bean.put("startDate", startDate);
+        bean.put("endDate", endDate);
+        bean.put("orderCount", orderCount);
+        bean.put("payAmount", String.valueOf(payAmount));
+        bean.put("refundCount", refundCount);
+        bean.put("refundAmount", String.valueOf(refundAmount));
+        bean.put("netAmount", String.valueOf(netAmount));
+        bean.put("avgOrderAmount", avgOrderAmount);
+        bean.put("visitorCount", visitorCount);
+        bean.put("pvCount", pvCount);
+        bean.put("dayList", dayList);
+        return bean;
+    }
+
+    private Map<String, Map<String, Object>> queryDailyAmountMap(String storeId, String startDateTime, String endDateTime,
+                                                                List<Integer> states, boolean inStates) {
+        String createTimeCol = MybatisPlusUtil.toColumns(OrderItem::getCreateTime);
+        String storeCol = MybatisPlusUtil.toColumns(OrderItem::getStoreId);
+        String stateCol = MybatisPlusUtil.toColumns(OrderItem::getState);
+        QueryWrapper<OrderItem> wrapper = new QueryWrapper<>();
+        wrapper.eq(storeCol, storeId);
+        wrapper.ge(createTimeCol, startDateTime);
+        wrapper.le(createTimeCol, endDateTime);
+        if (inStates) {
+            wrapper.in(stateCol, states);
+        } else {
+            wrapper.notIn(stateCol, states);
+        }
+        wrapper.select("DATE_FORMAT(" + createTimeCol + ", '%Y-%m-%d') AS statDate",
+            "IFNULL(SUM(pay_price),0) AS payAmount",
+            "COUNT(1) AS orderCount");
+        wrapper.groupBy("DATE_FORMAT(" + createTimeCol + ", '%Y-%m-%d')");
+        List<Map<String, Object>> rows = orderItemDao.selectMaps(wrapper);
+        Map<String, Map<String, Object>> result = new HashMap<>();
+        if (CollectionUtil.isEmpty(rows)) {
+            return result;
+        }
+        for (Map<String, Object> row : rows) {
+            String date = Objects.toString(mapIgnoreCase(row, "statDate"), "");
+            if (StrUtil.isNotBlank(date)) {
+                result.put(date, row);
+            }
+        }
+        return result;
+    }
+
+    private String normalizeStatDate(String value) {
+        if (StrUtil.isBlank(value)) {
+            return "";
+        }
+        String text = value.trim();
+        return text.length() >= 10 ? text.substring(0, 10) : text;
+    }
+
+    private Map<String, Object> firstMap(List<Map<String, Object>> rows) {
+        if (CollectionUtil.isEmpty(rows) || rows.get(0) == null) {
+            return Collections.emptyMap();
+        }
+        return rows.get(0);
+    }
+
+    private long toLong(Object value) {
+        if (value == null) {
+            return 0L;
+        }
+        try {
+            return new java.math.BigDecimal(value.toString()).longValue();
+        } catch (Exception ex) {
+            return 0L;
+        }
     }
 
     @Override

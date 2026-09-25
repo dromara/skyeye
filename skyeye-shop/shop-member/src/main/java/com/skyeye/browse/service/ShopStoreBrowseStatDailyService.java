@@ -7,6 +7,7 @@ package com.skyeye.browse.service;
 import com.skyeye.base.business.service.SkyeyeBusinessService;
 import com.skyeye.browse.entity.ShopStoreBrowseStatDaily;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ShopStoreBrowseStatDailyService extends SkyeyeBusinessService<ShopStoreBrowseStatDaily> {
@@ -20,4 +21,9 @@ public interface ShopStoreBrowseStatDailyService extends SkyeyeBusinessService<S
      * 查询指定门店在日期区间内的汇总（含起止日）
      */
     Map<String, Object> sumByStoreAndDateRange(String storeId, String fromDate, String toDate);
+
+    /**
+     * 查询指定门店在日期区间内的按日明细（含起止日）
+     */
+    List<Map<String, Object>> listDailyByStoreAndDateRange(String storeId, String fromDate, String toDate);
 }
