@@ -32,26 +32,14 @@ public class MealRefundOrderController {
     @Autowired
     private MealRefundOrderService mealRefundOrderService;
 
-    /**
-     * 查询会员套餐退款订单
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
-    @ApiOperation(id = "queryRefundMealOrderList", value = "查询会员套餐退款订单", method = "POST", allUse = "1")
+    @ApiOperation(id = "queryRefundMealOrderList", value = "查询会员套餐退款订单", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/MealRefundOrderController/queryRefundMealOrderList")
     public void queryRefundMealOrderList(InputObject inputObject, OutputObject outputObject) {
         mealRefundOrderService.queryPageList(inputObject, outputObject);
     }
 
-    /**
-     * 会员套餐退款申请操作
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
-    @ApiOperation(id = "refundMealOrder", value = "会员套餐退款申请操作", method = "POST", allUse = "1")
+    @ApiOperation(id = "refundMealOrder", value = "会员套餐退款申请操作", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "mealOrderChildId", name = "mealOrderChildId", value = "套餐订单子单据id", required = "required"),
         @ApiImplicitParam(id = "mealRefundReasonId", name = "mealRefundReasonId", value = "退款原因id", required = "required"),
@@ -62,26 +50,14 @@ public class MealRefundOrderController {
         mealRefundOrderService.refundMealOrder(inputObject, outputObject);
     }
 
-    /**
-     * 套餐退款订单提交审批
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
-    @ApiOperation(id = "submitMealRefundOrderToApproval", value = "套餐退款订单提交审批", method = "POST", allUse = "1")
+    @ApiOperation(id = "submitMealRefundOrderToApproval", value = "套餐退款订单提交审批", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = SubmitSkyeyeFlowable.class)
     @RequestMapping("/post/MealRefundOrderController/submitToApproval")
     public void submitToApproval(InputObject inputObject, OutputObject outputObject) {
         mealRefundOrderService.submitToApproval(inputObject, outputObject);
     }
 
-    /**
-     * 撤销套餐退款订单
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
-    @ApiOperation(id = "revokeMealRefundOrder", value = "撤销套餐退款订单", method = "PUT", allUse = "1")
+    @ApiOperation(id = "revokeMealRefundOrder", value = "撤销套餐退款订单", method = "PUT", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "processInstanceId", name = "processInstanceId", value = "流程实例id", required = "required")})
     @RequestMapping("/post/MealRefundOrderController/revoke")
@@ -89,13 +65,7 @@ public class MealRefundOrderController {
         mealRefundOrderService.revoke(inputObject, outputObject);
     }
 
-    /**
-     * 删除套餐退款订单
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
-    @ApiOperation(id = "deleteMealRefundOrderById", value = "删除套餐退款订单", method = "DELETE", allUse = "1")
+    @ApiOperation(id = "deleteMealRefundOrderById", value = "删除套餐退款订单", method = "DELETE", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
     @RequestMapping("/post/MealRefundOrderController/deleteMealRefundOrderById")
