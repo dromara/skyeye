@@ -89,6 +89,13 @@ public class OrderController {
         orderService.queryPersonalStoreOrderStat(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryStoreOrderStat", value = "管理端门店订单经营统计", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @RequestMapping("/post/OrderController/queryStoreOrderStat")
+    public void queryStoreOrderStat(InputObject inputObject, OutputObject outputObject) {
+        orderService.queryStoreOrderStat(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryPersonalStoreDropshipOrderStat", value = "供货方代发订单待办统计", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = TableSelectInfo.class)
     @RequestMapping("/post/OrderController/queryPersonalStoreDropshipOrderStat")

@@ -39,7 +39,7 @@ public class MemberController {
         memberService.queryPageList(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "writeMember", value = "添加/编辑会员信息", method = "POST", allUse = "1")
+    @ApiOperation(id = "writeMember", value = "添加/编辑会员信息", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = Member.class)
     @RequestMapping("/post/MemberController/writeMember")
     public void writeMember(InputObject inputObject, OutputObject outputObject) {
@@ -62,7 +62,7 @@ public class MemberController {
         memberService.selectByIds(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "member004", value = "删除会员信息", method = "DELETE", allUse = "1")
+    @ApiOperation(id = "member004", value = "删除会员信息", method = "DELETE", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
     @RequestMapping("/post/MemberController/deleteMemberById")

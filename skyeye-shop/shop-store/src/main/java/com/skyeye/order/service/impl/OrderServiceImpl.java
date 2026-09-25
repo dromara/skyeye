@@ -1266,6 +1266,22 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     }
 
     @Override
+    public void queryStoreOrderStat(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        String storeId = tableSelectInfo.getObjectId();
+        if (StrUtil.isEmpty(storeId)) {
+            throw new CustomException("请选择门店");
+        }
+        ShopStore store = shopStoreService.selectById(storeId);
+        if (store == null || StrUtil.isEmpty(store.getId())) {
+            throw new CustomException("门店不存在");
+        }
+        Map<String, Object> bean = buildStoreOrderStatBean(storeId, false);
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
     public void queryPersonalStoreDropshipOrderStat(InputObject inputObject, OutputObject outputObject) {
         TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
         String storeId = tableSelectInfo.getObjectId();
