@@ -39,14 +39,14 @@ public class KeepFitOrderController {
         keepFitOrderService.queryPageList(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "insertKeepFitOrder", value = "添加订单", method = "POST", allUse = "1")
+    @ApiOperation(id = "insertKeepFitOrder", value = "添加订单", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = KeepFitOrder.class)
     @RequestMapping("/post/KeepFitOrderController/insertKeepFitOrder")
     public void insertKeepFitOrder(InputObject inputObject, OutputObject outputObject) {
         keepFitOrderService.createEntity(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "keepFitOrderNotify", value = "支付订单完成后的回调", method = "POST", allUse = "1")
+    @ApiOperation(id = "keepFitOrderNotify", value = "支付订单完成后的回调", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "out_trade_no", name = "outTradeNo", value = "商户订单号", required = "required"),
         @ApiImplicitParam(id = "total_fee", name = "totalFee", value = "实际支付的订单金额:单位 分", required = "required")})
@@ -63,7 +63,7 @@ public class KeepFitOrderController {
         keepFitOrderService.selectById(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "verificationKeepFitOrder", value = "单据核销", method = "PUT", allUse = "1")
+    @ApiOperation(id = "verificationKeepFitOrder", value = "单据核销", method = "PUT", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "保养订单id", required = "required")})
     @RequestMapping("/post/KeepFitOrderController/verificationKeepFitOrder")
@@ -71,7 +71,7 @@ public class KeepFitOrderController {
         keepFitOrderService.verificationOrder(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "deleteKeepFitOrderById", value = "删除保养订单", method = "DELETE", allUse = "1")
+    @ApiOperation(id = "deleteKeepFitOrderById", value = "删除保养订单", method = "DELETE", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
     @RequestMapping("/post/KeepFitOrderController/deleteKeepFitOrderById")
@@ -79,7 +79,7 @@ public class KeepFitOrderController {
         keepFitOrderService.deleteById(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "complateKeepFitOrder", value = "完成保养", method = "POST", allUse = "1")
+    @ApiOperation(id = "complateKeepFitOrder", value = "完成保养", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "订单id", required = "required"),
         @ApiImplicitParam(id = "serviceTechnicianId", name = "serviceTechnicianId", value = "维修技师id(员工id)", required = "required"),

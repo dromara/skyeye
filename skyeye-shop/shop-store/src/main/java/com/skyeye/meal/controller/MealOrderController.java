@@ -39,14 +39,14 @@ public class MealOrderController {
         mealOrderService.queryPageList(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "insertMealOrder", value = "添加订单", method = "POST", allUse = "1")
+    @ApiOperation(id = "insertMealOrder", value = "添加订单", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = MealOrder.class)
     @RequestMapping("/post/MealController/insertMealOrder")
     public void insertMealOrder(InputObject inputObject, OutputObject outputObject) {
         mealOrderService.createEntity(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "mealOrderNotify", value = "支付订单完成后的回调", method = "POST", allUse = "1")
+    @ApiOperation(id = "mealOrderNotify", value = "支付订单完成后的回调", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "out_trade_no", name = "outTradeNo", value = "商户订单号", required = "required"),
         @ApiImplicitParam(id = "total_fee", name = "totalFee", value = "实际支付的订单金额:单位 分", required = "required")})
@@ -71,7 +71,7 @@ public class MealOrderController {
         mealOrderService.deleteById(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "updateMealOrderState", value = "套餐订单状态修改", method = "PUT", allUse = "1")
+    @ApiOperation(id = "updateMealOrderState", value = "套餐订单状态修改", method = "PUT", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "套餐订单id", required = "required"),
         @ApiImplicitParam(id = "state", name = "state", value = "订单状态  1.待支付  2.已支付 线上订单有以下状态： (0.已提交订单  3.已收货  4.已关闭  5.已退款)", required = "required,num")})
