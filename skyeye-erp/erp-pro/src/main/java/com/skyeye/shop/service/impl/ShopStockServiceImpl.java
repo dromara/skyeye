@@ -233,6 +233,7 @@ public class ShopStockServiceImpl extends SkyeyeBusinessServiceImpl<ShopStockDao
     }
 
     @Override
+    @IgnoreTenant
     public Map<String, String> queryNormsShopStock(String storeId, List<String> normsIds) {
         Map<String, String> stockMap = new HashMap<>();
         if (CollectionUtil.isEmpty(normsIds)) {

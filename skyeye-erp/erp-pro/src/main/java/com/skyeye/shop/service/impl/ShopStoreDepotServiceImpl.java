@@ -399,26 +399,27 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         return store.getStockMode() == null ? ShopMaterialStockMode.NORMAL.getKey() : store.getStockMode();
     }
 
-    private int sumDepotStock(List<String> depotIds, String normsId,
-                              Map<String, Map<String, String>> depotNormsStockMap) {
+    private String sumDepotStock(List<String> depotIds, String normsId,
+                                 Map<String, Map<String, String>> depotNormsStockMap) {
         if (CollectionUtil.isEmpty(depotIds) || StrUtil.isBlank(normsId) || MapUtil.isEmpty(depotNormsStockMap)) {
-            return 0;
+            return CommonNumConstants.NUM_ZERO.toString();
         }
-        int total = 0;
+        String total = CommonNumConstants.NUM_ZERO.toString();
         for (String depotId : depotIds) {
             Map<String, String> stockMap = depotNormsStockMap.get(depotId);
             if (MapUtil.isEmpty(stockMap)) {
                 continue;
             }
-            total += Convert.toInt(stockMap.get(normsId), 0);
+            String stock = StrUtil.blankToDefault(stockMap.get(normsId), CommonNumConstants.NUM_ZERO.toString());
+            total = CalculationUtil.add(ErpConstants.NUM_AFTER_DOT, total, stock);
         }
         return total;
     }
 
-    private int calcSaleableStock(String storeId, ShopMaterialStore relation, List<String> normsIds,
-                                  List<ShopStoreDepot> enabledDepots) {
+    private String calcSaleableStock(String storeId, ShopMaterialStore relation, List<String> normsIds,
+                                     List<ShopStoreDepot> enabledDepots) {
         if (CollectionUtil.isEmpty(normsIds)) {
-            return 0;
+            return CommonNumConstants.NUM_ZERO.toString();
         }
         // 平台货分销代销：可售库存读供货方门店
         String stockStoreId = storeId;
@@ -429,9 +430,10 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
             if (stockRelation == null) {
                 // 供货方无挂靠记录时按普通门店库存汇总
                 Map<String, String> shopStock = shopStockService.queryNormsShopStock(stockStoreId, normsIds);
-                int total = 0;
+                String total = CommonNumConstants.NUM_ZERO.toString();
                 for (String normsId : normsIds) {
-                    total += Convert.toInt(shopStock.get(normsId), 0);
+                    String stock = StrUtil.blankToDefault(shopStock.get(normsId), CommonNumConstants.NUM_ZERO.toString());
+                    total = CalculationUtil.add(ErpConstants.NUM_AFTER_DOT, total, stock);
                 }
                 return total;
             }
@@ -443,16 +445,17 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
                 .filter(StrUtil::isNotEmpty).distinct().collect(Collectors.toList());
             Map<String, Map<String, String>> depotNormsStockMap =
                 materialNormsStockService.queryMaterialNormsStockByDepotIds(normsIds, depotIds);
-            int total = 0;
+            String total = CommonNumConstants.NUM_ZERO.toString();
             for (String normsId : normsIds) {
-                total += sumDepotStock(depotIds, normsId, depotNormsStockMap);
+                total = CalculationUtil.add(ErpConstants.NUM_AFTER_DOT, total, sumDepotStock(depotIds, normsId, depotNormsStockMap));
             }
             return total;
         }
         Map<String, String> shopStock = shopStockService.queryNormsShopStock(stockStoreId, normsIds);
-        int total = 0;
+        String total = CommonNumConstants.NUM_ZERO.toString();
         for (String normsId : normsIds) {
-            total += Convert.toInt(shopStock.get(normsId), 0);
+            String stock = StrUtil.blankToDefault(shopStock.get(normsId), CommonNumConstants.NUM_ZERO.toString());
+            total = CalculationUtil.add(ErpConstants.NUM_AFTER_DOT, total, stock);
         }
         return total;
     }
@@ -494,12 +497,12 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
     }
 
     private Map<String, Object> buildInventoryRow(ShopMaterial shopMaterial, ShopMaterialStore relation,
-                                                  int saleable, String diagnoseType) {
+                                                  String saleable, String diagnoseType) {
         return buildInventoryRow(shopMaterial, relation, null, saleable, diagnoseType);
     }
 
     private Map<String, Object> buildInventoryRow(ShopMaterial shopMaterial, ShopMaterialStore relation,
-                                                  MaterialNorms norms, int saleable, String diagnoseType) {
+                                                  MaterialNorms norms, String saleable, String diagnoseType) {
         Map<String, Object> row = new HashMap<>();
         String normsId = norms == null ? StrUtil.EMPTY : norms.getId();
         // id 保持门店商品关系 id，便于编辑库存；uniqueKey 区分规格行
@@ -576,7 +579,7 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
                 if (norms == null || StrUtil.isBlank(norms.getId())) {
                     continue;
                 }
-                int saleable = calcSaleableStock(storeId, relation,
+                String saleable = calcSaleableStock(storeId, relation,
                     Collections.singletonList(norms.getId()), enabledDepots);
                 rows.add(buildInventoryRow(shopMaterial, relation, norms, saleable, null));
             }
@@ -692,9 +695,9 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         Map<String, Object> params = inputObject.getParams();
         String materialStoreId = MapUtil.getStr(params, "materialStoreId");
         String normsId = MapUtil.getStr(params, "normsId");
-        int need = Convert.toInt(params.get("count"), 0);
-        if (StrUtil.isBlank(materialStoreId) || StrUtil.isBlank(normsId) || need <= 0) {
-            throw new CustomException("库存校验参数不完整");
+        String need = MapUtil.getStr(params, "count");
+        if (CalculationUtil.compareTo(need, CommonNumConstants.NUM_ZERO.toString(), ErpConstants.NUM_AFTER_DOT, RoundingMode.UP) <= 0) {
+            throw new CustomException("购买数量必须大于0");
         }
         ShopMaterialStore relation = shopMaterialStoreService.selectById(materialStoreId);
         if (relation == null) {
@@ -702,8 +705,8 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         }
         List<String> normsIds = Collections.singletonList(normsId);
         List<ShopStoreDepot> enabled = listEnabledByStoreId(relation.getStoreId());
-        int saleable = calcSaleableStock(relation.getStoreId(), relation, normsIds, enabled);
-        if (saleable < need) {
+        String saleable = calcSaleableStock(relation.getStoreId(), relation, normsIds, enabled);
+        if (CalculationUtil.compareTo(saleable, need, ErpConstants.NUM_AFTER_DOT, RoundingMode.UP) < 0) {
             throw new CustomException("库存不足，当前可售 " + saleable + "，需要 " + need);
         }
         Map<String, Object> bean = new HashMap<>();
@@ -791,11 +794,13 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         shopMaterialStoreService.update(updateWrapper);
     }
 
-    private String diagnoseTypeOf(int saleable, int safety) {
-        if (saleable <= 0) {
+    private String diagnoseTypeOf(String saleable, int safety) {
+        if (CalculationUtil.compareTo(saleable, CommonNumConstants.NUM_ZERO.toString(),
+            ErpConstants.NUM_AFTER_DOT, RoundingMode.UP) <= 0) {
             return "oos";
         }
-        if (saleable < safety) {
+        if (safety > 0 && CalculationUtil.compareTo(saleable, String.valueOf(safety),
+            ErpConstants.NUM_AFTER_DOT, RoundingMode.UP) < 0) {
             return "low";
         }
         return "ok";
@@ -862,7 +867,7 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
                 if (norms == null || StrUtil.isBlank(norms.getId())) {
                     continue;
                 }
-                int saleable = calcSaleableStock(storeId, relation,
+                String saleable = calcSaleableStock(storeId, relation,
                     Collections.singletonList(norms.getId()), enabledDepots);
                 String type = diagnoseTypeOf(saleable, safetyOfNorms(norms));
                 if ("ok".equals(type)) {
@@ -893,7 +898,7 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         int low = 0;
         for (ShopMaterialStore relation : launched) {
             List<String> normsIds = normsIdsOfMaterial(relation.getMaterialId());
-            int saleable = calcSaleableStock(storeId, relation, normsIds, enabledDepots);
+            String saleable = calcSaleableStock(storeId, relation, normsIds, enabledDepots);
             int safety = safetyOfMaterial(relation.getMaterialId());
             String type = diagnoseTypeOf(saleable, safety);
             if ("oos".equals(type)) {
@@ -1002,7 +1007,7 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
             }
         }
 
-        int saleable = calcSaleableStock(storeId, relation, normsIds, enabledDepots);
+        String saleable = calcSaleableStock(storeId, relation, normsIds, enabledDepots);
         List<Map<String, Object>> depotOptions = new ArrayList<>();
         for (ShopStoreDepot depot : enabledDepots) {
             Depot d = finalDepotMap.get(depot.getDepotId());

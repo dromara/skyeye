@@ -26,10 +26,7 @@ import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
-import com.skyeye.common.enumeration.EnableEnum;
-import com.skyeye.common.enumeration.IsDefaultEnum;
-import com.skyeye.common.enumeration.ShopMaterialDeliveryMethod;
-import com.skyeye.common.enumeration.WhetherEnum;
+import com.skyeye.common.enumeration.*;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.TenantTypeEnum;
@@ -48,7 +45,6 @@ import com.skyeye.material.service.MaterialNormsService;
 import com.skyeye.material.service.MaterialService;
 import com.skyeye.material.service.MaterialUnitGroupService;
 import com.skyeye.rest.shop.service.IShopStoreService;
-import com.skyeye.shopmaterial.dao.ShopMaterialDao;
 import com.skyeye.shopmaterial.dao.ShopMaterialStoreDao;
 import com.skyeye.shopmaterial.entity.ShopMaterial;
 import com.skyeye.shopmaterial.entity.ShopMaterialNorms;
@@ -93,9 +89,6 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
     private MaterialUnitGroupService materialUnitGroupService;
 
     @Autowired
-    private ShopMaterialDao shopMaterialDao;
-
-    @Autowired
     private ShopMaterialNormsService shopMaterialNormsService;
 
     @Override
@@ -111,6 +104,24 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         queryWrapper.eq(MybatisPlusUtil.toColumns(ShopMaterialStore::getMaterialId), materialId);
         List<ShopMaterialStore> shopMaterialStoreList = list(queryWrapper);
         return shopMaterialStoreList;
+    }
+
+    @Override
+    @IgnoreTenant
+    public ShopMaterialStore selectById(String id) {
+        return runWithTenant(TenantEnum.NO_ISOLATION, () -> {
+            ShopMaterialStore knowledge = super.selectById(id);
+            return knowledge;
+        });
+    }
+
+    @Override
+    @IgnoreTenant
+    public List<ShopMaterialStore> selectByIds(String... ids) {
+        List<ShopMaterialStore> shopStores = runWithTenant(TenantEnum.NO_ISOLATION, () -> {
+            return super.selectByIds(ids);
+        });
+        return shopStores;
     }
 
     @IgnoreTenant
