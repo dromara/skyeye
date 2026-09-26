@@ -62,7 +62,7 @@ public class ShopTradeCart extends OperatorUserInfo {
 
     @TableField("count")
     @ApiModelProperty(value = "数量", required = "required")
-    private Integer count;
+    private String count;
 
     @TableField("selected")
     @ApiModelProperty(value = "是否选中", required = "required,num", enumClass = WhetherEnum.class)

@@ -252,8 +252,9 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         String deliverNumber = params.get("deliverNumber").toString();
         String deliveryTemplateChargeId = params.get("deliveryTemplateChargeId").toString();
         String deliveryCompanyId = params.get("deliveryCompanyId").toString();
-        Integer num = Integer.parseInt(params.get("num").toString());
-        if (num <= CommonNumConstants.NUM_ZERO) {
+        String num = params.get("num") == null ? "" : params.get("num").toString().trim();
+        if (StrUtil.isBlank(num)
+            || CalculationUtil.compareTo(num, CommonNumConstants.NUM_ZERO.toString(), CommonNumConstants.NUM_TWO, java.math.RoundingMode.HALF_UP) <= 0) {
             throw new CustomException("发货数量不可为负数或零");
         }
         List<OrderItem> orderItemList = queryOrderItemByParentId(orderId);
@@ -268,9 +269,13 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
             targetItem.getState() == ShopOrderItemOtherState.ALL_DELIVERED.getKey()) {
             throw new CustomException("该订单未支付或已全部发货");
         }
-        int delivered = targetItem.getDeliverNum() == null ? CommonNumConstants.NUM_ZERO : targetItem.getDeliverNum();
-        int remainingNum = targetItem.getCount() - delivered - num;
-        if (remainingNum < CommonNumConstants.NUM_ZERO) {
+        String delivered = StrUtil.blankToDefault(targetItem.getDeliverNum(), CommonNumConstants.NUM_ZERO.toString());
+        String count = StrUtil.blankToDefault(targetItem.getCount(), CommonNumConstants.NUM_ZERO.toString());
+        String remainingNum = CalculationUtil.subtract(
+            CalculationUtil.subtract(count, delivered, CommonNumConstants.NUM_TWO),
+            num,
+            CommonNumConstants.NUM_TWO);
+        if (CalculationUtil.compareTo(remainingNum, CommonNumConstants.NUM_ZERO.toString(), CommonNumConstants.NUM_TWO, java.math.RoundingMode.HALF_UP) < 0) {
             throw new CustomException("该订单子单可发货数量不足");
         }
         String memberId = inputObject.getLogParams().get("id").toString();
@@ -303,13 +308,13 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
             stockParams.put("materialStoreId", targetItem.getMaterialStoreId());
             stockParams.put("materialId", targetItem.getMaterialId());
             stockParams.put("normsId", targetItem.getNormsId());
-            stockParams.put("count", String.valueOf(num));
+            stockParams.put("count", num);
             iShopStockService.deductShopStockOnShip(stockParams);
         }
 
         // 更新已发数量与履约状态：还有剩余 → 部分发货；否则 → 全部发货
-        targetItem.setDeliverNum(delivered + num);
-        if (remainingNum > CommonNumConstants.NUM_ZERO) {
+        targetItem.setDeliverNum(CalculationUtil.add(delivered, num, CommonNumConstants.NUM_TWO));
+        if (CalculationUtil.compareTo(remainingNum, CommonNumConstants.NUM_ZERO.toString(), CommonNumConstants.NUM_TWO, java.math.RoundingMode.HALF_UP) > 0) {
             targetItem.setState(ShopOrderItemOtherState.PART_DELIVERED.getKey());
         } else {
             targetItem.setState(ShopOrderItemOtherState.ALL_DELIVERED.getKey());
@@ -393,11 +398,15 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         }
         List<ItemDeliverHistory> itemDeliverHistoryList = itemDeliverHistoryService.queryListByItemId(itemId);
         // 算出已发货总数
-        int num = itemDeliverHistoryList.stream().map(idh -> Integer.parseInt(idh.getNum())).reduce(CommonNumConstants.NUM_ZERO, Integer::sum);
+        String num = CommonNumConstants.NUM_ZERO.toString();
+        for (ItemDeliverHistory idh : itemDeliverHistoryList) {
+            num = CalculationUtil.add(num, StrUtil.blankToDefault(idh.getNum(), CommonNumConstants.NUM_ZERO.toString()), CommonNumConstants.NUM_TWO);
+        }
         // 计算未发货数量
-        int remainingNum = orderItem.getCount() - num;
-        if (remainingNum == CommonNumConstants.NUM_ZERO) {
-            orderItem.setSignNum(orderItem.getCount());
+        String count = StrUtil.blankToDefault(orderItem.getCount(), CommonNumConstants.NUM_ZERO.toString());
+        String remainingNum = CalculationUtil.subtract(count, num, CommonNumConstants.NUM_TWO);
+        if (CalculationUtil.compareTo(remainingNum, CommonNumConstants.NUM_ZERO.toString(), CommonNumConstants.NUM_TWO, java.math.RoundingMode.HALF_UP) == 0) {
+            orderItem.setSignNum(count);
             orderItem.setSignState(ItemSignState.ALL_SIGN.getKey());
             orderItem.setState(ShopOrderItemOtherState.SIGN.getKey());
         } else {
@@ -415,7 +424,9 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
             throw new CustomException("该订单子单不存在");
         }
         OrderItem item = setDateForItemLIst(Arrays.asList(orderItem)).get(CommonNumConstants.NUM_ZERO);
-        item.setCanDeliverNum(item.getCount() - item.getDeliverNum());
+        String count = StrUtil.blankToDefault(item.getCount(), CommonNumConstants.NUM_ZERO.toString());
+        String delivered = StrUtil.blankToDefault(item.getDeliverNum(), CommonNumConstants.NUM_ZERO.toString());
+        item.setCanDeliverNum(CalculationUtil.subtract(count, delivered, CommonNumConstants.NUM_TWO));
         return orderItem;
     }
 

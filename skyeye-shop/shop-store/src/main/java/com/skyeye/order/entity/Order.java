@@ -61,7 +61,7 @@ public class Order extends AreaInfo {
 
     @TableField("count")
     @Property(value = "商品的总数量")
-    private Integer count;
+    private String count;
 
     @TableField("finish_time")
     @Property(value = "订单完成时间")

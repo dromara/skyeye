@@ -151,7 +151,7 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         Map<String, Object> business = BeanUtil.beanToMap(order);
         String oddNumber = iCodeRuleService.getNextCodeByClassName(getClass().getName(), business);
         order.setOddNumber(oddNumber);
-        order.setCount(CommonNumConstants.NUM_ZERO);// 商品总数
+        order.setCount(CommonNumConstants.NUM_ZERO.toString());// 商品总数
         order.setCommentState(ShopOrderCommentState.UNFINISHED.getKey());// 评价状态
         order.setTotalPrice(CommonNumConstants.NUM_ZERO.toString());
         order.setDiscountPrice(CommonNumConstants.NUM_ZERO.toString());
@@ -193,12 +193,17 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
             // 获取子单单价  元 -> 分
             String salePrice = CalculationUtil.multiply(normsPriceMap.get(orderItem.getNormsId()), "100");
             // 设置子单总价
-            String price = CalculationUtil.multiply(String.valueOf(orderItem.getCount()), salePrice, CommonNumConstants.NUM_SIX);
+            String itemCount = StrUtil.blankToDefault(String.valueOf(orderItem.getCount()), CommonNumConstants.NUM_ZERO.toString());
+            orderItem.setCount(itemCount);
+            String price = CalculationUtil.multiply(itemCount, salePrice, CommonNumConstants.NUM_SIX);
             orderItem.setPrice(price);
             orderItem.setPayPrice(price);
             orderItem.setDiscountPrice("0");
             // 总单商品数量、子单状态、总单原价、总单应付金额
-            order.setCount(order.getCount() + orderItem.getCount());
+            order.setCount(CalculationUtil.add(
+                StrUtil.blankToDefault(order.getCount(), CommonNumConstants.NUM_ZERO.toString()),
+                itemCount,
+                CommonNumConstants.NUM_TWO));
             orderItem.setCommentState(ShopOrderCommentState.UNFINISHED.getKey());
             order.setTotalPrice(CalculationUtil.add(order.getTotalPrice(), orderItem.getPrice(), CommonNumConstants.NUM_SIX));
             order.setPayPrice(CalculationUtil.add(order.getPayPrice(), orderItem.getPayPrice(), CommonNumConstants.NUM_SIX));

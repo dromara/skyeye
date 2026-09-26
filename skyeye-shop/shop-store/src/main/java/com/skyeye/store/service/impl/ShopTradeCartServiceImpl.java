@@ -63,8 +63,10 @@ public class ShopTradeCartServiceImpl extends SkyeyeBusinessServiceImpl<ShopTrad
     @Override
     public void validatorEntity(ShopTradeCart shopTradeCart) {
         super.validatorEntity(shopTradeCart);
-        if (shopTradeCart.getCount() <= CommonNumConstants.NUM_ZERO) {
-            throw new CustomException("商品数量不能小于1");
+        String count = StrUtil.blankToDefault(shopTradeCart.getCount(), CommonNumConstants.NUM_ZERO.toString());
+        shopTradeCart.setCount(count);
+        if (CalculationUtil.compareTo(count, CommonNumConstants.NUM_ZERO.toString(), CommonNumConstants.NUM_TWO, java.math.RoundingMode.HALF_UP) <= 0) {
+            throw new CustomException("商品数量必须大于0");
         }
     }
 
@@ -134,7 +136,9 @@ public class ShopTradeCartServiceImpl extends SkyeyeBusinessServiceImpl<ShopTrad
         ShopTradeCart one = getOne(queryWrapper);
         if (ObjectUtil.isNotEmpty(one)) {
             shopTradeCart.setId(one.getId());
-            shopTradeCart.setCount(one.getCount() + shopTradeCart.getCount());
+            String oldCount = StrUtil.blankToDefault(one.getCount(), CommonNumConstants.NUM_ZERO.toString());
+            String addCount = StrUtil.blankToDefault(shopTradeCart.getCount(), CommonNumConstants.NUM_ZERO.toString());
+            shopTradeCart.setCount(CalculationUtil.add(oldCount, addCount, CommonNumConstants.NUM_TWO));
             return super.updateEntity(shopTradeCart, userId);
         }
         return super.createEntity(shopTradeCart, userId);
@@ -182,19 +186,31 @@ public class ShopTradeCartServiceImpl extends SkyeyeBusinessServiceImpl<ShopTrad
     public void changeCount(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String id = params.get("id").toString();
-        Integer sign = Integer.parseInt(params.get("sign").toString());
         UpdateWrapper<ShopTradeCart> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, id);
         ShopTradeCart one = getOne(updateWrapper);
-        Integer count = one.getCount();
-        if (Objects.equals(sign, CommonNumConstants.NUM_ONE)) {
-            updateWrapper.set(MybatisPlusUtil.toColumns(ShopTradeCart::getCount), count + CommonNumConstants.NUM_ONE);
-        } else {
-            if (count <= CommonNumConstants.NUM_ONE) {
-                throw new CustomException("商品数量不能小于1");
-            }
-            updateWrapper.set(MybatisPlusUtil.toColumns(ShopTradeCart::getCount), count - CommonNumConstants.NUM_ONE);
+        if (ObjectUtil.isEmpty(one)) {
+            throw new CustomException("购物车商品不存在");
         }
+        String current = StrUtil.blankToDefault(one.getCount(), CommonNumConstants.NUM_ZERO.toString());
+        String next;
+        Object countObj = params.get("count");
+        if (countObj != null && StrUtil.isNotBlank(countObj.toString())) {
+            next = countObj.toString().trim();
+        } else if (params.get("sign") != null && StrUtil.isNotBlank(params.get("sign").toString())) {
+            Integer sign = Integer.parseInt(params.get("sign").toString());
+            if (Objects.equals(sign, CommonNumConstants.NUM_ONE)) {
+                next = CalculationUtil.add(current, CommonNumConstants.NUM_ONE.toString(), CommonNumConstants.NUM_TWO);
+            } else {
+                next = CalculationUtil.subtract(current, CommonNumConstants.NUM_ONE.toString(), CommonNumConstants.NUM_TWO);
+            }
+        } else {
+            throw new CustomException("请传入数量或增减标志");
+        }
+        if (CalculationUtil.compareTo(next, CommonNumConstants.NUM_ZERO.toString(), CommonNumConstants.NUM_TWO, java.math.RoundingMode.HALF_UP) <= 0) {
+            throw new CustomException("商品数量必须大于0");
+        }
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopTradeCart::getCount), next);
         update(updateWrapper);
     }
 
@@ -219,8 +235,15 @@ public class ShopTradeCartServiceImpl extends SkyeyeBusinessServiceImpl<ShopTrad
         final String[] allPrice = {"0"};
         if (CollectionUtil.isNotEmpty(beans)) {
             // 遇到规格id相同的商品，就累加数量
-            Map<String, Integer> countMap = beans.stream().collect(Collectors
-                .toMap(ShopTradeCart::getNormsId, ShopTradeCart::getCount, Integer::sum));
+            Map<String, String> countMap = new HashMap<>();
+            for (ShopTradeCart bean : beans) {
+                String normsId = bean.getNormsId();
+                String c = StrUtil.blankToDefault(bean.getCount(), CommonNumConstants.NUM_ZERO.toString());
+                countMap.put(normsId, CalculationUtil.add(
+                    countMap.getOrDefault(normsId, CommonNumConstants.NUM_ZERO.toString()),
+                    c,
+                    CommonNumConstants.NUM_TWO));
+            }
             // 收集规格id列表，获得规格信息
             List<String> normsIdList = beans.stream().map(ShopTradeCart::getNormsId).collect(Collectors.toList());
             List<Map<String, Object>> normsListMap = iShopMaterialNormsService
@@ -228,7 +251,7 @@ public class ShopTradeCartServiceImpl extends SkyeyeBusinessServiceImpl<ShopTrad
             // 计算价格
             normsListMap.forEach(map -> {
                 String id = map.get("normsId").toString();
-                String count = StrUtil.toString(countMap.getOrDefault(id, CommonNumConstants.NUM_ZERO));
+                String count = countMap.getOrDefault(id, CommonNumConstants.NUM_ZERO.toString());
                 String salePrice = map.get("salePrice").toString();
                 String flagPrice = CalculationUtil.multiply(count, salePrice, CommonNumConstants.NUM_TWO);
                 allPrice[0] = CalculationUtil.add(allPrice[0], flagPrice);

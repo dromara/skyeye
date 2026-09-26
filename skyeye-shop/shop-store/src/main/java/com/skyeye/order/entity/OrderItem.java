@@ -82,15 +82,15 @@ public class OrderItem extends OperatorUserInfo {
 
     @TableField(exist = false)
     @ApiModelProperty(value = "可发货数量")
-    private Integer canDeliverNum;
+    private String canDeliverNum;
 
     @TableField("count")
     @ApiModelProperty(value = "购买数量", required = "required")
-    private Integer count;
+    private String count;
 
     @TableField("deliver_num")
     @ApiModelProperty(value = "已经发货的数量", defaultValue = "0")
-    private Integer deliverNum;
+    private String deliverNum;
 
     @TableField("state")
     @Property(value = "发货状态", enumClass = ShopOrderItemOtherState.class)
@@ -98,7 +98,7 @@ public class OrderItem extends OperatorUserInfo {
 
     @TableField("sign_num")
     @ApiModelProperty(value = "已经签收的数量", defaultValue = "0")
-    private Integer signNum;
+    private String signNum;
 
     @TableField("sign_state")
     @Property(value = "收货状态", enumClass = ItemSignState.class)

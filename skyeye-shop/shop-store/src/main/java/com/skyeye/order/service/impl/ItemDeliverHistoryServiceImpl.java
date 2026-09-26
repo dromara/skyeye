@@ -134,7 +134,7 @@ public class ItemDeliverHistoryServiceImpl extends SkyeyeBusinessServiceImpl<Ite
      * @param num                      发货数量
      */
     @Override
-    public void insertEntity(OrderItem orderItem, String deliverNumber, String deliveryTemplateChargeId, String deliveryCompanyId, Integer num) {
+    public void insertEntity(OrderItem orderItem, String deliverNumber, String deliveryTemplateChargeId, String deliveryCompanyId, String num) {
         ShopDeliveryTemplateCharge shopDeliveryTemplateCharge = shopDeliveryTemplateChargeService.selectById(deliveryTemplateChargeId);
         if (StrUtil.isEmpty(shopDeliveryTemplateCharge.getId())) {
             throw new CustomException("快递运费模板计费配置信息不存在: " + deliveryTemplateChargeId);
@@ -145,10 +145,13 @@ public class ItemDeliverHistoryServiceImpl extends SkyeyeBusinessServiceImpl<Ite
         itemDeliverHistory.setDeliverCompanyId(deliveryCompanyId);
         itemDeliverHistory.setDeliverTemplateChargeId(deliveryTemplateChargeId);
         itemDeliverHistory.setDeliverNumber(deliverNumber);
-        itemDeliverHistory.setNum(String.valueOf(num));
+        itemDeliverHistory.setNum(num);
         itemDeliverHistory.setPrice(shopDeliveryTemplateCharge.getStartPrice());
-        if (num > CommonNumConstants.NUM_ONE) {
-            String extraPrice = CalculationUtil.multiply(shopDeliveryTemplateCharge.getExtraPrice(), String.valueOf(num - shopDeliveryTemplateCharge.getStartCount()), CommonNumConstants.NUM_SIX);
+        String startCount = String.valueOf(shopDeliveryTemplateCharge.getStartCount() == null
+            ? CommonNumConstants.NUM_ZERO : shopDeliveryTemplateCharge.getStartCount());
+        if (CalculationUtil.compareTo(num, startCount, CommonNumConstants.NUM_TWO, java.math.RoundingMode.HALF_UP) > 0) {
+            String extraCount = CalculationUtil.subtract(num, startCount, CommonNumConstants.NUM_TWO);
+            String extraPrice = CalculationUtil.multiply(shopDeliveryTemplateCharge.getExtraPrice(), extraCount, CommonNumConstants.NUM_SIX);
             itemDeliverHistory.setPrice(CalculationUtil.add(shopDeliveryTemplateCharge.getStartPrice(), extraPrice, CommonNumConstants.NUM_SIX));
         }
         super.createEntity(itemDeliverHistory, InputObject.getLogParamsStatic().get("id").toString());

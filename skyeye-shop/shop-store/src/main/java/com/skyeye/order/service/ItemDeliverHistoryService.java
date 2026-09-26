@@ -19,7 +19,7 @@ import java.util.List;
 public interface ItemDeliverHistoryService extends SkyeyeBusinessService<ItemDeliverHistory> {
     void queryMyItemDeliverHistoryPageList(InputObject inputObject, OutputObject outputObject);
 
-    void insertEntity(OrderItem orderItem, String deliverNumber, String deliveryTemplateChargeId, String deliveryCompanyId, Integer num);
+    void insertEntity(OrderItem orderItem, String deliverNumber, String deliveryTemplateChargeId, String deliveryCompanyId, String num);
 
     List<ItemDeliverHistory> queryListByItemId(String itemId);
 

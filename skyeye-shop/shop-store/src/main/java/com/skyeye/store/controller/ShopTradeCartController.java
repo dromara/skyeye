@@ -58,7 +58,8 @@ public class ShopTradeCartController {
     @ApiOperation(id = "changeCount", value = "更新购物车商品数量", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),
-        @ApiImplicitParam(id = "sign", name = "sign", value = "修改标志0为减少，1为增加", required = "required")})
+        @ApiImplicitParam(id = "sign", name = "sign", value = "修改标志0为减少，1为增加（与count二选一）"),
+        @ApiImplicitParam(id = "count", name = "count", value = "目标数量，支持小数（优先于sign）")})
     @RequestMapping("/post/ShopTradeCartController/changeCount")
     public void changeCount(InputObject inputObject, OutputObject outputObject) {
         shopTradeCartService.changeCount(inputObject, outputObject);
