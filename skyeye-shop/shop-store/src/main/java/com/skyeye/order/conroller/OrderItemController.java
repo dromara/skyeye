@@ -19,8 +19,7 @@ public class OrderItemController {
     private OrderItemService orderItemService;
 
     @ApiOperation(id = "queryOrderItemByStoreId", value = "根据门店Id分页查询订单子单信息", method = "POST", allUse = "2")
-    @ApiImplicitParams(classBean = CommonPageInfo.class, value = {
-        @ApiImplicitParam(id = "objectId", name = "objectId", value = "门店id")})
+    @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/OrderItemController/queryOrderItemByStoreId")
     public void queryOrderByStoreId(InputObject inputObject, OutputObject outputObject) {
         orderItemService.queryPageList(inputObject, outputObject);

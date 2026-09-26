@@ -1141,97 +1141,6 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         return store;
     }
 
-    private List<Integer> resolveOrderItemStateList(String type) {
-        switch (StrUtil.isEmpty(type) ? CommonNumConstants.NUM_ZERO.toString() : type) {
-            case "1":
-                return Arrays.asList(ShopOrderItemOtherState.WAIT_PAY.getKey());
-            case "2":
-                // 待发货含「部分发货」，避免拆批发货后从待发货列表消失
-                return Arrays.asList(ShopOrderItemOtherState.WAIT_DELIVER.getKey(),
-                    ShopOrderItemOtherState.PART_DELIVERED.getKey());
-            case "3":
-                return Arrays.asList(ShopOrderItemOtherState.ALL_DELIVERED.getKey(), ShopOrderItemOtherState.TRANSPORTING.getKey());
-            case "4":
-                return Arrays.asList(ShopOrderItemOtherState.UNEVALUATE.getKey(), ShopOrderItemOtherState.EVALUATED.getKey(),
-                    ShopOrderItemOtherState.PARTIALEVALUATION.getKey(), ShopOrderItemOtherState.SIGN.getKey(),
-                    ShopOrderItemOtherState.COMPLETED.getKey(), ShopOrderItemOtherState.PARTIALLYDONE.getKey());
-            case "5":
-                return Arrays.asList(ShopOrderItemOtherState.CANCELED.getKey());
-            case "6":
-                return Arrays.asList(ShopOrderItemOtherState.REFUNDING.getKey(), ShopOrderItemOtherState.SALESRETURNING.getKey(),
-                    ShopOrderItemOtherState.EXCHANGEING.getKey());
-            case "7":
-                return Arrays.asList(ShopOrderItemOtherState.REFUND.getKey(), ShopOrderItemOtherState.SALESRETURNED.getKey(),
-                    ShopOrderItemOtherState.EXCHANGED.getKey());
-            default:
-                return new ArrayList<>();
-        }
-    }
-
-    @Override
-    public void queryPersonalStoreOrderPageList(InputObject inputObject, OutputObject outputObject) {
-        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
-        assertPersonalStore(commonPageInfo.getObjectId());
-        List<Integer> stateList = resolveOrderItemStateList(commonPageInfo.getType());
-        Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
-        QueryWrapper<OrderItem> wrapper = new QueryWrapper<>();
-        wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getStoreId), commonPageInfo.getObjectId());
-        if (CollectionUtil.isNotEmpty(stateList)) {
-            wrapper.in(MybatisPlusUtil.toColumns(OrderItem::getState), stateList);
-        }
-        if (StrUtil.isNotBlank(commonPageInfo.getKeyword())) {
-            wrapper.like(MybatisPlusUtil.toColumns(OrderItem::getOddNumber), commonPageInfo.getKeyword());
-        }
-        wrapper.orderByDesc(MybatisPlusUtil.toColumns(OrderItem::getCreateTime));
-        List<OrderItem> orderItemList = orderItemService.list(wrapper);
-        if (CollectionUtil.isEmpty(orderItemList)) {
-            return;
-        }
-        orderItemList = orderItemService.setDateForItemLIst(orderItemList);
-        outputObject.setBeans(orderItemList);
-        outputObject.settotal(pages.getTotal());
-    }
-
-    @Override
-    public void queryPersonalStoreDropshipOrderPageList(InputObject inputObject, OutputObject outputObject) {
-        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
-        // 供货方可能是个人店或企业店，只校验门店主
-        assertStoreOwner(commonPageInfo.getObjectId());
-        List<Integer> stateList = resolveOrderItemStateList(commonPageInfo.getType());
-        Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
-        QueryWrapper<OrderItem> wrapper = new QueryWrapper<>();
-        wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getSourceStoreId), commonPageInfo.getObjectId());
-        if (CollectionUtil.isNotEmpty(stateList)) {
-            wrapper.in(MybatisPlusUtil.toColumns(OrderItem::getState), stateList);
-        }
-        if (StrUtil.isNotBlank(commonPageInfo.getKeyword())) {
-            wrapper.like(MybatisPlusUtil.toColumns(OrderItem::getOddNumber), commonPageInfo.getKeyword());
-        }
-        wrapper.orderByDesc(MybatisPlusUtil.toColumns(OrderItem::getCreateTime));
-        List<OrderItem> orderItemList = orderItemService.list(wrapper);
-        if (CollectionUtil.isEmpty(orderItemList)) {
-            return;
-        }
-        orderItemList = orderItemService.setDateForItemLIst(orderItemList);
-        outputObject.setBeans(orderItemList);
-        outputObject.settotal(pages.getTotal());
-    }
-
-    private ShopStore assertStoreOwner(String storeId) {
-        if (StrUtil.isEmpty(storeId)) {
-            throw new CustomException("请选择门店");
-        }
-        ShopStore store = shopStoreService.selectById(storeId);
-        if (store == null || StrUtil.isEmpty(store.getId())) {
-            throw new CustomException("门店不存在");
-        }
-        String memberId = InputObject.getLogParamsStatic().get("id").toString();
-        if (!memberId.equals(store.getCreateId())) {
-            throw new CustomException("无权操作该门店");
-        }
-        return store;
-    }
-
     @Override
     public void queryMyOrderStat(InputObject inputObject, OutputObject outputObject) {
         String userId = InputObject.getLogParamsStatic().get(CommonConstants.ID).toString();
@@ -1283,16 +1192,6 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     }
 
     @Override
-    public void queryPersonalStoreOrderStat(InputObject inputObject, OutputObject outputObject) {
-        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
-        String storeId = tableSelectInfo.getObjectId();
-        assertPersonalStore(storeId);
-        Map<String, Object> bean = buildStoreOrderStatBean(storeId, false);
-        outputObject.setBean(bean);
-        outputObject.settotal(CommonNumConstants.NUM_ONE);
-    }
-
-    @Override
     public void queryStoreOrderStat(InputObject inputObject, OutputObject outputObject) {
         TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
         String storeId = tableSelectInfo.getObjectId();
@@ -1303,9 +1202,19 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         if (store == null || StrUtil.isEmpty(store.getId())) {
             throw new CustomException("门店不存在");
         }
-        Map<String, Object> bean = buildStoreOrderStatBean(storeId, false);
+        // dropship=1：按供货门店 sourceStoreId；否则按售出门店 storeId（走 customParamsMap）
+        boolean dropship = isDropshipQuery(tableSelectInfo);
+        Map<String, Object> bean = buildStoreOrderStatBean(storeId, dropship);
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    private boolean isDropshipQuery(TableSelectInfo tableSelectInfo) {
+        String flag = tableSelectInfo.getCustomParamsMapStr("dropship");
+        if (StrUtil.isBlank(flag)) {
+            return false;
+        }
+        return CommonNumConstants.NUM_ONE.toString().equals(flag) || "true".equalsIgnoreCase(flag);
     }
 
     @Override
@@ -1454,7 +1363,7 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     }
 
     private Map<String, Map<String, Object>> queryDailyAmountMap(String storeId, String startDateTime, String endDateTime,
-                                                                List<Integer> states, boolean inStates) {
+                                                                 List<Integer> states, boolean inStates) {
         String createTimeCol = MybatisPlusUtil.toColumns(OrderItem::getCreateTime);
         String storeCol = MybatisPlusUtil.toColumns(OrderItem::getStoreId);
         String stateCol = MybatisPlusUtil.toColumns(OrderItem::getState);
@@ -1509,17 +1418,6 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         } catch (Exception ex) {
             return 0L;
         }
-    }
-
-    @Override
-    public void queryPersonalStoreDropshipOrderStat(InputObject inputObject, OutputObject outputObject) {
-        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
-        String storeId = tableSelectInfo.getObjectId();
-        // 供货方可能是个人店或企业店，只校验门店主
-        assertStoreOwner(storeId);
-        Map<String, Object> bean = buildStoreOrderStatBean(storeId, true);
-        outputObject.setBean(bean);
-        outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
     /**

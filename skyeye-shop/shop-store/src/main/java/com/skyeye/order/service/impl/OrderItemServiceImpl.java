@@ -227,7 +227,58 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
     public void getQueryWrapper(InputObject inputObject, QueryWrapper<OrderItem> wrapper) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
         if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
-            wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getStoreId), commonPageInfo.getObjectId());
+            // dropship=1：按供货门店 sourceStoreId；否则按售出门店 storeId
+            if (isDropshipQuery(commonPageInfo)) {
+                wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getSourceStoreId), commonPageInfo.getObjectId());
+            } else {
+                wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getStoreId), commonPageInfo.getObjectId());
+            }
+        }
+        // 与商城/商家工作台订单列表 type 口径一致, 状态筛选：0全部；1待付款；2待发货；3待收货；4已完成；5已取消；6售后中；7售后完成
+        List<Integer> stateList = resolveOrderItemStateList(commonPageInfo.getType());
+        if (CollectionUtil.isNotEmpty(stateList)) {
+            wrapper.in(MybatisPlusUtil.toColumns(OrderItem::getState), stateList);
+        }
+        if (StrUtil.isNotBlank(commonPageInfo.getKeyword())) {
+            wrapper.like(MybatisPlusUtil.toColumns(OrderItem::getOddNumber), commonPageInfo.getKeyword());
+        }
+    }
+
+    private boolean isDropshipQuery(CommonPageInfo commonPageInfo) {
+        String flag = commonPageInfo.getCustomParamsMapStr("dropship");
+        if (StrUtil.isBlank(flag)) {
+            return false;
+        }
+        return CommonNumConstants.NUM_ONE.toString().equals(flag) || "true".equalsIgnoreCase(flag);
+    }
+
+    /**
+     * 订单子单状态筛选：0全部；1待付款；2待发货；3待收货；4已完成；5已取消；6售后中；7售后完成
+     */
+    private List<Integer> resolveOrderItemStateList(String type) {
+        switch (StrUtil.isEmpty(type) ? CommonNumConstants.NUM_ZERO.toString() : type) {
+            case "1":
+                return Arrays.asList(ShopOrderItemOtherState.WAIT_PAY.getKey());
+            case "2":
+                return Arrays.asList(ShopOrderItemOtherState.WAIT_DELIVER.getKey(),
+                    ShopOrderItemOtherState.PART_DELIVERED.getKey());
+            case "3":
+                return Arrays.asList(ShopOrderItemOtherState.ALL_DELIVERED.getKey(),
+                    ShopOrderItemOtherState.TRANSPORTING.getKey());
+            case "4":
+                return Arrays.asList(ShopOrderItemOtherState.UNEVALUATE.getKey(), ShopOrderItemOtherState.EVALUATED.getKey(),
+                    ShopOrderItemOtherState.PARTIALEVALUATION.getKey(), ShopOrderItemOtherState.SIGN.getKey(),
+                    ShopOrderItemOtherState.COMPLETED.getKey(), ShopOrderItemOtherState.PARTIALLYDONE.getKey());
+            case "5":
+                return Arrays.asList(ShopOrderItemOtherState.CANCELED.getKey());
+            case "6":
+                return Arrays.asList(ShopOrderItemOtherState.REFUNDING.getKey(), ShopOrderItemOtherState.SALESRETURNING.getKey(),
+                    ShopOrderItemOtherState.EXCHANGEING.getKey());
+            case "7":
+                return Arrays.asList(ShopOrderItemOtherState.REFUND.getKey(), ShopOrderItemOtherState.SALESRETURNED.getKey(),
+                    ShopOrderItemOtherState.EXCHANGED.getKey());
+            default:
+                return new ArrayList<>();
         }
     }
 

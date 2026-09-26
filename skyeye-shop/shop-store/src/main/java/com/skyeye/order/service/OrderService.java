@@ -38,17 +38,8 @@ public interface OrderService extends SkyeyeBusinessService<Order> {
 
     void queryMyOrderStat(InputObject inputObject, OutputObject outputObject);
 
-    void queryPersonalStoreOrderPageList(InputObject inputObject, OutputObject outputObject);
-
     /**
-     * 供货方代发订单分页（当前门店作为 sourceStoreId）
-     */
-    void queryPersonalStoreDropshipOrderPageList(InputObject inputObject, OutputObject outputObject);
-
-    void queryPersonalStoreOrderStat(InputObject inputObject, OutputObject outputObject);
-
-    /**
-     * 管理端门店订单经营统计（不限个人店）
+     * 门店订单经营统计（本店/代发由入参 dropship 区分）
      */
     void queryStoreOrderStat(InputObject inputObject, OutputObject outputObject);
 
@@ -61,11 +52,6 @@ public interface OrderService extends SkyeyeBusinessService<Order> {
      * 个人门店历史经营统计（区间汇总 + 按日趋势）
      */
     void queryPersonalStoreOrderHistoryStat(InputObject inputObject, OutputObject outputObject);
-
-    /**
-     * 供货方代发订单待办统计（当前门店作为 sourceStoreId）
-     */
-    void queryPersonalStoreDropshipOrderStat(InputObject inputObject, OutputObject outputObject);
 
     void generatePayOrderRrCode(InputObject inputObject, OutputObject outputObject);
 
