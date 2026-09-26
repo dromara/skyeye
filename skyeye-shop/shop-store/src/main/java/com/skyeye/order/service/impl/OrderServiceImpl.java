@@ -526,6 +526,24 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         if (CollectionUtil.isNotEmpty(stateList)) {
             wrapper.in(MybatisPlusUtil.toColumns(OrderItem::getState), stateList);
         }
+        if (StrUtil.isNotBlank(commonPageInfo.getKeyword())) {
+            String keyword = commonPageInfo.getKeyword().trim();
+            wrapper.like(MybatisPlusUtil.toColumns(OrderItem::getOddNumber), keyword);
+        }
+        if (StrUtil.isNotBlank(commonPageInfo.getStartTime())) {
+            String start = commonPageInfo.getStartTime().trim();
+            if (start.length() <= 10) {
+                start = start + " 00:00:00";
+            }
+            wrapper.ge(MybatisPlusUtil.toColumns(OrderItem::getCreateTime), start);
+        }
+        if (StrUtil.isNotBlank(commonPageInfo.getEndTime())) {
+            String end = commonPageInfo.getEndTime().trim();
+            if (end.length() <= 10) {
+                end = end + " 23:59:59";
+            }
+            wrapper.le(MybatisPlusUtil.toColumns(OrderItem::getCreateTime), end);
+        }
         wrapper.orderByDesc(MybatisPlusUtil.toColumns(OrderItem::getCreateTime));
         List<OrderItem> orderItemList = orderItemService.list(wrapper);
         if (CollectionUtil.isEmpty(orderItemList)) {
