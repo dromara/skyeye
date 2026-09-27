@@ -1098,23 +1098,35 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     public void changeOrderAddress(InputObject inputObject, OutputObject outputObject) {
         ShopAddressHistory shopAddressHistory = inputObject.getParams(ShopAddressHistory.class);
         Order order = super.selectById(shopAddressHistory.getOrderId());
-        if (ObjectUtil.isEmpty(order)) {
+        if (ObjectUtil.isEmpty(order) || StrUtil.isEmpty(order.getId())) {
             throw new CustomException("订单不存在");
+        }
+        String userId = inputObject.getLogParams().get(CommonConstants.ID).toString();
+        if (!StrUtil.equals(userId, order.getCreateId())) {
+            throw new CustomException("无权修改该订单收货地址");
         }
         List<Integer> stateList = Arrays.asList(ShopOrderState.UNPAID.getKey(), ShopOrderState.FAIRPAID.getKey(),
             ShopOrderState.PAY_SUCCESS.getKey(), ShopOrderState.PARTIAL_PAID.getKey());
         if (!stateList.contains(order.getState())) {
             throw new CustomException("订单的当前状态不允许修改收货地址");
         }
+        // 任一子单已发货则不可改（地址快照已用于履约）
+        List<OrderItem> itemList = orderItemService.queryOrderItemByParentId(order.getId());
+        boolean anyDelivered = CollectionUtil.isNotEmpty(itemList) && itemList.stream()
+            .anyMatch(item -> Double.parseDouble(StrUtil.blankToDefault(item.getDeliverNum(), "0")) > 0);
+        if (anyDelivered) {
+            throw new CustomException("订单已发货，无法修改收货地址");
+        }
         shopAddressHistory.setOrderId(order.getId());
         shopAddressHistory.setId(null);
-        shopAddressHistoryService.createEntity(shopAddressHistory, inputObject.getLogParams().get("id").toString());
+        shopAddressHistoryService.createEntity(shopAddressHistory, userId);
         order.setAddressId(shopAddressHistory.getId());
         order.setAddressFromType(AddressFromTypeEnums.ADDRESS_HISTORY_TABLE.getKey());
         order.setReceiverName(shopAddressHistory.getName());
         order.setReceiverMobile(shopAddressHistory.getMobile());
-        super.updateEntity(order, inputObject.getLogParams().get("id").toString());
-        outputObject.setBean(order);
+        super.updateEntity(order, userId);
+        // 返回带 addressMation 的最新订单
+        outputObject.setBean(selectById(order.getId()));
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
@@ -1222,15 +1234,23 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         if (store == null || StrUtil.isEmpty(store.getId())) {
             throw new CustomException("门店不存在");
         }
-        // dropship=1：按供货门店 sourceStoreId；否则按售出门店 storeId（走 customParamsMap）
+        // dropship=1：按供货门店 sourceStoreId；fulfill=1：本店需履约；否则按售出门店 storeId
         boolean dropship = isDropshipQuery(tableSelectInfo);
-        Map<String, Object> bean = buildStoreOrderStatBean(storeId, dropship);
+        boolean fulfill = isFulfillQuery(tableSelectInfo);
+        Map<String, Object> bean = buildStoreOrderStatBean(storeId, dropship, fulfill);
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
     private boolean isDropshipQuery(TableSelectInfo tableSelectInfo) {
-        String flag = tableSelectInfo.getCustomParamsMapStr("dropship");
+        return isFlagOn(tableSelectInfo.getCustomParamsMapStr("dropship"));
+    }
+
+    private boolean isFulfillQuery(TableSelectInfo tableSelectInfo) {
+        return isFlagOn(tableSelectInfo.getCustomParamsMapStr("fulfill"));
+    }
+
+    private boolean isFlagOn(String flag) {
         if (StrUtil.isBlank(flag)) {
             return false;
         }
@@ -1441,9 +1461,10 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     }
 
     /**
-     * @param dropship true：按 sourceStoreId（代发）；false：按 storeId（本店卖出）
+     * @param dropship true：按 sourceStoreId（代发）
+     * @param fulfill  true：本店需履约（自营 + 供货代发）
      */
-    private Map<String, Object> buildStoreOrderStatBean(String storeId, boolean dropship) {
+    private Map<String, Object> buildStoreOrderStatBean(String storeId, boolean dropship, boolean fulfill) {
         List<Integer> stateList = Arrays.asList(
             ShopOrderItemOtherState.WAIT_PAY.getKey(),
             ShopOrderItemOtherState.WAIT_DELIVER.getKey(),
@@ -1453,9 +1474,14 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
             ShopOrderItemOtherState.REFUNDING.getKey(),
             ShopOrderItemOtherState.SALESRETURNING.getKey(),
             ShopOrderItemOtherState.EXCHANGEING.getKey());
-        Map<Integer, Long> countMap = dropship
-            ? countDropshipOrderByState(storeId, stateList)
-            : countStoreOrderByState(storeId, stateList);
+        Map<Integer, Long> countMap;
+        if (dropship) {
+            countMap = countDropshipOrderByState(storeId, stateList);
+        } else if (fulfill) {
+            countMap = countFulfillOrderByState(storeId, stateList);
+        } else {
+            countMap = countStoreOrderByState(storeId, stateList);
+        }
         Map<String, Object> bean = new HashMap<>();
         bean.put("waitPay", sumStateCount(countMap, ShopOrderItemOtherState.WAIT_PAY.getKey()));
         bean.put("waitDeliver", sumStateCount(countMap,
@@ -1516,6 +1542,28 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         QueryWrapper<OrderItem> wrapper = new QueryWrapper<>();
         wrapper.select(stateCol, "COUNT(1) AS cnt");
         wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getSourceStoreId), storeId);
+        wrapper.in(stateCol, stateList);
+        wrapper.groupBy(stateCol);
+        return toStateCountMap(orderItemDao.selectMaps(wrapper));
+    }
+
+    /**
+     * 本店履约：自营卖出（无供货方）+ 作为供货方的代发单
+     */
+    private Map<Integer, Long> countFulfillOrderByState(String storeId, List<Integer> stateList) {
+        if (CollectionUtil.isEmpty(stateList)) {
+            return Collections.emptyMap();
+        }
+        String stateCol = MybatisPlusUtil.toColumns(OrderItem::getState);
+        String storeCol = MybatisPlusUtil.toColumns(OrderItem::getStoreId);
+        String sourceCol = MybatisPlusUtil.toColumns(OrderItem::getSourceStoreId);
+        QueryWrapper<OrderItem> wrapper = new QueryWrapper<>();
+        wrapper.select(stateCol, "COUNT(1) AS cnt");
+        wrapper.and(w -> w
+            .nested(n -> n.eq(storeCol, storeId)
+                .and(n2 -> n2.isNull(sourceCol).or().eq(sourceCol, StrUtil.EMPTY)))
+            .or()
+            .eq(sourceCol, storeId));
         wrapper.in(stateCol, stateList);
         wrapper.groupBy(stateCol);
         return toStateCountMap(orderItemDao.selectMaps(wrapper));

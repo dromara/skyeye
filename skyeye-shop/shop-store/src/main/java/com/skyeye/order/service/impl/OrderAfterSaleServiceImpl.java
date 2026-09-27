@@ -180,6 +180,9 @@ public class OrderAfterSaleServiceImpl extends SkyeyeBusinessServiceImpl<OrderAf
         wrapper.eq(MybatisPlusUtil.toColumns(OrderAfterSale::getOrderItemId), orderItemId);
         wrapper.orderByDesc(MybatisPlusUtil.toColumns(OrderAfterSale::getCreateTime));
         List<OrderAfterSale> list = list(wrapper);
+        if (CollectionUtil.isNotEmpty(list)) {
+            memberService.setDataMation(list, OrderAfterSale::getCreateId);
+        }
         outputObject.setBeans(list);
         outputObject.settotal(list.size());
         if (CollectionUtil.isNotEmpty(list)) {

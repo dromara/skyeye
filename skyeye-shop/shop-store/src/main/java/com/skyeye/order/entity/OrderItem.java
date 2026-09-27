@@ -77,6 +77,10 @@ public class OrderItem extends OperatorUserInfo {
     private String sourceStoreId;
 
     @TableField(exist = false)
+    @Property(value = "供货方门店信息")
+    private Map<String, Object> sourceStoreMation;
+
+    @TableField(exist = false)
     @Property(value = "商品与门店的关系信息")
     private Map<String, Object> shopMaterial;
 

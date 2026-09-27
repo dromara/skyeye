@@ -275,9 +275,14 @@ public class OrderCommentServiceImpl extends SkyeyeBusinessServiceImpl<OrderComm
     public void queryOrderCommentPageListPC(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
         String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
+        // 商城端（ShopPC）固定 tenantId=shop，与 erp_material / 子单真实租户不一致；
+        // 按门店查时用 storeId 隔离即可，勿再按 material.tenant_id 内连接，否则商家工作台永远查不到评价。
+        boolean storeScoped = StrUtil.equals(commonPageInfo.getType(), "Store");
+        boolean applyTenantMaterialFilter = StrUtil.isNotEmpty(tenantId) && !storeScoped
+            && !StrUtil.equalsIgnoreCase(tenantId, "shop");
         Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
         MPJLambdaWrapper<OrderComment> mpjLambdaWrapper = JoinWrappers.lambda("oc", OrderComment.class);
-        if (StrUtil.isNotEmpty(tenantId)) {
+        if (applyTenantMaterialFilter) {
             mpjLambdaWrapper.innerJoin("erp_material material ON oc.material_id = material.id")
                 .eq("material.tenant_id", tenantId);
         }
@@ -285,7 +290,7 @@ public class OrderCommentServiceImpl extends SkyeyeBusinessServiceImpl<OrderComm
             // keyword作为订单编号的查询条件
             mpjLambdaWrapper.innerJoin(OrderItem.class, "oi", OrderItem::getId, OrderComment::getOrderItemId)
                 .like(MybatisPlusUtil.toColumns(OrderItem::getOddNumber), commonPageInfo.getKeyword());
-            if (StrUtil.isNotEmpty(tenantId)) {
+            if (applyTenantMaterialFilter) {
                 mpjLambdaWrapper.eq("oi." + CommonConstants.TENANT_ID_FIELD, tenantId);
             }
         }
@@ -295,7 +300,7 @@ public class OrderCommentServiceImpl extends SkyeyeBusinessServiceImpl<OrderComm
             wrap.eq(type, OrderCommentType.CUSTOMERFiRST.getKey())
                 .or().eq(type, OrderCommentType.CUSTOMERLATER.getKey());
         });
-        if (StrUtil.equals(commonPageInfo.getType(), "Store")) {
+        if (storeScoped) {
             // 门店下的订单
             mpjLambdaWrapper.eq(MybatisPlusUtil.toColumns(OrderComment::getStoreId), commonPageInfo.getHolderId());
         } else if (StrUtil.equals(commonPageInfo.getType(), "All")) {

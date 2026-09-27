@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.skyeye.annotation.service.SkyeyeService;
+import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
@@ -42,9 +43,12 @@ import com.skyeye.order.service.OrderItemService;
 import com.skyeye.order.service.OrderService;
 import com.skyeye.rest.shopmaterialnorms.sevice.IShopMaterialNormsService;
 import com.skyeye.rest.shopstock.service.IShopStockService;
+import com.skyeye.service.MemberService;
 import com.skyeye.store.classenum.StoreNature;
 import com.skyeye.store.entity.ShopStore;
+import com.skyeye.store.entity.ShopStoreStaff;
 import com.skyeye.store.service.ShopStoreService;
+import com.skyeye.store.service.ShopStoreStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,6 +75,9 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
     private ShopStoreService shopStoreService;
 
     @Autowired
+    private ShopStoreStaffService shopStoreStaffService;
+
+    @Autowired
     private OrderCommentService orderCommentService;
 
     @Autowired
@@ -84,6 +91,9 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
 
     @Autowired
     private IShopStockService iShopStockService;
+
+    @Autowired
+    private MemberService memberService;
 
     @Override
     public void deleteByPerentIds(List<String> ids) {
@@ -117,6 +127,7 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
     }
 
     @Override
+    @IgnoreTenant
     public List<OrderItem> setDateForItemLIst(List<OrderItem> list) {
         // 计算评价信息
         List<String> orderItemIds = list.stream().map(OrderItem::getId).collect(Collectors.toList());
@@ -129,9 +140,11 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
                 map.setIsAdditionalReview(false);
             }
         }
-        // 设置门店、规格
+        // 设置门店、供货方门店、规格、下单会员
         shopStoreService.setDataMation(list, OrderItem::getStoreId);
+        shopStoreService.setDataMation(list, OrderItem::getSourceStoreId);
         iMaterialNormsService.setDataMation(list, OrderItem::getNormsId);
+        memberService.setDataMation(list, OrderItem::getCreateId);
         List<String> materialStoreIds = list.stream().map(OrderItem::getMaterialStoreId).distinct().collect(Collectors.toList());
         List<Map<String, Object>> materialByIds = iShopMaterialNormsService.queryShopMaterialByIds(materialStoreIds);// erp-shop-material 拿价钱logo
         Map<String, Map<String, Object>> materialStoreMap = materialByIds.stream()
@@ -165,7 +178,9 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
             orderQuery.select(CommonConstants.ID,
                 MybatisPlusUtil.toColumns(Order::getReceiverName),
                 MybatisPlusUtil.toColumns(Order::getReceiverMobile));
-            Map<String, Order> orderMap = orderService.list(orderQuery).stream()
+            // shop_order 无 tenant_id；内部自调用时切面拦不住，需显式无隔离
+            Map<String, Order> orderMap = runWithTenant(TenantEnum.NO_ISOLATION, () -> orderService.list(orderQuery))
+                .stream()
                 .collect(Collectors.toMap(Order::getId, o -> o, (a, b) -> a));
             for (OrderItem orderItem : list) {
                 Order parent = orderMap.get(orderItem.getParentId());
@@ -243,8 +258,14 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         List<OrderItem> list = JSONUtil.toList(JSONUtil.toJsonStr(beans), OrderItem.class);
         // 设置规格、商品等信息
         List<OrderItem> orderItemList = setDateForItemLIst(list);
-        // 分页列表脱敏收件手机，详情/发货仍走父订单完整号码
-        orderItemList.forEach(item -> item.setReceiverMobile(DesensitizedUtil.mobilePhone(item.getReceiverMobile())));
+        // 分页列表脱敏收件/会员手机，详情/发货仍走父订单完整号码
+        orderItemList.forEach(item -> {
+            item.setReceiverMobile(DesensitizedUtil.mobilePhone(item.getReceiverMobile()));
+            Map<String, Object> createMation = item.getCreateMation();
+            if (createMation != null && createMation.get("phone") != null) {
+                createMation.put("phone", DesensitizedUtil.mobilePhone(String.valueOf(createMation.get("phone"))));
+            }
+        });
         List<Map<String, Object>> result = JSONUtil.toList(JSONUtil.toJsonStr(orderItemList), null);
         return result;
     }
@@ -253,11 +274,20 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
     public void getQueryWrapper(InputObject inputObject, QueryWrapper<OrderItem> wrapper) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
         if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
-            // dropship=1：按供货门店 sourceStoreId；否则按售出门店 storeId
+            String storeId = commonPageInfo.getObjectId();
+            String storeCol = MybatisPlusUtil.toColumns(OrderItem::getStoreId);
+            String sourceCol = MybatisPlusUtil.toColumns(OrderItem::getSourceStoreId);
+            // dropship=1：仅供货方代发；fulfill=1：本店需履约（自营无供货方 + 供货方是本店）；默认：本店卖出
             if (isDropshipQuery(commonPageInfo)) {
-                wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getSourceStoreId), commonPageInfo.getObjectId());
+                wrapper.eq(sourceCol, storeId);
+            } else if (isFulfillQuery(commonPageInfo)) {
+                wrapper.and(w -> w
+                    .nested(n -> n.eq(storeCol, storeId)
+                        .and(n2 -> n2.isNull(sourceCol).or().eq(sourceCol, StrUtil.EMPTY)))
+                    .or()
+                    .eq(sourceCol, storeId));
             } else {
-                wrapper.eq(MybatisPlusUtil.toColumns(OrderItem::getStoreId), commonPageInfo.getObjectId());
+                wrapper.eq(storeCol, storeId);
             }
         }
         // 与商城/商家工作台订单列表 type 口径一致, 状态筛选：0全部；1待付款；2待发货；3待收货；4已完成；5已取消；6售后中；7售后完成
@@ -271,7 +301,14 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
     }
 
     private boolean isDropshipQuery(CommonPageInfo commonPageInfo) {
-        String flag = commonPageInfo.getCustomParamsMapStr("dropship");
+        return isFlagOn(commonPageInfo.getCustomParamsMapStr("dropship"));
+    }
+
+    private boolean isFulfillQuery(CommonPageInfo commonPageInfo) {
+        return isFlagOn(commonPageInfo.getCustomParamsMapStr("fulfill"));
+    }
+
+    private boolean isFlagOn(String flag) {
         if (StrUtil.isBlank(flag)) {
             return false;
         }
@@ -355,20 +392,31 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         if (CalculationUtil.compareTo(remainingNum, CommonNumConstants.NUM_ZERO.toString(), CommonNumConstants.NUM_TWO, java.math.RoundingMode.HALF_UP) < 0) {
             throw new CustomException("该订单子单可发货数量不足");
         }
-        String memberId = inputObject.getLogParams().get("id").toString();
-        // 平台货分销代销：仅供货方门店主可发货；自建商品仍由卖货门店发货
+        String userId = inputObject.getLogParams().get("id").toString();
+        Object staffIdObj = inputObject.getLogParams().get("staffId");
+        String staffId = staffIdObj == null ? StrUtil.EMPTY : staffIdObj.toString();
+        // 平台货须供货方发货：店主 / 门店员工可发；加盟店不卡会员 createId（门店工作台账号）
         if (StrUtil.isNotBlank(targetItem.getSourceStoreId())) {
             ShopStore sourceStore = shopStoreService.selectById(targetItem.getSourceStoreId());
             if (sourceStore == null || StrUtil.isEmpty(sourceStore.getId())) {
                 throw new CustomException("供货方门店不存在，无法发货");
             }
-            if (!memberId.equals(sourceStore.getCreateId())) {
+            if (!canShipBySourceStore(sourceStore, userId, staffId)) {
+                throw new CustomException("平台货源订单请由供货方发货");
+            }
+            // 禁止卖家个人店主在卖出端代点发货（须供货方门店工作台操作）
+            ShopStore sellStoreForAuth = shopStoreService.selectById(targetItem.getStoreId());
+            if (sellStoreForAuth != null
+                && StoreNature.PERSONAL.getKey().equals(sellStoreForAuth.getStoreNature())
+                && userId.equals(sellStoreForAuth.getCreateId())
+                && !userId.equals(sourceStore.getCreateId())
+                && !isStoreStaff(sourceStore.getId(), staffId)) {
                 throw new CustomException("平台货源订单请由供货方发货");
             }
         } else {
             ShopStore store = shopStoreService.selectById(targetItem.getStoreId());
             if (store != null && StoreNature.PERSONAL.getKey().equals(store.getStoreNature())
-                && !memberId.equals(store.getCreateId())) {
+                && !userId.equals(store.getCreateId())) {
                 throw new CustomException("无权发货该订单");
             }
         }
@@ -402,6 +450,34 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
             && StrUtil.isNotBlank(deliverNumber)) {
             itemDeliverHistoryService.insertEntity(targetItem, deliverNumber, deliveryTemplateChargeId, deliveryCompanyId, num);
         }
+    }
+
+    /**
+     * 是否具备供货方发货权限：店主、门店员工、或加盟/企业门店（门店工作台侧）。
+     */
+    private boolean canShipBySourceStore(ShopStore sourceStore, String userId, String staffId) {
+        if (sourceStore == null || StrUtil.isEmpty(sourceStore.getId())) {
+            return false;
+        }
+        if (StrUtil.isNotBlank(userId) && userId.equals(sourceStore.getCreateId())) {
+            return true;
+        }
+        if (isStoreStaff(sourceStore.getId(), staffId)) {
+            return true;
+        }
+        // 加盟/企业门店：不按会员 createId 拦截（工作台员工账号与 createId 不一致）
+        return !StoreNature.PERSONAL.getKey().equals(sourceStore.getStoreNature());
+    }
+
+    private boolean isStoreStaff(String storeId, String staffId) {
+        if (StrUtil.isBlank(storeId) || StrUtil.isBlank(staffId)) {
+            return false;
+        }
+        List<ShopStoreStaff> staffList = shopStoreStaffService.getShopStoresByStoreId(storeId);
+        if (CollectionUtil.isEmpty(staffList)) {
+            return false;
+        }
+        return staffList.stream().anyMatch(s -> staffId.equals(s.getStaffId()));
     }
 
     @Override
