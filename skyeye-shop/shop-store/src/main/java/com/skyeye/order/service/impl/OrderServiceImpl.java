@@ -615,6 +615,7 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
                 throw new CustomException("当前订单状态不为待支付、部分支付或支付失败状态，不可修改");
             }
             orderItemService.editStateById(orderItem.getId(), String.valueOf(ShopOrderItemOtherState.WAIT_DELIVER.getKey()));
+            // 资金：支付不入账，确认收货后冻结，期满可提现
 
             List<OrderItem> orderItemList = orderItemService.queryOrderItemByParentId(orderItem.getParentId());
             boolean hasOtherUnpaid = orderItemList.stream()

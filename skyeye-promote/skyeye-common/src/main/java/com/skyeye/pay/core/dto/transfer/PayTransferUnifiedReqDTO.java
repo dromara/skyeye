@@ -42,12 +42,15 @@ public class PayTransferUnifiedReqDTO {
     @ApiModelProperty(value = "收款人姓名", required = "required")
     private String userName;
 
-    @ApiModelProperty(value = "支付宝登录号", required = "required")
+    @ApiModelProperty(value = "支付宝登录号")
     private String alipayLogonId;
 
-    @ApiModelProperty(value = "微信 openId", required = "required")
+    @ApiModelProperty(value = "微信 openId")
     private String openid;
 
-    @ApiModelProperty(value = "支付渠道的额外参数")
+    @ApiModelProperty(value = "银行卡号（转账类型为银行卡时必填）")
+    private String bankAccountNo;
+
+    @ApiModelProperty(value = "支付渠道的额外参数（银行卡：inst_name/account_type/bank_code 等）")
     private Map<String, String> channelExtras;
 }

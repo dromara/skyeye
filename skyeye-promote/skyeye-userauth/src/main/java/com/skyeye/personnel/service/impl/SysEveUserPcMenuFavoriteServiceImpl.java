@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  * @Description: 用户PC菜单收藏服务层
  */
 @Service
-@SkyeyeService(name = "用户PC菜单收藏", groupName = "用户个人配置信息", tenant = TenantEnum.NO_ISOLATION)
+@SkyeyeService(name = "用户PC菜单收藏", groupName = "用户个人配置信息", tenant = TenantEnum.NO_ISOLATION, allowDynamicAttrKey = false)
 public class SysEveUserPcMenuFavoriteServiceImpl extends SkyeyeBusinessServiceImpl<SysEveUserPcMenuFavoriteDao, SysEveUserPcMenuFavorite>
     implements SysEveUserPcMenuFavoriteService {
 

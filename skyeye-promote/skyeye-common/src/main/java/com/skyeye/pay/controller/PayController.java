@@ -54,4 +54,25 @@ public class PayController {
         payService.refund(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "transfer", value = "统一转账", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "data", name = "data", value = "业务数据(outTransferNo/price/subject/userName/type/bankAccountNo)", required = "required,json"),
+        @ApiImplicitParam(id = "channelCode", name = "channelCode", value = "支付渠道编码", required = "required"),
+        @ApiImplicitParam(id = "appKey", name = "appKey", value = "支付应用标识", required = "required"),
+        @ApiImplicitParam(id = "channelExtras", name = "channelExtras", value = "渠道额外参数(json)，银行卡含 inst_name/account_type/bank_code", required = "json")})
+    @RequestMapping("/post/PayController/transfer")
+    public void transfer(InputObject inputObject, OutputObject outputObject) {
+        payService.transfer(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "getTransfer", value = "查询转账结果", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "data", name = "data", value = "业务数据(outTransferNo/type)", required = "required,json"),
+        @ApiImplicitParam(id = "channelCode", name = "channelCode", value = "支付渠道编码", required = "required"),
+        @ApiImplicitParam(id = "appKey", name = "appKey", value = "支付应用标识", required = "required")})
+    @RequestMapping("/post/PayController/getTransfer")
+    public void getTransfer(InputObject inputObject, OutputObject outputObject) {
+        payService.getTransfer(inputObject, outputObject);
+    }
+
 }

@@ -235,16 +235,16 @@ public abstract class AbstractAlipayPayClient extends AbstractPayClient<AlipayPa
         model.setTransAmount(formatAmount(reqDTO.getPrice())); // 转账金额
         model.setOrderTitle(reqDTO.getSubject());               // 转账业务的标题，用于在支付宝用户的账单里显示。
         model.setOutBizNo(reqDTO.getOutTransferNo());
-        model.setProductCode("TRANS_ACCOUNT_NO_PWD");    // 销售产品码。单笔无密转账固定为 TRANS_ACCOUNT_NO_PWD
         model.setBizScene("DIRECT_TRANSFER");           // 业务场景 单笔无密转账固定为 DIRECT_TRANSFER
-        if (reqDTO.getChannelExtras() != null) {
-            model.setBusinessParams(JSONUtil.toJsonStr(reqDTO.getChannelExtras()));
-        }
         // ② 个性化的参数
         Participant payeeInfo = new Participant();
         PayTransferType transferType = PayTransferType.typeOf(reqDTO.getType());
         switch (transferType) {
             case ALIPAY_BALANCE: {
+                model.setProductCode("TRANS_ACCOUNT_NO_PWD");
+                if (reqDTO.getChannelExtras() != null) {
+                    model.setBusinessParams(JSONUtil.toJsonStr(reqDTO.getChannelExtras()));
+                }
                 payeeInfo.setIdentityType("ALIPAY_LOGON_ID");
                 payeeInfo.setIdentity(reqDTO.getAlipayLogonId()); // 支付宝登录号
                 payeeInfo.setName(reqDTO.getUserName()); // 支付宝账号姓名
@@ -252,8 +252,37 @@ public abstract class AbstractAlipayPayClient extends AbstractPayClient<AlipayPa
                 break;
             }
             case BANK_CARD: {
+                // 单笔无密转账到银行卡
+                model.setProductCode("TRANS_BANKCARD_NO_PWD");
+                String bankAccountNo = StrUtil.blankToDefault(reqDTO.getBankAccountNo(),
+                    MapUtil.getStr(reqDTO.getChannelExtras(), "bankAccountNo"));
+                if (StrUtil.isBlank(bankAccountNo)) {
+                    throw new CustomException("银行卡号不能为空");
+                }
+                if (StrUtil.isBlank(reqDTO.getUserName())) {
+                    throw new CustomException("收款户名不能为空");
+                }
                 payeeInfo.setIdentityType("BANKCARD_ACCOUNT");
-                throw new CustomException("功能未实现/未开启");
+                payeeInfo.setIdentity(bankAccountNo.trim());
+                payeeInfo.setName(reqDTO.getUserName().trim());
+                BankcardExtInfo bankcardExtInfo = new BankcardExtInfo();
+                Map<String, String> extras = reqDTO.getChannelExtras();
+                String instName = extras != null ? MapUtil.getStr(extras, "inst_name") : null;
+                String accountType = extras != null ? MapUtil.getStr(extras, "account_type") : null;
+                bankcardExtInfo.setInstName(instName);
+                bankcardExtInfo.setAccountType(StrUtil.blankToDefault(accountType, "2")); // 默认对私
+                if (extras != null) {
+                    bankcardExtInfo.setBankCode(MapUtil.getStr(extras, "bank_code"));
+                    bankcardExtInfo.setInstProvince(MapUtil.getStr(extras, "inst_province"));
+                    bankcardExtInfo.setInstCity(MapUtil.getStr(extras, "inst_city"));
+                    bankcardExtInfo.setInstBranchName(MapUtil.getStr(extras, "inst_branch_name"));
+                }
+                if (StrUtil.isBlank(bankcardExtInfo.getInstName())) {
+                    throw new CustomException("开户行不能为空");
+                }
+                payeeInfo.setBankcardExtInfo(bankcardExtInfo);
+                model.setPayeeInfo(payeeInfo);
+                break;
             }
             default: {
                 throw new CustomException(StrUtil.format("不支持的转账类型: {}", transferType));

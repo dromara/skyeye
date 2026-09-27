@@ -75,12 +75,14 @@ public class MockPayClient extends AbstractPayClient<NonePayClientConfig> {
 
     @Override
     protected PayTransferRespDTO doUnifiedTransfer(PayTransferUnifiedReqDTO reqDTO) {
-        throw new UnsupportedOperationException("待实现");
+        return PayTransferRespDTO.successOf("mock_transfer_" + reqDTO.getOutTransferNo(),
+            java.time.LocalDateTime.now(), reqDTO.getOutTransferNo(), "mock-transfer-success");
     }
 
     @Override
     protected PayTransferRespDTO doGetTransfer(String outTradeNo, PayTransferType type) {
-        throw new UnsupportedOperationException("待实现");
+        return PayTransferRespDTO.successOf("mock_transfer_" + outTradeNo,
+            java.time.LocalDateTime.now(), outTradeNo, "mock-transfer-query");
     }
 
     @Override

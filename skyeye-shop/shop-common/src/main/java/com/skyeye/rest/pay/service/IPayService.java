@@ -30,4 +30,14 @@ public interface IPayService extends IService {
      */
     ResultEntity refund(Map<String, Object> data, String channelCode, String notifyUrl, String appKey);
 
+    /**
+     * 统一转账。data：outTransferNo、price、subject、userName、type、bankAccountNo；channelExtras 可含银行卡开户信息
+     */
+    ResultEntity transfer(Map<String, Object> data, String channelCode, String channelExtras, String appKey);
+
+    /**
+     * 查询转账。data：outTransferNo、type
+     */
+    ResultEntity getTransfer(Map<String, Object> data, String channelCode, String appKey);
+
 }

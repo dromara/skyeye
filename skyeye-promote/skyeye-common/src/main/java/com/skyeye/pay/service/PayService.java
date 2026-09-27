@@ -34,4 +34,22 @@ public interface PayService {
      */
     Map<String, Object> executeRefund(Map<String, Object> data, String channelCode, String notifyUrl, String appKey);
 
+    /**
+     * 统一转账（银行卡/支付宝等）。
+     */
+    void transfer(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 发起统一转账。data：outTransferNo、price(分)、subject、userName、type；
+     * 银行卡另需 bankAccountNo，channelExtras 可含 inst_name/account_type/bank_code。
+     */
+    Map<String, Object> executeTransfer(Map<String, Object> data, String channelCode, String channelExtras, String appKey);
+
+    /**
+     * 查询转账结果。data：outTransferNo、type
+     */
+    void getTransfer(InputObject inputObject, OutputObject outputObject);
+
+    Map<String, Object> executeGetTransfer(Map<String, Object> data, String channelCode, String appKey);
+
 }

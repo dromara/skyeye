@@ -18,6 +18,7 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
+import com.skyeye.finance.service.ShopStoreAccountService;
 import com.skyeye.order.dao.OrderAfterSaleDao;
 import com.skyeye.order.entity.Order;
 import com.skyeye.order.entity.OrderAfterSale;
@@ -35,6 +36,7 @@ import com.skyeye.store.classenum.StoreNature;
 import com.skyeye.store.entity.ShopStore;
 import com.skyeye.store.service.ShopStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -92,6 +94,10 @@ public class OrderAfterSaleServiceImpl extends SkyeyeBusinessServiceImpl<OrderAf
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    @Lazy
+    private ShopStoreAccountService shopStoreAccountService;
 
     @Override
     @Transactional(value = "transactionManager", rollbackFor = Exception.class)
@@ -487,6 +493,7 @@ public class OrderAfterSaleServiceImpl extends SkyeyeBusinessServiceImpl<OrderAf
         if (isYes(afterSale.getRestoreStock())) {
             restoreStockIfNeeded(afterSale);
         }
+        shopStoreAccountService.debitRefund(afterSale);
     }
 
     private Integer defaultRestoreStock(OrderAfterSale afterSale) {

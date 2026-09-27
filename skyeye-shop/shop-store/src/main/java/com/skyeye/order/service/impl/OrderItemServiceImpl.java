@@ -37,6 +37,7 @@ import com.skyeye.order.entity.OrderItem;
 import com.skyeye.order.enums.ItemSignState;
 import com.skyeye.order.enums.OrderCommentType;
 import com.skyeye.order.enums.ShopOrderItemOtherState;
+import com.skyeye.finance.service.ShopStoreAccountService;
 import com.skyeye.order.service.ItemDeliverHistoryService;
 import com.skyeye.order.service.OrderCommentService;
 import com.skyeye.order.service.OrderItemService;
@@ -50,6 +51,7 @@ import com.skyeye.store.entity.ShopStoreStaff;
 import com.skyeye.store.service.ShopStoreService;
 import com.skyeye.store.service.ShopStoreStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,6 +96,10 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    @Lazy
+    private ShopStoreAccountService shopStoreAccountService;
 
     @Override
     public void deleteByPerentIds(List<String> ids) {
@@ -568,6 +574,10 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
             orderItem.setState(ShopOrderItemOtherState.PART_SIGN.getKey());
         }
         super.updateEntity(orderItem, currenUserId);
+        // 整单签收：资金进入结算冻结，期满后可提现
+        if (ShopOrderItemOtherState.SIGN.getKey().equals(orderItem.getState())) {
+            shopStoreAccountService.holdOrderItemOnSign(orderItem);
+        }
     }
 
     @Override
