@@ -18,4 +18,9 @@ public interface PayNotifyService {
      */
     String notifyOrder(String channelId, HttpServletRequest request);
 
+    /**
+     * 处理渠道退款结果通知：验签解析后，成功则转发至 PayApp.refundNotifyUrl。
+     */
+    String notifyRefund(String channelId, HttpServletRequest request);
+
 }

@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
-import com.skyeye.common.entity.features.AreaInfo;
+import com.skyeye.common.entity.features.OperatorUserInfo;
 import com.skyeye.order.enums.*;
 import lombok.Data;
 
@@ -29,7 +29,7 @@ import java.util.Map;
 //@RedisCacheField(name = "shop:order")
 @TableName("shop_order")
 @ApiModel("商品订单管理实体类")
-public class Order extends AreaInfo {
+public class Order extends OperatorUserInfo {
 
     @TableId("id")
     @ApiModelProperty(value = "主键id")
@@ -124,23 +124,23 @@ public class Order extends AreaInfo {
     private String receiveTime;
 
     @TableField("address_id")
-    @ApiModelProperty(value = "收货地址id", required = "required")
+    @ApiModelProperty(value = "收货地址快照id（默认指向 address_history）", required = "required")
     private String addressId;
 
     @TableField(exist = false)
-    @Property(value = "收货地址信息")
+    @Property(value = "收货地址信息（按 addressFromType 从 address / address_history 组装）")
     private Map<String, Object> addressMation;
 
     @TableField("address_from_type")
-    @ApiModelProperty(value = "收货地址信息来源类型，0：address表；1address_history表,默认0")
+    @ApiModelProperty(value = "收货地址来源：0=address表（历史兼容）；1=address_history表（下单快照）", enumClass = AddressFromTypeEnums.class)
     private Integer addressFromType;
 
     @TableField("receiver_name")
-    @Property(value = "收件人姓名")
+    @Property(value = "收件人姓名（列表冗余，改订单地址时同步）")
     private String receiverName;
 
     @TableField("receiver_mobile")
-    @Property(value = "收件人手机")
+    @Property(value = "收件人手机（列表冗余，改订单地址时同步）")
     private String receiverMobile;
 
     @TableField("pick_up_store_id")

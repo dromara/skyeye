@@ -35,6 +35,11 @@ public class IShopStockServiceImpl extends IServiceImpl implements IShopStockSer
     }
 
     @Override
+    public void restoreShopStockOnRefund(Map<String, Object> params) {
+        ExecuteFeignClient.get(() -> iShopStockRest.restoreShopStockOnRefund(params));
+    }
+
+    @Override
     public void checkShopStockForSale(Map<String, Object> params) {
         ExecuteFeignClient.get(() -> iShopStockRest.checkShopStockForSale(params));
     }

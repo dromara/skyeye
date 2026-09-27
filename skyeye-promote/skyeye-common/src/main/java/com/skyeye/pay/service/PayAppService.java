@@ -21,7 +21,13 @@ public interface PayAppService extends SkyeyeBusinessService<PayApp> {
     /** 构建第三方渠道回调 pay 模块的完整 URL：{channelNotifyUrl}/{channelId} */
     String buildChannelOrderNotifyUrl(PayApp payApp, String channelId);
 
+    /** 构建第三方渠道退款回调 URL：将 channelNotifyUrl 中 /order 替换为 /refund 后拼接 channelId */
+    String buildChannelRefundNotifyUrl(PayApp payApp, String channelId);
+
     /** 获取 pay 模块转发支付成功通知时使用的业务 URL */
     String getBusinessOrderNotifyUrl(PayApp payApp);
+
+    /** 获取 pay 模块转发退款成功通知时使用的业务 URL */
+    String getBusinessRefundNotifyUrl(PayApp payApp);
 
 }

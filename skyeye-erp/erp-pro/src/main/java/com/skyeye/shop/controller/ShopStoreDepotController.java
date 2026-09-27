@@ -136,6 +136,18 @@ public class ShopStoreDepotController {
         shopStoreDepotService.deductShopStockOnShip(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "restoreShopStockOnRefund", value = "售后退货回补门店库存", method = "POST", allUse = "2")
+    @ApiImplicitParams(value = {
+        @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required"),
+        @ApiImplicitParam(id = "materialStoreId", name = "materialStoreId", value = "门店商品关系id"),
+        @ApiImplicitParam(id = "materialId", name = "materialId", value = "商品id", required = "required"),
+        @ApiImplicitParam(id = "normsId", name = "normsId", value = "规格id", required = "required"),
+        @ApiImplicitParam(id = "count", name = "count", value = "回补数量", required = "required")})
+    @RequestMapping("/post/ShopStoreDepotController/restoreShopStockOnRefund")
+    public void restoreShopStockOnRefund(InputObject inputObject, OutputObject outputObject) {
+        shopStoreDepotService.restoreShopStockOnRefund(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "checkShopStockForSale", value = "校验门店商品可售库存", method = "POST", allUse = "2")
     @ApiImplicitParams(value = {
         @ApiImplicitParam(id = "materialStoreId", name = "materialStoreId", value = "门店商品关系id", required = "required"),

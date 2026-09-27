@@ -24,6 +24,7 @@ import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
+import com.skyeye.common.util.DesensitizedUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.erp.service.IMaterialNormsService;
 import com.skyeye.exception.CustomException;
@@ -152,6 +153,29 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         for (OrderItem orderItem : list) {
             orderItem.setDeliverNumberList(deliverMap.getOrDefault(orderItem.getId(), new ArrayList<>()));
         }
+        // 收货人信息（父订单）；分页列表再脱敏手机号
+        List<String> parentIds = list.stream()
+            .map(OrderItem::getParentId)
+            .filter(StrUtil::isNotEmpty)
+            .distinct()
+            .collect(Collectors.toList());
+        if (CollectionUtil.isNotEmpty(parentIds)) {
+            QueryWrapper<Order> orderQuery = new QueryWrapper<>();
+            orderQuery.in(CommonConstants.ID, parentIds);
+            orderQuery.select(CommonConstants.ID,
+                MybatisPlusUtil.toColumns(Order::getReceiverName),
+                MybatisPlusUtil.toColumns(Order::getReceiverMobile));
+            Map<String, Order> orderMap = orderService.list(orderQuery).stream()
+                .collect(Collectors.toMap(Order::getId, o -> o, (a, b) -> a));
+            for (OrderItem orderItem : list) {
+                Order parent = orderMap.get(orderItem.getParentId());
+                if (parent == null) {
+                    continue;
+                }
+                orderItem.setReceiverName(parent.getReceiverName());
+                orderItem.setReceiverMobile(parent.getReceiverMobile());
+            }
+        }
         return list;
     }
 
@@ -219,6 +243,8 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         List<OrderItem> list = JSONUtil.toList(JSONUtil.toJsonStr(beans), OrderItem.class);
         // 设置规格、商品等信息
         List<OrderItem> orderItemList = setDateForItemLIst(list);
+        // 分页列表脱敏收件手机，详情/发货仍走父订单完整号码
+        orderItemList.forEach(item -> item.setReceiverMobile(DesensitizedUtil.mobilePhone(item.getReceiverMobile())));
         List<Map<String, Object>> result = JSONUtil.toList(JSONUtil.toJsonStr(orderItemList), null);
         return result;
     }

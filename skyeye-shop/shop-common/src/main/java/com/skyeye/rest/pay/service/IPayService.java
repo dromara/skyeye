@@ -25,4 +25,9 @@ public interface IPayService extends IService {
     ResultEntity payment(Map<String, Object> data, String channelCode, String returnUrl, String channelExtras,
                          String notifyUrl, String appKey);
 
+    /**
+     * 统一退款。data：oddNumber、outRefundNo、payPrice、refundPrice、reason
+     */
+    ResultEntity refund(Map<String, Object> data, String channelCode, String notifyUrl, String appKey);
+
 }

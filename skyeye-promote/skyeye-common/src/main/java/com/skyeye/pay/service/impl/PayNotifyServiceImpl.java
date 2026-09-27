@@ -12,9 +12,11 @@ import cn.hutool.json.JSONUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.pay.core.PayClient;
 import com.skyeye.pay.core.dto.order.PayOrderRespDTO;
+import com.skyeye.pay.core.dto.refund.PayRefundRespDTO;
 import com.skyeye.pay.entity.PayApp;
 import com.skyeye.pay.entity.PayChannel;
 import com.skyeye.pay.enums.PayOrderStatusResp;
+import com.skyeye.pay.enums.PayRefundStatusResp;
 import com.skyeye.pay.enums.PayType;
 import com.skyeye.pay.service.PayAppService;
 import com.skyeye.pay.service.PayChannelService;
@@ -65,6 +67,24 @@ public class PayNotifyServiceImpl implements PayNotifyService {
         return buildNotifySuccessResponse(payChannel.getCodeNum());
     }
 
+    @Override
+    public String notifyRefund(String channelId, HttpServletRequest request) {
+        PayChannel payChannel = payChannelService.selectById(channelId);
+        if (ObjectUtil.isEmpty(payChannel)) {
+            throw new CustomException("支付渠道不存在");
+        }
+        PayClient client = payChannelService.getPayClient(channelId);
+        PayRefundRespDTO notify = client.parseRefundNotify(getRequestParams(request), readRequestBody(request));
+        log.info("[notifyRefund][channelId({}) outRefundNo({}) status({})]", channelId,
+            notify.getOutRefundNo(), notify.getStatus());
+
+        if (PayRefundStatusResp.SUCCESS.getKey().equals(notify.getStatus())) {
+            payAppService.setDataMation(payChannel, PayChannel::getAppId);
+            forwardRefundToBusiness(payChannel.getAppMation(), payChannel.getCodeNum(), notify);
+        }
+        return buildNotifySuccessResponse(payChannel.getCodeNum());
+    }
+
     private void forwardToBusiness(PayApp payApp, String channelCode, PayOrderRespDTO notify) {
         // outTradeNo 即业务 oddNumber，各业务 notify 接口按此字段查单
         String businessNotifyUrl = payAppService.getBusinessOrderNotifyUrl(payApp);
@@ -82,6 +102,26 @@ public class PayNotifyServiceImpl implements PayNotifyService {
         } catch (Exception ex) {
             log.error("[forwardToBusiness][url({}) outTradeNo({}) 转发失败]", businessNotifyUrl, notify.getOutTradeNo(), ex);
             throw new CustomException("支付业务回调失败");
+        }
+    }
+
+    private void forwardRefundToBusiness(PayApp payApp, String channelCode, PayRefundRespDTO notify) {
+        String businessNotifyUrl = payAppService.getBusinessRefundNotifyUrl(payApp);
+        Map<String, Object> notifyParams = new HashMap<>();
+        notifyParams.put("outRefundNo", notify.getOutRefundNo());
+        notifyParams.put("channelCode", channelCode);
+        notifyParams.put("channelRefundNo", notify.getChannelRefundNo());
+        if (notify.getSuccessTime() != null) {
+            notifyParams.put("successTime", notify.getSuccessTime().toString());
+        }
+        try {
+            String response = HttpUtil.post(businessNotifyUrl, notifyParams);
+            log.info("[forwardRefundToBusiness][url({}) outRefundNo({}) response({})]",
+                businessNotifyUrl, notify.getOutRefundNo(), response);
+        } catch (Exception ex) {
+            log.error("[forwardRefundToBusiness][url({}) outRefundNo({}) 转发失败]",
+                businessNotifyUrl, notify.getOutRefundNo(), ex);
+            throw new CustomException("退款业务回调失败");
         }
     }
 

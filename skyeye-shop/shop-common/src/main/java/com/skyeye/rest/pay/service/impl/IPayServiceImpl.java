@@ -42,4 +42,14 @@ public class IPayServiceImpl extends IServiceImpl implements IPayService {
         params.put("notifyUrl", notifyUrl);
         return ExecuteFeignClient.get(() -> iPayRest.payment(params));
     }
+
+    @Override
+    public ResultEntity refund(Map<String, Object> data, String channelCode, String notifyUrl, String appKey) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("data", JSONUtil.toJsonStr(data));
+        params.put("channelCode", channelCode);
+        params.put("appKey", appKey);
+        params.put("notifyUrl", notifyUrl);
+        return ExecuteFeignClient.get(() -> iPayRest.refund(params));
+    }
 }

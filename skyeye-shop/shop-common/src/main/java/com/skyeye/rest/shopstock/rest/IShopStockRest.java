@@ -35,6 +35,12 @@ public interface IShopStockRest {
     String deductShopStockOnShip(Map<String, Object> params);
 
     /**
+     * 售后退货回补门店库存（对应 ERP restoreShopStockOnRefund）
+     */
+    @PostMapping("/restoreShopStockOnRefund")
+    String restoreShopStockOnRefund(Map<String, Object> params);
+
+    /**
      * 下单校验可售库存（对应 ERP checkShopStockForSale）
      */
     @PostMapping("/checkShopStockForSale")

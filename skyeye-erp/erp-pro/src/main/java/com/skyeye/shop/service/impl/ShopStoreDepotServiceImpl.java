@@ -691,6 +691,61 @@ public class ShopStoreDepotServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
 
     @Override
     @IgnoreTenant
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void restoreShopStockOnRefund(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String storeId = MapUtil.getStr(params, "storeId");
+        String materialStoreId = MapUtil.getStr(params, "materialStoreId");
+        String materialId = MapUtil.getStr(params, "materialId");
+        String normsId = MapUtil.getStr(params, "normsId");
+        String count = MapUtil.getStr(params, "count");
+        if (CalculationUtil.compareTo(count, CommonNumConstants.NUM_ZERO.toString(), ErpConstants.NUM_AFTER_DOT, RoundingMode.UP) <= 0) {
+            throw new CustomException("回补数量必须大于0");
+        }
+        ShopMaterialStore relation = null;
+        if (StrUtil.isNotBlank(materialStoreId)) {
+            relation = shopMaterialStoreService.selectById(materialStoreId);
+        }
+        String restoreStoreId = storeId;
+        ShopMaterialStore stockRelation = relation;
+        if (isPlatformDropship(relation)) {
+            restoreStoreId = relation.getSourceStoreId();
+            stockRelation = findStoreMaterialRelation(restoreStoreId, relation.getMaterialId());
+        }
+        Integer mode = stockRelation == null ? ShopMaterialStockMode.NORMAL.getKey() : resolveStockMode(stockRelation);
+        String useMaterialId = relation != null && StrUtil.isNotBlank(relation.getMaterialId())
+            ? relation.getMaterialId() : materialId;
+        if (ShopMaterialStockMode.DEPOT_LINK.getKey().equals(mode)) {
+            restoreDepotLinkStockOnRefund(restoreStoreId, useMaterialId, normsId, Convert.toInt(count, 0));
+        } else {
+            shopStockService.updateShopStock(restoreStoreId, useMaterialId, normsId, count, DepotPutOutType.PUT.getKey());
+        }
+    }
+
+    /** 关联仓回补：加回优先级最高（第一个启用）的商家仓 */
+    private void restoreDepotLinkStockOnRefund(String storeId, String materialId, String normsId, int add) {
+        List<ShopStoreDepot> enabled = listEnabledByStoreId(storeId);
+        if (CollectionUtil.isEmpty(enabled)) {
+            throw new CustomException("关联仓模式下请先启用至少一个商家仓");
+        }
+        ShopStoreDepot first = enabled.get(0);
+        String depotId = first.getDepotId();
+        if (StrUtil.isBlank(depotId)) {
+            throw new CustomException("关联仓配置无效");
+        }
+        Map<String, Map<String, String>> depotNormsStockMap = materialNormsStockService
+            .queryMaterialNormsStockByDepotIds(java.util.Collections.singletonList(normsId),
+                java.util.Collections.singletonList(depotId));
+        Map<String, String> stockMap = depotNormsStockMap.get(depotId);
+        int current = Convert.toInt(MapUtil.isEmpty(stockMap) ? null : stockMap.get(normsId), 0);
+        Map<String, String> putResult = new HashMap<>();
+        putResult.put(depotId, String.valueOf(current + add));
+        materialNormsStockService.batchSaveMaterialNormsStock(materialId, normsId, putResult,
+            MaterialNormsStockType.ORDER_STOCK.getKey());
+    }
+
+    @Override
+    @IgnoreTenant
     public void checkShopStockForSale(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String materialStoreId = MapUtil.getStr(params, "materialStoreId");

@@ -4,7 +4,6 @@
 
 package com.skyeye.store.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
@@ -21,18 +20,14 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.eve.service.IAreaService;
-import com.skyeye.order.service.OrderService;
 import com.skyeye.store.dao.ShopAddressDao;
 import com.skyeye.store.entity.ShopAddress;
-import com.skyeye.store.entity.ShopAddressHistory;
-import com.skyeye.store.service.ShopAddressHistoryService;
 import com.skyeye.store.service.ShopAddressLabelService;
 import com.skyeye.store.service.ShopAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -55,12 +50,6 @@ public class ShopAddressServiceImpl extends SkyeyeBusinessServiceImpl<ShopAddres
     @Autowired
     private ShopAddressLabelService shopAddressLabelService;
 
-    @Autowired
-    private OrderService orderService;
-
-    @Autowired
-    private ShopAddressHistoryService shopAddressHistoryService;
-
     @Override
     public void writePostpose(ShopAddress shopAddress, String userId) {
         if (WhetherEnum.ENABLE_USING.getKey().equals(shopAddress.getIsDefault())) {
@@ -76,22 +65,6 @@ public class ShopAddressServiceImpl extends SkyeyeBusinessServiceImpl<ShopAddres
             update(updateWrapper);
             refreshCache(one.getId());
         }
-    }
-
-    @Override
-    public void updatePrepose(ShopAddress entity) {
-        // 取出旧地址
-        QueryWrapper<ShopAddress> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(CommonConstants.ID, entity.getId());
-        ShopAddress oldShopAddress = getOne(queryWrapper);
-        ShopAddressHistory shopAddressHistory = new ShopAddressHistory();
-        BeanUtil.copyProperties(oldShopAddress, shopAddressHistory);
-        shopAddressHistory.setId(null);
-        shopAddressHistory.setParentId(entity.getId());
-        shopAddressHistoryService.createEntity(shopAddressHistory, InputObject.getLogParamsStatic().get(CommonConstants.ID).toString());
-        Map<String, String> addressOldNew = new HashMap<>();
-        addressOldNew.put(shopAddressHistory.getParentId(), shopAddressHistory.getId());
-        orderService.updateByAddressId(addressOldNew);
     }
 
     @Override
@@ -154,21 +127,5 @@ public class ShopAddressServiceImpl extends SkyeyeBusinessServiceImpl<ShopAddres
         iAreaService.setDataMation(list, ShopAddress::getTownshipId);
         shopAddressLabelService.setDataMation(list, ShopAddress::getLabelId);
         return JSONUtil.toList(JSONUtil.toJsonStr(list), null);
-    }
-
-    @Override
-    public void deletePreExecution(List<String> ids) {
-        List<ShopAddress> shopAddresses = selectByIds(ids.toArray(new String[]{}));
-        List<ShopAddressHistory> shopAddressHistories = new ArrayList<>();
-        for (ShopAddress shopAddress : shopAddresses) {
-            ShopAddressHistory shopAddressHistory = new ShopAddressHistory();
-            BeanUtil.copyProperties(shopAddress, shopAddressHistory);
-            shopAddressHistory.setId(null);
-            shopAddressHistory.setParentId(shopAddress.getId());
-            shopAddressHistories.add(shopAddressHistory);
-        }
-        shopAddressHistoryService.createEntity(shopAddressHistories, InputObject.getLogParamsStatic().get("id").toString());
-        Map<String, String> addressOldNew = shopAddressHistories.stream().collect(Collectors.toMap(ShopAddressHistory::getParentId, ShopAddressHistory::getId, (key1, key2) -> key2));
-        orderService.updateByAddressId(addressOldNew);
     }
 }

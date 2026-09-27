@@ -37,4 +37,14 @@ public class PayNotifyOpenController {
     public String notifyOrderGet(@PathVariable("channelId") String channelId, HttpServletRequest request) {
         return payNotifyService.notifyOrder(channelId, request);
     }
+
+    @PostMapping("/refund/{channelId}")
+    public String notifyRefundPost(@PathVariable("channelId") String channelId, HttpServletRequest request) {
+        return payNotifyService.notifyRefund(channelId, request);
+    }
+
+    @RequestMapping(value = "/refund/{channelId}", method = org.springframework.web.bind.annotation.RequestMethod.GET)
+    public String notifyRefundGet(@PathVariable("channelId") String channelId, HttpServletRequest request) {
+        return payNotifyService.notifyRefund(channelId, request);
+    }
 }

@@ -18,6 +18,8 @@ import com.skyeye.exception.CustomException;
 import com.skyeye.pay.core.PayClient;
 import com.skyeye.pay.core.dto.order.PayOrderRespDTO;
 import com.skyeye.pay.core.dto.order.PayOrderUnifiedReqDTO;
+import com.skyeye.pay.core.dto.refund.PayRefundRespDTO;
+import com.skyeye.pay.core.dto.refund.PayRefundUnifiedReqDTO;
 import com.skyeye.pay.entity.PayApp;
 import com.skyeye.pay.entity.PayChannel;
 import com.skyeye.pay.enums.PayOrderStatusResp;
@@ -154,5 +156,67 @@ public class PayServiceImpl implements PayService {
     private String getPayBody(Map<String, Object> data) {
         Object body = data.get("body");
         return body != null ? body.toString() : "购买商品信息";
+    }
+
+    @Override
+    @Transactional(value = "transactionManager", rollbackFor = Exception.class)
+    public void refund(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        Map<String, Object> data = JSONUtil.toBean(params.get("data").toString(), null);
+        String channelCode = params.get("channelCode").toString();
+        String notifyUrl = resolveOptionalParam(params, "notifyUrl");
+        String appKey = resolveRequiredAppKey(params);
+        Map<String, Object> result = executeRefund(data, channelCode, notifyUrl, appKey);
+        outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public Map<String, Object> executeRefund(Map<String, Object> data, String channelCode, String notifyUrl, String appKey) {
+        payAppService.getEnabledPayAppByAppKey(appKey);
+        PayChannel payChannel = payChannelService.getPayChannelByCode(appKey, channelCode);
+        payAppService.setDataMation(payChannel, PayChannel::getAppId);
+        PayClient client = payChannelService.getPayClient(payChannel.getId());
+
+        if (data.get("oddNumber") == null || StrUtil.isBlank(data.get("oddNumber").toString())) {
+            throw new CustomException("原支付单号(oddNumber)不能为空");
+        }
+        if (data.get("outRefundNo") == null || StrUtil.isBlank(data.get("outRefundNo").toString())) {
+            throw new CustomException("退款单号(outRefundNo)不能为空");
+        }
+        if (data.get("refundPrice") == null || StrUtil.isBlank(data.get("refundPrice").toString())) {
+            throw new CustomException("退款金额不能为空");
+        }
+
+        PayRefundUnifiedReqDTO reqDTO = new PayRefundUnifiedReqDTO();
+        reqDTO.setOutTradeNo(data.get("oddNumber").toString());
+        reqDTO.setOutRefundNo(data.get("outRefundNo").toString());
+        reqDTO.setReason(data.get("reason") != null ? data.get("reason").toString() : "退款");
+        reqDTO.setPayPrice(data.get("payPrice") != null ? data.get("payPrice").toString() : data.get("refundPrice").toString());
+        reqDTO.setRefundPrice(data.get("refundPrice").toString());
+        reqDTO.setNotifyUrl(resolveChannelRefundNotifyUrl(payChannel.getAppMation(), payChannel.getId(), notifyUrl));
+
+        PayRefundRespDTO refundRespDTO = client.unifiedRefund(reqDTO);
+        if (refundRespDTO == null) {
+            throw new CustomException("发起退款失败，请稍后重试");
+        }
+        if (StrUtil.isNotEmpty(refundRespDTO.getChannelErrorCode())) {
+            throw new CustomException(String.format("发起退款报错，错误码：%s，错误提示：%s",
+                refundRespDTO.getChannelErrorCode(), refundRespDTO.getChannelErrorMsg()));
+        }
+        log.info("[executeRefund][appKey({}) outTradeNo({}) outRefundNo({}) status({})]",
+            appKey, reqDTO.getOutTradeNo(), reqDTO.getOutRefundNo(), refundRespDTO.getStatus());
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("payChannel", JSONUtil.toJsonStr(payChannel));
+        result.put("payRefundRespDTO", JSONUtil.toJsonStr(refundRespDTO));
+        return result;
+    }
+
+    private String resolveChannelRefundNotifyUrl(PayApp payApp, String channelId, String notifyUrlParam) {
+        if (StrUtil.isNotBlank(notifyUrlParam)) {
+            return notifyUrlParam;
+        }
+        return payAppService.buildChannelRefundNotifyUrl(payApp, channelId);
     }
 }

@@ -102,12 +102,37 @@ public class PayAppServiceImpl extends SkyeyeBusinessServiceImpl<PayAppDao, PayA
 
     @Override
     @IgnoreTenant
+    public String buildChannelRefundNotifyUrl(PayApp payApp, String channelId) {
+        if (ObjectUtil.isEmpty(payApp) || StrUtil.isBlank(payApp.getChannelNotifyUrl())) {
+            throw new CustomException("请在支付应用中配置渠道回调地址(channelNotifyUrl)");
+        }
+        String orderUrl = StrUtil.removeSuffix(payApp.getChannelNotifyUrl().trim(), "/");
+        String refundUrl;
+        if (orderUrl.endsWith("/order")) {
+            refundUrl = orderUrl.substring(0, orderUrl.length() - 6) + "/refund";
+        } else {
+            refundUrl = orderUrl + "/refund";
+        }
+        return refundUrl + "/" + channelId;
+    }
+
+    @Override
+    @IgnoreTenant
     public String getBusinessOrderNotifyUrl(PayApp payApp) {
         // pay 模块验签成功后 HTTP 转发到此地址，由具体业务完成订单状态变更与权益交付
         if (ObjectUtil.isEmpty(payApp) || StrUtil.isBlank(payApp.getOrderNotifyUrl())) {
             throw new CustomException("请在支付应用中配置业务支付回调地址(orderNotifyUrl)");
         }
         return payApp.getOrderNotifyUrl();
+    }
+
+    @Override
+    @IgnoreTenant
+    public String getBusinessRefundNotifyUrl(PayApp payApp) {
+        if (ObjectUtil.isEmpty(payApp) || StrUtil.isBlank(payApp.getRefundNotifyUrl())) {
+            throw new CustomException("请在支付应用中配置业务退款回调地址(refundNotifyUrl)");
+        }
+        return payApp.getRefundNotifyUrl();
     }
 
     @Override

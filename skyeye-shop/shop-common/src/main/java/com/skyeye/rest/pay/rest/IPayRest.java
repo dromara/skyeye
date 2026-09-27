@@ -24,4 +24,7 @@ public interface IPayRest {
     @PostMapping("/payment")
     String payment(Map<String, Object> params);
 
+    @PostMapping("/refund")
+    String refund(Map<String, Object> params);
+
 }

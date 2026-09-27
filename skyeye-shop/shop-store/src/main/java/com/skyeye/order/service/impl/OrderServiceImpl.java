@@ -44,7 +44,6 @@ import com.skyeye.coupon.service.CouponStoreService;
 import com.skyeye.coupon.service.CouponUseMaterialService;
 import com.skyeye.coupon.service.CouponUseService;
 import com.skyeye.eve.rest.quartz.SysQuartzMation;
-import com.skyeye.eve.service.IAreaService;
 import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.order.dao.OrderDao;
@@ -107,9 +106,6 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     private ShopStoreService shopStoreService;
 
     @Autowired
-    private IAreaService iAreaService;
-
-    @Autowired
     private IShopMaterialNormsService iShopMaterialNormsService;
 
     @Autowired
@@ -157,10 +153,8 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         order.setDiscountPrice(CommonNumConstants.NUM_ZERO.toString());
         order.setDeliveryPrice(CommonNumConstants.NUM_ZERO.toString());
         order.setPayPrice(CommonNumConstants.NUM_ZERO.toString());
-        // 收货人信息
-        ShopAddress shopAddress = shopAddressService.selectById(order.getAddressId());
-        order.setReceiverName(shopAddress.getName());
-        order.setReceiverMobile(shopAddress.getMobile());
+        // 收货地址：下单即写入 history 快照，后续改/删地址簿不影响本单
+        snapshotOrderAddress(order);
         // 调价
         order.setAdjustPrice("0");
         // 子单的优惠券操作
@@ -393,12 +387,54 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
 
     @Override
     public void createPostpose(Order order, String userId) {
+        // 回写快照上的订单id
+        if (StrUtil.isNotEmpty(order.getAddressId())
+            && Objects.equals(order.getAddressFromType(), AddressFromTypeEnums.ADDRESS_HISTORY_TABLE.getKey())) {
+            UpdateWrapper<ShopAddressHistory> historyWrapper = new UpdateWrapper<>();
+            historyWrapper.eq(CommonConstants.ID, order.getAddressId())
+                .set(MybatisPlusUtil.toColumns(ShopAddressHistory::getOrderId), order.getId());
+            shopAddressHistoryService.update(historyWrapper);
+        }
         orderItemService.setValueAndCreateEntity(order, userId);
         couponUseService.updateState(order.getCouponUseId());// 更新用户领取的优惠券状态
         log.info("订单id:" + order.getId() + "创建定时任务-- 开始");
         startUpTaskQuartz(order.getId(), order.getOddNumber(), DateUtil.getTimeAndToString());
         log.info("订单id:" + order.getId() + "创建定时任务-- 结束");
         shopTradeCartService.deleteMySelect(userId);
+    }
+
+    /**
+     * 下单时把当前地址簿内容复制到 address_history，订单只挂快照。
+     */
+    private void snapshotOrderAddress(Order order) {
+        if (StrUtil.isEmpty(order.getAddressId())) {
+            throw new CustomException("收货地址不能为空");
+        }
+        // 已是 history（例如重复提交）则只补收件人冗余
+        if (Objects.equals(order.getAddressFromType(), AddressFromTypeEnums.ADDRESS_HISTORY_TABLE.getKey())) {
+            ShopAddressHistory history = shopAddressHistoryService.selectById(order.getAddressId());
+            if (ObjectUtil.isEmpty(history) || StrUtil.isEmpty(history.getId())) {
+                throw new CustomException("收货地址快照不存在");
+            }
+            order.setReceiverName(history.getName());
+            order.setReceiverMobile(history.getMobile());
+            return;
+        }
+        ShopAddress shopAddress = shopAddressService.selectById(order.getAddressId());
+        if (ObjectUtil.isEmpty(shopAddress) || StrUtil.isEmpty(shopAddress.getId())) {
+            throw new CustomException("收货地址不存在");
+        }
+        order.setReceiverName(shopAddress.getName());
+        order.setReceiverMobile(shopAddress.getMobile());
+        ShopAddressHistory history = new ShopAddressHistory();
+        BeanUtil.copyProperties(shopAddress, history);
+        history.setId(null);
+        history.setParentId(shopAddress.getId());
+        history.setOrderId(null);
+        String userId = InputObject.getLogParamsStatic().get(CommonConstants.ID).toString();
+        shopAddressHistoryService.createEntity(history, userId);
+        order.setAddressId(history.getId());
+        order.setAddressFromType(AddressFromTypeEnums.ADDRESS_HISTORY_TABLE.getKey());
     }
 
     private void startUpTaskQuartz(String name, String title, String delayedTime) {
@@ -478,10 +514,6 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         for (Order order : list) {
             order.setOrderItemList(mapByIds.containsKey(order.getId()) ? mapByIds.get(order.getId()) : new ArrayList<>());
         }
-        iAreaService.setDataMation(list, Order::getProvinceId);
-        iAreaService.setDataMation(list, Order::getCityId);
-        iAreaService.setDataMation(list, Order::getAreaId);
-        iAreaService.setDataMation(list, Order::getTownshipId);
         setAddressMationForList(list);
         // 分页查询时获取数据
         return JSONUtil.toList(JSONUtil.toJsonStr(list), null);
@@ -639,27 +671,22 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         Order order = super.selectById(id);
         Map<String, List<OrderItem>> orderItemList = orderItemService.queryListByParentId(Collections.singletonList(id));
         order.setOrderItemList(orderItemList.get(order.getId()));
-        iAreaService.setDataMation(order, Order::getProvinceId);
-        iAreaService.setDataMation(order, Order::getCityId);
-        iAreaService.setDataMation(order, Order::getAreaId);
-        iAreaService.setDataMation(order, Order::getTownshipId);
         List<Order> orderList = setAddressMationForList(Collections.singletonList(order));
         refreshCache(id);
         return orderList.get(CommonNumConstants.NUM_ZERO);
     }
 
     private List<Order> setAddressMationForList(List<Order> orderList) {
-        Map<String, Map<String, Object>> addressMap = new HashMap<>();
-        List<String> addressTableIdList = orderList.stream().filter(order -> Objects.equals(order.getAddressFromType(), AddressFromTypeEnums.ADDRESS_TABLE.getKey()))
-            .map(Order::getAddressId).distinct().collect(Collectors.toList());
-        if (CollectionUtil.isNotEmpty(addressTableIdList)) {
-            addressMap.putAll(shopAddressService.queryListByIds(addressTableIdList));
+        // 订单地址一律走 history 快照
+        List<String> addressHistoryIdList = orderList.stream()
+            .map(Order::getAddressId)
+            .filter(StrUtil::isNotEmpty)
+            .distinct()
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(addressHistoryIdList)) {
+            return orderList;
         }
-        List<String> addressHistoryIdList = orderList.stream().filter(order -> Objects.equals(order.getAddressFromType(), AddressFromTypeEnums.ADDRESS_HISTORY_TABLE.getKey()))
-            .map(Order::getAddressId).distinct().collect(Collectors.toList());
-        if (CollectionUtil.isNotEmpty(addressHistoryIdList)) {
-            addressMap.putAll(shopAddressHistoryService.queryListByIds(addressHistoryIdList));
-        }
+        Map<String, Map<String, Object>> addressMap = shopAddressHistoryService.queryListByIds(addressHistoryIdList);
         if (CollectionUtil.isNotEmpty(addressMap)) {
             orderList.forEach(order -> {
                 if (addressMap.containsKey(order.getAddressId())) {
@@ -1068,22 +1095,6 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     }
 
     @Override
-    public void updateByAddressId(Map<String, String> addressOldNew) {
-        List<String> oldAddressIdList = new ArrayList<>(addressOldNew.keySet());
-        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in(MybatisPlusUtil.toColumns(Order::getAddressId), oldAddressIdList);
-        List<Order> list = list(queryWrapper);
-        if (CollectionUtil.isEmpty(list)) {
-            return;
-        }
-        for (Order order : list) {
-            order.setAddressId(addressOldNew.get(order.getAddressId()));
-            order.setAddressFromType(AddressFromTypeEnums.ADDRESS_HISTORY_TABLE.getKey());
-        }
-        super.updateEntity(list, InputObject.getLogParamsStatic().get("id").toString());
-    }
-
-    @Override
     public void changeOrderAddress(InputObject inputObject, OutputObject outputObject) {
         ShopAddressHistory shopAddressHistory = inputObject.getParams(ShopAddressHistory.class);
         Order order = super.selectById(shopAddressHistory.getOrderId());
@@ -1099,6 +1110,9 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         shopAddressHistory.setId(null);
         shopAddressHistoryService.createEntity(shopAddressHistory, inputObject.getLogParams().get("id").toString());
         order.setAddressId(shopAddressHistory.getId());
+        order.setAddressFromType(AddressFromTypeEnums.ADDRESS_HISTORY_TABLE.getKey());
+        order.setReceiverName(shopAddressHistory.getName());
+        order.setReceiverMobile(shopAddressHistory.getMobile());
         super.updateEntity(order, inputObject.getLogParams().get("id").toString());
         outputObject.setBean(order);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
@@ -1147,6 +1161,8 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         // 与 queryOrderPageList type=1/3/4/6 口径对齐；评价仅统计待评价类，便于角标展示
         List<Integer> stateList = Arrays.asList(
             ShopOrderItemOtherState.WAIT_PAY.getKey(),
+            ShopOrderItemOtherState.WAIT_DELIVER.getKey(),
+            ShopOrderItemOtherState.PART_DELIVERED.getKey(),
             ShopOrderItemOtherState.ALL_DELIVERED.getKey(),
             ShopOrderItemOtherState.TRANSPORTING.getKey(),
             ShopOrderItemOtherState.UNEVALUATE.getKey(),
@@ -1158,6 +1174,10 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         Map<String, Object> bean = new HashMap<>();
         // 待支付
         bean.put("waitPay", sumStateCount(countMap, ShopOrderItemOtherState.WAIT_PAY.getKey()));
+        // 待发货
+        bean.put("waitDeliver", sumStateCount(countMap,
+            ShopOrderItemOtherState.WAIT_DELIVER.getKey(),
+            ShopOrderItemOtherState.PART_DELIVERED.getKey()));
         // 待收货
         bean.put("waitReceive", sumStateCount(countMap,
             ShopOrderItemOtherState.ALL_DELIVERED.getKey(),

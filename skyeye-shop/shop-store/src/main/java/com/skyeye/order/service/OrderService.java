@@ -61,8 +61,6 @@ public interface OrderService extends SkyeyeBusinessService<Order> {
 
     List<Order> queryOrderList(String orderId);
 
-    void updateByAddressId(Map<String, String> map);
-
     void changeOrderAddress(InputObject inputObject, OutputObject outputObject);
 
     void changeAdjustPriceById(String id, String interpolation);

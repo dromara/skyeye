@@ -43,4 +43,15 @@ public class PayController {
         payService.payment(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "refund", value = "统一退款", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "data", name = "data", value = "业务数据(oddNumber/outRefundNo/payPrice/refundPrice/reason)", required = "required,json"),
+        @ApiImplicitParam(id = "channelCode", name = "channelCode", value = "支付渠道编码", required = "required"),
+        @ApiImplicitParam(id = "appKey", name = "appKey", value = "支付应用标识", required = "required"),
+        @ApiImplicitParam(id = "notifyUrl", name = "notifyUrl", value = "退款结果回调地址")})
+    @RequestMapping("/post/PayController/refund")
+    public void refund(InputObject inputObject, OutputObject outputObject) {
+        payService.refund(inputObject, outputObject);
+    }
+
 }

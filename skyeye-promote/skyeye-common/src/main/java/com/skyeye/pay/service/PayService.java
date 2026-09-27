@@ -27,4 +27,11 @@ public interface PayService {
     Map<String, Object> executePayment(Map<String, Object> data, String channelCode, String returnUrl,
                                        String channelExtras, String notifyUrl, String appKey);
 
+    void refund(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 发起统一退款。data：oddNumber(原支付单号)、outRefundNo、payPrice、refundPrice、reason
+     */
+    Map<String, Object> executeRefund(Map<String, Object> data, String channelCode, String notifyUrl, String appKey);
+
 }

@@ -168,4 +168,12 @@ public class OrderItem extends OperatorUserInfo {
     @Property(value = "快递单号列表")
     private List<String> deliverNumberList;
 
+    @TableField(exist = false)
+    @Property(value = "收件人姓名（来自父订单）")
+    private String receiverName;
+
+    @TableField(exist = false)
+    @Property(value = "收件人手机（来自父订单）")
+    private String receiverMobile;
+
 }
