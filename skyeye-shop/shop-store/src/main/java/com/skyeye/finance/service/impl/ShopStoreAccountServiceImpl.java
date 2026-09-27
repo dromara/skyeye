@@ -29,6 +29,7 @@ import com.skyeye.exception.CustomException;
 import com.skyeye.finance.dao.ShopStoreAccountDao;
 import com.skyeye.finance.entity.ShopStoreAccount;
 import com.skyeye.finance.entity.ShopStoreLedger;
+import com.skyeye.finance.entity.ShopStorePayee;
 import com.skyeye.finance.entity.ShopStoreWithdraw;
 import com.skyeye.finance.enums.ShopStoreLedgerBizType;
 import com.skyeye.finance.enums.ShopStoreLedgerDirection;
@@ -36,6 +37,7 @@ import com.skyeye.finance.enums.ShopStoreSettleStatus;
 import com.skyeye.finance.enums.ShopStoreWithdrawStatus;
 import com.skyeye.finance.service.ShopStoreAccountService;
 import com.skyeye.finance.service.ShopStoreLedgerService;
+import com.skyeye.finance.service.ShopStorePayeeService;
 import com.skyeye.finance.service.ShopStoreWithdrawService;
 import com.skyeye.order.entity.OrderAfterSale;
 import com.skyeye.order.entity.OrderItem;
@@ -103,6 +105,9 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
 
     @Autowired
     private ShopStoreWithdrawService shopStoreWithdrawService;
+
+    @Autowired
+    private ShopStorePayeeService shopStorePayeeService;
 
     @Autowired
     private MemberService memberService;
@@ -419,14 +424,17 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
             throw new CustomException("可用余额不足");
         }
 
+        String payeeName = accountName.trim();
+        String payeeNo = accountNo.trim();
+        String payeeBank = bankName.trim();
         ShopStoreWithdraw withdraw = new ShopStoreWithdraw();
         withdraw.setStoreId(storeId);
         withdraw.setMemberId(userId);
         withdraw.setAmount(amount);
         withdraw.setState(ShopStoreWithdrawStatus.PENDING.getKey());
-        withdraw.setAccountName(accountName.trim());
-        withdraw.setAccountNo(accountNo.trim());
-        withdraw.setBankName(bankName.trim());
+        withdraw.setAccountName(payeeName);
+        withdraw.setAccountNo(payeeNo);
+        withdraw.setBankName(payeeBank);
         String withdrawId = shopStoreWithdrawService.createEntity(withdraw, userId);
 
         // 申请成功后冻结对应可用余额
@@ -440,7 +448,44 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
                 acc.setFrozenAmount(nvl(acc.getFrozenAmount()) + amt);
                 return amt;
             });
+        // 同步为默认收款账户，下次提现回填
+        shopStorePayeeService.upsertByStoreId(storeId, payeeName, payeeNo, payeeBank, userId);
         outputObject.setBean(shopStoreWithdrawService.selectById(withdrawId));
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    /**
+     * 商家端：查询默认收款账户
+     */
+    @Override
+    public void queryPersonalStorePayee(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String storeId = params.get("storeId").toString();
+        assertStoreFundAccess(storeId);
+        ShopStorePayee payee = shopStorePayeeService.getByStoreId(storeId);
+        if (payee == null) {
+            outputObject.setBean(new HashMap<>());
+            outputObject.settotal(CommonNumConstants.NUM_ZERO);
+            return;
+        }
+        outputObject.setBean(payee);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    /**
+     * 商家端：单独保存默认收款账户
+     */
+    @Override
+    public void savePersonalStorePayee(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String storeId = params.get("storeId").toString();
+        assertStoreFundAccess(storeId);
+        String userId = InputObject.getLogParamsStatic().get(CommonConstants.ID).toString();
+        String accountName = params.get("accountName") != null ? params.get("accountName").toString() : StrUtil.EMPTY;
+        String accountNo = params.get("accountNo") != null ? params.get("accountNo").toString() : StrUtil.EMPTY;
+        String bankName = params.get("bankName") != null ? params.get("bankName").toString() : StrUtil.EMPTY;
+        ShopStorePayee payee = shopStorePayeeService.upsertByStoreId(storeId, accountName, accountNo, bankName, userId);
+        outputObject.setBean(payee);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 

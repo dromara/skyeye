@@ -60,6 +60,25 @@ public class ShopStoreAccountController {
         shopStoreAccountService.applyPersonalStoreWithdraw(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryPersonalStorePayee", value = "查询门店默认收款账户", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required")})
+    @RequestMapping("/post/ShopStoreAccountController/queryPersonalStorePayee")
+    public void queryPersonalStorePayee(InputObject inputObject, OutputObject outputObject) {
+        shopStoreAccountService.queryPersonalStorePayee(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "savePersonalStorePayee", value = "保存门店默认收款账户", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id", required = "required"),
+        @ApiImplicitParam(id = "accountName", name = "accountName", value = "收款户名", required = "required"),
+        @ApiImplicitParam(id = "accountNo", name = "accountNo", value = "银行卡号", required = "required"),
+        @ApiImplicitParam(id = "bankName", name = "bankName", value = "开户行", required = "required")})
+    @RequestMapping("/post/ShopStoreAccountController/savePersonalStorePayee")
+    public void savePersonalStorePayee(InputObject inputObject, OutputObject outputObject) {
+        shopStoreAccountService.savePersonalStorePayee(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryMyPersonalStoreWithdrawList", value = "查询我的门店提现记录", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/ShopStoreAccountController/queryMyPersonalStoreWithdrawList")

@@ -42,6 +42,16 @@ public interface ShopStoreAccountService extends SkyeyeBusinessService<ShopStore
 
     void applyPersonalStoreWithdraw(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 商家端：查询门店默认收款账户
+     */
+    void queryPersonalStorePayee(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 商家端：保存门店默认收款账户
+     */
+    void savePersonalStorePayee(InputObject inputObject, OutputObject outputObject);
+
     void queryMyPersonalStoreWithdrawList(InputObject inputObject, OutputObject outputObject);
 
     void cancelMyPersonalStoreWithdraw(InputObject inputObject, OutputObject outputObject);
