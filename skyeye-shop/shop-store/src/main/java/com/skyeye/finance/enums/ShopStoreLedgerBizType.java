@@ -25,7 +25,15 @@ public enum ShopStoreLedgerBizType implements SkyeyeEnumClass {
     /** 确认收货后进入结算冻结，期满前不可提现 */
     ORDER_HOLD(6, "收货冻结", "blue", true, false),
     /** 结算期满：冻结转入可提现 */
-    ORDER_SETTLE(7, "结算可提现", "green", true, false);
+    ORDER_SETTLE(7, "结算可提现", "green", true, false),
+    /** 平台货：供货方佣金冻结（与订单同节奏） */
+    COMMISSION_HOLD(8, "佣金冻结", "blue", true, false),
+    /** 平台货：佣金结算可提现 */
+    COMMISSION_SETTLE(9, "佣金可提现", "green", true, false),
+    /** 兼容回填：佣金直接入可提现 */
+    COMMISSION_IN(10, "佣金入账", "green", true, false),
+    /** 售后：从供货方扣回佣金 */
+    COMMISSION_REFUND(11, "佣金退回", "red", true, false);
 
     private Integer key;
     private String value;

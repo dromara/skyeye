@@ -76,6 +76,10 @@ public class OrderItem extends OperatorUserInfo {
     @ApiModelProperty(value = "平台货供货方门店id（代发履约）")
     private String sourceStoreId;
 
+    @TableField("commission_amount")
+    @Property(value = "平台货佣金快照（分，整行）")
+    private Long commissionAmount;
+
     @TableField(exist = false)
     @Property(value = "供货方门店信息")
     private Map<String, Object> sourceStoreMation;

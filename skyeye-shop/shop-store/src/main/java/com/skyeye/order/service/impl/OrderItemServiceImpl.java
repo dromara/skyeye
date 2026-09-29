@@ -26,9 +26,11 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DesensitizedUtil;
+import com.skyeye.common.util.NumberParseUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.erp.service.IMaterialNormsService;
 import com.skyeye.exception.CustomException;
+import com.skyeye.finance.service.ShopStoreAccountService;
 import com.skyeye.order.dao.OrderItemDao;
 import com.skyeye.order.entity.ItemDeliverHistory;
 import com.skyeye.order.entity.Order;
@@ -37,7 +39,6 @@ import com.skyeye.order.entity.OrderItem;
 import com.skyeye.order.enums.ItemSignState;
 import com.skyeye.order.enums.OrderCommentType;
 import com.skyeye.order.enums.ShopOrderItemOtherState;
-import com.skyeye.finance.service.ShopStoreAccountService;
 import com.skyeye.order.service.ItemDeliverHistoryService;
 import com.skyeye.order.service.OrderCommentService;
 import com.skyeye.order.service.OrderItemService;
@@ -207,16 +208,22 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
         List<String> oddNumber = iCodeRuleService.getNextCodeByClassName(getClass().getName(), BeanUtil.beanToMap(orderItemList.get(CommonNumConstants.NUM_ZERO)), orderItemList.size());
 
         List<String> materialStoreIds = orderItemList.stream().map(OrderItem::getMaterialStoreId).distinct().collect(Collectors.toList());
-        // shopMaterial -> shopMaterialStore -> storeId / sourceStoreId
+        // shopMaterial -> shopMaterialStore -> storeId / sourceStoreId / platformCommission
         List<Map<String, Object>> materialByIds = iShopMaterialNormsService.queryShopMaterialByIds(materialStoreIds);// erp-shop-material
-        Map<String, Map<String, Object>> materialStoreInfoMap = materialByIds.stream()
-            .distinct().collect(Collectors.toMap(map -> {
-                Map<String, Object> shopMaterialStore = JSONUtil.toBean(map.get("shopMaterialStore").toString(), null);
-                return shopMaterialStore.get("id").toString();
-            }, map -> {
-                Map<String, Object> shopMaterialStore = JSONUtil.toBean(map.get("shopMaterialStore").toString(), null);
-                return shopMaterialStore;
-            }, (a, b) -> a));
+        Map<String, Map<String, Object>> materialStoreInfoMap = new HashMap<>();
+        Map<String, Long> commissionPerUnitMap = new HashMap<>();
+        for (Map<String, Object> map : materialByIds) {
+            if (map == null || map.get("shopMaterialStore") == null) {
+                continue;
+            }
+            Map<String, Object> shopMaterialStore = JSONUtil.toBean(map.get("shopMaterialStore").toString(), null);
+            if (shopMaterialStore == null || shopMaterialStore.get("id") == null) {
+                continue;
+            }
+            String msId = shopMaterialStore.get("id").toString();
+            materialStoreInfoMap.put(msId, shopMaterialStore);
+            commissionPerUnitMap.put(msId, NumberParseUtil.parseCommissionFen(map.get("platformCommission")));
+        }
         for (int i = 0; i < orderItemList.size(); i++) {
             OrderItem orderItem = orderItemList.get(i);
             Map<String, Object> storeInfo = materialStoreInfoMap.get(orderItem.getMaterialStoreId());
@@ -237,6 +244,17 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
             orderItem.setStoreId(sellStoreId);
             orderItem.setSourceStoreId(StrUtil.isBlank(sourceStoreId) ? null : sourceStoreId);
             orderItem.setOddNumber(oddNumber.get(i));
+            // 平台货：按件佣金 × 数量，且不超过本行实付；实付为 0 时佣金必须为 0
+            if (StrUtil.isNotBlank(sourceStoreId)) {
+                long perUnit = commissionPerUnitMap.getOrDefault(orderItem.getMaterialStoreId(), 0L);
+                long count = NumberParseUtil.parseCount(orderItem.getCount());
+                long payFen = NumberParseUtil.parseAmountFen(orderItem.getPayPrice());
+                long commission = Math.max(perUnit * count, 0L);
+                commission = payFen > 0 ? Math.min(commission, payFen) : 0L;
+                orderItem.setCommissionAmount(commission);
+            } else {
+                orderItem.setCommissionAmount(0L);
+            }
         }
         super.createEntity(orderItemList, userId);
     }
@@ -283,7 +301,8 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
             String storeId = commonPageInfo.getObjectId();
             String storeCol = MybatisPlusUtil.toColumns(OrderItem::getStoreId);
             String sourceCol = MybatisPlusUtil.toColumns(OrderItem::getSourceStoreId);
-            // dropship=1：仅供货方代发；fulfill=1：本店需履约（自营无供货方 + 供货方是本店）；默认：本店卖出
+            // dropship=1：仅供货方代发；fulfill=1：本店需履约（自营无供货方 + 供货方是本店）；
+            // reconcile=1：资金对账（本店卖出 + 本店供货）；默认：本店卖出
             if (isDropshipQuery(commonPageInfo)) {
                 wrapper.eq(sourceCol, storeId);
             } else if (isFulfillQuery(commonPageInfo)) {
@@ -292,6 +311,8 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
                         .and(n2 -> n2.isNull(sourceCol).or().eq(sourceCol, StrUtil.EMPTY)))
                     .or()
                     .eq(sourceCol, storeId));
+            } else if (isReconcileQuery(commonPageInfo)) {
+                wrapper.and(w -> w.eq(storeCol, storeId).or().eq(sourceCol, storeId));
             } else {
                 wrapper.eq(storeCol, storeId);
             }
@@ -312,6 +333,10 @@ public class OrderItemServiceImpl extends SkyeyeBusinessServiceImpl<OrderItemDao
 
     private boolean isFulfillQuery(CommonPageInfo commonPageInfo) {
         return isFlagOn(commonPageInfo.getCustomParamsMapStr("fulfill"));
+    }
+
+    private boolean isReconcileQuery(CommonPageInfo commonPageInfo) {
+        return isFlagOn(commonPageInfo.getCustomParamsMapStr("reconcile"));
     }
 
     private boolean isFlagOn(String flag) {

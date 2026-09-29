@@ -26,6 +26,7 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.object.ResultEntity;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.exception.CustomException;
 import com.skyeye.material.classenum.MaterialShelvesState;
 import com.skyeye.material.entity.Material;
 import com.skyeye.material.service.MaterialService;
@@ -79,6 +80,30 @@ public class ShopMaterialServiceImpl extends SkyeyeBusinessServiceImpl<ShopMater
     @Override
     public void createPrepose(ShopMaterial entity) {
         entity.setRealSales(CommonNumConstants.NUM_ZERO.toString());
+        assertPlatformCommission(entity);
+    }
+
+    @Override
+    public void updatePrepose(ShopMaterial entity) {
+        assertPlatformCommission(entity);
+    }
+
+    /**
+     * 允许作为平台货源时，佣金（分/件）必须大于 0
+     */
+    private void assertPlatformCommission(ShopMaterial entity) {
+        if (entity == null) {
+            return;
+        }
+        if (!WhetherEnum.ENABLE_USING.getKey().equals(entity.getAllowPlatformSource())) {
+            if (entity.getPlatformCommission() == null) {
+                entity.setPlatformCommission(0L);
+            }
+            return;
+        }
+        if (entity.getPlatformCommission() == null || entity.getPlatformCommission() <= 0) {
+            throw new CustomException("允许作为平台货源时，请填写大于0的佣金");
+        }
     }
 
     @Override

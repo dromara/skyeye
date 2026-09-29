@@ -1664,6 +1664,7 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         shopMaterial.setDeliveryMethod(deliveryMethod);
         shopMaterial.setBigTypeId(bigTypeId);
         shopMaterial.setAllowPlatformSource(WhetherEnum.DISABLE_USING.getKey());
+        shopMaterial.setPlatformCommission(0L);
         shopMaterial.setOrderBy(1);
         shopMaterial.setGiftPoint(0);
         shopMaterial.setVirtualSales("0");

@@ -130,6 +130,13 @@ public class ShopMaterial extends OperatorUserInfo {
     @ApiModelProperty(value = "是否允许别人作为平台货源使用", enumClass = WhetherEnum.class, required = "required,num")
     private Integer allowPlatformSource;
 
+    /**
+     * 平台货源佣金（分/件）。允许作为平台货源时必填；下单按数量快照到子单。
+     */
+    @TableField(value = "platform_commission")
+    @ApiModelProperty(value = "平台货源佣金（分/件）")
+    private Long platformCommission;
+
     @TableField(exist = false)
     @Property(value = "平台货源供货方门店id（选平台货列表回传）")
     private String sourceStoreId;

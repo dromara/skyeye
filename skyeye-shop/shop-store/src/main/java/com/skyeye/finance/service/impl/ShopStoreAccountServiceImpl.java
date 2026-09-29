@@ -6,6 +6,7 @@ package com.skyeye.finance.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.Page;
@@ -15,12 +16,14 @@ import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.classenum.MemberAuthStatus;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
+import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.util.DateUtil;
+import com.skyeye.common.util.NumberParseUtil;
+import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.entity.Member;
 import com.skyeye.eve.rest.quartz.SysQuartzMation;
@@ -52,8 +55,6 @@ import com.skyeye.store.entity.ShopStore;
 import com.skyeye.store.entity.ShopStoreStaff;
 import com.skyeye.store.service.ShopStoreService;
 import com.skyeye.store.service.ShopStoreStaffService;
-import com.skyeye.common.util.ToolUtil;
-import cn.hutool.json.JSONUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,18 +81,28 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
 
     private static final Logger log = LoggerFactory.getLogger(ShopStoreAccountServiceImpl.class);
 
-    /** 商城平台代收 PayApp */
+    /**
+     * 商城平台代收 PayApp
+     */
     private static final String MALL_ORDER_PAY_APP_KEY = "mall-order";
-    /** 一期银行卡自动打款默认走支付宝 PC 渠道（证书模式） */
+    /**
+     * 一期银行卡自动打款默认走支付宝 PC 渠道（证书模式）
+     */
     private static final String DEFAULT_TRANSFER_CHANNEL = "alipay_pc";
-    /** PayTransferType.BANK_CARD */
+    /**
+     * PayTransferType.BANK_CARD
+     */
     private static final int TRANSFER_TYPE_BANK_CARD = 3;
-    /** PayTransferStatusResp */
+    /**
+     * PayTransferStatusResp
+     */
     private static final int TRANSFER_STATUS_WAITING = 0;
     private static final int TRANSFER_STATUS_IN_PROGRESS = 10;
     private static final int TRANSFER_STATUS_SUCCESS = 20;
     private static final int TRANSFER_STATUS_CLOSED = 30;
-    /** 确认收货后结算冻结天数，期满冻结转入可提现 */
+    /**
+     * 确认收货后结算冻结天数，期满冻结转入可提现
+     */
     private static final int SETTLE_HOLD_DAYS = 7;
 
     @Autowired
@@ -130,6 +141,7 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
 
     /**
      * 兼容旧数据/回填：直接增加可提现。新单请走 holdOrderItemOnSign。
+     * 平台货：供货店拿货款（实付-佣金），销售店拿佣金。
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -137,27 +149,35 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
         if (orderItem == null || StrUtil.isBlank(orderItem.getId()) || StrUtil.isBlank(orderItem.getStoreId())) {
             return;
         }
-        // 已有收货冻结或历史入账则跳过
-        if (shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_HOLD.getKey(), orderItem.getId())
-            || shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_IN.getKey(), orderItem.getId())) {
+        long pay = resolvePayAmountFen(orderItem);
+        long commission = resolveCommissionFen(orderItem);
+        long goodsAmt = Math.max(pay - commission, 0L);
+        boolean goodsDone = shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_HOLD.getKey(), orderItem.getId())
+            || shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_IN.getKey(), orderItem.getId());
+        boolean commissionDone = shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.COMMISSION_HOLD.getKey(), orderItem.getId())
+            || shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.COMMISSION_IN.getKey(), orderItem.getId());
+        if (goodsDone && (commissionDone || commission <= 0)) {
             return;
         }
-        long amount = resolvePayAmountFen(orderItem);
-        if (amount <= 0) {
-            return;
+        if (!goodsDone && goodsAmt > 0) {
+            String goodsStoreId = resolveGoodsStoreId(orderItem);
+            applyChange(goodsStoreId, ShopStoreLedgerBizType.ORDER_IN.getKey(), orderItem.getId(),
+                goodsAmt, ShopStoreLedgerDirection.IN_AVAILABLE.getKey(),
+                "订单入账 " + StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId()),
+                (acc, amt) -> {
+                    acc.setAvailableAmount(nvl(acc.getAvailableAmount()) + amt);
+                    acc.setTotalIncome(nvl(acc.getTotalIncome()) + amt);
+                    return amt;
+                });
         }
-        applyChange(orderItem.getStoreId(), ShopStoreLedgerBizType.ORDER_IN.getKey(), orderItem.getId(),
-            amount, ShopStoreLedgerDirection.IN_AVAILABLE.getKey(),
-            "订单入账 " + StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId()),
-            (acc, amt) -> {
-                acc.setAvailableAmount(nvl(acc.getAvailableAmount()) + amt);
-                acc.setTotalIncome(nvl(acc.getTotalIncome()) + amt);
-                return amt;
-            });
+        if (!commissionDone) {
+            creditCommissionIn(orderItem, commission);
+        }
     }
 
     /**
-     * 确认收货整单签收：金额进冻结，SETTLE_HOLD_DAYS 天后解冻可提现
+     * 确认收货整单签收：金额进冻结，SETTLE_HOLD_DAYS 天后解冻可提现；
+     * 平台货拆分：供货店收货款（实付-佣金），销售店收佣金，节奏一致。
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -172,31 +192,40 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
             && !ShopOrderItemOtherState.PARTIALEVALUATION.getKey().equals(orderItem.getState())) {
             return;
         }
+        long pay = resolvePayAmountFen(orderItem);
+        long commission = resolveCommissionFen(orderItem);
+        long goodsAmt = Math.max(pay - commission, 0L);
+        boolean goodsDone = shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_HOLD.getKey(), orderItem.getId())
+            || shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_IN.getKey(), orderItem.getId());
+        boolean commissionDone = shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.COMMISSION_HOLD.getKey(), orderItem.getId())
+            || shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.COMMISSION_IN.getKey(), orderItem.getId());
+        if (goodsDone && (commissionDone || commission <= 0)) {
+            return;
+        }
+        if (!goodsDone && goodsAmt > 0) {
+            String goodsStoreId = resolveGoodsStoreId(orderItem);
+            applyChange(goodsStoreId, ShopStoreLedgerBizType.ORDER_HOLD.getKey(), orderItem.getId(),
+                goodsAmt, ShopStoreLedgerDirection.IN_FROZEN.getKey(),
+                "收货冻结 " + StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId())
+                    + "（" + SETTLE_HOLD_DAYS + "天后可提现）",
+                (acc, amt) -> {
+                    acc.setFrozenAmount(nvl(acc.getFrozenAmount()) + amt);
+                    acc.setTotalIncome(nvl(acc.getTotalIncome()) + amt);
+                    return amt;
+                });
+        }
+        if (!commissionDone) {
+            holdCommissionOnSign(orderItem, commission);
+        }
+        // 到点自动结算：注册延迟任务（货款或佣金任一冻结成功即可）
         if (shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_HOLD.getKey(), orderItem.getId())
-            || shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_IN.getKey(), orderItem.getId())) {
-            return;
-        }
-        long amount = resolvePayAmountFen(orderItem);
-        if (amount <= 0) {
-            return;
-        }
-        applyChange(orderItem.getStoreId(), ShopStoreLedgerBizType.ORDER_HOLD.getKey(), orderItem.getId(),
-            amount, ShopStoreLedgerDirection.IN_FROZEN.getKey(),
-            "收货冻结 " + StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId())
-                + "（" + SETTLE_HOLD_DAYS + "天后可提现）",
-            (acc, amt) -> {
-                acc.setFrozenAmount(nvl(acc.getFrozenAmount()) + amt);
-                acc.setTotalIncome(nvl(acc.getTotalIncome()) + amt);
-                return amt;
-            });
-        // 到点自动结算：注册延迟任务
-        if (shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_HOLD.getKey(), orderItem.getId())) {
+            || shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.COMMISSION_HOLD.getKey(), orderItem.getId())) {
             startSettleQuartz(orderItem.getId(), StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId()));
         }
     }
 
     /**
-     * 单笔到点结算（Quartz 回调）；幂等
+     * 单笔到点结算（Quartz 回调）；幂等——同时结算货款与佣金冻结
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -204,25 +233,20 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
         if (StrUtil.isBlank(orderItemId)) {
             return;
         }
-        QueryWrapper<ShopStoreLedger> qw = new QueryWrapper<>();
-        qw.eq(MybatisPlusUtil.toColumns(ShopStoreLedger::getBizType), ShopStoreLedgerBizType.ORDER_HOLD.getKey())
-            .eq(MybatisPlusUtil.toColumns(ShopStoreLedger::getBizId), orderItemId)
-            .last("LIMIT 1");
-        ShopStoreLedger hold = shopStoreLedgerService.getOne(qw, false);
-        if (hold == null || StrUtil.isBlank(hold.getId())) {
-            return;
+        List<ShopStoreLedger> holds = listHoldsByItemId(orderItemId);
+        for (ShopStoreLedger hold : holds) {
+            releaseOneHold(hold, true);
         }
-        // 定时任务到点触发，强制结算（幂等靠 ORDER_SETTLE）
-        releaseOneHold(hold, true);
     }
 
     /**
-     * 扫漏：释放全部已到期收货冻结
+     * 扫漏：释放全部已到期收货/佣金冻结
      */
     @Override
     public void releaseAllDueSettlements() {
         QueryWrapper<ShopStoreLedger> qw = new QueryWrapper<>();
-        qw.eq(MybatisPlusUtil.toColumns(ShopStoreLedger::getBizType), ShopStoreLedgerBizType.ORDER_HOLD.getKey());
+        qw.in(MybatisPlusUtil.toColumns(ShopStoreLedger::getBizType),
+            Arrays.asList(ShopStoreLedgerBizType.ORDER_HOLD.getKey(), ShopStoreLedgerBizType.COMMISSION_HOLD.getKey()));
         List<ShopStoreLedger> holds = shopStoreLedgerService.list(qw);
         if (CollectionUtil.isEmpty(holds)) {
             return;
@@ -231,13 +255,15 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
             try {
                 releaseOneHold(hold, false);
             } catch (Exception e) {
-                log.error("扫漏结算失败 storeId={} itemId={}", hold.getStoreId(), hold.getBizId(), e);
+                log.error("扫漏结算失败 storeId={} itemId={} bizType={}",
+                    hold.getStoreId(), hold.getBizId(), hold.getBizType(), e);
             }
         }
     }
 
     /**
-     * 售后退款成功出账：结算前优先扣冻结，否则扣可用；不足则扣到 0
+     * 售后退款成功出账：结算前优先扣冻结，否则扣可用；不足则扣到 0。
+     * 平台货按比例：供货店扣货款部分，销售店扣佣金部分。
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -245,46 +271,67 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
         if (afterSale == null || StrUtil.isBlank(afterSale.getId()) || StrUtil.isBlank(afterSale.getStoreId())) {
             return;
         }
-        long amount = parseFen(afterSale.getRefundAmount());
+        long amount = NumberParseUtil.parseAmountFen(afterSale.getRefundAmount());
         if (amount <= 0) {
-            amount = parseFen(afterSale.getApplyAmount());
+            amount = NumberParseUtil.parseAmountFen(afterSale.getApplyAmount());
         }
         if (amount <= 0) {
             return;
         }
-        final long debitAmount = amount;
-        final String storeId = afterSale.getStoreId();
         final String itemId = afterSale.getOrderItemId();
-        final boolean holdOpen = StrUtil.isNotBlank(itemId)
+        OrderItem orderItem = StrUtil.isNotBlank(itemId) ? orderItemService.selectById(itemId) : null;
+        long pay = orderItem != null ? resolvePayAmountFen(orderItem) : 0L;
+        long commissionTotal = orderItem != null ? resolveCommissionFen(orderItem) : 0L;
+        boolean platform = orderItem != null && StrUtil.isNotBlank(orderItem.getSourceStoreId()) && commissionTotal > 0;
+        long commissionRefund = 0L;
+        if (platform && pay > 0) {
+            commissionRefund = Math.min(commissionTotal, Math.round(amount * 1.0 * commissionTotal / pay));
+        }
+        long goodsRefund = Math.max(amount - commissionRefund, 0L);
+        final boolean goodsHoldOpen = StrUtil.isNotBlank(itemId)
             && shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_HOLD.getKey(), itemId)
             && !shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_SETTLE.getKey(), itemId)
             && !shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_IN.getKey(), itemId);
-        // 结算前有收货冻结：先扣冻结再扣可用
-        applyChange(storeId, ShopStoreLedgerBizType.REFUND_OUT.getKey(), afterSale.getId(),
-            debitAmount, ShopStoreLedgerDirection.OUT_AVAILABLE.getKey(), "售后退款出账",
-            (acc, amt) -> {
-                long left = amt;
-                long real = 0L;
-                if (holdOpen) {
-                    long frozen = nvl(acc.getFrozenAmount());
-                    long fromFrozen = Math.min(frozen, left);
-                    acc.setFrozenAmount(frozen - fromFrozen);
-                    left -= fromFrozen;
-                    real += fromFrozen;
-                }
-                if (left > 0) {
-                    long available = nvl(acc.getAvailableAmount());
-                    long fromAvail = Math.min(available, left);
-                    acc.setAvailableAmount(available - fromAvail);
-                    left -= fromAvail;
-                    real += fromAvail;
-                }
-                if (real < amt) {
-                    log.warn("门店{}退款出账余额不足，应扣{}实际扣{}", storeId, amt, real);
-                }
-                acc.setTotalRefund(nvl(acc.getTotalRefund()) + real);
-                return real;
-            });
+        if (goodsRefund > 0) {
+            String goodsStoreId = orderItem != null ? resolveGoodsStoreId(orderItem) : afterSale.getStoreId();
+            applyChange(goodsStoreId, ShopStoreLedgerBizType.REFUND_OUT.getKey(), afterSale.getId(),
+                goodsRefund, ShopStoreLedgerDirection.OUT_AVAILABLE.getKey(), "售后退款出账",
+                (acc, amt) -> debitFrozenThenAvailable(acc, amt, goodsHoldOpen, goodsStoreId));
+        }
+        if (commissionRefund > 0 && orderItem != null) {
+            final boolean commissionHoldOpen = shopStoreLedgerService.existsByBiz(
+                ShopStoreLedgerBizType.COMMISSION_HOLD.getKey(), itemId)
+                && !shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.COMMISSION_SETTLE.getKey(), itemId)
+                && !shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.COMMISSION_IN.getKey(), itemId);
+            // 佣金在销售店
+            applyChange(orderItem.getStoreId(), ShopStoreLedgerBizType.COMMISSION_REFUND.getKey(), afterSale.getId(),
+                commissionRefund, ShopStoreLedgerDirection.OUT_AVAILABLE.getKey(), "售后退款扣回佣金",
+                (acc, amt) -> debitFrozenThenAvailable(acc, amt, commissionHoldOpen, orderItem.getStoreId()));
+        }
+    }
+
+    private long debitFrozenThenAvailable(ShopStoreAccount acc, long amt, boolean holdOpen, String storeId) {
+        long left = amt;
+        long real = 0L;
+        if (holdOpen) {
+            long frozen = nvl(acc.getFrozenAmount());
+            long fromFrozen = Math.min(frozen, left);
+            acc.setFrozenAmount(frozen - fromFrozen);
+            left -= fromFrozen;
+            real += fromFrozen;
+        }
+        if (left > 0) {
+            long available = nvl(acc.getAvailableAmount());
+            long fromAvail = Math.min(available, left);
+            acc.setAvailableAmount(available - fromAvail);
+            left -= fromAvail;
+            real += fromAvail;
+        }
+        if (real < amt) {
+            log.warn("门店{}退款出账余额不足，应扣{}实际扣{}", storeId, amt, real);
+        }
+        acc.setTotalRefund(nvl(acc.getTotalRefund()) + real);
+        return real;
     }
 
     /**
@@ -328,7 +375,8 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
     }
 
     /**
-     * 商家端：订单对账，复用子单分页并附加退款额、净额、到账状态
+     * 商家端：订单对账，直接按「本店卖出 OR 本店供货」查子单，并附加退款额、净额、到账状态。
+     * 平台货：销售店净额=佣金，供货店净额=货款（实付-佣金）；自营：净额=实付-退款。
      */
     @Override
     public void queryPersonalStoreReconcileList(InputObject inputObject, OutputObject outputObject) {
@@ -337,56 +385,153 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
         assertStoreFundAccess(storeId);
         releaseDueSettlements(storeId);
         Page pages = PageHelper.startPage(pageInfo.getPage(), pageInfo.getLimit());
-        // 复用子单分页查询（objectId=storeId）；type 空/0 表示全部
-        List<Map<String, Object>> rows = orderItemService.queryPageDataList(inputObject);
-        if (CollectionUtil.isEmpty(rows)) {
-            outputObject.setBeans(Collections.emptyList());
-            outputObject.settotal(0L);
+        List<OrderItem> items = listReconcileOrderItems(storeId, pageInfo.getKeyword());
+        if (CollectionUtil.isEmpty(items)) {
             return;
         }
-        List<String> itemIds = rows.stream()
-            .map(r -> r.get("id").toString())
+        List<Map<String, Object>> rows = JSONUtil.toList(JSONUtil.toJsonStr(items), null);
+        List<String> itemIds = items.stream()
+            .map(OrderItem::getId)
             .filter(StrUtil::isNotBlank)
             .collect(Collectors.toList());
-        // 查询收货冻结
-        Set<String> holdIds = queryLedgerItemIdsByBizTypes(itemIds,
+        // 查询收货冻结、到账、退款金额
+        Set<String> goodsHoldIds = queryLedgerItemIdsByBizTypes(storeId, itemIds,
             Collections.singletonList(ShopStoreLedgerBizType.ORDER_HOLD.getKey()));
         // 查询到账、结算金额
-        Set<String> arrivedIds = queryLedgerItemIdsByBizTypes(itemIds,
+        Set<String> goodsArrivedIds = queryLedgerItemIdsByBizTypes(storeId, itemIds,
             Arrays.asList(ShopStoreLedgerBizType.ORDER_IN.getKey(), ShopStoreLedgerBizType.ORDER_SETTLE.getKey()));
+        // 查询佣金冻结、到账、退款金额
+        Set<String> commissionHoldIds = queryLedgerItemIdsByBizTypes(storeId, itemIds,
+            Collections.singletonList(ShopStoreLedgerBizType.COMMISSION_HOLD.getKey()));
+        // 查询佣金到账、结算金额
+        Set<String> commissionArrivedIds = queryLedgerItemIdsByBizTypes(storeId, itemIds,
+            Arrays.asList(ShopStoreLedgerBizType.COMMISSION_IN.getKey(), ShopStoreLedgerBizType.COMMISSION_SETTLE.getKey()));
         // 查询退款金额
         Map<String, Long> refundMap = queryRefundAmountByItemIds(itemIds);
         // 查询收货冻结创建时间
-        Map<String, String> holdTimeMap = queryHoldCreateTimeMap(itemIds);
+        Map<String, String> goodsHoldTimeMap = queryHoldCreateTimeMap(storeId, itemIds,
+            ShopStoreLedgerBizType.ORDER_HOLD.getKey());
+        // 查询佣金冻结创建时间
+        Map<String, String> commissionHoldTimeMap = queryHoldCreateTimeMap(storeId, itemIds,
+            ShopStoreLedgerBizType.COMMISSION_HOLD.getKey());
         // 遍历子单，计算净额、到账状态、退款金额
         for (Map<String, Object> row : rows) {
+            // 获取子单 id
             String id = row.get("id").toString();
+            // 获取实付金额
             long pay = resolvePayAmountFenFromMap(row);
+            // 获取佣金金额
+            long commission = resolveCommissionFenFromMap(row);
             long refund = refundMap.getOrDefault(id, 0L);
-            // 计算到账状态
-            Integer settleStatus;
-            if (arrivedIds.contains(id)) {
-                settleStatus = ShopStoreSettleStatus.ARRIVED.getKey();
-            } else if (holdIds.contains(id)) {
-                settleStatus = ShopStoreSettleStatus.HOLDING.getKey();
-            } else {
-                settleStatus = ShopStoreSettleStatus.NONE.getKey();
-            }
+            // 获取对账角色
+            String role = resolveReconcileRole(storeId, row, commission);
             // 设置到账状态
+            Integer settleStatus;
+            String holdTime = null;
+            // 根据对账角色设置到账状态
+            if ("sales".equals(role)) {
+                if (commissionArrivedIds.contains(id)) {
+                    settleStatus = ShopStoreSettleStatus.ARRIVED.getKey();
+                } else if (commissionHoldIds.contains(id)) {
+                    settleStatus = ShopStoreSettleStatus.HOLDING.getKey();
+                    holdTime = commissionHoldTimeMap.get(id);
+                } else {
+                    settleStatus = ShopStoreSettleStatus.NONE.getKey();
+                }
+            } else {
+                if (goodsArrivedIds.contains(id)) {
+                    settleStatus = ShopStoreSettleStatus.ARRIVED.getKey();
+                } else if (goodsHoldIds.contains(id)) {
+                    settleStatus = ShopStoreSettleStatus.HOLDING.getKey();
+                    holdTime = goodsHoldTimeMap.get(id);
+                } else {
+                    settleStatus = ShopStoreSettleStatus.NONE.getKey();
+                }
+            }
+            row.put("reconcileRole", role);
             row.put("settleStatus", settleStatus);
-            // 设置已到账标志
             row.put("credited", ShopStoreSettleStatus.NONE.getKey().equals(settleStatus) ? 0 : 1);
-            // 设置退款金额
             row.put("refundAmount", refund);
-            // 设置净额
-            row.put("netAmount", Math.max(pay - refund, 0));
-            // 设置预计到账时间
-            if (ShopStoreSettleStatus.HOLDING.getKey().equals(settleStatus) && holdTimeMap.containsKey(id)) {
-                row.put("settleExpectTime", calcSettleExpectTime(holdTimeMap.get(id)));
+            row.put("commissionAmount", commission);
+            row.put("netAmount", resolveReconcileNetAmount(role, pay, commission, refund));
+            if (ShopStoreSettleStatus.HOLDING.getKey().equals(settleStatus) && StrUtil.isNotBlank(holdTime)) {
+                row.put("settleExpectTime", calcSettleExpectTime(holdTime));
             }
         }
         outputObject.setBeans(rows);
         outputObject.settotal(pages.getTotal());
+    }
+
+    /**
+     * 对账子单：本店卖出 ∪ 本店供货（依赖子单 sourceStoreId 快照）
+     */
+    private List<OrderItem> listReconcileOrderItems(String storeId, String keyword) {
+        String storeCol = MybatisPlusUtil.toColumns(OrderItem::getStoreId);
+        String sourceCol = MybatisPlusUtil.toColumns(OrderItem::getSourceStoreId);
+        QueryWrapper<OrderItem> qw = new QueryWrapper<>();
+        qw.and(w -> w.eq(storeCol, storeId).or().eq(sourceCol, storeId));
+        if (StrUtil.isNotBlank(keyword)) {
+            qw.like(MybatisPlusUtil.toColumns(OrderItem::getOddNumber), keyword.trim());
+        }
+        qw.orderByDesc(MybatisPlusUtil.toColumns(OrderItem::getCreateTime));
+        return orderItemService.list(qw);
+    }
+
+    /**
+     * 对账视角：supply=供货看货款；sales=销售看佣金；self=自营看全额
+     */
+    private String resolveReconcileRole(String viewStoreId, Map<String, Object> row, long commission) {
+        String sellStoreId = rowVal(row, "storeId");
+        String sourceStoreId = rowVal(row, "sourceStoreId");
+        boolean isSell = StrUtil.equals(viewStoreId, sellStoreId);
+        boolean isSource = StrUtil.isNotBlank(sourceStoreId) && StrUtil.equals(viewStoreId, sourceStoreId);
+        if (isSource && !isSell) {
+            return "supply";
+        }
+        // 销售侧仅在确有佣金拆账时按佣金口径
+        if (isSell && StrUtil.isNotBlank(sourceStoreId)
+            && !StrUtil.equals(viewStoreId, sourceStoreId) && commission > 0) {
+            return "sales";
+        }
+        return "self";
+    }
+
+    /**
+     * 平台货按角色拆净额；退款按佣金占比分摊（与 debitRefund 一致）
+     */
+    private long resolveReconcileNetAmount(String role, long pay, long commission, long refund) {
+        if ("sales".equals(role)) {
+            long commissionRefund = 0L;
+            if (pay > 0 && commission > 0 && refund > 0) {
+                commissionRefund = Math.min(commission, Math.round(refund * 1.0 * commission / pay));
+            } else if (pay <= 0 && commission > 0 && refund > 0) {
+                commissionRefund = Math.min(commission, refund);
+            }
+            return Math.max(commission - commissionRefund, 0L);
+        }
+        if ("supply".equals(role)) {
+            long goods = Math.max(pay - commission, 0L);
+            long commissionRefund = 0L;
+            if (pay > 0 && commission > 0 && refund > 0) {
+                commissionRefund = Math.min(commission, Math.round(refund * 1.0 * commission / pay));
+            }
+            long goodsRefund = Math.max(refund - commissionRefund, 0L);
+            return Math.max(goods - goodsRefund, 0L);
+        }
+        return Math.max(pay - refund, 0L);
+    }
+
+    private long resolveCommissionFenFromMap(Map<String, Object> row) {
+        Object source = row.get("sourceStoreId");
+        if (source == null || StrUtil.isBlank(source.toString())) {
+            return 0L;
+        }
+        return Math.max(NumberParseUtil.parseCommissionFen(row.get("commissionAmount")), 0L);
+    }
+
+    private String rowVal(Map<String, Object> row, String key) {
+        Object val = row.get(key);
+        return val == null ? StrUtil.EMPTY : val.toString();
     }
 
     /**
@@ -405,7 +550,7 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
             assertMemberAuthed(userId);
         }
 
-        long amount = parseFen(params.get("amount").toString());
+        long amount = NumberParseUtil.parseAmountFen(params.get("amount"));
         if (amount <= 0) {
             throw new CustomException("提现金额必须大于0");
         }
@@ -729,7 +874,7 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
     }
 
     /**
-     * 扫描门店收货冻结流水，期满且未结算的转入可提现
+     * 扫描门店收货/佣金冻结流水，期满且未结算的转入可提现
      */
     private void releaseDueSettlements(String storeId) {
         if (StrUtil.isBlank(storeId)) {
@@ -737,7 +882,9 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
         }
         QueryWrapper<ShopStoreLedger> qw = new QueryWrapper<>();
         qw.eq(MybatisPlusUtil.toColumns(ShopStoreLedger::getStoreId), storeId)
-            .eq(MybatisPlusUtil.toColumns(ShopStoreLedger::getBizType), ShopStoreLedgerBizType.ORDER_HOLD.getKey());
+            .in(MybatisPlusUtil.toColumns(ShopStoreLedger::getBizType),
+                Arrays.asList(ShopStoreLedgerBizType.ORDER_HOLD.getKey(),
+                    ShopStoreLedgerBizType.COMMISSION_HOLD.getKey()));
         List<ShopStoreLedger> holds = shopStoreLedgerService.list(qw);
         if (CollectionUtil.isEmpty(holds)) {
             return;
@@ -755,18 +902,28 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
             return;
         }
         String itemId = hold.getBizId();
-        if (shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_SETTLE.getKey(), itemId)
-            || shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_IN.getKey(), itemId)) {
+        boolean isCommission = ShopStoreLedgerBizType.COMMISSION_HOLD.getKey().equals(hold.getBizType());
+        Integer settleBiz = isCommission
+            ? ShopStoreLedgerBizType.COMMISSION_SETTLE.getKey()
+            : ShopStoreLedgerBizType.ORDER_SETTLE.getKey();
+        Integer directInBiz = isCommission
+            ? ShopStoreLedgerBizType.COMMISSION_IN.getKey()
+            : ShopStoreLedgerBizType.ORDER_IN.getKey();
+        if (shopStoreLedgerService.existsByBiz(settleBiz, itemId)
+            || shopStoreLedgerService.existsByBiz(directInBiz, itemId)) {
             return;
         }
         if (!force && !isHoldDue(hold)) {
             return;
         }
-        long refunded = sumRefundedFenByItemId(itemId);
+        long refunded = isCommission
+            ? sumCommissionRefundedFenByItemId(itemId)
+            : sumRefundedFenByItemId(itemId);
         long releaseAmt = Math.max(nvl(hold.getAmount()) - refunded, 0L);
-        applyChange(hold.getStoreId(), ShopStoreLedgerBizType.ORDER_SETTLE.getKey(), itemId,
+        String remark = isCommission ? "佣金可提现 " + itemId : "结算可提现 " + itemId;
+        applyChange(hold.getStoreId(), settleBiz, itemId,
             releaseAmt, ShopStoreLedgerDirection.UNFREEZE.getKey(),
-            "结算可提现 " + itemId,
+            remark,
             (acc, amt) -> {
                 if (amt <= 0) {
                     return 0L;
@@ -811,25 +968,104 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
     }
 
     private long sumRefundedFenByItemId(String itemId) {
-        if (StrUtil.isBlank(itemId)) {
+        return sumLedgerAmountByAfterSaleBiz(itemId, ShopStoreLedgerBizType.REFUND_OUT.getKey());
+    }
+
+    private long sumCommissionRefundedFenByItemId(String itemId) {
+        return sumLedgerAmountByAfterSaleBiz(itemId, ShopStoreLedgerBizType.COMMISSION_REFUND.getKey());
+    }
+
+    /**
+     * 按子单已完成售后，汇总指定业务流水金额（用于结算时扣减已退部分）
+     */
+    private long sumLedgerAmountByAfterSaleBiz(String itemId, Integer bizType) {
+        if (StrUtil.isBlank(itemId) || bizType == null) {
             return 0L;
         }
         QueryWrapper<OrderAfterSale> qw = new QueryWrapper<>();
         qw.eq(MybatisPlusUtil.toColumns(OrderAfterSale::getOrderItemId), itemId)
             .eq(MybatisPlusUtil.toColumns(OrderAfterSale::getStatus), OrderAfterSaleStatus.DONE.getKey());
         List<OrderAfterSale> list = orderAfterSaleService.list(qw);
-        long sum = 0L;
-        for (OrderAfterSale as : list) {
-            if (!shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.REFUND_OUT.getKey(), as.getId())) {
-                continue;
-            }
-            long amt = parseFen(as.getRefundAmount());
-            if (amt <= 0) {
-                amt = parseFen(as.getApplyAmount());
-            }
-            sum += Math.max(amt, 0L);
+        if (CollectionUtil.isEmpty(list)) {
+            return 0L;
         }
-        return sum;
+        List<String> asIds = list.stream().map(OrderAfterSale::getId).filter(StrUtil::isNotBlank).collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(asIds)) {
+            return 0L;
+        }
+        QueryWrapper<ShopStoreLedger> lqw = new QueryWrapper<>();
+        lqw.eq(MybatisPlusUtil.toColumns(ShopStoreLedger::getBizType), bizType)
+            .in(MybatisPlusUtil.toColumns(ShopStoreLedger::getBizId), asIds);
+        return shopStoreLedgerService.list(lqw).stream()
+            .mapToLong(l -> nvl(l.getAmount()))
+            .sum();
+    }
+
+    private List<ShopStoreLedger> listHoldsByItemId(String orderItemId) {
+        QueryWrapper<ShopStoreLedger> qw = new QueryWrapper<>();
+        qw.in(MybatisPlusUtil.toColumns(ShopStoreLedger::getBizType),
+                Arrays.asList(ShopStoreLedgerBizType.ORDER_HOLD.getKey(),
+                    ShopStoreLedgerBizType.COMMISSION_HOLD.getKey()))
+            .eq(MybatisPlusUtil.toColumns(ShopStoreLedger::getBizId), orderItemId);
+        return shopStoreLedgerService.list(qw);
+    }
+
+    private void holdCommissionOnSign(OrderItem orderItem, long commission) {
+        if (commission <= 0 || orderItem == null || StrUtil.isBlank(orderItem.getSourceStoreId())
+            || StrUtil.isBlank(orderItem.getStoreId())) {
+            return;
+        }
+        if (shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.COMMISSION_HOLD.getKey(), orderItem.getId())
+            || shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.COMMISSION_IN.getKey(), orderItem.getId())) {
+            return;
+        }
+        // 佣金入销售店（选平台货源的个人店）
+        applyChange(orderItem.getStoreId(), ShopStoreLedgerBizType.COMMISSION_HOLD.getKey(), orderItem.getId(),
+            commission, ShopStoreLedgerDirection.IN_FROZEN.getKey(),
+            "佣金冻结 " + StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId())
+                + "（" + SETTLE_HOLD_DAYS + "天后可提现）",
+            (acc, amt) -> {
+                acc.setFrozenAmount(nvl(acc.getFrozenAmount()) + amt);
+                acc.setTotalIncome(nvl(acc.getTotalIncome()) + amt);
+                return amt;
+            });
+    }
+
+    private void creditCommissionIn(OrderItem orderItem, long commission) {
+        if (commission <= 0 || orderItem == null || StrUtil.isBlank(orderItem.getSourceStoreId())
+            || StrUtil.isBlank(orderItem.getStoreId())) {
+            return;
+        }
+        if (shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.COMMISSION_HOLD.getKey(), orderItem.getId())
+            || shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.COMMISSION_IN.getKey(), orderItem.getId())) {
+            return;
+        }
+        applyChange(orderItem.getStoreId(), ShopStoreLedgerBizType.COMMISSION_IN.getKey(), orderItem.getId(),
+            commission, ShopStoreLedgerDirection.IN_AVAILABLE.getKey(),
+            "佣金入账 " + StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId()),
+            (acc, amt) -> {
+                acc.setAvailableAmount(nvl(acc.getAvailableAmount()) + amt);
+                acc.setTotalIncome(nvl(acc.getTotalIncome()) + amt);
+                return amt;
+            });
+    }
+
+    /**
+     * 货款归属门店：平台货→供货店；自营→销售店
+     */
+    private String resolveGoodsStoreId(OrderItem orderItem) {
+        if (orderItem != null && StrUtil.isNotBlank(orderItem.getSourceStoreId())
+            && resolveCommissionFen(orderItem) > 0) {
+            return orderItem.getSourceStoreId();
+        }
+        return orderItem.getStoreId();
+    }
+
+    private long resolveCommissionFen(OrderItem item) {
+        if (item == null || StrUtil.isBlank(item.getSourceStoreId()) || item.getCommissionAmount() == null) {
+            return 0L;
+        }
+        return Math.max(item.getCommissionAmount(), 0L);
     }
 
     /**
@@ -1125,7 +1361,8 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
             .filter(i -> i != null && StrUtil.isNotBlank(i.getId()))
             .collect(Collectors.toMap(OrderItem::getId, i -> i, (a, b) -> a));
         Set<String> arrivedIds = queryLedgerItemIdsByBizTypes(orderItemIds,
-            Arrays.asList(ShopStoreLedgerBizType.ORDER_IN.getKey(), ShopStoreLedgerBizType.ORDER_SETTLE.getKey()));
+            Arrays.asList(ShopStoreLedgerBizType.ORDER_IN.getKey(), ShopStoreLedgerBizType.ORDER_SETTLE.getKey(),
+                ShopStoreLedgerBizType.COMMISSION_IN.getKey(), ShopStoreLedgerBizType.COMMISSION_SETTLE.getKey()));
         for (ShopStoreLedger ledger : list) {
             if (!isOrderFundBizType(ledger.getBizType()) || StrUtil.isBlank(ledger.getBizId())) {
                 continue;
@@ -1137,9 +1374,12 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
             Integer bizType = ledger.getBizType();
             if (ShopStoreLedgerBizType.ORDER_SETTLE.getKey().equals(bizType)
                 || ShopStoreLedgerBizType.ORDER_IN.getKey().equals(bizType)
+                || ShopStoreLedgerBizType.COMMISSION_SETTLE.getKey().equals(bizType)
+                || ShopStoreLedgerBizType.COMMISSION_IN.getKey().equals(bizType)
                 || arrivedIds.contains(ledger.getBizId())) {
                 ledger.setSettleStatus(ShopStoreSettleStatus.ARRIVED.getKey());
-            } else if (ShopStoreLedgerBizType.ORDER_HOLD.getKey().equals(bizType)) {
+            } else if (ShopStoreLedgerBizType.ORDER_HOLD.getKey().equals(bizType)
+                || ShopStoreLedgerBizType.COMMISSION_HOLD.getKey().equals(bizType)) {
                 ledger.setSettleStatus(ShopStoreSettleStatus.HOLDING.getKey());
                 ledger.setSettleExpectTime(calcSettleExpectTime(ledger.getCreateTime()));
             }
@@ -1149,29 +1389,42 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
     private boolean isOrderFundBizType(Integer bizType) {
         return ShopStoreLedgerBizType.ORDER_IN.getKey().equals(bizType)
             || ShopStoreLedgerBizType.ORDER_HOLD.getKey().equals(bizType)
-            || ShopStoreLedgerBizType.ORDER_SETTLE.getKey().equals(bizType);
+            || ShopStoreLedgerBizType.ORDER_SETTLE.getKey().equals(bizType)
+            || ShopStoreLedgerBizType.COMMISSION_HOLD.getKey().equals(bizType)
+            || ShopStoreLedgerBizType.COMMISSION_SETTLE.getKey().equals(bizType)
+            || ShopStoreLedgerBizType.COMMISSION_IN.getKey().equals(bizType);
     }
 
     private Set<String> queryLedgerItemIdsByBizTypes(List<String> itemIds, List<Integer> bizTypes) {
+        return queryLedgerItemIdsByBizTypes(null, itemIds, bizTypes);
+    }
+
+    private Set<String> queryLedgerItemIdsByBizTypes(String storeId, List<String> itemIds, List<Integer> bizTypes) {
         if (CollectionUtil.isEmpty(itemIds) || CollectionUtil.isEmpty(bizTypes)) {
             return Collections.emptySet();
         }
         QueryWrapper<ShopStoreLedger> qw = new QueryWrapper<>();
         qw.in(MybatisPlusUtil.toColumns(ShopStoreLedger::getBizType), bizTypes)
             .in(MybatisPlusUtil.toColumns(ShopStoreLedger::getBizId), itemIds);
+        if (StrUtil.isNotBlank(storeId)) {
+            qw.eq(MybatisPlusUtil.toColumns(ShopStoreLedger::getStoreId), storeId);
+        }
         return shopStoreLedgerService.list(qw).stream()
             .map(ShopStoreLedger::getBizId)
             .filter(StrUtil::isNotBlank)
             .collect(Collectors.toSet());
     }
 
-    private Map<String, String> queryHoldCreateTimeMap(List<String> itemIds) {
-        if (CollectionUtil.isEmpty(itemIds)) {
+    private Map<String, String> queryHoldCreateTimeMap(String storeId, List<String> itemIds, Integer holdBizType) {
+        if (CollectionUtil.isEmpty(itemIds) || holdBizType == null) {
             return Collections.emptyMap();
         }
         QueryWrapper<ShopStoreLedger> qw = new QueryWrapper<>();
-        qw.eq(MybatisPlusUtil.toColumns(ShopStoreLedger::getBizType), ShopStoreLedgerBizType.ORDER_HOLD.getKey())
+        qw.eq(MybatisPlusUtil.toColumns(ShopStoreLedger::getBizType), holdBizType)
             .in(MybatisPlusUtil.toColumns(ShopStoreLedger::getBizId), itemIds);
+        if (StrUtil.isNotBlank(storeId)) {
+            qw.eq(MybatisPlusUtil.toColumns(ShopStoreLedger::getStoreId), storeId);
+        }
         Map<String, String> map = new HashMap<>();
         for (ShopStoreLedger hold : shopStoreLedgerService.list(qw)) {
             if (StrUtil.isNotBlank(hold.getBizId()) && !map.containsKey(hold.getBizId())) {
@@ -1208,9 +1461,9 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
         List<OrderAfterSale> list = orderAfterSaleService.list(qw);
         Map<String, Long> map = new HashMap<>();
         for (OrderAfterSale as : list) {
-            long amt = parseFen(as.getRefundAmount());
+            long amt = NumberParseUtil.parseAmountFen(as.getRefundAmount());
             if (amt <= 0) {
-                amt = parseFen(as.getApplyAmount());
+                amt = NumberParseUtil.parseAmountFen(as.getApplyAmount());
             }
             map.merge(as.getOrderItemId(), amt, Long::sum);
         }
@@ -1223,33 +1476,19 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
     private long resolvePayAmountFen(OrderItem item) {
         if (StrUtil.isNotBlank(item.getAdjustPrice())
             && !StrUtil.equals(CommonNumConstants.NUM_ZERO.toString(), item.getAdjustPrice())) {
-            return parseFen(item.getAdjustPrice());
+            return NumberParseUtil.parseAmountFen(item.getAdjustPrice());
         }
-        return parseFen(item.getPayPrice());
+        return NumberParseUtil.parseAmountFen(item.getPayPrice());
     }
 
     private long resolvePayAmountFenFromMap(Map<String, Object> row) {
         Object adjustObj = row.get("adjustPrice");
         String adjust = adjustObj != null ? adjustObj.toString() : null;
         if (StrUtil.isNotBlank(adjust) && !StrUtil.equals(CommonNumConstants.NUM_ZERO.toString(), adjust)) {
-            return parseFen(adjust);
+            return NumberParseUtil.parseAmountFen(adjust);
         }
         Object payObj = row.get("payPrice");
-        return parseFen(payObj != null ? payObj.toString() : null);
-    }
-
-    /**
-     * 金额字符串转分，非法或空返回 0
-     */
-    private long parseFen(String val) {
-        if (StrUtil.isBlank(val)) {
-            return 0L;
-        }
-        try {
-            return Math.round(Double.parseDouble(val.trim()));
-        } catch (Exception e) {
-            return 0L;
-        }
+        return NumberParseUtil.parseAmountFen(payObj);
     }
 
     private long nvl(Long v) {
