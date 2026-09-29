@@ -14,6 +14,7 @@ import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.object.ResultEntity;
 import com.skyeye.rest.shopmaterialnorms.rest.IShopMaterialNormsRest;
 import com.skyeye.rest.shopmaterialnorms.sevice.IShopMaterialNormsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
  * @Copyright: 2023 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目
  */
+@Slf4j
 @Service
 public class IShopMaterialNormsServiceImpl extends IServiceImpl implements IShopMaterialNormsService {
 
@@ -61,7 +63,10 @@ public class IShopMaterialNormsServiceImpl extends IServiceImpl implements IShop
             return new ArrayList<>();
         }
         String joinIds = Joiner.on(CommonCharConstants.COMMA_MARK).join(ids);
-        ResultEntity resultEntity = ExecuteFeignClient.get(() -> iShopMaterialNormsRest.queryShopMaterialByIds(joinIds));
+        log.debug("queryShopMaterialByIds joinIds: {}", joinIds);
+        Map<String, Object> params = new HashMap<>();
+        params.put("ids", joinIds);
+        ResultEntity resultEntity = ExecuteFeignClient.get(() -> iShopMaterialNormsRest.queryShopMaterialByIds(params));
         List<Map<String, Object>> rows = resultEntity.getRows();
         return rows;
     }

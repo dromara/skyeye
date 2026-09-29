@@ -32,11 +32,11 @@ public interface IShopMaterialNormsRest {
     /**
      * 根据id批量获取商城商品信息
      *
-     * @param ids 主键id，多个逗号隔开
+     * @param params ids：主键id，多个逗号隔开
      * @return
      */
     @PostMapping("/queryShopMaterialByIds")
-    String queryShopMaterialByIds(@RequestParam("ids") String ids);
+    String queryShopMaterialByIds(Map<String, Object> params);
 
     /**
      * 按门店批量预览已上架商城商品
