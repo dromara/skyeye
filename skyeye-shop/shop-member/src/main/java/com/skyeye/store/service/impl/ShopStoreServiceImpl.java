@@ -16,6 +16,7 @@ import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.enumeration.WhetherEnum;
+import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.exception.CustomException;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -69,6 +70,7 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
         if (entity.getOfflineOpen() == null) {
             entity.setOfflineOpen(WhetherEnum.ENABLE_USING.getKey());
         }
+        entity.setTenantId(null);
     }
 
     @Override

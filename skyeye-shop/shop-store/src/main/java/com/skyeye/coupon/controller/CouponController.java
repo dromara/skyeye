@@ -32,14 +32,21 @@ public class CouponController {
     @Autowired
     private CouponService couponService;
 
-    @ApiOperation(id = "writeCoupon", value = "新增/编辑优惠券/模版信息", method = "POST", allUse = "1")
+    /**
+     * 新增/编辑。门店工作台传 storeId（写入 Coupon.storeId）；管理端不传。
+     */
+    @ApiOperation(id = "writeCoupon", value = "新增/编辑优惠券/模版信息", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = Coupon.class)
     @RequestMapping("/post/CouponController/writeCoupon")
     public void writeCoupon(InputObject inputObject, OutputObject outputObject) {
         couponService.saveOrUpdateEntity(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryCouponList", value = "分页获取优惠券/模版信息", method = "POST", allUse = "1")
+    /**
+     * 分页查询。门店工作台传 objectId=门店id；管理端不传。
+     * type：0 模板，1 优惠券。
+     */
+    @ApiOperation(id = "queryCouponList", value = "分页获取优惠券/模版信息", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/CouponController/queryCouponList")
     public void queryCouponList(InputObject inputObject, OutputObject outputObject) {
@@ -63,10 +70,11 @@ public class CouponController {
 
     @ApiOperation(id = "deleteCouponById", value = "根据id删除优惠券/模版信息", method = "DELETE", allUse = "2")
     @ApiImplicitParams({
-        @ApiImplicitParam(id = "ids", name = "ids", value = "主键id列表，多个主键用逗号隔开", required = "required")})
+        @ApiImplicitParam(id = "ids", name = "ids", value = "主键id列表，多个主键用逗号隔开", required = "required"),
+        @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id（门店工作台校验归属时传）")})
     @RequestMapping("/post/CouponController/deleteCouponById")
     public void deleteCouponById(InputObject inputObject, OutputObject outputObject) {
-        couponService.deleteByIds(inputObject, outputObject);
+        couponService.deleteCouponById(inputObject, outputObject);
     }
 
     @ApiOperation(id = "queryCouponListByMaterialId", value = "根据商品id分页获取已启用的优惠券列表", method = "GET", allUse = "0")
@@ -92,5 +100,15 @@ public class CouponController {
     @RequestMapping("/post/CouponController/queryCouponApplicableStoreList")
     public void queryCouponApplicableStoreList(InputObject inputObject, OutputObject outputObject) {
         couponService.queryCouponApplicableStoreList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "changeCouponEnabled", value = "启用/禁用优惠券", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "优惠券id", required = "required"),
+        @ApiImplicitParam(id = "enabled", name = "enabled", value = "状态", required = "required,num"),
+        @ApiImplicitParam(id = "storeId", name = "storeId", value = "门店id（门店工作台校验归属时传）")})
+    @RequestMapping("/post/CouponController/changeCouponEnabled")
+    public void changeCouponEnabled(InputObject inputObject, OutputObject outputObject) {
+        couponService.changeCouponEnabled(inputObject, outputObject);
     }
 }

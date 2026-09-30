@@ -8,10 +8,12 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
@@ -28,8 +30,10 @@ import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.coupon.dao.CouponUseDao;
 import com.skyeye.coupon.entity.Coupon;
 import com.skyeye.coupon.entity.CouponMaterial;
+import com.skyeye.coupon.entity.CouponStore;
 import com.skyeye.coupon.entity.CouponUse;
 import com.skyeye.coupon.entity.CouponUseMaterial;
+import com.skyeye.coupon.enums.CouponStoreCoverage;
 import com.skyeye.coupon.enums.CouponTakeType;
 import com.skyeye.coupon.enums.CouponUseState;
 import com.skyeye.coupon.enums.CouponValidityType;
@@ -42,6 +46,9 @@ import com.skyeye.eve.rest.quartz.SysQuartzMation;
 import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.service.MemberService;
+import com.skyeye.store.classenum.StoreNature;
+import com.skyeye.store.entity.ShopStore;
+import com.skyeye.store.service.ShopStoreService;
 import com.skyeye.xxljob.ShopXxlJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,6 +83,9 @@ public class CouponUseServiceImpl extends SkyeyeBusinessServiceImpl<CouponUseDao
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private ShopStoreService shopStoreService;
 
     private static Logger log = LoggerFactory.getLogger(ShopXxlJob.class);
 
@@ -224,23 +234,80 @@ public class CouponUseServiceImpl extends SkyeyeBusinessServiceImpl<CouponUseDao
     public void queryMyCouponUseByState(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
         String couponId = commonPageInfo.getCustomParamsMapStr("couponId");
+        List<String> orderStoreIds = parseStoreIdsParam(commonPageInfo);
+        String userId = inputObject.getLogParams().get("id").toString();
+
         Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
-        QueryWrapper<CouponUse> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(CouponUse::getCreateId), inputObject.getLogParams().get("id").toString());
+        MPJLambdaWrapper<CouponUse> wrapper = new MPJLambdaWrapper<CouponUse>()
+            .selectAll(CouponUse.class)
+            .eq(CouponUse::getCreateId, userId);
         if (StrUtil.isNotEmpty(commonPageInfo.getState())) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(CouponUse::getState), commonPageInfo.getState());
+            wrapper.eq(CouponUse::getState, commonPageInfo.getState());
         }
         if (StrUtil.isNotEmpty(commonPageInfo.getType())) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(CouponUse::getDiscountType), commonPageInfo.getType());
+            wrapper.eq(CouponUse::getDiscountType, commonPageInfo.getType());
         }
         if (StrUtil.isNotEmpty(couponId)) {
-            queryWrapper.eq(MybatisPlusUtil.toColumns(CouponUse::getCouponId), couponId);
+            wrapper.eq(CouponUse::getCouponId, couponId);
         }
-        queryWrapper.orderByDesc(MybatisPlusUtil.toColumns(CouponUse::getCreateTime));
-        List<CouponUse> list = list(queryWrapper);
+        // 结算页按订单门店过滤：关联 Coupon / CouponStore，数据库分页，不查全量
+        if (CollectionUtil.isNotEmpty(orderStoreIds)) {
+            wrapper.innerJoin(Coupon.class, Coupon::getId, CouponUse::getCouponId)
+                .leftJoin(CouponStore.class, CouponStore::getCouponId, Coupon::getId);
+            applyOrderStoreFilter(wrapper, orderStoreIds);
+            wrapper.groupBy(CouponUse::getId);
+        }
+        wrapper.orderByDesc(CouponUse::getCreateTime);
+
+        List<CouponUse> list = skyeyeBaseMapper.selectJoinList(CouponUse.class, wrapper);
         couponService.setDataMation(list, CouponUse::getCouponId);
         outputObject.setBeans(list);
         outputObject.settotal(pages.getTotal());
+    }
+
+    /**
+     * 指定门店：CouponStore 或 Coupon.storeId 命中订单门店；
+     * 全部门店：仅同租户企业店可用（个人店不可用）。
+     */
+    private void applyOrderStoreFilter(MPJLambdaWrapper<CouponUse> wrapper, List<String> orderStoreIds) {
+        List<ShopStore> stores = shopStoreService.selectByIds(orderStoreIds.toArray(new String[]{}));
+        List<String> enterpriseTenantIds = CollectionUtil.isEmpty(stores)
+            ? Collections.emptyList()
+            : stores.stream()
+            .filter(store -> store != null && StrUtil.isNotBlank(store.getId())
+                && !StoreNature.PERSONAL.getKey().equals(store.getStoreNature()))
+            .map(store -> StrUtil.blankToDefault(store.getTenantId(), StrUtil.EMPTY))
+            .distinct()
+            .collect(Collectors.toList());
+
+        wrapper.and(w -> {
+            w.and(wSpec -> wSpec.eq(Coupon::getStoreCoverage, CouponStoreCoverage.SPECIFIED_STORE.getKey())
+                .and(bind -> bind.in(CouponStore::getStoreId, orderStoreIds)
+                    .or().in(Coupon::getStoreId, orderStoreIds)));
+            if (CollectionUtil.isNotEmpty(enterpriseTenantIds)) {
+                w.or(wAll -> wAll.eq(Coupon::getStoreCoverage, CouponStoreCoverage.ALL_STORE.getKey())
+                    .in(Coupon::getTenantId, enterpriseTenantIds));
+            }
+        });
+    }
+
+    private List<String> parseStoreIdsParam(CommonPageInfo commonPageInfo) {
+        String storeIdsRaw = commonPageInfo.getCustomParamsMapStr("storeIds");
+        if (StrUtil.isBlank(storeIdsRaw)) {
+            return Collections.emptyList();
+        }
+        try {
+            List<String> parsed = JSONUtil.toList(storeIdsRaw, String.class);
+            if (CollectionUtil.isNotEmpty(parsed)) {
+                return parsed.stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.toList());
+            }
+        } catch (Exception ignored) {
+            // ignore
+        }
+        return StrUtil.splitTrim(storeIdsRaw, ',').stream()
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
     }
 
     @Override

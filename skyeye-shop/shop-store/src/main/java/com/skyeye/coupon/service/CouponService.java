@@ -35,4 +35,20 @@ public interface CouponService extends SkyeyeBusinessService<Coupon> {
      * 分页查询优惠券适用门店
      */
     void queryCouponApplicableStoreList(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 删除优惠券/模板。传 storeId 时校验门店归属。
+     *
+     * @param inputObject  入参以及用户信息等获取对象
+     * @param outputObject 出参以及提示信息的返回值对象
+     */
+    void deleteCouponById(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 启用/禁用优惠券。传 storeId 时校验门店归属。
+     *
+     * @param inputObject  入参以及用户信息等获取对象
+     * @param outputObject 出参以及提示信息的返回值对象
+     */
+    void changeCouponEnabled(InputObject inputObject, OutputObject outputObject);
 }

@@ -4,9 +4,9 @@
 
 package com.skyeye.coupon.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
@@ -41,6 +41,10 @@ public class Coupon extends BaseGeneralInfo {
     @ApiModelProperty(value = "优惠券与门店关联表列表")
     private List<CouponStore> couponStoreList;
 
+    @TableField(value = "store_id")
+    @ApiModelProperty(value = "归属门店id（门店自建时写入；管理端为空）")
+    private String storeId;
+
     @TableField(value = "template_id")
     @ApiModelProperty(value = "模板id")
     private String templateId;
@@ -58,7 +62,7 @@ public class Coupon extends BaseGeneralInfo {
     private Integer takeLimitCount;
 
     @TableField(value = "take_type")
-    @ApiModelProperty(value = "领取方式", required = "required,num",enumClass = CouponTakeType.class)
+    @ApiModelProperty(value = "领取方式", required = "required,num", enumClass = CouponTakeType.class)
     private Integer takeType;
 
     @TableField(value = "use_price")
@@ -70,7 +74,7 @@ public class Coupon extends BaseGeneralInfo {
     private Integer productScope;
 
     @TableField(value = "validity_type")
-    @ApiModelProperty(value = "生效日期类型", required = "required,num",enumClass = CouponValidityType.class)
+    @ApiModelProperty(value = "生效日期类型", required = "required,num", enumClass = CouponValidityType.class)
     private Integer validityType;
 
     @TableField(value = "valid_start_time")
@@ -90,7 +94,7 @@ public class Coupon extends BaseGeneralInfo {
     private Integer fixedEndTime;
 
     @TableField(value = "discount_type")
-    @ApiModelProperty(value = "折扣类型", required = "required,num",enumClass = PromotionDiscountType.class)
+    @ApiModelProperty(value = "折扣类型", required = "required,num", enumClass = PromotionDiscountType.class)
     private Integer discountType;
 
     @TableField(value = "discount_percent")
@@ -124,4 +128,12 @@ public class Coupon extends BaseGeneralInfo {
     @TableField(value = "store_coverage")
     @ApiModelProperty(value = "门店适用范围", enumClass = CouponStoreCoverage.class)
     private Integer storeCoverage;
+
+    @TableField(value = "coupon_source")
+    @ApiModelProperty(value = "来源：管理端/门店", enumClass = CouponSource.class)
+    private Integer couponSource;
+
+    @TableField(value = "tenant_id", updateStrategy = FieldStrategy.NEVER)
+    @Property(value = "租户id")
+    private String tenantId;
 }

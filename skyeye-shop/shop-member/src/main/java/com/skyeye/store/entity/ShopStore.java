@@ -4,6 +4,7 @@
 
 package com.skyeye.store.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -75,6 +76,10 @@ public class ShopStore extends AreaInfo {
     @TableField(value = "store_nature")
     @ApiModelProperty(value = "门店性质", enumClass = StoreNature.class, required = "num")
     private Integer storeNature;
+
+    @TableField(value = "tenant_id", updateStrategy = FieldStrategy.NEVER)
+    @Property(value = "租户id")
+    private String tenantId;
 
     @TableField(value = "online_open")
     @ApiModelProperty(value = "线上门店是否开启，开启后可在商城售卖", enumClass = WhetherEnum.class, required = "num")

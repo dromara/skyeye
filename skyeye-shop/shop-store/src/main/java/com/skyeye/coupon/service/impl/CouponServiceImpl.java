@@ -18,6 +18,7 @@ import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
+import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.constans.QuartzConstants;
@@ -26,6 +27,7 @@ import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.coupon.dao.CouponDao;
@@ -33,10 +35,7 @@ import com.skyeye.coupon.entity.Coupon;
 import com.skyeye.coupon.entity.CouponMaterial;
 import com.skyeye.coupon.entity.CouponStore;
 import com.skyeye.coupon.entity.CouponUse;
-import com.skyeye.coupon.enums.CouponStoreCoverage;
-import com.skyeye.coupon.enums.CouponValidityType;
-import com.skyeye.coupon.enums.PromotionDiscountType;
-import com.skyeye.coupon.enums.PromotionMaterialScope;
+import com.skyeye.coupon.enums.*;
 import com.skyeye.coupon.service.CouponMaterialService;
 import com.skyeye.coupon.service.CouponService;
 import com.skyeye.coupon.service.CouponStoreService;
@@ -45,8 +44,11 @@ import com.skyeye.eve.rest.quartz.SysQuartzMation;
 import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.rest.shopmaterialnorms.sevice.IShopMaterialNormsService;
+import com.skyeye.store.classenum.StoreNature;
 import com.skyeye.store.entity.ShopStore;
+import com.skyeye.store.entity.ShopStoreStaff;
 import com.skyeye.store.service.ShopStoreService;
+import com.skyeye.store.service.ShopStoreStaffService;
 import com.skyeye.xxljob.ShopXxlJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,6 +87,9 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
 
     @Autowired
     private ShopStoreService shopStoreService;
+
+    @Autowired
+    private ShopStoreStaffService shopStoreStaffService;
 
     private static Logger log = LoggerFactory.getLogger(ShopXxlJob.class);
 
@@ -131,11 +136,81 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         if (coupon.getUseCount() <= CommonNumConstants.NUM_ZERO) {
             throw new CustomException("优惠券总使用次数不能为零");
         }
+        // 门店工作台：按 Coupon.storeId 归属
+        if (StrUtil.isNotBlank(coupon.getStoreId())) {
+            ShopStore store = assertStoreCouponAccess(coupon.getStoreId());
+            coupon.setCouponSource(CouponSource.STORE.getKey());
+            if (StrUtil.isBlank(coupon.getTemplateId())) {
+                coupon.setTemplateId(StrUtil.EMPTY);
+            } else {
+                assertStoreOwnedTemplate(coupon.getTemplateId(), store);
+            }
+            if (Objects.equals(coupon.getProductScope(), PromotionMaterialScope.SPU.getKey())
+                && CollectionUtil.isEmpty(coupon.getCouponMaterialList())) {
+                throw new CustomException("请选择适用商品");
+            }
+            if (Objects.equals(coupon.getProductScope(), PromotionMaterialScope.SPU.getKey())
+                && CollectionUtil.isNotEmpty(coupon.getCouponMaterialList())) {
+                assertStoreCouponMaterialsAreSelfBuilt(coupon.getStoreId(), coupon.getCouponMaterialList());
+            }
+            applyStoreCoverageRule(coupon, store, coupon.getStoreId());
+            if (StrUtil.isNotBlank(coupon.getId())) {
+                assertStoreOwnedCoupon(coupon.getId(), store);
+            }
+        }
+    }
+
+    /**
+     * 门店券指定商品只能选自建：平台货源（sourceType=平台货源 / 有供货门店）不可绑定，避免给供货方商品降价。
+     */
+    private void assertStoreCouponMaterialsAreSelfBuilt(String storeId, List<CouponMaterial> materials) {
+        List<String> materialIds = materials.stream()
+            .map(CouponMaterial::getMaterialId)
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(materialIds)) {
+            return;
+        }
+        Map<String, Object> materialStoreIdMap = iShopMaterialNormsService
+            .queryShopMaterialMapByMaterialIdsAndStoreIds(materialIds, Collections.singletonList(storeId));
+        if (CollectionUtil.isEmpty(materialStoreIdMap)) {
+            throw new CustomException("适用商品不在本店商品中");
+        }
+        List<String> materialStoreIds = materialStoreIdMap.values().stream()
+            .map(Object::toString)
+            .collect(Collectors.toList());
+        List<Map<String, Object>> materialByIds = iShopMaterialNormsService.queryShopMaterialByIds(materialStoreIds);
+        if (CollectionUtil.isEmpty(materialByIds)) {
+            throw new CustomException("适用商品不在本店商品中");
+        }
+        // 平台货源 sourceType = 2（与 ShopMaterialStoreSourceType.PLATFORM 一致）
+        final int platformSourceType = 2;
+        for (Map<String, Object> map : materialByIds) {
+            if (ObjectUtil.isEmpty(map.get("shopMaterialStore"))) {
+                continue;
+            }
+            Map<String, Object> shopMaterialStore = JSONUtil.toBean(JSONUtil.toJsonStr(map.get("shopMaterialStore")), null);
+            if (CollectionUtil.isEmpty(shopMaterialStore)) {
+                continue;
+            }
+            Integer sourceType = MapUtil.getInt(shopMaterialStore, "sourceType");
+            String sourceStoreId = MapUtil.getStr(shopMaterialStore, "sourceStoreId");
+            if (Objects.equals(sourceType, platformSourceType) || StrUtil.isNotBlank(sourceStoreId)) {
+                throw new CustomException("平台货源商品不能设置为本店优惠券适用商品");
+            }
+        }
     }
 
     @Override
     public void createPrepose(Coupon entity) {
         entity.setTakeCount(CommonNumConstants.NUM_ZERO);
+        entity.setTenantId(null);
+        if (StrUtil.isNotBlank(entity.getStoreId())) {
+            entity.setCouponSource(CouponSource.STORE.getKey());
+        } else if (entity.getCouponSource() == null) {
+            entity.setCouponSource(CouponSource.PLATFORM.getKey());
+        }
     }
 
     private void startUpTaskQuartz(String name, String title, String delayedTime) {
@@ -151,21 +226,34 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     public void updatePrepose(Coupon entity) {
         Coupon oldCoupon = selectById(entity.getId());
         entity.setTakeCount(oldCoupon.getTakeCount());
+        if (StrUtil.isNotBlank(entity.getStoreId())) {
+            entity.setCouponSource(CouponSource.STORE.getKey());
+            // 归属门店不可改
+            entity.setStoreId(oldCoupon.getStoreId());
+        } else if (entity.getCouponSource() == null) {
+            entity.setCouponSource(oldCoupon.getCouponSource() == null
+                ? CouponSource.PLATFORM.getKey() : oldCoupon.getCouponSource());
+        }
     }
 
     @Override
     public void writePostpose(Coupon coupon, String userId) {
         // 新增/编辑优惠券的适用商品对象
         if (coupon.getProductScope() == PromotionMaterialScope.ALL.getKey()) {
-            // 适用全部商品
-            List<Map<String, Object>> material = iShopMaterialNormsService.queryAllShopMaterialListForChoose();
-            if (CollectionUtil.isNotEmpty(material)) {
-                List<CouponMaterial> couponMaterialList = material.stream().map(bean -> {
-                    CouponMaterial couponMaterial = new CouponMaterial();
-                    couponMaterial.setMaterialId(bean.get("id").toString());
-                    return couponMaterial;
-                }).collect(Collectors.toList());
-                couponMaterialService.insertCouponMaterial(coupon.getId(), couponMaterialList, userId);
+            if (Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.SPECIFIED_STORE.getKey())) {
+                // 指定门店 + 全部商品：不绑全租户商品，下单按门店范围校验；商品页可领券走门店维度列表
+                couponMaterialService.deleteByCouponId(coupon.getId());
+            } else {
+                // 全部门店 + 全部商品：绑定当前租户全部商城商品
+                List<Map<String, Object>> material = iShopMaterialNormsService.queryAllShopMaterialListForChoose();
+                if (CollectionUtil.isNotEmpty(material)) {
+                    List<CouponMaterial> couponMaterialList = material.stream().map(bean -> {
+                        CouponMaterial couponMaterial = new CouponMaterial();
+                        couponMaterial.setMaterialId(bean.get("id").toString());
+                        return couponMaterial;
+                    }).collect(Collectors.toList());
+                    couponMaterialService.insertCouponMaterial(coupon.getId(), couponMaterialList, userId);
+                }
             }
         } else if (coupon.getProductScope() == PromotionMaterialScope.SPU.getKey()) {
             // 适用指定商品
@@ -215,6 +303,12 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     }
 
     @Override
+    @IgnoreTenant
+    public void queryPageList(InputObject inputObject, OutputObject outputObject) {
+        super.queryPageList(inputObject, outputObject);
+    }
+
+    @Override
     public QueryWrapper<Coupon> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<Coupon> queryWrapper = super.getQueryWrapper(commonPageInfo);
         String type = commonPageInfo.getType();
@@ -223,14 +317,24 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         }
         String typeKey = MybatisPlusUtil.toColumns(Coupon::getTemplateId);
         if (type.equals(CommonNumConstants.NUM_ZERO.toString())) {
-            queryWrapper.and(wra -> {
-                wra.isNull(typeKey).or().eq(typeKey, StrUtil.EMPTY);
-            });
+            queryWrapper.and(wra -> wra.isNull(typeKey).or().eq(typeKey, StrUtil.EMPTY));
         }
         if (type.equals(CommonNumConstants.NUM_ONE.toString())) {
-            queryWrapper.and(wra -> {
-                wra.isNotNull(typeKey).ne(typeKey, StrUtil.EMPTY);
-            });
+            queryWrapper.and(wra -> wra.isNotNull(typeKey).ne(typeKey, StrUtil.EMPTY));
+        }
+        String sourceKey = MybatisPlusUtil.toColumns(Coupon::getCouponSource);
+        // 门店工作台：objectId = 归属门店 store_id
+        if (StrUtil.isNotBlank(commonPageInfo.getObjectId())) {
+            assertStoreCouponAccess(commonPageInfo.getObjectId());
+            queryWrapper.eq(MybatisPlusUtil.toColumns(Coupon::getStoreId), commonPageInfo.getObjectId());
+            queryWrapper.eq(sourceKey, CouponSource.STORE.getKey());
+            return queryWrapper;
+        }
+        // 管理端：仅管理端来源 + 当前租户（本方法在 IgnoreTenant 下，需手工加租户）
+        queryWrapper.and(wra -> wra.isNull(sourceKey).or().eq(sourceKey, CouponSource.PLATFORM.getKey()));
+        String tenantId = TenantContext.getTenantId();
+        if (StrUtil.isNotBlank(tenantId)) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(Coupon::getTenantId), tenantId);
         }
         return queryWrapper;
     }
@@ -273,13 +377,17 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
         wrapper.and(w -> w.ne(Coupon::getValidityType, CouponValidityType.DATE.getKey())
             .or(w2 -> w2.eq(Coupon::getValidityType, CouponValidityType.DATE.getKey())
                 .ge(Coupon::getValidEndTime, now)));
-        // 按门店过滤：全部门店 或 指定门店且关联该 storeId
+        // 按门店过滤：指定门店关联本店；全部门店仅同租户券可用（个人店/其他租户不可用）
         if (StrUtil.isNotEmpty(storeId)) {
-            wrapper.leftJoin(CouponStore.class, CouponStore::getCouponId, Coupon::getId)
-                .and(w -> w.eq(Coupon::getStoreCoverage, CouponStoreCoverage.ALL_STORE.getKey())
-                    .or(w2 -> w2.eq(Coupon::getStoreCoverage, CouponStoreCoverage.SPECIFIED_STORE.getKey())
-                        .eq(CouponStore::getStoreId, storeId)))
-                .groupBy(Coupon::getId);
+            ShopStore store = shopStoreService.selectById(storeId);
+            if (store == null || StrUtil.isBlank(store.getId())) {
+                outputObject.setBeans(new ArrayList<>());
+                outputObject.settotal(CommonNumConstants.NUM_ZERO);
+                return;
+            }
+            wrapper.leftJoin(CouponStore.class, CouponStore::getCouponId, Coupon::getId);
+            applyCEndStoreVisibility(wrapper, store, storeId);
+            wrapper.groupBy(Coupon::getId);
         }
         wrapper.orderByDesc(Coupon::getCreateTime);
 
@@ -347,22 +455,21 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     public void queryCouponListByMaterialId(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
         Map<String, Object> params = inputObject.getParams();
-        String materialId = MapUtil.getStr(params, "materialId");
-        String storeId = MapUtil.getStr(params, "storeId");
+        String materialId = params.get("materialId").toString();
+        String storeId = params.get("storeId").toString();
         String type = commonPageInfo.getType();
 
         String typeKey = MybatisPlusUtil.toColumns(Coupon::getTemplateId);
         Page pages = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
+        ShopStore store = shopStoreService.selectById(storeId);
         MPJLambdaWrapper<Coupon> wrapper = new MPJLambdaWrapper<Coupon>()
             .innerJoin(CouponMaterial.class, CouponMaterial::getCouponId, Coupon::getId)
             .eq(CouponMaterial::getMaterialId, materialId)
             .eq(MybatisPlusUtil.toColumns(Coupon::getEnabled), EnableEnum.ENABLE_USING.getKey())
             .isNotNull(typeKey).ne(typeKey, StrUtil.EMPTY)
-            .leftJoin(CouponStore.class, CouponStore::getCouponId, Coupon::getId)
-            .and(w -> w.eq(Coupon::getStoreCoverage, CouponStoreCoverage.ALL_STORE.getKey())
-                .or(w2 -> w2.eq(Coupon::getStoreCoverage, CouponStoreCoverage.SPECIFIED_STORE.getKey())
-                    .eq(CouponStore::getStoreId, storeId)))
-            .groupBy(Coupon::getId);
+            .leftJoin(CouponStore.class, CouponStore::getCouponId, Coupon::getId);
+        applyCEndStoreVisibility(wrapper, store, storeId);
+        wrapper.groupBy(Coupon::getId);
         if (StrUtil.isNotEmpty(type)) {
             wrapper.eq(Coupon::getDiscountType, type);
         }
@@ -376,20 +483,19 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
     @IgnoreTenant
     public void queryMaxCouponByMaterialId(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
-        String materialId = MapUtil.getStr(params, "materialId");
-        String storeId = MapUtil.getStr(params, "storeId");
+        String materialId = params.get("materialId").toString();
+        String storeId = params.get("storeId").toString();
 
         String typeKey = MybatisPlusUtil.toColumns(Coupon::getTemplateId);
+        ShopStore store = shopStoreService.selectById(storeId);
         MPJLambdaWrapper<Coupon> wrapper = new MPJLambdaWrapper<Coupon>()
             .innerJoin(CouponMaterial.class, CouponMaterial::getCouponId, Coupon::getId)
             .eq(CouponMaterial::getMaterialId, materialId)
             .eq(MybatisPlusUtil.toColumns(Coupon::getEnabled), EnableEnum.ENABLE_USING.getKey())
             .isNotNull(typeKey).ne(typeKey, StrUtil.EMPTY)
-            .leftJoin(CouponStore.class, CouponStore::getCouponId, Coupon::getId)
-            .and(w -> w.eq(Coupon::getStoreCoverage, CouponStoreCoverage.ALL_STORE.getKey())
-                .or(w2 -> w2.eq(Coupon::getStoreCoverage, CouponStoreCoverage.SPECIFIED_STORE.getKey())
-                    .eq(CouponStore::getStoreId, storeId)))
-            .groupBy(Coupon::getId);
+            .leftJoin(CouponStore.class, CouponStore::getCouponId, Coupon::getId);
+        applyCEndStoreVisibility(wrapper, store, storeId);
+        wrapper.groupBy(Coupon::getId);
         List<Coupon> allList = skyeyeBaseMapper.selectJoinList(Coupon.class, wrapper);
 
         Map<String, Object> result = new HashMap<>();
@@ -456,7 +562,11 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             if (allStore) {
                 QueryWrapper<ShopStore> enabledStoreQuery = new QueryWrapper<>();
                 enabledStoreQuery.select(CommonConstants.ID)
-                    .eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), EnableEnum.ENABLE_USING.getKey());
+                    .eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), EnableEnum.ENABLE_USING.getKey())
+                    .eq(MybatisPlusUtil.toColumns(ShopStore::getTenantId),
+                        StrUtil.blankToDefault(coupon.getTenantId(), StrUtil.EMPTY))
+                    // 「全部门店」不含个人店
+                    .ne(MybatisPlusUtil.toColumns(ShopStore::getStoreNature), StoreNature.PERSONAL.getKey());
                 candidateStoreIdList = shopStoreService.list(enabledStoreQuery).stream()
                     .map(ShopStore::getId).filter(StrUtil::isNotBlank).collect(Collectors.toList());
             } else {
@@ -517,8 +627,11 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             // 指定商品（已过滤）或指定门店：按门店 id 分页
             queryWrapper.in(CommonConstants.ID, storeIdList);
         } else {
-            // 全部商品 + 全部门店：分页启用门店
-            queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), EnableEnum.ENABLE_USING.getKey());
+            // 全部商品 + 全部门店：仅本租户启用企业门店（不含个人店）
+            queryWrapper.eq(MybatisPlusUtil.toColumns(ShopStore::getEnabled), EnableEnum.ENABLE_USING.getKey())
+                .eq(MybatisPlusUtil.toColumns(ShopStore::getTenantId),
+                    StrUtil.blankToDefault(coupon.getTenantId(), StrUtil.EMPTY))
+                .ne(MybatisPlusUtil.toColumns(ShopStore::getStoreNature), StoreNature.PERSONAL.getKey());
         }
         List<ShopStore> stores = shopStoreService.list(queryWrapper);
         outputObject.setBeans(stores);
@@ -535,6 +648,172 @@ public class CouponServiceImpl extends SkyeyeBusinessServiceImpl<CouponDao, Coup
             Integer takeLimitCount = coupon.getTakeLimitCount();// 限制领取数量
             Integer takeCount = map.containsKey(coupon.getId()) ? map.get(coupon.getId()) : CommonNumConstants.NUM_ZERO;// 已经领的
             coupon.setCanDraw(takeLimitCount == -1 ? true : takeCount < takeLimitCount);
+        }
+    }
+
+    @Override
+    @IgnoreTenant
+    public void deleteCouponById(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        Object storeIdObj = params.get("storeId");
+        String storeId = storeIdObj == null ? StrUtil.EMPTY : storeIdObj.toString();
+        String ids = params.get("ids").toString();
+        if (StrUtil.isNotBlank(storeId)) {
+            ShopStore store = assertStoreCouponAccess(storeId);
+            for (String id : ids.split(CommonCharConstants.COMMA_MARK)) {
+                if (StrUtil.isNotBlank(id)) {
+                    assertStoreOwnedCoupon(id.trim(), store);
+                }
+            }
+        }
+        deleteByIds(inputObject, outputObject);
+    }
+
+    @Override
+    @IgnoreTenant
+    public void changeCouponEnabled(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String id = params.get("id").toString();
+        Integer enabled = Integer.valueOf(params.get("enabled").toString());
+        Object storeIdObj = params.get("storeId");
+        String storeId = storeIdObj == null ? StrUtil.EMPTY : storeIdObj.toString();
+        if (StrUtil.isNotBlank(storeId)) {
+            ShopStore store = assertStoreCouponAccess(storeId);
+            assertStoreOwnedCoupon(id, store);
+        } else {
+            Coupon coupon = selectById(id);
+            if (ObjectUtil.isEmpty(coupon) || StrUtil.isBlank(coupon.getId())) {
+                throw new CustomException("优惠券不存在");
+            }
+            if (Objects.equals(coupon.getCouponSource(), CouponSource.STORE.getKey())) {
+                throw new CustomException("不能操作门店优惠券");
+            }
+        }
+        if (!Objects.equals(enabled, EnableEnum.ENABLE_USING.getKey())
+            && !Objects.equals(enabled, EnableEnum.DISABLE_USING.getKey())) {
+            throw new CustomException("状态不正确");
+        }
+        UpdateWrapper<Coupon> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, id);
+        updateWrapper.set(MybatisPlusUtil.toColumns(Coupon::getEnabled), enabled);
+        update(updateWrapper);
+        refreshCache(id);
+        outputObject.setBean(selectById(id));
+    }
+
+    /**
+     * 个人店强制指定本店；企业店可全部门店（仅本租户）或指定门店。
+     */
+    private void applyStoreCoverageRule(Coupon coupon, ShopStore store, String storeId) {
+        if (StoreNature.PERSONAL.getKey().equals(store.getStoreNature())) {
+            coupon.setStoreCoverage(CouponStoreCoverage.SPECIFIED_STORE.getKey());
+            coupon.setStoreIdList(Collections.singletonList(storeId));
+            return;
+        }
+        if (coupon.getStoreCoverage() == null) {
+            coupon.setStoreCoverage(CouponStoreCoverage.SPECIFIED_STORE.getKey());
+        }
+        if (Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.ALL_STORE.getKey())) {
+            coupon.setStoreIdList(null);
+            return;
+        }
+        coupon.setStoreCoverage(CouponStoreCoverage.SPECIFIED_STORE.getKey());
+        if (CollectionUtil.isEmpty(coupon.getStoreIdList())) {
+            coupon.setStoreIdList(Collections.singletonList(storeId));
+        }
+    }
+
+    /**
+     * C 端按门店可见性：个人店仅本店指定券；企业店=本租户全店券 + 绑定本店的指定券。
+     * 全店券不可被个人店或其他租户领取。
+     * 指定门店同时认 CouponStore 与 Coupon.storeId（门店自建券）。
+     */
+    private void applyCEndStoreVisibility(MPJLambdaWrapper<Coupon> wrapper, ShopStore store, String storeId) {
+        if (store == null || StrUtil.isBlank(store.getId())
+            || StoreNature.PERSONAL.getKey().equals(store.getStoreNature())) {
+            wrapper.eq(Coupon::getStoreCoverage, CouponStoreCoverage.SPECIFIED_STORE.getKey())
+                .and(w -> w.eq(CouponStore::getStoreId, storeId).or().eq(Coupon::getStoreId, storeId));
+            return;
+        }
+        String storeTenantId = StrUtil.blankToDefault(store.getTenantId(), StrUtil.EMPTY);
+        wrapper.and(w -> w.and(wAll -> wAll.eq(Coupon::getStoreCoverage, CouponStoreCoverage.ALL_STORE.getKey())
+                .eq(Coupon::getTenantId, storeTenantId))
+            .or(w2 -> w2.eq(Coupon::getStoreCoverage, CouponStoreCoverage.SPECIFIED_STORE.getKey())
+                .and(wBind -> wBind.eq(CouponStore::getStoreId, storeId).or().eq(Coupon::getStoreId, storeId))));
+    }
+
+    /**
+     * 门店优惠券操作权限：店主 / 本店员工 / 加盟企业店（入口靠菜单）。对齐资金 assertStoreFundAccess。
+     */
+    private ShopStore assertStoreCouponAccess(String storeId) {
+        if (StrUtil.isBlank(storeId)) {
+            throw new CustomException("请选择门店");
+        }
+        ShopStore store = shopStoreService.selectById(storeId);
+        if (store == null || StrUtil.isBlank(store.getId())) {
+            throw new CustomException("门店不存在");
+        }
+        String userId = InputObject.getLogParamsStatic().get(CommonConstants.ID).toString();
+        if (userId.equals(store.getCreateId())) {
+            return store;
+        }
+        Object staffIdObj = InputObject.getLogParamsStatic().get("staffId");
+        String staffId = staffIdObj == null ? StrUtil.EMPTY : staffIdObj.toString();
+        if (StrUtil.isNotBlank(staffId) && !"tmpUserStaffId".equals(staffId) && isStoreStaff(storeId, staffId)) {
+            return store;
+        }
+        if (!StoreNature.PERSONAL.getKey().equals(store.getStoreNature())) {
+            return store;
+        }
+        throw new CustomException("无权操作该门店");
+    }
+
+    private boolean isStoreStaff(String storeId, String staffId) {
+        List<ShopStoreStaff> staffList = shopStoreStaffService.getShopStoresByStoreId(storeId);
+        if (CollectionUtil.isEmpty(staffList)) {
+            return false;
+        }
+        return staffList.stream().anyMatch(s -> staffId.equals(s.getStaffId()));
+    }
+
+    private void assertCouponBelongStore(String couponId, String storeId) {
+        List<CouponStore> couponStoreList = couponStoreService.queryListByCouponId(couponId);
+        boolean matched = CollectionUtil.isNotEmpty(couponStoreList)
+            && couponStoreList.stream().anyMatch(item -> storeId.equals(item.getStoreId()));
+        if (!matched) {
+            throw new CustomException("优惠券不属于当前门店");
+        }
+    }
+
+    /**
+     * 校验为门店来源，且归属当前门店。
+     */
+    private void assertStoreOwnedCoupon(String couponId, ShopStore store) {
+        Coupon coupon = selectById(couponId);
+        if (ObjectUtil.isEmpty(coupon) || StrUtil.isBlank(coupon.getId())) {
+            throw new CustomException("优惠券不存在");
+        }
+        if (!Objects.equals(coupon.getCouponSource(), CouponSource.STORE.getKey())) {
+            throw new CustomException("不能操作管理端优惠券");
+        }
+        if (!StrUtil.equals(store.getId(), coupon.getStoreId())) {
+            throw new CustomException("优惠券不属于当前门店");
+        }
+    }
+
+    private void assertStoreOwnedTemplate(String templateId, ShopStore store) {
+        Coupon template = selectById(templateId);
+        if (ObjectUtil.isEmpty(template) || StrUtil.isBlank(template.getId())) {
+            throw new CustomException("优惠券模板不存在");
+        }
+        if (StrUtil.isNotBlank(template.getTemplateId())) {
+            throw new CustomException("请选择优惠券模板");
+        }
+        if (!Objects.equals(template.getCouponSource(), CouponSource.STORE.getKey())) {
+            throw new CustomException("不能使用管理端模板，请先自建模板");
+        }
+        if (!StrUtil.equals(store.getId(), template.getStoreId())) {
+            throw new CustomException("模板不属于当前门店");
         }
     }
 

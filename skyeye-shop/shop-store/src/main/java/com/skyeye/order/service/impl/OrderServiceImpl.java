@@ -231,15 +231,17 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
             throw new CustomException("优惠券不满足使用金额");
         }
         List<OrderItem> orderItemList = order.getOrderItemList();//子单列表
+        // 先按门店范围收窄，避免跨店用券（含折扣券）
+        List<OrderItem> storeEligibleItems = filterOrderItemsByCouponStore(couponUse, orderItemList);
         OrderItem orderItem = null;//优惠券使用商品
         if (Objects.equals(couponUse.getProductScope(), PromotionMaterialScope.ALL.getKey())) {// 全部商品
-            orderItem = orderItemList.stream().max(Comparator.comparing(OrderItem::getPrice)).orElse(null);// 获取优惠券使用商品列表中，价格最高的商品
+            orderItem = storeEligibleItems.stream().max(Comparator.comparing(OrderItem::getPrice)).orElse(null);// 获取优惠券使用商品列表中，价格最高的商品
             setOrderAndOrderItem(couponUse, order, orderItem);// 操作订单和子单的优惠券
         } else if (Objects.equals(couponUse.getProductScope(), PromotionMaterialScope.SPU.getKey())) {// 指定商品
             List<String> couponUseMaterialIds = couponUseMaterialService.queryListByCouponIds(Collections.singletonList(couponUseId))
                 .stream().map(CouponUseMaterial::getMaterialId).collect(Collectors.toList());// 收集子单商品id
             List<OrderItem> newOrderItemList = new ArrayList<>();
-            for (OrderItem item : orderItemList) {// 筛选出优惠券可用的商品
+            for (OrderItem item : storeEligibleItems) {// 筛选出优惠券可用的商品
                 if (couponUseMaterialIds.contains(item.getMaterialId())) {
                     newOrderItemList.add(item);
                 }
@@ -255,26 +257,76 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     }
 
     /**
-     * 指定门店券：只保留适用门店下的子单
+     * 按优惠券门店范围过滤子单：指定门店仅适用绑定店；全部门店仅同租户企业店（不含个人店/其他租户）。
+     * 门店自建券再排除平台货源子单（有 sourceStoreId），避免用本店券给供货方商品降价。
      */
     private List<OrderItem> filterOrderItemsByCouponStore(CouponUse couponUse, List<OrderItem> orderItemList) {
         Coupon coupon = couponService.selectById(couponUse.getCouponId());
-        if (ObjectUtil.isEmpty(coupon)
-            || !Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.SPECIFIED_STORE.getKey())) {
+        if (ObjectUtil.isEmpty(coupon)) {
             return orderItemList;
         }
-        List<String> couponStoreIds = couponStoreService.queryListByCouponId(coupon.getId()).stream()
-            .map(CouponStore::getStoreId)
-            .filter(StrUtil::isNotBlank)
-            .distinct()
-            .collect(Collectors.toList());
-        List<OrderItem> storeEligibleItems = orderItemList.stream()
-            .filter(item -> couponStoreIds.contains(item.getStoreId()))
-            .collect(Collectors.toList());
-        if (CollectionUtil.isEmpty(storeEligibleItems)) {
-            throw new CustomException("当前门店不在优惠券适用范围内");
+        List<OrderItem> filtered = orderItemList;
+        // 指定门店
+        if (Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.SPECIFIED_STORE.getKey())) {
+            List<String> couponStoreIds = couponStoreService.queryListByCouponId(coupon.getId()).stream()
+                .map(CouponStore::getStoreId)
+                .filter(StrUtil::isNotBlank)
+                .distinct()
+                .collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(couponStoreIds) && StrUtil.isNotBlank(coupon.getStoreId())) {
+                couponStoreIds = Collections.singletonList(coupon.getStoreId());
+            }
+            final List<String> allowedStoreIds = couponStoreIds;
+            filtered = orderItemList.stream()
+                .filter(item -> allowedStoreIds.contains(item.getStoreId()))
+                .collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(filtered)) {
+                throw new CustomException("当前门店不在优惠券适用范围内");
+            }
+        } else if (Objects.equals(coupon.getStoreCoverage(), CouponStoreCoverage.ALL_STORE.getKey())) {
+            // 全部门店
+            String couponTenantId = StrUtil.blankToDefault(coupon.getTenantId(), StrUtil.EMPTY);
+            List<String> storeIds = orderItemList.stream()
+                .map(OrderItem::getStoreId)
+                .filter(StrUtil::isNotBlank)
+                .distinct()
+                .collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(storeIds)) {
+                throw new CustomException("当前门店不在优惠券适用范围内");
+            }
+            Map<String, ShopStore> storeMap = shopStoreService.selectByIds(storeIds.toArray(new String[]{})).stream()
+                .collect(Collectors.toMap(ShopStore::getId, s -> s, (a, b) -> a));
+            filtered = orderItemList.stream().filter(item -> {
+                ShopStore store = storeMap.get(item.getStoreId());
+                if (store == null || StrUtil.isBlank(store.getId())) {
+                    return false;
+                }
+                if (StoreNature.PERSONAL.getKey().equals(store.getStoreNature())) {
+                    return false;
+                }
+                return couponTenantId.equals(StrUtil.blankToDefault(store.getTenantId(), StrUtil.EMPTY));
+            }).collect(Collectors.toList());
+            if (CollectionUtil.isEmpty(filtered)) {
+                throw new CustomException("当前门店不在优惠券适用范围内");
+            }
         }
-        return storeEligibleItems;
+        return excludePlatformSourceForStoreCoupon(coupon, filtered);
+    }
+
+    /**
+     * 门店券不能作用到平台货源：子单带 sourceStoreId 表示代发/供货方商品。
+     */
+    private List<OrderItem> excludePlatformSourceForStoreCoupon(Coupon coupon, List<OrderItem> items) {
+        if (ObjectUtil.isEmpty(coupon) || !Objects.equals(coupon.getCouponSource(), CouponSource.STORE.getKey())) {
+            return items;
+        }
+        List<OrderItem> selfItems = items.stream()
+            .filter(item -> StrUtil.isBlank(item.getSourceStoreId()))
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(selfItems)) {
+            throw new CustomException("门店优惠券仅适用于本店自建商品，当前订单无可适用商品");
+        }
+        return selfItems;
     }
 
     @Autowired
