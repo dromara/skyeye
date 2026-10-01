@@ -101,16 +101,23 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         apply.setRemark(params.get("remark").toString());
         apply.setContactName(params.get("contactName").toString());
         apply.setContactPhone(params.get("contactPhone").toString());
+        // 个人店省市区直接存高德名称，不做区域 id 匹配
         apply.setProvinceId(params.get("provinceId").toString());
         apply.setCityId(params.get("cityId").toString());
         apply.setAreaId(params.get("areaId").toString());
         apply.setTownshipId(params.get("townshipId").toString());
         apply.setAbsoluteAddress(params.get("absoluteAddress").toString());
+        apply.setLongitude(params.get("longitude").toString());
+        apply.setLatitude(params.get("latitude").toString());
         Integer onlineOpen = Integer.parseInt(params.get("onlineOpen").toString());
         Integer offlineOpen = Integer.parseInt(params.get("offlineOpen").toString());
         if (WhetherEnum.ENABLE_USING.getKey().equals(offlineOpen)
             && (StrUtil.isBlank(apply.getProvinceId()) || StrUtil.isBlank(apply.getAbsoluteAddress()))) {
-            throw new CustomException("开启线下门店要填写经营地址");
+            throw new CustomException("开启线下门店要在地图上选择经营地址");
+        }
+        if (WhetherEnum.ENABLE_USING.getKey().equals(offlineOpen)
+            && (StrUtil.isBlank(apply.getLongitude()) || StrUtil.isBlank(apply.getLatitude()))) {
+            throw new CustomException("开启线下门店要在地图上选择门店位置");
         }
         apply.setOnlineOpen(onlineOpen);
         apply.setOfflineOpen(offlineOpen);
@@ -293,6 +300,8 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
             store.setAreaId(apply.getAreaId());
             store.setTownshipId(apply.getTownshipId());
             store.setAbsoluteAddress(apply.getAbsoluteAddress());
+            store.setLongitude(apply.getLongitude());
+            store.setLatitude(apply.getLatitude());
             // createId 必须写成申请人会员 id，后续「我的门店」按 tenant_id + create_id 查询
             return shopStoreService.createEntity(store, apply.getMemberId());
         } finally {
@@ -376,24 +385,32 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         }
         Integer onlineOpen = Integer.parseInt(params.get("onlineOpen").toString());
         Integer offlineOpen = Integer.parseInt(params.get("offlineOpen").toString());
-        String provinceId = params.get("provinceId") == null ? "" : params.get("provinceId").toString();
-        String absoluteAddress = params.get("absoluteAddress") == null ? "" : params.get("absoluteAddress").toString();
+        String provinceId = params.get("provinceId").toString();
+        String absoluteAddress = params.get("absoluteAddress").toString();
+        String longitude = params.get("longitude").toString();
+        String latitude = params.get("latitude").toString();
         if (WhetherEnum.ENABLE_USING.getKey().equals(offlineOpen) && (StrUtil.isBlank(provinceId) || StrUtil.isBlank(absoluteAddress))) {
-            throw new CustomException("开启线下门店要填写经营地址");
+            throw new CustomException("开启线下门店要在地图上选择经营地址");
+        }
+        if (WhetherEnum.ENABLE_USING.getKey().equals(offlineOpen) && (StrUtil.isBlank(longitude) || StrUtil.isBlank(latitude))) {
+            throw new CustomException("开启线下门店要在地图上选择门店位置");
         }
         ShopStoreApply apply = new ShopStoreApply();
         apply.setTenantId(TenantTypeEnum.SHOP.getCode());
         apply.setMemberId(memberId);
         apply.setStoreName(store.getName());
         apply.setLogo(store.getLogo());
-        apply.setRemark(params.get("remark") == null ? "" : params.get("remark").toString());
-        apply.setContactName("");
-        apply.setContactPhone("");
+        apply.setRemark(params.get("remark").toString());
+        apply.setContactName(params.get("contactName").toString());
+        apply.setContactPhone(params.get("contactPhone").toString());
+        // 个人店省市区直接存高德名称，不做区域 id 匹配
         apply.setProvinceId(provinceId);
-        apply.setCityId(params.get("cityId") == null ? "" : params.get("cityId").toString());
-        apply.setAreaId(params.get("areaId") == null ? "" : params.get("areaId").toString());
-        apply.setTownshipId(params.get("townshipId") == null ? "" : params.get("townshipId").toString());
+        apply.setCityId(params.get("cityId").toString());
+        apply.setAreaId(params.get("areaId").toString());
+        apply.setTownshipId(params.get("townshipId").toString());
         apply.setAbsoluteAddress(absoluteAddress);
+        apply.setLongitude(longitude);
+        apply.setLatitude(latitude);
         apply.setOnlineOpen(onlineOpen);
         apply.setOfflineOpen(offlineOpen);
         apply.setApplyType(2);
@@ -421,8 +438,12 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getAreaId), apply.getAreaId());
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getTownshipId), apply.getTownshipId());
         updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getAbsoluteAddress), apply.getAbsoluteAddress());
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getLongitude), apply.getLongitude());
+        updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getLatitude), apply.getLatitude());
         if (!WhetherEnum.ENABLE_USING.getKey().equals(apply.getOfflineOpen())) {
             updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineBookAppoint), WhetherEnum.DISABLE_USING.getKey());
+            updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getLongitude), "");
+            updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getLatitude), "");
         }
         shopStoreService.update(updateWrapper);
         shopStoreService.refreshCache(apply.getStoreId());

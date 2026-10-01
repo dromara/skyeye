@@ -479,23 +479,12 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
     }
 
     private static void queryShopSelType(CommonPageInfo commonPageInfo, MPJLambdaWrapper<ShopMaterialStore> wrapper) {
-        String deliveryMethodColumn = MybatisPlusUtil.toColumns(ShopMaterial::getDeliveryMethod);
         if (StrUtil.equals(commonPageInfo.getCustomParamsMapStr("shopType"), "sameCity")) {
-            // 同城的商品 - 配送方式包含"同城配送"（key=3）
-            // deliveryMethod存储的是JSON字符串数组，如["1","2","3"]，使用LIKE查询字符串"3"
-            Integer key = ShopMaterialDeliveryMethod.LOCAL_DELIVERY.getKey();
-            wrapper.apply("sm." + deliveryMethodColumn + " LIKE {0}",
-                "%\"" + key + "\"%");
-            wrapper.apply("sms." + deliveryMethodColumn + " LIKE {0}",
-                "%\"" + key + "\"%");
+            // 同城/移动端门店：只出经营方式含线下的商品；历史未填经营方式的仍保留
+            wrapper.and(wra -> wra.isNull(ShopMaterialStore::getSaleChannel)
+                .or().apply("JSON_CONTAINS(sms.sale_channel, '\"2\"')"));
         } else if (StrUtil.equals(commonPageInfo.getCustomParamsMapStr("shopType"), "mallProducts")) {
-            // 可以邮寄的商品 - 配送方式包含"快递发货"（key=1）
-            Integer expressKey = ShopMaterialDeliveryMethod.EXPRESS_DELIVERY.getKey();
-            wrapper.apply("sm." + deliveryMethodColumn + " LIKE {0}",
-                "%\"" + expressKey + "\"%");
-            wrapper.apply("sms." + deliveryMethodColumn + " LIKE {0}",
-                "%\"" + expressKey + "\"%");
-            // PC/线上商城：经营方式含线上，或未写经营方式的旧数据；纯线下不展示
+            // PC/线上商城：只出经营方式含线上的商品；历史未填经营方式的仍保留
             wrapper.and(wra -> wra.isNull(ShopMaterialStore::getSaleChannel)
                 .or().apply("JSON_CONTAINS(sms.sale_channel, '\"1\"')"));
         }
@@ -705,6 +694,9 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
         shopMaterialStoreList.forEach(shopMaterialStore -> {
             ShopMaterial shopMaterial = shopMaterialMap.get(shopMaterialStore.getMaterialId());
             if (ObjectUtil.isEmpty(shopMaterial)) {
+                return;
+            }
+            if (ObjectUtil.isEmpty(shopMaterial.getMaterialMation())) {
                 return;
             }
             shopMaterial.getMaterialMation().setMaterialNorms(null);

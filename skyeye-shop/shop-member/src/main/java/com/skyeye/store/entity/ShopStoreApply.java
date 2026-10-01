@@ -96,4 +96,12 @@ public class ShopStoreApply extends AreaInfo {
     @Property(value = "申请类型：1开店 2变更线上线下或经营地址")
     private Integer applyType;
 
+    @TableField("longitude")
+    @ApiModelProperty(value = "经度，开启线下时必填，用于同城距离")
+    private String longitude;
+
+    @TableField("latitude")
+    @ApiModelProperty(value = "纬度，开启线下时必填，用于同城距离")
+    private String latitude;
+
 }
