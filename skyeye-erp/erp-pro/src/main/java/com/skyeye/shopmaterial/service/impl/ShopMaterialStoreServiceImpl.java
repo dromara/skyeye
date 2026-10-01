@@ -495,6 +495,9 @@ public class ShopMaterialStoreServiceImpl extends SkyeyeBusinessServiceImpl<Shop
                 "%\"" + expressKey + "\"%");
             wrapper.apply("sms." + deliveryMethodColumn + " LIKE {0}",
                 "%\"" + expressKey + "\"%");
+            // PC/线上商城：经营方式含线上，或未写经营方式的旧数据；纯线下不展示
+            wrapper.and(wra -> wra.isNull(ShopMaterialStore::getSaleChannel)
+                .or().apply("JSON_CONTAINS(sms.sale_channel, '\"1\"')"));
         }
     }
 
