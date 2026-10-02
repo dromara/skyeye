@@ -27,7 +27,11 @@ public class IPlatformBaseSettingServiceImpl implements IPlatformBaseSettingServ
 
     private static final int DEFAULT_MAX_PERSONAL_STORE_PER_MEMBER = 3;
 
+    private static final int DEFAULT_MAX_SAME_CITY_DELIVERY_METERS = 3000;
+
     private static final String KEY_MAX_PERSONAL_STORE_PER_MEMBER = "maxPersonalStorePerMember";
+
+    private static final String KEY_MAX_SAME_CITY_DELIVERY_METERS = "maxSameCityDeliveryMeters";
 
     @Autowired
     private IPlatformBaseSettingRest iPlatformBaseSettingRest;
@@ -48,6 +52,25 @@ public class IPlatformBaseSettingServiceImpl implements IPlatformBaseSettingServ
         } catch (Exception e) {
             log.warn("获取个人门店配额失败，使用默认值 {}: {}", DEFAULT_MAX_PERSONAL_STORE_PER_MEMBER, e.getMessage());
             return DEFAULT_MAX_PERSONAL_STORE_PER_MEMBER;
+        }
+    }
+
+    @Override
+    public Integer getMaxSameCityDeliveryMeters() {
+        try {
+            ResultEntity resultEntity = ExecuteFeignClient.get(() -> iPlatformBaseSettingRest.queryPlatformPersonalStoreConfig());
+            Map<String, Object> bean = resultEntity.getBean();
+            if (bean == null || ObjectUtil.isEmpty(bean.get(KEY_MAX_SAME_CITY_DELIVERY_METERS))) {
+                return DEFAULT_MAX_SAME_CITY_DELIVERY_METERS;
+            }
+            String value = bean.get(KEY_MAX_SAME_CITY_DELIVERY_METERS).toString();
+            if (StrUtil.isBlank(value)) {
+                return DEFAULT_MAX_SAME_CITY_DELIVERY_METERS;
+            }
+            return NumberUtil.parseInt(value);
+        } catch (Exception e) {
+            log.warn("获取同城配送默认半径失败，使用默认值 {}: {}", DEFAULT_MAX_SAME_CITY_DELIVERY_METERS, e.getMessage());
+            return DEFAULT_MAX_SAME_CITY_DELIVERY_METERS;
         }
     }
 

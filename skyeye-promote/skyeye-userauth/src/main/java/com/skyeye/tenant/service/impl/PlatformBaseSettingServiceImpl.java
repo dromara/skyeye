@@ -107,6 +107,8 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
      */
     private static final int DEFAULT_MAX_PERSONAL_STORE_PER_MEMBER = 3;
 
+    private static final int DEFAULT_MAX_SAME_CITY_DELIVERY_METERS = 3000;
+
     /**
      * 查询平台基础信息（管理端使用，需平台租户身份）
      */
@@ -317,9 +319,17 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
 
     @Override
     @IgnoreTenant
+    public Integer getMaxSameCityDeliveryMeters() {
+        return getShopGroupInt(PlatformBaseSettingConst.KEY_MAX_SAME_CITY_DELIVERY_METERS,
+            DEFAULT_MAX_SAME_CITY_DELIVERY_METERS);
+    }
+
+    @Override
+    @IgnoreTenant
     public void queryPlatformPersonalStoreConfig(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> data = new HashMap<>();
         data.put(PlatformBaseSettingConst.KEY_MAX_PERSONAL_STORE_PER_MEMBER, getMaxPersonalStorePerMember());
+        data.put(PlatformBaseSettingConst.KEY_MAX_SAME_CITY_DELIVERY_METERS, getMaxSameCityDeliveryMeters());
         outputObject.setBean(data);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
@@ -370,6 +380,7 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         settingData.put(PlatformBaseSettingGroup.TOKEN.getKey(), tokenGroup);
         Map<String, Object> shopGroup = new HashMap<>();
         shopGroup.put(PlatformBaseSettingConst.KEY_MAX_PERSONAL_STORE_PER_MEMBER, DEFAULT_MAX_PERSONAL_STORE_PER_MEMBER);
+        shopGroup.put(PlatformBaseSettingConst.KEY_MAX_SAME_CITY_DELIVERY_METERS, DEFAULT_MAX_SAME_CITY_DELIVERY_METERS);
         settingData.put(PlatformBaseSettingGroup.SHOP.getKey(), shopGroup);
         return settingData;
     }
@@ -645,6 +656,10 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         if (shopGroup.containsKey(PlatformBaseSettingConst.KEY_MAX_PERSONAL_STORE_PER_MEMBER)) {
             validateNonNegativeInteger(shopGroup.get(PlatformBaseSettingConst.KEY_MAX_PERSONAL_STORE_PER_MEMBER),
                 "个人门店数量上限");
+        }
+        if (shopGroup.containsKey(PlatformBaseSettingConst.KEY_MAX_SAME_CITY_DELIVERY_METERS)) {
+            validateNonNegativeInteger(shopGroup.get(PlatformBaseSettingConst.KEY_MAX_SAME_CITY_DELIVERY_METERS),
+                "同城配送默认最大半径");
         }
     }
 

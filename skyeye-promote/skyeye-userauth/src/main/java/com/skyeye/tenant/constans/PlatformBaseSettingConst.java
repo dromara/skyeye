@@ -57,6 +57,11 @@ public class PlatformBaseSettingConst {
     public static final String KEY_MAX_PERSONAL_STORE_PER_MEMBER = "maxPersonalStorePerMember";
 
     /**
+     * 同城配送默认最大半径（米）；0 表示不按距离限制
+     */
+    public static final String KEY_MAX_SAME_CITY_DELIVERY_METERS = "maxSameCityDeliveryMeters";
+
+    /**
      * AI 角色分组 - 研发/需求侧绑定的 AI 角色 id
      */
     public static final String KEY_AI_ROLE_ID = "roleId";

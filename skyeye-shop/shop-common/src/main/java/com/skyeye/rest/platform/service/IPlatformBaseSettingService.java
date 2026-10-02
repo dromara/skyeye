@@ -15,4 +15,9 @@ public interface IPlatformBaseSettingService {
      */
     Integer getMaxPersonalStorePerMember();
 
+    /**
+     * 同城配送默认最大半径（米）；0 表示不按距离限制；获取失败时返回默认值
+     */
+    Integer getMaxSameCityDeliveryMeters();
+
 }

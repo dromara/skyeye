@@ -136,6 +136,7 @@ public class ShopStoreController {
         @ApiImplicitParam(id = "endTime", name = "endTime", value = "营业结束时间"),
         @ApiImplicitParam(id = "absoluteAddress", name = "absoluteAddress", value = "线下门店地址"),
         @ApiImplicitParam(id = "remark", name = "remark", value = "店铺简介"),
+        @ApiImplicitParam(id = "deliveryRadiusMeters", name = "deliveryRadiusMeters", value = "同城配送半径（米），空则用平台默认", required = "num"),
         @ApiImplicitParam(id = "onlineBookAppoint", name = "onlineBookAppoint", value = "是否开启线上预约", required = "num"),
         @ApiImplicitParam(id = "onlineBookRadix", name = "onlineBookRadix", value = "单场基础时间，分钟", required = "num"),
         @ApiImplicitParam(id = "onlineBookType", name = "onlineBookType", value = "预约类型", required = "num"),

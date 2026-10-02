@@ -33,7 +33,9 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
+import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.common.enumeration.ShopMaterialDeliveryMethod;
 import com.skyeye.coupon.entity.Coupon;
 import com.skyeye.coupon.entity.CouponStore;
 import com.skyeye.coupon.entity.CouponUse;
@@ -155,6 +157,8 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         order.setPayPrice(CommonNumConstants.NUM_ZERO.toString());
         // 收货地址：下单即写入 history 快照，后续改/删地址簿不影响本单
         snapshotOrderAddress(order);
+        // 同城配送：按收货定位与门店坐标二次校验有效半径
+        checkSameCityDeliveryDistance(order);
         // 调价
         order.setAdjustPrice("0");
         // 子单的优惠券操作
@@ -207,6 +211,77 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
 
     private void checkAndSetDeliveryPrice(Order order) {
         order.setDeliveryPrice(StrUtil.isEmpty(order.getDeliveryPrice()) ? "0" : order.getDeliveryPrice());
+    }
+
+    /**
+     * 同城配送下单校验：用户坐标 ↔ 门店坐标，超过有效配送半径则拒绝
+     */
+    private void checkSameCityDeliveryDistance(Order order) {
+        if (!ShopMaterialDeliveryMethod.LOCAL_DELIVERY.getKey().equals(order.getDeliveryType())) {
+            return;
+        }
+        if (StrUtil.isBlank(order.getLatitude()) || StrUtil.isBlank(order.getLongitude())
+            || StrUtil.equals("undefined", order.getLatitude()) || StrUtil.equals("undefined", order.getLongitude())) {
+            throw new CustomException("同城配送请先定位或提供收货坐标");
+        }
+        List<OrderItem> orderItemList = order.getOrderItemList();
+        if (CollectionUtil.isEmpty(orderItemList)) {
+            return;
+        }
+        List<String> storeIds = orderItemList.stream()
+            .map(OrderItem::getStoreId)
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
+        // 直购等场景下单时可能只有 materialStoreId，需反查售出门店
+        if (CollectionUtil.isEmpty(storeIds)) {
+            List<String> materialStoreIds = orderItemList.stream()
+                .map(OrderItem::getMaterialStoreId)
+                .filter(StrUtil::isNotBlank)
+                .distinct()
+                .collect(Collectors.toList());
+            if (CollectionUtil.isNotEmpty(materialStoreIds)) {
+                List<Map<String, Object>> materialByIds = iShopMaterialNormsService.queryShopMaterialByIds(materialStoreIds);
+                for (Map<String, Object> map : materialByIds) {
+                    if (map == null || map.get("shopMaterialStore") == null) {
+                        continue;
+                    }
+                    Map<String, Object> shopMaterialStore = JSONUtil.toBean(map.get("shopMaterialStore").toString(), null);
+                    if (shopMaterialStore != null && shopMaterialStore.get("storeId") != null
+                        && StrUtil.isNotBlank(shopMaterialStore.get("storeId").toString())) {
+                        storeIds.add(shopMaterialStore.get("storeId").toString());
+                    }
+                }
+                storeIds = storeIds.stream().distinct().collect(Collectors.toList());
+            }
+        }
+        if (CollectionUtil.isEmpty(storeIds)) {
+            throw new CustomException("同城配送订单缺少门店信息");
+        }
+        double userLat = Double.parseDouble(order.getLatitude());
+        double userLng = Double.parseDouble(order.getLongitude());
+        List<ShopStore> stores = shopStoreService.selectByIds(storeIds.toArray(new String[]{}));
+        Map<String, ShopStore> storeMap = stores.stream()
+            .collect(Collectors.toMap(ShopStore::getId, s -> s, (a, b) -> a));
+        for (String storeId : storeIds) {
+            ShopStore store = storeMap.get(storeId);
+            if (store == null) {
+                throw new CustomException("门店不存在，无法配送");
+            }
+            if (StrUtil.isBlank(store.getLatitude()) || StrUtil.isBlank(store.getLongitude())
+                || StrUtil.equals("undefined", store.getLatitude()) || StrUtil.equals("undefined", store.getLongitude())) {
+                throw new CustomException("门店未设置位置，暂不支持同城配送");
+            }
+            int effectiveRadius = shopStoreService.resolveEffectiveDeliveryRadiusMeters(store);
+            if (effectiveRadius <= 0) {
+                continue;
+            }
+            double distance = ToolUtil.calculateDistance(userLat, userLng,
+                Double.parseDouble(store.getLatitude()), Double.parseDouble(store.getLongitude()));
+            if (distance > effectiveRadius) {
+                throw new CustomException("超出门店配送范围");
+            }
+        }
     }
 
     private void checkAndSetVariable(Order order) {

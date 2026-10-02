@@ -115,6 +115,14 @@ public class Order extends OperatorUserInfo {
     @ApiModelProperty(value = "配送方式")
     private Integer deliveryType;
 
+    @TableField(exist = false)
+    @ApiModelProperty(value = "用户纬度（同城配送距离校验，不落库）")
+    private String latitude;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "用户经度（同城配送距离校验，不落库）")
+    private String longitude;
+
     @TableField("tms_order_id")
     @ApiModelProperty(value = "物流单id")
     private String tmsOrderId;

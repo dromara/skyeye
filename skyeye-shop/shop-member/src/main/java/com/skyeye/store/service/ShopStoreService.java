@@ -38,4 +38,10 @@ public interface ShopStoreService extends SkyeyeBusinessService<ShopStore> {
      * 个人门店资料：营业时间、线上/线下开关、线下地址和预约
      */
     void savePersonalStoreSetting(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 门店有效同城配送半径（米）：门店有值用门店，否则用平台默认；<=0 表示不限制
+     */
+    int resolveEffectiveDeliveryRadiusMeters(ShopStore store);
+
 }

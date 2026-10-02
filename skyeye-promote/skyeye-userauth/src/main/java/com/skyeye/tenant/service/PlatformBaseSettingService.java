@@ -121,6 +121,11 @@ public interface PlatformBaseSettingService extends SkyeyeBusinessService<Platfo
     Integer getMaxPersonalStorePerMember();
 
     /**
+     * 同城配送默认最大半径（米）；0 表示不按距离限制
+     */
+    Integer getMaxSameCityDeliveryMeters();
+
+    /**
      * 查询个人门店配额配置（所有服务/前端可读）
      */
     void queryPlatformPersonalStoreConfig(InputObject inputObject, OutputObject outputObject);

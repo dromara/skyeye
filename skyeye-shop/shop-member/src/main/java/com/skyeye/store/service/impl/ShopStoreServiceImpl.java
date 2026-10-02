@@ -24,6 +24,7 @@ import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.rest.shopmaterialnorms.rest.IShopMaterialNormsRest;
+import com.skyeye.rest.platform.service.IPlatformBaseSettingService;
 import com.skyeye.store.classenum.StoreNature;
 import com.skyeye.store.dao.ShopStoreDao;
 import com.skyeye.store.entity.ShopStore;
@@ -59,6 +60,9 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
     @Autowired
     private IShopMaterialNormsRest iShopMaterialNormsRest;
 
+    @Autowired
+    private IPlatformBaseSettingService iPlatformBaseSettingService;
+
     @Override
     protected void createPrepose(ShopStore entity) {
         if (entity.getStoreNature() == null) {
@@ -91,10 +95,16 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
     @Override
     public void setDefaultOrderBy(CommonPageInfo commonPageInfo, QueryWrapper<ShopStore> wrapper) {
         if (StrUtil.isNotEmpty(commonPageInfo.getLatitude()) && StrUtil.isNotEmpty(commonPageInfo.getLongitude())) {
-            // 使用ST_Distance_Sphere函数计算距离并按距离排序
-            String orderByClause = "ORDER BY CASE WHEN longitude IS NULL THEN 1 ELSE 0 END, ST_Distance_Sphere(point(longitude, latitude), " +
-                "point(" + commonPageInfo.getLongitude() + ", " + commonPageInfo.getLatitude() + ")) ASC";
-            wrapper.last(orderByClause);
+            int platformDefault = iPlatformBaseSettingService.getMaxSameCityDeliveryMeters();
+            // 有定位的同城列表：无坐标门店排除；按有效配送半径过滤（门店覆盖或平台默认；<=0 不限距）
+            String distanceExpr = "ST_Distance_Sphere(point(longitude, latitude), point("
+                + commonPageInfo.getLongitude() + ", " + commonPageInfo.getLatitude() + "))";
+            String radiusExpr = "IFNULL(delivery_radius_meters, " + platformDefault + ")";
+            String filterClause = " AND longitude IS NOT NULL AND latitude IS NOT NULL"
+                + " AND longitude <> '' AND latitude <> ''"
+                + " AND (" + radiusExpr + " <= 0 OR " + distanceExpr + " <= " + radiusExpr + ")";
+            String orderByClause = " ORDER BY " + distanceExpr + " ASC";
+            wrapper.last(filterClause + orderByClause);
         } else {
             wrapper.orderByDesc(MybatisPlusUtil.toColumns(ShopStore::getCreateTime));
         }
@@ -350,6 +360,18 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
         if (params.get("remark") != null) {
             updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getRemark), params.get("remark").toString());
         }
+        if (params.containsKey("deliveryRadiusMeters")) {
+            Object radiusObj = params.get("deliveryRadiusMeters");
+            if (radiusObj == null || StrUtil.isBlank(radiusObj.toString())) {
+                updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getDeliveryRadiusMeters), null);
+            } else {
+                if (!radiusObj.toString().matches("^\\d+$")) {
+                    throw new CustomException("配送半径必须为非负整数（米）");
+                }
+                updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getDeliveryRadiusMeters),
+                    Integer.parseInt(radiusObj.toString()));
+            }
+        }
         if (WhetherEnum.ENABLE_USING.getKey().equals(onlineBookAppoint)) {
             updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineBookRadix), params.get("onlineBookRadix").toString());
             updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineBookType), params.get("onlineBookType").toString());
@@ -361,6 +383,16 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
         }
         update(updateWrapper);
         refreshCache(id);
+    }
+
+    @Override
+    public int resolveEffectiveDeliveryRadiusMeters(ShopStore store) {
+        Integer platformDefault = iPlatformBaseSettingService.getMaxSameCityDeliveryMeters();
+        int platformMeters = platformDefault == null ? 0 : platformDefault;
+        if (store != null && store.getDeliveryRadiusMeters() != null) {
+            return store.getDeliveryRadiusMeters();
+        }
+        return platformMeters;
     }
 
 }

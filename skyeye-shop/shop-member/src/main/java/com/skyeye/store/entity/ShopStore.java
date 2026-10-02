@@ -97,6 +97,10 @@ public class ShopStore extends AreaInfo {
     @ApiModelProperty(value = "纬度")
     private String latitude;
 
+    @TableField(value = "delivery_radius_meters")
+    @ApiModelProperty(value = "同城配送半径（米），空则使用平台默认")
+    private Integer deliveryRadiusMeters;
+
     @TableField(exist = false)
     @Property(value = "两点之间的距离，单位：米")
     private Double distance;
