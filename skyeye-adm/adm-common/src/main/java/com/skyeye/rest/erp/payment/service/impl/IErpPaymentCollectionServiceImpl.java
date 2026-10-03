@@ -7,6 +7,7 @@ import com.skyeye.rest.erp.payment.service.IErpPaymentCollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ public class IErpPaymentCollectionServiceImpl extends IServiceImpl implements IE
 
     @Override
     public List<Map<String, Object>> queryPaymentCollectionById(String ids) {
-        return ExecuteFeignClient.get(() -> iErpPaymentCollectionRest.queryPaymentCollectionById(ids)).getRows();
+        Map<String, Object> params = Collections.singletonMap("ids", ids);
+        return ExecuteFeignClient.get(() -> iErpPaymentCollectionRest.queryPaymentCollectionById(params)).getRows();
     }
 }

@@ -14,6 +14,8 @@ import com.skyeye.common.enumeration.FlowableChildStateEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.finance.event.classenum.BizAcctEventType;
+import com.skyeye.finance.event.service.BizAcctEventService;
 import com.skyeye.organization.service.IDepmentService;
 import com.skyeye.reimbursement.dao.ReimbursementDao;
 import com.skyeye.reimbursement.entity.Reimbursement;
@@ -24,6 +26,7 @@ import com.skyeye.rest.project.service.IProProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +50,9 @@ public class ReimbursementServiceImpl extends SkyeyeBusinessServiceImpl<Reimburs
 
     @Autowired
     private IProProjectService iProProjectService;
+
+    @Autowired
+    private BizAcctEventService bizAcctEventService;
 
     @Override
     public QueryWrapper<Reimbursement> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -114,6 +120,20 @@ public class ReimbursementServiceImpl extends SkyeyeBusinessServiceImpl<Reimburs
     @Override
     protected void approvalEndIsSuccess(Reimbursement entity) {
         reimbursementChildService.editStateByPId(entity.getId(), FlowableChildStateEnum.ADEQUATE.getKey());
+        // 业财一体：报销审批通过后推送会计事件
+        try {
+            Map<String, Object> event = new HashMap<>();
+            event.put("eventType", BizAcctEventType.EXPENSE_REIMBURSE.getKey());
+            event.put("sourceType", "IFS_REIMBURSEMENT");
+            event.put("sourceId", entity.getId());
+            event.put("sourceNo", entity.getOddNumber());
+            event.put("amount", StrUtil.blankToDefault(entity.getPrice(), "0"));
+            event.put("departmentId", entity.getDepartmentId());
+            event.put("summary", "费用报销-" + entity.getOddNumber());
+            bizAcctEventService.acceptEvent(event);
+        } catch (Exception ignored) {
+            // 失败事件可在业财事件台重试
+        }
     }
 
     @Override

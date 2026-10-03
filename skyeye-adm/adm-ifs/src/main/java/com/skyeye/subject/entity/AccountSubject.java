@@ -48,4 +48,44 @@ public class AccountSubject extends BaseGeneralInfo {
     @ApiModelProperty(value = "余额方向", required = "required,num", enumClass = AmountDirection.class)
     private Integer amountDirection;
 
+    @TableField("parent_id")
+    @ApiModelProperty(value = "上级科目")
+    private String parentId;
+
+    @TableField("`level`")
+    @ApiModelProperty(value = "级次")
+    private Integer level;
+
+    @TableField("is_leaf")
+    @ApiModelProperty(value = "是否末级")
+    private Integer isLeaf;
+
+    @TableField("aux_customer")
+    @ApiModelProperty(value = "辅助核算-客户")
+    private Integer auxCustomer;
+
+    @TableField("aux_supplier")
+    @ApiModelProperty(value = "辅助核算-供应商")
+    private Integer auxSupplier;
+
+    @TableField("aux_material")
+    @ApiModelProperty(value = "辅助核算-物料")
+    private Integer auxMaterial;
+
+    @TableField("aux_department")
+    @ApiModelProperty(value = "辅助核算-部门")
+    private Integer auxDepartment;
+
+    @TableField("aux_project")
+    @ApiModelProperty(value = "辅助核算-项目")
+    private Integer auxProject;
+
+    @TableField("aux_depot")
+    @ApiModelProperty(value = "辅助核算-仓库")
+    private Integer auxDepot;
+
+    @TableField("cash_flag")
+    @ApiModelProperty(value = "现金等价物")
+    private Integer cashFlag;
+
 }

@@ -27,11 +27,13 @@ import com.skyeye.payment.classenum.ErpPaymentAuthEnum;
 import com.skyeye.payment.dao.PaymentDao;
 import com.skyeye.payment.entity.Payment;
 import com.skyeye.payment.service.PaymentService;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import com.skyeye.rest.ifs.receivepayment.service.IfsReceivePaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -56,6 +58,9 @@ public class PaymentServiceImpl extends SkyeyeBusinessServiceImpl<PaymentDao, Pa
 
     @Autowired
     private IfsReceivePaymentService ifsReceivePaymentService;
+
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     @Override
     public Class getAuthEnumClass() {
@@ -152,6 +157,21 @@ public class PaymentServiceImpl extends SkyeyeBusinessServiceImpl<PaymentDao, Pa
         map.put("fromId",entity.getId());
         map.put("fromChildId",entity.getPayableId());
         ifsReceivePaymentService.addIFsReceivePayment(map);
+        // 业财一体：付款审批通过后推送会计事件生成凭证（失败落事件台，不阻断付款）
+        try {
+            Map<String, Object> acctEvent = new HashMap<>();
+            acctEvent.put("eventType", "PAYMENT");
+            acctEvent.put("sourceType", "ERP_PAYMENT");
+            acctEvent.put("sourceId", entity.getId());
+            acctEvent.put("sourceNo", payment.getOddNumber());
+            acctEvent.put("amount", entity.getPrice());
+            acctEvent.put("supplierId", entity.getObjectId());
+            acctEvent.put("voucherDate", entity.getCollectionTime());
+            acctEvent.put("summary", "供应商付款-" + payment.getOddNumber());
+            ifsBizAcctEventService.acceptBizAcctEvent(acctEvent);
+        } catch (Exception ignored) {
+            // 事件表已记录失败，可由财务台重试
+        }
     }
 
     @Override

@@ -21,4 +21,6 @@ public interface ReceivableService extends SkyeyeBusinessService<Receivable> {
     void updateReceivablePaidPrice(String receivableId, String price);
 
     void updateReceivableById(InputObject inputObject, OutputObject outputObject);
+
+    void queryReceivableCount(InputObject inputObject, OutputObject outputObject);
 }

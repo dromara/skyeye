@@ -19,4 +19,6 @@ public interface PayableService extends SkyeyeBusinessService<Payable> {
     void updatePayablePaidPrice(String payableId, String price);
 
     void updatePayableById(InputObject inputObject, OutputObject outputObject);
+
+    void queryPayableCount(InputObject inputObject, OutputObject outputObject);
 }

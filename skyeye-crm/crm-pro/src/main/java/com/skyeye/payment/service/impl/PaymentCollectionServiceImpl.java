@@ -27,6 +27,7 @@ import com.skyeye.payment.entity.PaymentCollection;
 import com.skyeye.payment.service.PaymentCollectionService;
 import com.skyeye.receivable.entity.Receivable;
 import com.skyeye.receivable.service.ReceivableService;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import com.skyeye.rest.ifs.receivepayment.service.IfsReceivePaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -59,6 +61,9 @@ public class PaymentCollectionServiceImpl extends SkyeyeBusinessServiceImpl<Paym
 
     @Autowired
     private IfsReceivePaymentService ifsReceivePaymentService;
+
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     @Override
     public Class getAuthEnumClass() {
@@ -153,6 +158,21 @@ public class PaymentCollectionServiceImpl extends SkyeyeBusinessServiceImpl<Paym
         map.put("fromId",entity.getId());
         map.put("fromChildId",entity.getReceivableId());
         ifsReceivePaymentService.addIFsReceivePayment(map);
+        // 业财一体：回款审批通过后推送会计事件生成凭证（失败落事件台，不阻断回款）
+        try {
+            Map<String, Object> acctEvent = new HashMap<>();
+            acctEvent.put("eventType", "RECEIPT");
+            acctEvent.put("sourceType", "CRM_RECEIPT");
+            acctEvent.put("sourceId", entity.getId());
+            acctEvent.put("sourceNo", entity.getOddNumber());
+            acctEvent.put("amount", entity.getPrice());
+            acctEvent.put("customerId", entity.getObjectId());
+            acctEvent.put("voucherDate", entity.getCollectionTime());
+            acctEvent.put("summary", "客户回款-" + entity.getOddNumber());
+            ifsBizAcctEventService.acceptBizAcctEvent(acctEvent);
+        } catch (Exception ignored) {
+            // 事件表已记录失败，可由财务台重试
+        }
     }
 
     @Override

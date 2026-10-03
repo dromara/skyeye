@@ -41,4 +41,16 @@ public class SetOfBooks extends BaseGeneralInfo {
     @ApiModelProperty(value = "状态", enumClass = EnableEnum.class, required = "required,num")
     private Integer enabled;
 
+    @TableField("currency")
+    @ApiModelProperty(value = "本位币")
+    private String currency;
+
+    @TableField("current_period")
+    @ApiModelProperty(value = "当前期间YYYY-MM")
+    private String currentPeriod;
+
+    @TableField("cost_domain_id")
+    @ApiModelProperty(value = "默认成本域")
+    private String costDomainId;
+
 }

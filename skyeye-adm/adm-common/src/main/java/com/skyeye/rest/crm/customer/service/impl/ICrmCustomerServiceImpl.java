@@ -8,6 +8,7 @@ import com.skyeye.rest.crm.customer.service.ICrmCustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ public class ICrmCustomerServiceImpl extends IServiceImpl implements ICrmCustome
 
     @Override
     public List<Map<String, Object>> queryCustomerListByIds(String ids) {
-        return ExecuteFeignClient.get(() -> iCrmCustomerRest.queryCustomerListByIds(ids)).getRows();
+        Map<String, Object> params = Collections.singletonMap("ids", ids);
+        return ExecuteFeignClient.get(() -> iCrmCustomerRest.queryCustomerListByIds(params)).getRows();
     }
 }

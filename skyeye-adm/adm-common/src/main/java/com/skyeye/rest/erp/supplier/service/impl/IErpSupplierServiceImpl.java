@@ -7,6 +7,7 @@ import com.skyeye.rest.erp.supplier.service.IErpSupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ public class IErpSupplierServiceImpl extends IServiceImpl implements IErpSupplie
 
     @Override
     public List<Map<String, Object>> querySupplierListByIds(String ids) {
-        return ExecuteFeignClient.get(() -> iErpSupplierRest.querySupplierListByIds(ids)).getRows();
+        Map<String, Object> params = Collections.singletonMap("ids", ids);
+        return ExecuteFeignClient.get(() -> iErpSupplierRest.querySupplierListByIds(params)).getRows();
     }
 }

@@ -154,4 +154,9 @@ public class ReceivableServiceImpl extends SkyeyeBusinessServiceImpl<ReceivableD
         String price = params.get("price").toString();
         updateReceivablePaidPrice(id, price);
     }
+
+    @Override
+    public void queryReceivableCount(InputObject inputObject, OutputObject outputObject) {
+        outputObject.settotal(count());
+    }
 }

@@ -105,4 +105,10 @@ public class PayableController {
         payableService.updatePayableById(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryPayableCount", value = "应付事项总笔数", method = "POST", allUse = "0")
+    @RequestMapping("/post/PayableController/queryPayableCount")
+    public void queryPayableCount(InputObject inputObject, OutputObject outputObject) {
+        payableService.queryPayableCount(inputObject, outputObject);
+    }
+
 }

@@ -103,4 +103,10 @@ public class ReceivableController {
         receivableService.updateReceivableById(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryReceivableCount", value = "应收事项总笔数", method = "POST", allUse = "0")
+    @RequestMapping("/post/ReceivableController/queryReceivableCount")
+    public void queryReceivableCount(InputObject inputObject, OutputObject outputObject) {
+        receivableService.queryReceivableCount(inputObject, outputObject);
+    }
+
 }

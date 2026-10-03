@@ -7,6 +7,7 @@ import com.skyeye.rest.erp.contract.service.IErpContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ public class IErpContractServiceImpl extends IServiceImpl implements IErpContrac
 
     @Override
     public List<Map<String, Object>> querySupplierContractByIds(String ids) {
-        return ExecuteFeignClient.get(() -> iErpContractRest.querySupplierContractByIds(ids)).getRows();
+        Map<String, Object> params = Collections.singletonMap("ids", ids);
+        return ExecuteFeignClient.get(() -> iErpContractRest.querySupplierContractByIds(params)).getRows();
     }
 }

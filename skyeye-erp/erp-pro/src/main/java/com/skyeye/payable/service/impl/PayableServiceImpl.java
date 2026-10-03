@@ -151,4 +151,9 @@ public class PayableServiceImpl extends SkyeyeBusinessServiceImpl<PayableDao, Pa
         String price = params.get("price").toString();
         updatePayablePaidPrice(id, price);
     }
+
+    @Override
+    public void queryPayableCount(InputObject inputObject, OutputObject outputObject) {
+        outputObject.settotal(count());
+    }
 }
