@@ -38,6 +38,7 @@ import com.skyeye.purchase.service.PurchaseExchangesService;
 import com.skyeye.purchase.service.PurchaseOrderService;
 import com.skyeye.purchase.service.PurchasePutService;
 import com.skyeye.purchase.service.PurchaseReturnsService;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import com.skyeye.util.ErpOrderUtil;
 import com.skyeye.whole.entity.WholeOrderOut;
 import com.skyeye.whole.service.WholeOrderOutService;
@@ -77,6 +78,9 @@ public class PurchaseReturnsServiceImpl extends SkyeyeErpOrderServiceImpl<Purcha
 
     @Autowired
     private DepotOutService depotOutService;
+
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     @Autowired
     private PurchaseExchangesService purchaseExchangesService;
@@ -247,6 +251,16 @@ public class PurchaseReturnsServiceImpl extends SkyeyeErpOrderServiceImpl<Purcha
             erpCommonService.editMaterialNormsDepotStock(MaterialNormsStockType.IN_TRANSIT_STOCK.getDefaultDepotId(), erpOrderItem.getMaterialId(),
                 erpOrderItem.getNormsId(), erpOrderItem.getOperNumber(), DepotPutOutType.OUT.getKey(), MaterialNormsStockType.IN_TRANSIT_STOCK.getKey());
         });
+        Map<String, Object> acctEvent = new java.util.HashMap<>();
+        acctEvent.put("eventType", "purchaseReturn");
+        acctEvent.put("sourceType", "ERP_PURCHASE_RETURN");
+        acctEvent.put("sourceId", entity.getId());
+        acctEvent.put("sourceNo", entity.getOddNumber());
+        acctEvent.put("amount", StrUtil.blankToDefault(entity.getTotalPrice(), "0"));
+        acctEvent.put("supplierId", entity.getHolderId());
+        acctEvent.put("voucherDate", entity.getOperTime());
+        acctEvent.put("summary", "采购退货-" + entity.getOddNumber());
+        ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
     }
 
     @Override

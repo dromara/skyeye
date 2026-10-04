@@ -158,21 +158,16 @@ public class PaymentCollectionServiceImpl extends SkyeyeBusinessServiceImpl<Paym
         map.put("fromId",entity.getId());
         map.put("fromChildId",entity.getReceivableId());
         ifsReceivePaymentService.addIFsReceivePayment(map);
-        // 业财一体：回款审批通过后推送会计事件生成凭证（失败落事件台，不阻断回款）
-        try {
-            Map<String, Object> acctEvent = new HashMap<>();
-            acctEvent.put("eventType", "RECEIPT");
-            acctEvent.put("sourceType", "CRM_RECEIPT");
-            acctEvent.put("sourceId", entity.getId());
-            acctEvent.put("sourceNo", entity.getOddNumber());
-            acctEvent.put("amount", entity.getPrice());
-            acctEvent.put("customerId", entity.getObjectId());
-            acctEvent.put("voucherDate", entity.getCollectionTime());
-            acctEvent.put("summary", "客户回款-" + entity.getOddNumber());
-            ifsBizAcctEventService.acceptBizAcctEvent(acctEvent);
-        } catch (Exception ignored) {
-            // 事件表已记录失败，可由财务台重试
-        }
+        Map<String, Object> acctEvent = new HashMap<>();
+        acctEvent.put("eventType", "receipt");
+        acctEvent.put("sourceType", "CRM_RECEIPT");
+        acctEvent.put("sourceId", entity.getId());
+        acctEvent.put("sourceNo", entity.getOddNumber());
+        acctEvent.put("amount", entity.getPrice());
+        acctEvent.put("customerId", entity.getObjectId());
+        acctEvent.put("voucherDate", entity.getCollectionTime());
+        acctEvent.put("summary", "客户回款-" + entity.getOddNumber());
+        ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
     }
 
     @Override

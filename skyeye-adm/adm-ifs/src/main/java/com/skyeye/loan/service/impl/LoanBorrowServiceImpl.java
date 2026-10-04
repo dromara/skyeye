@@ -26,6 +26,8 @@ import com.skyeye.loan.dao.LoanBorrowDao;
 import com.skyeye.loan.entity.LoanBorrow;
 import com.skyeye.loan.service.LoanBorrowService;
 import com.skyeye.loan.service.UserLoanService;
+import com.skyeye.finance.event.classenum.BizAcctEventType;
+import com.skyeye.finance.event.service.BizAcctEventService;
 import com.skyeye.organization.service.IDepmentService;
 import com.skyeye.rest.project.service.IProProjectService;
 import com.xingyuv.http.util.StringUtil;
@@ -55,6 +57,9 @@ public class LoanBorrowServiceImpl extends SkyeyeBusinessServiceImpl<LoanBorrowD
 
     @Autowired
     private IProProjectService iProProjectService;
+
+    @Autowired
+    private BizAcctEventService bizAcctEventService;
 
     @Override
     public void validatorEntity(LoanBorrow entity) {
@@ -98,6 +103,19 @@ public class LoanBorrowServiceImpl extends SkyeyeBusinessServiceImpl<LoanBorrowD
     @Override
     public void approvalEndIsSuccess(LoanBorrow entity) {
         userLoanService.calcUserLoanPrice(entity.getCreateId(), entity.getPrice(), true);
+        try {
+            Map<String, Object> event = new HashMap<>();
+            event.put("eventType", BizAcctEventType.LOAN_BORROW.getKey());
+            event.put("sourceType", "IFS_LOAN_BORROW");
+            event.put("sourceId", entity.getId());
+            event.put("sourceNo", entity.getOddNumber());
+            event.put("amount", StrUtil.blankToDefault(entity.getPrice(), "0"));
+            event.put("departmentId", entity.getDepartmentId());
+            event.put("voucherDate", entity.getApplicationTime());
+            event.put("summary", "借款-" + entity.getOddNumber());
+            bizAcctEventService.acceptEvent(event);
+        } catch (Exception ignored) {
+        }
     }
 
     @Override

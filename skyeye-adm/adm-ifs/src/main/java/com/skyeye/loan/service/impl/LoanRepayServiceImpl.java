@@ -20,10 +20,13 @@ import com.skyeye.loan.entity.LoanRepay;
 import com.skyeye.loan.service.LoanBorrowService;
 import com.skyeye.loan.service.LoanRepayService;
 import com.skyeye.loan.service.UserLoanService;
+import com.skyeye.finance.event.classenum.BizAcctEventType;
+import com.skyeye.finance.event.service.BizAcctEventService;
 import com.skyeye.rest.project.service.IProProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +50,9 @@ public class LoanRepayServiceImpl extends SkyeyeBusinessServiceImpl<LoanRepayDao
 
     @Autowired
     private IProProjectService iProProjectService;
+
+    @Autowired
+    private BizAcctEventService bizAcctEventService;
 
     @Override
     public void validatorEntity(LoanRepay entity) {
@@ -91,8 +97,19 @@ public class LoanRepayServiceImpl extends SkyeyeBusinessServiceImpl<LoanRepayDao
     public void approvalEndIsSuccess(LoanRepay entity) {
         userLoanService.calcUserLoanPrice(entity.getCreateId(), entity.getPrice(), false);
         if (StrUtil.isNotEmpty(entity.getLoanBorrowId())) {
-            // 更新借款单状态
             loanBorrowService.updateLoanBorrowStatePrice(entity.getLoanBorrowId(), entity.getPrice());
+        }
+        try {
+            Map<String, Object> event = new HashMap<>();
+            event.put("eventType", BizAcctEventType.LOAN_REPAY.getKey());
+            event.put("sourceType", "IFS_LOAN_REPAY");
+            event.put("sourceId", entity.getId());
+            event.put("sourceNo", entity.getOddNumber());
+            event.put("amount", StrUtil.blankToDefault(entity.getPrice(), "0"));
+            event.put("voucherDate", entity.getRepayTime());
+            event.put("summary", "还款-" + entity.getOddNumber());
+            bizAcctEventService.acceptEvent(event);
+        } catch (Exception ignored) {
         }
     }
 

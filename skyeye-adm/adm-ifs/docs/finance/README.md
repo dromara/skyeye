@@ -29,11 +29,18 @@
 
 ## 已打通业务链路
 
-1. ERP 付款审批通过 → `acceptBizAcctEvent(PAYMENT)`
-2. CRM 回款审批通过 → `acceptBizAcctEvent(RECEIPT)`
-3. 报销审批通过 → `EXPENSE_REIMBURSE`
-4. 存货核算计价过账 → 按 `billType` 生成凭证
-5. 生产领料/完工/制费 → `MfgCostAcctController`
+1. ERP 付款审批通过 → `acceptBizAcctEvent(payment)`
+2. CRM 回款审批通过 → `acceptBizAcctEvent(receipt)`
+3. 报销审批通过 → `expenseReimburse`
+4. 借款审批通过 → `loanBorrow`
+5. 还款审批通过 → `loanRepay`
+6. 采购入库审批通过 → `purchaseIn`（暂估）
+7. 销售出库审批通过 → `salesOut`
+8. 采购退货审批通过 → `purchaseReturn`
+9. 销售退货审批通过 → `salesReturn`
+10. 存货核算计价过账 → 按 `billType` 生成凭证
+11. 生产领料/完工/制费 → `MfgCostAcctController`（手工补记）
+（供应商发票只更新开票金额，不出凭证；资金类凭证以付款/回款为准）
 
 ## 前端路由（Cloud_Vue）
 
@@ -47,7 +54,7 @@
 ## 上线检查清单
 
 1. 执行 DDL，初始化账套期间与科目（科目编码对齐模板）
-2. 确认默认模板 `PAYMENT/RECEIPT/EXPENSE_REIMBURSE` 或按账套配置
+2. 确认默认模板 `payment/receipt/expenseReimburse/purchaseIn/salesOut/purchaseReturn/salesReturn/loanBorrow/loanRepay` 或按账套配置
 3. 手工凭证试过账 + 试算平衡
 4. 走一笔付款/回款，核对事件台与凭证互查
-5. 配置采购入库/销售出库模板后，用存货核算接口联调
+5. 配置采购入库/销售出库模板后，审批入库/出库核对事件台与凭证

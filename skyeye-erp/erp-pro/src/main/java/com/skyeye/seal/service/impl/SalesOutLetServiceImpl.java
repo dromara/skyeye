@@ -34,6 +34,7 @@ import com.skyeye.seal.service.SalesExchangesService;
 import com.skyeye.seal.service.SalesOrderService;
 import com.skyeye.seal.service.SalesOutLetService;
 import com.skyeye.seal.service.SalesReturnsService;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,6 +68,9 @@ public class SalesOutLetServiceImpl extends SkyeyeErpOrderServiceImpl<SalesOutLe
 
     @Autowired
     private SalesExchangesService salesExchangesService;
+
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     @Override
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
@@ -186,6 +190,16 @@ public class SalesOutLetServiceImpl extends SkyeyeErpOrderServiceImpl<SalesOutLe
             erpCommonService.editMaterialNormsDepotStock(MaterialNormsStockType.ALLOCATED_STOCK.getDefaultDepotId(), erpOrderItem.getMaterialId(),
                 erpOrderItem.getNormsId(), erpOrderItem.getOperNumber(), DepotPutOutType.OUT.getKey(), MaterialNormsStockType.ALLOCATED_STOCK.getKey());
         });
+        Map<String, Object> acctEvent = new java.util.HashMap<>();
+        acctEvent.put("eventType", "salesOut");
+        acctEvent.put("sourceType", "ERP_SALES_OUT");
+        acctEvent.put("sourceId", entity.getId());
+        acctEvent.put("sourceNo", entity.getOddNumber());
+        acctEvent.put("amount", StrUtil.blankToDefault(entity.getTotalPrice(), "0"));
+        acctEvent.put("customerId", entity.getHolderId());
+        acctEvent.put("voucherDate", entity.getOperTime());
+        acctEvent.put("summary", "销售出库-" + entity.getOddNumber());
+        ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
     }
 
     @Override
