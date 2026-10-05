@@ -113,11 +113,12 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
         if (StrUtil.isBlank(entity.getSourceType())) {
             entity.setSourceType(BizAcctEventType.MANUAL.getKey());
         }
-        // 期间码优先用凭证日期的 yyyy-MM，并绑定已存在的会计期间
+        // 期间码优先用凭证日期的 yyyy-MM；开账期间才允许新增/修改凭证
         if (StrUtil.isBlank(entity.getPeriodCode()) && StrUtil.isNotBlank(entity.getVoucherDate())
             && entity.getVoucherDate().length() >= 7) {
             entity.setPeriodCode(entity.getVoucherDate().substring(0, 7));
         }
+        accountPeriodService.assertPeriodOpen(entity.getSetOfBooksId(), entity.getPeriodCode());
         AccountPeriod period = accountPeriodService.getOpenPeriod(entity.getSetOfBooksId(), entity.getPeriodCode());
         entity.setPeriodId(period.getId());
     }
@@ -196,17 +197,21 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
     public void postVoucher(InputObject inputObject, OutputObject outputObject) {
         String id = inputObject.getParams().get("id").toString();
         JournalVoucher voucher = selectById(id);
-        doPost(voucher);
+        doPost(voucher, false);
         outputObject.setBean(selectById(id));
     }
 
     /**
-     * 过账：草稿或已审核均可；期间开放；按分录累加科目余额（含辅助核算维度）。
+     * 过账：手工必须已审核；业务自动过账/冲销凭证可跳过审核。期间必须开账。
      */
-    private void doPost(JournalVoucher voucher) {
-        if (!JournalVoucherState.DRAFT.getKey().equals(voucher.getState())
-            && !JournalVoucherState.APPROVED.getKey().equals(voucher.getState())) {
-            throw new CustomException("当前状态不可过账");
+    private void doPost(JournalVoucher voucher, boolean skipApprove) {
+        if (skipApprove) {
+            if (!JournalVoucherState.DRAFT.getKey().equals(voucher.getState())
+                && !JournalVoucherState.APPROVED.getKey().equals(voucher.getState())) {
+                throw new CustomException("当前状态不可过账");
+            }
+        } else if (!JournalVoucherState.APPROVED.getKey().equals(voucher.getState())) {
+            throw new CustomException("请先审核再过账");
         }
         accountPeriodService.assertPeriodOpen(voucher.getSetOfBooksId(), voucher.getPeriodCode());
         List<JournalEntry> entries = journalEntryService.selectByPId(voucher.getId());
@@ -229,6 +234,15 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
         if (!JournalVoucherState.POSTED.getKey().equals(origin.getState())) {
             throw new CustomException("仅已过账凭证可冲销");
         }
+        if (StrUtil.isNotBlank(origin.getReverseOfId())) {
+            throw new CustomException("冲销凭证不可再次冲销");
+        }
+        QueryWrapper<JournalVoucher> reversedQ = new QueryWrapper<>();
+        reversedQ.eq(MybatisPlusUtil.toColumns(JournalVoucher::getReverseOfId), origin.getId());
+        reversedQ.last("LIMIT 1");
+        if (ObjectUtil.isNotEmpty(getOne(reversedQ, false))) {
+            throw new CustomException("该凭证已冲销");
+        }
         accountPeriodService.assertPeriodOpen(origin.getSetOfBooksId(), origin.getPeriodCode());
         List<JournalEntry> originEntries = journalEntryService.selectByPId(id);
         JournalVoucher reverse = new JournalVoucher();
@@ -241,7 +255,7 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
         reverse.setSourceNo(origin.getSourceNo());
         reverse.setEventType(origin.getEventType());
         reverse.setReverseOfId(origin.getId());
-        reverse.setIdempotencyKey("REV-" + origin.getId() + "-" + System.currentTimeMillis());
+        reverse.setIdempotencyKey("REV-" + origin.getId());
         reverse.setRemark("冲销凭证：" + origin.getOddNumber());
         // 借贷方向对调，金额与辅助核算原样带出
         List<JournalEntry> revEntries = new ArrayList<>();
@@ -265,7 +279,7 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
         String userId = inputObject.getLogParams().get("id").toString();
         createEntity(reverse, userId);
         JournalVoucher saved = selectById(reverse.getId());
-        doPost(saved);
+        doPost(saved, true);
         // 原凭证作废，保留追溯；余额已由冲销凭证过账冲回
         UpdateWrapper<JournalVoucher> uw = new UpdateWrapper<>();
         uw.eq(CommonConstants.ID, origin.getId());
@@ -290,7 +304,7 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
         createEntity(voucher, userId);
         JournalVoucher saved = selectById(voucher.getId());
         if (autoPost) {
-            doPost(saved);
+            doPost(saved, true);
             saved = selectById(voucher.getId());
         }
         return saved;
@@ -309,7 +323,8 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
         QueryWrapper<JournalVoucher> qw = new QueryWrapper<>();
         qw.eq(MybatisPlusUtil.toColumns(JournalVoucher::getSetOfBooksId), setOfBooksId);
         qw.eq(MybatisPlusUtil.toColumns(JournalVoucher::getPeriodCode), periodCode);
-        qw.eq(MybatisPlusUtil.toColumns(JournalVoucher::getState), JournalVoucherState.POSTED.getKey());
+        qw.in(MybatisPlusUtil.toColumns(JournalVoucher::getState),
+            JournalVoucherState.POSTED.getKey(), JournalVoucherState.VOIDED.getKey());
         List<JournalVoucher> vouchers = list(qw);
         List<Map<String, Object>> rows = new ArrayList<>();
         for (JournalVoucher v : vouchers) {
@@ -331,6 +346,8 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
                 row.put("direction", e.getDirection());
                 row.put("amount", e.getAmount());
                 row.put("summary", e.getSummary());
+                row.put("reverseOfId", v.getReverseOfId());
+                row.put("state", v.getState());
                 rows.add(row);
             }
         }

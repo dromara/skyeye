@@ -4,18 +4,24 @@
 
 package com.skyeye.books.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.books.dao.IfsSetOfBooksDao;
 import com.skyeye.books.entity.SetOfBooks;
 import com.skyeye.books.service.IfsSetOfBooksService;
+import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.util.DateUtil;
+import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName: IfsSetOfBooksServiceImpl
@@ -53,6 +59,38 @@ public class IfsSetOfBooksServiceImpl extends SkyeyeBusinessServiceImpl<IfsSetOf
             }
         }
         return beans;
+    }
+
+    @Override
+    public String resolveSetOfBooksId(String setOfBooksId, String voucherDate) {
+        if (StrUtil.isNotBlank(setOfBooksId)) {
+            return setOfBooksId;
+        }
+        QueryWrapper<SetOfBooks> qw = new QueryWrapper<>();
+        qw.eq(MybatisPlusUtil.toColumns(SetOfBooks::getEnabled), EnableEnum.ENABLE_USING.getKey());
+        List<SetOfBooks> books = list(qw);
+        if (CollectionUtil.isEmpty(books)) {
+            throw new CustomException("未配置启用账套，通用凭证模板无法生成凭证");
+        }
+        if (books.size() == 1) {
+            return books.get(0).getId();
+        }
+        String date = StrUtil.blankToDefault(voucherDate, DateUtil.getYmdTimeAndToString());
+        List<SetOfBooks> inRange = books.stream()
+            .filter(item -> inBooksDateRange(item, date))
+            .collect(Collectors.toList());
+        if (inRange.size() == 1) {
+            return inRange.get(0).getId();
+        }
+        throw new CustomException("存在多个启用账套，请在业务单据或凭证模板中指定账套");
+    }
+
+    private boolean inBooksDateRange(SetOfBooks books, String date) {
+        if (books == null || StrUtil.hasBlank(books.getStartTime(), books.getEndTime(), date)) {
+            return false;
+        }
+        return DateUtil.getDistanceDay(books.getStartTime(), date) >= 0
+            && DateUtil.getDistanceDay(date, books.getEndTime()) >= 0;
     }
 
 }

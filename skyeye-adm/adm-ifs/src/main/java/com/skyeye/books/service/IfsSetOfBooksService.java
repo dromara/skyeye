@@ -17,4 +17,10 @@ import com.skyeye.books.entity.SetOfBooks;
  */
 public interface IfsSetOfBooksService extends SkyeyeBusinessService<SetOfBooks> {
 
+    /**
+     * 业务事件/通用模板未指定账套时，落到当前租户启用账套。
+     * 已指定则原样返回。
+     */
+    String resolveSetOfBooksId(String setOfBooksId, String voucherDate);
+
 }

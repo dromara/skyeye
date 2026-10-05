@@ -34,4 +34,28 @@ public class BizAcctEventAccept {
 
     @ApiModelProperty(value = "供应商id")
     private String supplierId;
+
+    @ApiModelProperty(value = "摘要")
+    private String summary;
+
+    @ApiModelProperty(value = "凭证日期")
+    private String voucherDate;
+
+    @ApiModelProperty(value = "备注")
+    private String remark;
+
+    @ApiModelProperty(value = "成本金额")
+    private String costAmount;
+
+    @ApiModelProperty(value = "部门id")
+    private String departmentId;
+
+    @ApiModelProperty(value = "物料id")
+    private String materialId;
+
+    @ApiModelProperty(value = "项目id")
+    private String projectId;
+
+    @ApiModelProperty(value = "仓库id")
+    private String depotId;
 }

@@ -13,6 +13,7 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
+import com.skyeye.finance.constants.IfsConstants;
 import com.skyeye.finance.event.classenum.BizAcctEventState;
 import com.skyeye.books.service.IfsSetOfBooksService;
 import com.skyeye.finance.event.dao.BizAcctEventDao;
@@ -80,16 +81,15 @@ public class BizAcctEventServiceImpl extends SkyeyeBusinessServiceImpl<BizAcctEv
             ? eventType + ":" + sourceType + ":" + sourceId + ":" + version
             : params.get("idempotencyKey").toString();
 
+        BizAcctEvent success = findSuccessBySource(eventType, sourceType, sourceId);
+        if (ObjectUtil.isNotEmpty(success)) {
+            return duplicatedResult(success);
+        }
         QueryWrapper<BizAcctEvent> existsQ = new QueryWrapper<>();
         existsQ.eq(MybatisPlusUtil.toColumns(BizAcctEvent::getIdempotencyKey), idempotencyKey);
-        BizAcctEvent exists = getOne(existsQ);
+        BizAcctEvent exists = getOne(existsQ, false);
         if (ObjectUtil.isNotEmpty(exists)) {
-            Map<String, Object> cached = new HashMap<>();
-            cached.put("eventId", exists.getId());
-            cached.put("journalVoucherId", exists.getJournalVoucherId());
-            cached.put("state", exists.getState());
-            cached.put("duplicated", true);
-            return cached;
+            return duplicatedResult(exists);
         }
 
         BizAcctEvent event = new BizAcctEvent();
@@ -111,14 +111,58 @@ public class BizAcctEventServiceImpl extends SkyeyeBusinessServiceImpl<BizAcctEv
         }
         createEntity(event, userId);
 
+        return generateVoucher(event, params);
+    }
+
+    /**
+     * 失败重试：在原事件上重新生成，不新建事件、不换幂等键。
+     * 同一来源已成功出凭证、或达到重试上限时拒绝。
+     */
+    @Override
+    public void retryFailedEvent(InputObject inputObject, OutputObject outputObject) {
+        String id = inputObject.getParams().get("id").toString();
+        BizAcctEvent event = selectById(id);
+        if (!BizAcctEventState.FAILED.getKey().equals(event.getState())) {
+            throw new CustomException("仅失败事件可重试");
+        }
+        int retry = event.getRetryCount() == null ? 0 : event.getRetryCount();
+        if (retry >= IfsConstants.MAX_BIZ_ACCT_RETRY) {
+            throw new CustomException("已达最大重试次数（" + IfsConstants.MAX_BIZ_ACCT_RETRY + "），请人工处理");
+        }
+        if (ObjectUtil.isNotEmpty(findSuccessBySource(event.getEventType(), event.getSourceType(), event.getSourceId()))) {
+            throw new CustomException("该来源单据已生成凭证，不能再重试");
+        }
+        Map<String, Object> payload = JSONUtil.toBean(event.getPayload(), Map.class);
+        UpdateWrapper<BizAcctEvent> pendingUw = new UpdateWrapper<>();
+        pendingUw.eq(CommonConstants.ID, id);
+        pendingUw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getState), BizAcctEventState.PENDING.getKey());
+        pendingUw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getRetryCount), retry + 1);
+        pendingUw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getErrorMsg), "");
+        update(pendingUw);
+        refreshCache(id);
+        event.setRetryCount(retry + 1);
+        outputObject.setBean(generateVoucher(event, payload));
+    }
+
+    private Map<String, Object> generateVoucher(BizAcctEvent event, Map<String, Object> params) {
         Map<String, Object> result = new HashMap<>();
         result.put("eventId", event.getId());
         result.put("duplicated", false);
         try {
-            // 按 eventType 取启用模板（优先账套专属），再按分录行表达式从 payload 取金额
-            VoucherTemplate template = voucherTemplateService.getEnabledTemplate(eventType, event.getSetOfBooksId());
+            VoucherTemplate template = voucherTemplateService.getEnabledTemplate(
+                event.getEventType(), event.getSetOfBooksId());
+            String booksId = ifsSetOfBooksService.resolveSetOfBooksId(
+                StrUtil.blankToDefault(event.getSetOfBooksId(), template.getSetOfBooksId()),
+                params.get("voucherDate") == null ? null : params.get("voucherDate").toString());
+            event.setSetOfBooksId(booksId);
+            params.put("setOfBooksId", booksId);
+            UpdateWrapper<BizAcctEvent> booksUw = new UpdateWrapper<>();
+            booksUw.eq(CommonConstants.ID, event.getId());
+            booksUw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getSetOfBooksId), booksId);
+            update(booksUw);
+
             Map<String, Object> payload = new HashMap<>(params);
-            payload.put("idempotencyKey", idempotencyKey);
+            payload.put("idempotencyKey", event.getIdempotencyKey());
             JournalVoucher voucher = voucherTemplateService.buildVoucherFromTemplate(template, payload);
             boolean autoPost = Integer.valueOf(1).equals(template.getAutoPost());
             JournalVoucher saved = journalVoucherService.createAndOptionallyPost(voucher, autoPost);
@@ -127,6 +171,7 @@ public class BizAcctEventServiceImpl extends SkyeyeBusinessServiceImpl<BizAcctEv
             uw.eq(CommonConstants.ID, event.getId());
             uw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getState), BizAcctEventState.SUCCESS.getKey());
             uw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getJournalVoucherId), saved.getId());
+            uw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getErrorMsg), "");
             update(uw);
             refreshCache(event.getId());
 
@@ -143,32 +188,27 @@ public class BizAcctEventServiceImpl extends SkyeyeBusinessServiceImpl<BizAcctEv
             refreshCache(event.getId());
             result.put("state", BizAcctEventState.FAILED.getKey());
             result.put("errorMsg", ex.getMessage());
-            // 不抛异常，保证业务链路可继续；调用方可据 state=FAILED 重试
         }
         return result;
     }
 
-    /**
-     * 失败重试：用原 payload 换新 version 再走 acceptEvent（避开旧幂等键）。
-     */
-    @Override
-    public void retryFailedEvent(InputObject inputObject, OutputObject outputObject) {
-        String id = inputObject.getParams().get("id").toString();
-        BizAcctEvent event = selectById(id);
-        if (!BizAcctEventState.FAILED.getKey().equals(event.getState())) {
-            throw new CustomException("仅失败事件可重试");
-        }
-        Map<String, Object> payload = JSONUtil.toBean(event.getPayload(), Map.class);
-        // 删除旧幂等记录后重建：更新 key 版本
-        int retry = event.getRetryCount() == null ? 0 : event.getRetryCount();
-        payload.put("version", String.valueOf(retry + 2));
-        payload.put("idempotencyKey", null);
-        Map<String, Object> result = acceptEvent(payload);
-        UpdateWrapper<BizAcctEvent> uw = new UpdateWrapper<>();
-        uw.eq(CommonConstants.ID, id);
-        uw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getRetryCount), retry + 1);
-        update(uw);
-        outputObject.setBean(result);
+    private BizAcctEvent findSuccessBySource(String eventType, String sourceType, String sourceId) {
+        QueryWrapper<BizAcctEvent> qw = new QueryWrapper<>();
+        qw.eq(MybatisPlusUtil.toColumns(BizAcctEvent::getEventType), eventType);
+        qw.eq(MybatisPlusUtil.toColumns(BizAcctEvent::getSourceType), sourceType);
+        qw.eq(MybatisPlusUtil.toColumns(BizAcctEvent::getSourceId), sourceId);
+        qw.eq(MybatisPlusUtil.toColumns(BizAcctEvent::getState), BizAcctEventState.SUCCESS.getKey());
+        qw.last("LIMIT 1");
+        return getOne(qw, false);
+    }
+
+    private Map<String, Object> duplicatedResult(BizAcctEvent exists) {
+        Map<String, Object> cached = new HashMap<>();
+        cached.put("eventId", exists.getId());
+        cached.put("journalVoucherId", exists.getJournalVoucherId());
+        cached.put("state", exists.getState());
+        cached.put("duplicated", true);
+        return cached;
     }
 
     private String required(Map<String, Object> params, String key) {

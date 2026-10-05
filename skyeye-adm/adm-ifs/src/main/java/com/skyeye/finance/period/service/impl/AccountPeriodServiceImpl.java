@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * 会计期间：账套下按 yyyy-MM 唯一；OPEN 才允许审核/过账/冲销。
+ * 会计期间：账套下按 yyyy-MM 唯一；OPEN 才允许新增凭证、审核、过账、冲销。
  * 关账分业务关账(BIZ_CLOSED)、财务关账(FIN_CLOSED)，可 reopen。
  */
 @Service
@@ -91,7 +91,7 @@ public class AccountPeriodServiceImpl extends SkyeyeBusinessServiceImpl<AccountP
     public void assertPeriodOpen(String setOfBooksId, String periodCode) {
         AccountPeriod period = getOpenPeriod(setOfBooksId, periodCode);
         if (!AccountPeriodState.OPEN.getKey().equals(period.getState())) {
-            throw new CustomException("会计期间已关闭，禁止过账：" + periodCode);
+            throw new CustomException("会计期间已关闭，禁止新增或记账：" + periodCode);
         }
     }
 

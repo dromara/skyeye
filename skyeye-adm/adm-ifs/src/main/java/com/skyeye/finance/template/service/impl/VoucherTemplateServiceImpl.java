@@ -313,18 +313,22 @@ public class VoucherTemplateServiceImpl extends SkyeyeBusinessServiceImpl<Vouche
         return val == null ? "0" : val.toString();
     }
 
-    /** 摘要模板占位符 {key} 用 payload 替换 */
+    /** 摘要模板 {key} 用 payload 替换；缺字段时 {summary} 回退到来源单号，避免原文留下 {summary} */
     private String renderSummary(String tpl, Map<String, Object> payload) {
+        String fallback = str(payload.get("summary"), str(payload.get("sourceNo"), ""));
         if (StrUtil.isBlank(tpl)) {
-            return str(payload.get("summary"), str(payload.get("sourceNo"), ""));
+            return fallback;
         }
         String result = tpl;
         for (Map.Entry<String, Object> e : payload.entrySet()) {
-            if (e.getValue() != null) {
+            if (e.getKey() != null && e.getValue() != null) {
                 result = result.replace("{" + e.getKey() + "}", e.getValue().toString());
             }
         }
-        return result;
+        result = result.replace("{summary}", fallback);
+        result = result.replace("{sourceNo}", str(payload.get("sourceNo"), ""));
+        result = result.replaceAll("\\{\\w+\\}", "");
+        return StrUtil.blankToDefault(result.trim(), fallback);
     }
 
     private String str(Object val, String def) {

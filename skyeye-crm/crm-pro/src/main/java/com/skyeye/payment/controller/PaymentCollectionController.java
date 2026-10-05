@@ -33,12 +33,6 @@ public class PaymentCollectionController {
     @Autowired
     private PaymentCollectionService paymentCollectionService;
 
-    /**
-     * 获取回款列表
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryPaymentCollectionList", value = "获取回款列表", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/PaymentCollectionController/queryPaymentCollectionList")
@@ -46,12 +40,6 @@ public class PaymentCollectionController {
         paymentCollectionService.queryPageList(inputObject, outputObject);
     }
 
-    /**
-     * 新增/编辑回款信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "writePaymentCollection", value = "新增/编辑回款信息", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = PaymentCollection.class)
     @RequestMapping("/post/PaymentCollectionController/writePaymentCollection")
@@ -59,26 +47,14 @@ public class PaymentCollectionController {
         paymentCollectionService.saveOrUpdateEntity(inputObject, outputObject);
     }
 
-    /**
-     * 删除回款信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "deletePaymentCollectionById", value = "删除回款信息", method = "DELETE", allUse = "2")
     @ApiImplicitParams({
-            @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
+        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
     @RequestMapping("/post/PaymentCollectionController/deletePaymentCollectionById")
     public void deletePaymentCollectionById(InputObject inputObject, OutputObject outputObject) {
         paymentCollectionService.deleteById(inputObject, outputObject);
     }
 
-    /**
-     * 回款提交审批
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "submitPaymentCollectionToApproval", value = "回款提交审批", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = SubmitSkyeyeFlowable.class)
     @RequestMapping("/post/PaymentCollectionController/submitToApproval")
@@ -86,43 +62,25 @@ public class PaymentCollectionController {
         paymentCollectionService.submitToApproval(inputObject, outputObject);
     }
 
-    /**
-     * 作废回款信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "invalidPaymentCollection", value = "作废回款信息", method = "POST", allUse = "2")
     @ApiImplicitParams({
-            @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
+        @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
     @RequestMapping("/post/PaymentCollectionController/invalid")
     public void invalid(InputObject inputObject, OutputObject outputObject) {
         paymentCollectionService.invalid(inputObject, outputObject);
     }
 
-    /**
-     * 撤销回款审批
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "revokePaymentCollection", value = "撤销回款审批", method = "PUT", allUse = "2")
     @ApiImplicitParams({
-            @ApiImplicitParam(id = "processInstanceId", name = "processInstanceId", value = "流程实例id", required = "required")})
+        @ApiImplicitParam(id = "processInstanceId", name = "processInstanceId", value = "流程实例id", required = "required")})
     @RequestMapping("/post/PaymentCollectionController/revoke")
     public void revoke(InputObject inputObject, OutputObject outputObject) {
         paymentCollectionService.revoke(inputObject, outputObject);
     }
 
-    /**
-     * 根据合同id获取回款列表
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryPaymentCollectionByContractId", value = "根据合同id获取回款列表", method = "GET", allUse = "2")
     @ApiImplicitParams({
-            @ApiImplicitParam(id = "contractId", name = "contractId", value = "合同id")})
+        @ApiImplicitParam(id = "contractId", name = "contractId", value = "合同id")})
     @RequestMapping("/post/PaymentCollectionController/queryPaymentCollectionByContractId")
     public void queryPaymentCollectionByContractId(InputObject inputObject, OutputObject outputObject) {
         paymentCollectionService.queryPaymentCollectionByContractId(inputObject, outputObject);
@@ -130,7 +88,7 @@ public class PaymentCollectionController {
 
     @ApiOperation(id = "queryPaymentCollectionByIds", value = "根据ids批量获取回款信息", method = "POST", allUse = "0")
     @ApiImplicitParams({
-            @ApiImplicitParam(id = "ids", name = "ids", value = "主键id", required = "required")})
+        @ApiImplicitParam(id = "ids", name = "ids", value = "主键id", required = "required")})
     @RequestMapping("/post/PaymentCollectionController/queryPaymentCollectionByIds")
     public void queryPaymentCollectionByIds(InputObject inputObject, OutputObject outputObject) {
         paymentCollectionService.selectByIds(inputObject, outputObject);
