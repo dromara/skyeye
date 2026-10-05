@@ -49,12 +49,14 @@ import com.skyeye.pick.entity.ReturnPut;
 import com.skyeye.pick.service.DepartmentStockService;
 import com.skyeye.pick.service.ReturnMaterialService;
 import com.skyeye.pick.service.ReturnPutService;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import com.skyeye.util.ErpOrderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -89,6 +91,9 @@ public class ReturnPutServiceImpl extends SkyeyeErpOrderServiceImpl<ReturnPutDao
 
     @Autowired
     private MachinService machinService;
+
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     @Override
     public QueryWrapper<ReturnPut> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -223,6 +228,18 @@ public class ReturnPutServiceImpl extends SkyeyeErpOrderServiceImpl<ReturnPutDao
         checkMaterialNorms(entity, true);
         // 校验并修改条形码信息
         checkNormsCodeAndSave(entity, false);
+        Map<String, Object> acctEvent = new HashMap<>();
+        acctEvent.put("eventType", "prodReturn");
+        acctEvent.put("sourceType", "ERP_PROD_RETURN");
+        acctEvent.put("sourceId", entity.getId());
+        acctEvent.put("sourceNo", entity.getOddNumber());
+        String amount = StrUtil.blankToDefault(entity.getTotalPrice(), "0");
+        acctEvent.put("amount", amount);
+        acctEvent.put("costAmount", amount);
+        acctEvent.put("departmentId", entity.getDepartmentId());
+        acctEvent.put("voucherDate", entity.getOperTime());
+        acctEvent.put("summary", "生产退料-" + entity.getOddNumber());
+        ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
     }
 
     private void checkDepartStockWhetherOutstrip(String departmentId, String farmId, List<ErpOrderItem> erpOrderItemList) {

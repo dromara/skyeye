@@ -20,7 +20,7 @@ public class IfsPageController {
     private IfsPageService ifsPageService;
 
     /**
-     * 一次性返回财务业务流程各节点数量，key 为节点 code（F01/G01/H01/J01 等），value 为笔数。
+     * 一次性返回财务业务流程各节点数量，key 为节点 code（F00/F01/G01/H01/J01 等），value 为笔数。
      */
     @ApiOperation(id = "queryIfsProcessFlowCount", value = "获取财务业务流程各节点单据数量", method = "POST", allUse = "2")
     @RequestMapping("/post/IfsPageController/queryIfsProcessFlowCount")

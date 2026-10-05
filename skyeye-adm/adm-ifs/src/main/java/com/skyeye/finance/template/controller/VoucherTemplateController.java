@@ -67,4 +67,10 @@ public class VoucherTemplateController {
     public void deleteVoucherTemplate(InputObject inputObject, OutputObject outputObject) {
         voucherTemplateService.deleteById(inputObject, outputObject);
     }
+
+    @ApiOperation(id = "initDefaultVoucherTemplates", value = "初始化默认凭证模板", method = "POST", allUse = "1")
+    @RequestMapping("/post/VoucherTemplateController/initDefaultVoucherTemplates")
+    public void initDefaultVoucherTemplates(InputObject inputObject, OutputObject outputObject) {
+        voucherTemplateService.initDefaultTemplates(inputObject, outputObject);
+    }
 }

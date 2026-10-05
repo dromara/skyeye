@@ -38,9 +38,12 @@
 7. 销售出库审批通过 → `salesOut`
 8. 采购退货审批通过 → `purchaseReturn`
 9. 销售退货审批通过 → `salesReturn`
-10. 存货核算计价过账 → 按 `billType` 生成凭证
-11. 生产领料/完工/制费 → `MfgCostAcctController`（手工补记）
-（供应商发票只更新开票金额，不出凭证；资金类凭证以付款/回款为准）
+10. 其他入库/出库审批通过 → `otherIn` / `otherOut`
+11. 领料/补料出库审批通过 → `prodPick`（补料复用同一模板）
+12. 退料入库审批通过 → `prodReturn`
+13. 存货核算计价过账 → 按 `billType` 生成凭证
+14. 完工/制费 → `MfgCostAcctController`（手工补记）
+（供应商/客户发票、调拨不出凭证；资金类以付款/回款为准。盘点盈亏待盘完明细后再接）
 
 ## 前端路由（Cloud_Vue）
 
@@ -53,8 +56,8 @@
 
 ## 上线检查清单
 
-1. 执行 DDL，初始化账套期间与科目（科目编码对齐模板）
-2. 确认默认模板 `payment/receipt/expenseReimburse/purchaseIn/salesOut/purchaseReturn/salesReturn/loanBorrow/loanRepay` 或按账套配置
+1. 执行 DDL，初始化账套期间与科目（科目编码对齐模板，参见 [02-voucher-template.md](02-voucher-template.md)）
+2. 打开「凭证模板」页点 **初始化默认模板**（`initDefaultVoucherTemplates`）：按科目编码补建缺失通用模板，已存在事项跳过；再按账套核对/改科目
 3. 手工凭证试过账 + 试算平衡
 4. 走一笔付款/回款，核对事件台与凭证互查
-5. 配置采购入库/销售出库模板后，审批入库/出库核对事件台与凭证
+5. 再抽测入库/出库/领退料，核对事件台与凭证

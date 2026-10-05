@@ -21,4 +21,6 @@ public interface IfsAccountSubjectService extends SkyeyeBusinessService<AccountS
 
     void queryEnabledSubjectList(InputObject inputObject, OutputObject outputObject);
 
+    void initDefaultSubjects(InputObject inputObject, OutputObject outputObject);
+
 }

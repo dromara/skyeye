@@ -37,6 +37,7 @@ import com.skyeye.pick.entity.RequisitionMaterial;
 import com.skyeye.pick.entity.RequisitionOutLet;
 import com.skyeye.pick.service.RequisitionMaterialService;
 import com.skyeye.pick.service.RequisitionOutLetService;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import com.skyeye.util.ErpOrderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -71,6 +73,9 @@ public class RequisitionOutLetServiceImpl extends SkyeyeErpOrderServiceImpl<Requ
 
     @Autowired
     private FarmService farmService;
+
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     @Override
     public QueryWrapper<RequisitionOutLet> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -179,6 +184,18 @@ public class RequisitionOutLetServiceImpl extends SkyeyeErpOrderServiceImpl<Requ
         RequisitionOutLet oldEntity = selectById(entity.getId());
         // 修改来源单据信息
         checkMaterialNorms(oldEntity, true);
+        String amount = StrUtil.blankToDefault(oldEntity.getTotalPrice(), "0");
+        Map<String, Object> acctEvent = new HashMap<>();
+        acctEvent.put("eventType", "prodPick");
+        acctEvent.put("sourceType", "ERP_PROD_PICK");
+        acctEvent.put("sourceId", oldEntity.getId());
+        acctEvent.put("sourceNo", oldEntity.getOddNumber());
+        acctEvent.put("amount", amount);
+        acctEvent.put("costAmount", amount);
+        acctEvent.put("departmentId", oldEntity.getDepartmentId());
+        acctEvent.put("voucherDate", oldEntity.getOperTime());
+        acctEvent.put("summary", "生产领料-" + oldEntity.getOddNumber());
+        ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
     }
 
     @Override

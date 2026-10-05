@@ -84,4 +84,13 @@ public class IfsAccountSubjectController {
         ifsAccountSubjectService.queryEnabledSubjectList(inputObject, outputObject);
     }
 
+    /**
+     * 初始化默认会计科目（按编码补建，已存在跳过）
+     */
+    @ApiOperation(id = "initDefaultAccountSubjects", value = "初始化默认会计科目", method = "POST", allUse = "1")
+    @RequestMapping("/post/IfsAccountSubjectController/initDefaultAccountSubjects")
+    public void initDefaultAccountSubjects(InputObject inputObject, OutputObject outputObject) {
+        ifsAccountSubjectService.initDefaultSubjects(inputObject, outputObject);
+    }
+
 }

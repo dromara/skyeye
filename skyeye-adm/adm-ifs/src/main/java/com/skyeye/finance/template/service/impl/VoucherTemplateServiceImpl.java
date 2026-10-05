@@ -7,6 +7,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.WhetherEnum;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
@@ -17,7 +20,6 @@ import com.skyeye.finance.template.dao.VoucherTemplateDao;
 import com.skyeye.finance.template.entity.VoucherTemplate;
 import com.skyeye.finance.template.entity.VoucherTemplateLine;
 import com.skyeye.books.service.IfsSetOfBooksService;
-import com.skyeye.common.object.InputObject;
 import com.skyeye.finance.template.service.VoucherTemplateLineService;
 import com.skyeye.finance.template.service.VoucherTemplateService;
 import com.skyeye.subject.entity.AccountSubject;
@@ -26,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -145,6 +148,94 @@ public class VoucherTemplateServiceImpl extends SkyeyeBusinessServiceImpl<Vouche
             return null;
         }
         return ifsAccountSubjectService.selectById(line.getSubjectId());
+    }
+
+    @Override
+    public void initDefaultTemplates(InputObject inputObject, OutputObject outputObject) {
+        String userId = inputObject.getLogParams().get("id").toString();
+        List<String> created = new ArrayList<>();
+        List<String> skipped = new ArrayList<>();
+        List<String> failed = new ArrayList<>();
+
+        for (DefaultVoucherTemplateCatalog.TemplateDef def : DefaultVoucherTemplateCatalog.all()) {
+            if (existsAnyTemplate(def.getEventType())) {
+                skipped.add(def.getEventType() + "(已存在)");
+                continue;
+            }
+            try {
+                List<VoucherTemplateLine> lines = new ArrayList<>();
+                List<String> missingNums = new ArrayList<>();
+                for (DefaultVoucherTemplateCatalog.LineDef lineDef : def.getLines()) {
+                    AccountSubject subject = findSubjectByNums(lineDef.getSubjectNums());
+                    if (ObjectUtil.isEmpty(subject)) {
+                        missingNums.add(String.join("/", lineDef.getSubjectNums()));
+                        continue;
+                    }
+                    VoucherTemplateLine line = new VoucherTemplateLine();
+                    line.setLineNo(lineDef.getLineNo());
+                    line.setDirection(lineDef.getDirection());
+                    line.setSubjectId(subject.getId());
+                    line.setAmountExpr(lineDef.getAmountExpr());
+                    line.setSummaryTpl(lineDef.getSummaryTpl());
+                    line.setAuxSupplier(lineDef.isAuxSupplier() ? WhetherEnum.ENABLE_USING.getKey() : WhetherEnum.DISABLE_USING.getKey());
+                    line.setAuxCustomer(lineDef.isAuxCustomer() ? WhetherEnum.ENABLE_USING.getKey() : WhetherEnum.DISABLE_USING.getKey());
+                    lines.add(line);
+                }
+                if (!missingNums.isEmpty()) {
+                    failed.add(def.getEventType() + "(缺科目:" + String.join(",", missingNums) + ")");
+                    continue;
+                }
+                if (lines.size() < 2) {
+                    failed.add(def.getEventType() + "(分录不足)");
+                    continue;
+                }
+                VoucherTemplate template = new VoucherTemplate();
+                template.setName("默认-" + def.getName());
+                template.setEventType(def.getEventType());
+                template.setEnabled(EnableEnum.ENABLE_USING.getKey());
+                template.setAutoPost(WhetherEnum.DISABLE_USING.getKey());
+                template.setLines(lines);
+                createEntity(template, userId);
+                created.add(def.getEventType());
+            } catch (Exception ex) {
+                failed.add(def.getEventType() + "(" + StrUtil.blankToDefault(ex.getMessage(), "失败") + ")");
+            }
+        }
+
+        Map<String, Object> bean = new HashMap<>();
+        bean.put("created", created);
+        bean.put("skipped", skipped);
+        bean.put("failed", failed);
+        bean.put("createdCount", created.size());
+        bean.put("skippedCount", skipped.size());
+        bean.put("failedCount", failed.size());
+        outputObject.setBean(bean);
+        outputObject.settotal(1);
+    }
+
+    private boolean existsAnyTemplate(String eventType) {
+        QueryWrapper<VoucherTemplate> qw = new QueryWrapper<>();
+        qw.eq(MybatisPlusUtil.toColumns(VoucherTemplate::getEventType), eventType);
+        return count(qw) > 0;
+    }
+
+    private AccountSubject findSubjectByNums(String[] nums) {
+        if (nums == null) {
+            return null;
+        }
+        for (String num : nums) {
+            if (StrUtil.isBlank(num)) {
+                continue;
+            }
+            QueryWrapper<AccountSubject> qw = new QueryWrapper<>();
+            qw.eq(MybatisPlusUtil.toColumns(AccountSubject::getNum), num);
+            qw.last("LIMIT 1");
+            AccountSubject subject = ifsAccountSubjectService.getOne(qw, false);
+            if (ObjectUtil.isNotEmpty(subject)) {
+                return subject;
+            }
+        }
+        return null;
     }
 
     /**

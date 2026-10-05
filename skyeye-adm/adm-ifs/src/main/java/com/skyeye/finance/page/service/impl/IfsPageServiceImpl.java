@@ -15,6 +15,7 @@ import com.skyeye.finance.ledger.service.SubjectBalanceService;
 import com.skyeye.finance.page.service.IfsPageService;
 import com.skyeye.finance.period.service.AccountPeriodService;
 import com.skyeye.finance.template.service.VoucherTemplateService;
+import com.skyeye.subject.service.IfsAccountSubjectService;
 import com.skyeye.loan.entity.LoanBorrow;
 import com.skyeye.loan.entity.LoanRepay;
 import com.skyeye.loan.service.LoanBorrowService;
@@ -39,6 +40,9 @@ import java.util.function.LongSupplier;
  */
 @Service
 public class IfsPageServiceImpl implements IfsPageService {
+
+    @Autowired
+    private IfsAccountSubjectService ifsAccountSubjectService;
 
     @Autowired
     private AccountPeriodService accountPeriodService;
@@ -86,6 +90,7 @@ public class IfsPageServiceImpl implements IfsPageService {
     public void queryProcessFlowCount(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> bean = new HashMap<>();
         // 主账簿
+        bean.put("F00", safeCount(() -> ifsAccountSubjectService.count()));
         bean.put("F01", safeCount(() -> accountPeriodService.count()));
         bean.put("F02", safeCount(() -> voucherTemplateService.count()));
         bean.put("F07", safeCount(() -> bizAcctEventService.count()));
