@@ -18,13 +18,6 @@ public class MfgCostAcctController {
     @Autowired
     private MfgCostAcctService mfgCostAcctService;
 
-    @ApiOperation(id = "postProdPickAcct", value = "生产领料记账", method = "POST", allUse = "2")
-    @ApiImplicitParams(classBean = MfgCostAcctPost.class)
-    @RequestMapping("/post/MfgCostAcctController/postProdPickAcct")
-    public void postProdPickAcct(InputObject inputObject, OutputObject outputObject) {
-        mfgCostAcctService.postProdPick(inputObject, outputObject);
-    }
-
     @ApiOperation(id = "postProdFinishAcct", value = "完工入库记账", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = MfgCostAcctPost.class)
     @RequestMapping("/post/MfgCostAcctController/postProdFinishAcct")

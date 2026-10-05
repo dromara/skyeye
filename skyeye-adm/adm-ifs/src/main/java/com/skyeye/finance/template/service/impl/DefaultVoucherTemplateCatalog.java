@@ -56,7 +56,13 @@ final class DefaultVoucherTemplateCatalog {
                 line(2, AmountDirection.LOAN, "costAmount", "{summary}", false, false, "1403", "1405")),
             def(BizAcctEventType.PROD_RETURN, "生产退料",
                 line(1, AmountDirection.BORROW, "costAmount", "{summary}", false, false, "1403", "1405"),
-                line(2, AmountDirection.LOAN, "costAmount", "{summary}", false, false, "5001"))
+                line(2, AmountDirection.LOAN, "costAmount", "{summary}", false, false, "5001")),
+            def(BizAcctEventType.PROD_FINISH, "完工入库",
+                line(1, AmountDirection.BORROW, "amount", "{summary}", false, false, "1405", "1403"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", false, false, "5001")),
+            def(BizAcctEventType.MFG_OVERHEAD, "制造费用归集",
+                line(1, AmountDirection.BORROW, "amount", "{summary}", false, false, "5001"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", false, false, "5101", "6602"))
         );
     }
 

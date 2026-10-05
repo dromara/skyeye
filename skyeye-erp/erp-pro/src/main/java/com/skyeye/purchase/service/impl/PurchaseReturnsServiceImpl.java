@@ -251,16 +251,19 @@ public class PurchaseReturnsServiceImpl extends SkyeyeErpOrderServiceImpl<Purcha
             erpCommonService.editMaterialNormsDepotStock(MaterialNormsStockType.IN_TRANSIT_STOCK.getDefaultDepotId(), erpOrderItem.getMaterialId(),
                 erpOrderItem.getNormsId(), erpOrderItem.getOperNumber(), DepotPutOutType.OUT.getKey(), MaterialNormsStockType.IN_TRANSIT_STOCK.getKey());
         });
-        Map<String, Object> acctEvent = new java.util.HashMap<>();
-        acctEvent.put("eventType", "purchaseReturn");
-        acctEvent.put("sourceType", "ERP_PURCHASE_RETURN");
-        acctEvent.put("sourceId", entity.getId());
-        acctEvent.put("sourceNo", entity.getOddNumber());
-        acctEvent.put("amount", StrUtil.blankToDefault(entity.getTotalPrice(), "0"));
-        acctEvent.put("supplierId", entity.getHolderId());
-        acctEvent.put("voucherDate", entity.getOperTime());
-        acctEvent.put("summary", "采购退货-" + entity.getOddNumber());
-        ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
+        // 需出库：仓库出库完成时记账；无需出库：业务单审批时记账
+        if (WhetherEnum.DISABLE_USING.getKey().equals(entity.getNeedDepot())) {
+            Map<String, Object> acctEvent = new java.util.HashMap<>();
+            acctEvent.put("eventType", "purchaseReturn");
+            acctEvent.put("sourceType", "ERP_PURCHASE_RETURN");
+            acctEvent.put("sourceId", entity.getId());
+            acctEvent.put("sourceNo", entity.getOddNumber());
+            acctEvent.put("amount", StrUtil.blankToDefault(entity.getTotalPrice(), "0"));
+            acctEvent.put("supplierId", entity.getHolderId());
+            acctEvent.put("voucherDate", entity.getOperTime());
+            acctEvent.put("summary", "采购退货-" + entity.getOddNumber());
+            ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
+        }
     }
 
     @Override

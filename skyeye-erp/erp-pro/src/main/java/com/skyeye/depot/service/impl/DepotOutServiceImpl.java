@@ -64,6 +64,7 @@ import com.skyeye.product.entity.ProductLeadOutStock;
 import com.skyeye.product.service.ProductLeadOutStockService;
 import com.skyeye.product.service.ProductLeadService;
 import com.skyeye.purchase.service.PurchaseReturnsService;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import com.skyeye.rest.sealservice.rest.IServiceApplyRest;
 import com.skyeye.rest.shop.service.IShopStoreService;
 import com.skyeye.retail.service.RetailOutLetService;
@@ -157,6 +158,8 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
     @Autowired
     private ProductLeadService productLeadService;
 
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     @Override
     public QueryWrapper<DepotOut> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -353,6 +356,53 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
             // 配件申领单：更新出库数量/状态及用户配件库存（远程，Seata 分支事务）
             updateSealApply(entity, normsCodeList, result);
         }
+        // 行业常见：仓库出库完成后再推财务
+        pushBizAcctEvent(entity);
+    }
+
+    /** 仓库出库审批通过后推会计事件 */
+    private void pushBizAcctEvent(DepotOut entity) {
+        Integer fromType = entity.getFromTypeId();
+        if (fromType == null) {
+            return;
+        }
+        Map<String, Object> acctEvent = new HashMap<>();
+        String amount = StrUtil.blankToDefault(entity.getTotalPrice(), "0");
+        acctEvent.put("sourceId", entity.getId());
+        acctEvent.put("sourceNo", entity.getOddNumber());
+        acctEvent.put("amount", amount);
+        acctEvent.put("voucherDate", entity.getOperTime());
+        if (fromType == DepotOutFromType.SEAL_OUTLET.getKey()) {
+            acctEvent.put("eventType", "salesOut");
+            acctEvent.put("sourceType", "ERP_DEPOT_OUT");
+            acctEvent.put("customerId", entity.getHolderId());
+            acctEvent.put("summary", "销售出库-" + entity.getOddNumber());
+        } else if (fromType == DepotOutFromType.OTHER_OUTLET.getKey()) {
+            acctEvent.put("eventType", "otherOut");
+            acctEvent.put("sourceType", "ERP_DEPOT_OUT");
+            acctEvent.put("costAmount", amount);
+            acctEvent.put("summary", "其他出库-" + entity.getOddNumber());
+        } else if (fromType == DepotOutFromType.PURCHASE_RETURNS.getKey()) {
+            acctEvent.put("eventType", "purchaseReturn");
+            acctEvent.put("sourceType", "ERP_DEPOT_OUT");
+            acctEvent.put("supplierId", entity.getHolderId());
+            acctEvent.put("summary", "采购退货-" + entity.getOddNumber());
+        } else if (fromType == DepotOutFromType.REQUISITION_OUTLET.getKey()) {
+            acctEvent.put("eventType", "prodPick");
+            acctEvent.put("sourceType", "ERP_DEPOT_OUT");
+            acctEvent.put("costAmount", amount);
+            acctEvent.put("departmentId", entity.getDepartmentId());
+            acctEvent.put("summary", "生产领料-" + entity.getOddNumber());
+        } else if (fromType == DepotOutFromType.PATCH_OUTLET.getKey()) {
+            acctEvent.put("eventType", "prodPick");
+            acctEvent.put("sourceType", "ERP_DEPOT_OUT");
+            acctEvent.put("costAmount", amount);
+            acctEvent.put("departmentId", entity.getDepartmentId());
+            acctEvent.put("summary", "生产补料-" + entity.getOddNumber());
+        } else {
+            return;
+        }
+        ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
     }
 
     private void updateSealApply(DepotOut entity, List<String> normsCodeList, boolean result) {

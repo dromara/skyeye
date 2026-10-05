@@ -24,12 +24,10 @@ import com.skyeye.material.classenum.MaterialInOrderType;
 import com.skyeye.other.dao.OtherWareHousDao;
 import com.skyeye.other.entity.OtherWareHous;
 import com.skyeye.other.service.OtherWareHousService;
-import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.RoundingMode;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -48,9 +46,6 @@ public class OtherWareHousServiceImpl extends SkyeyeErpOrderServiceImpl<OtherWar
     @Autowired
     private DepotPutService depotPutService;
 
-    @Autowired
-    private IfsBizAcctEventService ifsBizAcctEventService;
-
     @Override
     public void validatorEntity(OtherWareHous entity) {
         entity.setOtherState(DepotPutState.NEED_PUT.getKey());
@@ -58,18 +53,7 @@ public class OtherWareHousServiceImpl extends SkyeyeErpOrderServiceImpl<OtherWar
 
     @Override
     public void approvalEndIsSuccess(OtherWareHous entity) {
-        entity = selectById(entity.getId());
-        Map<String, Object> acctEvent = new HashMap<>();
-        acctEvent.put("eventType", "otherIn");
-        acctEvent.put("sourceType", "ERP_OTHER_IN");
-        acctEvent.put("sourceId", entity.getId());
-        acctEvent.put("sourceNo", entity.getOddNumber());
-        String amount = StrUtil.blankToDefault(entity.getTotalPrice(), "0");
-        acctEvent.put("amount", amount);
-        acctEvent.put("costAmount", amount);
-        acctEvent.put("voucherDate", entity.getOperTime());
-        acctEvent.put("summary", "其他入库-" + entity.getOddNumber());
-        ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
+        // 财务凭证在仓库入库单审批通过时推送
     }
 
     @Override

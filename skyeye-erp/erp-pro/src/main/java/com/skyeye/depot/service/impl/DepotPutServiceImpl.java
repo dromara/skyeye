@@ -49,6 +49,7 @@ import com.skyeye.pick.service.ReturnPutService;
 import com.skyeye.pickconfirm.service.ConfirmReturnService;
 import com.skyeye.product.service.ProductReturnInStockService;
 import com.skyeye.purchase.service.PurchasePutService;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import com.skyeye.retail.service.RetailReturnsService;
 import com.skyeye.seal.service.SalesExchangesService;
 import com.skyeye.seal.service.SalesReturnsService;
@@ -116,6 +117,9 @@ public class DepotPutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotPutDao, 
 
     @Autowired
     private SalesExchangesService salesExchangesService;
+
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     @Override
     public QueryWrapper<DepotPut> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -298,6 +302,47 @@ public class DepotPutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotPutDao, 
         // 修改库存信息以及记录客户/供应商/会员关联的商品
         super.depotOutOrPutSuccess(entity.getHolderId(), entity.getHolderKey(), entity.getErpOrderItemList(), DepotPutOutType.PUT.getKey(),
             entity.getFromId(), fromTypeIdKey);
+        // 行业常见：仓库入库完成后再推财务（账实同步）
+        pushBizAcctEvent(entity);
+    }
+
+    /** 仓库入库审批通过后推会计事件，金额取本张仓库单 */
+    private void pushBizAcctEvent(DepotPut entity) {
+        Integer fromType = entity.getFromTypeId();
+        if (fromType == null) {
+            return;
+        }
+        Map<String, Object> acctEvent = new HashMap<>();
+        String amount = StrUtil.blankToDefault(entity.getTotalPrice(), "0");
+        acctEvent.put("sourceId", entity.getId());
+        acctEvent.put("sourceNo", entity.getOddNumber());
+        acctEvent.put("amount", amount);
+        acctEvent.put("voucherDate", entity.getOperTime());
+        if (fromType == DepotPutFromType.PURCHASE_PUT.getKey()) {
+            acctEvent.put("eventType", "purchaseIn");
+            acctEvent.put("sourceType", "ERP_DEPOT_PUT");
+            acctEvent.put("supplierId", entity.getHolderId());
+            acctEvent.put("summary", "采购入库暂估-" + entity.getOddNumber());
+        } else if (fromType == DepotPutFromType.OTHER_WARE_HOUS.getKey()) {
+            acctEvent.put("eventType", "otherIn");
+            acctEvent.put("sourceType", "ERP_DEPOT_PUT");
+            acctEvent.put("costAmount", amount);
+            acctEvent.put("summary", "其他入库-" + entity.getOddNumber());
+        } else if (fromType == DepotPutFromType.SEAL_RETURNS.getKey()) {
+            acctEvent.put("eventType", "salesReturn");
+            acctEvent.put("sourceType", "ERP_DEPOT_PUT");
+            acctEvent.put("customerId", entity.getHolderId());
+            acctEvent.put("summary", "销售退货-" + entity.getOddNumber());
+        } else if (fromType == DepotPutFromType.RETURN_PUT.getKey()) {
+            acctEvent.put("eventType", "prodReturn");
+            acctEvent.put("sourceType", "ERP_DEPOT_PUT");
+            acctEvent.put("costAmount", amount);
+            acctEvent.put("departmentId", entity.getDepartmentId());
+            acctEvent.put("summary", "生产退料-" + entity.getOddNumber());
+        } else {
+            return;
+        }
+        ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
     }
 
     private void checkMaterialNorms(DepotPut entity, String fromTypeIdKey, boolean setData) {

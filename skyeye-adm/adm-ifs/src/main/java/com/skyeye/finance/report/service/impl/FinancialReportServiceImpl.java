@@ -1,15 +1,19 @@
 package com.skyeye.finance.report.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
+import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.finance.constants.IfsConstants;
+import com.skyeye.finance.event.classenum.BizAcctEventState;
 import com.skyeye.finance.event.classenum.BizAcctEventType;
+import com.skyeye.finance.event.entity.BizAcctEvent;
 import com.skyeye.finance.event.service.BizAcctEventService;
 import com.skyeye.finance.journal.classenum.JournalVoucherState;
 import com.skyeye.finance.journal.entity.JournalEntry;
@@ -27,6 +31,8 @@ import com.skyeye.subject.service.IfsAccountSubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.RoundingMode;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -170,8 +176,8 @@ public class FinancialReportServiceImpl implements FinancialReportService {
     }
 
     /**
-     * 期末损益结转：汇总本期损益得净利润，抛 PERIOD_CLOSE 事件由模板生成结转凭证。
-     * 须先配置 PERIOD_CLOSE 模板；期间需开放。
+     * 期末损益结转：按各损益科目期末余额生成结转凭证（不依赖两行模板），并过账。
+     * 同一账套同一期间只能成功一次。期间须开放。须有科目「本年利润」4103。
      */
     @Override
     public void periodProfitClose(InputObject inputObject, OutputObject outputObject) {
@@ -179,40 +185,94 @@ public class FinancialReportServiceImpl implements FinancialReportService {
         String setOfBooksId = required(params, "setOfBooksId");
         String periodCode = required(params, "periodCode");
         accountPeriodService.assertPeriodOpen(setOfBooksId, periodCode);
+        assertPeriodNotClosedAlready(setOfBooksId, periodCode);
 
+        AccountSubject profitSubject = findProfitSubject();
         List<SubjectBalance> balances = listBalances(params);
         Map<String, AccountSubject> subjectMap = loadSubjects(balances);
+
+        List<JournalEntry> pnlLines = new ArrayList<>();
         String incomeTotal = "0";
         String costTotal = "0";
+        String summary = "期末损益结转-" + periodCode;
         for (SubjectBalance b : balances) {
             AccountSubject s = subjectMap.get(b.getSubjectId());
-            if (s == null) {
+            if (!isCloseablePnl(s, profitSubject)) {
                 continue;
             }
-            String num = StrUtil.blankToDefault(s.getNum(), "");
-            if (AccountSubjectType.INCREASE_AND_DECREASE.getKey().equals(s.getType())
-                && (num.startsWith("6") || AmountDirection.LOAN.getKey().equals(s.getAmountDirection()))) {
-                incomeTotal = CalculationUtil.add(incomeTotal, b.getPeriodCredit(), IfsConstants.NUM_AFTER_DOT);
-            } else if (AccountSubjectType.INCREASE_AND_DECREASE.getKey().equals(s.getType())
-                || AccountSubjectType.PRIME_COST.getKey().equals(s.getType())
-                || num.startsWith("64") || num.startsWith("66") || num.startsWith("5")) {
-                costTotal = CalculationUtil.add(costTotal, b.getPeriodDebit(), IfsConstants.NUM_AFTER_DOT);
+            String net = netBalance(b, s);
+            if (isZero(net) || CalculationUtil.compareTo(net, "0", IfsConstants.NUM_AFTER_DOT, RoundingMode.HALF_UP) <= 0) {
+                continue;
             }
+            JournalEntry line = new JournalEntry();
+            line.setSubjectId(s.getId());
+            line.setAmount(net);
+            line.setSummary(summary);
+            if (AmountDirection.LOAN.getKey().equals(s.getAmountDirection())) {
+                line.setDirection(AmountDirection.BORROW.getKey());
+                incomeTotal = CalculationUtil.add(incomeTotal, net, IfsConstants.NUM_AFTER_DOT);
+            } else {
+                line.setDirection(AmountDirection.LOAN.getKey());
+                costTotal = CalculationUtil.add(costTotal, net, IfsConstants.NUM_AFTER_DOT);
+            }
+            pnlLines.add(line);
         }
+        if (pnlLines.isEmpty()) {
+            throw new CustomException("本期没有可结转的损益余额。请先将日常凭证过账后再结转。");
+        }
+
+        List<JournalEntry> entries = new ArrayList<>(pnlLines);
+        if (!isZero(incomeTotal)) {
+            entries.add(profitEntry(profitSubject.getId(), AmountDirection.LOAN.getKey(), incomeTotal, summary));
+        }
+        if (!isZero(costTotal)) {
+            entries.add(profitEntry(profitSubject.getId(), AmountDirection.BORROW.getKey(), costTotal, summary));
+        }
+
+        String voucherDate = periodEndDate(periodCode);
+        String sourceId = setOfBooksId + "-" + periodCode;
         String netProfit = CalculationUtil.subtract(incomeTotal, costTotal, IfsConstants.NUM_AFTER_DOT);
 
-        Map<String, Object> event = new HashMap<>();
-        event.put("eventType", BizAcctEventType.PERIOD_CLOSE.getKey());
-        event.put("sourceType", BizAcctEventType.PERIOD_CLOSE.getKey());
-        event.put("sourceId", setOfBooksId + "-" + periodCode);
-        event.put("sourceNo", periodCode);
-        event.put("setOfBooksId", setOfBooksId);
-        event.put("voucherDate", DateUtil.getYmdTimeAndToString());
-        event.put("amount", netProfit.replace("-", ""));
-        event.put("netProfit", netProfit);
-        event.put("summary", "期末损益结转-" + periodCode);
-        Map<String, Object> result = bizAcctEventService.acceptEvent(event);
+        JournalVoucher voucher = new JournalVoucher();
+        voucher.setName(summary);
+        voucher.setSetOfBooksId(setOfBooksId);
+        voucher.setPeriodCode(periodCode);
+        voucher.setVoucherDate(voucherDate);
+        voucher.setEventType(BizAcctEventType.PERIOD_CLOSE.getKey());
+        voucher.setSourceType(BizAcctEventType.PERIOD_CLOSE.getKey());
+        voucher.setSourceId(sourceId);
+        voucher.setSourceNo(periodCode);
+        voucher.setIdempotencyKey(BizAcctEventType.PERIOD_CLOSE.getKey() + ":" + sourceId);
+        voucher.setRemark(summary);
+        voucher.setEntries(entries);
+        JournalVoucher saved = journalVoucherService.createAndOptionallyPost(voucher, true);
+
+        BizAcctEvent event = new BizAcctEvent();
+        event.setId(ToolUtil.getSurFaceId());
+        event.setName(summary);
+        event.setEventType(BizAcctEventType.PERIOD_CLOSE.getKey());
+        event.setSourceType(BizAcctEventType.PERIOD_CLOSE.getKey());
+        event.setSourceId(sourceId);
+        event.setSourceNo(periodCode);
+        event.setIdempotencyKey(BizAcctEventType.PERIOD_CLOSE.getKey() + ":" + sourceId);
+        event.setSetOfBooksId(setOfBooksId);
+        event.setPayload(JSONUtil.toJsonStr(params));
+        event.setState(BizAcctEventState.SUCCESS.getKey());
+        event.setJournalVoucherId(saved.getId());
+        event.setRetryCount(0);
+        String userId = "";
+        if (InputObject.getLogParamsStatic() != null) {
+            userId = String.valueOf(InputObject.getLogParamsStatic().getOrDefault("id", ""));
+        }
+        bizAcctEventService.createEntity(event, userId);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("eventId", event.getId());
+        result.put("journalVoucherId", saved.getId());
+        result.put("oddNumber", saved.getOddNumber());
         result.put("netProfit", netProfit);
+        result.put("incomeTotal", incomeTotal);
+        result.put("costTotal", costTotal);
         outputObject.setBean(result);
     }
 
@@ -292,6 +352,64 @@ public class FinancialReportServiceImpl implements FinancialReportService {
             return CalculationUtil.subtract(b.getEndDebit(), b.getEndCredit(), IfsConstants.NUM_AFTER_DOT);
         }
         return CalculationUtil.subtract(b.getEndCredit(), b.getEndDebit(), IfsConstants.NUM_AFTER_DOT);
+    }
+
+    private void assertPeriodNotClosedAlready(String setOfBooksId, String periodCode) {
+        QueryWrapper<JournalVoucher> qw = new QueryWrapper<>();
+        qw.eq(MybatisPlusUtil.toColumns(JournalVoucher::getSetOfBooksId), setOfBooksId);
+        qw.eq(MybatisPlusUtil.toColumns(JournalVoucher::getPeriodCode), periodCode);
+        qw.eq(MybatisPlusUtil.toColumns(JournalVoucher::getEventType), BizAcctEventType.PERIOD_CLOSE.getKey());
+        qw.ne(MybatisPlusUtil.toColumns(JournalVoucher::getState), JournalVoucherState.VOIDED.getKey());
+        if (journalVoucherService.count(qw) > 0) {
+            throw new CustomException("本账套本期间已做损益结转，不能重复。如需重做请先冲销结转凭证。");
+        }
+    }
+
+    private AccountSubject findProfitSubject() {
+        QueryWrapper<AccountSubject> qw = new QueryWrapper<>();
+        qw.eq(MybatisPlusUtil.toColumns(AccountSubject::getNum), "4103");
+        qw.last("LIMIT 1");
+        AccountSubject subject = ifsAccountSubjectService.getOne(qw, false);
+        if (subject == null) {
+            throw new CustomException("未找到科目「本年利润」(4103)，请先初始化会计科目");
+        }
+        return subject;
+    }
+
+    /** 仅结转末级损益类科目，不含本年利润、生产成本 */
+    private boolean isCloseablePnl(AccountSubject s, AccountSubject profitSubject) {
+        if (s == null || profitSubject == null) {
+            return false;
+        }
+        if (StrUtil.equals(s.getId(), profitSubject.getId()) || "4103".equals(s.getNum())) {
+            return false;
+        }
+        if (!AccountSubjectType.INCREASE_AND_DECREASE.getKey().equals(s.getType())) {
+            return false;
+        }
+        return !Integer.valueOf(0).equals(s.getIsLeaf());
+    }
+
+    private JournalEntry profitEntry(String subjectId, Integer direction, String amount, String summary) {
+        JournalEntry line = new JournalEntry();
+        line.setSubjectId(subjectId);
+        line.setDirection(direction);
+        line.setAmount(amount);
+        line.setSummary(summary);
+        return line;
+    }
+
+    private String periodEndDate(String periodCode) {
+        try {
+            return YearMonth.parse(periodCode).atEndOfMonth().toString();
+        } catch (Exception e) {
+            return DateUtil.getYmdTimeAndToString();
+        }
+    }
+
+    private boolean isZero(String amt) {
+        return StrUtil.isBlank(amt)
+            || CalculationUtil.compareTo(amt, "0", IfsConstants.NUM_AFTER_DOT, RoundingMode.HALF_UP) == 0;
     }
 
     private String required(Map<String, Object> params, String key) {

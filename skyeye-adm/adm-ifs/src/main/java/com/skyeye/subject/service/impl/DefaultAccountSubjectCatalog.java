@@ -37,6 +37,7 @@ final class DefaultAccountSubjectCatalog {
             equity("4103", "本年利润", null),
 
             cost("5001", "生产成本", null, false, false, true, false, true),
+            cost("5101", "制造费用", null, false, false, false, true, false),
 
             pnl("6001", "主营业务收入", AmountDirection.LOAN, false, false, false, false),
             pnl("6301", "营业外收入", AmountDirection.LOAN, false, false, false, false),

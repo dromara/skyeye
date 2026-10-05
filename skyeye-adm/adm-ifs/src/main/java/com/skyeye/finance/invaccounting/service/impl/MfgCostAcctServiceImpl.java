@@ -17,7 +17,8 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * 生产领料 / 完工入库 / 制造费用结转。
+ * 完工入库 / 制造费用结转。
+ * 生产领料/补料由仓库出库审批自动推凭证；本页仅手工记账完工与制费。
  * 有明细走存货核算单；无明细直接抛业务事件（须配置对应模板）。
  */
 @Service
@@ -28,20 +29,6 @@ public class MfgCostAcctServiceImpl implements MfgCostAcctService {
 
     @Autowired
     private BizAcctEventService bizAcctEventService;
-
-    /** 生产领料 */
-    @Override
-    public void postProdPick(InputObject inputObject, OutputObject outputObject) {
-        Map<String, Object> params = fillSource(inputObject.getParams());
-        String eventType = BizAcctEventType.PROD_PICK.getKey();
-        params.put("billType", eventType);
-        params.put("sourceType", eventType);
-        if (hasItems(params.get("items"))) {
-            outputObject.setBean(invAcctBillService.createFromBizEvent(params));
-            return;
-        }
-        outputObject.setBean(directEvent(eventType, params));
-    }
 
     /** 完工入库 */
     @Override
