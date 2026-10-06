@@ -21,7 +21,8 @@ public class CounterpartAgingController {
     @ApiOperation(id = "queryCounterpartAging", value = "往来账龄", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "setOfBooksId", name = "setOfBooksId", value = "账套id", required = "required"),
-        @ApiImplicitParam(id = "periodCode", name = "periodCode", value = "期间", required = "required")})
+        @ApiImplicitParam(id = "periodCode", name = "periodCode", value = "期间", required = "required"),
+        @ApiImplicitParam(id = "side", name = "side", value = "ar应收/ap应付")})
     @RequestMapping("/post/CounterpartAgingController/queryCounterpartAging")
     public void queryCounterpartAging(InputObject inputObject, OutputObject outputObject) {
         counterpartAgingService.queryAging(inputObject, outputObject);

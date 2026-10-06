@@ -51,16 +51,15 @@ final class DefaultVoucherTemplateCatalog {
                 line(1, AmountDirection.BORROW, "amount", "{summary}", "2202", "220201"),
                 line(2, AmountDirection.LOAN, "amount", "{summary}", "1405", "1403")),
             def(BizAcctEventType.SALES_OUT, "销售出库",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", "1122"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", "6001")),
-            // 无税额时税行跳过；出库已确认收入时请把模板改成只记销项税，避免与销售出库重复
+                line(1, AmountDirection.BORROW, "costAmount", "{summary}", "6401"),
+                line(2, AmountDirection.LOAN, "costAmount", "{summary}", "1405", "1403")),
+            // 开票不再确认收入/应收，避免与应收事项或出库重复记 1122；无税额时事件跳过凭证
             def(BizAcctEventType.SALES_INVOICE, "销售开票",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", "1122"),
-                line(2, AmountDirection.LOAN, "amountExTax", "{summary}", "6001"),
-                line(3, AmountDirection.LOAN, "taxAmount", "{summary}", "22210101", "2221")),
+                line(1, AmountDirection.BORROW, "taxAmount", "{summary}", "1122"),
+                line(2, AmountDirection.LOAN, "taxAmount", "{summary}", "22210101", "2221")),
             def(BizAcctEventType.SALES_RETURN, "销售退货",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", "6001"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", "1122")),
+                line(1, AmountDirection.BORROW, "costAmount", "{summary}", "1405", "1403"),
+                line(2, AmountDirection.LOAN, "costAmount", "{summary}", "6401")),
             def(BizAcctEventType.OTHER_IN, "其他入库",
                 line(1, AmountDirection.BORROW, "amount", "{summary}", "1405", "1403"),
                 line(2, AmountDirection.LOAN, "amount", "{summary}", "6301", "6001")),
@@ -83,7 +82,10 @@ final class DefaultVoucherTemplateCatalog {
                 line(1, AmountDirection.BORROW, "profitAmount", "{summary}", "1405", "1403"),
                 line(2, AmountDirection.LOAN, "profitAmount", "{summary}", "1901"),
                 line(3, AmountDirection.BORROW, "lossAmount", "{summary}", "1901"),
-                line(4, AmountDirection.LOAN, "lossAmount", "{summary}", "1405", "1403"))
+                line(4, AmountDirection.LOAN, "lossAmount", "{summary}", "1405", "1403")),
+            def(BizAcctEventType.TRANSFER, "库存调拨",
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "1405", "1403"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "1405", "1403"))
         );
     }
 

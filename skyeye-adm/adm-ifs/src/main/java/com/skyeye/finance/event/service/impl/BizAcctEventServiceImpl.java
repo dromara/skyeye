@@ -10,11 +10,13 @@ import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.finance.constants.IfsConstants;
 import com.skyeye.finance.event.classenum.BizAcctEventState;
+import com.skyeye.finance.event.classenum.BizAcctEventType;
 import com.skyeye.books.service.IfsSetOfBooksService;
 import com.skyeye.finance.event.dao.BizAcctEventDao;
 import com.skyeye.finance.event.entity.BizAcctEvent;
@@ -26,6 +28,7 @@ import com.skyeye.finance.template.service.VoucherTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,6 +152,11 @@ public class BizAcctEventServiceImpl extends SkyeyeBusinessServiceImpl<BizAcctEv
         result.put("eventId", event.getId());
         result.put("duplicated", false);
         try {
+            if (BizAcctEventType.SALES_INVOICE.getKey().equals(event.getEventType())
+                && isZeroAmount(params.get("taxAmount"))) {
+                // 收入已在应收事项确认，开票无税时只回写台账
+                return skipVoucher(event, result, "销售开票不重复确认收入，无税额时不出凭证");
+            }
             VoucherTemplate template = voucherTemplateService.getEnabledTemplate(
                 event.getEventType(), event.getSetOfBooksId());
             String booksId = ifsSetOfBooksService.resolveSetOfBooksId(
@@ -163,6 +171,17 @@ public class BizAcctEventServiceImpl extends SkyeyeBusinessServiceImpl<BizAcctEv
 
             Map<String, Object> payload = new HashMap<>(params);
             payload.put("idempotencyKey", event.getIdempotencyKey());
+            if (BizAcctEventType.SALES_INVOICE.getKey().equals(event.getEventType())) {
+                // 旧模板若仍带 1122/收入行，金额置 0 跳过，避免重复记应收
+                payload.put("amount", "0");
+                payload.put("amountExTax", "0");
+            }
+            if ((BizAcctEventType.SALES_OUT.getKey().equals(event.getEventType())
+                || BizAcctEventType.SALES_RETURN.getKey().equals(event.getEventType())
+                || BizAcctEventType.TRANSFER.getKey().equals(event.getEventType()))
+                && isZeroAmount(payload.get("costAmount"))) {
+                payload.put("costAmount", payload.get("amount"));
+            }
             JournalVoucher voucher = voucherTemplateService.buildVoucherFromTemplate(template, payload);
             boolean autoPost = Integer.valueOf(1).equals(template.getAutoPost());
             JournalVoucher saved = journalVoucherService.createAndOptionallyPost(voucher, autoPost);
@@ -209,6 +228,29 @@ public class BizAcctEventServiceImpl extends SkyeyeBusinessServiceImpl<BizAcctEv
         cached.put("state", exists.getState());
         cached.put("duplicated", true);
         return cached;
+    }
+
+    /** 事件记成功但不生成凭证，原因写入 errorMsg 便于事件台查看 */
+    private Map<String, Object> skipVoucher(BizAcctEvent event, Map<String, Object> result, String reason) {
+        UpdateWrapper<BizAcctEvent> uw = new UpdateWrapper<>();
+        uw.eq(CommonConstants.ID, event.getId());
+        uw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getState), BizAcctEventState.SUCCESS.getKey());
+        uw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getJournalVoucherId), "");
+        uw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getErrorMsg), StrUtil.sub(reason, 0, 900));
+        update(uw);
+        refreshCache(event.getId());
+        result.put("journalVoucherId", "");
+        result.put("skipped", true);
+        result.put("state", BizAcctEventState.SUCCESS.getKey());
+        result.put("errorMsg", reason);
+        return result;
+    }
+
+    private boolean isZeroAmount(Object val) {
+        if (val == null || StrUtil.isBlank(val.toString())) {
+            return true;
+        }
+        return CalculationUtil.compareTo(val.toString(), "0", IfsConstants.NUM_AFTER_DOT, RoundingMode.HALF_UP) == 0;
     }
 
     private String required(Map<String, Object> params, String key) {

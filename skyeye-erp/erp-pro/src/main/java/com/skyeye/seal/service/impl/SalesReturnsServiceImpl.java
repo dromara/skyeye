@@ -172,6 +172,7 @@ public class SalesReturnsServiceImpl extends SkyeyeErpOrderServiceImpl<SalesRetu
             acctEvent.put("sourceId", entity.getId());
             acctEvent.put("sourceNo", entity.getOddNumber());
             acctEvent.put("amount", StrUtil.blankToDefault(entity.getTotalPrice(), "0"));
+            acctEvent.put("costAmount", StrUtil.blankToDefault(entity.getTotalPrice(), "0"));
             acctEvent.put("customerId", entity.getHolderId());
             acctEvent.put("voucherDate", entity.getOperTime());
             acctEvent.put("summary", "销售退货-" + entity.getOddNumber());

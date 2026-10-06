@@ -48,9 +48,17 @@ public class JournalEntry extends SkyeyeLinkData {
     @ApiModelProperty(value = "辅助-客户")
     private String auxCustomerId;
 
+    @TableField(exist = false)
+    @Property("客户名称")
+    private String auxCustomerName;
+
     @TableField("aux_supplier_id")
     @ApiModelProperty(value = "辅助-供应商")
     private String auxSupplierId;
+
+    @TableField(exist = false)
+    @Property("供应商名称")
+    private String auxSupplierName;
 
     @TableField("aux_material_id")
     @ApiModelProperty(value = "辅助-物料")

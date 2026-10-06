@@ -10,6 +10,8 @@ import com.google.common.base.Joiner;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.business.service.impl.SkyeyeErpOrderServiceImpl;
 import com.skyeye.common.constans.CommonCharConstants;
+import com.skyeye.common.util.CalculationUtil;
+import com.skyeye.constants.ErpConstants;
 import com.skyeye.depot.classenum.DepotPutOutType;
 import com.skyeye.entity.ErpOrderItem;
 import com.skyeye.exception.CustomException;
@@ -23,6 +25,8 @@ import com.skyeye.material.entity.MaterialNormsCode;
 import com.skyeye.other.dao.AllocationDao;
 import com.skyeye.other.entity.Allocation;
 import com.skyeye.other.service.AllocationService;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -39,6 +43,9 @@ import java.util.stream.Collectors;
 @Service
 @SkyeyeService(name = "调拨单", groupName = "调拨单模块", flowable = true, orderApproval = true)
 public class AllocationServiceImpl extends SkyeyeErpOrderServiceImpl<AllocationDao, Allocation> implements AllocationService {
+
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     @Override
     public void validatorEntity(Allocation entity) {
@@ -102,6 +109,43 @@ public class AllocationServiceImpl extends SkyeyeErpOrderServiceImpl<AllocationD
             // 调入仓库入库
             erpCommonService.editMaterialNormsDepotStock(anotherDepotId, materialId, normsId, operNumber, DepotPutOutType.PUT.getKey(), MaterialNormsStockType.ORDER_STOCK.getKey());
         }
+        pushBizAcctEvent(entity);
+    }
+
+    /**
+     * 调拨审批通过后推财务。调拨单没有表头合计金额，仓库辅助按第一行出入库仓写入。
+     */
+    private void pushBizAcctEvent(Allocation entity) {
+        Map<String, Object> acctEvent = new HashMap<>();
+        acctEvent.put("eventType", "transfer");
+        acctEvent.put("sourceType", "ERP_ALLOCATION");
+        acctEvent.put("sourceId", entity.getId());
+        acctEvent.put("sourceNo", entity.getOddNumber());
+        // Allocation 继承 ErpOrderCommon，无 totalPrice
+        acctEvent.put("amount", sumAllocationAmount(entity));
+        acctEvent.put("voucherDate", entity.getOperTime());
+        acctEvent.put("summary", "库存调拨-" + entity.getOddNumber());
+        if (CollectionUtil.isNotEmpty(entity.getErpOrderItemList())) {
+            ErpOrderItem first = entity.getErpOrderItemList().get(0);
+            // 借方用调入仓 toDepotId，贷方用调出仓 fromDepotId
+            acctEvent.put("fromDepotId", first.getDepotId());
+            acctEvent.put("toDepotId", first.getAnotherDepotId());
+            acctEvent.put("materialId", first.getMaterialId());
+        }
+        ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
+    }
+
+    /** 明细价税合计优先，没有则用不含税金额 */
+    private String sumAllocationAmount(Allocation entity) {
+        String amount = "0";
+        if (CollectionUtil.isEmpty(entity.getErpOrderItemList())) {
+            return amount;
+        }
+        for (ErpOrderItem item : entity.getErpOrderItemList()) {
+            String line = StrUtil.blankToDefault(item.getTaxLastMoney(), StrUtil.blankToDefault(item.getAllPrice(), "0"));
+            amount = CalculationUtil.add(amount, line, ErpConstants.NUM_AFTER_DOT);
+        }
+        return amount;
     }
 
     /**

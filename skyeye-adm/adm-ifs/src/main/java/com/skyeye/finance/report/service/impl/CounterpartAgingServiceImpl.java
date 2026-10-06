@@ -1,6 +1,5 @@
 package com.skyeye.finance.report.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
@@ -23,9 +22,11 @@ import com.skyeye.finance.ledger.service.SubjectBalanceService;
 import com.skyeye.finance.report.dao.CounterpartAgingDao;
 import com.skyeye.finance.report.entity.CounterpartAging;
 import com.skyeye.finance.report.service.CounterpartAgingService;
+import com.skyeye.subject.classenum.AmountDirection;
+import com.skyeye.subject.entity.AccountSubject;
+import com.skyeye.subject.service.IfsAccountSubjectService;
 import com.skyeye.rest.crm.customer.service.ICrmCustomerService;
 import com.skyeye.rest.erp.supplier.service.IErpSupplierService;
-import com.skyeye.subject.classenum.AmountDirection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 往来账龄/对账单：按科目余额的客户、供应商辅助核算汇总期末净额，账龄按本期最早发生日粗分档。
@@ -57,6 +57,9 @@ public class CounterpartAgingServiceImpl extends SkyeyeBusinessServiceImpl<Count
 
     @Autowired
     private JournalEntryService journalEntryService;
+
+    @Autowired
+    private IfsAccountSubjectService ifsAccountSubjectService;
 
     @Autowired
     private ICrmCustomerService iCrmCustomerService;
@@ -106,7 +109,6 @@ public class CounterpartAgingServiceImpl extends SkyeyeBusinessServiceImpl<Count
         }
 
         Map<String, String> oldest = oldestDateByPartner(setOfBooksId, periodCode, ar);
-        Map<String, String> nameMap = loadNames(ar, new ArrayList<>(netMap.keySet()));
         LocalDate asOf = YearMonth.parse(periodCode).atEndOfMonth();
         List<Map<String, Object>> rows = new ArrayList<>();
         for (Map.Entry<String, String> e : netMap.entrySet()) {
@@ -123,7 +125,6 @@ public class CounterpartAgingServiceImpl extends SkyeyeBusinessServiceImpl<Count
             }
             Map<String, Object> row = new HashMap<>();
             row.put("partnerId", e.getKey());
-            row.put("partnerName", nameMap.getOrDefault(e.getKey(), e.getKey()));
             row.put("balance", e.getValue());
             row.put("oldestDate", date);
             row.put("overdueDays", days);
@@ -132,6 +133,11 @@ public class CounterpartAgingServiceImpl extends SkyeyeBusinessServiceImpl<Count
             row.put("d61_90", days >= 61 && days <= 90 ? e.getValue() : "0");
             row.put("d90p", days > 90 ? e.getValue() : "0");
             rows.add(row);
+        }
+        if (ar) {
+            iCrmCustomerService.setNameForMap(rows, "partnerId", "partnerName");
+        } else {
+            iErpSupplierService.setNameForMap(rows, "partnerId", "partnerName");
         }
         return rows;
     }
@@ -159,11 +165,20 @@ public class CounterpartAgingServiceImpl extends SkyeyeBusinessServiceImpl<Count
                 if (!partnerId.equals(aux)) {
                     continue;
                 }
+                AccountSubject subject = ifsAccountSubjectService.selectById(e.getSubjectId());
+                String subjectNum = subject == null ? "" : StrUtil.blankToDefault(subject.getNum(), "");
+                if (ar && !subjectNum.startsWith("1122")) {
+                    continue;
+                }
+                if (!ar && !subjectNum.startsWith("2202")) {
+                    continue;
+                }
                 Map<String, Object> row = new HashMap<>();
                 row.put("oddNumber", v.getOddNumber());
                 row.put("voucherDate", v.getVoucherDate());
                 row.put("sourceNo", v.getSourceNo());
                 row.put("summary", e.getSummary());
+                row.put("subjectNum", subjectNum);
                 row.put("direction", e.getDirection());
                 row.put("amount", e.getAmount());
                 if (AmountDirection.BORROW.getKey().equals(e.getDirection())) {
@@ -186,6 +201,11 @@ public class CounterpartAgingServiceImpl extends SkyeyeBusinessServiceImpl<Count
             : CalculationUtil.subtract(creditTotal, debitTotal, IfsConstants.NUM_AFTER_DOT));
         bean.put("side", ar ? "ar" : "ap");
         bean.put("partnerId", partnerId);
+        if (ar) {
+            iCrmCustomerService.setNameForMap(bean, "partnerId", "partnerName");
+        } else {
+            iErpSupplierService.setNameForMap(bean, "partnerId", "partnerName");
+        }
         outputObject.setBean(bean);
         outputObject.setBeans(rows);
         outputObject.settotal(rows.size());
@@ -212,31 +232,6 @@ public class CounterpartAgingServiceImpl extends SkyeyeBusinessServiceImpl<Count
             }
         }
         return oldest;
-    }
-
-    private Map<String, String> loadNames(boolean ar, List<String> ids) {
-        Map<String, String> map = new HashMap<>();
-        if (CollectionUtil.isEmpty(ids)) {
-            return map;
-        }
-        String joined = ids.stream().filter(StrUtil::isNotBlank).distinct().collect(Collectors.joining(","));
-        if (StrUtil.isBlank(joined)) {
-            return map;
-        }
-        List<Map<String, Object>> list = ar
-            ? iCrmCustomerService.queryCustomerListByIds(joined)
-            : iErpSupplierService.querySupplierListByIds(joined);
-        if (CollectionUtil.isEmpty(list)) {
-            return map;
-        }
-        for (Map<String, Object> item : list) {
-            Object id = item.get("id");
-            Object name = item.get("name");
-            if (id != null) {
-                map.put(id.toString(), name == null ? id.toString() : name.toString());
-            }
-        }
-        return map;
     }
 
     private Map<String, Object> resolveParams(InputObject inputObject) {

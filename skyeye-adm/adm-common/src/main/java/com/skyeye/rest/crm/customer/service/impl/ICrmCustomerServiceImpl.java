@@ -2,6 +2,7 @@ package com.skyeye.rest.crm.customer.service.impl;
 
 import com.skyeye.base.rest.service.impl.IServiceImpl;
 import com.skyeye.common.client.ExecuteFeignClient;
+import com.skyeye.common.constans.CacheConstants;
 import com.skyeye.rest.crm.customer.rest.ICrmCustomerRest;
 import com.skyeye.rest.crm.customer.service.ICrmCustomerService;
 
@@ -9,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -30,5 +33,21 @@ public class ICrmCustomerServiceImpl extends IServiceImpl implements ICrmCustome
     public List<Map<String, Object>> queryCustomerListByIds(String ids) {
         Map<String, Object> params = Collections.singletonMap("ids", ids);
         return ExecuteFeignClient.get(() -> iCrmCustomerRest.queryCustomerListByIds(params)).getRows();
+    }
+
+    @Override
+    public Map<String, Object> queryEntityMationById(String id) {
+        return queryEntityMationByIds(id).stream().findFirst().orElse(new HashMap<>());
+    }
+
+    @Override
+    public List<Map<String, Object>> queryEntityMationByIds(String ids) {
+        List<Map<String, Object>> rows = queryCustomerListByIds(ids);
+        return rows == null ? Collections.emptyList() : rows;
+    }
+
+    @Override
+    public String queryCacheKeyById(String id) {
+        return String.format(Locale.ROOT, "%s:%s", CacheConstants.CRM_CUSTOMER_CACHE_KEY, id);
     }
 }

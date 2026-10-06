@@ -37,6 +37,7 @@ import com.skyeye.production.service.ProductionPlanService;
 import com.skyeye.purchase.classenum.PurchaseOrderFromType;
 import com.skyeye.purchase.entity.PurchaseOrder;
 import com.skyeye.purchase.service.PurchaseOrderService;
+import com.skyeye.rest.ifs.credit.service.IfsCreditControlService;
 import com.skyeye.seal.classenum.SalesExchangesFromType;
 import com.skyeye.seal.classenum.SalesOrderPurchaseState;
 import com.skyeye.seal.classenum.SealOrderFromType;
@@ -92,6 +93,9 @@ public class SalesOrderServiceImpl extends SkyeyeErpOrderServiceImpl<SalesOrderD
     @Autowired
     private PurchaseOrderService purchaseOrderService;
 
+    @Autowired
+    private IfsCreditControlService ifsCreditControlService;
+
     @Override
     public QueryWrapper<SalesOrder> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<SalesOrder> queryWrapper = super.getQueryWrapper(commonPageInfo);
@@ -107,6 +111,27 @@ public class SalesOrderServiceImpl extends SkyeyeErpOrderServiceImpl<SalesOrderD
     @Override
     public void validatorEntity(SalesOrder entity) {
         checkMaterialNorms(entity, false);
+        checkCustomerCredit(entity);
+    }
+
+    /**
+     * 保存销售订单时校验客户未清应收。strict=1：有余额则拦截；IFS 不可用时不挡下单。
+     */
+    private void checkCustomerCredit(SalesOrder entity) {
+        if (StrUtil.isBlank(entity.getHolderId())) {
+            return;
+        }
+        Map<String, Object> params = new java.util.HashMap<>();
+        params.put("customerId", entity.getHolderId());
+        params.put("amount", StrUtil.blankToDefault(entity.getTotalPrice(), "0"));
+        params.put("strict", "1");
+        try {
+            ifsCreditControlService.checkCustomerCredit(params);
+        } catch (CustomException ex) {
+            if (StrUtil.contains(ex.getMessage(), "应收")) {
+                throw ex;
+            }
+        }
     }
 
     @Override

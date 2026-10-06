@@ -22,6 +22,7 @@ import com.skyeye.finance.template.entity.VoucherTemplateLine;
 import com.skyeye.books.service.IfsSetOfBooksService;
 import com.skyeye.finance.template.service.VoucherTemplateLineService;
 import com.skyeye.finance.template.service.VoucherTemplateService;
+import com.skyeye.subject.classenum.AmountDirection;
 import com.skyeye.subject.entity.AccountSubject;
 import com.skyeye.subject.service.IfsAccountSubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -290,7 +291,12 @@ public class VoucherTemplateServiceImpl extends SkyeyeBusinessServiceImpl<Vouche
                 entry.setAuxProjectId(str(payload.get("projectId"), null));
             }
             if (WhetherEnum.ENABLE_USING.getKey().equals(subject.getAuxDepot())) {
-                entry.setAuxDepotId(str(payload.get("depotId"), null));
+                // 调拨：借方调入仓，贷方调出仓；其他事项用 depotId
+                if (AmountDirection.BORROW.getKey().equals(line.getDirection())) {
+                    entry.setAuxDepotId(str(payload.get("toDepotId"), str(payload.get("depotId"), null)));
+                } else {
+                    entry.setAuxDepotId(str(payload.get("fromDepotId"), str(payload.get("depotId"), null)));
+                }
             }
             entries.add(entry);
         }

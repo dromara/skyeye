@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
+import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.features.OperatorUserInfo;
 import lombok.Data;
 
@@ -53,8 +54,16 @@ public class SubjectBalance extends OperatorUserInfo {
     @TableField("aux_customer_id")
     private String auxCustomerId;
 
+    @TableField(exist = false)
+    @Property("客户名称")
+    private String auxCustomerName;
+
     @TableField("aux_supplier_id")
     private String auxSupplierId;
+
+    @TableField(exist = false)
+    @Property("供应商名称")
+    private String auxSupplierName;
 
     @TableField("aux_material_id")
     private String auxMaterialId;

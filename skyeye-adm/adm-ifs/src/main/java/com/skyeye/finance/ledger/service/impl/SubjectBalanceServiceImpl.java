@@ -20,6 +20,8 @@ import com.skyeye.finance.ledger.service.SubjectBalanceService;
 import com.skyeye.subject.classenum.AmountDirection;
 import com.skyeye.subject.entity.AccountSubject;
 import com.skyeye.subject.service.IfsAccountSubjectService;
+import com.skyeye.rest.crm.customer.service.ICrmCustomerService;
+import com.skyeye.rest.erp.supplier.service.IErpSupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +40,12 @@ public class SubjectBalanceServiceImpl extends SkyeyeBusinessServiceImpl<Subject
 
     @Autowired
     private IfsAccountSubjectService ifsAccountSubjectService;
+
+    @Autowired
+    private ICrmCustomerService iCrmCustomerService;
+
+    @Autowired
+    private IErpSupplierService iErpSupplierService;
 
     @Override
     public void applyPosting(JournalVoucher voucher, List<JournalEntry> entries) {
@@ -143,6 +151,8 @@ public class SubjectBalanceServiceImpl extends SkyeyeBusinessServiceImpl<Subject
             qw.eq(MybatisPlusUtil.toColumns(SubjectBalance::getSubjectId), params.get("subjectId"));
         }
         List<SubjectBalance> list = list(qw);
+        iCrmCustomerService.setName(list, "auxCustomerId", "auxCustomerName");
+        iErpSupplierService.setName(list, "auxSupplierId", "auxSupplierName");
         outputObject.setBeans(list);
         outputObject.settotal(list.size());
     }
@@ -155,6 +165,8 @@ public class SubjectBalanceServiceImpl extends SkyeyeBusinessServiceImpl<Subject
         qw.eq(MybatisPlusUtil.toColumns(SubjectBalance::getSetOfBooksId), params.get("setOfBooksId"));
         qw.eq(MybatisPlusUtil.toColumns(SubjectBalance::getPeriodCode), params.get("periodCode"));
         List<SubjectBalance> list = list(qw);
+        iCrmCustomerService.setName(list, "auxCustomerId", "auxCustomerName");
+        iErpSupplierService.setName(list, "auxSupplierId", "auxSupplierName");
         String debit = "0";
         String credit = "0";
         for (SubjectBalance b : list) {

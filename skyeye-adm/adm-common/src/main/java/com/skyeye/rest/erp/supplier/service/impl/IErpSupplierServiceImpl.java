@@ -2,13 +2,16 @@ package com.skyeye.rest.erp.supplier.service.impl;
 
 import com.skyeye.base.rest.service.impl.IServiceImpl;
 import com.skyeye.common.client.ExecuteFeignClient;
+import com.skyeye.common.constans.CacheConstants;
 import com.skyeye.rest.erp.supplier.rest.IErpSupplierRest;
 import com.skyeye.rest.erp.supplier.service.IErpSupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -29,5 +32,21 @@ public class IErpSupplierServiceImpl extends IServiceImpl implements IErpSupplie
     public List<Map<String, Object>> querySupplierListByIds(String ids) {
         Map<String, Object> params = Collections.singletonMap("ids", ids);
         return ExecuteFeignClient.get(() -> iErpSupplierRest.querySupplierListByIds(params)).getRows();
+    }
+
+    @Override
+    public Map<String, Object> queryEntityMationById(String id) {
+        return queryEntityMationByIds(id).stream().findFirst().orElse(new HashMap<>());
+    }
+
+    @Override
+    public List<Map<String, Object>> queryEntityMationByIds(String ids) {
+        List<Map<String, Object>> rows = querySupplierListByIds(ids);
+        return rows == null ? Collections.emptyList() : rows;
+    }
+
+    @Override
+    public String queryCacheKeyById(String id) {
+        return String.format(Locale.ROOT, "%s:%s", CacheConstants.ERP_SUPPLIER_CACHE_KEY, id);
     }
 }

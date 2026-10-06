@@ -32,6 +32,8 @@ import com.skyeye.books.service.IfsSetOfBooksService;
 import com.skyeye.subject.classenum.AmountDirection;
 import com.skyeye.subject.entity.AccountSubject;
 import com.skyeye.subject.service.IfsAccountSubjectService;
+import com.skyeye.rest.crm.customer.service.ICrmCustomerService;
+import com.skyeye.rest.erp.supplier.service.IErpSupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +64,12 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
 
     @Autowired
     private IfsSetOfBooksService ifsSetOfBooksService;
+
+    @Autowired
+    private ICrmCustomerService iCrmCustomerService;
+
+    @Autowired
+    private IErpSupplierService iErpSupplierService;
 
     /**
      * 列表筛选：期间编码走 customParamsMap.periodCode（如 2026-03）。
@@ -156,6 +164,8 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
                 .filter(StrUtil::isNotBlank).distinct().collect(java.util.stream.Collectors.toList());
             Map<String, Map<String, Object>> subjectMap = ifsAccountSubjectService.selectValIsMapByIds(subjectIds);
             voucher.getEntries().forEach(entry -> entry.setSubjectMation(subjectMap.get(entry.getSubjectId())));
+            iCrmCustomerService.setName(voucher.getEntries(), "auxCustomerId", "auxCustomerName");
+            iErpSupplierService.setName(voucher.getEntries(), "auxSupplierId", "auxSupplierName");
         }
         return voucher;
     }
@@ -363,6 +373,8 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
                 rows.add(row);
             }
         }
+        iCrmCustomerService.setNameForMap(rows, "auxCustomerId", "auxCustomerName");
+        iErpSupplierService.setNameForMap(rows, "auxSupplierId", "auxSupplierName");
         outputObject.setBeans(rows);
         outputObject.settotal(rows.size());
     }

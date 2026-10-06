@@ -376,6 +376,7 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
             acctEvent.put("eventType", "salesOut");
             acctEvent.put("sourceType", "ERP_DEPOT_OUT");
             acctEvent.put("customerId", entity.getHolderId());
+            acctEvent.put("costAmount", amount);
             acctEvent.put("summary", "销售出库-" + entity.getOddNumber());
         } else if (fromType == DepotOutFromType.OTHER_OUTLET.getKey()) {
             acctEvent.put("eventType", "otherOut");

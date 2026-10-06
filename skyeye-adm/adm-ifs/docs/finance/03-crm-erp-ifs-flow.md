@@ -173,6 +173,7 @@ graph TB
 | 出库 | 采购换货单 | 否 | |
 | 出库 | 借出出库单 | 否 | |
 | 盘点 | 盘点明细完成且有盈亏 | 是 | `stocktake` |
+| 调拨单 | 调拨审批通过 | 是 | `transfer` |
 
 采购退货/销售退货若 `needDepot=否`，在业务单审批通过时直接推，不再等仓库。
 
@@ -185,7 +186,8 @@ graph TB
 | CRM 发票 | 销售开票 | 审批通过 | 会计事件 + 台账开票金额回写 | `salesInvoice` |
 | ERP 应付 | 应付事项 | 审批通过 | 会计事件 | `payableConfirm` |
 | ERP 付款 | 供应商付款 | 审批通过 | 会计事件 + 收付款台账新增 | `payment` |
-| ERP 发票 | 采购发票 | 审批通过 | 会计事件 + 台账开票金额回写 | `purchaseInvoice` |
+| ERP 采购发票 | 采购发票 | 审批通过 | 会计事件 + 台账开票金额回写 | `purchaseInvoice` |
+| ERP 调拨 | 调拨单 | 审批通过 | 会计事件 | `transfer` |
 | ERP 采购退货 | 无需出库 | 退货单审批通过 | 会计事件 | `purchaseReturn` |
 | ERP 销售退货 | 无需入库 | 退货单审批通过 | 会计事件 | `salesReturn` |
 | IFS 费用 | 费用报销 | 审批通过 | 会计事件 | `expenseReimburse` |
@@ -202,14 +204,14 @@ graph TB
 | 编码 | 默认分录 | 账龄 |
 |------|----------|------|
 | `receivableConfirm` | 借 1122 / 贷 6001 | 应收 |
-| `salesInvoice` | 借 1122 / 贷收入+销项税 | 应收 |
+| `salesInvoice` | 无税额不出凭证；有税仅记销项税 | 不重复记应收 |
 | `receipt` | 借现金 / 贷 1122 | 冲应收 |
 | `payableConfirm` | 借 1405 / 贷 2202 | 应付 |
 | `purchaseIn` | 借库存 / 贷 2202 暂估 | 应付 |
 | `purchaseInvoice` | 冲暂估、进项税、正式应付 | 影响应付 |
 | `purchaseReturn` | 借应付 / 贷库存 | 冲应付 |
-| `salesOut` | 借 1122 / 贷 6001 | 应收 |
-| `salesReturn` | 借收入 / 贷 1122 | 冲应收 |
+| `salesOut` | 借成本 / 贷库存 | 否 |
+| `salesReturn` | 借库存 / 贷成本 | 否 |
 | `payment` | 借 2202 / 贷现金 | 冲应付 |
 | `otherIn` / `otherOut` | 库存 vs 营业外或费用 | 一般否 |
 | `prodPick` / `prodReturn` / `prodFinish` | 生产成本与库存 | 否 |
@@ -217,12 +219,12 @@ graph TB
 | `expenseReimburse` | 借费用 / 贷现金 | 否 |
 | `loanBorrow` / `loanRepay` | 其他应收 vs 现金 | 否 |
 | `mfgOverhead` | 借 5001 / 贷 5101 | 否 |
+| `transfer` | 借库存(调入仓) / 贷库存(调出仓) | 否 |
 | `manual` | 自选 | 1122或2202带辅助则进 |
 | `periodClose` | 损益进本年利润 | 否 |
 
 **有枚举但仓库未推财务（不要当成已同步）**
 
-- 库存调拨 `transfer`
 - 零售出库 / 零售退货
 - 门店申领 / 门店退货 / 门店物料退货
 - 销售换货入库 / 采购换货出库
