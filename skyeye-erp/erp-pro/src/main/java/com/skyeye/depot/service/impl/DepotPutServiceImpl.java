@@ -339,6 +339,11 @@ public class DepotPutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotPutDao, 
             acctEvent.put("costAmount", amount);
             acctEvent.put("departmentId", entity.getDepartmentId());
             acctEvent.put("summary", "生产退料-" + entity.getOddNumber());
+        } else if (fromType == DepotPutFromType.MACHIN_PUT.getKey()) {
+            acctEvent.put("eventType", "prodFinish");
+            acctEvent.put("sourceType", "ERP_DEPOT_PUT");
+            acctEvent.put("costAmount", amount);
+            acctEvent.put("summary", "完工入库-" + entity.getOddNumber());
         } else {
             return;
         }

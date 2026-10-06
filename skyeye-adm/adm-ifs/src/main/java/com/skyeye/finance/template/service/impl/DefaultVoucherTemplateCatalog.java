@@ -36,6 +36,11 @@ final class DefaultVoucherTemplateCatalog {
             def(BizAcctEventType.PURCHASE_IN, "采购入库暂估",
                 line(1, AmountDirection.BORROW, "amount", "{summary}", false, false, "1405", "1403"),
                 line(2, AmountDirection.LOAN, "amount", "{summary}", true, false, "2202", "220201")),
+            // 票到冲暂估：无税额时 taxAmount=0 该行跳过，仍借暂估贷正式应付
+            def(BizAcctEventType.PURCHASE_INVOICE, "采购发票校验",
+                line(1, AmountDirection.BORROW, "amountExTax", "{summary}", true, false, "2202"),
+                line(2, AmountDirection.BORROW, "taxAmount", "{summary}", false, false, "222101", "2221"),
+                line(3, AmountDirection.LOAN, "amount", "{summary}", true, false, "220201", "2202")),
             def(BizAcctEventType.PURCHASE_RETURN, "采购退货",
                 line(1, AmountDirection.BORROW, "amount", "{summary}", true, false, "2202", "220201"),
                 line(2, AmountDirection.LOAN, "amount", "{summary}", false, false, "1405", "1403")),

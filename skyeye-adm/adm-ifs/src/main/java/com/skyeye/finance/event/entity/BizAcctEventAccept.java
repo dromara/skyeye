@@ -47,6 +47,12 @@ public class BizAcctEventAccept {
     @ApiModelProperty(value = "成本金额")
     private String costAmount;
 
+    @ApiModelProperty(value = "不含税金额（发票校验等）")
+    private String amountExTax;
+
+    @ApiModelProperty(value = "税额（发票校验等）")
+    private String taxAmount;
+
     @ApiModelProperty(value = "部门id")
     private String departmentId;
 
