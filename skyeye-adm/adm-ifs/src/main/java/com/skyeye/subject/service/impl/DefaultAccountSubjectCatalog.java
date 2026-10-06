@@ -26,6 +26,7 @@ final class DefaultAccountSubjectCatalog {
             asset("1133", "其他应收款-备用金", null, false, false, false, false, false, false),
             asset("1403", "原材料", null, false, false, true, false, false, false),
             asset("1405", "库存商品", null, false, false, true, false, false, false),
+            asset("1901", "待处理财产损溢", null, false, false, false, false, false, false),
 
             debt("2202", "应付账款-暂估", null, false, true, false, false, false),
             debt("220201", "应付账款", "2202", false, true, false, false, false),

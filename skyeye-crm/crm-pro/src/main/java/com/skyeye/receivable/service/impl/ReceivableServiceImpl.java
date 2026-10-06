@@ -22,11 +22,12 @@ import com.skyeye.receivable.classenum.CrmReceivableAuthEnum;
 import com.skyeye.receivable.dao.ReceivableDao;
 import com.skyeye.receivable.entity.Receivable;
 import com.skyeye.receivable.service.ReceivableService;
-import org.checkerframework.checker.units.qual.A;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +52,8 @@ public class ReceivableServiceImpl extends SkyeyeBusinessServiceImpl<ReceivableD
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     @Override
     public Class getAuthEnumClass() {
@@ -86,6 +89,21 @@ public class ReceivableServiceImpl extends SkyeyeBusinessServiceImpl<ReceivableD
         iContactsService.setMationForMap(beans, "contactId", "contactMation");
         customerService.setMationForMap(beans,"objectId","objectMation");
         return beans;
+    }
+
+    @Override
+    public void approvalEndIsSuccess(Receivable entity) {
+        entity = selectById(entity.getId());
+        Map<String, Object> acctEvent = new HashMap<>();
+        acctEvent.put("eventType", "receivableConfirm");
+        acctEvent.put("sourceType", "CRM_RECEIVABLE");
+        acctEvent.put("sourceId", entity.getId());
+        acctEvent.put("sourceNo", entity.getOddNumber());
+        acctEvent.put("amount", StrUtil.blankToDefault(entity.getAmountPrice(), "0"));
+        acctEvent.put("customerId", entity.getObjectId());
+        acctEvent.put("voucherDate", entity.getInvoiceDate());
+        acctEvent.put("summary", "应收确认-" + entity.getOddNumber());
+        ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
     }
 
     @Override

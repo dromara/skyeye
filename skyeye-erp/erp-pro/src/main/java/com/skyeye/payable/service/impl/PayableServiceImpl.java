@@ -20,11 +20,13 @@ import com.skyeye.payable.classenum.ErpSupplierPayableAuthEnum;
 import com.skyeye.payable.dao.PayableDao;
 import com.skyeye.payable.entity.Payable;
 import com.skyeye.payable.service.PayableService;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import com.skyeye.supplier.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +50,9 @@ public class PayableServiceImpl extends SkyeyeBusinessServiceImpl<PayableDao, Pa
 
     @Autowired
     private SupplierService supplierService;
+
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     @Override
     public Class getAuthEnumClass() {
@@ -83,6 +88,21 @@ public class PayableServiceImpl extends SkyeyeBusinessServiceImpl<PayableDao, Pa
         iContactsService.setMationForMap(beans, "contactId", "contactMation");
         supplierService.setMationForMap(beans,"objectId","objectMation");
         return beans;
+    }
+
+    @Override
+    public void approvalEndIsSuccess(Payable entity) {
+        entity = selectById(entity.getId());
+        Map<String, Object> acctEvent = new HashMap<>();
+        acctEvent.put("eventType", "payableConfirm");
+        acctEvent.put("sourceType", "ERP_PAYABLE");
+        acctEvent.put("sourceId", entity.getId());
+        acctEvent.put("sourceNo", entity.getOddNumber());
+        acctEvent.put("amount", StrUtil.blankToDefault(entity.getAmountPrice(), "0"));
+        acctEvent.put("supplierId", entity.getObjectId());
+        acctEvent.put("voucherDate", entity.getInvoiceDate());
+        acctEvent.put("summary", "应付确认-" + entity.getOddNumber());
+        ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
     }
 
     @Override

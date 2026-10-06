@@ -19,55 +19,71 @@ final class DefaultVoucherTemplateCatalog {
     static List<TemplateDef> all() {
         return Arrays.asList(
             def(BizAcctEventType.PAYMENT, "供应商付款",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", true, false, "220201", "2202"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", false, false, "1002", "1001")),
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "220201", "2202"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "1002", "1001")),
+            def(BizAcctEventType.PAYABLE_CONFIRM, "应付确认",
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "1405", "1403"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "2202", "220201")),
+            def(BizAcctEventType.RECEIVABLE_CONFIRM, "应收确认",
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "1122"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "6001")),
             def(BizAcctEventType.RECEIPT, "客户回款",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", false, false, "1002", "1001"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", false, true, "1122")),
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "1002", "1001"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "1122")),
             def(BizAcctEventType.EXPENSE_REIMBURSE, "费用报销",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", false, false, "6602", "6601"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", false, false, "1002", "1001")),
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "6602", "6601"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "1002", "1001")),
             def(BizAcctEventType.LOAN_BORROW, "借款",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", false, false, "1221", "122101", "1133"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", false, false, "1002", "1001")),
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "1221", "122101", "1133"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "1002", "1001")),
             def(BizAcctEventType.LOAN_REPAY, "还款",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", false, false, "1002", "1001"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", false, false, "1221", "122101", "1133")),
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "1002", "1001"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "1221", "122101", "1133")),
             def(BizAcctEventType.PURCHASE_IN, "采购入库暂估",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", false, false, "1405", "1403"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", true, false, "2202", "220201")),
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "1405", "1403"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "2202", "220201")),
             // 票到冲暂估：无税额时 taxAmount=0 该行跳过，仍借暂估贷正式应付
             def(BizAcctEventType.PURCHASE_INVOICE, "采购发票校验",
-                line(1, AmountDirection.BORROW, "amountExTax", "{summary}", true, false, "2202"),
-                line(2, AmountDirection.BORROW, "taxAmount", "{summary}", false, false, "222101", "2221"),
-                line(3, AmountDirection.LOAN, "amount", "{summary}", true, false, "220201", "2202")),
+                line(1, AmountDirection.BORROW, "amountExTax", "{summary}", "2202"),
+                line(2, AmountDirection.BORROW, "taxAmount", "{summary}", "222101", "2221"),
+                line(3, AmountDirection.LOAN, "amount", "{summary}", "220201", "2202")),
             def(BizAcctEventType.PURCHASE_RETURN, "采购退货",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", true, false, "2202", "220201"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", false, false, "1405", "1403")),
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "2202", "220201"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "1405", "1403")),
             def(BizAcctEventType.SALES_OUT, "销售出库",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", false, true, "1122"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", false, false, "6001")),
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "1122"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "6001")),
+            // 无税额时税行跳过；出库已确认收入时请把模板改成只记销项税，避免与销售出库重复
+            def(BizAcctEventType.SALES_INVOICE, "销售开票",
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "1122"),
+                line(2, AmountDirection.LOAN, "amountExTax", "{summary}", "6001"),
+                line(3, AmountDirection.LOAN, "taxAmount", "{summary}", "22210101", "2221")),
             def(BizAcctEventType.SALES_RETURN, "销售退货",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", false, false, "6001"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", false, true, "1122")),
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "6001"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "1122")),
             def(BizAcctEventType.OTHER_IN, "其他入库",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", false, false, "1405", "1403"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", false, false, "6301", "6001")),
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "1405", "1403"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "6301", "6001")),
             def(BizAcctEventType.OTHER_OUT, "其他出库",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", false, false, "6711", "6602", "6401"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", false, false, "1405", "1403")),
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "6711", "6602", "6401"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "1405", "1403")),
             def(BizAcctEventType.PROD_PICK, "生产领料",
-                line(1, AmountDirection.BORROW, "costAmount", "{summary}", false, false, "5001"),
-                line(2, AmountDirection.LOAN, "costAmount", "{summary}", false, false, "1403", "1405")),
+                line(1, AmountDirection.BORROW, "costAmount", "{summary}", "5001"),
+                line(2, AmountDirection.LOAN, "costAmount", "{summary}", "1403", "1405")),
             def(BizAcctEventType.PROD_RETURN, "生产退料",
-                line(1, AmountDirection.BORROW, "costAmount", "{summary}", false, false, "1403", "1405"),
-                line(2, AmountDirection.LOAN, "costAmount", "{summary}", false, false, "5001")),
+                line(1, AmountDirection.BORROW, "costAmount", "{summary}", "1403", "1405"),
+                line(2, AmountDirection.LOAN, "costAmount", "{summary}", "5001")),
             def(BizAcctEventType.PROD_FINISH, "完工入库",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", false, false, "1405", "1403"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", false, false, "5001")),
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "1405", "1403"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "5001")),
             def(BizAcctEventType.MFG_OVERHEAD, "制造费用归集",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", false, false, "5001"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", false, false, "5101", "6602"))
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "5001"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "5101", "6602")),
+            def(BizAcctEventType.STOCKTAKE, "盘点盈亏",
+                line(1, AmountDirection.BORROW, "profitAmount", "{summary}", "1405", "1403"),
+                line(2, AmountDirection.LOAN, "profitAmount", "{summary}", "1901"),
+                line(3, AmountDirection.BORROW, "lossAmount", "{summary}", "1901"),
+                line(4, AmountDirection.LOAN, "lossAmount", "{summary}", "1405", "1403"))
         );
     }
 
@@ -76,8 +92,8 @@ final class DefaultVoucherTemplateCatalog {
     }
 
     private static LineDef line(int lineNo, AmountDirection direction, String amountExpr, String summaryTpl,
-                                boolean auxSupplier, boolean auxCustomer, String... subjectNums) {
-        return new LineDef(lineNo, direction.getKey(), amountExpr, summaryTpl, auxSupplier, auxCustomer, subjectNums);
+                                String... subjectNums) {
+        return new LineDef(lineNo, direction.getKey(), amountExpr, summaryTpl, subjectNums);
     }
 
     @Getter
@@ -95,8 +111,6 @@ final class DefaultVoucherTemplateCatalog {
         private final Integer direction;
         private final String amountExpr;
         private final String summaryTpl;
-        private final boolean auxSupplier;
-        private final boolean auxCustomer;
         private final String[] subjectNums;
     }
 }

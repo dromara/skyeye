@@ -39,22 +39,4 @@ public class VoucherTemplateLine extends SkyeyeLinkData {
     @TableField("summary_tpl")
     @ApiModelProperty(value = "摘要模板")
     private String summaryTpl;
-
-    @TableField("aux_customer")
-    private Integer auxCustomer;
-
-    @TableField("aux_supplier")
-    private Integer auxSupplier;
-
-    @TableField("aux_material")
-    private Integer auxMaterial;
-
-    @TableField("aux_department")
-    private Integer auxDepartment;
-
-    @TableField("aux_project")
-    private Integer auxProject;
-
-    @TableField("aux_depot")
-    private Integer auxDepot;
 }

@@ -319,6 +319,8 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
         String setOfBooksId = params.get("setOfBooksId").toString();
         String periodCode = params.get("periodCode").toString();
         String subjectId = params.get("subjectId") == null ? null : params.get("subjectId").toString();
+        String auxCustomerId = params.get("auxCustomerId") == null ? null : params.get("auxCustomerId").toString();
+        String auxSupplierId = params.get("auxSupplierId") == null ? null : params.get("auxSupplierId").toString();
 
         QueryWrapper<JournalVoucher> qw = new QueryWrapper<>();
         qw.eq(MybatisPlusUtil.toColumns(JournalVoucher::getSetOfBooksId), setOfBooksId);
@@ -333,6 +335,12 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
                 if (StrUtil.isNotBlank(subjectId) && !subjectId.equals(e.getSubjectId())) {
                     continue;
                 }
+                if (StrUtil.isNotBlank(auxCustomerId) && !auxCustomerId.equals(e.getAuxCustomerId())) {
+                    continue;
+                }
+                if (StrUtil.isNotBlank(auxSupplierId) && !auxSupplierId.equals(e.getAuxSupplierId())) {
+                    continue;
+                }
                 Map<String, Object> row = new java.util.HashMap<>();
                 row.put("voucherId", v.getId());
                 row.put("oddNumber", v.getOddNumber());
@@ -345,6 +353,10 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
                 row.put("subjectNum", subject == null ? "" : subject.getNum());
                 row.put("direction", e.getDirection());
                 row.put("amount", e.getAmount());
+                row.put("auxCustomerId", e.getAuxCustomerId());
+                row.put("auxSupplierId", e.getAuxSupplierId());
+                row.put("auxDepartmentId", e.getAuxDepartmentId());
+                row.put("auxDepotId", e.getAuxDepotId());
                 row.put("summary", e.getSummary());
                 row.put("reverseOfId", v.getReverseOfId());
                 row.put("state", v.getState());

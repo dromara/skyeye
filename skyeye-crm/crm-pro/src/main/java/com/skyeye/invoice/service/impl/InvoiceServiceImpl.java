@@ -28,6 +28,7 @@ import com.skyeye.invoice.entity.Invoice;
 import com.skyeye.invoice.service.InvoiceHeaderService;
 import com.skyeye.invoice.service.InvoiceService;
 import com.skyeye.payment.service.PaymentCollectionService;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import com.skyeye.rest.ifs.receivepayment.service.IfsReceivePaymentService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,9 @@ public class InvoiceServiceImpl extends SkyeyeBusinessServiceImpl<InvoiceDao, In
 
     @Autowired
     private IfsReceivePaymentService ifsReceivePaymentService;
+
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     @Override
     public Class getAuthEnumClass() {
@@ -130,6 +134,20 @@ public class InvoiceServiceImpl extends SkyeyeBusinessServiceImpl<InvoiceDao, In
         map.put("fromId", entity.getPaymentCollectionId());
         map.put("invoicePrice", entity.getPrice());
         ifsReceivePaymentService.updateReceivePayment(map);
+        entity = selectById(entity.getId());
+        String amount = StrUtil.blankToDefault(entity.getPrice(), "0");
+        Map<String, Object> acctEvent = new HashMap<>();
+        acctEvent.put("eventType", "salesInvoice");
+        acctEvent.put("sourceType", "CRM_INVOICE");
+        acctEvent.put("sourceId", entity.getId());
+        acctEvent.put("sourceNo", entity.getOddNumber());
+        acctEvent.put("amount", amount);
+        acctEvent.put("amountExTax", amount);
+        acctEvent.put("taxAmount", "0");
+        acctEvent.put("customerId", entity.getObjectId());
+        acctEvent.put("voucherDate", entity.getInvoicTime());
+        acctEvent.put("summary", "销售开票-" + entity.getOddNumber());
+        ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
     }
 
     @Override

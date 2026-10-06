@@ -32,12 +32,6 @@ public class IfsAccountSubjectController {
     @Autowired
     private IfsAccountSubjectService ifsAccountSubjectService;
 
-    /**
-     * 获取会计科目列表
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "ifsaccountsubject001", value = "获取会计科目列表", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/IfsAccountSubjectController/queryIfsAccountSubjectList")
@@ -45,12 +39,6 @@ public class IfsAccountSubjectController {
         ifsAccountSubjectService.queryPageList(inputObject, outputObject);
     }
 
-    /**
-     * 新增/编辑会计科目
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "writeIfsAccountSubject", value = "新增/编辑会计科目", method = "POST", allUse = "1")
     @ApiImplicitParams(classBean = AccountSubject.class)
     @RequestMapping("/post/IfsAccountSubjectController/writeIfsAccountSubject")
@@ -58,12 +46,6 @@ public class IfsAccountSubjectController {
         ifsAccountSubjectService.saveOrUpdateEntity(inputObject, outputObject);
     }
 
-    /**
-     * 删除会计科目信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "ifsaccountsubject005", value = "删除会计科目信息", method = "DELETE", allUse = "1")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -72,22 +54,13 @@ public class IfsAccountSubjectController {
         ifsAccountSubjectService.deleteById(inputObject, outputObject);
     }
 
-    /**
-     * 获取已启用的会计科目
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryEnabledSubjectList", value = "获取已启用的会计科目", method = "GET", allUse = "2")
     @RequestMapping("/post/IfsAccountSubjectController/queryEnabledSubjectList")
     public void queryEnabledSubjectList(InputObject inputObject, OutputObject outputObject) {
         ifsAccountSubjectService.queryEnabledSubjectList(inputObject, outputObject);
     }
 
-    /**
-     * 初始化默认会计科目（按编码补建，已存在跳过）
-     */
-    @ApiOperation(id = "initDefaultAccountSubjects", value = "初始化默认会计科目", method = "POST", allUse = "1")
+    @ApiOperation(id = "initDefaultAccountSubjects", value = "初始化默认会计科目（按编码补建，已存在跳过）", method = "POST", allUse = "1")
     @RequestMapping("/post/IfsAccountSubjectController/initDefaultAccountSubjects")
     public void initDefaultAccountSubjects(InputObject inputObject, OutputObject outputObject) {
         ifsAccountSubjectService.initDefaultSubjects(inputObject, outputObject);

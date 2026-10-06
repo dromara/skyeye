@@ -11,6 +11,7 @@ import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
+import com.skyeye.common.enumeration.WhetherEnum;
 import lombok.Data;
 
 import com.skyeye.subject.classenum.AccountSubjectType;
@@ -33,7 +34,7 @@ import com.skyeye.common.enumeration.EnableEnum;
 public class AccountSubject extends BaseGeneralInfo {
 
     @TableField(value = "num")
-    @ApiModelProperty(value = "编号", required = "required")
+    @ApiModelProperty(value = "编号", required = "required", fuzzyLike = true)
     private String num;
 
     @TableField(value = "type")
@@ -61,31 +62,31 @@ public class AccountSubject extends BaseGeneralInfo {
     private Integer isLeaf;
 
     @TableField("aux_customer")
-    @ApiModelProperty(value = "辅助核算-客户")
+    @ApiModelProperty(value = "辅助核算-客户", required = "required,num", enumClass = WhetherEnum.class)
     private Integer auxCustomer;
 
     @TableField("aux_supplier")
-    @ApiModelProperty(value = "辅助核算-供应商")
+    @ApiModelProperty(value = "辅助核算-供应商", required = "required,num", enumClass = WhetherEnum.class)
     private Integer auxSupplier;
 
     @TableField("aux_material")
-    @ApiModelProperty(value = "辅助核算-物料")
+    @ApiModelProperty(value = "辅助核算-物料", required = "required,num", enumClass = WhetherEnum.class)
     private Integer auxMaterial;
 
     @TableField("aux_department")
-    @ApiModelProperty(value = "辅助核算-部门")
+    @ApiModelProperty(value = "辅助核算-部门", required = "required,num", enumClass = WhetherEnum.class)
     private Integer auxDepartment;
 
     @TableField("aux_project")
-    @ApiModelProperty(value = "辅助核算-项目")
+    @ApiModelProperty(value = "辅助核算-项目", required = "required,num", enumClass = WhetherEnum.class)
     private Integer auxProject;
 
     @TableField("aux_depot")
-    @ApiModelProperty(value = "辅助核算-仓库")
+    @ApiModelProperty(value = "辅助核算-仓库", required = "required,num", enumClass = WhetherEnum.class)
     private Integer auxDepot;
 
     @TableField("cash_flag")
-    @ApiModelProperty(value = "现金等价物")
+    @ApiModelProperty(value = "现金等价物", required = "required,num", enumClass = WhetherEnum.class)
     private Integer cashFlag;
 
 }

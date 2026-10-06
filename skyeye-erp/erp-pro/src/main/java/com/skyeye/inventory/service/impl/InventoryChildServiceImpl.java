@@ -27,6 +27,7 @@ import com.skyeye.depot.service.ErpDepotService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.inventory.classenum.InventoryChildState;
 import com.skyeye.inventory.dao.InventoryChildDao;
+import com.skyeye.inventory.entity.Inventory;
 import com.skyeye.inventory.entity.InventoryChild;
 import com.skyeye.inventory.entity.InventoryChildCode;
 import com.skyeye.inventory.service.InventoryChildCodeService;
@@ -42,6 +43,7 @@ import com.skyeye.material.entity.MaterialNormsCode;
 import com.skyeye.material.service.MaterialNormsCodeService;
 import com.skyeye.material.service.MaterialNormsService;
 import com.skyeye.material.service.MaterialService;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import com.skyeye.service.ErpCommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,6 +82,9 @@ public class InventoryChildServiceImpl extends SkyeyeLinkDataServiceImpl<Invento
 
     @Autowired
     private InventoryService inventoryService;
+
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     @Autowired
     private ErpDepotService erpDepotService;
@@ -235,6 +240,7 @@ public class InventoryChildServiceImpl extends SkyeyeLinkDataServiceImpl<Invento
 
         // 更新盘点子单据信息
         updateInventory(inventoryChild, realNumber, profitNum, lossNum, profitNormsCode, lossNormsCode);
+        pushStocktakeEvent(selectById(id));
     }
 
     private void handleProfitNorms(List<String> profitNormsCodeList, InventoryChild inventoryChild, List<String> inventoryChildCodeNumList) {
@@ -315,5 +321,28 @@ public class InventoryChildServiceImpl extends SkyeyeLinkDataServiceImpl<Invento
         updateEntity(inventoryChild, StrUtil.EMPTY);
         // 更新盘点任务单据的已盘点数量
         inventoryService.setInventoriedNum(inventoryChild.getParentId(), inventoryChild.getPlanNumber());
+    }
+
+    private void pushStocktakeEvent(InventoryChild inventoryChild) {
+        String profit = StrUtil.blankToDefault(inventoryChild.getProfitPrice(), CommonNumConstants.NUM_ZERO.toString());
+        String loss = StrUtil.blankToDefault(inventoryChild.getLossPrice(), CommonNumConstants.NUM_ZERO.toString());
+        if (CalculationUtil.compareTo(profit, CommonNumConstants.NUM_ZERO.toString(), ErpConstants.NUM_AFTER_DOT, RoundingMode.UP) == 0
+            && CalculationUtil.compareTo(loss, CommonNumConstants.NUM_ZERO.toString(), ErpConstants.NUM_AFTER_DOT, RoundingMode.UP) == 0) {
+            return;
+        }
+        Inventory parent = inventoryService.selectById(inventoryChild.getParentId());
+        Map<String, Object> acctEvent = new HashMap<>();
+        acctEvent.put("eventType", "stocktake");
+        acctEvent.put("sourceType", "ERP_INVENTORY_CHILD");
+        acctEvent.put("sourceId", inventoryChild.getId());
+        acctEvent.put("sourceNo", inventoryChild.getOddNumber());
+        acctEvent.put("profitAmount", profit);
+        acctEvent.put("lossAmount", loss);
+        acctEvent.put("amount", CalculationUtil.add(profit, loss, ErpConstants.NUM_AFTER_DOT));
+        acctEvent.put("depotId", inventoryChild.getDepotId());
+        acctEvent.put("materialId", inventoryChild.getMaterialId());
+        acctEvent.put("voucherDate", parent == null ? DateUtil.getYmdTimeAndToString() : parent.getOperTime());
+        acctEvent.put("summary", "盘点盈亏-" + inventoryChild.getOddNumber());
+        ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
     }
 }

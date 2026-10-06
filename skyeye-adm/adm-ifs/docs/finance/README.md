@@ -7,6 +7,7 @@
 - [00-policy.md](00-policy.md)
 - [01-biz-event-dict.md](01-biz-event-dict.md)
 - [02-voucher-template.md](02-voucher-template.md)
+- [03-crm-erp-ifs-flow.md](03-crm-erp-ifs-flow.md) CRM / ERP / IFS 全流程（带 IFS 标注）
 
 ## DDL
 
@@ -43,7 +44,10 @@
 12. 退料入库审批通过 → `prodReturn`
 13. 存货核算计价过账 → 按 `billType` 生成凭证
 14. 完工/制费 → `MfgCostAcctController`（手工补记）
-（供应商/客户发票、调拨不出凭证；资金类以付款/回款为准。盘点盈亏待盘完明细后再接）
+15. CRM 应收事项审批通过 → `receivableConfirm`
+16. ERP 应付事项审批通过 → `payableConfirm`
+17. CRM 销售开票审批通过 → `salesInvoice`
+18. 盘点完成 → `stocktake`
 
 ## 前端路由（Cloud_Vue）
 
@@ -53,6 +57,12 @@
 - `/ifs/template/templateList` 凭证模板
 - `/ifs/report/financialReport` 财务报表
 - `/ifs/invAccounting/invAcctList` 存货核算
+- `/ifs/report/counterpartAging` 往来账龄
+- `/ifs/event/bizAcctEventList` 业务会计事件
+- `/ifs/costDomain/costDomainList` 成本域
+- `/ifs/mfg/mfgCostAcct` 生产成本记账
+- `/ifs/dealingsAccounts/receivable` 应收账款（CRM 应收事项）
+- `/ifs/dealingsAccounts/meet` 应付账款（ERP 应付事项）
 
 ## 上线检查清单
 

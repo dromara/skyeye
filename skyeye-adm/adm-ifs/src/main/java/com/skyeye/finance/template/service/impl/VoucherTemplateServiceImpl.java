@@ -177,8 +177,6 @@ public class VoucherTemplateServiceImpl extends SkyeyeBusinessServiceImpl<Vouche
                     line.setSubjectId(subject.getId());
                     line.setAmountExpr(lineDef.getAmountExpr());
                     line.setSummaryTpl(lineDef.getSummaryTpl());
-                    line.setAuxSupplier(lineDef.isAuxSupplier() ? WhetherEnum.ENABLE_USING.getKey() : WhetherEnum.DISABLE_USING.getKey());
-                    line.setAuxCustomer(lineDef.isAuxCustomer() ? WhetherEnum.ENABLE_USING.getKey() : WhetherEnum.DISABLE_USING.getKey());
                     lines.add(line);
                 }
                 if (!missingNums.isEmpty()) {
@@ -276,22 +274,22 @@ public class VoucherTemplateServiceImpl extends SkyeyeBusinessServiceImpl<Vouche
             entry.setDirection(line.getDirection());
             entry.setAmount(amount);
             entry.setSummary(renderSummary(line.getSummaryTpl(), payload));
-            if (Integer.valueOf(1).equals(line.getAuxCustomer())) {
+            if (WhetherEnum.ENABLE_USING.getKey().equals(subject.getAuxCustomer())) {
                 entry.setAuxCustomerId(str(payload.get("customerId"), null));
             }
-            if (Integer.valueOf(1).equals(line.getAuxSupplier())) {
+            if (WhetherEnum.ENABLE_USING.getKey().equals(subject.getAuxSupplier())) {
                 entry.setAuxSupplierId(str(payload.get("supplierId"), null));
             }
-            if (Integer.valueOf(1).equals(line.getAuxMaterial())) {
+            if (WhetherEnum.ENABLE_USING.getKey().equals(subject.getAuxMaterial())) {
                 entry.setAuxMaterialId(str(payload.get("materialId"), null));
             }
-            if (Integer.valueOf(1).equals(line.getAuxDepartment())) {
+            if (WhetherEnum.ENABLE_USING.getKey().equals(subject.getAuxDepartment())) {
                 entry.setAuxDepartmentId(str(payload.get("departmentId"), null));
             }
-            if (Integer.valueOf(1).equals(line.getAuxProject())) {
+            if (WhetherEnum.ENABLE_USING.getKey().equals(subject.getAuxProject())) {
                 entry.setAuxProjectId(str(payload.get("projectId"), null));
             }
-            if (Integer.valueOf(1).equals(line.getAuxDepot())) {
+            if (WhetherEnum.ENABLE_USING.getKey().equals(subject.getAuxDepot())) {
                 entry.setAuxDepotId(str(payload.get("depotId"), null));
             }
             entries.add(entry);

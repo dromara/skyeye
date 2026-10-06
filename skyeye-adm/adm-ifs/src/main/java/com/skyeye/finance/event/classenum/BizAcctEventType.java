@@ -14,6 +14,7 @@ public enum BizAcctEventType implements SkyeyeEnumClass {
     PURCHASE_INVOICE("purchaseInvoice", "采购发票校验", true, false),
     PURCHASE_RETURN("purchaseReturn", "采购退货", true, false),
     SALES_OUT("salesOut", "销售出库", true, false),
+    SALES_INVOICE("salesInvoice", "销售开票", true, false),
     SALES_RETURN("salesReturn", "销售退货", true, false),
     PAYABLE_CONFIRM("payableConfirm", "应付确认", true, false),
     PAYMENT("payment", "供应商付款", true, false),

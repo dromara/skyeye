@@ -73,7 +73,9 @@ public class JournalVoucherController {
     @ApiImplicitParams({
         @ApiImplicitParam(id = "setOfBooksId", name = "setOfBooksId", value = "账套id", required = "required"),
         @ApiImplicitParam(id = "periodCode", name = "periodCode", value = "期间", required = "required"),
-        @ApiImplicitParam(id = "subjectId", name = "subjectId", value = "科目id")
+        @ApiImplicitParam(id = "subjectId", name = "subjectId", value = "科目id"),
+        @ApiImplicitParam(id = "auxCustomerId", name = "auxCustomerId", value = "辅助客户id"),
+        @ApiImplicitParam(id = "auxSupplierId", name = "auxSupplierId", value = "辅助供应商id")
     })
     @RequestMapping("/post/JournalVoucherController/queryDetailLedger")
     public void queryDetailLedger(InputObject inputObject, OutputObject outputObject) {
