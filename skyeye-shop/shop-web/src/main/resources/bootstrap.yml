@@ -46,6 +46,8 @@ webroot:
   skyeye-pro: skyeye-pro-${spring.profiles.active}
   # ERP相关的服务
   skyeye-erp: skyeye-erp-${spring.profiles.active}
+  # 财政相关服务（商城结算/提现推会计事件）
+  skyeye-ifs: skyeye-ifs-${spring.profiles.active}
 
 seata:
   # 总开关。默认 false：不连 TC、@GlobalTransactional 不生效；生产启用：SEATA_ENABLED=true

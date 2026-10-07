@@ -64,4 +64,15 @@ public class AuthPointController {
         authPointService.deleteById(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "migrateAuthPoint", value = "一键迁移菜单权限点到目标菜单", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "sourceObjectId", name = "sourceObjectId", value = "源菜单id", required = "required"),
+        @ApiImplicitParam(id = "sourceObjectKey", name = "sourceObjectKey", value = "源菜单类型(PC/APP服务类名)", required = "required"),
+        @ApiImplicitParam(id = "targetObjectId", name = "targetObjectId", value = "目标菜单id", required = "required"),
+        @ApiImplicitParam(id = "namePrefix", name = "namePrefix", value = "名称前缀（非必填，迁移后拼到权限点名称前）")})
+    @RequestMapping("/post/AuthPointController/migrateAuthPoint")
+    public void migrateAuthPoint(InputObject inputObject, OutputObject outputObject) {
+        authPointService.migrateAuthPoint(inputObject, outputObject);
+    }
+
 }

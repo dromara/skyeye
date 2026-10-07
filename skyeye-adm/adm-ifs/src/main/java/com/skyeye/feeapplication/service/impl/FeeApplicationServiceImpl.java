@@ -16,6 +16,8 @@ import com.skyeye.exception.CustomException;
 import com.skyeye.feeapplication.dao.FeeApplicationDao;
 import com.skyeye.feeapplication.entity.FeeApplication;
 import com.skyeye.feeapplication.service.FeeApplicationService;
+import com.skyeye.finance.event.classenum.BizAcctEventType;
+import com.skyeye.finance.event.service.BizAcctEventService;
 import com.skyeye.organization.service.IDepmentService;
 import com.skyeye.rest.project.service.IProProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,9 @@ public class FeeApplicationServiceImpl extends SkyeyeBusinessServiceImpl<FeeAppl
 
     @Autowired
     private IProProjectService iProProjectService;
+
+    @Autowired
+    private BizAcctEventService bizAcctEventService;
 
     @Override
     protected void validatorEntity(FeeApplication entity) {
@@ -69,6 +74,25 @@ public class FeeApplicationServiceImpl extends SkyeyeBusinessServiceImpl<FeeAppl
         iAuthUserService.setDataMation(feeApplication, FeeApplication::getApplicantId);
         iProProjectService.setDataMation(feeApplication, FeeApplication::getProjectId);
         return feeApplication;
+    }
+
+    @Override
+    protected void approvalEndIsSuccess(FeeApplication entity) {
+        // 业财一体：费用申请审批通过后挂账（借费用 / 贷其他应付款）
+        try {
+            Map<String, Object> event = new HashMap<>();
+            event.put("eventType", BizAcctEventType.EXPENSE_APPLY.getKey());
+            event.put("sourceType", "IFS_FEE_APPLICATION");
+            event.put("sourceId", entity.getId());
+            event.put("sourceNo", entity.getOddNumber());
+            event.put("amount", StrUtil.blankToDefault(entity.getPrice(), "0"));
+            event.put("departmentId", entity.getDepartmentId());
+            event.put("projectId", entity.getProjectId());
+            event.put("summary", "费用申请-" + entity.getOddNumber());
+            bizAcctEventService.acceptEvent(event);
+        } catch (Exception ignored) {
+            // 失败事件可在业财事件台重试
+        }
     }
 
     @Override

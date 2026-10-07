@@ -39,8 +39,11 @@ import org.springframework.stereotype.Service;
 
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 会计凭证：草稿 → 审核 → 过账；已过账可冲销。
@@ -82,6 +85,63 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
             wrapper.eq(MybatisPlusUtil.toColumns(JournalVoucher::getPeriodCode), periodCode);
         }
         return wrapper;
+    }
+
+    @Override
+    public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
+        List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
+        fillReverseRelation(beans);
+        return beans;
+    }
+
+    /**
+     * 列表补充冲销关系：冲销凭证显示「冲销：原凭证号」；原凭证若被冲销显示「已被冲销：冲销凭证号」。
+     */
+    private void fillReverseRelation(List<Map<String, Object>> beans) {
+        if (CollectionUtil.isEmpty(beans)) {
+            return;
+        }
+        Set<String> reverseOfIds = beans.stream()
+            .map(b -> (String) b.get("reverseOfId"))
+            .filter(StrUtil::isNotBlank)
+            .collect(Collectors.toSet());
+        Set<String> rowIds = beans.stream()
+            .map(b -> (String) b.get("id"))
+            .filter(StrUtil::isNotBlank)
+            .collect(Collectors.toSet());
+        Map<String, String> idToOdd = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(reverseOfIds)) {
+            List<JournalVoucher> origins = listByIds(reverseOfIds);
+            for (JournalVoucher v : origins) {
+                idToOdd.put(v.getId(), v.getOddNumber());
+            }
+        }
+        Map<String, String> originIdToReverseOdd = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(rowIds)) {
+            QueryWrapper<JournalVoucher> qw = new QueryWrapper<>();
+            qw.in(MybatisPlusUtil.toColumns(JournalVoucher::getReverseOfId), rowIds);
+            List<JournalVoucher> reverses = list(qw);
+            for (JournalVoucher v : reverses) {
+                if (StrUtil.isNotBlank(v.getReverseOfId())) {
+                    originIdToReverseOdd.put(v.getReverseOfId(), v.getOddNumber());
+                }
+            }
+        }
+        for (Map<String, Object> row : beans) {
+            String reverseOfId = (String) row.get("reverseOfId");
+            String id = (String) row.get("id");
+            if (StrUtil.isNotBlank(reverseOfId)) {
+                String originOdd = idToOdd.get(reverseOfId);
+                row.put("reverseOfOddNumber", originOdd);
+                row.put("reverseRelation", StrUtil.isNotBlank(originOdd) ? ("冲销：" + originOdd) : "冲销凭证");
+            } else if (StrUtil.isNotBlank(id) && originIdToReverseOdd.containsKey(id)) {
+                String revOdd = originIdToReverseOdd.get(id);
+                row.put("reversedByOddNumber", revOdd);
+                row.put("reverseRelation", "已被冲销：" + revOdd);
+            } else {
+                row.put("reverseRelation", "");
+            }
+        }
     }
 
     @Override
@@ -158,6 +218,24 @@ public class JournalVoucherServiceImpl extends SkyeyeBusinessServiceImpl<Journal
     @Override
     public JournalVoucher selectById(String id) {
         JournalVoucher voucher = super.selectById(id);
+        if (ObjectUtil.isEmpty(voucher)) {
+            return voucher;
+        }
+        if (StrUtil.isNotBlank(voucher.getReverseOfId())) {
+            JournalVoucher origin = super.selectById(voucher.getReverseOfId());
+            if (ObjectUtil.isNotEmpty(origin)) {
+                voucher.setReverseOfOddNumber(origin.getOddNumber());
+            }
+        }
+        if (StrUtil.isNotBlank(voucher.getId())) {
+            QueryWrapper<JournalVoucher> qw = new QueryWrapper<>();
+            qw.eq(MybatisPlusUtil.toColumns(JournalVoucher::getReverseOfId), voucher.getId());
+            qw.last("limit 1");
+            JournalVoucher reverse = getOne(qw, false);
+            if (ObjectUtil.isNotEmpty(reverse)) {
+                voucher.setReversedByOddNumber(reverse.getOddNumber());
+            }
+        }
         ifsSetOfBooksService.setDataMation(voucher, JournalVoucher::getSetOfBooksId);
         if (CollectionUtil.isNotEmpty(voucher.getEntries())) {
             List<String> subjectIds = voucher.getEntries().stream().map(JournalEntry::getSubjectId)

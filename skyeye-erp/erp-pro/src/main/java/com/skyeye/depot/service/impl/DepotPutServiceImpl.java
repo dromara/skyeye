@@ -341,10 +341,43 @@ public class DepotPutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotPutDao, 
             acctEvent.put("departmentId", entity.getDepartmentId());
             acctEvent.put("summary", "生产退料-" + entity.getOddNumber());
         } else if (fromType == DepotPutFromType.MACHIN_PUT.getKey()) {
+            // 生产成本：加工入库审批通过自动推完工入库凭证（制费仍走 IFS 手工归集）
             acctEvent.put("eventType", "prodFinish");
             acctEvent.put("sourceType", "ERP_DEPOT_PUT");
             acctEvent.put("costAmount", amount);
             acctEvent.put("summary", "完工入库-" + entity.getOddNumber());
+        } else if (fromType == DepotPutFromType.RETAIL_RETURNS.getKey()) {
+            acctEvent.put("eventType", "retailReturn");
+            acctEvent.put("sourceType", "ERP_DEPOT_PUT");
+            acctEvent.put("costAmount", amount);
+            acctEvent.put("summary", "零售退货-" + entity.getOddNumber());
+        } else if (fromType == DepotPutFromType.SHOP_RETURNS.getKey()) {
+            acctEvent.put("eventType", "storeReturn");
+            acctEvent.put("sourceType", "ERP_DEPOT_PUT");
+            acctEvent.put("costAmount", amount);
+            acctEvent.put("summary", "门店退货-" + entity.getOddNumber());
+        } else if (fromType == DepotPutFromType.SHOP_CONFIRM_RETURNS.getKey()) {
+            acctEvent.put("eventType", "storeMaterialReturn");
+            acctEvent.put("sourceType", "ERP_DEPOT_PUT");
+            acctEvent.put("costAmount", amount);
+            acctEvent.put("summary", "门店物料退货-" + entity.getOddNumber());
+        } else if (fromType == DepotPutFromType.CONFIRM_RETURN.getKey()) {
+            acctEvent.put("eventType", "materialReturn");
+            acctEvent.put("sourceType", "ERP_DEPOT_PUT");
+            acctEvent.put("costAmount", amount);
+            acctEvent.put("departmentId", entity.getDepartmentId());
+            acctEvent.put("summary", "物料退货-" + entity.getOddNumber());
+        } else if (fromType == DepotPutFromType.SALES_EXCHANGES.getKey()) {
+            acctEvent.put("eventType", "exchangeIn");
+            acctEvent.put("sourceType", "ERP_DEPOT_PUT");
+            acctEvent.put("customerId", entity.getHolderId());
+            acctEvent.put("costAmount", amount);
+            acctEvent.put("summary", "销售换货入库-" + entity.getOddNumber());
+        } else if (fromType == DepotPutFromType.LOANIN.getKey()) {
+            acctEvent.put("eventType", "stockReturn");
+            acctEvent.put("sourceType", "ERP_DEPOT_PUT");
+            acctEvent.put("customerId", entity.getHolderId());
+            acctEvent.put("summary", "归还入库-" + entity.getOddNumber());
         } else {
             return;
         }

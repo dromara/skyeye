@@ -86,6 +86,14 @@ public class JournalVoucher extends BaseGeneralInfo {
     private String reverseOfId;
 
     @TableField(exist = false)
+    @Property("冲销原凭证号（列表展示）")
+    private String reverseOfOddNumber;
+
+    @TableField(exist = false)
+    @Property("被冲销后生成的冲销凭证号（原凭证列表展示）")
+    private String reversedByOddNumber;
+
+    @TableField(exist = false)
     @ApiModelProperty(value = "分录列表", required = "required,json")
     private List<JournalEntry> entries;
 }

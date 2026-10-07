@@ -5,6 +5,8 @@
 package com.skyeye.menu.service;
 
 import com.skyeye.base.business.service.SkyeyeBusinessService;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.menu.entity.AuthPoint;
 
 /**
@@ -16,5 +18,10 @@ import com.skyeye.menu.entity.AuthPoint;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目
  */
 public interface AuthPointService extends SkyeyeBusinessService<AuthPoint> {
+
+    /**
+     * 将某菜单下全部权限点迁移到目标菜单，可选名称前缀。
+     */
+    void migrateAuthPoint(InputObject inputObject, OutputObject outputObject);
 
 }

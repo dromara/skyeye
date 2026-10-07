@@ -21,6 +21,7 @@ import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.NumberParseUtil;
 import com.skyeye.common.util.ToolUtil;
@@ -48,6 +49,7 @@ import com.skyeye.order.enums.OrderAfterSaleStatus;
 import com.skyeye.order.enums.ShopOrderItemOtherState;
 import com.skyeye.order.service.OrderAfterSaleService;
 import com.skyeye.order.service.OrderItemService;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import com.skyeye.rest.pay.service.IPayService;
 import com.skyeye.service.MemberService;
 import com.skyeye.store.classenum.StoreNature;
@@ -132,6 +134,9 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
 
     @Autowired
     private IPayService iPayService;
+
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     @Autowired
     private TransactionTemplate transactionTemplate;
@@ -934,6 +939,17 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
                 acc.setAvailableAmount(nvl(acc.getAvailableAmount()) + real);
                 return real;
             });
+        // 业财一体：冻结转可提现后推会计事件（金额分→元）
+        if (releaseAmt > 0) {
+            Map<String, Object> acctEvent = new HashMap<>();
+            acctEvent.put("eventType", "shopSettle");
+            acctEvent.put("sourceType", "SHOP_STORE_SETTLE");
+            acctEvent.put("sourceId", itemId);
+            acctEvent.put("sourceNo", itemId);
+            acctEvent.put("amount", CalculationUtil.divide(String.valueOf(releaseAmt), "100", CommonNumConstants.NUM_TWO));
+            acctEvent.put("summary", remark);
+            ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
+        }
     }
 
     private boolean isHoldDue(ShopStoreLedger hold) {
@@ -1170,6 +1186,17 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
                 log.warn("提现成功状态更新冲突 withdrawId={}", withdrawId);
             }
             shopStoreWithdrawService.refreshCache(withdrawId);
+            // 业财一体：提现打款成功推会计事件（金额分→元）
+            if (amount > 0) {
+                Map<String, Object> acctEvent = new HashMap<>();
+                acctEvent.put("eventType", "shopWithdraw");
+                acctEvent.put("sourceType", "SHOP_STORE_WITHDRAW");
+                acctEvent.put("sourceId", withdrawId);
+                acctEvent.put("sourceNo", StrUtil.blankToDefault(withdraw.getOutTransferNo(), withdrawId));
+                acctEvent.put("amount", CalculationUtil.divide(String.valueOf(amount), "100", CommonNumConstants.NUM_TWO));
+                acctEvent.put("summary", "商城提现打款-" + StrUtil.blankToDefault(withdraw.getOutTransferNo(), withdrawId));
+                ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
+            }
         });
     }
 

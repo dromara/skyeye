@@ -177,6 +177,7 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
             List<String> stateList = Arrays.asList(new String[]{FlowableStateEnum.PASS.getKey(), ErpOrderStateEnum.PARTIALLY_COMPLETED.getKey(),
                 ErpOrderStateEnum.COMPLETED.getKey()});
             queryWrapper.in(MybatisPlusUtil.toColumns(ErpOrderCommon::getState), stateList);
+            // 仓库在明细行：按子表 depot_id 反查主单
         } else if (StrUtil.equals(commonPageInfo.getType(), "AllComplate")) {
             // 所有已出库的单据信息
             queryWrapper = super.getGrandFatherQueryWrapper(commonPageInfo);
@@ -186,7 +187,23 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
             // 查询仓库出库单
             queryWrapper = super.getQueryWrapper(commonPageInfo);
         }
+        // 工作台按仓库筛：明细行 depot_id
+        applyDepotItemFilter(queryWrapper, commonPageInfo);
         return queryWrapper;
+    }
+
+    /**
+     * 出库管理按仓库筛选：仓库 id 在 erp_depotitem.depot_id，用 EXISTS 反查主单。
+     * 入参：customParamsMap.depotId
+     */
+    private void applyDepotItemFilter(QueryWrapper<DepotOut> queryWrapper, CommonPageInfo commonPageInfo) {
+        String depotId = commonPageInfo.getCustomParamsMapStr("depotId");
+        if (StrUtil.isBlank(depotId)) {
+            return;
+        }
+        queryWrapper.apply(
+            "EXISTS (SELECT 1 FROM erp_depotitem i WHERE i.parent_id = erp_depothead.id AND i.depot_id = {0})",
+            depotId);
     }
 
     @Override
@@ -400,6 +417,31 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
             acctEvent.put("costAmount", amount);
             acctEvent.put("departmentId", entity.getDepartmentId());
             acctEvent.put("summary", "生产补料-" + entity.getOddNumber());
+        } else if (fromType == DepotOutFromType.RETAIL_OUTLET.getKey()) {
+            acctEvent.put("eventType", "retailOut");
+            acctEvent.put("sourceType", "ERP_DEPOT_OUT");
+            acctEvent.put("costAmount", amount);
+            acctEvent.put("summary", "零售出库-" + entity.getOddNumber());
+        } else if (fromType == DepotOutFromType.SHOP_OUTLET.getKey()) {
+            acctEvent.put("eventType", "storePick");
+            acctEvent.put("sourceType", "ERP_DEPOT_OUT");
+            acctEvent.put("costAmount", amount);
+            acctEvent.put("summary", "门店申领-" + entity.getOddNumber());
+        } else if (fromType == DepotOutFromType.SEAL_APPLY.getKey()) {
+            acctEvent.put("eventType", "sealPick");
+            acctEvent.put("sourceType", "ERP_DEPOT_OUT");
+            acctEvent.put("costAmount", amount);
+            acctEvent.put("summary", "配件申领-" + entity.getOddNumber());
+        } else if (fromType == DepotOutFromType.PURCHASE_EXCHANGE.getKey()) {
+            acctEvent.put("eventType", "exchangeOut");
+            acctEvent.put("sourceType", "ERP_DEPOT_OUT");
+            acctEvent.put("supplierId", entity.getHolderId());
+            acctEvent.put("summary", "采购换货出库-" + entity.getOddNumber());
+        } else if (fromType == DepotOutFromType.LOANOUT.getKey()) {
+            acctEvent.put("eventType", "stockLoan");
+            acctEvent.put("sourceType", "ERP_DEPOT_OUT");
+            acctEvent.put("customerId", entity.getHolderId());
+            acctEvent.put("summary", "借出出库-" + entity.getOddNumber());
         } else {
             return;
         }
