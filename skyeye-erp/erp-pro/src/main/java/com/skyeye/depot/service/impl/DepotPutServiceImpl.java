@@ -146,7 +146,23 @@ public class DepotPutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotPutDao, 
             // 查询仓库入库单
             queryWrapper = super.getQueryWrapper(commonPageInfo);
         }
+        // 仓库在明细行：按子表 depot_id 反查主单
+        applyDepotItemFilter(queryWrapper, commonPageInfo);
         return queryWrapper;
+    }
+
+    /**
+     * 入库管理/仓库入库单按仓库筛选：仓库 id 在 erp_depotitem.depot_id。
+     * 入参：customParamsMap.depotId
+     */
+    private void applyDepotItemFilter(QueryWrapper<DepotPut> queryWrapper, CommonPageInfo commonPageInfo) {
+        String depotId = commonPageInfo.getCustomParamsMapStr("depotId");
+        if (StrUtil.isBlank(depotId)) {
+            return;
+        }
+        queryWrapper.apply(
+            "EXISTS (SELECT 1 FROM erp_depotitem i WHERE i.parent_id = erp_depothead.id AND i.depot_id = {0})",
+            depotId);
     }
 
     @Override

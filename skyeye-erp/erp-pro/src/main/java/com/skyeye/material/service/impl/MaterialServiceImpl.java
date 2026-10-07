@@ -341,7 +341,7 @@ public class MaterialServiceImpl extends SkyeyeBusinessServiceImpl<MaterialDao, 
     @Override
     @IgnoreTenant
     public void queryMaterialInventoryWarningList(InputObject inputObject, OutputObject outputObject) {
-        CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
+        MaterialChooseQueryDo pageInfo = inputObject.getParams(MaterialChooseQueryDo.class);
         pageInfo.setDeleteFlag(DeleteFlagEnum.NOT_DELETE.getKey());
         pageInfo.setEnabled(EnableEnum.ENABLE_USING.getKey());
         if (tenantEnable) {

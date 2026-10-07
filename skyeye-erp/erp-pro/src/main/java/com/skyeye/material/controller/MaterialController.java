@@ -107,7 +107,7 @@ public class MaterialController {
     }
 
     @ApiOperation(id = "material017", value = "获取预警商品库存信息", method = "POST", allUse = "1")
-    @ApiImplicitParams(classBean = CommonPageInfo.class)
+    @ApiImplicitParams(classBean = MaterialChooseQueryDo.class)
     @RequestMapping("/post/MaterialController/queryMaterialInventoryWarningList")
     public void queryMaterialInventoryWarningList(InputObject inputObject, OutputObject outputObject) {
         materialService.queryMaterialInventoryWarningList(inputObject, outputObject);

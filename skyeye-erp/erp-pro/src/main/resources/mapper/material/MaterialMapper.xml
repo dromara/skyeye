@@ -7,7 +7,8 @@
 			*
 		FROM
 			(SELECT
-				b.id,
+				a.id,
+				b.id materialId,
 				b.`name`,
 				b.model,
 				b.category_id categoryId,
@@ -19,6 +20,9 @@
 				IFNULL((SELECT SUM(it.stock)
 				FROM erp_material_norms_stock it
 				WHERE it.norms_id = a.id
+				<if test="depotId != null and depotId != ''">
+					AND it.depot_id = #{depotId}
+				</if>
 				), 0) allStock
 			FROM
 				erp_material_norms a,

@@ -4,9 +4,9 @@
 
 package com.skyeye.material.dao;
 
-import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.eve.dao.SkyeyeBaseMapper;
 import com.skyeye.material.entity.Material;
+import com.skyeye.material.entity.MaterialChooseQueryDo;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +21,6 @@ import java.util.Map;
  */
 public interface MaterialDao extends SkyeyeBaseMapper<Material> {
 
-    List<Map<String, Object>> queryMaterialInventoryWarningList(CommonPageInfo pageInfo);
+    List<Map<String, Object>> queryMaterialInventoryWarningList(MaterialChooseQueryDo pageInfo);
 
 }
