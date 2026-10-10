@@ -96,7 +96,7 @@ public class ShopStoreController {
         shopStoreService.queryStoreOnlineById(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "saveStoreOnlineMation", value = "保存门店线上预约信息", method = "POST", allUse = "1")
+    @ApiOperation(id = "saveStoreOnlineMation", value = "保存门店线上预约信息", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required"),
         @ApiImplicitParam(id = "startTime", name = "startTime", value = "营业开始时间", required = "required"),

@@ -89,7 +89,7 @@ public class DepotOutController {
         depotOutService.insertDepotOutToSealsReturns(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryNeedStoreConfirmDepotOutList", value = "获取需要门店物料确认的仓库出库列表", method = "POST", allUse = "1")
+    @ApiOperation(id = "queryNeedStoreConfirmDepotOutList", value = "获取需要门店物料确认的仓库出库列表", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/DepotOutController/queryNeedStoreConfirmDepotOutList")
     public void queryNeedStoreConfirmDepotOutList(InputObject inputObject, OutputObject outputObject) {
