@@ -31,14 +31,14 @@ public class StoreIntercourseController {
     @Autowired
     private StoreIntercourseService storeIntercourseService;
 
-    @ApiOperation(id = "queryStoreIntercourseList", value = "获取指定门店的支出/收入往来的数据", method = "POST", allUse = "1")
+    @ApiOperation(id = "queryStoreIntercourseList", value = "获取指定门店的支出/收入往来的数据", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = StoreIntercourseQueryDo.class)
     @RequestMapping("/post/StoreIntercourseController/queryStoreIntercourseList")
     public void queryStoreIntercourseList(InputObject inputObject, OutputObject outputObject) {
         storeIntercourseService.queryStoreIntercourseList(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "editStoreIntercourseState", value = "编辑指定门店的支出/收入往来的状态", method = "PUT", allUse = "1")
+    @ApiOperation(id = "editStoreIntercourseState", value = "编辑指定门店的支出/收入往来的状态", method = "PUT", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "往来数据id", required = "required"),
         @ApiImplicitParam(id = "state", name = "state", value = "状态  1.待套餐购买门店确认  2.待保养门店确认  3.已确认", required = "required,num")})
