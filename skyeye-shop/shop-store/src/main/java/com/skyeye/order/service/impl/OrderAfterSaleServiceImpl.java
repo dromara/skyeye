@@ -190,6 +190,8 @@ public class OrderAfterSaleServiceImpl extends SkyeyeBusinessServiceImpl<OrderAf
         List<OrderAfterSale> list = list(wrapper);
         if (CollectionUtil.isNotEmpty(list)) {
             memberService.setDataMation(list, OrderAfterSale::getCreateId);
+            // 与列表一致：补齐子单
+            fillOrderItemMation(list);
         }
         outputObject.setBeans(list);
         outputObject.settotal(list.size());
