@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.skyeye.annotation.api.ApiModel;
 import com.skyeye.annotation.api.ApiModelProperty;
+import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.features.OperatorUserInfo;
 import lombok.Data;
 
@@ -51,4 +52,24 @@ public class AssetDepreciationDetail extends OperatorUserInfo {
     @TableField("accum_after")
     @ApiModelProperty(value = "计提后累计折旧")
     private String accumAfter;
+
+    @TableField(exist = false)
+    @Property(value = "资产id")
+    private String assetId;
+
+    @TableField(exist = false)
+    @Property(value = "资产名称")
+    private String assetName;
+
+    @TableField(exist = false)
+    @Property(value = "规格")
+    private String specifications;
+
+    @TableField(exist = false)
+    @Property(value = "存放区域")
+    private String storageArea;
+
+    @TableField(exist = false)
+    @Property(value = "入库时间")
+    private String warehousingTime;
 }

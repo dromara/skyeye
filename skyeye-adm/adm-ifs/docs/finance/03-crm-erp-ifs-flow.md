@@ -345,9 +345,10 @@ graph TB
 1. 前置：执行 `adm-pro/docs/sql/asset_depreciation.sql`；初始化科目补 `1601`/`1602`；初始化模板补 `fixedAsset*`。
 2. 资产入库单审批通过 → `fixedAssetPurchase`；同时写入默认折旧政策（60月、残值率5%、次月起提）。
 3. 资产退货单审批通过 → `fixedAssetReturn`。
-4. 资产明细改为「报废」→ `fixedAssetDispose`。
-5. **月结主路径**：财务流程图 →「固定资产月结折旧」→ 选账套/期间 → 预览 → 执行 → `fixedAssetDeprec`（来源 `ADM_ASSET_DEPREC_RUN`），并回写累计折旧。
-6. 例外补账：`postFixedAssetDeprecAcct`（不回写资产卡片累计折旧）。
+4. 资产明细改为「报废」→ `fixedAssetDispose`（借累计折旧+净值损失 / 贷原值；累计折旧取卡片 `accumDeprecAmount`）。
+5. 折旧政策字段在布局 `FP2025022200001` 中维护：年限(月)、残值率%、开始折旧月（累计折旧/上次折旧月只读，由月结回写）。
+6. **月结主路径**：财务流程图 →「固定资产月结折旧」→ 选账套/期间 → 预览 → 执行 → `fixedAssetDeprec`（来源 `ADM_ASSET_DEPREC_RUN`），并回写累计折旧；「计提历史」可看批次明细。
+7. 例外补账：`postFixedAssetDeprecAcct`（不回写资产卡片累计折旧）。
 
 ### 10. 保养套餐往来确认（本批）
 

@@ -13,9 +13,11 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
+import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
+import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.PropertiesUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.eve.assets.classenum.AssetReportState;
@@ -33,6 +35,7 @@ import com.skyeye.finance.event.service.BizAcctEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -260,16 +263,22 @@ public class AssetReportServiceImpl extends SkyeyeBusinessServiceImpl<AssetRepor
             && old.getState().equals(AssetReportState.SCRAP.getKey());
         if (scrapNow && !wasScrap) {
             try {
-                String price = StrUtil.blankToDefault(assetReport.getUnitPrice(),
+                String original = StrUtil.blankToDefault(assetReport.getUnitPrice(),
                     old != null ? StrUtil.blankToDefault(old.getUnitPrice(), "0") : "0");
+                String accum = old != null ? StrUtil.blankToDefault(old.getAccumDeprecAmount(), "0") : "0";
+                String netBook = CalculationUtil.subtract(original, accum, CommonNumConstants.NUM_TWO);
+                if (CalculationUtil.compareTo(netBook, "0", CommonNumConstants.NUM_TWO, RoundingMode.HALF_UP) < 0) {
+                    netBook = "0";
+                }
                 Map<String, Object> event = new HashMap<>();
                 event.put("eventType", BizAcctEventType.FIXED_ASSET_DISPOSE.getKey());
                 event.put("sourceType", "ADM_ASSET_REPORT_SCRAP");
                 event.put("sourceId", assetReport.getId());
                 event.put("sourceNo", StrUtil.blankToDefault(old != null ? old.getAssetNum() : null, assetReport.getId()));
-                event.put("amount", price);
-                event.put("originalAmount", price);
-                event.put("accumDeprecAmount", "0");
+                // 模板：借累计折旧 + 借净值损失 / 贷原值
+                event.put("amount", netBook);
+                event.put("originalAmount", original);
+                event.put("accumDeprecAmount", accum);
                 event.put("summary", "固定资产报废-" + StrUtil.blankToDefault(old != null ? old.getAssetNum() : null, assetReport.getId()));
                 bizAcctEventService.acceptEvent(event);
             } catch (Exception ignored) {
