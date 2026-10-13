@@ -51,6 +51,26 @@ public class AssetReport extends OperatorUserInfo implements EnclosureFace {
     @ApiModelProperty(value = "资产单价", required = "required,double")
     private String unitPrice;
 
+    @TableField(value = "useful_life_months")
+    @ApiModelProperty(value = "折旧年限(月)，直线法；空则月结时按60")
+    private Integer usefulLifeMonths;
+
+    @TableField(value = "residual_rate")
+    @ApiModelProperty(value = "残值率(%)，空则月结时按5")
+    private String residualRate;
+
+    @TableField(value = "deprec_start_month")
+    @ApiModelProperty(value = "开始折旧年月YYYY-MM；空则按入库次月")
+    private String deprecStartMonth;
+
+    @TableField(value = "accum_deprec_amount")
+    @ApiModelProperty(value = "累计折旧")
+    private String accumDeprecAmount;
+
+    @TableField(value = "last_deprec_month")
+    @ApiModelProperty(value = "上次折旧年月YYYY-MM")
+    private String lastDeprecMonth;
+
     @TableField(value = "from_id")
     @ApiModelProperty(value = "资产来源id", required = "required")
     private String fromId;

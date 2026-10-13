@@ -6,6 +6,8 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.yulichang.toolkit.JoinWrappers;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
@@ -214,12 +216,10 @@ public class OrderAfterSaleServiceImpl extends SkyeyeBusinessServiceImpl<OrderAf
     public void queryMyOrderAfterSaleList(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
         String userId = inputObject.getLogParams().get(CommonConstants.ID).toString();
-        QueryWrapper<OrderAfterSale> wrapper = new QueryWrapper<>();
-        wrapper.eq(MybatisPlusUtil.toColumns(OrderAfterSale::getCreateId), userId);
-        applyAfterSaleListFilter(wrapper, pageInfo);
-        wrapper.orderByDesc(MybatisPlusUtil.toColumns(OrderAfterSale::getCreateTime));
+        MPJLambdaWrapper<OrderAfterSale> wrapper = buildAfterSaleListWrapper(pageInfo);
+        wrapper.eq(OrderAfterSale::getCreateId, userId);
         Page pages = PageHelper.startPage(pageInfo.getPage(), pageInfo.getLimit());
-        List<OrderAfterSale> list = list(wrapper);
+        List<OrderAfterSale> list = skyeyeBaseMapper.selectJoinList(OrderAfterSale.class, wrapper);
         fillOrderItemMation(list);
         outputObject.setBeans(list);
         outputObject.settotal(pages.getTotal());
@@ -243,35 +243,42 @@ public class OrderAfterSaleServiceImpl extends SkyeyeBusinessServiceImpl<OrderAf
         if (!userId.equals(store.getCreateId()) && !isStaff) {
             throw new CustomException("无权查看该门店售后");
         }
-        QueryWrapper<OrderAfterSale> wrapper = new QueryWrapper<>();
-        wrapper.and(w -> w.eq(MybatisPlusUtil.toColumns(OrderAfterSale::getStoreId), storeId)
-            .or().eq(MybatisPlusUtil.toColumns(OrderAfterSale::getSourceStoreId), storeId));
-        applyAfterSaleListFilter(wrapper, pageInfo);
-        wrapper.orderByDesc(MybatisPlusUtil.toColumns(OrderAfterSale::getCreateTime));
+        MPJLambdaWrapper<OrderAfterSale> wrapper = buildAfterSaleListWrapper(pageInfo);
+        wrapper.and(w -> w.eq(OrderAfterSale::getStoreId, storeId)
+            .or().eq(OrderAfterSale::getSourceStoreId, storeId));
         Page pages = PageHelper.startPage(pageInfo.getPage(), pageInfo.getLimit());
-        List<OrderAfterSale> list = list(wrapper);
+        List<OrderAfterSale> list = skyeyeBaseMapper.selectJoinList(OrderAfterSale.class, wrapper);
         memberService.setDataMation(list, OrderAfterSale::getCreateId);
         fillOrderItemMation(list);
         outputObject.settotal(pages.getTotal());
         outputObject.setBeans(list);
     }
 
-    private void applyAfterSaleListFilter(QueryWrapper<OrderAfterSale> wrapper, CommonPageInfo pageInfo) {
+    /**
+     * 售后列表公共条件；有 keyword 时 leftJoin 子单，按订单号/原因/退货单号过滤（避免先查 id 再 IN）。
+     */
+    private MPJLambdaWrapper<OrderAfterSale> buildAfterSaleListWrapper(CommonPageInfo pageInfo) {
+        MPJLambdaWrapper<OrderAfterSale> wrapper = JoinWrappers.lambda("oas", OrderAfterSale.class)
+            .selectAll(OrderAfterSale.class);
         String type = pageInfo.getType();
         if (StrUtil.isNotBlank(type)) {
             if ("1".equals(type)) {
-                wrapper.in(MybatisPlusUtil.toColumns(OrderAfterSale::getStatus), ACTIVE_STATUS);
+                wrapper.in(OrderAfterSale::getStatus, ACTIVE_STATUS);
             } else {
-                wrapper.eq(MybatisPlusUtil.toColumns(OrderAfterSale::getStatus), Integer.valueOf(type));
+                wrapper.eq(OrderAfterSale::getStatus, Integer.valueOf(type));
             }
         }
         String keyword = pageInfo.getKeyword();
         if (StrUtil.isNotBlank(keyword)) {
-            wrapper.and(w -> w.like(MybatisPlusUtil.toColumns(OrderAfterSale::getReasonText), keyword)
-                .or().like(MybatisPlusUtil.toColumns(OrderAfterSale::getParentId), keyword)
-                .or().like(MybatisPlusUtil.toColumns(OrderAfterSale::getOrderItemId), keyword)
-                .or().like(MybatisPlusUtil.toColumns(OrderAfterSale::getReturnDeliverNumber), keyword));
+            String kw = keyword.trim();
+            String oddNumberCol = "oi." + MybatisPlusUtil.toColumns(OrderItem::getOddNumber);
+            wrapper.leftJoin(OrderItem.class, "oi", OrderItem::getId, OrderAfterSale::getOrderItemId);
+            wrapper.and(w -> w.like(OrderAfterSale::getReasonText, kw)
+                .or().like(OrderAfterSale::getReturnDeliverNumber, kw)
+                .or().like(oddNumberCol, kw));
         }
+        wrapper.orderByDesc(OrderAfterSale::getCreateTime);
+        return wrapper;
     }
 
     private void fillOrderItemMation(List<OrderAfterSale> list) {

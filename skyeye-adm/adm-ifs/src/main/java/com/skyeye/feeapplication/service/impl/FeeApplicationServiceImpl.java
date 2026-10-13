@@ -78,21 +78,46 @@ public class FeeApplicationServiceImpl extends SkyeyeBusinessServiceImpl<FeeAppl
 
     @Override
     protected void approvalEndIsSuccess(FeeApplication entity) {
-        // 业财一体：费用申请审批通过后挂账（借费用 / 贷其他应付款）
+        // 业财一体：费用申请审批通过后挂账；费用类型/事由含「制造费用」时归集到生产成本
         try {
+            boolean mfgOverhead = isMfgOverheadFee(entity);
             Map<String, Object> event = new HashMap<>();
-            event.put("eventType", BizAcctEventType.EXPENSE_APPLY.getKey());
-            event.put("sourceType", "IFS_FEE_APPLICATION");
+            event.put("eventType", mfgOverhead
+                ? BizAcctEventType.MFG_OVERHEAD.getKey()
+                : BizAcctEventType.EXPENSE_APPLY.getKey());
+            event.put("sourceType", mfgOverhead ? "IFS_FEE_APPLICATION_MFG" : "IFS_FEE_APPLICATION");
             event.put("sourceId", entity.getId());
             event.put("sourceNo", entity.getOddNumber());
             event.put("amount", StrUtil.blankToDefault(entity.getPrice(), "0"));
             event.put("departmentId", entity.getDepartmentId());
             event.put("projectId", entity.getProjectId());
-            event.put("summary", "费用申请-" + entity.getOddNumber());
+            event.put("summary", (mfgOverhead ? "制造费用归集-" : "费用申请-") + entity.getOddNumber());
             bizAcctEventService.acceptEvent(event);
         } catch (Exception ignored) {
             // 失败事件可在业财事件台重试
         }
+    }
+
+    /**
+     * 费用类型名称或事由/备注包含「制造费用」时，走制造费用归集而非普通费用申请挂账。
+     */
+    private boolean isMfgOverheadFee(FeeApplication entity) {
+        String text = StrUtil.blankToDefault(entity.getPurposes(), StrUtil.EMPTY)
+            + StrUtil.blankToDefault(entity.getRemark(), StrUtil.EMPTY);
+        if (StrUtil.contains(text, "制造费用")) {
+            return true;
+        }
+        if (StrUtil.isNotEmpty(entity.getTypeId())) {
+            Map<String, Object> typeMation = iSysDictDataService.queryDataMationById(entity.getTypeId());
+            if (typeMation != null) {
+                String dictName = typeMation.get("dictName") == null ? StrUtil.EMPTY : typeMation.get("dictName").toString();
+                String pathName = typeMation.get("pathName") == null ? StrUtil.EMPTY : typeMation.get("pathName").toString();
+                if (StrUtil.contains(dictName, "制造费用") || StrUtil.contains(pathName, "制造费用")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

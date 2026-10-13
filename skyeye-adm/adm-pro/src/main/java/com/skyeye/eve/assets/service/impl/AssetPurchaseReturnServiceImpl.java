@@ -27,6 +27,8 @@ import com.skyeye.eve.assets.dao.AssetPurchaseReturnDao;
 import com.skyeye.eve.assets.entity.*;
 import com.skyeye.eve.assets.service.*;
 import com.skyeye.exception.CustomException;
+import com.skyeye.finance.event.classenum.BizAcctEventType;
+import com.skyeye.finance.event.service.BizAcctEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,6 +61,9 @@ public class AssetPurchaseReturnServiceImpl extends SkyeyeBusinessServiceImpl<As
 
     @Autowired
     private AssetReportService assetReportService;
+
+    @Autowired
+    private BizAcctEventService bizAcctEventService;
 
     @Override
     public QueryWrapper<AssetPurchaseReturn> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -181,6 +186,19 @@ public class AssetPurchaseReturnServiceImpl extends SkyeyeBusinessServiceImpl<As
         }
         // 修改子单据状态
         assetPurchaseLinkService.editStateByPId(entity.getId(), FlowableChildStateEnum.ADEQUATE.getKey());
+        // 业财一体：资产退货审批通过后冲固定资产
+        try {
+            Map<String, Object> event = new HashMap<>();
+            event.put("eventType", BizAcctEventType.FIXED_ASSET_RETURN.getKey());
+            event.put("sourceType", "ADM_ASSET_PURCHASE_RETURN");
+            event.put("sourceId", entity.getId());
+            event.put("sourceNo", entity.getOddNumber());
+            event.put("amount", StrUtil.blankToDefault(entity.getAllPrice(), "0"));
+            event.put("summary", "固定资产退货-" + entity.getOddNumber());
+            bizAcctEventService.acceptEvent(event);
+        } catch (Exception ignored) {
+            // 失败事件可在业财事件台重试
+        }
     }
 
     @Override

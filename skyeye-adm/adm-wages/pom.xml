@@ -23,6 +23,13 @@
             <artifactId>adm-ehr</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!-- 业财一体：薪资计提/发放推会计事件 -->
+        <dependency>
+            <groupId>com.skyeye</groupId>
+            <artifactId>adm-ifs</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

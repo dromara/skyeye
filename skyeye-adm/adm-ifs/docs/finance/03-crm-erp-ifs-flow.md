@@ -214,7 +214,15 @@ graph TB
 | IFS 还款 | 还款单 | 审批通过 | 会计事件 | `loanRepay` |
 | IFS 存货核算 | 补账计价过账 | 手工过账 | 会计事件 勿与仓库重复 | 单上 `billType` |
 | IFS 生产成本 | 完工入库 | 加工入库审批自动；手工可补 | 会计事件 | `prodFinish` |
-| IFS 生产成本 | 制造费用 | 手工归集入口 | 会计事件 | `mfgOverhead` |
+| IFS 生产成本 | 制造费用 | 手工归集；费用申请/报销含「制造费用」自动 | 会计事件 | `mfgOverhead` |
+| EHR 薪资 | 薪资核算 | 生成待发放记录 | 会计事件 | `salaryAccrue` |
+| EHR 薪资 | 薪资发放 | 发放状态变为已发放 | 会计事件 | `salaryPay` |
+| ADM 资产 | 资产入库 | 审批通过 | 会计事件 | `fixedAssetPurchase` |
+| ADM 资产 | 资产退货 | 审批通过 | 会计事件 | `fixedAssetReturn` |
+| ADM 资产 | 资产报废 | 明细状态改为报废 | 会计事件 | `fixedAssetDispose` |
+| ADM 资产 | 月结批量折旧 | 月结计提主路径 | 会计事件 | `fixedAssetDeprec` |
+| IFS 资产 | 固定资产折旧补账 | 手工差额补账（例外） | 会计事件 | `fixedAssetDeprec` |
+| Shop 往来 | 保养套餐往来 | 双方确认完成 | 会计事件 | `keepfitIntercourse` |
 | Shop 结算 | 冻结转可提现 | 结算到期释放 | 会计事件 | `shopSettle` |
 | Shop 提现 | 打款成功 | 转账成功回调 | 会计事件 | `shopWithdraw` |
 | IFS 会计凭证 | 手工录入 | 保存 | 直接凭证 | `manual` |
@@ -249,7 +257,14 @@ graph TB
 | `shopSettle` | 借费用 / 贷其他应付款 | 否 |
 | `shopWithdraw` | 借其他应付款 / 贷现金 | 否 |
 | `loanBorrow` / `loanRepay` | 其他应收 vs 现金 | 否 |
-| `mfgOverhead` | 借 5001 / 贷 5101 | 否 |
+| `mfgOverhead` | 借 5001 / 贷 5101(或2241/现金) | 否 |
+| `salaryAccrue` | 借管理费用 / 贷应付职工薪酬 2211 | 否 |
+| `salaryPay` | 借 2211 / 贷现金 | 否 |
+| `fixedAssetPurchase` | 借 1601 / 贷现金或应付 | 否 |
+| `fixedAssetReturn` | 借现金或应付 / 贷 1601 | 否 |
+| `fixedAssetDeprec` | 借管理费用或制费 / 贷 1602 | 否 |
+| `fixedAssetDispose` | 借累计折旧+营业外支出 / 贷 1601 | 否 |
+| `keepfitIntercourse` | 借销售费用 / 贷其他应付款 | 否 |
 | `transfer` | 借库存(调入仓) / 贷库存(调出仓) | 否 |
 | `manual` | 自选 | 1122或2202带辅助则进 |
 | `periodClose` | 损益进本年利润 | 否 |
@@ -266,10 +281,11 @@ graph TB
 
 ### 0. 前置（每个环境只做一次）
 
-1. 重启 `skyeye-ifs`、`skyeye-erp`、`skyeye-shop`（及 Cloud_Vue）。
-2. IFS → 会计科目 →「初始化默认科目」（补 `2241` 其他应付款）。
+1. 重启 `skyeye-adm`（含 ifs/wages）、`skyeye-erp`、`skyeye-shop`（及 Cloud_Vue）。
+2. IFS → 会计科目 →「初始化默认科目」（补 `2241`、`2211` 应付职工薪酬、`1601` 固定资产、`1602` 累计折旧）。
 3. IFS → 凭证模板 →「初始化默认模板」（补本批新 eventType；已存在的类型会跳过）。
 4. 确认当前账套期间已开账；凭证模板对应事项已启用。
+5. Shop 配置 `webroot.skyeye-ifs` 可达（保养往来、结算/提现依赖 Feign）。
 
 ### 1. 零售出库 / 零售退货
 
@@ -297,10 +313,12 @@ graph TB
 1. IFS 费用申请提交并审批通过。
 2. 凭证 `expenseApply`：借管理费用 / 贷其他应付款 2241；来源类型 `IFS_FEE_APPLICATION`。
 
-### 5. 生产成本
+### 5. 生产成本 / 制造费用
 
 1. 加工入库 → 仓库入库审批 → 自动 `prodFinish`（无需再点手工完工，除非补账）。
-2. 制造费用仍走 IFS「生产成本/制费」手工入口 → `mfgOverhead`。
+2. 手工：IFS「生产成本/制费」入口 → `mfgOverhead`。
+3. 自动：费用类型名称或事由含「制造费用」的费用申请审批通过 → `mfgOverhead`（来源 `IFS_FEE_APPLICATION_MFG`）。
+4. 自动：报销明细费用项目含「制造费用」审批通过 → `mfgOverhead`（来源 `IFS_REIMBURSEMENT_MFG`）。
 
 ### 6. 商城结算 / 提现
 
@@ -313,3 +331,26 @@ graph TB
 1. 任选一张已过账非冲销凭证 → 冲销。
 2. 列表：原凭证状态作废，冲销关系「已被冲销：xxx」；新凭证冲销关系「冲销：原凭证号」，点击可打开原凭证。
 3. 冲销凭证行不应再出现「冲销」按钮。
+
+### 8. 薪资计提 / 发放（本批）
+
+1. 前置：重启 adm（含 wages/ifs）；IFS 初始化默认科目（补 `2211`）与默认凭证模板（补 `salaryAccrue`/`salaryPay`）。
+2. 触发薪资核算任务（或跑 `staffWagesQuartz`）生成待发放记录。
+3. 业财事件台：每人一条 `salaryAccrue`，借管理费用 / 贷应付职工薪酬，金额=实发 `actWages`，来源 `EHR_WAGES_ACCRUE`。
+4. 触发发放（`staffWagesPaymentQuartz` 或状态改为已发放）。
+5. 业财事件台：对应 `salaryPay`，借 2211 / 贷银行存款，来源 `EHR_WAGES_PAY`。
+
+### 9. 固定资产购入 / 退货 / 报废 / 月结折旧（本批）
+
+1. 前置：执行 `adm-pro/docs/sql/asset_depreciation.sql`；初始化科目补 `1601`/`1602`；初始化模板补 `fixedAsset*`。
+2. 资产入库单审批通过 → `fixedAssetPurchase`；同时写入默认折旧政策（60月、残值率5%、次月起提）。
+3. 资产退货单审批通过 → `fixedAssetReturn`。
+4. 资产明细改为「报废」→ `fixedAssetDispose`。
+5. **月结主路径**：财务流程图 →「固定资产月结折旧」→ 选账套/期间 → 预览 → 执行 → `fixedAssetDeprec`（来源 `ADM_ASSET_DEPREC_RUN`），并回写累计折旧。
+6. 例外补账：`postFixedAssetDeprecAcct`（不回写资产卡片累计折旧）。
+
+### 10. 保养套餐往来确认（本批）
+
+1. 重启 shop；确认 `webroot.skyeye-ifs` 可达；初始化模板补 `keepfitIntercourse`。
+2. 门店往来：套餐购买门店确认 → 保养门店确认 → 状态变为「已确认」。
+3. 业财事件台：`keepfitIntercourse`，金额=`mealAllSinglePrice`，借销售费用 / 贷其他应付款，来源 `SHOP_STORE_INTERCOURSE`。

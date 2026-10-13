@@ -120,20 +120,50 @@ public class ReimbursementServiceImpl extends SkyeyeBusinessServiceImpl<Reimburs
     @Override
     protected void approvalEndIsSuccess(Reimbursement entity) {
         reimbursementChildService.editStateByPId(entity.getId(), FlowableChildStateEnum.ADEQUATE.getKey());
-        // 业财一体：报销审批通过后推送会计事件
+        // 业财一体：报销审批通过后推送会计事件；明细费用项目含「制造费用」时归集到生产成本
         try {
+            entity = selectById(entity.getId());
+            boolean mfgOverhead = isMfgOverheadReimburse(entity);
             Map<String, Object> event = new HashMap<>();
-            event.put("eventType", BizAcctEventType.EXPENSE_REIMBURSE.getKey());
-            event.put("sourceType", "IFS_REIMBURSEMENT");
+            event.put("eventType", mfgOverhead
+                ? BizAcctEventType.MFG_OVERHEAD.getKey()
+                : BizAcctEventType.EXPENSE_REIMBURSE.getKey());
+            event.put("sourceType", mfgOverhead ? "IFS_REIMBURSEMENT_MFG" : "IFS_REIMBURSEMENT");
             event.put("sourceId", entity.getId());
             event.put("sourceNo", entity.getOddNumber());
             event.put("amount", StrUtil.blankToDefault(entity.getPrice(), "0"));
             event.put("departmentId", entity.getDepartmentId());
-            event.put("summary", "费用报销-" + entity.getOddNumber());
+            event.put("summary", (mfgOverhead ? "制造费用归集-" : "费用报销-") + entity.getOddNumber());
             bizAcctEventService.acceptEvent(event);
         } catch (Exception ignored) {
             // 失败事件可在业财事件台重试
         }
+    }
+
+    private boolean isMfgOverheadReimburse(Reimbursement entity) {
+        if (entity.getReimbursementChildList() == null) {
+            return false;
+        }
+        for (ReimbursementChild child : entity.getReimbursementChildList()) {
+            Map<String, Object> proMation = child.getReimburseProMation();
+            if (proMation != null) {
+                String dictName = proMation.get("dictName") == null ? StrUtil.EMPTY : proMation.get("dictName").toString();
+                String pathName = proMation.get("pathName") == null ? StrUtil.EMPTY : proMation.get("pathName").toString();
+                if (StrUtil.contains(dictName, "制造费用") || StrUtil.contains(pathName, "制造费用")) {
+                    return true;
+                }
+            }
+            if (StrUtil.isNotEmpty(child.getReimburseProId())) {
+                Map<String, Object> typeMation = iSysDictDataService.queryDataMationById(child.getReimburseProId());
+                if (typeMation != null) {
+                    String dictName = typeMation.get("dictName") == null ? StrUtil.EMPTY : typeMation.get("dictName").toString();
+                    if (StrUtil.contains(dictName, "制造费用")) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override

@@ -63,7 +63,10 @@ public class AssetReportController {
         @ApiImplicitParam(id = "storageArea", name = "storageArea", value = "存放区域"),
         @ApiImplicitParam(id = "assetAdmin", name = "assetAdmin", value = "管理人"),
         @ApiImplicitParam(id = "describe", name = "describe", value = "附加描述"),
-        @ApiImplicitParam(id = "state", name = "state", value = "状态", enumClass = AssetReportState.class)})
+        @ApiImplicitParam(id = "state", name = "state", value = "状态", enumClass = AssetReportState.class),
+        @ApiImplicitParam(id = "usefulLifeMonths", name = "usefulLifeMonths", value = "折旧年限(月)"),
+        @ApiImplicitParam(id = "residualRate", name = "residualRate", value = "残值率(%)"),
+        @ApiImplicitParam(id = "deprecStartMonth", name = "deprecStartMonth", value = "开始折旧年月YYYY-MM")})
     @RequestMapping("/post/AssetReportController/updateAssetReportById")
     public void updateAssetReportById(InputObject inputObject, OutputObject outputObject) {
         assetReportService.updateAssetReportById(inputObject, outputObject);

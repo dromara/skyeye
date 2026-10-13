@@ -14,12 +14,14 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.entity.intercourse.StoreIntercourseQueryDo;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import com.skyeye.store.dao.StoreIntercourseDao;
 import com.skyeye.store.service.StoreIntercourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +39,9 @@ public class StoreIntercourseServiceImpl implements StoreIntercourseService {
 
     @Autowired
     private StoreIntercourseDao storeIntercourseDao;
+
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     @Value("${skyeye.tenant.enable}")
     protected boolean tenantEnable;
@@ -120,6 +125,18 @@ public class StoreIntercourseServiceImpl implements StoreIntercourseService {
             return;
         }
         storeIntercourseDao.editStoreIntercourseState(id, state, tenantId);
+        // 业财一体：双方确认后推保养套餐往来会计事件
+        if (state == State.CONFIRMED.getState()) {
+            Map<String, Object> acctEvent = new HashMap<>();
+            acctEvent.put("eventType", "keepfitIntercourse");
+            acctEvent.put("sourceType", "SHOP_STORE_INTERCOURSE");
+            acctEvent.put("sourceId", id);
+            acctEvent.put("sourceNo", id);
+            acctEvent.put("amount", StrUtil.blankToDefault(
+                storeIntercourse.get("mealAllSinglePrice") == null ? null : storeIntercourse.get("mealAllSinglePrice").toString(), "0"));
+            acctEvent.put("summary", "保养套餐往来确认-" + id);
+            ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
+        }
     }
 
     /**

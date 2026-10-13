@@ -28,6 +28,8 @@ import com.skyeye.eve.rest.mq.JobMateMation;
 import com.skyeye.eve.service.IBarCodeService;
 import com.skyeye.eve.service.IJobMateMationService;
 import com.skyeye.exception.CustomException;
+import com.skyeye.finance.event.classenum.BizAcctEventType;
+import com.skyeye.finance.event.service.BizAcctEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +59,9 @@ public class AssetReportServiceImpl extends SkyeyeBusinessServiceImpl<AssetRepor
 
     @Autowired
     private AssetService assetService;
+
+    @Autowired
+    private BizAcctEventService bizAcctEventService;
 
     @Override
     public void getQueryWrapper(InputObject inputObject, QueryWrapper<AssetReport> wrapper) {
@@ -228,6 +233,7 @@ public class AssetReportServiceImpl extends SkyeyeBusinessServiceImpl<AssetRepor
     @Override
     public void updateAssetReportById(InputObject inputObject, OutputObject outputObject) {
         AssetReport assetReport = inputObject.getParams(AssetReport.class);
+        AssetReport old = selectById(assetReport.getId());
         UpdateWrapper<AssetReport> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, assetReport.getId());
         updateWrapper.set(MybatisPlusUtil.toColumns(AssetReport::getUnitPrice), assetReport.getUnitPrice());
@@ -236,8 +242,40 @@ public class AssetReportServiceImpl extends SkyeyeBusinessServiceImpl<AssetRepor
         updateWrapper.set(MybatisPlusUtil.toColumns(AssetReport::getAssetAdmin), assetReport.getAssetAdmin());
         updateWrapper.set(MybatisPlusUtil.toColumns(AssetReport::getDescribe), assetReport.getDescribe());
         updateWrapper.set(MybatisPlusUtil.toColumns(AssetReport::getState), assetReport.getState());
+        if (assetReport.getUsefulLifeMonths() != null) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(AssetReport::getUsefulLifeMonths), assetReport.getUsefulLifeMonths());
+        }
+        if (StrUtil.isNotBlank(assetReport.getResidualRate())) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(AssetReport::getResidualRate), assetReport.getResidualRate());
+        }
+        if (StrUtil.isNotBlank(assetReport.getDeprecStartMonth())) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(AssetReport::getDeprecStartMonth), assetReport.getDeprecStartMonth());
+        }
         update(updateWrapper);
         refreshCache(assetReport.getId());
+        // 业财一体：资产明细改为报废时推处置事件（金额取单价/净值）
+        boolean scrapNow = assetReport.getState() != null
+            && assetReport.getState().equals(AssetReportState.SCRAP.getKey());
+        boolean wasScrap = old != null && old.getState() != null
+            && old.getState().equals(AssetReportState.SCRAP.getKey());
+        if (scrapNow && !wasScrap) {
+            try {
+                String price = StrUtil.blankToDefault(assetReport.getUnitPrice(),
+                    old != null ? StrUtil.blankToDefault(old.getUnitPrice(), "0") : "0");
+                Map<String, Object> event = new HashMap<>();
+                event.put("eventType", BizAcctEventType.FIXED_ASSET_DISPOSE.getKey());
+                event.put("sourceType", "ADM_ASSET_REPORT_SCRAP");
+                event.put("sourceId", assetReport.getId());
+                event.put("sourceNo", StrUtil.blankToDefault(old != null ? old.getAssetNum() : null, assetReport.getId()));
+                event.put("amount", price);
+                event.put("originalAmount", price);
+                event.put("accumDeprecAmount", "0");
+                event.put("summary", "固定资产报废-" + StrUtil.blankToDefault(old != null ? old.getAssetNum() : null, assetReport.getId()));
+                bizAcctEventService.acceptEvent(event);
+            } catch (Exception ignored) {
+                // 失败事件可在业财事件台重试
+            }
+        }
     }
 
 }

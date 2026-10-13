@@ -26,6 +26,8 @@ import com.skyeye.eve.assets.dao.AssetPurchasePutDao;
 import com.skyeye.eve.assets.entity.*;
 import com.skyeye.eve.assets.service.*;
 import com.skyeye.exception.CustomException;
+import com.skyeye.finance.event.classenum.BizAcctEventType;
+import com.skyeye.finance.event.service.BizAcctEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +60,9 @@ public class AssetPurchasePutServiceImpl extends SkyeyeBusinessServiceImpl<Asset
 
     @Autowired
     private AssetReportService assetReportService;
+
+    @Autowired
+    private BizAcctEventService bizAcctEventService;
 
     @Override
     public QueryWrapper<AssetPurchasePut> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -174,6 +179,19 @@ public class AssetPurchasePutServiceImpl extends SkyeyeBusinessServiceImpl<Asset
         checkAndEditAssetBarCodeDepotMaiton(entity, true);
         // 修改子单据状态
         assetPurchaseLinkService.editStateByPId(entity.getId(), FlowableChildStateEnum.ADEQUATE.getKey());
+        // 业财一体：资产入库审批通过后推固定资产购入
+        try {
+            Map<String, Object> event = new HashMap<>();
+            event.put("eventType", BizAcctEventType.FIXED_ASSET_PURCHASE.getKey());
+            event.put("sourceType", "ADM_ASSET_PURCHASE_PUT");
+            event.put("sourceId", entity.getId());
+            event.put("sourceNo", entity.getOddNumber());
+            event.put("amount", StrUtil.blankToDefault(entity.getAllPrice(), "0"));
+            event.put("summary", "固定资产购入-" + entity.getOddNumber());
+            bizAcctEventService.acceptEvent(event);
+        } catch (Exception ignored) {
+            // 失败事件可在业财事件台重试
+        }
     }
 
     @Override
@@ -222,6 +240,26 @@ public class AssetPurchasePutServiceImpl extends SkyeyeBusinessServiceImpl<Asset
                 assetReport.setWarehousingId(entity.getId());
                 assetReport.setWarehousingTime(warehousingTime);
                 assetReport.setState(AssetReportState.NORMAL.getKey());
+                // 月结折旧默认政策：60月、残值率5%、次月起提
+                if (assetReport.getUsefulLifeMonths() == null || assetReport.getUsefulLifeMonths() <= 0) {
+                    assetReport.setUsefulLifeMonths(60);
+                }
+                if (StrUtil.isBlank(assetReport.getResidualRate())) {
+                    assetReport.setResidualRate("5");
+                }
+                if (StrUtil.isBlank(assetReport.getAccumDeprecAmount())) {
+                    assetReport.setAccumDeprecAmount("0");
+                }
+                if (StrUtil.isBlank(assetReport.getDeprecStartMonth()) && warehousingTime.length() >= 7) {
+                    try {
+                        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(DateUtil.YYYY_MM);
+                        java.util.Calendar cal = java.util.Calendar.getInstance();
+                        cal.setTime(sdf.parse(warehousingTime.substring(0, 7)));
+                        cal.add(java.util.Calendar.MONTH, 1);
+                        assetReport.setDeprecStartMonth(sdf.format(cal.getTime()));
+                    } catch (Exception ignored) {
+                    }
+                }
             });
             assetReportService.updateEntity(assetReportList, entity.getCreateId());
         }

@@ -106,7 +106,8 @@ public class ShopStoreController {
         @ApiImplicitParam(id = "onlineBookType", name = "onlineBookType", value = "线上预约类型的设定", required = "num"),
         @ApiImplicitParam(id = "onlineBookJson", name = "onlineBookJson", value = "设置线上预约时需要存储各个时间段内的信息", required = "json"),
         @ApiImplicitParam(id = "onlineOpen", name = "onlineOpen", value = "线上门店是否开启", enumClass = WhetherEnum.class, required = "num"),
-        @ApiImplicitParam(id = "offlineOpen", name = "offlineOpen", value = "线下门店是否开启", enumClass = WhetherEnum.class, required = "num")})
+        @ApiImplicitParam(id = "offlineOpen", name = "offlineOpen", value = "线下门店是否开启", enumClass = WhetherEnum.class, required = "num"),
+        @ApiImplicitParam(id = "deliveryRadiusMeters", name = "deliveryRadiusMeters", value = "同城配送半径（米），空则用平台默认", required = "num")})
     @RequestMapping("/post/ShopStoreController/saveStoreOnlineMation")
     public void saveStoreOnlineMation(InputObject inputObject, OutputObject outputObject) {
         shopStoreService.saveStoreOnlineMation(inputObject, outputObject);

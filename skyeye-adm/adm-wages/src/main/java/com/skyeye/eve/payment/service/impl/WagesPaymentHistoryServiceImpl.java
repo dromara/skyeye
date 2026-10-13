@@ -22,8 +22,12 @@ import com.skyeye.eve.payment.classenum.PaymentHistoryState;
 import com.skyeye.eve.payment.dao.WagesPaymentHistoryDao;
 import com.skyeye.eve.payment.entity.WagesPaymentHistory;
 import com.skyeye.eve.payment.service.WagesPaymentHistoryService;
+import com.skyeye.finance.event.classenum.BizAcctEventType;
+import com.skyeye.finance.event.service.BizAcctEventService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,6 +43,10 @@ import java.util.stream.Collectors;
 @Service
 @SkyeyeService(name = "薪资发放历史", groupName = "薪资发放历史", allowDynamicAttrKey = false)
 public class WagesPaymentHistoryServiceImpl extends SkyeyeBusinessServiceImpl<WagesPaymentHistoryDao, WagesPaymentHistory> implements WagesPaymentHistoryService {
+
+    @Autowired
+    private BizAcctEventService bizAcctEventService;
+
     @Override
     protected QueryWrapper<WagesPaymentHistory> getQueryWrapper(CommonPageInfo commonPageInfo) {
         QueryWrapper<WagesPaymentHistory> queryWrapper = super.getQueryWrapper(commonPageInfo);
@@ -116,6 +124,15 @@ public class WagesPaymentHistoryServiceImpl extends SkyeyeBusinessServiceImpl<Wa
     }
 
     @Override
+    protected void createPostpose(WagesPaymentHistory entity, String userId) {
+        super.createPostpose(entity, userId);
+        // 业财一体：薪资核算完成计提应付职工薪酬
+        if (entity.getState() != null && entity.getState().equals(PaymentHistoryState.UNISSUED.getKey())) {
+            pushSalaryAcctEvent(entity, BizAcctEventType.SALARY_ACCRUE, "EHR_WAGES_ACCRUE", "薪资计提");
+        }
+    }
+
+    @Override
     public void editWagesPaymentHistoryState(String staffId, String payMonth, Integer state) {
         UpdateWrapper<WagesPaymentHistory> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(MybatisPlusUtil.toColumns(WagesPaymentHistory::getStaffId), staffId);
@@ -123,6 +140,37 @@ public class WagesPaymentHistoryServiceImpl extends SkyeyeBusinessServiceImpl<Wa
         updateWrapper.set(MybatisPlusUtil.toColumns(WagesPaymentHistory::getState), state);
         updateWrapper.set(MybatisPlusUtil.toColumns(WagesPaymentHistory::getGrantTime), DateUtil.getTimeAndToString());
         update(updateWrapper);
+        // 业财一体：薪资发放冲应付付现
+        if (state != null && state.equals(PaymentHistoryState.ISSUED.getKey())) {
+            QueryWrapper<WagesPaymentHistory> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq(MybatisPlusUtil.toColumns(WagesPaymentHistory::getStaffId), staffId);
+            queryWrapper.eq(MybatisPlusUtil.toColumns(WagesPaymentHistory::getPayMonth), payMonth);
+            WagesPaymentHistory history = getOne(queryWrapper, false);
+            if (history != null) {
+                pushSalaryAcctEvent(history, BizAcctEventType.SALARY_PAY, "EHR_WAGES_PAY", "薪资发放");
+            }
+        }
+    }
+
+    private void pushSalaryAcctEvent(WagesPaymentHistory entity, BizAcctEventType eventType, String sourceType, String summaryPrefix) {
+        try {
+            String amount = StrUtil.blankToDefault(entity.getActWages(), "0");
+            if (StrUtil.equals(amount, "0") || StrUtil.equals(amount, "0.00")) {
+                return;
+            }
+            // WagesPaymentHistory 无独立 id，业务主键为 staffId + payMonth
+            String sourceKey = entity.getStaffId() + "-" + entity.getPayMonth();
+            Map<String, Object> event = new HashMap<>();
+            event.put("eventType", eventType.getKey());
+            event.put("sourceType", sourceType);
+            event.put("sourceId", sourceKey);
+            event.put("sourceNo", sourceKey);
+            event.put("amount", amount);
+            event.put("summary", summaryPrefix + "-" + sourceKey);
+            bizAcctEventService.acceptEvent(event);
+        } catch (Exception ignored) {
+            // 失败事件可在业财事件台重试
+        }
     }
 
     @Override

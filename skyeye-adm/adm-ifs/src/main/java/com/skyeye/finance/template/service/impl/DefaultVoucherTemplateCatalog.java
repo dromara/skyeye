@@ -79,9 +79,10 @@ final class DefaultVoucherTemplateCatalog {
             def(BizAcctEventType.PROD_FINISH, "完工入库",
                 line(1, AmountDirection.BORROW, "amount", "{summary}", "1405", "1403"),
                 line(2, AmountDirection.LOAN, "amount", "{summary}", "5001")),
+            // 贷方可选：制费池结转(5101)、管理费用重分类(6602)、费用申请挂账(2241)、报销付现(现金)
             def(BizAcctEventType.MFG_OVERHEAD, "制造费用归集",
                 line(1, AmountDirection.BORROW, "amount", "{summary}", "5001"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", "5101", "6602")),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "5101", "6602", "2241", "1002", "1001")),
             def(BizAcctEventType.STOCKTAKE, "盘点盈亏",
                 line(1, AmountDirection.BORROW, "profitAmount", "{summary}", "1405", "1403"),
                 line(2, AmountDirection.LOAN, "profitAmount", "{summary}", "1901"),
@@ -128,7 +129,31 @@ final class DefaultVoucherTemplateCatalog {
                 line(2, AmountDirection.LOAN, "amount", "{summary}", "2241", "2202")),
             def(BizAcctEventType.SHOP_WITHDRAW, "商城提现打款",
                 line(1, AmountDirection.BORROW, "amount", "{summary}", "2241", "2202"),
-                line(2, AmountDirection.LOAN, "amount", "{summary}", "1002", "1001"))
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "1002", "1001")),
+            // 薪资：核算计提应付，发放时冲应付付现
+            def(BizAcctEventType.SALARY_ACCRUE, "薪资计提",
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "6602", "6601", "5101"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "2211")),
+            def(BizAcctEventType.SALARY_PAY, "薪资发放",
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "2211"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "1002", "1001")),
+            def(BizAcctEventType.FIXED_ASSET_PURCHASE, "固定资产购入",
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "1601"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "1002", "1001", "2202")),
+            def(BizAcctEventType.FIXED_ASSET_RETURN, "固定资产退货",
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "1002", "1001", "2202"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "1601")),
+            def(BizAcctEventType.FIXED_ASSET_DEPREC, "固定资产折旧",
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "6602", "5101", "6601"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "1602")),
+            // 报废简化：无累计折旧时仅按净值/原值冲固定资产
+            def(BizAcctEventType.FIXED_ASSET_DISPOSE, "固定资产处置报废",
+                line(1, AmountDirection.BORROW, "accumDeprecAmount", "{summary}", "1602"),
+                line(2, AmountDirection.BORROW, "amount", "{summary}", "6711", "6602"),
+                line(3, AmountDirection.LOAN, "originalAmount", "{summary}", "1601")),
+            def(BizAcctEventType.KEEPFIT_INTERCOURSE, "保养套餐往来确认",
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "6601", "6401"),
+                line(2, AmountDirection.LOAN, "amount", "{summary}", "2241", "2202"))
         );
     }
 

@@ -45,6 +45,13 @@ public enum BizAcctEventType implements SkyeyeEnumClass {
     STOCK_RETURN("stockReturn", "归还入库", true, false),
     SHOP_SETTLE("shopSettle", "商城结算可提现", true, false),
     SHOP_WITHDRAW("shopWithdraw", "商城提现打款", true, false),
+    SALARY_ACCRUE("salaryAccrue", "薪资计提", true, false),
+    SALARY_PAY("salaryPay", "薪资发放", true, false),
+    FIXED_ASSET_PURCHASE("fixedAssetPurchase", "固定资产购入", true, false),
+    FIXED_ASSET_RETURN("fixedAssetReturn", "固定资产退货", true, false),
+    FIXED_ASSET_DEPREC("fixedAssetDeprec", "固定资产折旧", true, false),
+    FIXED_ASSET_DISPOSE("fixedAssetDispose", "固定资产处置报废", true, false),
+    KEEPFIT_INTERCOURSE("keepfitIntercourse", "保养套餐往来确认", true, false),
     MANUAL("manual", "手工凭证", true, true),
     PERIOD_CLOSE("periodClose", "期末损益结转", true, false);
 

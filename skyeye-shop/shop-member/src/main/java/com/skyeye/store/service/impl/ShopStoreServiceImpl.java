@@ -290,6 +290,12 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
             updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineBookType), null);
             updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getOnlineBookJson), null);
         }
+        String deliveryRadiusMeters = params.get("deliveryRadiusMeters").toString();
+        if (StrUtil.isNotEmpty(deliveryRadiusMeters)) {
+            updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getDeliveryRadiusMeters), deliveryRadiusMeters);
+        } else {
+            updateWrapper.set(MybatisPlusUtil.toColumns(ShopStore::getDeliveryRadiusMeters), null);
+        }
         update(updateWrapper);
         refreshCache(params.get("id").toString());
     }
