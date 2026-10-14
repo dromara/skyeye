@@ -25,9 +25,12 @@ import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.rest.shopmaterialnorms.rest.IShopMaterialNormsRest;
 import com.skyeye.rest.platform.service.IPlatformBaseSettingService;
+import com.skyeye.store.classenum.ShopStoreApplyStatus;
 import com.skyeye.store.classenum.StoreNature;
+import com.skyeye.store.dao.ShopStoreApplyDao;
 import com.skyeye.store.dao.ShopStoreDao;
 import com.skyeye.store.entity.ShopStore;
+import com.skyeye.store.entity.ShopStoreApply;
 import com.skyeye.store.entity.ShopStoreStaff;
 import com.skyeye.store.service.ShopAreaService;
 import com.skyeye.store.service.ShopStoreService;
@@ -63,6 +66,9 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
     @Autowired
     private IPlatformBaseSettingService iPlatformBaseSettingService;
 
+    @Autowired
+    private ShopStoreApplyDao shopStoreApplyDao;
+
     @Override
     protected void createPrepose(ShopStore entity) {
         if (entity.getStoreNature() == null) {
@@ -74,7 +80,33 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
         if (entity.getOfflineOpen() == null) {
             entity.setOfflineOpen(WhetherEnum.ENABLE_USING.getKey());
         }
+        assertStoreNameAvailable(entity.getName(), null);
         entity.setTenantId(null);
+    }
+
+    @Override
+    public void assertStoreNameAvailable(String storeName, String excludeStoreId) {
+        String name = StrUtil.trim(storeName);
+        if (StrUtil.isBlank(name)) {
+            throw new CustomException("店铺名称不能为空");
+        }
+        boolean nameUsed = runWithTenant(TenantEnum.NO_ISOLATION, () -> {
+            QueryWrapper<ShopStore> storeQw = new QueryWrapper<>();
+            storeQw.eq(MybatisPlusUtil.toColumns(ShopStore::getName), name);
+            if (StrUtil.isNotBlank(excludeStoreId)) {
+                storeQw.ne(CommonConstants.ID, excludeStoreId);
+            }
+            if (getBaseMapper().selectCount(storeQw) > 0) {
+                return true;
+            }
+            QueryWrapper<ShopStoreApply> applyQw = new QueryWrapper<>();
+            applyQw.eq(MybatisPlusUtil.toColumns(ShopStoreApply::getStoreName), name);
+            applyQw.eq(MybatisPlusUtil.toColumns(ShopStoreApply::getState), ShopStoreApplyStatus.PENDING.getKey());
+            return shopStoreApplyDao.selectCount(applyQw) > 0;
+        });
+        if (nameUsed) {
+            throw new CustomException("店铺名称已存在，请更换");
+        }
     }
 
     @Override
@@ -149,6 +181,10 @@ public class ShopStoreServiceImpl extends SkyeyeBusinessServiceImpl<ShopStoreDao
         entity.setOnlineBookRadix(oldShopStore.getOnlineBookRadix());
         entity.setOnlineBookType(oldShopStore.getOnlineBookType());
         entity.setOnlineBookJson(oldShopStore.getOnlineBookJson());
+        // 改名时做全局唯一校验（排除自身）
+        if (!StrUtil.equals(StrUtil.trim(oldShopStore.getName()), StrUtil.trim(entity.getName()))) {
+            assertStoreNameAvailable(entity.getName(), entity.getId());
+        }
     }
 
     @Override

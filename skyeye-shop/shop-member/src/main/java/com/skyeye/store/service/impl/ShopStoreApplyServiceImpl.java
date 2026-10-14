@@ -76,10 +76,11 @@ public class ShopStoreApplyServiceImpl extends SkyeyeBusinessServiceImpl<ShopSto
     public void applyPersonalStore(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String memberId = inputObject.getLogParams().get("id").toString();
-        String storeName = params.get("storeName").toString();
+        String storeName = StrUtil.trim(params.get("storeName").toString());
         if (StrUtil.isBlank(storeName)) {
             throw new CustomException("店铺名称不能为空");
         }
+        shopStoreService.assertStoreNameAvailable(storeName, null);
 
         Member member = memberService.selectById(memberId);
         if (member == null || !java.util.Objects.equals(member.getAuthStatus(), MemberAuthStatus.AUTHED.getKey())) {

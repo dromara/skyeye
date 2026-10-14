@@ -44,4 +44,12 @@ public interface ShopStoreService extends SkyeyeBusinessService<ShopStore> {
      */
     int resolveEffectiveDeliveryRadiusMeters(ShopStore store);
 
+    /**
+     * 门店名称全局唯一校验（不按租户隔离）
+     *
+     * @param storeName      门店名称
+     * @param excludeStoreId 编辑时排除自身门店 id，新建传空
+     */
+    void assertStoreNameAvailable(String storeName, String excludeStoreId);
+
 }
