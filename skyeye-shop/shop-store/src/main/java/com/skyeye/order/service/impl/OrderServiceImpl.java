@@ -48,13 +48,20 @@ import com.skyeye.coupon.service.CouponUseService;
 import com.skyeye.eve.rest.quartz.SysQuartzMation;
 import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
+import com.skyeye.order.dao.OrderAfterSaleDao;
+import com.skyeye.order.dao.OrderCommentDao;
 import com.skyeye.order.dao.OrderDao;
 import com.skyeye.order.dao.OrderItemDao;
 import com.skyeye.order.entity.Order;
+import com.skyeye.order.entity.OrderAfterSale;
+import com.skyeye.order.entity.OrderComment;
 import com.skyeye.order.entity.OrderItem;
 import com.skyeye.order.enums.*;
 import com.skyeye.order.service.OrderItemService;
 import com.skyeye.order.service.OrderService;
+import com.skyeye.store.classenum.ShopStoreApplyStatus;
+import com.skyeye.store.entity.ShopStoreApply;
+import com.skyeye.store.service.ShopStoreApplyService;
 import com.skyeye.rest.pay.service.IPayService;
 import com.skyeye.rest.shopmaterialnorms.sevice.IShopMaterialNormsService;
 import com.skyeye.store.classenum.StoreNature;
@@ -139,6 +146,22 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
 
     @Autowired
     private ShopStoreBrowseStatDailyService shopStoreBrowseStatDailyService;
+
+    @Autowired
+    private OrderAfterSaleDao orderAfterSaleDao;
+
+    @Autowired
+    private OrderCommentDao orderCommentDao;
+
+    @Autowired
+    private ShopStoreApplyService shopStoreApplyService;
+
+    /** 售后「处理中」：待商家处理 / 待买家退货 / 待商家收货 / 退款中 */
+    private static final List<Integer> AFTER_SALE_PROCESSING = Arrays.asList(
+        OrderAfterSaleStatus.WAIT_MERCHANT.getKey(),
+        OrderAfterSaleStatus.WAIT_BUYER_RETURN.getKey(),
+        OrderAfterSaleStatus.WAIT_MERCHANT_RECEIVE.getKey(),
+        OrderAfterSaleStatus.REFUNDING.getKey());
 
     @Override
     public void createPrepose(Order order) {
@@ -1368,6 +1391,65 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         Map<String, Object> bean = buildStoreOrderStatBean(storeId, dropship, fulfill);
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    public void queryPersonalStoreWorkbenchBadge(InputObject inputObject, OutputObject outputObject) {
+        TableSelectInfo tableSelectInfo = inputObject.getParams(TableSelectInfo.class);
+        String storeId = tableSelectInfo.getObjectId();
+        if (StrUtil.isEmpty(storeId)) {
+            throw new CustomException("请选择门店");
+        }
+        ShopStore store = shopStoreService.selectById(storeId);
+        if (store == null || StrUtil.isEmpty(store.getId())) {
+            throw new CustomException("门店不存在");
+        }
+        String userId = inputObject.getLogParams().get(CommonConstants.ID).toString();
+        Map<String, Object> bean = new HashMap<>();
+        // 已卖出的订单：待发货（含部分发货）
+        Map<String, Object> soldStat = buildStoreOrderStatBean(storeId, false, false);
+        bean.put("orderWaitDeliver", soldStat.getOrDefault("waitDeliver", 0));
+        // 代发订单：供货方待发货
+        Map<String, Object> dropshipStat = buildStoreOrderStatBean(storeId, true, false);
+        bean.put("dropshipWaitDeliver", dropshipStat.getOrDefault("waitDeliver", 0));
+        // 售后记录：处理中
+        bean.put("afterSaleProcessing", countAfterSaleProcessing(storeId));
+        // 订单评价：待商家回复
+        bean.put("commentWaitReply", countCommentWaitReply(storeId));
+        // 我的申请：待审核
+        bean.put("applyPending", countApplyPending(userId));
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    private long countAfterSaleProcessing(String storeId) {
+        QueryWrapper<OrderAfterSale> wrapper = new QueryWrapper<>();
+        wrapper.and(w -> w.eq(MybatisPlusUtil.toColumns(OrderAfterSale::getStoreId), storeId)
+            .or().eq(MybatisPlusUtil.toColumns(OrderAfterSale::getSourceStoreId), storeId));
+        wrapper.in(MybatisPlusUtil.toColumns(OrderAfterSale::getStatus), AFTER_SALE_PROCESSING);
+        return orderAfterSaleDao.selectCount(wrapper);
+    }
+
+    private long countCommentWaitReply(String storeId) {
+        QueryWrapper<OrderComment> wrapper = new QueryWrapper<>();
+        wrapper.eq(MybatisPlusUtil.toColumns(OrderComment::getStoreId), storeId);
+        wrapper.in(MybatisPlusUtil.toColumns(OrderComment::getType), Arrays.asList(
+            OrderCommentType.CUSTOMERFiRST.getKey(),
+            OrderCommentType.CUSTOMERLATER.getKey()));
+        // isComment=1 表示商家已回复
+        wrapper.and(w -> w.ne(MybatisPlusUtil.toColumns(OrderComment::getIsComment), CommonNumConstants.NUM_ONE)
+            .or().isNull(MybatisPlusUtil.toColumns(OrderComment::getIsComment)));
+        return orderCommentDao.selectCount(wrapper);
+    }
+
+    private long countApplyPending(String userId) {
+        if (StrUtil.isBlank(userId)) {
+            return 0L;
+        }
+        QueryWrapper<ShopStoreApply> wrapper = new QueryWrapper<>();
+        wrapper.eq(MybatisPlusUtil.toColumns(ShopStoreApply::getCreateId), userId);
+        wrapper.eq(MybatisPlusUtil.toColumns(ShopStoreApply::getState), ShopStoreApplyStatus.PENDING.getKey());
+        return shopStoreApplyService.count(wrapper);
     }
 
     private boolean isDropshipQuery(TableSelectInfo tableSelectInfo) {

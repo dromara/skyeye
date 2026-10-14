@@ -75,6 +75,13 @@ public class OrderController {
         orderService.queryStoreOrderStat(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryPersonalStoreWorkbenchBadge", value = "个人店工作台菜单角标统计", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = TableSelectInfo.class)
+    @RequestMapping("/post/OrderController/queryPersonalStoreWorkbenchBadge")
+    public void queryPersonalStoreWorkbenchBadge(InputObject inputObject, OutputObject outputObject) {
+        orderService.queryPersonalStoreWorkbenchBadge(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryStoreOrderHistoryStat", value = "管理端门店历史经营统计", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = TableSelectInfo.class)
     @RequestMapping("/post/OrderController/queryStoreOrderHistoryStat")

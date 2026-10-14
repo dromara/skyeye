@@ -44,6 +44,12 @@ public interface OrderService extends SkyeyeBusinessService<Order> {
     void queryStoreOrderStat(InputObject inputObject, OutputObject outputObject);
 
     /**
+     * 个人店工作台菜单角标：仅返回待办特有状态数量
+     * orderWaitDeliver / dropshipWaitDeliver / afterSaleProcessing / commentWaitReply / applyPending
+     */
+    void queryPersonalStoreWorkbenchBadge(InputObject inputObject, OutputObject outputObject);
+
+    /**
      * 管理端门店历史经营统计（区间汇总 + 按日趋势）
      */
     void queryStoreOrderHistoryStat(InputObject inputObject, OutputObject outputObject);
