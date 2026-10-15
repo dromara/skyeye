@@ -23,7 +23,10 @@
 | EXPENSE_APPLY | 费用申请 | IFS | 费用申请单 | 否 |
 | LOAN_BORROW | 借款 | IFS | 借款单 | 否 |
 | LOAN_REPAY | 还款 | IFS | 还款单 | 否 |
-| SHOP_SETTLE | 商城结算可提现 | Shop | 结算释放 | 否 |
+| SHOP_ORDER_PAY | 商城订单支付入账 | Shop | 支付成功 | 否 |
+| SHOP_REFUND | 商城售后退款冲账 | Shop | 退款出账 | 否 |
+| SHOP_SETTLE | 商城结算可提现 | Shop | 货款结算释放 | 否 |
+| SHOP_COMMISSION | 商城佣金结算可提现 | Shop | 佣金结算释放 | 否 |
 | SHOP_WITHDRAW | 商城提现打款 | Shop | 提现成功 | 否 |
 | SALARY_ACCRUE | 薪资计提 | EHR | 薪资核算生成待发放 | 否 |
 | SALARY_PAY | 薪资发放 | EHR | 薪资发放（定时/状态变更） | 否 |

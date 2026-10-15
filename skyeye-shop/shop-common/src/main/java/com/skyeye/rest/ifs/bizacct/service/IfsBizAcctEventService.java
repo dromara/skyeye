@@ -1,5 +1,8 @@
 package com.skyeye.rest.ifs.bizacct.service;
 
+import cn.hutool.core.util.StrUtil;
+import com.skyeye.common.tenant.context.TenantContext;
+
 import java.util.Map;
 
 public interface IfsBizAcctEventService {
@@ -13,6 +16,24 @@ public interface IfsBizAcctEventService {
         try {
             acceptBizAcctEvent(map);
         } catch (Exception ignored) {
+        }
+    }
+
+    /**
+     * 按指定租户推财务事件（临时切换 TenantContext，供 Feign 透传；结束后还原）。
+     * 个人店请传 {@code TenantTypeEnum.SHOP}；企业店传门店所属租户。
+     */
+    default void pushIfsBizAcctEvent(Map<String, Object> map, String tenantId) {
+        if (StrUtil.isBlank(tenantId)) {
+            pushIfsBizAcctEvent(map);
+            return;
+        }
+        String oldTenantId = TenantContext.getTenantId();
+        try {
+            TenantContext.setTenantId(tenantId);
+            pushIfsBizAcctEvent(map);
+        } finally {
+            TenantContext.setTenantId(oldTenantId);
         }
     }
 }

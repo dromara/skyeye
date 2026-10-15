@@ -159,7 +159,7 @@ graph TB
 - 不再从整框拉线，避免线贴在框边上像连错。
 - 采购入库单、销售出库单、零售/门店/换货/借还等，要先转到仓库入/出库单后再记账，对应关系见下面仓库表；调拨单在业务单审批通过后直接推。
 - 费用申请、费用报销都推会计事件（申请挂账、报销付现）；加工完工走仓库入库自动推，制费仍手工。
-- 商城结算可提现、提现打款成功走 Shop → 会计事件。
+- 商城支付入账、退款冲账、货款/佣金结算、提现打款走 Shop → 会计事件。
 - 回款和开票是两条线，不是回款之后才开票。
 - 凭证支持冲销：过账后红字冲销，列表可看冲销关系。
 
@@ -223,7 +223,10 @@ graph TB
 | ADM 资产 | 月结批量折旧 | 月结计提主路径 | 会计事件 | `fixedAssetDeprec` |
 | IFS 资产 | 固定资产折旧补账 | 手工差额补账（例外） | 会计事件 | `fixedAssetDeprec` |
 | Shop 往来 | 保养套餐往来 | 双方确认完成 | 会计事件 | `keepfitIntercourse` |
-| Shop 结算 | 冻结转可提现 | 结算到期释放 | 会计事件 | `shopSettle` |
+| Shop 支付 | 订单支付成功 | 子单/父单支付落单 | 会计事件 | `shopOrderPay` |
+| Shop 退款 | 售后退款出账 | 退款成功扣账 | 会计事件 | `shopRefund` |
+| Shop 结算 | 货款冻结转可提现 | 结算到期释放 | 会计事件 | `shopSettle` |
+| Shop 佣金 | 佣金冻结转可提现 | 佣金结算释放 | 会计事件 | `shopCommission` |
 | Shop 提现 | 打款成功 | 转账成功回调 | 会计事件 | `shopWithdraw` |
 | IFS 会计凭证 | 手工录入 | 保存 | 直接凭证 | `manual` |
 | IFS 期末结转 | 损益结转 | 结账 | 会计事件 | `periodClose` |
@@ -254,7 +257,10 @@ graph TB
 | `exchangeOut` | 借应付 / 贷库存 | 冲应付 |
 | `exchangeIn` | 借库存 / 贷成本 | 否 |
 | `stockLoan` / `stockReturn` | 其他应收 vs 库存 | 否 |
+| `shopOrderPay` | 借现金 / 贷主营业务收入 | 否 |
+| `shopRefund` | 借主营业务收入 / 贷现金 | 否 |
 | `shopSettle` | 借费用 / 贷其他应付款 | 否 |
+| `shopCommission` | 借费用 / 贷其他应付款 | 否 |
 | `shopWithdraw` | 借其他应付款 / 贷现金 | 否 |
 | `loanBorrow` / `loanRepay` | 其他应收 vs 现金 | 否 |
 | `mfgOverhead` | 借 5001 / 贷 5101(或2241/现金) | 否 |
@@ -320,11 +326,14 @@ graph TB
 3. 自动：费用类型名称或事由含「制造费用」的费用申请审批通过 → `mfgOverhead`（来源 `IFS_FEE_APPLICATION_MFG`）。
 4. 自动：报销明细费用项目含「制造费用」审批通过 → `mfgOverhead`（来源 `IFS_REIMBURSEMENT_MFG`）。
 
-### 6. 商城结算 / 提现
+### 6. 商城支付 / 退款 / 结算 / 提现
 
-1. 个人店订单确认收货并过结算冻结期（或走定时/强制释放）→ 流水「结算可提现」后，IFS 有 `shopSettle`（金额=分转元）。
-2. 提现申请审核通过且渠道打款成功 → `shopWithdraw`（借其他应付款 / 贷银行存款）。
-3. Shop 需配置 `webroot.skyeye-ifs`，且能访问 ifs 服务。
+1. 前置：重启 shop + ifs；初始化默认凭证模板（补 `shopOrderPay`/`shopRefund`/`shopCommission`）。**个人店事件落在租户 `shop`**，企业店落在门店 `tenantId`；测个人店请切到 `shop` 租户看事件台。
+2. 订单支付成功（子单或整单落单）→ `shopOrderPay`（借银行存款 / 贷主营业务收入；来源 `SHOP_ORDER_ITEM_PAY`，金额=分转元，按子单幂等；租户=销售店）。
+3. 售后退款出账成功 → `shopRefund`（借收入 / 贷银行存款；来源 `SHOP_ORDER_AFTER_SALE`；租户=售后门店）。
+4. 确认收货过结算冻结期：货款释放 → `shopSettle`（`SHOP_STORE_SETTLE`）；佣金释放 → `shopCommission`（`SHOP_STORE_COMMISSION_SETTLE`），二者 sourceId 同为子单 id 但不冲突；租户=资金所属门店。
+5. 提现申请审核通过且渠道打款成功 → `shopWithdraw`（借其他应付款 / 贷银行存款；租户=提现门店）。
+6. Shop 需配置 `webroot.skyeye-ifs`，且能访问 ifs 服务。
 
 ### 7. 凭证冲销关系 UI
 

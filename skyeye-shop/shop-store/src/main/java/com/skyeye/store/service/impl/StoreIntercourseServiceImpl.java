@@ -135,7 +135,12 @@ public class StoreIntercourseServiceImpl implements StoreIntercourseService {
             acctEvent.put("amount", StrUtil.blankToDefault(
                 storeIntercourse.get("mealAllSinglePrice") == null ? null : storeIntercourse.get("mealAllSinglePrice").toString(), "0"));
             acctEvent.put("summary", "保养套餐往来确认-" + id);
-            ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
+            // 往来属企业店场景，落当前请求租户；无租户上下文时不强制切换
+            if (tenantEnable && StrUtil.isNotBlank(TenantContext.getTenantId())) {
+                ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent, TenantContext.getTenantId());
+            } else {
+                ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
+            }
         }
     }
 

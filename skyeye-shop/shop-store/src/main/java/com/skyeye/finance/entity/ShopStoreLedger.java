@@ -65,6 +65,13 @@ public class ShopStoreLedger extends OperatorUserInfo {
     private String oddNumber;
 
     /**
+     * 关联订单子单 id（订单入账/冻结等 bizId 即子单；退款类 bizId 为售后单，此字段指向子单便于跳转）
+     */
+    @TableField(exist = false)
+    @Property(value = "关联订单子单id")
+    private String orderItemId;
+
+    /**
      * 订单到账状态；非订单类流水为空
      */
     @TableField(exist = false)

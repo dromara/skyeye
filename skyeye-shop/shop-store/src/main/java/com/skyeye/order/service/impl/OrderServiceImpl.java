@@ -62,6 +62,8 @@ import com.skyeye.order.service.OrderService;
 import com.skyeye.store.classenum.ShopStoreApplyStatus;
 import com.skyeye.store.entity.ShopStoreApply;
 import com.skyeye.store.service.ShopStoreApplyService;
+import com.skyeye.rest.ifs.bizacct.ShopIfsAcctTenantHelper;
+import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import com.skyeye.rest.pay.service.IPayService;
 import com.skyeye.rest.shopmaterialnorms.sevice.IShopMaterialNormsService;
 import com.skyeye.store.classenum.StoreNature;
@@ -155,6 +157,9 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
 
     @Autowired
     private ShopStoreApplyService shopStoreApplyService;
+
+    @Autowired
+    private IfsBizAcctEventService ifsBizAcctEventService;
 
     /** 售后「处理中」：待商家处理 / 待买家退货 / 待商家收货 / 退款中 */
     private static final List<Integer> AFTER_SALE_PROCESSING = Arrays.asList(
@@ -765,7 +770,8 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
                 throw new CustomException("当前订单状态不为待支付、部分支付或支付失败状态，不可修改");
             }
             orderItemService.editStateById(orderItem.getId(), String.valueOf(ShopOrderItemOtherState.WAIT_DELIVER.getKey()));
-            // 资金：支付不入账，确认收货后冻结，期满可提现
+            // 业财：支付入账（门店资金仍确认收货后冻结，期满可提现）
+            pushShopOrderPayAcctEvent(orderItem);
 
             List<OrderItem> orderItemList = orderItemService.queryOrderItemByParentId(orderItem.getParentId());
             boolean hasOtherUnpaid = orderItemList.stream()
@@ -797,6 +803,7 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
                 .collect(Collectors.toList());
             for (OrderItem item : waitPayList) {
                 orderItemService.editStateById(item.getId(), String.valueOf(ShopOrderItemOtherState.WAIT_DELIVER.getKey()));
+                pushShopOrderPayAcctEvent(item);
             }
             UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq(CommonConstants.ID, id);
@@ -809,6 +816,52 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         } else {
             throw new CustomException("当前订单状态不为待支付、部分支付或支付失败状态，不可修改");
         }
+    }
+
+    /**
+     * 业财一体：子单支付成功推收入入账（金额分→元；幂等=子单）
+     */
+    private void pushShopOrderPayAcctEvent(OrderItem orderItem) {
+        if (orderItem == null || StrUtil.isBlank(orderItem.getId())) {
+            return;
+        }
+        String payFen = orderItem.getPayPrice();
+        if (StrUtil.isNotBlank(orderItem.getAdjustPrice())
+            && !StrUtil.equals(CommonNumConstants.NUM_ZERO.toString(), orderItem.getAdjustPrice())) {
+            payFen = orderItem.getAdjustPrice();
+        }
+        if (StrUtil.isBlank(payFen) || StrUtil.equals(CommonNumConstants.NUM_ZERO.toString(), payFen)) {
+            return;
+        }
+        String amountYuan = CalculationUtil.divide(payFen, "100", CommonNumConstants.NUM_TWO);
+        if (StrUtil.isBlank(amountYuan)
+            || CalculationUtil.compareTo(amountYuan, CommonNumConstants.NUM_ZERO.toString(),
+            CommonNumConstants.NUM_TWO, java.math.RoundingMode.HALF_UP) <= 0) {
+            return;
+        }
+        Map<String, Object> acctEvent = new HashMap<>();
+        acctEvent.put("eventType", "shopOrderPay");
+        acctEvent.put("sourceType", "SHOP_ORDER_ITEM_PAY");
+        acctEvent.put("sourceId", orderItem.getId());
+        acctEvent.put("sourceNo", StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId()));
+        acctEvent.put("amount", amountYuan);
+        acctEvent.put("summary", "商城订单支付-" + StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId()));
+        ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent, resolveIfsTenantIdByStoreId(orderItem.getStoreId()));
+    }
+
+    /**
+     * 业财落账租户：个人店→shop，企业店→门店所属租户
+     */
+    private String resolveIfsTenantIdByStoreId(String storeId) {
+        if (StrUtil.isBlank(storeId)) {
+            return ShopIfsAcctTenantHelper.resolve(true, null);
+        }
+        ShopStore store = shopStoreService.selectById(storeId);
+        if (store == null) {
+            return ShopIfsAcctTenantHelper.resolve(true, null);
+        }
+        boolean personal = Objects.equals(store.getStoreNature(), StoreNature.PERSONAL.getKey());
+        return ShopIfsAcctTenantHelper.resolve(personal, store.getTenantId());
     }
 
     @Override
