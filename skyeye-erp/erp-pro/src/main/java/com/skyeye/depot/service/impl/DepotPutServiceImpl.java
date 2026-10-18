@@ -330,6 +330,7 @@ public class DepotPutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotPutDao, 
         }
         Map<String, Object> acctEvent = new HashMap<>();
         String amount = StrUtil.blankToDefault(entity.getTotalPrice(), "0");
+        String costAmount = resolveCostAmountByNorms(entity.getErpOrderItemList());
         acctEvent.put("sourceId", entity.getId());
         acctEvent.put("sourceNo", entity.getOddNumber());
         acctEvent.put("amount", amount);
@@ -342,52 +343,54 @@ public class DepotPutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotPutDao, 
         } else if (fromType == DepotPutFromType.OTHER_WARE_HOUS.getKey()) {
             acctEvent.put("eventType", "otherIn");
             acctEvent.put("sourceType", "ERP_DEPOT_PUT");
-            acctEvent.put("costAmount", amount);
+            acctEvent.put("costAmount", costAmount);
             acctEvent.put("summary", "其他入库-" + entity.getOddNumber());
         } else if (fromType == DepotPutFromType.SEAL_RETURNS.getKey()) {
+            // amount=退货价(冲收入/应收)，costAmount=规格成本价(冲成本)
             acctEvent.put("eventType", "salesReturn");
             acctEvent.put("sourceType", "ERP_DEPOT_PUT");
             acctEvent.put("customerId", entity.getHolderId());
-            acctEvent.put("costAmount", amount);
+            acctEvent.put("costAmount", costAmount);
             acctEvent.put("summary", "销售退货-" + entity.getOddNumber());
         } else if (fromType == DepotPutFromType.RETURN_PUT.getKey()) {
             acctEvent.put("eventType", "prodReturn");
             acctEvent.put("sourceType", "ERP_DEPOT_PUT");
-            acctEvent.put("costAmount", amount);
+            acctEvent.put("costAmount", costAmount);
             acctEvent.put("departmentId", entity.getDepartmentId());
             acctEvent.put("summary", "生产退料-" + entity.getOddNumber());
         } else if (fromType == DepotPutFromType.MACHIN_PUT.getKey()) {
             // 生产成本：加工入库审批通过自动推完工入库凭证（制费仍走 IFS 手工归集）
             acctEvent.put("eventType", "prodFinish");
             acctEvent.put("sourceType", "ERP_DEPOT_PUT");
-            acctEvent.put("costAmount", amount);
+            acctEvent.put("costAmount", costAmount);
+            acctEvent.put("amount", isBlankOrZero(costAmount) ? amount : costAmount);
             acctEvent.put("summary", "完工入库-" + entity.getOddNumber());
         } else if (fromType == DepotPutFromType.RETAIL_RETURNS.getKey()) {
             acctEvent.put("eventType", "retailReturn");
             acctEvent.put("sourceType", "ERP_DEPOT_PUT");
-            acctEvent.put("costAmount", amount);
+            acctEvent.put("costAmount", costAmount);
             acctEvent.put("summary", "零售退货-" + entity.getOddNumber());
         } else if (fromType == DepotPutFromType.SHOP_RETURNS.getKey()) {
             acctEvent.put("eventType", "storeReturn");
             acctEvent.put("sourceType", "ERP_DEPOT_PUT");
-            acctEvent.put("costAmount", amount);
+            acctEvent.put("costAmount", costAmount);
             acctEvent.put("summary", "门店退货-" + entity.getOddNumber());
         } else if (fromType == DepotPutFromType.SHOP_CONFIRM_RETURNS.getKey()) {
             acctEvent.put("eventType", "storeMaterialReturn");
             acctEvent.put("sourceType", "ERP_DEPOT_PUT");
-            acctEvent.put("costAmount", amount);
+            acctEvent.put("costAmount", costAmount);
             acctEvent.put("summary", "门店物料退货-" + entity.getOddNumber());
         } else if (fromType == DepotPutFromType.CONFIRM_RETURN.getKey()) {
             acctEvent.put("eventType", "materialReturn");
             acctEvent.put("sourceType", "ERP_DEPOT_PUT");
-            acctEvent.put("costAmount", amount);
+            acctEvent.put("costAmount", costAmount);
             acctEvent.put("departmentId", entity.getDepartmentId());
             acctEvent.put("summary", "物料退货-" + entity.getOddNumber());
         } else if (fromType == DepotPutFromType.SALES_EXCHANGES.getKey()) {
             acctEvent.put("eventType", "exchangeIn");
             acctEvent.put("sourceType", "ERP_DEPOT_PUT");
             acctEvent.put("customerId", entity.getHolderId());
-            acctEvent.put("costAmount", amount);
+            acctEvent.put("costAmount", costAmount);
             acctEvent.put("summary", "销售换货入库-" + entity.getOddNumber());
         } else if (fromType == DepotPutFromType.LOANIN.getKey()) {
             acctEvent.put("eventType", "stockReturn");
@@ -398,6 +401,13 @@ public class DepotPutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotPutDao, 
             return;
         }
         ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
+    }
+
+    private boolean isBlankOrZero(String amount) {
+        if (StrUtil.isBlank(amount)) {
+            return true;
+        }
+        return CalculationUtil.compareTo(amount, "0", CommonNumConstants.NUM_TWO, RoundingMode.HALF_UP) == 0;
     }
 
     private void checkMaterialNorms(DepotPut entity, String fromTypeIdKey, boolean setData) {

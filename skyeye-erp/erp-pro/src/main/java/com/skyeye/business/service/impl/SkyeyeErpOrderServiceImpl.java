@@ -538,4 +538,40 @@ public class SkyeyeErpOrderServiceImpl<D extends SkyeyeBaseMapper<T>, T extends 
         update(updateWrapper);
         refreshCache(id);
     }
+
+    /**
+     * 业财成本金额：按规格「采购价/成本价」× 数量汇总；无成本价时该行记 0。
+     * 完整移动加权待存货成本台账落地后替换。
+     */
+    protected String resolveCostAmountByNorms(List<ErpOrderItem> items) {
+        if (CollectionUtil.isEmpty(items)) {
+            return CommonNumConstants.NUM_ZERO.toString();
+        }
+        List<String> normsIds = items.stream()
+            .map(ErpOrderItem::getNormsId)
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
+        Map<String, MaterialNorms> normsMap = CollectionUtil.isEmpty(normsIds)
+            ? Collections.emptyMap()
+            : materialNormsService.selectByIds(normsIds.toArray(new String[0])).stream()
+            .filter(n -> n != null && StrUtil.isNotBlank(n.getId()))
+            .collect(Collectors.toMap(MaterialNorms::getId, n -> n, (a, b) -> a));
+        String total = CommonNumConstants.NUM_ZERO.toString();
+        for (ErpOrderItem item : items) {
+            if (item == null || StrUtil.isBlank(item.getNormsId())) {
+                continue;
+            }
+            MaterialNorms norms = normsMap.get(item.getNormsId());
+            String unitCost = norms == null ? null : norms.getEstimatePurchasePrice();
+            if (StrUtil.isBlank(unitCost)
+                || CalculationUtil.compareTo(unitCost, "0", CommonNumConstants.NUM_TWO, RoundingMode.HALF_UP) <= 0) {
+                continue;
+            }
+            String qty = StrUtil.blankToDefault(item.getOperNumber(), CommonNumConstants.NUM_ZERO.toString());
+            String lineCost = CalculationUtil.multiply(qty, unitCost, CommonNumConstants.NUM_TWO);
+            total = CalculationUtil.add(total, lineCost, CommonNumConstants.NUM_TWO);
+        }
+        return total;
+    }
 }

@@ -23,6 +23,7 @@ import com.skyeye.finance.event.entity.BizAcctEvent;
 import com.skyeye.finance.event.service.BizAcctEventService;
 import com.skyeye.finance.journal.entity.JournalVoucher;
 import com.skyeye.finance.journal.service.JournalVoucherService;
+import com.skyeye.finance.period.service.AccountPeriodService;
 import com.skyeye.finance.template.entity.VoucherTemplate;
 import com.skyeye.finance.template.service.VoucherTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,9 @@ public class BizAcctEventServiceImpl extends SkyeyeBusinessServiceImpl<BizAcctEv
 
     @Autowired
     private IfsSetOfBooksService ifsSetOfBooksService;
+
+    @Autowired
+    private AccountPeriodService accountPeriodService;
 
     @Override
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
@@ -159,15 +163,23 @@ public class BizAcctEventServiceImpl extends SkyeyeBusinessServiceImpl<BizAcctEv
             }
             VoucherTemplate template = voucherTemplateService.getEnabledTemplate(
                 event.getEventType(), event.getSetOfBooksId());
+            String voucherDate = params.get("voucherDate") == null ? null : params.get("voucherDate").toString();
             String booksId = ifsSetOfBooksService.resolveSetOfBooksId(
                 StrUtil.blankToDefault(event.getSetOfBooksId(), template.getSetOfBooksId()),
-                params.get("voucherDate") == null ? null : params.get("voucherDate").toString());
+                voucherDate);
             event.setSetOfBooksId(booksId);
             params.put("setOfBooksId", booksId);
             UpdateWrapper<BizAcctEvent> booksUw = new UpdateWrapper<>();
             booksUw.eq(CommonConstants.ID, event.getId());
             booksUw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getSetOfBooksId), booksId);
             update(booksUw);
+
+            // 期间关闭后禁止生成凭证（BIZ_CLOSED / FIN_CLOSED）；事件记 FAILED 可重试
+            String periodCode = StrUtil.isNotBlank(voucherDate) && voucherDate.length() >= 7
+                ? voucherDate.substring(0, 7) : null;
+            if (StrUtil.isNotBlank(periodCode)) {
+                accountPeriodService.assertPeriodOpen(booksId, periodCode);
+            }
 
             Map<String, Object> payload = new HashMap<>(params);
             payload.put("idempotencyKey", event.getIdempotencyKey());
@@ -176,9 +188,8 @@ public class BizAcctEventServiceImpl extends SkyeyeBusinessServiceImpl<BizAcctEv
                 payload.put("amount", "0");
                 payload.put("amountExTax", "0");
             }
-            if ((BizAcctEventType.SALES_OUT.getKey().equals(event.getEventType())
-                || BizAcctEventType.SALES_RETURN.getKey().equals(event.getEventType())
-                || BizAcctEventType.TRANSFER.getKey().equals(event.getEventType()))
+            // 调拨无成本价时仍可用 amount；销售出/退不再用售价冒充成本
+            if (BizAcctEventType.TRANSFER.getKey().equals(event.getEventType())
                 && isZeroAmount(payload.get("costAmount"))) {
                 payload.put("costAmount", payload.get("amount"));
             }

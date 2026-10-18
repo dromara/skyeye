@@ -385,6 +385,7 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
         }
         Map<String, Object> acctEvent = new HashMap<>();
         String amount = StrUtil.blankToDefault(entity.getTotalPrice(), "0");
+        String costAmount = resolveCostAmountByNorms(entity.getErpOrderItemList());
         acctEvent.put("sourceId", entity.getId());
         acctEvent.put("sourceNo", entity.getOddNumber());
         acctEvent.put("amount", amount);
@@ -393,12 +394,14 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
             acctEvent.put("eventType", "salesOut");
             acctEvent.put("sourceType", "ERP_DEPOT_OUT");
             acctEvent.put("customerId", entity.getHolderId());
-            acctEvent.put("costAmount", amount);
+            acctEvent.put("costAmount", costAmount);
             acctEvent.put("summary", "销售出库-" + entity.getOddNumber());
         } else if (fromType == DepotOutFromType.OTHER_OUTLET.getKey()) {
             acctEvent.put("eventType", "otherOut");
             acctEvent.put("sourceType", "ERP_DEPOT_OUT");
-            acctEvent.put("costAmount", amount);
+            // 其他出库模板用 amount；无成本价时仍回退单据金额，避免零分录
+            acctEvent.put("amount", isBlankOrZero(costAmount) ? amount : costAmount);
+            acctEvent.put("costAmount", costAmount);
             acctEvent.put("summary", "其他出库-" + entity.getOddNumber());
         } else if (fromType == DepotOutFromType.PURCHASE_RETURNS.getKey()) {
             acctEvent.put("eventType", "purchaseReturn");
@@ -408,29 +411,29 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
         } else if (fromType == DepotOutFromType.REQUISITION_OUTLET.getKey()) {
             acctEvent.put("eventType", "prodPick");
             acctEvent.put("sourceType", "ERP_DEPOT_OUT");
-            acctEvent.put("costAmount", amount);
+            acctEvent.put("costAmount", costAmount);
             acctEvent.put("departmentId", entity.getDepartmentId());
             acctEvent.put("summary", "生产领料-" + entity.getOddNumber());
         } else if (fromType == DepotOutFromType.PATCH_OUTLET.getKey()) {
             acctEvent.put("eventType", "prodPick");
             acctEvent.put("sourceType", "ERP_DEPOT_OUT");
-            acctEvent.put("costAmount", amount);
+            acctEvent.put("costAmount", costAmount);
             acctEvent.put("departmentId", entity.getDepartmentId());
             acctEvent.put("summary", "生产补料-" + entity.getOddNumber());
         } else if (fromType == DepotOutFromType.RETAIL_OUTLET.getKey()) {
             acctEvent.put("eventType", "retailOut");
             acctEvent.put("sourceType", "ERP_DEPOT_OUT");
-            acctEvent.put("costAmount", amount);
+            acctEvent.put("costAmount", costAmount);
             acctEvent.put("summary", "零售出库-" + entity.getOddNumber());
         } else if (fromType == DepotOutFromType.SHOP_OUTLET.getKey()) {
             acctEvent.put("eventType", "storePick");
             acctEvent.put("sourceType", "ERP_DEPOT_OUT");
-            acctEvent.put("costAmount", amount);
+            acctEvent.put("costAmount", costAmount);
             acctEvent.put("summary", "门店申领-" + entity.getOddNumber());
         } else if (fromType == DepotOutFromType.SEAL_APPLY.getKey()) {
             acctEvent.put("eventType", "sealPick");
             acctEvent.put("sourceType", "ERP_DEPOT_OUT");
-            acctEvent.put("costAmount", amount);
+            acctEvent.put("costAmount", costAmount);
             acctEvent.put("summary", "配件申领-" + entity.getOddNumber());
         } else if (fromType == DepotOutFromType.PURCHASE_EXCHANGE.getKey()) {
             acctEvent.put("eventType", "exchangeOut");
@@ -446,6 +449,13 @@ public class DepotOutServiceImpl extends SkyeyeErpOrderServiceImpl<DepotOutDao, 
             return;
         }
         ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent);
+    }
+
+    private boolean isBlankOrZero(String amount) {
+        if (StrUtil.isBlank(amount)) {
+            return true;
+        }
+        return CalculationUtil.compareTo(amount, "0", CommonNumConstants.NUM_TWO, RoundingMode.HALF_UP) == 0;
     }
 
     private void updateSealApply(DepotOut entity, List<String> normsCodeList, boolean result) {

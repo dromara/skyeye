@@ -30,10 +30,11 @@ final class DefaultVoucherTemplateCatalog {
             def(BizAcctEventType.RECEIPT, "客户回款",
                 line(1, AmountDirection.BORROW, "amount", "{summary}", "1002", "1001"),
                 line(2, AmountDirection.LOAN, "amount", "{summary}", "1122")),
-            def(BizAcctEventType.EXPENSE_REIMBURSE, "费用报销",
-                line(1, AmountDirection.BORROW, "amount", "{summary}", "6602", "6601"),
+            // 报销付款：冲费用申请挂账；须先走费用申请，否则 2241 会透支
+            def(BizAcctEventType.EXPENSE_REIMBURSE, "费用报销付款",
+                line(1, AmountDirection.BORROW, "amount", "{summary}", "2241"),
                 line(2, AmountDirection.LOAN, "amount", "{summary}", "1002", "1001")),
-            // 费用申请审批通过：先挂账，报销付款时再冲其他应付款
+            // 费用申请审批通过：借费用 / 贷其他应付款
             def(BizAcctEventType.EXPENSE_APPLY, "费用申请",
                 line(1, AmountDirection.BORROW, "amount", "{summary}", "6602", "6601"),
                 line(2, AmountDirection.LOAN, "amount", "{summary}", "2241")),
@@ -61,9 +62,12 @@ final class DefaultVoucherTemplateCatalog {
             def(BizAcctEventType.SALES_INVOICE, "销售开票",
                 line(1, AmountDirection.BORROW, "taxAmount", "{summary}", "1122"),
                 line(2, AmountDirection.LOAN, "taxAmount", "{summary}", "22210101", "2221")),
+            // 冲成本 + 冲收入/应收（amount=退货价，costAmount=成本价；0 行自动跳过）
             def(BizAcctEventType.SALES_RETURN, "销售退货",
                 line(1, AmountDirection.BORROW, "costAmount", "{summary}", "1405", "1403"),
-                line(2, AmountDirection.LOAN, "costAmount", "{summary}", "6401")),
+                line(2, AmountDirection.LOAN, "costAmount", "{summary}", "6401"),
+                line(3, AmountDirection.BORROW, "amount", "{summary}", "6001"),
+                line(4, AmountDirection.LOAN, "amount", "{summary}", "1122")),
             def(BizAcctEventType.OTHER_IN, "其他入库",
                 line(1, AmountDirection.BORROW, "amount", "{summary}", "1405", "1403"),
                 line(2, AmountDirection.LOAN, "amount", "{summary}", "6301", "6001")),

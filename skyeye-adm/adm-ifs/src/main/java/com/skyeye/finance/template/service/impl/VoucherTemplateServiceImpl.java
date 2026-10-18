@@ -29,9 +29,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 凭证模板：按业务事项(eventType)配置借贷科目与金额字段。
@@ -40,6 +43,11 @@ import java.util.Map;
 @Service
 @SkyeyeService(name = "凭证模板管理", groupName = "财务中枢")
 public class VoucherTemplateServiceImpl extends SkyeyeBusinessServiceImpl<VoucherTemplateDao, VoucherTemplate> implements VoucherTemplateService {
+
+    /** 目录已改正的事项：初始化时重建「默认-」模板，避免旧分录继续双记费用/只冲成本 */
+    private static final Set<String> FORCE_REFRESH_DEFAULT_EVENT_TYPES = new HashSet<>(Arrays.asList(
+        "salesReturn", "expenseReimburse"
+    ));
 
     @Autowired
     private VoucherTemplateLineService voucherTemplateLineService;
@@ -159,7 +167,12 @@ public class VoucherTemplateServiceImpl extends SkyeyeBusinessServiceImpl<Vouche
         List<String> failed = new ArrayList<>();
 
         for (DefaultVoucherTemplateCatalog.TemplateDef def : DefaultVoucherTemplateCatalog.all()) {
-            if (existsAnyTemplate(def.getEventType())) {
+            if (FORCE_REFRESH_DEFAULT_EVENT_TYPES.contains(def.getEventType())) {
+                int removed = deleteDefaultTemplatesByEventType(def.getEventType());
+                if (removed > 0) {
+                    skipped.add(def.getEventType() + "(已重建默认模板x" + removed + ")");
+                }
+            } else if (existsAnyTemplate(def.getEventType())) {
                 skipped.add(def.getEventType() + "(已存在)");
                 continue;
             }
@@ -216,6 +229,21 @@ public class VoucherTemplateServiceImpl extends SkyeyeBusinessServiceImpl<Vouche
         QueryWrapper<VoucherTemplate> qw = new QueryWrapper<>();
         qw.eq(MybatisPlusUtil.toColumns(VoucherTemplate::getEventType), eventType);
         return count(qw) > 0;
+    }
+
+    /** 仅删名称以「默认-」开头的模板，保留手工自定义 */
+    private int deleteDefaultTemplatesByEventType(String eventType) {
+        QueryWrapper<VoucherTemplate> qw = new QueryWrapper<>();
+        qw.eq(MybatisPlusUtil.toColumns(VoucherTemplate::getEventType), eventType);
+        qw.likeRight(MybatisPlusUtil.toColumns(VoucherTemplate::getName), "默认-");
+        List<VoucherTemplate> list = list(qw);
+        if (CollectionUtil.isEmpty(list)) {
+            return 0;
+        }
+        for (VoucherTemplate tpl : list) {
+            deleteById(tpl.getId());
+        }
+        return list.size();
     }
 
     private AccountSubject findSubjectByNums(String[] nums) {
