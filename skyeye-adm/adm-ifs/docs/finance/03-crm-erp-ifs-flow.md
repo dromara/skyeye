@@ -265,7 +265,7 @@ graph TB
 | `exchangeIn` | 借库存 / 贷成本 | 否 |
 | `stockLoan` / `stockReturn` | 其他应收 vs 库存 | 否 |
 | `shopOrderPay` | 借现金 / 贷预收账款 2203 | 否 |
-| `shopOrderIncome` | 借预收 / 贷收入+销项税；有成本再借成本贷库存 | 否 |
+| `shopOrderIncome` | 借预收 / 贷收入（暂不拆销项税）；有成本再借成本贷库存 | 否 |
 | `shopRefundAdvance` | 借预收 2203 / 贷现金 | 否 |
 | `shopRefund` | 借主营业务收入 / 贷现金 | 否 |
 | `shopSettle` | 借费用 / 贷其他应付款 | 否 |
@@ -379,7 +379,7 @@ graph TB
 3. 关闭会计期间后再审批会推账的单据 → 审批失败，提示「会计期间已关闭」；重开期间后再审。
 4. 先采购入库暂估成功，再对同一供应商、同一金额做应付确认 → 应付事件成功但不出凭证，原因含「已有采购入库暂估」。
 5. 应收事项填税率或税额后审批 → `receivableConfirm` 借 1122（价税合计）/ 贷 6001（不含税）/ 贷销项税。
-6. 商城规格填采购价，可选填税率；确认收货 → `shopOrderIncome` 含成本行，有税率再出销项税。执行 `docs/sql/202610-receivable-shop-tax.sql`。
+6. 商城规格填采购价即可；确认收货 → `shopOrderIncome` 含成本行，暂不拆销项税。应收价税字段执行 `docs/sql/202610-receivable-shop-tax.sql`。
 
 ### 9. 固定资产购入 / 退货 / 报废 / 月结折旧（本批）
 

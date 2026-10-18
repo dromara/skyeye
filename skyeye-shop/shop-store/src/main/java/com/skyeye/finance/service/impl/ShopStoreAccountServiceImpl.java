@@ -23,7 +23,6 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
-import com.skyeye.common.util.InvoiceTaxSplitUtil;
 import com.skyeye.common.util.NumberParseUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
@@ -1626,12 +1625,13 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
     }
 
     /**
-     * 商城收入/退款：按规格税率拆销项税，按采购价×数量结转成本。
-     * 部分退款按退款额/实付比例冲成本。查不到规格时税额和成本为 0。
+     * 商城收入/退款：暂不按规格拆销项税（整额进收入）；按采购价×数量结转成本。
+     * 部分退款按退款额/实付比例冲成本。查不到规格时成本为 0。
      */
     private void fillShopIncomeTaxAndCost(Map<String, Object> acctEvent, OrderItem item,
                                            String inclusiveYuan, boolean scaleCostByRefund) {
-        String taxRate = null;
+        acctEvent.put("amountExTax", inclusiveYuan);
+        acctEvent.put("taxAmount", "0");
         String unitCost = null;
         try {
             if (item != null && StrUtil.isNotBlank(item.getNormsId())) {
@@ -1645,16 +1645,12 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
                             break;
                         }
                     }
-                    taxRate = row.get("taxRate") == null ? null : row.get("taxRate").toString();
                     unitCost = row.get("estimatePurchasePrice") == null ? null : row.get("estimatePurchasePrice").toString();
                 }
             }
         } catch (Exception ex) {
-            log.warn("读取商城规格税率/成本失败 normsId={}", item == null ? null : item.getNormsId(), ex);
+            log.warn("读取商城规格成本失败 normsId={}", item == null ? null : item.getNormsId(), ex);
         }
-        Map<String, String> taxSplit = InvoiceTaxSplitUtil.split(inclusiveYuan, null, taxRate);
-        acctEvent.put("amountExTax", taxSplit.get("amountExTax"));
-        acctEvent.put("taxAmount", taxSplit.get("taxAmount"));
         String cost = "0";
         if (StrUtil.isNotBlank(unitCost)
             && CalculationUtil.compareTo(unitCost, "0", CommonNumConstants.NUM_TWO, java.math.RoundingMode.HALF_UP) > 0
