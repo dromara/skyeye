@@ -12,6 +12,7 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
+import com.skyeye.exception.PeriodClosedException;
 import com.skyeye.finance.period.classenum.AccountPeriodState;
 import com.skyeye.finance.period.dao.AccountPeriodDao;
 import com.skyeye.finance.period.entity.AccountPeriod;
@@ -91,7 +92,7 @@ public class AccountPeriodServiceImpl extends SkyeyeBusinessServiceImpl<AccountP
     public void assertPeriodOpen(String setOfBooksId, String periodCode) {
         AccountPeriod period = getOpenPeriod(setOfBooksId, periodCode);
         if (!AccountPeriodState.OPEN.getKey().equals(period.getState())) {
-            throw new CustomException("会计期间已关闭，禁止新增或记账：" + periodCode);
+            throw new PeriodClosedException("会计期间已关闭，禁止新增或记账：" + periodCode);
         }
     }
 

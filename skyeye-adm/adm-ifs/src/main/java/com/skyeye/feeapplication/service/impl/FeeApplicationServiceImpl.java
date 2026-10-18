@@ -13,6 +13,7 @@ import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
+import com.skyeye.exception.PeriodClosedException;
 import com.skyeye.feeapplication.dao.FeeApplicationDao;
 import com.skyeye.feeapplication.entity.FeeApplication;
 import com.skyeye.feeapplication.service.FeeApplicationService;
@@ -92,9 +93,10 @@ public class FeeApplicationServiceImpl extends SkyeyeBusinessServiceImpl<FeeAppl
             event.put("departmentId", entity.getDepartmentId());
             event.put("projectId", entity.getProjectId());
             event.put("summary", (mfgOverhead ? "制造费用归集-" : "费用申请-") + entity.getOddNumber());
-            bizAcctEventService.acceptEvent(event);
+            bizAcctEventService.acceptEventRequireOpen(event);
+        } catch (PeriodClosedException ex) {
+            throw ex;
         } catch (Exception ignored) {
-            // 失败事件可在业财事件台重试
         }
     }
 

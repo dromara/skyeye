@@ -13,6 +13,7 @@ import com.skyeye.common.enumeration.PayTypeEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
+import com.skyeye.common.util.InvoiceTaxSplitUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.contract.service.CrmContractService;
 import com.skyeye.customer.service.CustomerService;
@@ -94,12 +95,16 @@ public class ReceivableServiceImpl extends SkyeyeBusinessServiceImpl<ReceivableD
     @Override
     public void approvalEndIsSuccess(Receivable entity) {
         entity = selectById(entity.getId());
+        Map<String, String> taxSplit = InvoiceTaxSplitUtil.split(
+            entity.getAmountPrice(), entity.getTaxPrice(), entity.getTaxRate());
         Map<String, Object> acctEvent = new HashMap<>();
         acctEvent.put("eventType", "receivableConfirm");
         acctEvent.put("sourceType", "CRM_RECEIVABLE");
         acctEvent.put("sourceId", entity.getId());
         acctEvent.put("sourceNo", entity.getOddNumber());
-        acctEvent.put("amount", StrUtil.blankToDefault(entity.getAmountPrice(), "0"));
+        acctEvent.put("amount", taxSplit.get("amount"));
+        acctEvent.put("amountExTax", taxSplit.get("amountExTax"));
+        acctEvent.put("taxAmount", taxSplit.get("taxAmount"));
         acctEvent.put("customerId", entity.getObjectId());
         acctEvent.put("voucherDate", entity.getInvoiceDate());
         acctEvent.put("summary", "应收确认-" + entity.getOddNumber());

@@ -30,6 +30,7 @@ import com.skyeye.eve.rest.mq.JobMateMation;
 import com.skyeye.eve.service.IBarCodeService;
 import com.skyeye.eve.service.IJobMateMationService;
 import com.skyeye.exception.CustomException;
+import com.skyeye.exception.PeriodClosedException;
 import com.skyeye.finance.event.classenum.BizAcctEventType;
 import com.skyeye.finance.event.service.BizAcctEventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -280,9 +281,10 @@ public class AssetReportServiceImpl extends SkyeyeBusinessServiceImpl<AssetRepor
                 event.put("originalAmount", original);
                 event.put("accumDeprecAmount", accum);
                 event.put("summary", "固定资产报废-" + StrUtil.blankToDefault(old != null ? old.getAssetNum() : null, assetReport.getId()));
-                bizAcctEventService.acceptEvent(event);
+                bizAcctEventService.acceptEventRequireOpen(event);
+            } catch (PeriodClosedException ex) {
+                throw ex;
             } catch (Exception ignored) {
-                // 失败事件可在业财事件台重试
             }
         }
     }

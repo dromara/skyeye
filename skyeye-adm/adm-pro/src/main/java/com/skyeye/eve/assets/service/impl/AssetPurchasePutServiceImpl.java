@@ -26,6 +26,7 @@ import com.skyeye.eve.assets.dao.AssetPurchasePutDao;
 import com.skyeye.eve.assets.entity.*;
 import com.skyeye.eve.assets.service.*;
 import com.skyeye.exception.CustomException;
+import com.skyeye.exception.PeriodClosedException;
 import com.skyeye.finance.event.classenum.BizAcctEventType;
 import com.skyeye.finance.event.service.BizAcctEventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -188,9 +189,10 @@ public class AssetPurchasePutServiceImpl extends SkyeyeBusinessServiceImpl<Asset
             event.put("sourceNo", entity.getOddNumber());
             event.put("amount", StrUtil.blankToDefault(entity.getAllPrice(), "0"));
             event.put("summary", "固定资产购入-" + entity.getOddNumber());
-            bizAcctEventService.acceptEvent(event);
+            bizAcctEventService.acceptEventRequireOpen(event);
+        } catch (PeriodClosedException ex) {
+            throw ex;
         } catch (Exception ignored) {
-            // 失败事件可在业财事件台重试
         }
     }
 

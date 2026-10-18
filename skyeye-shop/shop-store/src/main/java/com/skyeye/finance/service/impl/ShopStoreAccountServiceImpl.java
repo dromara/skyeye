@@ -23,6 +23,7 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
+import com.skyeye.common.util.InvoiceTaxSplitUtil;
 import com.skyeye.common.util.NumberParseUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
@@ -49,6 +50,7 @@ import com.skyeye.order.enums.OrderAfterSaleStatus;
 import com.skyeye.order.enums.ShopOrderItemOtherState;
 import com.skyeye.order.service.OrderAfterSaleService;
 import com.skyeye.order.service.OrderItemService;
+import com.skyeye.rest.shopmaterialnorms.sevice.IShopMaterialNormsService;
 import com.skyeye.rest.ifs.bizacct.ShopIfsAcctTenantHelper;
 import com.skyeye.rest.ifs.bizacct.service.IfsBizAcctEventService;
 import com.skyeye.rest.pay.service.IPayService;
@@ -138,6 +140,9 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
 
     @Autowired
     private IfsBizAcctEventService ifsBizAcctEventService;
+
+    @Autowired
+    private IShopMaterialNormsService iShopMaterialNormsService;
 
     @Autowired
     private TransactionTemplate transactionTemplate;
@@ -338,7 +343,11 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
             acctEvent.put("sourceType", "SHOP_ORDER_AFTER_SALE");
             acctEvent.put("sourceId", afterSale.getId());
             acctEvent.put("sourceNo", StrUtil.blankToDefault(afterSale.getOutRefundNo(), afterSale.getId()));
-            acctEvent.put("amount", CalculationUtil.divide(String.valueOf(amount), "100", CommonNumConstants.NUM_TWO));
+            String inclusiveYuan = CalculationUtil.divide(String.valueOf(amount), "100", CommonNumConstants.NUM_TWO);
+            acctEvent.put("amount", inclusiveYuan);
+            if (incomeRecognized) {
+                fillShopIncomeTaxAndCost(acctEvent, orderItem, inclusiveYuan, true);
+            }
             acctEvent.put("summary", (incomeRecognized ? "商城售后退款冲收入-" : "商城售后退款冲预收-")
                 + StrUtil.blankToDefault(afterSale.getOutRefundNo(), afterSale.getId()));
             pushShopIfsAcctEvent(acctEvent, afterSale.getStoreId());
@@ -1609,9 +1618,59 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
         acctEvent.put("sourceType", "SHOP_ORDER_ITEM_INCOME");
         acctEvent.put("sourceId", orderItem.getId());
         acctEvent.put("sourceNo", StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId()));
-        acctEvent.put("amount", CalculationUtil.divide(String.valueOf(payFen), "100", CommonNumConstants.NUM_TWO));
+        String inclusiveYuan = CalculationUtil.divide(String.valueOf(payFen), "100", CommonNumConstants.NUM_TWO);
+        acctEvent.put("amount", inclusiveYuan);
+        fillShopIncomeTaxAndCost(acctEvent, orderItem, inclusiveYuan, false);
         acctEvent.put("summary", "商城确认收货确认收入-" + StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId()));
         pushShopIfsAcctEvent(acctEvent, orderItem.getStoreId());
+    }
+
+    /**
+     * 商城收入/退款：按规格税率拆销项税，按采购价×数量结转成本。
+     * 部分退款按退款额/实付比例冲成本。查不到规格时税额和成本为 0。
+     */
+    private void fillShopIncomeTaxAndCost(Map<String, Object> acctEvent, OrderItem item,
+                                           String inclusiveYuan, boolean scaleCostByRefund) {
+        String taxRate = null;
+        String unitCost = null;
+        try {
+            if (item != null && StrUtil.isNotBlank(item.getNormsId())) {
+                List<Map<String, Object>> rows = iShopMaterialNormsService.queryShopMaterialByNormsIdList(item.getNormsId());
+                if (CollectionUtil.isNotEmpty(rows)) {
+                    Map<String, Object> row = rows.get(0);
+                    for (Map<String, Object> candidate : rows) {
+                        Object normsId = candidate.get("normsId");
+                        if (normsId != null && item.getNormsId().equals(normsId.toString())) {
+                            row = candidate;
+                            break;
+                        }
+                    }
+                    taxRate = row.get("taxRate") == null ? null : row.get("taxRate").toString();
+                    unitCost = row.get("estimatePurchasePrice") == null ? null : row.get("estimatePurchasePrice").toString();
+                }
+            }
+        } catch (Exception ex) {
+            log.warn("读取商城规格税率/成本失败 normsId={}", item == null ? null : item.getNormsId(), ex);
+        }
+        Map<String, String> taxSplit = InvoiceTaxSplitUtil.split(inclusiveYuan, null, taxRate);
+        acctEvent.put("amountExTax", taxSplit.get("amountExTax"));
+        acctEvent.put("taxAmount", taxSplit.get("taxAmount"));
+        String cost = "0";
+        if (StrUtil.isNotBlank(unitCost)
+            && CalculationUtil.compareTo(unitCost, "0", CommonNumConstants.NUM_TWO, java.math.RoundingMode.HALF_UP) > 0
+            && item != null && StrUtil.isNotBlank(item.getCount())) {
+            cost = CalculationUtil.multiply(unitCost, item.getCount(), CommonNumConstants.NUM_TWO);
+            if (scaleCostByRefund) {
+                String payYuan = CalculationUtil.divide(String.valueOf(resolvePayAmountFen(item)), "100", CommonNumConstants.NUM_TWO);
+                if (CalculationUtil.compareTo(payYuan, "0", CommonNumConstants.NUM_TWO, java.math.RoundingMode.HALF_UP) > 0
+                    && CalculationUtil.compareTo(inclusiveYuan, payYuan, CommonNumConstants.NUM_TWO, java.math.RoundingMode.HALF_UP) != 0) {
+                    cost = CalculationUtil.divide(
+                        CalculationUtil.multiply(cost, inclusiveYuan, CommonNumConstants.NUM_SIX),
+                        payYuan, CommonNumConstants.NUM_TWO);
+                }
+            }
+        }
+        acctEvent.put("costAmount", cost);
     }
 
     /**

@@ -14,6 +14,7 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
+import com.skyeye.exception.PeriodClosedException;
 import com.skyeye.loan.dao.LoanRepayDao;
 import com.skyeye.loan.entity.LoanBorrow;
 import com.skyeye.loan.entity.LoanRepay;
@@ -108,7 +109,9 @@ public class LoanRepayServiceImpl extends SkyeyeBusinessServiceImpl<LoanRepayDao
             event.put("amount", StrUtil.blankToDefault(entity.getPrice(), "0"));
             event.put("voucherDate", entity.getRepayTime());
             event.put("summary", "还款-" + entity.getOddNumber());
-            bizAcctEventService.acceptEvent(event);
+            bizAcctEventService.acceptEventRequireOpen(event);
+        } catch (PeriodClosedException ex) {
+            throw ex;
         } catch (Exception ignored) {
         }
     }

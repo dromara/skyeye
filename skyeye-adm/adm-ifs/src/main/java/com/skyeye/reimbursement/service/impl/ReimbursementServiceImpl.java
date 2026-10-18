@@ -14,6 +14,7 @@ import com.skyeye.common.enumeration.FlowableChildStateEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.exception.PeriodClosedException;
 import com.skyeye.finance.event.classenum.BizAcctEventType;
 import com.skyeye.finance.event.service.BizAcctEventService;
 import com.skyeye.organization.service.IDepmentService;
@@ -134,9 +135,10 @@ public class ReimbursementServiceImpl extends SkyeyeBusinessServiceImpl<Reimburs
             event.put("amount", StrUtil.blankToDefault(entity.getPrice(), "0"));
             event.put("departmentId", entity.getDepartmentId());
             event.put("summary", (mfgOverhead ? "制造费用归集-" : "费用报销-") + entity.getOddNumber());
-            bizAcctEventService.acceptEvent(event);
+            bizAcctEventService.acceptEventRequireOpen(event);
+        } catch (PeriodClosedException ex) {
+            throw ex;
         } catch (Exception ignored) {
-            // 失败事件可在业财事件台重试
         }
     }
 

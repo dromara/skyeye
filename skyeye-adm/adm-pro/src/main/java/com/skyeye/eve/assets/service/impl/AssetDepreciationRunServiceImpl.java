@@ -23,6 +23,7 @@ import com.skyeye.eve.assets.service.AssetDepreciationRunService;
 import com.skyeye.eve.assets.service.AssetReportService;
 import com.skyeye.eve.assets.service.AssetService;
 import com.skyeye.exception.CustomException;
+import com.skyeye.exception.PeriodClosedException;
 import com.skyeye.finance.event.classenum.BizAcctEventType;
 import com.skyeye.finance.event.service.BizAcctEventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -167,9 +168,10 @@ public class AssetDepreciationRunServiceImpl
             event.put("setOfBooksId", setOfBooksId);
             event.put("amount", total);
             event.put("summary", "固定资产月结折旧-" + period);
-            bizAcctEventService.acceptEvent(event);
+            bizAcctEventService.acceptEventRequireOpen(event);
+        } catch (PeriodClosedException ex) {
+            throw ex;
         } catch (Exception ignored) {
-            // 失败可在业财事件台重试
         }
 
         run.setDetailList(details);

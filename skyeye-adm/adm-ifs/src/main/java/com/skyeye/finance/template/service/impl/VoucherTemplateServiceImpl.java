@@ -46,7 +46,7 @@ public class VoucherTemplateServiceImpl extends SkyeyeBusinessServiceImpl<Vouche
 
     /** 目录已改正的事项：初始化时重建「默认-」模板，避免旧分录继续双记费用/只冲成本 */
     private static final Set<String> FORCE_REFRESH_DEFAULT_EVENT_TYPES = new HashSet<>(Arrays.asList(
-        "salesReturn", "expenseReimburse"
+        "salesReturn", "expenseReimburse", "receivableConfirm", "shopOrderIncome", "shopRefund"
     ));
 
     @Autowired

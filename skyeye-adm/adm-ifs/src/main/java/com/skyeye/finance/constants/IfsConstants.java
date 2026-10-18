@@ -15,4 +15,7 @@ public class IfsConstants {
     /** 业务会计事件失败重试上限，超出后需人工处理，避免重复出凭证 */
     public static final int MAX_BIZ_ACCT_RETRY = 5;
 
+    /** 业财事件失败码：会计期间已关闭（与 {@link com.skyeye.exception.PeriodClosedException#ERROR_CODE} 一致） */
+    public static final String ERROR_PERIOD_CLOSED = "PERIOD_CLOSED";
+
 }

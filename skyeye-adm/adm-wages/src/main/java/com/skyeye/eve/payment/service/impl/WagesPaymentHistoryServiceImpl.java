@@ -20,6 +20,7 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.exception.PeriodClosedException;
 import com.skyeye.eve.payment.classenum.PaymentHistoryState;
 import com.skyeye.eve.payment.dao.WagesPaymentHistoryDao;
 import com.skyeye.eve.payment.entity.WagesPaymentHistory;
@@ -229,9 +230,10 @@ public class WagesPaymentHistoryServiceImpl extends SkyeyeBusinessServiceImpl<Wa
             event.put("sourceNo", sourceId);
             event.put("amount", amt);
             event.put("summary", summaryPrefix + "-" + sourceId);
-            bizAcctEventService.acceptEvent(event);
+            bizAcctEventService.acceptEventRequireOpen(event);
+        } catch (PeriodClosedException ex) {
+            throw ex;
         } catch (Exception ignored) {
-            // 失败事件可在业财事件台重试
         }
     }
 

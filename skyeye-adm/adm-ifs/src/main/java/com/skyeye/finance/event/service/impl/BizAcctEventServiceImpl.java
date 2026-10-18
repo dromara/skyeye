@@ -14,6 +14,7 @@ import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
+import com.skyeye.exception.PeriodClosedException;
 import com.skyeye.finance.constants.IfsConstants;
 import com.skyeye.finance.event.classenum.BizAcctEventState;
 import com.skyeye.finance.event.classenum.BizAcctEventType;
@@ -118,6 +119,7 @@ public class BizAcctEventServiceImpl extends SkyeyeBusinessServiceImpl<BizAcctEv
         }
         createEntity(event, userId);
 
+        // 期间关闭时返回 errorCode=PERIOD_CLOSED，由 Feign/业务侧决定是否回滚，此处不抛以免吞掉结果码
         return generateVoucher(event, params);
     }
 
@@ -148,7 +150,9 @@ public class BizAcctEventServiceImpl extends SkyeyeBusinessServiceImpl<BizAcctEv
         update(pendingUw);
         refreshCache(id);
         event.setRetryCount(retry + 1);
-        outputObject.setBean(generateVoucher(event, payload));
+        Map<String, Object> result = generateVoucher(event, payload);
+        throwIfPeriodClosed(result);
+        outputObject.setBean(result);
     }
 
     private Map<String, Object> generateVoucher(BizAcctEvent event, Map<String, Object> params) {
@@ -180,6 +184,10 @@ public class BizAcctEventServiceImpl extends SkyeyeBusinessServiceImpl<BizAcctEv
             if (StrUtil.isNotBlank(periodCode)) {
                 accountPeriodService.assertPeriodOpen(booksId, periodCode);
             }
+            String skipMutex = skipDoubleInventory(event.getEventType(), params);
+            if (StrUtil.isNotBlank(skipMutex)) {
+                return skipVoucher(event, result, skipMutex);
+            }
 
             Map<String, Object> payload = new HashMap<>(params);
             payload.put("idempotencyKey", event.getIdempotencyKey());
@@ -208,18 +216,26 @@ public class BizAcctEventServiceImpl extends SkyeyeBusinessServiceImpl<BizAcctEv
             result.put("journalVoucherId", saved.getId());
             result.put("oddNumber", saved.getOddNumber());
             result.put("state", BizAcctEventState.SUCCESS.getKey());
+        } catch (PeriodClosedException ex) {
+            markEventFailed(event, result, ex.getMessage(), IfsConstants.ERROR_PERIOD_CLOSED);
         } catch (Exception ex) {
-            UpdateWrapper<BizAcctEvent> uw = new UpdateWrapper<>();
-            uw.eq(CommonConstants.ID, event.getId());
-            uw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getState), BizAcctEventState.FAILED.getKey());
-            uw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getErrorMsg),
-                StrUtil.sub(ex.getMessage(), 0, 900));
-            update(uw);
-            refreshCache(event.getId());
-            result.put("state", BizAcctEventState.FAILED.getKey());
-            result.put("errorMsg", ex.getMessage());
+            markEventFailed(event, result, ex.getMessage(), null);
         }
         return result;
+    }
+
+    private void markEventFailed(BizAcctEvent event, Map<String, Object> result, String errorMsg, String errorCode) {
+        UpdateWrapper<BizAcctEvent> uw = new UpdateWrapper<>();
+        uw.eq(CommonConstants.ID, event.getId());
+        uw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getState), BizAcctEventState.FAILED.getKey());
+        uw.set(MybatisPlusUtil.toColumns(BizAcctEvent::getErrorMsg), StrUtil.sub(errorMsg, 0, 900));
+        update(uw);
+        refreshCache(event.getId());
+        result.put("state", BizAcctEventState.FAILED.getKey());
+        result.put("errorMsg", errorMsg);
+        if (StrUtil.isNotBlank(errorCode)) {
+            result.put("errorCode", errorCode);
+        }
     }
 
     private BizAcctEvent findSuccessBySource(String eventType, String sourceType, String sourceId) {
@@ -255,6 +271,47 @@ public class BizAcctEventServiceImpl extends SkyeyeBusinessServiceImpl<BizAcctEv
         result.put("state", BizAcctEventState.SUCCESS.getKey());
         result.put("errorMsg", reason);
         return result;
+    }
+
+    /**
+     * 采购入库暂估与应付确认都会借库存。同供应商、同金额已有对方成功凭证时跳过，避免双记。
+     */
+    private String skipDoubleInventory(String eventType, Map<String, Object> params) {
+        String peer = null;
+        if (BizAcctEventType.PAYABLE_CONFIRM.getKey().equals(eventType)) {
+            peer = BizAcctEventType.PURCHASE_IN.getKey();
+        } else if (BizAcctEventType.PURCHASE_IN.getKey().equals(eventType)) {
+            peer = BizAcctEventType.PAYABLE_CONFIRM.getKey();
+        } else {
+            return null;
+        }
+        Object supplier = params.get("supplierId");
+        Object amount = params.get("amount");
+        if (supplier == null || StrUtil.isBlank(supplier.toString()) || amount == null || isZeroAmount(amount)) {
+            return null;
+        }
+        QueryWrapper<BizAcctEvent> qw = new QueryWrapper<>();
+        qw.eq(MybatisPlusUtil.toColumns(BizAcctEvent::getEventType), peer);
+        qw.eq(MybatisPlusUtil.toColumns(BizAcctEvent::getState), BizAcctEventState.SUCCESS.getKey());
+        qw.like(MybatisPlusUtil.toColumns(BizAcctEvent::getPayload), "\"supplierId\":\"" + supplier + "\"");
+        qw.like(MybatisPlusUtil.toColumns(BizAcctEvent::getPayload), "\"amount\":\"" + amount + "\"");
+        qw.last("LIMIT 1");
+        if (getOne(qw, false) == null) {
+            return null;
+        }
+        return BizAcctEventType.PAYABLE_CONFIRM.getKey().equals(eventType)
+            ? "同供应商同金额已有采购入库暂估，跳过应付确认以免双记库存"
+            : "同供应商同金额已有应付确认，跳过采购入库暂估以免双记库存";
+    }
+
+    private void throwIfPeriodClosed(Map<String, Object> result) {
+        if (result == null) {
+            return;
+        }
+        if (IfsConstants.ERROR_PERIOD_CLOSED.equals(String.valueOf(result.get("errorCode")))) {
+            Object msg = result.get("errorMsg");
+            throw new PeriodClosedException(msg == null ? "会计期间已关闭" : msg.toString());
+        }
     }
 
     private boolean isZeroAmount(Object val) {

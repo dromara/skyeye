@@ -20,6 +20,7 @@ import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
+import com.skyeye.exception.PeriodClosedException;
 import com.skyeye.loan.classenum.LoanBorrowTypeEnum;
 import com.skyeye.loan.classenum.LoanPaidStateEnum;
 import com.skyeye.loan.dao.LoanBorrowDao;
@@ -113,7 +114,9 @@ public class LoanBorrowServiceImpl extends SkyeyeBusinessServiceImpl<LoanBorrowD
             event.put("departmentId", entity.getDepartmentId());
             event.put("voucherDate", entity.getApplicationTime());
             event.put("summary", "借款-" + entity.getOddNumber());
-            bizAcctEventService.acceptEvent(event);
+            bizAcctEventService.acceptEventRequireOpen(event);
+        } catch (PeriodClosedException ex) {
+            throw ex;
         } catch (Exception ignored) {
         }
     }

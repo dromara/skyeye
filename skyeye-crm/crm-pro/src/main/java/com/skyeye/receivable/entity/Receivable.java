@@ -61,8 +61,16 @@ public class Receivable extends SkyeyeFlowable {
     private String typeId;
 
     @TableField(value = "amount_price")
-    @ApiModelProperty(value = "应收款金额", required = "double", defaultValue = "0")
+    @ApiModelProperty(value = "应收款金额(价税合计)", required = "double", defaultValue = "0")
     private String amountPrice;
+
+    @TableField(value = "tax_rate")
+    @ApiModelProperty(value = "税率(%)，如 13；空则业财税额按 0")
+    private String taxRate;
+
+    @TableField(value = "tax_price")
+    @ApiModelProperty(value = "税额；有值优先，否则按税率从价税合计拆分")
+    private String taxPrice;
 
     @TableField(value = "state")
     @Property(value = "状态", enumClass = FlowableStateEnum.class)

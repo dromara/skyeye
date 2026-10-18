@@ -62,6 +62,10 @@ public class ShopMaterialNorms extends OperatorUserInfo {
     @ApiModelProperty(value = "销售价", required = "required,double")
     private String salePrice;
 
+    @TableField(value = "tax_rate")
+    @ApiModelProperty(value = "销项税率(%)，如 13；空则商城确认收入税额为 0")
+    private String taxRate;
+
     @TableField(value = "logo_type")
     @ApiModelProperty(value = "logo类型", enumClass = ShopMaterialNormsLogoType.class, required = "required,num")
     private Integer logoType;
