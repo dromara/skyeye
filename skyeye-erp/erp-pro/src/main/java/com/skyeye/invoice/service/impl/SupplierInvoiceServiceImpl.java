@@ -18,6 +18,7 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.CalculationUtil;
 import com.skyeye.common.util.DateUtil;
+import com.skyeye.common.util.InvoiceTaxSplitUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 
 import com.skyeye.contract.service.SupplierContractService;
@@ -146,17 +147,17 @@ public class SupplierInvoiceServiceImpl extends SkyeyeBusinessServiceImpl<Suppli
         map.put("fromId", entity.getPaymentCollectionId());
         map.put("invoicePrice", entity.getPrice());
         ifsReceivePaymentService.updateReceivePayment(map);
-        // 票到冲暂估：冲应付暂估并转正式应付（当前发票无税额字段，税额按 0，模板税行会跳过）
+        // 票到冲暂估：冲应付暂估并转正式应付；价税合计按 taxPrice/taxRate 拆分
         entity = selectById(entity.getId());
-        String amount = StrUtil.blankToDefault(entity.getPrice(), "0");
+        Map<String, String> taxSplit = InvoiceTaxSplitUtil.split(entity.getPrice(), entity.getTaxPrice(), entity.getTaxRate());
         Map<String, Object> acctEvent = new HashMap<>();
         acctEvent.put("eventType", "purchaseInvoice");
         acctEvent.put("sourceType", "ERP_SUPPLIER_INVOICE");
         acctEvent.put("sourceId", entity.getId());
         acctEvent.put("sourceNo", entity.getOddNumber());
-        acctEvent.put("amount", amount);
-        acctEvent.put("amountExTax", amount);
-        acctEvent.put("taxAmount", "0");
+        acctEvent.put("amount", taxSplit.get("amount"));
+        acctEvent.put("amountExTax", taxSplit.get("amountExTax"));
+        acctEvent.put("taxAmount", taxSplit.get("taxAmount"));
         acctEvent.put("supplierId", entity.getObjectId());
         acctEvent.put("voucherDate", entity.getInvoicTime());
         acctEvent.put("summary", "采购发票校验-" + entity.getOddNumber());

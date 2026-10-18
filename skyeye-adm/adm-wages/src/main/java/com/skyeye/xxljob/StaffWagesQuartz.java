@@ -394,6 +394,27 @@ public class StaffWagesQuartz {
         childField2.setFieldType(WagesModelFieldType.FIELD.getKey());
         childField2.setOrderBy(CommonNumConstants.NUM_TWO);
         childFields.add(childField2);
+
+        WagesModelField childField3 = new WagesModelField();
+        FieldType fieldKeyMation3 = new FieldType();
+        fieldKeyMation3.setName("单位缴纳社保");
+        childField3.setFieldKeyMation(fieldKeyMation3);
+        childField3.setMoneyValue(staffModelFieldMap.get(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_INSURANCE_COMPANY.getKey()));
+        childField3.setFieldKey(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_INSURANCE_COMPANY.getKey());
+        childField3.setFieldType(WagesModelFieldType.FIELD.getKey());
+        childField3.setOrderBy(CommonNumConstants.NUM_THREE);
+        childFields.add(childField3);
+
+        WagesModelField childField4 = new WagesModelField();
+        FieldType fieldKeyMation4 = new FieldType();
+        fieldKeyMation4.setName("单位缴纳公积金");
+        childField4.setFieldKeyMation(fieldKeyMation4);
+        childField4.setMoneyValue(staffModelFieldMap.get(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_ACCUMULATION_COMPANY.getKey()));
+        childField4.setFieldKey(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_ACCUMULATION_COMPANY.getKey());
+        childField4.setFieldType(WagesModelFieldType.FIELD.getKey());
+        childField4.setOrderBy(CommonNumConstants.NUM_FOUR);
+        childFields.add(childField4);
+
         bean.put("childFields", childFields);
         beans.add(bean);
         return beans;
@@ -1006,10 +1027,26 @@ public class StaffWagesQuartz {
             String insurance = CalculationUtil.add(CommonNumConstants.NUM_TWO, insuranceEndowment, insuranceUnemployment, insuranceEmployment, insuranceMaternity,
                 insuranceMedical);
             staffModelFieldMap.put(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_INSURANCE.getKey(), insurance);
+            // 单位社保
+            String insuranceCompany = CalculationUtil.add(CommonNumConstants.NUM_TWO,
+                CalculationUtil.multiply(staffSocialSecurityFund.getEndowmentBase(),
+                    CalculationUtil.divide(staffSocialSecurityFund.getEndowmentCompany(), "100", CommonNumConstants.NUM_TWO), CommonNumConstants.NUM_TWO),
+                CalculationUtil.multiply(staffSocialSecurityFund.getUnemploymentBase(),
+                    CalculationUtil.divide(staffSocialSecurityFund.getUnemploymentCompany(), "100", CommonNumConstants.NUM_TWO), CommonNumConstants.NUM_TWO),
+                CalculationUtil.multiply(staffSocialSecurityFund.getEmploymentBase(),
+                    CalculationUtil.divide(staffSocialSecurityFund.getEmploymentCompany(), "100", CommonNumConstants.NUM_TWO), CommonNumConstants.NUM_TWO),
+                CalculationUtil.multiply(staffSocialSecurityFund.getMaternityBase(),
+                    CalculationUtil.divide(staffSocialSecurityFund.getMaternityCompany(), "100", CommonNumConstants.NUM_TWO), CommonNumConstants.NUM_TWO),
+                CalculationUtil.multiply(staffSocialSecurityFund.getMedicalBase(),
+                    CalculationUtil.divide(staffSocialSecurityFund.getMedicalCompany(), "100", CommonNumConstants.NUM_TWO), CommonNumConstants.NUM_TWO));
+            staffModelFieldMap.put(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_INSURANCE_COMPANY.getKey(), insuranceCompany);
             // 公积金
             String accumulation = CalculationUtil.multiply(staffSocialSecurityFund.getAccumulationBase(),
                 CalculationUtil.divide(staffSocialSecurityFund.getAccumulationPersonScale(), "100", CommonNumConstants.NUM_TWO), CommonNumConstants.NUM_TWO);
             staffModelFieldMap.put(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_ACCUMULATION.getKey(), accumulation);
+            String accumulationCompany = CalculationUtil.multiply(staffSocialSecurityFund.getAccumulationBase(),
+                CalculationUtil.divide(staffSocialSecurityFund.getAccumulationCompanyScale(), "100", CommonNumConstants.NUM_TWO), CommonNumConstants.NUM_TWO);
+            staffModelFieldMap.put(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_ACCUMULATION_COMPANY.getKey(), accumulationCompany);
             String result = CalculationUtil.add(CommonNumConstants.NUM_TWO, insurance, accumulation, staffSocialSecurityFund.getInsTotalSeriouslyIllIndividual());
             return result;
         }

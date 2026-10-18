@@ -4,6 +4,7 @@
 
 package com.skyeye.eve.payment.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -12,6 +13,7 @@ import com.github.pagehelper.PageHelper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonNumConstants;
+import com.skyeye.common.constans.WagesConstant;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -126,9 +128,24 @@ public class WagesPaymentHistoryServiceImpl extends SkyeyeBusinessServiceImpl<Wa
     @Override
     protected void createPostpose(WagesPaymentHistory entity, String userId) {
         super.createPostpose(entity, userId);
-        // 业财一体：薪资核算完成计提应付职工薪酬
+        // 业财一体：实发 + 个人代扣社保公积金/个税 + 单位社保公积金
         if (entity.getState() != null && entity.getState().equals(PaymentHistoryState.UNISSUED.getKey())) {
-            pushSalaryAcctEvent(entity, BizAcctEventType.SALARY_ACCRUE, "EHR_WAGES_ACCRUE", "薪资计提");
+            Map<String, String> fieldMap = extractWagesFieldMoney(entity);
+            String sourceKey = entity.getStaffId() + "-" + entity.getPayMonth();
+            pushSalaryAcctEvent(BizAcctEventType.SALARY_ACCRUE, "EHR_WAGES_ACCRUE", sourceKey,
+                entity.getActWages(), "薪资实发计提");
+            String personSocial = CalculationUtil.add(CommonNumConstants.NUM_TWO,
+                StrUtil.blankToDefault(fieldMap.get(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_INSURANCE.getKey()), "0"),
+                StrUtil.blankToDefault(fieldMap.get(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_ACCUMULATION.getKey()), "0"));
+            pushSalaryAcctEvent(BizAcctEventType.SALARY_SOCIAL_PERSON, "EHR_WAGES_SOCIAL_PERSON", sourceKey + "-socialPerson",
+                personSocial, "个人社保公积金代扣");
+            String companySocial = CalculationUtil.add(CommonNumConstants.NUM_TWO,
+                StrUtil.blankToDefault(fieldMap.get(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_INSURANCE_COMPANY.getKey()), "0"),
+                StrUtil.blankToDefault(fieldMap.get(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_ACCUMULATION_COMPANY.getKey()), "0"));
+            pushSalaryAcctEvent(BizAcctEventType.SALARY_SOCIAL_COMPANY, "EHR_WAGES_SOCIAL_COMPANY", sourceKey + "-socialCompany",
+                companySocial, "单位社保公积金计提");
+            pushSalaryAcctEvent(BizAcctEventType.SALARY_TAX_WITHHOLD, "EHR_WAGES_TAX_WITHHOLD", sourceKey + "-tax",
+                fieldMap.get(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.LAST_MONTH_TAX_RATE_BY_PERSON.getKey()), "个人所得税代扣");
         }
     }
 
@@ -140,33 +157,78 @@ public class WagesPaymentHistoryServiceImpl extends SkyeyeBusinessServiceImpl<Wa
         updateWrapper.set(MybatisPlusUtil.toColumns(WagesPaymentHistory::getState), state);
         updateWrapper.set(MybatisPlusUtil.toColumns(WagesPaymentHistory::getGrantTime), DateUtil.getTimeAndToString());
         update(updateWrapper);
-        // 业财一体：薪资发放冲应付付现
+        // 业财一体：实发付现 + 简化为同期缴纳代扣的社保/个税
         if (state != null && state.equals(PaymentHistoryState.ISSUED.getKey())) {
             QueryWrapper<WagesPaymentHistory> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq(MybatisPlusUtil.toColumns(WagesPaymentHistory::getStaffId), staffId);
             queryWrapper.eq(MybatisPlusUtil.toColumns(WagesPaymentHistory::getPayMonth), payMonth);
             WagesPaymentHistory history = getOne(queryWrapper, false);
             if (history != null) {
-                pushSalaryAcctEvent(history, BizAcctEventType.SALARY_PAY, "EHR_WAGES_PAY", "薪资发放");
+                Map<String, String> fieldMap = extractWagesFieldMoney(history);
+                String sourceKey = history.getStaffId() + "-" + history.getPayMonth();
+                pushSalaryAcctEvent(BizAcctEventType.SALARY_PAY, "EHR_WAGES_PAY", sourceKey,
+                    history.getActWages(), "薪资实发发放");
+                String socialPay = CalculationUtil.add(CommonNumConstants.NUM_TWO,
+                    StrUtil.blankToDefault(fieldMap.get(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_INSURANCE.getKey()), "0"),
+                    StrUtil.blankToDefault(fieldMap.get(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_ACCUMULATION.getKey()), "0"),
+                    StrUtil.blankToDefault(fieldMap.get(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_INSURANCE_COMPANY.getKey()), "0"),
+                    StrUtil.blankToDefault(fieldMap.get(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.MONTHLY_SOCIAL_SECURITY_FUND_ACCUMULATION_COMPANY.getKey()), "0"));
+                pushSalaryAcctEvent(BizAcctEventType.SALARY_SOCIAL_PAY, "EHR_WAGES_SOCIAL_PAY", sourceKey + "-socialPay",
+                    socialPay, "社保公积金缴纳");
+                pushSalaryAcctEvent(BizAcctEventType.SALARY_TAX_PAY, "EHR_WAGES_TAX_PAY", sourceKey + "-taxPay",
+                    fieldMap.get(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.LAST_MONTH_TAX_RATE_BY_PERSON.getKey()), "个人所得税缴纳");
             }
         }
     }
 
-    private void pushSalaryAcctEvent(WagesPaymentHistory entity, BizAcctEventType eventType, String sourceType, String summaryPrefix) {
+    /**
+     * 从 wagesJson 子项按 fieldKey 汇总金额（兼容 moneyValue / money）
+     */
+    @SuppressWarnings("unchecked")
+    private Map<String, String> extractWagesFieldMoney(WagesPaymentHistory entity) {
+        Map<String, String> result = new HashMap<>();
+        if (entity == null || CollectionUtil.isEmpty(entity.getWagesJson())) {
+            return result;
+        }
+        for (Map<String, Object> group : entity.getWagesJson()) {
+            Object children = group.get("childFields");
+            if (!(children instanceof List)) {
+                continue;
+            }
+            for (Object raw : (List<?>) children) {
+                if (!(raw instanceof Map)) {
+                    continue;
+                }
+                Map<String, Object> field = (Map<String, Object>) raw;
+                String key = field.get("fieldKey") == null ? null : field.get("fieldKey").toString();
+                if (StrUtil.isBlank(key)) {
+                    continue;
+                }
+                Object money = field.get("moneyValue");
+                if (money == null) {
+                    money = field.get("money");
+                }
+                result.put(key, money == null ? "0" : money.toString());
+            }
+        }
+        return result;
+    }
+
+    private void pushSalaryAcctEvent(BizAcctEventType eventType, String sourceType, String sourceId,
+                                     String amount, String summaryPrefix) {
         try {
-            String amount = StrUtil.blankToDefault(entity.getActWages(), "0");
-            if (StrUtil.equals(amount, "0") || StrUtil.equals(amount, "0.00")) {
+            String amt = StrUtil.blankToDefault(amount, "0");
+            if (StrUtil.equals(amt, "0") || StrUtil.equals(amt, "0.00")
+                || CalculationUtil.compareTo(amt, "0", CommonNumConstants.NUM_TWO, java.math.RoundingMode.HALF_UP) <= 0) {
                 return;
             }
-            // WagesPaymentHistory 无独立 id，业务主键为 staffId + payMonth
-            String sourceKey = entity.getStaffId() + "-" + entity.getPayMonth();
             Map<String, Object> event = new HashMap<>();
             event.put("eventType", eventType.getKey());
             event.put("sourceType", sourceType);
-            event.put("sourceId", sourceKey);
-            event.put("sourceNo", sourceKey);
-            event.put("amount", amount);
-            event.put("summary", summaryPrefix + "-" + sourceKey);
+            event.put("sourceId", sourceId);
+            event.put("sourceNo", sourceId);
+            event.put("amount", amt);
+            event.put("summary", summaryPrefix + "-" + sourceId);
             bizAcctEventService.acceptEvent(event);
         } catch (Exception ignored) {
             // 失败事件可在业财事件台重试

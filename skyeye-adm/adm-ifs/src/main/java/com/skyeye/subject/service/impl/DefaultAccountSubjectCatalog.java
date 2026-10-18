@@ -32,11 +32,13 @@ final class DefaultAccountSubjectCatalog {
 
             debt("2202", "应付账款-暂估", null, false, true, false, false, false),
             debt("220201", "应付账款", "2202", false, true, false, false, false),
+            debt("2203", "预收账款", null, true, false, false, false, false),
             debt("2211", "应付职工薪酬", null, false, false, false, false, false),
             debt("2241", "其他应付款", null, false, false, false, false, false),
             debt("2221", "应交税费", null, false, false, false, false, false),
             debt("222101", "应交税费-进项税额", "2221", false, false, false, false, false),
             debt("22210101", "应交税费-销项税额", "222101", false, false, false, false, false),
+            debt("222112", "应交税费-个人所得税", "2221", false, false, false, false, false),
 
             equity("4001", "实收资本", null),
             equity("4103", "本年利润", null),

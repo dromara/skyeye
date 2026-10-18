@@ -223,11 +223,15 @@ graph TB
 | ADM 资产 | 月结批量折旧 | 月结计提主路径 | 会计事件 | `fixedAssetDeprec` |
 | IFS 资产 | 固定资产折旧补账 | 手工差额补账（例外） | 会计事件 | `fixedAssetDeprec` |
 | Shop 往来 | 保养套餐往来 | 双方确认完成 | 会计事件 | `keepfitIntercourse` |
-| Shop 支付 | 订单支付成功 | 子单/父单支付落单 | 会计事件 | `shopOrderPay` |
-| Shop 退款 | 售后退款出账 | 退款成功扣账 | 会计事件 | `shopRefund` |
+| Shop 支付 | 订单支付成功 | 子单/父单支付落单 | 会计事件 | `shopOrderPay`（预收） |
+| Shop 收入 | 确认收货 | 收货冻结入账 | 会计事件 | `shopOrderIncome` |
+| Shop 退款 | 售后退款 | 未确认收入 | 会计事件 | `shopRefundAdvance` |
+| Shop 退款 | 售后退款 | 已确认收入 | 会计事件 | `shopRefund` |
 | Shop 结算 | 货款冻结转可提现 | 结算到期释放 | 会计事件 | `shopSettle` |
 | Shop 佣金 | 佣金冻结转可提现 | 佣金结算释放 | 会计事件 | `shopCommission` |
 | Shop 提现 | 打款成功 | 转账成功回调 | 会计事件 | `shopWithdraw` |
+| EHR 薪资 | 社保/个税代扣与单位计提 | 核算待发放 | 会计事件 | `salarySocial*` / `salaryTaxWithhold` |
+| EHR 薪资 | 社保/个税缴纳 | 发放时简化一并推 | 会计事件 | `salarySocialPay` / `salaryTaxPay` |
 | IFS 会计凭证 | 手工录入 | 保存 | 直接凭证 | `manual` |
 | IFS 期末结转 | 损益结转 | 结账 | 会计事件 | `periodClose` |
 | IFS 迁移 | 旧报销借款还款 | 迁移接口 | 会计事件 | 对应费用借款还款 |
@@ -257,11 +261,16 @@ graph TB
 | `exchangeOut` | 借应付 / 贷库存 | 冲应付 |
 | `exchangeIn` | 借库存 / 贷成本 | 否 |
 | `stockLoan` / `stockReturn` | 其他应收 vs 库存 | 否 |
-| `shopOrderPay` | 借现金 / 贷主营业务收入 | 否 |
+| `shopOrderPay` | 借现金 / 贷预收账款 2203 | 否 |
+| `shopOrderIncome` | 借预收 2203 / 贷主营业务收入 | 否 |
+| `shopRefundAdvance` | 借预收 2203 / 贷现金 | 否 |
 | `shopRefund` | 借主营业务收入 / 贷现金 | 否 |
 | `shopSettle` | 借费用 / 贷其他应付款 | 否 |
 | `shopCommission` | 借费用 / 贷其他应付款 | 否 |
 | `shopWithdraw` | 借其他应付款 / 贷现金 | 否 |
+| `salarySocialPerson` / `salarySocialCompany` | 借管理费用 / 贷其他应付款 | 否 |
+| `salaryTaxWithhold` | 借管理费用 / 贷应交个税 | 否 |
+| `salarySocialPay` / `salaryTaxPay` | 借应付 / 贷现金 | 否 |
 | `loanBorrow` / `loanRepay` | 其他应收 vs 现金 | 否 |
 | `mfgOverhead` | 借 5001 / 贷 5101(或2241/现金) | 否 |
 | `salaryAccrue` | 借管理费用 / 贷应付职工薪酬 2211 | 否 |
@@ -326,14 +335,25 @@ graph TB
 3. 自动：费用类型名称或事由含「制造费用」的费用申请审批通过 → `mfgOverhead`（来源 `IFS_FEE_APPLICATION_MFG`）。
 4. 自动：报销明细费用项目含「制造费用」审批通过 → `mfgOverhead`（来源 `IFS_REIMBURSEMENT_MFG`）。
 
-### 6. 商城支付 / 退款 / 结算 / 提现
+### 6. 商城支付 / 收入 / 退款 / 结算 / 提现
 
-1. 前置：重启 shop + ifs；初始化默认凭证模板（补 `shopOrderPay`/`shopRefund`/`shopCommission`）。**个人店事件落在租户 `shop`**，企业店落在门店 `tenantId`；测个人店请切到 `shop` 租户看事件台。
-2. 订单支付成功（子单或整单落单）→ `shopOrderPay`（借银行存款 / 贷主营业务收入；来源 `SHOP_ORDER_ITEM_PAY`，金额=分转元，按子单幂等；租户=销售店）。
-3. 售后退款出账成功 → `shopRefund`（借收入 / 贷银行存款；来源 `SHOP_ORDER_AFTER_SALE`；租户=售后门店）。
-4. 确认收货过结算冻结期：货款释放 → `shopSettle`（`SHOP_STORE_SETTLE`）；佣金释放 → `shopCommission`（`SHOP_STORE_COMMISSION_SETTLE`），二者 sourceId 同为子单 id 但不冲突；租户=资金所属门店。
-5. 提现申请审核通过且渠道打款成功 → `shopWithdraw`（借其他应付款 / 贷银行存款；租户=提现门店）。
-6. Shop 需配置 `webroot.skyeye-ifs`，且能访问 ifs 服务。
+1. 前置：重启 shop + ifs；初始化默认科目（补 `2203`）与默认凭证模板（补 `shopOrderPay`/`shopOrderIncome`/`shopRefund*`/`shopCommission`）。个人店切租户 `shop`。
+2. 支付成功 → `shopOrderPay`：借银行存款 / 贷预收账款（尚未确认收入）。
+3. 确认收货 → `shopOrderIncome`：借预收 / 贷主营业务收入；同时门店资金「收货冻结」。
+4. 未收货退款 → `shopRefundAdvance`（冲预收）；已收货后退款 → `shopRefund`（冲收入）。门店资金仅在本单已入账/冻结时才扣款。
+5. 结算期满：`shopSettle` / `shopCommission`；提现成功 → `shopWithdraw`。
+6. Shop 需配置 `webroot.skyeye-ifs`。
+
+### 6.1 薪资社保 / 个税
+
+1. 初始化模板补 `salarySocial*` / `salaryTax*`；科目补 `222112`。
+2. 薪资核算生成待发放 → 实发 `salaryAccrue` + 个人代扣 `salarySocialPerson` + 单位计提 `salarySocialCompany` + 个税代扣 `salaryTaxWithhold`（金额来自 wagesJson，为 0 则跳过）。
+3. 发放 → `salaryPay` + `salarySocialPay`（个人+单位合计）+ `salaryTaxPay`（简化为发放当月一并缴纳）。
+
+### 6.2 采购/销售发票税额
+
+1. 执行 `docs/sql/202610-invoice-tax.sql`；布局可加 `taxRate`、`taxPrice`。
+2. 发票审批通过：有 `taxPrice` 用显式税额；否则按 `taxRate` 从价税合计拆分；都空则税=0（兼容旧数据）。
 
 ### 7. 凭证冲销关系 UI
 
@@ -343,11 +363,7 @@ graph TB
 
 ### 8. 薪资计提 / 发放（本批）
 
-1. 前置：重启 adm（含 wages/ifs）；IFS 初始化默认科目（补 `2211`）与默认凭证模板（补 `salaryAccrue`/`salaryPay`）。
-2. 触发薪资核算任务（或跑 `staffWagesQuartz`）生成待发放记录。
-3. 业财事件台：每人一条 `salaryAccrue`，借管理费用 / 贷应付职工薪酬，金额=实发 `actWages`，来源 `EHR_WAGES_ACCRUE`。
-4. 触发发放（`staffWagesPaymentQuartz` 或状态改为已发放）。
-5. 业财事件台：对应 `salaryPay`，借 2211 / 贷银行存款，来源 `EHR_WAGES_PAY`。
+见 **6.1**。实发链路仍为 `salaryAccrue` / `salaryPay`；社保个税为新增事项。
 
 ### 9. 固定资产购入 / 退货 / 报废 / 月结折旧（本批）
 

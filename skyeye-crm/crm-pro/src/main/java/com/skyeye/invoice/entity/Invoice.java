@@ -57,8 +57,16 @@ public class Invoice extends SkyeyeFlowable {
     private String typeId;
 
     @TableField(value = "price")
-    @ApiModelProperty(value = "开票金额", required = "double", defaultValue = "0")
+    @ApiModelProperty(value = "开票金额(价税合计)", required = "double", defaultValue = "0")
     private String price;
+
+    @TableField(value = "tax_rate")
+    @ApiModelProperty(value = "税率(%)，如 13；空则业财税额按 0")
+    private String taxRate;
+
+    @TableField(value = "tax_price")
+    @ApiModelProperty(value = "税额；有值优先，否则按税率从价税合计拆分")
+    private String taxPrice;
 
     @TableField("remark")
     @ApiModelProperty(value = "描述")

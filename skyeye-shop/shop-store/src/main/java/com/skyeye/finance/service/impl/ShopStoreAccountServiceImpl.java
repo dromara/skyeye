@@ -156,6 +156,7 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
             return;
         }
         long pay = resolvePayAmountFen(orderItem);
+        pushShopOrderIncomeAcctEvent(orderItem, pay);
         long commission = resolveCommissionFen(orderItem);
         long goodsAmt = Math.max(pay - commission, 0L);
         boolean goodsDone = shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_HOLD.getKey(), orderItem.getId())
@@ -199,6 +200,8 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
             return;
         }
         long pay = resolvePayAmountFen(orderItem);
+        // 业财：确认收货确认收入（预收→主营收入；幂等按子单）
+        pushShopOrderIncomeAcctEvent(orderItem, pay);
         long commission = resolveCommissionFen(orderItem);
         long goodsAmt = Math.max(pay - commission, 0L);
         boolean goodsDone = shopStoreLedgerService.existsByBiz(ShopStoreLedgerBizType.ORDER_HOLD.getKey(), orderItem.getId())
@@ -327,15 +330,17 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
             log.info("子单佣金未入账/未冻结，跳过佣金退款出账 itemId={} afterSaleId={} amount={}",
                 itemId, afterSale.getId(), commissionRefund);
         }
-        // 业财一体：退款出账后冲支付收入（金额分→元，幂等键=售后单）
+        // 业财：已确认收入冲收入，否则冲预收（金额分→元，幂等=售后单）
         if (amount > 0) {
+            boolean incomeRecognized = goodsCredited || commissionCredited;
             Map<String, Object> acctEvent = new HashMap<>();
-            acctEvent.put("eventType", "shopRefund");
+            acctEvent.put("eventType", incomeRecognized ? "shopRefund" : "shopRefundAdvance");
             acctEvent.put("sourceType", "SHOP_ORDER_AFTER_SALE");
             acctEvent.put("sourceId", afterSale.getId());
             acctEvent.put("sourceNo", StrUtil.blankToDefault(afterSale.getOutRefundNo(), afterSale.getId()));
             acctEvent.put("amount", CalculationUtil.divide(String.valueOf(amount), "100", CommonNumConstants.NUM_TWO));
-            acctEvent.put("summary", "商城售后退款-" + StrUtil.blankToDefault(afterSale.getOutRefundNo(), afterSale.getId()));
+            acctEvent.put("summary", (incomeRecognized ? "商城售后退款冲收入-" : "商城售后退款冲预收-")
+                + StrUtil.blankToDefault(afterSale.getOutRefundNo(), afterSale.getId()));
             pushShopIfsAcctEvent(acctEvent, afterSale.getStoreId());
         }
     }
@@ -1400,12 +1405,14 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
         if (CollectionUtil.isEmpty(list)) {
             return;
         }
+        // 子单 id
         List<String> orderItemIds = list.stream()
             .filter(l -> isOrderItemBizType(l.getBizType()))
             .map(ShopStoreLedger::getBizId)
             .filter(StrUtil::isNotBlank)
             .distinct()
             .collect(Collectors.toList());
+        // 售后单 id。退款流水写入时 bizId 仍是售后单 id（debitRefund 里 REFUND_OUT / COMMISSION_REFUND），不是子单 id。售后分支就是把售后单映射成 orderItemId，再带出子单的 oddNumber。
         List<String> afterSaleIds = list.stream()
             .filter(l -> isRefundBizType(l.getBizType()))
             .map(ShopStoreLedger::getBizId)
@@ -1588,6 +1595,23 @@ public class ShopStoreAccountServiceImpl extends SkyeyeBusinessServiceImpl<ShopS
 
     private long nvl(Long v) {
         return v == null ? 0L : v;
+    }
+
+    /**
+     * 业财：确认收货将预收结转主营收入（金额分→元）
+     */
+    private void pushShopOrderIncomeAcctEvent(OrderItem orderItem, long payFen) {
+        if (orderItem == null || StrUtil.isBlank(orderItem.getId()) || payFen <= 0) {
+            return;
+        }
+        Map<String, Object> acctEvent = new HashMap<>();
+        acctEvent.put("eventType", "shopOrderIncome");
+        acctEvent.put("sourceType", "SHOP_ORDER_ITEM_INCOME");
+        acctEvent.put("sourceId", orderItem.getId());
+        acctEvent.put("sourceNo", StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId()));
+        acctEvent.put("amount", CalculationUtil.divide(String.valueOf(payFen), "100", CommonNumConstants.NUM_TWO));
+        acctEvent.put("summary", "商城确认收货确认收入-" + StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId()));
+        pushShopIfsAcctEvent(acctEvent, orderItem.getStoreId());
     }
 
     /**

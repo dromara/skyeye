@@ -819,7 +819,7 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
     }
 
     /**
-     * 业财一体：子单支付成功推收入入账（金额分→元；幂等=子单）
+     * 业财一体：子单支付成功挂预收（借银行存款/贷预收；确认收货后再确认收入）
      */
     private void pushShopOrderPayAcctEvent(OrderItem orderItem) {
         if (orderItem == null || StrUtil.isBlank(orderItem.getId())) {
@@ -845,7 +845,7 @@ public class OrderServiceImpl extends SkyeyeBusinessServiceImpl<OrderDao, Order>
         acctEvent.put("sourceId", orderItem.getId());
         acctEvent.put("sourceNo", StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId()));
         acctEvent.put("amount", amountYuan);
-        acctEvent.put("summary", "商城订单支付-" + StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId()));
+        acctEvent.put("summary", "商城订单支付预收-" + StrUtil.blankToDefault(orderItem.getOddNumber(), orderItem.getId()));
         ifsBizAcctEventService.pushIfsBizAcctEvent(acctEvent, resolveIfsTenantIdByStoreId(orderItem.getStoreId()));
     }
 
