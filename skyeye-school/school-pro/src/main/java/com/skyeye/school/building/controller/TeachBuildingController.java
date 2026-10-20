@@ -80,4 +80,20 @@ public class TeachBuildingController {
     public void queryTeachBuildingById(InputObject inputObject, OutputObject outputObject) {
         teachBuildingService.selectById(inputObject, outputObject);
     }
+
+    @ApiOperation(id = "queryCampusTwinBySchoolId", value = "根据学校获取校园数字孪生", method = "GET", allUse = "0")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "schoolId", name = "schoolId", value = "学校id", required = "required")})
+    @RequestMapping("/post/TeachBuildingController/queryCampusTwinBySchoolId")
+    public void queryCampusTwinBySchoolId(InputObject inputObject, OutputObject outputObject) {
+        teachBuildingService.queryCampusTwinBySchoolId(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryBuildingTwinByLocationId", value = "根据地点获取楼栋数字孪生", method = "GET", allUse = "0")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "地点id", required = "required")})
+    @RequestMapping("/post/TeachBuildingController/queryBuildingTwinByLocationId")
+    public void queryBuildingTwinByLocationId(InputObject inputObject, OutputObject outputObject) {
+        teachBuildingService.queryBuildingTwinByLocationId(inputObject, outputObject);
+    }
 }

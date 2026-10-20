@@ -55,7 +55,19 @@ public class FloorInfo extends OperatorUserInfo {
     @ApiModelProperty(value = "排序id,默认1")
     private Integer sortOrder;
 
+    @TableField("floor_index")
+    @ApiModelProperty(value = "楼层序号，地上从1开始，地下为负数。仅楼层节点使用")
+    private Integer floorIndex;
+
     @TableField("remark")
     @ApiModelProperty(value = "备注")
     private String remark;
+
+    @TableField("model_color")
+    @ApiModelProperty(value = "3D模型颜色，如 #13c2c2；仅教室/房间节点使用")
+    private String modelColor;
+
+    @TableField("logo")
+    @ApiModelProperty(value = "房间logo相对路径；仅教室/房间节点使用")
+    private String logo;
 }

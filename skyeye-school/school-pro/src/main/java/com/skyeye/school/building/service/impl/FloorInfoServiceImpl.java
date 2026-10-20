@@ -23,11 +23,17 @@ import com.skyeye.school.building.dao.FloorInfoDao;
 import com.skyeye.school.building.entity.FloorInfo;
 import com.skyeye.school.building.entity.TeachBuilding;
 import com.skyeye.school.building.floorenum.FloorInfoEnum;
+import com.skyeye.school.building.floorenum.SpaceOwnerTypeEnum;
 import com.skyeye.school.building.service.FloorInfoService;
+import com.skyeye.school.building.service.RoomOccupantService;
+import com.skyeye.school.building.service.SpaceVertexService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName: FloorInfoServiceImpl
@@ -40,6 +46,12 @@ import java.util.Map;
 @Service
 @SkyeyeService(name = "楼层教室服务管理", groupName = "楼层教室服务管理")
 public class FloorInfoServiceImpl extends SkyeyeBusinessServiceImpl<FloorInfoDao, FloorInfo> implements FloorInfoService {
+
+    @Autowired
+    private SpaceVertexService spaceVertexService;
+
+    @Autowired
+    private RoomOccupantService roomOccupantService;
 
     @Override
     public void createPrepose(FloorInfo floorInfo) {
@@ -148,6 +160,16 @@ public class FloorInfoServiceImpl extends SkyeyeBusinessServiceImpl<FloorInfoDao
         String id = inputObject.getParams().get("id").toString();
         FloorInfo floorInfo = selectById(id);
         Integer nodeType = floorInfo.getNodeType();
+        if (nodeType == CommonNumConstants.NUM_TWO) {
+            spaceVertexService.deleteByOwners(SpaceOwnerTypeEnum.ROOM.getKey(), Collections.singletonList(id));
+            roomOccupantService.deleteByFloorInfoIds(Collections.singletonList(id));
+        } else if (nodeType == CommonNumConstants.NUM_ONE) {
+            QueryWrapper<FloorInfo> roomQuery = new QueryWrapper<>();
+            roomQuery.eq(MybatisPlusUtil.toColumns(FloorInfo::getParentId), id);
+            List<String> roomIds = list(roomQuery).stream().map(FloorInfo::getId).collect(Collectors.toList());
+            spaceVertexService.deleteByOwners(SpaceOwnerTypeEnum.ROOM.getKey(), roomIds);
+            roomOccupantService.deleteByFloorInfoIds(roomIds);
+        }
         // 删除服务--直接删除
         super.deleteById(id);
         if (nodeType == CommonNumConstants.NUM_TWO) {
