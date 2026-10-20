@@ -177,8 +177,11 @@ public class DouBaoKnowledgeClient implements AiKnowledgeClient {
             fillKnowledgeId(body, config.getKnowledgeId());
             JSONObject json = postJson(resolveVikingKey(config), "/api/knowledge/collection/search_knowledge", body);
             return join(json, topN);
+        } catch (CustomException e) {
+            // 业务错误（含免费版过期、参数非法等）必须抛出，避免上层误判为「无检索结果」
+            throw e;
         } catch (Exception e) {
-            return StrUtil.EMPTY;
+            throw new CustomException("豆包知识库检索失败: " + e.getMessage());
         }
     }
 
