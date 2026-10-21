@@ -46,7 +46,8 @@ public class DouBaoAgentRunner {
                     AiAgentToolContext context, Consumer<String> onStatus,
                     DouBaoChatClient.StreamListener listener) {
         DouBaoChatClient client = (DouBaoChatClient) aiFactory.getDefaultChatModel(AiPlatformEnum.DOU_BAO, apiKey);
-        if (toolRegistry.isEmpty()) {
+        // 表单/布局 Assist 等非闲聊：不挂 tools，避免干扰结构化输出
+        if (toolRegistry.isEmpty() || !isChatBiz(context)) {
             client.streamChat(baseMessages, images, listener);
             return;
         }
@@ -83,6 +84,15 @@ public class DouBaoAgentRunner {
             }
         }
         client.streamChatMessages(messages, images, listener);
+    }
+
+    /** 闲聊 / 旧聊天页（bizType 为空）才启用 Agent 工具 */
+    private boolean isChatBiz(AiAgentToolContext context) {
+        if (context == null) {
+            return true;
+        }
+        String bizType = context.getBizType();
+        return bizType == null || "chat".equals(bizType);
     }
 
     private JSONObject buildAssistantToolMessage(DouBaoChatClient.ChatToolsResult result) {
@@ -131,9 +141,6 @@ public class DouBaoAgentRunner {
     }
 
     private String statusForTool(String toolName) {
-        if ("knowledge_search".equals(toolName)) {
-            return "正在检索知识库...";
-        }
         if ("knowledge_doc_stats".equals(toolName)) {
             return "正在查询知识库文档统计...";
         }

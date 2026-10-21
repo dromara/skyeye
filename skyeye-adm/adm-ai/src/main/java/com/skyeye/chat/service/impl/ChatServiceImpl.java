@@ -11,7 +11,6 @@ import com.skyeye.ai.agent.DouBaoAgentRunner;
 import com.skyeye.ai.core.doubao.DouBaoChatClient;
 import com.skyeye.ai.core.enums.AiPlatformEnum;
 import com.skyeye.ai.core.factory.AiFactory;
-import com.skyeye.ai.core.knowledge.AiKnowledgeClient;
 import com.skyeye.ai.core.qianfan.QianfanChatClient;
 import com.skyeye.ai.core.tongyi.TongYiChatClient;
 import com.skyeye.ai.core.xunfei.XunFeiChatClient;
@@ -33,14 +32,12 @@ import com.skyeye.eve.service.ITenantService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.key.entity.AiApiKey;
 import com.skyeye.key.service.AiApiKeyService;
-import com.skyeye.knowledge.util.KnowledgeTenantFilterHelper;
 import com.skyeye.role.entity.Role;
 import com.skyeye.role.service.RoleService;
 import com.skyeye.websocket.AiMessageWebSocket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -90,52 +87,6 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     private final Map<String, String> chatPromptCache = new ConcurrentHashMap<>();
 
     @Override
-    @Transactional
-    public void sendChatMessage(InputObject inputObject, OutputObject outputObject) {
-        Map<String, Object> params = inputObject.getParams();
-        String content = params.get("content").toString();
-        String apiKeyId = params.get("apiKeyId").toString();
-        String userId = InputObject.getLogParamsStatic().get("id").toString();
-        checkTenantTokenAllowUse();
-        Chat chat = new Chat();
-        AiApiKey aiApiKey = aiApiKeyService.selectById(apiKeyId);
-        String platform = aiApiKey.getPlatform();
-        // 获取到具有的ai模型
-        AiPlatformEnum aiModel = AiPlatformEnum.getName(platform);
-        // 获取role实例
-        com.skyeye.role.entity.Role role = roleService.selectById(aiApiKey.getRoleId());
-        String systemPrompt = role == null ? null : role.getPrompt();
-        // 创建AI实例
-        chat.setMessage(content);
-        chat.setPlatform(platform);
-        chat.setApiKeyId(apiKeyId);
-        String id = createEntity(chat, userId);
-        rememberChatPrompt(id, content);
-        switch (aiModel) {
-            case YI_YAN:
-                QianFanResponse(content, systemPrompt, userId, id, aiApiKey);
-                break;
-            case XUN_FEI:
-                XunFeiResponse(content, systemPrompt, userId, id, aiApiKey);
-                break;
-            case TONG_YI:
-                TongYiResponse(content, systemPrompt, userId, id, aiApiKey);
-                break;
-            case DOU_BAO:
-                DouBaoResponse(content, systemPrompt, userId, id, aiApiKey, role);
-                break;
-            default:
-                throw new CustomException("不支持的AI平台");
-        }
-        aiApiKey.setRoleMation(role);
-        chat.setApiKeyMation(aiApiKey);
-
-        outputObject.setBean(chat);
-        outputObject.setreturnCode(CommonNumConstants.NUM_ZERO);
-        outputObject.settotal(CommonNumConstants.NUM_ONE);
-    }
-
-    @Override
     public void syncChatCompletion(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String content = params.get("content").toString();
@@ -170,15 +121,8 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         } else {
             id = ToolUtil.getSurFaceId();
         }
-        // 豆包 + 闲聊走方案 C Agent：由模型按需调 knowledge_search，不再强制预检索塞 prompt
-        boolean useDouBaoAgent = aiModel == AiPlatformEnum.DOU_BAO && "chat".equals(bizType);
+        // 豆包统一走 streamDouBao；是否挂 tools 由 Runner 按 bizType 决定（仅 chat/旧聊天页）
         String knowledgeQuery = params.get("knowledgeQuery") == null ? "" : params.get("knowledgeQuery").toString();
-        if (!useDouBaoAgent) {
-            if ("chat".equals(bizType) && role != null && StrUtil.isNotBlank(role.getKnowledgeId())) {
-                sendStreamChunk(userId, id, bizType, "正在检索知识库...", false, 0, STREAM_TYPE_STATUS);
-            }
-            content = appendRoleKnowledge(bizType, role, content, knowledgeQuery);
-        }
         rememberChatPrompt(id, content);
         Map<String, Object> bean = new HashMap<>();
         bean.put("id", id);
@@ -196,65 +140,14 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
                 streamTongYi(content, systemPrompt, userId, id, aiApiKey, bizType, images, saveChat);
                 break;
             case DOU_BAO:
-                if (useDouBaoAgent) {
-                    streamDouBaoAgent(content, systemPrompt, userId, id, aiApiKey, bizType, images, saveChat,
-                        role, StrUtil.blankToDefault(knowledgeQuery, userMessage));
-                } else {
-                    streamDouBao(content, systemPrompt, userId, id, aiApiKey, bizType, images, saveChat);
-                }
+                streamDouBao(content, systemPrompt, userId, id, aiApiKey, bizType, images, saveChat,
+                    role, StrUtil.blankToDefault(knowledgeQuery, userMessage));
                 break;
             default:
                 throw new CustomException("不支持的AI平台");
         }
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
-    }
-
-    /**
-     * 闲聊时绑定角色知识库。检索词优先用用户原问题，不要拿整段提示词去搜。
-     * 开启租户时：检索后按正文中的租户标记过滤，并提示模型按当前租户作答。
-     */
-    private String appendRoleKnowledge(String bizType, com.skyeye.role.entity.Role role, String content,
-                                       String knowledgeQuery) {
-        if (!"chat".equals(bizType) || role == null || StrUtil.isBlank(role.getKnowledgeId()) || StrUtil.isBlank(content)) {
-            return content;
-        }
-        AiApiKey apiKey;
-        try {
-            apiKey = aiApiKeyService.selectEnabledKeyByRoleId(role.getId());
-        } catch (CustomException e) {
-            return content;
-        }
-        if (StrUtil.isBlank(apiKey.getPlatformKnowledgeId())) {
-            return content;
-        }
-        AiPlatformEnum platform = AiPlatformEnum.getName(apiKey.getPlatform());
-        AiKnowledgeClient client = aiFactory.getKnowledgeClient(platform);
-        if (client.useNativeAppKnowledge()) {
-            return content;
-        }
-        String currentTenantId = TenantContext.getTenantId();
-        String query = StrUtil.blankToDefault(knowledgeQuery, content);
-        if (tenantEnable && StrUtil.isNotBlank(currentTenantId)) {
-            // 提高与当前租户相关片段的召回
-            query = query + " 租户ID " + currentTenantId;
-        }
-        int topN = tenantEnable && StrUtil.isNotBlank(currentTenantId) ? 16 : 8;
-        String knowledgeText = client.search(apiKey.toAiKnowledgeConfig(), query, topN);
-        knowledgeText = KnowledgeTenantFilterHelper.filterKnowledgeText(knowledgeText, tenantEnable, currentTenantId);
-        if (StrUtil.isBlank(knowledgeText)) {
-            return content;
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.append("以下是知识库检索到的相关资料，请据此回答；可归纳列表。资料不足时说明缺少什么，不要编造。\n");
-        if (tenantEnable && StrUtil.isNotBlank(currentTenantId)) {
-            sb.append("当前租户ID=").append(currentTenantId)
-                .append("。资料块含 [skyeye_tenant=…][skyeye_isolation=…] 标记，请严格按隔离类型使用：")
-                .append("strongIsolation 仅当前租户；weakIsolation 当前租户或平台；")
-                .append("noIsolation 不限；plate 仅平台账号可见。不要使用其他租户的私有数据。\n");
-        }
-        sb.append("【知识库】\n").append(knowledgeText).append("\n【用户问题】\n").append(content);
-        return sb.toString();
     }
 
     /**
@@ -341,19 +234,11 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         });
     }
 
-    private void streamDouBao(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey,
-                              String bizType, List<String> images, boolean saveChat) {
-        runStreamTask(userId, chatId, bizType, () -> {
-            consumeDouBaoStream(aiApiKey, buildChatMessages(systemPrompt, resolveHistory(saveChat, userId, aiApiKey.getId()), content),
-                images, userId, chatId, bizType);
-        });
-    }
-
     /**
-     * 方案 C：豆包 Agent（tools 循环 + 最终流式）。有图时仍走原流式，避免 tool 与视觉混用。
+     * 豆包统一入口：闲聊走 Agent tools；表单/布局等由 Runner 跳过 tools；有图时走视觉流式。
      */
-    private void streamDouBaoAgent(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey,
-                                   String bizType, List<String> images, boolean saveChat, Role role, String userQuery) {
+    private void streamDouBao(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey,
+                              String bizType, List<String> images, boolean saveChat, Role role, String userQuery) {
         runStreamTask(userId, chatId, bizType, () -> {
             List<Map<String, String>> messages = buildChatMessages(systemPrompt,
                 resolveHistory(saveChat, userId, aiApiKey.getId()), content);
@@ -380,17 +265,6 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
      */
     private List<Chat> resolveHistory(boolean saveChat, String userId, String apiKeyId) {
         return saveChat ? getRecentlyChats(userId, apiKeyId) : null;
-    }
-
-    /**
-     * 普通聊天页的文心流式调用：会把近期 user/assistant 历史拼进 messages，再追加本轮用户输入。
-     * bizType 传 null，走旧聊天页的 WebSocket 协议（不含 chatId、bizType 字段）。
-     */
-    private void QianFanResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {
-        runStreamTask(userId, chatId, null, () -> {
-            List<Chat> chatList = getRecentlyChats(userId, aiApiKey.getId());
-            consumeYiYanStream(aiApiKey, buildChatMessages(systemPrompt, chatList, message), null, userId, chatId, null);
-        });
     }
 
     private List<String> readImages(String raw) {
@@ -739,13 +613,6 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         return chat;
     }
 
-    private void XunFeiResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {
-        runStreamTask(userId, chatId, null, () -> {
-            List<Chat> chatList = getRecentlyChats(userId, aiApiKey.getId());
-            consumeXunFeiStream(aiApiKey, buildChatMessages(systemPrompt, chatList, message), 0.5, userId, chatId, null);
-        });
-    }
-
     private List<Chat> getRecentlyChats(String userId, String apiKeyId) {
         QueryWrapper<Chat> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(Chat::getApiKeyId), apiKeyId);
@@ -754,20 +621,6 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         PageHelper.startPage(1, 10);
         return chatService.list(queryWrapper);
     }
-
-    private void TongYiResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {
-        runStreamTask(userId, chatId, null, () -> {
-            List<Chat> chatList = getRecentlyChats(userId, aiApiKey.getId());
-            consumeTongYiStream(aiApiKey, systemPrompt, chatList, message, null, userId, chatId, null);
-        });
-    }
-
-    private void DouBaoResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey,
-                                Role role) {
-        // 旧聊天页 WebSocket 仍用 bizType=null；Agent 工具循环照常走
-        streamDouBaoAgent(message, systemPrompt, userId, chatId, aiApiKey, null, null, true, role, message);
-    }
-
 
     @Override
     public void queryPageMessageList(InputObject inputObject, OutputObject outputObject) {

@@ -93,7 +93,7 @@ com.skyeye.ai.agent
 
 | name | 作用 | 状态 |
 |------|------|------|
-| `knowledge_search` | 按问题检索角色绑定知识库片段 | ✅ |
+| `knowledge_search` | 按问题检索角色绑定知识库片段（Viking） | ❌ 已下线（不准/套餐问题） |
 | `knowledge_doc_stats` | 查本地知识库文档数量/同步状态（结构化） | ✅ |
 
 #### B. 业务查询（示例 → 再扩）
@@ -148,7 +148,7 @@ com.skyeye.ai.agent
 ```text
 你可以使用工具获取准确信息。
 涉及数量、统计、列表、待办笔数时，必须调用业务查询工具，不要根据知识库片段臆测。
-文档制度类问题可调用 knowledge_search；文档数量/同步状态用 knowledge_doc_stats。
+文档数量/同步状态用 knowledge_doc_stats（勿再写 knowledge_search，该工具已下线）。
 ```
 
 ---
@@ -159,7 +159,7 @@ com.skyeye.ai.agent
 
 - [x] 设计文档（本文）
 - [x] `AiAgentTool` / `Registry` / `Context`
-- [x] `knowledge_search` + `knowledge_doc_stats`
+- [x] `knowledge_doc_stats`（`knowledge_search` 已下线）
 - [x] `DouBaoChatClient` tools 非流式 + 最终流式
 - [x] `DouBaoAgentRunner` + `ChatServiceImpl` 豆包 chat 接入
 - [x] 去掉「必先 RAG 拼 prompt」；改为工具可选调用
@@ -183,7 +183,7 @@ com.skyeye.ai.agent
 
 | # | 用户问法 | 期望 |
 |---|----------|------|
-| 1 | 请假制度是怎样的？ | 调 `knowledge_search`，据文档回答 |
+| 1 | 请假制度是怎样的？ | 暂无向量检索工具；旗舰版/官方检索就绪后再接 |
 | 2 | 知识库里同步了多少文档？ | 调 `knowledge_doc_stats`，给准确数字 |
 | 3 | 当前待出库有多少单？ | 调 ERP count 工具（C1），**不**用知识库猜 |
 | 4 | 把库存扣掉 | 无写工具，提示人工到业务页操作 |

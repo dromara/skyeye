@@ -28,15 +28,6 @@ public class ChatController {
     @Autowired
     private ChatService chatService;
 
-    @ApiOperation(id = "sendChatMessage", value = "发送消息", method = "POST", allUse = "2")
-    @ApiImplicitParams({
-        @ApiImplicitParam(id = "content", name = "content", value = "消息", required = "required"),
-        @ApiImplicitParam(id = "apiKeyId", name = "apiKeyId", value = "AI配置id", required = "required")})
-    @RequestMapping("/post/ChatController/sendChatMessage")
-    public void sendChatMessage(InputObject inputObject, OutputObject outputObject) {
-        chatService.sendChatMessage(inputObject, outputObject);
-    }
-
     @ApiOperation(id = "syncChatCompletion", value = "流式调用大模型", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "content", name = "content", value = "用户消息（有的地方会基于原话进行拼接再发给大模型）", required = "required"),

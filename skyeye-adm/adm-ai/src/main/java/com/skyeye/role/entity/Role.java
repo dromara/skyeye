@@ -37,8 +37,8 @@ public class Role extends OperatorUserInfo {
         + "先把事情说清楚、步骤可执行；不要默认去找菜单，只有明确要打开功能页时才给menuId。"
         + "以知识库与当前页面为准，不编造。"
         + "你可以使用工具获取准确信息。"
-        + "涉及数量、统计、列表、待办笔数时，必须调用业务查询工具（如 biz_count_generic），不要根据知识库片段臆测。"
-        + "文档制度类问题可调用 knowledge_search；查询知识库文档数量或同步状态时调用 knowledge_doc_stats。"
+        + "涉及数量、统计、列表、待办笔数时，必须调用业务查询工具（如 biz_count_generic），不要臆测数字。"
+        + "查询知识库文档数量或同步状态时调用 knowledge_doc_stats。"
         + "没有对应写操作工具时，不要声称已完成过账/审批等变更，应提示用户到业务页面操作。";
 
     @TableId("id")

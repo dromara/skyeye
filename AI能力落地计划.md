@@ -46,7 +46,7 @@
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-> **方案 C（Agent 业务工具）**：详见仓库根目录 [`AI-Agent方案C-业务工具.md`](./AI-Agent方案C-业务工具.md)。豆包闲聊不再强制预检索塞 prompt，由模型按需调用 `knowledge_search` / `knowledge_doc_stats` / `biz_count_*`。
+> **方案 C（Agent 业务工具）**：详见仓库根目录 [`AI-Agent方案C-业务工具.md`](./AI-Agent方案C-业务工具.md)。豆包闲聊不再预检索/工具检索塞知识库片段；按需调用 `knowledge_doc_stats` / `biz_count_*`。知识库问答待旗舰版官方检索或其它方案。
 
 ### 1.1 已落地能力清单
 

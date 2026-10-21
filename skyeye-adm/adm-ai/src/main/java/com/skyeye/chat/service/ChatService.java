@@ -16,9 +16,7 @@ import com.skyeye.common.object.OutputObject;
  */
 public interface ChatService extends SkyeyeBusinessService<Chat> {
 
-    void sendChatMessage(InputObject inputObject, OutputObject outputObject);
-
-        /**
+    /**
      * 流式调用大模型，立即返回 chatId，正文通过 WebSocket 推送
      */
     void syncChatCompletion(InputObject inputObject, OutputObject outputObject);
