@@ -40,4 +40,8 @@ public class SpaceVertex extends OperatorUserInfo {
     @TableField("latitude")
     @ApiModelProperty(value = "纬度", required = "required")
     private String latitude;
+
+    @TableField("ref_room_id")
+    @ApiModelProperty(value = "关联房间id，楼层路线顶点可选，表示该点为房间接入点")
+    private String refRoomId;
 }

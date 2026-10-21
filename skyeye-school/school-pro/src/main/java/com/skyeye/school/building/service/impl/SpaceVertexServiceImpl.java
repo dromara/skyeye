@@ -36,7 +36,10 @@ public class SpaceVertexServiceImpl extends SkyeyeBusinessServiceImpl<SpaceVerte
         Map<String, Object> params = inputObject.getParams();
         Integer ownerType = Integer.valueOf(params.get("ownerType").toString());
         String ownerId = params.get("ownerId").toString();
-        if (!SpaceOwnerTypeEnum.BUILDING.getKey().equals(ownerType) && !SpaceOwnerTypeEnum.ROOM.getKey().equals(ownerType)) {
+        boolean isFloorPath = SpaceOwnerTypeEnum.FLOOR_PATH.getKey().equals(ownerType);
+        if (!SpaceOwnerTypeEnum.BUILDING.getKey().equals(ownerType)
+            && !SpaceOwnerTypeEnum.ROOM.getKey().equals(ownerType)
+            && !isFloorPath) {
             throw new CustomException("轮廓归属类型不正确");
         }
         if (StrUtil.isEmpty(ownerId)) {
@@ -47,8 +50,10 @@ public class SpaceVertexServiceImpl extends SkyeyeBusinessServiceImpl<SpaceVerte
         if (vertexRaw != null && StrUtil.isNotEmpty(vertexRaw.toString())) {
             vertices = JSONUtil.toList(vertexRaw.toString(), SpaceVertex.class);
         }
-        if (CollectionUtil.isNotEmpty(vertices) && vertices.size() < 3) {
-            throw new CustomException("范围至少需要3个点");
+        // 楼栋/房间轮廓至少3点；楼层路线至少2点
+        int minPoints = isFloorPath ? 2 : 3;
+        if (CollectionUtil.isNotEmpty(vertices) && vertices.size() < minPoints) {
+            throw new CustomException(isFloorPath ? "楼层路线至少需要2个点" : "范围至少需要3个点");
         }
         deleteByOwners(ownerType, Collections.singletonList(ownerId));
         if (CollectionUtil.isEmpty(vertices)) {
@@ -68,6 +73,11 @@ public class SpaceVertexServiceImpl extends SkyeyeBusinessServiceImpl<SpaceVerte
             }
             if (StrUtil.isEmpty(vertex.getLongitude()) || StrUtil.isEmpty(vertex.getLatitude())) {
                 throw new CustomException("轮廓顶点经纬度不能为空");
+            }
+            if (!isFloorPath) {
+                vertex.setRefRoomId(null);
+            } else if (StrUtil.isNotEmpty(vertex.getRefRoomId())) {
+                vertex.setRefRoomId(vertex.getRefRoomId().trim());
             }
         }
         String userId = inputObject.getLogParams().get("id").toString();

@@ -168,6 +168,7 @@ public class FloorInfoServiceImpl extends SkyeyeBusinessServiceImpl<FloorInfoDao
             roomQuery.eq(MybatisPlusUtil.toColumns(FloorInfo::getParentId), id);
             List<String> roomIds = list(roomQuery).stream().map(FloorInfo::getId).collect(Collectors.toList());
             spaceVertexService.deleteByOwners(SpaceOwnerTypeEnum.ROOM.getKey(), roomIds);
+            spaceVertexService.deleteByOwners(SpaceOwnerTypeEnum.FLOOR_PATH.getKey(), Collections.singletonList(id));
             roomOccupantService.deleteByFloorInfoIds(roomIds);
         }
         // 删除服务--直接删除

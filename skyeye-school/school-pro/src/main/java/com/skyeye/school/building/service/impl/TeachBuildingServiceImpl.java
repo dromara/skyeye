@@ -146,8 +146,13 @@ public class TeachBuildingServiceImpl extends SkyeyeBusinessServiceImpl<TeachBui
             .filter(item -> FloorInfoEnum.ClASS_INFO_ENUM.getKey().equals(item.getNodeType()))
             .map(FloorInfo::getId)
             .collect(Collectors.toList());
+        List<String> floorIds = nodes.stream()
+            .filter(item -> FloorInfoEnum.FLOOR_INFO_ENUM.getKey().equals(item.getNodeType()))
+            .map(FloorInfo::getId)
+            .collect(Collectors.toList());
         spaceVertexService.deleteByOwners(SpaceOwnerTypeEnum.BUILDING.getKey(), Collections.singletonList(id));
         spaceVertexService.deleteByOwners(SpaceOwnerTypeEnum.ROOM.getKey(), roomIds);
+        spaceVertexService.deleteByOwners(SpaceOwnerTypeEnum.FLOOR_PATH.getKey(), floorIds);
         roomOccupantService.deleteByFloorInfoIds(roomIds);
         deleteById(id);
         floorInfoService.remove(queryWrapper);
@@ -196,8 +201,14 @@ public class TeachBuildingServiceImpl extends SkyeyeBusinessServiceImpl<TeachBui
             .filter(item -> FloorInfoEnum.ClASS_INFO_ENUM.getKey().equals(item.getNodeType()))
             .map(FloorInfo::getId)
             .collect(Collectors.toList());
+        List<String> floorIds = nodes.stream()
+            .filter(item -> FloorInfoEnum.FLOOR_INFO_ENUM.getKey().equals(item.getNodeType()))
+            .map(FloorInfo::getId)
+            .collect(Collectors.toList());
         Map<String, List<SpaceVertex>> roomOutlines = spaceVertexService.queryGroupByOwner(
             SpaceOwnerTypeEnum.ROOM.getKey(), roomIds);
+        Map<String, List<SpaceVertex>> floorWalkPaths = spaceVertexService.queryGroupByOwner(
+            SpaceOwnerTypeEnum.FLOOR_PATH.getKey(), floorIds);
         Map<String, List<RoomOccupant>> occupants = roomOccupantService.queryGroupByFloorInfoIds(roomIds);
 
         List<Map<String, Object>> rows = new ArrayList<>();
@@ -210,7 +221,7 @@ public class TeachBuildingServiceImpl extends SkyeyeBusinessServiceImpl<TeachBui
             row.put("latitude", building.getLatitude());
             row.put("schoolId", building.getSchoolId());
             row.put("outline", toVertexMaps(buildingOutlines.get(building.getId())));
-            row.put("floors", buildFloors(nodesByLocation.get(building.getId()), roomOutlines, occupants));
+            row.put("floors", buildFloors(nodesByLocation.get(building.getId()), roomOutlines, floorWalkPaths, occupants));
             rows.add(row);
         }
         return rows;
@@ -218,6 +229,7 @@ public class TeachBuildingServiceImpl extends SkyeyeBusinessServiceImpl<TeachBui
 
     private List<Map<String, Object>> buildFloors(List<FloorInfo> nodes,
                                                   Map<String, List<SpaceVertex>> roomOutlines,
+                                                  Map<String, List<SpaceVertex>> floorWalkPaths,
                                                   Map<String, List<RoomOccupant>> occupants) {
         if (CollectionUtil.isEmpty(nodes)) {
             return new ArrayList<>();
@@ -241,6 +253,7 @@ public class TeachBuildingServiceImpl extends SkyeyeBusinessServiceImpl<TeachBui
             floorRow.put("sortOrder", floor.getSortOrder());
             floorRow.put("remark", floor.getRemark());
             floorRow.put("status", floor.getStatus());
+            floorRow.put("walkPath", toVertexMaps(floorWalkPaths.get(floor.getId())));
             List<FloorInfo> rooms = roomsByParent.getOrDefault(floor.getId(), new ArrayList<>());
             rooms.sort(Comparator.comparing(item -> item.getSortOrder() == null ? 0 : item.getSortOrder()));
             List<Map<String, Object>> roomRows = new ArrayList<>();
@@ -273,6 +286,7 @@ public class TeachBuildingServiceImpl extends SkyeyeBusinessServiceImpl<TeachBui
             row.put("longitude", vertex.getLongitude());
             row.put("latitude", vertex.getLatitude());
             row.put("orderNum", vertex.getOrderNum());
+            row.put("refRoomId", vertex.getRefRoomId());
             rows.add(row);
         }
         return rows;
