@@ -257,7 +257,7 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
         }
         // ② 先清 S3 + 平台文档，再删本地，最后由框架删库记录
         deleteRemote(file, apiKey);
-        deleteLocalFile(file.getPath());
+        deleteLocalFile(file.getPath(), file.getId());
     }
 
     @Override
@@ -273,15 +273,41 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
         } catch (Exception e) {
             log.warn("删除知识库文件时未找到可用 AI 配置 knowledgeId={}: {}", knowledgeId, e.getMessage());
         }
-        // ② 逐个清远端 + 本地
+        // ② 逐个清远端 + 本地（本地路径若被其他知识库引用则跳过删盘）
         for (KnowledgeFile file : files) {
             deleteRemote(file, apiKey);
-            deleteLocalFile(file.getPath());
+            deleteLocalFile(file.getPath(), file.getId());
         }
         // ③ 再删库记录
         QueryWrapper<KnowledgeFile> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(KnowledgeFile::getKnowledgeId), knowledgeId);
         remove(queryWrapper);
+    }
+
+    @Override
+    public void copyFromKnowledge(String sourceKnowledgeId, String targetKnowledgeId, String userId) {
+        List<KnowledgeFile> sourceFiles = selectByKnowledgeId(sourceKnowledgeId);
+        if (CollectionUtil.isEmpty(sourceFiles)) {
+            return;
+        }
+        List<KnowledgeFile> copies = new ArrayList<>();
+        for (KnowledgeFile source : sourceFiles) {
+            KnowledgeFile copy = new KnowledgeFile();
+            copy.setKnowledgeId(targetKnowledgeId);
+            copy.setName(source.getName());
+            // 共用本地访问路径；删除时若仍有引用则不删物理文件
+            copy.setPath(source.getPath());
+            copy.setFileExt(source.getFileExt());
+            copy.setFileSize(source.getFileSize());
+            copy.setSyncStatus(KnowledgeFileSyncStatusEnum.WAIT.getKey());
+            copy.setStorageConfigId(source.getStorageConfigId());
+            copy.setS3ObjectId(null);
+            copy.setPlatformDocId(null);
+            copy.setSyncTime(null);
+            copy.setErrorMsg(null);
+            copies.add(copy);
+        }
+        createEntity(copies, StrUtil.blankToDefault(userId, StrUtil.EMPTY));
     }
 
     private void syncOneFile(Knowledge knowledge, AiApiKey apiKey, KnowledgeFile file) {
@@ -384,7 +410,22 @@ public class KnowledgeFileServiceImpl extends SkyeyeBusinessServiceImpl<Knowledg
         }
     }
 
-    private void deleteLocalFile(String visitPath) {
+    /**
+     * @param excludeFileId 当前即将删除的文件 id；同 path 还有其它记录时不删物理文件（拷贝共用路径）
+     */
+    private void deleteLocalFile(String visitPath, String excludeFileId) {
+        if (StrUtil.isBlank(visitPath)) {
+            return;
+        }
+        QueryWrapper<KnowledgeFile> refQuery = new QueryWrapper<>();
+        refQuery.eq(MybatisPlusUtil.toColumns(KnowledgeFile::getPath), visitPath);
+        if (StrUtil.isNotBlank(excludeFileId)) {
+            refQuery.ne(MybatisPlusUtil.toColumns(KnowledgeFile::getId), excludeFileId);
+        }
+        if (count(refQuery) > 0) {
+            log.info("知识库本地文件仍被其他记录引用，跳过删盘 path={}", visitPath);
+            return;
+        }
         String abs = resolveLocalAbsPath(visitPath);
         if (StrUtil.isBlank(abs)) {
             return;

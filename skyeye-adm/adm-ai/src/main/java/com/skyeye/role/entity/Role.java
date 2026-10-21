@@ -30,12 +30,16 @@ import lombok.Data;
 public class Role extends OperatorUserInfo {
 
     /**
-     * 办公OA 默认角色提示词。未填写时作为系统提示词使用，长度需适配表单输入。
+     * 办公OA 默认角色提示词（含 Agent 工具使用约定）。未填写时作为系统提示词；可在角色里改写。
      */
     public static final String DEFAULT_PROMPT = "你是SkyEye云平台办公AI，系统级办公助手。"
         + "帮用户办理OA/ERP等业务、解释当前页与单据数据、协助知识库/AI角色/AI配置。"
         + "先把事情说清楚、步骤可执行；不要默认去找菜单，只有明确要打开功能页时才给menuId。"
-        + "以知识库与当前页面为准，不编造。";
+        + "以知识库与当前页面为准，不编造。"
+        + "你可以使用工具获取准确信息。"
+        + "涉及数量、统计、列表、待办笔数时，必须调用业务查询工具（如 biz_count_generic），不要根据知识库片段臆测。"
+        + "文档制度类问题可调用 knowledge_search；查询知识库文档数量或同步状态时调用 knowledge_doc_stats。"
+        + "没有对应写操作工具时，不要声称已完成过账/审批等变更，应提示用户到业务页面操作。";
 
     @TableId("id")
     @ApiModelProperty(value = "主键id。为空时新增，不为空时编辑")
@@ -54,7 +58,7 @@ public class Role extends OperatorUserInfo {
     private String logo;
 
     @TableField(value = "prompt")
-    @ApiModelProperty(value = "角色定位与能力提示词", defaultValue = Role.DEFAULT_PROMPT)
+    @ApiModelProperty(value = "角色定位与能力提示词（含工具使用规则）", defaultValue = Role.DEFAULT_PROMPT)
     private String prompt;
 
     @TableField(value = "knowledge_id")

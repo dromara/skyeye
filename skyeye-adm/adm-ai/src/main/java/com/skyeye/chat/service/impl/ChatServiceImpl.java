@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.base.Joiner;
+import com.skyeye.ai.agent.AiAgentToolContext;
+import com.skyeye.ai.agent.DouBaoAgentRunner;
 import com.skyeye.ai.core.doubao.DouBaoChatClient;
 import com.skyeye.ai.core.enums.AiPlatformEnum;
 import com.skyeye.ai.core.factory.AiFactory;
@@ -79,6 +81,9 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     @Autowired
     private ITenantService iTenantService;
 
+    @Autowired
+    private DouBaoAgentRunner douBaoAgentRunner;
+
     @Value("${skyeye.tenant.enable:false}")
     private boolean tenantEnable;
 
@@ -117,7 +122,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
                 TongYiResponse(content, systemPrompt, userId, id, aiApiKey);
                 break;
             case DOU_BAO:
-                DouBaoResponse(content, systemPrompt, userId, id, aiApiKey);
+                DouBaoResponse(content, systemPrompt, userId, id, aiApiKey, role);
                 break;
             default:
                 throw new CustomException("不支持的AI平台");
@@ -165,11 +170,15 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         } else {
             id = ToolUtil.getSurFaceId();
         }
-        if ("chat".equals(bizType) && role != null && StrUtil.isNotBlank(role.getKnowledgeId())) {
-            sendStreamChunk(userId, id, bizType, "正在检索知识库...", false, 0, STREAM_TYPE_STATUS);
-        }
+        // 豆包 + 闲聊走方案 C Agent：由模型按需调 knowledge_search，不再强制预检索塞 prompt
+        boolean useDouBaoAgent = aiModel == AiPlatformEnum.DOU_BAO && "chat".equals(bizType);
         String knowledgeQuery = params.get("knowledgeQuery") == null ? "" : params.get("knowledgeQuery").toString();
-        content = appendRoleKnowledge(bizType, role, content, knowledgeQuery);
+        if (!useDouBaoAgent) {
+            if ("chat".equals(bizType) && role != null && StrUtil.isNotBlank(role.getKnowledgeId())) {
+                sendStreamChunk(userId, id, bizType, "正在检索知识库...", false, 0, STREAM_TYPE_STATUS);
+            }
+            content = appendRoleKnowledge(bizType, role, content, knowledgeQuery);
+        }
         rememberChatPrompt(id, content);
         Map<String, Object> bean = new HashMap<>();
         bean.put("id", id);
@@ -187,7 +196,12 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
                 streamTongYi(content, systemPrompt, userId, id, aiApiKey, bizType, images, saveChat);
                 break;
             case DOU_BAO:
-                streamDouBao(content, systemPrompt, userId, id, aiApiKey, bizType, images, saveChat);
+                if (useDouBaoAgent) {
+                    streamDouBaoAgent(content, systemPrompt, userId, id, aiApiKey, bizType, images, saveChat,
+                        role, StrUtil.blankToDefault(knowledgeQuery, userMessage));
+                } else {
+                    streamDouBao(content, systemPrompt, userId, id, aiApiKey, bizType, images, saveChat);
+                }
                 break;
             default:
                 throw new CustomException("不支持的AI平台");
@@ -332,6 +346,32 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         runStreamTask(userId, chatId, bizType, () -> {
             consumeDouBaoStream(aiApiKey, buildChatMessages(systemPrompt, resolveHistory(saveChat, userId, aiApiKey.getId()), content),
                 images, userId, chatId, bizType);
+        });
+    }
+
+    /**
+     * 方案 C：豆包 Agent（tools 循环 + 最终流式）。有图时仍走原流式，避免 tool 与视觉混用。
+     */
+    private void streamDouBaoAgent(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey,
+                                   String bizType, List<String> images, boolean saveChat, Role role, String userQuery) {
+        runStreamTask(userId, chatId, bizType, () -> {
+            List<Map<String, String>> messages = buildChatMessages(systemPrompt,
+                resolveHistory(saveChat, userId, aiApiKey.getId()), content);
+            if (images != null && !images.isEmpty()) {
+                consumeDouBaoStream(aiApiKey, messages, images, userId, chatId, bizType);
+                return;
+            }
+            AiAgentToolContext ctx = AiAgentToolContext.builder()
+                .userId(userId)
+                .tenantId(TenantContext.getTenantId())
+                .tenantEnable(tenantEnable)
+                .bizType(bizType)
+                .chatId(chatId)
+                .role(role)
+                .apiKey(aiApiKey)
+                .userQuery(userQuery)
+                .build();
+            consumeDouBaoAgentStream(aiApiKey, messages, userId, chatId, bizType, ctx);
         });
     }
 
@@ -489,6 +529,31 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         DouBaoChatClient client = (DouBaoChatClient) aiFactory.getDefaultChatModel(AiPlatformEnum.DOU_BAO, aiApiKey);
         consumeClientStream(userId, chatId, bizType, (tenantId, isolationType, finished) ->
             client.streamChat(messages, images, new DouBaoChatClient.StreamListener() {
+                @Override
+                public void onDelta(String piece, boolean end) {
+                    handleStreamDelta(tenantId, isolationType, userId, chatId, bizType, piece, end, finished);
+                }
+
+                @Override
+                public void onReasoningDelta(String piece, boolean end) {
+                    handleStreamReasoningDelta(userId, chatId, bizType, piece);
+                }
+
+                @Override
+                public void onError(String message) {
+                    handleStreamError(tenantId, isolationType, userId, chatId, bizType, message, finished);
+                }
+            }));
+    }
+
+    private void consumeDouBaoAgentStream(AiApiKey aiApiKey, List<Map<String, String>> messages,
+                                          String userId, String chatId, String bizType, AiAgentToolContext ctx) {
+        consumeClientStream(userId, chatId, bizType, (tenantId, isolationType, finished) ->
+            douBaoAgentRunner.run(aiApiKey, messages, null, ctx, status -> {
+                // 不 clear：本线程后续还要执行工具 / 落库，租户由 runStreamTask finally 统一清理
+                bindTenantContext(tenantId, isolationType);
+                sendStreamChunk(userId, chatId, bizType, status, false, 0, STREAM_TYPE_STATUS);
+            }, new DouBaoChatClient.StreamListener() {
                 @Override
                 public void onDelta(String piece, boolean end) {
                     handleStreamDelta(tenantId, isolationType, userId, chatId, bizType, piece, end, finished);
@@ -697,11 +762,10 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         });
     }
 
-    private void DouBaoResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey) {
-        runStreamTask(userId, chatId, null, () -> {
-            List<Chat> chatList = getRecentlyChats(userId, aiApiKey.getId());
-            consumeDouBaoStream(aiApiKey, buildChatMessages(systemPrompt, chatList, message), null, userId, chatId, null);
-        });
+    private void DouBaoResponse(String message, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey,
+                                Role role) {
+        // 旧聊天页 WebSocket 仍用 bizType=null；Agent 工具循环照常走
+        streamDouBaoAgent(message, systemPrompt, userId, chatId, aiApiKey, null, null, true, role, message);
     }
 
 

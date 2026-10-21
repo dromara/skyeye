@@ -183,6 +183,106 @@ public class KnowledgeServiceImpl extends SkyeyeBusinessServiceImpl<KnowledgeDao
         }
     }
 
+    private static final String COPY_NAME_SUFFIX = "-副本";
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void copyAiKnowledge(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String sourceId = params.get("id") == null ? StrUtil.EMPTY : params.get("id").toString();
+        if (StrUtil.isBlank(sourceId)) {
+            throw new CustomException("请选择要拷贝的知识库");
+        }
+        String userId = inputObject.getLogParams().get("id").toString();
+        // 用库内原文（含 JDBC 密码），不用对外脱敏后的 selectById
+        Knowledge source = super.selectById(sourceId);
+        if (source == null || StrUtil.isBlank(source.getId())) {
+            throw new CustomException("知识库不存在");
+        }
+        Knowledge copy = new Knowledge();
+        copy.setName(buildCopyName(source.getName()));
+        copy.setDescr(source.getDescr());
+        copy.setEnabled(source.getEnabled());
+        copy.setJdbcUrl(source.getJdbcUrl());
+        copy.setJdbcUser(source.getJdbcUser());
+        copy.setJdbcPassword(source.getJdbcPassword());
+        copy.setDriverClass(source.getDriverClass());
+        copy.setFileConfigId(source.getFileConfigId());
+        copy.setFrequency(source.getFrequency());
+        copy.setExecuteTime(source.getExecuteTime());
+        copy.setWeekDays(source.getWeekDays());
+        copy.setMonthDays(source.getMonthDays());
+        copy.setCustomCron(source.getCustomCron());
+        copy.setLastSyncTime(null);
+        createEntity(copy, userId);
+
+        List<KnowledgeSync> sourceSyncList = knowledgeSyncService.selectByKnowledgeId(sourceId);
+        if (CollectionUtil.isNotEmpty(sourceSyncList)) {
+            List<KnowledgeSync> syncCopies = new ArrayList<>();
+            for (KnowledgeSync sync : sourceSyncList) {
+                KnowledgeSync item = new KnowledgeSync();
+                item.setTableName(sync.getTableName());
+                item.setIdField(sync.getIdField());
+                item.setTitleField(sync.getTitleField());
+                item.setContentFields(sync.getContentFields());
+                item.setTenantField(sync.getTenantField());
+                item.setTenantIsolation(sync.getTenantIsolation());
+                item.setSyncType(sync.getSyncType());
+                item.setWatermarkField(sync.getWatermarkField());
+                // 水位/分片不拷，下次全量或增量从零开始
+                item.setLastWatermark(null);
+                item.setTablePartCount(null);
+                item.setPartDocIds(null);
+                syncCopies.add(item);
+            }
+            knowledgeSyncService.saveList(copy.getId(), syncCopies);
+        }
+
+        knowledgeFileService.copyFromKnowledge(sourceId, copy.getId(), userId);
+
+        Knowledge result = selectById(copy.getId());
+        outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    private String buildCopyName(String name) {
+        String baseName = StrUtil.blankToDefault(name, "知识库");
+        String prefix = baseName.endsWith(COPY_NAME_SUFFIX) ? baseName : baseName + COPY_NAME_SUFFIX;
+        Set<Integer> usedIndexes = findUsedCopyNameIndexes(prefix);
+        int nextIndex = 1;
+        while (usedIndexes.contains(nextIndex)) {
+            nextIndex++;
+        }
+        String candidate = nextIndex <= 1 ? prefix : prefix + nextIndex;
+        return candidate.length() <= 100 ? candidate : candidate.substring(0, 100);
+    }
+
+    private Set<Integer> findUsedCopyNameIndexes(String prefix) {
+        QueryWrapper<Knowledge> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select(MybatisPlusUtil.toColumns(Knowledge::getName));
+        queryWrapper.likeRight(MybatisPlusUtil.toColumns(Knowledge::getName), prefix);
+        List<Knowledge> existList = list(queryWrapper);
+        Set<Integer> usedIndexes = new HashSet<>();
+        if (CollectionUtil.isEmpty(existList)) {
+            return usedIndexes;
+        }
+        for (Knowledge item : existList) {
+            String existName = item.getName();
+            if (prefix.equals(existName)) {
+                usedIndexes.add(1);
+                continue;
+            }
+            if (existName == null || !existName.startsWith(prefix)) {
+                continue;
+            }
+            String suffix = existName.substring(prefix.length());
+            if (StrUtil.isNumeric(suffix)) {
+                usedIndexes.add(Integer.parseInt(suffix));
+            }
+        }
+        return usedIndexes;
+    }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void writeSyncList(InputObject inputObject, OutputObject outputObject) {

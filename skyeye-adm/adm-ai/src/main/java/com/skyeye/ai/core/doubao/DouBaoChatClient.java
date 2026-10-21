@@ -56,6 +56,13 @@ public class DouBaoChatClient {
         .readTimeout(0, TimeUnit.MILLISECONDS)
         .build();
 
+    /** 非流式（含 tools 轮次）需要有限读超时 */
+    private static final OkHttpClient SYNC_HTTP_CLIENT = new OkHttpClient.Builder()
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(120, TimeUnit.SECONDS)
+        .build();
+
     private final String apiKey;
     private final String chatCompletionsUrl;
     private final String modelId;
@@ -74,6 +81,13 @@ public class DouBaoChatClient {
      * @param images 截图地址，可空；有值时走图文混排
      */
     public void streamChat(List<Map<String, String>> messages, List<String> images, StreamListener listener) {
+        streamChatMessages(messages, images, listener);
+    }
+
+    /**
+     * 流式最终回答；messages 可为含 tool_calls / tool 角色的异构结构。
+     */
+    public void streamChatMessages(List<?> messages, List<String> images, StreamListener listener) {
         List<String> sendableImages = toSendableImages(images);
         boolean vision = !sendableImages.isEmpty();
         JSONObject body = new JSONObject();
@@ -81,7 +95,7 @@ public class DouBaoChatClient {
         body.set("stream", true);
         // ① Seed 系列需显式开启思考，SSE 才会推 reasoning_content
         body.set("thinking", JSONUtil.createObj().set("type", "enabled"));
-        body.set("messages", vision ? buildVisionMessages(messages, sendableImages) : messages);
+        body.set("messages", vision ? buildVisionMessages(messages, sendableImages) : toJsonArray(messages));
 
         Request request = new Request.Builder()
             .url(chatCompletionsUrl)
@@ -167,6 +181,102 @@ public class DouBaoChatClient {
         }
     }
 
+    /**
+     * 非流式一轮：可带 tools，解析 tool_calls 或纯文本 content。
+     * 工具轮关闭 thinking，避免与 function call 冲突。
+     */
+    public ChatToolsResult chatWithTools(List<?> messages, JSONArray tools) {
+        JSONObject body = new JSONObject();
+        body.set("model", resolveModel(false));
+        body.set("stream", false);
+        body.set("thinking", JSONUtil.createObj().set("type", "disabled"));
+        body.set("messages", toJsonArray(messages));
+        if (tools != null && !tools.isEmpty()) {
+            body.set("tools", tools);
+            body.set("tool_choice", "auto");
+        }
+        Request request = new Request.Builder()
+            .url(chatCompletionsUrl)
+            .header("Authorization", "Bearer " + apiKey)
+            .header("Content-Type", "application/json")
+            .post(RequestBody.create(JSON_MEDIA_TYPE, body.toString()))
+            .build();
+        try (Response response = SYNC_HTTP_CLIENT.newCall(request).execute()) {
+            String raw = response.body() == null ? StrUtil.EMPTY : response.body().string();
+            if (!response.isSuccessful()) {
+                throw new CustomException(StrUtil.blankToDefault(raw, "豆包 tools 调用失败: HTTP " + response.code()));
+            }
+            JSONObject json = JSONUtil.parseObj(raw);
+            if (json.containsKey("error")) {
+                throw new CustomException(readErrorMessage(json));
+            }
+            return parseChatToolsResult(json);
+        } catch (CustomException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new CustomException(StrUtil.blankToDefault(e.getMessage(), "豆包 tools 调用失败"));
+        }
+    }
+
+    private ChatToolsResult parseChatToolsResult(JSONObject json) {
+        ChatToolsResult result = new ChatToolsResult();
+        JSONArray choices = json.getJSONArray("choices");
+        if (choices == null || choices.isEmpty()) {
+            return result;
+        }
+        JSONObject choice = choices.getJSONObject(0);
+        JSONObject message = choice.getJSONObject("message");
+        if (message == null) {
+            return result;
+        }
+        result.setContent(message.getStr("content"));
+        result.setFinishReason(choice.getStr("finish_reason"));
+        JSONArray toolCalls = message.getJSONArray("tool_calls");
+        if (toolCalls == null || toolCalls.isEmpty()) {
+            return result;
+        }
+        List<ToolCall> parsed = new ArrayList<>();
+        for (int i = 0; i < toolCalls.size(); i++) {
+            JSONObject item = toolCalls.getJSONObject(i);
+            if (item == null) {
+                continue;
+            }
+            ToolCall call = new ToolCall();
+            call.setId(item.getStr("id"));
+            call.setType(StrUtil.blankToDefault(item.getStr("type"), "function"));
+            JSONObject fn = item.getJSONObject("function");
+            if (fn != null) {
+                call.setName(fn.getStr("name"));
+                call.setArguments(fn.getStr("arguments"));
+            }
+            parsed.add(call);
+        }
+        result.setToolCalls(parsed);
+        result.setRawAssistantMessage(message);
+        return result;
+    }
+
+    private JSONArray toJsonArray(List<?> messages) {
+        if (messages instanceof JSONArray) {
+            return (JSONArray) messages;
+        }
+        JSONArray arr = new JSONArray();
+        if (messages == null) {
+            return arr;
+        }
+        for (Object item : messages) {
+            if (item == null) {
+                continue;
+            }
+            if (item instanceof JSONObject) {
+                arr.add(item);
+            } else {
+                arr.add(JSONUtil.parseObj(item));
+            }
+        }
+        return arr;
+    }
+
     private String resolveModel(boolean vision) {
         if (StrUtil.isNotBlank(modelId)) {
             return modelId;
@@ -186,44 +296,42 @@ public class DouBaoChatClient {
         return base + "chat/completions";
     }
 
-    private JSONArray buildVisionMessages(List<Map<String, String>> messages, List<String> images) {
+    private JSONArray buildVisionMessages(List<?> messages, List<String> images) {
+        JSONArray source = toJsonArray(messages);
         JSONArray result = new JSONArray();
         int lastUserIndex = -1;
-        if (messages != null) {
-            for (int i = 0; i < messages.size(); i++) {
-                if ("user".equals(messages.get(i).get("role"))) {
-                    lastUserIndex = i;
-                }
+        for (int i = 0; i < source.size(); i++) {
+            JSONObject item = source.getJSONObject(i);
+            if (item != null && "user".equals(item.getStr("role"))) {
+                lastUserIndex = i;
             }
         }
-        if (messages != null) {
-            for (int i = 0; i < messages.size(); i++) {
-                Map<String, String> item = messages.get(i);
-                JSONObject msg = new JSONObject();
-                msg.set("role", item.get("role"));
-                if (i == lastUserIndex) {
-                    JSONArray content = new JSONArray();
-                    JSONObject text = new JSONObject();
-                    text.set("type", "text");
-                    text.set("text", item.get("content"));
-                    content.add(text);
-                    for (String image : images) {
-                        if (StrUtil.isBlank(image)) {
-                            continue;
-                        }
-                        JSONObject imageUrl = new JSONObject();
-                        imageUrl.set("url", image);
-                        JSONObject imagePart = new JSONObject();
-                        imagePart.set("type", "image_url");
-                        imagePart.set("image_url", imageUrl);
-                        content.add(imagePart);
-                    }
-                    msg.set("content", content);
-                } else {
-                    msg.set("content", item.get("content"));
-                }
-                result.add(msg);
+        for (int i = 0; i < source.size(); i++) {
+            JSONObject item = source.getJSONObject(i);
+            if (item == null) {
+                continue;
             }
+            JSONObject msg = JSONUtil.parseObj(item.toString());
+            if (i == lastUserIndex) {
+                JSONArray content = new JSONArray();
+                JSONObject text = new JSONObject();
+                text.set("type", "text");
+                text.set("text", item.getStr("content"));
+                content.add(text);
+                for (String image : images) {
+                    if (StrUtil.isBlank(image)) {
+                        continue;
+                    }
+                    JSONObject imageUrl = new JSONObject();
+                    imageUrl.set("url", image);
+                    JSONObject imagePart = new JSONObject();
+                    imagePart.set("type", "image_url");
+                    imagePart.set("image_url", imageUrl);
+                    content.add(imagePart);
+                }
+                msg.set("content", content);
+            }
+            result.add(msg);
         }
         return result;
     }
@@ -323,6 +431,88 @@ public class DouBaoChatClient {
         void onError(String message);
 
         default void onReasoningDelta(String content, boolean end) {
+        }
+    }
+
+    public static class ChatToolsResult {
+        private String content;
+        private String finishReason;
+        private List<ToolCall> toolCalls;
+        private JSONObject rawAssistantMessage;
+
+        public boolean hasToolCalls() {
+            return toolCalls != null && !toolCalls.isEmpty();
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public String getFinishReason() {
+            return finishReason;
+        }
+
+        public void setFinishReason(String finishReason) {
+            this.finishReason = finishReason;
+        }
+
+        public List<ToolCall> getToolCalls() {
+            return toolCalls;
+        }
+
+        public void setToolCalls(List<ToolCall> toolCalls) {
+            this.toolCalls = toolCalls;
+        }
+
+        public JSONObject getRawAssistantMessage() {
+            return rawAssistantMessage;
+        }
+
+        public void setRawAssistantMessage(JSONObject rawAssistantMessage) {
+            this.rawAssistantMessage = rawAssistantMessage;
+        }
+    }
+
+    public static class ToolCall {
+        private String id;
+        private String type;
+        private String name;
+        private String arguments;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getArguments() {
+            return arguments;
+        }
+
+        public void setArguments(String arguments) {
+            this.arguments = arguments;
         }
     }
 }

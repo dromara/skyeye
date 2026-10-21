@@ -67,6 +67,14 @@ public class KnowledgeController {
         knowledgeService.deleteById(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "copyAiKnowledge", value = "拷贝AI知识库（配置/同步表/文件，不含历史）", method = "POST", allUse = "1")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "源知识库主键id", required = "required")})
+    @RequestMapping("/post/knowledgeController/copyAiKnowledge")
+    public void copyAiKnowledge(InputObject inputObject, OutputObject outputObject) {
+        knowledgeService.copyAiKnowledge(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryAiKnowledgeList", value = "获取全部AI知识库", method = "POST", allUse = "2")
     @RequestMapping("/post/knowledgeController/queryAiKnowledgeList")
     public void queryAiKnowledgeList(InputObject inputObject, OutputObject outputObject) {

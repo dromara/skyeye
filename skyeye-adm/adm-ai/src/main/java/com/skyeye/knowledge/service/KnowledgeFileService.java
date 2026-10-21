@@ -34,4 +34,9 @@ public interface KnowledgeFileService extends SkyeyeBusinessService<KnowledgeFil
 
     void deleteByKnowledgeId(String knowledgeId);
 
+    /**
+     * 将源知识库文件记录拷到目标知识库（重置为待同步，不拷平台文档 ID）。
+     */
+    void copyFromKnowledge(String sourceKnowledgeId, String targetKnowledgeId, String userId);
+
 }
