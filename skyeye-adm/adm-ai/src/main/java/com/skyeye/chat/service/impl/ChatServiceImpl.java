@@ -18,11 +18,13 @@ import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.chat.dao.ChatDao;
 import com.skyeye.chat.entity.Chat;
 import com.skyeye.chat.service.ChatService;
+import com.skyeye.common.client.FeignHeaderHolder;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.enumeration.WhetherEnum;
+import com.skyeye.common.object.GetUserToken;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
@@ -38,6 +40,7 @@ import com.skyeye.websocket.AiMessageWebSocket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -181,22 +184,28 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     }
 
     /**
-     * 请求线程的租户在 ThreadLocal 里，丢进线程池后会丢。
-     * 提交前先拷贝，子线程和 OkHttp/WebSocket 回调里再绑回去，否则 MyBatis 租户拦截器会报「租户ID不能为空」。
+     * 请求线程的租户 / userToken 在 ThreadLocal 里，丢进线程池后会丢。
+     * 提交前先拷贝，子线程再绑回去：否则 MyBatis 租户拦截器会报错，Agent Feign 会 SESSIONSTATUS=TIMEOUT。
      * NoClassDefFoundError 等 Error 不是 Exception，必须 catch Throwable，否则前端收不到结束包会一直转圈。
      */
     private void runStreamTask(String userId, String chatId, String bizType, Runnable task) {
         String tenantId = TenantContext.getTenantId();
         TenantEnum isolationType = TenantContext.getIsolationType();
+        // 必须在请求线程取：子线程里 InputObject.getRequest() 为 null
+        String userToken = GetUserToken.getUserToken(InputObject.getRequest());
         messageStreamExecutor.execute(() -> {
             try {
+                RequestContextHolder.resetRequestAttributes();
                 bindTenantContext(tenantId, isolationType);
+                FeignHeaderHolder.setOutboundUserToken(userToken);
                 task.run();
             } catch (Throwable t) {
                 persistYiYanPartial(userId, chatId);
                 sendYiYanError(userId, chatId, bizType, StrUtil.blankToDefault(t.getMessage(), t.getClass().getSimpleName()));
             } finally {
+                FeignHeaderHolder.clearOutbound();
                 TenantContext.clear();
+                RequestContextHolder.resetRequestAttributes();
             }
         });
     }

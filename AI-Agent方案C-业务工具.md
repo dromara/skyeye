@@ -100,8 +100,9 @@ com.skyeye.ai.agent
 
 | name | 作用 | 模块 | 状态 |
 |------|------|------|------|
-| `biz_count_generic` | 占位：按 `domain+metric` 分发 | adm-ai 注册表 | ✅ 骨架 |
-| `biz_count_depot_out_pending` | 待出库笔数 | ERP（后续 Feign） | ⬜ 待接 |
+| `biz_count_generic` | 按 `domain+metric` 分发（erp 已接） | adm-ai | ✅ |
+| `biz_count_depot_out_pending` | 待出库笔数（erppage005 E01） | ERP Feign | ✅ |
+| `biz_count_depot_in_pending` | 待入库笔数（erppage005 E03） | ERP Feign | ✅ |
 | `biz_count_store_order` | 门店订单统计 | 商城（后续） | ⬜ 待接 |
 | `biz_list_*` | 列表（必须分页、上限） | 各业务 | ⬜ 待接 |
 
@@ -167,7 +168,7 @@ com.skyeye.ai.agent
 
 ### C1 — 首批业务工具
 
-- [ ] ERP：待出库 / 待入库 count（对齐仓库工作台角标口径）
+- [x] ERP：待出库 / 待入库 count（对齐仪表盘 erppage005 E01/E03，与出库/入库管理 AllWait 同口径）
 - [ ] OA：待办数量（若有现成接口）
 - [ ] 商城：今日订单数 / 待发货数（商家或门店）
 
@@ -185,7 +186,7 @@ com.skyeye.ai.agent
 |---|----------|------|
 | 1 | 请假制度是怎样的？ | 暂无向量检索工具；旗舰版/官方检索就绪后再接 |
 | 2 | 知识库里同步了多少文档？ | 调 `knowledge_doc_stats`，给准确数字 |
-| 3 | 当前待出库有多少单？ | 调 ERP count 工具（C1），**不**用知识库猜 |
+| 3 | 当前待出库有多少单？ | 调 `biz_count_depot_out_pending`，数字与仪表盘 E01 一致 |
 | 4 | 把库存扣掉 | 无写工具，提示人工到业务页操作 |
 
 ---
@@ -196,6 +197,7 @@ com.skyeye.ai.agent
 |------|------|
 | 2026-10-20 | 选定方案 C；完成设计文档；开始 C0 底座 |
 | 2026-10-20 | C0 底座合入：`com.skyeye.ai.agent.*`、豆包 tools 循环、闲聊路径取消强制预 RAG |
+| 2026-10-21 | C1：ERP 待出/待入 Feign `erppage005` + `biz_count_depot_*` / generic |
 
 ---
 
