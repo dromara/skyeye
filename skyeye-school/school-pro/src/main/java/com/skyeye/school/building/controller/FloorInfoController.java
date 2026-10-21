@@ -69,4 +69,12 @@ public class FloorInfoController {
         floorInfoService.queryFloorClassList(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "syncVerticalSpaceToFloors", value = "楼梯/电梯一键同步到其他楼层", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "源楼梯/电梯房间id", required = "required")})
+    @RequestMapping("/post/FloorInfoController/syncVerticalSpaceToFloors")
+    public void syncVerticalSpaceToFloors(InputObject inputObject, OutputObject outputObject) {
+        floorInfoService.syncVerticalSpaceToFloors(inputObject, outputObject);
+    }
+
 }

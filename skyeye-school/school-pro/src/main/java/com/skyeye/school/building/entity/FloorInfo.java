@@ -70,4 +70,16 @@ public class FloorInfo extends OperatorUserInfo {
     @TableField("logo")
     @ApiModelProperty(value = "房间logo相对路径；仅教室/房间节点使用")
     private String logo;
+
+    @TableField("space_kind")
+    @ApiModelProperty(value = "空间类型：0普通房间 1楼梯 2电梯；仅房间节点使用")
+    private Integer spaceKind;
+
+    @TableField("link_group_id")
+    @ApiModelProperty(value = "竖向通道分组id，跨层楼梯/电梯共用同一值")
+    private String linkGroupId;
+
+    @TableField("space_dir")
+    @ApiModelProperty(value = "楼梯上楼方向：0正向 1反向（沿轮廓长边翻转）")
+    private Integer spaceDir;
 }

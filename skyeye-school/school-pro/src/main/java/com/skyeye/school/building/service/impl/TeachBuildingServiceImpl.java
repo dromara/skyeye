@@ -266,6 +266,9 @@ public class TeachBuildingServiceImpl extends SkyeyeBusinessServiceImpl<TeachBui
                 roomRow.put("status", room.getStatus());
                 roomRow.put("modelColor", room.getModelColor());
                 roomRow.put("logo", room.getLogo());
+                roomRow.put("spaceKind", room.getSpaceKind() == null ? 0 : room.getSpaceKind());
+                roomRow.put("linkGroupId", room.getLinkGroupId());
+                roomRow.put("spaceDir", room.getSpaceDir() == null ? 0 : room.getSpaceDir());
                 roomRow.put("outline", toVertexMaps(roomOutlines.get(room.getId())));
                 roomRow.put("occupants", toOccupantMaps(occupants.get(room.getId())));
                 roomRows.add(roomRow);

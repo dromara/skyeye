@@ -21,16 +21,21 @@ import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
 import com.skyeye.school.building.dao.FloorInfoDao;
 import com.skyeye.school.building.entity.FloorInfo;
+import com.skyeye.school.building.entity.SpaceVertex;
 import com.skyeye.school.building.entity.TeachBuilding;
 import com.skyeye.school.building.floorenum.FloorInfoEnum;
+import com.skyeye.school.building.floorenum.SpaceKindEnum;
 import com.skyeye.school.building.floorenum.SpaceOwnerTypeEnum;
 import com.skyeye.school.building.service.FloorInfoService;
 import com.skyeye.school.building.service.RoomOccupantService;
 import com.skyeye.school.building.service.SpaceVertexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -60,12 +65,17 @@ public class FloorInfoServiceImpl extends SkyeyeBusinessServiceImpl<FloorInfoDao
         if (nodeType == FloorInfoEnum.ClASS_INFO_ENUM.getKey()) {
             // 新增的节点是教室
             setDisabledStatus(floorInfo, parentId, FloorInfoEnum.ClASS_INFO_ENUM.getKey());
+            if (floorInfo.getSpaceKind() == null) {
+                floorInfo.setSpaceKind(SpaceKindEnum.ROOM.getKey());
+            }
         } else if (nodeType == FloorInfoEnum.SERVICE_INFO_ENUM.getKey()) {
             // 新增的节点是服务
             setDisabledStatus(floorInfo, parentId, FloorInfoEnum.SERVICE_INFO_ENUM.getKey());
         } else {
             // 新增的节点是楼层
             floorInfo.setLevel(FloorInfoEnum.FLOOR_INFO_ENUM.getKey());
+            floorInfo.setSpaceKind(null);
+            floorInfo.setLinkGroupId(null);
         }
     }
 
@@ -235,5 +245,92 @@ public class FloorInfoServiceImpl extends SkyeyeBusinessServiceImpl<FloorInfoDao
         List<FloorInfo> bean = skyeyeBaseMapper.selectJoinList(FloorInfo.class, queryWrapper);
         outputObject.setBeans(bean);
         outputObject.settotal(bean.size());
+    }
+
+    @Override
+    @Transactional(value = TRANSACTION_MANAGER_VALUE, rollbackFor = Exception.class)
+    public void syncVerticalSpaceToFloors(InputObject inputObject, OutputObject outputObject) {
+        String id = inputObject.getParams().get("id").toString();
+        FloorInfo source = selectById(id);
+        if (source == null || !FloorInfoEnum.ClASS_INFO_ENUM.getKey().equals(source.getNodeType())) {
+            throw new CustomException("请选择楼梯或电梯");
+        }
+        Integer kind = source.getSpaceKind() == null ? SpaceKindEnum.ROOM.getKey() : source.getSpaceKind();
+        if (!SpaceKindEnum.STAIR.getKey().equals(kind) && !SpaceKindEnum.ELEVATOR.getKey().equals(kind)) {
+            throw new CustomException("仅楼梯/电梯支持同步到其他楼层");
+        }
+        List<SpaceVertex> outline = spaceVertexService
+            .queryGroupByOwner(SpaceOwnerTypeEnum.ROOM.getKey(), Collections.singletonList(id))
+            .getOrDefault(id, new ArrayList<>());
+        if (outline.size() < 3) {
+            throw new CustomException("请先绘制楼梯/电梯范围再同步");
+        }
+        String userId = inputObject.getLogParams().get("id").toString();
+        String groupId = StrUtil.isNotEmpty(source.getLinkGroupId()) ? source.getLinkGroupId() : source.getId();
+        if (StrUtil.isEmpty(source.getLinkGroupId())) {
+            source.setLinkGroupId(groupId);
+            updateEntity(source, userId);
+        }
+
+        QueryWrapper<FloorInfo> floorQuery = new QueryWrapper<>();
+        floorQuery.eq(MybatisPlusUtil.toColumns(FloorInfo::getLocationId), source.getLocationId());
+        floorQuery.eq(MybatisPlusUtil.toColumns(FloorInfo::getNodeType), FloorInfoEnum.FLOOR_INFO_ENUM.getKey());
+        List<FloorInfo> floors = list(floorQuery);
+        int synced = 0;
+        for (FloorInfo floor : floors) {
+            if (StrUtil.equals(floor.getId(), source.getParentId())) {
+                continue;
+            }
+            QueryWrapper<FloorInfo> existQuery = new QueryWrapper<>();
+            existQuery.eq(MybatisPlusUtil.toColumns(FloorInfo::getParentId), floor.getId());
+            existQuery.eq(MybatisPlusUtil.toColumns(FloorInfo::getLinkGroupId), groupId);
+            existQuery.eq(MybatisPlusUtil.toColumns(FloorInfo::getNodeType), FloorInfoEnum.ClASS_INFO_ENUM.getKey());
+            FloorInfo existing = getOne(existQuery, false);
+            String targetId;
+            if (existing == null) {
+                FloorInfo neu = new FloorInfo();
+                neu.setLocationId(source.getLocationId());
+                neu.setParentId(floor.getId());
+                neu.setName(source.getName());
+                neu.setNodeType(FloorInfoEnum.ClASS_INFO_ENUM.getKey());
+                neu.setSpaceKind(kind);
+                neu.setLinkGroupId(groupId);
+                neu.setSpaceDir(source.getSpaceDir() == null ? 0 : source.getSpaceDir());
+                neu.setModelColor(source.getModelColor());
+                neu.setLogo(source.getLogo());
+                neu.setStatus(source.getStatus());
+                neu.setSortOrder(source.getSortOrder());
+                neu.setRemark(source.getRemark());
+                targetId = createEntity(neu, userId);
+            } else {
+                existing.setName(source.getName());
+                existing.setSpaceKind(kind);
+                existing.setLinkGroupId(groupId);
+                existing.setSpaceDir(source.getSpaceDir() == null ? 0 : source.getSpaceDir());
+                existing.setModelColor(source.getModelColor());
+                existing.setLogo(source.getLogo());
+                existing.setRemark(source.getRemark());
+                updateEntity(existing, userId);
+                targetId = existing.getId();
+            }
+            spaceVertexService.deleteByOwners(SpaceOwnerTypeEnum.ROOM.getKey(), Collections.singletonList(targetId));
+            List<SpaceVertex> copies = new ArrayList<>();
+            int orderNum = 1;
+            for (SpaceVertex vertex : outline) {
+                SpaceVertex copy = new SpaceVertex();
+                copy.setOwnerType(SpaceOwnerTypeEnum.ROOM.getKey());
+                copy.setOwnerId(targetId);
+                copy.setLongitude(vertex.getLongitude());
+                copy.setLatitude(vertex.getLatitude());
+                copy.setOrderNum(orderNum++);
+                copies.add(copy);
+            }
+            spaceVertexService.createEntity(copies, userId);
+            synced++;
+        }
+        Map<String, Object> bean = new LinkedHashMap<>();
+        bean.put("linkGroupId", groupId);
+        bean.put("syncedFloorCount", synced);
+        outputObject.setBean(bean);
     }
 }

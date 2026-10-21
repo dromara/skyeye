@@ -17,4 +17,9 @@ public interface FloorInfoService extends SkyeyeBusinessService<FloorInfo> {
     void queryFloorInfosByLocationId(InputObject inputObject, OutputObject outputObject);
 
     void queryFloorClassList(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 将楼梯/电梯范围同步到同楼栋其他楼层（同 linkGroupId）
+     */
+    void syncVerticalSpaceToFloors(InputObject inputObject, OutputObject outputObject);
 }
