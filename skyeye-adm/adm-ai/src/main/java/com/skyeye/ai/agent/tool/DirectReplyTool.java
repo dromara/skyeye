@@ -31,7 +31,7 @@ public class DirectReplyTool implements AiAgentTool {
             + "适用：闲聊、概念解释、操作步骤说明、菜单引导、澄清问题等。"
             + "若用户要问待办笔数、待出库/待入库、商城待发货/今日订单、知识库文档数等实时数量，不要用本工具，"
             + "应改用 biz_oa_board / biz_erp_board / biz_mall_board / knowledge_doc_stats；"
-            + "若要「列出/看看」待办明细，用 biz_list。";
+            + "若要「列出/看看」待办或订单明细，用 biz_list（oa / mall）。";
     }
 
     @Override

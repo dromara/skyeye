@@ -12,6 +12,7 @@ import com.skyeye.ai.agent.AiAgentTool;
 import com.skyeye.ai.agent.AiAgentToolContext;
 import com.skyeye.exception.CustomException;
 import com.skyeye.rest.oa.list.service.IOaListService;
+import com.skyeye.rest.shop.list.service.IShopListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * 业务列表查询（只读、强制分页）。首期 OA 待办三类；商城等后续按 domain 扩展。
+ * 业务列表查询（只读、强制分页）。OA 待办 + 商城买家订单。
  */
 @Component
 public class BizListTool implements AiAgentTool {
@@ -30,6 +31,9 @@ public class BizListTool implements AiAgentTool {
     @Autowired
     private IOaListService iOaListService;
 
+    @Autowired
+    private IShopListService iShopListService;
+
     @Override
     public String name() {
         return "biz_list";
@@ -38,8 +42,10 @@ public class BizListTool implements AiAgentTool {
     @Override
     public String description() {
         return "分页查询业务列表（只读）。"
-            + "OA：domain=oa，type=pending（审批待办）/ initiated（我发起）/ schedule（日程待办）。"
-            + "用户说「列出/看看/有哪些待办」时用本工具；只要笔数用 biz_oa_board。"
+            + "OA：domain=oa，type=pending（审批待办）/ initiated（我发起）/ schedule（日程待办）；笔数用 biz_oa_board。"
+            + "商城买家订单：domain=mall，type=waitPay/waitDeliver/waitReceive/waitReview/afterSale/all；"
+            + "笔数用 biz_mall_board。"
+            + "用户说「列出/看看/有哪些」明细时用本工具。"
             + "必须传 page（从1）与 limit（默认5，最大10）。"
             + "回答时在最终 JSON 中带 list 字段（title + items），便于前端卡片展示；items 用工具返回的精简字段。";
     }
@@ -51,10 +57,11 @@ public class BizListTool implements AiAgentTool {
             .set("properties", JSONUtil.createObj()
                 .set("domain", JSONUtil.createObj()
                     .set("type", "string")
-                    .set("description", "业务域：目前支持 oa"))
+                    .set("description", "业务域：oa / mall"))
                 .set("type", JSONUtil.createObj()
                     .set("type", "string")
-                    .set("description", "oa：pending / initiated / schedule"))
+                    .set("description", "oa：pending / initiated / schedule；"
+                        + "mall：waitPay / waitDeliver / waitReceive / waitReview / afterSale / all"))
                 .set("page", JSONUtil.createObj()
                     .set("type", "integer")
                     .set("description", "页码，从 1 开始，默认 1"))
@@ -84,27 +91,21 @@ public class BizListTool implements AiAgentTool {
         }
         String domainKey = domain.trim().toLowerCase(Locale.ROOT);
         try {
-            if (!"oa".equals(domainKey)) {
-                return JSONUtil.createObj()
-                    .set("ok", false)
-                    .set("domain", domainKey)
-                    .set("error", "该 domain 列表尚未接入，目前仅支持 oa")
-                    .set("supported", JSONUtil.createObj()
-                        .set("oa", JSONUtil.createArray().put("pending").put("initiated").put("schedule")))
-                    .toString();
+            if ("oa".equals(domainKey)) {
+                return okResult("oa", type, iOaListService.queryTodoList(type, page, limit), listTitleOa);
             }
-            Map<String, Object> data = iOaListService.queryTodoList(type, page, limit);
-            String listType = String.valueOf(data.getOrDefault("type", type));
+            if ("mall".equals(domainKey) || "shop".equals(domainKey)) {
+                return okResult("mall", type, iShopListService.queryMyOrderList(type, page, limit), listTitleMall);
+            }
             return JSONUtil.createObj()
-                .set("ok", true)
-                .set("domain", "oa")
-                .set("type", listType)
-                .set("total", data.get("total"))
-                .set("page", data.get("page"))
-                .set("limit", data.get("limit"))
-                .set("listTitle", listTitle(listType))
-                .set("items", data.get("items"))
-                .set("hint", "请在最终回复的 JSON 中设置 list:{title,items}，items 原样或精简引用本结果；reply 中用一两句话概括")
+                .set("ok", false)
+                .set("domain", domainKey)
+                .set("error", "该 domain 列表尚未接入，目前支持 oa / mall")
+                .set("supported", JSONUtil.createObj()
+                    .set("oa", JSONUtil.createArray().put("pending").put("initiated").put("schedule"))
+                    .set("mall", JSONUtil.createArray()
+                        .put("waitPay").put("waitDeliver").put("waitReceive")
+                        .put("waitReview").put("afterSale").put("all")))
                 .toString();
         } catch (CustomException e) {
             return JSONUtil.createObj().set("ok", false).set("error", e.getMessage()).toString();
@@ -116,7 +117,27 @@ public class BizListTool implements AiAgentTool {
         }
     }
 
-    private String listTitle(String type) {
+    private String okResult(String domain, String type, Map<String, Object> data, TitleFn titleFn) {
+        String listType = String.valueOf(data.getOrDefault("type", type));
+        return JSONUtil.createObj()
+            .set("ok", true)
+            .set("domain", domain)
+            .set("type", listType)
+            .set("total", data.get("total"))
+            .set("page", data.get("page"))
+            .set("limit", data.get("limit"))
+            .set("listTitle", titleFn.apply(listType))
+            .set("items", data.get("items"))
+            .set("hint", "请在最终回复的 JSON 中设置 list:{title,items}，items 原样或精简引用本结果；reply 中用一两句话概括")
+            .toString();
+    }
+
+    @FunctionalInterface
+    private interface TitleFn {
+        String apply(String type);
+    }
+
+    private static final TitleFn listTitleOa = type -> {
         if ("initiated".equals(type)) {
             return "我发起的流程";
         }
@@ -124,5 +145,24 @@ public class BizListTool implements AiAgentTool {
             return "日程待办";
         }
         return "审批待办";
-    }
+    };
+
+    private static final TitleFn listTitleMall = type -> {
+        if ("waitPay".equals(type)) {
+            return "待支付订单";
+        }
+        if ("waitDeliver".equals(type)) {
+            return "待发货订单";
+        }
+        if ("waitReceive".equals(type)) {
+            return "待收货订单";
+        }
+        if ("waitReview".equals(type)) {
+            return "待评价订单";
+        }
+        if ("afterSale".equals(type)) {
+            return "售后中订单";
+        }
+        return "我的订单";
+    };
 }

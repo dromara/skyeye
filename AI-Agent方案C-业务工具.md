@@ -104,7 +104,7 @@ com.skyeye.ai.agent
 | `biz_erp_board` | ERP 流程板快照（一次 erppage005，含 E01/E03 等） | ERP Feign | ✅ |
 | `biz_oa_board` | OA 待办快照（pending/initiated/schedule） | Flowable+日程 Feign | ✅ |
 | `biz_mall_board` | 商城看板（买家 queryMyOrderStat；可选 storeId→门店经营） | Shop Feign | ✅ |
-| `biz_list` | 业务列表（须 page/limit，limit≤10）；首期 OA pending/initiated/schedule | OA Feign | ✅ |
+| `biz_list` | 业务列表（须 page/limit，limit≤10）；oa 待办三类 + mall 买家订单 | OA/Shop Feign | ✅ |
 
 **路由**：闲聊 Agent 统一 `tool_choice=required`，由模型在查询工具与 `direct_reply` 间选择，**不做用户话术关键词匹配**。
 
@@ -179,9 +179,10 @@ com.skyeye.ai.agent
 ### C2 — 增强
 
 - [x] 列表工具 + 前端卡片展示（`biz_list` OA 三类 + `parseGuidePayload.list` / AiGuideDrawer）
+- [x] 商城买家订单列表（`biz_list` domain=mall，对齐 queryOrderPageList）
 - [ ] 旗舰版时知识库切官方 Responses `knowledge_search`
 - [ ] 多平台（通义/文心）复用同一 Tool 层
-- [ ] 商城等其它 domain 列表（按需扩 `biz_list`）
+- [ ] 门店侧订单列表（`queryOrderItemByStoreId`，需 storeId）
 
 ---
 
@@ -195,6 +196,7 @@ com.skyeye.ai.agent
 | 5 | 我有多少审批待办？ | 调 `biz_oa_board`，取 counts.pending，与仪表盘待办小部件一致 |
 | 6 | 我有多少待发货/待收货订单？ | 调 `biz_mall_board`，取 waitDeliver / waitReceive |
 | 7 | 列出我的审批待办 | 调 `biz_list`(oa/pending)，最终 JSON 带 list，前端出卡片 |
+| 8 | 列出我的待发货订单 | 调 `biz_list`(mall/waitDeliver)，最终 JSON 带 list |
 | 4 | 把库存扣掉 | 无写工具，提示人工到业务页操作 |
 
 ---
@@ -211,6 +213,7 @@ com.skyeye.ai.agent
 | 2026-10-22 | C1：`biz_mall_board` 商城看板；C1 业务看板收口完成 |
 | 2026-10-22 | Agent 路由改为 tool_choice=required + direct_reply（去掉关键词硬匹配） |
 | 2026-10-22 | C2：`biz_list`（OA 待办三类）+ 前端 list 卡片；prompt/输出规范补充 list |
+| 2026-10-22 | C2：`biz_list` 扩 mall 买家订单（queryOrderPageList） |
 
 ---
 

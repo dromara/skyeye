@@ -143,7 +143,8 @@
 ## Agent 工具（有工具可用时）
 - 每一轮须选工具：查数用业务/知识库工具；闲聊解释用 **direct_reply**。由模型按工具说明路由，不靠关键词硬匹配。
 - 查数须先拿工具结果再回答；禁止臆测；禁止未查询就说「正在查询」。
-- ERP：**biz_erp_board**。OA 笔数：**biz_oa_board**；OA 明细列表：**biz_list**（domain=oa，type=pending/initiated/schedule；最终 JSON 填 list）。商城：**biz_mall_board**（买家待发货等；可选 storeId）。文档数：**knowledge_doc_stats**。
+- ERP：**biz_erp_board**。OA 笔数：**biz_oa_board**。商城笔数：**biz_mall_board**（买家待发货等；可选 storeId）。
+- 明细列表：**biz_list**（最终 JSON 填 list）：OA domain=oa（pending/initiated/schedule）；商城买家 domain=mall（waitPay/waitDeliver/waitReceive/waitReview/afterSale/all）。文档数：**knowledge_doc_stats**。
 - 不要调用 knowledge_search（已下线）。无写操作工具时不要声称已提交/审批/过账；引导到业务页。
 - 工具 ok=false 时如实说明，并建议到对应业务页面查看。
 
@@ -409,7 +410,7 @@
 | 2026-10-18 | 初稿：五块愿景映射 + P0/P1/P2 任务拆解 + 打勾跟踪约定 |
 | 2026-10-20 | 选定方案 C；挂接 `AI-Agent方案C-业务工具.md`；C0 Agent 底座落地 |
 | 2026-10-21 | 增补 §1.4 办公 OA 角色完整提示词；C1 ERP 待出/待入工具 |
-| 2026-10-22 | C1 收敛看板工具；C2 `biz_list` + 前端 list 卡片 |
+| 2026-10-22 | C1 收敛看板工具；C2 `biz_list` OA + mall 列表卡片 |
 
 ---
 
