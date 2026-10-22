@@ -1,6 +1,6 @@
 # 方案 C：Agent 工具（业务查询 + 可选知识库检索）
 
-> 状态：🟡 进行中（C0 底座已合入代码，待联调）  
+> 状态：🟡 进行中（C0/C1 已合入；C2 OA 列表+前端卡片已合入，待联调）  
 > 创建：2026-10-20  
 > 关联：`AI能力落地计划.md`、豆包对话 / 知识库 RAG
 
@@ -104,14 +104,15 @@ com.skyeye.ai.agent
 | `biz_erp_board` | ERP 流程板快照（一次 erppage005，含 E01/E03 等） | ERP Feign | ✅ |
 | `biz_oa_board` | OA 待办快照（pending/initiated/schedule） | Flowable+日程 Feign | ✅ |
 | `biz_mall_board` | 商城看板（买家 queryMyOrderStat；可选 storeId→门店经营） | Shop Feign | ✅ |
-| `biz_list_*` | 列表（必须分页、上限） | 各业务 | ⬜ 待接 |
+| `biz_list` | 业务列表（须 page/limit，limit≤10）；首期 OA pending/initiated/schedule | OA Feign | ✅ |
 
 **路由**：闲聊 Agent 统一 `tool_choice=required`，由模型在查询工具与 `direct_reply` 间选择，**不做用户话术关键词匹配**。
 
 **原则**：
 - 数目类 → **按域一次拉看板**，禁止「一指标一工具 / 一指标一 Feign」膨胀  
 - **禁止**靠知识库片段猜数  
-- 列表 → 强制 `page/limit`，默认 limit≤20  
+- 列表 → 强制 `page/limit`，默认 limit≤5、最大 10；最终 JSON 带 `list` 供前端卡片  
+
 - 写操作（过账/审批同意）→ **不提供工具**
 
 ### 3.3 风控
@@ -177,9 +178,10 @@ com.skyeye.ai.agent
 
 ### C2 — 增强
 
-- [ ] 列表工具 + 前端卡片展示
+- [x] 列表工具 + 前端卡片展示（`biz_list` OA 三类 + `parseGuidePayload.list` / AiGuideDrawer）
 - [ ] 旗舰版时知识库切官方 Responses `knowledge_search`
 - [ ] 多平台（通义/文心）复用同一 Tool 层
+- [ ] 商城等其它 domain 列表（按需扩 `biz_list`）
 
 ---
 
@@ -192,6 +194,7 @@ com.skyeye.ai.agent
 | 3 | 当前待出库有多少单？ | 调 `biz_erp_board`，取 counts.E01，与仪表盘一致 |
 | 5 | 我有多少审批待办？ | 调 `biz_oa_board`，取 counts.pending，与仪表盘待办小部件一致 |
 | 6 | 我有多少待发货/待收货订单？ | 调 `biz_mall_board`，取 waitDeliver / waitReceive |
+| 7 | 列出我的审批待办 | 调 `biz_list`(oa/pending)，最终 JSON 带 list，前端出卡片 |
 | 4 | 把库存扣掉 | 无写工具，提示人工到业务页操作 |
 
 ---
@@ -207,6 +210,7 @@ com.skyeye.ai.agent
 | 2026-10-22 | C1：`biz_oa_board` OA 待办看板（Flowable+日程） |
 | 2026-10-22 | C1：`biz_mall_board` 商城看板；C1 业务看板收口完成 |
 | 2026-10-22 | Agent 路由改为 tool_choice=required + direct_reply（去掉关键词硬匹配） |
+| 2026-10-22 | C2：`biz_list`（OA 待办三类）+ 前端 list 卡片；prompt/输出规范补充 list |
 
 ---
 

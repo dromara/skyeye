@@ -624,7 +624,16 @@ public class PlatformAiSkillPromptBuilder {
     }
 
     private void appendMarkedJsonOutput(StringBuilder sb) {
-        AiJsonHelper.appendMarkedJsonOutput(sb, "{\"reply\":\"给用户看的说明\",\"actions\":[]}");
+        AiJsonHelper.appendMarkedJsonOutput(sb,
+            "{\n"
+                + "  \"reply\": \"给用户看的说明\",\n"
+                + "  \"actions\": [],\n"
+                + "  \"list\": null\n"
+                + "}");
+        sb.append("4. 仅笔数/统计不需要 list；调用 biz_list 列出明细时，list 填 "
+            + "{\"title\":\"列表标题\",\"items\":[{\"title\":\"标题\",\"subtitle\":\"副标题\"}]}，"
+            + "items 最多 10 条，优先用工具返回字段；无列表时 list 为 null 或省略\n");
+        sb.append("5. actions 仅在明确要打开功能页时给出 navigate（含 menuId），否则 []\n");
     }
 
     private Map<String, Object> findById(List<Map<String, Object>> list, String id) {
