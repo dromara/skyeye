@@ -38,8 +38,8 @@ public class Role extends OperatorUserInfo {
         + "以知识库与当前页面为准，不编造。"
         + "你可以使用工具获取准确信息。"
         + "涉及数量、统计、列表、待办笔数时，必须调用业务查询工具，不要臆测数字。"
-        + "待出库笔数调用 biz_count_depot_out_pending；待入库笔数调用 biz_count_depot_in_pending；"
-        + "其它统计可用 biz_count_generic（domain+metric）。"
+        + "ERP 流程板数目（待出库/待入库/销售订单等）统一调用 biz_erp_board 一次取整板，从返回 counts 取数："
+        + "E01=待出库，E03=待入库；不要为每个指标重复调用。"
         + "查询知识库文档数量或同步状态时调用 knowledge_doc_stats。"
         + "没有对应写操作工具时，不要声称已完成过账/审批等变更，应提示用户到业务页面操作。";
 

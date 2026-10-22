@@ -82,7 +82,7 @@ com.skyeye.ai.agent
 
 | 字段 | 说明 |
 |------|------|
-| `name` | 英文蛇形，如 `knowledge_search`、`biz_count_depot_out_pending` |
+| `name` | 英文蛇形，如 `knowledge_doc_stats`、`biz_erp_board` |
 | `description` | 给模型看的用途说明（中文可） |
 | `parameters` | JSON Schema（OpenAI tools 格式） |
 | `execute(args, ctx)` | 返回给模型的字符串（建议 JSON） |
@@ -100,14 +100,13 @@ com.skyeye.ai.agent
 
 | name | 作用 | 模块 | 状态 |
 |------|------|------|------|
-| `biz_count_generic` | 按 `domain+metric` 分发（erp 已接） | adm-ai | ✅ |
-| `biz_count_depot_out_pending` | 待出库笔数（erppage005 E01） | ERP Feign | ✅ |
-| `biz_count_depot_in_pending` | 待入库笔数（erppage005 E03） | ERP Feign | ✅ |
-| `biz_count_store_order` | 门店订单统计 | 商城（后续） | ⬜ 待接 |
+| `biz_erp_board` | ERP 流程板快照（一次 erppage005，含 E01/E03 等） | ERP Feign | ✅ |
+| `biz_*_board`（OA/商城） | 按域看板快照，勿按指标拆工具 | 各业务 | ⬜ 待接 |
 | `biz_list_*` | 列表（必须分页、上限） | 各业务 | ⬜ 待接 |
 
 **原则**：
-- 数目类 → `count` 工具，**禁止**靠知识库片段猜数  
+- 数目类 → **按域一次拉看板**，禁止「一指标一工具 / 一指标一 Feign」膨胀  
+- **禁止**靠知识库片段猜数  
 - 列表 → 强制 `page/limit`，默认 limit≤20  
 - 写操作（过账/审批同意）→ **不提供工具**
 
@@ -168,9 +167,9 @@ com.skyeye.ai.agent
 
 ### C1 — 首批业务工具
 
-- [x] ERP：待出库 / 待入库 count（对齐仪表盘 erppage005 E01/E03，与出库/入库管理 AllWait 同口径）
-- [ ] OA：待办数量（若有现成接口）
-- [ ] 商城：今日订单数 / 待发货数（商家或门店）
+- [x] ERP：`biz_erp_board` 一次拉流程板（erppage005），同租户 30s 短缓存；专用 depot_out/in / generic 已收敛删除
+- [ ] OA：待办看板快照（若有现成聚合接口）
+- [ ] 商城：工作台统计快照（商家或门店）
 
 ### C2 — 增强
 
@@ -186,7 +185,7 @@ com.skyeye.ai.agent
 |---|----------|------|
 | 1 | 请假制度是怎样的？ | 暂无向量检索工具；旗舰版/官方检索就绪后再接 |
 | 2 | 知识库里同步了多少文档？ | 调 `knowledge_doc_stats`，给准确数字 |
-| 3 | 当前待出库有多少单？ | 调 `biz_count_depot_out_pending`，数字与仪表盘 E01 一致 |
+| 3 | 当前待出库有多少单？ | 调 `biz_erp_board`，取 counts.E01，与仪表盘一致 |
 | 4 | 把库存扣掉 | 无写工具，提示人工到业务页操作 |
 
 ---
@@ -198,6 +197,7 @@ com.skyeye.ai.agent
 | 2026-10-20 | 选定方案 C；完成设计文档；开始 C0 底座 |
 | 2026-10-20 | C0 底座合入：`com.skyeye.ai.agent.*`、豆包 tools 循环、闲聊路径取消强制预 RAG |
 | 2026-10-21 | C1：ERP 待出/待入 Feign `erppage005` + `biz_count_depot_*` / generic |
+| 2026-10-22 | C1 收敛：改为 `biz_erp_board` 整板快照 + 30s 缓存；删除按指标拆分工具 |
 
 ---
 
