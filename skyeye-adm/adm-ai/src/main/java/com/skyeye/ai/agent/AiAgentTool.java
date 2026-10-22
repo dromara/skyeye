@@ -11,10 +11,14 @@ import cn.hutool.json.JSONObject;
  */
 public interface AiAgentTool {
 
-    /** 英文蛇形，如 knowledge_search */
+    /**
+     * 英文蛇形，如 knowledge_search
+     */
     String name();
 
-    /** 给模型看的用途说明 */
+    /**
+     * 给模型看的用途说明
+     */
     String description();
 
     /**

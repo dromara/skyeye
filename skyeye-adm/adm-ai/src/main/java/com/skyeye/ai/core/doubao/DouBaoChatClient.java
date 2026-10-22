@@ -186,6 +186,13 @@ public class DouBaoChatClient {
      * 工具轮关闭 thinking，避免与 function call 冲突。
      */
     public ChatToolsResult chatWithTools(List<?> messages, JSONArray tools) {
+        return chatWithTools(messages, tools, "auto");
+    }
+
+    /**
+     * @param toolChoice OpenAI 兼容：auto / required / none
+     */
+    public ChatToolsResult chatWithTools(List<?> messages, JSONArray tools, String toolChoice) {
         JSONObject body = new JSONObject();
         body.set("model", resolveModel(false));
         body.set("stream", false);
@@ -193,7 +200,7 @@ public class DouBaoChatClient {
         body.set("messages", toJsonArray(messages));
         if (tools != null && !tools.isEmpty()) {
             body.set("tools", tools);
-            body.set("tool_choice", "auto");
+            body.set("tool_choice", StrUtil.blankToDefault(toolChoice, "auto"));
         }
         Request request = new Request.Builder()
             .url(chatCompletionsUrl)

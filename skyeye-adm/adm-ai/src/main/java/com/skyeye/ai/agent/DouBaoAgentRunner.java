@@ -8,6 +8,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.skyeye.ai.agent.tool.DirectReplyTool;
 import com.skyeye.ai.core.doubao.DouBaoChatClient;
 import com.skyeye.ai.core.enums.AiPlatformEnum;
 import com.skyeye.ai.core.factory.AiFactory;
@@ -23,7 +24,9 @@ import java.util.function.Consumer;
 
 /**
  * 豆包 Agent：tools 非流式循环 → 最终流式回答。
- * 工具使用规则写在 AI 角色 {@code prompt}（system）里，不再单独注入。
+ * <p>
+ * 闲聊路径统一 {@code tool_choice=required}：由模型在业务工具与 {@link DirectReplyTool} 之间路由，
+ * 不做关键词匹配。工具使用细则写在 AI 角色 prompt 与各工具 description 里。
  */
 @Component
 public class DouBaoAgentRunner {
@@ -57,10 +60,11 @@ public class DouBaoAgentRunner {
         }
         JSONArray tools = toolRegistry.toOpenAiTools();
         for (int round = 0; round < MAX_TOOL_ROUNDS; round++) {
-            DouBaoChatClient.ChatToolsResult result = client.chatWithTools(messages, tools);
+            // 必须选一个工具：查数 or direct_reply，避免「请稍等」空话当最终答案
+            DouBaoChatClient.ChatToolsResult result = client.chatWithTools(messages, tools, "required");
             if (!result.hasToolCalls()) {
+                // 个别网关忽略 required 时的兜底：有文案则当最终答，否则进入流式
                 if (StrUtil.isNotBlank(result.getContent())) {
-                    // 模型已在非流式给出全文：拆成一次 delta 推前端
                     listener.onDelta(result.getContent(), true);
                     return;
                 }
@@ -71,7 +75,11 @@ public class DouBaoAgentRunner {
                 assistantMsg = buildAssistantToolMessage(result);
             }
             messages.add(assistantMsg);
+            boolean onlyDirect = true;
             for (DouBaoChatClient.ToolCall call : result.getToolCalls()) {
+                if (!DirectReplyTool.NAME.equals(call.getName())) {
+                    onlyDirect = false;
+                }
                 String status = statusForTool(call.getName());
                 if (onStatus != null && StrUtil.isNotBlank(status)) {
                     onStatus.accept(status);
@@ -82,11 +90,17 @@ public class DouBaoAgentRunner {
                     .set("tool_call_id", StrUtil.blankToDefault(call.getId(), "call_" + round))
                     .set("content", toolResult));
             }
+            // 只选了 direct_reply：结束工具循环，流式生成最终回答
+            if (onlyDirect) {
+                break;
+            }
         }
         client.streamChatMessages(messages, images, listener);
     }
 
-    /** 闲聊 / 旧聊天页（bizType 为空）才启用 Agent 工具 */
+    /**
+     * 闲聊 / 旧聊天页（bizType 为空）才启用 Agent 工具
+     */
     private boolean isChatBiz(AiAgentToolContext context) {
         if (context == null) {
             return true;
@@ -141,6 +155,9 @@ public class DouBaoAgentRunner {
     }
 
     private String statusForTool(String toolName) {
+        if (DirectReplyTool.NAME.equals(toolName)) {
+            return null;
+        }
         if ("knowledge_doc_stats".equals(toolName)) {
             return "正在查询知识库文档统计...";
         }

@@ -51,6 +51,10 @@ skyeye:
         delete-storage-after-import: true # 知识库同步成功后删除 S3/TOS 临时文件
 
 webroot:
+  # 行政/AI（自调日程待办等）
+  skyeye-adm: skyeye-adm-${spring.profiles.active}
+  # 工作流（审批待办）
+  skyeye-flowable: skyeye-flowable-${spring.profiles.active}
   # 考勤相关的服务
   skyeye-checkwork: skyeye-adm-${spring.profiles.active}
   # 项目相关的服务
