@@ -52,7 +52,7 @@
 
 - [x] 多模型聊天底座（通义 / 豆包 / 讯飞 / 千帆等）
 - [x] AI 角色 + 绑定知识库 RAG
-- [x] 豆包 Agent 工具底座（C0 + C1 ERP/OA 看板工具）
+- [x] 豆包 Agent 工具底座（C0 + C1 ERP/OA/商城看板 + direct_reply）
 - [x] API Key / 平台配置（含 OA AI 角色绑定）
 - [x] AI 技能积木 / 套件 / 分类（`useScene`：聊天=1 / 表单=2 / 仅编码=3）
 - [x] 办公 AI 向导（找菜单、办事、知识库问答）
@@ -143,7 +143,7 @@
 ## Agent 工具（有工具可用时）
 - 每一轮须选工具：查数用业务/知识库工具；闲聊解释用 **direct_reply**。由模型按工具说明路由，不靠关键词硬匹配。
 - 查数须先拿工具结果再回答；禁止臆测；禁止未查询就说「正在查询」。
-- ERP：**biz_erp_board**（E01=待出库，E03=待入库）。OA：**biz_oa_board**。文档数：**knowledge_doc_stats**。
+- ERP：**biz_erp_board**。OA：**biz_oa_board**。商城：**biz_mall_board**（买家待发货等；可选 storeId）。文档数：**knowledge_doc_stats**。
 - 不要调用 knowledge_search（已下线）。无写操作工具时不要声称已提交/审批/过账；引导到业务页。
 - 工具 ok=false 时如实说明，并建议到对应业务页面查看。
 

@@ -103,7 +103,7 @@ com.skyeye.ai.agent
 | `direct_reply` | 无需查数时可直接回答（闲聊/解释/引导） | adm-ai | ✅ |
 | `biz_erp_board` | ERP 流程板快照（一次 erppage005，含 E01/E03 等） | ERP Feign | ✅ |
 | `biz_oa_board` | OA 待办快照（pending/initiated/schedule） | Flowable+日程 Feign | ✅ |
-| `biz_*_board`（商城） | 按域看板快照，勿按指标拆工具 | 商城 | ⬜ 待接 |
+| `biz_mall_board` | 商城看板（买家 queryMyOrderStat；可选 storeId→门店经营） | Shop Feign | ✅ |
 | `biz_list_*` | 列表（必须分页、上限） | 各业务 | ⬜ 待接 |
 
 **路由**：闲聊 Agent 统一 `tool_choice=required`，由模型在查询工具与 `direct_reply` 间选择，**不做用户话术关键词匹配**。
@@ -173,7 +173,7 @@ com.skyeye.ai.agent
 
 - [x] ERP：`biz_erp_board` 一次拉流程板（erppage005），同租户 30s 短缓存；专用 depot_out/in / generic 已收敛删除
 - [x] OA：`biz_oa_board`（对齐仪表盘待办小部件：activitimode008/013 + myagency001），按用户 30s 缓存
-- [ ] 商城：工作台统计快照（商家或门店）
+- [x] 商城：`biz_mall_board`（买家 queryMyOrderStat；可选 storeId→queryStoreOrderStat）
 
 ### C2 — 增强
 
@@ -191,6 +191,7 @@ com.skyeye.ai.agent
 | 2 | 知识库里同步了多少文档？ | 调 `knowledge_doc_stats`，给准确数字 |
 | 3 | 当前待出库有多少单？ | 调 `biz_erp_board`，取 counts.E01，与仪表盘一致 |
 | 5 | 我有多少审批待办？ | 调 `biz_oa_board`，取 counts.pending，与仪表盘待办小部件一致 |
+| 6 | 我有多少待发货/待收货订单？ | 调 `biz_mall_board`，取 waitDeliver / waitReceive |
 | 4 | 把库存扣掉 | 无写工具，提示人工到业务页操作 |
 
 ---
@@ -204,6 +205,8 @@ com.skyeye.ai.agent
 | 2026-10-21 | C1：ERP 待出/待入 Feign `erppage005` + `biz_count_depot_*` / generic |
 | 2026-10-22 | C1 收敛：改为 `biz_erp_board` 整板快照 + 30s 缓存；删除按指标拆分工具 |
 | 2026-10-22 | C1：`biz_oa_board` OA 待办看板（Flowable+日程） |
+| 2026-10-22 | C1：`biz_mall_board` 商城看板；C1 业务看板收口完成 |
+| 2026-10-22 | Agent 路由改为 tool_choice=required + direct_reply（去掉关键词硬匹配） |
 
 ---
 

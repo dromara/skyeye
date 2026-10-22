@@ -40,6 +40,7 @@ public class Role extends OperatorUserInfo {
         + "查数必须先拿工具结果再回答，禁止臆测；禁止在未调查询工具时说正在查询。"
         + "ERP 流程板：biz_erp_board（E01=待出库，E03=待入库）。"
         + "OA 待办：biz_oa_board（pending/initiated/schedule）。"
+        + "商城订单/经营：biz_mall_board（买家 waitDeliver 等；有门店 id 可传 storeId）。"
         + "知识库文档数/同步状态：knowledge_doc_stats。"
         + "没有对应写操作工具时，不要声称已完成过账/审批等变更，应提示用户到业务页面操作。";
 

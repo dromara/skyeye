@@ -55,6 +55,8 @@ webroot:
   skyeye-adm: skyeye-adm-${spring.profiles.active}
   # 工作流（审批待办）
   skyeye-flowable: skyeye-flowable-${spring.profiles.active}
+  # 商城（订单待办 / 门店经营）
+  skyeye-shop: skyeye-shop-${spring.profiles.active}
   # 考勤相关的服务
   skyeye-checkwork: skyeye-adm-${spring.profiles.active}
   # 项目相关的服务
