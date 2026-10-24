@@ -12,7 +12,7 @@
 | 阶段 | 说明 | 状态 |
 |------|------|------|
 | P0 | 技能包 + 表单开关 + 办公向导深化 + 知识库同步 + 风控约定 | 🟡 进行中 |
-| P1 | 领域 Assist（进销存 / 审批只读 / 商城文案售后 / 办公拟稿纪要） | ⬜ 未开始 |
+| P1 | 领域 Assist（进销存 / 审批只读 / 商城文案售后 / 办公拟稿纪要） | 🟡 进行中 |
 | P2 | 深领域（补货预测 / 排产根因 / 一句话配流程 / 多端上架） | ⬜ 未开始 |
 
 **状态图例**：⬜ 未开始　🟡 进行中　✅ 已完成　⏸ 暂缓
@@ -25,6 +25,7 @@
 ┌─────────────────────────────────────────────────────────────────┐
 │ 前端入口                                                         │
 │  PC：AiGuideDrawer / SkDsFormAiAssist / SkDsFormLayoutAiAssist   │
+│      / SkFlowApproveAiAssist（审批只读）                          │
 │  移动：pages/aiChat、sk-ds-form-ai-assist                         │
 │  流式：useAiStream / dsFormAiStream + WebSocket                   │
 └────────────────────────────┬────────────────────────────────────┘
@@ -35,6 +36,7 @@
 │  PlatformAiGuideService           bizType=chat                   │
 │  PlatformDsFormAiDraftService     bizType=dsFormAssist           │
 │                                   bizType=dsFormLayoutAssist     │
+│  PlatformFlowApproveAiDraftService bizType=flowApproveAssist     │
 │  PlatformAiSkillPromptBuilder / PlatformAiChatHelper             │
 └────────────────────────────┬────────────────────────────────────┘
                              │ Feign IAiChatRest / IAiSkillRest
@@ -52,7 +54,7 @@
 
 - [x] 多模型聊天底座（通义 / 豆包 / 讯飞 / 千帆等）
 - [x] AI 角色 + 绑定知识库 RAG
-- [x] 豆包 Agent 工具底座（C0 + C1 看板 + C2 `biz_list` OA 列表卡片 + direct_reply）
+- [x] 豆包 Agent 工具底座（C0 + C1 `biz_board` + C2 `biz_list` 配置驱动 + 平台指引配置；2026-10-24 联调通过）
 - [x] API Key / 平台配置（含 OA AI 角色绑定）
 - [x] AI 技能积木 / 套件 / 分类（`useScene`：聊天=1 / 表单=2 / 仅编码=3）
 - [x] 办公 AI 向导（找菜单、办事、知识库问答）
@@ -73,6 +75,7 @@
 | PC 向导 | `skyeyeCloud_Vue/src/views/layout/components/AiGuideDrawer.vue` |
 | PC 表单 AI | `.../components/SkDsFormAiAssist/`、`composables/useDsFormAi.js` |
 | PC 布局 AI | `.../components/SkDsFormLayoutAiAssist/` |
+| PC 审批 AI | `.../components/SkFlowApproveAiAssist/` → `views/activiti/myActiviti/approve.vue` |
 | PC 技能管理 | `.../views/system/business/components/ai-skill/` |
 | 移动聊天 | `skyeyeCloud/pages/aiChat/index.vue` |
 | 移动表单 AI | `skyeyeCloud/components/sk-ds-form-ai-assist/` |
@@ -193,8 +196,8 @@
 | 愿景能力 | 落地方式 | 阶段 | 状态 |
 |----------|----------|------|------|
 | 一句话流程配置 | 自然语言 → 流程模型草案（高风险后置） | P2 | ⬜ |
-| 审批意见预判 / 风险点提醒 | 审批详情页只读 Assist | P1 | ⬜ |
-| 智能驳回建议 | 只读建议文案，人工点驳回 | P1 | ⬜ |
+| 审批意见预判 / 风险点提醒 | 审批详情页只读 Assist | P1 | ✅ |
+| 智能驳回建议 | 只读建议文案，人工点驳回 | P1 | ✅ |
 | 一句话提交并自动流转 | **不做自动通过**；可辅助填申请单 | P0～P1 | ⬜ |
 
 ### 2.5 AI 智能商城（SkyEye 商城）
@@ -265,11 +268,17 @@
 
 #### P1-B 智能审批（只读）
 
-- [ ] 审批详情页挂载「AI 摘要」
-- [ ] 「风险点提醒」
-- [ ] 「建议通过/驳回意见」文案（写入意见框需用户确认）
-- [ ] 后端新 `bizType`（建议：`flowApproveAssist`）+ PromptBuilder
-- [ ] 明确不调用「同意/驳回」业务 API
+- [x] 审批详情页挂载「AI 摘要」（`approve.vue` → `SkFlowApproveAiAssist`）
+- [x] 「风险点提醒」
+- [x] 「建议通过/驳回意见」文案（写入意见框需用户确认；可一键填入，不代提交）
+- [x] 后端新 `bizType=flowApproveAssist`（`PlatformFlowApproveAiDraftService`）
+- [x] 明确不调用「同意/驳回」业务 API（仅建议 + 人工提交）
+
+**P1-B 进度备注**
+
+| 日期 | 说明 |
+|------|------|
+| 2026-10-24 | 审批详情只读 Assist 上线：`aiGenerate/ParseFlowApproveAssist` + PC 挂载 |
 
 #### P1-C 智能商城
 
@@ -371,7 +380,7 @@
 | 场景 | 组件/入口 |
 |------|-----------|
 | 单据填写 | 已有 `SkDsFormAiAssist` / 移动同款 |
-| 只读分析/摘要 | 轻量抽屉或详情页「AI 助手」按钮 + 流式面板 |
+| 只读分析/摘要 | 审批：`SkFlowApproveAiAssist`；其它详情可仿 |
 | 办事找功能 | `AiGuideDrawer` / `aiChat` |
 | 商家端 | `skyeyeShop/pages/my/merchant/*` 按需挂 |
 | 门店工作台 | `skyeyeCloud/page-SHOP/storeDesign/*` 按需挂 |
@@ -384,7 +393,7 @@
 
 1. [ ] **ERP**：采购 / 入库 / 出库 — 表单技能 + 开 `aiFormAssist` + 一句话填单验证（挂载/快捷问法/风控已就绪，**待配技能并联调**）
 2. [ ] **OA**：请假 / 常用审批申请单 — 表单技能 + 向导办事技能
-3. [ ] **审批**：详情页「AI 摘要 + 建议意见」（只读，新 `flowApproveAssist`）
+3. [x] **审批**：详情页「AI 摘要 + 建议意见」（只读，`flowApproveAssist`；2026-10-24）
 4. [ ] **商城**：商品文案生成（新 `shopGoodsCopyDraft`）
 
 **首批进度备注**
@@ -392,6 +401,7 @@
 | 日期 | 项 | 说明 |
 |------|----|------|
 | 2026-10-22 | ERP | 代码侧：写页挂载确认、ERP 快捷问法、仅供参考；技能内容需后台配置后验证一句话填单 |
+| 2026-10-24 | 审批 | PC `approve.vue` 挂载 `SkFlowApproveAiAssist`；后端 `flowApproveAssist` |
 
 ---
 
@@ -422,6 +432,8 @@
 | 2026-10-23 | `ai-biz-list-endpoints.json` 增加 `docs` 字段说明；界面配置（平台信息）待做 |
 | 2026-10-23 | 平台信息「AI业务列表」可配 biz_list endpoints；运行时优先平台配置，空则内置 JSON |
 | 2026-10-24 | 看板收敛为单一 `biz_board`（配置驱动）；平台可配 bizBoardEndpoints；删 oa/erp/mall 三 Tool |
+| 2026-10-24 | Agent 路由可配 `springApplicationName`；待出库 NPE 根因修复；平台「AI业务接入」表单化；方案 C C0～C2 联调通过 |
+| 2026-10-24 | P1-B：审批只读 Assist（`flowApproveAssist` + `SkFlowApproveAiAssist` 挂 `approve.vue`） |
 
 ---
 

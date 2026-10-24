@@ -1,6 +1,6 @@
 # 方案 C：Agent 工具（业务查询 + 可选知识库检索）
 
-> 状态：🟡 进行中（C0/C1 已合入；C2 OA 列表+前端卡片已合入，待联调）  
+> 状态：✅ C0～C2 已合入并联调通过（配置驱动 `biz_board` / `biz_list` + 平台指引配置）  
 > 创建：2026-10-20  
 > 关联：`AI能力落地计划.md`、豆包对话 / 知识库 RAG
 
@@ -185,7 +185,7 @@ com.skyeye.ai.agent
 
 ## 6. 验收用例
 
-> 第九条之后（包含第九条）得没测试
+> 2026-10-24 联调：#3/#5/#6/#7/#10 等核心路径已通过；门店 #9 视环境有 storeId 再验。
 
 | # | 用户问法 | 期望 |
 |---|----------|------|
@@ -221,6 +221,8 @@ com.skyeye.ai.agent
 | 2026-10-23 | `biz_list` 路由对齐 `IDataServiceImpl`：仅 `appId+serviceClassName`，单一 `AiAgentDynListRest` |
 | 2026-10-23 | `biz_list` 可在平台信息「AI业务列表」配置；优先 DB，空则 classpath JSON |
 | 2026-10-24 | 三看板 Tool 收敛为 `biz_board` + `ai-biz-board-endpoints.json`；平台可配 |
+| 2026-10-24 | 路由支持 `springApplicationName`（非 SkyeyeBusinessService 可直连 Discovery）；待出库 NPE 修复；异常不再吞成 0 |
+| 2026-10-24 | 平台「AI业务接入」指引式表单 + 内置 docs；联调通过（erp 待出库笔数/明细、OA/mall） |
 
 ---
 
