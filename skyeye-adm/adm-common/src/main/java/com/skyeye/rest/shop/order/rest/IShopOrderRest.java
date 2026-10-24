@@ -26,10 +26,4 @@ public interface IShopOrderRest {
      */
     @PostMapping("/queryStoreOrderStat")
     String queryStoreOrderStat(@RequestBody Map<String, Object> params);
-
-    /**
-     * 买家「我的订单」分页列表。params：page/limit/type(1待支付~6售后，空=全部)/keyword。
-     */
-    @PostMapping("/queryOrderPageList")
-    String queryOrderPageList(@RequestBody Map<String, Object> params);
 }

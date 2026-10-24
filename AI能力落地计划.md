@@ -11,7 +11,7 @@
 
 | 阶段 | 说明 | 状态 |
 |------|------|------|
-| P0 | 技能包 + 表单开关 + 办公向导深化 + 知识库同步 + 风控约定 | ⬜ 未开始 |
+| P0 | 技能包 + 表单开关 + 办公向导深化 + 知识库同步 + 风控约定 | 🟡 进行中 |
 | P1 | 领域 Assist（进销存 / 审批只读 / 商城文案售后 / 办公拟稿纪要） | ⬜ 未开始 |
 | P2 | 深领域（补货预测 / 排产根因 / 一句话配流程 / 多端上架） | ⬜ 未开始 |
 
@@ -143,8 +143,8 @@
 ## Agent 工具（有工具可用时）
 - 每一轮须选工具：查数用业务/知识库工具；闲聊解释用 **direct_reply**。由模型按工具说明路由，不靠关键词硬匹配。
 - 查数须先拿工具结果再回答；禁止臆测；禁止未查询就说「正在查询」。
-- ERP：**biz_erp_board**。OA 笔数：**biz_oa_board**。商城笔数：**biz_mall_board**（买家待发货等；可选 storeId）。
-- 明细列表：**biz_list**（最终 JSON 填 list）：OA domain=oa（pending/initiated/schedule）；商城买家 domain=mall（waitPay/waitDeliver/waitReceive/waitReview/afterSale/all）。文档数：**knowledge_doc_stats**。
+- 笔数看板：**biz_board**（domain=oa/erp/mall；商城可选 storeId）。
+- 明细列表：**biz_list**（最终 JSON 填 list）：OA；ERP domain=erp（depotOut/depotIn，对齐 E01/E03）；商城 domain=mall（可选 storeId）。文档数：**knowledge_doc_stats**。
 - 不要调用 knowledge_search（已下线）。无写操作工具时不要声称已提交/审批/过账；引导到业务页。
 - 工具 ok=false 时如实说明，并建议到对应业务页面查看。
 
@@ -214,17 +214,22 @@
 
 #### P0-1 业务对象技能包与表单开关
 
-- [ ] 梳理 ERP 高频单据业务对象清单（采购、入库、出库、销售等）
+- [x] 梳理 ERP 高频单据业务对象清单（采购、入库、出库；首批）
+  - 采购：`com.skyeye.purchase.entity.PurchaseOrder`（及采购申请/到货可后续扩）
+  - 入库：`DepotPut` / `PurchasePut`
+  - 出库：`DepotOut`
 - [ ] 梳理 OA 高频单据业务对象清单（请假、报销、公文相关等）
-- [ ] 为上述对象配置 AiSkill（`useScene` 含表单 / 聊天）
-- [ ] 开启对应业务对象 `aiFormAssist`
-- [ ] PC 写页确认已挂 `SkDsFormAiAssist`
-- [ ] 移动写页确认已挂 `sk-ds-form-ai-assist`
+- [ ] 为上述对象配置 AiSkill（`useScene` 含表单 / 聊天）← **运营在「AI技能」后台按业务对象创建**
+- [ ] 开启对应业务对象 `aiFormAssist` ← **业务对象基础信息开关；未配置时默认开启**
+- [x] PC 写页确认已挂 `SkDsFormAiAssist`（`writeShow.vue`，受 `aiFormAssist` 控制）
+- [x] 移动写页确认已挂 `sk-ds-form-ai-assist`（`page-LAYOUT/dsForm/write.vue`）
+- [x] ERP 表单快捷问法：采购/入出库按 className 分流（`buildFormAiQuickPrompts`）
 
 #### P0-2 办公向导深化
 
 - [ ] 补齐办事/找菜单相关技能与知识库条目
-- [ ] 验证 PC `AiGuideDrawer`、移动 `aiChat` 主路径
+- [x] 验证 PC `AiGuideDrawer` 主路径（Agent 工具 + list 卡片已通）
+- [ ] 验证移动 `aiChat` 主路径
 - [ ] 确认平台已绑定 OA AI 角色（`oaRoleId`）
 
 #### P0-3 知识库同步
@@ -235,16 +240,16 @@
 
 #### P0-4 风控与产品约定（文档级完成即打勾）
 
-- [ ] 约定：金额字段 AI 回填后必须人工确认
-- [ ] 约定：库存扣减/出入库过账禁止 AI 直接调用业务接口
-- [ ] 约定：审批通过/驳回禁止 AI 自动执行
-- [ ] 前端对「建议类」结果统一展示「仅供参考」提示
+- [x] 约定：金额字段 AI 回填后必须人工确认（表单 prompt 强制提醒；前端文案）
+- [x] 约定：库存扣减/出入库过账禁止 AI 直接调用业务接口（Agent 不提供写工具）
+- [x] 约定：审批通过/驳回禁止 AI 自动执行（同上）
+- [x] 前端对「建议类」结果统一展示「仅供参考」提示（表单 AI / 办公 AI 抽屉）
 
 **P0 进度备注**
 
 | 日期 | 说明 |
 |------|------|
-|  |  |
+| 2026-10-22 | P0-4 风控约定落地（prompt + 仅供参考）；确认 PC/移动表单 AI 挂载；ERP 快捷问法 |
 
 ---
 
@@ -377,7 +382,7 @@
 
 完成一项勾一项：
 
-1. [ ] **ERP**：采购 / 入库 / 出库 — 表单技能 + 开 `aiFormAssist` + 一句话填单验证
+1. [ ] **ERP**：采购 / 入库 / 出库 — 表单技能 + 开 `aiFormAssist` + 一句话填单验证（挂载/快捷问法/风控已就绪，**待配技能并联调**）
 2. [ ] **OA**：请假 / 常用审批申请单 — 表单技能 + 向导办事技能
 3. [ ] **审批**：详情页「AI 摘要 + 建议意见」（只读，新 `flowApproveAssist`）
 4. [ ] **商城**：商品文案生成（新 `shopGoodsCopyDraft`）
@@ -386,7 +391,7 @@
 
 | 日期 | 项 | 说明 |
 |------|----|------|
-|  |  |  |
+| 2026-10-22 | ERP | 代码侧：写页挂载确认、ERP 快捷问法、仅供参考；技能内容需后台配置后验证一句话填单 |
 
 ---
 
@@ -411,6 +416,12 @@
 | 2026-10-20 | 选定方案 C；挂接 `AI-Agent方案C-业务工具.md`；C0 Agent 底座落地 |
 | 2026-10-21 | 增补 §1.4 办公 OA 角色完整提示词；C1 ERP 待出/待入工具 |
 | 2026-10-22 | C1 收敛看板工具；C2 `biz_list` OA + mall 列表卡片 |
+| 2026-10-22 | 切入落地计划 P0：风控文案/prompt、表单挂载确认、ERP 快捷问法 |
+| 2026-10-23 | Agent `biz_list` 改为 JSON 配置驱动，新列表优先只改配置 |
+| 2026-10-23 | `biz_list` 路由：仅 `appId+serviceClassName`（对齐 IDataServiceImpl）；单动态 Feign |
+| 2026-10-23 | `ai-biz-list-endpoints.json` 增加 `docs` 字段说明；界面配置（平台信息）待做 |
+| 2026-10-23 | 平台信息「AI业务列表」可配 biz_list endpoints；运行时优先平台配置，空则内置 JSON |
+| 2026-10-24 | 看板收敛为单一 `biz_board`（配置驱动）；平台可配 bizBoardEndpoints；删 oa/erp/mall 三 Tool |
 
 ---
 

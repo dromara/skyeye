@@ -101,6 +101,26 @@ public interface PlatformBaseSettingService extends SkyeyeBusinessService<Platfo
     String getAiSkillCodeRuleId();
 
     /**
+     * 查询平台配置的 Agent biz_list endpoints（所有服务可读；未配则 bean.endpoints 为空列表）
+     */
+    void queryPlatformBizListEndpoints(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 获取平台配置的 biz_list endpoints；未配置或为空时返回空列表（调用方应回退内置 JSON）
+     */
+    java.util.List<java.util.Map<String, Object>> getBizListEndpoints();
+
+    /**
+     * 查询平台配置的 Agent biz_board boards（所有服务可读；未配则空列表）
+     */
+    void queryPlatformBizBoardEndpoints(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 获取平台配置的 biz_board boards；未配置或为空时返回空列表
+     */
+    java.util.List<java.util.Map<String, Object>> getBizBoardEndpoints();
+
+    /**
      * 查询 Token 计费标准（所有租户可读）
      */
     void queryPlatformTokenBilling(InputObject inputObject, OutputObject outputObject);

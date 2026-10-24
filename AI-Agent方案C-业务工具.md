@@ -82,7 +82,7 @@ com.skyeye.ai.agent
 
 | 字段 | 说明 |
 |------|------|
-| `name` | 英文蛇形，如 `knowledge_doc_stats`、`biz_erp_board` |
+| `name` | 英文蛇形，如 `knowledge_doc_stats`、`biz_board` |
 | `description` | 给模型看的用途说明（中文可） |
 | `parameters` | JSON Schema（OpenAI tools 格式） |
 | `execute(args, ctx)` | 返回给模型的字符串（建议 JSON） |
@@ -101,10 +101,8 @@ com.skyeye.ai.agent
 | name | 作用 | 模块 | 状态 |
 |------|------|------|------|
 | `direct_reply` | 无需查数时可直接回答（闲聊/解释/引导） | adm-ai | ✅ |
-| `biz_erp_board` | ERP 流程板快照（一次 erppage005，含 E01/E03 等） | ERP Feign | ✅ |
-| `biz_oa_board` | OA 待办快照（pending/initiated/schedule） | Flowable+日程 Feign | ✅ |
-| `biz_mall_board` | 商城看板（买家 queryMyOrderStat；可选 storeId→门店经营） | Shop Feign | ✅ |
-| `biz_list` | 业务列表（须 page/limit，limit≤10）；oa 待办三类 + mall 买家订单 | OA/Shop Feign | ✅ |
+| `biz_board` | 业务看板笔数（配置驱动；domain=oa/erp/mall） | `AiAgentDynListRest` | ✅ |
+| `biz_list` | 业务列表（配置驱动；仅 `appId+serviceClassName` 解析 URI，单 Feign） | `AiAgentDynListRest` | ✅ |
 
 **路由**：闲聊 Agent 统一 `tool_choice=required`，由模型在查询工具与 `direct_reply` 间选择，**不做用户话术关键词匹配**。
 
@@ -172,31 +170,34 @@ com.skyeye.ai.agent
 
 ### C1 — 首批业务工具
 
-- [x] ERP：`biz_erp_board` 一次拉流程板（erppage005），同租户 30s 短缓存；专用 depot_out/in / generic 已收敛删除
-- [x] OA：`biz_oa_board`（对齐仪表盘待办小部件：activitimode008/013 + myagency001），按用户 30s 缓存
-- [x] 商城：`biz_mall_board`（买家 queryMyOrderStat；可选 storeId→queryStoreOrderStat）
+- [x] 统一 `biz_board`（配置驱动 oa/erp/mall；30s 短缓存；erppage005 / 待办 total / 商城 stat）
 
 ### C2 — 增强
 
 - [x] 列表工具 + 前端卡片展示（`biz_list` OA 三类 + `parseGuidePayload.list` / AiGuideDrawer）
 - [x] 商城买家订单列表（`biz_list` domain=mall，对齐 queryOrderPageList）
+- [x] 门店侧订单列表（`storeId` + queryOrderItemByStoreId）
+- [x] ERP 待出库/待入库列表（`domain=erp`，depotOut/depotIn，对齐 E01/E03）
 - [ ] 旗舰版时知识库切官方 Responses `knowledge_search`
 - [ ] 多平台（通义/文心）复用同一 Tool 层
-- [ ] 门店侧订单列表（`queryOrderItemByStoreId`，需 storeId）
 
 ---
 
 ## 6. 验收用例
 
+> 第九条之后（包含第九条）得没测试
+
 | # | 用户问法 | 期望 |
 |---|----------|------|
 | 1 | 请假制度是怎样的？ | 暂无向量检索工具；旗舰版/官方检索就绪后再接 |
 | 2 | 知识库里同步了多少文档？ | 调 `knowledge_doc_stats`，给准确数字 |
-| 3 | 当前待出库有多少单？ | 调 `biz_erp_board`，取 counts.E01，与仪表盘一致 |
-| 5 | 我有多少审批待办？ | 调 `biz_oa_board`，取 counts.pending，与仪表盘待办小部件一致 |
-| 6 | 我有多少待发货/待收货订单？ | 调 `biz_mall_board`，取 waitDeliver / waitReceive |
+| 3 | 当前待出库有多少单？ | 调 `biz_board` domain=erp，取 counts.E01 |
+| 5 | 我有多少审批待办？ | 调 `biz_board` domain=oa，取 counts.pending |
+| 6 | 我有多少待发货/待收货订单？ | 调 `biz_board` domain=mall，取 waitDeliver / waitReceive |
 | 7 | 列出我的审批待办 | 调 `biz_list`(oa/pending)，最终 JSON 带 list，前端出卡片 |
 | 8 | 列出我的待发货订单 | 调 `biz_list`(mall/waitDeliver)，最终 JSON 带 list |
+| 9 | 列出某门店待发货（已知 storeId） | 调 `biz_list`(mall/waitDeliver + storeId) |
+| 10 | 列出待出库单据 | 调 `biz_list`(erp/depotOut)，与 E01 同口径 |
 | 4 | 把库存扣掉 | 无写工具，提示人工到业务页操作 |
 
 ---
@@ -214,6 +215,12 @@ com.skyeye.ai.agent
 | 2026-10-22 | Agent 路由改为 tool_choice=required + direct_reply（去掉关键词硬匹配） |
 | 2026-10-22 | C2：`biz_list`（OA 待办三类）+ 前端 list 卡片；prompt/输出规范补充 list |
 | 2026-10-22 | C2：`biz_list` 扩 mall 买家订单（queryOrderPageList） |
+| 2026-10-22 | C2：`biz_list` mall + storeId 门店售出列表 |
+| 2026-10-22 | C2：`biz_list` erp depotOut/depotIn（对齐 E01/E03） |
+| 2026-10-23 | `biz_list` 配置驱动：`ai-biz-list-endpoints.json` + 动态 Feign 执行器 |
+| 2026-10-23 | `biz_list` 路由对齐 `IDataServiceImpl`：仅 `appId+serviceClassName`，单一 `AiAgentDynListRest` |
+| 2026-10-23 | `biz_list` 可在平台信息「AI业务列表」配置；优先 DB，空则 classpath JSON |
+| 2026-10-24 | 三看板 Tool 收敛为 `biz_board` + `ai-biz-board-endpoints.json`；平台可配 |
 
 ---
 
@@ -221,3 +228,11 @@ com.skyeye.ai.agent
 
 完成一项将 `- [ ]` 改为 `- [x]`。  
 业务工具新增时：实现 `AiAgentTool` 并注册为 Spring Bean，**无需改** Runner 核心循环。
+
+### 8.1 扩展 `biz_list`（优先改配置，不写 Tool）
+
+1. 编辑 `adm-ai/src/main/resources/ai-biz-list-endpoints.json`，追加一条 `endpoints`。  
+2. 填 `domain` / `type` / `service`（`flowable`|`adm`|`erp`|`shop`）/ `apiId` / `fields`。  
+3. 若需新微服务：在 `adm-common` 增加一个 `AiAgentDynXxxRest`，并在 `AiBizListRemoteInvoker` 加一行分支。  
+4. 重启 adm-ai；**不必**改 `BizListTool`。  
+5. 角色 prompt 里补一句新 type 说明（库里自定义 prompt 需回贴）。

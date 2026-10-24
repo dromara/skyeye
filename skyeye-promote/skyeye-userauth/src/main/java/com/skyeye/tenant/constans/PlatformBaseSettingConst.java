@@ -77,6 +77,18 @@ public class PlatformBaseSettingConst {
     public static final String KEY_AI_SKILL_CODE_RULE_ID = "aiSkillCodeRuleId";
 
     /**
+     * AI 角色分组 - Agent biz_list 列表接入配置（endpoints 数组）。
+     * 非空时覆盖 adm-ai 内置 ai-biz-list-endpoints.json；空/未配则用内置默认。
+     */
+    public static final String KEY_BIZ_LIST_ENDPOINTS = "bizListEndpoints";
+
+    /**
+     * AI 角色分组 - Agent biz_board 看板接入配置（boards 数组）。
+     * 非空时覆盖 adm-ai 内置 ai-biz-board-endpoints.json；空/未配则用内置默认。
+     */
+    public static final String KEY_BIZ_BOARD_ENDPOINTS = "bizBoardEndpoints";
+
+    /**
      * Token 计费分组 - 1 元兑换的 Token 数量
      */
     public static final String KEY_TOKENS_PER_YUAN = "tokensPerYuan";

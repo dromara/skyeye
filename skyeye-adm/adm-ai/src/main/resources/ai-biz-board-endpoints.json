@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "docs": {
+    "说明": "biz_board 统一看板工具配置。优先：平台信息 settingData.ai.bizBoardEndpoints；空则用本文件。一个工具按 domain 取数，不必再为 oa/erp/mall 各写 Tool。",
+    "mode": {
+      "metrics": "多接口各取 total（如 OA 待办三类）",
+      "beanMap": "单接口，ResultEntity.bean 整表即 counts（如 ERP erppage005）",
+      "beanFields": "单接口，按 fieldMap 从 bean 映射到 counts；可配 storeVariant"
+    },
+    "路由": "二选一：(1) springApplicationName=Nacos 服务名前缀如 skyeye-erp（自动拼 -profile，不查 ServiceBean，适合 ErpPageServiceImpl 这类非 SkyeyeBusinessService）；(2) appId+serviceClassName 查 ServiceBean（须已注册）。apiId 才是真正接口。",
+    "备选": "不想写 springApplicationName 时，也可用同微服务已注册类只负责解析地址（如 DepotOutServiceImpl + apiId=erppage005）"
+  },
+  "boards": [
+    {
+      "domain": "oa",
+      "scope": "当前登录用户（与仪表盘待办小部件一致）",
+      "hint": "pending=审批待办，initiated=我发起的流程，schedule=日程待办",
+      "mode": "metrics",
+      "fixedParams": {
+        "page": 1,
+        "limit": 1,
+        "keyword": ""
+      },
+      "metrics": [
+        {
+          "code": "pending",
+          "label": "审批待办",
+          "appId": "",
+          "serviceClassName": "com.skyeye.userprocess.service.impl.ActUserProcessServiceImpl",
+          "apiId": "activitimode008",
+          "valueFrom": "total"
+        },
+        {
+          "code": "initiated",
+          "label": "我发起的流程",
+          "appId": "",
+          "serviceClassName": "com.skyeye.userprocess.service.impl.ActUserProcessServiceImpl",
+          "apiId": "activitimode013",
+          "valueFrom": "total"
+        },
+        {
+          "code": "schedule",
+          "label": "日程待办",
+          "appId": "",
+          "serviceClassName": "com.skyeye.eve.schedule.service.impl.ScheduleDayServiceImpl",
+          "apiId": "myagency001",
+          "valueFrom": "total"
+        }
+      ]
+    },
+    {
+      "domain": "erp",
+      "scope": "当前租户全量（与 ERP 仪表盘流程板一致）",
+      "hint": "E01=待出库笔数，E03=待入库笔数；回答时从 counts 取值并带上 labels 中文名",
+      "mode": "beanMap",
+      "appId": "",
+      "springApplicationName": "skyeye-erp",
+      "serviceClassName": "com.skyeye.service.impl.ErpPageServiceImpl",
+      "apiId": "erppage005",
+      "labels": {
+        "B01": "销售订单",
+        "B02": "销售出库单",
+        "B03": "销售退货单",
+        "B04": "销售换货单",
+        "C01": "零售出库单",
+        "C02": "零售退货单",
+        "D01": "借出申请单",
+        "D02": "借出出库单",
+        "D03": "归还申请单",
+        "D04": "归还入库单",
+        "E01": "待出库",
+        "E02": "仓库出库单",
+        "E03": "待入库",
+        "E04": "仓库入库单",
+        "G01": "出货计划单",
+        "G02": "生产计划单",
+        "G03": "加工单",
+        "G04": "车间任务",
+        "I01": "领料单",
+        "I02": "领料出库单",
+        "I03": "补料单",
+        "I04": "补料出库单",
+        "I05": "退料单",
+        "I06": "退料入库单"
+      }
+    },
+    {
+      "domain": "mall",
+      "scope": "当前登录用户买家订单待办（queryMyOrderStat）",
+      "hint": "买家：waitPay/waitDeliver/waitReceive/waitReview/afterSale；门店：store_waitDeliver、store_todayOrder、store_todayAmount 等",
+      "mode": "beanFields",
+      "appId": "",
+      "serviceClassName": "com.skyeye.order.service.impl.OrderServiceImpl",
+      "apiId": "queryMyOrderStat",
+      "fieldMap": {
+        "waitPay": "waitPay",
+        "waitDeliver": "waitDeliver",
+        "waitReceive": "waitReceive",
+        "waitReview": "waitReview",
+        "afterSale": "afterSale"
+      },
+      "labels": {
+        "waitPay": "待支付（买家）",
+        "waitDeliver": "待发货（买家）",
+        "waitReceive": "待收货（买家）",
+        "waitReview": "待评价（买家）",
+        "afterSale": "售后中（买家）",
+        "store_waitPay": "待支付（门店售出）",
+        "store_waitDeliver": "待发货（门店售出）",
+        "store_waitReceive": "待收货（门店售出）",
+        "store_afterSale": "售后中（门店）",
+        "store_todayOrder": "今日订单数（门店）",
+        "store_todayAmount": "今日成交额（门店）"
+      },
+      "storeVariant": {
+        "apiId": "queryStoreOrderStat",
+        "argBindings": {
+          "storeId": "objectId"
+        },
+        "fieldMap": {
+          "waitPay": "store_waitPay",
+          "waitDeliver": "store_waitDeliver",
+          "waitReceive": "store_waitReceive",
+          "afterSale": "store_afterSale",
+          "todayOrder": "store_todayOrder",
+          "todayAmount": "store_todayAmount"
+        }
+      }
+    }
+  ]
+}

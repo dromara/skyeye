@@ -33,7 +33,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -288,6 +291,109 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
 
     @Override
     @IgnoreTenant
+    public void queryPlatformBizListEndpoints(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> data = new HashMap<>();
+        List<Map<String, Object>> endpoints = getBizListEndpoints();
+        data.put(PlatformBaseSettingConst.KEY_BIZ_LIST_ENDPOINTS, endpoints);
+        data.put("configured", !endpoints.isEmpty());
+        outputObject.setBean(data);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    @IgnoreTenant
+    @SuppressWarnings("unchecked")
+    public List<Map<String, Object>> getBizListEndpoints() {
+        Map<String, Object> aiGroup = getAiGroupSetting();
+        Object raw = aiGroup.get(PlatformBaseSettingConst.KEY_BIZ_LIST_ENDPOINTS);
+        if (raw == null) {
+            return Collections.emptyList();
+        }
+        if (raw instanceof List) {
+            List<?> list = (List<?>) raw;
+            List<Map<String, Object>> out = new ArrayList<>();
+            for (Object item : list) {
+                if (item instanceof Map) {
+                    out.add((Map<String, Object>) item);
+                }
+            }
+            return out;
+        }
+        // 兼容误存成 JSON 字符串
+        if (raw instanceof String && StrUtil.isNotBlank((String) raw)) {
+            try {
+                List<Map> parsed = cn.hutool.json.JSONUtil.toList((String) raw, Map.class);
+                List<Map<String, Object>> out = new ArrayList<>();
+                if (parsed != null) {
+                    for (Map m : parsed) {
+                        if (m != null) {
+                            out.add((Map<String, Object>) m);
+                        }
+                    }
+                }
+                return out;
+            } catch (Exception ignored) {
+                return Collections.emptyList();
+            }
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    @IgnoreTenant
+    public void queryPlatformBizBoardEndpoints(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> data = new HashMap<>();
+        List<Map<String, Object>> boards = getBizBoardEndpoints();
+        data.put(PlatformBaseSettingConst.KEY_BIZ_BOARD_ENDPOINTS, boards);
+        data.put("configured", !boards.isEmpty());
+        outputObject.setBean(data);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    @IgnoreTenant
+    public List<Map<String, Object>> getBizBoardEndpoints() {
+        return parseAiListSetting(PlatformBaseSettingConst.KEY_BIZ_BOARD_ENDPOINTS);
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<Map<String, Object>> parseAiListSetting(String key) {
+        Map<String, Object> aiGroup = getAiGroupSetting();
+        Object raw = aiGroup.get(key);
+        if (raw == null) {
+            return Collections.emptyList();
+        }
+        if (raw instanceof List) {
+            List<?> list = (List<?>) raw;
+            List<Map<String, Object>> out = new ArrayList<>();
+            for (Object item : list) {
+                if (item instanceof Map) {
+                    out.add((Map<String, Object>) item);
+                }
+            }
+            return out;
+        }
+        if (raw instanceof String && StrUtil.isNotBlank((String) raw)) {
+            try {
+                List<Map> parsed = cn.hutool.json.JSONUtil.toList((String) raw, Map.class);
+                List<Map<String, Object>> out = new ArrayList<>();
+                if (parsed != null) {
+                    for (Map m : parsed) {
+                        if (m != null) {
+                            out.add((Map<String, Object>) m);
+                        }
+                    }
+                }
+                return out;
+            } catch (Exception ignored) {
+                return Collections.emptyList();
+            }
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    @IgnoreTenant
     public void queryPlatformTokenBilling(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> data = new HashMap<>();
         data.put(PlatformBaseSettingConst.KEY_TOKENS_PER_YUAN, getTokensPerYuan());
@@ -373,6 +479,8 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         aiGroup.put(PlatformBaseSettingConst.KEY_AI_ROLE_ID, StrUtil.EMPTY);
         aiGroup.put(PlatformBaseSettingConst.KEY_OA_AI_ROLE_ID, StrUtil.EMPTY);
         aiGroup.put(PlatformBaseSettingConst.KEY_AI_SKILL_CODE_RULE_ID, StrUtil.EMPTY);
+        aiGroup.put(PlatformBaseSettingConst.KEY_BIZ_LIST_ENDPOINTS, new ArrayList<>());
+        aiGroup.put(PlatformBaseSettingConst.KEY_BIZ_BOARD_ENDPOINTS, new ArrayList<>());
         settingData.put(PlatformBaseSettingGroup.AI.getKey(), aiGroup);
         Map<String, Object> tokenGroup = new HashMap<>();
         tokenGroup.put(PlatformBaseSettingConst.KEY_TOKENS_PER_YUAN, DEFAULT_TOKENS_PER_YUAN);
@@ -549,6 +657,8 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
             normalizeOptionalString(aiGroup, PlatformBaseSettingConst.KEY_AI_ROLE_ID);
             normalizeOptionalString(aiGroup, PlatformBaseSettingConst.KEY_OA_AI_ROLE_ID);
             normalizeOptionalString(aiGroup, PlatformBaseSettingConst.KEY_AI_SKILL_CODE_RULE_ID);
+            validateBizListEndpoints(aiGroup);
+            validateBizBoardEndpoints(aiGroup);
         }
         Map<String, Object> tokenGroup = settingData.get(PlatformBaseSettingGroup.TOKEN.getKey());
         if (MapUtil.isNotEmpty(tokenGroup)) {
@@ -660,6 +770,105 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         if (shopGroup.containsKey(PlatformBaseSettingConst.KEY_MAX_SAME_CITY_DELIVERY_METERS)) {
             validateNonNegativeInteger(shopGroup.get(PlatformBaseSettingConst.KEY_MAX_SAME_CITY_DELIVERY_METERS),
                 "同城配送默认最大半径");
+        }
+    }
+
+    /**
+     * 校验 biz_list endpoints：可空（空=用内置默认）；非空时每条须含 domain/type/apiId/serviceClassName
+     */
+    @SuppressWarnings("unchecked")
+    private void validateBizListEndpoints(Map<String, Object> aiGroup) {
+        if (!aiGroup.containsKey(PlatformBaseSettingConst.KEY_BIZ_LIST_ENDPOINTS)) {
+            return;
+        }
+        Object raw = aiGroup.get(PlatformBaseSettingConst.KEY_BIZ_LIST_ENDPOINTS);
+        if (raw == null) {
+            aiGroup.put(PlatformBaseSettingConst.KEY_BIZ_LIST_ENDPOINTS, new ArrayList<>());
+            return;
+        }
+        List<?> list;
+        if (raw instanceof List) {
+            list = (List<?>) raw;
+        } else if (raw instanceof String) {
+            String s = ((String) raw).trim();
+            if (StrUtil.isBlank(s)) {
+                aiGroup.put(PlatformBaseSettingConst.KEY_BIZ_LIST_ENDPOINTS, new ArrayList<>());
+                return;
+            }
+            try {
+                list = cn.hutool.json.JSONUtil.parseArray(s);
+                aiGroup.put(PlatformBaseSettingConst.KEY_BIZ_LIST_ENDPOINTS, list);
+            } catch (Exception e) {
+                throw new CustomException("业务列表接入配置必须是 JSON 数组");
+            }
+        } else {
+            throw new CustomException("业务列表接入配置格式不正确");
+        }
+        for (int i = 0; i < list.size(); i++) {
+            Object item = list.get(i);
+            if (!(item instanceof Map)) {
+                throw new CustomException("业务列表接入第 " + (i + 1) + " 条必须是对象");
+            }
+            Map<String, Object> ep = (Map<String, Object>) item;
+            requireEndpointField(ep, "domain", i);
+            requireEndpointField(ep, "type", i);
+            requireEndpointField(ep, "apiId", i);
+            requireEndpointField(ep, "serviceClassName", i);
+        }
+    }
+
+    private void requireEndpointField(Map<String, Object> ep, String field, int index) {
+        Object v = ep.get(field);
+        if (ObjectUtil.isEmpty(v) || StrUtil.isBlank(v.toString())) {
+            throw new CustomException("业务列表接入第 " + (index + 1) + " 条缺少 " + field);
+        }
+    }
+
+    /**
+     * 校验 biz_board boards：可空；非空时每条须含 domain、mode
+     */
+    @SuppressWarnings("unchecked")
+    private void validateBizBoardEndpoints(Map<String, Object> aiGroup) {
+        if (!aiGroup.containsKey(PlatformBaseSettingConst.KEY_BIZ_BOARD_ENDPOINTS)) {
+            return;
+        }
+        Object raw = aiGroup.get(PlatformBaseSettingConst.KEY_BIZ_BOARD_ENDPOINTS);
+        if (raw == null) {
+            aiGroup.put(PlatformBaseSettingConst.KEY_BIZ_BOARD_ENDPOINTS, new ArrayList<>());
+            return;
+        }
+        List<?> list;
+        if (raw instanceof List) {
+            list = (List<?>) raw;
+        } else if (raw instanceof String) {
+            String s = ((String) raw).trim();
+            if (StrUtil.isBlank(s)) {
+                aiGroup.put(PlatformBaseSettingConst.KEY_BIZ_BOARD_ENDPOINTS, new ArrayList<>());
+                return;
+            }
+            try {
+                list = cn.hutool.json.JSONUtil.parseArray(s);
+                aiGroup.put(PlatformBaseSettingConst.KEY_BIZ_BOARD_ENDPOINTS, list);
+            } catch (Exception e) {
+                throw new CustomException("业务看板接入配置必须是 JSON 数组");
+            }
+        } else {
+            throw new CustomException("业务看板接入配置格式不正确");
+        }
+        for (int i = 0; i < list.size(); i++) {
+            Object item = list.get(i);
+            if (!(item instanceof Map)) {
+                throw new CustomException("业务看板接入第 " + (i + 1) + " 条必须是对象");
+            }
+            Map<String, Object> board = (Map<String, Object>) item;
+            Object domain = board.get("domain");
+            Object mode = board.get("mode");
+            if (ObjectUtil.isEmpty(domain) || StrUtil.isBlank(domain.toString())) {
+                throw new CustomException("业务看板接入第 " + (i + 1) + " 条缺少 domain");
+            }
+            if (ObjectUtil.isEmpty(mode) || StrUtil.isBlank(mode.toString())) {
+                throw new CustomException("业务看板接入第 " + (i + 1) + " 条缺少 mode");
+            }
         }
     }
 

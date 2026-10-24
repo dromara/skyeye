@@ -78,6 +78,18 @@ public class PlatformBaseSettingController {
         platformBaseSettingService.queryPlatformAiSkillCodeRule(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryPlatformBizListEndpoints", value = "获取平台Agent业务列表接入配置", method = "GET", allUse = "2")
+    @RequestMapping("/post/PlatformBaseSettingController/queryPlatformBizListEndpoints")
+    public void queryPlatformBizListEndpoints(InputObject inputObject, OutputObject outputObject) {
+        platformBaseSettingService.queryPlatformBizListEndpoints(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryPlatformBizBoardEndpoints", value = "获取平台Agent业务看板接入配置", method = "GET", allUse = "2")
+    @RequestMapping("/post/PlatformBaseSettingController/queryPlatformBizBoardEndpoints")
+    public void queryPlatformBizBoardEndpoints(InputObject inputObject, OutputObject outputObject) {
+        platformBaseSettingService.queryPlatformBizBoardEndpoints(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryPlatformTokenBilling", value = "获取平台Token计费标准", method = "GET", allUse = "2")
     @RequestMapping("/post/PlatformBaseSettingController/queryPlatformTokenBilling")
     public void queryPlatformTokenBilling(InputObject inputObject, OutputObject outputObject) {

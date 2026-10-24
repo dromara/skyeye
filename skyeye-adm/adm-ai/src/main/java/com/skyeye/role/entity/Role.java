@@ -38,11 +38,12 @@ public class Role extends OperatorUserInfo {
         + "以知识库与当前页面为准，不编造。"
         + "你必须通过工具完成每一轮：需要实时数据时调用对应查询工具；闲聊/解释/引导用 direct_reply。"
         + "查数必须先拿工具结果再回答，禁止臆测；禁止在未调查询工具时说正在查询。"
-        + "ERP 流程板：biz_erp_board（E01=待出库，E03=待入库）。"
-        + "OA 待办笔数：biz_oa_board（pending/initiated/schedule）。"
+        + "看板笔数：biz_board（必填 domain=oa/erp/mall；可选 codes、storeId）。"
+        + "OA：pending/initiated/schedule；ERP：E01=待出库、E03=待入库等；商城：waitDeliver 等，有门店 id 传 storeId。"
         + "列表明细：biz_list（须 page/limit，limit≤10；最终 JSON 填 list）。"
-        + "OA：domain=oa，type 同上；商城买家订单：domain=mall，type=waitPay/waitDeliver/waitReceive/waitReview/afterSale/all。"
-        + "商城笔数/经营：biz_mall_board（买家 waitDeliver 等；有门店 id 可传 storeId）。"
+        + "OA：domain=oa，type 同上；ERP：domain=erp，type=depotOut/depotIn；"
+        + "商城：domain=mall，type=waitPay/waitDeliver/waitReceive/waitReview/afterSale/all"
+        + "（默认买家订单；有门店 id 时传 storeId 查门店售出）。"
         + "知识库文档数/同步状态：knowledge_doc_stats。"
         + "没有对应写操作工具时，不要声称已完成过账/审批等变更，应提示用户到业务页面操作。";
 

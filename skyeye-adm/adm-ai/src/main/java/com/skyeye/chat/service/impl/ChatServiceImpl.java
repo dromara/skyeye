@@ -249,12 +249,15 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     private void streamDouBao(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey,
                               String bizType, List<String> images, boolean saveChat, Role role, String userQuery) {
         runStreamTask(userId, chatId, bizType, () -> {
+            // 获取历史消息
             List<Map<String, String>> messages = buildChatMessages(systemPrompt,
                 resolveHistory(saveChat, userId, aiApiKey.getId()), content);
             if (images != null && !images.isEmpty()) {
+                // 如果有图片，则走视觉流式处理
                 consumeDouBaoStream(aiApiKey, messages, images, userId, chatId, bizType);
                 return;
             }
+            // 构建 Agent 上下文
             AiAgentToolContext ctx = AiAgentToolContext.builder()
                 .userId(userId)
                 .tenantId(TenantContext.getTenantId())
@@ -265,6 +268,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
                 .apiKey(aiApiKey)
                 .userQuery(userQuery)
                 .build();
+            // 消费豆包 Agent 流式响应
             consumeDouBaoAgentStream(aiApiKey, messages, userId, chatId, bizType, ctx);
         });
     }
@@ -429,6 +433,16 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
             }));
     }
 
+    /**
+     * 消费豆包 Agent 流式响应
+     *
+     * @param aiApiKey API Key
+     * @param messages 消息列表
+     * @param userId   用户 ID
+     * @param chatId   聊天 ID
+     * @param bizType  业务类型
+     * @param ctx      Agent 上下文
+     */
     private void consumeDouBaoAgentStream(AiApiKey aiApiKey, List<Map<String, String>> messages,
                                           String userId, String chatId, String bizType, AiAgentToolContext ctx) {
         consumeClientStream(userId, chatId, bizType, (tenantId, isolationType, finished) ->

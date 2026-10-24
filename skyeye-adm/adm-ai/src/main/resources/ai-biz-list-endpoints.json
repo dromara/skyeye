@@ -1,0 +1,1082 @@
+{
+  "version": 1,
+  "docs": {
+    "说明": "biz_list 工具的列表接入配置。优先：平台信息设置 → AI业务列表（settingData.ai.bizListEndpoints）；未配或空数组时用本文件。标准 JSON 不支持 // 注释，故用 docs 字段说明。",
+    "路由": "二选一：springApplicationName（直接 Discovery，可写 skyeye-erp）或 appId+serviceClassName（查 ServiceBean，须为已注册的 SkyeyeBusinessService）。domain 不是微服务名。",
+    "索引键": "domain + type + variant（默认 default；商城传了 storeId 时用 store）",
+    "字段": {
+      "domain": "业务域，给大模型选：oa / erp / mall（shop 会归一成 mall）",
+      "type": "列表类型，工具入参 type，如 pending、depotOut、waitPay",
+      "aliases": "可选。type 别名，如 waitDepotOut、E01 也能命中同一条",
+      "listTitle": "返回给前端/模型的列表卡片标题",
+      "scope": "可选。结果里的 scope 说明，默认等于 domain",
+      "appId": "可选，可空字符串。与业务对象 ServiceBean 的 appId 一致",
+      "springApplicationName": "可选。Nacos 服务名前缀如 skyeye-erp；有则跳过 ServiceBean",
+      "serviceClassName": "无 springApplicationName 时必填。须已注册到 ServiceBean 的类全限定名",
+      "apiId": "必填。远程接口短 id，如 activitimode008、queryDepotOutList（禁止含斜杠）",
+      "variant": "default | store。有门店 id 查门店列表时用 store",
+      "requireStoreId": "可选 bool。true 时必须传 storeId",
+      "fixedParams": "可选。每次请求固定附带的参数，如 {\"type\":\"AllWait\"}",
+      "typeParamMap": "可选。把工具 type 映射成接口 type 码，如 {\"waitPay\":\"1\"}",
+      "typeParamKey": "可选。写入请求的 type 字段名，默认 type",
+      "argBindings": "可选。工具入参映射到请求字段，如 {\"storeId\":\"objectId\"}",
+      "fields": {
+        "titlePaths": "行数据里取卡片标题的候选路径（按顺序取第一个非空）",
+        "subtitle": "副标题配置数组：{label?, paths:[...]}",
+        "idPaths": "取业务 id 的候选路径"
+      }
+    },
+    "示例": {
+      "domain": "erp",
+      "type": "depotOut",
+      "listTitle": "待出库单据",
+      "appId": "",
+      "serviceClassName": "com.skyeye.depot.service.impl.DepotOutServiceImpl",
+      "apiId": "queryDepotOutList",
+      "variant": "default"
+    },
+    "界面配置": "云平台 → 系统 → 平台基础信息 →「AI业务列表」Tab；可加载内置默认后编辑保存。",
+    "注意_Flowable": "ActivitiTaskServiceImpl 无 @SkyeyeService，不能用于路由；审批类接口请用同微服务上已注册的 ActUserProcessServiceImpl（仅解析 URI，apiId 仍指向 activitimode*）。"
+  },
+  "endpoints": [
+    {
+      "domain": "oa",
+      "type": "pending",
+      "listTitle": "审批待办",
+      "scope": "oa",
+      "apiId": "activitimode008",
+      "variant": "default",
+      "fields": {
+        "titlePaths": [
+          "processMation.title",
+          "processDefinitionName",
+          "name",
+          "taskName"
+        ],
+        "subtitle": [
+          {
+            "label": "申请人",
+            "paths": [
+              "processMation.createName"
+            ]
+          },
+          {
+            "label": "节点",
+            "paths": [
+              "taskName"
+            ]
+          }
+        ],
+        "idPaths": [
+          "taskId",
+          "id",
+          "processInstanceId"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.userprocess.service.impl.ActUserProcessServiceImpl"
+    },
+    {
+      "domain": "oa",
+      "type": "initiated",
+      "listTitle": "我发起的流程",
+      "scope": "oa",
+      "apiId": "activitimode013",
+      "variant": "default",
+      "fields": {
+        "titlePaths": [
+          "processMation.title",
+          "processDefinitionName",
+          "name",
+          "taskName"
+        ],
+        "subtitle": [
+          {
+            "label": "申请时间",
+            "paths": [
+              "processMation.createTime",
+              "createTime"
+            ]
+          }
+        ],
+        "idPaths": [
+          "processInstanceId",
+          "id",
+          "taskId"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.userprocess.service.impl.ActUserProcessServiceImpl"
+    },
+    {
+      "domain": "oa",
+      "type": "schedule",
+      "listTitle": "日程待办",
+      "scope": "oa",
+      "apiId": "myagency001",
+      "variant": "default",
+      "fields": {
+        "titlePaths": [
+          "name",
+          "title"
+        ],
+        "subtitle": [
+          {
+            "paths": [
+              "startTime"
+            ]
+          },
+          {
+            "paths": [
+              "endTime"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.eve.schedule.service.impl.ScheduleDayServiceImpl"
+    },
+    {
+      "domain": "erp",
+      "type": "depotOut",
+      "aliases": [
+        "waitDepotOut",
+        "E01",
+        "e01"
+      ],
+      "listTitle": "待出库单据",
+      "scope": "erp",
+      "apiId": "queryDepotOutList",
+      "variant": "default",
+      "fixedParams": {
+        "type": "AllWait"
+      },
+      "fields": {
+        "titlePaths": [
+          "oddNumber",
+          "id"
+        ],
+        "subtitle": [
+          {
+            "paths": [
+              "otherState"
+            ],
+            "valueLabels": {
+              "2": "待出库",
+              "3": "部分出库"
+            }
+          },
+          {
+            "label": "申请人",
+            "paths": [
+              "createName"
+            ]
+          },
+          {
+            "label": "时间",
+            "paths": [
+              "createTime",
+              "operTime"
+            ]
+          },
+          {
+            "label": "来源",
+            "paths": [
+              "idKey"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ],
+        "oddNumberPaths": [
+          "oddNumber"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.depot.service.impl.DepotOutServiceImpl"
+    },
+    {
+      "domain": "erp",
+      "type": "depotIn",
+      "aliases": [
+        "waitDepotIn",
+        "E03",
+        "e03",
+        "depotPut"
+      ],
+      "listTitle": "待入库单据",
+      "scope": "erp",
+      "apiId": "queryDepotPutList",
+      "variant": "default",
+      "fixedParams": {
+        "type": "AllWait"
+      },
+      "fields": {
+        "titlePaths": [
+          "oddNumber",
+          "id"
+        ],
+        "subtitle": [
+          {
+            "paths": [
+              "otherState"
+            ],
+            "valueLabels": {
+              "2": "待入库",
+              "3": "部分入库"
+            }
+          },
+          {
+            "label": "申请人",
+            "paths": [
+              "createName"
+            ]
+          },
+          {
+            "label": "时间",
+            "paths": [
+              "createTime",
+              "operTime"
+            ]
+          },
+          {
+            "label": "来源",
+            "paths": [
+              "idKey"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ],
+        "oddNumberPaths": [
+          "oddNumber"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.depot.service.impl.DepotPutServiceImpl"
+    },
+    {
+      "domain": "mall",
+      "type": "waitPay",
+      "listTitle": "待支付订单",
+      "scope": "买家我的订单",
+      "apiId": "queryOrderPageList",
+      "variant": "default",
+      "typeParamKey": "type",
+      "typeParamMap": {
+        "waitPay": "1",
+        "waitDeliver": "2",
+        "waitReceive": "3",
+        "waitReview": "4",
+        "afterSale": "6",
+        "all": ""
+      },
+      "fields": {
+        "titlePaths": [
+          "shopMaterial.materialMation.name",
+          "normsMation.name",
+          "oddNumber",
+          "id"
+        ],
+        "subtitle": [
+          {
+            "paths": [
+              "state"
+            ],
+            "valueLabels": {
+              "0": "待支付",
+              "1": "支付失败",
+              "2": "已取消",
+              "3": "待发货",
+              "4": "全部发货",
+              "5": "运输中",
+              "6": "已签收",
+              "7": "已完成",
+              "8": "待评价",
+              "9": "已评价",
+              "10": "退款中",
+              "11": "已退款",
+              "12": "退货中",
+              "13": "已退货",
+              "14": "换货中",
+              "15": "已换货",
+              "16": "部分完成",
+              "17": "部分评价",
+              "18": "部分发货",
+              "19": "部分签收"
+            }
+          },
+          {
+            "paths": [
+              "payPrice"
+            ],
+            "fenToYuan": true
+          },
+          {
+            "label": "时间",
+            "paths": [
+              "createTime"
+            ]
+          },
+          {
+            "paths": [
+              "storeMation.name"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ],
+        "oddNumberPaths": [
+          "oddNumber"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.order.service.impl.OrderServiceImpl"
+    },
+    {
+      "domain": "mall",
+      "type": "waitDeliver",
+      "listTitle": "待发货订单",
+      "scope": "买家我的订单",
+      "apiId": "queryOrderPageList",
+      "variant": "default",
+      "typeParamKey": "type",
+      "typeParamMap": {
+        "waitPay": "1",
+        "waitDeliver": "2",
+        "waitReceive": "3",
+        "waitReview": "4",
+        "afterSale": "6",
+        "all": ""
+      },
+      "fields": {
+        "titlePaths": [
+          "shopMaterial.materialMation.name",
+          "normsMation.name",
+          "oddNumber",
+          "id"
+        ],
+        "subtitle": [
+          {
+            "paths": [
+              "state"
+            ],
+            "valueLabels": {
+              "0": "待支付",
+              "3": "待发货",
+              "4": "全部发货",
+              "5": "运输中",
+              "8": "待评价",
+              "10": "退款中",
+              "18": "部分发货"
+            }
+          },
+          {
+            "paths": [
+              "payPrice"
+            ],
+            "fenToYuan": true
+          },
+          {
+            "label": "时间",
+            "paths": [
+              "createTime"
+            ]
+          },
+          {
+            "paths": [
+              "storeMation.name"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ],
+        "oddNumberPaths": [
+          "oddNumber"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.order.service.impl.OrderServiceImpl"
+    },
+    {
+      "domain": "mall",
+      "type": "waitReceive",
+      "listTitle": "待收货订单",
+      "scope": "买家我的订单",
+      "apiId": "queryOrderPageList",
+      "variant": "default",
+      "typeParamKey": "type",
+      "typeParamMap": {
+        "waitPay": "1",
+        "waitDeliver": "2",
+        "waitReceive": "3",
+        "waitReview": "4",
+        "afterSale": "6",
+        "all": ""
+      },
+      "fields": {
+        "titlePaths": [
+          "shopMaterial.materialMation.name",
+          "normsMation.name",
+          "oddNumber",
+          "id"
+        ],
+        "subtitle": [
+          {
+            "paths": [
+              "state"
+            ],
+            "valueLabels": {
+              "0": "待支付",
+              "3": "待发货",
+              "4": "全部发货",
+              "5": "运输中",
+              "18": "部分发货"
+            }
+          },
+          {
+            "paths": [
+              "payPrice"
+            ],
+            "fenToYuan": true
+          },
+          {
+            "label": "时间",
+            "paths": [
+              "createTime"
+            ]
+          },
+          {
+            "paths": [
+              "storeMation.name"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ],
+        "oddNumberPaths": [
+          "oddNumber"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.order.service.impl.OrderServiceImpl"
+    },
+    {
+      "domain": "mall",
+      "type": "waitReview",
+      "listTitle": "待评价订单",
+      "scope": "买家我的订单",
+      "apiId": "queryOrderPageList",
+      "variant": "default",
+      "typeParamKey": "type",
+      "typeParamMap": {
+        "waitPay": "1",
+        "waitDeliver": "2",
+        "waitReceive": "3",
+        "waitReview": "4",
+        "afterSale": "6",
+        "all": ""
+      },
+      "fields": {
+        "titlePaths": [
+          "shopMaterial.materialMation.name",
+          "normsMation.name",
+          "oddNumber",
+          "id"
+        ],
+        "subtitle": [
+          {
+            "paths": [
+              "state"
+            ],
+            "valueLabels": {
+              "8": "待评价",
+              "9": "已评价",
+              "17": "部分评价",
+              "7": "已完成"
+            }
+          },
+          {
+            "paths": [
+              "payPrice"
+            ],
+            "fenToYuan": true
+          },
+          {
+            "label": "时间",
+            "paths": [
+              "createTime"
+            ]
+          },
+          {
+            "paths": [
+              "storeMation.name"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ],
+        "oddNumberPaths": [
+          "oddNumber"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.order.service.impl.OrderServiceImpl"
+    },
+    {
+      "domain": "mall",
+      "type": "afterSale",
+      "listTitle": "售后中订单",
+      "scope": "买家我的订单",
+      "apiId": "queryOrderPageList",
+      "variant": "default",
+      "typeParamKey": "type",
+      "typeParamMap": {
+        "waitPay": "1",
+        "waitDeliver": "2",
+        "waitReceive": "3",
+        "waitReview": "4",
+        "afterSale": "6",
+        "all": ""
+      },
+      "fields": {
+        "titlePaths": [
+          "shopMaterial.materialMation.name",
+          "normsMation.name",
+          "oddNumber",
+          "id"
+        ],
+        "subtitle": [
+          {
+            "paths": [
+              "state"
+            ],
+            "valueLabels": {
+              "10": "退款中",
+              "11": "已退款",
+              "12": "退货中",
+              "13": "已退货",
+              "14": "换货中",
+              "15": "已换货"
+            }
+          },
+          {
+            "paths": [
+              "payPrice"
+            ],
+            "fenToYuan": true
+          },
+          {
+            "label": "时间",
+            "paths": [
+              "createTime"
+            ]
+          },
+          {
+            "paths": [
+              "storeMation.name"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ],
+        "oddNumberPaths": [
+          "oddNumber"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.order.service.impl.OrderServiceImpl"
+    },
+    {
+      "domain": "mall",
+      "type": "all",
+      "listTitle": "我的订单",
+      "scope": "买家我的订单",
+      "apiId": "queryOrderPageList",
+      "variant": "default",
+      "typeParamKey": "type",
+      "typeParamMap": {
+        "waitPay": "1",
+        "waitDeliver": "2",
+        "waitReceive": "3",
+        "waitReview": "4",
+        "afterSale": "6",
+        "all": ""
+      },
+      "fields": {
+        "titlePaths": [
+          "shopMaterial.materialMation.name",
+          "normsMation.name",
+          "oddNumber",
+          "id"
+        ],
+        "subtitle": [
+          {
+            "paths": [
+              "state"
+            ],
+            "valueLabels": {
+              "0": "待支付",
+              "3": "待发货",
+              "4": "全部发货",
+              "5": "运输中",
+              "8": "待评价",
+              "10": "退款中",
+              "18": "部分发货"
+            }
+          },
+          {
+            "paths": [
+              "payPrice"
+            ],
+            "fenToYuan": true
+          },
+          {
+            "label": "时间",
+            "paths": [
+              "createTime"
+            ]
+          },
+          {
+            "paths": [
+              "storeMation.name"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ],
+        "oddNumberPaths": [
+          "oddNumber"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.order.service.impl.OrderServiceImpl"
+    },
+    {
+      "domain": "mall",
+      "type": "waitPay",
+      "listTitle": "门店待支付订单",
+      "scope": "门店售出订单",
+      "apiId": "queryOrderItemByStoreId",
+      "variant": "store",
+      "requireStoreId": true,
+      "argBindings": {
+        "storeId": "objectId"
+      },
+      "typeParamKey": "type",
+      "typeParamMap": {
+        "waitPay": "1",
+        "waitDeliver": "2",
+        "waitReceive": "3",
+        "waitReview": "4",
+        "afterSale": "6",
+        "all": ""
+      },
+      "fields": {
+        "titlePaths": [
+          "shopMaterial.materialMation.name",
+          "normsMation.name",
+          "oddNumber",
+          "id"
+        ],
+        "subtitle": [
+          {
+            "paths": [
+              "state"
+            ],
+            "valueLabels": {
+              "0": "待支付",
+              "3": "待发货",
+              "4": "全部发货",
+              "5": "运输中",
+              "8": "待评价",
+              "10": "退款中",
+              "18": "部分发货"
+            }
+          },
+          {
+            "paths": [
+              "payPrice"
+            ],
+            "fenToYuan": true
+          },
+          {
+            "label": "买家",
+            "paths": [
+              "createMation.name",
+              "createMation.userName",
+              "receiverName"
+            ]
+          },
+          {
+            "label": "时间",
+            "paths": [
+              "createTime"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ],
+        "oddNumberPaths": [
+          "oddNumber"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.order.service.impl.OrderItemServiceImpl"
+    },
+    {
+      "domain": "mall",
+      "type": "waitDeliver",
+      "listTitle": "门店待发货订单",
+      "scope": "门店售出订单",
+      "apiId": "queryOrderItemByStoreId",
+      "variant": "store",
+      "requireStoreId": true,
+      "argBindings": {
+        "storeId": "objectId"
+      },
+      "typeParamKey": "type",
+      "typeParamMap": {
+        "waitPay": "1",
+        "waitDeliver": "2",
+        "waitReceive": "3",
+        "waitReview": "4",
+        "afterSale": "6",
+        "all": ""
+      },
+      "fields": {
+        "titlePaths": [
+          "shopMaterial.materialMation.name",
+          "normsMation.name",
+          "oddNumber",
+          "id"
+        ],
+        "subtitle": [
+          {
+            "paths": [
+              "state"
+            ],
+            "valueLabels": {
+              "3": "待发货",
+              "18": "部分发货",
+              "4": "全部发货"
+            }
+          },
+          {
+            "paths": [
+              "payPrice"
+            ],
+            "fenToYuan": true
+          },
+          {
+            "label": "买家",
+            "paths": [
+              "createMation.name",
+              "createMation.userName",
+              "receiverName"
+            ]
+          },
+          {
+            "label": "时间",
+            "paths": [
+              "createTime"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ],
+        "oddNumberPaths": [
+          "oddNumber"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.order.service.impl.OrderItemServiceImpl"
+    },
+    {
+      "domain": "mall",
+      "type": "waitReceive",
+      "listTitle": "门店待收货订单",
+      "scope": "门店售出订单",
+      "apiId": "queryOrderItemByStoreId",
+      "variant": "store",
+      "requireStoreId": true,
+      "argBindings": {
+        "storeId": "objectId"
+      },
+      "typeParamKey": "type",
+      "typeParamMap": {
+        "waitPay": "1",
+        "waitDeliver": "2",
+        "waitReceive": "3",
+        "waitReview": "4",
+        "afterSale": "6",
+        "all": ""
+      },
+      "fields": {
+        "titlePaths": [
+          "shopMaterial.materialMation.name",
+          "normsMation.name",
+          "oddNumber",
+          "id"
+        ],
+        "subtitle": [
+          {
+            "paths": [
+              "state"
+            ],
+            "valueLabels": {
+              "4": "全部发货",
+              "5": "运输中"
+            }
+          },
+          {
+            "paths": [
+              "payPrice"
+            ],
+            "fenToYuan": true
+          },
+          {
+            "label": "买家",
+            "paths": [
+              "createMation.name",
+              "receiverName"
+            ]
+          },
+          {
+            "label": "时间",
+            "paths": [
+              "createTime"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ],
+        "oddNumberPaths": [
+          "oddNumber"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.order.service.impl.OrderItemServiceImpl"
+    },
+    {
+      "domain": "mall",
+      "type": "waitReview",
+      "listTitle": "门店已完成订单",
+      "scope": "门店售出订单",
+      "apiId": "queryOrderItemByStoreId",
+      "variant": "store",
+      "requireStoreId": true,
+      "argBindings": {
+        "storeId": "objectId"
+      },
+      "typeParamKey": "type",
+      "typeParamMap": {
+        "waitPay": "1",
+        "waitDeliver": "2",
+        "waitReceive": "3",
+        "waitReview": "4",
+        "afterSale": "6",
+        "all": ""
+      },
+      "fields": {
+        "titlePaths": [
+          "shopMaterial.materialMation.name",
+          "normsMation.name",
+          "oddNumber",
+          "id"
+        ],
+        "subtitle": [
+          {
+            "paths": [
+              "state"
+            ],
+            "valueLabels": {
+              "7": "已完成",
+              "8": "待评价",
+              "9": "已评价"
+            }
+          },
+          {
+            "paths": [
+              "payPrice"
+            ],
+            "fenToYuan": true
+          },
+          {
+            "label": "买家",
+            "paths": [
+              "createMation.name",
+              "receiverName"
+            ]
+          },
+          {
+            "label": "时间",
+            "paths": [
+              "createTime"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ],
+        "oddNumberPaths": [
+          "oddNumber"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.order.service.impl.OrderItemServiceImpl"
+    },
+    {
+      "domain": "mall",
+      "type": "afterSale",
+      "listTitle": "门店售后中订单",
+      "scope": "门店售出订单",
+      "apiId": "queryOrderItemByStoreId",
+      "variant": "store",
+      "requireStoreId": true,
+      "argBindings": {
+        "storeId": "objectId"
+      },
+      "typeParamKey": "type",
+      "typeParamMap": {
+        "waitPay": "1",
+        "waitDeliver": "2",
+        "waitReceive": "3",
+        "waitReview": "4",
+        "afterSale": "6",
+        "all": ""
+      },
+      "fields": {
+        "titlePaths": [
+          "shopMaterial.materialMation.name",
+          "normsMation.name",
+          "oddNumber",
+          "id"
+        ],
+        "subtitle": [
+          {
+            "paths": [
+              "state"
+            ],
+            "valueLabels": {
+              "10": "退款中",
+              "12": "退货中",
+              "14": "换货中"
+            }
+          },
+          {
+            "paths": [
+              "payPrice"
+            ],
+            "fenToYuan": true
+          },
+          {
+            "label": "买家",
+            "paths": [
+              "createMation.name",
+              "receiverName"
+            ]
+          },
+          {
+            "label": "时间",
+            "paths": [
+              "createTime"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ],
+        "oddNumberPaths": [
+          "oddNumber"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.order.service.impl.OrderItemServiceImpl"
+    },
+    {
+      "domain": "mall",
+      "type": "all",
+      "listTitle": "门店订单",
+      "scope": "门店售出订单",
+      "apiId": "queryOrderItemByStoreId",
+      "variant": "store",
+      "requireStoreId": true,
+      "argBindings": {
+        "storeId": "objectId"
+      },
+      "typeParamKey": "type",
+      "typeParamMap": {
+        "waitPay": "1",
+        "waitDeliver": "2",
+        "waitReceive": "3",
+        "waitReview": "4",
+        "afterSale": "6",
+        "all": ""
+      },
+      "fields": {
+        "titlePaths": [
+          "shopMaterial.materialMation.name",
+          "normsMation.name",
+          "oddNumber",
+          "id"
+        ],
+        "subtitle": [
+          {
+            "paths": [
+              "state"
+            ],
+            "valueLabels": {
+              "0": "待支付",
+              "3": "待发货",
+              "4": "全部发货",
+              "5": "运输中",
+              "18": "部分发货"
+            }
+          },
+          {
+            "paths": [
+              "payPrice"
+            ],
+            "fenToYuan": true
+          },
+          {
+            "label": "买家",
+            "paths": [
+              "createMation.name",
+              "receiverName"
+            ]
+          },
+          {
+            "label": "时间",
+            "paths": [
+              "createTime"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ],
+        "oddNumberPaths": [
+          "oddNumber"
+        ]
+      },
+      "appId": "",
+      "serviceClassName": "com.skyeye.order.service.impl.OrderItemServiceImpl"
+    }
+  ]
+}

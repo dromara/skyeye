@@ -19,4 +19,16 @@ public interface IPlatformBaseSettingRest {
      */
     @GetMapping("/queryPlatformAiSkillCodeRule")
     String queryPlatformAiSkillCodeRule();
+
+    /**
+     * 查询平台 Agent biz_list endpoints（未配则 endpoints 为空）
+     */
+    @GetMapping("/queryPlatformBizListEndpoints")
+    String queryPlatformBizListEndpoints();
+
+    /**
+     * 查询平台 Agent biz_board boards（未配则为空）
+     */
+    @GetMapping("/queryPlatformBizBoardEndpoints")
+    String queryPlatformBizBoardEndpoints();
 }

@@ -14,6 +14,7 @@ import com.skyeye.ai.core.enums.AiPlatformEnum;
 import com.skyeye.ai.core.factory.AiFactory;
 import com.skyeye.exception.CustomException;
 import com.skyeye.key.entity.AiApiKey;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,7 @@ import java.util.function.Consumer;
  * 闲聊路径统一 {@code tool_choice=required}：由模型在业务工具与 {@link DirectReplyTool} 之间路由，
  * 不做关键词匹配。工具使用细则写在 AI 角色 prompt 与各工具 description 里。
  */
+@Slf4j
 @Component
 public class DouBaoAgentRunner {
 
@@ -146,8 +148,10 @@ public class DouBaoAgentRunner {
             }
             return StrUtil.blankToDefault(result, "{}");
         } catch (CustomException e) {
+            log.error("agent tool {} CustomException: {}", name, e.getMessage(), e);
             return JSONUtil.createObj().set("ok", false).set("error", e.getMessage()).toString();
         } catch (Exception e) {
+            log.error("agent tool {} failed", name, e);
             return JSONUtil.createObj().set("ok", false)
                 .set("error", StrUtil.blankToDefault(e.getMessage(), e.getClass().getSimpleName()))
                 .toString();

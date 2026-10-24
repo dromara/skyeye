@@ -548,6 +548,9 @@ public class PlatformAiSkillPromptBuilder {
         sb.append("3. 子表/清单类字段（simpleTable、bomChildList 等）value 用 JSON 数组字符串\n");
         sb.append("4. 富文本字段用 HTML；枚举/下拉必须从字段可选值里选原文\n");
         sb.append("5. actions 留空，除非技能说明书明确要求导航\n");
+        sb.append("6. 金额、数量、单价等关键字段给出建议后，必须在 reply 中提醒用户人工核对；"
+            + "不要声称已保存、已过账、已审批或已扣库存\n");
+        sb.append("7. 回填仅为建议草稿，最终以用户点击保存/提交为准\n");
     }
 
     private int scoreKeywords(String haystack, String keywords) {
