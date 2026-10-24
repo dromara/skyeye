@@ -38,6 +38,7 @@ public class AiBizListConfigController {
         Map<String, Object> data = new HashMap<>();
         List<Map<String, Object>> endpoints = listRegistry.getClasspathEndpoints();
         data.put("bizListEndpoints", endpoints);
+        data.put("docs", listRegistry.getClasspathDocs());
         data.put("source", "classpath");
         outputObject.setBean(data);
         outputObject.settotal(CommonNumConstants.NUM_ONE);
@@ -58,6 +59,7 @@ public class AiBizListConfigController {
     public void queryAiBizBoardEndpointsDefault(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> data = new HashMap<>();
         data.put("bizBoardEndpoints", boardRegistry.getClasspathBoards());
+        data.put("docs", boardRegistry.getClasspathDocs());
         data.put("source", "classpath");
         outputObject.setBean(data);
         outputObject.settotal(CommonNumConstants.NUM_ONE);

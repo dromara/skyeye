@@ -51,6 +51,9 @@ public class AiBizListEndpointRegistry {
      */
     private JSONArray classpathEndpointsRaw = new JSONArray();
 
+    /** 内置 JSON 的 docs，供平台页展示说明 */
+    private JSONObject classpathDocs = new JSONObject();
+
     @PostConstruct
     public void loadClasspath() {
         try {
@@ -64,6 +67,8 @@ public class AiBizListEndpointRegistry {
                 json = IoUtil.read(in, StandardCharsets.UTF_8);
             }
             JSONObject root = JSONUtil.parseObj(json);
+            JSONObject docs = root.getJSONObject("docs");
+            this.classpathDocs = docs == null ? new JSONObject() : docs;
             JSONArray arr = root.getJSONArray("endpoints");
             if (arr == null) {
                 arr = new JSONArray();
@@ -234,6 +239,17 @@ public class AiBizListEndpointRegistry {
             }
         }
         return out;
+    }
+
+    /**
+     * 内置 JSON 的 docs（字段说明等），供平台页展示。
+     */
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getClasspathDocs() {
+        if (classpathDocs == null || classpathDocs.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        return new LinkedHashMap<>(classpathDocs);
     }
 
     /**

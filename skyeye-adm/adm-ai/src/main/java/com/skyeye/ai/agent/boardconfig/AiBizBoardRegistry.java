@@ -61,6 +61,9 @@ public class AiBizBoardRegistry {
      */
     private JSONArray classpathBoardsRaw = new JSONArray();
 
+    /** 内置 JSON 的 docs，供平台页展示说明 */
+    private JSONObject classpathDocs = new JSONObject();
+
     /**
      * 启动加载内置 JSON；失败则阻断启动（配置坏了看板全挂，尽早暴露）。
      */
@@ -77,6 +80,8 @@ public class AiBizBoardRegistry {
                 json = IoUtil.read(in, StandardCharsets.UTF_8);
             }
             JSONObject root = JSONUtil.parseObj(json);
+            JSONObject docs = root.getJSONObject("docs");
+            this.classpathDocs = docs == null ? new JSONObject() : docs;
             JSONArray arr = root.getJSONArray("boards");
             if (arr == null) {
                 arr = new JSONArray();
@@ -223,6 +228,16 @@ public class AiBizBoardRegistry {
             }
         }
         return out;
+    }
+
+    /**
+     * 内置 JSON 的 docs（mode/路由等说明），供平台页展示。
+     */
+    public Map<String, Object> getClasspathDocs() {
+        if (classpathDocs == null || classpathDocs.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        return new LinkedHashMap<>(classpathDocs);
     }
 
     /**
