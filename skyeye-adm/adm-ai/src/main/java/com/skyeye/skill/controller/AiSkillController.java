@@ -54,7 +54,11 @@ public class AiSkillController {
         aiSkillService.deleteById(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryEnabledAiSkillMatchList", value = "办公AI匹配用：启用中的套件、技能与分类", method = "POST", allUse = "2")
+    @ApiOperation(id = "queryEnabledAiSkillMatchList", value = "办公AI匹配用：启用中的套件、技能与分类；传 appId+serviceClassName 时按业务对象过滤", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "useScene", name = "useScene", value = "使用场景：1聊天 2表单"),
+        @ApiImplicitParam(id = "appId", name = "appId", value = "业务应用 appId（与 serviceClassName 同时传则按业务对象过滤）"),
+        @ApiImplicitParam(id = "serviceClassName", name = "serviceClassName", value = "业务对象 className")})
     @RequestMapping("/post/AiSkillController/queryEnabledAiSkillMatchList")
     public void queryEnabledAiSkillMatchList(InputObject inputObject, OutputObject outputObject) {
         aiSkillService.queryMatchList(inputObject, outputObject);

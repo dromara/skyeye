@@ -244,8 +244,20 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
     @Override
     public void queryMatchList(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
-        String useScene = params == null ? null : String.valueOf(params.getOrDefault("useScene", ""));
-        List<AiSkill> skills = queryEnabledList();
+        String useScene = params.get("useScene").toString();
+        String appId = params.get("appId").toString();
+        String serviceClassName = params.get("serviceClassName").toString();
+        boolean filterByBiz = StrUtil.isNotBlank(appId) && StrUtil.isNotBlank(serviceClassName);
+
+        List<AiSkill> skills;
+        if (filterByBiz) {
+            // 表单/布局设计器：按业务对象精确匹配，避免拉全量再前端筛
+            skills = queryByBiz(appId.trim(), serviceClassName.trim()).stream()
+                .filter(item -> EnableEnum.ENABLE_USING.getKey().equals(item.getEnabled()))
+                .collect(Collectors.toList());
+        } else {
+            skills = queryEnabledList();
+        }
         if (StrUtil.isNotBlank(useScene) && !"null".equals(useScene)) {
             AiSkillUseSceneEnum scene = parseScene(useScene);
             if (scene != null) {
@@ -255,6 +267,17 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
             }
         }
         List<AiSkillSuite> suites = aiSkillSuiteService.queryEnabledList();
+        if (filterByBiz && CollectionUtil.isNotEmpty(skills)) {
+            java.util.Set<String> suiteIds = skills.stream()
+                .map(AiSkill::getSuiteId)
+                .filter(StrUtil::isNotBlank)
+                .collect(Collectors.toSet());
+            suites = suites.stream()
+                .filter(item -> suiteIds.contains(item.getId()))
+                .collect(Collectors.toList());
+        } else if (filterByBiz) {
+            suites = java.util.Collections.emptyList();
+        }
         List<AiSkillCategory> categories = aiSkillCategoryService.queryEnabledList();
         Map<String, Object> bean = new HashMap<>();
         bean.put("skillList", skills);
@@ -270,6 +293,8 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
                 row.put("suiteId", item.getSuiteId());
                 row.put("useScene", item.getUseScene());
                 row.put("oddNumber", item.getOddNumber());
+                row.put("appId", item.getAppId());
+                row.put("applyServiceClassName", item.getApplyServiceClassName());
                 return row;
             }).collect(Collectors.toList()));
         }

@@ -27,9 +27,8 @@ import java.util.*;
 @Service
 public class PlatformDsFormAiDraftServiceImpl implements PlatformDsFormAiDraftService {
 
+    /** 与前端 useDsFormAi 监听的 bizType 一致；布局/表单填写共用这一路流 */
     private static final String BIZ_TYPE = "dsFormAssist";
-
-    private static final String LAYOUT_BIZ_TYPE = "dsFormLayoutAssist";
 
     @Autowired
     private PlatformAiChatHelper platformAiChatHelper;
@@ -40,44 +39,27 @@ public class PlatformDsFormAiDraftServiceImpl implements PlatformDsFormAiDraftSe
     @Override
     public void generate(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
-        String question = params.get("question").toString();
-        String formContext = AiJsonHelper.normalizeJsonText(params.get("formContext"));
-        String pageTitle = params.get("pageTitle").toString();
-        String appId = params.get("appId").toString();
-        String serviceClassName = params.get("serviceClassName").toString();
-        String skillId = params.get("skillId").toString();
-        String suiteId = params.get("suiteId").toString();
-        String content = platformAiSkillPromptBuilder.buildForDsForm(
-            question, pageTitle, appId, serviceClassName, skillId, suiteId, formContext);
-        Map<String, Object> bean = platformAiChatHelper.startStreamingChat(content, BIZ_TYPE);
-        outputObject.setBean(bean);
-        outputObject.settotal(CommonNumConstants.NUM_ONE);
-    }
-
-    @Override
-    public void generateLayoutAssist(InputObject inputObject, OutputObject outputObject) {
-        Map<String, Object> params = inputObject.getParams();
         String question = strParam(params, "question");
-        String skillOddNumber = strParam(params, "skillOddNumber");
-        String layoutContext = AiJsonHelper.normalizeJsonText(params.get("layoutContext"));
+        String formContext = AiJsonHelper.normalizeJsonText(params.get("formContext"));
         String pageTitle = strParam(params, "pageTitle");
         String appId = strParam(params, "appId");
         String serviceClassName = strParam(params, "serviceClassName");
+        String skillId = strParam(params, "skillId");
+        String suiteId = strParam(params, "suiteId");
+        String assistScene = strParam(params, "assistScene");
         if (StrUtil.isBlank(question)) {
             throw new CustomException("请输入问题");
         }
-        if (StrUtil.isBlank(skillOddNumber)) {
-            throw new CustomException("技能编码不能为空");
+        // 人设与布局规则在 AI 技能提示词；这里只拼技能说明书 + 前端上下文
+        String content = platformAiSkillPromptBuilder.buildForDsForm(
+            question, pageTitle, appId, serviceClassName, skillId, suiteId, formContext, assistScene);
+        Map<String, Object> extra = new HashMap<>();
+        if (StrUtil.isNotBlank(skillId)) {
+            extra.put("skillId", skillId);
         }
-        try {
-            String content = platformAiSkillPromptBuilder.buildForLayoutDesign(
-                question, pageTitle, appId, serviceClassName, skillOddNumber, layoutContext);
-            Map<String, Object> bean = platformAiChatHelper.startStreamingChat(content, LAYOUT_BIZ_TYPE);
-            outputObject.setBean(bean);
-            outputObject.settotal(CommonNumConstants.NUM_ONE);
-        } catch (IllegalArgumentException e) {
-            throw new CustomException(e.getMessage());
-        }
+        Map<String, Object> bean = platformAiChatHelper.startStreamingChat(content, BIZ_TYPE, extra);
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
     private String strParam(Map<String, Object> params, String key) {

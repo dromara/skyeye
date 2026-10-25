@@ -4,6 +4,7 @@
 
 package com.skyeye.ai.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.skyeye.ai.skill.PlatformAiSkillPromptBuilder;
 import com.skyeye.ai.util.PlatformAiChatHelper;
 import com.skyeye.common.constans.CommonNumConstants;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 平台办公 AI 编排。角色提示词负责人设；技能/套件由配置台维护并在此注入。
+ * 平台办公 AI 编排。system 提示词：技能 prompt → 角色 prompt；技能说明书拼进用户消息。
  */
 @Service
 public class PlatformAiGuideService {
@@ -45,6 +46,9 @@ public class PlatformAiGuideService {
         extraParams.put("saveChat", 1);
         extraParams.put("knowledgeQuery", question);
         extraParams.put("userMessage", question);
+        if (StrUtil.isNotBlank(skillId)) {
+            extraParams.put("skillId", skillId);
+        }
         return platformAiChatHelper.startStreamingChat(
             platformAiSkillPromptBuilder.build(question, pageTitle, pagePath, skillId, suiteId),
             BIZ_TYPE_CHAT,

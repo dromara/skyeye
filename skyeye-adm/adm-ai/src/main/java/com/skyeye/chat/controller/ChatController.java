@@ -37,7 +37,9 @@ public class ChatController {
         @ApiImplicitParam(id = "saveChat", name = "saveChat", value = "是否记录聊天，1是 0否，默认是。需求/Bug草稿传0", enumClass = WhetherEnum.class),
         @ApiImplicitParam(id = "images", name = "images", value = "截图地址列表，看图提 Bug 时传入"),
         @ApiImplicitParam(id = "knowledgeQuery", name = "knowledgeQuery", value = "知识库检索词；闲聊绑知识库时优先用此字段检索，不传则用 content"),
-        @ApiImplicitParam(id = "userMessage", name = "userMessage", value = "用户原话。落库和历史展示用；不传则把 content 当作用户消息")})
+        @ApiImplicitParam(id = "userMessage", name = "userMessage", value = "用户原话。落库和历史展示用；不传则把 content 当作用户消息"),
+        @ApiImplicitParam(id = "skillOddNumber", name = "skillOddNumber", value = "技能编码；有则优先用该技能 prompt 作为 system 提示词"),
+        @ApiImplicitParam(id = "skillId", name = "skillId", value = "技能id；skillOddNumber 为空时可用，同样优先技能 prompt")})
     @RequestMapping("/post/ChatController/syncChatCompletion")
     public void syncChatCompletion(InputObject inputObject, OutputObject outputObject) {
         chatService.syncChatCompletion(inputObject, outputObject);

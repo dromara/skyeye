@@ -25,7 +25,7 @@ public class PlatformDsFormAiController {
     @Autowired
     private PlatformDsFormAiDraftService platformDsFormAiDraftService;
 
-    @ApiOperation(id = "aiGenerateDsFormAssist", value = "AI表单布局辅助生成", method = "POST", allUse = "2")
+    @ApiOperation(id = "aiGenerateDsFormAssist", value = "AI表单/布局辅助生成", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "question", name = "question", value = "用户问题或指令", required = "required"),
         @ApiImplicitParam(id = "pageTitle", name = "pageTitle", value = "当前页面标题"),
@@ -33,7 +33,8 @@ public class PlatformDsFormAiController {
         @ApiImplicitParam(id = "serviceClassName", name = "serviceClassName", value = "业务对象 className 全路径"),
         @ApiImplicitParam(id = "skillId", name = "skillId", value = "用户点选的技能id（单个）"),
         @ApiImplicitParam(id = "suiteId", name = "suiteId", value = "用户点选的套件id（单个）"),
-        @ApiImplicitParam(id = "formContext", name = "formContext", value = "表单布局上下文JSON", required = "required,json")})
+        @ApiImplicitParam(id = "assistScene", name = "assistScene", value = "form=表单填写；layout=布局设计器（上下文由前端拼接）"),
+        @ApiImplicitParam(id = "formContext", name = "formContext", value = "上下文JSON（表单字段或布局画布）", required = "required,json")})
     @RequestMapping("/post/PlatformDsFormAiController/aiGenerateDsFormAssist")
     public void aiGenerateDsFormAssist(InputObject inputObject, OutputObject outputObject) {
         platformDsFormAiDraftService.generate(inputObject, outputObject);
@@ -46,18 +47,5 @@ public class PlatformDsFormAiController {
     @RequestMapping("/post/PlatformDsFormAiController/aiParseDsFormAssist")
     public void aiParseDsFormAssist(InputObject inputObject, OutputObject outputObject) {
         platformDsFormAiDraftService.parseAnswer(inputObject, outputObject);
-    }
-
-    @ApiOperation(id = "aiGenerateDsFormLayoutAssist", value = "布局设计器AI辅导（按技能编码）", method = "POST", allUse = "2")
-    @ApiImplicitParams({
-        @ApiImplicitParam(id = "question", name = "question", value = "用户问题或指令", required = "required"),
-        @ApiImplicitParam(id = "skillOddNumber", name = "skillOddNumber", value = "技能编码", required = "required"),
-        @ApiImplicitParam(id = "pageTitle", name = "pageTitle", value = "当前布局名称"),
-        @ApiImplicitParam(id = "appId", name = "appId", value = "业务应用 appId"),
-        @ApiImplicitParam(id = "serviceClassName", name = "serviceClassName", value = "业务对象 className 全路径"),
-        @ApiImplicitParam(id = "layoutContext", name = "layoutContext", value = "布局设计器画布上下文JSON", required = "json")})
-    @RequestMapping("/post/PlatformDsFormAiController/aiGenerateDsFormLayoutAssist")
-    public void aiGenerateDsFormLayoutAssist(InputObject inputObject, OutputObject outputObject) {
-        platformDsFormAiDraftService.generateLayoutAssist(inputObject, outputObject);
     }
 }

@@ -61,6 +61,13 @@ public class AiSkill extends OperatorUserInfo {
     @ApiModelProperty(value = "触发词，逗号分隔")
     private String keywords;
 
+    /**
+     * 技能级 system 提示词。提问时优先于平台 AI 角色 prompt；空则回退角色。
+     */
+    @TableField(value = "prompt", updateStrategy = FieldStrategy.IGNORED)
+    @ApiModelProperty(value = "技能提示词（优先于角色提示词）")
+    private String prompt;
+
     @TableField(value = "instruction")
     @ApiModelProperty(value = "编译后的说明书")
     private String instruction;
@@ -68,6 +75,15 @@ public class AiSkill extends OperatorUserInfo {
     @TableField(value = "blocks")
     @ApiModelProperty(value = "结构化积木 JSON")
     private String blocks;
+
+    /**
+     * 编码调用面板 UI 配置 JSON，例如：
+     * {"panelTitle":"AI 布局辅导","placeholder":"…","generateText":"生成",
+     *  "quickPrompts":["问法1","问法2"],"disclaimer":"仅供参考"}
+     */
+    @TableField(value = "assist_config", updateStrategy = FieldStrategy.IGNORED)
+    @ApiModelProperty(value = "编码调用面板配置JSON")
+    private String assistConfig;
 
     @TableField(value = "app_id", updateStrategy = FieldStrategy.NEVER)
     @ApiModelProperty(value = "业务应用 appId")

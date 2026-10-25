@@ -36,6 +36,8 @@ import com.skyeye.key.entity.AiApiKey;
 import com.skyeye.key.service.AiApiKeyService;
 import com.skyeye.role.entity.Role;
 import com.skyeye.role.service.RoleService;
+import com.skyeye.skill.entity.AiSkill;
+import com.skyeye.skill.service.AiSkillService;
 import com.skyeye.websocket.AiMessageWebSocket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -68,6 +70,9 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private AiSkillService aiSkillService;
 
     @Autowired
     private ChatService chatService;
@@ -109,10 +114,8 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         if (role == null && StrUtil.isNotBlank(aiApiKey.getRoleId())) {
             role = roleService.selectById(aiApiKey.getRoleId());
         }
-        String systemPrompt = null;
-        if ("chat".equals(bizType) && role != null) {
-            systemPrompt = StrUtil.blankToDefault(role.getPrompt(), Role.DEFAULT_PROMPT);
-        }
+        // 提示词优先级：① 技能 prompt → ② 角色 prompt → ③ 角色默认文案（聊天/带技能调用均适用）
+        String systemPrompt = resolveSystemPrompt(params, role, bizType);
         AiPlatformEnum aiModel = AiPlatformEnum.getName(aiApiKey.getPlatform());
         String id;
         if (saveChat) {
@@ -696,6 +699,60 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
             return;
         }
         iTenantService.checkTenantTokenAllowUse(tenantId);
+    }
+
+    /**
+     * system 提示词：技能 prompt 优先，否则角色 prompt（聊天始终有角色兜底；其它 bizType 在命中技能或显式需要时同样兜底）。
+     */
+    private String resolveSystemPrompt(Map<String, Object> params, Role role, String bizType) {
+        String skillPrompt = resolveSkillPrompt(params);
+        if (StrUtil.isNotBlank(skillPrompt)) {
+            return skillPrompt.trim();
+        }
+        if (role == null) {
+            return null;
+        }
+        // 无技能提示词时：聊天用角色；带了技能编码/id 的业务调用也回退角色
+        boolean needRoleFallback = "chat".equals(bizType)
+            || StrUtil.isNotBlank(paramStr(params, "skillOddNumber"))
+            || StrUtil.isNotBlank(paramStr(params, "skillId"));
+        if (!needRoleFallback) {
+            return null;
+        }
+        return StrUtil.blankToDefault(role.getPrompt(), Role.DEFAULT_PROMPT);
+    }
+
+    private String resolveSkillPrompt(Map<String, Object> params) {
+        String oddNumber = paramStr(params, "skillOddNumber");
+        if (StrUtil.isNotBlank(oddNumber)) {
+            try {
+                AiSkill skill = aiSkillService.queryByOddNumber(oddNumber.trim());
+                if (skill != null && StrUtil.isNotBlank(skill.getPrompt())) {
+                    return skill.getPrompt();
+                }
+            } catch (Exception ignored) {
+                // 技能加载失败不阻断对话，回退角色
+            }
+        }
+        String skillId = paramStr(params, "skillId");
+        if (StrUtil.isNotBlank(skillId)) {
+            try {
+                AiSkill skill = aiSkillService.selectById(skillId.trim());
+                if (skill != null && StrUtil.isNotBlank(skill.getPrompt())) {
+                    return skill.getPrompt();
+                }
+            } catch (Exception ignored) {
+                // ignore
+            }
+        }
+        return null;
+    }
+
+    private String paramStr(Map<String, Object> params, String key) {
+        if (params == null || params.get(key) == null) {
+            return "";
+        }
+        return String.valueOf(params.get(key)).trim();
     }
 
     private void rememberChatPrompt(String chatId, String prompt) {
