@@ -12,7 +12,7 @@
 | 阶段 | 说明 | 状态 |
 |------|------|------|
 | P0 | 技能包 + 表单开关 + 办公向导深化 + 知识库同步 + 风控约定 | 🟡 进行中 |
-| P1 | 领域 Assist（进销存 / 审批只读 / 商城文案售后 / 办公拟稿纪要） | 🟡 进行中 |
+| P1 | 领域 Assist（进销存 / 审批只读 / 商城文案售后 / 办公拟稿纪要） | 🟡 进行中（审批+商品文案已落地） |
 | P2 | 深领域（补货预测 / 排产根因 / 一句话配流程 / 多端上架） | ⬜ 未开始 |
 
 **状态图例**：⬜ 未开始　🟡 进行中　✅ 已完成　⏸ 暂缓
@@ -37,6 +37,7 @@
 │  PlatformDsFormAiDraftService     bizType=dsFormAssist           │
 │                                   bizType=dsFormLayoutAssist     │
 │  PlatformFlowApproveAiDraftService bizType=flowApproveAssist     │
+│  PlatformShopGoodsCopyAiDraftService bizType=shopGoodsCopyDraft  │
 │  PlatformAiSkillPromptBuilder / PlatformAiChatHelper             │
 └────────────────────────────┬────────────────────────────────────┘
                              │ Feign IAiChatRest / IAiSkillRest
@@ -76,6 +77,7 @@
 | PC 表单 AI | `.../components/SkDsFormAiAssist/`、`composables/useDsFormAi.js` |
 | PC 布局 AI | `.../components/SkDsFormLayoutAiAssist/` |
 | PC 审批 AI | `.../components/SkFlowApproveAiAssist/` → `views/activiti/myActiviti/approve.vue` |
+| PC 商品文案 | `SkShopGoodsCopyAiAssist` → groundShop/basic；ShopPC `merchant/goods.vue` |
 | PC 技能管理 | `.../views/system/business/components/ai-skill/` |
 | 移动聊天 | `skyeyeCloud/pages/aiChat/index.vue` |
 | 移动表单 AI | `skyeyeCloud/components/sk-ds-form-ai-assist/` |
@@ -204,7 +206,7 @@
 
 | 愿景能力 | 落地方式 | 阶段 | 状态 |
 |----------|----------|------|------|
-| AI 生成商品文案 | 商品编辑页 draft（`shopGoodsCopyDraft`） | P1 | ⬜ |
+| AI 生成商品文案 | 商品编辑页 draft（`shopGoodsCopyDraft`） | P1 | ✅ |
 | 售后工单摘要 | 售后详情只读摘要 | P1 | ⬜ |
 | 评价销售分析 / 补货建议 | 分析型 Assist | P2 | ⬜ |
 | 一键上架多端售卖 | 表单 AI + 渠道字段回填 | P2 | ⬜ |
@@ -282,10 +284,16 @@
 
 #### P1-C 智能商城
 
-- [ ] 商品文案生成 Assist（PC 商城 / 商家端择一先做）
+- [x] 商品文案生成 Assist（`shopGoodsCopyDraft`；Cloud_Vue 上架商城 + ShopPC 自建商品）
 - [ ] 售后工单摘要 Assist
-- [ ] 独立商城技能套件或角色策略（避免硬绑 OA 人设）
-- [ ] skyeyeShop / ShopPC 入口挂载点确认
+- [ ] 独立商城技能套件或角色策略（避免硬绑 OA 人设；当前仍走平台 OA AI 角色）
+- [x] skyeyeShopPC / groundShop 入口挂载点确认
+
+**P1-C 进度备注**
+
+| 日期 | 说明 |
+|------|------|
+| 2026-10-24 | `PlatformShopGoodsCopyAi*` + `SkShopGoodsCopyAiAssist`；ShopPC 接通 `$aiWs` |
 
 #### P1-D 智能办公增强
 
@@ -394,7 +402,7 @@
 1. [ ] **ERP**：采购 / 入库 / 出库 — 表单技能 + 开 `aiFormAssist` + 一句话填单验证（挂载/快捷问法/风控已就绪，**待配技能并联调**）
 2. [ ] **OA**：请假 / 常用审批申请单 — 表单技能 + 向导办事技能
 3. [x] **审批**：详情页「AI 摘要 + 建议意见」（只读，`flowApproveAssist`；2026-10-24）
-4. [ ] **商城**：商品文案生成（新 `shopGoodsCopyDraft`）
+4. [x] **商城**：商品文案生成（`shopGoodsCopyDraft`；2026-10-24）
 
 **首批进度备注**
 
@@ -402,6 +410,7 @@
 |------|----|------|
 | 2026-10-22 | ERP | 代码侧：写页挂载确认、ERP 快捷问法、仅供参考；技能内容需后台配置后验证一句话填单 |
 | 2026-10-24 | 审批 | PC `approve.vue` 挂载 `SkFlowApproveAiAssist`；后端 `flowApproveAssist` |
+| 2026-10-24 | 商城 | `shopGoodsCopyDraft`：groundShop + ShopPC 自建商品；ShopPC `$aiWs` |
 
 ---
 
@@ -434,6 +443,7 @@
 | 2026-10-24 | 看板收敛为单一 `biz_board`（配置驱动）；平台可配 bizBoardEndpoints；删 oa/erp/mall 三 Tool |
 | 2026-10-24 | Agent 路由可配 `springApplicationName`；待出库 NPE 根因修复；平台「AI业务接入」表单化；方案 C C0～C2 联调通过 |
 | 2026-10-24 | P1-B：审批只读 Assist（`flowApproveAssist` + `SkFlowApproveAiAssist` 挂 `approve.vue`） |
+| 2026-10-24 | P1-C：商品文案草稿（`shopGoodsCopyDraft` + groundShop / ShopPC） |
 
 ---
 
