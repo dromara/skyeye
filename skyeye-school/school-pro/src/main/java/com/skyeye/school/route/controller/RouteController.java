@@ -61,7 +61,8 @@ public class RouteController {
     @ApiOperation(id = "writeRouteStopList", value = "编辑路线停靠点列表", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "路线id", required = "required"),
-        @ApiImplicitParam(id = "routeStopList", name = "routeStopList", value = "路线停靠点列表", required = "json")})
+        @ApiImplicitParam(id = "routeStopList", name = "routeStopList", value = "路线停靠点列表", required = "json"),
+        @ApiImplicitParam(id = "routeLength", name = "routeLength", value = "路线长度（米，前端计算）", required = "required")})
     @RequestMapping("/post/RouteController/writeRouteStopList")
     public void writeRouteStopList(InputObject inputObject, OutputObject outputObject) {
         routeService.writeRouteStopList(inputObject, outputObject);

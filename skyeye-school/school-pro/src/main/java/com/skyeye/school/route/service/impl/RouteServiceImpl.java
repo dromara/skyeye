@@ -16,7 +16,6 @@ import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.eve.service.SchoolService;
 import com.skyeye.exception.CustomException;
@@ -100,18 +99,21 @@ public class RouteServiceImpl extends SkyeyeBusinessServiceImpl<RoutesDao, Route
             throw new CustomException("未找到路线信息");
         }
         List<RouteStop> routeStopList = JSONUtil.toList(params.get("routeStopList").toString(), RouteStop.class);
-        double totalLength = 0;
-        for (int i = 0; i < routeStopList.size() - 1; i++) {
-            RouteStop currentStop = routeStopList.get(i);
-            RouteStop nextStop = routeStopList.get(i + 1);
-            double distance = ToolUtil.haversine(
-                Double.parseDouble(currentStop.getLatitude()),
-                Double.parseDouble(currentStop.getLongitude()),
-                Double.parseDouble(nextStop.getLatitude()),
-                Double.parseDouble(nextStop.getLongitude())
-            );
-            totalLength += distance;
+        // 长度由前端按节点计算（米），后端只落库
+        Object lengthRaw = params.get("routeLength");
+        if (lengthRaw == null || StrUtil.isBlank(lengthRaw.toString())) {
+            throw new CustomException("路线长度不能为空");
         }
+        double totalLength;
+        try {
+            totalLength = Double.parseDouble(lengthRaw.toString());
+        } catch (NumberFormatException e) {
+            throw new CustomException("路线长度格式不正确");
+        }
+        if (totalLength < 0) {
+            throw new CustomException("路线长度不能为负数");
+        }
+        totalLength = Math.round(totalLength * 100.0) / 100.0;
         UpdateWrapper<Routes> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, id);
         updateWrapper.set(MybatisPlusUtil.toColumns(Routes::getRouteLength), totalLength);

@@ -12,7 +12,7 @@
 | 阶段 | 说明 | 状态 |
 |------|------|------|
 | P0 | 技能包 + 表单开关 + 办公向导深化 + 知识库同步 + 风控约定 | 🟡 进行中 |
-| P1 | 领域 Assist（进销存 / 审批只读 / 商城文案售后 / 办公拟稿纪要） | 🟡 进行中（审批+商品文案已落地） |
+| P1 | 领域 Assist（进销存 / 审批只读 / 商城文案售后 / 办公拟稿纪要） | 🟡 进行中（填单类与审批、文案、售后已落地；纪要、待办清理、库存只读未做） |
 | P2 | 深领域（补货预测 / 排产根因 / 一句话配流程 / 多端上架） | ⬜ 未开始 |
 
 **状态图例**：⬜ 未开始　🟡 进行中　✅ 已完成　⏸ 暂缓
@@ -24,22 +24,23 @@
 ```text
 ┌─────────────────────────────────────────────────────────────────┐
 │ 前端入口                                                         │
-│  PC：AiGuideDrawer / SkDsFormAiAssist / SkDsFormLayoutAiAssist   │
-│      / SkFlowApproveAiAssist（审批只读）                          │
-│  移动：pages/aiChat、sk-ds-form-ai-assist                         │
-│  流式：useAiStream / dsFormAiStream + WebSocket                   │
+│  PC：AiGuideDrawer / SkDsFormAiAssist（表单+布局）                 │
+│      / SkFlowApproveAiAssist / SkShopGoodsCopyAiAssist           │
+│      / SkShopAfterSaleSummaryAiAssist                            │
+│  移动：pages/aiChat、sk-ds-form-ai-assist、sk-flow-approve-ai-assist │
+│  流式：useAiStream / dsFormAiStream + WebSocket（按 bizType）      │
 └────────────────────────────┬────────────────────────────────────┘
-                             │ aiGenerate* / syncChatCompletion
+                             │
+              表单/布局：aiGenerateDsFormAssist（userauth）
+              审批/文案/售后：syncChatCompletion（adm-ai，技能提示词即人设）
                              ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │ 编排层 skyeye-userauth（com.skyeye.ai.*）                          │
 │  PlatformAiGuideService           bizType=chat                   │
 │  PlatformDsFormAiDraftService     bizType=dsFormAssist           │
-│                                   bizType=dsFormLayoutAssist     │
-│  PlatformFlowApproveAiDraftService bizType=flowApproveAssist     │
-│  PlatformShopGoodsCopyAiDraftService bizType=shopGoodsCopyDraft  │
-│  PlatformShopAfterSaleAiDraftService bizType=shopAfterSaleSummary│
+│                                   （表单 fieldValues + 布局 layoutPatches）│
 │  PlatformAiSkillPromptBuilder / PlatformAiChatHelper             │
+│  审批 / 商品文案 / 售后：不再单独建 Draft 服务                       │
 └────────────────────────────┬────────────────────────────────────┘
                              │ Feign IAiChatRest / IAiSkillRest
                              ▼
@@ -47,6 +48,7 @@
 │ 底座 adm-ai                                                      │
 │  Chat + 多模型工厂 + 知识库 RAG + Role + ApiKey                    │
 │  Agent 工具（方案C：豆包 tools 循环）+ AiSkill + WebSocket + Token  │
+│  syncChatCompletion：skill.prompt 优先于角色 prompt               │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -61,7 +63,9 @@
 - [x] AI 技能积木 / 套件 / 分类（`useScene`：聊天=1 / 表单=2 / 仅编码=3）
 - [x] 办公 AI 向导（找菜单、办事、知识库问答）
 - [x] 表单填写 AI（回填 `fieldValues`，业务对象开关 `aiFormAssist`）
-- [x] 布局设计器 AI（`layoutPatches`，按技能编码调用）
+- [x] 布局设计器 AI（`layoutPatches`，与表单填写共用 `bizType=dsFormAssist`；人设在技能提示词）
+- [x] 技能辅助面板 `assistConfig`（标题 / 按钮 / 占位 / 快捷问法 / 免责声明 / 思考中提示）；PC 与移动表单 AI 都读这份配置
+- [x] 场景 Assist：审批 `flowApproveAssist`、商品文案 `shopGoodsCopyDraft`、售后 `shopAfterSaleSummary`（技能提示词 + `syncChatCompletion`，前端解析 JSON）
 - [x] 流式通道 WebSocket（按 `bizType` 推送）
 - [x] AI 知识库 + DB 同步
 - [x] 租户 Token 计费 / 停用
@@ -76,21 +80,22 @@
 | Feign | `.../rest/ai/IAiChatRest.java`、`IAiSkillRest.java` |
 | PC 向导 | `skyeyeCloud_Vue/src/views/layout/components/AiGuideDrawer.vue` |
 | PC 表单 AI | `.../components/SkDsFormAiAssist/`、`composables/useDsFormAi.js` |
-| PC 布局 AI | `.../components/SkDsFormLayoutAiAssist/` |
+| PC 布局 AI | `views/dsForm/design/baseLayout.vue` 使用 `SkDsFormAiAssist`（`resultMode=layoutPatches`） |
 | PC 审批 AI | `.../components/SkFlowApproveAiAssist/` → `views/activiti/myActiviti/approve.vue` |
 | PC 商品文案 | `SkShopGoodsCopyAiAssist` → groundShop/basic；ShopPC `merchant/goods.vue` |
 | PC 售后摘要 | `SkShopAfterSaleSummaryAiAssist` → storeDesign afterSale；ShopPC OrderAfterSaleModal |
 | PC 技能管理 | `.../views/system/business/components/ai-skill/` |
 | 移动聊天 | `skyeyeCloud/pages/aiChat/index.vue` |
-| 移动表单 AI | `skyeyeCloud/components/sk-ds-form-ai-assist/` |
+| 移动表单 AI | `skyeyeCloud/components/sk-ds-form-ai-assist/`（读技能 `assistConfig`） |
+| 移动审批 AI | `skyeyeCloud/components/sk-flow-approve-ai-assist/` → `page-LAYOUT/dsForm/basicInformation.vue` |
 | Draft 范例 | `skyeye-auto/auto-pro/.../*AiDraft*` |
 
 ### 1.3 关键抽象（扩展必须对齐）
 
 1. **AiSkill**：`appId` + `applyServiceClassName` 绑定业务对象；积木编译为 `instruction`
-2. **bizType**：流式会话类型（`chat` / `dsFormAssist` / `dsFormLayoutAssist` / 新建领域类型）
-3. **PromptBuilder**：`PlatformAiSkillPromptBuilder`（聊天 / 表单 / 布局）
-4. **Draft 模式**：拼 prompt → `PlatformAiChatHelper.startStreamingChat` → 前端收流 → 解析 JSON 回填或展示建议
+2. **bizType**：流式会话类型。`chat`；`dsFormAssist`（表单回填与布局补丁共用）；场景类 `flowApproveAssist` / `shopGoodsCopyDraft` / `shopAfterSaleSummary`。不再使用 `dsFormLayoutAssist`
+3. **人设**：AI 技能的「技能提示词」作为 system prompt。表单/布局仍由 `PlatformAiSkillPromptBuilder` 把字段或画布上下文和 JSON 约定拼进用户消息。审批/文案/售后不经 PromptBuilder，页面自己拼上下文，调用 `syncChatCompletion`
+4. **结果**：表单回填 `fieldValues`；布局写 `layoutPatches`；场景类前端解析 JSON 后展示建议。落库必须走原有业务校验接口
 5. **风控默认**：金额、库存扣减、审批通过/驳回 **禁止 AI 直接落库**，只给建议 + 人工确认
 
 ### 1.4 办公 OA AI 角色提示词（粘贴用）
@@ -174,13 +179,13 @@
 | 采购补货建议 | 读库存+销量上下文 → 建议清单（不自动下单） | P2 | ⬜ |
 | 对账摘要 | 对账单据摘要 draft | P1 | ⬜ |
 | 设备维保预测 | 设备履历 + 保养数据 → 建议（需历史数据） | P2 | ⬜ |
-| 一句话入库 | 自然语言 → `dsFormAssist` 回填入库单 | P0～P1 | ⬜ |
+| 一句话采购 / 入库 / 出库 | 自然语言 → `dsFormAssist` 回填对应单据 | P0～P1 | ✅ |
 
 ### 2.2 AI 智能办公（SkyEye OA）
 
 | 愿景能力 | 落地方式 | 阶段 | 状态 |
 |----------|----------|------|------|
-| 一句话拟稿公文/报告 | 新 `bizType`（如 `oaDocDraft`） | P1 | ⬜ |
+| 一句话拟稿公文/报告 | 复用 `dsFormAssist` + 表单技能（发文/收文），不新建 `oaDocDraft` | P1 | ✅ |
 | 自动会议纪要 | 依赖转写输入 → 纪要 draft | P1 | ⬜ |
 | 知识库问答 | 复用现有 RAG + 向导（深化技能包） | P0 | ⬜ |
 | 智能待办清理建议 | 向导/技能建议，不自动删待办 | P1 | ⬜ |
@@ -192,8 +197,8 @@
 |----------|----------|------|------|
 | 智能排产建议 | 只读建议 draft（不直接改计划） | P2 | ⬜ |
 | 异常根因分析 | 异常上下文 → 分析 Assist | P2 | ⬜ |
-| 质检数据备注 / 工序指导 | 表单 AI + 技能说明书 | P1 | ⬜ |
-| 一句话报工 | 自然语言 → 报工表单回填 | P1 | ⬜ |
+| 质检数据备注 / 工序指导 | 复用 `dsFormAssist` + 表单技能（质检单、工序管理） | P1 | ✅ |
+| 一句话报工 | 自然语言 → 工序验收单回填（`MachinProcedureAcceptServiceImpl`） | P1 | ✅ |
 
 ### 2.4 AI 智能审批（SkyEye Workflow）
 
@@ -225,9 +230,13 @@
   - 采购：`com.skyeye.purchase.entity.PurchaseOrder`（及采购申请/到货可后续扩）
   - 入库：`DepotPut` / `PurchasePut`
   - 出库：`DepotOut`
-- [ ] 梳理 OA 高频单据业务对象清单（请假、报销、公文相关等）
-- [ ] 为上述对象配置 AiSkill（`useScene` 含表单 / 聊天）← **运营在「AI技能」后台按业务对象创建**
-- [ ] 开启对应业务对象 `aiFormAssist` ← **业务对象基础信息开关；未配置时默认开启**
+- [x] 梳理 OA 高频单据业务对象清单（请假、报销、公文）
+  - 公文发文：`com.skyeye.eve.gw.service.impl.GwSendDocumentServiceImpl`（`com.wzq.skyeye.adm`）
+  - 公文收文：`com.skyeye.eve.gw.service.impl.GwReceiveDocumentServiceImpl`
+  - 请假：`com.skyeye.leave.service.impl.LeaveServiceImpl`
+  - 报销：`com.skyeye.reimbursement.service.impl.ReimbursementServiceImpl`
+- [x] 为上述对象配置 AiSkill（`useScene` 表单）← **公文发文/收文、采购、入库、出库、请假、报销已在后台启用（2026-10-25）**
+- [x] 开启对应业务对象 `aiFormAssist` ← **未单独关闭时默认开启；上述单据写页已挂表单 AI**
 - [x] PC 写页确认已挂 `SkDsFormAiAssist`（`writeShow.vue`，受 `aiFormAssist` 控制）
 - [x] 移动写页确认已挂 `sk-ds-form-ai-assist`（`page-LAYOUT/dsForm/write.vue`）
 - [x] ERP 表单快捷问法：采购/入出库按 className 分流（`buildFormAiQuickPrompts`）
@@ -257,6 +266,8 @@
 | 日期 | 说明 |
 |------|------|
 | 2026-10-22 | P0-4 风控约定落地（prompt + 仅供参考）；确认 PC/移动表单 AI 挂载；ERP 快捷问法 |
+| 2026-10-25 | OA 单据类名整理；公文发文/收文技能已在后台启用 |
+| 2026-10-25 | 采购、入库、出库、请假、报销的表单技能已配置 |
 
 ---
 
@@ -264,8 +275,8 @@
 
 #### P1-A 智能进销存
 
-- [ ] 一句话入库：自然语言 → 入库单表单回填（复用 `dsFormAssist` 或专用 `bizType`）
-- [ ] 出库/采购单据一句话填单（同模式）
+- [x] 一句话入库：自然语言 → 入库单表单回填（复用 `dsFormAssist` + 表单技能）
+- [x] 出库/采购单据一句话填单（同模式，技能已配）
 - [ ] 库存预警解读 Assist（只读）
 - [ ] 对账摘要 Assist（只读）
 - [ ] 单据打印/详情页解读入口（可选）
@@ -275,14 +286,16 @@
 - [x] 审批详情页挂载「AI 摘要」（`approve.vue` → `SkFlowApproveAiAssist`）
 - [x] 「风险点提醒」
 - [x] 「建议通过/驳回意见」文案（写入意见框需用户确认；可一键填入，不代提交）
-- [x] 后端新 `bizType=flowApproveAssist`（`PlatformFlowApproveAiDraftService`）
+- [x] `bizType=flowApproveAssist`：走 `syncChatCompletion` + 技能提示词（已删除 `PlatformFlowApproveAiDraftService`）
+- [x] 移动待办审批挂载 `sk-flow-approve-ai-assist`（`basicInformation.vue`）
 - [x] 明确不调用「同意/驳回」业务 API（仅建议 + 人工提交）
 
 **P1-B 进度备注**
 
 | 日期 | 说明 |
 |------|------|
-| 2026-10-24 | 审批详情只读 Assist 上线：`aiGenerate/ParseFlowApproveAssist` + PC 挂载 |
+| 2026-10-24 | 审批详情只读 Assist 上线：PC `approve.vue` |
+| 2026-10-25 | 去掉独立审批 Draft 服务，改为技能提示词 + `syncChatCompletion`；移动待办同步挂载 |
 
 #### P1-C 智能商城
 
@@ -297,23 +310,27 @@
 |------|------|
 | 2026-10-24 | `PlatformShopGoodsCopyAi*` + `SkShopGoodsCopyAiAssist`；ShopPC 接通 `$aiWs` |
 | 2026-10-25 | `shopAfterSaleSummary`：只读摘要/风险/建议；可填入拒绝原因，不代操作 |
+| 2026-10-25 | 文案/售后独立 Draft 服务删除，人设改放技能提示词；前端仍按原 JSON 解析 |
 
 #### P1-D 智能办公增强
 
-- [ ] 公文/报告拟稿 draft（`oaDocDraft`）
+- [x] 公文/报告拟稿：复用写页 `dsFormAssist` + 表单技能（发文拟稿、收文登记）。不新建 `oaDocDraft`
 - [ ] 会议纪要 draft（输入：转写文本/录音结果）
 - [ ] 待办清理「建议列表」（不自动删除）
 
 #### P1-E 智能制造（浅层）
 
-- [ ] 报工单一句话填单（表单 AI）
-- [ ] 质检备注 / 工序指导技能说明书
+- [x] 报工单一句话填单：工序验收（`com.skyeye.machinprocedure.service.impl.MachinProcedureAcceptServiceImpl`）表单技能已配
+- [x] 质检备注：质检单（`com.skyeye.inspection.service.impl.QualityInspectionServiceImpl`）表单技能已配
+- [x] 工序指导：工序管理（`com.skyeye.procedure.service.impl.WorkProcedureServiceImpl`）表单技能已配，写入工序内容
 
 **P1 进度备注**
 
 | 日期 | 说明 |
 |------|------|
-|  |  |
+| 2026-10-25 | 公文拟稿走现有表单 AI；移动表单面板改为读取技能 `assistConfig`，与 PC 一致 |
+| 2026-10-25 | 采购、入库、出库、请假、报销表单技能已配，一句话填单走现有写页 |
+| 2026-10-25 | 工序验收、质检单、工序管理表单技能已配 |
 
 ---
 
@@ -354,12 +371,14 @@
 
 ### 4.1 新建领域 Assist 标准步骤
 
-1. 定 `bizType` 常量与用途（只读建议 / 表单回填 / 文案生成）
-2. userauth 新增 `*AiDraftService` + Controller（仿 `PlatformDsFormAiDraftService` 或 auto `*AiDraft`）
-3. Prompt：业务上下文 +（可选）AiSkill.instruction + 输出 JSON Schema
-4. 走 `PlatformAiChatHelper` 流式；前端 `useAiStream` 按 `bizType` 订阅
-5. 解析结果：回填表单字段 **或** 展示建议面板；落库必须走原有业务校验接口
-6. 权限、`allUse`、租户 Token 与现有 AI 一致
+表单回填、布局补丁继续走 `PlatformDsFormAiDraftService`。只读分析、文案生成优先：**技能提示词写人设和 JSON 约定，页面拼上下文，直接调 `syncChatCompletion`**。不要再为每个场景新建 Controller。
+
+仍要新页面时：
+
+1. 定 `bizType`（与前端 `useAiStream` 监听一致）
+2. 技能使用位置选「表单AI辅助」，提示词要求只输出一个 JSON 对象
+3. 页面用已有 `SkDsFormAiAssist`（`panelPreset=scene`）或薄封装，只负责拼上下文和结果区
+4. 落库必须走原有业务校验接口；金额、库存、审批不代提交
 
 ### 4.2 技能配置约定
 
@@ -367,7 +386,7 @@
 |----------|------|
 | 1 聊天 | 向导、办事问答 |
 | 2 表单 | 写页 AI 辅助填单 |
-| 3 仅编码 | 布局 AI、后台按 `oddNumber` 调用的场景 |
+| 3 仅编码 | 不进选用列表，业务按技能编码调用。布局设计器已改走「表单AI辅助」 |
 
 - 绑定字段：`appId` + `applyServiceClassName`
 - 同业务对象同 UI 场景注意技能互斥（启用策略以现网为准）
@@ -376,15 +395,17 @@
 
 | bizType | 用途 | 阶段 |
 |---------|------|------|
-| `erpStockWarningAssist` | 库存预警解读 | P1 |
-| `erpReconcileSummary` | 对账摘要 | P1 |
-| `flowApproveAssist` | 审批摘要/风险/建议意见 | P1 |
-| `shopGoodsCopyDraft` | 商品文案 | P1 |
-| `shopAfterSaleSummary` | 售后摘要 | P1 |
-| `oaDocDraft` | 公文/报告拟稿 | P1 |
-| `oaMeetingMinutes` | 会议纪要 | P1 |
+| `dsFormAssist` | 表单回填 `fieldValues`、布局 `layoutPatches` | 已落地 |
+| `flowApproveAssist` | 审批摘要/风险/建议意见（技能提示词，无独立 Draft） | 已落地 |
+| `shopGoodsCopyDraft` | 商品文案（同上） | 已落地 |
+| `shopAfterSaleSummary` | 售后摘要（同上） | 已落地 |
+| `erpStockWarningAssist` | 库存预警解读 | P1 未做 |
+| `erpReconcileSummary` | 对账摘要 | P1 未做 |
+| `oaMeetingMinutes` | 会议纪要 | P1 未做 |
 | `mesScheduleSuggest` | 排产建议 | P2 |
 | `erpReplenishSuggest` | 补货建议 | P2 |
+
+公文拟稿不单列 bizType，走 `dsFormAssist`。`oaDocDraft`、`dsFormLayoutAssist` 不新建。
 
 ### 4.4 前端挂载建议
 
@@ -402,18 +423,34 @@
 
 完成一项勾一项：
 
-1. [ ] **ERP**：采购 / 入库 / 出库 — 表单技能 + 开 `aiFormAssist` + 一句话填单验证（挂载/快捷问法/风控已就绪，**待配技能并联调**）
-2. [ ] **OA**：请假 / 常用审批申请单 — 表单技能 + 向导办事技能
-3. [x] **审批**：详情页「AI 摘要 + 建议意见」（只读，`flowApproveAssist`；2026-10-24）
-4. [x] **商城**：商品文案生成（`shopGoodsCopyDraft`；2026-10-24）
+1. [x] **ERP**：采购 / 入库 / 出库 — 表单技能已配，走现有写页（2026-10-25）
+2. [x] **OA**：请假、报销 — 表单技能已配（2026-10-25）
+3. [x] **审批**：详情页「AI 摘要 + 建议意见」（`flowApproveAssist`；PC 2026-10-24，移动 2026-10-25）
+4. [x] **商城**：商品文案（2026-10-24）+ 售后摘要（2026-10-25）
+5. [x] **公文**：发文拟稿 / 收文登记，复用表单 AI（2026-10-25）
+
+下一批（仍不新写填单接口；有现成单据页的继续只配技能）：
+
+6. [x] **制造**：工序验收报工、质检备注、工序指导 — 表单技能已配（2026-10-25）
+
+下一批：
+
+7. [ ] **办公**：待办清理建议（聊天技能，只出清单，不自动删）
+8. [ ] **办公**：会议纪要（要有转写或正文可贴入的页面，再出纪要草稿）
+9. [ ] **进销存只读**：库存预警解读、对账摘要（挂在已有列表或详情上，上下文从页面传入）
 
 **首批进度备注**
 
 | 日期 | 项 | 说明 |
 |------|----|------|
 | 2026-10-22 | ERP | 代码侧：写页挂载确认、ERP 快捷问法、仅供参考；技能内容需后台配置后验证一句话填单 |
-| 2026-10-24 | 审批 | PC `approve.vue` 挂载 `SkFlowApproveAiAssist`；后端 `flowApproveAssist` |
+| 2026-10-24 | 审批 | PC `approve.vue` 挂载 `SkFlowApproveAiAssist` |
 | 2026-10-24 | 商城 | `shopGoodsCopyDraft`：groundShop + ShopPC 自建商品；ShopPC `$aiWs` |
+| 2026-10-25 | 商城 | 售后摘要；文案/售后/审批改为技能提示词，独立 Draft 服务删除 |
+| 2026-10-25 | 公文 | 发文/收文技能 + 现有表单 AI；移动面板对齐 PC 的 `assistConfig` |
+| 2026-10-25 | 审批 | 移动待办 `basicInformation.vue` 挂审批助手 |
+| 2026-10-25 | ERP / OA | 采购、入库、出库、请假、报销表单技能已配置 |
+| 2026-10-25 | 制造 | 工序验收、质检单、工序管理表单技能已配置 |
 
 ---
 
@@ -448,6 +485,10 @@
 | 2026-10-24 | P1-B：审批只读 Assist（`flowApproveAssist` + `SkFlowApproveAiAssist` 挂 `approve.vue`） |
 | 2026-10-24 | P1-C：商品文案草稿（`shopGoodsCopyDraft` + groundShop / ShopPC） |
 | 2026-10-25 | P1-C：售后摘要（`shopAfterSaleSummary` + 门店/商家售后弹窗） |
+| 2026-10-25 | 审批/文案/售后去掉独立 Draft 服务，人设改放技能提示词；布局与表单填写仍走 `dsFormAssist` |
+| 2026-10-25 | P1-D：公文拟稿复用表单 AI（发文/收文技能），不新建 `oaDocDraft`；移动表单面板读取 `assistConfig`；移动待办挂审批助手 |
+| 2026-10-25 | P0-1 / P1-A：采购、入库、出库、请假、报销表单技能已配，一句话填单不再单开接口 |
+| 2026-10-25 | P1-E：工序验收报工、质检备注、工序指导改为表单技能，不新建接口 |
 
 ---
 
