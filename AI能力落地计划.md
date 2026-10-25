@@ -38,6 +38,7 @@
 │                                   bizType=dsFormLayoutAssist     │
 │  PlatformFlowApproveAiDraftService bizType=flowApproveAssist     │
 │  PlatformShopGoodsCopyAiDraftService bizType=shopGoodsCopyDraft  │
+│  PlatformShopAfterSaleAiDraftService bizType=shopAfterSaleSummary│
 │  PlatformAiSkillPromptBuilder / PlatformAiChatHelper             │
 └────────────────────────────┬────────────────────────────────────┘
                              │ Feign IAiChatRest / IAiSkillRest
@@ -78,6 +79,7 @@
 | PC 布局 AI | `.../components/SkDsFormLayoutAiAssist/` |
 | PC 审批 AI | `.../components/SkFlowApproveAiAssist/` → `views/activiti/myActiviti/approve.vue` |
 | PC 商品文案 | `SkShopGoodsCopyAiAssist` → groundShop/basic；ShopPC `merchant/goods.vue` |
+| PC 售后摘要 | `SkShopAfterSaleSummaryAiAssist` → storeDesign afterSale；ShopPC OrderAfterSaleModal |
 | PC 技能管理 | `.../views/system/business/components/ai-skill/` |
 | 移动聊天 | `skyeyeCloud/pages/aiChat/index.vue` |
 | 移动表单 AI | `skyeyeCloud/components/sk-ds-form-ai-assist/` |
@@ -207,7 +209,7 @@
 | 愿景能力 | 落地方式 | 阶段 | 状态 |
 |----------|----------|------|------|
 | AI 生成商品文案 | 商品编辑页 draft（`shopGoodsCopyDraft`） | P1 | ✅ |
-| 售后工单摘要 | 售后详情只读摘要 | P1 | ⬜ |
+| 售后工单摘要 | 售后详情只读摘要 | P1 | ✅ |
 | 评价销售分析 / 补货建议 | 分析型 Assist | P2 | ⬜ |
 | 一键上架多端售卖 | 表单 AI + 渠道字段回填 | P2 | ⬜ |
 
@@ -285,7 +287,7 @@
 #### P1-C 智能商城
 
 - [x] 商品文案生成 Assist（`shopGoodsCopyDraft`；Cloud_Vue 上架商城 + ShopPC 自建商品）
-- [ ] 售后工单摘要 Assist
+- [x] 售后工单摘要 Assist（`shopAfterSaleSummary`；门店 afterSale + ShopPC OrderAfterSaleModal）
 - [ ] 独立商城技能套件或角色策略（避免硬绑 OA 人设；当前仍走平台 OA AI 角色）
 - [x] skyeyeShopPC / groundShop 入口挂载点确认
 
@@ -294,6 +296,7 @@
 | 日期 | 说明 |
 |------|------|
 | 2026-10-24 | `PlatformShopGoodsCopyAi*` + `SkShopGoodsCopyAiAssist`；ShopPC 接通 `$aiWs` |
+| 2026-10-25 | `shopAfterSaleSummary`：只读摘要/风险/建议；可填入拒绝原因，不代操作 |
 
 #### P1-D 智能办公增强
 
@@ -444,6 +447,7 @@
 | 2026-10-24 | Agent 路由可配 `springApplicationName`；待出库 NPE 根因修复；平台「AI业务接入」表单化；方案 C C0～C2 联调通过 |
 | 2026-10-24 | P1-B：审批只读 Assist（`flowApproveAssist` + `SkFlowApproveAiAssist` 挂 `approve.vue`） |
 | 2026-10-24 | P1-C：商品文案草稿（`shopGoodsCopyDraft` + groundShop / ShopPC） |
+| 2026-10-25 | P1-C：售后摘要（`shopAfterSaleSummary` + 门店/商家售后弹窗） |
 
 ---
 
