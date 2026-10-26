@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
-@SkyeyeService(name = "商品规格库存", groupName = "商品管理", manageShow = false)
+@SkyeyeService(name = "商品规格库存", groupName = "商品管理")
 public class MaterialNormsStockServiceImpl extends SkyeyeBusinessServiceImpl<MaterialNormsStockDao, MaterialNormsStock> implements MaterialNormsStockService {
 
     @Autowired
