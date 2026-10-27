@@ -94,7 +94,7 @@
 
 1. **AiSkill**：`appId` + `applyServiceClassName` 绑定业务对象；积木编译为 `instruction`
 2. **bizType**：流式会话类型。`chat`；`dsFormAssist`（表单回填与布局补丁共用）；场景类 `flowApproveAssist` / `shopGoodsCopyDraft` / `shopAfterSaleSummary`。不再使用 `dsFormLayoutAssist`
-3. **人设**：AI 技能的「技能提示词」作为 system prompt。表单/布局仍由 `PlatformAiSkillPromptBuilder` 把字段或画布上下文和 JSON 约定拼进用户消息。审批/文案/售后不经 PromptBuilder，页面自己拼上下文，调用 `syncChatCompletion`
+3. **人设**：AI 技能的「技能提示词」作为 system prompt。表单/布局仍由 `PlatformAiSkillPromptBuilder` 把字段或画布上下文和 JSON 约定拼进用户消息。审批/文案/售后不经 PromptBuilder，页面自己拼上下文，调用 `syncChatCompletion`。商城与办公共用平台 `oaRoleId`，不另建商城角色
 4. **结果**：表单回填 `fieldValues`；布局写 `layoutPatches`；场景类前端解析 JSON 后展示建议。落库必须走原有业务校验接口
 5. **风控默认**：金额、库存扣减、审批通过/驳回 **禁止 AI 直接落库**，只给建议 + 人工确认
 
@@ -302,7 +302,7 @@
 
 - [x] 商品文案生成 Assist（`shopGoodsCopyDraft`；Cloud_Vue 上架商城 + ShopPC 自建商品）
 - [x] 售后工单摘要 Assist（`shopAfterSaleSummary`；门店 afterSale + ShopPC OrderAfterSaleModal）
-- [ ] 独立商城技能套件或角色策略（避免硬绑 OA 人设；当前仍走平台 OA AI 角色）
+- [x] 商城与办公共用平台 OA AI 角色（`oaRoleId`）。不另建商城角色或技能套件；文案、售后等人设写在技能提示词（2026-10-27）
 - [x] skyeyeShopPC / groundShop 入口挂载点确认
 
 **P1-C 进度备注**
@@ -312,6 +312,7 @@
 | 2026-10-24 | `PlatformShopGoodsCopyAi*` + `SkShopGoodsCopyAiAssist`；ShopPC 接通 `$aiWs` |
 | 2026-10-25 | `shopAfterSaleSummary`：只读摘要/风险/建议；可填入拒绝原因，不代操作 |
 | 2026-10-25 | 文案/售后独立 Draft 服务删除，人设改放技能提示词；前端仍按原 JSON 解析 |
+| 2026-10-27 | 商城与办公共用 `oaRoleId`，不再单独做商城 AI 角色 |
 
 #### P1-D 智能办公增强
 
@@ -483,7 +484,7 @@
 | 审批自动通过 | 产品禁止；接口层不提供 AI 调同意/驳回 |
 | 未绑定 OA AI 角色 | 向导不可用；上线检查平台设置 |
 | Token 耗尽 | 租户用量提示；降级文案 |
-| 商城人设与 OA 混用 | P1 起商城用独立技能套件/角色策略 |
+| 商城与办公共用一个角色 | 人设差异写在技能提示词；角色只负责选启用的 AI 配置 |
 | 知识库 ≠ OA 企业知识库 | RAG 用 AI 知识库；内容库需单独同步策略 |
 
 ---
@@ -515,6 +516,7 @@
 | 2026-10-27 | P1-A：对账摘要挂往来账龄（`erpReconcileSummary`），技能绑 `CounterpartAgingServiceImpl`，不改账、不过账 |
 | 2026-10-27 | P1-A：单据打印解读挂打印预览（`erpPrintRead`），技能绑 `PrintTemplateServiceImpl`，不改模板、不代打印 |
 | 2026-10-27 | P0-2：移动 AI 助手主路径可用；平台办公 AI 角色已绑定 |
+| 2026-10-27 | P1-C：商城与办公共用 `oaRoleId`，不另建商城 AI 角色 |
 
 ---
 

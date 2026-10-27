@@ -4,8 +4,10 @@
 
 package com.skyeye.key.service;
 
-import com.skyeye.key.entity.AiApiKey;
 import com.skyeye.base.business.service.SkyeyeBusinessService;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
+import com.skyeye.key.entity.AiApiKey;
 
 /**
  * @ClassName: ShopDeliveryCompanyController
@@ -31,4 +33,9 @@ public interface AiApiKeyService extends SkyeyeBusinessService<AiApiKey> {
      * 按知识库关联角色，获取一条已启用的 AI 配置（多表 join，需手动带表别名过滤租户）
      */
     AiApiKey selectEnabledKeyByKnowledgeId(String knowledgeId);
+
+    /**
+     * 拷贝一条 AI 配置。新记录名称加「副本」，状态为停用，避免挤掉同角色已启用的配置。
+     */
+    void copyAiApiKey(InputObject inputObject, OutputObject outputObject);
 }

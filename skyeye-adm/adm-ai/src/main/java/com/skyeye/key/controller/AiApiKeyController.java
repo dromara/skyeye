@@ -67,4 +67,12 @@ public class AiApiKeyController {
     public void queryAiApiKeyList(InputObject inputObject, OutputObject outputObject) {
         aiApiKeyService.queryList(inputObject, outputObject);
     }
+
+    @ApiOperation(id = "copyAiApiKey", value = "拷贝AI配置", method = "POST", allUse = "1")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "要拷贝的配置id", required = "required")})
+    @RequestMapping("/post/AiApiKeyController/copyAiApiKey")
+    public void copyAiApiKey(InputObject inputObject, OutputObject outputObject) {
+        aiApiKeyService.copyAiApiKey(inputObject, outputObject);
+    }
 }

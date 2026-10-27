@@ -14,10 +14,12 @@ import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
+import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.TableSelectInfo;
 import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.exception.CustomException;
@@ -28,6 +30,7 @@ import com.skyeye.role.entity.Role;
 import com.skyeye.role.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -165,6 +168,55 @@ public class AiApiKeyServiceImpl extends SkyeyeBusinessServiceImpl<AiApiKeyDao, 
             throw new CustomException("请先在 AI 角色中绑定该知识库，并启用对应 AI 配置");
         }
         return list.get(0);
+    }
+
+    private static final String COPY_NAME_SUFFIX = "-副本";
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void copyAiApiKey(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String sourceId = params.get("id").toString();
+        String userId = inputObject.getLogParams().get("id").toString();
+        AiApiKey source = super.selectById(sourceId);
+        if (source == null || StrUtil.isBlank(source.getId())) {
+            throw new CustomException("AI配置不存在");
+        }
+        AiApiKey copy = new AiApiKey();
+        copy.setName(buildCopyName(source.getName()));
+        copy.setRemark(source.getRemark());
+        copy.setApiAppId(source.getApiAppId());
+        copy.setApiKey(source.getApiKey());
+        copy.setSecretKey(source.getSecretKey());
+        // 停用，避免同角色只能有一条启用配置时把原配置关掉
+        copy.setEnabled(String.valueOf(EnableEnum.DISABLE_USING.getKey()));
+        copy.setPlatform(source.getPlatform());
+        copy.setUrl(source.getUrl());
+        copy.setPlatformKnowledgeId(source.getPlatformKnowledgeId());
+        copy.setPlatformWorkspaceId(source.getPlatformWorkspaceId());
+        copy.setPlatformCategoryId(source.getPlatformCategoryId());
+        copy.setRoleId(source.getRoleId());
+        createEntity(copy, userId);
+        outputObject.setBean(selectById(copy.getId()));
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    private String buildCopyName(String name) {
+        String baseName = StrUtil.blankToDefault(name, "AI配置");
+        String prefix = baseName.endsWith(COPY_NAME_SUFFIX) ? baseName : baseName + COPY_NAME_SUFFIX;
+        String candidate = prefix;
+        int index = 2;
+        while (nameExists(candidate)) {
+            candidate = prefix + index;
+            index++;
+        }
+        return candidate.length() <= 100 ? candidate : candidate.substring(0, 100);
+    }
+
+    private boolean nameExists(String name) {
+        QueryWrapper<AiApiKey> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(AiApiKey::getName), name);
+        return count(queryWrapper) > 0;
     }
 
     private void disableOtherEnabledKeysOfRole(AiApiKey aiApiKey) {
