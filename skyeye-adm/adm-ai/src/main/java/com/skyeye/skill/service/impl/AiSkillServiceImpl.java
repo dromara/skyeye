@@ -10,6 +10,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
+import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.client.ExecuteFeignClient;
 import com.skyeye.common.constans.CommonConstants;
@@ -54,6 +55,10 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
 
     @Autowired
     private IPlatformBaseSettingRest iPlatformBaseSettingRest;
+
+    @Autowired
+    @Lazy
+    private AiSkillService selfService;
 
     @Override
     public void validatorEntity(AiSkill entity) {
@@ -200,6 +205,7 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
     }
 
     @Override
+    @IgnoreTenant
     public List<AiSkill> queryByBiz(String appId, String serviceClassName) {
         QueryWrapper<AiSkill> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getAppId), appId);
@@ -242,6 +248,7 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
     }
 
     @Override
+    @IgnoreTenant
     public void queryMatchList(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String useScene = params.get("useScene").toString();
@@ -252,7 +259,7 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
         List<AiSkill> skills;
         if (filterByBiz) {
             // 表单/布局设计器：按业务对象精确匹配，避免拉全量再前端筛
-            skills = queryByBiz(appId.trim(), serviceClassName.trim()).stream()
+            skills = selfService.queryByBiz(appId.trim(), serviceClassName.trim()).stream()
                 .filter(item -> EnableEnum.ENABLE_USING.getKey().equals(item.getEnabled()))
                 .collect(Collectors.toList());
         } else {
