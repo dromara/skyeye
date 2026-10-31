@@ -80,4 +80,23 @@ public class ActivitiModelController {
         activitiModelService.discardActivitiModelDraft(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryActivitiModelVersionDiagram", value = "查询流程定义版本流程图", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "processDefinitionId", name = "processDefinitionId", value = "流程定义id", required = "required")})
+    @RequestMapping("/post/ActivitiModelController/queryActivitiModelVersionDiagram")
+    public void queryActivitiModelVersionDiagram(InputObject inputObject, OutputObject outputObject) {
+        activitiModelService.queryActivitiModelVersionDiagram(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryActivitiModelVersionDiff", value = "对比流程定义版本结构变更", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "processDefinitionId", name = "processDefinitionId", value = "目标流程定义id"),
+        @ApiImplicitParam(id = "compareProcessDefinitionId", name = "compareProcessDefinitionId", value = "对比的流程定义id（旧版）"),
+        @ApiImplicitParam(id = "modelId", name = "modelId", value = "模型id（草案对比时用）"),
+        @ApiImplicitParam(id = "compareDraft", name = "compareDraft", value = "是否对比未发布草案与线上版")})
+    @RequestMapping("/post/ActivitiModelController/queryActivitiModelVersionDiff")
+    public void queryActivitiModelVersionDiff(InputObject inputObject, OutputObject outputObject) {
+        activitiModelService.queryActivitiModelVersionDiff(inputObject, outputObject);
+    }
+
 }

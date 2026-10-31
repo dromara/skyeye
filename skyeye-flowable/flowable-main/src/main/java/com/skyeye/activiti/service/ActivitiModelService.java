@@ -107,4 +107,14 @@ public interface ActivitiModelService {
      * 丢弃未发布草案：用当前已发布 BPMN 覆盖编辑器源
      */
     void discardActivitiModelDraft(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 按流程定义生成版本流程图（PNG base64）
+     */
+    void queryActivitiModelVersionDiagram(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 两版结构对比；支持草案 vs 当前线上版
+     */
+    void queryActivitiModelVersionDiff(InputObject inputObject, OutputObject outputObject);
 }

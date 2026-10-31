@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.skyeye.activiti.flowimg.FlowImgService;
+import com.skyeye.activiti.flowimg.img.CustomProcessDiagramGenerator;
 import com.skyeye.activiti.mapper.ActivityMapper;
 import com.skyeye.activiti.mapper.FlowReModelDao;
 import com.skyeye.activiti.mapper.FlowReProcdefDao;
@@ -26,14 +27,20 @@ import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.FileUtil;
 import com.skyeye.common.util.ToolUtil;
+import com.google.common.base.Joiner;
+import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.eve.entity.ActFlowMation;
 import com.skyeye.eve.flowable.entity.FlowableSubData;
+import com.skyeye.eve.service.IAuthUserService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.userprocess.service.ActUserProcessService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.flowable.bpmn.converter.BpmnXMLConverter;
 import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.FlowElement;
+import org.flowable.bpmn.model.Process;
+import org.flowable.bpmn.model.UserTask;
 import org.flowable.common.engine.api.FlowableException;
 import org.flowable.editor.constants.ModelDataJsonConstants;
 import org.flowable.editor.language.json.converter.BpmnJsonConverter;
@@ -108,6 +115,9 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
 
     @Autowired
     private ActUserProcessService actUserProcessService;
+
+    @Autowired
+    private IAuthUserService iAuthUserService;
 
     @Value("${skyeye.tenant.enable}")
     private boolean tenantEnable;
@@ -793,7 +803,8 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
             }
         }
         List<Map<String, Object>> beans = new ArrayList<>();
-        for (ProcessDefinition definition : definitions) {
+        for (int i = 0; i < definitions.size(); i++) {
+            ProcessDefinition definition = definitions.get(i);
             Map<String, Object> row = new HashMap<>();
             row.put("id", definition.getId());
             row.put("name", definition.getName());
@@ -806,6 +817,10 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
             row.put("deploymentTime", deployTime == null
                 ? StrUtil.EMPTY
                 : DateUtil.formatDate2Str(deployTime, DateUtil.YYYY_MM_DD_HH_MM_SS));
+            // 明细对比按需调用 queryActivitiModelVersionDiff，列表只带上一版 id
+            ProcessDefinition previous = i + 1 < definitions.size() ? definitions.get(i + 1) : null;
+            row.put("previousProcessDefinitionId", previous == null ? StrUtil.EMPTY : previous.getId());
+            row.put("hasPrevious", previous != null);
             beans.add(row);
         }
         Map<String, Object> extra = new HashMap<>();
@@ -886,6 +901,378 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
             log.error("丢弃未发布草案失败 modelId={}", modelId, e);
             throw new CustomException("删除未发布修改失败: " + e.getMessage());
         }
+    }
+
+    @Override
+    public void queryActivitiModelVersionDiagram(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> map = inputObject.getParams();
+        String processDefinitionId = map.get("processDefinitionId").toString();
+        try {
+            BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinitionId);
+            if (bpmnModel == null || bpmnModel.getProcesses().isEmpty()) {
+                outputObject.setreturnMessage("流程定义不存在或为空");
+                return;
+            }
+            byte[] bpmnBytes = new BpmnXMLConverter().convertToXML(bpmnModel);
+            String bpmnXml = new String(bpmnBytes, "UTF-8");
+            String imageBase64 = generateBpmnDiagramBase64(bpmnModel);
+            Map<String, Object> bean = new HashMap<>();
+            bean.put("bpmnXml", bpmnXml);
+            bean.put("imageBase64", imageBase64);
+            bean.put("processDefinitionId", processDefinitionId);
+            bean.put("taskAssignees", buildUserTaskAssigneeInfos(bpmnModel));
+            outputObject.setBean(bean);
+            outputObject.settotal(CommonNumConstants.NUM_ONE);
+        } catch (CustomException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("生成版本流程图失败 processDefinitionId={}", processDefinitionId, e);
+            throw new CustomException("生成流程图失败: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void queryActivitiModelVersionDiff(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> map = inputObject.getParams();
+        boolean compareDraft = map.get("compareDraft") != null
+            && ("true".equalsIgnoreCase(String.valueOf(map.get("compareDraft")))
+            || Boolean.TRUE.equals(map.get("compareDraft"))
+            || "1".equals(String.valueOf(map.get("compareDraft"))));
+        try {
+            Map<String, Object> diff;
+            if (compareDraft) {
+                String modelId = map.get("modelId").toString();
+                if (StrUtil.isBlank(modelId)) {
+                    outputObject.setreturnMessage("模型id不能为空");
+                    return;
+                }
+                Model model = repositoryService.getModel(modelId);
+                if (model == null) {
+                    outputObject.setreturnMessage("流程模型不存在");
+                    return;
+                }
+                if (StrUtil.isBlank(model.getDeploymentId())) {
+                    outputObject.setreturnMessage("模型未发布，无法对比草案");
+                    return;
+                }
+                ProcessDefinition currentDef = repositoryService.createProcessDefinitionQuery()
+                    .deploymentId(model.getDeploymentId())
+                    .singleResult();
+                if (currentDef == null) {
+                    outputObject.setreturnMessage("当前发布的流程定义不存在");
+                    return;
+                }
+                BpmnModel draftModel = loadDraftBpmnModel(model);
+                if (draftModel == null) {
+                    outputObject.setreturnMessage("未发布草案为空");
+                    return;
+                }
+                diff = diffBpmnModels(repositoryService.getBpmnModel(currentDef.getId()), draftModel);
+            } else {
+                String processDefinitionId = map.get("processDefinitionId").toString();
+                if (StrUtil.isBlank(processDefinitionId)) {
+                    outputObject.setreturnMessage("流程定义id不能为空");
+                    return;
+                }
+                ProcessDefinition target = repositoryService.getProcessDefinition(processDefinitionId);
+                if (target == null) {
+                    outputObject.setreturnMessage("目标流程定义不存在");
+                    return;
+                }
+                String compareId = map.get("compareProcessDefinitionId").toString();
+                ProcessDefinition previous;
+                if (StrUtil.isNotBlank(compareId)) {
+                    previous = repositoryService.getProcessDefinition(compareId);
+                } else {
+                    previous = findPreviousProcessDefinition(target);
+                }
+                if (previous == null) {
+                    diff = emptyVersionDiff("首个发布版本，无对比");
+                } else {
+                    diff = diffBpmnModels(
+                        repositoryService.getBpmnModel(previous.getId()),
+                        repositoryService.getBpmnModel(target.getId()));
+                }
+            }
+            outputObject.setBean(diff);
+            outputObject.settotal(CommonNumConstants.NUM_ONE);
+        } catch (CustomException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("对比流程版本失败", e);
+            throw new CustomException("对比流程版本失败: " + e.getMessage());
+        }
+    }
+
+    private ProcessDefinition findPreviousProcessDefinition(ProcessDefinition target) {
+        ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery()
+            .processDefinitionKey(target.getKey())
+            .orderByProcessDefinitionVersion()
+            .desc();
+        if (StrUtil.isNotBlank(target.getTenantId())) {
+            query.processDefinitionTenantId(target.getTenantId());
+        }
+        List<ProcessDefinition> list = query.list();
+        for (int i = 0; i < list.size(); i++) {
+            if (target.getId().equals(list.get(i).getId()) && i + 1 < list.size()) {
+                return list.get(i + 1);
+            }
+        }
+        return null;
+    }
+
+    private String generateBpmnDiagramBase64(BpmnModel bpmnModel) throws Exception {
+        CustomProcessDiagramGenerator generator = new CustomProcessDiagramGenerator();
+        InputStream imageStream = null;
+        try {
+            imageStream = generator.generateDiagram(
+                bpmnModel,
+                "png",
+                Collections.emptyList(),
+                Collections.emptyList(),
+                "宋体",
+                "微软雅黑",
+                null,
+                1.0,
+                true);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[4096];
+            int len;
+            while ((len = imageStream.read(buffer)) != -1) {
+                baos.write(buffer, 0, len);
+            }
+            return Base64.getEncoder().encodeToString(baos.toByteArray());
+        } finally {
+            FileUtil.close(imageStream);
+        }
+    }
+
+    private BpmnModel loadDraftBpmnModel(Model model) {
+        try {
+            byte[] bytes = repositoryService.getModelEditorSource(model.getId());
+            if (bytes == null || bytes.length == 0) {
+                return null;
+            }
+            JsonNode modelNode = objectMapper.readTree(bytes);
+            BpmnModel bpmnModel = new BpmnJsonConverter().convertToBpmnModel(modelNode);
+            if (bpmnModel == null || bpmnModel.getProcesses().isEmpty()) {
+                return null;
+            }
+            return bpmnModel;
+        } catch (Exception e) {
+            log.warn("读取未发布草案 BPMN 失败 modelId={}", model.getId(), e);
+            return null;
+        }
+    }
+
+    private Map<String, Object> emptyVersionDiff(String tip) {
+        Map<String, Object> diff = new HashMap<>();
+        diff.put("changeSummary", tip);
+        diff.put("added", Collections.emptyList());
+        diff.put("removed", Collections.emptyList());
+        diff.put("changed", Collections.emptyList());
+        diff.put("unchangedCount", 0);
+        return diff;
+    }
+
+    /**
+     * 对比两版 BPMN 中的 UserTask：oldModel → newModel
+     */
+    private Map<String, Object> diffBpmnModels(BpmnModel oldModel, BpmnModel newModel) {
+        Map<String, Map<String, Object>> oldNodes = extractUserTaskNodes(oldModel);
+        Map<String, Map<String, Object>> newNodes = extractUserTaskNodes(newModel);
+        List<Map<String, Object>> added = new ArrayList<>();
+        List<Map<String, Object>> removed = new ArrayList<>();
+        List<Map<String, Object>> changed = new ArrayList<>();
+        int unchangedCount = 0;
+
+        for (Map.Entry<String, Map<String, Object>> entry : newNodes.entrySet()) {
+            Map<String, Object> oldNode = oldNodes.get(entry.getKey());
+            if (oldNode == null) {
+                added.add(entry.getValue());
+                continue;
+            }
+            String oldName = StrUtil.blankToDefault((String) oldNode.get("name"), StrUtil.EMPTY);
+            String newName = StrUtil.blankToDefault((String) entry.getValue().get("name"), StrUtil.EMPTY);
+            if (!Objects.equals(oldName, newName)) {
+                Map<String, Object> item = new HashMap<>(entry.getValue());
+                item.put("oldName", oldName);
+                item.put("newName", newName);
+                changed.add(item);
+            } else {
+                unchangedCount++;
+            }
+        }
+        for (Map.Entry<String, Map<String, Object>> entry : oldNodes.entrySet()) {
+            if (!newNodes.containsKey(entry.getKey())) {
+                removed.add(entry.getValue());
+            }
+        }
+
+        Map<String, Object> diff = new HashMap<>();
+        diff.put("added", added);
+        diff.put("removed", removed);
+        diff.put("changed", changed);
+        diff.put("unchangedCount", unchangedCount);
+        if (added.isEmpty() && removed.isEmpty() && changed.isEmpty()) {
+            diff.put("changeSummary", "无结构变更");
+        } else {
+            List<String> parts = new ArrayList<>();
+            if (!added.isEmpty()) {
+                parts.add("新增" + added.size());
+            }
+            if (!removed.isEmpty()) {
+                parts.add("删除" + removed.size());
+            }
+            if (!changed.isEmpty()) {
+                parts.add("改名" + changed.size());
+            }
+            diff.put("changeSummary", String.join(" / ", parts));
+        }
+        return diff;
+    }
+
+    private Map<String, Map<String, Object>> extractUserTaskNodes(BpmnModel bpmnModel) {
+        Map<String, Map<String, Object>> nodes = new LinkedHashMap<>();
+        if (bpmnModel == null) {
+            return nodes;
+        }
+        Process process = bpmnModel.getMainProcess();
+        if (process == null) {
+            return nodes;
+        }
+        for (FlowElement element : process.getFlowElements()) {
+            if (!(element instanceof UserTask)) {
+                continue;
+            }
+            Map<String, Object> node = new HashMap<>();
+            node.put("id", element.getId());
+            node.put("name", StrUtil.blankToDefault(element.getName(), element.getId()));
+            node.put("type", "userTask");
+            nodes.put(element.getId(), node);
+        }
+        return nodes;
+    }
+
+    /**
+     * 解析用户任务的审批人配置，供流程图预览展示
+     */
+    private List<Map<String, Object>> buildUserTaskAssigneeInfos(BpmnModel bpmnModel) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        if (bpmnModel == null || bpmnModel.getMainProcess() == null) {
+            return result;
+        }
+        List<UserTask> userTasks = new ArrayList<>();
+        Set<String> userIds = new LinkedHashSet<>();
+        for (FlowElement element : bpmnModel.getMainProcess().getFlowElements()) {
+            if (!(element instanceof UserTask)) {
+                continue;
+            }
+            UserTask userTask = (UserTask) element;
+            userTasks.add(userTask);
+            collectConcreteUserIds(userTask.getAssignee(), userIds);
+            if (userTask.getCandidateUsers() != null) {
+                for (String candidate : userTask.getCandidateUsers()) {
+                    collectConcreteUserIds(candidate, userIds);
+                }
+            }
+        }
+        Map<String, String> userNameMap = resolveUserDisplayNames(userIds);
+        for (UserTask userTask : userTasks) {
+            List<String> displayNames = new ArrayList<>();
+            String assignee = userTask.getAssignee();
+            if (StrUtil.isNotBlank(assignee)) {
+                displayNames.add(formatAssigneeDisplay(assignee, userNameMap));
+            }
+            if (userTask.getCandidateUsers() != null) {
+                for (String candidate : userTask.getCandidateUsers()) {
+                    if (StrUtil.isBlank(candidate)) {
+                        continue;
+                    }
+                    for (String part : candidate.split(CommonCharConstants.COMMA_MARK)) {
+                        if (StrUtil.isBlank(part)) {
+                            continue;
+                        }
+                        String text = formatAssigneeDisplay(part.trim(), userNameMap);
+                        if (!displayNames.contains(text)) {
+                            displayNames.add(text);
+                        }
+                    }
+                }
+            }
+            if (userTask.getCandidateGroups() != null && !userTask.getCandidateGroups().isEmpty()) {
+                for (String group : userTask.getCandidateGroups()) {
+                    if (StrUtil.isBlank(group)) {
+                        continue;
+                    }
+                    displayNames.add(group.contains("${") ? "动态审批组" : ("组:" + group));
+                }
+            }
+            Map<String, Object> item = new HashMap<>();
+            item.put("taskId", userTask.getId());
+            item.put("taskName", StrUtil.blankToDefault(userTask.getName(), userTask.getId()));
+            item.put("displayText", displayNames.isEmpty() ? "未配置审批人" : String.join("、", displayNames));
+            result.add(item);
+        }
+        return result;
+    }
+
+    private void collectConcreteUserIds(String raw, Set<String> userIds) {
+        if (StrUtil.isBlank(raw) || raw.contains("${")) {
+            return;
+        }
+        for (String part : raw.split(CommonCharConstants.COMMA_MARK)) {
+            String id = part.trim();
+            if (StrUtil.isNotBlank(id)) {
+                userIds.add(id);
+            }
+        }
+    }
+
+    private Map<String, String> resolveUserDisplayNames(Set<String> userIds) {
+        Map<String, String> nameMap = new HashMap<>();
+        if (userIds == null || userIds.isEmpty()) {
+            return nameMap;
+        }
+        try {
+            List<Map<String, Object>> users = iAuthUserService.queryDataMationByIds(
+                Joiner.on(CommonCharConstants.COMMA_MARK).join(userIds));
+            if (users == null) {
+                return nameMap;
+            }
+            for (Map<String, Object> user : users) {
+                if (user == null || user.get("id") == null) {
+                    continue;
+                }
+                String id = String.valueOf(user.get("id"));
+                String jobNumber = Objects.toString(user.get("jobNumber"), StrUtil.EMPTY);
+                String userName = Objects.toString(user.get("userName"), StrUtil.EMPTY);
+                if (StrUtil.isBlank(userName)) {
+                    userName = Objects.toString(user.get("name"), StrUtil.EMPTY);
+                }
+                if (StrUtil.isNotBlank(jobNumber) && StrUtil.isNotBlank(userName)) {
+                    nameMap.put(id, jobNumber + "_" + userName);
+                } else if (StrUtil.isNotBlank(userName)) {
+                    nameMap.put(id, userName);
+                } else {
+                    nameMap.put(id, id);
+                }
+            }
+        } catch (Exception e) {
+            log.warn("解析审批人姓名失败 userIds={}", userIds, e);
+        }
+        return nameMap;
+    }
+
+    private String formatAssigneeDisplay(String raw, Map<String, String> userNameMap) {
+        if (StrUtil.isBlank(raw)) {
+            return StrUtil.EMPTY;
+        }
+        String value = raw.trim();
+        if (value.contains("${")) {
+            return "动态指定";
+        }
+        return StrUtil.blankToDefault(userNameMap.get(value), value);
     }
 
     /**
