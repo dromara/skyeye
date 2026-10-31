@@ -85,4 +85,13 @@ public class ActFlowController {
         actFlowService.copyActFlowMationById(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "applyActFlowAiDraft", value = "AI 流程草案写入设计器（不发布）", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "流程配置主键", required = "required"),
+        @ApiImplicitParam(id = "approveSteps", name = "approveSteps", value = "审批节点 JSON 数组，元素为 name 或 {name}", required = "required")})
+    @RequestMapping("/post/ActFlowController/applyActFlowAiDraft")
+    public void applyActFlowAiDraft(InputObject inputObject, OutputObject outputObject) {
+        actFlowService.applyActFlowAiDraft(inputObject, outputObject);
+    }
+
 }

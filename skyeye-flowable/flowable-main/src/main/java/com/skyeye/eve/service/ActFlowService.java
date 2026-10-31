@@ -32,6 +32,11 @@ public interface ActFlowService extends SkyeyeBusinessService<ActFlowMation> {
 
     void copyActFlowMationById(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * AI 流程草案写入设计器（不发布）。已发布也可写草案，不自动重新部署。
+     */
+    void applyActFlowAiDraft(InputObject inputObject, OutputObject outputObject);
+
     List<ActFlowMation> queryActFlowMationByTenantId(String tenantId);
 
     /**

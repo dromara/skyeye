@@ -171,11 +171,12 @@ public class ServiceBeanServiceImpl extends SkyeyeBusinessServiceImpl<ServiceBea
     public void registerServiceBean(InputObject inputObject, OutputObject outputObject) {
         ServiceBeanApi serviceBeanApi = inputObject.getParams(ServiceBeanApi.class);
 
-        // 获取数据库中的数据
+        // 获取数据库中的数据（物理模型 + 服务模型；虚拟模型为手工维护，不参与启动扫描覆盖）
         QueryWrapper<ServiceBean> wrapper = new QueryWrapper<>();
         wrapper.eq(MybatisPlusUtil.toColumns(ServiceBean::getSpringApplicationName), serviceBeanApi.getSpringApplicationName());
-        // 只查询物理模型
-        wrapper.eq(MybatisPlusUtil.toColumns(ServiceBean::getType), ServiceBeanType.PHYSICAL_MODEL.getKey());
+        wrapper.in(MybatisPlusUtil.toColumns(ServiceBean::getType), Arrays.asList(
+            ServiceBeanType.PHYSICAL_MODEL.getKey(),
+            ServiceBeanType.SERVICE_MODEL.getKey()));
         List<ServiceBean> oldList = super.list(wrapper);
         List<String> oldKeys = oldList.stream().map(bean -> getKey(bean)).collect(Collectors.toList());
 
@@ -195,6 +196,9 @@ public class ServiceBeanServiceImpl extends SkyeyeBusinessServiceImpl<ServiceBea
             QueryWrapper<ServiceBean> deleteWrapper = new QueryWrapper<>();
             deleteWrapper.eq(MybatisPlusUtil.toColumns(ServiceBean::getSpringApplicationName), serviceBeanApi.getSpringApplicationName());
             deleteWrapper.in(MybatisPlusUtil.toColumns(ServiceBean::getClassName), classNames);
+            deleteWrapper.in(MybatisPlusUtil.toColumns(ServiceBean::getType), Arrays.asList(
+                ServiceBeanType.PHYSICAL_MODEL.getKey(),
+                ServiceBeanType.SERVICE_MODEL.getKey()));
             remove(deleteWrapper);
         }
 
@@ -202,7 +206,10 @@ public class ServiceBeanServiceImpl extends SkyeyeBusinessServiceImpl<ServiceBea
         List<ServiceBean> addBeans = classNameList.stream().filter(item -> !oldKeys.contains(getKey(item))).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(addBeans)) {
             addBeans.forEach(bean -> {
-                bean.setType(ServiceBeanType.PHYSICAL_MODEL.getKey());
+                // 扫描端已标 SERVICE_MODEL；其余默认物理模型
+                if (bean.getType() == null) {
+                    bean.setType(ServiceBeanType.PHYSICAL_MODEL.getKey());
+                }
             });
             createEntity(addBeans, StringUtils.EMPTY);
         }

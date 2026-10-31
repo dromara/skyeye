@@ -15,6 +15,7 @@ import com.skyeye.activiti.mapper.FlowReModelDao;
 import com.skyeye.activiti.mapper.FlowReProcdefDao;
 import com.skyeye.activiti.service.ActivitiModelService;
 import com.skyeye.activiti.service.ActivitiTaskService;
+import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.object.InputObject;
@@ -29,6 +30,7 @@ import com.skyeye.eve.entity.ActFlowMation;
 import com.skyeye.eve.flowable.entity.FlowableSubData;
 import com.skyeye.exception.CustomException;
 import com.skyeye.userprocess.service.ActUserProcessService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.flowable.bpmn.converter.BpmnXMLConverter;
 import org.flowable.bpmn.model.BpmnModel;
@@ -66,10 +68,10 @@ import java.util.stream.Collectors;
  * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
+@Slf4j
 @Service
+@SkyeyeService(name = "流程模型设计", groupName = "流程模型管理")
 public class ActivitiModelServiceImpl implements ActivitiModelService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ActivitiModelServiceImpl.class);
 
     @Autowired
     private ProcessEngine processEngine;
@@ -236,7 +238,7 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
         }
         try {
             JsonNode modelNode = new ObjectMapper().readTree(bytes);
-            LOGGER.info("modelNode = {}", modelNode.toString());
+            log.info("modelNode = {}", modelNode.toString());
             BpmnModel model = new BpmnJsonConverter().convertToBpmnModel(modelNode);
             if (model.getProcesses().size() == 0) {
                 outputObject.setreturnMessage("数据模型不符要求，请至少设计一条主线流程。");
@@ -271,9 +273,9 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
             ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
             if (!StrUtil.isBlank(processName)) {
                 activityMapper.updateProcessDefinitionName(processName, processDefinition.getId(), deployment.getTenantId());
-                LOGGER.info("流程模型【{}】没有配置流程名称，默认使用流程模型名称作为流程名称", processName);
+                log.info("流程模型【{}】没有配置流程名称，默认使用流程模型名称作为流程名称", processName);
             }
-            LOGGER.info("流程【{}】成功发布", processName);
+            log.info("流程【{}】成功发布", processName);
         } catch (Exception ee) {
             throw new CustomException(ee);
         }
@@ -284,12 +286,12 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
         if (!judgeProcessKeyIsLive(actFlowMation)) {
             throw new CustomException("任务发起失败,不存在该流程模型.");
         }
-        LOGGER.info("approvalId is : " + flowableSubData.getApprovalId());
+        log.info("approvalId is : " + flowableSubData.getApprovalId());
         // 业务对象
         Map<String, Object> varables = new HashMap<>();
         // 默认设置审批人为会签人
         varables.put(ActivitiConstants.ASSIGNEE_USER_LIST, Arrays.asList(flowableSubData.getApprovalId()));
-        LOGGER.info("startProcessInstanceByKey start.");
+        log.info("startProcessInstanceByKey start.");
 
         String tenantId = TenantTypeEnum.PLATFORM.getCode();
         if (tenantEnable) {
@@ -311,7 +313,7 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
 
         // 设置第一个userTask任务的审批人
         activitiTaskService.setNextUserTaskApproval(processInstanceId, flowableSubData.getApprovalId());
-        LOGGER.info("start process success, processInstanceId is: {}", processInstanceId);
+        log.info("start process success, processInstanceId is: {}", processInstanceId);
         return processInstanceId;
     }
 
@@ -500,7 +502,7 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
 
                 repositoryService.addModelEditorSource(model.getId(), editorJsonNode.toString().getBytes("utf-8"));
             } catch (Exception e) {
-                LOGGER.error("Error get model JSON", e);
+                log.error("Error get model JSON", e);
                 throw new FlowableException("Error get model JSON", e);
             }
         }
@@ -570,11 +572,11 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
             // 保存新模型的编辑器源码
             repositoryService.addModelEditorSource(newModel.getId(), editorJsonNode.toString().getBytes("utf-8"));
 
-            LOGGER.info("成功复制模型，源模型ID: {}, 新模型ID: {}, 新模型名称: {}", sourceModelId, newModel.getId(), newModelName);
+            log.info("成功复制模型，源模型ID: {}, 新模型ID: {}, 新模型名称: {}", sourceModelId, newModel.getId(), newModelName);
             return newModel.getId();
 
         } catch (Exception e) {
-            LOGGER.error("复制模型失败，源模型ID: {}, 错误信息: {}", sourceModelId, e.getMessage(), e);
+            log.error("复制模型失败，源模型ID: {}, 错误信息: {}", sourceModelId, e.getMessage(), e);
             throw new CustomException("复制模型失败: " + e.getMessage());
         }
     }
@@ -592,55 +594,284 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
     @Transactional(value = "transactionManager", rollbackFor = Exception.class)
     public String createModelFromBpmnXml(String bpmnXml, String modelName, String modelKey, String tenantId) {
         try {
-            LOGGER.info("开始根据BPMN XML创建模型，模型名称: {}, 模型Key: {}, 租户ID: {}", modelName, modelKey, tenantId);
+            log.info("开始根据BPMN XML创建模型，模型名称: {}, 模型Key: {}, 租户ID: {}", modelName, modelKey, tenantId);
 
-            // 将BPMN XML转换为BpmnModel
-            BpmnXMLConverter xmlConverter = new BpmnXMLConverter();
-            InputStream xmlInputStream = new ByteArrayInputStream(bpmnXml.getBytes("UTF-8"));
-            XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
-            XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(xmlInputStream);
-            BpmnModel bpmnModel = xmlConverter.convertToBpmnModel(xmlStreamReader);
-
-            if (bpmnModel.getProcesses().isEmpty()) {
-                throw new CustomException("BPMN XML中没有有效的流程定义");
-            }
-
-            // 将BpmnModel转换为JSON（用于编辑器）
-            BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
-            ObjectNode editorJsonNode = jsonConverter.convertToJson(bpmnModel);
-
-            // 创建新模型
             Model model = repositoryService.newModel();
             model.setName(modelName);
             model.setKey(ToolUtil.getSurFaceId());
-
-            // 设置租户信息
             if (StrUtil.isNotBlank(tenantId)) {
                 model.setTenantId(tenantId);
             } else {
                 model.setTenantId(TenantTypeEnum.PLATFORM.getCode());
             }
-
-            // 设置元信息
-            ObjectNode metaInfo = getMateInfo(modelName);
-            model.setMetaInfo(metaInfo.toString());
-
-            // 保存模型
+            model.setMetaInfo(getMateInfo(modelName).toString());
             repositoryService.saveModel(model);
 
-            // 设置流程属性
-            ObjectNode processProperties = getProcessProperties(modelName, modelKey, null);
-            editorJsonNode.put("properties", processProperties);
+            writeEditorSourceFromBpmnXml(model, bpmnXml, modelName, modelKey);
 
-            // 保存编辑器源码
-            repositoryService.addModelEditorSource(model.getId(), editorJsonNode.toString().getBytes("utf-8"));
-
-            LOGGER.info("成功根据BPMN XML创建模型，模型ID: {}, 模型名称: {}, 租户ID: {}", model.getId(), modelName, tenantId);
+            log.info("成功根据BPMN XML创建模型，模型ID: {}, 模型名称: {}, 租户ID: {}", model.getId(), modelName, tenantId);
             return model.getId();
+        } catch (CustomException e) {
+            throw e;
         } catch (Exception e) {
-            LOGGER.error("根据BPMN XML创建模型失败，模型名称: {}, 错误信息: {}", modelName, e.getMessage(), e);
+            log.error("根据BPMN XML创建模型失败，模型名称: {}, 错误信息: {}", modelName, e.getMessage(), e);
             throw new CustomException("根据BPMN XML创建模型失败: " + e.getMessage());
         }
+    }
+
+    /**
+     * 覆盖已有模型编辑器源：与 createModelFromBpmnXml、设计器保存同一套
+     * repositoryService.saveModel + addModelEditorSource（不走发布）。
+     */
+    @Override
+    @Transactional(value = "transactionManager", rollbackFor = Exception.class)
+    public void updateModelFromBpmnXml(String modelId, String bpmnXml, String modelName, String modelKey) {
+        if (StrUtil.isBlank(modelId)) {
+            throw new CustomException("模型ID不能为空");
+        }
+        if (StrUtil.isBlank(bpmnXml)) {
+            throw new CustomException("BPMN XML不能为空");
+        }
+        Model model = repositoryService.getModel(modelId);
+        if (model == null) {
+            throw new CustomException("流程模型不存在");
+        }
+        // 已发布也可改编辑器草案（与设计器手工保存一致），不自动重新部署；线上定义仍以当前 deployment 为准
+        String name = StrUtil.blankToDefault(modelName, model.getName());
+        String key = StrUtil.blankToDefault(modelKey, model.getKey());
+        try {
+            model.setName(name);
+            model.setMetaInfo(getMateInfo(name).toString());
+            model.setVersion(model.getVersion() + 1);
+            writeEditorSourceFromBpmnXml(model, bpmnXml, name, key);
+            log.info("已用 BPMN 覆盖模型编辑器源 modelId={}, published={}", modelId, StrUtil.isNotBlank(model.getDeploymentId()));
+        } catch (CustomException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("覆盖模型编辑器源失败 modelId={}", modelId, e);
+            throw new CustomException("写入流程草案失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * BPMN XML → 编辑器 JSON → saveModel + addModelEditorSource（与租户同步建模型同源）
+     */
+    private void writeEditorSourceFromBpmnXml(Model model, String bpmnXml, String modelName, String modelKey) throws Exception {
+        BpmnXMLConverter xmlConverter = new BpmnXMLConverter();
+        InputStream xmlInputStream = new ByteArrayInputStream(bpmnXml.getBytes("UTF-8"));
+        XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+        XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(xmlInputStream);
+        BpmnModel bpmnModel = xmlConverter.convertToBpmnModel(xmlStreamReader);
+        if (bpmnModel.getProcesses().isEmpty()) {
+            throw new CustomException("BPMN XML中没有有效的流程定义");
+        }
+
+        BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
+        ObjectNode editorJsonNode = jsonConverter.convertToJson(bpmnModel);
+        ObjectNode processProperties = getProcessProperties(modelName, modelKey, null);
+        editorJsonNode.put("properties", processProperties);
+
+        repositoryService.saveModel(model);
+        repositoryService.addModelEditorSource(model.getId(), editorJsonNode.toString().getBytes("utf-8"));
+    }
+
+    /**
+     * AI 流程草案：拼 BPMN 后复用 {@link #updateModelFromBpmnXml}（同 createModelFromBpmnXml 写入方式）。
+     * 结构对齐 workflow-template：start → N×userTask → exclusiveGateway → 同意/拒绝 → end
+     */
+    @Override
+    @Transactional(value = "transactionManager", rollbackFor = Exception.class)
+    public void applyAiDraftToModel(String modelId, String processName, String modelKey, List<String> approveStepNames) {
+        if (approveStepNames == null || approveStepNames.isEmpty()) {
+            throw new CustomException("请至少提供一个审批节点");
+        }
+        List<String> steps = approveStepNames.stream()
+            .map(StrUtil::trim)
+            .filter(StrUtil::isNotBlank)
+            .collect(Collectors.toList());
+        if (steps.isEmpty()) {
+            throw new CustomException("请至少提供一个审批节点");
+        }
+        if (steps.size() > 20) {
+            throw new CustomException("审批节点过多，请控制在 20 个以内");
+        }
+        Model model = repositoryService.getModel(modelId);
+        if (model == null) {
+            throw new CustomException("流程模型不存在");
+        }
+        String name = StrUtil.blankToDefault(processName, model.getName());
+        String key = StrUtil.blankToDefault(modelKey, model.getKey());
+        String bpmnXml = buildApproveChainBpmnXml(key, name, steps);
+        updateModelFromBpmnXml(modelId, bpmnXml, name, key);
+        log.info("AI 流程草案已写入模型 modelId={}, steps={}", modelId, steps.size());
+    }
+
+    /**
+     * 生成与租户模板同构的串行审批 BPMN XML。
+     * 必须带齐 BPMNShape + BPMNEdge（含 waypoint），否则 BpmnJsonConverter 转序列流会 NPE，设计器也看不到连线。
+     */
+    private String buildApproveChainBpmnXml(String processId, String processName, List<String> stepNames) {
+        String safeProcessId = escapeXml(processId);
+        String safeProcessName = escapeXml(processName);
+        String startId = newSid();
+        String gatewayId = newSid();
+        String passId = newSid();
+        String rejectId = newSid();
+        String endId = newSid();
+
+        List<String> taskIds = new ArrayList<>();
+        for (int i = 0; i < stepNames.size(); i++) {
+            taskIds.add(newSid());
+        }
+
+        // flowId -> [sourceId, targetId]；边 waypoint 按节点 bounds 推算
+        List<String[]> flows = new ArrayList<>();
+        Map<String, double[]> bounds = new LinkedHashMap<>();
+
+        StringBuilder process = new StringBuilder();
+        process.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        process.append("<definitions xmlns=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" ");
+        process.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
+        process.append("xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" ");
+        process.append("xmlns:flowable=\"http://flowable.org/bpmn\" ");
+        process.append("xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" ");
+        process.append("xmlns:omgdc=\"http://www.omg.org/spec/DD/20100524/DC\" ");
+        process.append("xmlns:omgdi=\"http://www.omg.org/spec/DD/20100524/DI\" ");
+        process.append("typeLanguage=\"http://www.w3.org/2001/XMLSchema\" ");
+        process.append("expressionLanguage=\"http://www.w3.org/1999/XPath\" ");
+        process.append("targetNamespace=\"http://www.activiti.org/processdef\">\n");
+        process.append("  <process id=\"").append(safeProcessId).append("\" name=\"").append(safeProcessName)
+            .append("\" isExecutable=\"true\">\n");
+        process.append("    <startEvent id=\"").append(startId).append("\"></startEvent>\n");
+
+        for (int i = 0; i < stepNames.size(); i++) {
+            String taskId = taskIds.get(i);
+            process.append("    <userTask id=\"").append(taskId).append("\" name=\"")
+                .append(escapeXml(stepNames.get(i))).append("\"></userTask>\n");
+            String from = i == 0 ? startId : taskIds.get(i - 1);
+            String flowId = newSid();
+            process.append("    <sequenceFlow id=\"").append(flowId).append("\" sourceRef=\"")
+                .append(from).append("\" targetRef=\"").append(taskId).append("\"></sequenceFlow>\n");
+            flows.add(new String[]{flowId, from, taskId});
+        }
+
+        String lastTaskId = taskIds.get(taskIds.size() - 1);
+        process.append("    <exclusiveGateway id=\"").append(gatewayId).append("\"></exclusiveGateway>\n");
+        String toGw = newSid();
+        process.append("    <sequenceFlow id=\"").append(toGw).append("\" sourceRef=\"")
+            .append(lastTaskId).append("\" targetRef=\"").append(gatewayId).append("\"></sequenceFlow>\n");
+        flows.add(new String[]{toGw, lastTaskId, gatewayId});
+
+        process.append("    <serviceTask id=\"").append(passId)
+            .append("\" name=\"同意\" flowable:class=\"com.skyeye.listener.ApprovalIsEndListener\">\n");
+        process.append("      <extensionElements>\n");
+        process.append("        <flowable:field name=\"state\"><flowable:string><![CDATA[pass]]></flowable:string></flowable:field>\n");
+        process.append("      </extensionElements>\n");
+        process.append("    </serviceTask>\n");
+        String passFlow = newSid();
+        process.append("    <sequenceFlow id=\"").append(passFlow).append("\" name=\"同意\" sourceRef=\"")
+            .append(gatewayId).append("\" targetRef=\"").append(passId).append("\">\n");
+        process.append("      <conditionExpression xsi:type=\"tFormalExpression\"><![CDATA[${flag==1}]]></conditionExpression>\n");
+        process.append("    </sequenceFlow>\n");
+        flows.add(new String[]{passFlow, gatewayId, passId});
+
+        process.append("    <serviceTask id=\"").append(rejectId)
+            .append("\" name=\"拒绝\" flowable:class=\"com.skyeye.listener.ApprovalIsEndListener\">\n");
+        process.append("      <extensionElements>\n");
+        process.append("        <flowable:field name=\"state\"><flowable:string><![CDATA[onpass]]></flowable:string></flowable:field>\n");
+        process.append("      </extensionElements>\n");
+        process.append("    </serviceTask>\n");
+        String rejectFlow = newSid();
+        process.append("    <sequenceFlow id=\"").append(rejectFlow).append("\" name=\"拒绝\" sourceRef=\"")
+            .append(gatewayId).append("\" targetRef=\"").append(rejectId).append("\">\n");
+        process.append("      <conditionExpression xsi:type=\"tFormalExpression\"><![CDATA[${flag==2}]]></conditionExpression>\n");
+        process.append("    </sequenceFlow>\n");
+        flows.add(new String[]{rejectFlow, gatewayId, rejectId});
+
+        process.append("    <endEvent id=\"").append(endId).append("\"></endEvent>\n");
+        String passEnd = newSid();
+        process.append("    <sequenceFlow id=\"").append(passEnd).append("\" sourceRef=\"")
+            .append(passId).append("\" targetRef=\"").append(endId).append("\"></sequenceFlow>\n");
+        flows.add(new String[]{passEnd, passId, endId});
+        String rejectEnd = newSid();
+        process.append("    <sequenceFlow id=\"").append(rejectEnd).append("\" sourceRef=\"")
+            .append(rejectId).append("\" targetRef=\"").append(endId).append("\"></sequenceFlow>\n");
+        flows.add(new String[]{rejectEnd, rejectId, endId});
+        process.append("  </process>\n");
+
+        // 简易横向布局（与 workflow-template 同构）
+        double startX = 100;
+        double y = 200;
+        bounds.put(startId, new double[]{startX, y + 25, 30, 30});
+        double x = startX + 80;
+        for (String taskId : taskIds) {
+            bounds.put(taskId, new double[]{x, y, 100, 80});
+            x += 140;
+        }
+        bounds.put(gatewayId, new double[]{x, y + 20, 40, 40});
+        double branchX = x + 80;
+        bounds.put(passId, new double[]{branchX, y - 90, 100, 80});
+        bounds.put(rejectId, new double[]{branchX, y + 90, 100, 80});
+        bounds.put(endId, new double[]{branchX + 140, y + 26, 28, 28});
+
+        process.append("  <bpmndi:BPMNDiagram id=\"BPMNDiagram_").append(safeProcessId).append("\">\n");
+        process.append("    <bpmndi:BPMNPlane bpmnElement=\"").append(safeProcessId)
+            .append("\" id=\"BPMNPlane_").append(safeProcessId).append("\">\n");
+        for (Map.Entry<String, double[]> entry : bounds.entrySet()) {
+            double[] b = entry.getValue();
+            appendShape(process, entry.getKey(), b[0], b[1], b[2], b[3]);
+        }
+        for (String[] flow : flows) {
+            appendEdge(process, flow[0], bounds.get(flow[1]), bounds.get(flow[2]));
+        }
+        process.append("    </bpmndi:BPMNPlane>\n");
+        process.append("  </bpmndi:BPMNDiagram>\n");
+        process.append("</definitions>");
+        return process.toString();
+    }
+
+    private void appendShape(StringBuilder sb, String elementId, double x, double y, double w, double h) {
+        sb.append("      <bpmndi:BPMNShape bpmnElement=\"").append(elementId)
+            .append("\" id=\"BPMNShape_").append(elementId).append("\">\n");
+        sb.append("        <omgdc:Bounds height=\"").append(h).append("\" width=\"").append(w)
+            .append("\" x=\"").append(x).append("\" y=\"").append(y).append("\"></omgdc:Bounds>\n");
+        sb.append("      </bpmndi:BPMNShape>\n");
+    }
+
+    /** 源节点右中 → 目标节点左中；上下分支时加中间折点，避免线叠在一起 */
+    private void appendEdge(StringBuilder sb, String flowId, double[] source, double[] target) {
+        if (source == null || target == null) {
+            return;
+        }
+        double sx = source[0] + source[2];
+        double sy = source[1] + source[3] / 2;
+        double tx = target[0];
+        double ty = target[1] + target[3] / 2;
+        sb.append("      <bpmndi:BPMNEdge bpmnElement=\"").append(flowId)
+            .append("\" id=\"BPMNEdge_").append(flowId).append("\">\n");
+        sb.append("        <omgdi:waypoint x=\"").append(sx).append("\" y=\"").append(sy).append("\"></omgdi:waypoint>\n");
+        if (Math.abs(sy - ty) > 1) {
+            double midX = (sx + tx) / 2;
+            sb.append("        <omgdi:waypoint x=\"").append(midX).append("\" y=\"").append(sy).append("\"></omgdi:waypoint>\n");
+            sb.append("        <omgdi:waypoint x=\"").append(midX).append("\" y=\"").append(ty).append("\"></omgdi:waypoint>\n");
+        }
+        sb.append("        <omgdi:waypoint x=\"").append(tx).append("\" y=\"").append(ty).append("\"></omgdi:waypoint>\n");
+        sb.append("      </bpmndi:BPMNEdge>\n");
+    }
+
+    private static String newSid() {
+        return "sid-" + UUID.randomUUID().toString().toUpperCase();
+    }
+
+    private static String escapeXml(String raw) {
+        if (raw == null) {
+            return "";
+        }
+        return raw.replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace("\"", "&quot;")
+            .replace("'", "&apos;");
     }
 
 }

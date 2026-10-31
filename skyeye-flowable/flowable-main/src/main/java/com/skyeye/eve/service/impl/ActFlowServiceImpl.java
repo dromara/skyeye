@@ -6,6 +6,8 @@ package com.skyeye.eve.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
@@ -15,6 +17,7 @@ import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
+import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -23,9 +26,11 @@ import com.skyeye.eve.dao.ActFlowDao;
 import com.skyeye.eve.entity.ActFlowMation;
 import com.skyeye.eve.service.ActFlowService;
 import com.skyeye.eve.service.ITenantService;
+import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -182,6 +187,81 @@ public class ActFlowServiceImpl extends SkyeyeBusinessServiceImpl<ActFlowDao, Ac
 
         String userId = inputObject.getLogParams().get("id").toString();
         createEntity(oldActFlowMation, userId);
+    }
+
+    @Override
+    public void applyActFlowAiDraft(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String id = params.get("id") == null ? "" : params.get("id").toString().trim();
+        if (StrUtil.isBlank(id)) {
+            throw new CustomException("流程配置 id 不能为空");
+        }
+        ActFlowMation flow = selectById(id);
+        if (flow == null || StrUtil.isBlank(flow.getId())) {
+            throw new CustomException("流程模型不存在");
+        }
+        if (StrUtil.isBlank(flow.getModelId())) {
+            throw new CustomException("流程尚未关联设计器模型");
+        }
+        List<String> stepNames = parseApproveStepNames(params.get("approveSteps"));
+        activitiModelService.applyAiDraftToModel(
+            flow.getModelId(),
+            flow.getFlowName(),
+            flow.getModelKey(),
+            stepNames
+        );
+        Map<String, Object> bean = new HashMap<>();
+        bean.put("id", flow.getId());
+        bean.put("modelId", flow.getModelId());
+        bean.put("stepCount", stepNames.size());
+        outputObject.setBean(bean);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    /** approveSteps 支持 JSON 数组：字符串列表，或 [{name}] */
+    private List<String> parseApproveStepNames(Object raw) {
+        if (raw == null) {
+            throw new CustomException("approveSteps 不能为空");
+        }
+        JSONArray arr;
+        if (raw instanceof JSONArray) {
+            arr = (JSONArray) raw;
+        } else if (raw instanceof List) {
+            arr = JSONUtil.parseArray(JSONUtil.toJsonStr(raw));
+        } else {
+            String text = raw.toString().trim();
+            if (StrUtil.isBlank(text)) {
+                throw new CustomException("approveSteps 不能为空");
+            }
+            arr = JSONUtil.parseArray(text);
+        }
+        List<String> names = new ArrayList<>();
+        for (int i = 0; i < arr.size(); i++) {
+            Object item = arr.get(i);
+            if (item == null) {
+                continue;
+            }
+            if (item instanceof JSONObject) {
+                String name = ((JSONObject) item).getStr("name");
+                if (StrUtil.isNotBlank(name)) {
+                    names.add(name.trim());
+                }
+            } else if (item instanceof Map) {
+                Object name = ((Map<?, ?>) item).get("name");
+                if (name != null && StrUtil.isNotBlank(name.toString())) {
+                    names.add(name.toString().trim());
+                }
+            } else {
+                String name = item.toString().trim();
+                if (StrUtil.isNotBlank(name)) {
+                    names.add(name);
+                }
+            }
+        }
+        if (names.isEmpty()) {
+            throw new CustomException("请至少提供一个审批节点名称");
+        }
+        return names;
     }
 
     @Override

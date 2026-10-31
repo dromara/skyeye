@@ -81,4 +81,15 @@ public interface ActivitiModelService {
      * @return 新模型的ID
      */
     String createModelFromBpmnXml(String bpmnXml, String modelName, String modelKey, String tenantId);
+
+    /**
+     * 用 BPMN XML 覆盖已有模型的编辑器源（与 createModelFromBpmnXml / 设计器保存同源：saveModel + addModelEditorSource）。
+     * 已发布也可写草案，不自动重新部署。
+     */
+    void updateModelFromBpmnXml(String modelId, String bpmnXml, String modelName, String modelKey);
+
+    /**
+     * AI 流程草案：按审批节点拼 BPMN 后走 {@link #updateModelFromBpmnXml}，不发布。
+     */
+    void applyAiDraftToModel(String modelId, String processName, String modelKey, List<String> approveStepNames);
 }
