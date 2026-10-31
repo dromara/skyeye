@@ -7,7 +7,8 @@
             a.ID_ id,
             a.NAME_ name,
             a.VERSION_ version,
-            a.DEPLOYMENT_ID_ deploymentId
+            a.DEPLOYMENT_ID_ deploymentId,
+            a.META_INFO_ metaInfo
         FROM
             act_re_model a
         <where>
@@ -25,7 +26,8 @@
             a.ID_ id,
             a.NAME_ name,
             a.VERSION_ version,
-            a.DEPLOYMENT_ID_ deploymentId
+            a.DEPLOYMENT_ID_ deploymentId,
+            a.META_INFO_ metaInfo
         FROM
             act_re_model a
         <where>

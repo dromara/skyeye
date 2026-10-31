@@ -176,6 +176,52 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
         return modelNode;
     }
 
+    /** metaInfo 中标记：已发布模型又改了草案，尚未重新部署 */
+    private static final String META_UNPUBLISHED_DRAFT = "unpublishedDraft";
+
+    private void markModelUnpublishedDraft(Model model) {
+        if (model == null) {
+            return;
+        }
+        try {
+            ObjectNode modelJson = StrUtil.isBlank(model.getMetaInfo())
+                ? objectMapper.createObjectNode()
+                : (ObjectNode) objectMapper.readTree(model.getMetaInfo());
+            if (StrUtil.isNotBlank(model.getDeploymentId())) {
+                modelJson.put(META_UNPUBLISHED_DRAFT, true);
+            }
+            model.setMetaInfo(modelJson.toString());
+        } catch (Exception e) {
+            log.warn("标记未发布草案失败 modelId={}", model.getId(), e);
+        }
+    }
+
+    private void clearModelUnpublishedDraft(Model model) {
+        if (model == null || StrUtil.isBlank(model.getMetaInfo())) {
+            return;
+        }
+        try {
+            ObjectNode modelJson = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
+            modelJson.put(META_UNPUBLISHED_DRAFT, false);
+            model.setMetaInfo(modelJson.toString());
+        } catch (Exception e) {
+            log.warn("清除未发布草案标记失败 modelId={}", model.getId(), e);
+        }
+    }
+
+    private boolean isUnpublishedDraft(Model model) {
+        if (model == null || StrUtil.isBlank(model.getDeploymentId()) || StrUtil.isBlank(model.getMetaInfo())) {
+            return false;
+        }
+        try {
+            JsonNode meta = objectMapper.readTree(model.getMetaInfo());
+            JsonNode flag = meta.get(META_UNPUBLISHED_DRAFT);
+            return flag != null && flag.asBoolean(false);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     /**
      * 设置流程模型信息
      *
@@ -193,12 +239,7 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
         List<ProcessDefinitionEntityImpl> procdefList = flowReProcdefDao.getProcdefByDeploymentIds(deploymentIds);
         Map<String, ProcessDefinition> procdefMap = procdefList.stream().collect(Collectors.toMap(bean -> bean.getDeploymentId(), bean -> bean));
 
-        actFlowList.forEach(bean -> {
-            Model model = modelMap.get(bean.get("modelId").toString());
-            bean.put("model", BeanUtil.beanToMap(model));
-            ProcessDefinition processDefinition = procdefMap.get(model.getDeploymentId());
-            bean.put("procdef", processDefinition != null ? BeanUtil.beanToMap(processDefinition) : new HashMap<>());
-        });
+        actFlowList.forEach(bean -> fillActivitiModelInfo(bean, modelMap, procdefMap));
     }
 
     @Override
@@ -211,12 +252,22 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
         List<ProcessDefinitionEntityImpl> procdefList = flowReProcdefDao.getProcdefByDeploymentIds(deploymentIds);
         Map<String, ProcessDefinition> procdefMap = procdefList.stream().collect(Collectors.toMap(bean -> bean.getDeploymentId(), bean -> bean));
 
-        actFlowList.forEach(bean -> {
-            Model model = modelMap.get(bean.get("modelId").toString());
-            bean.put("model", BeanUtil.beanToMap(model));
-            ProcessDefinition processDefinition = procdefMap.get(model.getDeploymentId());
-            bean.put("procdef", processDefinition != null ? BeanUtil.beanToMap(processDefinition) : new HashMap<>());
-        });
+        actFlowList.forEach(bean -> fillActivitiModelInfo(bean, modelMap, procdefMap));
+    }
+
+    private void fillActivitiModelInfo(Map<String, Object> bean, Map<String, Model> modelMap,
+                                       Map<String, ProcessDefinition> procdefMap) {
+        Model model = modelMap.get(bean.get("modelId").toString());
+        if (model == null) {
+            bean.put("model", new HashMap<>());
+            bean.put("procdef", new HashMap<>());
+            return;
+        }
+        Map<String, Object> modelInfo = BeanUtil.beanToMap(model);
+        modelInfo.put("hasUnpublishedChanges", isUnpublishedDraft(model));
+        bean.put("model", modelInfo);
+        ProcessDefinition processDefinition = procdefMap.get(model.getDeploymentId());
+        bean.put("procdef", processDefinition != null ? BeanUtil.beanToMap(processDefinition) : new HashMap<>());
     }
 
     /**
@@ -264,18 +315,18 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
                     .addString(processName, new String(bpmnBytes, "UTF-8")).deploy();
             }
 
-            // 发布版本+1
-            Integer version = modelData.getVersion();
-            modelData.setVersion(StrUtil.isBlank(modelData.getDeploymentId()) ? version : version + 1);
+            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
+            // 模型版本与流程定义版本对齐（仅发布/版本升级时变更）
+            modelData.setVersion(processDefinition.getVersion());
             modelData.setDeploymentId(deployment.getId());
+            clearModelUnpublishedDraft(modelData);
             repositoryService.saveModel(modelData);
 
-            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
             if (!StrUtil.isBlank(processName)) {
                 activityMapper.updateProcessDefinitionName(processName, processDefinition.getId(), deployment.getTenantId());
                 log.info("流程模型【{}】没有配置流程名称，默认使用流程模型名称作为流程名称", processName);
             }
-            log.info("流程【{}】成功发布", processName);
+            log.info("流程【{}】成功发布，版本={}", processName, processDefinition.getVersion());
         } catch (Exception ee) {
             throw new CustomException(ee);
         }
@@ -490,7 +541,7 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
 
         if (model != null) {
             model.setName(modelName);
-            model.setVersion(model.getVersion() + 1);
+            markModelUnpublishedDraft(model);
             repositoryService.saveModel(model);
 
             try {
@@ -641,8 +692,11 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
         String key = StrUtil.blankToDefault(modelKey, model.getKey());
         try {
             model.setName(name);
-            model.setMetaInfo(getMateInfo(name).toString());
-            model.setVersion(model.getVersion() + 1);
+            ObjectNode metaInfo = getMateInfo(name);
+            if (StrUtil.isNotBlank(model.getDeploymentId())) {
+                metaInfo.put(META_UNPUBLISHED_DRAFT, true);
+            }
+            model.setMetaInfo(metaInfo.toString());
             writeEditorSourceFromBpmnXml(model, bpmnXml, name, key);
             log.info("已用 BPMN 覆盖模型编辑器源 modelId={}, published={}", modelId, StrUtil.isNotBlank(model.getDeploymentId()));
         } catch (CustomException e) {
@@ -704,6 +758,134 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
         String bpmnXml = buildApproveChainBpmnXml(key, name, steps);
         updateModelFromBpmnXml(modelId, bpmnXml, name, key);
         log.info("AI 流程草案已写入模型 modelId={}, steps={}", modelId, steps.size());
+    }
+
+    @Override
+    public void queryActivitiModelVersionList(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> map = inputObject.getParams();
+        String modelId = map.get("modelId").toString();
+        String modelKey = map.get("modelKey").toString();
+        Model model = repositoryService.getModel(modelId);
+        if (model == null) {
+            outputObject.setreturnMessage("流程模型不存在");
+            return;
+        }
+        ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery()
+            .processDefinitionKey(modelKey)
+            .orderByProcessDefinitionVersion()
+            .desc();
+        if (tenantEnable) {
+            query.processDefinitionTenantId(TenantContext.getTenantId());
+        } else if (StrUtil.isNotBlank(model.getTenantId())) {
+            query.processDefinitionTenantId(model.getTenantId());
+        }
+        List<ProcessDefinition> definitions = query.list();
+        String currentDeploymentId = model.getDeploymentId();
+        Set<String> deploymentIds = definitions.stream()
+            .map(ProcessDefinition::getDeploymentId)
+            .filter(StrUtil::isNotBlank)
+            .collect(Collectors.toSet());
+        Map<String, Date> deployTimeMap = new HashMap<>();
+        for (String deploymentId : deploymentIds) {
+            Deployment deployment = repositoryService.createDeploymentQuery().deploymentId(deploymentId).singleResult();
+            if (deployment != null && deployment.getDeploymentTime() != null) {
+                deployTimeMap.put(deploymentId, deployment.getDeploymentTime());
+            }
+        }
+        List<Map<String, Object>> beans = new ArrayList<>();
+        for (ProcessDefinition definition : definitions) {
+            Map<String, Object> row = new HashMap<>();
+            row.put("id", definition.getId());
+            row.put("name", definition.getName());
+            row.put("key", definition.getKey());
+            row.put("version", definition.getVersion());
+            row.put("deploymentId", definition.getDeploymentId());
+            row.put("current", StrUtil.isNotBlank(currentDeploymentId)
+                && currentDeploymentId.equals(definition.getDeploymentId()));
+            Date deployTime = deployTimeMap.get(definition.getDeploymentId());
+            row.put("deploymentTime", deployTime == null
+                ? StrUtil.EMPTY
+                : DateUtil.formatDate2Str(deployTime, DateUtil.YYYY_MM_DD_HH_MM_SS));
+            beans.add(row);
+        }
+        Map<String, Object> extra = new HashMap<>();
+        extra.put("hasUnpublishedChanges", isUnpublishedDraft(model));
+        extra.put("currentDeploymentId", currentDeploymentId);
+        outputObject.setBean(extra);
+        outputObject.setBeans(beans);
+        outputObject.settotal(beans.size());
+    }
+
+    @Override
+    @Transactional(value = "transactionManager", rollbackFor = Exception.class)
+    public void deleteActivitiModelVersion(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> map = inputObject.getParams();
+        String modelId = map.get("modelId").toString();
+        String deploymentId = map.get("deploymentId").toString();
+        Model model = repositoryService.getModel(modelId);
+        if (model == null) {
+            outputObject.setreturnMessage("流程模型不存在");
+            return;
+        }
+        if (StrUtil.isBlank(deploymentId)) {
+            outputObject.setreturnMessage("部署id不能为空");
+            return;
+        }
+        if (deploymentId.equals(model.getDeploymentId())) {
+            outputObject.setreturnMessage("当前线上版本不可删除，请使用取消发布");
+            return;
+        }
+        try {
+            repositoryService.deleteDeployment(deploymentId);
+            log.info("已删除历史流程定义版本 modelId={}, deploymentId={}", modelId, deploymentId);
+        } catch (Exception e) {
+            log.warn("删除历史流程定义版本失败 modelId={}, deploymentId={}", modelId, deploymentId, e);
+            outputObject.setreturnMessage("存在流程实例，无法删除");
+        }
+    }
+
+    @Override
+    @Transactional(value = "transactionManager", rollbackFor = Exception.class)
+    public void discardActivitiModelDraft(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> map = inputObject.getParams();
+        String modelId = map.get("modelId").toString();
+        Model model = repositoryService.getModel(modelId);
+        if (model == null) {
+            outputObject.setreturnMessage("流程模型不存在");
+            return;
+        }
+        if (StrUtil.isBlank(model.getDeploymentId())) {
+            outputObject.setreturnMessage("模型未发布，无线上版本可还原");
+            return;
+        }
+        if (!isUnpublishedDraft(model)) {
+            outputObject.setreturnMessage("当前没有未发布修改");
+            return;
+        }
+        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+            .deploymentId(model.getDeploymentId())
+            .singleResult();
+        if (processDefinition == null) {
+            outputObject.setreturnMessage("当前发布的流程定义不存在");
+            return;
+        }
+        try {
+            BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinition.getId());
+            if (bpmnModel == null || bpmnModel.getProcesses().isEmpty()) {
+                outputObject.setreturnMessage("当前发布的流程定义为空，无法还原");
+                return;
+            }
+            byte[] bpmnBytes = new BpmnXMLConverter().convertToXML(bpmnModel);
+            String bpmnXml = new String(bpmnBytes, "UTF-8");
+            clearModelUnpublishedDraft(model);
+            writeEditorSourceFromBpmnXml(model, bpmnXml, model.getName(), processDefinition.getKey());
+            log.info("已丢弃未发布草案并还原为线上版本 modelId={}, deploymentId={}", modelId, model.getDeploymentId());
+        } catch (CustomException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("丢弃未发布草案失败 modelId={}", modelId, e);
+            throw new CustomException("删除未发布修改失败: " + e.getMessage());
+        }
     }
 
     /**

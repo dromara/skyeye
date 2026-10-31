@@ -54,4 +54,30 @@ public class ActivitiModelController {
         activitiModelService.editApprovalActivitiTaskListByUserId(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryActivitiModelVersionList", value = "查询流程定义版本历史", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "modelId", name = "modelId", value = "模型id", required = "required"),
+        @ApiImplicitParam(id = "modelKey", name = "modelKey", value = "模型key", required = "required")})
+    @RequestMapping("/post/ActivitiModelController/queryActivitiModelVersionList")
+    public void queryActivitiModelVersionList(InputObject inputObject, OutputObject outputObject) {
+        activitiModelService.queryActivitiModelVersionList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "deleteActivitiModelVersion", value = "删除历史流程定义版本", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "modelId", name = "modelId", value = "模型id", required = "required"),
+        @ApiImplicitParam(id = "deploymentId", name = "deploymentId", value = "部署id", required = "required")})
+    @RequestMapping("/post/ActivitiModelController/deleteActivitiModelVersion")
+    public void deleteActivitiModelVersion(InputObject inputObject, OutputObject outputObject) {
+        activitiModelService.deleteActivitiModelVersion(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "discardActivitiModelDraft", value = "删除未发布修改并还原为当前线上版本", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "modelId", name = "modelId", value = "模型id", required = "required")})
+    @RequestMapping("/post/ActivitiModelController/discardActivitiModelDraft")
+    public void discardActivitiModelDraft(InputObject inputObject, OutputObject outputObject) {
+        activitiModelService.discardActivitiModelDraft(inputObject, outputObject);
+    }
+
 }

@@ -92,4 +92,19 @@ public interface ActivitiModelService {
      * AI 流程草案：按审批节点拼 BPMN 后走 {@link #updateModelFromBpmnXml}，不发布。
      */
     void applyAiDraftToModel(String modelId, String processName, String modelKey, List<String> approveStepNames);
+
+    /**
+     * 查询流程定义版本历史（按业务 modelKey）
+     */
+    void queryActivitiModelVersionList(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 删除非当前的历史流程定义部署
+     */
+    void deleteActivitiModelVersion(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 丢弃未发布草案：用当前已发布 BPMN 覆盖编辑器源
+     */
+    void discardActivitiModelDraft(InputObject inputObject, OutputObject outputObject);
 }

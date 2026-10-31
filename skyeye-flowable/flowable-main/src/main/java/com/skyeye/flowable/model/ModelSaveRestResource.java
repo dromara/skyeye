@@ -70,8 +70,11 @@ public class ModelSaveRestResource implements ModelDataJsonConstants {
             ObjectNode modelJson = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
             modelJson.put(MODEL_NAME, name);
             modelJson.put(MODEL_DESCRIPTION, description);
+            // 已发布后再保存：只改草案不升版本，标记有未发布修改
+            if (model.getDeploymentId() != null && !model.getDeploymentId().isEmpty()) {
+                modelJson.put("unpublishedDraft", true);
+            }
             model.setMetaInfo(modelJson.toString());
-            model.setVersion(model.getVersion() + 1);
             model.setName(name);
 
             repositoryService.saveModel(model);
