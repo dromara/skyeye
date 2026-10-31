@@ -17,6 +17,7 @@ import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
@@ -308,17 +309,30 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
     }
 
     @Override
+    @IgnoreTenant
+    public AiSkill selectByIdForPrompt(String id) {
+        if (StrUtil.isBlank(id)) {
+            return null;
+        }
+        // 与 Role.selectById、queryMatchList 一致：商城租户可加载管理端配置的技能提示词
+        return runWithTenant(TenantEnum.NO_ISOLATION, () -> selectById(id));
+    }
+
+    @Override
+    @IgnoreTenant
     public AiSkill queryByOddNumber(String oddNumber) {
         if (StrUtil.isBlank(oddNumber)) {
             return null;
         }
-        QueryWrapper<AiSkill> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getOddNumber), oddNumber.trim());
-        AiSkill skill = getOne(queryWrapper, false);
-        if (skill != null) {
-            return selectById(skill.getId());
-        }
-        return null;
+        return runWithTenant(TenantEnum.NO_ISOLATION, () -> {
+            QueryWrapper<AiSkill> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq(MybatisPlusUtil.toColumns(AiSkill::getOddNumber), oddNumber.trim());
+            AiSkill skill = getOne(queryWrapper, false);
+            if (skill != null) {
+                return selectById(skill.getId());
+            }
+            return null;
+        });
     }
 
     @Override

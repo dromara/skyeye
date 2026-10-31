@@ -24,6 +24,12 @@ public interface AiSkillService extends SkyeyeBusinessService<AiSkill> {
     void queryMatchList(InputObject inputObject, OutputObject outputObject);
 
     /**
+     * 对话/场景 Assist：按 id 取技能（含提示词），跨租户可读，与 queryMatchList 一致。
+     * 管理端配置的技能要给商城商家端用时，不能按当前请求租户隔离掉。
+     */
+    AiSkill selectByIdForPrompt(String id);
+
+    /**
      * 按技能编码查询（启用校验在 Controller/调用方处理）
      */
     AiSkill queryByOddNumber(String oddNumber);

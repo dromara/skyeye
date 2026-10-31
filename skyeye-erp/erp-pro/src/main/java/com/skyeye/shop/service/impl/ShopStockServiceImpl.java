@@ -68,7 +68,7 @@ import java.util.stream.Collectors;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @Service
-@SkyeyeService(name = "门店物料库存信息", groupName = "门店物料库存", manageShow = false)
+@SkyeyeService(name = "门店物料库存信息", groupName = "门店物料库存")
 public class ShopStockServiceImpl extends SkyeyeBusinessServiceImpl<ShopStockDao, ShopStock> implements ShopStockService {
 
     @Autowired

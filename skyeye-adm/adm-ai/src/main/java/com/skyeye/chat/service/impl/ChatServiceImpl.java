@@ -737,7 +737,9 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         String skillId = paramStr(params, "skillId");
         if (StrUtil.isNotBlank(skillId)) {
             try {
-                AiSkill skill = aiSkillService.selectById(skillId.trim());
+                // 必须走 selectByIdForPrompt：商城固定 tenant=shop，技能常配在管理端租户；
+                // 若用普通 selectById，技能 prompt 会被租户隔离掉，回退角色默认文案 → 模型输出 Markdown 散文而不是约定 JSON
+                AiSkill skill = aiSkillService.selectByIdForPrompt(skillId.trim());
                 if (skill != null && StrUtil.isNotBlank(skill.getPrompt())) {
                     return skill.getPrompt();
                 }
