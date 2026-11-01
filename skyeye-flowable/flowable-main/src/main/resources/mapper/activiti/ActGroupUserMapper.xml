@@ -35,4 +35,113 @@
         group by b.id
     </select>
 
+    <select id="queryDistinctJobNameList" resultType="java.util.Map">
+        SELECT
+            MIN(a.id) AS id,
+            a.`name` AS name
+        FROM company_job a
+        <where>
+            a.`name` IS NOT NULL
+            AND a.`name` != ''
+            <if test="tenantId != null and tenantId != ''">
+                AND a.tenant_id = #{tenantId}
+            </if>
+        </where>
+        GROUP BY a.`name`
+        ORDER BY a.`name` ASC
+    </select>
+
+    <select id="queryUserByDeptAndJobName" resultType="java.util.Map">
+        SELECT
+            b.user_id AS id,
+            b.user_name AS userName,
+            b.company_id AS companyId,
+            b.department_id AS departmentId,
+            b.job_id AS jobId,
+            b.email,
+            b.job_number AS jobNumber
+        FROM sys_eve_user_staff b
+        INNER JOIN company_job j ON b.job_id = j.id
+        <if test="tenantId != null and tenantId != ''">
+            INNER JOIN tenant_user k ON k.staff_id = b.id AND k.tenant_id = #{tenantId}
+        </if>
+        <where>
+            b.department_id = #{departmentId}
+            AND j.`name` = #{jobName}
+            <if test="tenantId != null and tenantId != ''">
+                AND k.tenant_id = #{tenantId}
+            </if>
+        </where>
+        GROUP BY b.user_id
+    </select>
+
+    <select id="queryDepartmentIdByUserId" resultType="java.lang.String">
+        SELECT b.department_id
+        FROM sys_eve_user_staff b
+        <if test="tenantId != null and tenantId != ''">
+            INNER JOIN tenant_user k ON k.staff_id = b.id AND k.tenant_id = #{tenantId}
+        </if>
+        <where>
+            b.user_id = #{userId}
+            <if test="tenantId != null and tenantId != ''">
+                AND k.tenant_id = #{tenantId}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <select id="queryStaffIdByUserId" resultType="java.lang.String">
+        SELECT b.id
+        FROM sys_eve_user_staff b
+        <if test="tenantId != null and tenantId != ''">
+            INNER JOIN tenant_user k ON k.staff_id = b.id AND k.tenant_id = #{tenantId}
+        </if>
+        <where>
+            b.user_id = #{userId}
+            <if test="tenantId != null and tenantId != ''">
+                AND k.tenant_id = #{tenantId}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <select id="queryLeaderStaffIdByStaffId" resultType="java.lang.String">
+        <choose>
+            <when test="tenantId != null and tenantId != ''">
+                SELECT k.leader_staff_id
+                FROM tenant_user k
+                WHERE k.staff_id = #{staffId}
+                  AND k.tenant_id = #{tenantId}
+                LIMIT 1
+            </when>
+            <otherwise>
+                SELECT b.leader_staff_id
+                FROM sys_eve_user_staff b
+                WHERE b.id = #{staffId}
+                LIMIT 1
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="queryUserBriefByStaffId" resultType="java.util.Map">
+        SELECT
+            b.user_id AS id,
+            b.id AS staffId,
+            b.user_name AS userName,
+            b.job_number AS jobNumber,
+            b.department_id AS departmentId,
+            b.job_id AS jobId
+        FROM sys_eve_user_staff b
+        <if test="tenantId != null and tenantId != ''">
+            INNER JOIN tenant_user k ON k.staff_id = b.id AND k.tenant_id = #{tenantId}
+        </if>
+        <where>
+            b.id = #{staffId}
+            <if test="tenantId != null and tenantId != ''">
+                AND k.tenant_id = #{tenantId}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
 </mapper>

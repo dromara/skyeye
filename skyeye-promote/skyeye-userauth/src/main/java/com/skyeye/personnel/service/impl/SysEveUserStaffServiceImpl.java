@@ -192,6 +192,11 @@ public class SysEveUserStaffServiceImpl extends SkyeyeBusinessServiceImpl<SysEve
                 throw new CustomException("请传入员工类型.");
             }
         }
+        if (StrUtil.isNotEmpty(entity.getLeaderStaffId())
+            && StrUtil.isNotEmpty(entity.getId())
+            && StrUtil.equals(entity.getId(), entity.getLeaderStaffId())) {
+            throw new CustomException("直属上级不能是本人.");
+        }
         QueryWrapper<SysEveUserStaff> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(SysEveUserStaff::getPhone), entity.getPhone());
         if (StringUtils.isNotEmpty(entity.getId())) {
@@ -266,6 +271,9 @@ public class SysEveUserStaffServiceImpl extends SkyeyeBusinessServiceImpl<SysEve
         if (!tenantEnable) {
             // 单租户模式才去保存员工考勤时间段信息，多租户模式在其他地方调用
             sysEveUserStaffTimeService.saveUserStaffCheckWorkTime(entity.getTimeIdList(), entity.getId());
+        } else {
+            // 多租户：直属上级保存在租户用户表
+            tenantUserService.editLeaderStaffIdByStaffId(entity.getId(), entity.getLeaderStaffId());
         }
         if (StrUtil.isNotBlank(entity.getUserId())) {
             // 删除用户的缓存信息
@@ -293,6 +301,25 @@ public class SysEveUserStaffServiceImpl extends SkyeyeBusinessServiceImpl<SysEve
         companyDepartmentService.setNameDataMation(sysEveUserStaff, SysEveUserStaff::getDepartmentId, StrUtil.EMPTY);
         companyJobService.setNameDataMation(sysEveUserStaff, SysEveUserStaff::getJobId, StrUtil.EMPTY);
         companyJobScoreService.setNameDataMation(sysEveUserStaff, SysEveUserStaff::getJobScoreId, StrUtil.EMPTY);
+        // 直属上级回显（避免递归 selectById）
+        if (StrUtil.isNotEmpty(sysEveUserStaff.getLeaderStaffId())) {
+            SysEveUserStaff leader = super.selectById(sysEveUserStaff.getLeaderStaffId());
+            if (ObjectUtil.isNotEmpty(leader)) {
+                if (tenantEnable) {
+                    leader = tenantUserService.setThisTenantUserToDefault(leader);
+                }
+                Map<String, Object> leaderMation = new HashMap<>();
+                leaderMation.put("id", leader.getId());
+                leaderMation.put("staffId", leader.getId());
+                leaderMation.put("userId", leader.getUserId());
+                leaderMation.put("userName", leader.getUserName());
+                leaderMation.put("jobNumber", leader.getJobNumber());
+                leaderMation.put("name", StrUtil.blankToDefault(leader.getJobNumber(), StrUtil.EMPTY)
+                    + (StrUtil.isNotBlank(leader.getJobNumber()) && StrUtil.isNotBlank(leader.getUserName()) ? "_" : "")
+                    + StrUtil.blankToDefault(leader.getUserName(), StrUtil.EMPTY));
+                sysEveUserStaff.setLeaderStaffMation(leaderMation);
+            }
+        }
         return sysEveUserStaff;
     }
 

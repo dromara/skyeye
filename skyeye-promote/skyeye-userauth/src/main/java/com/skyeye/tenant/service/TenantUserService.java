@@ -23,6 +23,11 @@ import java.util.Map;
  */
 public interface TenantUserService extends SkyeyeBusinessService<TenantUser> {
 
+    /**
+     * 分页查询当前租户下的用户（支持工号/姓名/手机号模糊）
+     */
+    void queryTenantUserList(InputObject inputObject, OutputObject outputObject);
+
     void removeTenantUserByStaffId(InputObject inputObject, OutputObject outputObject);
 
     void exitTenantUser(InputObject inputObject, OutputObject outputObject);
@@ -32,6 +37,8 @@ public interface TenantUserService extends SkyeyeBusinessService<TenantUser> {
     TenantUser queryTenantUserByStaffId(String staffId, String tenantId);
 
     void editUserStaffActMoneyByStaffId(String staffId, String actMoney);
+
+    void editLeaderStaffIdByStaffId(String staffId, String leaderStaffId);
 
     void editUserStaffAnnualLeaveByStaffId(String staffId, String quarterYearHour, String annualLeaveStatisTime);
 

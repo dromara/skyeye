@@ -5,7 +5,10 @@
 package com.skyeye.util;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.google.common.base.Joiner;
+import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.entity.ActGroupUser;
@@ -301,6 +304,55 @@ public class FlowableUtil {
     }
 
     /**
+     * 是否为「发起人同部门+岗位」自定义表达式，如 ${skyDeptJob:项目经理}
+     */
+    public static boolean isSkyDeptJobExpression(String expression) {
+        if (!isExpression(expression)) {
+            return false;
+        }
+        String content = extractVariableName(expression);
+        return content != null && content.startsWith(ActivitiConstants.SKY_DEPT_JOB_PREFIX);
+    }
+
+    /**
+     * 是否为「连续上级」自定义表达式，如 ${skyLeader:1}
+     */
+    public static boolean isSkyLeaderExpression(String expression) {
+        if (!isExpression(expression)) {
+            return false;
+        }
+        String content = extractVariableName(expression);
+        return content != null && content.startsWith(ActivitiConstants.SKY_LEADER_PREFIX);
+    }
+
+    /**
+     * 提取 skyDeptJob 表达式中的岗位名称
+     */
+    public static String extractSkyDeptJobName(String expression) {
+        if (!isSkyDeptJobExpression(expression)) {
+            return null;
+        }
+        String content = extractVariableName(expression);
+        return content.substring(ActivitiConstants.SKY_DEPT_JOB_PREFIX.length()).trim();
+    }
+
+    /**
+     * 提取 skyLeader 表达式中的级数，非法时返回 -1
+     */
+    public static int extractSkyLeaderLevel(String expression) {
+        if (!isSkyLeaderExpression(expression)) {
+            return -1;
+        }
+        String content = extractVariableName(expression);
+        String levelStr = content.substring(ActivitiConstants.SKY_LEADER_PREFIX.length()).trim();
+        try {
+            return Integer.parseInt(levelStr);
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    /**
      * 提取表达式中的变量名（简单提取，不支持复杂表达式）
      * 
      * @param expression 表达式字符串，如 "${userId}" 或 "${user.id}"
@@ -311,6 +363,70 @@ public class FlowableUtil {
             return null;
         }
         return expression.substring(2, expression.length() - 1).trim();
+    }
+
+    /**
+     * 解析审批人表达式为用户ID列表（支持 initiator / 表单字段 / skyDeptJob）
+     */
+    public static List<String> resolveApproverExpressionToUserIds(
+            String expression,
+            Map<String, Object> businessData,
+            ActivitiUserService activitiUserService) {
+        List<String> userIds = new ArrayList<>();
+        if (ToolUtil.isBlank(expression)) {
+            return userIds;
+        }
+        if (isSkyDeptJobExpression(expression)) {
+            String jobName = extractSkyDeptJobName(expression);
+            String initiator = businessData != null
+                ? Objects.toString(businessData.get(ActivitiConstants.INITIATOR), StrUtil.EMPTY)
+                : StrUtil.EMPTY;
+            if (StrUtil.isBlank(initiator) || StrUtil.isBlank(jobName) || activitiUserService == null) {
+                LOGGER.warn("解析部门岗位审批人失败: initiator={}, jobName={}, serviceNull={}",
+                    initiator, jobName, activitiUserService == null);
+                return userIds;
+            }
+            List<Map<String, Object>> users = activitiUserService.resolveUsersByInitiatorDeptAndJob(initiator, jobName);
+            if (CollectionUtils.isNotEmpty(users)) {
+                for (Map<String, Object> user : users) {
+                    if (user != null && user.get("id") != null) {
+                        userIds.add(user.get("id").toString());
+                    }
+                }
+            }
+            return userIds;
+        }
+        if (isSkyLeaderExpression(expression)) {
+            int level = extractSkyLeaderLevel(expression);
+            String initiator = businessData != null
+                ? Objects.toString(businessData.get(ActivitiConstants.INITIATOR), StrUtil.EMPTY)
+                : StrUtil.EMPTY;
+            if (StrUtil.isBlank(initiator) || level < 1 || activitiUserService == null) {
+                LOGGER.warn("解析连续上级审批人失败: initiator={}, level={}, serviceNull={}",
+                    initiator, level, activitiUserService == null);
+                return userIds;
+            }
+            List<Map<String, Object>> users = activitiUserService.resolveUsersByLeaderLevel(initiator, level);
+            if (CollectionUtils.isNotEmpty(users)) {
+                for (Map<String, Object> user : users) {
+                    if (user != null && user.get("id") != null) {
+                        userIds.add(user.get("id").toString());
+                    }
+                }
+            }
+            return userIds;
+        }
+        String resolved = expression;
+        if (isExpression(expression)) {
+            resolved = evaluateExpressionAsString(expression, businessData);
+        }
+        if (!ToolUtil.isBlank(resolved)) {
+            Arrays.stream(resolved.split(CommonCharConstants.COMMA_MARK))
+                .map(String::trim)
+                .filter(id -> !ToolUtil.isBlank(id))
+                .forEach(userIds::add);
+        }
+        return userIds;
     }
 
     /**
@@ -335,14 +451,20 @@ public class FlowableUtil {
      */
     private static void collectIdsFromList(List<String> idList, Map<String, Object> businessData, 
                                           Set<String> targetSet) {
+        collectIdsFromList(idList, businessData, targetSet, null);
+    }
+
+    private static void collectIdsFromList(List<String> idList, Map<String, Object> businessData,
+                                          Set<String> targetSet, ActivitiUserService activitiUserService) {
         if (CollectionUtils.isEmpty(idList) || targetSet == null) {
             return;
         }
         
         for (String id : idList) {
-            // 评估表达式（如果是表达式）
-            if (isExpression(id)) {
-                id = evaluateExpressionAsString(id, businessData);
+            if (isSkyDeptJobExpression(id) || isSkyLeaderExpression(id) || isExpression(id)) {
+                List<String> resolvedIds = resolveApproverExpressionToUserIds(id, businessData, activitiUserService);
+                targetSet.addAll(resolvedIds);
+                continue;
             }
             
             if (!ToolUtil.isBlank(id)) {
@@ -395,6 +517,15 @@ public class FlowableUtil {
             Map<String, Object> businessData,
             ActGroupUserService actGroupUserService,
             IAuthUserService iAuthUserService) {
+        return getNextTaskApproveBatch(userTask, businessData, actGroupUserService, iAuthUserService, null);
+    }
+
+    public static List<Map<String, Object>> getNextTaskApproveBatch(
+            UserTask userTask,
+            Map<String, Object> businessData,
+            ActGroupUserService actGroupUserService,
+            IAuthUserService iAuthUserService,
+            ActivitiUserService activitiUserService) {
         if (userTask == null) {
             return new ArrayList<>();
         }
@@ -410,19 +541,15 @@ public class FlowableUtil {
         // 1. 收集候选组ID
         collectIdsFromList(userTask.getCandidateGroups(), businessData, allGroupIds);
         
-        // 2. 收集候选用户ID
-        collectIdsFromList(userTask.getCandidateUsers(), businessData, allUserIds);
+        // 2. 收集候选用户ID（含动态规则表达式）
+        collectIdsFromList(userTask.getCandidateUsers(), businessData, allUserIds, activitiUserService);
         
         // 3. 收集默认审批人
         String assignee = userTask.getAssignee();
         if (!ToolUtil.isBlank(assignee)) {
-            // 如果 assignee 是表达式，需要评估
-            if (isExpression(assignee)) {
-                assignee = evaluateExpressionAsString(assignee, businessData);
-            }
-            if (!ToolUtil.isBlank(assignee)) {
-                allUserIds.add(assignee);
-            }
+            List<String> resolvedAssignees = resolveApproverExpressionToUserIds(
+                assignee, businessData, activitiUserService);
+            allUserIds.addAll(resolvedAssignees);
         }
 
         // 第二步：批量查询数据（减少数据库操作次数）
@@ -535,6 +662,14 @@ public class FlowableUtil {
             UserTask userTask, 
             Map<String, Object> businessData,
             IAuthUserService iAuthUserService) {
+        return findDefaultApprover(userTask, businessData, iAuthUserService, null);
+    }
+
+    public static Map<String, Object> findDefaultApprover(
+            UserTask userTask,
+            Map<String, Object> businessData,
+            IAuthUserService iAuthUserService,
+            ActivitiUserService activitiUserService) {
         if (userTask == null) {
             return null;
         }
@@ -542,12 +677,13 @@ public class FlowableUtil {
         // 获取用户任务节点的 assignee 属性
         String assignee = userTask.getAssignee();
         if (!ToolUtil.isBlank(assignee)) {
-            // 如果 assignee 是表达式，需要评估
-            if (isExpression(assignee)) {
-                assignee = evaluateExpressionAsString(assignee, businessData);
+            List<String> resolvedIds = resolveApproverExpressionToUserIds(
+                assignee, businessData != null ? businessData : new HashMap<>(), activitiUserService);
+            if (CollectionUtils.isNotEmpty(resolvedIds) && iAuthUserService != null) {
+                return iAuthUserService.queryDataMationById(resolvedIds.get(0));
             }
-            if (!ToolUtil.isBlank(assignee)) {
-                return iAuthUserService.queryDataMationById(assignee);
+            if (isSkyDeptJobExpression(assignee) || isSkyLeaderExpression(assignee)) {
+                LOGGER.warn("动态审批人规则解析结果为空: {}", assignee);
             }
         }
         return null;

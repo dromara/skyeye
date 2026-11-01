@@ -15,6 +15,7 @@ import com.skyeye.activiti.entity.NextTaskInfo;
 import com.skyeye.activiti.service.ActivitiModelService;
 import com.skyeye.activiti.service.ActivitiProcessService;
 import com.skyeye.activiti.service.ActivitiTaskService;
+import com.skyeye.activiti.service.ActivitiUserService;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonNumConstants;
@@ -103,8 +104,43 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
     @Autowired
     private ActGroupUserService actGroupUserService;
 
+    @Autowired
+    private ActivitiUserService activitiUserService;
+
     @Value("${skyeye.tenant.enable}")
     protected boolean tenantEnable;
+
+    /**
+     * 确保业务数据中带有发起人（用于 ${initiator} / 部门岗位规则）
+     */
+    private void ensureInitiatorInBusinessData(Map<String, Object> businessData, String processInstanceId) {
+        if (businessData == null) {
+            return;
+        }
+        Object existing = businessData.get(ActivitiConstants.INITIATOR);
+        if (existing != null && StrUtil.isNotBlank(existing.toString())) {
+            return;
+        }
+        if (StrUtil.isNotBlank(processInstanceId)) {
+            try {
+                Object initiator = runtimeService.getVariable(processInstanceId, ActivitiConstants.INITIATOR);
+                if (initiator != null && StrUtil.isNotBlank(initiator.toString())) {
+                    businessData.put(ActivitiConstants.INITIATOR, initiator.toString());
+                    return;
+                }
+            } catch (Exception e) {
+                log.warn("读取流程发起人变量失败: {}", e.getMessage());
+            }
+        }
+        try {
+            Map<String, Object> logParams = InputObject.getLogParamsStatic();
+            if (logParams != null && logParams.get("id") != null) {
+                businessData.put(ActivitiConstants.INITIATOR, logParams.get("id").toString());
+            }
+        } catch (Exception e) {
+            log.warn("回填当前用户为发起人失败: {}", e.getMessage());
+        }
+    }
 
     /**
      * 流程挂起
@@ -216,6 +252,7 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
             if (!ToolUtil.isBlank(flag)) {
                 businessData.put("flag", flag);
             }
+            ensureInitiatorInBusinessData(businessData, processInstanceId);
 
             // 获取下一个用户任务节点
             NextTaskInfo nextTaskInfo = this.getNextTaskInfo(taskId, businessData);
@@ -224,7 +261,7 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
                 UserTask nextUserTask = nextTaskInfo.getUserTask();
                 // 使用批量查询方式获取审批人列表
                 List<Map<String, Object>> userList = FlowableUtil.getNextTaskApproveBatch(
-                    nextUserTask, businessData, actGroupUserService, iAuthUserService);
+                    nextUserTask, businessData, actGroupUserService, iAuthUserService, activitiUserService);
                 // 设置返回结果
                 outputObject.setBeans(userList);
                 // 设置节点信息
@@ -281,6 +318,7 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
             if (!ToolUtil.isBlank(flag)) {
                 businessData.put("flag", flag);
             }
+            ensureInitiatorInBusinessData(businessData, processInstanceId);
 
             // 获取下一个用户任务节点
             NextTaskInfo nextTaskInfo = this.getNextTaskInfo(taskId, businessData);
@@ -288,9 +326,21 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
             if (nextTaskInfo != null && nextTaskInfo.getUserTask() != null) {
                 UserTask nextUserTask = nextTaskInfo.getUserTask();
                 // 使用批量查询方式获取审批人列表
-                Map<String, Object> user = FlowableUtil.findDefaultApprover(nextUserTask, businessData, iAuthUserService);
+                Map<String, Object> user = FlowableUtil.findDefaultApprover(
+                    nextUserTask, businessData, iAuthUserService, activitiUserService);
                 // 设置返回结果
                 outputObject.setBean(user);
+                if ((user == null || user.isEmpty()) && FlowableUtil.isExpression(nextUserTask.getAssignee())) {
+                    String tip;
+                    if (FlowableUtil.isSkyDeptJobExpression(nextUserTask.getAssignee())) {
+                        tip = "下一节点审批人规则（发起人同部门+岗位）未解析到人员，请检查发起人部门与岗位配置";
+                    } else if (FlowableUtil.isSkyLeaderExpression(nextUserTask.getAssignee())) {
+                        tip = "下一节点审批人规则（连续上级）未解析到人员，请在员工档案维护直属上级";
+                    } else {
+                        tip = "下一节点审批人表达式未解析到人员：" + nextUserTask.getAssignee();
+                    }
+                    outputObject.setreturnMessage(tip);
+                }
             } else {
                 // 如果没有下一个用户任务节点，返回空
                 log.warn("未找到下一个用户任务节点，taskId: {}, processInstanceId: {}", taskId, processInstanceId);
@@ -477,7 +527,12 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
             if (firstUserTask == null) {
                 return new ArrayList<>();
             }
-            return FlowableUtil.getNextTaskApproveBatch(firstUserTask, businessData, actGroupUserService, iAuthUserService);
+            if (businessData == null) {
+                businessData = new HashMap<>();
+            }
+            ensureInitiatorInBusinessData(businessData, null);
+            return FlowableUtil.getNextTaskApproveBatch(
+                firstUserTask, businessData, actGroupUserService, iAuthUserService, activitiUserService);
         } catch (Exception e) {
             log.error("获取第一个用户任务节点审批人列表异常，流程定义ID: {}", processDefinition.getId(), e);
             return new ArrayList<>();
@@ -534,7 +589,12 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
 
             UserTask firstUserTask = managementService.executeCommand(cmd);
 
-            return FlowableUtil.findDefaultApprover(firstUserTask, businessData, iAuthUserService);
+            if (businessData == null) {
+                businessData = new HashMap<>();
+            }
+            ensureInitiatorInBusinessData(businessData, null);
+            return FlowableUtil.findDefaultApprover(
+                firstUserTask, businessData, iAuthUserService, activitiUserService);
         } catch (Exception e) {
             log.error("获取第一个用户任务节点默认审批人异常，流程定义ID: {}", processDefinition.getId(), e);
             throw new CustomException("获取第一个用户任务节点默认审批人失败: " + e.getMessage());

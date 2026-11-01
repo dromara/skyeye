@@ -24,4 +24,46 @@ public interface ActGroupUserDao extends SkyeyeBaseMapper<ActGroupUser> {
     @IgnoreTenant
     List<Map<String, Object>> queryUserInfoOnActGroup(CommonPageInfo commonPageInfo);
 
+    /**
+     * 查询岗位名称列表（去重），供设计器「部门岗位」规则选择
+     */
+    @IgnoreTenant
+    List<Map<String, Object>> queryDistinctJobNameList(@org.apache.ibatis.annotations.Param("tenantId") String tenantId);
+
+    /**
+     * 按部门 + 岗位名称查用户（发起人同部门岗位规则）
+     */
+    @IgnoreTenant
+    List<Map<String, Object>> queryUserByDeptAndJobName(@org.apache.ibatis.annotations.Param("departmentId") String departmentId,
+                                                       @org.apache.ibatis.annotations.Param("jobName") String jobName,
+                                                       @org.apache.ibatis.annotations.Param("tenantId") String tenantId);
+
+    /**
+     * 按用户ID查员工部门ID
+     */
+    @IgnoreTenant
+    String queryDepartmentIdByUserId(@org.apache.ibatis.annotations.Param("userId") String userId,
+                                    @org.apache.ibatis.annotations.Param("tenantId") String tenantId);
+
+    /**
+     * 按用户ID查员工ID
+     */
+    @IgnoreTenant
+    String queryStaffIdByUserId(@org.apache.ibatis.annotations.Param("userId") String userId,
+                               @org.apache.ibatis.annotations.Param("tenantId") String tenantId);
+
+    /**
+     * 按员工ID查直属上级员工ID
+     */
+    @IgnoreTenant
+    String queryLeaderStaffIdByStaffId(@org.apache.ibatis.annotations.Param("staffId") String staffId,
+                                      @org.apache.ibatis.annotations.Param("tenantId") String tenantId);
+
+    /**
+     * 按员工ID查用户ID与基础信息
+     */
+    @IgnoreTenant
+    Map<String, Object> queryUserBriefByStaffId(@org.apache.ibatis.annotations.Param("staffId") String staffId,
+                                               @org.apache.ibatis.annotations.Param("tenantId") String tenantId);
+
 }

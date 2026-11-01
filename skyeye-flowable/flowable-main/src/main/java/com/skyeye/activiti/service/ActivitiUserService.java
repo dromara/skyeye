@@ -22,8 +22,28 @@ public interface ActivitiUserService {
     void queryUserGroupListToActiviti(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 按用户/审批组 ID 批量解析展示名（工号_姓名 / 组名），供流程设计器代理属性回显
+     * 按用户/审批组 ID 批量解析展示名（工号_姓名 / 组名），供流程设计器审批人属性回显
      */
     void queryDisplayNameByIds(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 岗位名称列表（去重），供「发起人同部门+岗位」规则选择
+     */
+    void queryJobNameListForActiviti(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 按发起人同部门 + 岗位名称解析审批人
+     */
+    void queryUsersByInitiatorDeptAndJob(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 运行时：按发起人用户ID + 岗位名称查同部门岗位用户
+     */
+    java.util.List<java.util.Map<String, Object>> resolveUsersByInitiatorDeptAndJob(String initiatorUserId, String jobName);
+
+    /**
+     * 运行时：按发起人向上查 N 级直属上级（N=1 为直属上级）
+     */
+    java.util.List<java.util.Map<String, Object>> resolveUsersByLeaderLevel(String initiatorUserId, int level);
 
 }

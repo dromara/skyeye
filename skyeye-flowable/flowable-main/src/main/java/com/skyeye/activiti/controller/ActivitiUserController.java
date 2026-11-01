@@ -55,4 +55,19 @@ public class ActivitiUserController {
         activitiUserService.queryDisplayNameByIds(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryActivitiJobNameList", value = "岗位名称列表（审批人规则）", method = "POST", allUse = "2")
+    @RequestMapping("/post/ActivitiUserController/queryJobNameListForActiviti")
+    public void queryJobNameListForActiviti(InputObject inputObject, OutputObject outputObject) {
+        activitiUserService.queryJobNameListForActiviti(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryActivitiUsersByInitiatorDeptJob", value = "按发起人同部门岗位查审批人", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "initiatorUserId", name = "initiatorUserId", value = "发起人用户ID", required = "required"),
+        @ApiImplicitParam(id = "jobName", name = "jobName", value = "岗位名称", required = "required")})
+    @RequestMapping("/post/ActivitiUserController/queryUsersByInitiatorDeptAndJob")
+    public void queryUsersByInitiatorDeptAndJob(InputObject inputObject, OutputObject outputObject) {
+        activitiUserService.queryUsersByInitiatorDeptAndJob(inputObject, outputObject);
+    }
+
 }

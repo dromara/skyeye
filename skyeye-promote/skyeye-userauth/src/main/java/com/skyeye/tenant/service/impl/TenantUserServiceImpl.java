@@ -12,6 +12,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.yulichang.toolkit.JoinWrappers;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
@@ -44,13 +46,16 @@ import com.skyeye.tenant.entity.TenantUser;
 import com.skyeye.tenant.service.TenantService;
 import com.skyeye.tenant.service.TenantUserInviteService;
 import com.skyeye.tenant.service.TenantUserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -96,6 +101,11 @@ public class TenantUserServiceImpl extends SkyeyeBusinessServiceImpl<TenantUserD
     protected void validatorEntity(TenantUser entity) {
         if (!tenantEnable) {
             throw new CustomException("租户模式未开启.");
+        }
+        if (StrUtil.isNotEmpty(entity.getLeaderStaffId())
+            && StrUtil.isNotEmpty(entity.getStaffId())
+            && StrUtil.equals(entity.getStaffId(), entity.getLeaderStaffId())) {
+            throw new CustomException("直属上级不能是本人.");
         }
     }
 
@@ -166,23 +176,96 @@ public class TenantUserServiceImpl extends SkyeyeBusinessServiceImpl<TenantUserD
     @Override
     public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
         List<Map<String, Object>> beans = super.queryPageDataList(inputObject);
-        List<String> staffIds = beans.stream().map(bean -> bean.get("staffId").toString()).collect(Collectors.toList());
+        fillTenantUserListExtraInfo(beans, true);
+        return beans;
+    }
+
+    @Override
+    public void queryTenantUserList(InputObject inputObject, OutputObject outputObject) {
+        CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
+        Page page = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
+        String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
+        List<Map<String, Object>> beans = queryTenantUserMapList(commonPageInfo, tenantId);
+        fillTenantUserListExtraInfo(beans, true);
+        outputObject.setBeans(beans);
+        outputObject.settotal(page.getTotal());
+    }
+
+    /**
+     * 查询租户用户列表（有 keyword 时关联员工表：工号/姓名/手机号）
+     *
+     * @param commonPageInfo 分页与关键词
+     * @param tenantId       指定租户时传入；为空则走当前租户隔离
+     */
+    private List<Map<String, Object>> queryTenantUserMapList(CommonPageInfo commonPageInfo, String tenantId) {
+        if (StrUtil.isNotEmpty(commonPageInfo.getKeyword())) {
+            return queryTenantUserMapListByKeyword(commonPageInfo, tenantId);
+        }
+        QueryWrapper<TenantUser> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        if (StrUtil.isNotEmpty(tenantId)) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(TenantUser::getTenantId), tenantId);
+        }
+        List<TenantUser> tenantUserList = list(queryWrapper);
+        if (CollectionUtil.isEmpty(tenantUserList)) {
+            return Collections.emptyList();
+        }
+        return tenantUserList.stream().map(BeanUtil::beanToMap).collect(Collectors.toList());
+    }
+
+    /**
+     * 按关键词关联查询租户用户：工号 / 员工姓名 / 手机号
+     */
+    private List<Map<String, Object>> queryTenantUserMapListByKeyword(CommonPageInfo commonPageInfo, String tenantId) {
+        String keyword = commonPageInfo.getKeyword().trim();
+        MPJLambdaWrapper<TenantUser> wrapper = JoinWrappers.lambda("tu", TenantUser.class);
+        wrapper.innerJoin(SysEveUserStaff.class, "staff", SysEveUserStaff::getId, TenantUser::getStaffId);
+        if (StrUtil.isNotEmpty(tenantId)) {
+            wrapper.eq(TenantUser::getTenantId, tenantId);
+        }
+        wrapper.and(w -> w
+            .like(TenantUser::getJobNumber, keyword)
+            .or()
+            .like(SysEveUserStaff::getUserName, keyword)
+            .or()
+            .like(SysEveUserStaff::getPhone, keyword)
+        );
+        String sqlExtract = commonPageInfo.getSqlExtract();
+        if (StringUtils.isNotEmpty(sqlExtract)) {
+            String sql = sqlExtract.trim();
+            if (sql.toUpperCase().startsWith("AND")) {
+                sql = sql.substring(3).trim();
+            }
+            wrapper.apply(sql);
+        }
+        wrapper.orderByDesc(TenantUser::getCreateTime);
+        List<TenantUser> tenantUserList = skyeyeBaseMapper.selectJoinList(TenantUser.class, wrapper);
+        if (CollectionUtil.isEmpty(tenantUserList)) {
+            return Collections.emptyList();
+        }
+        return tenantUserList.stream().map(BeanUtil::beanToMap).collect(Collectors.toList());
+    }
+
+    private void fillTenantUserListExtraInfo(List<Map<String, Object>> beans, boolean withStaffServiceClassName) {
+        if (CollectionUtil.isEmpty(beans)) {
+            return;
+        }
+        List<String> staffIds = beans.stream()
+            .map(bean -> bean.get("staffId").toString())
+            .collect(Collectors.toList());
         Map<String, Map<String, Object>> staffMap = iAuthUserService.queryUserMationListByStaffIds(staffIds);
-
-        String staffServiceClassName = sysEveUserStaffService.getServiceClassName();
-
+        String staffServiceClassName = withStaffServiceClassName
+            ? sysEveUserStaffService.getServiceClassName() : null;
         beans.forEach(bean -> {
             String transferStaffId = bean.get("staffId").toString();
             bean.put("staffMation", staffMap.get(transferStaffId));
-            bean.put("staffServiceClassName", staffServiceClassName);
+            if (withStaffServiceClassName) {
+                bean.put("staffServiceClassName", staffServiceClassName);
+            }
         });
-
-        // 设置组织信息
         companyMationService.setNameMationForMap(beans, "companyId", "companyName", StrUtil.EMPTY);
         companyDepartmentService.setNameMationForMap(beans, "departmentId", "departmentName", StrUtil.EMPTY);
         companyJobService.setNameMationForMap(beans, "jobId", "jobName", StrUtil.EMPTY);
         companyJobScoreService.setNameMationForMap(beans, "jobScoreId", "jobScoreName", StrUtil.EMPTY);
-        return beans;
     }
 
     @Override
@@ -203,6 +286,28 @@ public class TenantUserServiceImpl extends SkyeyeBusinessServiceImpl<TenantUserD
         companyDepartmentService.setDataMation(tenantUser, TenantUser::getDepartmentId);
         companyJobService.setDataMation(tenantUser, TenantUser::getJobId);
         companyJobScoreService.setDataMation(tenantUser, TenantUser::getJobScoreId);
+        // 直属上级回显
+        if (StrUtil.isNotEmpty(tenantUser.getLeaderStaffId())) {
+            Map<String, Map<String, Object>> leaderMap = iAuthUserService
+                .queryUserMationListByStaffIds(Arrays.asList(tenantUser.getLeaderStaffId()));
+            Map<String, Object> leaderMation = leaderMap.get(tenantUser.getLeaderStaffId());
+            if (CollectionUtil.isNotEmpty(leaderMation)) {
+                if (leaderMation.get("id") == null) {
+                    leaderMation.put("id", tenantUser.getLeaderStaffId());
+                }
+                if (leaderMation.get("staffId") == null) {
+                    leaderMation.put("staffId", tenantUser.getLeaderStaffId());
+                }
+                if (leaderMation.get("name") == null) {
+                    String jobNumber = Objects.toString(leaderMation.get("jobNumber"), StrUtil.EMPTY);
+                    String userName = Objects.toString(leaderMation.get("userName"), StrUtil.EMPTY);
+                    leaderMation.put("name", StrUtil.isNotBlank(jobNumber) && StrUtil.isNotBlank(userName)
+                        ? jobNumber + "_" + userName
+                        : StrUtil.blankToDefault(userName, jobNumber));
+                }
+                tenantUser.setLeaderStaffMation(leaderMation);
+            }
+        }
         return tenantUser;
     }
 
@@ -283,6 +388,14 @@ public class TenantUserServiceImpl extends SkyeyeBusinessServiceImpl<TenantUserD
     }
 
     @Override
+    public void editLeaderStaffIdByStaffId(String staffId, String leaderStaffId) {
+        UpdateWrapper<TenantUser> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(MybatisPlusUtil.toColumns(TenantUser::getStaffId), staffId);
+        updateWrapper.set(MybatisPlusUtil.toColumns(TenantUser::getLeaderStaffId), leaderStaffId);
+        update(updateWrapper);
+    }
+
+    @Override
     public void editUserStaffAnnualLeaveByStaffId(String staffId, String quarterYearHour, String annualLeaveStatisTime) {
         // 开启多租户模式时，默认加上租户id
         UpdateWrapper<TenantUser> updateWrapper = new UpdateWrapper<>();
@@ -357,6 +470,7 @@ public class TenantUserServiceImpl extends SkyeyeBusinessServiceImpl<TenantUserD
         sysEveUserStaff.setDepartmentId(tenantUser.getDepartmentId());
         sysEveUserStaff.setJobId(tenantUser.getJobId());
         sysEveUserStaff.setJobScoreId(tenantUser.getJobScoreId());
+        sysEveUserStaff.setLeaderStaffId(tenantUser.getLeaderStaffId());
         sysEveUserStaff.setWorkTime(tenantUser.getWorkTime());
         sysEveUserStaff.setEntryTime(tenantUser.getEntryTime());
         sysEveUserStaff.setQuitTime(tenantUser.getQuitTime());
@@ -381,6 +495,7 @@ public class TenantUserServiceImpl extends SkyeyeBusinessServiceImpl<TenantUserD
         sysEveUserStaff.put("departmentId", tenantUser.getDepartmentId());
         sysEveUserStaff.put("jobId", tenantUser.getJobId());
         sysEveUserStaff.put("jobScoreId", tenantUser.getJobScoreId());
+        sysEveUserStaff.put("leaderStaffId", tenantUser.getLeaderStaffId());
         sysEveUserStaff.put("workstationType", tenantUser.getWorkstationType());
         sysEveUserStaff.put("hourlyPrice", tenantUser.getHourlyPrice());
         sysEveUserStaff.put("email", tenantUser.getEmail());
@@ -590,27 +705,9 @@ public class TenantUserServiceImpl extends SkyeyeBusinessServiceImpl<TenantUserD
             throw new CustomException("租户ID不能为空");
         }
         Page page = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
-        QueryWrapper<TenantUser> queryWrapper = super.getQueryWrapper(commonPageInfo);
-        queryWrapper.eq(MybatisPlusUtil.toColumns(TenantUser::getTenantId), commonPageInfo.getTenantId());
-        List<TenantUser> tenantUserList = super.list(queryWrapper);
-        if (CollectionUtil.isEmpty(tenantUserList)) {
-            return;
-        }
-        List<Map<String, Object>> beans = tenantUserList.stream()
-            .map(tenantUser -> BeanUtil.beanToMap(tenantUser)).collect(Collectors.toList());
-        List<String> staffIds = beans.stream().map(bean -> bean.get("staffId").toString()).collect(Collectors.toList());
+        List<Map<String, Object>> beans = queryTenantUserMapList(commonPageInfo, commonPageInfo.getTenantId());
         TenantContext.setTenantId(commonPageInfo.getTenantId());
-        Map<String, Map<String, Object>> staffMap = iAuthUserService.queryUserMationListByStaffIds(staffIds);
-        beans.forEach(bean -> {
-            String transferStaffId = bean.get("staffId").toString();
-            bean.put("staffMation", staffMap.get(transferStaffId));
-        });
-
-        // 设置组织信息
-        companyMationService.setNameMationForMap(beans, "companyId", "companyName", StrUtil.EMPTY);
-        companyDepartmentService.setNameMationForMap(beans, "departmentId", "departmentName", StrUtil.EMPTY);
-        companyJobService.setNameMationForMap(beans, "jobId", "jobName", StrUtil.EMPTY);
-        companyJobScoreService.setNameMationForMap(beans, "jobScoreId", "jobScoreName", StrUtil.EMPTY);
+        fillTenantUserListExtraInfo(beans, false);
         outputObject.setBeans(beans);
         outputObject.settotal(page.getTotal());
     }

@@ -138,10 +138,10 @@
                 {
                     "id": "usertaskassignment",
                     "type": "Complex",
-                    "title": "代理",
+                    "title": "审批人",
                     "value": "",
-                    "description": "用户任务的参与者配置。",
-                    "remark": "设置 assignee、candidateUsers、candidateGroups 等，示例：{\"assignee\":\"${initiator}\",\"candidateGroups\":\"finance\"}。",
+                    "description": "用户任务的审批人配置（指定人/发起人/部门岗位/表单字段/审批组）。",
+                    "remark": "设置 assignee、candidateUsers、candidateGroups 等。支持规则：指定人员、发起人(${initiator})、发起人同部门岗位(${skyDeptJob:岗位名})、表单字段(${字段名})、审批组。",
                     "popular": true
                 }
             ]

@@ -18,14 +18,19 @@ import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.tenant.context.TenantContext;
+import com.skyeye.eve.dao.ActGroupUserDao;
 import com.skyeye.eve.service.ActGroupUserService;
 import com.skyeye.eve.service.IAuthUserService;
 import com.skyeye.eve.service.ISysDictDataService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -52,7 +57,13 @@ public class ActivitiUserServiceImpl implements ActivitiUserService {
     private ActGroupUserService actGroupUserService;
 
     @Autowired
+    private ActGroupUserDao actGroupUserDao;
+
+    @Autowired
     private IAuthUserService iAuthUserService;
+
+    @Value("${skyeye.tenant.enable:false}")
+    private boolean tenantEnable;
 
     @Override
     @IgnoreTenant
@@ -297,6 +308,96 @@ public class ActivitiUserServiceImpl implements ActivitiUserService {
             .filter(StrUtil::isNotBlank)
             .forEach(ids::add);
         return ids;
+    }
+
+    private String currentTenantId() {
+        return tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
+    }
+
+    @Override
+    @IgnoreTenant
+    public void queryJobNameListForActiviti(InputObject inputObject, OutputObject outputObject) {
+        List<Map<String, Object>> jobs = actGroupUserDao.queryDistinctJobNameList(currentTenantId());
+        if (jobs == null) {
+            jobs = new ArrayList<>();
+        }
+        outputObject.setBeans(jobs);
+        outputObject.settotal(jobs.size());
+    }
+
+    @Override
+    @IgnoreTenant
+    public void queryUsersByInitiatorDeptAndJob(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String initiatorUserId = Objects.toString(params.get("initiatorUserId"), StrUtil.EMPTY);
+        String jobName = Objects.toString(params.get("jobName"), StrUtil.EMPTY);
+        List<Map<String, Object>> users = resolveUsersByInitiatorDeptAndJob(initiatorUserId, jobName);
+        outputObject.setBeans(users);
+        outputObject.settotal(users.size());
+    }
+
+    @Override
+    @IgnoreTenant
+    public List<Map<String, Object>> resolveUsersByInitiatorDeptAndJob(String initiatorUserId, String jobName) {
+        if (StrUtil.isBlank(initiatorUserId) || StrUtil.isBlank(jobName)) {
+            return Collections.emptyList();
+        }
+        try {
+            String tenantId = currentTenantId();
+            String departmentId = actGroupUserDao.queryDepartmentIdByUserId(initiatorUserId, tenantId);
+            if (StrUtil.isBlank(departmentId)) {
+                Map<String, Object> initiator = iAuthUserService.queryDataMationById(initiatorUserId);
+                if (initiator != null) {
+                    departmentId = Objects.toString(initiator.get("departmentId"), StrUtil.EMPTY);
+                }
+            }
+            if (StrUtil.isBlank(departmentId)) {
+                return Collections.emptyList();
+            }
+            List<Map<String, Object>> users = actGroupUserDao.queryUserByDeptAndJobName(
+                departmentId, jobName, tenantId);
+            return users != null ? users : Collections.emptyList();
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    @IgnoreTenant
+    public List<Map<String, Object>> resolveUsersByLeaderLevel(String initiatorUserId, int level) {
+        if (StrUtil.isBlank(initiatorUserId) || level < 1) {
+            return Collections.emptyList();
+        }
+        try {
+            String tenantId = currentTenantId();
+            String staffId = actGroupUserDao.queryStaffIdByUserId(initiatorUserId, tenantId);
+            if (StrUtil.isBlank(staffId)) {
+                return Collections.emptyList();
+            }
+            Set<String> visited = new LinkedHashSet<>();
+            visited.add(staffId);
+            String currentStaffId = staffId;
+            Map<String, Object> leaderUser = null;
+            for (int i = 0; i < level; i++) {
+                String leaderStaffId = actGroupUserDao.queryLeaderStaffIdByStaffId(currentStaffId, tenantId);
+                if (StrUtil.isBlank(leaderStaffId)) {
+                    return Collections.emptyList();
+                }
+                if (!visited.add(leaderStaffId)) {
+                    // 环路保护
+                    return Collections.emptyList();
+                }
+                leaderUser = actGroupUserDao.queryUserBriefByStaffId(leaderStaffId, tenantId);
+                if (leaderUser == null || leaderUser.get("id") == null
+                    || StrUtil.isBlank(leaderUser.get("id").toString())) {
+                    return Collections.emptyList();
+                }
+                currentStaffId = leaderStaffId;
+            }
+            return leaderUser != null ? Collections.singletonList(leaderUser) : Collections.emptyList();
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
 
 }

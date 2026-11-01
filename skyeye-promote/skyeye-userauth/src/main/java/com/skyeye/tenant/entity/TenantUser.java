@@ -93,6 +93,15 @@ public class TenantUser extends OperatorUserInfo {
     @Property(value = "岗位信息")
     private CompanyJob jobMation;
 
+    /** 直属上级员工ID（用于审批「连续上级」规则） */
+    @TableField("leader_staff_id")
+    @ApiModelProperty(value = "直属上级员工id")
+    private String leaderStaffId;
+
+    @TableField(exist = false)
+    @Property(value = "直属上级员工信息")
+    private Map<String, Object> leaderStaffMation;
+
     @TableField("job_score_id")
     @ApiModelProperty(value = "职位定级id")
     private String jobScoreId;

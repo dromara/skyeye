@@ -352,6 +352,15 @@ public class ActivitiModelServiceImpl implements ActivitiModelService {
         Map<String, Object> varables = new HashMap<>();
         // 默认设置审批人为会签人
         varables.put(ActivitiConstants.ASSIGNEE_USER_LIST, Arrays.asList(flowableSubData.getApprovalId()));
+        // 写入发起人，供 ${initiator} / 部门岗位规则使用
+        try {
+            Object initiatorId = InputObject.getLogParamsStatic().get("id");
+            if (initiatorId != null) {
+                varables.put(ActivitiConstants.INITIATOR, initiatorId.toString());
+            }
+        } catch (Exception e) {
+            log.warn("写入流程发起人变量失败: {}", e.getMessage());
+        }
         log.info("startProcessInstanceByKey start.");
 
         String tenantId = TenantTypeEnum.PLATFORM.getCode();

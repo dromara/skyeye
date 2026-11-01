@@ -37,7 +37,7 @@ public class TenantUserController {
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/TenantUserController/queryTenantUserList")
     public void queryTenantUserList(InputObject inputObject, OutputObject outputObject) {
-        tenantUserService.queryPageList(inputObject, outputObject);
+        tenantUserService.queryTenantUserList(inputObject, outputObject);
     }
 
     @ApiOperation(id = "queryTenantUserById", value = "根据id获取租户下的用户信息", method = "GET", allUse = "2")

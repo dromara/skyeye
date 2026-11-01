@@ -136,6 +136,15 @@ public class SysEveUserStaff extends OperatorUserInfo {
     @Property(value = "所属职位名称")
     private String jobName;
 
+    /** 直属上级员工ID（用于审批「连续上级」规则） */
+    @TableField("leader_staff_id")
+    @ApiModelProperty(value = "直属上级员工id")
+    private String leaderStaffId;
+
+    @TableField(exist = false)
+    @Property(value = "直属上级员工信息")
+    private Map<String, Object> leaderStaffMation;
+
     @TableField("job_score_id")
     @ApiModelProperty(value = "职位定级id")
     private String jobScoreId;
