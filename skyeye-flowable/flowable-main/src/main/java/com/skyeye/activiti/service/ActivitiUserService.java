@@ -27,19 +27,19 @@ public interface ActivitiUserService {
     void queryDisplayNameByIds(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 岗位名称列表（去重），供「发起人同部门+岗位」规则选择
+     * 岗位列表（含部门），供「发起人同部门+岗位」规则按 jobId 选择
      */
     void queryJobNameListForActiviti(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 按发起人同部门 + 岗位名称解析审批人
+     * 按发起人同部门 + 岗位ID解析审批人
      */
     void queryUsersByInitiatorDeptAndJob(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 运行时：按发起人用户ID + 岗位名称查同部门岗位用户
+     * 运行时：按发起人用户ID + 岗位ID查同部门岗位用户（jobIds 逗号分隔）
      */
-    java.util.List<java.util.Map<String, Object>> resolveUsersByInitiatorDeptAndJob(String initiatorUserId, String jobName);
+    java.util.List<java.util.Map<String, Object>> resolveUsersByInitiatorDeptAndJobIds(String initiatorUserId, String jobIds);
 
     /**
      * 运行时：按发起人向上查 N 级直属上级（N=1 为直属上级）

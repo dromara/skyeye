@@ -25,18 +25,18 @@ public interface ActGroupUserDao extends SkyeyeBaseMapper<ActGroupUser> {
     List<Map<String, Object>> queryUserInfoOnActGroup(CommonPageInfo commonPageInfo);
 
     /**
-     * 查询岗位名称列表（去重），供设计器「部门岗位」规则选择
+     * 岗位列表（含部门），供设计器按 jobId 选择
      */
     @IgnoreTenant
-    List<Map<String, Object>> queryDistinctJobNameList(@org.apache.ibatis.annotations.Param("tenantId") String tenantId);
+    List<Map<String, Object>> queryJobListForActiviti(@org.apache.ibatis.annotations.Param("tenantId") String tenantId);
 
     /**
-     * 按部门 + 岗位名称查用户（发起人同部门岗位规则）
+     * 按部门 + 岗位ID查用户（发起人同部门岗位规则）
      */
     @IgnoreTenant
-    List<Map<String, Object>> queryUserByDeptAndJobName(@org.apache.ibatis.annotations.Param("departmentId") String departmentId,
-                                                       @org.apache.ibatis.annotations.Param("jobName") String jobName,
-                                                       @org.apache.ibatis.annotations.Param("tenantId") String tenantId);
+    List<Map<String, Object>> queryUserByDeptAndJobIds(@org.apache.ibatis.annotations.Param("departmentId") String departmentId,
+                                                      @org.apache.ibatis.annotations.Param("jobIds") java.util.List<String> jobIds,
+                                                      @org.apache.ibatis.annotations.Param("tenantId") String tenantId);
 
     /**
      * 按用户ID查员工部门ID

@@ -317,7 +317,8 @@ public class ActivitiUserServiceImpl implements ActivitiUserService {
     @Override
     @IgnoreTenant
     public void queryJobNameListForActiviti(InputObject inputObject, OutputObject outputObject) {
-        List<Map<String, Object>> jobs = actGroupUserDao.queryDistinctJobNameList(currentTenantId());
+        // 设计器按 jobId 选择，返回岗位完整列表（含部门名）
+        List<Map<String, Object>> jobs = actGroupUserDao.queryJobListForActiviti(currentTenantId());
         if (jobs == null) {
             jobs = new ArrayList<>();
         }
@@ -330,32 +331,45 @@ public class ActivitiUserServiceImpl implements ActivitiUserService {
     public void queryUsersByInitiatorDeptAndJob(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String initiatorUserId = Objects.toString(params.get("initiatorUserId"), StrUtil.EMPTY);
-        String jobName = Objects.toString(params.get("jobName"), StrUtil.EMPTY);
-        List<Map<String, Object>> users = resolveUsersByInitiatorDeptAndJob(initiatorUserId, jobName);
+        String jobIds = Objects.toString(params.get("jobIds"), StrUtil.EMPTY);
+        List<Map<String, Object>> users = resolveUsersByInitiatorDeptAndJobIds(initiatorUserId, jobIds);
         outputObject.setBeans(users);
         outputObject.settotal(users.size());
     }
 
+    private String resolveInitiatorDepartmentId(String initiatorUserId, String tenantId) {
+        String departmentId = actGroupUserDao.queryDepartmentIdByUserId(initiatorUserId, tenantId);
+        if (StrUtil.isBlank(departmentId)) {
+            Map<String, Object> initiator = iAuthUserService.queryDataMationById(initiatorUserId);
+            if (initiator != null) {
+                departmentId = Objects.toString(initiator.get("departmentId"), StrUtil.EMPTY);
+            }
+        }
+        return departmentId;
+    }
+
     @Override
     @IgnoreTenant
-    public List<Map<String, Object>> resolveUsersByInitiatorDeptAndJob(String initiatorUserId, String jobName) {
-        if (StrUtil.isBlank(initiatorUserId) || StrUtil.isBlank(jobName)) {
+    public List<Map<String, Object>> resolveUsersByInitiatorDeptAndJobIds(String initiatorUserId, String jobIds) {
+        if (StrUtil.isBlank(initiatorUserId) || StrUtil.isBlank(jobIds)) {
+            return Collections.emptyList();
+        }
+        List<String> jobIdList = Arrays.stream(jobIds.split(CommonCharConstants.COMMA_MARK))
+            .map(String::trim)
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(jobIdList)) {
             return Collections.emptyList();
         }
         try {
             String tenantId = currentTenantId();
-            String departmentId = actGroupUserDao.queryDepartmentIdByUserId(initiatorUserId, tenantId);
-            if (StrUtil.isBlank(departmentId)) {
-                Map<String, Object> initiator = iAuthUserService.queryDataMationById(initiatorUserId);
-                if (initiator != null) {
-                    departmentId = Objects.toString(initiator.get("departmentId"), StrUtil.EMPTY);
-                }
-            }
+            String departmentId = resolveInitiatorDepartmentId(initiatorUserId, tenantId);
             if (StrUtil.isBlank(departmentId)) {
                 return Collections.emptyList();
             }
-            List<Map<String, Object>> users = actGroupUserDao.queryUserByDeptAndJobName(
-                departmentId, jobName, tenantId);
+            List<Map<String, Object>> users = actGroupUserDao.queryUserByDeptAndJobIds(
+                departmentId, jobIdList, tenantId);
             return users != null ? users : Collections.emptyList();
         } catch (Exception e) {
             return Collections.emptyList();

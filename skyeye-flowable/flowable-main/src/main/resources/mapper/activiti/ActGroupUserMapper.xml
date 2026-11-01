@@ -35,11 +35,14 @@
         group by b.id
     </select>
 
-    <select id="queryDistinctJobNameList" resultType="java.util.Map">
+    <select id="queryJobListForActiviti" resultType="java.util.Map">
         SELECT
-            MIN(a.id) AS id,
-            a.`name` AS name
+            a.id AS id,
+            a.`name` AS name,
+            a.department_id AS departmentId,
+            d.`name` AS departmentName
         FROM company_job a
+        LEFT JOIN company_department d ON a.department_id = d.id
         <where>
             a.`name` IS NOT NULL
             AND a.`name` != ''
@@ -47,11 +50,10 @@
                 AND a.tenant_id = #{tenantId}
             </if>
         </where>
-        GROUP BY a.`name`
-        ORDER BY a.`name` ASC
+        ORDER BY d.`name` ASC, a.`name` ASC
     </select>
 
-    <select id="queryUserByDeptAndJobName" resultType="java.util.Map">
+    <select id="queryUserByDeptAndJobIds" resultType="java.util.Map">
         SELECT
             b.user_id AS id,
             b.user_name AS userName,
@@ -61,13 +63,17 @@
             b.email,
             b.job_number AS jobNumber
         FROM sys_eve_user_staff b
-        INNER JOIN company_job j ON b.job_id = j.id
         <if test="tenantId != null and tenantId != ''">
             INNER JOIN tenant_user k ON k.staff_id = b.id AND k.tenant_id = #{tenantId}
         </if>
         <where>
             b.department_id = #{departmentId}
-            AND j.`name` = #{jobName}
+            <if test="jobIds != null and jobIds.size() > 0">
+                AND b.job_id IN
+                <foreach collection="jobIds" item="jobId" open="(" separator="," close=")">
+                    #{jobId}
+                </foreach>
+            </if>
             <if test="tenantId != null and tenantId != ''">
                 AND k.tenant_id = #{tenantId}
             </if>

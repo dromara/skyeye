@@ -332,7 +332,7 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
                 outputObject.setBean(user);
                 if ((user == null || user.isEmpty()) && FlowableUtil.isExpression(nextUserTask.getAssignee())) {
                     String tip;
-                    if (FlowableUtil.isSkyDeptJobExpression(nextUserTask.getAssignee())) {
+                    if (FlowableUtil.isSkyDeptJobIdExpression(nextUserTask.getAssignee())) {
                         tip = "下一节点审批人规则（发起人同部门+岗位）未解析到人员，请检查发起人部门与岗位配置";
                     } else if (FlowableUtil.isSkyLeaderExpression(nextUserTask.getAssignee())) {
                         tip = "下一节点审批人规则（连续上级）未解析到人员，请在员工档案维护直属上级";

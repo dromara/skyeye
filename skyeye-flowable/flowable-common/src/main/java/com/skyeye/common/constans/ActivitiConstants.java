@@ -46,10 +46,10 @@ public class ActivitiConstants {
     public static final String INITIATOR_EXP = "${" + INITIATOR + "}";
 
     /**
-     * 发起人同部门+岗位规则表达式前缀。
-     * 完整形如：${skyDeptJob:项目经理}
+     * 发起人同部门+岗位ID规则表达式前缀。
+     * 完整形如：${skyDeptJobId:jobId1,jobId2}
      */
-    public static final String SKY_DEPT_JOB_PREFIX = "skyDeptJob:";
+    public static final String SKY_DEPT_JOB_ID_PREFIX = "skyDeptJobId:";
 
     /**
      * 连续上级规则表达式前缀。

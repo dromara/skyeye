@@ -304,14 +304,14 @@ public class FlowableUtil {
     }
 
     /**
-     * 是否为「发起人同部门+岗位」自定义表达式，如 ${skyDeptJob:项目经理}
+     * 是否为「发起人同部门+岗位ID」自定义表达式，如 ${skyDeptJobId:xxx,yyy}
      */
-    public static boolean isSkyDeptJobExpression(String expression) {
+    public static boolean isSkyDeptJobIdExpression(String expression) {
         if (!isExpression(expression)) {
             return false;
         }
         String content = extractVariableName(expression);
-        return content != null && content.startsWith(ActivitiConstants.SKY_DEPT_JOB_PREFIX);
+        return content != null && content.startsWith(ActivitiConstants.SKY_DEPT_JOB_ID_PREFIX);
     }
 
     /**
@@ -326,14 +326,14 @@ public class FlowableUtil {
     }
 
     /**
-     * 提取 skyDeptJob 表达式中的岗位名称
+     * 提取 skyDeptJobId 表达式中的岗位ID（可逗号分隔）
      */
-    public static String extractSkyDeptJobName(String expression) {
-        if (!isSkyDeptJobExpression(expression)) {
+    public static String extractSkyDeptJobIds(String expression) {
+        if (!isSkyDeptJobIdExpression(expression)) {
             return null;
         }
         String content = extractVariableName(expression);
-        return content.substring(ActivitiConstants.SKY_DEPT_JOB_PREFIX.length()).trim();
+        return content.substring(ActivitiConstants.SKY_DEPT_JOB_ID_PREFIX.length()).trim();
     }
 
     /**
@@ -366,7 +366,7 @@ public class FlowableUtil {
     }
 
     /**
-     * 解析审批人表达式为用户ID列表（支持 initiator / 表单字段 / skyDeptJob）
+     * 解析审批人表达式为用户ID列表（支持 initiator / 表单字段 / skyDeptJobId / skyLeader）
      */
     public static List<String> resolveApproverExpressionToUserIds(
             String expression,
@@ -376,17 +376,17 @@ public class FlowableUtil {
         if (ToolUtil.isBlank(expression)) {
             return userIds;
         }
-        if (isSkyDeptJobExpression(expression)) {
-            String jobName = extractSkyDeptJobName(expression);
+        if (isSkyDeptJobIdExpression(expression)) {
+            String jobIds = extractSkyDeptJobIds(expression);
             String initiator = businessData != null
                 ? Objects.toString(businessData.get(ActivitiConstants.INITIATOR), StrUtil.EMPTY)
                 : StrUtil.EMPTY;
-            if (StrUtil.isBlank(initiator) || StrUtil.isBlank(jobName) || activitiUserService == null) {
-                LOGGER.warn("解析部门岗位审批人失败: initiator={}, jobName={}, serviceNull={}",
-                    initiator, jobName, activitiUserService == null);
+            if (StrUtil.isBlank(initiator) || StrUtil.isBlank(jobIds) || activitiUserService == null) {
+                LOGGER.warn("解析部门岗位(ID)审批人失败: initiator={}, jobIds={}, serviceNull={}",
+                    initiator, jobIds, activitiUserService == null);
                 return userIds;
             }
-            List<Map<String, Object>> users = activitiUserService.resolveUsersByInitiatorDeptAndJob(initiator, jobName);
+            List<Map<String, Object>> users = activitiUserService.resolveUsersByInitiatorDeptAndJobIds(initiator, jobIds);
             if (CollectionUtils.isNotEmpty(users)) {
                 for (Map<String, Object> user : users) {
                     if (user != null && user.get("id") != null) {
@@ -461,7 +461,7 @@ public class FlowableUtil {
         }
         
         for (String id : idList) {
-            if (isSkyDeptJobExpression(id) || isSkyLeaderExpression(id) || isExpression(id)) {
+            if (isSkyDeptJobIdExpression(id) || isSkyLeaderExpression(id) || isExpression(id)) {
                 List<String> resolvedIds = resolveApproverExpressionToUserIds(id, businessData, activitiUserService);
                 targetSet.addAll(resolvedIds);
                 continue;
@@ -682,7 +682,7 @@ public class FlowableUtil {
             if (CollectionUtils.isNotEmpty(resolvedIds) && iAuthUserService != null) {
                 return iAuthUserService.queryDataMationById(resolvedIds.get(0));
             }
-            if (isSkyDeptJobExpression(assignee) || isSkyLeaderExpression(assignee)) {
+            if (isSkyDeptJobIdExpression(assignee) || isSkyLeaderExpression(assignee)) {
                 LOGGER.warn("动态审批人规则解析结果为空: {}", assignee);
             }
         }
