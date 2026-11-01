@@ -21,4 +21,9 @@ public interface ActivitiUserService {
 
     void queryUserGroupListToActiviti(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 按用户/审批组 ID 批量解析展示名（工号_姓名 / 组名），供流程设计器代理属性回显
+     */
+    void queryDisplayNameByIds(InputObject inputObject, OutputObject outputObject);
+
 }

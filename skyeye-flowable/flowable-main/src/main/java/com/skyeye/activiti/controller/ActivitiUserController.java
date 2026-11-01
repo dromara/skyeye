@@ -46,4 +46,13 @@ public class ActivitiUserController {
         activitiUserService.queryUserGroupListToActiviti(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryActivitiDisplayNameByIds", value = "按ID批量解析审批人/审批组展示名", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "userIds", name = "userIds", value = "用户ID，逗号分隔"),
+        @ApiImplicitParam(id = "groupIds", name = "groupIds", value = "审批组ID，逗号分隔")})
+    @RequestMapping("/post/ActivitiUserController/queryDisplayNameByIds")
+    public void queryDisplayNameByIds(InputObject inputObject, OutputObject outputObject) {
+        activitiUserService.queryDisplayNameByIds(inputObject, outputObject);
+    }
+
 }

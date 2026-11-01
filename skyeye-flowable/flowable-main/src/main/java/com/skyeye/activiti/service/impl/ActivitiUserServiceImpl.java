@@ -9,21 +9,29 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.google.common.base.Joiner;
 import com.skyeye.activiti.service.ActivitiUserService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.common.constans.ActivitiConstants;
+import com.skyeye.common.constans.CommonCharConstants;
+import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.eve.service.ActGroupUserService;
+import com.skyeye.eve.service.IAuthUserService;
 import com.skyeye.eve.service.ISysDictDataService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -42,6 +50,9 @@ public class ActivitiUserServiceImpl implements ActivitiUserService {
 
     @Autowired
     private ActGroupUserService actGroupUserService;
+
+    @Autowired
+    private IAuthUserService iAuthUserService;
 
     @Override
     @IgnoreTenant
@@ -201,4 +212,92 @@ public class ActivitiUserServiceImpl implements ActivitiUserService {
         outputObject.settotal(total);
     }
 
+    @Override
+    @IgnoreTenant
+    public void queryDisplayNameByIds(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String userIds = Objects.toString(params.get("userIds"), StrUtil.EMPTY);
+        String groupIds = Objects.toString(params.get("groupIds"), StrUtil.EMPTY);
+
+        Map<String, Object> result = new HashMap<>();
+        Map<String, String> userNameMap = new HashMap<>();
+        Map<String, String> groupNameMap = new HashMap<>();
+
+        Set<String> userIdSet = splitIds(userIds);
+        if (CollectionUtil.isNotEmpty(userIdSet)) {
+            try {
+                List<Map<String, Object>> users = iAuthUserService.queryDataMationByIds(
+                    Joiner.on(CommonCharConstants.COMMA_MARK).join(userIdSet));
+                if (users != null) {
+                    for (Map<String, Object> user : users) {
+                        if (user == null || user.get("id") == null) {
+                            continue;
+                        }
+                        String id = String.valueOf(user.get("id"));
+                        String jobNumber = Objects.toString(user.get("jobNumber"), StrUtil.EMPTY);
+                        String userName = Objects.toString(user.get("userName"), StrUtil.EMPTY);
+                        if (StrUtil.isBlank(userName)) {
+                            userName = Objects.toString(user.get("name"), StrUtil.EMPTY);
+                        }
+                        if (StrUtil.isNotBlank(jobNumber) && StrUtil.isNotBlank(userName)) {
+                            userNameMap.put(id, jobNumber + "_" + userName);
+                        } else if (StrUtil.isNotBlank(userName)) {
+                            userNameMap.put(id, userName);
+                        } else {
+                            userNameMap.put(id, id);
+                        }
+                    }
+                }
+            } catch (Exception ignored) {
+                // 回显失败时前端仍展示原 ID
+            }
+        }
+
+        Set<String> groupIdSet = splitIds(groupIds);
+        if (CollectionUtil.isNotEmpty(groupIdSet)) {
+            try {
+                List<Map<String, Object>> groups = iSysDictDataService.queryDictDataListByDictTypeCode("ACT_GROUP");
+                if (groups != null) {
+                    for (Map<String, Object> group : groups) {
+                        if (group == null) {
+                            continue;
+                        }
+                        String id = Objects.toString(group.get("id"), StrUtil.EMPTY);
+                        if (StrUtil.isBlank(id) || !groupIdSet.contains(id)) {
+                            // 兼容 dictKey / dictCode 作为流程里存的组标识
+                            String dictKey = Objects.toString(group.get("dictKey"), StrUtil.EMPTY);
+                            String dictName = Objects.toString(group.get("dictName"), StrUtil.EMPTY);
+                            if (StrUtil.isNotBlank(dictKey) && groupIdSet.contains(dictKey)) {
+                                groupNameMap.put(dictKey, StrUtil.blankToDefault(dictName, dictKey));
+                            }
+                            continue;
+                        }
+                        String dictName = Objects.toString(group.get("dictName"), StrUtil.EMPTY);
+                        groupNameMap.put(id, StrUtil.blankToDefault(dictName, id));
+                    }
+                }
+            } catch (Exception ignored) {
+                // ignore
+            }
+        }
+
+        result.put("userNameMap", userNameMap);
+        result.put("groupNameMap", groupNameMap);
+        outputObject.setBean(result);
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    private Set<String> splitIds(String raw) {
+        Set<String> ids = new LinkedHashSet<>();
+        if (StrUtil.isBlank(raw)) {
+            return ids;
+        }
+        Arrays.stream(raw.split(CommonCharConstants.COMMA_MARK))
+            .map(String::trim)
+            .filter(StrUtil::isNotBlank)
+            .forEach(ids::add);
+        return ids;
+    }
+
 }
+
