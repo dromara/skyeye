@@ -98,4 +98,14 @@ public class PlatformBaseSettingConst {
      */
     public static final String KEY_MIN_BUY_TOKEN_AMOUNT = "minBuyTokenAmount";
 
+    /**
+     * 消息通知分组 - 渠道账号列表
+     */
+    public static final String KEY_NOTICE_CHANNELS = "channels";
+
+    /**
+     * 消息通知分组 - 通知类型清单（不含租户模板）
+     */
+    public static final String KEY_NOTICE_TYPES = "types";
+
 }

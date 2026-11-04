@@ -44,8 +44,8 @@ public class UserMessage extends BaseGeneralInfo {
     private String receiveId;
 
     @TableField("type")
-    @ApiModelProperty(value = "消息类型", enumClass = NoticeUserMessageTypeEnum.class, required = "required,num")
-    private Integer type;
+    @ApiModelProperty(value = "消息类型", enumClass = NoticeUserMessageTypeEnum.class, required = "required")
+    private String type;
 
     @TableField(exist = false)
     @ApiModelProperty(value = "传递过来的创建id，用来设置创建人", required = "required")

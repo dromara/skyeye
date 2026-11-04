@@ -8,21 +8,16 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.google.common.base.Joiner;
-import com.skyeye.common.constans.CommonCharConstants;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.MqConstants;
-import com.skyeye.common.enumeration.NoticeUserMessageTypeEnum;
 import com.skyeye.common.tenant.context.TenantContext;
-import com.skyeye.common.util.MailUtil;
-import com.skyeye.common.util.ToolUtil;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
 import com.skyeye.eve.rest.mq.JobMateUpdateMation;
-import com.skyeye.eve.rest.notice.UserMessage;
+import com.skyeye.eve.rest.notice.NoticeDispatchBody;
 import com.skyeye.eve.service.IAuthUserService;
 import com.skyeye.eve.service.IJobMateMationService;
-import com.skyeye.eve.service.IUserNoticeService;
+import com.skyeye.eve.service.INoticeDispatchService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
@@ -31,12 +26,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 /**
- * 设备巡检单派工通知
+ * 设备巡检单派工通知（统一走 NoticeDispatch）
  */
 @Slf4j
 @Component
@@ -56,10 +51,7 @@ public class EquipmentInspectionDispatchNoticeServiceImpl implements RocketMQLis
     private IAuthUserService iAuthUserService;
 
     @Autowired
-    private IUserNoticeService iUserNoticeService;
-
-    @Autowired
-    private Executor watiWorkerSendEmailExecutor;
+    private INoticeDispatchService iNoticeDispatchService;
 
     @Value("${skyeye.tenant.enable}")
     protected boolean tenantEnable;
@@ -69,84 +61,52 @@ public class EquipmentInspectionDispatchNoticeServiceImpl implements RocketMQLis
         Map<String, Object> map = JSONUtil.toBean(data, null);
         String jobId = map.get("jobMateId").toString();
         try {
-            String tenantId;
             if (tenantEnable) {
-                tenantId = map.get("tenantId").toString();
-                TenantContext.setTenantId(tenantId);
+                TenantContext.setTenantId(map.get("tenantId").toString());
             }
-            // 任务开始
             updateJobMation(jobId, MqConstants.JOB_TYPE_IS_PROCESSING, StrUtil.EMPTY);
-            // 巡检单id
             String serviceId = map.get("serviceId").toString();
-            log.info("开始设备巡检派工通知，巡检单id：{}，主题：{}，消息内容：{}", serviceId,
-                MqConstants.JobMateMationJobType.EQUIPMENT_INSPECTION_DISPATCH, data);
-            // 获取巡检单接收人和协助人id
             EquipmentInspectionOrder order = equipmentInspectionOrderService.selectById(serviceId);
-            // 如果巡检单信息不为空
             if (ObjectUtil.isNotEmpty(order)) {
-                // 调用消息系统添加通知
-                String orderStr = JSONUtil.toJsonStr(order);
-                List<UserMessage> userMessageBoxList = new ArrayList<>();
-                log.info("接收人是：{}", order.getServiceUserId());
-                // 1.接收人通知
+                List<String> receiveUserIds = new ArrayList<>();
+                Map<String, Map<String, Object>> extras = new HashMap<>();
                 if (StrUtil.isNotEmpty(order.getServiceUserId())) {
+                    receiveUserIds.add(order.getServiceUserId());
                     Map<String, Object> userMation = iAuthUserService.queryDataMationById(order.getServiceUserId());
-                    // 1.1内部消息
-                    String content = NoticeUserMessageTypeEnum.getNoticeServiceUserContent(
-                        order.getOddNumber(), userMation.get("name").toString());
-                    UserMessage userMessage = getUserNotice(order.getServiceUserId(), content,
-                        userMation.getOrDefault("email", StrUtil.EMPTY).toString(), orderStr);
-                    userMessageBoxList.add(userMessage);
+                    Map<String, Object> extra = new HashMap<>();
+                    extra.put("email", userMation.getOrDefault("email", StrUtil.EMPTY));
+                    extras.put(order.getServiceUserId(), extra);
                 }
-                log.info("协助人是：{}", order.getCooperationUserId());
-                // 2.协助人通知
                 if (CollectionUtil.isNotEmpty(order.getCooperationUserId())) {
-                    // 获取协助人
-                    List<Map<String, Object>> cooperationUser = iAuthUserService
-                        .queryDataMationByIds(Joiner.on(CommonCharConstants.COMMA_MARK).join(order.getCooperationUserId()));
-                    for (Map<String, Object> user : cooperationUser) {
-                        // 2.1内部消息
-                        String content = NoticeUserMessageTypeEnum.getNoticeCooperationUserContent(
-                            order.getOddNumber(), user.get("name").toString());
-                        UserMessage userMessage = getUserNotice(user.get("id").toString(), content,
-                            user.getOrDefault("email", StrUtil.EMPTY).toString(), orderStr);
-                        userMessageBoxList.add(userMessage);
+                    for (String cooperationUserId : order.getCooperationUserId()) {
+                        if (StrUtil.isEmpty(cooperationUserId) || receiveUserIds.contains(cooperationUserId)) {
+                            continue;
+                        }
+                        receiveUserIds.add(cooperationUserId);
+                        Map<String, Object> user = iAuthUserService.queryDataMationById(cooperationUserId);
+                        Map<String, Object> extra = new HashMap<>();
+                        extra.put("email", user.getOrDefault("email", StrUtil.EMPTY));
+                        extras.put(cooperationUserId, extra);
                     }
                 }
-                log.info("通知列表：{}", JSONUtil.toJsonStr(userMessageBoxList));
-                if (!userMessageBoxList.isEmpty()) {
-                    iUserNoticeService.insertUserNoticeMation(userMessageBoxList);
-                    // 发送消息
-                    watiWorkerSendEmailExecutor.execute(() -> {
-                        for (UserMessage userMessage : userMessageBoxList) {
-                            if (ToolUtil.isEmail(userMessage.getEmail()) && !ToolUtil.isBlank(userMessage.getEmail())) {
-                                new MailUtil().send(userMessage.getEmail(),
-                                    NoticeUserMessageTypeEnum.WORK_ORDER_REMINDER.getValue(), userMessage.getContent());
-                            }
-                        }
-                    });
+                if (CollectionUtil.isNotEmpty(receiveUserIds)) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("orderNum", order.getOddNumber());
+                    NoticeDispatchBody body = new NoticeDispatchBody();
+                    body.setTypeCode("EQUIPMENT_INSPECTION_REMINDER");
+                    body.setReceiveUserIds(receiveUserIds);
+                    body.setParams(params);
+                    body.setCreateUserId(CommonConstants.ADMIN_USER_ID);
+                    body.setObjectData(JSONUtil.toJsonStr(order));
+                    body.setReceiverExtras(extras);
+                    iNoticeDispatchService.dispatch(body);
                 }
             }
-            // 任务完成
             updateJobMation(jobId, MqConstants.JOB_TYPE_IS_SUCCESS, StrUtil.EMPTY);
         } catch (Exception e) {
             log.warn("Dispatch notice failed, reason is {}.", e);
-            // 任务失败
             updateJobMation(jobId, MqConstants.JOB_TYPE_IS_FAIL, StrUtil.EMPTY);
         }
-    }
-
-    private UserMessage getUserNotice(String userId, String content, String email, String objectData) {
-        UserMessage userMessage = new UserMessage();
-        userMessage.setName(NoticeUserMessageTypeEnum.WORK_ORDER_REMINDER.getValue());
-        userMessage.setRemark(NoticeUserMessageTypeEnum.WORK_ORDER_REMINDER.getRemark());
-        userMessage.setEmail(email);
-        userMessage.setContent(content);
-        userMessage.setReceiveId(userId);
-        userMessage.setType(NoticeUserMessageTypeEnum.WORK_ORDER_REMINDER.getKey());
-        userMessage.setCreateUserId(CommonConstants.ADMIN_USER_ID);
-        userMessage.setObjectData(objectData);
-        return userMessage;
     }
 
     private void updateJobMation(String jobId, String status, String responseBody) {

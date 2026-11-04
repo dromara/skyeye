@@ -7,19 +7,14 @@ package com.skyeye.xxljob;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.common.constans.CommonConstants;
-import com.skyeye.common.constans.MqConstants;
-import com.skyeye.common.enumeration.NoticeUserMessageTypeEnum;
 import com.skyeye.common.tenant.context.TenantContext;
-import com.skyeye.common.util.MapUtil;
-import com.skyeye.eve.rest.mq.JobMateMation;
-import com.skyeye.eve.rest.notice.UserMessage;
+import com.skyeye.eve.notice.service.NoticeDispatchService;
+import com.skyeye.eve.rest.notice.NoticeDispatchBody;
 import com.skyeye.eve.schedule.classenum.ScheduleState;
 import com.skyeye.eve.schedule.entity.ScheduleDay;
 import com.skyeye.eve.schedule.service.ScheduleDayService;
 import com.skyeye.eve.service.IAuthUserService;
-import com.skyeye.eve.service.IJobMateMationService;
 import com.skyeye.eve.service.IQuartzService;
-import com.skyeye.eve.service.IUserNoticeService;
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
@@ -47,16 +42,13 @@ public class MyScheduleDayMationService {
     private ScheduleDayService scheduleDayService;
 
     @Autowired
-    private IJobMateMationService iJobMateMationService;
-
-    @Autowired
     private IQuartzService iQuartzService;
 
     @Autowired
     private IAuthUserService iAuthUserService;
 
     @Autowired
-    private IUserNoticeService iUserNoticeService;
+    private NoticeDispatchService noticeDispatchService;
 
     @Value("${skyeye.tenant.enable}")
     protected boolean tenantEnable;
@@ -73,45 +65,27 @@ public class MyScheduleDayMationService {
         }
         try {
             Map<String, Object> userMation = iAuthUserService.queryDataMationById(userId);
-            // 获取日程信息
             ScheduleDay scheduleDay = scheduleDayService.selectById(scheduleId);
-            //发送消息
-            String content = NoticeUserMessageTypeEnum.getScheduleMessageContent(userMation.get("userName").toString(), scheduleDay.getName(),
-                scheduleDay.getStartTime(), scheduleDay.getEndTime(), scheduleDay.getRemark());
 
-            // 调用消息系统添加通知
-            insertUserNotice(userId, content);
+            Map<String, Object> params = new HashMap<>();
+            params.put("userName", userMation.getOrDefault("userName", StrUtil.EMPTY));
+            params.put("title", scheduleDay.getName());
+            params.put("startTime", scheduleDay.getStartTime());
+            params.put("endTime", scheduleDay.getEndTime());
+            params.put("remark", StrUtil.blankToDefault(scheduleDay.getRemark(), StrUtil.EMPTY));
 
-            // 发送邮件
-            if (!MapUtil.checkKeyIsNull(userMation, "email")) {
-                Map<String, Object> emailNotice = new HashMap<>();
-                emailNotice.put("title", NoticeUserMessageTypeEnum.SCHEDULE_MESSAGE.getValue());
-                emailNotice.put("content", content);
-                emailNotice.put("email", userMation.get("email").toString());
-                emailNotice.put("type", MqConstants.JobMateMationJobType.ORDINARY_MAIL_DELIVERY.getJobType());
-                JobMateMation jobMateMation = new JobMateMation();
-                jobMateMation.setJsonStr(JSONUtil.toJsonStr(emailNotice));
-                jobMateMation.setUserId(userId);
-                iJobMateMationService.sendMQProducer(jobMateMation);
-            }
+            NoticeDispatchBody body = new NoticeDispatchBody();
+            body.setTypeCode("SCHEDULE_MESSAGE");
+            body.setReceiveUserIds(Arrays.asList(userId));
+            body.setParams(params);
+            body.setCreateUserId(CommonConstants.ADMIN_USER_ID);
+            noticeDispatchService.dispatch(body);
         } catch (Exception e) {
             log.error("日程提醒失败", e);
         } finally {
-            // 修改日程状态
             scheduleDayService.editScheduleStateById(scheduleId, ScheduleState.REMINDED_SCHEDULE.getKey());
             iQuartzService.stopAndDeleteTaskQuartz(scheduleId);
         }
-    }
-
-    private void insertUserNotice(String userId, String content) {
-        UserMessage userMessage = new UserMessage();
-        userMessage.setName(NoticeUserMessageTypeEnum.SCHEDULE_MESSAGE.getValue());
-        userMessage.setRemark(NoticeUserMessageTypeEnum.SCHEDULE_MESSAGE.getRemark());
-        userMessage.setContent(content);
-        userMessage.setReceiveId(userId);
-        userMessage.setType(NoticeUserMessageTypeEnum.SCHEDULE_MESSAGE.getKey());
-        userMessage.setCreateUserId(CommonConstants.ADMIN_USER_ID);
-        iUserNoticeService.insertUserNoticeMation(Arrays.asList(userMessage));
     }
 
 }

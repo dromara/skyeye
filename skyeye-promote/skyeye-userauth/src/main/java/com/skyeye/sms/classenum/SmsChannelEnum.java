@@ -5,6 +5,7 @@
 package com.skyeye.sms.classenum;
 
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.skyeye.common.base.classenum.SkyeyeEnumClass;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,6 +47,9 @@ public enum SmsChannelEnum implements SkyeyeEnumClass {
     public static Map<String, Object> getMation(String code) {
         SmsChannelEnum type = getByCode(code);
         Map<String, Object> result = new HashMap<>();
+        if (ObjectUtil.isNull(type)) {
+            return result;
+        }
         result.put("id", type.getKey());
         result.put("name", type.getValue());
         return result;

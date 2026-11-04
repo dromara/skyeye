@@ -38,7 +38,12 @@ public enum PlatformBaseSettingGroup {
     /**
      * 商城/个人门店相关配置
      */
-    SHOP("shop", "商城门店");
+    SHOP("shop", "商城门店"),
+
+    /**
+     * 消息通知：渠道账号与通知类型清单
+     */
+    NOTICE("notice", "消息通知");
 
     /**
      * 分组标识，存入 settingData 的 key

@@ -92,4 +92,11 @@ public class SystemFoundationSettings extends CommonInfo {
     @ApiModelProperty(value = "月报可撤销时间（分钟）", required = "num")
     private Integer diaryMonthRevokeMinute;
 
+    /**
+     * 多渠道消息通知配置：types(通知类型+模板)、channels(公众号/小程序/短信账号)
+     */
+    @TableField(value = "notice_dispatch_config", typeHandler = JacksonTypeHandler.class)
+    @ApiModelProperty(value = "多渠道消息通知配置", required = "json")
+    private Map<String, Object> noticeDispatchConfig;
+
 }

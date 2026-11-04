@@ -6,7 +6,6 @@ package com.skyeye.eve.notice.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -24,16 +23,17 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.eve.notice.classenum.NoticeChannelEnum;
 import com.skyeye.eve.notice.classenum.NoticeRealLinesType;
 import com.skyeye.eve.notice.classenum.NoticeState;
 import com.skyeye.eve.notice.classenum.NoticeTimeSend;
 import com.skyeye.eve.notice.dao.NoticeDao;
 import com.skyeye.eve.notice.entity.Notice;
+import com.skyeye.eve.notice.service.NoticeDispatchService;
 import com.skyeye.eve.notice.service.NoticeService;
 import com.skyeye.eve.notice.service.NoticeUserService;
-import com.skyeye.eve.rest.mq.JobMateMation;
+import com.skyeye.eve.rest.notice.NoticeDispatchBody;
 import com.skyeye.eve.rest.quartz.SysQuartzMation;
-import com.skyeye.eve.service.IJobMateMationService;
 import com.skyeye.eve.service.IQuartzService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.rest.pro.service.ISysEveUserStaffService;
@@ -62,13 +62,13 @@ public class NoticeServiceImpl extends SkyeyeBusinessServiceImpl<NoticeDao, Noti
     private IQuartzService iQuartzService;
 
     @Autowired
-    private IJobMateMationService iJobMateMationService;
-
-    @Autowired
     private ISysEveUserStaffService iSysEveUserStaffService;
 
     @Autowired
     private NoticeUserService noticeUserService;
+
+    @Autowired
+    private NoticeDispatchService noticeDispatchService;
 
     @Override
     @IgnoreTenant
@@ -156,15 +156,30 @@ public class NoticeServiceImpl extends SkyeyeBusinessServiceImpl<NoticeDao, Noti
             // 手动发送
             if (entity.getWhetherEmail().equals(WhetherEnum.ENABLE_USING.getKey())
                 && entity.getState().equals(NoticeState.UP.getKey())) {
-                // 开启了邮件通知并且是上线状态
-                // 启动mq消息任务
-                Map<String, Object> notice = new HashMap<>();
-                notice.put("title", "公告提醒");
-                notice.put("content", "内部公告 -【" + entity.getName() + "】");
-                notice.put("email", userInfoList);
-                // 消息队列任务类型
-                notice.put("type", MqConstants.JobMateMationJobType.NOTICE_SEND.getJobType());
-                sendMQProducer(JSONUtil.toJsonStr(notice), userId);
+                // 开启了邮件通知并且是上线状态：走统一多渠道分发（默认仅邮件渠道）
+                List<String> receiveUserIds = userInfoList.stream()
+                    .map(bean -> bean.getOrDefault("userId", StrUtil.EMPTY).toString())
+                    .filter(StrUtil::isNotEmpty).distinct().collect(Collectors.toList());
+                Map<String, Map<String, Object>> extras = new HashMap<>();
+                for (Map<String, Object> bean : userInfoList) {
+                    String receiveUserId = bean.getOrDefault("userId", StrUtil.EMPTY).toString();
+                    if (StrUtil.isEmpty(receiveUserId)) {
+                        continue;
+                    }
+                    Map<String, Object> extra = new HashMap<>();
+                    extra.put("email", bean.getOrDefault("email", StrUtil.EMPTY));
+                    extras.put(receiveUserId, extra);
+                }
+                Map<String, Object> params = new HashMap<>();
+                params.put("title", entity.getName());
+                NoticeDispatchBody body = new NoticeDispatchBody();
+                body.setTypeCode("ANNOUNCEMENT");
+                body.setReceiveUserIds(receiveUserIds);
+                body.setParams(params);
+                body.setChannels(Arrays.asList(NoticeChannelEnum.EMAIL.getKey()));
+                body.setCreateUserId(userId);
+                body.setReceiverExtras(extras);
+                noticeDispatchService.dispatch(body);
             }
         }
     }
@@ -204,13 +219,6 @@ public class NoticeServiceImpl extends SkyeyeBusinessServiceImpl<NoticeDao, Noti
         sysQuartzMation.setDelayedTime(delayedTime);
         sysQuartzMation.setGroupId(QuartzConstants.QuartzMateMationJobType.QUARTZ_NOTICE_GROUP_STR.getTaskType());
         iQuartzService.startUpTaskQuartz(sysQuartzMation);
-    }
-
-    private void sendMQProducer(String jsonStr, String userId) {
-        JobMateMation jobMateMation = new JobMateMation();
-        jobMateMation.setJsonStr(jsonStr);
-        jobMateMation.setUserId(userId);
-        iJobMateMationService.sendMQProducer(jobMateMation);
     }
 
     @Override

@@ -4,11 +4,14 @@
 
 package com.skyeye.mq.job.impl;
 
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.common.constans.MqConstants;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.common.util.MailUtil;
+import com.skyeye.eve.service.INoticeDispatchHistoryService;
+import com.skyeye.eve.rest.notice.NoticeDispatchChannelLogUpdateBody;
 import com.skyeye.service.JobMateMationService;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
@@ -38,6 +41,9 @@ public class OrdinaryMailDeliveryServiceImpl implements RocketMQListener<String>
     @Autowired
     private JobMateMationService jobMateMationService;
 
+    @Autowired
+    private INoticeDispatchHistoryService iNoticeDispatchHistoryService;
+
     @Value("${skyeye.tenant.enable}")
     protected boolean tenantEnable;
 
@@ -45,6 +51,7 @@ public class OrdinaryMailDeliveryServiceImpl implements RocketMQListener<String>
     public void onMessage(String data) {
         Map<String, Object> map = JSONUtil.toBean(data, null);
         String jobId = map.get("jobMateId").toString();
+        String channelLogId = MapUtil.getStr(map, "channelLogId");
         try {
             String tenantId;
             if (tenantEnable) {
@@ -59,10 +66,15 @@ public class OrdinaryMailDeliveryServiceImpl implements RocketMQListener<String>
             new MailUtil().send(email, map.get("title").toString(), content);
             // 任务完成
             jobMateMationService.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_SUCCESS, StrUtil.EMPTY);
+            iNoticeDispatchHistoryService.updateChannelLog(channelLogId,
+                NoticeDispatchChannelLogUpdateBody.STATUS_SUCCESS, jobId, StrUtil.EMPTY);
         } catch (Exception e) {
             LOGGER.warn("Normal mail sending task failed, reason is {}.", e);
             // 任务失败
-            jobMateMationService.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_FAIL, StrUtil.EMPTY);
+            jobMateMationService.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_FAIL,
+                StrUtil.blankToDefault(e.getMessage(), StrUtil.EMPTY));
+            iNoticeDispatchHistoryService.updateChannelLog(channelLogId,
+                NoticeDispatchChannelLogUpdateBody.STATUS_FAIL, jobId, e.getMessage());
         }
     }
 

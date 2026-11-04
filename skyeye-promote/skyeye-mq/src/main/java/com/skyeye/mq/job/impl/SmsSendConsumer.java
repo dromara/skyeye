@@ -4,10 +4,13 @@
 
 package com.skyeye.mq.job.impl;
 
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.common.constans.MqConstants;
 import com.skyeye.common.tenant.context.TenantContext;
+import com.skyeye.eve.rest.notice.NoticeDispatchChannelLogUpdateBody;
+import com.skyeye.eve.service.INoticeDispatchHistoryService;
 import com.skyeye.service.JobMateMationService;
 import com.skyeye.sms.entity.SmsSendMessage;
 import com.skyeye.sms.service.SmsSendService;
@@ -44,6 +47,9 @@ public class SmsSendConsumer implements RocketMQListener<String> {
     @Autowired
     private SmsSendService smsSendService;
 
+    @Autowired
+    private INoticeDispatchHistoryService iNoticeDispatchHistoryService;
+
     @Value("${skyeye.tenant.enable}")
     protected boolean tenantEnable;
 
@@ -52,6 +58,7 @@ public class SmsSendConsumer implements RocketMQListener<String> {
         Map<String, Object> map = JSONUtil.toBean(data, null);
         String jobId = map.get("jobMateId").toString();
         String content = map.get("content").toString();
+        String channelLogId = MapUtil.getStr(map, "channelLogId");
         try {
             String tenantId = StrUtil.EMPTY;
             if (tenantEnable) {
@@ -66,10 +73,15 @@ public class SmsSendConsumer implements RocketMQListener<String> {
             smsSendService.doSendSms(message);
             // 任务完成
             jobMateMationService.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_SUCCESS, "");
+            iNoticeDispatchHistoryService.updateChannelLog(channelLogId,
+                NoticeDispatchChannelLogUpdateBody.STATUS_SUCCESS, jobId, StrUtil.EMPTY);
         } catch (Exception e) {
             LOGGER.warn("notification failed, reason is {}.", e);
             // 任务失败
-            jobMateMationService.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_FAIL, "");
+            jobMateMationService.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_FAIL,
+                StrUtil.blankToDefault(e.getMessage(), StrUtil.EMPTY));
+            iNoticeDispatchHistoryService.updateChannelLog(channelLogId,
+                NoticeDispatchChannelLogUpdateBody.STATUS_FAIL, jobId, e.getMessage());
         }
     }
 

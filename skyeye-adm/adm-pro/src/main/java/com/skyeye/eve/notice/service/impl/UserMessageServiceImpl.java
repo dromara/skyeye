@@ -90,7 +90,11 @@ public class UserMessageServiceImpl extends SkyeyeBusinessServiceImpl<UserMessag
     @Override
     public void insertUserMessage(InputObject inputObject, OutputObject outputObject) {
         UserMessageBox userMessageBox = inputObject.getParams(UserMessageBox.class);
-        List<UserMessage> userMessageList = userMessageBox.getUserNoticeMationList();
+        insertUserMessageList(userMessageBox.getUserNoticeMationList());
+    }
+
+    @Override
+    public void insertUserMessageList(List<UserMessage> userMessageList) {
         log.info("userMessageList: {}", JSONUtil.toJsonStr(userMessageList));
         if (CollectionUtil.isEmpty(userMessageList)) {
             return;

@@ -416,7 +416,9 @@
 
 	<select id="queryUserBindMationByUserId" parameterType="java.lang.String" resultType="java.util.Map">
 		SELECT
-			a.id
+			a.id,
+			a.open_id openId,
+			a.user_id userId
 		FROM
 			wx_user_mation a
 		WHERE

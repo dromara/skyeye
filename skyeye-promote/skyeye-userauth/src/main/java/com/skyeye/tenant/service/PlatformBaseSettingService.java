@@ -150,4 +150,14 @@ public interface PlatformBaseSettingService extends SkyeyeBusinessService<Platfo
      */
     void queryPlatformPersonalStoreConfig(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 查询平台消息通知配置（渠道账号 + 类型清单，所有租户可读）
+     */
+    void queryPlatformNoticeDispatchConfig(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 获取平台消息通知配置 Map（channels / types）
+     */
+    java.util.Map<String, Object> getNoticeDispatchConfig();
+
 }

@@ -31,4 +31,10 @@ public interface IPlatformBaseSettingRest {
      */
     @GetMapping("/queryPlatformBizBoardEndpoints")
     String queryPlatformBizBoardEndpoints();
+
+    /**
+     * 查询平台消息通知配置（渠道账号 + 类型清单）
+     */
+    @GetMapping("/queryPlatformNoticeDispatchConfig")
+    String queryPlatformNoticeDispatchConfig();
 }

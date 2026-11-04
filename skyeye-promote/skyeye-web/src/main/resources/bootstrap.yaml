@@ -65,6 +65,10 @@ topic:
   notice-send-service: NOTICE_SEND_SERVICE
   # 短信通知的topic
   sms-send-service: SMS_SEND_SERVICE
+  # 公众号模板消息（本服务 skyeye-mq 消费）
+  mp-template-send-service: MP_TEMPLATE_SEND_SERVICE
+  # 小程序订阅消息（本服务 skyeye-mq 消费）
+  mini-subscribe-send-service: MINI_SUBSCRIBE_SEND_SERVICE
   # 导入导出：JSON 落盘后异步转 Excel
   import-export-json-to-excel-service: IMPORT_EXPORT_JSON_TO_EXCEL_SERVICE
   # 同步数据到租户的topic，会有多个消费者同时消费

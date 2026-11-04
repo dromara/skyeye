@@ -25,5 +25,12 @@ public interface UserMessageService extends SkyeyeBusinessService<UserMessage> {
 
     void insertUserMessage(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 直接写入站内信并推送 WebSocket（供通知分发 MQ 消费调用）
+     *
+     * @param userMessageList 消息列表
+     */
+    void insertUserMessageList(java.util.List<UserMessage> userMessageList);
+
     void queryUnReadMessageCount(InputObject inputObject, OutputObject outputObject);
 }

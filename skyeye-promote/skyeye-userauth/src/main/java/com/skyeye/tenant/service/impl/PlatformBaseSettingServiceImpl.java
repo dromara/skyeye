@@ -13,6 +13,7 @@ import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonNumConstants;
+import com.skyeye.common.enumeration.EnableEnum;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -441,6 +442,25 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
     }
 
     @Override
+    @IgnoreTenant
+    public void queryPlatformNoticeDispatchConfig(InputObject inputObject, OutputObject outputObject) {
+        outputObject.setBean(getNoticeDispatchConfig());
+        outputObject.settotal(CommonNumConstants.NUM_ONE);
+    }
+
+    @Override
+    @IgnoreTenant
+    public Map<String, Object> getNoticeDispatchConfig() {
+        Map<String, Object> noticeGroup = getNoticeGroupSetting();
+        Map<String, Object> data = new HashMap<>();
+        data.put(PlatformBaseSettingConst.KEY_NOTICE_CHANNELS,
+            parseNoticeList(noticeGroup.get(PlatformBaseSettingConst.KEY_NOTICE_CHANNELS)));
+        data.put(PlatformBaseSettingConst.KEY_NOTICE_TYPES,
+            parseNoticeList(noticeGroup.get(PlatformBaseSettingConst.KEY_NOTICE_TYPES)));
+        return data;
+    }
+
+    @Override
     public void validatorEntity(PlatformBaseSetting entity) {
         validateSettingData(entity.getSettingData());
     }
@@ -490,7 +510,62 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         shopGroup.put(PlatformBaseSettingConst.KEY_MAX_PERSONAL_STORE_PER_MEMBER, DEFAULT_MAX_PERSONAL_STORE_PER_MEMBER);
         shopGroup.put(PlatformBaseSettingConst.KEY_MAX_SAME_CITY_DELIVERY_METERS, DEFAULT_MAX_SAME_CITY_DELIVERY_METERS);
         settingData.put(PlatformBaseSettingGroup.SHOP.getKey(), shopGroup);
+        Map<String, Object> noticeGroup = new HashMap<>();
+        noticeGroup.put(PlatformBaseSettingConst.KEY_NOTICE_CHANNELS, new ArrayList<>());
+        noticeGroup.put(PlatformBaseSettingConst.KEY_NOTICE_TYPES, buildDefaultNoticeTypes());
+        settingData.put(PlatformBaseSettingGroup.NOTICE.getKey(), noticeGroup);
         return settingData;
+    }
+
+    private List<Map<String, Object>> buildDefaultNoticeTypes() {
+        List<Map<String, Object>> types = new ArrayList<>();
+        types.add(buildNoticeType("SCHEDULE_MESSAGE", "日程消息"));
+        types.add(buildNoticeType("PLAN_REMINDER", "计划提醒"));
+        types.add(buildNoticeType("WORK_ORDER_REMINDER", "售后工单派工提醒"));
+        types.add(buildNoticeType("EQUIPMENT_INSPECTION_REMINDER", "设备巡检派工提醒"));
+        types.add(buildNoticeType("EQUIPMENT_REPAIR_REMINDER", "设备维修派工提醒"));
+        types.add(buildNoticeType("ANNOUNCEMENT", "公告提醒"));
+        return types;
+    }
+
+    private Map<String, Object> buildNoticeType(String codeNum, String name) {
+        Map<String, Object> type = new HashMap<>();
+        type.put("codeNum", codeNum);
+        type.put("name", name);
+        type.put("enabled", EnableEnum.ENABLE_USING.getKey());
+        type.put("apiTemplates", new ArrayList<>());
+        return type;
+    }
+
+    private Map<String, Object> getNoticeGroupSetting() {
+        PlatformBaseSetting setting = getOne(new QueryWrapper<>(), false);
+        if (ObjectUtil.isEmpty(setting) || MapUtil.isEmpty(setting.getSettingData())) {
+            return buildDefaultSettingData().get(PlatformBaseSettingGroup.NOTICE.getKey());
+        }
+        Map<String, Map<String, Object>> merged = mergeSettingData(buildDefaultSettingData(), setting.getSettingData());
+        Map<String, Object> noticeGroup = merged.get(PlatformBaseSettingGroup.NOTICE.getKey());
+        if (MapUtil.isEmpty(noticeGroup)) {
+            return buildDefaultSettingData().get(PlatformBaseSettingGroup.NOTICE.getKey());
+        }
+        return noticeGroup;
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<Map<String, Object>> parseNoticeList(Object raw) {
+        if (raw == null) {
+            return Collections.emptyList();
+        }
+        if (raw instanceof List) {
+            List<?> list = (List<?>) raw;
+            List<Map<String, Object>> out = new ArrayList<>();
+            for (Object item : list) {
+                if (item instanceof Map) {
+                    out.add((Map<String, Object>) item);
+                }
+            }
+            return out;
+        }
+        return Collections.emptyList();
     }
 
     private Map<String, Map<String, Object>> buildDefaultOrgTypeConfig() {
@@ -667,6 +742,41 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         Map<String, Object> shopGroup = settingData.get(PlatformBaseSettingGroup.SHOP.getKey());
         if (MapUtil.isNotEmpty(shopGroup)) {
             validateShopGroup(shopGroup);
+        }
+        Map<String, Object> noticeGroup = settingData.get(PlatformBaseSettingGroup.NOTICE.getKey());
+        if (MapUtil.isNotEmpty(noticeGroup)) {
+            validateNoticeGroup(noticeGroup);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void validateNoticeGroup(Map<String, Object> noticeGroup) {
+        Object typesObj = noticeGroup.get(PlatformBaseSettingConst.KEY_NOTICE_TYPES);
+        if (ObjectUtil.isEmpty(typesObj)) {
+            return;
+        }
+        if (!(typesObj instanceof List)) {
+            throw new CustomException("通知类型清单格式不正确");
+        }
+        List<?> types = (List<?>) typesObj;
+        java.util.Set<String> codeSet = new java.util.HashSet<>();
+        for (Object item : types) {
+            if (!(item instanceof Map)) {
+                throw new CustomException("通知类型清单格式不正确");
+            }
+            Map<String, Object> type = (Map<String, Object>) item;
+            String codeNum = MapUtil.getStr(type, "codeNum");
+            String name = MapUtil.getStr(type, "name");
+            if (StrUtil.isBlank(codeNum) || StrUtil.isBlank(name)) {
+                throw new CustomException("通知类型名称与编码不能为空");
+            }
+            if (!codeSet.add(codeNum)) {
+                throw new CustomException("通知类型编码重复：" + codeNum);
+            }
+        }
+        Object channelsObj = noticeGroup.get(PlatformBaseSettingConst.KEY_NOTICE_CHANNELS);
+        if (ObjectUtil.isNotEmpty(channelsObj) && !(channelsObj instanceof List)) {
+            throw new CustomException("渠道账号列表格式不正确");
         }
     }
 
