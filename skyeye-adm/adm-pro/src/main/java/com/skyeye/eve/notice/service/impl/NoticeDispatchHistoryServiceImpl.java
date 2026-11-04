@@ -150,8 +150,9 @@ public class NoticeDispatchHistoryServiceImpl
         if (CollectionUtil.isNotEmpty(logs)) {
             iAuthUserService.setDataMation(logs, NoticeDispatchChannelLog::getReceiveUserId);
             for (NoticeDispatchChannelLog item : logs) {
-                // 站内信旧数据账号曾存 userId，展示时替换为姓名
-                if (NoticeChannelEnum.SITE.getKey().equals(item.getChannel())
+                // 站内信/聊天旧数据账号曾存 userId，展示时替换为姓名
+                if ((NoticeChannelEnum.SITE.getKey().equals(item.getChannel())
+                    || NoticeChannelEnum.CHAT.getKey().equals(item.getChannel()))
                     && item.getReceiveUserMation() != null
                     && StrUtil.equals(item.getReceiveAccount(), item.getReceiveUserId())) {
                     Object name = item.getReceiveUserMation().getOrDefault("name",

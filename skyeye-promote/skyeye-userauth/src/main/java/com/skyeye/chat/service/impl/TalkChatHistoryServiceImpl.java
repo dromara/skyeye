@@ -18,6 +18,7 @@ import com.skyeye.chat.entity.TalkChatHistory;
 import com.skyeye.chat.enums.TalkChatType;
 import com.skyeye.chat.service.TalkChatHistoryService;
 import com.skyeye.common.constans.CommonCharConstants;
+import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
@@ -291,14 +292,22 @@ public class TalkChatHistoryServiceImpl extends SkyeyeBusinessServiceImpl<TalkCh
                     talkUserId = talkChatHistory.getSendId();
                     user = userMap.get(talkChatHistory.getSendId());
                 }
-                if (CollectionUtil.isEmpty(user)) {
+                boolean systemSender = StrUtil.equals(talkUserId, CommonConstants.ADMIN_USER_ID);
+                // 系统通知发送方（消息通知「聊天」渠道）：无员工档案也作为正式会话返回
+                if (CollectionUtil.isEmpty(user) && !systemSender) {
                     continue;
                 }
                 unreadCount = countPersonalUnread(userId, talkUserId);
-                // 发送者信息
-                bean.put("name", user.get("userName").toString());
-                bean.put("avatar", user.get("userPhoto").toString());
-                bean.put("staffId", user.get("staffId").toString());
+                if (systemSender) {
+                    bean.put("name", "系统通知");
+                    bean.put("avatar", StrUtil.EMPTY);
+                    bean.put("staffId", talkUserId);
+                } else {
+                    bean.put("name", user.get("userName").toString());
+                    bean.put("avatar", user.getOrDefault("userPhoto", StrUtil.EMPTY).toString());
+                    Object staffIdObj = user.get("staffId");
+                    bean.put("staffId", staffIdObj == null ? talkUserId : staffIdObj.toString());
+                }
                 // 会话 id 必须使用 userId，与 WebSocket/好友列表的 id 保持一致
                 bean.put("talkId", talkUserId);
                 bean.put("userId", talkUserId);

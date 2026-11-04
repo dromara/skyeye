@@ -26,7 +26,8 @@ public enum NoticeChannelEnum implements SkyeyeEnumClass {
     EMAIL(2, "邮件", true, false),
     SMS(3, "短信", true, false),
     MP(4, "公众号", true, false),
-    MINI_PROGRAM(5, "小程序", true, false);
+    MINI_PROGRAM(5, "小程序", true, false),
+    CHAT(6, "聊天", true, false);
 
     private Integer key;
 

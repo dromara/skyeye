@@ -282,6 +282,8 @@ public class NoticeDispatchServiceImpl implements NoticeDispatchService {
                 return MqConstants.JobMateMationJobType.MP_TEMPLATE_SEND.getJobType();
             case MINI_PROGRAM:
                 return MqConstants.JobMateMationJobType.MINI_SUBSCRIBE_SEND.getJobType();
+            case CHAT:
+                return MqConstants.JobMateMationJobType.CHAT_MESSAGE_SEND.getJobType();
             default:
                 throw new CustomException("不支持的通知渠道");
         }
@@ -291,7 +293,8 @@ public class NoticeDispatchServiceImpl implements NoticeDispatchService {
                                          Map<String, Object> userMation, Map<String, Object> extras) {
         switch (channelEnum) {
             case SITE:
-                // 站内信无独立账号，展示用姓名（详情页也会用 receiveUserMation）
+            case CHAT:
+                // 站内信/聊天无独立账号，展示用姓名（详情页也会用 receiveUserMation）
                 String userName = MapUtil.getStr(userMation, "userName");
                 if (StrUtil.isBlank(userName)) {
                     userName = MapUtil.getStr(userMation, "name");
