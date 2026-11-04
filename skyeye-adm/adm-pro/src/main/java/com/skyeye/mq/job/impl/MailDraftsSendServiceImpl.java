@@ -100,7 +100,9 @@ public class MailDraftsSendServiceImpl implements RocketMQListener<String> {
                     .deleteEmail(username, title, message.getMessageId());
             }
             //发送邮件
-            String messageId = new MailUtil(username, password, emailServer.get("emailSendServer").toString())
+            String messageId = new MailUtil(username, password,
+                emailServer.get("emailSendServer").toString(),
+                emailServer.getOrDefault("emailSendServerPort", "465").toString())
                 .send(toPeople, toCc, toBCc, title, content, tPath.replace(FileConstants.FILE_BASE_FIRST_PATH, StrUtil.EMPTY), beans);
             if (!ToolUtil.isBlank(messageId)) {
                 Map<String, Object> emailEditMessageId = new HashMap<>();

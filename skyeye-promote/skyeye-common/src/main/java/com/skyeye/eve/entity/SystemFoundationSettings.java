@@ -56,6 +56,14 @@ public class SystemFoundationSettings extends CommonInfo {
     @ApiModelProperty(value = "发件服务器ssl端口", required = "required")
     private String emailSendServerPort;
 
+    @TableField("email_send_user")
+    @ApiModelProperty(value = "发件邮箱账号")
+    private String emailSendUser;
+
+    @TableField("email_send_password")
+    @ApiModelProperty(value = "发件邮箱密码/授权码")
+    private String emailSendPassword;
+
     @TableField("no_documentary_day_num")
     @ApiModelProperty(value = "未跟单天数，N天未跟单自动进入公海", required = "num")
     private Integer noDocumentaryDayNum;
