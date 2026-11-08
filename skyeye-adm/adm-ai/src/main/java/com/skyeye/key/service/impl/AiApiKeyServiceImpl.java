@@ -186,6 +186,7 @@ public class AiApiKeyServiceImpl extends SkyeyeBusinessServiceImpl<AiApiKeyDao, 
         copy.setName(buildCopyName(source.getName()));
         copy.setRemark(source.getRemark());
         copy.setApiAppId(source.getApiAppId());
+        copy.setApiVlAppId(source.getApiVlAppId());
         copy.setApiKey(source.getApiKey());
         copy.setSecretKey(source.getSecretKey());
         // 停用，避免同角色只能有一条启用配置时把原配置关掉

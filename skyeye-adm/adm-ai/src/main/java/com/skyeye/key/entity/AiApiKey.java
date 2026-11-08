@@ -43,9 +43,21 @@ public class AiApiKey extends OperatorUserInfo {
     @ApiModelProperty(value = "备注")
     private String remark;
 
+    /**
+     * 平台侧应用/模型标识：
+     * 豆包：方舟接入点 ID（ep-xxxx）或模型名（如 doubao-seed-evolving）；
+     * 通义：百炼应用 ID；讯飞 HTTP：modelId。
+     */
     @TableField(value = "api_app_id")
-    @ApiModelProperty(value = "appId")
+    @ApiModelProperty(value = "appId/模型（豆包：接入点 ep-xxxx 或模型名；通义：应用ID）")
     private String apiAppId;
+
+    /**
+     * 视觉/多模态模型（可选）。豆包有图时优先用本字段；空则回退 {@link #apiAppId}。
+     */
+    @TableField(value = "api_vl_app_id")
+    @ApiModelProperty(value = "视觉模型（可选；豆包有图时用，空则用 appId/模型）")
+    private String apiVlAppId;
 
     @TableField(value = "`api_key`")
     @ApiModelProperty(value = "密钥（豆包：方舟对话 ark- Key；通义：AccessKeyId）")

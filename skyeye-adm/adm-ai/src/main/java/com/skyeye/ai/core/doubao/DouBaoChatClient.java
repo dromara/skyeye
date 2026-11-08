@@ -39,15 +39,6 @@ public class DouBaoChatClient {
 
     public static final String DEFAULT_BASE_URL = "https://ark.cn-beijing.volces.com/api/v3/";
 
-    /**
-     * 未配置接入点时的默认模型。
-     * Doubao-Seed-Evolving：持续进化模型，无需随版本号更换 modelId。
-     * 正式环境请在 AI 配置的 appId 填方舟接入点 ID（ep-xxxx）。
-     */
-    public static final String DEFAULT_MODEL = "doubao-seed-evolving";
-
-    public static final String DEFAULT_VL_MODEL = "doubao-seed-evolving";
-
     private static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
 
     private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
@@ -65,12 +56,20 @@ public class DouBaoChatClient {
 
     private final String apiKey;
     private final String chatCompletionsUrl;
+    /** AI 配置 apiAppId：对话模型 / 接入点 */
     private final String modelId;
+    /** AI 配置 apiVlAppId：视觉模型；空则回退 modelId */
+    private final String vlModelId;
 
     public DouBaoChatClient(String apiKey, String url, String modelId) {
+        this(apiKey, url, modelId, null);
+    }
+
+    public DouBaoChatClient(String apiKey, String url, String modelId, String vlModelId) {
         this.apiKey = apiKey;
         this.chatCompletionsUrl = resolveChatCompletionsUrl(url);
         this.modelId = StrUtil.blankToDefault(modelId, StrUtil.EMPTY);
+        this.vlModelId = StrUtil.blankToDefault(vlModelId, StrUtil.EMPTY);
     }
 
     public void streamChat(List<Map<String, String>> messages, StreamListener listener) {
@@ -284,11 +283,19 @@ public class DouBaoChatClient {
         return arr;
     }
 
+    /**
+     * 有图：优先视觉模型，空则用对话模型；无图：用对话模型。
+     * 均须在 AI 配置填写 {@code apiAppId} / {@code apiVlAppId}，不做兜底。
+     */
     private String resolveModel(boolean vision) {
+        if (vision && StrUtil.isNotBlank(vlModelId)) {
+            return vlModelId;
+        }
         if (StrUtil.isNotBlank(modelId)) {
             return modelId;
         }
-        return vision ? DEFAULT_VL_MODEL : DEFAULT_MODEL;
+        throw new CustomException("豆包未配置模型：请在 AI 配置填写 appId/模型（apiAppId）"
+            + (vision ? "或视觉模型（apiVlAppId）" : ""));
     }
 
     private String resolveChatCompletionsUrl(String url) {

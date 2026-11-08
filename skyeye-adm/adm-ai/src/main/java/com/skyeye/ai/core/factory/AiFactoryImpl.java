@@ -33,7 +33,15 @@ public class AiFactoryImpl implements AiFactory {
 
     @Override
     public Object getOrCreateChatModel(AiPlatformEnum platform, String appId, String apiKey, String secretKey, String url) {
-        String cacheKey = buildClientCacheKey(platform, appId, apiKey, secretKey, url);
+        return getOrCreateChatModel(platform, appId, null, apiKey, secretKey, url);
+    }
+
+    /**
+     * @param vlAppId 豆包视觉模型（可选）；其它平台忽略
+     */
+    private Object getOrCreateChatModel(AiPlatformEnum platform, String appId, String vlAppId,
+                                        String apiKey, String secretKey, String url) {
+        String cacheKey = buildClientCacheKey(platform, appId, vlAppId, apiKey, secretKey, url);
         return Singleton.get(cacheKey, (Func0<Object>) () -> {
             switch (platform) {
                 case YI_YAN:
@@ -44,7 +52,7 @@ public class AiFactoryImpl implements AiFactory {
                 case TONG_YI:
                     return buildTongYiChatClient(appId, apiKey);
                 case DOU_BAO:
-                    return buildDouBaoChatClient(appId, apiKey, url);
+                    return buildDouBaoChatClient(appId, vlAppId, apiKey, url);
                 default:
                     throw new IllegalArgumentException(StrUtil.format("未知平台({})", platform));
             }
@@ -55,6 +63,7 @@ public class AiFactoryImpl implements AiFactory {
     public Object getDefaultChatModel(AiPlatformEnum platform, AiApiKey aiApiKey) {
         return getOrCreateChatModel(platform,
             aiApiKey.getApiAppId(),
+            aiApiKey.getApiVlAppId(),
             aiApiKey.getApiKey(),
             aiApiKey.getSecretKey(),
             aiApiKey.getUrl());
@@ -134,10 +143,10 @@ public class AiFactoryImpl implements AiFactory {
 
     /**
      * 豆包走火山引擎方舟 OpenAI 兼容接口。
-     * 配置里的 apiAppId 填接入点 ID（ep-xxxx）或模型名，url 可空。
+     * apiAppId = 对话模型/接入点；apiVlAppId = 视觉模型（可选）；url 可空。
      */
-    private static DouBaoChatClient buildDouBaoChatClient(String appId, String apiKey, String url) {
-        return new DouBaoChatClient(apiKey, url, appId);
+    private static DouBaoChatClient buildDouBaoChatClient(String appId, String vlAppId, String apiKey, String url) {
+        return new DouBaoChatClient(apiKey, url, appId, vlAppId);
     }
 
 }
