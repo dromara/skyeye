@@ -163,20 +163,70 @@ public class SysEveUserController {
 
     @ApiOperation(id = "userphone004", value = "根据openId获取用户信息", method = "POST", allUse = "0")
     @ApiImplicitParams({
-        @ApiImplicitParam(id = "openId", name = "openId", value = "用户openId", required = "required")})
+        @ApiImplicitParam(id = "openId", name = "openId", value = "用户openId", required = "required"),
+        @ApiImplicitParam(id = "appId", name = "appId", value = "微信应用AppId（公众号/小程序，建议必传）")})
     @RequestMapping("/post/SysEveUserController/queryUserMationByOpenId")
     public void queryUserMationByOpenId(InputObject inputObject, OutputObject outputObject) {
         sysEveUserService.queryUserMationByOpenId(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "userphone005", value = "openId绑定用户信息", method = "POST", allUse = "0")
+    @ApiOperation(id = "userphone005", value = "openId绑定用户信息（账号密码）", method = "POST", allUse = "0")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "userCode", name = "userCode", value = "账号", required = "required"),
         @ApiImplicitParam(id = "password", name = "password", value = "密码", required = "required"),
-        @ApiImplicitParam(id = "openId", name = "openId", value = "用户openId", required = "required")})
+        @ApiImplicitParam(id = "openId", name = "openId", value = "用户openId", required = "required"),
+        @ApiImplicitParam(id = "appId", name = "appId", value = "微信应用AppId（公众号/小程序，建议必传）")})
     @RequestMapping("/post/SysEveUserController/insertUserMationByOpenId")
     public void insertUserMationByOpenId(InputObject inputObject, OutputObject outputObject) {
         sysEveUserService.insertUserMationByOpenId(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "bindCurrentUserWechatOpenId", value = "当前登录用户绑定微信openId", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "appId", name = "appId", value = "微信应用AppId", required = "required"),
+        @ApiImplicitParam(id = "openId", name = "openId", value = "用户openId", required = "required")})
+    @RequestMapping("/post/SysEveUserController/bindCurrentUserWechatOpenId")
+    public void bindCurrentUserWechatOpenId(InputObject inputObject, OutputObject outputObject) {
+        sysEveUserService.bindCurrentUserWechatOpenId(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "bindCurrentUserWechatByCode", value = "当前登录用户通过微信code绑定（小程序/公众号）", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "wxCode", name = "wxCode", value = "微信code（小程序js_code/公众号oauth code）", required = "required"),
+        @ApiImplicitParam(id = "channel", name = "channel", value = "渠道：4公众号 5小程序", required = "required,num"),
+        @ApiImplicitParam(id = "appId", name = "appId", value = "可选，指定AppId；默认取消息通知渠道配置")})
+    @RequestMapping("/post/SysEveUserController/bindCurrentUserWechatByCode")
+    public void bindCurrentUserWechatByCode(InputObject inputObject, OutputObject outputObject) {
+        sysEveUserService.bindCurrentUserWechatByCode(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "getMpWechatBindAuthUrl", value = "获取公众号网页授权绑定跳转地址", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "redirectUri", name = "redirectUri", value = "授权回调地址（不含#，须在公众号网页授权域名下）", required = "required"),
+        @ApiImplicitParam(id = "appId", name = "appId", value = "可选，指定公众号AppId")})
+    @RequestMapping("/post/SysEveUserController/getMpWechatBindAuthUrl")
+    public void getMpWechatBindAuthUrl(InputObject inputObject, OutputObject outputObject) {
+        sysEveUserService.getMpWechatBindAuthUrl(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryWechatBindGuideConfig", value = "查询微信绑定引导图配置", method = "GET", allUse = "2")
+    @RequestMapping("/post/SysEveUserController/queryWechatBindGuideConfig")
+    public void queryWechatBindGuideConfig(InputObject inputObject, OutputObject outputObject) {
+        sysEveUserService.queryWechatBindGuideConfig(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryMyWechatBindList", value = "查询当前用户微信绑定列表", method = "GET", allUse = "2")
+    @RequestMapping("/post/SysEveUserController/queryMyWechatBindList")
+    public void queryMyWechatBindList(InputObject inputObject, OutputObject outputObject) {
+        sysEveUserService.queryMyWechatBindList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "unbindCurrentUserWechat", value = "当前登录用户按appId解绑微信", method = "POST", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "appId", name = "appId", value = "微信应用AppId", required = "required")})
+    @RequestMapping("/post/SysEveUserController/unbindCurrentUserWechat")
+    public void unbindCurrentUserWechat(InputObject inputObject, OutputObject outputObject) {
+        sysEveUserService.unbindCurrentUserWechat(inputObject, outputObject);
     }
 
     @ApiOperation(id = "querySysEveUserById", value = "根据id查询用户信息", method = "GET", allUse = "2")

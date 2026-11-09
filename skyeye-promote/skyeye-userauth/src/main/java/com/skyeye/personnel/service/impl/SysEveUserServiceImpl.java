@@ -5,8 +5,10 @@
 package com.skyeye.personnel.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -27,6 +29,7 @@ import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.eve.entity.userauth.user.UserTreeQueryDo;
+import com.skyeye.eve.service.ISystemFoundationSettingsService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.menu.service.RoleMenuService;
 import com.skyeye.organization.service.CompanyDepartmentService;
@@ -48,6 +51,7 @@ import com.skyeye.personnel.service.SysEveUserStaffService;
 import com.skyeye.role.service.SysEveRoleService;
 import com.skyeye.tenant.classenum.TenantAppMenuType;
 import com.skyeye.tenant.entity.TenantUser;
+import com.skyeye.tenant.service.PlatformBaseSettingService;
 import com.skyeye.tenant.service.TenantService;
 import com.skyeye.tenant.service.TenantUserService;
 import org.apache.commons.lang3.StringUtils;
@@ -110,6 +114,21 @@ public class SysEveUserServiceImpl extends SkyeyeBusinessServiceImpl<SysEveUserD
     @Autowired
     private SysEveUserLoginLogService sysEveUserLoginLogService;
 
+    @Autowired(required = false)
+    private ISystemFoundationSettingsService iSystemFoundationSettingsService;
+
+    @Autowired(required = false)
+    private PlatformBaseSettingService platformBaseSettingService;
+
+    /**
+     * 消息通知渠道：公众号
+     */
+    private static final int NOTICE_CHANNEL_MP = 4;
+    /**
+     * 消息通知渠道：小程序
+     */
+    private static final int NOTICE_CHANNEL_MINI = 5;
+
     @Override
     public void querySysUserList(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
@@ -137,7 +156,7 @@ public class SysEveUserServiceImpl extends SkyeyeBusinessServiceImpl<SysEveUserD
             // 未锁定，设置为锁定
             editUserLockState(id, UserLockState.SYS_USER_LOCK_STATE_ISLOCK.getKey());
         } else {
-            outputObject.setreturnMessage("该账号已被锁定，请刷新页面.");
+            throw new CustomException("该账号已被锁定，请刷新页面.");
         }
     }
 
@@ -152,7 +171,7 @@ public class SysEveUserServiceImpl extends SkyeyeBusinessServiceImpl<SysEveUserD
             // 锁定，设置为解锁
             editUserLockState(id, UserLockState.SYS_USER_LOCK_STATE_ISUNLOCK.getKey());
         } else {
-            outputObject.setreturnMessage("该账号已解锁，请刷新页面.");
+            throw new CustomException("该账号已解锁，请刷新页面.");
         }
     }
 
@@ -399,7 +418,7 @@ public class SysEveUserServiceImpl extends SkyeyeBusinessServiceImpl<SysEveUserD
     public void queryUserMationBySession(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> userMation = inputObject.getLogParams();
         if (userMation == null) {
-            outputObject.setreturnMessage("登录超时，请重新登录。");
+            throw new CustomException("登录超时，请重新登录。");
         } else {
             outputObject.setBean(userMation);
         }
@@ -570,7 +589,7 @@ public class SysEveUserServiceImpl extends SkyeyeBusinessServiceImpl<SysEveUserD
             updateWrapper.set(MybatisPlusUtil.toColumns(SysEveUser::getPassword), newPassword);
             update(updateWrapper);
         } else {
-            outputObject.setreturnMessage("旧密码输入错误.");
+            throw new CustomException("旧密码输入错误.");
         }
     }
 
@@ -788,54 +807,51 @@ public class SysEveUserServiceImpl extends SkyeyeBusinessServiceImpl<SysEveUserD
     }
 
     /**
-     * 根据openId获取用户信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
+     * 根据 openId（建议同时传 appId）获取用户信息；无记录则先落库待绑定
      */
     @Override
     public void queryUserMationByOpenId(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> map = inputObject.getParams();
-        String openId = map.get("openId").toString();
-        //判断该微信用户在redis中是否存在数据
-        String key = WxchatUtil.getWechatUserOpenIdMation(openId);
+        String openId = MapUtil.getStr(map, "openId");
+        String appId = StrUtil.blankToDefault(MapUtil.getStr(map, "appId"), StrUtil.EMPTY);
+        if (StrUtil.isBlank(openId)) {
+            throw new CustomException("openId不能为空.");
+        }
+        String key = WxchatUtil.getWechatUserOpenIdMation(appId, openId);
         if (ToolUtil.isBlank(jedisClientService.get(key))) {
-            //该用户没有绑定账号
-            Map<String, Object> bean = sysEveUserDao.queryWxUserMationByOpenId(openId);
-            //判断该用户的openId是否存在于数据库
+            Map<String, Object> bean = StrUtil.isNotBlank(appId)
+                ? sysEveUserDao.queryWxUserMationByAppIdAndOpenId(appId, openId)
+                : sysEveUserDao.queryWxUserMationByOpenId(openId);
             if (bean != null && !bean.isEmpty()) {
-                //存在数据库
                 map.putAll(bean);
-                //1.将微信和账号的绑定信息存入redis
                 jedisClientService.set(key, JSONUtil.toJsonStr(bean));
-                //如果已经绑定用户，则获取用户信息
                 if (bean.containsKey("userId") && !ToolUtil.isBlank(bean.get("userId").toString())) {
-                    Map<String, Object> userMation = sysEveUserDao.queryUserMationByOpenId(openId);
+                    Map<String, Object> userMation = StrUtil.isNotBlank(appId)
+                        ? sysEveUserDao.queryUserMationByAppIdAndOpenId(appId, openId)
+                        : sysEveUserDao.queryUserMationByOpenId(openId);
                     companyMationService.setNameMationForMap(userMation, "companyId", "companyName", StrUtil.EMPTY);
                     companyDepartmentService.setNameMationForMap(userMation, "departmentId", "departmentName", StrUtil.EMPTY);
-                    // 2.将账号的信息存入redis
                     setUserLoginRedisMation(bean.get("userId").toString() + SysUserAuthConstants.APP_IDENTIFYING, userMation, false);
                 }
             } else {
-                //不存在
                 map.put("id", ToolUtil.getSurFaceId());
                 map.put("joinTime", DateUtil.getTimeAndToString());
                 map.put("openId", openId);
+                map.put("appId", appId);
                 map.put("userId", "");
                 sysEveUserDao.insertWxUserMation(map);
-                //1.将微信和账号的绑定信息存入redis
                 jedisClientService.set(key, JSONUtil.toJsonStr(map));
             }
         } else {
             map = JSONUtil.toBean(jedisClientService.get(key), null);
-            //如果已经绑定用户，则获取用户信息
             if (map.containsKey("userId") && !ToolUtil.isBlank(map.get("userId").toString())) {
-                Map<String, Object> userMation = sysEveUserDao.queryUserMationByOpenId(openId);
+                Map<String, Object> userMation = StrUtil.isNotBlank(appId)
+                    ? sysEveUserDao.queryUserMationByAppIdAndOpenId(appId, openId)
+                    : sysEveUserDao.queryUserMationByOpenId(openId);
                 companyMationService.setNameMationForMap(userMation, "companyId", "companyName", StrUtil.EMPTY);
-                //2.将账号的信息存入redis
                 setUserLoginRedisMation(map.get("userId").toString() + SysUserAuthConstants.APP_IDENTIFYING, userMation, false);
             } else {
-                outputObject.setreturnMessage("您还未绑定用户，请前往绑定.", "-9000");
+                throw new CustomException("您还未绑定用户，请前往绑定.");
             }
         }
         outputObject.setBean(map);
@@ -850,10 +866,7 @@ public class SysEveUserServiceImpl extends SkyeyeBusinessServiceImpl<SysEveUserD
     }
 
     /**
-     * openId绑定用户信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
+     * openId + 账号密码绑定（建议传 appId；同一账号可按不同 appId 各绑一条）
      */
     @Override
     public void insertUserMationByOpenId(InputObject inputObject, OutputObject outputObject) {
@@ -861,61 +874,414 @@ public class SysEveUserServiceImpl extends SkyeyeBusinessServiceImpl<SysEveUserD
         String userCode = map.get("userCode").toString();
         String password = map.get("password").toString();
         String openId = map.get("openId").toString();
-        // 根据账号获取用户信息
+        String appId = StrUtil.blankToDefault(MapUtil.getStr(map, "appId"), StrUtil.EMPTY);
         Map<String, Object> userMation = sysEveUserDao.queryMationByUserCode(userCode);
-        // 判断该账号是否存在
         if (userMation != null && !userMation.isEmpty()) {
             int pwdNum = Integer.parseInt(userMation.get("pwdNum").toString());
             for (int i = 0; i < pwdNum; i++) {
                 password = ToolUtil.MD5(password);
             }
-            //判断密码是否正确
             if (password.equals(userMation.get("password").toString())) {
-                //判断账号是否锁定
                 int userLock = Integer.parseInt(userMation.get("userLock").toString());
                 if (UserLockState.SYS_USER_LOCK_STATE_ISLOCK.getKey() == userLock) {
-                    outputObject.setreturnMessage("您的账号已被锁定，请联系管理员解除.");
+                    throw new CustomException("您的账号已被锁定，请联系管理员解除.");
                 } else {
-                    Map<String, Object> wxUserMation = sysEveUserDao.queryWxUserMationByOpenId(openId);
-                    //判断该用户的openId是否存在于数据库
-                    if (wxUserMation != null && !wxUserMation.isEmpty()) {
-                        //判断当前openId是否已经绑定账号
-                        if (wxUserMation.containsKey("userId") && !ToolUtil.isBlank(wxUserMation.get("userId").toString())) {
-                            outputObject.setreturnMessage("该微信用户已绑定账号.");
-                        } else {
-                            //判断该账号是否被别人绑定
-                            Map<String, Object> isBindInWx = sysEveUserDao.queryUserBindMationByUserId(userMation.get("id").toString());
-                            if (isBindInWx != null && !isBindInWx.isEmpty()) {
-                                outputObject.setreturnMessage("该账号已被绑定.");
-                            } else {
-                                companyJobService.setNameMationForMap(userMation, "jobId", "jobName", StrUtil.EMPTY);
-                                //构建绑定信息对象
-                                map = new HashMap<>();
-                                String userId = userMation.get("id").toString();
-                                map.put("userId", userId);
-                                map.put("bindTime", DateUtil.getTimeAndToString());
-                                map.put("openId", openId);
-                                sysEveUserDao.updateBindUserMation(map);
-                                //重新获取绑定信息，存入redis，返回前端
-                                map = sysEveUserDao.queryWxUserMationByOpenId(openId);
-                                //1.将微信和账号的绑定信息存入redis
-                                String key = WxchatUtil.getWechatUserOpenIdMation(openId);
-                                jedisClientService.set(key, JSONUtil.toJsonStr(map));
-                                //2.将账号的信息存入redis
-                                setUserLoginRedisMation(userId + SysUserAuthConstants.APP_IDENTIFYING, userMation, false);
-                                outputObject.setBean(map);
-                            }
-                        }
-                    } else {
-                        outputObject.setreturnMessage("该微信用户不存在.");
+                    try {
+                        Map<String, Object> bind = bindOpenIdToUser(userMation.get("id").toString(), appId, openId);
+                        companyJobService.setNameMationForMap(userMation, "jobId", "jobName", StrUtil.EMPTY);
+                        setUserLoginRedisMation(userMation.get("id").toString() + SysUserAuthConstants.APP_IDENTIFYING, userMation, false);
+                        outputObject.setBean(bind);
+                    } catch (CustomException e) {
+                        throw new CustomException(e.getMessage());
                     }
                 }
             } else {
-                outputObject.setreturnMessage("密码输入错误.");
+                throw new CustomException("密码输入错误.");
             }
         } else {
-            outputObject.setreturnMessage("该账号不存在，请核实后进行登录.");
+            throw new CustomException("该账号不存在，请核实后进行登录.");
         }
+    }
+
+    @Override
+    public void bindCurrentUserWechatOpenId(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> map = inputObject.getParams();
+        String appId = MapUtil.getStr(map, "appId");
+        String openId = MapUtil.getStr(map, "openId");
+        if (StrUtil.hasBlank(appId, openId)) {
+            throw new CustomException("appId、openId不能为空.");
+        }
+        String userId = MapUtil.getStr(InputObject.getLogParamsStatic(), "id");
+        if (StrUtil.isBlank(userId)) {
+            throw new CustomException("请先登录.");
+        }
+        try {
+            outputObject.setBean(bindOpenIdToUser(userId, appId, openId));
+        } catch (CustomException e) {
+            throw new CustomException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void bindCurrentUserWechatByCode(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> map = inputObject.getParams();
+        String wxCode = MapUtil.getStr(map, "wxCode");
+        Integer channel = MapUtil.getInt(map, "channel");
+        String appId = MapUtil.getStr(map, "appId");
+        if (StrUtil.isBlank(wxCode) || channel == null) {
+            throw new CustomException("wxCode、channel不能为空.");
+        }
+        if (!Objects.equals(channel, NOTICE_CHANNEL_MP) && !Objects.equals(channel, NOTICE_CHANNEL_MINI)) {
+            throw new CustomException("channel仅支持公众号(4)或小程序(5).");
+        }
+        String userId = MapUtil.getStr(InputObject.getLogParamsStatic(), "id");
+        if (StrUtil.isBlank(userId)) {
+            throw new CustomException("请先登录.");
+        }
+        Map<String, Object> channelConfig = findNoticeChannelConfig(channel, appId);
+        if (ObjectUtil.isEmpty(channelConfig)) {
+            throw new CustomException(Objects.equals(channel, NOTICE_CHANNEL_MP)
+                ? "未配置公众号账号，请先在「公众号」页签配置 AppId/AppSecret."
+                : "未配置小程序账号，请先在「小程序」页签配置 AppId/AppSecret.");
+        }
+        String resolvedAppId = MapUtil.getStr(channelConfig, "appId");
+        String appSecret = MapUtil.getStr(channelConfig, "appSecret");
+        if (StrUtil.hasBlank(resolvedAppId, appSecret)) {
+            throw new CustomException(Objects.equals(channel, NOTICE_CHANNEL_MP)
+                ? "公众号账号缺少 AppId 或 AppSecret."
+                : "小程序账号缺少 AppId 或 AppSecret.");
+        }
+        try {
+            String openId = exchangeWechatOpenId(channel, resolvedAppId, appSecret, wxCode);
+            // 公众号：未关注时模板消息发不出去，提示先关注（引导图由绑定页展示）
+            if (Objects.equals(channel, NOTICE_CHANNEL_MP)
+                && !isMpUserSubscribed(resolvedAppId, appSecret, openId)) {
+                Map<String, Object> tip = new HashMap<>();
+                tip.put("needFollow", true);
+                tip.put("guideImage", MapUtil.getStr(channelConfig, "guideImage"));
+                tip.put("appId", resolvedAppId);
+                outputObject.setBean(tip);
+                outputObject.setreturnMessage("请先关注公众号后再绑定，可长按识别页面中的二维码关注。");
+                return;
+            }
+            outputObject.setBean(bindOpenIdToUser(userId, resolvedAppId, openId));
+        } catch (CustomException e) {
+            throw new CustomException(e.getMessage());
+        } catch (Exception e) {
+            LOGGER.warn("bind wechat by code failed", e);
+            throw new CustomException(StrUtil.blankToDefault(e.getMessage(), "微信授权失败"));
+        }
+    }
+
+    @Override
+    public void getMpWechatBindAuthUrl(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> map = inputObject.getParams();
+        String redirectUri = MapUtil.getStr(map, "redirectUri");
+        String preferAppId = MapUtil.getStr(map, "appId");
+        if (StrUtil.isBlank(redirectUri)) {
+            throw new CustomException("redirectUri不能为空.");
+        }
+        if (redirectUri.contains("#")) {
+            throw new CustomException("redirectUri不能包含#，请传 H5 入口地址（如 https://域名/h5/）.");
+        }
+        Map<String, Object> channelConfig = findNoticeChannelConfig(NOTICE_CHANNEL_MP, preferAppId);
+        if (ObjectUtil.isEmpty(channelConfig)) {
+            throw new CustomException("未配置公众号账号，请先在「公众号」页签配置 AppId/AppSecret.");
+        }
+        String appId = MapUtil.getStr(channelConfig, "appId");
+        if (StrUtil.isBlank(appId)) {
+            throw new CustomException("公众号账号缺少 AppId.");
+        }
+        try {
+            String encodedRedirect = java.net.URLEncoder.encode(redirectUri, "UTF-8");
+            // snsapi_base：静默授权，仅拿 openId，用户无感知授权页（已关注/已授权场景）
+            String authUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId
+                + "&redirect_uri=" + encodedRedirect
+                + "&response_type=code&scope=snsapi_base&state=skyeye_mp_bind#wechat_redirect";
+            Map<String, Object> result = new HashMap<>();
+            result.put("authUrl", authUrl);
+            result.put("appId", appId);
+            result.put("guideImage", MapUtil.getStr(channelConfig, "guideImage"));
+            result.put("state", "skyeye_mp_bind");
+            outputObject.setBean(result);
+        } catch (Exception e) {
+            throw new CustomException("生成授权地址失败.");
+        }
+    }
+
+    @Override
+    public void queryWechatBindGuideConfig(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> config = loadNoticeConfigForWechatBind();
+        Map<String, Object> mp = config == null ? null : resolveWechatAccount(config, NOTICE_CHANNEL_MP);
+        Map<String, Object> mini = config == null ? null : resolveWechatAccount(config, NOTICE_CHANNEL_MINI);
+        Map<String, Object> result = new HashMap<>();
+        result.put("mpGuideImage", mp == null ? StrUtil.EMPTY : MapUtil.getStr(mp, "guideImage"));
+        result.put("miniGuideImage", mini == null ? StrUtil.EMPTY : MapUtil.getStr(mini, "guideImage"));
+        result.put("mpAppId", mp == null ? StrUtil.EMPTY : MapUtil.getStr(mp, "appId"));
+        result.put("miniAppId", mini == null ? StrUtil.EMPTY : MapUtil.getStr(mini, "appId"));
+        result.put("mpEnabled", mp != null && Objects.equals(MapUtil.getInt(mp, "enabled", 1), 1));
+        result.put("miniEnabled", mini != null && Objects.equals(MapUtil.getInt(mini, "enabled", 1), 1));
+        outputObject.setBean(result);
+        outputObject.settotal(1);
+    }
+
+    @Override
+    public void queryMyWechatBindList(InputObject inputObject, OutputObject outputObject) {
+        String userId = MapUtil.getStr(InputObject.getLogParamsStatic(), "id");
+        if (StrUtil.isBlank(userId)) {
+            throw new CustomException("请先登录.");
+        }
+        List<Map<String, Object>> list = sysEveUserDao.queryUserBindListByUserId(userId);
+        Map<String, Object> config = loadNoticeConfigForWechatBind();
+        Map<String, Object> mp = config == null ? null : resolveWechatAccount(config, NOTICE_CHANNEL_MP);
+        Map<String, Object> mini = config == null ? null : resolveWechatAccount(config, NOTICE_CHANNEL_MINI);
+        String mpAppId = mp == null ? StrUtil.EMPTY : MapUtil.getStr(mp, "appId");
+        String miniAppId = mini == null ? StrUtil.EMPTY : MapUtil.getStr(mini, "appId");
+        if (CollectionUtil.isNotEmpty(list)) {
+            for (Map<String, Object> item : list) {
+                String appId = MapUtil.getStr(item, "appId");
+                if (StrUtil.isNotBlank(mpAppId) && StrUtil.equals(appId, mpAppId)) {
+                    item.put("bindType", "mp");
+                    item.put("bindTypeName", "微信公众号");
+                } else if (StrUtil.isNotBlank(miniAppId) && StrUtil.equals(appId, miniAppId)) {
+                    item.put("bindType", "mini");
+                    item.put("bindTypeName", "微信小程序");
+                } else {
+                    item.put("bindType", "other");
+                    item.put("bindTypeName", "微信账号");
+                }
+            }
+        }
+        outputObject.setBeans(list);
+        outputObject.settotal(list == null ? 0 : list.size());
+    }
+
+    @Override
+    public void unbindCurrentUserWechat(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> map = inputObject.getParams();
+        String appId = MapUtil.getStr(map, "appId");
+        if (StrUtil.isBlank(appId)) {
+            throw new CustomException("appId不能为空.");
+        }
+        String userId = MapUtil.getStr(InputObject.getLogParamsStatic(), "id");
+        if (StrUtil.isBlank(userId)) {
+            throw new CustomException("请先登录.");
+        }
+        Map<String, Object> bind = sysEveUserDao.queryUserBindMationByUserIdAndAppId(userId, appId);
+        sysEveUserDao.unbindUserMationByUserIdAndAppId(userId, appId);
+        if (bind != null && StrUtil.isNotBlank(MapUtil.getStr(bind, "openId"))) {
+            jedisClientService.del(WxchatUtil.getWechatUserOpenIdMation(appId, MapUtil.getStr(bind, "openId")));
+        }
+    }
+
+    /**
+     * 将 openId 绑定到指定用户；同一 appId 下 openId、用户互相唯一
+     */
+    private Map<String, Object> bindOpenIdToUser(String userId, String appId, String openId) {
+        if (StrUtil.hasBlank(userId, openId)) {
+            throw new CustomException("userId、openId不能为空.");
+        }
+        String resolvedAppId = StrUtil.blankToDefault(appId, StrUtil.EMPTY);
+        Map<String, Object> wxUserMation = StrUtil.isNotBlank(resolvedAppId)
+            ? sysEveUserDao.queryWxUserMationByAppIdAndOpenId(resolvedAppId, openId)
+            : sysEveUserDao.queryWxUserMationByOpenId(openId);
+        if (wxUserMation == null || wxUserMation.isEmpty()) {
+            Map<String, Object> insert = new HashMap<>();
+            insert.put("id", ToolUtil.getSurFaceId());
+            insert.put("openId", openId);
+            insert.put("appId", resolvedAppId);
+            insert.put("joinTime", DateUtil.getTimeAndToString());
+            sysEveUserDao.insertWxUserMation(insert);
+            wxUserMation = insert;
+        }
+        String boundUserId = MapUtil.getStr(wxUserMation, "userId");
+        if (StrUtil.isNotBlank(boundUserId) && !StrUtil.equals(boundUserId, userId)) {
+            throw new CustomException("该微信用户已绑定其他账号.");
+        }
+        if (StrUtil.isNotBlank(resolvedAppId)) {
+            Map<String, Object> exist = sysEveUserDao.queryUserBindMationByUserIdAndAppId(userId, resolvedAppId);
+            if (exist != null && !exist.isEmpty()
+                && !StrUtil.equals(MapUtil.getStr(exist, "openId"), openId)) {
+                throw new CustomException("该账号已在此微信应用下绑定其他 openId.");
+            }
+        }
+        Map<String, Object> update = new HashMap<>();
+        update.put("userId", userId);
+        update.put("bindTime", DateUtil.getTimeAndToString());
+        update.put("openId", openId);
+        update.put("appId", resolvedAppId);
+        sysEveUserDao.updateBindUserMation(update);
+        Map<String, Object> bind = StrUtil.isNotBlank(resolvedAppId)
+            ? sysEveUserDao.queryWxUserMationByAppIdAndOpenId(resolvedAppId, openId)
+            : sysEveUserDao.queryWxUserMationByOpenId(openId);
+        jedisClientService.set(WxchatUtil.getWechatUserOpenIdMation(resolvedAppId, openId), JSONUtil.toJsonStr(bind));
+        return bind;
+    }
+
+    /**
+     * 绑定只依赖公众号/小程序页签凭证，不要求消息通知里再配渠道行。
+     * 多租户读平台信息设置；单租户读系统基础设置 noticeDispatchConfig。
+     */
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> findNoticeChannelConfig(Integer channel, String preferAppId) {
+        Map<String, Object> config = loadNoticeConfigForWechatBind();
+        if (config == null || config.isEmpty()) {
+            return null;
+        }
+        Map<String, Object> account = resolveWechatAccount(config, channel);
+        if (account != null && StrUtil.isNotBlank(MapUtil.getStr(account, "appId"))
+            && Objects.equals(MapUtil.getInt(account, "enabled", 1), 1)) {
+            if (StrUtil.isBlank(preferAppId)
+                || StrUtil.equals(preferAppId, MapUtil.getStr(account, "appId"))) {
+                Map<String, Object> result = new HashMap<>();
+                result.put("channel", channel);
+                result.put("appId", MapUtil.getStr(account, "appId"));
+                result.put("appSecret", MapUtil.getStr(account, "appSecret"));
+                result.put("guideImage", MapUtil.getStr(account, "guideImage"));
+                result.put("enabled", 1);
+                return result;
+            }
+        }
+        // 兼容旧数据：渠道行内联 appId/appSecret
+        List<Map<String, Object>> channels =
+            (List<Map<String, Object>>) config.getOrDefault("channels", new ArrayList<>());
+        for (Object item : channels) {
+            Map<String, Object> channelCfg = item instanceof Map
+                ? (Map<String, Object>) item
+                : JSONUtil.toBean(JSONUtil.toJsonStr(item), null);
+            if (!Objects.equals(MapUtil.getInt(channelCfg, "channel"), channel)) {
+                continue;
+            }
+            if (!Objects.equals(MapUtil.getInt(channelCfg, "enabled", 1), 1)) {
+                continue;
+            }
+            Map<String, Object> enriched = enrichWechatChannelCredential(config, channelCfg);
+            if (StrUtil.isBlank(MapUtil.getStr(enriched, "appId"))) {
+                continue;
+            }
+            if (StrUtil.isNotBlank(preferAppId)
+                && !StrUtil.equals(preferAppId, MapUtil.getStr(enriched, "appId"))) {
+                continue;
+            }
+            return enriched;
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> loadNoticeConfigForWechatBind() {
+        if (tenantEnable && platformBaseSettingService != null) {
+            return platformBaseSettingService.getNoticeDispatchConfig();
+        }
+        if (iSystemFoundationSettingsService == null) {
+            return null;
+        }
+        Map<String, Object> settings = iSystemFoundationSettingsService.querySystemFoundationSettingsList();
+        if (settings == null) {
+            return null;
+        }
+        Object raw = settings.get("noticeDispatchConfig");
+        if (raw == null) {
+            return null;
+        }
+        return raw instanceof Map
+            ? (Map<String, Object>) raw
+            : JSONUtil.toBean(JSONUtil.toJsonStr(raw), null);
+    }
+
+    /**
+     * 公众号/小程序凭证优先取 wechatMp / wechatMini；兼容旧数组账号
+     */
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> enrichWechatChannelCredential(Map<String, Object> config,
+                                                              Map<String, Object> channelCfg) {
+        if (channelCfg == null || config == null) {
+            return channelCfg;
+        }
+        Integer channel = MapUtil.getInt(channelCfg, "channel");
+        if (!Objects.equals(channel, NOTICE_CHANNEL_MP) && !Objects.equals(channel, NOTICE_CHANNEL_MINI)) {
+            return channelCfg;
+        }
+        Map<String, Object> account = resolveWechatAccount(config, channel);
+        if (account != null && StrUtil.isNotBlank(MapUtil.getStr(account, "appId"))
+            && Objects.equals(MapUtil.getInt(account, "enabled", 1), 1)) {
+            Map<String, Object> enriched = new HashMap<>(channelCfg);
+            enriched.put("appId", MapUtil.getStr(account, "appId"));
+            enriched.put("appSecret", MapUtil.getStr(account, "appSecret"));
+            enriched.put("guideImage", MapUtil.getStr(account, "guideImage"));
+            return enriched;
+        }
+        return channelCfg;
+    }
+
+    /**
+     * 是否已关注公众号。查不到/接口异常时不拦截绑定（避免误伤）。
+     */
+    private boolean isMpUserSubscribed(String appId, String appSecret, String openId) {
+        if (StrUtil.hasBlank(appId, appSecret, openId)) {
+            return true;
+        }
+        try {
+            String tokenUrl = String.format(
+                "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s",
+                appId, appSecret);
+            Map<String, Object> tokenResp = JSONUtil.toBean(HttpUtil.get(tokenUrl), null);
+            String accessToken = MapUtil.getStr(tokenResp, "access_token");
+            if (StrUtil.isBlank(accessToken)) {
+                LOGGER.warn("get mp access_token failed: {}", tokenResp);
+                return true;
+            }
+            String infoUrl = String.format(
+                "https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=zh_CN",
+                accessToken, openId);
+            Map<String, Object> info = JSONUtil.toBean(HttpUtil.get(infoUrl), null);
+            if (info == null || !info.containsKey("subscribe")) {
+                LOGGER.warn("get mp user info failed: {}", info);
+                return true;
+            }
+            return Objects.equals(MapUtil.getInt(info, "subscribe"), 1);
+        } catch (Exception e) {
+            LOGGER.warn("check mp subscribe failed", e);
+            return true;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> resolveWechatAccount(Map<String, Object> config, Integer channel) {
+        String objectKey = Objects.equals(channel, NOTICE_CHANNEL_MP) ? "wechatMp" : "wechatMini";
+        String arrayKey = Objects.equals(channel, NOTICE_CHANNEL_MP) ? "wechatMpAccounts" : "wechatMiniAccounts";
+        Object raw = config.get(objectKey);
+        if (raw instanceof Map) {
+            return (Map<String, Object>) raw;
+        }
+        Object listRaw = config.get(arrayKey);
+        if (listRaw instanceof List && !((List<?>) listRaw).isEmpty()) {
+            Object first = ((List<?>) listRaw).get(0);
+            return first instanceof Map
+                ? (Map<String, Object>) first
+                : JSONUtil.toBean(JSONUtil.toJsonStr(first), null);
+        }
+        return null;
+    }
+
+    private String exchangeWechatOpenId(Integer channel, String appId, String appSecret, String code) {
+        String url;
+        if (Objects.equals(channel, NOTICE_CHANNEL_MINI)) {
+            url = String.format(
+                "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
+                appId, appSecret, code);
+        } else {
+            url = String.format(
+                "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code",
+                appId, appSecret, code);
+        }
+        String body = HttpUtil.get(url);
+        Map<String, Object> resp = JSONUtil.toBean(body, null);
+        String openId = MapUtil.getStr(resp, "openid");
+        if (StrUtil.isBlank(openId)) {
+            throw new CustomException(StrUtil.blankToDefault(MapUtil.getStr(resp, "errmsg"), "换取 openId 失败"));
+        }
+        return openId;
     }
 
     @Override

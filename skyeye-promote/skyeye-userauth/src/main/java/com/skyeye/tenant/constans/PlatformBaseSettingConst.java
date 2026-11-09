@@ -108,4 +108,14 @@ public class PlatformBaseSettingConst {
      */
     public static final String KEY_NOTICE_TYPES = "types";
 
+    /**
+     * 消息通知分组 - 公众号 AppId/AppSecret
+     */
+    public static final String KEY_NOTICE_WECHAT_MP = "wechatMp";
+
+    /**
+     * 消息通知分组 - 小程序 AppId/AppSecret
+     */
+    public static final String KEY_NOTICE_WECHAT_MINI = "wechatMini";
+
 }

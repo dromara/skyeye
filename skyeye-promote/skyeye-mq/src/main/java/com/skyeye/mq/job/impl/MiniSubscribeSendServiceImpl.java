@@ -108,10 +108,12 @@ public class MiniSubscribeSendServiceImpl implements RocketMQListener<String> {
             return openId;
         }
         String receiveId = MapUtil.getStr(map, "receiveId");
-        if (StrUtil.isEmpty(receiveId)) {
+        String appId = MapUtil.getStr(map, "appId");
+        if (StrUtil.isEmpty(receiveId) || StrUtil.isEmpty(appId)) {
             return StrUtil.EMPTY;
         }
-        Map<String, Object> bind = sysEveUserDao.queryUserBindMationByUserId(receiveId);
+        // 按 appId 取小程序 openId，避免与公众号 openId 串用
+        Map<String, Object> bind = sysEveUserDao.queryUserBindMationByUserIdAndAppId(receiveId, appId);
         if (bind == null) {
             return StrUtil.EMPTY;
         }

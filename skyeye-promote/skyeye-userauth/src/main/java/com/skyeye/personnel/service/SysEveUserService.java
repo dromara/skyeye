@@ -87,6 +87,36 @@ public interface SysEveUserService extends SkyeyeBusinessService<SysEveUser> {
 
     void insertUserMationByOpenId(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 当前登录用户绑定微信 openId（按 appId 区分公众号/小程序）
+     */
+    void bindCurrentUserWechatOpenId(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 当前登录用户通过微信 code 换 openId 并绑定（小程序 js_code / 公众号 oauth code）
+     */
+    void bindCurrentUserWechatByCode(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 获取公众号网页授权绑定跳转地址（snsapi_base）
+     */
+    void getMpWechatBindAuthUrl(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 查询微信绑定页引导图（公众号/小程序二维码等，不含密钥）
+     */
+    void queryWechatBindGuideConfig(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 查询当前登录用户的微信绑定列表
+     */
+    void queryMyWechatBindList(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 当前登录用户按 appId 解绑微信
+     */
+    void unbindCurrentUserWechat(InputObject inputObject, OutputObject outputObject);
+
     void editUserLockState(String id, Integer userLock);
 
     void resetUserEffectiveDate(InputObject inputObject, OutputObject outputObject);

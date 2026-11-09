@@ -47,12 +47,22 @@ public interface SysEveUserDao extends SkyeyeBaseMapper<SysEveUser> {
 
     Map<String, Object> queryWxUserMationByOpenId(@Param("openId") String openId);
 
+    Map<String, Object> queryWxUserMationByAppIdAndOpenId(@Param("appId") String appId, @Param("openId") String openId);
+
     Map<String, Object> queryUserMationByOpenId(@Param("openId") String openId);
 
+    Map<String, Object> queryUserMationByAppIdAndOpenId(@Param("appId") String appId, @Param("openId") String openId);
+
     Map<String, Object> queryUserBindMationByUserId(@Param("userId") String userId);
+
+    Map<String, Object> queryUserBindMationByUserIdAndAppId(@Param("userId") String userId, @Param("appId") String appId);
+
+    List<Map<String, Object>> queryUserBindListByUserId(@Param("userId") String userId);
 
     int updateBindUserMation(Map<String, Object> map);
 
     int insertWxUserMation(Map<String, Object> map);
+
+    int unbindUserMationByUserIdAndAppId(@Param("userId") String userId, @Param("appId") String appId);
 
 }

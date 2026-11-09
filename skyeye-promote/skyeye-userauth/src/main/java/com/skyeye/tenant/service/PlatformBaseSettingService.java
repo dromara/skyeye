@@ -156,7 +156,7 @@ public interface PlatformBaseSettingService extends SkyeyeBusinessService<Platfo
     void queryPlatformNoticeDispatchConfig(InputObject inputObject, OutputObject outputObject);
 
     /**
-     * 获取平台消息通知配置 Map（channels / types）
+     * 获取平台消息通知配置 Map（channels / types / wechatMp / wechatMini）
      */
     java.util.Map<String, Object> getNoticeDispatchConfig();
 

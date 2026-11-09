@@ -8,6 +8,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.annotation.tenant.IgnoreTenant;
@@ -457,6 +458,10 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
             parseNoticeList(noticeGroup.get(PlatformBaseSettingConst.KEY_NOTICE_CHANNELS)));
         data.put(PlatformBaseSettingConst.KEY_NOTICE_TYPES,
             parseNoticeList(noticeGroup.get(PlatformBaseSettingConst.KEY_NOTICE_TYPES)));
+        data.put(PlatformBaseSettingConst.KEY_NOTICE_WECHAT_MP,
+            parseNoticeObject(noticeGroup.get(PlatformBaseSettingConst.KEY_NOTICE_WECHAT_MP)));
+        data.put(PlatformBaseSettingConst.KEY_NOTICE_WECHAT_MINI,
+            parseNoticeObject(noticeGroup.get(PlatformBaseSettingConst.KEY_NOTICE_WECHAT_MINI)));
         return data;
     }
 
@@ -513,6 +518,8 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         Map<String, Object> noticeGroup = new HashMap<>();
         noticeGroup.put(PlatformBaseSettingConst.KEY_NOTICE_CHANNELS, new ArrayList<>());
         noticeGroup.put(PlatformBaseSettingConst.KEY_NOTICE_TYPES, buildDefaultNoticeTypes());
+        noticeGroup.put(PlatformBaseSettingConst.KEY_NOTICE_WECHAT_MP, new HashMap<>());
+        noticeGroup.put(PlatformBaseSettingConst.KEY_NOTICE_WECHAT_MINI, new HashMap<>());
         settingData.put(PlatformBaseSettingGroup.NOTICE.getKey(), noticeGroup);
         return settingData;
     }
@@ -566,6 +573,18 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
             return out;
         }
         return Collections.emptyList();
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> parseNoticeObject(Object raw) {
+        if (raw instanceof Map) {
+            return new HashMap<>((Map<String, Object>) raw);
+        }
+        if (raw instanceof String && StrUtil.isNotBlank(raw.toString())) {
+            Map<String, Object> parsed = JSONUtil.toBean(raw.toString(), null);
+            return parsed == null ? new HashMap<>() : parsed;
+        }
+        return new HashMap<>();
     }
 
     private Map<String, Map<String, Object>> buildDefaultOrgTypeConfig() {

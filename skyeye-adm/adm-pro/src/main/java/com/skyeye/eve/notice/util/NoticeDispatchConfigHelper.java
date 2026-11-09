@@ -97,8 +97,51 @@ public final class NoticeDispatchConfigHelper {
             Integer cfgChannel = MapUtil.getInt(channelCfg, "channel");
             Integer enabled = MapUtil.getInt(channelCfg, "enabled", EnableEnum.ENABLE_USING.getKey());
             if (channel.equals(cfgChannel) && EnableEnum.ENABLE_USING.getKey().equals(enabled)) {
-                return channelCfg;
+                return enrichWechatChannelCredential(config, channelCfg);
             }
+        }
+        return null;
+    }
+
+    /**
+     * 公众号/小程序：凭证优先取 wechatMp / wechatMini；兼容旧数组账号与渠道行内联 appId。
+     */
+    @SuppressWarnings("unchecked")
+    private static Map<String, Object> enrichWechatChannelCredential(Map<String, Object> config,
+                                                                     Map<String, Object> channelCfg) {
+        if (channelCfg == null || config == null) {
+            return channelCfg;
+        }
+        Integer channel = MapUtil.getInt(channelCfg, "channel");
+        if (!Integer.valueOf(4).equals(channel) && !Integer.valueOf(5).equals(channel)) {
+            return channelCfg;
+        }
+        Map<String, Object> account = resolveWechatAccount(config, channel);
+        if (account != null && StrUtil.isNotBlank(MapUtil.getStr(account, "appId"))
+            && EnableEnum.ENABLE_USING.getKey().equals(
+            MapUtil.getInt(account, "enabled", EnableEnum.ENABLE_USING.getKey()))) {
+            Map<String, Object> enriched = new HashMap<>(channelCfg);
+            enriched.put("appId", MapUtil.getStr(account, "appId"));
+            enriched.put("appSecret", MapUtil.getStr(account, "appSecret"));
+            enriched.put("guideImage", MapUtil.getStr(account, "guideImage"));
+            return enriched;
+        }
+        return channelCfg;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Map<String, Object> resolveWechatAccount(Map<String, Object> config, Integer channel) {
+        String objectKey = Integer.valueOf(4).equals(channel) ? "wechatMp" : "wechatMini";
+        String arrayKey = Integer.valueOf(4).equals(channel) ? "wechatMpAccounts" : "wechatMiniAccounts";
+        Object raw = config.get(objectKey);
+        if (raw instanceof Map) {
+            return (Map<String, Object>) raw;
+        }
+        Object listRaw = config.get(arrayKey);
+        if (listRaw instanceof List && CollectionUtil.isNotEmpty((List<?>) listRaw)) {
+            Object first = ((List<?>) listRaw).get(0);
+            return first instanceof Map ? (Map<String, Object>) first
+                : JSONUtil.toBean(JSONUtil.toJsonStr(first), null);
         }
         return null;
     }
@@ -176,6 +219,8 @@ public final class NoticeDispatchConfigHelper {
         Map<String, Object> config = new HashMap<>();
         config.put("types", mergedTypes);
         config.put("channels", platform.getOrDefault("channels", new ArrayList<>()));
+        config.put("wechatMp", platform.getOrDefault("wechatMp", new HashMap<>()));
+        config.put("wechatMini", platform.getOrDefault("wechatMini", new HashMap<>()));
         return config;
     }
 
@@ -199,7 +244,15 @@ public final class NoticeDispatchConfigHelper {
         if (CollectionUtil.isEmpty(types)) {
             Map<String, Object> defaults = defaultPlatformConfig();
             defaults.put("channels", config.getOrDefault("channels", new ArrayList<>()));
+            defaults.put("wechatMp", config.getOrDefault("wechatMp", new HashMap<>()));
+            defaults.put("wechatMini", config.getOrDefault("wechatMini", new HashMap<>()));
             return defaults;
+        }
+        if (!config.containsKey("wechatMp")) {
+            config.put("wechatMp", new HashMap<>());
+        }
+        if (!config.containsKey("wechatMini")) {
+            config.put("wechatMini", new HashMap<>());
         }
         return config;
     }
@@ -215,6 +268,8 @@ public final class NoticeDispatchConfigHelper {
         types.add(buildPlatformType("ANNOUNCEMENT", "公告提醒"));
         config.put("types", types);
         config.put("channels", new ArrayList<>());
+        config.put("wechatMp", new HashMap<>());
+        config.put("wechatMini", new HashMap<>());
         return config;
     }
 

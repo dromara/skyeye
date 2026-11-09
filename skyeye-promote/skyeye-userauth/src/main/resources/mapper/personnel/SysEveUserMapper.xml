@@ -376,12 +376,28 @@
 		SELECT
 			a.id,
 			a.open_id openId,
+			a.app_id appId,
 			a.user_id userId,
 			a.join_time joinTime
 		FROM
 			wx_user_mation a
 		WHERE
 			a.open_id = #{openId}
+		LIMIT 1
+	</select>
+
+	<select id="queryWxUserMationByAppIdAndOpenId" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.open_id openId,
+			a.app_id appId,
+			a.user_id userId,
+			a.join_time joinTime
+		FROM
+			wx_user_mation a
+		WHERE
+			a.app_id = #{appId}
+		  AND a.open_id = #{openId}
 		LIMIT 1
 	</select>
 
@@ -414,16 +430,76 @@
 		  AND a.id = e.user_id
 	</select>
 
+	<select id="queryUserMationByAppIdAndOpenId" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code userCode,
+			a.pwd_num_enc pwdNum,
+			a.`password`,
+			a.user_lock userLock,
+			b.win_bg_pic_url winBgPicUrl,
+			b.win_lock_bg_pic_url winLockBgPicUrl,
+			b.win_theme_color winThemeColor,
+			b.win_start_menu_size winStartMenuSize,
+			b.win_task_position winTaskPosition,
+			b.win_bg_pic_vague winBgPicVague,
+			b.win_bg_pic_vague_value winBgPicVagueValue,
+			b.win_bottom_menu_icon winBottomMenuIcon,
+			c.user_name userName,
+			c.user_photo userPhoto,
+			c.company_id companyId,
+			c.department_id departmentId
+		FROM
+			sys_eve_user a
+			LEFT JOIN sys_eve_user_install b ON a.id = b.user_id
+			LEFT JOIN sys_eve_user_staff c ON a.id = c.user_id,
+			wx_user_mation e
+		WHERE
+			e.app_id = #{appId}
+		  AND e.open_id = #{openId}
+		  AND a.id = e.user_id
+	</select>
+
 	<select id="queryUserBindMationByUserId" parameterType="java.lang.String" resultType="java.util.Map">
 		SELECT
 			a.id,
 			a.open_id openId,
+			a.app_id appId,
 			a.user_id userId
 		FROM
 			wx_user_mation a
 		WHERE
 			a.user_id = #{userId}
 		LIMIT 1
+	</select>
+
+	<select id="queryUserBindMationByUserIdAndAppId" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.open_id openId,
+			a.app_id appId,
+			a.user_id userId
+		FROM
+			wx_user_mation a
+		WHERE
+			a.user_id = #{userId}
+		  AND a.app_id = #{appId}
+		LIMIT 1
+	</select>
+
+	<select id="queryUserBindListByUserId" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.open_id openId,
+			a.app_id appId,
+			a.user_id userId,
+			DATE_FORMAT(a.join_time, '%Y-%m-%d %H:%i:%s') joinTime,
+			DATE_FORMAT(a.binding_time, '%Y-%m-%d %H:%i:%s') bindingTime
+		FROM
+			wx_user_mation a
+		WHERE
+			a.user_id = #{userId}
+		ORDER BY a.binding_time DESC, a.join_time DESC
 	</select>
 
 	<update id="updateBindUserMation" parameterType="java.util.Map">
@@ -435,15 +511,29 @@
 			<if test="bindTime != '' and bindTime != null">
 				binding_time = #{bindTime},
 			</if>
+			<if test="appId != '' and appId != null">
+				app_id = #{appId},
+			</if>
 		</set>
 		WHERE open_id = #{openId}
+		<if test="appId != '' and appId != null">
+			AND app_id = #{appId}
+		</if>
 	</update>
 
 	<insert id="insertWxUserMation" parameterType="java.util.Map">
 		INSERT into wx_user_mation
-			(id, open_id, join_time)
+			(id, open_id, app_id, join_time)
 		VALUES
-			(#{id}, #{openId}, #{joinTime})
+			(#{id}, #{openId}, IFNULL(#{appId}, ''), #{joinTime})
 	</insert>
+
+	<update id="unbindUserMationByUserIdAndAppId">
+		UPDATE wx_user_mation
+		SET user_id = NULL,
+			binding_time = NULL
+		WHERE user_id = #{userId}
+		  AND app_id = #{appId}
+	</update>
 	
 </mapper>
