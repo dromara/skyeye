@@ -120,24 +120,29 @@ public class MpTemplateSendServiceImpl implements RocketMQListener<String> {
         return MapUtil.getStr(bind, "openId");
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * 固定映射：消息通知标题/内容（已解析占位符）→ 微信模板 title / content。
+     * 注意：微信自 2023-05 起不再展示 first、remark，勿再用这两个字段名。
+     */
     private List<WxMpTemplateData> buildTemplateData(Map<String, Object> map) {
         List<WxMpTemplateData> list = new ArrayList<>();
-        Object paramsObj = map.get("params");
-        if (paramsObj instanceof Map) {
-            Map<String, Object> params = (Map<String, Object>) paramsObj;
-            for (Map.Entry<String, Object> entry : params.entrySet()) {
-                // 微信模板字段名优先用业务 key；运营可在微信后台按同名字段配置
-                String name = entry.getKey();
-                String value = entry.getValue() == null ? StrUtil.EMPTY : entry.getValue().toString();
-                list.add(new WxMpTemplateData(name, value));
-            }
-        }
-        if (list.isEmpty()) {
-            list.add(new WxMpTemplateData("first", MapUtil.getStr(map, "title")));
-            list.add(new WxMpTemplateData("remark", MapUtil.getStr(map, "content")));
-        }
+        String title = toPlainText(MapUtil.getStr(map, "title"));
+        String content = toPlainText(MapUtil.getStr(map, "content"));
+        list.add(new WxMpTemplateData("title", title));
+        list.add(new WxMpTemplateData("content", content));
+        log.info("mp template data titleLen={}, contentLen={}", title.length(), content.length());
         return list;
+    }
+
+    /** 站内信内容可能含 HTML，公众号模板只收纯文本 */
+    private String toPlainText(String raw) {
+        if (StrUtil.isBlank(raw)) {
+            return StrUtil.EMPTY;
+        }
+        String text = raw.replaceAll("(?i)<br\\s*/?>", "\n");
+        text = text.replaceAll("<[^>]+>", StrUtil.EMPTY);
+        return text.replace("&nbsp;", " ").replace("&lt;", "<").replace("&gt;", ">")
+            .replace("&amp;", "&").trim();
     }
 
 }

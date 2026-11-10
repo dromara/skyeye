@@ -102,7 +102,7 @@ public class PlatformBaseSettingController {
         platformBaseSettingService.queryPlatformPersonalStoreConfig(inputObject, outputObject);
     }
 
-    @ApiOperation(id = "queryPlatformNoticeDispatchConfig", value = "获取平台消息通知配置", method = "GET", allUse = "2")
+    @ApiOperation(id = "queryPlatformNoticeDispatchConfig", value = "获取平台消息通知配置", method = "GET", allUse = "0")
     @RequestMapping("/post/PlatformBaseSettingController/queryPlatformNoticeDispatchConfig")
     public void queryPlatformNoticeDispatchConfig(InputObject inputObject, OutputObject outputObject) {
         platformBaseSettingService.queryPlatformNoticeDispatchConfig(inputObject, outputObject);

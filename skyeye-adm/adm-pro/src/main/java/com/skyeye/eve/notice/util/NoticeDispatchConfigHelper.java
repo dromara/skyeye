@@ -9,6 +9,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.eve.notice.classenum.NoticeChannelEnum;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,15 +93,37 @@ public final class NoticeDispatchConfigHelper {
     @SuppressWarnings("unchecked")
     public static Map<String, Object> findChannelConfig(Map<String, Object> config, Integer channel) {
         List<Map<String, Object>> channels = (List<Map<String, Object>>) config.getOrDefault("channels", new ArrayList<>());
+        Map<String, Object> found = null;
         for (Object item : channels) {
-            Map<String, Object> channelCfg = item instanceof Map ? (Map<String, Object>) item : JSONUtil.toBean(JSONUtil.toJsonStr(item), null);
+            Map<String, Object> channelCfg = item instanceof Map ? (Map<String, Object>) item
+                : JSONUtil.toBean(JSONUtil.toJsonStr(item), null);
             Integer cfgChannel = MapUtil.getInt(channelCfg, "channel");
             Integer enabled = MapUtil.getInt(channelCfg, "enabled", EnableEnum.ENABLE_USING.getKey());
-            if (channel.equals(cfgChannel) && EnableEnum.ENABLE_USING.getKey().equals(enabled)) {
-                return enrichWechatChannelCredential(config, channelCfg);
+            if (channel.equals(cfgChannel) && !Integer.valueOf(2).equals(enabled)) {
+                found = enrichWechatChannelCredential(config, channelCfg);
+                break;
             }
         }
-        return null;
+        // 公众号/小程序：渠道行缺失或行内无凭证时，直接用页签 wechatMp / wechatMini
+        if (NoticeChannelEnum.MP.getKey().equals(channel) || NoticeChannelEnum.MINI_PROGRAM.getKey().equals(channel)) {
+            if (found != null && StrUtil.isNotBlank(MapUtil.getStr(found, "appId"))
+                && StrUtil.isNotBlank(MapUtil.getStr(found, "appSecret"))) {
+                return found;
+            }
+            Map<String, Object> fromTab = buildWechatChannelFromTab(config, channel);
+            if (fromTab != null) {
+                if (found == null) {
+                    return fromTab;
+                }
+                // 保留渠道行其它字段，凭证以页签为准
+                Map<String, Object> merged = new HashMap<>(found);
+                merged.put("appId", MapUtil.getStr(fromTab, "appId"));
+                merged.put("appSecret", MapUtil.getStr(fromTab, "appSecret"));
+                merged.put("guideImage", MapUtil.getStr(fromTab, "guideImage"));
+                return merged;
+            }
+        }
+        return found;
     }
 
     /**
@@ -117,9 +140,7 @@ public final class NoticeDispatchConfigHelper {
             return channelCfg;
         }
         Map<String, Object> account = resolveWechatAccount(config, channel);
-        if (account != null && StrUtil.isNotBlank(MapUtil.getStr(account, "appId"))
-            && EnableEnum.ENABLE_USING.getKey().equals(
-            MapUtil.getInt(account, "enabled", EnableEnum.ENABLE_USING.getKey()))) {
+        if (isWechatAccountUsable(account)) {
             Map<String, Object> enriched = new HashMap<>(channelCfg);
             enriched.put("appId", MapUtil.getStr(account, "appId"));
             enriched.put("appSecret", MapUtil.getStr(account, "appSecret"));
@@ -129,21 +150,74 @@ public final class NoticeDispatchConfigHelper {
         return channelCfg;
     }
 
+    /**
+     * 仅用页签配置组装可用渠道凭证（可不依赖 channels 行）
+     */
+    private static Map<String, Object> buildWechatChannelFromTab(Map<String, Object> config, Integer channel) {
+        Map<String, Object> account = resolveWechatAccount(config, channel);
+        if (!isWechatAccountUsable(account)) {
+            return null;
+        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("channel", channel);
+        result.put("enabled", EnableEnum.ENABLE_USING.getKey());
+        result.put("appId", MapUtil.getStr(account, "appId"));
+        result.put("appSecret", MapUtil.getStr(account, "appSecret"));
+        result.put("guideImage", MapUtil.getStr(account, "guideImage"));
+        return result;
+    }
+
+    private static boolean isWechatAccountUsable(Map<String, Object> account) {
+        if (account == null) {
+            return false;
+        }
+        if (StrUtil.isBlank(MapUtil.getStr(account, "appId"))
+            || StrUtil.isBlank(MapUtil.getStr(account, "appSecret"))) {
+            return false;
+        }
+        // 2 = 禁用；其余（含空）视为启用
+        return !EnableEnum.DISABLE_USING.getKey().equals(MapUtil.getInt(account, "enabled", EnableEnum.ENABLE_USING.getKey()));
+    }
+
     @SuppressWarnings("unchecked")
     private static Map<String, Object> resolveWechatAccount(Map<String, Object> config, Integer channel) {
-        String objectKey = Integer.valueOf(4).equals(channel) ? "wechatMp" : "wechatMini";
-        String arrayKey = Integer.valueOf(4).equals(channel) ? "wechatMpAccounts" : "wechatMiniAccounts";
+        String objectKey = NoticeChannelEnum.MP.getKey().equals(channel) ? "wechatMp" : "wechatMini";
+        String arrayKey = NoticeChannelEnum.MP.getKey().equals(channel) ? "wechatMpAccounts" : "wechatMiniAccounts";
         Object raw = config.get(objectKey);
-        if (raw instanceof Map) {
-            return (Map<String, Object>) raw;
+        Map<String, Object> fromObject = asStringObjectMap(raw);
+        if (fromObject != null) {
+            return fromObject;
         }
         Object listRaw = config.get(arrayKey);
         if (listRaw instanceof List && CollectionUtil.isNotEmpty((List<?>) listRaw)) {
             Object first = ((List<?>) listRaw).get(0);
-            return first instanceof Map ? (Map<String, Object>) first
-                : JSONUtil.toBean(JSONUtil.toJsonStr(first), null);
+            return asStringObjectMap(first);
         }
         return null;
+    }
+
+    /**
+     * Map / JSONObject / JSON 字符串 → Map；空对象返回 null
+     */
+    @SuppressWarnings("unchecked")
+    private static Map<String, Object> asStringObjectMap(Object raw) {
+        if (raw == null) {
+            return null;
+        }
+        if (raw instanceof Map) {
+            Map<String, Object> map = (Map<String, Object>) raw;
+            return map.isEmpty() ? null : map;
+        }
+        if (raw instanceof String && StrUtil.isNotBlank(raw.toString())) {
+            Map<String, Object> parsed = JSONUtil.toBean(raw.toString(), null);
+            return CollectionUtil.isEmpty(parsed) ? null : parsed;
+        }
+        try {
+            Map<String, Object> parsed = JSONUtil.toBean(JSONUtil.toJsonStr(raw), null);
+            return CollectionUtil.isEmpty(parsed) ? null : parsed;
+        } catch (Exception ignore) {
+            return null;
+        }
     }
 
     /**
@@ -151,8 +225,7 @@ public final class NoticeDispatchConfigHelper {
      * codeNum、name 以平台为准；remark/enabledChannels/templates 取租户；渠道账号只读平台。
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, Object> mergePlatformAndTenant(Object platformRaw, Object tenantRaw) {
-        Map<String, Object> platform = parsePlatformConfig(platformRaw);
+    public static Map<String, Object> mergePlatformAndTenant(Map<String, Object> platform, Object tenantRaw) {
         Map<String, Object> tenant = parseConfig(tenantRaw);
         List<Map<String, Object>> platformTypes =
             (List<Map<String, Object>>) platform.getOrDefault("types", new ArrayList<>());
@@ -221,39 +294,6 @@ public final class NoticeDispatchConfigHelper {
         config.put("channels", platform.getOrDefault("channels", new ArrayList<>()));
         config.put("wechatMp", platform.getOrDefault("wechatMp", new HashMap<>()));
         config.put("wechatMini", platform.getOrDefault("wechatMini", new HashMap<>()));
-        return config;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static Map<String, Object> parsePlatformConfig(Object raw) {
-        if (raw == null) {
-            return defaultPlatformConfig();
-        }
-        Map<String, Object> config;
-        if (raw instanceof Map) {
-            config = (Map<String, Object>) raw;
-        } else if (raw instanceof String && StrUtil.isNotBlank(raw.toString())) {
-            config = JSONUtil.toBean(raw.toString(), null);
-        } else {
-            return defaultPlatformConfig();
-        }
-        if (CollectionUtil.isEmpty(config)) {
-            return defaultPlatformConfig();
-        }
-        List<?> types = (List<?>) config.get("types");
-        if (CollectionUtil.isEmpty(types)) {
-            Map<String, Object> defaults = defaultPlatformConfig();
-            defaults.put("channels", config.getOrDefault("channels", new ArrayList<>()));
-            defaults.put("wechatMp", config.getOrDefault("wechatMp", new HashMap<>()));
-            defaults.put("wechatMini", config.getOrDefault("wechatMini", new HashMap<>()));
-            return defaults;
-        }
-        if (!config.containsKey("wechatMp")) {
-            config.put("wechatMp", new HashMap<>());
-        }
-        if (!config.containsKey("wechatMini")) {
-            config.put("wechatMini", new HashMap<>());
-        }
         return config;
     }
 

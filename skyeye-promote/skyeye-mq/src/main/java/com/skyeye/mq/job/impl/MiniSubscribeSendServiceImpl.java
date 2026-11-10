@@ -120,22 +120,25 @@ public class MiniSubscribeSendServiceImpl implements RocketMQListener<String> {
         return MapUtil.getStr(bind, "openId");
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * 固定映射：消息通知标题/内容（已解析占位符）→ thing1 / thing2。
+     * 小程序订阅消息模板请使用 thing1、thing2 两个字段承接。
+     */
     private List<WxMaSubscribeMessage.MsgData> buildMsgData(Map<String, Object> map) {
         List<WxMaSubscribeMessage.MsgData> list = new ArrayList<>();
-        Object paramsObj = map.get("params");
-        if (paramsObj instanceof Map) {
-            Map<String, Object> params = (Map<String, Object>) paramsObj;
-            for (Map.Entry<String, Object> entry : params.entrySet()) {
-                String value = entry.getValue() == null ? StrUtil.EMPTY : entry.getValue().toString();
-                list.add(new WxMaSubscribeMessage.MsgData(entry.getKey(), value));
-            }
-        }
-        if (list.isEmpty()) {
-            list.add(new WxMaSubscribeMessage.MsgData("thing1", MapUtil.getStr(map, "title")));
-            list.add(new WxMaSubscribeMessage.MsgData("thing2", MapUtil.getStr(map, "content")));
-        }
+        list.add(new WxMaSubscribeMessage.MsgData("thing1", toPlainText(MapUtil.getStr(map, "title"))));
+        list.add(new WxMaSubscribeMessage.MsgData("thing2", toPlainText(MapUtil.getStr(map, "content"))));
         return list;
+    }
+
+    private String toPlainText(String raw) {
+        if (StrUtil.isBlank(raw)) {
+            return StrUtil.EMPTY;
+        }
+        String text = raw.replaceAll("(?i)<br\\s*/?>", "\n");
+        text = text.replaceAll("<[^>]+>", StrUtil.EMPTY);
+        return text.replace("&nbsp;", " ").replace("&lt;", "<").replace("&gt;", ">")
+            .replace("&amp;", "&").trim();
     }
 
 }

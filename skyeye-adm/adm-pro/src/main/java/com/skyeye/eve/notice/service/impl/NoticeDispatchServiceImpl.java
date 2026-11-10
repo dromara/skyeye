@@ -9,12 +9,12 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.skyeye.common.client.ExecuteFeignClient;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.MqConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.tenant.context.TenantContext;
-import com.skyeye.common.client.ExecuteFeignClient;
 import com.skyeye.eve.notice.classenum.NoticeChannelEnum;
 import com.skyeye.eve.notice.classenum.NoticeDispatchChannelStatusEnum;
 import com.skyeye.eve.notice.entity.NoticeDispatchChannelLog;
@@ -36,11 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -336,12 +332,11 @@ public class NoticeDispatchServiceImpl implements NoticeDispatchService {
     @SuppressWarnings("unchecked")
     private Map<String, Object> loadPlatformNoticeConfig() {
         try {
-            Map<String, Object> bean = ExecuteFeignClient.get(
-                () -> iPlatformBaseSettingRest.queryPlatformNoticeDispatchConfig()).getBean();
-            if (ObjectUtil.isEmpty(bean)) {
+            Map<String, Object> result = ExecuteFeignClient.get(() -> iPlatformBaseSettingRest.queryPlatformNoticeDispatchConfig()).getBean();
+            if (CollectionUtil.isEmpty(result)) {
                 return NoticeDispatchConfigHelper.defaultPlatformConfig();
             }
-            return bean;
+            return result;
         } catch (Exception e) {
             log.warn("load platform notice config failed, fallback to defaults", e);
             return NoticeDispatchConfigHelper.defaultPlatformConfig();
