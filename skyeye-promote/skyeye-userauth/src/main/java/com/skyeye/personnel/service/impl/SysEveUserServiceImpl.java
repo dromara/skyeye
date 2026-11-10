@@ -1249,17 +1249,9 @@ public class SysEveUserServiceImpl extends SkyeyeBusinessServiceImpl<SysEveUserD
     @SuppressWarnings("unchecked")
     private Map<String, Object> resolveWechatAccount(Map<String, Object> config, Integer channel) {
         String objectKey = Objects.equals(channel, NOTICE_CHANNEL_MP) ? "wechatMp" : "wechatMini";
-        String arrayKey = Objects.equals(channel, NOTICE_CHANNEL_MP) ? "wechatMpAccounts" : "wechatMiniAccounts";
         Object raw = config.get(objectKey);
         if (raw instanceof Map) {
             return (Map<String, Object>) raw;
-        }
-        Object listRaw = config.get(arrayKey);
-        if (listRaw instanceof List && !((List<?>) listRaw).isEmpty()) {
-            Object first = ((List<?>) listRaw).get(0);
-            return first instanceof Map
-                ? (Map<String, Object>) first
-                : JSONUtil.toBean(JSONUtil.toJsonStr(first), null);
         }
         return null;
     }

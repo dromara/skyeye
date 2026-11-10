@@ -82,18 +82,10 @@ public class MiniSubscribeSendServiceImpl implements RocketMQListener<String> {
             wxMaService.setWxMaConfig(config);
 
             List<WxMaSubscribeMessage.MsgData> dataList = buildMsgData(map);
-            String pagePath = MapUtil.getStr(map, "pagePath");
-            // 小程序订阅消息只支持小程序内路径，忽略 http(s)
-            if (StrUtil.isNotBlank(pagePath)) {
-                String lower = pagePath.trim().toLowerCase();
-                if (lower.startsWith("http://") || lower.startsWith("https://")) {
-                    pagePath = StrUtil.EMPTY;
-                }
-            }
             WxMaSubscribeMessage message = WxMaSubscribeMessage.builder()
                 .toUser(openId)
                 .templateId(apiTemplateId)
-                .page(pagePath)
+                .page(MapUtil.getStr(map, "pagePath"))
                 .data(dataList)
                 .build();
             wxMaService.getMsgService().sendSubscribeMsg(message);

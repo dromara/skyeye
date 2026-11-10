@@ -194,17 +194,11 @@ public class NoticeDispatchServiceImpl implements NoticeDispatchService {
 
         try {
             String pagePath = resolveRenderedPath(body == null ? null : body.getMiniPagePath(),
-                firstNonBlank(MapUtil.getStr(params, "miniPagePath"), MapUtil.getStr(params, "pagePath")),
+                MapUtil.getStr(params, "pagePath"),
                 MapUtil.getStr(template, "pagePath"), params);
             String resolvedJumpUrl = resolveRenderedPath(body == null ? null : body.getJumpUrl(),
-                firstNonBlank(MapUtil.getStr(params, "jumpUrl"),
-                    firstNonBlank(MapUtil.getStr(params, "url"), MapUtil.getStr(params, "h5Url"))),
+                MapUtil.getStr(params, "jumpUrl"),
                 MapUtil.getStr(template, "h5Url"), params);
-            // 兼容旧配置：pagePath 写成 http(s) 时当作 H5
-            if (StrUtil.isBlank(resolvedJumpUrl) && isHttpUrl(pagePath)) {
-                resolvedJumpUrl = pagePath;
-                pagePath = StrUtil.EMPTY;
-            }
             String pcPath = resolveRenderedPath(body == null ? null : body.getPcPath(),
                 MapUtil.getStr(params, "pcPath"), MapUtil.getStr(template, "pcPath"), params);
             String mobilePath = resolveRenderedPath(body == null ? null : body.getMobilePath(),
@@ -362,14 +356,6 @@ public class NoticeDispatchServiceImpl implements NoticeDispatchService {
 
     private String firstNonBlank(String first, String second) {
         return StrUtil.isNotBlank(first) ? first : StrUtil.blankToDefault(second, StrUtil.EMPTY);
-    }
-
-    private boolean isHttpUrl(String value) {
-        if (StrUtil.isBlank(value)) {
-            return false;
-        }
-        String lower = value.trim().toLowerCase();
-        return lower.startsWith("http://") || lower.startsWith("https://");
     }
 
     /**

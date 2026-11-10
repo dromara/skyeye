@@ -69,9 +69,6 @@ public class SiteMessageSendServiceImpl implements RocketMQListener<String> {
             userMessage.setContent(map.getOrDefault("content", StrUtil.EMPTY).toString());
             userMessage.setReceiveId(map.get("receiveId").toString());
             String typeCode = map.get("typeCode") == null ? StrUtil.EMPTY : map.get("typeCode").toString();
-            if (StrUtil.isBlank(typeCode) && map.get("typeKey") != null) {
-                typeCode = map.get("typeKey").toString();
-            }
             userMessage.setType(NoticeUserMessageTypeEnum.normalizeType(typeCode));
             userMessage.setCreateUserId(map.getOrDefault("createUserId", CommonConstants.ADMIN_USER_ID).toString());
             userMessage.setObjectData(buildSiteObjectData(map));

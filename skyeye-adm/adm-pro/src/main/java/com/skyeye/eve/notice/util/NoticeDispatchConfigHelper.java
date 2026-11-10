@@ -127,7 +127,7 @@ public final class NoticeDispatchConfigHelper {
     }
 
     /**
-     * 公众号/小程序：凭证优先取 wechatMp / wechatMini；兼容旧数组账号与渠道行内联 appId。
+     * 公众号/小程序：凭证取 wechatMp / wechatMini 页签配置。
      */
     @SuppressWarnings("unchecked")
     private static Map<String, Object> enrichWechatChannelCredential(Map<String, Object> config,
@@ -179,21 +179,9 @@ public final class NoticeDispatchConfigHelper {
         return !EnableEnum.DISABLE_USING.getKey().equals(MapUtil.getInt(account, "enabled", EnableEnum.ENABLE_USING.getKey()));
     }
 
-    @SuppressWarnings("unchecked")
     private static Map<String, Object> resolveWechatAccount(Map<String, Object> config, Integer channel) {
         String objectKey = NoticeChannelEnum.MP.getKey().equals(channel) ? "wechatMp" : "wechatMini";
-        String arrayKey = NoticeChannelEnum.MP.getKey().equals(channel) ? "wechatMpAccounts" : "wechatMiniAccounts";
-        Object raw = config.get(objectKey);
-        Map<String, Object> fromObject = asStringObjectMap(raw);
-        if (fromObject != null) {
-            return fromObject;
-        }
-        Object listRaw = config.get(arrayKey);
-        if (listRaw instanceof List && CollectionUtil.isNotEmpty((List<?>) listRaw)) {
-            Object first = ((List<?>) listRaw).get(0);
-            return asStringObjectMap(first);
-        }
-        return null;
+        return asStringObjectMap(config.get(objectKey));
     }
 
     /**
@@ -366,18 +354,6 @@ public final class NoticeDispatchConfigHelper {
         return base + "/" + trimmedPath;
     }
 
-    public static String firstNonBlankPath(String... values) {
-        if (values == null) {
-            return StrUtil.EMPTY;
-        }
-        for (String value : values) {
-            if (StrUtil.isNotBlank(value)) {
-                return value.trim();
-            }
-        }
-        return StrUtil.EMPTY;
-    }
-
     private static Map<String, Object> buildPlatformType(String code, String name) {
         Map<String, Object> type = new HashMap<>();
         type.put("codeNum", code);
@@ -424,13 +400,12 @@ public final class NoticeDispatchConfigHelper {
 
     /**
      * 多租户：跳转路径仅平台可配，覆盖到租户模板（站内信/公众号/小程序）。
-     * 若平台未下发 jumpConfigs，则不改模板跳转字段（避免 Feign 丢嵌套后被清空）。
+     * 若平台未下发 jumpConfigs，则不改模板跳转字段。
      */
     @SuppressWarnings("unchecked")
     private static void applyPlatformJumpConfigs(Map<String, Object> mergedType, Map<String, Object> platformType) {
         Object jumpRaw = platformType.get("jumpConfigs");
         if (!(jumpRaw instanceof List) || CollectionUtil.isEmpty((List<?>) jumpRaw)) {
-            // 兼容 Feign 把嵌套 List 丢掉后变成 JSON 字符串
             if (jumpRaw instanceof String && StrUtil.isNotBlank(jumpRaw.toString())) {
                 try {
                     Object parsed = JSONUtil.toBean(jumpRaw.toString(), null);

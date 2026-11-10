@@ -104,18 +104,12 @@ public class MpTemplateSendServiceImpl implements RocketMQListener<String> {
 
     /**
      * 跳转：H5（jumpUrl）与小程序（miniAppId + pagePath）可同时下发；微信端有小程序时优先打开小程序。
-     * 兼容旧配置：pagePath 若以 http(s) 开头且无 jumpUrl，则当作 H5。
      */
     private void applyJump(WxMpTemplateMessage.WxMpTemplateMessageBuilder builder, Map<String, Object> map) {
         String pagePath = MapUtil.getStr(map, "pagePath");
-        String jumpUrl = firstNonBlank(MapUtil.getStr(map, "jumpUrl"),
-            firstNonBlank(MapUtil.getStr(map, "url"), MapUtil.getStr(map, "h5Url")));
+        String jumpUrl = MapUtil.getStr(map, "jumpUrl");
         String miniAppId = MapUtil.getStr(map, "miniAppId");
-        if (StrUtil.isNotBlank(pagePath) && isHttpUrl(pagePath) && StrUtil.isBlank(jumpUrl)) {
-            jumpUrl = pagePath;
-            pagePath = StrUtil.EMPTY;
-        }
-        if (StrUtil.isNotBlank(miniAppId) && StrUtil.isNotBlank(pagePath) && !isHttpUrl(pagePath)) {
+        if (StrUtil.isNotBlank(miniAppId) && StrUtil.isNotBlank(pagePath)) {
             WxMpTemplateMessage.MiniProgram miniProgram = new WxMpTemplateMessage.MiniProgram();
             miniProgram.setAppid(miniAppId);
             miniProgram.setPagePath(pagePath);
@@ -124,18 +118,6 @@ public class MpTemplateSendServiceImpl implements RocketMQListener<String> {
         if (StrUtil.isNotBlank(jumpUrl)) {
             builder.url(jumpUrl);
         }
-    }
-
-    private boolean isHttpUrl(String value) {
-        if (StrUtil.isBlank(value)) {
-            return false;
-        }
-        String lower = value.trim().toLowerCase();
-        return lower.startsWith("http://") || lower.startsWith("https://");
-    }
-
-    private String firstNonBlank(String first, String second) {
-        return StrUtil.isNotBlank(first) ? first : second;
     }
 
     private String resolveOpenId(Map<String, Object> map) {
