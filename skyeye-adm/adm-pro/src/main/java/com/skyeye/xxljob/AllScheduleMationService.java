@@ -70,6 +70,7 @@ public class AllScheduleMationService {
             .collect(Collectors.toList());
         if (!receiveUserIds.isEmpty()) {
             Map<String, Object> params = new HashMap<>();
+            params.put("id", scheduleDay.getId());
             params.put("title", scheduleDay.getName());
             params.put("startTime", scheduleDay.getStartTime());
             params.put("endTime", scheduleDay.getEndTime());
@@ -80,6 +81,7 @@ public class AllScheduleMationService {
             body.setReceiveUserIds(receiveUserIds);
             body.setParams(params);
             body.setCreateUserId(CommonConstants.ADMIN_USER_ID);
+            body.setObjectData(JSONUtil.toJsonStr(scheduleDay));
             // 按人补充 userName（模板可使用）
             Map<String, Map<String, Object>> extras = new HashMap<>();
             for (Map<String, Object> user : users) {

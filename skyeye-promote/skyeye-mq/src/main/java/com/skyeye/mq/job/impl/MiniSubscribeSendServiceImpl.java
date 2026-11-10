@@ -82,10 +82,18 @@ public class MiniSubscribeSendServiceImpl implements RocketMQListener<String> {
             wxMaService.setWxMaConfig(config);
 
             List<WxMaSubscribeMessage.MsgData> dataList = buildMsgData(map);
+            String pagePath = MapUtil.getStr(map, "pagePath");
+            // 小程序订阅消息只支持小程序内路径，忽略 http(s)
+            if (StrUtil.isNotBlank(pagePath)) {
+                String lower = pagePath.trim().toLowerCase();
+                if (lower.startsWith("http://") || lower.startsWith("https://")) {
+                    pagePath = StrUtil.EMPTY;
+                }
+            }
             WxMaSubscribeMessage message = WxMaSubscribeMessage.builder()
                 .toUser(openId)
                 .templateId(apiTemplateId)
-                .page(MapUtil.getStr(map, "pagePath"))
+                .page(pagePath)
                 .data(dataList)
                 .build();
             wxMaService.getMsgService().sendSubscribeMsg(message);
@@ -131,14 +139,17 @@ public class MiniSubscribeSendServiceImpl implements RocketMQListener<String> {
         return list;
     }
 
+    /** 小程序订阅消息字段同样不支持 HTML/换行，&lt;br/&gt; 转空格 */
     private String toPlainText(String raw) {
         if (StrUtil.isBlank(raw)) {
             return StrUtil.EMPTY;
         }
-        String text = raw.replaceAll("(?i)<br\\s*/?>", "\n");
+        String text = raw.replaceAll("(?i)<br\\s*/?>", " ");
         text = text.replaceAll("<[^>]+>", StrUtil.EMPTY);
-        return text.replace("&nbsp;", " ").replace("&lt;", "<").replace("&gt;", ">")
-            .replace("&amp;", "&").trim();
+        text = text.replace("&nbsp;", " ").replace("&lt;", "<").replace("&gt;", ">")
+            .replace("&amp;", "&");
+        text = text.replaceAll("[\\r\\n]+", " ").replaceAll("\\s{2,}", " ");
+        return text.trim();
     }
 
 }

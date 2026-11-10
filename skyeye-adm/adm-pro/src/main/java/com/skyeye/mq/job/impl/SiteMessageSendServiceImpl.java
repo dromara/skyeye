@@ -74,9 +74,7 @@ public class SiteMessageSendServiceImpl implements RocketMQListener<String> {
             }
             userMessage.setType(NoticeUserMessageTypeEnum.normalizeType(typeCode));
             userMessage.setCreateUserId(map.getOrDefault("createUserId", CommonConstants.ADMIN_USER_ID).toString());
-            if (map.get("objectData") != null) {
-                userMessage.setObjectData(map.get("objectData").toString());
-            }
+            userMessage.setObjectData(buildSiteObjectData(map));
             userMessageService.insertUserMessageList(Collections.singletonList(userMessage));
             MqSendUtil.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_SUCCESS, StrUtil.EMPTY);
             callbackHistory(channelLogId, NoticeDispatchChannelStatusEnum.SUCCESS.getKey(), jobId, StrUtil.EMPTY);
@@ -102,6 +100,60 @@ public class SiteMessageSendServiceImpl implements RocketMQListener<String> {
             // 回写失败不能拖垮已发送成功的消费，避免 MQ 无限重试
             log.warn("callback notice history failed, channelLogId={}", channelLogId, e);
         }
+    }
+
+    /**
+     * 组装站内信 objectData：保留业务对象，并写入已拼域名的跳转字段。
+     * MQ 反序列化后 objectData 可能是 String 或 Map，不能直接 toString。
+     */
+    @SuppressWarnings("unchecked")
+    private String buildSiteObjectData(Map<String, Object> map) {
+        // 跳转字段放最前，避免 object_data 列过长被截断时丢跳转
+        Map<String, Object> data = new java.util.LinkedHashMap<>();
+        putJump(data, "pcPath", MapUtil.getStr(map, "pcPath"));
+        putJump(data, "mobilePath", MapUtil.getStr(map, "mobilePath"));
+        putJump(data, "h5Url", firstNonBlank(MapUtil.getStr(map, "jumpUrl"), MapUtil.getStr(map, "h5Url")));
+        putJump(data, "pagePath", MapUtil.getStr(map, "pagePath"));
+        Object raw = map.get("objectData");
+        if (raw instanceof Map) {
+            for (Map.Entry<String, Object> entry : ((Map<String, Object>) raw).entrySet()) {
+                if (!data.containsKey(entry.getKey())) {
+                    data.put(entry.getKey(), entry.getValue());
+                }
+            }
+        } else if (raw != null && StrUtil.isNotBlank(raw.toString())) {
+            String text = raw.toString().trim();
+            try {
+                Object parsed = JSONUtil.toBean(text, null);
+                if (parsed instanceof Map) {
+                    for (Map.Entry<String, Object> entry : ((Map<String, Object>) parsed).entrySet()) {
+                        if (!data.containsKey(entry.getKey())) {
+                            data.put(entry.getKey(), entry.getValue());
+                        }
+                    }
+                } else if (StrUtil.isNotBlank(text) && !text.startsWith("{") && !text.startsWith("[")) {
+                    data.put("raw", text);
+                }
+            } catch (Exception e) {
+                if (!text.startsWith("{")) {
+                    data.put("raw", text);
+                }
+            }
+        }
+        if (data.isEmpty()) {
+            return StrUtil.EMPTY;
+        }
+        return JSONUtil.toJsonStr(data);
+    }
+
+    private void putJump(Map<String, Object> data, String key, String value) {
+        if (StrUtil.isNotBlank(value)) {
+            data.put(key, value.trim());
+        }
+    }
+
+    private String firstNonBlank(String first, String second) {
+        return StrUtil.isNotBlank(first) ? first : StrUtil.blankToDefault(second, StrUtil.EMPTY);
     }
 
 }

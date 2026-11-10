@@ -118,4 +118,9 @@ public class PlatformBaseSettingConst {
      */
     public static final String KEY_NOTICE_WECHAT_MINI = "wechatMini";
 
+    /**
+     * 消息通知分组 - 跳转域名（H5/PC，仅平台可配）
+     */
+    public static final String KEY_NOTICE_JUMP_DOMAINS = "jumpDomains";
+
 }

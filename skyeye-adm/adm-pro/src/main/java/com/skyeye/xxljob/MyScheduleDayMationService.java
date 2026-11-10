@@ -68,6 +68,7 @@ public class MyScheduleDayMationService {
             ScheduleDay scheduleDay = scheduleDayService.selectById(scheduleId);
 
             Map<String, Object> params = new HashMap<>();
+            params.put("id", scheduleDay.getId());
             params.put("userName", userMation.getOrDefault("userName", StrUtil.EMPTY));
             params.put("title", scheduleDay.getName());
             params.put("startTime", scheduleDay.getStartTime());
@@ -79,6 +80,7 @@ public class MyScheduleDayMationService {
             body.setReceiveUserIds(Arrays.asList(userId));
             body.setParams(params);
             body.setCreateUserId(CommonConstants.ADMIN_USER_ID);
+            body.setObjectData(JSONUtil.toJsonStr(scheduleDay));
             noticeDispatchService.dispatch(body);
         } catch (Exception e) {
             log.error("日程提醒失败", e);

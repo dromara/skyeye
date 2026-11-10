@@ -285,8 +285,9 @@ public final class NoticeDispatchConfigHelper {
                 merged.put("enabledChannels", new ArrayList<>());
                 merged.put("templates", new ArrayList<>());
             }
-            // 多租户：平台模板号以平台 apiTemplates 为准，覆盖到各渠道模板
+            // 多租户：平台模板号、跳转路径以平台为准，覆盖到各渠道模板
             applyPlatformApiTemplateIds(merged, platformType);
+            applyPlatformJumpConfigs(merged, platformType);
             mergedTypes.add(merged);
         }
         Map<String, Object> config = new HashMap<>();
@@ -294,6 +295,8 @@ public final class NoticeDispatchConfigHelper {
         config.put("channels", platform.getOrDefault("channels", new ArrayList<>()));
         config.put("wechatMp", platform.getOrDefault("wechatMp", new HashMap<>()));
         config.put("wechatMini", platform.getOrDefault("wechatMini", new HashMap<>()));
+        // 跳转域名仅来自平台，租户不可覆盖
+        config.put("jumpDomains", normalizeJumpDomains(platform.get("jumpDomains")));
         return config;
     }
 
@@ -310,7 +313,69 @@ public final class NoticeDispatchConfigHelper {
         config.put("channels", new ArrayList<>());
         config.put("wechatMp", new HashMap<>());
         config.put("wechatMini", new HashMap<>());
+        config.put("jumpDomains", defaultJumpDomains());
         return config;
+    }
+
+    public static Map<String, Object> defaultJumpDomains() {
+        Map<String, Object> domains = new HashMap<>();
+        domains.put("h5Domain", StrUtil.EMPTY);
+        domains.put("pcDomain", StrUtil.EMPTY);
+        return domains;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Map<String, Object> normalizeJumpDomains(Object raw) {
+        Map<String, Object> domains = defaultJumpDomains();
+        Map<String, Object> src = asStringObjectMap(raw);
+        if (MapUtil.isEmpty(src)) {
+            return domains;
+        }
+        domains.put("h5Domain", StrUtil.trim(MapUtil.getStr(src, "h5Domain", StrUtil.EMPTY)));
+        domains.put("pcDomain", StrUtil.trim(MapUtil.getStr(src, "pcDomain", StrUtil.EMPTY)));
+        return domains;
+    }
+
+    public static String getJumpDomain(Map<String, Object> config, String key) {
+        Map<String, Object> domains = normalizeJumpDomains(config == null ? null : config.get("jumpDomains"));
+        return MapUtil.getStr(domains, key, StrUtil.EMPTY);
+    }
+
+    /**
+     * 相对路径拼接域名；已是 http(s) 或域名未配则原样返回。
+     */
+    public static String joinWithDomain(String domain, String path) {
+        if (StrUtil.isBlank(path)) {
+            return StrUtil.EMPTY;
+        }
+        String trimmedPath = path.trim();
+        String lower = trimmedPath.toLowerCase();
+        if (lower.startsWith("http://") || lower.startsWith("https://")) {
+            return trimmedPath;
+        }
+        if (StrUtil.isBlank(domain)) {
+            return trimmedPath;
+        }
+        String base = domain.trim();
+        while (base.endsWith("/")) {
+            base = base.substring(0, base.length() - 1);
+        }
+        if (trimmedPath.startsWith("/")) {
+            return base + trimmedPath;
+        }
+        return base + "/" + trimmedPath;
+    }
+
+    public static String firstNonBlankPath(String... values) {
+        if (values == null) {
+            return StrUtil.EMPTY;
+        }
+        for (String value : values) {
+            if (StrUtil.isNotBlank(value)) {
+                return value.trim();
+            }
+        }
+        return StrUtil.EMPTY;
     }
 
     private static Map<String, Object> buildPlatformType(String code, String name) {
@@ -351,6 +416,71 @@ public final class NoticeDispatchConfigHelper {
             String channel = MapUtil.getStr(template, "channel");
             if (apiMap.containsKey(channel)) {
                 template.put("apiTemplateId", apiMap.get(channel));
+            }
+            templates.add(template);
+        }
+        mergedType.put("templates", templates);
+    }
+
+    /**
+     * 多租户：跳转路径仅平台可配，覆盖到租户模板（站内信/公众号/小程序）。
+     * 若平台未下发 jumpConfigs，则不改模板跳转字段（避免 Feign 丢嵌套后被清空）。
+     */
+    @SuppressWarnings("unchecked")
+    private static void applyPlatformJumpConfigs(Map<String, Object> mergedType, Map<String, Object> platformType) {
+        Object jumpRaw = platformType.get("jumpConfigs");
+        if (!(jumpRaw instanceof List) || CollectionUtil.isEmpty((List<?>) jumpRaw)) {
+            // 兼容 Feign 把嵌套 List 丢掉后变成 JSON 字符串
+            if (jumpRaw instanceof String && StrUtil.isNotBlank(jumpRaw.toString())) {
+                try {
+                    Object parsed = JSONUtil.toBean(jumpRaw.toString(), null);
+                    if (parsed instanceof List) {
+                        jumpRaw = parsed;
+                    } else {
+                        return;
+                    }
+                } catch (Exception e) {
+                    return;
+                }
+            } else {
+                return;
+            }
+        }
+        Map<String, Map<String, Object>> jumpMap = new HashMap<>();
+        for (Object item : (List<?>) jumpRaw) {
+            Map<String, Object> row = item instanceof Map ? (Map<String, Object>) item
+                : JSONUtil.toBean(JSONUtil.toJsonStr(item), null);
+            if (row == null) {
+                continue;
+            }
+            String channel = MapUtil.getStr(row, "channel");
+            if (StrUtil.isNotBlank(channel)) {
+                jumpMap.put(channel, row);
+            }
+        }
+        if (jumpMap.isEmpty()) {
+            return;
+        }
+        Object templatesObj = mergedType.get("templates");
+        if (!(templatesObj instanceof List)) {
+            return;
+        }
+        List<Map<String, Object>> templates = new ArrayList<>();
+        for (Object item : (List<?>) templatesObj) {
+            Map<String, Object> template = item instanceof Map ? new HashMap<>((Map<String, Object>) item)
+                : JSONUtil.toBean(JSONUtil.toJsonStr(item), null);
+            String channel = MapUtil.getStr(template, "channel");
+            Map<String, Object> jump = jumpMap.get(channel);
+            if (jump != null) {
+                if ("1".equals(channel)) {
+                    template.put("pcPath", MapUtil.getStr(jump, "pcPath", StrUtil.EMPTY));
+                    template.put("mobilePath", MapUtil.getStr(jump, "mobilePath", StrUtil.EMPTY));
+                } else if ("4".equals(channel)) {
+                    template.put("h5Url", MapUtil.getStr(jump, "h5Url", StrUtil.EMPTY));
+                    template.put("pagePath", MapUtil.getStr(jump, "pagePath", StrUtil.EMPTY));
+                } else if ("5".equals(channel)) {
+                    template.put("pagePath", MapUtil.getStr(jump, "pagePath", StrUtil.EMPTY));
+                }
             }
             templates.add(template);
         }
@@ -403,6 +533,7 @@ public final class NoticeDispatchConfigHelper {
             listOf(buildTemplate(2, "公告-邮件", "公告提醒", "内部公告 -【{title}】"))));
         config.put("types", types);
         config.put("channels", new ArrayList<>());
+        config.put("jumpDomains", defaultJumpDomains());
         return config;
     }
 
@@ -427,6 +558,9 @@ public final class NoticeDispatchConfigHelper {
         template.put("apiTemplateId", StrUtil.EMPTY);
         template.put("smsTemplateCode", StrUtil.EMPTY);
         template.put("pagePath", StrUtil.EMPTY);
+        template.put("h5Url", StrUtil.EMPTY);
+        template.put("pcPath", StrUtil.EMPTY);
+        template.put("mobilePath", StrUtil.EMPTY);
         template.put("enabled", EnableEnum.ENABLE_USING.getKey());
         return template;
     }

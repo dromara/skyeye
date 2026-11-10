@@ -91,6 +91,7 @@ public class EquipmentInspectionDispatchNoticeServiceImpl implements RocketMQLis
                 }
                 if (CollectionUtil.isNotEmpty(receiveUserIds)) {
                     Map<String, Object> params = new HashMap<>();
+                    params.put("id", order.getId());
                     params.put("orderNum", order.getOddNumber());
                     NoticeDispatchBody body = new NoticeDispatchBody();
                     body.setTypeCode("EQUIPMENT_INSPECTION_REMINDER");

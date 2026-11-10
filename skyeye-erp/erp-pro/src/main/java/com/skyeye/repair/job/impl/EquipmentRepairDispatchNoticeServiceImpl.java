@@ -68,6 +68,7 @@ public class EquipmentRepairDispatchNoticeServiceImpl implements RocketMQListene
             if (ObjectUtil.isNotEmpty(repairOrder) && StrUtil.isNotEmpty(repairOrder.getServiceUserId())) {
                 Map<String, Object> userMation = iAuthUserService.queryDataMationById(repairOrder.getServiceUserId());
                 Map<String, Object> params = new HashMap<>();
+                params.put("id", repairOrder.getId());
                 params.put("orderNum", repairOrder.getOddNumber());
                 Map<String, Map<String, Object>> extras = new HashMap<>();
                 Map<String, Object> extra = new HashMap<>();

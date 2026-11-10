@@ -462,6 +462,8 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
             parseNoticeObject(noticeGroup.get(PlatformBaseSettingConst.KEY_NOTICE_WECHAT_MP)));
         data.put(PlatformBaseSettingConst.KEY_NOTICE_WECHAT_MINI,
             parseNoticeObject(noticeGroup.get(PlatformBaseSettingConst.KEY_NOTICE_WECHAT_MINI)));
+        data.put(PlatformBaseSettingConst.KEY_NOTICE_JUMP_DOMAINS,
+            parseNoticeObject(noticeGroup.get(PlatformBaseSettingConst.KEY_NOTICE_JUMP_DOMAINS)));
         return data;
     }
 
@@ -520,8 +522,16 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
         noticeGroup.put(PlatformBaseSettingConst.KEY_NOTICE_TYPES, buildDefaultNoticeTypes());
         noticeGroup.put(PlatformBaseSettingConst.KEY_NOTICE_WECHAT_MP, new HashMap<>());
         noticeGroup.put(PlatformBaseSettingConst.KEY_NOTICE_WECHAT_MINI, new HashMap<>());
+        noticeGroup.put(PlatformBaseSettingConst.KEY_NOTICE_JUMP_DOMAINS, buildDefaultJumpDomains());
         settingData.put(PlatformBaseSettingGroup.NOTICE.getKey(), noticeGroup);
         return settingData;
+    }
+
+    private Map<String, Object> buildDefaultJumpDomains() {
+        Map<String, Object> domains = new HashMap<>();
+        domains.put("h5Domain", StrUtil.EMPTY);
+        domains.put("pcDomain", StrUtil.EMPTY);
+        return domains;
     }
 
     private List<Map<String, Object>> buildDefaultNoticeTypes() {

@@ -6,6 +6,7 @@ package com.skyeye.eve.notice.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -171,6 +172,7 @@ public class NoticeServiceImpl extends SkyeyeBusinessServiceImpl<NoticeDao, Noti
                     extras.put(receiveUserId, extra);
                 }
                 Map<String, Object> params = new HashMap<>();
+                params.put("id", entity.getId());
                 params.put("title", entity.getName());
                 NoticeDispatchBody body = new NoticeDispatchBody();
                 body.setTypeCode("ANNOUNCEMENT");
@@ -178,6 +180,7 @@ public class NoticeServiceImpl extends SkyeyeBusinessServiceImpl<NoticeDao, Noti
                 body.setParams(params);
                 body.setChannels(Arrays.asList(NoticeChannelEnum.EMAIL.getKey()));
                 body.setCreateUserId(userId);
+                body.setObjectData(JSONUtil.toJsonStr(entity));
                 body.setReceiverExtras(extras);
                 noticeDispatchService.dispatch(body);
             }

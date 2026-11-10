@@ -82,12 +82,12 @@ public class MpTemplateSendServiceImpl implements RocketMQListener<String> {
             WxMpService wxMpService = new WxMpServiceImpl();
             wxMpService.setWxMpConfigStorage(config);
 
-            WxMpTemplateMessage message = WxMpTemplateMessage.builder()
+            WxMpTemplateMessage.WxMpTemplateMessageBuilder builder = WxMpTemplateMessage.builder()
                 .toUser(openId)
-                .templateId(apiTemplateId)
-                .build();
-            List<WxMpTemplateData> dataList = buildTemplateData(map);
-            message.setData(dataList);
+                .templateId(apiTemplateId);
+            applyJump(builder, map);
+            WxMpTemplateMessage message = builder.build();
+            message.setData(buildTemplateData(map));
             wxMpService.getTemplateMsgService().sendTemplateMsg(message);
 
             jobMateMationService.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_SUCCESS, StrUtil.EMPTY);
@@ -102,6 +102,42 @@ public class MpTemplateSendServiceImpl implements RocketMQListener<String> {
         }
     }
 
+    /**
+     * 跳转：H5（jumpUrl）与小程序（miniAppId + pagePath）可同时下发；微信端有小程序时优先打开小程序。
+     * 兼容旧配置：pagePath 若以 http(s) 开头且无 jumpUrl，则当作 H5。
+     */
+    private void applyJump(WxMpTemplateMessage.WxMpTemplateMessageBuilder builder, Map<String, Object> map) {
+        String pagePath = MapUtil.getStr(map, "pagePath");
+        String jumpUrl = firstNonBlank(MapUtil.getStr(map, "jumpUrl"),
+            firstNonBlank(MapUtil.getStr(map, "url"), MapUtil.getStr(map, "h5Url")));
+        String miniAppId = MapUtil.getStr(map, "miniAppId");
+        if (StrUtil.isNotBlank(pagePath) && isHttpUrl(pagePath) && StrUtil.isBlank(jumpUrl)) {
+            jumpUrl = pagePath;
+            pagePath = StrUtil.EMPTY;
+        }
+        if (StrUtil.isNotBlank(miniAppId) && StrUtil.isNotBlank(pagePath) && !isHttpUrl(pagePath)) {
+            WxMpTemplateMessage.MiniProgram miniProgram = new WxMpTemplateMessage.MiniProgram();
+            miniProgram.setAppid(miniAppId);
+            miniProgram.setPagePath(pagePath);
+            builder.miniProgram(miniProgram);
+        }
+        if (StrUtil.isNotBlank(jumpUrl)) {
+            builder.url(jumpUrl);
+        }
+    }
+
+    private boolean isHttpUrl(String value) {
+        if (StrUtil.isBlank(value)) {
+            return false;
+        }
+        String lower = value.trim().toLowerCase();
+        return lower.startsWith("http://") || lower.startsWith("https://");
+    }
+
+    private String firstNonBlank(String first, String second) {
+        return StrUtil.isNotBlank(first) ? first : second;
+    }
+
     private String resolveOpenId(Map<String, Object> map) {
         String openId = MapUtil.getStr(map, "receiveAccount");
         if (StrUtil.isNotEmpty(openId)) {
@@ -112,7 +148,6 @@ public class MpTemplateSendServiceImpl implements RocketMQListener<String> {
         if (StrUtil.isEmpty(receiveId) || StrUtil.isEmpty(appId)) {
             return StrUtil.EMPTY;
         }
-        // 按 appId 取公众号 openId，避免与小程序 openId 串用
         Map<String, Object> bind = sysEveUserDao.queryUserBindMationByUserIdAndAppId(receiveId, appId);
         if (bind == null) {
             return StrUtil.EMPTY;
@@ -121,28 +156,26 @@ public class MpTemplateSendServiceImpl implements RocketMQListener<String> {
     }
 
     /**
-     * 固定映射：消息通知标题/内容（已解析占位符）→ 微信模板 title / content。
-     * 注意：微信自 2023-05 起不再展示 first、remark，勿再用这两个字段名。
+     * 固定两字段：消息通知标题/内容（已解析占位符）→ title / content。
+     * 勿用 first/remark（微信已屏蔽）。
      */
     private List<WxMpTemplateData> buildTemplateData(Map<String, Object> map) {
         List<WxMpTemplateData> list = new ArrayList<>();
-        String title = toPlainText(MapUtil.getStr(map, "title"));
-        String content = toPlainText(MapUtil.getStr(map, "content"));
-        list.add(new WxMpTemplateData("title", title));
-        list.add(new WxMpTemplateData("content", content));
-        log.info("mp template data titleLen={}, contentLen={}", title.length(), content.length());
+        list.add(new WxMpTemplateData("title", toPlainText(MapUtil.getStr(map, "title"))));
+        list.add(new WxMpTemplateData("content", toPlainText(MapUtil.getStr(map, "content"))));
         return list;
     }
 
-    /** 站内信内容可能含 HTML，公众号模板只收纯文本 */
     private String toPlainText(String raw) {
         if (StrUtil.isBlank(raw)) {
             return StrUtil.EMPTY;
         }
-        String text = raw.replaceAll("(?i)<br\\s*/?>", "\n");
+        String text = raw.replaceAll("(?i)<br\\s*/?>", " ");
         text = text.replaceAll("<[^>]+>", StrUtil.EMPTY);
-        return text.replace("&nbsp;", " ").replace("&lt;", "<").replace("&gt;", ">")
-            .replace("&amp;", "&").trim();
+        text = text.replace("&nbsp;", " ").replace("&lt;", "<").replace("&gt;", ">")
+            .replace("&amp;", "&");
+        text = text.replaceAll("[\\r\\n]+", " ").replaceAll("\\s{2,}", " ");
+        return text.trim();
     }
 
 }

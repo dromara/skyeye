@@ -96,6 +96,7 @@ public class WatiWorkerSendServiceImpl implements RocketMQListener<String> {
                 }
                 if (CollectionUtil.isNotEmpty(receiveUserIds)) {
                     Map<String, Object> params = new HashMap<>();
+                    params.put("id", afterSeal.getId());
                     params.put("orderNum", afterSeal.getOddNumber());
                     NoticeDispatchBody body = new NoticeDispatchBody();
                     body.setTypeCode("WORK_ORDER_REMINDER");

@@ -130,7 +130,7 @@ public class NoticeDispatchServiceImpl implements NoticeDispatchService {
             for (Integer channel : channels) {
                 try {
                     dispatchOneChannel(config, noticeType, channel, receiveUserId, userMation, extras,
-                        userParams, createUserId, body.getObjectData(), tenantId, historyId);
+                        userParams, createUserId, body.getObjectData(), tenantId, historyId, body);
                 } catch (Exception e) {
                     log.error("dispatch channel {} for user {} failed", channel, receiveUserId, e);
                     noticeDispatchChannelLogService.createLog(historyId, channel, receiveUserId, StrUtil.EMPTY,
@@ -145,7 +145,7 @@ public class NoticeDispatchServiceImpl implements NoticeDispatchService {
     private void dispatchOneChannel(Map<String, Object> config, Map<String, Object> noticeType, Integer channel,
                                     String receiveUserId, Map<String, Object> userMation, Map<String, Object> extras,
                                     Map<String, Object> params, String createUserId, String objectData,
-                                    String tenantId, String historyId) {
+                                    String tenantId, String historyId, NoticeDispatchBody body) {
         NoticeChannelEnum channelEnum = NoticeChannelEnum.getByKey(channel);
         if (channelEnum == null) {
             noticeDispatchChannelLogService.createLog(historyId, channel, receiveUserId, StrUtil.EMPTY,
@@ -193,6 +193,33 @@ public class NoticeDispatchServiceImpl implements NoticeDispatchService {
             NoticeDispatchChannelStatusEnum.PROCESSING.getKey(), StrUtil.EMPTY, createUserId);
 
         try {
+            String pagePath = resolveRenderedPath(body == null ? null : body.getMiniPagePath(),
+                firstNonBlank(MapUtil.getStr(params, "miniPagePath"), MapUtil.getStr(params, "pagePath")),
+                MapUtil.getStr(template, "pagePath"), params);
+            String resolvedJumpUrl = resolveRenderedPath(body == null ? null : body.getJumpUrl(),
+                firstNonBlank(MapUtil.getStr(params, "jumpUrl"),
+                    firstNonBlank(MapUtil.getStr(params, "url"), MapUtil.getStr(params, "h5Url"))),
+                MapUtil.getStr(template, "h5Url"), params);
+            // 兼容旧配置：pagePath 写成 http(s) 时当作 H5
+            if (StrUtil.isBlank(resolvedJumpUrl) && isHttpUrl(pagePath)) {
+                resolvedJumpUrl = pagePath;
+                pagePath = StrUtil.EMPTY;
+            }
+            String pcPath = resolveRenderedPath(body == null ? null : body.getPcPath(),
+                MapUtil.getStr(params, "pcPath"), MapUtil.getStr(template, "pcPath"), params);
+            String mobilePath = resolveRenderedPath(body == null ? null : body.getMobilePath(),
+                MapUtil.getStr(params, "mobilePath"), MapUtil.getStr(template, "mobilePath"), params);
+            // 平台/单租户配置的跳转域名：相对路径自动拼接；小程序 pagePath 不拼
+            String h5Domain = NoticeDispatchConfigHelper.getJumpDomain(config, "h5Domain");
+            String pcDomain = NoticeDispatchConfigHelper.getJumpDomain(config, "pcDomain");
+            resolvedJumpUrl = NoticeDispatchConfigHelper.joinWithDomain(h5Domain, resolvedJumpUrl);
+            pcPath = NoticeDispatchConfigHelper.joinWithDomain(pcDomain, pcPath);
+            mobilePath = NoticeDispatchConfigHelper.joinWithDomain(h5Domain, mobilePath);
+            String resolvedObjectData = objectData;
+            if (NoticeChannelEnum.SITE.equals(channelEnum)) {
+                resolvedObjectData = mergeSiteJumpObjectData(objectData, pcPath, mobilePath, resolvedJumpUrl, pagePath);
+            }
+
             Map<String, Object> payload = new LinkedHashMap<>();
             payload.put("typeCode", MapUtil.getStr(noticeType, "codeNum"));
             payload.put("channel", channel);
@@ -201,12 +228,25 @@ public class NoticeDispatchServiceImpl implements NoticeDispatchService {
             payload.put("title", title);
             payload.put("content", content);
             payload.put("remark", StrUtil.blankToDefault(MapUtil.getStr(noticeType, "remark"), title));
-            payload.put("objectData", objectData);
+            payload.put("objectData", resolvedObjectData);
             payload.put("createUserId", createUserId);
             payload.put("params", params);
             payload.put("apiTemplateId", MapUtil.getStr(template, "apiTemplateId"));
             payload.put("smsTemplateCode", MapUtil.getStr(template, "smsTemplateCode"));
-            payload.put("pagePath", MapUtil.getStr(template, "pagePath"));
+            payload.put("pagePath", pagePath);
+            payload.put("jumpUrl", resolvedJumpUrl);
+            payload.put("pcPath", pcPath);
+            payload.put("mobilePath", mobilePath);
+            String resolvedMiniAppId = StrUtil.blankToDefault(
+                body == null ? null : body.getMiniAppId(), MapUtil.getStr(params, "miniAppId"));
+            if (StrUtil.isBlank(resolvedMiniAppId)) {
+                Map<String, Object> miniCfg = NoticeDispatchConfigHelper.findChannelConfig(
+                    config, NoticeChannelEnum.MINI_PROGRAM.getKey());
+                if (ObjectUtil.isNotEmpty(miniCfg)) {
+                    resolvedMiniAppId = MapUtil.getStr(miniCfg, "appId");
+                }
+            }
+            payload.put("miniAppId", resolvedMiniAppId);
             payload.put("historyId", historyId);
             payload.put("channelLogId", channelLog.getId());
             if (tenantEnable) {
@@ -318,6 +358,67 @@ public class NoticeDispatchServiceImpl implements NoticeDispatchService {
             return second.get(secondKey).toString();
         }
         return StrUtil.EMPTY;
+    }
+
+    private String firstNonBlank(String first, String second) {
+        return StrUtil.isNotBlank(first) ? first : StrUtil.blankToDefault(second, StrUtil.EMPTY);
+    }
+
+    private boolean isHttpUrl(String value) {
+        if (StrUtil.isBlank(value)) {
+            return false;
+        }
+        String lower = value.trim().toLowerCase();
+        return lower.startsWith("http://") || lower.startsWith("https://");
+    }
+
+    /**
+     * 业务入参 > params > 模板字段，均支持 {占位} 渲染
+     */
+    private String resolveRenderedPath(String bodyValue, String paramsValue, String templateValue,
+                                       Map<String, Object> params) {
+        String raw = firstNonBlank(bodyValue, firstNonBlank(paramsValue, templateValue));
+        if (StrUtil.isBlank(raw)) {
+            return StrUtil.EMPTY;
+        }
+        return StrUtil.blankToDefault(NoticeTemplateRender.render(raw, params), StrUtil.EMPTY).trim();
+    }
+
+    @SuppressWarnings("unchecked")
+    private String mergeSiteJumpObjectData(String objectData, String pcPath, String mobilePath,
+                                           String h5Url, String pagePath) {
+        // 跳转字段放最前，避免 object_data 列过长被截断时丢跳转
+        Map<String, Object> map = new LinkedHashMap<>();
+        putIfNotBlank(map, "pcPath", pcPath);
+        putIfNotBlank(map, "mobilePath", mobilePath);
+        putIfNotBlank(map, "h5Url", h5Url);
+        putIfNotBlank(map, "pagePath", pagePath);
+        if (StrUtil.isNotBlank(objectData)) {
+            try {
+                Object parsed = JSONUtil.toBean(objectData, null);
+                if (parsed instanceof Map) {
+                    for (Map.Entry<String, Object> entry : ((Map<String, Object>) parsed).entrySet()) {
+                        if (!map.containsKey(entry.getKey())) {
+                            map.put(entry.getKey(), entry.getValue());
+                        }
+                    }
+                } else {
+                    map.put("raw", objectData);
+                }
+            } catch (Exception e) {
+                map.put("raw", objectData);
+            }
+        }
+        if (map.isEmpty()) {
+            return StrUtil.blankToDefault(objectData, StrUtil.EMPTY);
+        }
+        return JSONUtil.toJsonStr(map);
+    }
+
+    private void putIfNotBlank(Map<String, Object> map, String key, String value) {
+        if (StrUtil.isNotBlank(value)) {
+            map.put(key, value);
+        }
     }
 
     private Map<String, Object> safeQueryUser(String userId) {
