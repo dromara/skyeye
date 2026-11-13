@@ -13,6 +13,7 @@ import com.skyeye.eve.notice.classenum.NoticeChannelEnum;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -369,13 +370,13 @@ public final class NoticeDispatchConfigHelper {
         if (!(apiRaw instanceof List) || CollectionUtil.isEmpty((List<?>) apiRaw)) {
             return;
         }
-        Map<String, String> apiMap = new HashMap<>();
+        Map<String, Map<String, Object>> apiMap = new HashMap<>();
         for (Object item : (List<?>) apiRaw) {
             Map<String, Object> row = item instanceof Map ? (Map<String, Object>) item
                 : JSONUtil.toBean(JSONUtil.toJsonStr(item), null);
             String channel = MapUtil.getStr(row, "channel");
             if (StrUtil.isNotBlank(channel)) {
-                apiMap.put(channel, MapUtil.getStr(row, "apiTemplateId", StrUtil.EMPTY));
+                apiMap.put(channel, row);
             }
         }
         if (apiMap.isEmpty()) {
@@ -390,12 +391,90 @@ public final class NoticeDispatchConfigHelper {
             Map<String, Object> template = item instanceof Map ? new HashMap<>((Map<String, Object>) item)
                 : JSONUtil.toBean(JSONUtil.toJsonStr(item), null);
             String channel = MapUtil.getStr(template, "channel");
-            if (apiMap.containsKey(channel)) {
-                template.put("apiTemplateId", apiMap.get(channel));
+            Map<String, Object> apiRow = apiMap.get(channel);
+            if (apiRow != null) {
+                template.put("apiTemplateId", MapUtil.getStr(apiRow, "apiTemplateId", StrUtil.EMPTY));
+                template.put("wxTitleField", defaultWxTitleField(channel, MapUtil.getStr(apiRow, "wxTitleField")));
+                template.put("wxContentField", defaultWxContentField(channel, MapUtil.getStr(apiRow, "wxContentField")));
             }
             templates.add(template);
         }
         mergedType.put("templates", templates);
+    }
+
+    /** 公众号默认 title；小程序默认 thing1 */
+    public static String defaultWxTitleField(String channel, String configured) {
+        if (StrUtil.isNotBlank(configured)) {
+            return configured.trim();
+        }
+        return isMiniProgramChannel(channel) ? "thing1" : "title";
+    }
+
+    /** 公众号默认 content；小程序默认 thing2 */
+    public static String defaultWxContentField(String channel, String configured) {
+        if (StrUtil.isNotBlank(configured)) {
+            return configured.trim();
+        }
+        return isMiniProgramChannel(channel) ? "thing2" : "content";
+    }
+
+    private static boolean isMiniProgramChannel(String channel) {
+        return String.valueOf(NoticeChannelEnum.MINI_PROGRAM.getKey()).equals(StrUtil.trim(channel));
+    }
+
+    /**
+     * 已启用且配置了小程序平台模板号的通知类型，按 apiTemplateId 去重。
+     * 供移动端「消息订阅」页一次拉取可授权模板（微信一次最多 3 个）。
+     */
+    @SuppressWarnings("unchecked")
+    public static List<Map<String, Object>> listMiniSubscribeTemplates(Map<String, Object> config) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        if (config == null || config.isEmpty()) {
+            return result;
+        }
+        Integer miniChannel = NoticeChannelEnum.MINI_PROGRAM.getKey();
+        Map<String, Map<String, Object>> byTemplateId = new LinkedHashMap<>();
+        List<Map<String, Object>> types =
+            (List<Map<String, Object>>) config.getOrDefault("types", new ArrayList<>());
+        for (Object item : types) {
+            Map<String, Object> type = item instanceof Map
+                ? (Map<String, Object>) item
+                : JSONUtil.toBean(JSONUtil.toJsonStr(item), null);
+            if (type == null
+                || !EnableEnum.ENABLE_USING.getKey().equals(MapUtil.getInt(type, "enabled"))) {
+                continue;
+            }
+            List<Integer> channels = enabledChannels(type);
+            if (channels == null || !channels.contains(miniChannel)) {
+                continue;
+            }
+            Map<String, Object> template = findTemplate(type, miniChannel);
+            String templateId = template == null ? StrUtil.EMPTY
+                : StrUtil.trim(MapUtil.getStr(template, "apiTemplateId"));
+            if (StrUtil.isBlank(templateId)) {
+                continue;
+            }
+            String codeNum = MapUtil.getStr(type, "codeNum");
+            String typeName = StrUtil.blankToDefault(MapUtil.getStr(type, "name"), codeNum);
+            Map<String, Object> row = byTemplateId.get(templateId);
+            if (row == null) {
+                row = new HashMap<>();
+                row.put("templateId", templateId);
+                row.put("typeCodes", new ArrayList<String>());
+                row.put("typeNames", new ArrayList<String>());
+                byTemplateId.put(templateId, row);
+            }
+            List<String> typeCodes = (List<String>) row.get("typeCodes");
+            List<String> typeNames = (List<String>) row.get("typeNames");
+            if (StrUtil.isNotBlank(codeNum) && !typeCodes.contains(codeNum)) {
+                typeCodes.add(codeNum);
+            }
+            if (StrUtil.isNotBlank(typeName) && !typeNames.contains(typeName)) {
+                typeNames.add(typeName);
+            }
+        }
+        result.addAll(byTemplateId.values());
+        return result;
     }
 
     /**

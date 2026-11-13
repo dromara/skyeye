@@ -22,10 +22,13 @@ import com.skyeye.eve.notice.entity.NoticeDispatchHistory;
 import com.skyeye.eve.notice.service.NoticeDispatchChannelLogService;
 import com.skyeye.eve.notice.service.NoticeDispatchHistoryService;
 import com.skyeye.eve.notice.service.NoticeDispatchService;
+import com.skyeye.eve.notice.service.NoticeMiniSubscribeService;
 import com.skyeye.eve.notice.util.NoticeDispatchConfigHelper;
 import com.skyeye.eve.notice.util.NoticeTemplateRender;
 import com.skyeye.eve.rest.mq.JobMateMation;
 import com.skyeye.eve.rest.notice.NoticeDispatchBody;
+import com.skyeye.eve.rest.notice.NoticeMiniSubscribeConsumeBody;
+import com.skyeye.eve.rest.notice.NoticeMiniSubscribeSaveBody;
 import com.skyeye.eve.service.IAuthUserService;
 import com.skyeye.eve.service.IJobMateMationService;
 import com.skyeye.eve.service.ISystemFoundationSettingsService;
@@ -69,6 +72,9 @@ public class NoticeDispatchServiceImpl implements NoticeDispatchService {
     @Autowired
     private NoticeDispatchChannelLogService noticeDispatchChannelLogService;
 
+    @Autowired
+    private NoticeMiniSubscribeService noticeMiniSubscribeService;
+
     @Value("${skyeye.tenant.enable}")
     private boolean tenantEnable;
 
@@ -79,16 +85,48 @@ public class NoticeDispatchServiceImpl implements NoticeDispatchService {
     }
 
     @Override
+    public void queryMiniSubscribeTemplateList(InputObject inputObject, OutputObject outputObject) {
+        List<Map<String, Object>> rows =
+            NoticeDispatchConfigHelper.listMiniSubscribeTemplates(loadMergedNoticeConfig());
+        String userId = MapUtil.getStr(InputObject.getLogParamsStatic(), "id");
+        Set<String> templateIds = rows.stream()
+            .map(row -> MapUtil.getStr(row, "templateId"))
+            .filter(StrUtil::isNotBlank)
+            .collect(Collectors.toSet());
+        Set<String> accepted = noticeMiniSubscribeService.listAcceptedTemplateIds(userId, templateIds);
+        for (Map<String, Object> row : rows) {
+            String templateId = MapUtil.getStr(row, "templateId");
+            row.put("subscribed", StrUtil.isNotBlank(templateId) && accepted.contains(templateId));
+        }
+        outputObject.setBeans(rows);
+        outputObject.settotal(rows.size());
+    }
+
+    @Override
+    public void saveMiniSubscribeStatus(InputObject inputObject, OutputObject outputObject) {
+        NoticeMiniSubscribeSaveBody body = inputObject.getParams(NoticeMiniSubscribeSaveBody.class);
+        String userId = MapUtil.getStr(InputObject.getLogParamsStatic(), "id");
+        if (StrUtil.isBlank(userId)) {
+            throw new CustomException("未登录，无法保存订阅状态.");
+        }
+        noticeMiniSubscribeService.upsertStatuses(userId, body == null ? null : body.getList());
+    }
+
+    @Override
+    public void consumeMiniSubscribeStatus(InputObject inputObject, OutputObject outputObject) {
+        NoticeMiniSubscribeConsumeBody body = inputObject.getParams(NoticeMiniSubscribeConsumeBody.class);
+        if (body == null) {
+            return;
+        }
+        noticeMiniSubscribeService.consumeAccept(body.getUserId(), body.getTemplateId());
+    }
+
+    @Override
     public void dispatch(NoticeDispatchBody body) {
         if (body == null || StrUtil.isEmpty(body.getTypeCode()) || CollectionUtil.isEmpty(body.getReceiveUserIds())) {
             throw new CustomException("通知类型编码与接收人不能为空.");
         }
-        Map<String, Object> settings = iSystemFoundationSettingsService.querySystemFoundationSettingsList();
-        Object tenantConfig = settings == null ? null : settings.get("noticeDispatchConfig");
-        // 多租户：平台类型/渠道账号 + 租户模板；单租户：全部走系统基础设置
-        Map<String, Object> config = tenantEnable
-            ? NoticeDispatchConfigHelper.mergePlatformAndTenant(loadPlatformNoticeConfig(), tenantConfig)
-            : NoticeDispatchConfigHelper.parseConfig(tenantConfig);
+        Map<String, Object> config = loadMergedNoticeConfig();
         Map<String, Object> noticeType = NoticeDispatchConfigHelper.findType(config, body.getTypeCode());
         if (ObjectUtil.isEmpty(noticeType)) {
             throw new CustomException("通知类型不存在或已禁用: " + body.getTypeCode());
@@ -227,6 +265,11 @@ public class NoticeDispatchServiceImpl implements NoticeDispatchService {
             payload.put("params", params);
             payload.put("apiTemplateId", MapUtil.getStr(template, "apiTemplateId"));
             payload.put("smsTemplateCode", MapUtil.getStr(template, "smsTemplateCode"));
+            String channelKey = channel == null ? StrUtil.EMPTY : String.valueOf(channel);
+            payload.put("wxTitleField", NoticeDispatchConfigHelper.defaultWxTitleField(
+                channelKey, MapUtil.getStr(template, "wxTitleField")));
+            payload.put("wxContentField", NoticeDispatchConfigHelper.defaultWxContentField(
+                channelKey, MapUtil.getStr(template, "wxContentField")));
             payload.put("pagePath", pagePath);
             payload.put("jumpUrl", resolvedJumpUrl);
             payload.put("pcPath", pcPath);
@@ -414,6 +457,15 @@ public class NoticeDispatchServiceImpl implements NoticeDispatchService {
             log.warn("query user {} failed", userId, e);
             return new HashMap<>();
         }
+    }
+
+    /** 多租户：平台类型/渠道账号 + 租户模板；单租户：系统基础设置 */
+    private Map<String, Object> loadMergedNoticeConfig() {
+        Map<String, Object> settings = iSystemFoundationSettingsService.querySystemFoundationSettingsList();
+        Object tenantConfig = settings == null ? null : settings.get("noticeDispatchConfig");
+        return tenantEnable
+            ? NoticeDispatchConfigHelper.mergePlatformAndTenant(loadPlatformNoticeConfig(), tenantConfig)
+            : NoticeDispatchConfigHelper.parseConfig(tenantConfig);
     }
 
     @SuppressWarnings("unchecked")

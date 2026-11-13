@@ -93,12 +93,20 @@ public class MiniSubscribeSendServiceImpl implements RocketMQListener<String> {
             jobMateMationService.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_SUCCESS, StrUtil.EMPTY);
             iNoticeDispatchHistoryService.updateChannelLog(channelLogId,
                 NoticeDispatchChannelLogUpdateBody.STATUS_SUCCESS, jobId, StrUtil.EMPTY);
+            // 一次性订阅发出后额度已用，清除「已开启」
+            iNoticeDispatchHistoryService.consumeMiniSubscribeStatus(
+                MapUtil.getStr(map, "receiveId"), apiTemplateId);
         } catch (Exception e) {
             log.warn("mini subscribe send failed", e);
-            jobMateMationService.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_FAIL,
-                StrUtil.blankToDefault(e.getMessage(), StrUtil.EMPTY));
+            String errMsg = StrUtil.blankToDefault(e.getMessage(), StrUtil.EMPTY);
+            jobMateMationService.comMQJobMation(jobId, MqConstants.JOB_TYPE_IS_FAIL, errMsg);
             iNoticeDispatchHistoryService.updateChannelLog(channelLogId,
-                NoticeDispatchChannelLogUpdateBody.STATUS_FAIL, jobId, e.getMessage());
+                NoticeDispatchChannelLogUpdateBody.STATUS_FAIL, jobId, errMsg);
+            // 用户拒绝/无额度，同步清掉本地「已开启」
+            if (errMsg.contains("43101")) {
+                iNoticeDispatchHistoryService.consumeMiniSubscribeStatus(
+                    MapUtil.getStr(map, "receiveId"), MapUtil.getStr(map, "apiTemplateId"));
+            }
         }
     }
 
@@ -121,14 +129,61 @@ public class MiniSubscribeSendServiceImpl implements RocketMQListener<String> {
     }
 
     /**
-     * 固定映射：消息通知标题/内容（已解析占位符）→ thing1 / thing2。
-     * 小程序订阅消息模板请使用 thing1、thing2 两个字段承接。
+     * 消息通知标题/内容 → 可配置的微信字段（默认 thing1 / thing2）。
+     * thing 等类型有长度上限，超长会 47003（如 data.thing2.value invalid）。
      */
     private List<WxMaSubscribeMessage.MsgData> buildMsgData(Map<String, Object> map) {
+        String titleField = StrUtil.blankToDefault(MapUtil.getStr(map, "wxTitleField"), "thing1").trim();
+        String contentField = StrUtil.blankToDefault(MapUtil.getStr(map, "wxContentField"), "thing2").trim();
         List<WxMaSubscribeMessage.MsgData> list = new ArrayList<>();
-        list.add(new WxMaSubscribeMessage.MsgData("thing1", toPlainText(MapUtil.getStr(map, "title"))));
-        list.add(new WxMaSubscribeMessage.MsgData("thing2", toPlainText(MapUtil.getStr(map, "content"))));
+        list.add(new WxMaSubscribeMessage.MsgData(titleField,
+            fitSubscribeValue(titleField, MapUtil.getStr(map, "title"))));
+        list.add(new WxMaSubscribeMessage.MsgData(contentField,
+            fitSubscribeValue(contentField, MapUtil.getStr(map, "content"))));
         return list;
+    }
+
+    /** 去 HTML/换行后按微信字段类型截断；空值用「-」避免 47003 */
+    private String fitSubscribeValue(String fieldName, String raw) {
+        String text = toPlainText(raw);
+        if (StrUtil.isBlank(text)) {
+            return "-";
+        }
+        int max = resolveSubscribeMaxLen(fieldName);
+        if (max > 0 && text.length() > max) {
+            return text.substring(0, max);
+        }
+        return text;
+    }
+
+    /**
+     * 按字段名前缀取微信订阅消息长度上限；未知类型不截断。
+     * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/mp-message-management/subscribe-message/sendMessage.html">订阅消息参数限制</a>
+     */
+    private int resolveSubscribeMaxLen(String fieldName) {
+        String name = StrUtil.blankToDefault(fieldName, StrUtil.EMPTY).toLowerCase();
+        if (name.startsWith("thing")) {
+            return 20;
+        }
+        if (name.startsWith("phrase")) {
+            return 5;
+        }
+        if (name.startsWith("name")) {
+            return 10;
+        }
+        if (name.startsWith("character_string") || name.startsWith("number") || name.startsWith("letter")) {
+            return 32;
+        }
+        if (name.startsWith("symbol")) {
+            return 5;
+        }
+        if (name.startsWith("phone_number")) {
+            return 17;
+        }
+        if (name.startsWith("car_number")) {
+            return 8;
+        }
+        return -1;
     }
 
     /** 小程序订阅消息字段同样不支持 HTML/换行，&lt;br/&gt; 转空格 */

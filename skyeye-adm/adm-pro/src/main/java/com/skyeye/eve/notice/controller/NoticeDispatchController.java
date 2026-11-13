@@ -11,6 +11,8 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.eve.notice.service.NoticeDispatchService;
 import com.skyeye.eve.rest.notice.NoticeDispatchBody;
+import com.skyeye.eve.rest.notice.NoticeMiniSubscribeConsumeBody;
+import com.skyeye.eve.rest.notice.NoticeMiniSubscribeSaveBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,6 +37,26 @@ public class NoticeDispatchController {
     @RequestMapping("/post/NoticeDispatchController/dispatchNotice")
     public void dispatchNotice(InputObject inputObject, OutputObject outputObject) {
         noticeDispatchService.dispatchNotice(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "queryMiniSubscribeTemplateList", value = "查询小程序可订阅消息模板列表（按模板ID去重）", method = "GET", allUse = "2")
+    @RequestMapping("/post/NoticeDispatchController/queryMiniSubscribeTemplateList")
+    public void queryMiniSubscribeTemplateList(InputObject inputObject, OutputObject outputObject) {
+        noticeDispatchService.queryMiniSubscribeTemplateList(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "saveMiniSubscribeStatus", value = "上报小程序订阅消息授权结果", method = "POST", allUse = "2")
+    @ApiImplicitParams(classBean = NoticeMiniSubscribeSaveBody.class)
+    @RequestMapping("/post/NoticeDispatchController/saveMiniSubscribeStatus")
+    public void saveMiniSubscribeStatus(InputObject inputObject, OutputObject outputObject) {
+        noticeDispatchService.saveMiniSubscribeStatus(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "consumeMiniSubscribeStatus", value = "消耗小程序订阅额度---供其他微服务调用", method = "POST", allUse = "0")
+    @ApiImplicitParams(classBean = NoticeMiniSubscribeConsumeBody.class)
+    @RequestMapping("/post/NoticeDispatchController/consumeMiniSubscribeStatus")
+    public void consumeMiniSubscribeStatus(InputObject inputObject, OutputObject outputObject) {
+        noticeDispatchService.consumeMiniSubscribeStatus(inputObject, outputObject);
     }
 
 }
