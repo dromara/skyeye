@@ -67,6 +67,26 @@ public class AppAuthController {
         sysEveUserService.queryPhoneToLogin(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "miniProgramWxLogin", value = "小程序微信登录（已绑定直接登录，未绑定返回 needBind）", method = "POST", allUse = "0")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "wxCode", name = "wxCode", value = "小程序 uni.login 返回的 code", required = "required"),
+        @ApiImplicitParam(id = "appId", name = "appId", value = "小程序 AppId，可选；默认取消息通知「小程序」页签配置")})
+    @RequestMapping("/post/AppAuthController/miniProgramWxLogin")
+    public void miniProgramWxLogin(InputObject inputObject, OutputObject outputObject) {
+        sysEveUserService.miniProgramWxLogin(inputObject, outputObject);
+    }
+
+    @ApiOperation(id = "miniProgramWxBindLogin", value = "小程序微信绑定账号并登录（一微信一用户）", method = "POST", allUse = "0")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "openId", name = "openId", value = "微信 openId", required = "required"),
+        @ApiImplicitParam(id = "appId", name = "appId", value = "小程序 AppId", required = "required"),
+        @ApiImplicitParam(id = "userCode", name = "userCode", value = "账号", required = "required"),
+        @ApiImplicitParam(id = "password", name = "password", value = "密码", required = "required")})
+    @RequestMapping("/post/AppAuthController/miniProgramWxBindLogin")
+    public void miniProgramWxBindLogin(InputObject inputObject, OutputObject outputObject) {
+        sysEveUserService.miniProgramWxBindLogin(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "login003", value = "退出", method = "POST", allUse = "2")
     @RequestMapping("/post/AppAuthController/deleteUserMationBySession")
     public void deleteUserMationBySession(InputObject inputObject, OutputObject outputObject) {

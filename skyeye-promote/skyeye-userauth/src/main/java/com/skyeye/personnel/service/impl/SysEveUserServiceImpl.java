@@ -781,23 +781,117 @@ public class SysEveUserServiceImpl extends SkyeyeBusinessServiceImpl<SysEveUserD
     public void queryPhoneToLogin(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> map = inputObject.getParams();
         Map<String, Object> userMation = checkLogin(map, SysUserAuthConstants.APP_IDENTIFYING);
+        finishAppLogin(userMation, map.get("userCode").toString(), "登录成功");
+        outputObject.setBean(userMation);
+    }
 
+    @Override
+    public void miniProgramWxLogin(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> map = inputObject.getParams();
+        String wxCode = MapUtil.getStr(map, "wxCode");
+        String preferAppId = MapUtil.getStr(map, "appId");
+        if (StrUtil.isBlank(wxCode)) {
+            throw new CustomException("wxCode不能为空.");
+        }
+        Map<String, Object> channelConfig = findNoticeChannelConfig(NOTICE_CHANNEL_MINI, preferAppId);
+        if (ObjectUtil.isEmpty(channelConfig)) {
+            throw new CustomException("未配置小程序账号，请先在「小程序」页签配置 AppId/AppSecret.");
+        }
+        String appId = MapUtil.getStr(channelConfig, "appId");
+        String appSecret = MapUtil.getStr(channelConfig, "appSecret");
+        if (StrUtil.hasBlank(appId, appSecret)) {
+            throw new CustomException("小程序账号缺少 AppId 或 AppSecret.");
+        }
+        String openId = exchangeWechatOpenId(NOTICE_CHANNEL_MINI, appId, appSecret, wxCode);
+        Map<String, Object> wxUser = sysEveUserDao.queryWxUserMationByAppIdAndOpenId(appId, openId);
+        String boundUserId = wxUser == null ? StrUtil.EMPTY : MapUtil.getStr(wxUser, "userId");
+        if (StrUtil.isBlank(boundUserId)) {
+            Map<String, Object> tip = new HashMap<>();
+            tip.put("needBind", true);
+            tip.put("openId", openId);
+            tip.put("appId", appId);
+            outputObject.setBean(tip);
+            return;
+        }
+        Map<String, Object> bindUser = sysEveUserDao.queryUserMationByAppIdAndOpenId(appId, openId);
+        if (bindUser == null || bindUser.isEmpty() || StrUtil.isBlank(MapUtil.getStr(bindUser, "userCode"))) {
+            throw new CustomException("微信已绑定账号异常，请联系管理员.");
+        }
+        Map<String, Object> userMation = buildAppLoginByUserCode(MapUtil.getStr(bindUser, "userCode"));
+        finishAppLogin(userMation, MapUtil.getStr(userMation, "userCode"), "微信登录成功");
+        userMation.put("needBind", false);
+        outputObject.setBean(userMation);
+    }
+
+    @Override
+    public void miniProgramWxBindLogin(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> map = inputObject.getParams();
+        String userCode = MapUtil.getStr(map, "userCode");
+        String password = MapUtil.getStr(map, "password");
+        String openId = MapUtil.getStr(map, "openId");
+        String appId = MapUtil.getStr(map, "appId");
+        if (StrUtil.hasBlank(userCode, password, openId, appId)) {
+            throw new CustomException("账号、密码、openId、appId不能为空.");
+        }
+        // 校验账号密码（与手机端登录一致）
+        Map<String, Object> userMation = checkLogin(map, SysUserAuthConstants.APP_IDENTIFYING);
+        // 一微信一用户 / 一账号一 openId（同 appId）
+        try {
+            bindOpenIdToUser(userMation.get("id").toString(), appId, openId);
+        } catch (CustomException e) {
+            throw new CustomException(e.getMessage());
+        }
+        finishAppLogin(userMation, userCode, "微信绑定登录成功");
+        userMation.put("needBind", false);
+        outputObject.setBean(userMation);
+    }
+
+    /**
+     * 按账号组装手机端登录用户信息（含 token），不校验密码
+     */
+    private Map<String, Object> buildAppLoginByUserCode(String userCode) {
+        Map<String, Object> userMation = sysEveUserDao.queryMationByUserCode(userCode);
+        if (userMation == null || userMation.isEmpty()) {
+            throw new CustomException("绑定账号不存在，请联系管理员.");
+        }
+        String userId = userMation.get("id").toString();
+        int userLock = Integer.parseInt(userMation.get("userLock").toString());
+        if (UserLockState.SYS_USER_LOCK_STATE_ISLOCK.getKey() == userLock) {
+            recordLoginFailureLog(userId, userCode, UserLoginLogDeviceType.MOBILE.getKey(), "账号已被锁定");
+            throw new CustomException("您的账号已被锁定，请联系管理员解除！");
+        }
+        try {
+            chectUserEffectiveDate(userMation);
+        } catch (CustomException e) {
+            recordLoginFailureLog(userId, userCode, UserLoginLogDeviceType.MOBILE.getKey(), e.getMessage());
+            throw e;
+        }
+        String userToken = GetUserToken.createNewToken(userId, userMation.get("password").toString());
+        userMation.put("userToken", userToken);
+        if (!tenantEnable) {
+            companyMationService.setNameMationForMap(userMation, "companyId", "companyName", StrUtil.EMPTY);
+            companyDepartmentService.setNameMationForMap(userMation, "departmentId", "departmentName", StrUtil.EMPTY);
+            companyJobService.setNameMationForMap(userMation, "jobId", "jobName", StrUtil.EMPTY);
+            judgeAndGetSchoolMation(userMation, userId);
+        }
+        return userMation;
+    }
+
+    private void finishAppLogin(Map<String, Object> userMation, String userCode, String successMsg) {
         String appUserId = userMation.get("id").toString() + SysUserAuthConstants.APP_IDENTIFYING;
         if (!tenantEnable) {
-            // 单租户模式
             LOGGER.info("set userMation to redis cache start.");
-            String roleIds = userMation.get("roleId").toString();
-            jedisClientService.set(ObjectConstant.getUserHasRoleIds(appUserId), roleIds);
+            Object roleId = userMation.get("roleId");
+            if (roleId != null) {
+                jedisClientService.set(ObjectConstant.getUserHasRoleIds(appUserId), roleId.toString());
+            }
         } else {
             // TODO 多租户模式挤掉同类型终端的其他登录信息
         }
         removeUserLoginRedisMation(userMation);
         setUserLoginRedisMation(appUserId, userMation, false);
-
-        // 异步记录登录日志
-        sysEveUserLoginLogService.recordLoginLogAsync(userMation.get("id").toString(), map.get("userCode").toString(),
-            UserLoginLogDeviceType.MOBILE.getKey(), UserLoginLogStatus.SUCCESS.getKey(), "登录成功");
-        outputObject.setBean(userMation);
+        sysEveUserLoginLogService.recordLoginLogAsync(userMation.get("id").toString(), userCode,
+            UserLoginLogDeviceType.MOBILE.getKey(), UserLoginLogStatus.SUCCESS.getKey(), successMsg);
     }
 
     private void removeUserLoginRedisMation(Map<String, Object> userMation) {

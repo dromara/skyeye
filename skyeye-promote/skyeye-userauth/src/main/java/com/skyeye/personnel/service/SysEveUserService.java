@@ -83,6 +83,16 @@ public interface SysEveUserService extends SkyeyeBusinessService<SysEveUser> {
 
     void queryPhoneToLogin(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 小程序微信登录：wxCode 换 openId，已绑定则直接登录，未绑定返回 needBind
+     */
+    void miniProgramWxLogin(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 小程序微信绑定并登录：openId + 账号密码绑定（一微信一用户），成功后登录
+     */
+    void miniProgramWxBindLogin(InputObject inputObject, OutputObject outputObject);
+
     void queryUserMationByOpenId(InputObject inputObject, OutputObject outputObject);
 
     void insertUserMationByOpenId(InputObject inputObject, OutputObject outputObject);
