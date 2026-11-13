@@ -9,6 +9,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.NoticeUserMessageTypeEnum;
 import com.skyeye.eve.notice.classenum.NoticeChannelEnum;
 
 import java.util.ArrayList;
@@ -292,12 +293,11 @@ public final class NoticeDispatchConfigHelper {
     public static Map<String, Object> defaultPlatformConfig() {
         Map<String, Object> config = new HashMap<>();
         List<Map<String, Object>> types = new ArrayList<>();
-        types.add(buildPlatformType("SCHEDULE_MESSAGE", "日程消息"));
-        types.add(buildPlatformType("PLAN_REMINDER", "计划提醒"));
-        types.add(buildPlatformType("WORK_ORDER_REMINDER", "售后工单派工提醒"));
-        types.add(buildPlatformType("EQUIPMENT_INSPECTION_REMINDER", "设备巡检派工提醒"));
-        types.add(buildPlatformType("EQUIPMENT_REPAIR_REMINDER", "设备维修派工提醒"));
-        types.add(buildPlatformType("ANNOUNCEMENT", "公告提醒"));
+        for (NoticeUserMessageTypeEnum typeEnum : NoticeUserMessageTypeEnum.values()) {
+            if (Boolean.TRUE.equals(typeEnum.getShow())) {
+                types.add(buildPlatformType(typeEnum.getKey(), typeEnum.getValue()));
+            }
+        }
         config.put("types", types);
         config.put("channels", new ArrayList<>());
         config.put("wechatMp", new HashMap<>());
@@ -549,42 +549,46 @@ public final class NoticeDispatchConfigHelper {
     public static Map<String, Object> defaultConfig() {
         Map<String, Object> config = new HashMap<>();
         List<Map<String, Object>> types = new ArrayList<>();
-        types.add(buildType("SCHEDULE_MESSAGE", "日程消息",
-            "您有一条新的日程信息，请及时阅读。", listOf(1, 2),
+        types.add(buildType(NoticeUserMessageTypeEnum.SCHEDULE.getKey(), NoticeUserMessageTypeEnum.SCHEDULE.getValue(),
+            NoticeUserMessageTypeEnum.SCHEDULE.getRemark(), listOf(1, 2),
             listOf(
-                buildTemplate(1, "日程-站内信", "日程消息",
+                buildTemplate(1, "日程-站内信", NoticeUserMessageTypeEnum.SCHEDULE.getValue(),
                     "尊敬的{userName},您好：<br/>《{title}》时间为：{startTime} ~ {endTime}<br/>请注意安排好您的工作时间。"),
-                buildTemplate(2, "日程-邮件", "日程消息",
+                buildTemplate(2, "日程-邮件", NoticeUserMessageTypeEnum.SCHEDULE.getValue(),
                     "尊敬的{userName},您好：<br/>《{title}》时间为：{startTime} ~ {endTime}<br/>请注意安排好您的工作时间。")
             )));
-        types.add(buildType("PLAN_REMINDER", "计划提醒", "计划提醒", listOf(1),
-            listOf(buildTemplate(1, "计划-站内信", "计划提醒", "您有一条计划提醒：{title}"))));
-        types.add(buildType("WORK_ORDER_REMINDER", "售后工单派工提醒",
-            "您有一条新的派工信息，请及时阅读。", listOf(1, 2),
+        types.add(buildType(NoticeUserMessageTypeEnum.PLAN.getKey(), NoticeUserMessageTypeEnum.PLAN.getValue(),
+            NoticeUserMessageTypeEnum.PLAN.getRemark(), listOf(1),
+            listOf(buildTemplate(1, "计划-站内信", NoticeUserMessageTypeEnum.PLAN.getValue(), "您有一条计划提醒：{title}"))));
+        types.add(buildType(NoticeUserMessageTypeEnum.WORK_ORDER.getKey(), NoticeUserMessageTypeEnum.WORK_ORDER.getValue(),
+            NoticeUserMessageTypeEnum.WORK_ORDER.getRemark(), listOf(1, 2),
             listOf(
-                buildTemplate(1, "售后工单-站内信", "售后工单派工提醒",
+                buildTemplate(1, "售后工单-站内信", NoticeUserMessageTypeEnum.WORK_ORDER.getValue(),
                     "尊敬的{userName}，您好：<br/>您有一份待接单工单，工单号为：{orderNum}，请及时接单。"),
-                buildTemplate(2, "售后工单-邮件", "售后工单派工提醒",
+                buildTemplate(2, "售后工单-邮件", NoticeUserMessageTypeEnum.WORK_ORDER.getValue(),
                     "尊敬的{userName}，您好：<br/>您有一份待接单工单，工单号为：{orderNum}，请及时接单。")
             )));
-        types.add(buildType("EQUIPMENT_INSPECTION_REMINDER", "设备巡检派工提醒",
-            "您有一条新的巡检派工信息，请及时阅读。", listOf(1, 2),
+        types.add(buildType(NoticeUserMessageTypeEnum.EQUIPMENT_INSPECTION.getKey(),
+            NoticeUserMessageTypeEnum.EQUIPMENT_INSPECTION.getValue(),
+            NoticeUserMessageTypeEnum.EQUIPMENT_INSPECTION.getRemark(), listOf(1, 2),
             listOf(
-                buildTemplate(1, "巡检-站内信", "设备巡检派工提醒",
+                buildTemplate(1, "巡检-站内信", NoticeUserMessageTypeEnum.EQUIPMENT_INSPECTION.getValue(),
                     "尊敬的{userName}，您好：<br/>您有一份待接单巡检单，单号为：{orderNum}，请及时接单。"),
-                buildTemplate(2, "巡检-邮件", "设备巡检派工提醒",
+                buildTemplate(2, "巡检-邮件", NoticeUserMessageTypeEnum.EQUIPMENT_INSPECTION.getValue(),
                     "尊敬的{userName}，您好：<br/>您有一份待接单巡检单，单号为：{orderNum}，请及时接单。")
             )));
-        types.add(buildType("EQUIPMENT_REPAIR_REMINDER", "设备维修派工提醒",
-            "您有一条新的维修派工信息，请及时阅读。", listOf(1, 2),
+        types.add(buildType(NoticeUserMessageTypeEnum.EQUIPMENT_REPAIR.getKey(),
+            NoticeUserMessageTypeEnum.EQUIPMENT_REPAIR.getValue(),
+            NoticeUserMessageTypeEnum.EQUIPMENT_REPAIR.getRemark(), listOf(1, 2),
             listOf(
-                buildTemplate(1, "维修-站内信", "设备维修派工提醒",
+                buildTemplate(1, "维修-站内信", NoticeUserMessageTypeEnum.EQUIPMENT_REPAIR.getValue(),
                     "尊敬的{userName}，您好：<br/>您有一份待接单维修单，单号为：{orderNum}，请及时接单。"),
-                buildTemplate(2, "维修-邮件", "设备维修派工提醒",
+                buildTemplate(2, "维修-邮件", NoticeUserMessageTypeEnum.EQUIPMENT_REPAIR.getValue(),
                     "尊敬的{userName}，您好：<br/>您有一份待接单维修单，单号为：{orderNum}，请及时接单。")
             )));
-        types.add(buildType("ANNOUNCEMENT", "公告提醒", "内部公告邮件通知", listOf(2),
-            listOf(buildTemplate(2, "公告-邮件", "公告提醒", "内部公告 -【{title}】"))));
+        types.add(buildType(NoticeUserMessageTypeEnum.ANNOUNCE.getKey(), NoticeUserMessageTypeEnum.ANNOUNCE.getValue(),
+            NoticeUserMessageTypeEnum.ANNOUNCE.getRemark(), listOf(2),
+            listOf(buildTemplate(2, "公告-邮件", NoticeUserMessageTypeEnum.ANNOUNCE.getValue(), "内部公告 -【{title}】"))));
         config.put("types", types);
         config.put("channels", new ArrayList<>());
         config.put("jumpDomains", defaultJumpDomains());

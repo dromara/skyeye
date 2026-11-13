@@ -15,6 +15,7 @@ import com.skyeye.annotation.tenant.IgnoreTenant;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonNumConstants;
 import com.skyeye.common.enumeration.EnableEnum;
+import com.skyeye.common.enumeration.NoticeUserMessageTypeEnum;
 import com.skyeye.common.enumeration.TenantEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -536,12 +537,11 @@ public class PlatformBaseSettingServiceImpl extends SkyeyeBusinessServiceImpl<Pl
 
     private List<Map<String, Object>> buildDefaultNoticeTypes() {
         List<Map<String, Object>> types = new ArrayList<>();
-        types.add(buildNoticeType("SCHEDULE_MESSAGE", "日程消息"));
-        types.add(buildNoticeType("PLAN_REMINDER", "计划提醒"));
-        types.add(buildNoticeType("WORK_ORDER_REMINDER", "售后工单派工提醒"));
-        types.add(buildNoticeType("EQUIPMENT_INSPECTION_REMINDER", "设备巡检派工提醒"));
-        types.add(buildNoticeType("EQUIPMENT_REPAIR_REMINDER", "设备维修派工提醒"));
-        types.add(buildNoticeType("ANNOUNCEMENT", "公告提醒"));
+        for (NoticeUserMessageTypeEnum typeEnum : NoticeUserMessageTypeEnum.values()) {
+            if (Boolean.TRUE.equals(typeEnum.getShow())) {
+                types.add(buildNoticeType(typeEnum.getKey(), typeEnum.getValue()));
+            }
+        }
         return types;
     }
 

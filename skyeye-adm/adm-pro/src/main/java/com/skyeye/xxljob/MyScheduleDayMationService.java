@@ -7,6 +7,7 @@ package com.skyeye.xxljob;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.common.constans.CommonConstants;
+import com.skyeye.common.enumeration.NoticeUserMessageTypeEnum;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.eve.notice.service.NoticeDispatchService;
 import com.skyeye.eve.rest.notice.NoticeDispatchBody;
@@ -76,7 +77,7 @@ public class MyScheduleDayMationService {
             params.put("remark", StrUtil.blankToDefault(scheduleDay.getRemark(), StrUtil.EMPTY));
 
             NoticeDispatchBody body = new NoticeDispatchBody();
-            body.setTypeCode("SCHEDULE_MESSAGE");
+            body.setTypeCode(NoticeUserMessageTypeEnum.SCHEDULE.getKey());
             body.setReceiveUserIds(Arrays.asList(userId));
             body.setParams(params);
             body.setCreateUserId(CommonConstants.ADMIN_USER_ID);

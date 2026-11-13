@@ -12,6 +12,7 @@ import com.skyeye.afterseal.entity.AfterSeal;
 import com.skyeye.afterseal.service.AfterSealService;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.MqConstants;
+import com.skyeye.common.enumeration.NoticeUserMessageTypeEnum;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.eve.rest.mq.JobMateUpdateMation;
 import com.skyeye.eve.rest.notice.NoticeDispatchBody;
@@ -99,7 +100,7 @@ public class WatiWorkerSendServiceImpl implements RocketMQListener<String> {
                     params.put("id", afterSeal.getId());
                     params.put("orderNum", afterSeal.getOddNumber());
                     NoticeDispatchBody body = new NoticeDispatchBody();
-                    body.setTypeCode("WORK_ORDER_REMINDER");
+                    body.setTypeCode(NoticeUserMessageTypeEnum.WORK_ORDER.getKey());
                     body.setReceiveUserIds(receiveUserIds);
                     body.setParams(params);
                     body.setCreateUserId(CommonConstants.ADMIN_USER_ID);

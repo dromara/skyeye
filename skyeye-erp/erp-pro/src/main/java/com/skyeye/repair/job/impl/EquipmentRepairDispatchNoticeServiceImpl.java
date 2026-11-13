@@ -9,6 +9,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.MqConstants;
+import com.skyeye.common.enumeration.NoticeUserMessageTypeEnum;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.eve.rest.mq.JobMateUpdateMation;
 import com.skyeye.eve.rest.notice.NoticeDispatchBody;
@@ -76,7 +77,7 @@ public class EquipmentRepairDispatchNoticeServiceImpl implements RocketMQListene
                 extras.put(repairOrder.getServiceUserId(), extra);
 
                 NoticeDispatchBody body = new NoticeDispatchBody();
-                body.setTypeCode("EQUIPMENT_REPAIR_REMINDER");
+                body.setTypeCode(NoticeUserMessageTypeEnum.EQUIPMENT_REPAIR.getKey());
                 body.setReceiveUserIds(Collections.singletonList(repairOrder.getServiceUserId()));
                 body.setParams(params);
                 body.setCreateUserId(CommonConstants.ADMIN_USER_ID);

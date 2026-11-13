@@ -10,6 +10,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.common.constans.CommonConstants;
 import com.skyeye.common.constans.MqConstants;
+import com.skyeye.common.enumeration.NoticeUserMessageTypeEnum;
 import com.skyeye.common.tenant.context.TenantContext;
 import com.skyeye.equipmentinspection.entity.EquipmentInspectionOrder;
 import com.skyeye.equipmentinspection.service.EquipmentInspectionOrderService;
@@ -94,7 +95,7 @@ public class EquipmentInspectionDispatchNoticeServiceImpl implements RocketMQLis
                     params.put("id", order.getId());
                     params.put("orderNum", order.getOddNumber());
                     NoticeDispatchBody body = new NoticeDispatchBody();
-                    body.setTypeCode("EQUIPMENT_INSPECTION_REMINDER");
+                    body.setTypeCode(NoticeUserMessageTypeEnum.EQUIPMENT_INSPECTION.getKey());
                     body.setReceiveUserIds(receiveUserIds);
                     body.setParams(params);
                     body.setCreateUserId(CommonConstants.ADMIN_USER_ID);

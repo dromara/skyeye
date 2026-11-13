@@ -17,6 +17,7 @@ import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.*;
 import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.common.enumeration.DeleteFlagEnum;
+import com.skyeye.common.enumeration.NoticeUserMessageTypeEnum;
 import com.skyeye.common.enumeration.UserStaffState;
 import com.skyeye.common.enumeration.WhetherEnum;
 import com.skyeye.common.object.InputObject;
@@ -175,7 +176,7 @@ public class NoticeServiceImpl extends SkyeyeBusinessServiceImpl<NoticeDao, Noti
                 params.put("id", entity.getId());
                 params.put("title", entity.getName());
                 NoticeDispatchBody body = new NoticeDispatchBody();
-                body.setTypeCode("ANNOUNCEMENT");
+                body.setTypeCode(NoticeUserMessageTypeEnum.ANNOUNCE.getKey());
                 body.setReceiveUserIds(receiveUserIds);
                 body.setParams(params);
                 body.setChannels(Arrays.asList(NoticeChannelEnum.EMAIL.getKey()));
