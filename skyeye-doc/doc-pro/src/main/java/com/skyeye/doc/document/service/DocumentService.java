@@ -24,4 +24,9 @@ public interface DocumentService extends SkyeyeBusinessService<Document> {
     void deleteDocumentById(InputObject inputObject, OutputObject outputObject);
 
     void queryAllEnabledDocumentByList(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 将文档/目录移动到指定父目录（parentId=0 表示根目录）
+     */
+    void moveDocument(InputObject inputObject, OutputObject outputObject);
 }

@@ -5,9 +5,11 @@
 package com.skyeye.doc.document.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.skyeye.annotation.service.SkyeyeService;
 import com.skyeye.base.business.service.impl.SkyeyeBusinessServiceImpl;
 import com.skyeye.common.constans.CommonConstants;
@@ -18,12 +20,14 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.doc.document.dao.DocumentDao;
 import com.skyeye.doc.document.entity.Document;
+import com.skyeye.doc.document.enums.DocumentType;
 import com.skyeye.doc.document.service.DocumentService;
 import com.skyeye.exception.CustomException;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: DocumentServiceImpl
@@ -96,5 +100,64 @@ public class DocumentServiceImpl extends SkyeyeBusinessServiceImpl<DocumentDao, 
         List<Document> documents = list(queryWrapper);
         outputObject.setBeans(documents);
         outputObject.settotal(documents.size());
+    }
+
+    @Override
+    public void moveDocument(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String id = MapUtil.getStr(params, "id");
+        String parentId = StrUtil.blankToDefault(MapUtil.getStr(params, "parentId"), "0");
+        if (StrUtil.isBlank(id)) {
+            throw new CustomException("文档ID不能为空");
+        }
+        Document document = selectById(id);
+        if (ObjectUtil.isEmpty(document) || StrUtil.isBlank(document.getId())) {
+            throw new CustomException("文档不存在");
+        }
+        if (StrUtil.equals(id, parentId)) {
+            throw new CustomException("不能移动到自身下");
+        }
+        List<String> childIds = skyeyeBaseMapper.queryAllChildIdsByParentId(Arrays.asList(id));
+        if (CollectionUtil.isNotEmpty(childIds) && childIds.contains(parentId)) {
+            throw new CustomException("不能移动到自身的子目录下");
+        }
+        if (!StrUtil.equals("0", parentId)) {
+            Document parent = selectById(parentId);
+            if (ObjectUtil.isEmpty(parent) || StrUtil.isBlank(parent.getId())) {
+                throw new CustomException("目标目录不存在");
+            }
+            if (!DocumentType.DIRECTORY.getKey().equals(parent.getType())) {
+                throw new CustomException("只能移动到目录下");
+            }
+        }
+        String oldParentId = StrUtil.blankToDefault(document.getParentId(), "0");
+        if (StrUtil.equals(oldParentId, parentId)) {
+            outputObject.setBean(document);
+            return;
+        }
+        QueryWrapper<Document> nameWrapper = new QueryWrapper<>();
+        nameWrapper.eq(MybatisPlusUtil.toColumns(Document::getParentId), parentId);
+        nameWrapper.eq(MybatisPlusUtil.toColumns(Document::getName), document.getName());
+        nameWrapper.ne(CommonConstants.ID, id);
+        if (ObjectUtil.isNotEmpty(getOne(nameWrapper))) {
+            throw new CustomException("目标目录下已存在同名文档，请先修改名称");
+        }
+        QueryWrapper<Document> orderWrapper = new QueryWrapper<>();
+        orderWrapper.eq(MybatisPlusUtil.toColumns(Document::getParentId), parentId);
+        orderWrapper.select(MybatisPlusUtil.toColumns(Document::getOrderBy));
+        orderWrapper.orderByDesc(MybatisPlusUtil.toColumns(Document::getOrderBy));
+        orderWrapper.last("LIMIT 1");
+        Document last = getOne(orderWrapper);
+        int nextOrder = last == null || last.getOrderBy() == null ? 1 : last.getOrderBy() + 1;
+
+        UpdateWrapper<Document> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq(CommonConstants.ID, id);
+        updateWrapper.set(MybatisPlusUtil.toColumns(Document::getParentId), parentId);
+        updateWrapper.set(MybatisPlusUtil.toColumns(Document::getOrderBy), nextOrder);
+        update(updateWrapper);
+        refreshCache(id);
+
+        Document moved = selectById(id);
+        outputObject.setBean(moved);
     }
 }

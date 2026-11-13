@@ -60,6 +60,15 @@ public class DocumentController {
         documentService.deleteDocumentById(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "moveDocument", value = "移动文档/目录到指定父目录", method = "POST", allUse = "1")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "id", name = "id", value = "要移动的文档/目录主键id", required = "required"),
+        @ApiImplicitParam(id = "parentId", name = "parentId", value = "目标父目录id，根目录传 0", required = "required")})
+    @RequestMapping("/post/DocumentController/moveDocument")
+    public void moveDocument(InputObject inputObject, OutputObject outputObject) {
+        documentService.moveDocument(inputObject, outputObject);
+    }
+
     @ApiOperation(id = "queryAllEnabledDocumentByList", value = "获取所有启动的文档/目录信息", method = "POST", allUse = "2")
     @RequestMapping("/post/DocumentController/queryAllEnabledDocumentByList")
     public void queryAllEnabledDocumentByList(InputObject inputObject, OutputObject outputObject) {
