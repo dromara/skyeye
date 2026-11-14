@@ -116,6 +116,23 @@ public class DepotLevelValServiceImpl extends SkyeyeBusinessServiceImpl<DepotLev
     }
 
     @Override
+    public void queryAllDepotLevelValByDepotId(InputObject inputObject, OutputObject outputObject) {
+        String depotId = inputObject.getParams().get("depotId").toString();
+        if (StrUtil.isBlank(depotId)) {
+            throw new CustomException("仓库id不能为空");
+        }
+        QueryWrapper<DepotLevelVal> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(DepotLevelVal::getDepotId), depotId);
+        queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(DepotLevelVal::getCreateTime));
+        List<DepotLevelVal> list = list(queryWrapper);
+        List<Map<String, Object>> beans = list.stream().map(BeanUtil::beanToMap).collect(Collectors.toList());
+        depotLevelService.setMationForMap(beans, "depotLevelId", "depotLevelMation");
+        setMationForMap(beans, "parentId", "parentMation");
+        outputObject.setBeans(beans);
+        outputObject.settotal(beans.size());
+    }
+
+    @Override
     public void deleteDepotLevelValListByDepotLevelId(String... depotLevelId) {
         List<String> depotLevelIdList = Arrays.asList(depotLevelId);
         if (CollectionUtil.isEmpty(depotLevelIdList)) {

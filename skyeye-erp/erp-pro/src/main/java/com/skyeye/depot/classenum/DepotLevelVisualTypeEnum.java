@@ -28,8 +28,11 @@ public enum DepotLevelVisualTypeEnum implements SkyeyeEnumClass {
     LEVEL(4, "层", true, false),
     BIN(5, "位/格口", true, false),
     DOCK(6, "月台/出入口", true, false),
-    VERTICAL(7, "电梯/楼梯/升降", true, false),
-    CUSTOM(8, "自定义", true, true);
+    /** 原「电梯/楼梯/升降」拆分：历史数据 visualType=7 按电梯处理 */
+    ELEVATOR(7, "电梯", true, false),
+    CUSTOM(8, "自定义", true, true),
+    STAIRS(9, "楼梯", true, false),
+    LIFT(10, "升降机", true, false);
 
     private Integer key;
 

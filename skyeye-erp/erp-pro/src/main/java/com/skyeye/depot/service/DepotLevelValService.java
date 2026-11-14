@@ -26,4 +26,9 @@ public interface DepotLevelValService extends SkyeyeBusinessService<DepotLevelVa
     void deleteDepotLevelValListByDepotLevelId(String... depotLevelId);
 
     void batchGenerateDepotLevelVal(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 按仓库查询全部库位值（含各层级，不限 parentId=0）
+     */
+    void queryAllDepotLevelValByDepotId(InputObject inputObject, OutputObject outputObject);
 }

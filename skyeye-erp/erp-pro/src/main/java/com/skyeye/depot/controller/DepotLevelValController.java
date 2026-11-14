@@ -46,6 +46,14 @@ public class DepotLevelValController {
         depotLevelValService.queryPageList(inputObject, outputObject);
     }
 
+    @ApiOperation(id = "queryAllDepotLevelValByDepotId", value = "按仓库查询全部库位值（区/排/层/位等各层，供 3D 设计器组件库使用）", method = "GET", allUse = "2")
+    @ApiImplicitParams({
+        @ApiImplicitParam(id = "depotId", name = "depotId", value = "仓库id", required = "required")})
+    @RequestMapping("/post/DepotLevelValController/queryAllDepotLevelValByDepotId")
+    public void queryAllDepotLevelValByDepotId(InputObject inputObject, OutputObject outputObject) {
+        depotLevelValService.queryAllDepotLevelValByDepotId(inputObject, outputObject);
+    }
+
     /**
      * 新增/编辑仓库级别的值信息
      *
