@@ -16,6 +16,7 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
+import com.skyeye.depot.classenum.DepotLevelVisualTypeEnum;
 import com.skyeye.depot.dao.DepotLevelDao;
 import com.skyeye.depot.entity.DepotLevel;
 import com.skyeye.depot.service.DepotLevelService;
@@ -48,6 +49,9 @@ public class DepotLevelServiceImpl extends SkyeyeBusinessServiceImpl<DepotLevelD
     @Override
     public void validatorEntity(DepotLevel entity) {
         super.validatorEntity(entity);
+        if (entity.getVisualType() == null) {
+            entity.setVisualType(DepotLevelVisualTypeEnum.CUSTOM.getKey());
+        }
         QueryWrapper<DepotLevel> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(MybatisPlusUtil.toColumns(DepotLevel::getDepotId), entity.getDepotId());
         queryWrapper.eq(MybatisPlusUtil.toColumns(DepotLevel::getParentId), entity.getParentId());

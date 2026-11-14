@@ -12,6 +12,7 @@ import com.skyeye.annotation.api.Property;
 import com.skyeye.annotation.cache.RedisCacheField;
 import com.skyeye.annotation.unique.UniqueField;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
+import com.skyeye.depot.classenum.DepotLevelVisualTypeEnum;
 import lombok.Data;
 
 /**
@@ -40,5 +41,9 @@ public class DepotLevel extends BaseGeneralInfo {
     @TableField(exist = false)
     @Property(value = "仓库信息")
     private Depot depotMation;
+
+    @TableField(value = "visual_type")
+    @ApiModelProperty(value = "3D可视化类型", enumClass = DepotLevelVisualTypeEnum.class, required = "required,num")
+    private Integer visualType;
 
 }
