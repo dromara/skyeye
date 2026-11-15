@@ -14,6 +14,7 @@ import com.skyeye.business.entity.BusinessApi;
 import com.skyeye.common.entity.features.BaseGeneralInfo;
 import com.skyeye.operate.classenum.EventType;
 import com.skyeye.operate.classenum.OperatePosition;
+import com.skyeye.operate.classenum.PageModalSize;
 import com.skyeye.operate.classenum.PageOpenType;
 import lombok.Data;
 
@@ -72,6 +73,10 @@ public class Operate extends BaseGeneralInfo {
     @TableField(value = "open_type")
     @ApiModelProperty(value = "页面布局打开方式", enumClass = PageOpenType.class)
     private Integer openType;
+
+    @TableField(value = "modal_size")
+    @ApiModelProperty(value = "弹窗尺寸，事件类型为新开页面且以弹窗打开时生效", enumClass = PageModalSize.class)
+    private Integer modalSize;
 
     @TableField(exist = false)
     @ApiModelProperty(value = "当事件类型为新开页面时，填写的页面/布局信息")
