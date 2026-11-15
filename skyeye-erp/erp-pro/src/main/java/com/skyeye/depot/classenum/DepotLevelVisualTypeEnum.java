@@ -36,7 +36,9 @@ public enum DepotLevelVisualTypeEnum implements SkyeyeEnumClass {
     /** 通用组件 */
     STAIRS(9, "楼梯", false, false),
     /** 通用组件 */
-    LIFT(10, "升降机", false, false);
+    LIFT(10, "升降机", false, false),
+    /** 通用组件：建筑楼层底板（示意层板，用楼层号抬升） */
+    FLOOR(11, "楼层底板", false, false);
 
     private Integer key;
 
