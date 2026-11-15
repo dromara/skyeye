@@ -32,8 +32,16 @@ public class DepotSpaceLayout extends OperatorUserInfo {
     private String depotId;
 
     @TableField(value = "level_val_id")
-    @ApiModelProperty(value = "库位值id", required = "required")
+    @ApiModelProperty(value = "库位值id；通用组件为 g:{visualType}:{uuid}", required = "required")
     private String levelValId;
+
+    @TableField(value = "visual_type")
+    @ApiModelProperty(value = "3D可视化类型（通用组件必填；库位节点可空，以前端级别类型为准）", enumClass = com.skyeye.depot.classenum.DepotLevelVisualTypeEnum.class)
+    private Integer visualType;
+
+    @TableField(value = "mesh_variant")
+    @ApiModelProperty(value = "通用组件外观款式（如 elevator:cabin/freight/shaft）")
+    private String meshVariant;
 
     @TableField(value = "floor_no")
     @ApiModelProperty(value = "第几层/楼层号", required = "num")

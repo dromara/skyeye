@@ -23,16 +23,20 @@ import lombok.NoArgsConstructor;
 public enum DepotLevelVisualTypeEnum implements SkyeyeEnumClass {
 
     ZONE(1, "分区/库区", true, false),
-    AISLE(2, "巷道/通道", true, false),
+    /** 通用组件：不在「级别 3D 类型」下拉中展示，由设计器「通用组件库」拖入 */
+    AISLE(2, "巷道/通道", false, false),
     RACK(3, "排/货架", true, false),
     LEVEL(4, "层", true, false),
     BIN(5, "位/格口", true, false),
-    DOCK(6, "月台/出入口", true, false),
-    /** 原「电梯/楼梯/升降」拆分：历史数据 visualType=7 按电梯处理 */
-    ELEVATOR(7, "电梯", true, false),
+    /** 通用组件 */
+    DOCK(6, "月台/出入口", false, false),
+    /** 原「电梯/楼梯/升降」拆分：历史数据 visualType=7 按电梯处理；通用组件 */
+    ELEVATOR(7, "电梯", false, false),
     CUSTOM(8, "自定义", true, true),
-    STAIRS(9, "楼梯", true, false),
-    LIFT(10, "升降机", true, false);
+    /** 通用组件 */
+    STAIRS(9, "楼梯", false, false),
+    /** 通用组件 */
+    LIFT(10, "升降机", false, false);
 
     private Integer key;
 

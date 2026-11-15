@@ -108,8 +108,23 @@ public class DepotSpaceLayoutServiceImpl extends SkyeyeBusinessServiceImpl<Depot
         if (StrUtil.isBlank(levelValId)) {
             throw new CustomException("库位值id不能为空");
         }
+        deleteByLevelValIds(java.util.Collections.singletonList(levelValId));
+    }
+
+    @Override
+    public void deleteByLevelValIds(List<String> levelValIds) {
+        if (CollectionUtil.isEmpty(levelValIds)) {
+            return;
+        }
+        List<String> ids = levelValIds.stream()
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(ids)) {
+            return;
+        }
         QueryWrapper<DepotSpaceLayout> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(MybatisPlusUtil.toColumns(DepotSpaceLayout::getLevelValId), levelValId);
+        queryWrapper.in(MybatisPlusUtil.toColumns(DepotSpaceLayout::getLevelValId), ids);
         remove(queryWrapper);
     }
 }

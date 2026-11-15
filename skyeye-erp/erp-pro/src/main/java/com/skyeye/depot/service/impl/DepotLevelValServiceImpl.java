@@ -23,6 +23,7 @@ import com.skyeye.depot.entity.DepotLevel;
 import com.skyeye.depot.entity.DepotLevelVal;
 import com.skyeye.depot.service.DepotLevelService;
 import com.skyeye.depot.service.DepotLevelValService;
+import com.skyeye.depot.service.DepotSpaceLayoutService;
 import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,9 @@ public class DepotLevelValServiceImpl extends SkyeyeBusinessServiceImpl<DepotLev
 
     @Autowired
     private DepotLevelService depotLevelService;
+
+    @Autowired
+    private DepotSpaceLayoutService depotSpaceLayoutService;
 
     @Override
     public QueryWrapper<DepotLevelVal> getQueryWrapper(CommonPageInfo commonPageInfo) {
@@ -105,6 +109,8 @@ public class DepotLevelValServiceImpl extends SkyeyeBusinessServiceImpl<DepotLev
         String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
         // 查询子节点信息(包含当前节点)
         List<String> childIds = skyeyeBaseMapper.queryAllChildIdsByParentId(Arrays.asList(entity.getId()), tenantId);
+        // 级联清理 3D 空间布局，避免孤儿布局
+        depotSpaceLayoutService.deleteByLevelValIds(childIds);
         deleteById(childIds);
     }
 
@@ -140,6 +146,11 @@ public class DepotLevelValServiceImpl extends SkyeyeBusinessServiceImpl<DepotLev
         }
         QueryWrapper<DepotLevelVal> queryWrapper = new QueryWrapper<>();
         queryWrapper.in(MybatisPlusUtil.toColumns(DepotLevelVal::getDepotLevelId), depotLevelIdList);
+        List<DepotLevelVal> list = list(queryWrapper);
+        if (CollectionUtil.isNotEmpty(list)) {
+            List<String> levelValIds = list.stream().map(DepotLevelVal::getId).collect(Collectors.toList());
+            depotSpaceLayoutService.deleteByLevelValIds(levelValIds);
+        }
         remove(queryWrapper);
     }
 
