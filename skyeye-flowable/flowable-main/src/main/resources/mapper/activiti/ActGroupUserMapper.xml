@@ -24,7 +24,7 @@
                 AND a.group_id = #{objectId}
             </if>
             <if test="keyword != '' and keyword != null">
-                AND b.user_name LIKE '%${keyword}%'
+                AND b.user_name LIKE CONCAT('%', #{keyword}, '%')
             </if>
             <if test="tenantId != '' and tenantId != null">
                 AND a.tenant_id = #{tenantId}

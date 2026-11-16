@@ -24,7 +24,7 @@
                 ${sqlExtract}
             </if>
             <if test="keyword != null and keyword != ''">
-                AND (t1.PROC_INST_ID_ LIKE '%${keyword}%' OR t1.NAME_ LIKE '%${keyword}%')
+                AND (t1.PROC_INST_ID_ LIKE CONCAT('%', #{keyword}, '%') OR t1.NAME_ LIKE CONCAT('%', #{keyword}, '%'))
             </if>
             <if test="tenantId != '' and tenantId != null">
                 AND t1.TENANT_ID_ = #{tenantId}
@@ -50,7 +50,7 @@
                   AND mv.NAME_ IN ('nrOfInstances', 'assigneeList')
             )
         <if test="keyword != null and keyword != ''">
-            AND e.PROC_INST_ID_ LIKE '%${keyword}%'
+            AND e.PROC_INST_ID_ LIKE CONCAT('%', #{keyword}, '%')
         </if>
         <if test="tenantId != '' and tenantId != null">
             AND e.TENANT_ID_ = #{tenantId}
@@ -69,7 +69,7 @@
             AND v.NAME_ = 'multiInstanceHostAssignee'
             AND v.TEXT_ = #{userId}
         <if test="keyword != null and keyword != ''">
-            AND e.PROC_INST_ID_ LIKE '%${keyword}%'
+            AND e.PROC_INST_ID_ LIKE CONCAT('%', #{keyword}, '%')
         </if>
         <if test="tenantId != '' and tenantId != null">
             AND e.TENANT_ID_ = #{tenantId}

@@ -17,7 +17,7 @@
 			a.create_id = #{createId}
 			AND a.delete_flag = #{deleteFlag}
 			<if test="keyword != null and keyword != ''">
-				AND a.`name` like '%${keyword}%'
+				AND a.`name` like CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="tenantId != null and tenantId != ''">
 				AND a.tenant_id = #{tenantId}

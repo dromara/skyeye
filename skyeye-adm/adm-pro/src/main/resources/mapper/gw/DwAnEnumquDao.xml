@@ -32,7 +32,7 @@
                 ${sqlExtract}
             </if>
             <if test="keyword != null and keyword != ''">
-                AND (a.odd_number like '%${keyword}%' OR a.title like '%${keyword}%')
+                AND (a.odd_number like CONCAT('%', #{keyword}, '%') OR a.title like CONCAT('%', #{keyword}, '%'))
             </if>
             <if test="type != null and type != ''">
                 <choose>

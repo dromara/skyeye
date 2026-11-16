@@ -33,13 +33,13 @@
 			AND b.create_id = c.id
 			AND c.school_id = f.id
 				<if test="surveyName != '' and surveyName != null">
-					AND a.survey_name LIKE '%${surveyName}%'
+					AND a.survey_name LIKE CONCAT('%', #{surveyName}, '%')
 				</if>
 				<if test="studentName != '' and studentName != null">
-					AND c.student_name LIKE '%${studentName}%'
+					AND c.student_name LIKE CONCAT('%', #{studentName}, '%')
 				</if>
 				<if test="studentNo != '' and studentNo != null">
-					AND c.student_no LIKE '%${studentNo}%'
+					AND c.student_no LIKE CONCAT('%', #{studentNo}, '%')
 				</if>
 				<if test="gradeId != '' and gradeId != null">
 					AND a.grade_id = #{gradeId}
@@ -88,13 +88,13 @@
 			AND b.create_id = c.id
 			AND c.school_id = f.id
 				<if test="surveyName != '' and surveyName != null">
-					AND a.survey_name LIKE '%${surveyName}%'
+					AND a.survey_name LIKE CONCAT('%', #{surveyName}, '%')
 				</if>
 				<if test="studentName != '' and studentName != null">
-					AND c.student_name LIKE '%${studentName}%'
+					AND c.student_name LIKE CONCAT('%', #{studentName}, '%')
 				</if>
 				<if test="studentNo != '' and studentNo != null">
-					AND c.student_no LIKE '%${studentNo}%'
+					AND c.student_no LIKE CONCAT('%', #{studentNo}, '%')
 				</if>
 				<if test="gradeId != '' and gradeId != null">
 					AND a.grade_id = #{gradeId}
@@ -148,13 +148,13 @@
 		AND a.create_id = d.id
 		AND b.school_id = e.id
 			<if test="surveyName != '' and surveyName != null">
-				AND b.survey_name LIKE '%${surveyName}%'
+				AND b.survey_name LIKE CONCAT('%', #{surveyName}, '%')
 			</if>
 			<if test="studentName != '' and studentName != null">
-				AND d.student_name LIKE '%${studentName}%'
+				AND d.student_name LIKE CONCAT('%', #{studentName}, '%')
 			</if>
 			<if test="studentNo != '' and studentNo != null">
-				AND d.student_no LIKE '%${studentNo}%'
+				AND d.student_no LIKE CONCAT('%', #{studentNo}, '%')
 			</if>
 			<if test="gradeId != '' and gradeId != null">
 				AND b.grade_id = #{gradeId}

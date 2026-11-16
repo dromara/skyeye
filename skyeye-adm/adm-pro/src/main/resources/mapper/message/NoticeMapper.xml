@@ -30,7 +30,7 @@
 				${sqlExtract}
 			</if>
 			<if test="keyword != null and keyword != ''">
-				AND a.`name` like '%${keyword}%'
+				AND a.`name` like CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="objectId != null and objectId != ''">
 				AND c.user_id = #{objectId}

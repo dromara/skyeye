@@ -29,7 +29,7 @@
 				${sqlExtract}
 			</if>
 			<if test="keyword != null and keyword != ''">
-				AND a.`name` like '%${keyword}%'
+				AND a.`name` like CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="state != null and state != ''">
 				AND a.state = #{state}

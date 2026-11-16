@@ -16,7 +16,7 @@
 				${sqlExtract}
 			</if>
 			<if test="keyword != null and keyword != ''">
-				AND a.process_instance_id LIKE '%${keyword}%'
+				AND a.process_instance_id LIKE CONCAT('%', #{keyword}, '%')
 			</if>
 		</where>
 		ORDER BY a.create_time DESC

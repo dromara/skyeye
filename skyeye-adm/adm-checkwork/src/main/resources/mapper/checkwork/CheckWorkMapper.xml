@@ -353,7 +353,7 @@
         <where>
             <include refid="checkWorkReportStaffStateFilter"/>
             <if test="userName != '' and userName != null">
-                AND a.user_name LIKE '%${userName}%'
+                AND a.user_name LIKE CONCAT('%', #{userName}, '%')
             </if>
         </where>
         GROUP BY a.id
@@ -393,7 +393,7 @@
         WHERE cw.check_date = #{day}
         <include refid="checkWorkEchartsDayStaffStateFilter"/>
         <if test="userName != '' and userName != null">
-            AND b.user_name LIKE '%${userName}%'
+            AND b.user_name LIKE CONCAT('%', #{userName}, '%')
         </if>
         <if test="tenantId != '' and tenantId != null">
             AND cw.tenant_id = #{tenantId}
@@ -522,7 +522,7 @@
                 AND a.tenant_id = #{tenantId}
             </if>
             <if test="userName != '' and userName != null">
-                AND b.user_name LIKE '%${userName}%'
+                AND b.user_name LIKE CONCAT('%', #{userName}, '%')
             </if>
         </where>
         ORDER BY a.check_date ASC, a.create_id ASC

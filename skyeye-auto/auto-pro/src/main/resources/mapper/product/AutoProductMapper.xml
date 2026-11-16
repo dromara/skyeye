@@ -22,7 +22,7 @@
                 ${sqlExtract}
             </if>
             <if test="keyword != '' and keyword != null">
-                AND a.`name` like '%${keyword}%'
+                AND a.`name` like CONCAT('%', #{keyword}, '%')
             </if>
         </where>
         ORDER BY a.create_time DESC

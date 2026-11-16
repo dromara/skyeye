@@ -28,7 +28,7 @@
                 ${sqlExtract}
             </if>
             <if test="keyword != null and keyword != ''">
-                AND (a.`name` LIKE '%${keyword}%' OR a.mobile_phone LIKE '%${keyword}%')
+                AND (a.`name` LIKE CONCAT('%', #{keyword}, '%') OR a.mobile_phone LIKE CONCAT('%', #{keyword}, '%'))
             </if>
             <if test="objectId != null and objectId != ''">
                 AND a.object_id = #{objectId}
