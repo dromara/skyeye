@@ -175,18 +175,19 @@
                      (element.shadow?.enabled ? 'box-shadow:' + element.shadow.x + 'px ' + element.shadow.y + 'px ' + element.shadow.blur + 'px ' + element.shadow.color + ';' : '') +
                      (element.animation?.type != 'none' ? 'animation-duration:' + element.animation.duration + 'ms;animation-delay:' + element.animation.delay + 'ms;' : '')}">
 
-            <!-- 文本元素 -->
+            <!-- 文本元素：align 存 flex-start/center/flex-end（与设计器一致），需同时映射 text-align 与 justify-content -->
             <div th:if="${element.type == 'text'}"
                 th:style="${'font-size:' + (element.fontSize ?: 12) + 'px;' +
                          'font-weight:' + (element.bold ? 'bold' : 'normal') + ';' +
                          'font-style:' + (element.italic ? 'italic' : 'normal') + ';' +
                          'text-decoration:' + (element.underline ? 'underline' : 'none') + ';' +
-                         'text-align:' + (element.align ?: 'left') + ';' +
+                         'text-align:' + ((element.align == 'flex-end' or element.align == 'right') ? 'right' : ((element.align == 'center') ? 'center' : 'left')) + ';' +
                          'height: 100%;' +
                          'width: 100%;' +
                          'display: flex;' +
                          'padding: 4px;' +
                          'align-items: center;' +
+                         'justify-content:' + ((element.align == 'flex-end' or element.align == 'right') ? 'flex-end' : ((element.align == 'center') ? 'center' : 'flex-start')) + ';' +
                          'max-width:' + (element.width != null ? element.width + 'px' : 'none') + ';' +
                          'max-height:' + (element.height != null ? element.height + 'px' : 'none') + ';'}"
                 th:utext="${#strings.replace(element.content, '\\n', '<br>')}">
@@ -328,13 +329,15 @@
                                                            'height:' + (cellElement.height != null ? cellElement.height.toString().replace('px', '') : 'auto') + 'px;' +
                                                            'margin-bottom:4px;' +
                                                            'overflow:hidden;'}">
-                                                <!-- 文本元素 -->
+                                                <!-- 文本元素：对齐与画布文本一致 -->
                                                 <div th:if="${cellElement.type == 'text'}"
                                                      th:style="${'font-size:' + (cellElement.fontSize ?: 12) + 'px;' +
                                                               'font-weight:' + (cellElement.bold ? 'bold' : 'normal') + ';' +
                                                               'font-style:' + (cellElement.italic ? 'italic' : 'normal') + ';' +
                                                               'text-decoration:' + (cellElement.underline ? 'underline' : 'none') + ';' +
-                                                              'text-align:' + (cellElement.align ?: 'left') + ';' +
+                                                              'text-align:' + ((cellElement.align == 'flex-end' or cellElement.align == 'right') ? 'right' : ((cellElement.align == 'center') ? 'center' : 'left')) + ';' +
+                                                              'display:flex;align-items:center;' +
+                                                              'justify-content:' + ((cellElement.align == 'flex-end' or cellElement.align == 'right') ? 'flex-end' : ((cellElement.align == 'center') ? 'center' : 'flex-start')) + ';' +
                                                               'width:100%;height:100%;padding:2px;'}"
                                                      th:utext="${#strings.replace(cellElement.content != null ? cellElement.content : '', '\\n', '<br>')}">
                                                 </div>
