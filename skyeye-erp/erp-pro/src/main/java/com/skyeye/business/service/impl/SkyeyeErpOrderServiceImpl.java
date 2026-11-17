@@ -32,6 +32,7 @@ import com.skyeye.common.util.MapUtil;
 import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.constants.ErpConstants;
 import com.skyeye.crm.service.ICustomerService;
+import com.skyeye.depot.service.DepotLevelValOccupancyService;
 import com.skyeye.depot.service.ErpDepotService;
 import com.skyeye.entity.*;
 import com.skyeye.eve.dao.SkyeyeBaseMapper;
@@ -94,6 +95,9 @@ public class SkyeyeErpOrderServiceImpl<D extends SkyeyeBaseMapper<T>, T extends 
 
     @Autowired
     protected ErpDepotService erpDepotService;
+
+    @Autowired
+    protected DepotLevelValOccupancyService depotLevelValOccupancyService;
 
     @Autowired
     protected HolderNormsService holderNormsService;
@@ -385,6 +389,16 @@ public class SkyeyeErpOrderServiceImpl<D extends SkyeyeBaseMapper<T>, T extends 
         // 修改库存&&保存客户/供应商/会员关联的商品信息
         for (ErpOrderItem bean : erpOrderItemList) {
             erpCommonService.editMaterialNormsDepotStock(bean.getDepotId(), bean.getMaterialId(), bean.getNormsId(), bean.getOperNumber(), type, MaterialNormsStockType.ORDER_STOCK.getKey());
+            // 明细挂了库位时，同步增减库位占用（3D LIVE）；未填库位则跳过
+            if (StrUtil.isNotBlank(bean.getLevelValId()) && StrUtil.isNotBlank(bean.getDepotId())) {
+                depotLevelValOccupancyService.adjustOccupancyQty(
+                    bean.getDepotId(),
+                    bean.getLevelValId(),
+                    bean.getOperNumber(),
+                    type,
+                    StrUtil.EMPTY
+                );
+            }
 
             if (StrUtil.isNotEmpty(holderId) && StrUtil.isNotEmpty(holderKey) && orderTypes.contains(orderIdKey)) {
                 // 记录客户/供应商/会员关联的商品

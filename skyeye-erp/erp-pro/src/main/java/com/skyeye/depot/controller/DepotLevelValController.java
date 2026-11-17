@@ -33,12 +33,6 @@ public class DepotLevelValController {
     @Autowired
     private DepotLevelValService depotLevelValService;
 
-    /**
-     * 获取仓库级别的值信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryDepotLevelValList", value = "获取仓库级别的值信息", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/DepotLevelValController/queryDepotLevelValList")
@@ -54,12 +48,6 @@ public class DepotLevelValController {
         depotLevelValService.queryAllDepotLevelValByDepotId(inputObject, outputObject);
     }
 
-    /**
-     * 新增/编辑仓库级别的值信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "writeDepotLevelVal", value = "新增/编辑仓库级别的值信息", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = DepotLevelVal.class)
     @RequestMapping("/post/DepotLevelValController/writeDepotLevelVal")
@@ -67,12 +55,6 @@ public class DepotLevelValController {
         depotLevelValService.saveOrUpdateEntity(inputObject, outputObject);
     }
 
-    /**
-     * 根据id获取仓库级别的值信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryDepotLevelValById", value = "根据id获取仓库级别的值信息", method = "GET", allUse = "2")
     @ApiImplicitParams(value = {
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -81,12 +63,6 @@ public class DepotLevelValController {
         depotLevelValService.selectById(inputObject, outputObject);
     }
 
-    /**
-     * 删除仓库级别的值信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "deleteDepotLevelValById", value = "删除仓库级别的值信息", method = "DELETE", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -95,12 +71,6 @@ public class DepotLevelValController {
         depotLevelValService.deleteById(inputObject, outputObject);
     }
 
-    /**
-     * 批量生成仓库级别的值信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "batchGenerateDepotLevelVal", value = "批量生成仓库级别的值信息", method = "POST", allUse = "2")
     @ApiImplicitParams(value = {
         @ApiImplicitParam(id = "type", name = "type", value = "生成的编号类型", enumClass = GenerateDepotLevelValType.class, required = "required,num"),
