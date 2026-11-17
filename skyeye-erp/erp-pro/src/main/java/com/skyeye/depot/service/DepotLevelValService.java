@@ -9,7 +9,9 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.depot.entity.DepotLevelVal;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: DepotLevelValService
@@ -31,4 +33,11 @@ public interface DepotLevelValService extends SkyeyeBusinessService<DepotLevelVa
      * 按仓库查询全部库位值（含各层级，不限 parentId=0）
      */
     void queryAllDepotLevelValByDepotId(InputObject inputObject, OutputObject outputObject);
+
+    /**
+     * 按库位值 id 批量构建展示路径：区 9 › 货架 444 › 层 1 › 位 01
+     *
+     * @return id -> pathLabel
+     */
+    Map<String, String> queryPathLabelByIds(Collection<String> ids);
 }

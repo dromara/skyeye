@@ -29,10 +29,7 @@ import com.skyeye.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -222,6 +219,85 @@ public class DepotLevelValServiceImpl extends SkyeyeBusinessServiceImpl<DepotLev
             String userId = inputObject.getLogParams().get("id").toString();
             createEntity(saveDataList, userId);
         }
+    }
+
+    @Override
+    public Map<String, String> queryPathLabelByIds(Collection<String> ids) {
+        Map<String, String> result = new HashMap<>();
+        if (CollectionUtil.isEmpty(ids)) {
+            return result;
+        }
+        List<String> uniq = ids.stream()
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(uniq)) {
+            return result;
+        }
+        Map<String, DepotLevelVal> seed = selectMapByIds(uniq);
+        if (seed == null || seed.isEmpty()) {
+            return result;
+        }
+        Set<String> depotIds = seed.values().stream()
+            .filter(ObjectUtil::isNotNull)
+            .map(DepotLevelVal::getDepotId)
+            .filter(StrUtil::isNotBlank)
+            .collect(Collectors.toSet());
+        Map<String, DepotLevelVal> allMap = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(depotIds)) {
+            QueryWrapper<DepotLevelVal> queryWrapper = new QueryWrapper<>();
+            queryWrapper.in(MybatisPlusUtil.toColumns(DepotLevelVal::getDepotId), depotIds);
+            List<DepotLevelVal> list = list(queryWrapper);
+            if (CollectionUtil.isNotEmpty(list)) {
+                depotLevelService.setDataMation(list, DepotLevelVal::getDepotLevelId);
+                list.forEach(v -> {
+                    if (v != null && StrUtil.isNotBlank(v.getId())) {
+                        allMap.put(v.getId(), v);
+                    }
+                });
+            }
+        }
+        for (String id : uniq) {
+            String label = buildPathLabel(id, allMap);
+            if (StrUtil.isNotBlank(label)) {
+                result.put(id, label);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 对齐前端 depotLevelValPath.buildPathLabel：区 9 › 货架 444 › 层 1 › 位 01
+     */
+    private String buildPathLabel(String id, Map<String, DepotLevelVal> allMap) {
+        if (StrUtil.isBlank(id) || allMap == null || allMap.isEmpty()) {
+            return StrUtil.EMPTY;
+        }
+        List<String> parts = new ArrayList<>();
+        DepotLevelVal cur = allMap.get(id);
+        Set<String> guard = new HashSet<>();
+        while (cur != null && StrUtil.isNotBlank(cur.getId()) && !guard.contains(cur.getId())) {
+            guard.add(cur.getId());
+            String levelName = ObjectUtil.isNotNull(cur.getDepotLevelMation())
+                ? StrUtil.blankToDefault(cur.getDepotLevelMation().getName(), StrUtil.EMPTY)
+                : StrUtil.EMPTY;
+            String num = StrUtil.blankToDefault(cur.getNumber(), StrUtil.EMPTY);
+            if (StrUtil.isNotBlank(levelName) && StrUtil.isNotBlank(num)) {
+                parts.add(0, levelName + " " + num);
+            } else if (StrUtil.isNotBlank(num)) {
+                parts.add(0, num);
+            } else if (StrUtil.isNotBlank(levelName)) {
+                parts.add(0, levelName);
+            } else {
+                parts.add(0, cur.getId());
+            }
+            String pid = StrUtil.blankToDefault(cur.getParentId(), "0");
+            if (StrUtil.equals(pid, "0")) {
+                break;
+            }
+            cur = allMap.get(pid);
+        }
+        return CollectionUtil.isEmpty(parts) ? StrUtil.EMPTY : String.join(" › ", parts);
     }
 
     /**

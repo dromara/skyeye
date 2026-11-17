@@ -33,6 +33,7 @@ import com.skyeye.common.util.mybatisplus.MybatisPlusUtil;
 import com.skyeye.constants.ErpConstants;
 import com.skyeye.crm.service.ICustomerService;
 import com.skyeye.depot.service.DepotLevelValOccupancyService;
+import com.skyeye.depot.service.DepotLevelValService;
 import com.skyeye.depot.service.ErpDepotService;
 import com.skyeye.entity.*;
 import com.skyeye.eve.dao.SkyeyeBaseMapper;
@@ -98,6 +99,9 @@ public class SkyeyeErpOrderServiceImpl<D extends SkyeyeBaseMapper<T>, T extends 
 
     @Autowired
     protected DepotLevelValOccupancyService depotLevelValOccupancyService;
+
+    @Autowired
+    protected DepotLevelValService depotLevelValService;
 
     @Autowired
     protected HolderNormsService holderNormsService;
@@ -358,9 +362,46 @@ public class SkyeyeErpOrderServiceImpl<D extends SkyeyeBaseMapper<T>, T extends 
         // 仓库信息
         erpDepotService.setDataMation(erpOrderHead.getErpOrderItemList(), ErpOrderItem::getDepotId);
         erpDepotService.setDataMation(erpOrderHead.getErpOrderItemList(), ErpOrderItem::getAnotherDepotId);
+        // 库位信息（路径名，对齐仓库 depotMation.name 展示）
+        setLevelValMation(erpOrderHead.getErpOrderItemList());
         // 业务员信息
         iAuthUserService.setDataMation(erpOrderHead, ErpOrderCommon::getSalesman);
         return erpOrderHead;
+    }
+
+    /**
+     * 明细库位 levelValId → levelValMation.name（区 › 货架 › 层 › 位）
+     */
+    private void setLevelValMation(List<ErpOrderItem> items) {
+        if (CollectionUtil.isEmpty(items)) {
+            return;
+        }
+        List<String> ids = items.stream()
+            .map(ErpOrderItem::getLevelValId)
+            .filter(StrUtil::isNotBlank)
+            .distinct()
+            .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(ids)) {
+            return;
+        }
+        Map<String, String> pathMap = depotLevelValService.queryPathLabelByIds(ids);
+        if (pathMap == null || pathMap.isEmpty()) {
+            return;
+        }
+        items.forEach(item -> {
+            String levelValId = item.getLevelValId();
+            if (StrUtil.isBlank(levelValId)) {
+                return;
+            }
+            String name = pathMap.get(levelValId);
+            if (StrUtil.isBlank(name)) {
+                return;
+            }
+            Map<String, Object> mation = new HashMap<>();
+            mation.put("id", levelValId);
+            mation.put("name", name);
+            item.setLevelValMation(mation);
+        });
     }
 
     private void setAccountMation(T entity) {

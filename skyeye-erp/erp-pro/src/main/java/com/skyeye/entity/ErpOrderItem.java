@@ -77,6 +77,10 @@ public class ErpOrderItem extends SkyeyeLinkData {
     @ApiModelProperty(value = "库位值id（3D库位；可选，审核出入库后回写库位占用）")
     private String levelValId;
 
+    @TableField(exist = false)
+    @Property(value = "库位信息（name 为区›货架›层›位路径；字段名对齐 getKeyIdToMation(levelValId)=levelValMation）")
+    private Map<String, Object> levelValMation;
+
     @TableField(value = "another_depot_id")
     @ApiModelProperty(value = "调拨时，对方仓库Id")
     private String anotherDepotId;
