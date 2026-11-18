@@ -45,86 +45,62 @@ public class PlatformDsFormAiDraftServiceImpl implements PlatformDsFormAiDraftSe
     public void generate(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
         String question = strParam(params, "question");
-        String formContext = AiJsonHelper.normalizeJsonText(params.get("formContext"));
+        if (StrUtil.isBlank(question)) {
+            throw new CustomException("请输入问题");
+        }
         String pageTitle = strParam(params, "pageTitle");
         String appId = strParam(params, "appId");
         String serviceClassName = strParam(params, "serviceClassName");
         String skillId = strParam(params, "skillId");
         String suiteId = strParam(params, "suiteId");
-        String assistScene = strParam(params, "assistScene");
-        String confirmedAnswers = null;
-        if (params.get("confirmedAnswers") != null
-            && StrUtil.isNotBlank(String.valueOf(params.get("confirmedAnswers")))) {
-            confirmedAnswers = AiJsonHelper.normalizeJsonText(params.get("confirmedAnswers"));
-        }
-        if (StrUtil.isBlank(question)) {
-            throw new CustomException("请输入问题");
-        }
-        // 人设与布局规则在 AI 技能提示词；这里只拼技能说明书 + 前端上下文
+        String confirmedRaw = strParam(params, "confirmedAnswers");
+        String confirmedAnswers = StrUtil.isBlank(confirmedRaw)
+            ? null
+            : AiJsonHelper.normalizeJsonText(confirmedRaw);
         String content = platformAiSkillPromptBuilder.buildForDsForm(
-            question, pageTitle, appId, serviceClassName, skillId, suiteId, formContext, assistScene,
+            question, pageTitle, appId, serviceClassName, skillId, suiteId,
+            AiJsonHelper.normalizeJsonText(params.get("formContext")),
+            strParam(params, "assistScene"),
             confirmedAnswers);
         Map<String, Object> extra = new HashMap<>();
         if (StrUtil.isNotBlank(skillId)) {
             extra.put("skillId", skillId);
         }
-        // 透传技能 Agent 标记（仅提示词/扩展用；表单是否挂工具不依赖此值）
         if (platformAiSkillPromptBuilder.resolveEnableAgentForDsForm(
             question, pageTitle, appId, serviceClassName, skillId, suiteId)) {
             extra.put("enableAgent", 1);
         }
-        Map<String, Object> bean = platformAiChatHelper.startStreamingChat(content, BIZ_TYPE, extra);
-        outputObject.setBean(bean);
+        outputObject.setBean(platformAiChatHelper.startStreamingChat(content, BIZ_TYPE, extra));
         outputObject.settotal(CommonNumConstants.NUM_ONE);
-    }
-
-    private String strParam(Map<String, Object> params, String key) {
-        if (params == null || params.get(key) == null) {
-            return "";
-        }
-        return String.valueOf(params.get(key));
     }
 
     @Override
     public void parseAnswer(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> params = inputObject.getParams();
-        String answer = params.get("answer").toString();
-        String formContext = params.get("formContext").toString();
-        outputObject.setBean(parseAssistAnswer(answer, formContext));
+        outputObject.setBean(parseAssistAnswer(
+            String.valueOf(params.get("answer")),
+            String.valueOf(params.get("formContext"))));
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
     private DsFormAiAssistParseResult parseAssistAnswer(String answer, String formContext) {
-        JSONObject json = AiJsonHelper.parseJsonObject(AiJsonHelper.extractJsonBlock(answer));
         DsFormAiAssistParseResult bean = new DsFormAiAssistParseResult();
-        Set<String> allowedKeys = loadAllowedFieldKeys(formContext);
+        JSONObject json = AiJsonHelper.parseJsonObject(AiJsonHelper.extractJsonBlock(answer));
         if (json == null) {
-            bean.setReply(answer.trim());
+            bean.setReply(StrUtil.blankToDefault(answer, "").trim());
             return bean;
         }
+        Set<String> allowedKeys = loadAllowedFieldKeys(formContext);
         bean.setReply(json.getStr("reply"));
         bean.setFieldValues(filterFieldValues(json.get("fieldValues"), allowedKeys));
-        bean.setActions(parseActions(json.get("actions")));
+        bean.setActions(toBeanListQuietly(json.get("actions"), DsFormAiAction.class));
         bean.setClarifications(parseClarifications(json.get("clarifications"), allowedKeys));
         return bean;
     }
 
     private List<DsFormAiClarification> parseClarifications(Object raw, Set<String> allowedKeys) {
         List<DsFormAiClarification> list = new ArrayList<>();
-        if (raw == null) {
-            return list;
-        }
-        JSONArray array = raw instanceof JSONArray
-            ? (JSONArray) raw
-            : JSONUtil.parseArray(JSONUtil.toJsonStr(raw));
-        List<DsFormAiClarification> rows = JSONUtil.toList(array, DsFormAiClarification.class);
-        if (CollectionUtil.isEmpty(rows)) {
-            return list;
-        }
-        for (DsFormAiClarification row : rows) {
-            if (row == null) {
-                continue;
-            }
+        for (DsFormAiClarification row : toBeanListQuietly(raw, DsFormAiClarification.class)) {
             row.normalize(list.size());
             if (!row.isChoice()) {
                 continue;
@@ -144,17 +120,54 @@ public class PlatformDsFormAiDraftServiceImpl implements PlatformDsFormAiDraftSe
     }
 
     private List<DsFormAiClarifyOption> parseClarifyOptions(Object raw) {
-        if (raw == null) {
-            return new ArrayList<>();
-        }
-        List<DsFormAiClarifyOption> list = JSONUtil.toList(JSONUtil.toJsonStr(raw), DsFormAiClarifyOption.class);
-        if (CollectionUtil.isEmpty(list)) {
-            return new ArrayList<>();
-        }
-        list.removeIf(Objects::isNull);
+        List<DsFormAiClarifyOption> list = toBeanListQuietly(raw, DsFormAiClarifyOption.class);
         list.forEach(DsFormAiClarifyOption::normalize);
         list.removeIf(opt -> !opt.isValid());
         return list.size() > 20 ? new ArrayList<>(list.subList(0, 20)) : list;
+    }
+
+    /**
+     * 模型输出的数组字段：兼容 JSONArray / Collection / JSON 数组字符串；其它类型当空。
+     */
+    private <T> List<T> toBeanListQuietly(Object raw, Class<T> type) {
+        JSONArray array = toJsonArrayQuietly(raw);
+        if (array.isEmpty()) {
+            return new ArrayList<>();
+        }
+        try {
+            List<T> list = JSONUtil.toList(array, type);
+            if (CollectionUtil.isEmpty(list)) {
+                return new ArrayList<>();
+            }
+            list.removeIf(Objects::isNull);
+            return list;
+        } catch (Exception ignored) {
+            return new ArrayList<>();
+        }
+    }
+
+    private JSONArray toJsonArrayQuietly(Object raw) {
+        if (raw == null) {
+            return new JSONArray();
+        }
+        if (raw instanceof JSONArray) {
+            return (JSONArray) raw;
+        }
+        try {
+            if (raw instanceof String) {
+                String s = ((String) raw).trim();
+                if (StrUtil.isBlank(s) || !s.startsWith("[")) {
+                    return new JSONArray();
+                }
+                return JSONUtil.parseArray(s);
+            }
+            if (raw instanceof Collection) {
+                return JSONUtil.parseArray(JSONUtil.toJsonStr(raw));
+            }
+        } catch (Exception ignored) {
+            // 关 Agent 时常见非数组字符串，忽略
+        }
+        return new JSONArray();
     }
 
     private Set<String> loadAllowedFieldKeys(String formContext) {
@@ -163,8 +176,7 @@ public class PlatformDsFormAiDraftServiceImpl implements PlatformDsFormAiDraftSe
             return keys;
         }
         try {
-            JSONObject ctx = JSONUtil.parseObj(formContext);
-            JSONArray fields = ctx.getJSONArray("fields");
+            JSONArray fields = JSONUtil.parseObj(formContext).getJSONArray("fields");
             if (fields == null) {
                 return keys;
             }
@@ -178,7 +190,7 @@ public class PlatformDsFormAiDraftServiceImpl implements PlatformDsFormAiDraftSe
                 }
             }
         } catch (Exception ignored) {
-            // 解析失败时不限制，避免阻断展示
+            // 解析失败时不限制
         }
         return keys;
     }
@@ -201,15 +213,10 @@ public class PlatformDsFormAiDraftServiceImpl implements PlatformDsFormAiDraftSe
         return result;
     }
 
-    private List<DsFormAiAction> parseActions(Object raw) {
-        if (raw == null) {
-            return new ArrayList<>();
+    private String strParam(Map<String, Object> params, String key) {
+        if (params == null || params.get(key) == null) {
+            return "";
         }
-        List<DsFormAiAction> list = JSONUtil.toList(JSONUtil.toJsonStr(raw), DsFormAiAction.class);
-        if (CollectionUtil.isEmpty(list)) {
-            return new ArrayList<>();
-        }
-        list.removeIf(Objects::isNull);
-        return list;
+        return String.valueOf(params.get(key));
     }
 }
