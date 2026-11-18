@@ -44,7 +44,7 @@ public class PlatformAiSkillPromptBuilder {
         appendQuestionAndPage(sb, question, pageTitle, pagePath);
         appendMatched(sb, match, skills);
         if (matchedSkillEnablesAgent(match, skills)) {
-            appendAgentBehaviorHint(sb);
+            appendAgentBehaviorHint(sb, false, false);
         }
         appendMarkedJsonOutput(sb);
         return sb.toString();
@@ -57,6 +57,13 @@ public class PlatformAiSkillPromptBuilder {
      */
     public String buildForDsForm(String question, String pageTitle, String appId, String serviceClassName,
                                  String skillId, String suiteId, String formContextJson, String assistScene) {
+        return buildForDsForm(question, pageTitle, appId, serviceClassName, skillId, suiteId,
+            formContextJson, assistScene, null);
+    }
+
+    public String buildForDsForm(String question, String pageTitle, String appId, String serviceClassName,
+                                 String skillId, String suiteId, String formContextJson, String assistScene,
+                                 String confirmedAnswersJson) {
         Map<String, Object> payload = loadMatchPayload();
         List<Map<String, Object>> skills = filterByScene(asMapList(payload.get("skillList")), "2");
         List<Map<String, Object>> suites = asMapList(payload.get("suiteList"));
@@ -67,6 +74,10 @@ public class PlatformAiSkillPromptBuilder {
             match = matchByServiceClassName(appId, serviceClassName, skills, suites);
         }
         boolean layout = "layout".equalsIgnoreCase(assistScene);
+        boolean agentOn = matchedSkillEnablesAgent(match, skills);
+        // 前端二次生成会传 confirmedAnswers（可为 []），表示澄清已完成
+        boolean hasConfirmed = StrUtil.isNotBlank(confirmedAnswersJson)
+            && !"null".equalsIgnoreCase(confirmedAnswersJson.trim());
         StringBuilder sb = new StringBuilder();
         if (layout) {
             sb.append("请严格按命中技能的提示词与说明书执行。下方是前端传入的布局上下文。\n\n");
@@ -75,16 +86,22 @@ public class PlatformAiSkillPromptBuilder {
             sb.append("请结合下方技能说明书、表单字段定义与当前值，理解用户指令后给出可落地的建议或草稿。\n\n");
         }
         appendQuestionAndPage(sb, question, pageTitle, matchPath);
+        if (!layout && hasConfirmed) {
+            sb.append("【用户已确认的澄清答案】\n");
+            sb.append(confirmedAnswersJson.trim()).append("\n");
+            sb.append("请据此直接生成完整 fieldValues；clarifications 必须为空数组 []。")
+                .append("不要再追问已确认或已跳过的项；跳过的项对应字段留空即可。\n\n");
+        }
         appendMatched(sb, match, skills);
-        if (matchedSkillEnablesAgent(match, skills)) {
-            appendAgentBehaviorHint(sb);
+        if (agentOn) {
+            appendAgentBehaviorHint(sb, hasConfirmed || layout, !layout);
         }
         if (layout) {
             appendRawContext(sb, formContextJson);
             appendLayoutPatchesJsonOutput(sb);
         } else {
             appendFormContext(sb, formContextJson);
-            appendDsFormJsonOutput(sb, formContextJson);
+            appendDsFormJsonOutput(sb, formContextJson, agentOn);
         }
         return sb.toString();
     }
@@ -408,6 +425,10 @@ public class PlatformAiSkillPromptBuilder {
     }
 
     private void appendDsFormJsonOutput(StringBuilder sb, String formContextJson) {
+        appendDsFormJsonOutput(sb, formContextJson, false);
+    }
+
+    private void appendDsFormJsonOutput(StringBuilder sb, String formContextJson, boolean agentOn) {
         StringBuilder exampleFields = new StringBuilder();
         exampleFields.append("    \"字段attrKey\": \"建议值或留空表示不改\"");
         try {
@@ -434,13 +455,26 @@ public class PlatformAiSkillPromptBuilder {
         } catch (Exception ignored) {
             // use default example
         }
+        String clarificationExample = agentOn
+            ? ",\n"
+            + "  \"clarifications\": [\n"
+            + "    {\n"
+            + "      \"id\": \"字段attrKey或自定义id\",\n"
+            + "      \"attrKey\": \"对应表单attrKey\",\n"
+            + "      \"type\": \"choice\",\n"
+            + "      \"question\": \"请用户确认的问题\",\n"
+            + "      \"options\": [{\"id\": \"选项值\", \"label\": \"选项文案\"}]\n"
+            + "    }\n"
+            + "  ]"
+            : ",\n  \"clarifications\": []";
         AiJsonHelper.appendMarkedJsonOutput(sb,
             "{\n"
                 + "  \"reply\": \"给用户看的说明，解释你做了什么、还需要用户确认什么\",\n"
                 + "  \"fieldValues\": {\n"
                 + exampleFields + "\n"
                 + "  },\n"
-                + "  \"actions\": []\n"
+                + "  \"actions\": []"
+                + clarificationExample + "\n"
                 + "}");
         sb.append("要求：\n");
         sb.append("1. fieldValues 的 key 必须来自上方字段 attrKey，不要自造字段名\n");
@@ -451,6 +485,10 @@ public class PlatformAiSkillPromptBuilder {
         sb.append("6. 金额、数量、单价等关键字段给出建议后，必须在 reply 中提醒用户人工核对；"
             + "不要声称已保存、已过账、已审批或已扣库存\n");
         sb.append("7. 回填仅为建议草稿，最终以用户点击保存/提交为准\n");
+        if (agentOn) {
+            sb.append("8. clarifications 仅放 choice 单选题；无需确认时必须为 []\n");
+            sb.append("9. 只要 clarifications 非空，fieldValues 只放已唯一确定的字段，不要抢先填待确认字段\n");
+        }
     }
 
     private int scoreKeywords(String haystack, String keywords) {
@@ -524,17 +562,32 @@ public class PlatformAiSkillPromptBuilder {
 
     /**
      * 命中技能开启 enableAgent 时追加（平台固定维护）。
-     * 与是否挂工具无关：工具在表单 Assist 下始终可用；本段只强化「歧义必问人」等行为。
+     * 与是否挂工具无关：工具在表单 Assist 下始终可用；表单场景强化「先澄清再生成」。
+     * @param answersAlreadyConfirmed 第二轮：用户已答过澄清，应直接出 fieldValues
+     * @param forDsForm true=表单 Assist；false=闲聊（不要求 clarifications 协议）
      */
-    private void appendAgentBehaviorHint(StringBuilder sb) {
+    private void appendAgentBehaviorHint(StringBuilder sb, boolean answersAlreadyConfirmed, boolean forDsForm) {
         sb.append("【平台 Agent 行为约束】\n");
         sb.append("1. 可用工具 biz_list 查询主数据：domain=erp、type=supplier（供应商）或 material（物料），并传 keyword=用户说的名称。\n");
-        sb.append("2. 仅当工具结果唯一命中时，才把确定后的名称写入 fieldValues；多个或高度相似时不要擅自选定 id，")
-            .append("但仍须把用户说的名称字符串写入对应字段（如 holderId / materialName），并在 reply 用「供应商「名称」」格式说明有多个候选，便于前端弹窗请用户选择。\n");
-        sb.append("3. 没把握的选择类、枚举类字段一律留空，在 reply 说明需用户确认。\n");
-        sb.append("4. 不要声称已经保存、提交、入库或过账；金额与关键字段请用户核对。\n");
-        sb.append("5. 用户未明确给出的数量、单价、税率、编号等不要编造。\n");
-        sb.append("6. 工具调用结束后，最终回复仍必须输出约定的标记 JSON（含 reply 与 fieldValues）。\n\n");
+        if (forDsForm) {
+            if (answersAlreadyConfirmed) {
+                sb.append("2. 用户已提供澄清答案：按答案写入 fieldValues，clarifications 必须为 []。\n");
+                sb.append("3. 已跳过的项对应字段留空；其余可确定字段照常填写。\n");
+            } else {
+                sb.append("2. 两阶段填写：若主数据多个/高度相似，或枚举/下拉/是否类没把握，先只输出 clarifications（type=choice，options 含 id+label），")
+                    .append("不要把待确认字段写入 fieldValues；能唯一确定的字段仍可写入 fieldValues。\n");
+                sb.append("3. 主数据澄清：options 用工具查出的候选（id=业务主键，label=名称）；")
+                    .append("enum/下拉澄清：options 必须来自字段可选值。无需确认时 clarifications=[]。\n");
+            }
+            sb.append("4. 不要声称已经保存、提交、入库或过账；金额与关键字段请用户核对。\n");
+            sb.append("5. 用户未明确给出的数量、单价、税率、编号等不要编造，数量类不确定时留空并在 reply 提示，不要做成开放问答题。\n");
+            sb.append("6. 工具调用结束后，最终回复仍必须输出约定的标记 JSON（含 reply、fieldValues、clarifications）。\n\n");
+            return;
+        }
+        sb.append("2. 主数据多个或高度相似时不要擅自选定，在回复中说明并请用户确认。\n");
+        sb.append("3. 不要声称已经保存、提交、入库或过账。\n");
+        sb.append("4. 用户未明确给出的数量、金额等不要编造。\n");
+        sb.append("5. 工具调用结束后，最终回复仍必须输出约定的标记 JSON。\n\n");
     }
 
     private boolean matchedSkillEnablesAgent(MatchResult match, List<Map<String, Object>> allSkills) {

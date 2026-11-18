@@ -4,10 +4,15 @@
 
 package com.skyeye.ai.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.skyeye.ai.dto.DsFormAiAction;
+import com.skyeye.ai.dto.DsFormAiAssistParseResult;
+import com.skyeye.ai.dto.DsFormAiClarification;
+import com.skyeye.ai.dto.DsFormAiClarifyOption;
 import com.skyeye.ai.service.PlatformDsFormAiDraftService;
 import com.skyeye.ai.skill.PlatformAiSkillPromptBuilder;
 import com.skyeye.ai.util.PlatformAiChatHelper;
@@ -47,12 +52,18 @@ public class PlatformDsFormAiDraftServiceImpl implements PlatformDsFormAiDraftSe
         String skillId = strParam(params, "skillId");
         String suiteId = strParam(params, "suiteId");
         String assistScene = strParam(params, "assistScene");
+        String confirmedAnswers = null;
+        if (params.get("confirmedAnswers") != null
+            && StrUtil.isNotBlank(String.valueOf(params.get("confirmedAnswers")))) {
+            confirmedAnswers = AiJsonHelper.normalizeJsonText(params.get("confirmedAnswers"));
+        }
         if (StrUtil.isBlank(question)) {
             throw new CustomException("请输入问题");
         }
         // 人设与布局规则在 AI 技能提示词；这里只拼技能说明书 + 前端上下文
         String content = platformAiSkillPromptBuilder.buildForDsForm(
-            question, pageTitle, appId, serviceClassName, skillId, suiteId, formContext, assistScene);
+            question, pageTitle, appId, serviceClassName, skillId, suiteId, formContext, assistScene,
+            confirmedAnswers);
         Map<String, Object> extra = new HashMap<>();
         if (StrUtil.isNotBlank(skillId)) {
             extra.put("skillId", skillId);
@@ -79,25 +90,71 @@ public class PlatformDsFormAiDraftServiceImpl implements PlatformDsFormAiDraftSe
         Map<String, Object> params = inputObject.getParams();
         String answer = params.get("answer").toString();
         String formContext = params.get("formContext").toString();
-        Map<String, Object> bean = parseAssistAnswer(answer, formContext);
-        outputObject.setBean(bean);
+        outputObject.setBean(parseAssistAnswer(answer, formContext));
         outputObject.settotal(CommonNumConstants.NUM_ONE);
     }
 
-    private Map<String, Object> parseAssistAnswer(String answer, String formContext) {
+    private DsFormAiAssistParseResult parseAssistAnswer(String answer, String formContext) {
         JSONObject json = AiJsonHelper.parseJsonObject(AiJsonHelper.extractJsonBlock(answer));
-        Map<String, Object> bean = new HashMap<>();
+        DsFormAiAssistParseResult bean = new DsFormAiAssistParseResult();
         Set<String> allowedKeys = loadAllowedFieldKeys(formContext);
         if (json == null) {
-            bean.put("reply", answer.trim());
-            bean.put("fieldValues", new HashMap<>());
-            bean.put("actions", new ArrayList<>());
+            bean.setReply(answer.trim());
             return bean;
         }
-        bean.put("reply", json.getStr("reply"));
-        bean.put("fieldValues", filterFieldValues(json.get("fieldValues"), allowedKeys));
-        bean.put("actions", parseActions(json.get("actions")));
+        bean.setReply(json.getStr("reply"));
+        bean.setFieldValues(filterFieldValues(json.get("fieldValues"), allowedKeys));
+        bean.setActions(parseActions(json.get("actions")));
+        bean.setClarifications(parseClarifications(json.get("clarifications"), allowedKeys));
         return bean;
+    }
+
+    private List<DsFormAiClarification> parseClarifications(Object raw, Set<String> allowedKeys) {
+        List<DsFormAiClarification> list = new ArrayList<>();
+        if (raw == null) {
+            return list;
+        }
+        JSONArray array = raw instanceof JSONArray
+            ? (JSONArray) raw
+            : JSONUtil.parseArray(JSONUtil.toJsonStr(raw));
+        List<DsFormAiClarification> rows = JSONUtil.toList(array, DsFormAiClarification.class);
+        if (CollectionUtil.isEmpty(rows)) {
+            return list;
+        }
+        for (DsFormAiClarification row : rows) {
+            if (row == null) {
+                continue;
+            }
+            row.normalize(list.size());
+            if (!row.isChoice()) {
+                continue;
+            }
+            if (!allowedKeys.isEmpty() && StrUtil.isNotBlank(row.getAttrKey())
+                && !allowedKeys.contains(row.getAttrKey())) {
+                continue;
+            }
+            List<DsFormAiClarifyOption> options = parseClarifyOptions(row.getOptions());
+            if (CollectionUtil.isEmpty(options)) {
+                continue;
+            }
+            row.setOptions(options);
+            list.add(row);
+        }
+        return list;
+    }
+
+    private List<DsFormAiClarifyOption> parseClarifyOptions(Object raw) {
+        if (raw == null) {
+            return new ArrayList<>();
+        }
+        List<DsFormAiClarifyOption> list = JSONUtil.toList(JSONUtil.toJsonStr(raw), DsFormAiClarifyOption.class);
+        if (CollectionUtil.isEmpty(list)) {
+            return new ArrayList<>();
+        }
+        list.removeIf(Objects::isNull);
+        list.forEach(DsFormAiClarifyOption::normalize);
+        list.removeIf(opt -> !opt.isValid());
+        return list.size() > 20 ? new ArrayList<>(list.subList(0, 20)) : list;
     }
 
     private Set<String> loadAllowedFieldKeys(String formContext) {
@@ -144,38 +201,15 @@ public class PlatformDsFormAiDraftServiceImpl implements PlatformDsFormAiDraftSe
         return result;
     }
 
-    private List<Map<String, Object>> parseActions(Object raw) {
-        List<Map<String, Object>> actions = new ArrayList<>();
+    private List<DsFormAiAction> parseActions(Object raw) {
         if (raw == null) {
-            return actions;
+            return new ArrayList<>();
         }
-        JSONArray array;
-        try {
-            if (raw instanceof JSONArray) {
-                array = (JSONArray) raw;
-            } else if (raw instanceof List) {
-                array = JSONUtil.parseArray(JSONUtil.toJsonStr(raw));
-            } else {
-                array = JSONUtil.parseArray(raw.toString());
-            }
-        } catch (Exception e) {
-            return actions;
+        List<DsFormAiAction> list = JSONUtil.toList(JSONUtil.toJsonStr(raw), DsFormAiAction.class);
+        if (CollectionUtil.isEmpty(list)) {
+            return new ArrayList<>();
         }
-        if (array == null) {
-            return actions;
-        }
-        for (Object item : array) {
-            if (!(item instanceof JSONObject)) {
-                continue;
-            }
-            JSONObject action = (JSONObject) item;
-            Map<String, Object> map = new HashMap<>();
-            map.put("type", action.getStr("type"));
-            map.put("label", action.getStr("label"));
-            map.put("menuId", action.getStr("menuId"));
-            map.put("pageId", action.getStr("pageId"));
-            actions.add(map);
-        }
-        return actions;
+        list.removeIf(Objects::isNull);
+        return list;
     }
 }
