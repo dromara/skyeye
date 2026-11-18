@@ -121,7 +121,8 @@ public class PrintHtmlGeneratorImpl implements PrintHtmlGenerator {
             // 处理特殊元素类型
             if ("table".equals(processedElement.getType())) {
                 processTableElement(processedElement, data);
-                processedElement.setPosition("relative");
+                // 与其它元素一致用 absolute，避免 relative 把后续绝对定位元素顶乱
+                processedElement.setPosition("absolute");
             } else if ("table-container".equals(processedElement.getType())) {
                 processTableContainerElement(processedElement, data);
             } else if ("barcode".equals(processedElement.getType())) {
@@ -133,7 +134,104 @@ public class PrintHtmlGeneratorImpl implements PrintHtmlGenerator {
             result.add(processedElement);
         }
 
+        // 表格行数超出设计高度时，把下方元素整体下推，避免重叠
+        pushDownBelowTables(result);
         return result;
+    }
+
+    /**
+     * 表格实际高度大于设计高度时，下推表格下方（含设计时压进表格框内）的元素，避免重叠
+     */
+    private void pushDownBelowTables(List<PrintElement> elements) {
+        if (elements == null || elements.isEmpty()) {
+            return;
+        }
+        List<PrintElement> tables = new ArrayList<>();
+        for (PrintElement element : elements) {
+            if ("table".equals(element.getType())) {
+                tables.add(element);
+            }
+        }
+        tables.sort(Comparator.comparingInt(e -> e.getY() != null ? e.getY() : 0));
+
+        for (PrintElement table : tables) {
+            int designedH = parsePx(table.getHeight());
+            int actualH = estimateTableHeight(table);
+            if (designedH <= 0 || actualH <= designedH) {
+                continue;
+            }
+            int delta = actualH - designedH;
+            int tableX = table.getX() != null ? table.getX() : 0;
+            int tableY = table.getY() != null ? table.getY() : 0;
+            int tableW = parsePx(table.getWidth());
+
+            for (PrintElement other : elements) {
+                if (other == table) {
+                    continue;
+                }
+                int otherX = other.getX() != null ? other.getX() : 0;
+                int otherY = other.getY() != null ? other.getY() : 0;
+                int otherW = parsePx(other.getWidth());
+                // 完全在表格左右外侧的不推
+                boolean sideBySide = otherX >= tableX + tableW || otherX + otherW <= tableX;
+                // 顶边在表格顶边之下的（含原先塞在设计高度内的备注等）都下移
+                if (!sideBySide && otherY > tableY) {
+                    int newY = otherY + delta;
+                    other.setY(newY);
+                    other.setMarginTop(newY + "px");
+                }
+            }
+            table.setHeight(String.valueOf(actualH));
+        }
+    }
+
+    /**
+     * 按行列内容估算表格高度（换行列按字数折算行数，避免低估导致 PDF 重叠）
+     */
+    private int estimateTableHeight(PrintElement table) {
+        int baseRowH = table.getRowHeight() != null && table.getRowHeight() > 0 ? table.getRowHeight() : 36;
+        int headerH = Boolean.TRUE.equals(table.getShowHeader()) ? baseRowH : 0;
+        List<Map<String, Object>> rows = table.getRows();
+        if (rows == null || rows.isEmpty()) {
+            return headerH;
+        }
+        int total = headerH;
+        List<TableColumn> columns = table.getColumns();
+        for (Map<String, Object> row : rows) {
+            int rowLines = 1;
+            if (columns != null) {
+                for (TableColumn col : columns) {
+                    Object val = row.get(col.getField());
+                    String text = val != null ? String.valueOf(val) : "";
+                    if (StrUtil.isBlank(text)) {
+                        continue;
+                    }
+                    // wrap 默认 true（与设计器一致）；false 才按单行
+                    if (Boolean.FALSE.equals(col.getWrap())) {
+                        continue;
+                    }
+                    int fontSize = col.getFontSize() != null && col.getFontSize() > 0 ? col.getFontSize() : 12;
+                    int colW = col.getWidth() != null && col.getWidth() > 0 ? col.getWidth() : 100;
+                    int contentW = Math.max(colW - 16, fontSize);
+                    int charsPerLine = Math.max(contentW / fontSize, 1);
+                    int linesByWidth = (int) Math.ceil((double) text.length() / charsPerLine);
+                    int linesByBreak = text.split("\r?\n", -1).length;
+                    rowLines = Math.max(rowLines, Math.max(linesByWidth, linesByBreak));
+                }
+            }
+            int lineBox = Math.max(fontSizeLike(table), Math.max(baseRowH / 2, 14));
+            int thisRowH = Math.max(baseRowH, rowLines * lineBox + 10);
+            total += thisRowH;
+        }
+        // 略留余量，避免 iText 换行比估算更高
+        return total + 4;
+    }
+
+    private int fontSizeLike(PrintElement table) {
+        if (table.getFontSize() != null && table.getFontSize() > 0) {
+            return table.getFontSize();
+        }
+        return 14;
     }
 
     private void processTableElement(PrintElement element, Map<String, Object> data) {
@@ -171,6 +269,52 @@ public class PrintHtmlGeneratorImpl implements PrintHtmlGenerator {
                 }
                 element.setRows(processedRows);
             }
+        }
+        fitTableColumnsToWidth(element);
+    }
+
+    /**
+     * 列宽之和与表格宽度不一致时按比例缩放，避免 PDF/预览横向撑出纸面
+     */
+    private void fitTableColumnsToWidth(PrintElement element) {
+        if (element == null || element.getColumns() == null || element.getColumns().isEmpty()) {
+            return;
+        }
+        int tableWidth = parsePx(element.getWidth());
+        if (tableWidth <= 0) {
+            return;
+        }
+        int sum = 0;
+        for (TableColumn column : element.getColumns()) {
+            sum += column.getWidth() != null && column.getWidth() > 0 ? column.getWidth() : 100;
+        }
+        if (sum <= 0 || sum == tableWidth) {
+            return;
+        }
+        double ratio = (double) tableWidth / sum;
+        int allocated = 0;
+        List<TableColumn> columns = element.getColumns();
+        for (int i = 0; i < columns.size(); i++) {
+            TableColumn column = columns.get(i);
+            int raw = column.getWidth() != null && column.getWidth() > 0 ? column.getWidth() : 100;
+            if (i == columns.size() - 1) {
+                column.setWidth(Math.max(tableWidth - allocated, 20));
+            } else {
+                int w = Math.max((int) Math.floor(raw * ratio), 20);
+                column.setWidth(w);
+                allocated += w;
+            }
+        }
+    }
+
+    private int parsePx(String value) {
+        if (StrUtil.isBlank(value)) {
+            return 0;
+        }
+        try {
+            return Integer.parseInt(value.trim().toLowerCase().replace("px", "").trim());
+        } catch (NumberFormatException e) {
+            return 0;
         }
     }
 
@@ -326,7 +470,7 @@ public class PrintHtmlGeneratorImpl implements PrintHtmlGenerator {
                         // 处理特殊元素类型
                         if ("table".equals(cellElement.getType())) {
                             processTableElement(cellElement, data);
-                            cellElement.setPosition("relative");
+                            cellElement.setPosition("absolute");
                         } else if ("barcode".equals(cellElement.getType())) {
                             processBarcodeElement(cellElement, data);
                         } else if ("image".equals(cellElement.getType())) {

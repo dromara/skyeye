@@ -156,7 +156,8 @@
 </head>
 
 <body>
-    <div class="print-container" th:style="${'width:' + template.width + ';height:' + template.height}">
+    <div class="print-container"
+         th:style="${'width:' + template.width + ';height:' + template.height + ';overflow:hidden;box-sizing:border-box;'}">
         <!-- 遍历渲染所有元素 -->
         <div th:each="element : ${elements}" class="print-element"
             th:classappend="${element.type + '-element' +
@@ -205,22 +206,24 @@
                              'max-height:' + (element.height != null ? element.height + 'px' : 'none') + ';'}">
             </div>
 
-            <!-- 表格元素 -->
-            <div th:if="${element.type == 'table'}" style="width:100%;height:100%;">
+            <!-- 表格元素：勿用 rowHeight 做整表 line-height，换行时会把字叠在一起 -->
+            <div th:if="${element.type == 'table'}" style="width:100%;height:auto;min-height:100%;overflow:visible;">
                 <table th:class="${'table-element' + ((element.zebra != null && element.zebra) ? ' zebra' : '')}"
-                    th:style="${'border-collapse:collapse;width:100%;table-layout:fixed;' +
-                    (element.rowHeight != null ? 'line-height:' + element.rowHeight + 'px;' : '')}">
+                    th:style="${'border-collapse:collapse;width:100%;table-layout:fixed;'}">
                     <thead th:if="${element.showHeader}">
                         <tr>
                             <th th:each="col : ${element.columns}"
-                                th:style="${'width:' + (col.width != null ? col.width - 16 + 'px' : 'auto') + ';' +
+                                th:style="${'width:' + (col.width != null ? col.width + 'px' : 'auto') + ';' +
                                          'text-align:' + (col.align == 'flex-start' ? 'left' : (col.align == 'flex-end' ? 'right' : 'center')) + ';' +
                                          'font-size:' + (col.fontSize != null ? col.fontSize : 12) + 'px;' +
                                          'white-space:' + ((col.wrap != null && col.wrap) ? 'normal' : 'nowrap') + ';' +
+                                         'word-break:' + ((col.wrap != null && col.wrap) ? 'break-word' : 'normal') + ';' +
+                                         'overflow:hidden;' +
                                          'background-color: #f2f2f2;' +
                                          'font-weight: 500;' +
                                          'padding: 8px;' +
-                                         'word-break: break-all;'}"
+                                         'vertical-align: middle;' +
+                                         'box-sizing:border-box;'}"
                                 th:text="${col.title}">
                             </th>
                         </tr>
@@ -228,12 +231,15 @@
                     <tbody>
                         <tr th:each="row : ${element.rows}">
                             <td th:each="col : ${element.columns}"
-                                th:style="${'text-align:' + (col.align == 'flex-start' ? 'left' : (col.align == 'flex-end' ? 'right' : 'center')) + ';' +
+                                th:style="${'width:' + (col.width != null ? col.width + 'px' : 'auto') + ';' +
+                                         'text-align:' + (col.align == 'flex-start' ? 'left' : (col.align == 'flex-end' ? 'right' : 'center')) + ';' +
                                          'font-size:' + (col.fontSize != null ? col.fontSize : 12) + 'px;' +
                                          'white-space:' + ((col.wrap != null && col.wrap) ? 'normal' : 'nowrap') + ';' +
+                                         'word-break:' + ((col.wrap != null && col.wrap) ? 'break-word' : 'normal') + ';' +
+                                         'overflow:hidden;' +
                                          'padding: 8px;' +
-                                         'vertical-align: initial;' +
-                                         'word-break: break-all;'}"
+                                         'vertical-align: middle;' +
+                                         'box-sizing:border-box;'}"
                                 th:text="${row[col.field]}">
                             </td>
                         </tr>
@@ -359,11 +365,12 @@
                                                         <thead th:if="${cellElement.showHeader}">
                                                             <tr>
                                                                 <th th:each="col : ${cellElement.columns}"
-                                                                    th:style="${'width:' + (col.width != null ? col.width - 16 : 'auto') + 'px;' +
+                                                                    th:style="${'width:' + (col.width != null ? col.width : 'auto') + 'px;' +
                                                                              'text-align:' + (col.align == 'flex-start' ? 'left' : (col.align == 'flex-end' ? 'right' : 'center')) + ';' +
                                                                              'font-size:' + (col.fontSize != null ? col.fontSize : 12) + 'px;' +
                                                                              'white-space:' + ((col.wrap != null && col.wrap) ? 'normal' : 'nowrap') + ';' +
-                                                                             'background-color: #f2f2f2;font-weight: 500;padding: 8px;word-break: break-all;'}"
+                                                                             'overflow:hidden;text-overflow:ellipsis;box-sizing:border-box;' +
+                                                                             'background-color: #f2f2f2;font-weight: 500;padding: 8px;'}"
                                                                     th:text="${col.title}">
                                                                 </th>
                                                             </tr>
@@ -371,10 +378,12 @@
                                                         <tbody>
                                                             <tr th:each="row : ${cellElement.rows}">
                                                                 <td th:each="col : ${cellElement.columns}"
-                                                                    th:style="${'text-align:' + (col.align == 'flex-start' ? 'left' : (col.align == 'flex-end' ? 'right' : 'center')) + ';' +
+                                                                    th:style="${'width:' + (col.width != null ? col.width : 'auto') + 'px;' +
+                                                                             'text-align:' + (col.align == 'flex-start' ? 'left' : (col.align == 'flex-end' ? 'right' : 'center')) + ';' +
                                                                              'font-size:' + (col.fontSize != null ? col.fontSize : 12) + 'px;' +
                                                                              'white-space:' + ((col.wrap != null && col.wrap) ? 'normal' : 'nowrap') + ';' +
-                                                                             'padding: 8px;vertical-align: initial;word-break: break-all;'}"
+                                                                             'overflow:hidden;text-overflow:ellipsis;box-sizing:border-box;' +
+                                                                             'padding: 8px;vertical-align: initial;'}"
                                                                     th:text="${row[col.field]}">
                                                                 </td>
                                                             </tr>

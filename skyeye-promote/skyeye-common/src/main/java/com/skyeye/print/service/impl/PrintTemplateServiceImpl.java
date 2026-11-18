@@ -121,12 +121,8 @@ public class PrintTemplateServiceImpl extends SkyeyeBusinessServiceImpl<PrintTem
             throw new CustomException("打印模板不存在");
         }
 
-        if (StrUtil.equals(template.getOrientation(), Orientation.LANDSCAPE.getKey())) {
-            String width = template.getHeight();
-            String height = template.getWidth();
-            template.setWidth(width);
-            template.setHeight(height);
-        }
+        // 与设计器一致：纸面用 96dpi px，避免 iText pt 被当成 CSS 像素
+        normalizeTemplateSizeForHtml(template);
 
         try {
             // 渲染HTML
@@ -165,18 +161,14 @@ public class PrintTemplateServiceImpl extends SkyeyeBusinessServiceImpl<PrintTem
             throw new CustomException("打印模板不存在");
         }
 
-        if (StrUtil.equals(template.getOrientation(), Orientation.LANDSCAPE.getKey())) {
-            String width = template.getHeight();
-            String height = template.getWidth();
-            template.setWidth(width);
-            template.setHeight(height);
-        }
+        // 与设计器一致：纸面用 96dpi px，避免 iText pt 被当成 CSS 像素
+        normalizeTemplateSizeForHtml(template);
 
         try {
             // 渲染HTML
             String html = htmlGenerator.generateHtml(template, printData);
 
-            // 生成PDF
+            // 生成PDF（纸张尺寸仍按 paperSize+orientation 取标准页，不依赖上面的 px 字符串）
             byte[] pdfBytes = HtmlToPdfUtil.convertHtmlToPdfBytes(html, webRootfileBath, template.getPaperSize(), template.getOrientation(),
                 template.getWidth(), template.getHeight());
 
@@ -193,6 +185,53 @@ public class PrintTemplateServiceImpl extends SkyeyeBusinessServiceImpl<PrintTem
         } catch (Exception e) {
             log.error("生成PDF失败", e);
             throw new CustomException("生成PDF失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 将模板宽高规范为与前端设计器一致的 96dpi 像素（带 px），供 HTML/PDF 渲染使用。
+     * 标准纸张按 mm 换算；自定义纸张字段存的是 mm。
+     */
+    private void normalizeTemplateSizeForHtml(PrintTemplate template) {
+        float widthMm;
+        float heightMm;
+        if (StrUtil.equals(template.getPaperSize(), PaperSize.CUSTOM.getKey())) {
+            widthMm = parseMm(template.getWidth(), 210f);
+            heightMm = parseMm(template.getHeight(), 297f);
+        } else if (StrUtil.equals(template.getPaperSize(), PaperSize.A3.getKey())) {
+            widthMm = 297f;
+            heightMm = 420f;
+        } else if (StrUtil.equals(template.getPaperSize(), PaperSize.A5.getKey())) {
+            widthMm = 148f;
+            heightMm = 210f;
+        } else if (StrUtil.equals(template.getPaperSize(), PaperSize.LETTER.getKey())) {
+            widthMm = 215.9f;
+            heightMm = 279.4f;
+        } else {
+            // 默认 A4
+            widthMm = 210f;
+            heightMm = 297f;
+        }
+        if (StrUtil.equals(template.getOrientation(), Orientation.LANDSCAPE.getKey())) {
+            float tmp = widthMm;
+            widthMm = heightMm;
+            heightMm = tmp;
+        }
+        int widthPx = Math.round(widthMm * 96f / 25.4f);
+        int heightPx = Math.round(heightMm * 96f / 25.4f);
+        template.setWidth(widthPx + "px");
+        template.setHeight(heightPx + "px");
+    }
+
+    private float parseMm(String value, float defaultMm) {
+        if (StrUtil.isBlank(value)) {
+            return defaultMm;
+        }
+        try {
+            String v = value.trim().toLowerCase().replace("mm", "").replace("px", "").trim();
+            return Float.parseFloat(v);
+        } catch (NumberFormatException e) {
+            return defaultMm;
         }
     }
 
