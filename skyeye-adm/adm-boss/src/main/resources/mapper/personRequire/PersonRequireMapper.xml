@@ -27,7 +27,7 @@
                 ${sqlExtract}
             </if>
             <if test="keyword != null and keyword != ''">
-                AND a.odd_number like '%${keyword}%'
+                AND a.odd_number like CONCAT('%', #{keyword}, '%')
             </if>
             <if test="stateList != null and stateList.size() &gt; 0">
                 <foreach collection="stateList" item="state" separator="," open=" AND a.state in(" close=")">

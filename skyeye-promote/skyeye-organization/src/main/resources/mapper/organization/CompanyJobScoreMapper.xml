@@ -19,7 +19,7 @@
                 ${sqlExtract}
             </if>
             <if test="keyword != null and keyword != ''">
-                AND a.`name` LIKE '%${keyword}%'
+                AND a.`name` LIKE CONCAT('%', #{keyword}, '%')
             </if>
             <if test="tenantId != null and tenantId != ''">
                 AND a.tenant_id = #{tenantId}

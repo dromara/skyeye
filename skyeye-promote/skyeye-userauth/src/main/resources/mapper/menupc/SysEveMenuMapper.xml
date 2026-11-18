@@ -13,7 +13,7 @@
 			</if>
 			<choose>
 				<when test="keyword != null and keyword != ''">
-					AND a.`name` LIKE '%${keyword}%'
+					AND a.`name` LIKE CONCAT('%', #{keyword}, '%')
 				</when>
 				<otherwise>
 					AND a.parent_id = '0'

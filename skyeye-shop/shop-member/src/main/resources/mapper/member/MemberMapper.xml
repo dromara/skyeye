@@ -25,7 +25,7 @@
                 AND s.store_id = #{holderId}
             </if>
             <if test="keyword != null and keyword != ''">
-                AND (s.`name` like '%${keyword}%' OR s.phone like '%${keyword}%')
+                AND (s.`name` like CONCAT('%', #{keyword}, '%') OR s.phone like CONCAT('%', #{keyword}, '%'))
             </if>
             <if test="objectId != null and objectId != ''">
                 AND s.phone = #{objectId}
@@ -48,7 +48,7 @@
                 AND s.store_id = #{holderId}
             </if>
             <if test="keyword != null and keyword != ''">
-                AND (s.`name` like '%${keyword}%' OR s.phone like '%${keyword}%')
+                AND (s.`name` like CONCAT('%', #{keyword}, '%') OR s.phone like CONCAT('%', #{keyword}, '%'))
             </if>
         </where>
     </select>

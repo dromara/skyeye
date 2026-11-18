@@ -26,7 +26,7 @@
                 ${sqlExtract}
             </if>
             <if test="keyword != null and keyword != ''">
-                AND a.odd_number like '%${keyword}%'
+                AND a.odd_number like CONCAT('%', #{keyword}, '%')
             </if>
         </where>
         ORDER BY a.create_time DESC
@@ -58,7 +58,7 @@
                 ${sqlExtract}
             </if>
             <if test="keyword != null and keyword != ''">
-                AND a.odd_number like '%${keyword}%'
+                AND a.odd_number like CONCAT('%', #{keyword}, '%')
             </if>
             <if test="tenantId != '' and tenantId != null">
                 AND k.tenant_id = #{tenantId} AND a.tenant_id = #{tenantId}
@@ -91,7 +91,7 @@
                 ${sqlExtract}
             </if>
             <if test="keyword != null and keyword != ''">
-                AND a.odd_number like '%${keyword}%'
+                AND a.odd_number like CONCAT('%', #{keyword}, '%')
             </if>
         </where>
         ORDER BY a.create_time DESC

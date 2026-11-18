@@ -30,7 +30,7 @@
 				${sqlExtract}
 			</if>
 			<if test="keyword != '' and keyword != null">
-				AND (a.user_code like '%${keyword}%' OR k.user_name like '%${keyword}%' OR k.job_number like '%${keyword}%')
+				AND (a.user_code like CONCAT('%', #{keyword}, '%') OR k.user_name like CONCAT('%', #{keyword}, '%') OR k.job_number like CONCAT('%', #{keyword}, '%'))
 			</if>
 		</where>
 		ORDER BY a.user_lock ASC, a.create_time DESC
