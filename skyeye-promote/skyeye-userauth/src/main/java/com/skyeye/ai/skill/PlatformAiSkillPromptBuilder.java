@@ -43,6 +43,9 @@ public class PlatformAiSkillPromptBuilder {
         StringBuilder sb = new StringBuilder();
         appendQuestionAndPage(sb, question, pageTitle, pagePath);
         appendMatched(sb, match, skills);
+        if (matchedSkillEnablesAgent(match, skills)) {
+            appendAgentBehaviorHint(sb);
+        }
         appendMarkedJsonOutput(sb);
         return sb.toString();
     }
@@ -73,6 +76,9 @@ public class PlatformAiSkillPromptBuilder {
         }
         appendQuestionAndPage(sb, question, pageTitle, matchPath);
         appendMatched(sb, match, skills);
+        if (matchedSkillEnablesAgent(match, skills)) {
+            appendAgentBehaviorHint(sb);
+        }
         if (layout) {
             appendRawContext(sb, formContextJson);
             appendLayoutPatchesJsonOutput(sb);
@@ -497,6 +503,80 @@ public class PlatformAiSkillPromptBuilder {
             sb.append(instruction).append("\n");
         }
         sb.append("\n");
+    }
+
+    /**
+     * 与 {@link #buildForDsForm} 相同的命中逻辑，判断是否开启 Agent（供生成接口传给聊天服务）。
+     */
+    public boolean resolveEnableAgentForDsForm(String question, String pageTitle, String appId, String serviceClassName,
+                                               String skillId, String suiteId) {
+        Map<String, Object> payload = loadMatchPayload();
+        List<Map<String, Object>> skills = filterByScene(asMapList(payload.get("skillList")), "2");
+        List<Map<String, Object>> suites = asMapList(payload.get("suiteList"));
+        String matchPath = StrUtil.blankToDefault(serviceClassName, pageTitle);
+        MatchResult match = match(question, pageTitle, matchPath, skillId, suiteId, skills, suites);
+        if (match.skills.isEmpty() && match.suites.isEmpty()
+            && StrUtil.isNotBlank(appId) && StrUtil.isNotBlank(serviceClassName)) {
+            match = matchByServiceClassName(appId, serviceClassName, skills, suites);
+        }
+        return matchedSkillEnablesAgent(match, skills);
+    }
+
+    /**
+     * 命中技能开启 enableAgent 时追加（平台固定维护）。
+     * 与是否挂工具无关：工具在表单 Assist 下始终可用；本段只强化「歧义必问人」等行为。
+     */
+    private void appendAgentBehaviorHint(StringBuilder sb) {
+        sb.append("【平台 Agent 行为约束】\n");
+        sb.append("1. 可用工具 biz_list 查询主数据：domain=erp、type=supplier（供应商）或 material（物料），并传 keyword=用户说的名称。\n");
+        sb.append("2. 仅当工具结果唯一命中时，才把确定后的名称写入 fieldValues；多个或高度相似时不要擅自选定 id，")
+            .append("但仍须把用户说的名称字符串写入对应字段（如 holderId / materialName），并在 reply 用「供应商「名称」」格式说明有多个候选，便于前端弹窗请用户选择。\n");
+        sb.append("3. 没把握的选择类、枚举类字段一律留空，在 reply 说明需用户确认。\n");
+        sb.append("4. 不要声称已经保存、提交、入库或过账；金额与关键字段请用户核对。\n");
+        sb.append("5. 用户未明确给出的数量、单价、税率、编号等不要编造。\n");
+        sb.append("6. 工具调用结束后，最终回复仍必须输出约定的标记 JSON（含 reply 与 fieldValues）。\n\n");
+    }
+
+    private boolean matchedSkillEnablesAgent(MatchResult match, List<Map<String, Object>> allSkills) {
+        if (match == null) {
+            return false;
+        }
+        if (CollectionUtil.isNotEmpty(match.skills)) {
+            for (Map<String, Object> skill : match.skills) {
+                if (isAgentEnabled(skill)) {
+                    return true;
+                }
+            }
+        }
+        if (CollectionUtil.isNotEmpty(match.suites)) {
+            for (Map<String, Object> suite : match.suites) {
+                List<Map<String, Object>> suiteSkills = skillsOfSuite(allSkills, str(suite, "id"), null);
+                for (Map<String, Object> skill : suiteSkills) {
+                    if (isAgentEnabled(skill)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isAgentEnabled(Map<String, Object> skill) {
+        if (skill == null) {
+            return false;
+        }
+        Object raw = skill.get("enableAgent");
+        if (raw == null) {
+            raw = skill.get("enable_agent");
+        }
+        if (raw == null) {
+            return false;
+        }
+        if (raw instanceof Number) {
+            return ((Number) raw).intValue() == 1;
+        }
+        String s = String.valueOf(raw).trim();
+        return "1".equals(s) || "true".equalsIgnoreCase(s);
     }
 
     private void appendMarkedJsonOutput(StringBuilder sb) {

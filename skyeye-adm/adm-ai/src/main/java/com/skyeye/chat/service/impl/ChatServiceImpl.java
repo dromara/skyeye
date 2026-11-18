@@ -127,8 +127,9 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
         } else {
             id = ToolUtil.getSurFaceId();
         }
-        // 豆包统一走 streamDouBao；是否挂 tools 由 Runner 按 bizType 决定（仅 chat/旧聊天页）
+        // 豆包：闲聊与表单 dsFormAssist 挂 tools；技能 enableAgent 只影响提示词，不挡工具
         String knowledgeQuery = params.get("knowledgeQuery") == null ? "" : params.get("knowledgeQuery").toString();
+        Integer enableAgent = resolveEnableAgent(params);
         rememberChatPrompt(id, content);
         Map<String, Object> bean = new HashMap<>();
         bean.put("id", id);
@@ -147,7 +148,7 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
                 break;
             case DOU_BAO:
                 streamDouBao(content, systemPrompt, userId, id, aiApiKey, bizType, images, saveChat,
-                    role, StrUtil.blankToDefault(knowledgeQuery, userMessage));
+                    role, StrUtil.blankToDefault(knowledgeQuery, userMessage), enableAgent);
                 break;
             default:
                 throw new CustomException("不支持的AI平台");
@@ -247,10 +248,11 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
     }
 
     /**
-     * 豆包统一入口：闲聊走 Agent tools；表单/布局等由 Runner 跳过 tools；有图时走视觉流式。
+     * 豆包统一入口：闲聊与表单 Assist 挂 Agent tools；有图时走视觉流式。
      */
     private void streamDouBao(String content, String systemPrompt, String userId, String chatId, AiApiKey aiApiKey,
-                              String bizType, List<String> images, boolean saveChat, Role role, String userQuery) {
+                              String bizType, List<String> images, boolean saveChat, Role role, String userQuery,
+                              Integer enableAgent) {
         runStreamTask(userId, chatId, bizType, () -> {
             // 获取历史消息
             List<Map<String, String>> messages = buildChatMessages(systemPrompt,
@@ -270,10 +272,46 @@ public class ChatServiceImpl extends SkyeyeBusinessServiceImpl<ChatDao, Chat> im
                 .role(role)
                 .apiKey(aiApiKey)
                 .userQuery(userQuery)
+                .enableAgent(enableAgent)
                 .build();
             // 消费豆包 Agent 流式响应
             consumeDouBaoAgentStream(aiApiKey, messages, userId, chatId, bizType, ctx);
         });
+    }
+
+    /**
+     * 解析是否开启 Agent：优先请求参数 enableAgent；否则按 skillId / skillOddNumber 读技能配置。
+     */
+    private Integer resolveEnableAgent(Map<String, Object> params) {
+        Object raw = params == null ? null : params.get("enableAgent");
+        if (raw != null) {
+            String s = String.valueOf(raw).trim();
+            if ("1".equals(s) || "true".equalsIgnoreCase(s)) {
+                return 1;
+            }
+            if ("0".equals(s) || "false".equalsIgnoreCase(s)) {
+                return 0;
+            }
+        }
+        try {
+            String skillId = paramStr(params, "skillId");
+            if (StrUtil.isNotBlank(skillId)) {
+                AiSkill skill = aiSkillService.selectByIdForPrompt(skillId.trim());
+                if (skill != null && skill.getEnableAgent() != null) {
+                    return skill.getEnableAgent() == 1 ? 1 : 0;
+                }
+            }
+            String oddNumber = paramStr(params, "skillOddNumber");
+            if (StrUtil.isNotBlank(oddNumber)) {
+                AiSkill skill = aiSkillService.queryByOddNumber(oddNumber.trim());
+                if (skill != null && skill.getEnableAgent() != null) {
+                    return skill.getEnableAgent() == 1 ? 1 : 0;
+                }
+            }
+        } catch (Exception ignored) {
+            // 技能加载失败时不挂表单 Agent 工具
+        }
+        return 0;
     }
 
     /**

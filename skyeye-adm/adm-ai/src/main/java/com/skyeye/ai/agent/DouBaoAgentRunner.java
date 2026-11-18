@@ -51,8 +51,8 @@ public class DouBaoAgentRunner {
                     AiAgentToolContext context, Consumer<String> onStatus,
                     DouBaoChatClient.StreamListener listener) {
         DouBaoChatClient client = (DouBaoChatClient) aiFactory.getDefaultChatModel(AiPlatformEnum.DOU_BAO, apiKey);
-        // 表单/布局 Assist 等非闲聊：不挂 tools，避免干扰结构化输出
-        if (toolRegistry.isEmpty() || !isChatBiz(context)) {
+        // 闲聊与表单 Assist 都挂工具；技能「开启 Agent」只影响提示词，不挡工具
+        if (toolRegistry.isEmpty() || !shouldUseTools(context)) {
             client.streamChat(baseMessages, images, listener);
             return;
         }
@@ -61,9 +61,10 @@ public class DouBaoAgentRunner {
             messages.addAll(baseMessages);
         }
         JSONArray tools = toolRegistry.toOpenAiTools();
+        // 表单填单：auto，简单填写可直接出 JSON；闲聊：required，避免空话
+        String toolChoice = isFormAssist(context) ? "auto" : "required";
         for (int round = 0; round < MAX_TOOL_ROUNDS; round++) {
-            // 必须选一个工具：查数 or direct_reply，避免「请稍等」空话当最终答案
-            DouBaoChatClient.ChatToolsResult result = client.chatWithTools(messages, tools, "required");
+            DouBaoChatClient.ChatToolsResult result = client.chatWithTools(messages, tools, toolChoice);
             if (!result.hasToolCalls()) {
                 // 个别网关忽略 required 时的兜底：有文案则当最终答，否则进入流式
                 if (StrUtil.isNotBlank(result.getContent())) {
@@ -101,14 +102,18 @@ public class DouBaoAgentRunner {
     }
 
     /**
-     * 闲聊 / 旧聊天页（bizType 为空）才启用 Agent 工具
+     * 闲聊与表单 dsFormAssist 挂工具；其它 bizType（如布局草稿等）不挂，避免干扰结构化输出。
      */
-    private boolean isChatBiz(AiAgentToolContext context) {
+    private boolean shouldUseTools(AiAgentToolContext context) {
         if (context == null) {
             return true;
         }
         String bizType = context.getBizType();
-        return bizType == null || "chat".equals(bizType);
+        return bizType == null || "chat".equals(bizType) || isFormAssist(context);
+    }
+
+    private boolean isFormAssist(AiAgentToolContext context) {
+        return context != null && "dsFormAssist".equals(context.getBizType());
     }
 
     private JSONObject buildAssistantToolMessage(DouBaoChatClient.ChatToolsResult result) {

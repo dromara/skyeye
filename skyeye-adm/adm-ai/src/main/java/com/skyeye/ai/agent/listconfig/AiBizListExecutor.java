@@ -40,6 +40,13 @@ public class AiBizListExecutor {
      * @param limit   每页条数
      */
     public Map<String, Object> execute(String domain, String type, String storeId, int page, int limit) {
+        return execute(domain, type, storeId, page, limit, null);
+    }
+
+    /**
+     * @param keyword 可选名称关键字（供应商/物料等）
+     */
+    public Map<String, Object> execute(String domain, String type, String storeId, int page, int limit, String keyword) {
         String domainKey = StrUtil.blankToDefault(domain, "").trim().toLowerCase(Locale.ROOT);
         if ("shop".equals(domainKey)) {
             domainKey = "mall";
@@ -60,7 +67,7 @@ public class AiBizListExecutor {
             throw new CustomException("该列表需要 storeId（门店 id）");
         }
 
-        Map<String, Object> params = buildParams(ep, type, storeId, page, limit);
+        Map<String, Object> params = buildParams(ep, type, storeId, page, limit, keyword);
 
         ResultEntity entity = remoteInvoker.invoke(
             ep.getAppId(),
@@ -96,16 +103,19 @@ public class AiBizListExecutor {
     }
 
     /**
-     * 组装下游请求体：固定参数 + 分页 +（可选）type 码映射 + storeId 绑定。
+     * 组装下游请求体：固定参数 + 分页 + keyword +（可选）type 码映射 + storeId 绑定。
      */
-    private Map<String, Object> buildParams(AiBizListEndpoint ep, String type, String storeId, int page, int limit) {
+    private Map<String, Object> buildParams(AiBizListEndpoint ep, String type, String storeId, int page, int limit,
+                                            String keyword) {
         Map<String, Object> params = new HashMap<>();
         if (ep.getFixedParams() != null) {
             params.putAll(ep.getFixedParams());
         }
         params.put("page", Math.max(page, 1));
         params.put("limit", Math.max(limit, 1));
-        if (!params.containsKey("keyword")) {
+        if (StrUtil.isNotBlank(keyword)) {
+            params.put("keyword", keyword.trim());
+        } else if (!params.containsKey("keyword")) {
             params.put("keyword", "");
         }
 

@@ -79,6 +79,13 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
         if (entity.getEnabled() == null) {
             entity.setEnabled(EnableEnum.ENABLE_USING.getKey());
         }
+        // Agent 开关仅用 0/1（与表单 a-switch 一致），勿复用 EnableEnum 禁用值
+        if (entity.getEnableAgent() == null
+            || !Integer.valueOf(CommonNumConstants.NUM_ONE).equals(entity.getEnableAgent())) {
+            entity.setEnableAgent(CommonNumConstants.NUM_ZERO);
+        } else {
+            entity.setEnableAgent(CommonNumConstants.NUM_ONE);
+        }
         if (entity.getOrderBy() == null) {
             entity.setOrderBy(100);
         }
@@ -303,6 +310,7 @@ public class AiSkillServiceImpl extends SkyeyeBusinessServiceImpl<AiSkillDao, Ai
                 row.put("oddNumber", item.getOddNumber());
                 row.put("appId", item.getAppId());
                 row.put("applyServiceClassName", item.getApplyServiceClassName());
+                row.put("enableAgent", item.getEnableAgent());
                 return row;
             }).collect(Collectors.toList()));
         }

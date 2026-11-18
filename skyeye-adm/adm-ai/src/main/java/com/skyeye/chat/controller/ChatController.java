@@ -39,7 +39,8 @@ public class ChatController {
         @ApiImplicitParam(id = "knowledgeQuery", name = "knowledgeQuery", value = "知识库检索词；闲聊绑知识库时优先用此字段检索，不传则用 content"),
         @ApiImplicitParam(id = "userMessage", name = "userMessage", value = "用户原话。落库和历史展示用；不传则把 content 当作用户消息"),
         @ApiImplicitParam(id = "skillOddNumber", name = "skillOddNumber", value = "技能编码；有则优先用该技能 prompt 作为 system 提示词"),
-        @ApiImplicitParam(id = "skillId", name = "skillId", value = "技能id；skillOddNumber 为空时可用，同样优先技能 prompt")})
+        @ApiImplicitParam(id = "skillId", name = "skillId", value = "技能id；skillOddNumber 为空时可用，同样优先技能 prompt"),
+        @ApiImplicitParam(id = "enableAgent", name = "enableAgent", value = "技能Agent行为标记：1开启（仅提示词侧）；不传则按技能配置。不影响是否挂工具")})
     @RequestMapping("/post/ChatController/syncChatCompletion")
     public void syncChatCompletion(InputObject inputObject, OutputObject outputObject) {
         chatService.syncChatCompletion(inputObject, outputObject);

@@ -26,7 +26,7 @@ import java.util.Set;
  * <p>
  * <b>和 biz_board 的分工</b>：board 只给「笔数 counts」；本工具给「分页 items」供前端 list 卡片。
  * <p>
- * <b>入参</b>：domain（业务域，非微服务名）+ type（列表类型）+ 可选 storeId/page/limit。
+ * <b>入参</b>：domain（业务域，非微服务名）+ type（列表类型）+ 可选 keyword/storeId/page/limit。
  * 命中哪条配置、打哪个接口，见 {@code ai-biz-list-endpoints.json} / 平台 bizListEndpoints。
  * <p>
  * <b>路由</b>：springApplicationName 或 appId+serviceClassName → {@link com.skyeye.ai.agent.listconfig.AiBizListRemoteInvoker}。
@@ -69,6 +69,9 @@ public class BizListTool implements AiAgentTool {
                 .set("type", JSONUtil.createObj()
                     .set("type", "string")
                     .set("description", registry.buildTypeSchemaDescription()))
+                .set("keyword", JSONUtil.createObj()
+                    .set("type", "string")
+                    .set("description", "可选。名称关键字，查供应商/物料等主数据时传入"))
                 .set("storeId", JSONUtil.createObj()
                     .set("type", "string")
                     .set("description", "可选。mall 且查门店售出时传入门店 id"))
@@ -86,6 +89,7 @@ public class BizListTool implements AiAgentTool {
         String domain = args == null ? null : args.getStr("domain");
         String type = args == null ? null : args.getStr("type");
         String storeId = args == null ? null : args.getStr("storeId");
+        String keyword = args == null ? null : args.getStr("keyword");
         int page = args == null ? 1 : args.getInt("page", 1);
         int limit = args == null ? DEFAULT_LIMIT : args.getInt("limit", DEFAULT_LIMIT);
         if (page < 1) {
@@ -101,7 +105,7 @@ public class BizListTool implements AiAgentTool {
             return JSONUtil.createObj().set("ok", false).set("error", "domain 与 type 必填").toString();
         }
         try {
-            Map<String, Object> data = executor.execute(domain, type, storeId, page, limit);
+            Map<String, Object> data = executor.execute(domain, type, storeId, page, limit, keyword);
             JSONObject out = JSONUtil.createObj()
                 .set("ok", true)
                 .set("domain", data.get("domain"))
@@ -112,9 +116,13 @@ public class BizListTool implements AiAgentTool {
                 .set("limit", data.get("limit"))
                 .set("listTitle", data.get("listTitle"))
                 .set("items", data.get("items"))
-                .set("hint", "请在最终回复的 JSON 中设置 list:{title,items}，items 原样或精简引用本结果；reply 中用一两句话概括");
+                .set("hint", "请在最终回复的 JSON 中设置 list:{title,items}，items 原样或精简引用本结果；reply 中用一两句话概括；"
+                    + "表单填单时若多项候选，fieldValues 留空该选择字段，在 reply 请用户选");
             if (data.get("storeId") != null) {
                 out.set("storeId", data.get("storeId"));
+            }
+            if (StrUtil.isNotBlank(keyword)) {
+                out.set("keyword", keyword.trim());
             }
             return out.toString();
         } catch (CustomException e) {

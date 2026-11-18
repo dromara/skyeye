@@ -85,6 +85,14 @@ public class AiSkill extends OperatorUserInfo {
     @ApiModelProperty(value = "编码调用面板配置JSON")
     private String assistConfig;
 
+    /**
+     * 开启后：平台在组提示词时追加固定 Agent 行为说明（歧义必问用户等）。
+     * 关闭则不追加该段。表单/闲聊是否挂工具与本开关无关。
+     */
+    @TableField(value = "enable_agent")
+    @ApiModelProperty(value = "是否开启 Agent 行为提示：1 开启 0 关闭")
+    private Integer enableAgent;
+
     @TableField(value = "app_id", updateStrategy = FieldStrategy.NEVER)
     @ApiModelProperty(value = "业务应用 appId")
     private String appId;

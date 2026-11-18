@@ -32,4 +32,9 @@ public class AiAgentToolContext {
 
     /** 用户原问题（检索用，勿用整段 system prompt） */
     private String userQuery;
+
+    /**
+     * 技能「开启 Agent」标记（1/0）。仅用于业务侧记录/扩展；是否挂工具由 Runner 按 bizType 决定，不受本字段影响。
+     */
+    private Integer enableAgent;
 }

@@ -57,6 +57,11 @@ public class PlatformDsFormAiDraftServiceImpl implements PlatformDsFormAiDraftSe
         if (StrUtil.isNotBlank(skillId)) {
             extra.put("skillId", skillId);
         }
+        // 透传技能 Agent 标记（仅提示词/扩展用；表单是否挂工具不依赖此值）
+        if (platformAiSkillPromptBuilder.resolveEnableAgentForDsForm(
+            question, pageTitle, appId, serviceClassName, skillId, suiteId)) {
+            extra.put("enableAgent", 1);
+        }
         Map<String, Object> bean = platformAiChatHelper.startStreamingChat(content, BIZ_TYPE, extra);
         outputObject.setBean(bean);
         outputObject.settotal(CommonNumConstants.NUM_ONE);

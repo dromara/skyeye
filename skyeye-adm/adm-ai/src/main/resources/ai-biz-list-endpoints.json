@@ -1077,6 +1077,79 @@
       },
       "appId": "",
       "serviceClassName": "com.skyeye.order.service.impl.OrderItemServiceImpl"
+    },
+    {
+      "domain": "erp",
+      "type": "supplier",
+      "aliases": [
+        "供应商",
+        "supplierList"
+      ],
+      "listTitle": "供应商",
+      "scope": "erp",
+      "apiId": "supplier001",
+      "variant": "default",
+      "fields": {
+        "titlePaths": [
+          "name"
+        ],
+        "subtitle": [
+          {
+            "label": "地址",
+            "paths": [
+              "address"
+            ]
+          },
+          {
+            "label": "状态",
+            "paths": [
+              "enabled"
+            ],
+            "valueLabels": {
+              "1": "启用",
+              "2": "禁用"
+            }
+          }
+        ],
+        "idPaths": [
+          "id"
+        ]
+      },
+      "springApplicationName": "skyeye-erp",
+      "appId": "",
+      "serviceClassName": "com.skyeye.supplier.service.impl.SupplierServiceImpl"
+    },
+    {
+      "domain": "erp",
+      "type": "material",
+      "aliases": [
+        "物料",
+        "商品",
+        "materialList"
+      ],
+      "listTitle": "物料/商品",
+      "scope": "erp",
+      "apiId": "material010",
+      "variant": "default",
+      "fields": {
+        "titlePaths": [
+          "name"
+        ],
+        "subtitle": [
+          {
+            "label": "型号",
+            "paths": [
+              "model"
+            ]
+          }
+        ],
+        "idPaths": [
+          "id"
+        ]
+      },
+      "springApplicationName": "skyeye-erp",
+      "appId": "",
+      "serviceClassName": "com.skyeye.material.service.impl.MaterialServiceImpl"
     }
   ]
 }
