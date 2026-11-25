@@ -56,7 +56,8 @@ public class SysEveMenuController {
 
     @ApiOperation(id = "sys009", value = "根据父菜单ID查看子菜单", method = "GET", allUse = "2")
     @ApiImplicitParams(value = {
-        @ApiImplicitParam(id = "parentId", name = "parentId", value = "父菜单ID", required = "required")})
+        @ApiImplicitParam(id = "parentId", name = "parentId", value = "父菜单ID", required = "required"),
+        @ApiImplicitParam(id = "desktopId", name = "desktopId", value = "所属桌面ID")})
     @RequestMapping("/post/SysEveMenuController/querySysMenuMationBySimpleLevel")
     public void querySysMenuMationBySimpleLevel(InputObject inputObject, OutputObject outputObject) {
         sysEveMenuService.querySysMenuMationBySimpleLevel(inputObject, outputObject);

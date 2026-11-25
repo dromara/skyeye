@@ -42,6 +42,9 @@
 			AND b.id = #{parentId}
 			AND (b.level + 1) = a.level
 		</if>
+		<if test="desktopId != null and desktopId != ''">
+			AND a.desktop_id = #{desktopId}
+		</if>
 		ORDER BY a.order_num ASC
 	</select>
 	
