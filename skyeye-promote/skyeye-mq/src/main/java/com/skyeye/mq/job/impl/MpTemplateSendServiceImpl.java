@@ -138,11 +138,11 @@ public class MpTemplateSendServiceImpl implements RocketMQListener<String> {
     }
 
     /**
-     * 消息通知标题/内容 → 可配置的微信字段（默认 title / content）。
+     * 消息通知标题/内容 → 可配置的微信字段（默认 thing1 / thing2，与小程序一致）。
      */
     private List<WxMpTemplateData> buildTemplateData(Map<String, Object> map) {
-        String titleField = StrUtil.blankToDefault(MapUtil.getStr(map, "wxTitleField"), "title").trim();
-        String contentField = StrUtil.blankToDefault(MapUtil.getStr(map, "wxContentField"), "content").trim();
+        String titleField = StrUtil.blankToDefault(MapUtil.getStr(map, "wxTitleField"), "thing1").trim();
+        String contentField = StrUtil.blankToDefault(MapUtil.getStr(map, "wxContentField"), "thing2").trim();
         List<WxMpTemplateData> list = new ArrayList<>();
         list.add(new WxMpTemplateData(titleField, toPlainText(MapUtil.getStr(map, "title"))));
         list.add(new WxMpTemplateData(contentField, toPlainText(MapUtil.getStr(map, "content"))));

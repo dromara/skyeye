@@ -402,24 +402,26 @@ public final class NoticeDispatchConfigHelper {
         mergedType.put("templates", templates);
     }
 
-    /** 公众号默认 title；小程序默认 thing1 */
+    /** 公众号/小程序默认均为 thing1（可配置覆盖） */
     public static String defaultWxTitleField(String channel, String configured) {
         if (StrUtil.isNotBlank(configured)) {
             return configured.trim();
         }
-        return isMiniProgramChannel(channel) ? "thing1" : "title";
+        return isWechatTemplateChannel(channel) ? "thing1" : "title";
     }
 
-    /** 公众号默认 content；小程序默认 thing2 */
+    /** 公众号/小程序默认均为 thing2（可配置覆盖） */
     public static String defaultWxContentField(String channel, String configured) {
         if (StrUtil.isNotBlank(configured)) {
             return configured.trim();
         }
-        return isMiniProgramChannel(channel) ? "thing2" : "content";
+        return isWechatTemplateChannel(channel) ? "thing2" : "content";
     }
 
-    private static boolean isMiniProgramChannel(String channel) {
-        return String.valueOf(NoticeChannelEnum.MINI_PROGRAM.getKey()).equals(StrUtil.trim(channel));
+    private static boolean isWechatTemplateChannel(String channel) {
+        String ch = StrUtil.trim(channel);
+        return String.valueOf(NoticeChannelEnum.MP.getKey()).equals(ch)
+            || String.valueOf(NoticeChannelEnum.MINI_PROGRAM.getKey()).equals(ch);
     }
 
     /**
