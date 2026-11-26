@@ -15,6 +15,7 @@
         <module>adm-checkwork</module>
         <module>adm-ifs</module>
         <module>adm-wages</module>
+        <module>adm-performance</module>
     </modules>
 
     <parent>

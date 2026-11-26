@@ -588,6 +588,15 @@ public final class NoticeDispatchConfigHelper {
                 buildTemplate(2, "维修-邮件", NoticeUserMessageTypeEnum.EQUIPMENT_REPAIR.getValue(),
                     "尊敬的{userName}，您好：<br/>您有一份待接单维修单，单号为：{orderNum}，请及时接单。")
             )));
+        types.add(buildType(NoticeUserMessageTypeEnum.PERFORMANCE_RESULT.getKey(),
+            NoticeUserMessageTypeEnum.PERFORMANCE_RESULT.getValue(),
+            NoticeUserMessageTypeEnum.PERFORMANCE_RESULT.getRemark(), listOf(1, 2),
+            listOf(
+                buildTemplate(1, "绩效-站内信", NoticeUserMessageTypeEnum.PERFORMANCE_RESULT.getValue(),
+                    "尊敬的{userName}，您好：<br/>您的绩效考核《{title}》已审批通过，总分：{totalScore}，等级：{grade}，单号：{orderNum}。"),
+                buildTemplate(2, "绩效-邮件", NoticeUserMessageTypeEnum.PERFORMANCE_RESULT.getValue(),
+                    "尊敬的{userName}，您好：<br/>您的绩效考核《{title}》已审批通过，总分：{totalScore}，等级：{grade}，单号：{orderNum}。")
+            )));
         types.add(buildType(NoticeUserMessageTypeEnum.ANNOUNCE.getKey(), NoticeUserMessageTypeEnum.ANNOUNCE.getValue(),
             NoticeUserMessageTypeEnum.ANNOUNCE.getRemark(), listOf(2),
             listOf(buildTemplate(2, "公告-邮件", NoticeUserMessageTypeEnum.ANNOUNCE.getValue(), "内部公告 -【{title}】"))));

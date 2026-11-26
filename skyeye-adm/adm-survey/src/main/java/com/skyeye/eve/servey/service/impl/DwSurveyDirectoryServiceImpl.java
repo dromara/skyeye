@@ -57,6 +57,7 @@ import com.skyeye.eve.score.entity.DwAnScore;
 import com.skyeye.eve.score.entity.DwQuScore;
 import com.skyeye.eve.score.service.DwAnScoreService;
 import com.skyeye.eve.score.service.DwQuScoreService;
+import com.skyeye.eve.servey.classenum.DwSurveyState;
 import com.skyeye.eve.servey.dao.DwSurveyDirectoryDao;
 import com.skyeye.eve.servey.entity.DwSurveyAnswer;
 import com.skyeye.eve.servey.entity.DwSurveyDirectory;
@@ -163,12 +164,12 @@ public class DwSurveyDirectoryServiceImpl extends SkyeyeBusinessServiceImpl<DwSu
         }
         if (ObjUtil.isNotEmpty(dwSurveyDirectory)) {
             // 判断试卷是否未发布
-            if (dwSurveyDirectory.getSurveyState().equals(CommonNumConstants.NUM_ZERO)) {
+            if (DwSurveyState.DESIGN.getKey().equals(dwSurveyDirectory.getSurveyState())) {
                 String dwSurveyDirectoryId = dwSurveyDirectory.getId();
                 getFractionNumber(dwSurveyDirectoryId);
                 UpdateWrapper<DwSurveyDirectory> updateWrapper = new UpdateWrapper<>();
                 updateWrapper.eq(CommonConstants.ID, id);
-                updateWrapper.set(MybatisPlusUtil.toColumns(DwSurveyDirectory::getSurveyState), CommonNumConstants.NUM_ONE);
+                updateWrapper.set(MybatisPlusUtil.toColumns(DwSurveyDirectory::getSurveyState), DwSurveyState.RUNNING.getKey());
                 update(updateWrapper);
             } else {
                 throw new CustomException("该问卷已发布，请刷新数据。");
@@ -235,7 +236,7 @@ public class DwSurveyDirectoryServiceImpl extends SkyeyeBusinessServiceImpl<DwSu
         if (ObjUtil.isEmpty(dwSurveyDirectory) && StrUtil.isEmpty(dwSurveyDirectory.getId())) {
             throw new CustomException("该问卷不存在");
         }
-        if (dwSurveyDirectory.getSurveyState().equals(CommonNumConstants.NUM_ONE)) {
+        if (DwSurveyState.RUNNING.getKey().equals(dwSurveyDirectory.getSurveyState())) {
             if (dwSurveyDirectory.getIsEffective().equals(CommonNumConstants.NUM_ONE)) {
                 if (dwSurveyDirectory.getEffective().equals(CommonNumConstants.NUM_ONE)) {
                     // 获取前端传进来的机器码
@@ -301,7 +302,7 @@ public class DwSurveyDirectoryServiceImpl extends SkyeyeBusinessServiceImpl<DwSu
         String surveyName = map.get("surveyName").toString();
         DwSurveyDirectory examSurveyDirectory = selectById(dwDirectoryId);
         examSurveyDirectory.setSurveyModel(CommonNumConstants.NUM_ONE);
-        examSurveyDirectory.setSurveyState(CommonNumConstants.NUM_ZERO);
+        examSurveyDirectory.setSurveyState(DwSurveyState.DESIGN.getKey());
         examSurveyDirectory.setCreateId(userId);
         examSurveyDirectory.setCreateTime(DateUtil.getTimeAndToString());
         examSurveyDirectory.setId(ToolUtil.randomStr(6, 12));
@@ -470,7 +471,7 @@ public class DwSurveyDirectoryServiceImpl extends SkyeyeBusinessServiceImpl<DwSu
         UpdateWrapper<DwSurveyDirectory> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq(CommonConstants.ID, id);
         updateWrapper.set(MybatisPlusUtil.toColumns(DwSurveyDirectory::getWhetherDelete), CommonNumConstants.NUM_TWO);
-        updateWrapper.set(MybatisPlusUtil.toColumns(DwSurveyDirectory::getSurveyState), CommonNumConstants.NUM_TWO);
+        updateWrapper.set(MybatisPlusUtil.toColumns(DwSurveyDirectory::getSurveyState), DwSurveyState.END.getKey());
         update(updateWrapper);
     }
 
@@ -490,16 +491,16 @@ public class DwSurveyDirectoryServiceImpl extends SkyeyeBusinessServiceImpl<DwSu
         DwSurveyDirectory examSurveyDirectory = getOne(queryWrapper);
         // 判断问卷目录对象是否存在
         if (ObjUtil.isNotEmpty(examSurveyDirectory)) {
-            // 判断问卷目录状态是否为进行中（NUM_ONE）
-            if (examSurveyDirectory.getSurveyState().equals(CommonNumConstants.NUM_ONE)) {
+            // 判断问卷目录状态是否为进行中
+            if (DwSurveyState.RUNNING.getKey().equals(examSurveyDirectory.getSurveyState())) {
                 // 获取当前时间作为实际结束时间
                 String realEndTime = DateUtil.getTimeAndToString();
                 UpdateWrapper<DwSurveyDirectory> updateWrapper = new UpdateWrapper<>();
                 updateWrapper.eq(CommonConstants.ID, dwSurveyDirectoryId);
                 // 设置实际结束时间为当前时间
                 updateWrapper.set(MybatisPlusUtil.toColumns(DwSurveyDirectory::getRealEndTime), realEndTime);
-                // 设置问卷目录状态为已结束（NUM_TWO）
-                updateWrapper.set(MybatisPlusUtil.toColumns(DwSurveyDirectory::getSurveyState), CommonNumConstants.NUM_TWO);
+                // 设置问卷目录状态为已结束
+                updateWrapper.set(MybatisPlusUtil.toColumns(DwSurveyDirectory::getSurveyState), DwSurveyState.END.getKey());
                 // 设置结束类型为自动结束（NUM_ONE）
                 updateWrapper.set(MybatisPlusUtil.toColumns(DwSurveyDirectory::getEndType), CommonNumConstants.NUM_ONE);
                 // 执行更新操作
@@ -514,7 +515,7 @@ public class DwSurveyDirectoryServiceImpl extends SkyeyeBusinessServiceImpl<DwSu
     public void queryFilterDwLists(InputObject inputObject, OutputObject outputObject) {
         CommonPageInfo commonPageInfo = inputObject.getParams(CommonPageInfo.class);
         Page page = PageHelper.startPage(commonPageInfo.getPage(), commonPageInfo.getLimit());
-        QueryWrapper<DwSurveyDirectory> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<DwSurveyDirectory> queryWrapper = super.getQueryWrapper(commonPageInfo);
         outputDwList(outputObject, commonPageInfo, queryWrapper, page);
     }
 

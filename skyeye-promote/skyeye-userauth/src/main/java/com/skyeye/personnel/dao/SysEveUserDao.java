@@ -26,6 +26,7 @@ public interface SysEveUserDao extends SkyeyeBaseMapper<SysEveUser> {
 
     List<Map<String, Object>> querySysUserList(CommonPageInfo pageInfo);
 
+    @IgnoreTenant
     Map<String, Object> queryMationByUserCode(@Param("userCode") String userCode);
 
     int editRoleIdsByUserId(Map<String, Object> map);
@@ -45,24 +46,31 @@ public interface SysEveUserDao extends SkyeyeBaseMapper<SysEveUser> {
 
     List<Map<String, Object>> queryTalkGroupUserListByUserId(UserTreeQueryDo queryDo);
 
+    @IgnoreTenant
     Map<String, Object> queryWxUserMationByOpenId(@Param("openId") String openId);
 
+    @IgnoreTenant
     Map<String, Object> queryWxUserMationByAppIdAndOpenId(@Param("appId") String appId, @Param("openId") String openId);
 
+    @IgnoreTenant
     Map<String, Object> queryUserMationByOpenId(@Param("openId") String openId);
 
+    @IgnoreTenant
     Map<String, Object> queryUserMationByAppIdAndOpenId(@Param("appId") String appId, @Param("openId") String openId);
 
-    Map<String, Object> queryUserBindMationByUserId(@Param("userId") String userId);
-
+    @IgnoreTenant
     Map<String, Object> queryUserBindMationByUserIdAndAppId(@Param("userId") String userId, @Param("appId") String appId);
 
+    @IgnoreTenant
     List<Map<String, Object>> queryUserBindListByUserId(@Param("userId") String userId);
 
+    @IgnoreTenant
     int updateBindUserMation(Map<String, Object> map);
 
+    @IgnoreTenant
     int insertWxUserMation(Map<String, Object> map);
 
+    @IgnoreTenant
     int unbindUserMationByUserIdAndAppId(@Param("userId") String userId, @Param("appId") String appId);
 
 }

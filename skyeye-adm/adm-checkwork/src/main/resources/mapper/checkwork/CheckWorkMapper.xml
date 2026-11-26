@@ -355,6 +355,9 @@
             <if test="userName != '' and userName != null">
                 AND a.user_name LIKE '%${userName}%'
             </if>
+            <if test="staffId != '' and staffId != null">
+                AND a.id = #{staffId}
+            </if>
         </where>
         GROUP BY a.id
         <choose>

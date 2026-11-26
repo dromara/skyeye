@@ -460,19 +460,6 @@
 		  AND a.id = e.user_id
 	</select>
 
-	<select id="queryUserBindMationByUserId" parameterType="java.lang.String" resultType="java.util.Map">
-		SELECT
-			a.id,
-			a.open_id openId,
-			a.app_id appId,
-			a.user_id userId
-		FROM
-			wx_user_mation a
-		WHERE
-			a.user_id = #{userId}
-		LIMIT 1
-	</select>
-
 	<select id="queryUserBindMationByUserIdAndAppId" resultType="java.util.Map">
 		SELECT
 			a.id,

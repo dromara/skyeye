@@ -54,6 +54,16 @@ public interface CheckWorkService extends SkyeyeBusinessService<CheckWork> {
 
     void queryCheckWorkReport(InputObject inputObject, OutputObject outputObject);
 
+    /**
+     * 查询单个员工在日期范围内的考勤汇总（应出勤、正常、旷工、迟到等）
+     *
+     * @param staffId   员工id
+     * @param startTime 开始日期 yyyy-MM-dd
+     * @param endTime   结束日期 yyyy-MM-dd
+     * @return 汇总行；无数据时返回空 Map
+     */
+    Map<String, Object> queryStaffCheckWorkSummary(String staffId, String startTime, String endTime);
+
     void queryCheckWorkEcharts(InputObject inputObject, OutputObject outputObject);
 
     void queryReportDetail(InputObject inputObject, OutputObject outputObject);

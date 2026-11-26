@@ -12,6 +12,7 @@ import com.skyeye.annotation.api.ApiModelProperty;
 import com.skyeye.annotation.api.Property;
 import com.skyeye.common.entity.features.OperatorUserInfo;
 import com.skyeye.eve.question.entity.DwQuestion;
+import com.skyeye.eve.servey.classenum.DwSurveyState;
 import lombok.Data;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public class DwSurveyDirectory extends OperatorUserInfo {
     private Integer surveyQuNum;
 
     @TableField("survey_state")
-    @ApiModelProperty(value = "问卷状态  0默认设计状态  1执行中 2结束 ")
+    @ApiModelProperty(value = "问卷状态", enumClass = DwSurveyState.class)
     private Integer surveyState;
 
     @TableField("real_start_time")

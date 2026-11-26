@@ -824,6 +824,7 @@ public class SysEveUserServiceImpl extends SkyeyeBusinessServiceImpl<SysEveUserD
     }
 
     @Override
+    @IgnoreTenant
     public void miniProgramWxBindLogin(InputObject inputObject, OutputObject outputObject) {
         Map<String, Object> map = inputObject.getParams();
         String userCode = MapUtil.getStr(map, "userCode");
@@ -980,14 +981,10 @@ public class SysEveUserServiceImpl extends SkyeyeBusinessServiceImpl<SysEveUserD
                 if (UserLockState.SYS_USER_LOCK_STATE_ISLOCK.getKey() == userLock) {
                     throw new CustomException("您的账号已被锁定，请联系管理员解除.");
                 } else {
-                    try {
-                        Map<String, Object> bind = bindOpenIdToUser(userMation.get("id").toString(), appId, openId);
-                        companyJobService.setNameMationForMap(userMation, "jobId", "jobName", StrUtil.EMPTY);
-                        setUserLoginRedisMation(userMation.get("id").toString() + SysUserAuthConstants.APP_IDENTIFYING, userMation, false);
-                        outputObject.setBean(bind);
-                    } catch (CustomException e) {
-                        throw new CustomException(e.getMessage());
-                    }
+                    Map<String, Object> bind = bindOpenIdToUser(userMation.get("id").toString(), appId, openId);
+                    companyJobService.setNameMationForMap(userMation, "jobId", "jobName", StrUtil.EMPTY);
+                    setUserLoginRedisMation(userMation.get("id").toString() + SysUserAuthConstants.APP_IDENTIFYING, userMation, false);
+                    outputObject.setBean(bind);
                 }
             } else {
                 throw new CustomException("密码输入错误.");
@@ -1120,6 +1117,7 @@ public class SysEveUserServiceImpl extends SkyeyeBusinessServiceImpl<SysEveUserD
     }
 
     @Override
+    @IgnoreTenant
     public void queryMyWechatBindList(InputObject inputObject, OutputObject outputObject) {
         String userId = MapUtil.getStr(InputObject.getLogParamsStatic(), "id");
         if (StrUtil.isBlank(userId)) {

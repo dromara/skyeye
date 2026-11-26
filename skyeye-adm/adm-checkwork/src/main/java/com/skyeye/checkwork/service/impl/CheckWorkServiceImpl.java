@@ -1263,6 +1263,29 @@ public class CheckWorkServiceImpl extends SkyeyeBusinessServiceImpl<CheckWorkDao
         outputObject.settotal(pages.getTotal());
     }
 
+    @Override
+    @IgnoreTenant
+    public Map<String, Object> queryStaffCheckWorkSummary(String staffId, String startTime, String endTime) {
+        if (StrUtil.hasBlank(staffId, startTime, endTime)) {
+            return new HashMap<>();
+        }
+        Map<String, Integer> timeWorkDay = getAllCheckWorkTime(startTime, endTime);
+        String tenantId = tenantEnable ? TenantContext.getTenantId() : StrUtil.EMPTY;
+        Map<String, Object> map = new HashMap<>();
+        map.put("startTime", startTime);
+        map.put("endTime", endTime);
+        map.put("tenantId", tenantId);
+        map.put("staffId", staffId);
+        map.put("timeId", StrUtil.EMPTY);
+        map.put("userName", StrUtil.EMPTY);
+        List<Map<String, Object>> beans = checkWorkDao.queryCheckWorkReport(map);
+        setShouldTime(beans, timeWorkDay, StrUtil.EMPTY);
+        if (CollectionUtil.isEmpty(beans)) {
+            return new HashMap<>();
+        }
+        return beans.get(0);
+    }
+
     private void setShouldTime(List<Map<String, Object>> beans, Map<String, Integer> timeWorkDay, String filterTimeId) {
         for (Map<String, Object> bean : beans) {
             String timsIdsStr = bean.getOrDefault("timsIds", StrUtil.EMPTY).toString();

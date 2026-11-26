@@ -368,6 +368,33 @@ public class PieceworkSystemServiceImpl extends SkyeyeBusinessServiceImpl<Piecew
         return getOne(queryWrapper);
     }
 
+    @Override
+    public void queryPieceworkByStaffAndMonths(InputObject inputObject, OutputObject outputObject) {
+        Map<String, Object> params = inputObject.getParams();
+        String staffId = params.getOrDefault("staffId", StrUtil.EMPTY).toString();
+        String farmId = params.getOrDefault("farmId", StrUtil.EMPTY).toString();
+        String startMonth = params.getOrDefault("startMonth", StrUtil.EMPTY).toString();
+        String endMonth = params.getOrDefault("endMonth", StrUtil.EMPTY).toString();
+        List<PieceworkSystem> list = listByStaffAndMonths(staffId, farmId, startMonth, endMonth);
+        outputObject.setBeans(list);
+        outputObject.settotal(list.size());
+    }
+
+    @Override
+    public List<PieceworkSystem> listByStaffAndMonths(String staffId, String farmId, String startMonth, String endMonth) {
+        if (StrUtil.hasBlank(staffId, startMonth, endMonth)) {
+            return new java.util.ArrayList<>();
+        }
+        QueryWrapper<PieceworkSystem> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(MybatisPlusUtil.toColumns(PieceworkSystem::getStaffId), staffId);
+        if (StrUtil.isNotEmpty(farmId)) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(PieceworkSystem::getFarmId), farmId);
+        }
+        queryWrapper.between(MybatisPlusUtil.toColumns(PieceworkSystem::getDayMouth), startMonth, endMonth);
+        queryWrapper.orderByAsc(MybatisPlusUtil.toColumns(PieceworkSystem::getDayMouth));
+        return list(queryWrapper);
+    }
+
     // 通过反射获取字段值
     private Object getFieldValue(PieceworkSystem obj, String fieldName) {
         try {
