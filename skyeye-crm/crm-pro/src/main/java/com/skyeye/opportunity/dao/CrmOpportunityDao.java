@@ -4,12 +4,8 @@
 
 package com.skyeye.opportunity.dao;
 
-import com.skyeye.common.entity.search.CommonPageInfo;
 import com.skyeye.eve.dao.SkyeyeBaseMapper;
 import com.skyeye.opportunity.entity.CrmOpportunity;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName: CrmOpportunityDao
@@ -20,7 +16,5 @@ import java.util.Map;
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 public interface CrmOpportunityDao extends SkyeyeBaseMapper<CrmOpportunity> {
-
-    List<Map<String, Object>> queryCrmOpportunityList(CommonPageInfo pageInfo);
 
 }

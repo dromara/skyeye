@@ -33,12 +33,6 @@ public class CrmOpportunityController {
     @Autowired
     private CrmOpportunityService crmOpportunityService;
 
-    /**
-     * 获取商机列表
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryCrmOpportunityList", value = "获取商机列表", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CommonPageInfo.class)
     @RequestMapping("/post/CrmOpportunityController/queryCrmOpportunityList")
@@ -46,12 +40,6 @@ public class CrmOpportunityController {
         crmOpportunityService.queryPageList(inputObject, outputObject);
     }
 
-    /**
-     * 新增/编辑商机信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "writeCrmOpportunity", value = "新增/编辑商机信息", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = CrmOpportunity.class)
     @RequestMapping("/post/CrmOpportunityController/writeCrmOpportunity")
@@ -59,12 +47,6 @@ public class CrmOpportunityController {
         crmOpportunityService.saveOrUpdateEntity(inputObject, outputObject);
     }
 
-    /**
-     * 删除商机信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "deleteCrmOpportunityById", value = "删除商机信息", method = "DELETE", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -73,12 +55,6 @@ public class CrmOpportunityController {
         crmOpportunityService.deleteById(inputObject, outputObject);
     }
 
-    /**
-     * 根据客户id获取指定状态的商机列表
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "queryCrmOpportunityListByObjectId", value = "根据客户id获取指定状态的商机列表", method = "GET", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "objectId", name = "objectId", value = "所属第三方业务数据id")})
@@ -87,12 +63,6 @@ public class CrmOpportunityController {
         crmOpportunityService.queryCrmOpportunityListByObjectId(inputObject, outputObject);
     }
 
-    /**
-     * 作废商机信息
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "opportunity013", value = "作废商机信息", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -101,12 +71,6 @@ public class CrmOpportunityController {
         crmOpportunityService.invalid(inputObject, outputObject);
     }
 
-    /**
-     * 商机提交审批
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "opportunity017", value = "商机提交审批", method = "POST", allUse = "2")
     @ApiImplicitParams(classBean = SubmitSkyeyeFlowable.class)
     @RequestMapping("/post/CrmOpportunityController/submitToApproval")
@@ -114,12 +78,6 @@ public class CrmOpportunityController {
         crmOpportunityService.submitToApproval(inputObject, outputObject);
     }
 
-    /**
-     * 撤销商机审批
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "opportunity027", value = "撤销商机审批", method = "PUT", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "processInstanceId", name = "processInstanceId", value = "流程实例id", required = "required")})
@@ -128,12 +86,6 @@ public class CrmOpportunityController {
         crmOpportunityService.revoke(inputObject, outputObject);
     }
 
-    /**
-     * 根据商机Id初期沟通
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "opportunity019", value = "根据商机Id初期沟通", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -142,12 +94,6 @@ public class CrmOpportunityController {
         crmOpportunityService.conmunicateOpportunity(inputObject, outputObject);
     }
 
-    /**
-     * 根据商机Id方案与报价
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "opportunity020", value = "根据商机Id方案与报价", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -156,12 +102,6 @@ public class CrmOpportunityController {
         crmOpportunityService.quotedPriceOpportunity(inputObject, outputObject);
     }
 
-    /**
-     * 根据商机Id竞争与投标
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "opportunity021", value = "根据商机Id竞争与投标", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -170,12 +110,6 @@ public class CrmOpportunityController {
         crmOpportunityService.tenderOpportunity(inputObject, outputObject);
     }
 
-    /**
-     * 根据商机Id商务谈判
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "opportunity022", value = "根据商机Id商务谈判", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -184,12 +118,6 @@ public class CrmOpportunityController {
         crmOpportunityService.negotiateOpportunity(inputObject, outputObject);
     }
 
-    /**
-     * 根据商机Id成交
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "opportunity023", value = "根据商机Id成交", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -198,12 +126,6 @@ public class CrmOpportunityController {
         crmOpportunityService.turnoverOpportunity(inputObject, outputObject);
     }
 
-    /**
-     * 根据商机Id丢单
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "opportunity024", value = "根据商机Id丢单", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})
@@ -212,12 +134,6 @@ public class CrmOpportunityController {
         crmOpportunityService.losingTableOpportunity(inputObject, outputObject);
     }
 
-    /**
-     * 根据商机Id搁置
-     *
-     * @param inputObject  入参以及用户信息等获取对象
-     * @param outputObject 出参以及提示信息的返回值对象
-     */
     @ApiOperation(id = "opportunity025", value = "根据商机Id搁置", method = "POST", allUse = "2")
     @ApiImplicitParams({
         @ApiImplicitParam(id = "id", name = "id", value = "主键id", required = "required")})

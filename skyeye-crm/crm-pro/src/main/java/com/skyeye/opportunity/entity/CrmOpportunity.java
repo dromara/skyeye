@@ -44,7 +44,7 @@ public class CrmOpportunity extends SkyeyeFlowable {
     private String objectKey;
 
     @TableField(value = "title")
-    @ApiModelProperty(value = "商机名称", required = "required")
+    @ApiModelProperty(value = "商机名称", required = "required", fuzzyLike = true)
     private String title;
 
     @TableField(value = "from_id")

@@ -67,11 +67,12 @@ public class CrmOpportunityServiceImpl extends SkyeyeBusinessServiceImpl<CrmOppo
     }
 
     @Override
-    public List<Map<String, Object>> queryPageDataList(InputObject inputObject) {
-        CommonPageInfo pageInfo = inputObject.getParams(CommonPageInfo.class);
-        pageInfo.setCreateId(inputObject.getLogParams().get("id").toString());
-        List<Map<String, Object>> beans = skyeyeBaseMapper.queryCrmOpportunityList(pageInfo);
-        return beans;
+    protected QueryWrapper<CrmOpportunity> getQueryWrapper(CommonPageInfo commonPageInfo) {
+        QueryWrapper<CrmOpportunity> queryWrapper = super.getQueryWrapper(commonPageInfo);
+        if (StrUtil.isNotEmpty(commonPageInfo.getObjectId())) {
+            queryWrapper.eq(MybatisPlusUtil.toColumns(CrmOpportunity::getObjectId), commonPageInfo.getObjectId());
+        }
+        return queryWrapper;
     }
 
     @Override
